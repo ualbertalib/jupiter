@@ -1,0 +1,11 @@
+<h1>Collection: <%= @collection.title %></h1>
+<h5><%= link_to 'Parent Community: ' + @community.title, community_path(@community)%></h5>
+
+
+<% if @collection.member_works.count > 0 %>
+	<% @collection.member_works.each do |w| %>
+		<li><%= link_to w.title, work_path(w) %>
+	<% end %>
+<% else %>
+	There are no works in this Collection
+<% end %>

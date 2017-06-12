@@ -1,10 +1,7 @@
 class Community < JupiterCore::Base
-    has_properties  :title => { 
-                    predicate: ::RDF::Vocab::DC.title,
-                    index: [:stored_searchable, :facetable]
-                 },
-                 :path => {
-                   predicate: MyTerms.foo,
-                   index: [:descendent_path]
-                 }
+  has_property :title, predicate: ::RDF::Vocab::DC.title, index: [:stored_searchable, :facetable]
+
+  def member_works
+    ActiveFedora::Base.where("community_id_dpsim:#{id}")
+  end
 end

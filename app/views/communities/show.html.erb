@@ -1,0 +1,11 @@
+<h1>Community: <%= @community.title %></h1>
+
+<% if @community.member_works.count > 0 %>
+	<% @community.member_works.each do |c| %>
+		<li><%= link_to c.title, community_collection_path(@community, c) %>
+	<% end %>
+<% else %>
+	There are no Collections in this Community
+<% end %>
+
+<li><%= link_to 'Create New Collection', new_community_collection_path(@community) %>

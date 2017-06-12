@@ -15,42 +15,56 @@ class JupiterCore::Base < ActiveFedora::Base
     end
  end
 
+ # override this to control what properties are automatically listed in the properties list
+ def display_properties
+  property_names
+ end
+
   # Track properties, so that we can avoid duplicating definitions in a separate indexer and on forms
 	def property_names
-		Work.property_names
+		self.class.property_names
 	end
 
   def self.property_names
-    @@property_names
+    @property_names
   end
 
   def properties
-    @@property_names.map do |name|
-      [name, self.send(name)]
+    display_properties.map do |name|
+      [name.to_s, self.send(name)]
     end
   end
 
   def property_metadata(property_name)
-    @@properties[property_name]
+    self.class.property_metadata
+  end
+
+  def self.property_metadata(property_name)
+    @property_cache[property_name]
   end
 
   protected
 
   # a utility DSL for declaring properties which allows us to store knowledge of them.
-	def self.has_properties(props = {})
-		@@property_names = []
-    @@properties = props
+  # TODO we could make this inheritable http://wiseheartdesign.com/articles/2006/09/22/class-level-instance-variables/
+  def self.has_property(name, attributes)
+    raise PropertyInvalid unless name.is_a? Symbol
+    raise PropertyInvalid unless attributes.has_key? :predicate
 
-		@@properties.each do |key, value|
-			@@property_names << key
-      raise PropertyInvalid unless value.has_key? :predicate
+    @property_names ||= []
+    @property_cache ||= {}
 
-      multiple = value.has_key?(:multiple) ? value[:multiple] : false
 
-			property key, predicate: value[:predicate], multiple: multiple do |index|
-        index.type value[:type] if value.has_key? :type
-				index.as *value[:index] if value.has_key? :index
-			end
-		end
-	end
+    @property_names << name
+    @property_cache[name] = attributes
+
+
+    multiple = attributes.has_key?(:multiple) ? attributes[:multiple] : false
+
+    property name, predicate: attributes[:predicate], multiple: multiple do |index|
+      index.type attributes[:type] if attributes.has_key? :type
+      index.as *attributes[:index] if attributes.has_key? :index
+    end
+  end
+
 end
