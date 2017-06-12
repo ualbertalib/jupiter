@@ -1,0 +1,9 @@
+Test
+
+<% @work.properties.each do |name, value|%>
+
+	<li><%=name %> : <%= value %>
+
+<% end %>
+
+<li> <%= link_to 'edit', edit_work_path(@work) %>

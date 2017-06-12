@@ -1,0 +1,43 @@
+class WorksController < ApplicationController
+
+  before_action :load_work, only: [:show, :edit, :update]
+
+  def new
+    @work = Work.new
+  end
+
+  def create
+    @work = Work.new(work_params)
+
+    params[:work][:file].each do |file|
+      fileset = FileSet.new
+      Hydra::Works::AddFileToFileSet.call(fileset, file, :original_file, update_existing: false, versioning: false)
+      fileset.save!
+      # pull in hydra derivatives, set temp file base
+      # Hydra::Works::CharacterizationService.run(fileset.characterization_proxy, filename)
+      @work.members << fileset
+    end
+
+    @work.save!
+    redirect_to @work
+  end
+
+  def update
+    @work.update!(work_params)
+    redirect_to @work
+  end
+
+	def index
+		@collection = []
+	end
+
+  private
+
+  def load_work
+    @work = Work.find(params[:id])
+  end
+
+  def work_params
+    params[:work].permit(Work.property_names)
+  end
+end
