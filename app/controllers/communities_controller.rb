@@ -2,6 +2,10 @@ class CommunitiesController < ApplicationController
 
   def show
     @community = Community.find(params[:id])
+    respond_to do |format|
+      format.html
+      format.json {render json: @community.member_collections}
+    end
   end
 
   def index

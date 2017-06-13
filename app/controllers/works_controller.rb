@@ -7,8 +7,16 @@ class WorksController < ApplicationController
   end
 
   def create
+    communities = params[:work].delete :community
+    collections = params[:work].delete :collection
+
     @work = Work.new(work_params)
 
+    communities.each_with_index do |community, idx|
+      @work.add_to_path(community, collections[idx])
+    end
+
+    # see also https://github.com/samvera/hydra-works/wiki/Lesson%3A-Add-attached-files
     params[:work][:file].each do |file|
       fileset = FileSet.new
       Hydra::Works::AddFileToFileSet.call(fileset, file, :original_file, update_existing: false, versioning: false)

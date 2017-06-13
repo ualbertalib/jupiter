@@ -12,4 +12,8 @@ class Collection < JupiterCore::Base
     ActiveFedora::Base.where("member_of_paths_dpsim:#{path}")
   end
 
+  def as_json(options)
+    super(only: [:title, :id])
+  end
+
 end

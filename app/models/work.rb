@@ -4,7 +4,7 @@ class Work < JupiterCore::Base
 
   has_property :title, predicate: ::RDF::Vocab::DC.title, index: [:stored_searchable, :facetable]
   
-  has_property :member_of_paths, predicate: ::UalibTerms.path, index: [:descendent_path] 
+  has_properties :member_of_paths, predicate: ::UalibTerms.path, index: [:descendent_path] 
   
   has_property :subject, predicate: ::RDF::Vocab::DC.subject, index: [:stored_searchable, :facetable]
   
@@ -27,5 +27,9 @@ class Work < JupiterCore::Base
 
   def display_properties
     super - [:member_of_paths]
+  end
+
+  def add_to_path(community_id, collection_id)
+    self.member_of_paths += ["#{community_id}/#{collection_id}"]
   end
 end

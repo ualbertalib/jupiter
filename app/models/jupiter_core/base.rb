@@ -45,6 +45,11 @@ class JupiterCore::Base < ActiveFedora::Base
 
   protected
 
+  # TODO name? ehhh
+  def self.has_properties(name, attributes)
+    self.has_property(name, attributes.merge!(multiple: true))
+  end
+
   # a utility DSL for declaring properties which allows us to store knowledge of them.
   # TODO we could make this inheritable http://wiseheartdesign.com/articles/2006/09/22/class-level-instance-variables/
   def self.has_property(name, attributes)
