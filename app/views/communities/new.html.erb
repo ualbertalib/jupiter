@@ -1,8 +1,0 @@
-<h1>Create Community</h1>
-<%= simple_form_for @community do |f| %>
-	<% @community.property_names.each do |prop| %>
-		<%= f.input prop %>
-	<% end %>
-
-	<%= f.button :submit %>
-<% end %>

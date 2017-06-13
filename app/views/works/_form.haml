@@ -1,0 +1,9 @@
+= simple_form_for work, html: {multipart: true} do |f|
+	- work.property_names.each do |prop|
+		= f.input prop
+
+	= f.input :file, as: :file, label: 'File', input_html: {name: 'work[file][]'}
+	= f.input :file, as: :file, label: 'File', input_html: {name: 'work[file][]'}
+
+
+	= f.button :submit, class: 'btn btn-primary'

@@ -1,7 +1,0 @@
-<h1>Communities</h1>
-
-<% @communities.each do |c| %>
-	<li><%= link_to c.title, community_path(c) %>
-<% end %>
-
-<li><%= link_to 'Create New Community', new_community_path %>

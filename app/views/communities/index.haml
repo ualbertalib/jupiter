@@ -1,0 +1,9 @@
+%h2.mt-3 Communities
+.row.mt-3
+	.col
+		.list-group
+			- @communities.each do |c| 
+				= link_to c.title, community_path(c), class: 'list-group-item list-group-item-action'
+.row.mt-3
+	.col
+		= link_to 'Create New Community', new_community_path, class: 'btn btn-primary'

@@ -1,9 +1,0 @@
-<h1><%= @work.title %></h1>
-
-<% @work.properties.each do |name, value|%>
-	<li><%=name.titlecase %> : <%= value %>
-<% end %>
-
-<li>Member of: <%= to_named_path(@work.member_of_paths)%>
-
-<li> <%= link_to 'edit', edit_work_path(@work) %>

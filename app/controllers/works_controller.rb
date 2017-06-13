@@ -27,10 +27,6 @@ class WorksController < ApplicationController
     redirect_to @work
   end
 
-	def index
-		@collection = []
-	end
-
   private
 
   def load_work

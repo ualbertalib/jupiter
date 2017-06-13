@@ -1,0 +1,13 @@
+%h2.mt-3= "Community: #{@community.title}"
+.row.mt-3
+    .col
+        .list-group
+            - if @community.member_works.count > 0
+                - @community.member_works.each do |c|
+                    = link_to c.title, community_collection_path(@community, c), class: 'list-group-item list-group-item-action'
+            - else
+                There are no Collections in this Community
+
+.row.mt-3
+    .col
+        = link_to 'Create New Collection', new_community_collection_path(@community), class: 'btn btn-primary'

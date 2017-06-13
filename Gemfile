@@ -1,3 +1,4 @@
+
 source 'https://rubygems.org'
 
 git_source(:github) do |repo_name|
@@ -26,6 +27,8 @@ gem 'turbolinks', '~> 5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'
 
+gem 'haml'
+
 gem 'rdf-vocab'
 
 gem 'hydra-works'
@@ -33,6 +36,9 @@ gem 'hydra-works'
 gem 'simple_form'
 
 gem 'solrizer', git: 'https://github.com/mbarnett/solrizer.git', branch: 'solrizable_path_types'
+gem 'jquery-rails'
+gem 'bootstrap'
+gem 'popper_js'
 
 
 # Use Redis adapter to run Action Cable in production

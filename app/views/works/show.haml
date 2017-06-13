@@ -1,0 +1,11 @@
+%h2.mt-3="Work: #{@work.title}"
+.row.mt-3
+	.col
+		.list-group
+			- @work.properties.each do |name, value|
+				.list-group-item="#{name.titlecase} : #{value}"
+
+			.list-group-item= "Member of: #{to_named_path(@work.member_of_paths)}".html_safe
+.row.mt-3
+	.col
+		= link_to 'Edit', edit_work_path(@work), class: 'btn btn-primary pull-right'
