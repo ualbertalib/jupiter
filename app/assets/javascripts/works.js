@@ -1,4 +1,4 @@
-$(function() {
+$(document).on('turbolinks:load', function() {
 	$("#new_work #community").change(function() {
 		update_collections();
 	});
