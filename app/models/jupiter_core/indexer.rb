@@ -6,7 +6,7 @@ class JupiterCore::Indexer < ActiveFedora::IndexingService
     super
 		super.tap do |solr_doc|
       object.properties.each do |key, value|
-        solr_doc[Solrizer.solr_name(key.to_s, :symbol)] = object.send(key)
+        solr_doc[object.class.solr_property_name(key)] = object.send(key)
       end
     end
 	end
