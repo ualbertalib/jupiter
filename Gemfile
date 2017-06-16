@@ -39,7 +39,8 @@ gem 'solrizer', git: 'https://github.com/mbarnett/solrizer.git', branch: 'solriz
 gem 'jquery-rails'
 gem 'bootstrap'
 gem 'popper_js'
-
+gem 'blacklight'
+gem 'rsolr'
 
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 3.0'
