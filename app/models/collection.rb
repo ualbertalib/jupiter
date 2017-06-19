@@ -1,8 +1,8 @@
 class Collection < JupiterCore::Base
   include Hydra::Works::CollectionBehavior
 
-  has_property :title, predicate: ::RDF::Vocab::DC.title, index: [:stored_searchable, :facetable]
-  has_property :community_id, predicate: ::UalibTerms.path, index: [:descendent_path]
+  has_property :title, ::RDF::Vocab::DC.title, solr: [:search, :facet]
+  has_property :community_id, ::UalibTerms.path, solr: :path
 
   def path
     "#{community_id}/#{id}"
