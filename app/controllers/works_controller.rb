@@ -35,6 +35,9 @@ class WorksController < ApplicationController
     redirect_to @work
   end
 
+  def search
+  end
+
   private
 
   def load_work

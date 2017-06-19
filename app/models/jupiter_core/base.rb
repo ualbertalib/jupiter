@@ -2,6 +2,14 @@ class JupiterCore::Base < ActiveFedora::Base
 
   class PropertyInvalid < StandardError; end
 
+  SOLR_DESCRIPTOR_MAP = {
+    :search => :stored_searchable,
+    :sort => :stored_sortable,
+    :facet => :facetable,
+    :symbol => :symbol,
+    :path => :descendent_path
+  }
+
   # a single common indexer for all subclasses which leverages stored property metadata to DRY up indexing
   # doing this the more obvious way, but overridding self.indexer, doesn't work, as it gets
   # clobbered by the Works includes in deriving classes, so we work around this with the
@@ -43,8 +51,20 @@ class JupiterCore::Base < ActiveFedora::Base
     @property_cache[property_name]
   end
 
-  def self.solr_property_name(property_name)
-    @solrized_name[property_name]
+  def self.facet_fields
+    @facets
+  end
+
+  def self.search(q='')
+    response = ActiveFedora::SolrService.instance.conn.get("select", params: {q: %W|has_model_ssim:"#{self.to_s}"|, 
+      facet: true,
+      :'facet.field' => facet_fields.map(&:to_s)
+    })
+
+    raise SearchFailed unless response['responseHeader']['status'] == 0
+
+    return response['response']['docs'].map {|doc| JupiterCore::LightweightResult.new(doc)}
+
   end
 
   protected
@@ -57,17 +77,11 @@ class JupiterCore::Base < ActiveFedora::Base
   # a utility DSL for declaring properties which allows us to store knowledge of them.
   # TODO we could make this inheritable http://wiseheartdesign.com/articles/2006/09/22/class-level-instance-variables/
 
-
-  # the solrizer & associate code is a mess of confusion eg. stored searchable = 
-  # https://github.com/mbarnett/solrizer/blob/e5dd2bd571b9ebdb8a8ab214574075c28951e53e/lib/solrizer/default_descriptors.rb
-
   # search == index.as stored_searchable
   # facet == index.as facetable
   # sort == index.as sortable
   # type == index.type
-
-  # TODO descendant paths don't map to this well
-  # TODO puzzle out index as
+  # etc
 
   # descriptors == personalities. multiple index.as personalties == multiple appearances in solr doc
   # 
@@ -75,38 +89,58 @@ class JupiterCore::Base < ActiveFedora::Base
   # so add it to search?
   # or just make path its own param?
 
-  def self.has_property(name, predicate, multiple: false, search: false, facet: false, sort: false, type: :symbol)
+  def self.has_property(name, predicate, multiple: false, search_by_default: false, solr: [], type: :string)
     raise PropertyInvalid unless name.is_a? Symbol
     raise PropertyInvalid unless predicate.present?
-    raise PropertyInvalid unless [true, false, :default].include?(search)
-    raise PropertyInvalid unless [true, false].include?(facet)
-    raise PropertyInvalid unless [true, false].include?(sort)
-    # todo type validation
+    
+    # TODO keep this conveinience, or push responsibility for [] onto the callsite?
+    solr = [solr] unless solr.is_a? Array
+
+    # index should contain only some combination of :search, :sort, :facet, :symbol, and :path
+    # this isn't an exhaustive layering over this mess https://github.com/mbarnett/solrizer/blob/e5dd2bd571b9ebdb8a8ab214574075c28951e53e/lib/solrizer/default_descriptors.rb
+    # but it helps
+    raise PropertyInvalid if (solr.count {|item| ![:search, :sort, :facet, :path, :symbol].include?(item)} > 0)
+
+    # TODO type validation
 
     @property_names ||= []
     @property_cache ||= {}
     @facets ||= []
     @search_fields ||= []
-    @solrized_name ||= {}
+    @default_search_fields ||= []
 
     @property_names << name
-    @property_cache[name] = attributes
 
-    # todo change dsl: search => true, facet => true, do all the heavy lifting here
-    @facets << name if (attributes.has_key?(:index) && (attributes[:index] == :facetable) || attributes.include?(:facetable))
-    @search_fields << name if attributes[:search_by_default] == true
+    solr_name_cache ||= []
+    solr.each do |descriptor| 
+      solr_name_cache << Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[descriptor], type: type)
+    end
 
-    # todo cleanup
-    index = attributes[:index].is_a?(Array) ? attributes[:index].first : attributes[:index]
+    @facets << Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[:facet], type: type) if solr.include?(:facet) 
+    @facets << Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[:path], type: type) if solr.include?(:path)
 
-    # todo what should the "default" index type be?
-    @solrized_name[name] = Solrizer.solr_name(name, index, type: (attributes[:type] || :symbol))
+    searchable_fields = []
+    searchable_fields << Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[:search], type: type) if solr.include?(:search)
+    searchable_fields << Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[:symbol], type: type) if solr.include?(:symbol)
+  
+    @search_fields.concat(searchable_fields)
+    @default_search_fields.concat(searchable_fields) if search_by_default
 
-    multiple = attributes.has_key?(:multiple) ? attributes[:multiple] : false
+    @property_cache[name] = {
+      name: name,
+      predicate: predicate,
+      multiple: multiple,
+      search_by_default: search_by_default,
+      solr: solr,
+      type: type,
+      search_fields: @search_fields,
+      default_search_fields: @default_search_fields,
+      solr_names: solr_name_cache
+    }
 
     property name, predicate: predicate, multiple: multiple do |index|
-      index.type attributes[:type] if attributes.has_key? :type
-      index.as *attributes[:index] if attributes.has_key? :index
+      index.type type if type.present?
+      index.as *solr.map {|index| SOLR_DESCRIPTOR_MAP[index]}
     end
   end
 
