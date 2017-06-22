@@ -1,5 +1,5 @@
 = simple_form_for work, html: {multipart: true} do |f|
-	- work.properties.each do |prop, _|
+	- work.display_attributes.each do |prop, _|
 		= f.input prop
 
 	= f.input :community, as: :unread_select, collection: Community.all, label_method: :title, value_method: :id, input_html: {name: 'work[community][]'}

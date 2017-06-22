@@ -7,19 +7,21 @@ class CollectionsController < ApplicationController
 
   def new
     @community = Community.find(params[:community_id])
-    @collection = Collection.new(community_id: params[:community_id])
+    @collection = Collection.new_locked_ldp_object(community_id: params[:community_id])
   end
 
   def create
     @community = Community.find(params[:community_id])
-    @collection = Collection.create!(collection_params)
+    @collection = Collection.new_locked_ldp_object(collection_params)
+    @collection.unlock_and_load_writable_ldp_object.save!
+    
     redirect_to community_collection_path(@community, @collection)
   end
 
   protected
 
   def collection_params
-    params[:collection].permit(Collection.property_names)
+    params[:collection].permit(Collection.attribute_names)
   end
 
 end

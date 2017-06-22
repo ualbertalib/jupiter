@@ -3,14 +3,15 @@ class WorksController < ApplicationController
   before_action :load_work, only: [:show, :edit, :update]
 
   def new
-    @work = Work.new
+    @work = Work.new_locked_ldp_object
   end
 
   def create
+    raise 'foo'
     communities = params[:work].delete :community
     collections = params[:work].delete :collection
 
-    @work = Work.new(work_params)
+    @work = Work.new_locked_ldp_object(work_params).unlock_and_load_writable_ldp_object
 
     communities.each_with_index do |community, idx|
       @work.add_to_path(community, collections[idx])
@@ -31,11 +32,12 @@ class WorksController < ApplicationController
   end
 
   def update
-    @work.update!(work_params)
+    @work.unlock_and_load_writable_ldp_object.update!(work_params)
     redirect_to @work
   end
 
   def search
+    @results = Work.search(q: params[:q])
   end
 
   private
@@ -45,6 +47,6 @@ class WorksController < ApplicationController
   end
 
   def work_params
-    params[:work].permit(Work.property_names)
+    params[:work].permit(Work.attribute_names)
   end
 end
