@@ -1,15 +1,15 @@
-class Collection < JupiterCore::Base
-  include Hydra::Works::CollectionBehavior
+class Collection < JupiterCore::CachedLdpObject
+  ldp_object_includes Hydra::Works::CollectionBehavior
 
-  has_property :title, ::RDF::Vocab::DC.title, solr: [:search, :facet]
-  has_property :community_id, ::UalibTerms.path, solr: :path
+  has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
+  has_attribute :community_id, ::UalibTerms.path, solrize_for: :pathing
 
   def path
     "#{community_id}/#{id}"
   end
 
   def member_works
-    ActiveFedora::Base.where("member_of_paths_dpsim:#{path}")
+    Work.where('member_of_paths_dpsim' => path)
   end
 
   def as_json(options)

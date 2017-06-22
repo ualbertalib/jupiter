@@ -2,7 +2,7 @@
 .row.mt-3
 	.col
 		= simple_form_for @community do |f|
-			- @community.property_names.each do |prop|
+			- Community.attribute_names.each do |prop|
 				.form-group
 					= f.input prop
 
