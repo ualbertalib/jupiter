@@ -2,7 +2,7 @@
 .row.mt-3
 	.col
 		.list-group
-			- @work.properties.each do |name, value|
+			- @work.display_attributes.each do |name, value|
 				.list-group-item="#{name.titlecase} : #{value}"
 
 			.list-group-item.flex-column
@@ -20,12 +20,12 @@
 					%th Original Filename
 					%th MIME Type
 			%tbody
-				- @work.file_sets.each_with_index do |fs,idx|
-					- fs.files.each do |file|
-						%tr
-							%td=idx + 1
-							%td=file.original_name
-							%td=file.mime_type
-.row.mt-3
+-# 				- @work.file_sets.each_with_index do |fs,idx|
+-# 					- fs.files.each do |file|
+-# 						%tr
+-# 							%td=idx + 1
+-# 							%td=file.original_name
+-# 							%td=file.mime_type
+-# .row.mt-3
 	.col
 		= link_to 'Edit', edit_work_path(@work), class: 'btn btn-primary pull-right'

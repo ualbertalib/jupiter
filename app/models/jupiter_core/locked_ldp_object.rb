@@ -2,7 +2,7 @@
 module JupiterCore
   class ObjectNotFound < StandardError; end
 
-  class CachedLdpObject
+  class LockedLdpObject
     class PropertyInvalidError < StandardError; end
     class MultipleIdViolationError < StandardError; end
     class AlreadyDefinedError < StandardError; end
@@ -10,8 +10,6 @@ module JupiterCore
 
     include ActiveModel::Model
     include ActiveModel::Serializers::JSON
-
-    private_class_method :new
 
     AF_CLASS_PREFIX = 'IR'
 
@@ -23,6 +21,13 @@ module JupiterCore
       :pathing => :descendent_path
     }
 
+    private_class_method :new
+
+    # inheritable class attributes (not all class-level attributes in this class should be inherited, 
+    # these are the inheritance-safe attributes)
+    class_attribute :af_parent_class, :attribute_cache, :attribute_names, :facets, 
+                    :reverse_solr_name_cache, :solr_calc_attributes
+
     attr_reader :solr_representation
 
     def id
@@ -30,9 +35,10 @@ module JupiterCore
       solr_representation['id'] if solr_representation
     end
 
-    def unlock_and_load_writable_ldp_object
-      return @ldp_object if ldp_object
-      self.ldp_object = self.class.derived_af_class.find(self.id)
+    def unlock_and_fetch_ldp_object(&block)
+      self.ldp_object = self.class.derived_af_class.find(self.id) unless @ldp_object.present?
+      yield @ldp_object
+      return self
     end
 
     def attributes
@@ -80,76 +86,106 @@ module JupiterCore
     # errors forwarding?
 
     def valid?(*args)
-      return true unless ldp_object.present?
+      return super(*args) unless ldp_object.present?
       return ldp_object.valid?(*args)
     end
 
-    def invalid?(*args)
-      return !valid?(*args)
-    end
-
     def errors
-      return {} unless ldp_object.present?
+      return super unless ldp_object.present?
       return ldp_object.errors
     end
 
     def self.new_locked_ldp_object(*attrs)
-      new_obj = new
-      new_obj.send(:ldp_object=, self.derived_af_class.new(*attrs))
-      return new_obj
+      new(ldp_obj: self.derived_af_class.new(*attrs))
     end
 
     # override this to control what attributes are automatically listed in the attributes list
     def self.display_attribute_names
-      attribute_names
+      self.attribute_names - [:id]
     end
 
-    # Track attributes, so that we can avoid duplicating definitions in a separate indexer and on forms
-    def self.attribute_names
-      @attribute_names
+    # # Track attributes, so that we can avoid duplicating definitions in a separate indexer and on forms
+    # def self.attribute_names
+    #   @attribute_names
+    # end
+
+    def self.safe_attributes
+      self.attribute_names - [:id]
     end
 
     def self.attribute_metadata(attribute_name)
-      @attribute_cache[attribute_name]
+      self.attribute_cache[attribute_name]
     end
 
     def self.solr_name_to_attribute_name(solr_name)
-      @reverse_solr_name_cache[solr_name]
+      self.reverse_solr_name_cache[solr_name]
     end
 
     def self.find(id)
-      results_count, results, _ = perform_solr_query('', %W|has_model_ssim:#{derived_af_class_name} id:#{id}|, false)
+      results_count, results, _ = perform_solr_query(%Q|_query_:"{!raw f=id}#{id}"|, '', false)
       raise ObjectNotFound, "Couldn't find #{self.to_s} with id='#{id}'" if results_count == 0
       raise MultipleIdViolationError if results_count > 1
 
-      new_obj = new
-      new_obj.send(:solr_representation=, results.first)
-      new_obj
+      new(solr_doc: results.first)
     end
 
     def self.all
-      results_count, results, _ = perform_solr_query('', %W|has_model_ssim:#{derived_af_class_name}|, false)
-      results.map{|res| new_obj = new; new_obj.send(:solr_representation=, res); new_obj}
+      results_count, results, _ = perform_solr_query('', '', false)
+      results.map{|res| new_obj = new(solr_doc: res)}
     end
 
     def self.where(attributes)
-      filter_queries = %W|has_model_ssim:#{derived_af_class_name}|
-      filter_queries << attributes.map{|k, v| %Q|#{k}:#{v}|}
+      attr_queries = []
+      attr_queries << attributes.map do |k, v| 
+        solr_key = self.attribute_metadata(k)[:solr_names].first
+        %Q|_query_:"{!field f=#{solr_key}}#{v}"|
+      end
 
-      results_count, results, _ = perform_solr_query('', filter_queries.flatten.join(' '), false)
-      results.map{|res| new_obj = new; new_obj.send(:solr_representation=, res); new_obj}
+      results_count, results, _ = perform_solr_query(attr_queries, '', false)
+      results.map{|res| new_obj = new(solr_doc: res)}
     end
 
     def self.search(q:'', fq:'')
-      filter_queries = %W|has_model_ssim:"#{self.to_s}"|
+      filter_queries = %W|has_model_ssim:"#{derived_af_class_name}"|
       filter_queries << fq
 
-      results_count, results, facets = perform_solr_query(q || '', filter_queries, true, @facets.map(&:to_s))
+      results_count, results, facets = perform_solr_query(q || '', filter_queries, true, self.facets.map(&:to_s))
 
-      return results_count, facets, results
+      return SearchResults.new(self, results_count, facets, results.map{|res| new(solr_doc: res)})
     end
 
     protected
+
+    def self.perform_solr_query(q, fq, facet, facet_fields=[])
+      query = []
+      query << %Q|_query_:"{!raw f=has_model_ssim}#{derived_af_class_name}"|
+      query.append(q) if q.present?
+
+      response = ActiveFedora::SolrService.instance.conn.get("select", params: {q: query.join(' AND '),
+        fq: fq,
+        facet: facet,
+        :'facet.field' => facet_fields
+      })
+
+      raise SearchFailed unless response['responseHeader']['status'] == 0
+
+      return response['response']['numFound'], response['response']['docs'], response['facet_counts']
+    end
+
+    def initialize(solr_doc: nil, ldp_obj: nil)
+      raise ArgumentError if solr_doc.present? && ldp_obj.present?
+      self.solr_representation = solr_doc if solr_doc.present?
+      self.ldp_object = ldp_obj if ldp_obj.present?
+    end
+
+    # clone inherited arrays/maps so that local mutation doesn't propogate to the parent
+    def self.inherited(child)
+      child.attribute_names = self.attribute_names.dup
+      child.reverse_solr_name_cache = self.reverse_solr_name_cache.dup
+      child.attribute_cache = self.attribute_cache.dup
+      child.facets = self.facets.dup
+      child.solr_calc_attributes = self.solr_calc_attributes.dup
+    end
 
     def method_missing(name, *args, &block)
       if self.class.derived_af_class.instance_methods.include?(name)
@@ -178,18 +214,6 @@ module JupiterCore
       derived_af_class.send(:include, module_name)
     end
 
-    def self.perform_solr_query(q, fq, facet, facet_fields=[])
-      response = ActiveFedora::SolrService.instance.conn.get("select", params: {q: q,
-        fq: fq,
-        facet: facet,
-        :'facet.field' => facet_fields
-      })
-
-      raise SearchFailed unless response['responseHeader']['status'] == 0
-
-      return response['response']['numFound'], response['response']['docs'], response['facet_counts']
-    end
-
     def self.derived_af_class_name
       AF_CLASS_PREFIX + self.to_s
     end
@@ -201,7 +225,9 @@ module JupiterCore
     # for a class Book, this would generate an ActiveFedora subclass "IRBook"
     def self.generate_af_class
       if !const_defined? derived_af_class_name
-        af_class = Class.new(ActiveFedora::Base) do
+        self.af_parent_class ||= ActiveFedora::Base
+
+        af_class = Class.new(self.af_parent_class) do
           attr_accessor :owning_object
 
           def owning_class
@@ -229,6 +255,7 @@ module JupiterCore
         end
         af_class.instance_variable_set(:@owning_class, self)
         Object.const_set(derived_af_class_name, af_class)
+        self.af_parent_class = af_class
         af_class
       else
         raise AlreadyDefinedError, "The attempted ActiveFedora class generation name '#{derived_af_class_name}' is already defined"
@@ -244,6 +271,15 @@ module JupiterCore
       val = solr_representation[solr_name_cache.first]
       return val.freeze if val.nil? || multiple
       return val.first.freeze
+    end
+
+    def self.solr_calculated_attribute(name, solrize_for:, &callable)
+      raise PropertyInvalidError unless callable.respond_to?(:call)
+      raise PropertyInvalidError unless name.present?
+      raise PropertyInvalidError unless solrize_for.present? && solrize_for.is_a?(Symbol)
+
+      self.solr_calc_attributes ||= {}
+      self.solr_calc_attributes[name] = {type: SOLR_DESCRIPTOR_MAP[solrize_for], callable: callable}
     end
 
     # TODO name? Necessary?
@@ -280,24 +316,24 @@ module JupiterCore
 
       # TODO type validation
 
-      @attribute_names ||= []
-      @attribute_cache ||= {}
-      @facets ||= []
+      self.attribute_names ||= [:id]
+      self.attribute_cache ||= {}
+      self.facets ||= []
       # @search_fields ||= []
       # @default_search_fields ||= []
-      @reverse_solr_name_cache ||= {}
+      self.reverse_solr_name_cache ||= {}
 
-      @attribute_names << name
+      self.attribute_names << name
 
       solr_name_cache ||= []
       solrize_for.each do |descriptor| 
         solr_name = Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[descriptor], type: type)
         solr_name_cache << solr_name
-        @reverse_solr_name_cache[solr_name] = name
+        self.reverse_solr_name_cache[solr_name] = name
       end
 
-      @facets << Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[:facet], type: type) if solrize_for.include?(:facet) 
-      @facets << Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[:path], type: type) if solrize_for.include?(:path)
+      self.facets << Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[:facet], type: type) if solrize_for.include?(:facet)
+      self.facets << Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[:path], type: type) if solrize_for.include?(:path)
 
       # searchable_fields = []
       # searchable_fields << Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[:search], type: type) if solrize_for.include?(:search)
@@ -306,7 +342,7 @@ module JupiterCore
       # @search_fields.concat(searchable_fields)
       # @default_search_fields.concat(searchable_fields) if search_by_default
 
-      @attribute_cache[name] = {
+      self.attribute_cache[name] = {
         predicate: predicate,
         multiple: multiple,
       #  search_by_default: search_by_default,

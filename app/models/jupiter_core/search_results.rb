@@ -3,18 +3,16 @@ class JupiterCore::SearchResults
 
   def initialize(searched_class, count, facets, results)
     @count = count
-    @facets = facets['facet_fields'].map do |k,v|
-      {searched_class.solr_name_to_property_name(k) => v}
-    end.reduce(:merge)
+    @facets = facets['facet_fields'].map do |k, v|
+      JupiterCore::FacetResult.new(searched_class, k, v)
+    end
 
     @results = results
-
-    @facet_names = @facets.keys
   end
 
-  def each_facet_result_for(facet_name)
-    @facets[facet_name].each_slice(2) do |name, count|
-      yield name, count if name.present?
+  def each_facet_with_results
+    @facets.each do |facet|
+      yield facet if facet.present?
     end
   end
 end

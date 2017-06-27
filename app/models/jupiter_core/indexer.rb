@@ -4,11 +4,8 @@ class JupiterCore::Indexer < ActiveFedora::IndexingService
   # smart defaults are good
 	def generate_solr_document
 		super.tap do |solr_doc|
-      object.owning_class.attribute_names.each do |name|
-        metadata = object.owning_class.attribute_metadata(name)
-        metadata[:solr_names].each do |solr_name| 
-          solr_doc[solr_name] = object.send(name)
-        end
+      object.owning_class.solr_calc_attributes.each do |name, metadata|
+        Solrizer.insert_field(solr_doc, name, metadata[:callable].call(object), metadata[:type])
       end
     end
 	end
