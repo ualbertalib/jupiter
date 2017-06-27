@@ -3,12 +3,12 @@
 	.row.mt-3
 		.col-sm-2
 			Refine your search
-			- @results.facet_names.each do |field|
+			- @results.each_facet_with_results do |facet|
 				.row.mt-3
 					.col-sm-1
-						= field.to_s.titleize
+						= facet.name
 					.col-md-11
-						- @results.each_facet_result_for(field) do |name, count|
+						- facet.each_facet_value do |name, count|
 							.row
 								.col
 									#{link_to name, ''}, #{count}

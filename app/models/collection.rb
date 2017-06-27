@@ -1,4 +1,4 @@
-class Collection < JupiterCore::CachedLdpObject
+class Collection < JupiterCore::LockedLdpObject
   ldp_object_includes Hydra::Works::CollectionBehavior
 
   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
@@ -9,7 +9,7 @@ class Collection < JupiterCore::CachedLdpObject
   end
 
   def member_works
-    Work.where('member_of_paths_dpsim' => path)
+    Work.where(member_of_paths: path)
   end
 
   def as_json(options)
