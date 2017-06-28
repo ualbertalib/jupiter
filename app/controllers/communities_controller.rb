@@ -18,7 +18,8 @@ class CommunitiesController < ApplicationController
 
   def create
     @community = Community.new_locked_ldp_object(community_params)
-    @community.unlock_and_load_writable_ldp_object.save!
+    @community.unlock_and_fetch_ldp_object {|c| c.save!}
+
     redirect_to @community
   end
 
