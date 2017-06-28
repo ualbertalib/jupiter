@@ -189,7 +189,7 @@ module JupiterCore
 
     def method_missing(name, *args, &block)
       if self.class.derived_af_class.instance_methods.include?(name)
-        raise LockedInstanceError, "This is a locked cache instance and does not respond to the method you attempted to call (##{name}). However, the locked instance DOES respond to ##{name}. Use unlock_and_load_writable_ldp_object to load a writable copy (SLOW)."
+        raise LockedInstanceError, "This is a locked cache instance and does not respond to the method you attempted to call (##{name}). However, the locked instance DOES respond to ##{name}. Use unlock_and_fetch_ldp_object to load a writable copy (SLOW)."
       else
         super
       end
@@ -363,7 +363,7 @@ module JupiterCore
       end
 
       define_method "#{name}=" do |*args|
-        raise LockedInstanceError, "The Locked LDP object cannot be mutated outside of an unlocked block or without calling unlock_and_load_writable_ldp_object to load a writable copy (SLOW)."
+        raise LockedInstanceError, "The Locked LDP object cannot be mutated outside of an unlocked block or without calling unlock_and_fetch_ldp_object to load a writable copy (SLOW)."
       end
 
       derived_af_class.class_eval do

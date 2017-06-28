@@ -12,7 +12,6 @@ $(document).on('turbolinks:load', function() {
 });
 
 function update_collections() {
-	console.log("here");
 	id =  $("option:selected", '#new_work #community').val();
 	
 	$.getJSON('/communities/' + id + '.json').done(function(data) {
