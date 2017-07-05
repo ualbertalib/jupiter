@@ -1,5 +1,5 @@
 class JupiterCore::SearchResults
-  attr_reader :count, :facet_names, :results
+  attr_reader :count, :results
 
   def initialize(searched_class, count, facets, results)
     @count = count
