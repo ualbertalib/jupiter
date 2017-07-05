@@ -4,6 +4,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
   @@klass = Class.new(JupiterCore::LockedLdpObject) do
     ldp_object_includes Hydra::Works::WorkBehavior
     has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
+    has_attribute :creator, ::RDF::Vocab::DC.creator, solrize_for: [:search, :facet]
     has_multival_attribute :member_of_paths, ::UalibTerms.path, solrize_for: :pathing
 
     solr_calculated_attribute :my_solr_doc_attr, solrize_for: :search do
@@ -49,7 +50,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
   end
 
   def test_attribute_definitions
-    assert_equal @@klass.attribute_names.sort, [:id, :member_of_paths, :title]
+    assert_equal [:creator, :id, :member_of_paths, :title], @@klass.attribute_names.sort
   end
 
   def test_attribute_metadata
@@ -66,7 +67,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
   end
 
   def test_solr_calculated_attributes
-    obj = @@klass.new_locked_ldp_object(title: 'A Work')
+    obj = @@klass.new_locked_ldp_object(title: generate_random_string)
 
     obj.unlock_and_fetch_ldp_object do |uo|
       solr_doc = uo.to_solr
@@ -87,54 +88,65 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
   end
 
   def test_locked_object_enforcement
-    obj = @@klass.new_locked_ldp_object(title: 'A Work')
+    original_title = generate_random_string
+    obj = @@klass.new_locked_ldp_object(title: original_title)
 
-    assert_equal 'A Work', obj.title
+    assert_equal original_title, obj.title
+
     assert_raises JupiterCore::LockedInstanceError do
-      obj.title = 'asdf'
+      obj.title = generate_random_string
     end
 
     assert_raises JupiterCore::LockedInstanceError do
-      obj.locked_method_shouldnt_mutate('asdf')
+      obj.locked_method_shouldnt_mutate(generate_random_string)
     end
 
     assert_raises JupiterCore::LockedInstanceError do
-      obj.unlocked_method_can_mutate('asdf')
+      obj.unlocked_method_can_mutate(generate_random_string)
     end
 
     assert_raises JupiterCore::LockedInstanceError do
-      obj.unlock_and_fetch_ldp_object {|uo| uo.unlocked_method_dont_let_locked_methods_mutate('asdf')}
+      obj.unlock_and_fetch_ldp_object {|uo| uo.unlocked_method_dont_let_locked_methods_mutate(generate_random_string)}
     end
+
+    assert_equal original_title, obj.title
   end
 
   def test_unlocked_methods_can_call_locked_methods
-    obj = @@klass.new_locked_ldp_object(title: 'A Work')
+    title = generate_random_string
+    obj = @@klass.new_locked_ldp_object(title: title)
 
     obj.unlock_and_fetch_ldp_object do |uo|
-      assert_equal "Title is: A Work", uo.safe_locked_method
+      assert_equal "Title is: #{title}", uo.safe_locked_method
     end
   end
 
   def test_unlocked_methods_can_mutate
-    obj = @@klass.new_locked_ldp_object(title: 'A Work')
+    orig_title = generate_random_string
+    obj = @@klass.new_locked_ldp_object(title: orig_title)
+
+    new_title = generate_random_string
 
     obj.unlock_and_fetch_ldp_object do |unlocked_object|
-      assert_equal 'A Work', unlocked_object.title
-      unlocked_object.title = 'A New Title'
+      assert_equal orig_title, unlocked_object.title
+      unlocked_object.title = new_title
     end
 
-    assert_equal 'A New Title', obj.title
+    assert_equal new_title, obj.title
+
+    another_new_title = generate_random_string
 
     obj.unlock_and_fetch_ldp_object do |unlocked_object|
-      unlocked_object.unlocked_method_can_mutate('Another New Title')
+      unlocked_object.unlocked_method_can_mutate(another_new_title)
     end
 
-    assert_equal 'Another New Title', obj.title
+    assert_equal another_new_title, obj.title
   end
 
   def test_object_inspecting
-    obj = @@klass.new_locked_ldp_object(title: 'A Work')
-    assert_equal "#<AnonymousClass id: nil, title: \"A Work\", member_of_paths: []>", obj.inspect
+    title = generate_random_string
+    obj = @@klass.new_locked_ldp_object(title: title)
+    assert_equal "#<AnonymousClass id: nil, title: \"#{title}\", creator: nil, member_of_paths: []>", obj.inspect
   end
 
   def test_inheritance_of_attributes
@@ -142,20 +154,21 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
       has_attribute :subject, ::RDF::Vocab::DC.subject, solrize_for: :search
     end
 
-    assert_equal subclass.attribute_names.sort, [:id, :member_of_paths, :subject, :title]
+    assert_equal [:creator, :id, :member_of_paths, :subject, :title], subclass.attribute_names.sort
     # ensure mutating subclass attribute lists isn't trickling back to the superclass
-    assert_equal @@klass.attribute_names.sort, [:id, :member_of_paths, :title]
+    assert_equal [:creator, :id, :member_of_paths, :title], @@klass.attribute_names.sort
   end
 
   def test_attributes
-    obj = @@klass.new_locked_ldp_object(title: 'A Work')
+    title = generate_random_string
+    obj = @@klass.new_locked_ldp_object(title: title)
     assert obj.attributes.key? 'title'
-    assert_equal 'A Work', obj.attributes['title']
+    assert_equal title, obj.attributes['title']
     assert obj.attributes.key? 'id'
 
     assert obj.display_attributes.key? 'title'
     assert_not obj.display_attributes.key? 'id'
-    assert_equal 'A Work', obj.display_attributes['title']
+    assert_equal title, obj.display_attributes['title']
   end
 
   def test_activemodel_integration
@@ -171,9 +184,63 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
 
     assert_predicate obj, :changed?
 
-    # TODO validation and persistence
+    # TODO validation
   end
 
-  # search
+  def test_basic_solr_finds
+    assert @@klass.all.count == 0
 
+    creator = generate_random_string
+    first_title = generate_random_string
+
+    obj = @@klass.new_locked_ldp_object(title: first_title, creator: creator)
+    obj.unlock_and_fetch_ldp_object {|uo| uo.save!}
+
+    assert obj.id.present?
+
+    assert @@klass.all.count == 1
+
+    assert_equal first_title, @@klass.all.first.title
+
+    second_title = generate_random_string
+
+    another_obj = @@klass.new_locked_ldp_object(title: second_title, creator: creator)
+    another_obj.unlock_and_fetch_ldp_object {|uo| uo.save!}
+
+    assert @@klass.all.count == 2
+
+    assert @@klass.where(title: second_title).present?
+    assert @@klass.where(title: second_title).first.id == another_obj.id
+
+
+    assert_raises JupiterCore::ObjectNotFound do
+      @@klass.find(generate_random_string)
+    end
+
+    assert @@klass.find(obj.id).present?
+
+    search_results = @@klass.search(q: '')
+
+    assert search_results.count == 2
+
+    search_results.results.each do |res|
+      assert_includes [obj, another_obj].map(&:id), res.id
+    end
+
+    search_results.each_facet_with_results do |facet|
+      assert_includes ['Title', 'Creator'], facet.name
+      if facet.name == 'Title'
+        assert facet.values.keys.count == 2
+        assert facet.values.key?(first_title)
+        assert facet.values.key?(second_title)
+        [first_title, second_title].each do |title|
+          assert facet.values[title] == 1
+        end
+      else
+        assert facet.values.keys.count == 1
+        assert facet.values.key?(creator)
+        assert facet.values[creator] == 2
+      end
+    end
+  end
 end

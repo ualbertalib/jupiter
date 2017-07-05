@@ -1,13 +1,12 @@
 # JupiterCore::Base classes are lightweight, read-only objects
 module JupiterCore
   class ObjectNotFound < StandardError; end
+  class PropertyInvalidError < StandardError; end
+  class MultipleIdViolationError < StandardError; end
+  class AlreadyDefinedError < StandardError; end
+  class LockedInstanceError < StandardError; end
 
   class LockedLdpObject
-    class PropertyInvalidError < StandardError; end
-    class MultipleIdViolationError < StandardError; end
-    class AlreadyDefinedError < StandardError; end
-    class LockedInstanceError < StandardError; end
-
     include ActiveModel::Model
     include ActiveModel::Serializers::JSON
 
@@ -23,9 +22,9 @@ module JupiterCore
 
     private_class_method :new
 
-    # inheritable class attributes (not all class-level attributes in this class should be inherited, 
+    # inheritable class attributes (not all class-level attributes in this class should be inherited,
     # these are the inheritance-safe attributes)
-    class_attribute :af_parent_class, :attribute_cache, :attribute_names, :facets, 
+    class_attribute :af_parent_class, :attribute_cache, :attribute_names, :facets,
                     :reverse_solr_name_cache, :solr_calc_attributes
 
     attr_reader :solr_representation
@@ -50,20 +49,20 @@ module JupiterCore
     def display_attributes
       self.class.display_attribute_names.map do |name|
         [name.to_s, self.send(name)]
-      end
+      end.to_h
     end
 
     def inspect
-      "#<#{self.class.to_s} id: #{self.id} " + self.class.attribute_names.map do |name|
+      "#<#{self.class.name || 'AnonymousClass'} " + self.class.attribute_names.map do |name|
         val = self.send(name)
-        val_display = case 
+        val_display = case
         when val.is_a?(String)
           %Q|"#{val}"|
         when val.nil?
           'nil'
         when val.is_a?(Enumerable) && val.empty?
           '[]'
-        else          
+        else
           val.to_s
         end
         "#{name}: #{val_display}"
@@ -136,7 +135,7 @@ module JupiterCore
 
     def self.where(attributes)
       attr_queries = []
-      attr_queries << attributes.map do |k, v| 
+      attr_queries << attributes.map do |k, v|
         solr_key = self.attribute_metadata(k)[:solr_names].first
         %Q|_query_:"{!field f=#{solr_key}}#{v}"|
       end
@@ -180,11 +179,13 @@ module JupiterCore
 
     # clone inherited arrays/maps so that local mutation doesn't propogate to the parent
     def self.inherited(child)
-      child.attribute_names = self.attribute_names.dup
-      child.reverse_solr_name_cache = self.reverse_solr_name_cache.dup
-      child.attribute_cache = self.attribute_cache.dup
-      child.facets = self.facets.dup
-      child.solr_calc_attributes = self.solr_calc_attributes.dup
+      super
+      child.attribute_names = self.attribute_names  ? self.attribute_names.dup : [:id]
+      child.reverse_solr_name_cache = self.reverse_solr_name_cache ? self.reverse_solr_name_cache.dup : {}
+      child.attribute_cache = self.attribute_cache  ? self.attribute_cache.dup : {}
+      child.facets = self.facets  ? self.facets.dup : []
+      child.solr_calc_attributes = self.solr_calc_attributes.present? ? self.solr_calc_attributes.dup : {}
+      #child.derived_af_class
     end
 
     def method_missing(name, *args, &block)
@@ -215,7 +216,8 @@ module JupiterCore
     end
 
     def self.derived_af_class_name
-      AF_CLASS_PREFIX + self.to_s
+      return AF_CLASS_PREFIX + self.to_s if self.name.present?
+      "AnonymousDerivedClass#{self.object_id}"
     end
 
     def self.unlocked(&block)
@@ -266,13 +268,6 @@ module JupiterCore
       @derived_af_class ||= generate_af_class
     end
 
-    def self.fetch_attribute_value(name)
-      return ldp_object.send(name).freeze if ldp_object.present?
-      val = solr_representation[solr_name_cache.first]
-      return val.freeze if val.nil? || multiple
-      return val.first.freeze
-    end
-
     def self.solr_calculated_attribute(name, solrize_for:, &callable)
       raise PropertyInvalidError unless callable.respond_to?(:call)
       raise PropertyInvalidError unless name.present?
@@ -297,7 +292,7 @@ module JupiterCore
     # etc
 
     # descriptors == personalities. multiple index.as personalties == multiple appearances in solr doc
-    # 
+    #
     # maybe special logic on the type? as they imply stored, indexed, multi
     # so add it to search?
     # or just make path its own param?
@@ -305,7 +300,7 @@ module JupiterCore
     def self.has_attribute(name, predicate, multiple: false, search_by_default: false, solrize_for: [], type: :string)
       raise PropertyInvalidError unless name.is_a? Symbol
       raise PropertyInvalidError unless predicate.present?
-      
+
       # TODO keep this conveinience, or push responsibility for [] onto the callsite?
       solrize_for = [solrize_for] unless solrize_for.is_a? Array
 
@@ -316,17 +311,17 @@ module JupiterCore
 
       # TODO type validation
 
-      self.attribute_names ||= [:id]
-      self.attribute_cache ||= {}
-      self.facets ||= []
-      # @search_fields ||= []
-      # @default_search_fields ||= []
-      self.reverse_solr_name_cache ||= {}
+      # self.attribute_names ||= [:id]
+      # self.attribute_cache ||= {}
+      # self.facets ||= []
+      # # @search_fields ||= []
+      # # @default_search_fields ||= []
+      # self.reverse_solr_name_cache ||= {}
 
       self.attribute_names << name
 
       solr_name_cache ||= []
-      solrize_for.each do |descriptor| 
+      solrize_for.each do |descriptor|
         solr_name = Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[descriptor], type: type)
         solr_name_cache << solr_name
         self.reverse_solr_name_cache[solr_name] = name
@@ -338,7 +333,7 @@ module JupiterCore
       # searchable_fields = []
       # searchable_fields << Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[:search], type: type) if solrize_for.include?(:search)
       # searchable_fields << Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[:symbol], type: type) if solrize_for.include?(:symbol)
-    
+
       # @search_fields.concat(searchable_fields)
       # @default_search_fields.concat(searchable_fields) if search_by_default
 

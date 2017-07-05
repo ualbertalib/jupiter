@@ -12,7 +12,6 @@ gem 'hydra-works'
 gem 'jquery-rails'
 gem 'mysql2', '>= 0.3.18', '< 0.5'
 gem 'popper_js'
-gem 'blacklight'
 gem 'rails', '~> 5.1.1'
 gem 'rdf-vocab'
 gem 'redis', '~> 3.0'
@@ -34,4 +33,11 @@ group :development do
   gem 'binding_of_caller'
   gem 'listen', '>= 3.0.5', '< 3.2'
   gem 'web-console', '>= 3.3.0'
+end
+
+group :test do
+  gem 'simplecov'
+  # Faker added 0.5 seconds to the test suite per call. Haikunator seems much faster for faking strings
+  gem 'haikunator'
+  gem 'minitest-hooks'
 end
