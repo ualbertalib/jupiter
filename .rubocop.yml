@@ -1,0 +1,86 @@
+# List of cops can be found here:
+# https://github.com/bbatsov/rubocop/blob/master/config/default.yml
+# https://github.com/bbatsov/rubocop/blob/master/config/disabled.yml
+# https://github.com/bbatsov/rubocop/blob/master/config/enabled.yml
+
+AllCops:
+  DisplayCopNames: true
+  DisplayStyleGuide: true
+  Exclude:
+    - 'tmp/**/*'
+    - 'vendor/**/*'
+  ExtraDetails: true
+  TargetRubyVersion: 2.3
+
+# readability is Actually Good
+Layout/EmptyLinesAroundClassBody:
+  EnforcedStyle: empty_lines_except_namespace
+
+Layout/IndentationConsistency:
+  Enabled: true
+  EnforcedStyle: normal
+
+# A calculated magnitude based on number of assignments,
+# branches, and conditions.
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/ClassLength:
+  Max: 500 # default 100
+
+# A complexity metric that is strongly correlated to the number
+# of test cases needed to validate a method.
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/LineLength:
+  Enabled: true
+  Max: 120 # default is 80
+
+# Avoid methods longer than 10 lines of code.
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
+
+Metrics/ModuleLength:
+  Max: 500 # default 100
+
+# A complexity metric geared towards measuring complexity for a human reader.
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+# indentation is an endangered resource
+Style/ClassAndModuleChildren:
+  EnforcedStyle: compact
+
+Style/Documentation:
+  Enabled: false
+
+Style/FileName:
+  Exclude:
+    - Dangerfile
+    - Rakefile
+    - Gemfile
+
+# Checks if there is a magic comment to enforce string literals
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+# Perfer to use // but %r can be better in certain scenarios
+Style/RegexpLiteral:
+  Enabled: false
+
+Style/SymbolArray:
+  Enabled: false
+
+# Use %w or %W for arrays of words.
+Style/WordArray:
+  Enabled: false
+
+Style/PercentLiteralDelimiter:
+  Enabled: false
+
+Style/BarePercentLiterals:
+  Enabled: false
