@@ -25,6 +25,7 @@ group :development, :test do
   gem 'capybara', '~> 2.13'
   gem 'pry'
   gem 'pry-rails'
+  gem 'rubocop', require: false
   gem 'selenium-webdriver'
 end
 
