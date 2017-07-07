@@ -1,4 +1,4 @@
-# JupiterCore::Base classes are lightweight, read-only objects
+# JupiterCore::LockedLdpObject classes are lightweight, read-only objects
 module JupiterCore
   class ObjectNotFound < StandardError; end
   class PropertyInvalidError < StandardError; end
@@ -11,7 +11,7 @@ module JupiterCore
     include ActiveModel::Model
     include ActiveModel::Serializers::JSON
 
-    # Prefix added to subclass names to derive the name of their corresponding <tt>ActiveFedora</tt> LDP object
+    # Prefix added to subclass names to derive the name of their corresponding +ActiveFedora+ LDP object
     AF_CLASS_PREFIX = 'IR'.freeze
 
     # Maps semantically meaningful, easily understandable names for solr index behaviours
@@ -42,14 +42,14 @@ module JupiterCore
 
     # Provides structured, mediated interaction for mutating the underlying LDP object
     #
-    # yields the underlying mutable <tt>ActiveFedora</tt> object to the block and returns self for chaining
+    # yields the underlying mutable +ActiveFedora+ object to the block and returns self for chaining
     #
     #  locked_obj.unlock_and_fetch_ldp_object do |ldp_object|
     #    ldp_object.title = 'asdf'
     #    ldp_object.save
     #  end
     def unlock_and_fetch_ldp_object
-      self.ldp_object = self.class.derived_af_class.find(self.id) unless @ldp_object.present?
+      self.ldp_object = self.class.send(:derived_af_class).find(self.id) unless @ldp_object.present?
       yield @ldp_object
       self
     end
@@ -61,7 +61,7 @@ module JupiterCore
       end.to_h
     end
 
-    # Returns name-value pairs for the LDP Object's attributes named by <tt>display_attribute_names</tt> as a Hash
+    # Returns name-value pairs for the LDP Object's attributes named by +display_attribute_names+ as a Hash
     def display_attributes
       self.class.display_attribute_names.map do |name|
         [name.to_s, self.send(name)]
@@ -110,7 +110,7 @@ module JupiterCore
       ldp_object.errors
     end
 
-    # Use this to create a new <tt>LockedLDPObjects</tt> and its underlying LDP instance. attrs populate the new object's
+    # Use this to create a new +LockedLDPObjects+ and its underlying LDP instance. attrs populate the new object's
     # attributes
     def self.new_locked_ldp_object(*attrs)
       new(ldp_obj: derived_af_class.new(*attrs))
@@ -125,7 +125,7 @@ module JupiterCore
     # attribute for forms to modify. Subclasses should override this and remove any other sensitive attributes from
     # this array
     #
-    # a Work +LockedLDPObject+ might choose to protect its <tt>owner</tt> attribute by overriding this method:
+    # a Work +LockedLDPObject+ might choose to protect its +owner+ attribute by overriding this method:
     #
     #  def self.safe_attributes
     #    super - [:owner]
@@ -159,7 +159,7 @@ module JupiterCore
 
     # Accepts a String name of a name-mangled solr field, and returns the symbol of the attribute that corresponds to it
     #
-    # Given a subclass <tt>Work</tt> with an attribute declaration:
+    # Given a subclass +Work+ with an attribute declaration:
     #   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
     #
     # then:
@@ -169,7 +169,7 @@ module JupiterCore
       self.reverse_solr_name_cache[solr_name]
     end
 
-    # Accepts a string id of an object in the LDP, and returns a <tt>LockedLDPObjects</tt> representation of that object
+    # Accepts a string id of an object in the LDP, and returns a +LockedLDPObjects+ representation of that object
     # or raises <tt>JupiterCore::ObjectNotFound</tt> if there is no object corresponding to that id
     def self.find(id)
       results_count, results, = perform_solr_query(%Q(_query_:"{!raw f=id}#{id}"), '', false)
@@ -202,7 +202,7 @@ module JupiterCore
     end
 
     # Performs a solr search using the given query and filtered query strings.
-    # Returns an instance of <tt>SearchResult</tt> providing result counts, +LockedLDPObject+ representing results, and
+    # Returns an instance of +SearchResult+ providing result counts, +LockedLDPObject+ representing results, and
     # access to result facets.
     def self.search(q: '', fq: '')
       filter_queries = %W[has_model_ssim:"#{derived_af_class_name}"]
@@ -290,7 +290,6 @@ module JupiterCore
           raise AlreadyDefinedError, "The attempted ActiveFedora class generation name '#{derived_af_class_name}' is"\
                                      'already defined'
         end
-
         self.af_parent_class ||= ActiveFedora::Base
 
         af_class = Class.new(self.af_parent_class) do
@@ -300,18 +299,14 @@ module JupiterCore
             self.class.owning_class
           end
 
-          class << self
-
-            attr_reader :owning_class
-
+          def self.owning_class
+            @owning_class
           end
 
           # a single common indexer for all subclasses which leverages stored property metadata to DRY up indexing
           def self.indexer
             JupiterCore::Indexer
           end
-
-          # RESPONDS TO MISSINGs
 
           def method_missing(name, *args, &block)
             if owning_object.respond_to?(name, true)
@@ -325,6 +320,7 @@ module JupiterCore
             owning_object.respond_to?(name, include_private) || super
           end
         end
+
         af_class.instance_variable_set(:@owning_class, self)
         Object.const_set(derived_af_class_name, af_class)
         self.af_parent_class = af_class
@@ -344,7 +340,6 @@ module JupiterCore
         self.solr_calc_attributes[name] = { type: SOLR_DESCRIPTOR_MAP[solrize_for], callable: callable }
       end
 
-      # TODO: name? Necessary?
       def has_multival_attribute(name, predicate, solrize_for: [], type: :string)
         has_attribute(name, predicate, multiple: true, solrize_for: solrize_for, type: type)
       end
