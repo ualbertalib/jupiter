@@ -36,6 +36,7 @@ Metrics/CyclomaticComplexity:
 Metrics/LineLength:
   Enabled: true
   Max: 120 # default is 80
+  IgnoredPatterns: ['\A\s*#'] # tweak to ignore long comments, which often are examples or URLs that are not easily broken up
 
 # Avoid methods longer than 10 lines of code.
 Metrics/MethodLength:
