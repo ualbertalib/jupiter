@@ -13,8 +13,8 @@ class CollectionsController < ApplicationController
   def create
     @community = Community.find(params[:community_id])
     @collection = Collection.new_locked_ldp_object(collection_params)
-    @collection.unlock_and_fetch_ldp_object {|c| c.save!}
-    
+    @collection.unlock_and_fetch_ldp_object(&:save!)
+
     redirect_to community_collection_path(@community, @collection)
   end
 

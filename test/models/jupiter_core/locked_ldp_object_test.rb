@@ -1,6 +1,7 @@
 require 'test_helper'
 
 class LockedLdpObjectTest < ActiveSupport::TestCase
+
   @@klass = Class.new(JupiterCore::LockedLdpObject) do
     ldp_object_includes Hydra::Works::WorkBehavior
     has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
@@ -16,7 +17,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     end
 
     def safe_locked_method
-      return "Title is: #{self.title}"
+      "Title is: #{title}"
     end
 
     unlocked do
@@ -106,7 +107,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     end
 
     assert_raises JupiterCore::LockedInstanceError do
-      obj.unlock_and_fetch_ldp_object {|uo| uo.unlocked_method_dont_let_locked_methods_mutate(generate_random_string)}
+      obj.unlock_and_fetch_ldp_object { |uo| uo.unlocked_method_dont_let_locked_methods_mutate(generate_random_string) }
     end
 
     assert_equal original_title, obj.title
@@ -180,11 +181,11 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     assert_not_predicate obj, :changed?
     assert_predicate obj, :valid?
 
-    obj.unlock_and_fetch_ldp_object {|uo| uo.title = 'Title'}
+    obj.unlock_and_fetch_ldp_object { |uo| uo.title = 'Title' }
 
     assert_predicate obj, :changed?
 
-    # TODO validation
+    # TODO: validation
   end
 
   def test_basic_solr_finds
@@ -194,7 +195,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     first_title = generate_random_string
 
     obj = @@klass.new_locked_ldp_object(title: first_title, creator: creator)
-    obj.unlock_and_fetch_ldp_object {|uo| uo.save!}
+    obj.unlock_and_fetch_ldp_object(&:save!)
 
     assert obj.id.present?
 
@@ -205,13 +206,12 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     second_title = generate_random_string
 
     another_obj = @@klass.new_locked_ldp_object(title: second_title, creator: creator)
-    another_obj.unlock_and_fetch_ldp_object {|uo| uo.save!}
+    another_obj.unlock_and_fetch_ldp_object(&:save!)
 
     assert @@klass.all.count == 2
 
     assert @@klass.where(title: second_title).present?
     assert @@klass.where(title: second_title).first.id == another_obj.id
-
 
     assert_raises JupiterCore::ObjectNotFound do
       @@klass.find(generate_random_string)
@@ -243,4 +243,5 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
       end
     end
   end
+
 end

@@ -4,7 +4,7 @@ class CommunitiesController < ApplicationController
     @community = Community.find(params[:id])
     respond_to do |format|
       format.html
-      format.json {render json: @community.member_collections}
+      format.json { render json: @community.member_collections }
     end
   end
 
@@ -18,7 +18,7 @@ class CommunitiesController < ApplicationController
 
   def create
     @community = Community.new_locked_ldp_object(community_params)
-    @community.unlock_and_fetch_ldp_object {|c| c.save!}
+    @community.unlock_and_fetch_ldp_object(&:save!)
 
     redirect_to @community
   end
