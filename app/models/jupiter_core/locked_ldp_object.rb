@@ -1,5 +1,3 @@
-
-
 # JupiterCore::Base classes are lightweight, read-only objects
 module JupiterCore
   class ObjectNotFound < StandardError; end
@@ -13,8 +11,12 @@ module JupiterCore
     include ActiveModel::Model
     include ActiveModel::Serializers::JSON
 
+    # Prefix added to subclass names to derive the name of their corresponding <tt>ActiveFedora</tt> LDP object
     AF_CLASS_PREFIX = 'IR'.freeze
 
+    # Maps semantically meaningful, easily understandable names for solr index behaviours
+    # into the sometimes inscrutable and opaque descriptors used by Solrizer. See:
+    # https://github.com/mbarnett/solrizer/blob/e5dd2bd571b9ebdb8a8ab214574075c28951e53e/lib/solrizer/default_descriptors.rb
     SOLR_DESCRIPTOR_MAP = {
       search: :stored_searchable,
       sort: :stored_sortable,
@@ -23,6 +25,8 @@ module JupiterCore
       pathing: :descendent_path
     }.freeze
 
+    # we reserve .new for internal use in constructing LockedLDPObjects. Use the public interface
+    # <tt>new_locked_ldp_object</tt> for constructing new objects externally.
     private_class_method :new
 
     # inheritable class attributes (not all class-level attributes in this class should be inherited,
@@ -30,31 +34,41 @@ module JupiterCore
     class_attribute :af_parent_class, :attribute_cache, :attribute_names, :facets,
                     :reverse_solr_name_cache, :solr_calc_attributes
 
-    attr_reader :solr_representation
-
+    # Returns the id of the object in LDP as a String
     def id
       return ldp_object.send(:id) if ldp_object.present?
       solr_representation['id'] if solr_representation
     end
 
+    # Provides structured, mediated interaction for mutating the underlying LDP object
+    #
+    # yields the underlying mutable <tt>ActiveFedora</tt> object to the block and returns self for chaining
+    #
+    #  locked_obj.unlock_and_fetch_ldp_object do |ldp_object|
+    #    ldp_object.title = 'asdf'
+    #    ldp_object.save
+    #  end
     def unlock_and_fetch_ldp_object
       self.ldp_object = self.class.derived_af_class.find(self.id) unless @ldp_object.present?
       yield @ldp_object
       self
     end
 
+    # Returns name-value pairs for all of the LDP Object's attributes as a Hash
     def attributes
       self.class.attribute_names.map do |name|
         [name.to_s, self.send(name)]
       end.to_h
     end
 
+    # Returns name-value pairs for the LDP Object's attributes named by <tt>display_attribute_names</tt> as a Hash
     def display_attributes
       self.class.display_attribute_names.map do |name|
         [name.to_s, self.send(name)]
       end.to_h
     end
 
+    # A better debug representation for LDP Objects
     def inspect
       "#<#{self.class.name || 'AnonymousClass'} " + self.class.attribute_names.map do |name|
         val = self.send(name)
@@ -71,57 +85,92 @@ module JupiterCore
       end.join(', ') + '>'
     end
 
-    # TODO: check if these are coming from activemodel
-
-    # if we haven't had to load the internal ldp_object, by definition we must by synced to disk
+    # Has this object been persisted? (Defined for ActiveModel compatibility)
     def persisted?
+      # if we haven't had to load the internal ldp_object, by definition we must by synced to disk
       return true unless ldp_object.present?
       ldp_object.persisted?
     end
 
+    # Has this object been changed since being loaded? (Defined for ActiveModel compatibility)
     def changed?
       return false unless ldp_object.present?
       ldp_object.changed?
     end
 
-    # errors forwarding?
-
+    # Do this object's validations pass? (Defined for ActiveModel compatibility)
     def valid?(*args)
       return super(*args) unless ldp_object.present?
       ldp_object.valid?(*args)
     end
 
+    # Do this object's validations pass? (Defined for ActiveModel compatibility)
     def errors
       return super unless ldp_object.present?
       ldp_object.errors
     end
 
+    # Use this to create a new <tt>LockedLDPObjects</tt> and its underlying LDP instance. attrs populate the new object's
+    # attributes
     def self.new_locked_ldp_object(*attrs)
       new(ldp_obj: derived_af_class.new(*attrs))
     end
 
-    # override this to control what attributes are automatically listed in the attributes list
+    # Override this in your subclasses to control what attributes are automatically listed in the attributes list
     def self.display_attribute_names
       self.attribute_names - [:id]
     end
 
-    # # Track attributes, so that we can avoid duplicating definitions in a separate indexer and on forms
-    # def self.attribute_names
-    #   @attribute_names
-    # end
-
+    # An array of attribute names that are safe to be used for safe_params calls in controllers. ID is _never_ a safe
+    # attribute for forms to modify. Subclasses should override this and remove any other sensitive attributes from
+    # this array
+    #
+    # a Work +LockedLDPObject+ might choose to protect its <tt>owner</tt> attribute by overriding this method:
+    #
+    #  def self.safe_attributes
+    #    super - [:owner]
+    #  end
+    #
+    # and then enforce that in a controller like works_controller.rb:
+    #    def work_params
+    #      params[:work].permit(Work.safe_attributes)
+    #    end
     def self.safe_attributes
       self.attribute_names - [:id]
     end
 
+    # Accepts a symbol representing the attribute name, and returns a Hash containing
+    # metadata about an object's attributes.
+    #
+    # Given a subclass +Work+ with an attribute declaration:
+    #   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
+    #
+    # then the Hash returned by <tt>Work.attribute_metadata(:title)</tt> would be:
+    #   {
+    #      :predicate => #<RDF::Vocabulary::Term:0x3fe32a1d1a30 URI:http://purl.org/dc/terms/title>,
+    #      :multiple => false,
+    #      :solrize_for => [:search, :facet],
+    #      :type => :string,
+    #      :solr_names => ["title_tesim", "title_sim"]
+    #   }
     def self.attribute_metadata(attribute_name)
       self.attribute_cache[attribute_name]
     end
 
+    # Accepts a String name of a name-mangled solr field, and returns the symbol of the attribute that corresponds to it
+    #
+    # Given a subclass <tt>Work</tt> with an attribute declaration:
+    #   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
+    #
+    # then:
+    #   Work.solr_name_to_attribute_name('title_tesim')
+    #   => :title
     def self.solr_name_to_attribute_name(solr_name)
       self.reverse_solr_name_cache[solr_name]
     end
 
+    # Accepts a string id of an object in the LDP, and returns a <tt>LockedLDPObjects</tt> representation of that object
+    # or raises <tt>JupiterCore::ObjectNotFound</tt> if there is no object corresponding to that id
     def self.find(id)
       results_count, results, = perform_solr_query(%Q(_query_:"{!raw f=id}#{id}"), '', false)
       raise ObjectNotFound, "Couldn't find #{self} with id='#{id}'" if results_count == 0
@@ -130,11 +179,17 @@ module JupiterCore
       new(solr_doc: results.first)
     end
 
+    # Returns an array of all +LockedLDPObject+ in the LDP
     def self.all
       _, results, = perform_solr_query('', '', false)
       results.map { |res| new(solr_doc: res) }
     end
 
+    # Accepts a hash of name-value pairs to query for, and returns an Array of matching +LockedLDPObject+
+    #
+    # For example:
+    #   Work.where(title: 'Test upload')
+    #    => [#<Work id: "e5f4a074-5bcb-48a4-99ee-12bc83cef291", title: "Test upload", subject: "", creator: "", contributor: "", description: "", publisher: "", date_created: "", language: "", doi: "", member_of_paths: ["98124366-c8b2-487a-95f0-a1c18c805ddd/799e2eee-5435-4f08-bf3d-fc256fee9447"]>
     def self.where(attributes)
       attr_queries = []
       attr_queries << attributes.map do |k, v|
@@ -146,6 +201,9 @@ module JupiterCore
       results.map { |res| new(solr_doc: res) }
     end
 
+    # Performs a solr search using the given query and filtered query strings.
+    # Returns an instance of <tt>SearchResult</tt> providing result counts, +LockedLDPObject+ representing results, and
+    # access to result facets.
     def self.search(q: '', fq: '')
       filter_queries = %W[has_model_ssim:"#{derived_af_class_name}"]
       filter_queries << fq
@@ -158,7 +216,7 @@ module JupiterCore
     private
 
     attr_reader :ldp_object
-    attr_writer :solr_representation
+    attr_accessor :solr_representation
 
     def initialize(solr_doc: nil, ldp_obj: nil)
       raise ArgumentError if solr_doc.present? && ldp_obj.present?
@@ -292,18 +350,6 @@ module JupiterCore
       end
 
       # a utility DSL for declaring attributes which allows us to store knowledge of them.
-      # search == index.as stored_searchable
-      # facet == index.as facetable
-      # sort == index.as sortable
-      # type == index.type
-      # etc
-
-      # descriptors == personalities. multiple index.as personalties == multiple appearances in solr doc
-      #
-      # maybe special logic on the type? as they imply stored, indexed, multi
-      # so add it to search?
-      # or just make path its own param?
-
       def has_attribute(name, predicate, multiple: false, solrize_for: [], type: :string)
         raise PropertyInvalidError unless name.is_a? Symbol
         raise PropertyInvalidError unless predicate.present?

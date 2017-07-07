@@ -6,7 +6,7 @@
 
 # Ignore bundler config.
 /.bundle
-
+/doc/*
 # Ignore all logfiles and tempfiles.
 /log/*
 /coverage/*
@@ -18,3 +18,5 @@
 /yarn-error.log
 
 .byebug_history
+.ruby-version
+.ruby-gemset

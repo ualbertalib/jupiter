@@ -11,6 +11,8 @@ gem 'haml'
 gem 'hydra-works'
 gem 'jquery-rails'
 gem 'mysql2', '>= 0.3.18', '< 0.5'
+# TODO: this is a missed bootsrap requirement, now fixed on their master  twbs/bootstrap-rubygem@8927eff
+# review and remove when that makes it into a release
 gem 'popper_js'
 gem 'rails', '~> 5.1.1'
 gem 'rdf-vocab'
