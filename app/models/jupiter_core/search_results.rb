@@ -1,4 +1,5 @@
 class JupiterCore::SearchResults
+
   attr_reader :count, :results
 
   def initialize(searched_class, count, facets, results)
@@ -15,4 +16,5 @@ class JupiterCore::SearchResults
       yield facet if facet.present?
     end
   end
+
 end

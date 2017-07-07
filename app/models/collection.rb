@@ -1,4 +1,5 @@
 class Collection < JupiterCore::LockedLdpObject
+
   ldp_object_includes Hydra::Works::CollectionBehavior
 
   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
@@ -12,7 +13,7 @@ class Collection < JupiterCore::LockedLdpObject
     Work.where(member_of_paths: path)
   end
 
-  def as_json(options)
+  def as_json(_options)
     super(only: [:title, :id])
   end
 

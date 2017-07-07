@@ -11,7 +11,6 @@ class WorksController < ApplicationController
     collections = params[:work].delete :collection
 
     @work = Work.new_locked_ldp_object(work_params).unlock_and_fetch_ldp_object do |unlocked_work|
-
       communities.each_with_index do |community, idx|
         unlocked_work.add_to_path(community, collections[idx])
       end
@@ -51,4 +50,5 @@ class WorksController < ApplicationController
   def work_params
     params[:work].permit(Work.safe_attributes)
   end
+
 end

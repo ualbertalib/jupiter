@@ -7,8 +7,8 @@ class JupiterCore::FacetResult
 
     # values are just a key => value hash of facet text to count
     # we have to filter out all of the useless "" facets Solr sends back for non-required fields
-    @values = values.each_slice(2).map do |name, count|
-      name.present? ? {name => count} : {}
+    @values = values.each_slice(2).map do |value_name, count|
+      value_name.present? ? { value_name => count } : {}
     end.reduce(:merge)
   end
 
@@ -21,4 +21,5 @@ class JupiterCore::FacetResult
       yield name, count if name.present?
     end
   end
+
 end

@@ -54,6 +54,9 @@ Metrics/PerceivedComplexity:
 # indentation is an endangered resource
 Style/ClassAndModuleChildren:
   EnforcedStyle: compact
+  Exclude:
+    - config/application.rb
+
 
 Style/Documentation:
   Enabled: false
@@ -63,6 +66,10 @@ Style/FileName:
     - Dangerfile
     - Rakefile
     - Gemfile
+
+Style/RedundantSelf:
+  Exclude:
+    - app/models/jupiter_core/locked_ldp_object.rb
 
 # Checks if there is a magic comment to enforce string literals
 Style/FrozenStringLiteralComment:
@@ -79,8 +86,19 @@ Style/SymbolArray:
 Style/WordArray:
   Enabled: false
 
-Style/PercentLiteralDelimiter:
+Style/BarePercentLiterals:
   Enabled: false
 
-Style/BarePercentLiterals:
+Style/NumericPredicate:
+  EnforcedStyle: comparison
+
+Style/ClassVars:
+  Exclude:
+    - !ruby/regexp /_test\.rb$/
+
+Style/PredicateName:
+  Exclude:
+    - app/models/jupiter_core/locked_ldp_object.rb
+
+Style/SingleLineMethods:
   Enabled: false

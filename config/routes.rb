@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   root to: 'welcome#index'
-  
+
   resources :works do
     collection do
       get 'search'
