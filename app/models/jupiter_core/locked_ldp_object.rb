@@ -26,7 +26,7 @@ module JupiterCore
     }.freeze
 
     # we reserve .new for internal use in constructing LockedLDPObjects. Use the public interface
-    # <tt>new_locked_ldp_object</tt> for constructing new objects externally.
+    # +new_locked_ldp_object+ for constructing new objects externally.
     private_class_method :new
 
     # inheritable class attributes (not all class-level attributes in this class should be inherited,

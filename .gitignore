@@ -6,9 +6,9 @@
 
 # Ignore bundler config.
 /.bundle
-/doc/*
 # Ignore all logfiles and tempfiles.
 /log/*
+/docs/rdoc/*
 /coverage/*
 /tmp/*
 !/log/.keep
