@@ -103,3 +103,7 @@ Style/PredicateName:
 
 Style/SingleLineMethods:
   Enabled: false
+
+Style/TrivialAccessors:
+  Exclude:
+    - app/models/jupiter_core/locked_ldp_object.rb
