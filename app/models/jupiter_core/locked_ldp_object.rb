@@ -34,6 +34,10 @@ module JupiterCore
     class_attribute :af_parent_class, :attribute_cache, :attribute_names, :facets,
                     :reverse_solr_name_cache, :solr_calc_attributes
 
+    # TODO: Access Controls -- does this belong here or in Work? Do collections "have" this?
+    # has_attribute :owner,
+    # has_multival_attribute :groups,
+
     # Returns the id of the object in LDP as a String
     def id
       return ldp_object.send(:id) if ldp_object.present?

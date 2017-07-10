@@ -1,0 +1,5 @@
+- vocabulary: ualib
+  schema: http://terms.library.ualberta.ca/identifiers/
+  terms:
+    - doi
+    - path
