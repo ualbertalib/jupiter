@@ -3,8 +3,14 @@ sudo: required
 language: bash
 services: docker
 
-script:
+before_script:
+  - docker-compose build
   - docker-compose up -d
+
+script:
   - docker-compose run --rm web rails db:setup
   - docker-compose run --rm web rails test
   - docker-compose run --rm web rails rubocop
+
+after_script:
+  - docker-compose down
