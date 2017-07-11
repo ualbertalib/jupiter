@@ -1,9 +1,10 @@
 sudo: required
-services:
-  - docker
+
+language: bash
+services: docker
 
 script:
-  - docker-compose build
-  - docker-compose run web rails db:setup
-  - docker-compose run web rails test
-  - docker-compose run web rails rubocop
+  - docker-compose up -d
+  - docker-compose run -rm web rails db:setup
+  - docker-compose run -rm web rails test
+  - docker-compose run -rm web rails rubocop
