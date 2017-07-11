@@ -10,7 +10,7 @@ before_script:
   - docker-compose build
   - docker-compose up -d
 
-  - sleep 5 # wait for containers to finish setting up
+  - sleep 10 # wait for containers to finish setting up
   - docker ps
 
   - docker-compose run --rm web rails db:setup
