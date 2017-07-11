@@ -5,6 +5,6 @@ services: docker
 
 script:
   - docker-compose up -d
-  - docker-compose run -rm web rails db:setup
-  - docker-compose run -rm web rails test
-  - docker-compose run -rm web rails rubocop
+  - docker-compose run --rm web rails db:setup
+  - docker-compose run --rm web rails test
+  - docker-compose run --rm web rails rubocop
