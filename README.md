@@ -24,8 +24,8 @@ This project comes with a docker setup to easily setup your own local developmen
 
 ### Step 1: Make sure you have docker and docker-compose installed:
 
-1. [Install Docker](https://docs.docker.com/engine/installation/)
-2. [Install Docker Compose](https://docs.docker.com/compose/install/)
+1. [Install Docker](https://docs.docker.com/engine/installation/) (Requires version 1.13.0+)
+2. [Install Docker Compose](https://docs.docker.com/compose/install/) (Requires version 1.10.0+)
 
 #### Still need more help? Check out the following
 
@@ -102,12 +102,13 @@ Now everything is ready, you can go and view Jupiter! Just open your favorite br
   docker-compose logs web
   ```
 
-- One common issue could be the webpage is not rendering when you go to [localhost:9000](localhost:9000). This probably due to the server not being started due to a bad stop and exiting of the container from a previous run. This causes the server from leaving a pid file in the tmp directory. To fix this, cleanup the pid file via:
+- One common issue could be the webpage is not rendering when you go to [localhost:9000](localhost:9000). This probably a result of the server not being started due to a bad stop and exiting of the container from a previous run. This causes the server to leave a pid file in the tmp directory. To fix this, cleanup the pid file via:
 
   ```shell
   sudo rm -rf /tmp/pids/server.pid
   ```
-Then restart the server:
-  ```
-  docker-compose restart web
-  ```
+
+  Then restart the server:
+    ```shell
+    docker-compose restart web
+    ```
