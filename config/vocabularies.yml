@@ -1,3 +1,20 @@
+# Expected file format:
+#    - vocabulary: ual
+#      schema: http://terms.library.ualberta.ca/identifiers/
+#      terms:
+#        - doi
+#        - path
+#    - vocabulary: acl
+#      schema: http://www.w3.org/ns/auth/acl
+#      terms:
+#        - mode
+#
+# Usage in the application:
+#
+#   VOCABULARY[:ual].doi
+#   => #<RDF::Vocabulary::Term:0x3fc87891aa0c URI:http://terms.library.ualberta.ca/identifiers/doi>
+#
+
 - vocabulary: ualib
   schema: http://terms.library.ualberta.ca/identifiers/
   terms:
