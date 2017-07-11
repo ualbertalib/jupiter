@@ -51,7 +51,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
   end
 
   def test_attribute_definitions
-    assert_equal [:creator, :id, :member_of_paths, :title], @@klass.attribute_names.sort
+    assert_equal [:creator, :id, :member_of_paths, :owner, :title, :visibility], @@klass.attribute_names.sort
   end
 
   def test_attribute_metadata
@@ -147,7 +147,8 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
   def test_object_inspecting
     title = generate_random_string
     obj = @@klass.new_locked_ldp_object(title: title)
-    assert_equal "#<AnonymousClass id: nil, title: \"#{title}\", creator: nil, member_of_paths: []>", obj.inspect
+    assert_equal "#<AnonymousClass id: nil, visibility: nil, owner: nil, title: \"#{title}\", creator: nil,"\
+                 ' member_of_paths: []>', obj.inspect
   end
 
   def test_inheritance_of_attributes
@@ -155,9 +156,9 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
       has_attribute :subject, ::RDF::Vocab::DC.subject, solrize_for: :search
     end
 
-    assert_equal [:creator, :id, :member_of_paths, :subject, :title], subclass.attribute_names.sort
+    assert_equal [:creator, :id, :member_of_paths, :owner, :subject, :title, :visibility], subclass.attribute_names.sort
     # ensure mutating subclass attribute lists isn't trickling back to the superclass
-    assert_equal [:creator, :id, :member_of_paths, :title], @@klass.attribute_names.sort
+    assert_equal [:creator, :id, :member_of_paths, :owner, :title, :visibility], @@klass.attribute_names.sort
   end
 
   def test_attributes
@@ -179,13 +180,15 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     assert_not_predicate obj.errors, :any?
     assert_not_predicate obj, :persisted?
     assert_not_predicate obj, :changed?
-    assert_predicate obj, :valid?
+    assert_not_predicate obj, :valid?
 
-    obj.unlock_and_fetch_ldp_object { |uo| uo.title = 'Title' }
+    obj.unlock_and_fetch_ldp_object do |uo|
+      uo.title = 'Title'
+      uo.visibility = :public
+    end
 
     assert_predicate obj, :changed?
-
-    # TODO: validation
+    assert_predicate obj, :valid?
   end
 
   def test_basic_solr_finds
@@ -194,7 +197,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     creator = generate_random_string
     first_title = generate_random_string
 
-    obj = @@klass.new_locked_ldp_object(title: first_title, creator: creator)
+    obj = @@klass.new_locked_ldp_object(title: first_title, creator: creator, visibility: 'public')
     obj.unlock_and_fetch_ldp_object(&:save!)
 
     assert obj.id.present?
@@ -205,7 +208,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
 
     second_title = generate_random_string
 
-    another_obj = @@klass.new_locked_ldp_object(title: second_title, creator: creator)
+    another_obj = @@klass.new_locked_ldp_object(title: second_title, creator: creator, visibility: 'public')
     another_obj.unlock_and_fetch_ldp_object(&:save!)
 
     assert @@klass.all.count == 2
@@ -228,7 +231,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     end
 
     search_results.each_facet_with_results do |facet|
-      assert_includes ['Title', 'Creator'], facet.name
+      assert_includes ['Title', 'Creator', 'Visibility'], facet.name
       if facet.name == 'Title'
         assert facet.values.keys.count == 2
         assert facet.values.key?(first_title)
@@ -236,10 +239,14 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
         [first_title, second_title].each do |title|
           assert facet.values[title] == 1
         end
-      else
+      elsif facet.name == 'Creator'
         assert facet.values.keys.count == 1
         assert facet.values.key?(creator)
         assert facet.values[creator] == 2
+      elsif facet.name == 'Visibility'
+        assert facet.values.keys.count == 1
+        assert facet.values.key?('public')
+        assert facet.values['public'] == 2
       end
     end
   end

@@ -14,6 +14,7 @@ class Work < JupiterCore::LockedLdpObject
   has_attribute :doi, ::VOCABULARY[:ualib].doi, solrize_for: :exact_match
 
   has_multival_attribute :member_of_paths, ::VOCABULARY[:ualib].path, solrize_for: :pathing
+  has_attribute :embargo_end_date, ::RDF::Vocab::DC.modified, solrize_for: [:search, :sort]
 
   solr_calculated_attribute :doi_without_label, solrize_for: :exact_match do |work|
     work.doi.gsub('doi:', '') if work.doi.present?
@@ -23,7 +24,13 @@ class Work < JupiterCore::LockedLdpObject
     super - [:member_of_paths]
   end
 
+  def self.valid_visibilities
+    super + [:embargo]
+  end
+
   unlocked do
+    validates :embargo_end_date, presence: true, if: ->(work) {work.visibility == :embargo}
+
     def add_to_path(community_id, collection_id)
       self.member_of_paths += ["#{community_id}/#{collection_id}"]
     end
