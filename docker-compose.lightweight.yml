@@ -1,0 +1,56 @@
+# Lightweight docker-compose which only has the datastores, so you can still develop rails locally
+
+# To use, you must pass in the `-f` flag to docker-compose
+# For example: docker-compose -f docker-compose.lightweight.yml up -d
+
+version: '3'
+
+volumes:
+  # mysql:
+  #   driver: local
+  solr:
+    driver: local
+  fcrepo:
+    driver: local
+  # redis:
+  #   driver: local
+
+services:
+  # Need mysql? Uncomment this and respective volume above
+  # mysql:
+  #   image: mysql:5.7
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: mysecretpassword
+  #   volumes:
+  #     - mysql:/var/lib/mysql
+  #   port:
+  #     - "3306:3306"
+
+  solr:
+    image: solr
+    ports:
+      - "8983:8983"
+    volumes:
+      - solr:/opt/solr/server/solr/mycores
+      - ./solr/config:/config
+    entrypoint:
+      - docker-entrypoint.sh
+      - solr-precreate
+      - jupiter
+      - /config
+
+  fcrepo:
+    image: murny/docker-fcrepo4
+    volumes:
+      - fcrepo:/fcrepo4-data
+    ports:
+      - "8080:8080"
+
+  # Need redis? Uncomment this and respective volume above
+  # redis:
+  #   image: redis:alpine
+  #   volumes:
+  #     - redis:/data
+  #   port:
+  #     - "6379:6379"
+

@@ -43,6 +43,7 @@ Use your distribution's package manager to install `docker` and `docker-compose`
 Clone the Jupiter repository from github:
 ```shell
 git clone git@github.com:ualbertalib/jupiter.git
+cd jupiter
 ```
 
 ### Step 3: Start docker and docker compose
@@ -60,7 +61,7 @@ docker-compose run web rails db:setup
 ### Step 4: Open and view Jupiter!
 Now everything is ready, you can go and view Jupiter! Just open your favorite browser and go to the following url:
 
-[localhost:9000](localhost:9000)
+[localhost:3000](http://localhost:3000)
 
 (Note: ip address may be different if you are using `docker-machine`)
 
@@ -83,6 +84,15 @@ Now everything is ready, you can go and view Jupiter! Just open your favorite br
   ```shell
   docker-compose run web rails test
   ```
+### Docker compose lightweight edition
+
+If you want to develop in rails locally on your own machine, there is also a `docker-compose.lightweight.yml` provided. This will give you the datastores you require (solr/fedora) and potentially others if you need them (mysql/redis (commented out by default)). Just run:
+  ```shell
+  docker-compose -f docker-compose.lightweight.yml up -d
+  ```
+And everything else is how you would normally develop in a rails project.
+
+(See other sections of this README for more information about developing in a rails project environment)
 
 ### Common gotchas?
 
@@ -101,6 +111,7 @@ Now everything is ready, you can go and view Jupiter! Just open your favorite br
   ```shell
   docker-compose logs web
   ```
+- If your switching between docker-compose and local development on your machine, you may encounter in weird permissions on files that docker has created (logs/tmp/etc.). Simply just `sudo rm` them.
 
 - One common issue could be the webpage is not rendering when you go to [localhost:9000](localhost:9000). This probably a result of the server not being started due to a bad stop and exiting of the container from a previous run. This causes the server to leave a pid file in the tmp directory. To fix this, cleanup the pid file via:
 
@@ -112,3 +123,4 @@ Now everything is ready, you can go and view Jupiter! Just open your favorite br
     ```shell
     docker-compose restart web
     ```
+  (NOTE: we could add this pid removal to before the rails start command if this is a common issue? `command: bash -c "rm -f tmp/pids/* && bundle exec rails s -p 3000 -b '0.0.0.0'"`)

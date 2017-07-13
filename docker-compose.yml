@@ -22,14 +22,14 @@ services:
     image: solr
     # Uncomment this if you want to access SOLR's web interface
     # ports:
-    #   - "9393:8983"
+    #   - "8983:8983"
     volumes:
       - solr:/opt/solr/server/solr/mycores
       - ./solr/config:/config
     entrypoint:
       - docker-entrypoint.sh
       - solr-precreate
-      - mycore
+      - jupiter
       - /config
 
   fcrepo:
@@ -37,8 +37,8 @@ services:
     volumes:
       - fcrepo:/fcrepo4-data
     # Uncomment this if you want to access Fedora's web interface
-    # ports:
-    #   - "9080:8080"
+    ports:
+      - "8080:8080"
 
   redis:
     image: redis:alpine
@@ -52,13 +52,12 @@ services:
       RAILS_ENV: development
       DATABASE_URL: 'mysql2://root:mysecretpassword@mysql/'
       FCREPO_URL: http://fcrepo:8080/fcrepo/rest
-      SOLR_URL: http://solr:8983/solr/mycore
+      SOLR_URL: http://solr:8983/solr/jupiter
       REDIS_URL: 'redis://redis/1'
     volumes:
       - .:/app
-    # picked a random port (sometimes people are running rails on port 3000 already)
     ports:
-      - "9000:3000"
+      - "3000:3000"
     links:
       - mysql
       - fcrepo
@@ -74,7 +73,7 @@ services:
   #     RAILS_ENV: development
   #     DATABASE_URL: 'mysql2://:mysecretpassword@mysql/'
   #     FCREPO_URL: http://fcrepo:8080/fcrepo/rest
-  #     SOLR_URL: http://solr:8983/solr/mycore
+  #     SOLR_URL: http://solr:8983/solr/jupiter
   #     REDIS_URL: 'redis://redis/1'
   #   volumes:
   #     - .:/app

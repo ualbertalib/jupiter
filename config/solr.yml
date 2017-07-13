@@ -1,7 +1,7 @@
 # Needed and used by active fedora, to specify where to find solr
 development:
-  url: <%= ENV['SOLR_URL'] || 'http://localhost:8983/solr/development' %>
+  url: <%= ENV['SOLR_URL'] || 'http://localhost:8983/solr/jupiter' %>
 test:
-  url: <%= ENV['SOLR_URL'] || 'http://localhost:8983/solr/test' %>
+  url: <%= ENV['SOLR_URL'] || 'http://localhost:8983/solr/jupiter' %>
 production:
   url: ENV['SOLR_URL']
