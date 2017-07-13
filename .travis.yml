@@ -1,0 +1,29 @@
+sudo: required
+
+language: bash
+services: docker
+
+before_script:
+  - docker version
+  - docker-compose version
+
+  - docker-compose build
+  - docker-compose up -d
+
+  - sleep 10 # wait for containers to finish setting up
+  - docker ps
+
+  - docker-compose run --rm web rails db:setup
+
+script:
+  - docker-compose run --rm web rails test
+  - docker-compose run --rm web rubocop
+
+after_script:
+  - docker-compose down
+
+# after_success:
+ # Do autodeploy magic here to UAT
+  # - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+  # - docker push $REPO
+  # - bash deploy.sh

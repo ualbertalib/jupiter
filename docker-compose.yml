@@ -1,0 +1,81 @@
+version: '3'
+
+volumes:
+  mysql:
+    driver: local
+  solr:
+    driver: local
+  fcrepo:
+    driver: local
+  redis:
+    driver: local
+
+services:
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: mysecretpassword
+    volumes:
+      - mysql:/var/lib/mysql
+
+  solr:
+    image: solr
+    # Uncomment this if you want to access SOLR's web interface
+    # ports:
+    #   - "8983:8983"
+    volumes:
+      - solr:/opt/solr/server/solr/mycores
+      - ./solr/config:/config
+      - ./solr/scripts/solr-precreate-jupiter.sh:/docker-entrypoint-initdb.d/solr-precreate-jupiter.sh
+
+  fcrepo:
+    image: murny/docker-fcrepo4
+    volumes:
+      - fcrepo:/fcrepo4-data
+    # Uncomment this if you want to access Fedora's web interface
+    # ports:
+    #   - "8080:8080"
+
+  redis:
+    image: redis:alpine
+    volumes:
+      - redis:/data
+
+  web:
+    build: .
+    image: ualbertalib/jupiter
+    environment:
+      RAILS_ENV: development
+      DATABASE_URL: 'mysql2://root:mysecretpassword@mysql/'
+      FCREPO_URL: http://fcrepo:8080/fcrepo/rest
+      SOLR_URL: http://solr:8983/solr/development
+      SOLR_TEST_URL: http://solr:8983/solr/test
+      REDIS_URL: 'redis://redis/1'
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    links:
+      - mysql
+      - fcrepo
+      - redis
+      - solr
+
+  # No worker yet, uncomment this when we add something...preferablly sidekiq?
+  # worker:
+  #   build: .
+  #   image: ualbertalib/jupiter
+  #   command: bundle exec rake environment resque:work QUEUE=*
+  #   environment:
+  #     RAILS_ENV: development
+  #     DATABASE_URL: 'mysql2://:mysecretpassword@mysql/'
+  #     FCREPO_URL: http://fcrepo:8080/fcrepo/rest
+  #     SOLR_URL: http://solr:8983/solr/jupiter
+  #     REDIS_URL: 'redis://redis/1'
+  #   volumes:
+  #     - .:/app
+  #   links:
+  #     - mysql
+  #     - fcrepo
+  #     - redis
+  #     - solr
