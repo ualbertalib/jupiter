@@ -93,9 +93,6 @@ And everything else is how you would normally develop in a rails project.
 (See other sections of this README for more information about developing in a rails project environment)
 
 ## Common gotchas?
-
-- We are reusing the same solr for test and dev. This may cause issues between data. This shouldn't matter to much, but just be aware of this if things are getting mangled.
-
 - If your having issues, logs are the best place to first look at what went wrong.
 
   To check all container logs:

@@ -26,11 +26,7 @@ services:
     volumes:
       - solr:/opt/solr/server/solr/mycores
       - ./solr/config:/config
-    entrypoint:
-      - docker-entrypoint.sh
-      - solr-precreate
-      - jupiter
-      - /config
+      - ./solr/scripts/solr-precreate-jupiter.sh:/docker-entrypoint-initdb.d/solr-precreate-jupiter.sh
 
   fcrepo:
     image: murny/docker-fcrepo4
@@ -52,7 +48,8 @@ services:
       RAILS_ENV: development
       DATABASE_URL: 'mysql2://root:mysecretpassword@mysql/'
       FCREPO_URL: http://fcrepo:8080/fcrepo/rest
-      SOLR_URL: http://solr:8983/solr/jupiter
+      SOLR_URL: http://solr:8983/solr/development
+      SOLR_TEST_URL: http://solr:8983/solr/test
       REDIS_URL: 'redis://redis/1'
     volumes:
       - .:/app

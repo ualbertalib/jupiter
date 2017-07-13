@@ -2,7 +2,6 @@
 
 # To use, you must pass in the `-f` flag to docker-compose
 # For example: docker-compose -f docker-compose.lightweight.yml up -d
-
 version: '3'
 
 volumes:
@@ -33,11 +32,7 @@ services:
     volumes:
       - solr:/opt/solr/server/solr/mycores
       - ./solr/config:/config
-    entrypoint:
-      - docker-entrypoint.sh
-      - solr-precreate
-      - jupiter
-      - /config
+      - ./solr/scripts/solr-precreate-jupiter.sh:/docker-entrypoint-initdb.d/solr-precreate-jupiter.sh
 
   fcrepo:
     image: murny/docker-fcrepo4
