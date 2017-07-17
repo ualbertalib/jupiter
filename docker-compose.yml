@@ -44,7 +44,7 @@ services:
   web:
     build: .
     image: ualbertalib/jupiter
-    command: bash -c 'rm -f tmp/pids/server.pid && bundle exec rails s'
+    command: bash -c 'rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b "0.0.0.0"'
     environment:
       RAILS_ENV: development
       DATABASE_URL: 'mysql2://root:mysecretpassword@mysql/'
