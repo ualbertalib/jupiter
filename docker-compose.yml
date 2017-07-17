@@ -44,6 +44,7 @@ services:
   web:
     build: .
     image: ualbertalib/jupiter
+    command: bash -c 'rm -f tmp/pids/server.pid && bundle exec rails s'
     environment:
       RAILS_ENV: development
       DATABASE_URL: 'mysql2://root:mysecretpassword@mysql/'
@@ -55,7 +56,7 @@ services:
       - .:/app
     ports:
       - "3000:3000"
-    links:
+    depends_on:
       - mysql
       - fcrepo
       - redis
@@ -65,16 +66,19 @@ services:
   # worker:
   #   build: .
   #   image: ualbertalib/jupiter
-  #   command: bundle exec rake environment resque:work QUEUE=*
+  #   command: bundle exec sidekiq
   #   environment:
   #     RAILS_ENV: development
-  #     DATABASE_URL: 'mysql2://:mysecretpassword@mysql/'
+  #     DATABASE_URL: 'mysql2://root:mysecretpassword@mysql/'
   #     FCREPO_URL: http://fcrepo:8080/fcrepo/rest
-  #     SOLR_URL: http://solr:8983/solr/jupiter
+  #     SOLR_URL: http://solr:8983/solr/development
+  #     SOLR_TEST_URL: http://solr:8983/solr/test
   #     REDIS_URL: 'redis://redis/1'
   #   volumes:
   #     - .:/app
-  #   links:
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
   #     - mysql
   #     - fcrepo
   #     - redis
