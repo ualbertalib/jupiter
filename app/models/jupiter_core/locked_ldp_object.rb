@@ -340,10 +340,8 @@ module JupiterCore
           validate :visibility_must_be_known
 
           def visibility_must_be_known
-
-            unless visibility.present? && owning_object.class.valid_visibilities.include?(visibility.to_sym)
-              errors.add(:visibility, "#{visibility} is not a known visibility")
-            end
+            return true if visibility.present? && owning_object.class.valid_visibilities.include?(visibility)
+            errors.add(:visibility, "#{visibility} is not a known visibility")
           end
 
           def owning_class
