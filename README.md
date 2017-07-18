@@ -107,15 +107,3 @@ And everything else is how you would normally develop in a rails project.
   docker-compose logs web
   ```
 - If your switching between docker-compose and local development on your machine, you may encounter in weird permissions on files that docker has created (logs/tmp/etc.). Simply just `sudo rm` them.
-
-- One common issue could be the webpage is not rendering when you go to [localhost:3000](http://localhost:3000). This probably a result of the server not being started due to a bad stop and exiting of the container from a previous run. This causes the server to leave a pid file in the tmp directory. To fix this, cleanup the pid file via:
-
-  ```shell
-  sudo rm -rf /tmp/pids/server.pid
-  ```
-
-  Then restart the server:
-    ```shell
-    docker-compose restart web
-    ```
-  (NOTE: we could add this pid removal to before the rails start command if this is a common issue? `command: bash -c "rm -f tmp/pids/* && bundle exec rails s -p 3000 -b '0.0.0.0'"`)
