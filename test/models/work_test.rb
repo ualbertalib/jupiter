@@ -33,4 +33,20 @@ class WorkTest < ActiveSupport::TestCase
     assert_includes work.errors[:embargo_end_date], "can't be blank"
   end
 
+  def test_add_to_path
+    work = Work.new_locked_ldp_object
+    community_id = generate_random_string
+    collection_id = generate_random_string
+
+    work.unlock_and_fetch_ldp_object do |unlocked_work|
+      unlocked_work.add_to_path(community_id, collection_id)
+    end
+
+    assert_includes work.member_of_paths, "#{community_id}/#{collection_id}"
+  end
+
+  def test_display_attributes
+    assert_not_includes Work.display_attribute_names, :member_of_paths
+  end
+
 end
