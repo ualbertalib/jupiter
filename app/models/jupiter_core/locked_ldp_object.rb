@@ -1,4 +1,6 @@
 # JupiterCore::LockedLdpObject classes are lightweight, read-only objects
+# TODO: this file could benefit from some reorganization, possibly into several
+# files
 module JupiterCore
   class ObjectNotFound < StandardError; end
   class PropertyInvalidError < StandardError; end
@@ -204,13 +206,23 @@ module JupiterCore
     # Performs a solr search using the given query and filtered query strings.
     # Returns an instance of +SearchResult+ providing result counts, +LockedLDPObject+ representing results, and
     # access to result facets.
-    def self.search(q: '', fq: '')
-      filter_queries = %W[has_model_ssim:"#{derived_af_class_name}"]
-      filter_queries << fq
+    def self.search(q: '', fq: '', as: nil)
+      raise ArgumentError, 'as: must specify a user!' if as.present? && !as.is_a?(User)
+      base_query = []
+      ownership_query = calculate_ownership_query(as)
 
-      results_count, results, facets = perform_solr_query(q || '', filter_queries, true, self.facets.map(&:to_s))
+      # Our query permissions are white-list based. You only get public results unless the results of +calculate_ownership_query+
+      # assign you additional permissions based on the user passed to it.
+      base_query << %Q((_query_:"{!raw f=visibility_ssim}public"#{ownership_query}))
+      base_query << q if q.present?
+
+      results_count, results, facets = perform_solr_query(base_query, fq, true, self.facets.map(&:to_s))
 
       SearchResults.new(self, results_count, facets, results.map { |res| new(solr_doc: res) })
+    end
+
+    def self.valid_visibilities
+      [:public, :private, :authenticated]
     end
 
     private
@@ -231,6 +243,7 @@ module JupiterCore
                                  'unlock_and_fetch_ldp_object to load a writable copy (SLOW).'
     end
 
+    # Looks pointless, but keeps rubocop happy because of the error-message refining +method_missing+ above
     def respond_to_missing?(*_args); super; end
 
     def ldp_object=(obj)
@@ -260,7 +273,8 @@ module JupiterCore
         [response['response']['numFound'], response['response']['docs'], response['facet_counts']]
       end
 
-      # clone inherited arrays/maps so that local mutation doesn't propogate to the parent
+      # Clones inherited arrays/maps so that local mutation doesn't propogate to the parent
+      # also sets up basic attributes that every child class has: +id+, +owner+, and +visibility+
       def inherited(child)
         super
         child.attribute_names = self.attribute_names ? self.attribute_names.dup : [:id]
@@ -269,10 +283,38 @@ module JupiterCore
         child.facets = self.facets ? self.facets.dup : []
         child.solr_calc_attributes = self.solr_calc_attributes.present? ? self.solr_calc_attributes.dup : {}
         # child.derived_af_class
+
+        # If there's no class between +LockedLdpObject+ and this child that's
+        # already had +visibility+ and +owner+ defined, define them.
+        child.class_eval do
+          unless attribute_names.include?(:visibility)
+            has_attribute :visibility, ::VOCABULARY[:jupiter_core].visibility, solrize_for: [:exact_match, :facet]
+          end
+          unless attribute_names.include?(:owner)
+            has_attribute :owner, ::VOCABULARY[:jupiter_core].owner, solrize_for: [:exact_match]
+          end
+        end
       end
 
       def ldp_object_includes(module_name)
         derived_af_class.send(:include, module_name)
+      end
+
+      # derive additional restriction or broadening of the visibilitily query on top of the default
+      # "where visibility is public" restriction
+      def calculate_ownership_query(user)
+        # non-logged-in users don't get anything else
+        return '' unless user.present?
+
+        # You can see what you own, regardless of visibility
+        # TODO: owner is...? db id? ccid? email?
+        return %Q( OR _query_:"{!raw f=owner_ssim}#{user.id}") unless user.admin?
+
+        # make any visibility setting, including a missing visibility specifier, visible to admins
+        #
+        # this translates into non-insane query language as "OR visibility is null ([* TO *] AND *:*") OR visibility
+        # is any non-null value (*)
+        ' OR _query_:"-visibility_ssim:[* TO *] AND *:*" OR _query_:"visibility_ssim:*"'
       end
 
       def derived_af_class_name
@@ -294,6 +336,13 @@ module JupiterCore
 
         af_class = Class.new(self.af_parent_class) do
           attr_accessor :owning_object
+
+          validate :visibility_must_be_known
+
+          def visibility_must_be_known
+            return true if visibility.present? && owning_object.class.valid_visibilities.include?(visibility)
+            errors.add(:visibility, "#{visibility} is not a known visibility")
+          end
 
           def owning_class
             self.class.owning_class
