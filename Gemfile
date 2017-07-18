@@ -44,4 +44,5 @@ group :test do
   # Faker added 0.5 seconds to the test suite per call. Haikunator seems much faster for faking strings
   gem 'haikunator'
   gem 'minitest-hooks'
+  gem 'shoulda', require: false
 end
