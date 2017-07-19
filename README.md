@@ -1,3 +1,7 @@
+# Jupiter
+
+[![Build Status](https://travis-ci.org/ualbertalib/jupiter.svg?branch=master)](https://travis-ci.org/ualbertalib/jupiter)
+
 # Generate Documentation
 
 `$ bundle exec rake rdoc`
@@ -107,3 +111,12 @@ And everything else is how you would normally develop in a rails project.
   docker-compose logs web
   ```
 - If your switching between docker-compose and local development on your machine, you may encounter in weird permissions on files that docker has created (logs/tmp/etc.). Simply just `sudo rm` them.
+
+## Configuring SAML
+
+* Update `secrets.yml`/`omniauth.rb` config files for the SAML implementation (you may need to generate a certificate/key for certain environments)
+* Give IST's Identity Provider (uat-login or login) the metadata for our service provider
+  * Quick way to view this metadata is to the start the Rails server and navigate to `localhost:3000/auth/saml/metadata` (feel free to edit this metadata accordingly for example adding Organization and ContactPerson metadata)
+* Once this is complete, login via SAML should be working successfully. Try it out!
+
+(TODO: Provide an alternative to IST? Like TestShib?)

@@ -11,9 +11,9 @@
   </head>
 
   <body>
-
+    <%= render partial:'navbar' %>
     <div class="container">
-      <%= render partial:'navbar' %>
+      <%= render partial: 'flash' %>
       <%= yield %>
     </div>
   </body>
