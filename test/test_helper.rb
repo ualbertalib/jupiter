@@ -5,6 +5,7 @@ require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 require 'minitest/hooks/test'
 require 'active_fedora/cleaner'
+require 'shoulda'
 
 class ActiveSupport::TestCase
 
