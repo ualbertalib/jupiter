@@ -1,13 +1,9 @@
 <h1 class="mt-3"><%= t('.header') %></h1>
 
 <p><%= t('.description_html') %></p>
-<a href="/auth/saml" class="btn btn-primary">
-  <%= t('.button_text') %>
-</a>
+<%= link_to t('.saml_link'), '/auth/saml', class: 'btn btn-primary' %>
 
 <%- if Rails.env.development? %>
   <%# TODO: Temporary login form for local development until IST shibboleth issues gets resolved %>
-  <a href="/auth/developer" class='btn btn-primary'>
-    Sign in with Developer Account
-  </a>
+  <%= link_to t('.developer_link'), '/auth/developer', class: 'btn btn-primary' %>
 <% end %>

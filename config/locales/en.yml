@@ -30,22 +30,28 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  site_name: 'Jupiter'
   application:
     navbar:
+      search:
+        placeholder: "Search Jupiter..."
+        button_text: 'Search'
       links:
-        communities: Communities
-        new_work: Upload
-        login: Log In
-        admin: Admin
-        logout: Logout
-        profile: Your Profile
-        settings: Settings
+        communities: 'Communities'
+        new_work: 'Upload'
+        login: 'Log In'
+        admin: 'Admin'
+        logout: 'Logout'
+        profile: 'Your Profile'
+        settings: 'Settings'
+      user_dropdown:
+        heading_html: "Signed in as <strong>%{display_name}</strong>"
   sessions:
     new:
       header: 'Login to ERA'
       description_html: 'ERA is now a <a href="https://ist.ualberta.ca/services/ccid-passwords/campus-computing-id">CCID</a> (Campus Computing ID) enabled service. If you have a CCID please use it to log in to ERA.'
-      button_text: 'Sign in with University of Alberta CCID (Campus Computing ID)'
+      saml_link: 'Sign in with University of Alberta CCID (Campus Computing ID)'
+      developer_link: Sign in with Developer Account
   omniauth:
     error: 'There is an error authorizing from your CCID account.'
     success: "Successfully authenticated from %{kind} account."
