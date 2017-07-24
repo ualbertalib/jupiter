@@ -18,6 +18,13 @@
 
 `$ bundle exec rails test`
 
+# Run system tests
+By default, `rails test` will not run the system tests. To run them use:
+
+`$ bundle exec rails test:system`
+
+***Note***: You may need chromedriver and perhaps a few other dependencies installed to run these system tests in selenium.
+
 # REGenerate Documentation
 
 `$ bundle exec rake rerdoc`
@@ -114,9 +121,9 @@ And everything else is how you would normally develop in a rails project.
 
 ## Configuring SAML
 
-* Update `secrets.yml`/`omniauth.rb` config files for the SAML implementation (you may need to generate a certificate/key for certain environments)
+* Update `secrets.yml` (and maybe `omniauth.rb`) for the SAML implementation (you may need to generate a certificate/key for certain environments)
 * Give IST's Identity Provider (uat-login or login) the metadata for our service provider
-  * Quick way to view this metadata is to the start the Rails server and navigate to `localhost:3000/auth/saml/metadata` (feel free to edit this metadata accordingly for example adding Organization and ContactPerson metadata)
+  * Quick way to view this metadata is to the start the Rails server and navigate to `http://localhost:3000/auth/saml/metadata` (feel free to edit this metadata accordingly for example adding Organization and ContactPerson metadata)
 * Once this is complete, login via SAML should be working successfully. Try it out!
 
-(TODO: Provide an alternative to IST? Like TestShib?)
+(TODO: Provide an alternatives to IST IdP for non production environments?)
