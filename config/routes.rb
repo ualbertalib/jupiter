@@ -12,7 +12,6 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
-
+    resources :communities_and_collections, only: [:create, :new, :index]
   end
-
 end
