@@ -1,86 +1,116 @@
-# require 'rails_helper'
+require 'test_helper'
 
-# RSpec.describe Users::OmniauthCallbacksController, type: :controller do
-#   describe 'GET complete' do
-#     context 'with valid new user' do
-#       it 'creates new user and new identity' do
-#         request.env['omniauth.auth'] = OmniAuth::AuthHash.new(
-#           provider: 'saml',
-#           uid: 'johndoe',
-#           info: {
-#             email: 'johndoe@ualberta.ca',
-#             display_name: 'John Doe'
-#           }
-#         )
+class SessionsControllerTest < ActionDispatch::IntegrationTest
 
-#         expect { get :complete, params: { provider: 'saml' } }.to change { User.count }.by(1)
-#         user = User.last
-#         identity = user.identities.last
-#         expect(user.display_name).to eq 'John Doe'
-#         expect(user.email).to eq 'johndoe@ualberta.ca'
-#         expect(identity.provider).to eq 'saml'
-#         expect(identity.uid).to eq 'johndoe'
-#         expect(controller).to set_flash[:notice].to(I18n.t('devise.omniauth_callbacks.success', kind: 'saml'))
-#         expect(response).to redirect_to(::Sufia::Engine.routes.url_helpers.dashboard_index_path)
-#       end
-#     end
+  teardown do
+    Rails.application.env_config['omniauth.auth'] = nil
+  end
 
-#     context 'with valid existing user' do
-#       it 'uses existing identity if present' do
-#         user = create(:omniauth_user, email: 'johndoe@ualberta.ca', provider: 'saml', uid: 'johndoe')
+  test 'new session page' do
+    get login_url
+    assert_response :success
+  end
 
-#         request.env['omniauth.auth'] = OmniAuth::AuthHash.new(
-#           provider: 'saml',
-#           uid: 'johndoe',
-#           info: {
-#             email: 'johndoe@ualberta.ca'
-#           }
-#         )
+  context '#create' do
+    context 'with valid new user' do
+      should 'create a new user and new identity' do
+        OmniAuth.config.mock_auth[:saml] = OmniAuth::AuthHash.new(
+          provider: 'saml',
+          uid: 'johndoe',
+          info: { email: 'johndoe@ualberta.ca', name: 'John Doe' }
+        )
+        assert_difference ['User.count', 'Identity.count'], 1 do
+          post '/auth/saml/callback'
+        end
 
-#         expect { get :complete, params: { provider: 'saml' } }.not_to change { User.count }
-#         identity = user.identities.last
-#         expect(user.email).to eq 'johndoe@ualberta.ca'
-#         expect(identity.provider).to eq 'saml'
-#         expect(identity.uid).to eq 'johndoe'
-#         expect(controller).to set_flash[:notice].to(I18n.t('devise.omniauth_callbacks.success', kind: 'saml'))
-#         expect(response).to redirect_to(::Sufia::Engine.routes.url_helpers.dashboard_index_path)
-#       end
+        user = User.last
+        identity = user.identities.last
+        assert_equal 'John Doe', user.display_name
+        assert_equal 'johndoe@ualberta.ca', user.email
+        assert_equal 'saml', identity.provider
+        assert_equal 'johndoe', identity.uid
+        assert_redirected_to root_url
+        assert_equal I18n.t('omniauth.success', kind: 'saml'), flash[:notice]
+        assert logged_in?
+      end
+    end
 
-#       it 'creates a new identity if not present' do
-#         user = create(:omniauth_user, email: 'johndoe@ualberta.ca', provider: 'saml', uid: 'johndoe')
+    context 'with valid existing user' do
+      should 'use existing identity if present' do
+        user = users(:user)
+        identity = identities(:user_saml)
 
-#         request.env['omniauth.auth'] = OmniAuth::AuthHash.new(
-#           provider: 'facebook',
-#           uid: '12345678',
-#           info: {
-#             email: 'johndoe@ualberta.ca'
-#           }
-#         )
+        OmniAuth.config.mock_auth[:saml] = OmniAuth::AuthHash.new(
+          provider: 'saml',
+          uid: identity.uid,
+          info: { email: user.email, name: user.display_name }
+        )
 
-#         expect { get :complete, params: { provider: 'facebook' } }.not_to change { User.count }
-#         identity = user.identities.last
-#         expect(user.email).to eq 'johndoe@ualberta.ca'
-#         expect(identity.provider).to eq 'facebook'
-#         expect(identity.uid).to eq '12345678'
-#         expect(controller).to set_flash[:notice].to(I18n.t('devise.omniauth_callbacks.success', kind: 'facebook'))
-#         expect(response).to redirect_to(::Sufia::Engine.routes.url_helpers.dashboard_index_path)
-#       end
-#     end
+        assert_no_difference ['User.count', 'Identity.count'] do
+          post '/auth/saml/callback'
+        end
 
-#     context 'with invalid new user' do
-#       it 'Gives error message and does not save user' do
-#         request.env['omniauth.auth'] = OmniAuth::AuthHash.new(
-#           provider: 'saml',
-#           uid: 'johndoe',
-#           info: {
-#             email: nil
-#           }
-#         )
+        assert_redirected_to root_url
+        assert_equal I18n.t('omniauth.success', kind: 'saml'), flash[:notice]
+        assert logged_in?
+      end
 
-#         expect { get :complete, params: { provider: 'saml' } }.not_to change { User.count }
-#         expect(controller).to set_flash[:alert].to(I18n.t('login.omniauth_error'))
-#         expect(response).to redirect_to(new_user_session_path)
-#       end
-#     end
-#   end
-# end
+      should 'create a new identity if not present' do
+        user = users(:user)
+
+        Rails.application.env_config['omniauth.auth'] = OmniAuth::AuthHash.new(
+          provider: 'twitter',
+          uid: 'twitter-012345',
+          info: { email: user.email, name: user.display_name }
+        )
+
+        assert_no_difference ['User.count'] do
+          post '/auth/twitter/callback'
+        end
+
+        identity = user.identities.last
+        assert_equal 'twitter', identity.provider
+        assert_equal 'twitter-012345', identity.uid
+
+        assert_redirected_to root_url
+        assert_equal I18n.t('omniauth.success', kind: 'twitter'), flash[:notice]
+        assert logged_in?
+      end
+    end
+
+    context 'with invalid new user' do
+      should 'give an error message and not save the user' do
+        OmniAuth.config.mock_auth[:saml] = :invalid_credentials
+
+        assert_no_difference ['User.count', 'Identity.count'] do
+          post '/auth/saml/callback'
+        end
+
+        assert_redirected_to login_url
+        assert_equal I18n.t('omniauth.error'), flash[:alert]
+        assert_not logged_in?
+      end
+    end
+  end
+
+  test 'session destroy' do
+    user = users(:user)
+
+    sign_in_as user
+
+    assert logged_in?
+
+    get logout_url
+    assert_redirected_to root_url
+    assert_equal I18n.t('omniauth.signed_out'), flash[:notice]
+
+    assert_not logged_in?
+  end
+
+  test 'session omniauth failure' do
+    get auth_failure_url
+    assert_redirected_to login_url
+    assert_equal I18n.t('omniauth.error'), flash[:alert]
+  end
+
+end

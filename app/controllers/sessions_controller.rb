@@ -1,7 +1,10 @@
 class SessionsController < ApplicationController
-  # TODO: this is only required for the omniauth developer provider (for development),
-  #  should be removed once we do something smarter with omniauth saml/IST saml
-  skip_before_action :verify_authenticity_token, only: :create if Rails.env.development?
+
+  # some omniauth callbacks (like developer) are sent using a post request,
+  # need to disable this otherwise session will be clobbered by rails
+  # https://github.com/omniauth/omniauth/wiki/FAQ#rails-session-is-clobbered-after-callback-on-openid-providers
+  # TODO just limit this to development mode? since this doesnt effect saml?
+  skip_before_action :verify_authenticity_token, only: :create
 
   def new
     # renders login page (views/sessions/new.html.erb)
@@ -22,24 +25,24 @@ class SessionsController < ApplicationController
 
       if user.nil?
         user = User.create(email: auth_hash.info.email,
-                           display_name: auth_hash.info.name.to_s)
+                           display_name: auth_hash.info.name)
       end
 
       user.identities.create(provider: auth_hash.provider, uid: auth_hash.uid)
     end
 
     # Sign the user in, if they exist
-    self.current_user = user
+    sign_in(user)
 
     # If signed in successfully, redirect them to the homepage
-    return redirect_to root_url, notice: I18n.t('omniauth.success', kind: auth_hash.provider) if signed_in?
+    return redirect_to root_url, notice: I18n.t('omniauth.success', kind: auth_hash.provider) if current_user.present?
 
     # Else something went wrong along the way with omniauth
     redirect_to login_path, alert: I18n.t('omniauth.error')
   end
 
   def destroy
-    self.current_user = nil
+    log_off_user
     redirect_to root_url, notice: I18n.t('omniauth.signed_out')
   end
 

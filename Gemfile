@@ -6,14 +6,20 @@ git_source(:github) do |repo_name|
 end
 
 gem 'bcrypt', '~> 3.1.7'
-gem 'bootstrap'
+
+gem 'bootstrap', '~> 4.0.0.alpha6'
+
+# Review this after and update once bootstrap V4.0.0.alpha6+ come out,
+#  latest versions use popper instead of tether
+source 'https://rails-assets.org' do
+  gem 'rails-assets-tether', '>= 1.3.3'
+end
+
 gem 'haml'
 gem 'hydra-works'
 gem 'jquery-rails'
 gem 'mysql2', '>= 0.3.18', '< 0.5'
-# TODO: this is a missed bootsrap requirement, now fixed on their master  twbs/bootstrap-rubygem@8927eff
-# review and remove when that makes it into a release
-gem 'popper_js'
+gem 'puma', '~> 3.7'
 gem 'rails', '~> 5.1.1'
 gem 'rdf-vocab'
 gem 'redis', '~> 3.0'
@@ -29,10 +35,11 @@ gem 'omniauth-saml'
 
 group :development, :test do
   gem 'capybara', '~> 2.13'
+  gem 'selenium-webdriver', require: false
+
   gem 'pry'
   gem 'pry-rails'
   gem 'rubocop', require: false
-  gem 'selenium-webdriver'
 end
 
 group :development do
