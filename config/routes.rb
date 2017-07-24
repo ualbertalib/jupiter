@@ -10,4 +10,9 @@ Rails.application.routes.draw do
   resources :communities do
     resources :collections
   end
+
+  namespace :admin do
+
+  end
+
 end

@@ -14,7 +14,7 @@
 
     <div class="container">
       <%= render partial:'navbar' %>
-      <%= yield %>
+      <%= content_for?(:content) ? yield(:content) : yield %>
     </div>
   </body>
 </html>
