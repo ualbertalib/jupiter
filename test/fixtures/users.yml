@@ -10,6 +10,6 @@ admin:
   admin: true
 
 user:
-  display_name: User
-  email: user@example.com
+  display_name: Random User
+  email: random_user@example.com
   admin: false

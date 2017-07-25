@@ -11,9 +11,9 @@
   </head>
 
   <body>
-
-    <div class="container">
-      <%= render partial:'navbar' %>
+    <%= render partial:'navbar' %>
+    <div class="container">    
+      <%= render partial: 'flash' %>
       <%= content_for?(:content) ? yield(:content) : yield %>
     </div>
   </body>
