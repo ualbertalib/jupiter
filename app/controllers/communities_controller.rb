@@ -26,5 +26,27 @@ class CommunitiesController < ApplicationController
 
     redirect_to @community
   end
+  
+  def update
+      @community = Community.find(params[:id])
+      @community.unlock_and_fetch_ldp_object do |unlocked_community|
+          unlocked_community.update!(community_params)
+      end
+      redirect_to @community
+  end
+
+  def destroy
+    community = Community.find(params[:id])
+    community.unlock_and_fetch_ldp_object do |uo|
+      (flash[:error] = 'Cannot delete a non-empty Community') unless uo.destroy
+      redirect_to admin_communities_and_collections_path
+    end
+  end
+
+  protected
+
+  def community_params
+    params[:community].permit(Community.attribute_names)
+  end
 
 end

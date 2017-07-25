@@ -221,7 +221,7 @@ module JupiterCore
     end
 
     def self.valid_visibilities
-      [:public, :private, :authenticated]
+      ['public', 'private', 'authenticated']
     end
 
     # Used to dynamically turn an arbitrary Solr document into an instance of its originating class
@@ -342,6 +342,8 @@ module JupiterCore
             JupiterCore::Indexer
           end
 
+          # Methods defined on the +owning_object+ can be called by the "unlocked" methods defined on the ActiveFedora
+          # object
           def method_missing(name, *args, &block)
             if owning_object.respond_to?(name, true)
               owning_object.send(name, *args, &block)

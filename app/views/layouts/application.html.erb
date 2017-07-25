@@ -6,6 +6,7 @@
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= yield(:head) %>
     <% if Rails.env.development? %>
       <%= favicon_link_tag 'mc_360.png' %>
     <% end %>
@@ -14,6 +15,8 @@
   </head>
 
   <body>
+
+    <div class="container">
     <%= render partial:'navbar' %>
     <div class="container">    
       <%= render partial: 'flash' %>
