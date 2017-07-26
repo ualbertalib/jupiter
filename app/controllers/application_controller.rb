@@ -5,6 +5,8 @@ class ApplicationController < ActionController::Base
   after_action :verify_authorized
 
   protect_from_forgery with: :exception
+  
+   helper_method :current_site_notifications
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
@@ -48,6 +50,11 @@ class ApplicationController < ActionController::Base
 
   def current_site_notifications
     SiteNotification.current
+  end
+
+  # TODO: remove shim
+  def current_user
+    User.first
   end
 
 end

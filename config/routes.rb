@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     root to: 'dashboard#index'
 
     resources :communities_and_collections, only: [:create, :new, :index]
+    resources :site_notifications, only: [:new, :destroy, :create]
   end
 
   get 'login', to: 'sessions#new'
