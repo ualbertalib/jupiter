@@ -46,4 +46,8 @@ class ApplicationController < ActionController::Base
     session.delete(:forwarding_url)
   end
 
+  def current_site_notifications
+    SiteNotification.current
+  end
+
 end
