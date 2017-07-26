@@ -18,7 +18,7 @@ class AuthenticationTest < ApplicationSystemTestCase
         }
       )
 
-      click_link I18n.t('sessions.new.button_text')
+      click_link I18n.t('sessions.new.saml_link')
 
       assert_text I18n.t('omniauth.success', kind: 'saml')
 
@@ -40,7 +40,7 @@ class AuthenticationTest < ApplicationSystemTestCase
 
       OmniAuth.config.mock_auth[:saml] = :invalid_credentials
 
-      click_link I18n.t('sessions.new.button_text')
+      click_link I18n.t('sessions.new.saml_link')
 
       assert_text I18n.t('omniauth.error')
 

@@ -4,6 +4,10 @@ class CollectionPolicy < ApplicationPolicy
     true
   end
 
+  def show?
+    true
+  end
+
   def permitted_attributes
     [:visibility, :owner, :title, :community_id] if user.admin?
   end

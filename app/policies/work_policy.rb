@@ -4,6 +4,10 @@ class WorkPolicy < ApplicationPolicy
     true
   end
 
+  def show?
+    true
+  end
+
   def create?
     owned? || admin?
   end
@@ -18,25 +22,24 @@ class WorkPolicy < ApplicationPolicy
 
   def owned?
     user.present?
-    # TODO: Currently record (work) has no relationship to a user/creator
+    # TODO: Fix this, how to get owner of works? Currently record (work) has no relationship to a user/creator
     # record && user && record.creator == user.email
   end
 
   def permitted_attributes
     [:visibility,
-      :owner,
-      :title,
-      :subject,
-      :creator,
-      :contributor,
-      :description,
-      :publisher,
-      :date_created,
-      :language,
-      :doi,
-      :member_of_paths,
-      :embargo_end_date
-    ]
+     :owner,
+     :title,
+     :subject,
+     :creator,
+     :contributor,
+     :description,
+     :publisher,
+     :date_created,
+     :language,
+     :doi,
+     :member_of_paths,
+     :embargo_end_date]
   end
 
   class Scope < ApplicationPolicy::Scope

@@ -4,6 +4,10 @@ class UserPolicy < ApplicationPolicy
     false
   end
 
+  def show?
+    owned? || admin?
+  end
+
   def update?
     owned? || admin?
   end
