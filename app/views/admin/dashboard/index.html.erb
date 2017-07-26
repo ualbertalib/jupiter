@@ -1,0 +1,126 @@
+<div class="admin-dashboard">
+  <h2>Versions</h2>
+  <div class="row">
+    <div class="col-md-4">
+      <p>
+        Jupiter
+        <span class="badge badge-primary">
+          0.0.1
+          <%# TODO: Add version file in jupiter %>
+          <%#= Jupiter::VERSION %>
+        </span>
+      </p>
+    </div>
+    <div class="col-md-4">
+      <p>
+        Ruby
+        <span class="badge badge-primary">
+          <%= "#{RUBY_VERSION}p#{RUBY_PATCHLEVEL}" %>
+        </span>
+      </p>
+    </div>
+    <div class="col-md-4">
+      <p>
+        Rails
+        <span class="badge badge-primary">
+          <%= "#{Rails::VERSION::STRING}" %>
+        </span>
+      </p>
+    </div>
+    </div>
+  </div>
+
+  <hr/>
+
+  <h2>Statistics</h2>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card text-center">
+      <div class="card-block">
+        <h4 class="card-title">Works</h4>
+        <div class="data">
+          <%= link_to '#todo', class: 'card-text' do %>
+          <%#= admin_works_path do %>
+              <%#= number_with_delimiter(Work.count) %>
+              99
+          <% end %>
+        </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card text-center">
+        <div class="card-block">
+          <h4 class="card-title">Users</h4>
+          <%= link_to '#todo', class: 'card-text' do %>
+          <%#= link_to admin_users_path do %>
+              <%= number_with_delimiter(User.count) %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card text-center">
+        <div class="card-block">
+        <h4 class="card-title">Communities</h4>
+          <%= link_to '#todo', class: 'card-text' do %>
+          <%#= link_to admin_communities_path do %>
+              <%#= number_with_delimiter(Communities.count) %>
+              99
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card text-center">
+        <div class="card-block">
+          <h4 class="card-title">Collections</h4>
+          <%= link_to '#todo', class: 'card-text' do %>
+          <%#= link_to admin_collections_path do %>
+              <%#= number_with_delimiter(Collections.count) %>
+              99
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr/>
+
+  <h2>Recent Activity</h2>
+  <div class="row prepend-top-10">
+    <div class="col-md-4">
+      <h4>Latest works</h4>
+      <ul class="list-group">
+        <% @works.each do |work| %>
+          <li class="list-group-item justify-content-between">
+            <%#= link_to [:admin, work] %>
+            <%= work.title %>
+            <%# end %>
+            <span  class="badge badge-default badge-pill">
+              <%#= TODO timeago or momementjs  time stamps %>
+              <%#= what is this called in AF? work.date_created or work.created_at? %>
+            </span>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+    <div class="col-md-4">
+      <h4>Latest users</h4>
+      <ul class="list-group">
+        <% @users.each do |user| %>
+          <li class="list-group-item justify-content-between">
+            <%#= link_to [:admin, user] do %>
+              <%= user.display_name %>
+            <%# end %>
+            <span class="badge badge-default badge-pill">
+              <%#= TODO timeago or momementjs  time stamps %>
+              <%= user.created_at %>
+            </span>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</div>
+

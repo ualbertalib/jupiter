@@ -1,17 +1,25 @@
 class WorksController < ApplicationController
 
-  before_action :load_work, only: [:show, :edit, :update]
+  # TODO: Show/edit/etc pages?
+  before_action :load_work, only: [:update]
 
   def new
     @work = Work.new_locked_ldp_object
+    authorize @work
   end
 
   def create
     communities = params[:work].delete :community
     collections = params[:work].delete :collection
 
-    @work = Work.new_locked_ldp_object(work_params).unlock_and_fetch_ldp_object do |unlocked_work|
+    @work = Work.new_locked_ldp_object(work_params)
+
+    authorize @work
+
+    # TODO: add validations?
+    @work.unlock_and_fetch_ldp_object do |unlocked_work|
       communities.each_with_index do |community, idx|
+        # TODO: raises undefined method `[]' for nil:NilClass on empty form
         unlocked_work.add_to_path(community, collections[idx])
       end
 
@@ -31,6 +39,7 @@ class WorksController < ApplicationController
   end
 
   def update
+    authorize @work
     @work.unlock_and_fetch_ldp_object do |unlocked_work|
       unlocked_work.update!(work_params)
     end
@@ -48,7 +57,7 @@ class WorksController < ApplicationController
   end
 
   def work_params
-    params[:work].permit(Work.safe_attributes)
+    params.require(:work).permit(policy(Work).permitted_attributes)
   end
 
 end

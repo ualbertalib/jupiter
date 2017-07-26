@@ -15,17 +15,17 @@
     <div class="navbar-collapse collapse" id="jupiter-main-nav" aria-expanded="false">
       <ul class="nav navbar-nav mr-auto">
         <li role="presentation" class="nav-item">
-          <%= link_to t('.links.communities'), communities_path, class: 'nav-link' %>
+          <%= link_to t('.links.communities'), communities_path, class: "nav-link" %>
         </li>
         <li role="presentation" class="nav-item">
-          <%= link_to t('.links.new_work'), new_work_path, class: 'nav-link' %>
+          <%= link_to t('.links.new_work'), new_work_path, class: "nav-link" %>
         </li>
       </ul>
       <ul class="nav navbar-nav pull-xs-right mr-2">
         <li role="presentation" class="nav-item mr-3">
           <form class="form-inline">
             <div class="input-group">
-              <%= search_field_tag 'search', placeholder: t('.search.placeholder'), class: 'form-control' %>
+              <%= search_field_tag 'search', nil, placeholder: t('.search.placeholder'), class: "form-control" %>
               <button type="submit" class="input-group-addon btn btn-outline-secondary">
                 <%= link_to t('.search.button_text') %>
               </button>
@@ -55,7 +55,7 @@
 
               <% if current_user.admin? %>
                 <div class="dropdown-divider"></div>
-                <%= link_to t('.links.admin'), "#TODO", class: 'dropdown-item' %>
+                <%= link_to t('.links.admin'), admin_root_path, class: 'dropdown-item' %>
               <% end %>
             </div>
           </li>

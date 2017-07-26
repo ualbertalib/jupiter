@@ -1,6 +1,10 @@
 class ApplicationController < ActionController::Base
 
+  include Pundit
+
   protect_from_forgery with: :exception
+
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   protected
 
@@ -22,6 +26,12 @@ class ApplicationController < ActionController::Base
   def log_off_user
     session[:user_id] = nil
     @current_user = nil
+  end
+
+  def user_not_authorized
+    # TODO: should actually redirect to login page, then after login, redirects back
+    flash[:alert] = I18n.t('authorization.user_not_authorized')
+    redirect_to(request.referrer || root_path)
   end
 
 end

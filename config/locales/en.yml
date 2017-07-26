@@ -56,3 +56,5 @@ en:
     error: 'There is an error authorizing from your CCID account.'
     success: "Successfully authenticated from %{kind} account."
     signed_out: "Signed out successfully."
+  authorization:
+    user_not_authorized: 'You are not authorized to perform this action.'
