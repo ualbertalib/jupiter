@@ -26,4 +26,23 @@ class ActiveSupport::TestCase
 
   # Add more helper methods to be used by all tests here...
 
+  # Logs in a test user. Used for integration tests.
+  def sign_in_as(user)
+    # grab first user identitiy, dont care just need to login user
+    identity = user.identities.first
+    Rails.application.env_config['omniauth.auth'] = OmniAuth::AuthHash.new(
+      provider: identity.provider,
+      uid: identity.uid
+    )
+    post "/auth/#{identity.provider}/callback"
+  end
+
+  # Returns true if a test user is logged in.
+  def logged_in?
+    session[:user_id].present?
+  end
+
+  # turn on test mode for omniauth
+  OmniAuth.config.test_mode = true
+
 end
