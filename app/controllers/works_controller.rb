@@ -12,8 +12,7 @@ class WorksController < ApplicationController
     communities = params[:work].delete :community
     collections = params[:work].delete :collection
 
-    @work = Work.new_locked_ldp_object(work_params)
-
+    @work = Work.new_locked_ldp_object(permitted_attributes(Work))
     authorize @work
 
     # TODO: add validations?
@@ -41,7 +40,7 @@ class WorksController < ApplicationController
   def update
     authorize @work
     @work.unlock_and_fetch_ldp_object do |unlocked_work|
-      unlocked_work.update!(work_params)
+      unlocked_work.update!(permitted_attributes(@work))
     end
     redirect_to @work
   end
@@ -54,10 +53,6 @@ class WorksController < ApplicationController
 
   def load_work
     @work = Work.find(params[:id])
-  end
-
-  def work_params
-    params.require(:work).permit(policy(Work).permitted_attributes)
   end
 
 end

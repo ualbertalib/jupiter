@@ -13,18 +13,12 @@ class CollectionsController < ApplicationController
   end
 
   def create
-    @collection = Collection.new_locked_ldp_object(collection_params)
+    @collection = Collection.new_locked_ldp_object(permitted_attributes(Collection))
     authorize @collection
     @community = Community.find(params[:community_id])
     @collection.unlock_and_fetch_ldp_object(&:save!)
 
     redirect_to community_collection_path(@community, @collection)
-  end
-
-  protected
-
-  def collection_params
-    params.require(:collection).permit(policy(Collection).permitted_attributes)
   end
 
 end

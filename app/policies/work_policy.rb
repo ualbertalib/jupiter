@@ -1,10 +1,6 @@
-class WorkPolicy < ApplicationPolicy
+class WorkPolicy < LockedLdpObjectPolicy
 
   def index?
-    true
-  end
-
-  def show?
     true
   end
 
@@ -24,35 +20,6 @@ class WorkPolicy < ApplicationPolicy
     user.present?
     # TODO: Fix this, how to get owner of works? Currently record (work) has no relationship to a user/creator
     # record && user && record.creator == user.email
-  end
-
-  def permitted_attributes
-    [:visibility,
-     :owner,
-     :title,
-     :subject,
-     :creator,
-     :contributor,
-     :description,
-     :publisher,
-     :date_created,
-     :language,
-     :doi,
-     :member_of_paths,
-     :embargo_end_date]
-  end
-
-  class Scope < ApplicationPolicy::Scope
-
-    def resolve
-      # eventually we only want to show public works
-      # if user.admin?
-      scope.all
-      # else
-      #   scope.where(private: false)
-      # end
-    end
-
   end
 
 end
