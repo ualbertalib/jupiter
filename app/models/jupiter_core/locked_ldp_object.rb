@@ -275,6 +275,21 @@ module JupiterCore
 
       private
 
+      def perform_solr_query(q, fq, facet, facet_fields = [])
+        query = []
+        query << %Q(_query_:"{!raw f=has_model_ssim}#{derived_af_class_name}")
+        query.append(q) if q.present?
+
+        response = ActiveFedora::SolrService.instance.conn.get('select', params: { q: query.join(' AND '),
+                                                                                   fq: fq,
+                                                                                   facet: facet,
+                                                                                   'facet.field': facet_fields })
+
+        raise SearchFailed unless response['responseHeader']['status'] == 0
+
+        [response['response']['numFound'], response['response']['docs'], response['facet_counts']]
+      end
+
       # Clones inherited arrays/maps so that local mutation doesn't propogate to the parent
       # also sets up basic attributes that every child class has: +id+, +owner+, and +visibility+
       def inherited(child)
