@@ -21,7 +21,7 @@ class WorkTest < ActiveSupport::TestCase
   end
 
   test 'embargo is a valid visibility for works' do
-    assert_includes Work.valid_visibilities, :embargo
+    assert_includes Work.valid_visibilities, 'embargo'
   end
 
   test 'embargo_end_date must be present if visibility is embargo' do

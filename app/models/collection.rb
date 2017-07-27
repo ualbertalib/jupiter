@@ -21,4 +21,14 @@ class Collection < JupiterCore::LockedLdpObject
     super(only: [:title, :id])
   end
 
+  unlocked do
+    before_destroy :can_be_destroyed?
+
+    def can_be_destroyed?
+      return true if member_works.count == 0
+      errors.add(:member_works, 'must be empty')
+      throw(:abort)
+    end
+  end
+
 end
