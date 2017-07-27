@@ -7,7 +7,7 @@ class Admin::CommunitiesAndCollectionsController < Admin::AdminController
   def show
     @community = Community.find(params[:id])
     respond_to do |format|
-      format.json { render json: @community.member_collections }
+      format.js
     end
   end
 

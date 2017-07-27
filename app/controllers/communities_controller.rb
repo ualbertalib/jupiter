@@ -38,7 +38,12 @@ class CommunitiesController < ApplicationController
   def destroy
     community = Community.find(params[:id])
     community.unlock_and_fetch_ldp_object do |uo|
-      (flash[:error] = 'Cannot delete a non-empty Community') unless uo.destroy
+      if uo.destroy
+        flash[:notice] = 'Community deleted'
+      else
+        flash[:alert] = 'Cannot delete a non-empty Community'
+      end
+
       redirect_to admin_communities_and_collections_path
     end
   end

@@ -13,8 +13,13 @@
       <% end %>
 
       <%= render 'sidebar_group', title: 'Users' do %>
+        <li><a href="">Manage Users</a></li>
+      <% end %>
+
+
+      <%= render 'sidebar_group', title: 'Communities and Collections' do %>
         <li><%= link_to 'Manage Communities / Collections', admin_communities_and_collections_path %></li>
-        <li><a href="">Add New Community</a></li>
+        <li><%= link_to 'Add new Community', new_community_path %></li>
         <li><a href="">Add New Collection</a></li>
       <% end %>
 
