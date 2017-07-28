@@ -6,6 +6,8 @@ class SessionsController < ApplicationController
   # TODO just limit this to development mode? since this doesnt effect saml?
   skip_before_action :verify_authenticity_token, only: :create
 
+  skip_after_action :verify_authorized
+
   def new
     # renders login page (views/sessions/new.html.erb)
   end

@@ -47,6 +47,7 @@ class WorksController < ApplicationController
 
   def search
     @results = Work.search(q: params[:q])
+    authorize @results, :index?
   end
 
   private
