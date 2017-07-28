@@ -33,6 +33,9 @@ gem 'uglifier', '>= 1.3.0'
 gem 'omniauth'
 gem 'omniauth-saml'
 
+# Authorization
+gem 'pundit'
+
 group :development, :test do
   gem 'capybara', '~> 2.13'
   gem 'selenium-webdriver', require: false
