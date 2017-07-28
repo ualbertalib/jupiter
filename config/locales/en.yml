@@ -57,4 +57,5 @@ en:
     success: "Successfully authenticated from %{kind} account."
     signed_out: "Signed out successfully."
   authorization:
-    user_not_authorized: 'You are not authorized to perform this action.'
+    user_not_authorized: 'Sorry, you are not authorized to perform this action.'
+    user_not_authorized_try_logging_in: 'Sorry, you are not authorized to perform this action. Try logging in?'
