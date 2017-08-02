@@ -1,9 +1,12 @@
 <li class="list-group-item list-group-item-info">
-  <%= link_to collection.title, community_collection_path(community, collection) %>
+  <div class="pl-4" >
+    <%= link_to collection.title, community_collection_path(community, collection) %>
+  </div>
   <div class="ml-auto">
     <div class="btn-group">
       <%= link_to 'Edit', edit_community_collection_path(community, collection), class:'btn btn-secondary' %>
       <%= button_to "Delete", community_collection_path(community, collection), class: 'btn btn-danger', method: :delete, data: {confirm: 'Are you sure?' } %>
     </div>
   </div>
+
 </li>

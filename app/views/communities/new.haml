@@ -6,6 +6,4 @@
         .row
           = f.input :title
         .row
-          = f.collection_radio_buttons :visibility, [['public', 'Public'], ['embargo', 'Embargoed'], ['authenticated', 'Authenticated'], ['private', 'Private']], :first, :last
-        .row
           = f.button :submit, class: 'btn btn-primary'

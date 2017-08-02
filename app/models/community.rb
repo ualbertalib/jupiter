@@ -9,6 +9,11 @@ class Community < JupiterCore::LockedLdpObject
 
   unlocked do
     before_destroy :can_be_destroyed?
+    before_create :set_visibility_public
+
+    def set_visibility_public
+      self.visibility = 'public'
+    end
 
     def can_be_destroyed?
       return true if member_collections.count == 0

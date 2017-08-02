@@ -260,8 +260,11 @@ module JupiterCore
 
     def ldp_object=(obj)
       @ldp_object = obj
-      @solr_representation = @ldp_object.to_solr
       @ldp_object.owning_object = self
+
+      # NOTE: it's important to establish the owning object PRIOR to calling to_solr, as solr_calc_properties
+      # could need to call methods that get forwarded to the owning object
+      @solr_representation = @ldp_object.to_solr
       @ldp_object
     end
 
@@ -382,13 +385,20 @@ module JupiterCore
         @derived_af_class ||= generate_af_class
       end
 
-      def solr_calculated_attribute(name, solrize_for:, &callable)
-        raise PropertyInvalidError unless callable.respond_to?(:call)
+
+      # Write properties directly to the solr index for an LDP object, without having to back them in the LDP
+      # a lambda, +as+, controls how it is calculated.
+      # Examples:
+      #
+      #    solr_index :downcased_title, solrize_for: :exact_match, as: -> { title.downcase }
+      #
+      def solr_index(name, solrize_for:, as:)
+        raise PropertyInvalidError unless as.respond_to?(:call)
         raise PropertyInvalidError unless name.present?
         raise PropertyInvalidError unless solrize_for.present? && solrize_for.is_a?(Symbol)
 
         self.solr_calc_attributes ||= {}
-        self.solr_calc_attributes[name] = { type: SOLR_DESCRIPTOR_MAP[solrize_for], callable: callable }
+        self.solr_calc_attributes[name] = { type: SOLR_DESCRIPTOR_MAP[solrize_for], callable: as }
       end
 
       def has_multival_attribute(name, predicate, solrize_for: [], type: :string)

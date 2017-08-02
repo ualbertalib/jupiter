@@ -9,10 +9,11 @@
         <%= link_to community.title, community_path(community)%>
 
         <div class="ml-auto">
+          <%= link_to "Collections #{fa_icon('chevron-down')}".html_safe, admin_communities_and_collection_path(community), data: {community_id: community.id }, class: 'btn btn-secondary collection-btn', remote: true %>
+          <%= link_to "Close #{fa_icon('chevron-up')}".html_safe, '', class: 'btn btn-secondary close-btn hidden-xs-up', data: {community_id: community.id } %>
+
           <div class="btn-group">
             <%= link_to 'Edit', edit_community_path(community), class:'btn btn-secondary' %>
-            <%= link_to 'Collections', admin_communities_and_collection_path(community), data: {community_id: community.id }, class: 'btn btn-secondary collection-btn', remote: true %>
-            <%= link_to 'Close', '', class: 'btn btn-secondary close-btn hidden-xs-up', data: {community_id: community.id } %>
             <%= button_to "Delete", community_path(community), class: 'btn btn-danger', method: :delete, data: {confirm: 'Are you sure?' } %>
           </div>
         </div>

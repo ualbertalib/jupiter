@@ -16,9 +16,8 @@ class Work < JupiterCore::LockedLdpObject
   has_multival_attribute :member_of_paths, ::VOCABULARY[:ualib].path, solrize_for: :pathing
   has_attribute :embargo_end_date, ::RDF::Vocab::DC.modified, solrize_for: [:search, :sort]
 
-  solr_calculated_attribute :doi_without_label, solrize_for: :exact_match do |work|
-    work.doi.gsub('doi:', '') if work.doi.present?
-  end
+  solr_index :doi_without_label, solrize_for: :exact_match,
+             as: -> { doi.gsub('doi:', '') if doi.present? }
 
   def self.display_attribute_names
     super - [:member_of_paths]
