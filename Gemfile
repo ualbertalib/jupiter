@@ -5,29 +5,36 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-gem 'bcrypt', '~> 3.1.7'
+# Core Rails stuff
+gem 'puma', '~> 3.7'
+gem 'rails', '~> 5.1.1'
+
+# Assets (CSS/JS) stuff
+gem 'font-awesome-rails'
+gem 'jquery-rails'
+gem 'turbolinks', '~> 5'
+gem 'uglifier', '>= 1.3.0'
 
 gem 'bootstrap', '~> 4.0.0.alpha6'
-
 # Review this after and update once bootstrap V4.0.0.alpha6+ come out,
 #  latest versions use popper instead of tether
 source 'https://rails-assets.org' do
   gem 'rails-assets-tether', '>= 1.3.3'
 end
 
+# View stuff
 gem 'haml'
+gem 'simple_form'
+
+# Hydra stuff
 gem 'hydra-works'
-gem 'jquery-rails'
-gem 'mysql2', '>= 0.3.18', '< 0.5'
-gem 'puma', '~> 3.7'
-gem 'rails', '~> 5.1.1'
 gem 'rdf-vocab'
+gem 'solrizer', github: 'mbarnett/solrizer', branch: 'solrizable_path_types'
+
+# Database stuff
+gem 'mysql2', '>= 0.3.18', '< 0.5'
 gem 'redis', '~> 3.0'
 gem 'rsolr'
-gem 'simple_form'
-gem 'solrizer', github: 'mbarnett/solrizer', branch: 'solrizable_path_types'
-gem 'turbolinks', '~> 5'
-gem 'uglifier', '>= 1.3.0'
 
 # Authentication
 gem 'omniauth'
@@ -36,18 +43,23 @@ gem 'omniauth-saml'
 # Authorization
 gem 'pundit'
 
+# Misc Utilities
+gem 'kaminari'
+
 group :development, :test do
   gem 'capybara', '~> 2.13'
   gem 'selenium-webdriver', require: false
 
   gem 'pry'
   gem 'pry-rails'
+
   gem 'rubocop', require: false
 end
 
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
+
   gem 'listen', '>= 3.0.5', '< 3.2'
   gem 'sdoc'
   gem 'web-console', '>= 3.3.0'

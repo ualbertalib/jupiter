@@ -1,0 +1,35 @@
+<p><%= @user.display_name %></p>
+<p><%= @user.email %></p>
+<p><%= @user.admin? %></p>
+<p><%= @user.created_at %></p>
+<p><%= @user.updated_at %></p>
+
+<% if @user.blocked? %>
+  <%= link_to("unblock", unblock_admin_user_path(@user), method: :patch) %>
+<% else %>
+  <%= link_to("block", block_admin_user_path(@user), method: :patch) %>
+<% end %>
+
+<% if @user.admin? %>
+  <%= link_to("Revoke Admin Access", revoke_admin_admin_user_path(@user), method: :patch) %>
+<% else %>
+  <%= link_to("Grant Admin Access", grant_admin_admin_user_path(@user), method: :patch) %>
+<% end %>
+
+<%= link_to("Impersonate", impersonate_admin_user_path(@user), method: :post) %>
+
+
+
+<div class="row mt-3">
+  <div class="col">
+    <div class="list-group">
+			<% if @works.present? %>
+				<% @works.each do |work| %>
+  				<%= link_to work.title, work_path(work), class: 'list-group-item list-group-item-action'%>
+        <% end %>
+      <% else %>
+				<p>There are no works for this user</p>
+      <% end %>
+    </div>
+  </div>
+</div>

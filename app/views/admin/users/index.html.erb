@@ -1,0 +1,49 @@
+<h2 class="m-3">Users</h2>
+
+<%= form_tag admin_users_path, method:'get' do %>
+  <%# preserve previous params when submitting form %>
+  <%= hidden_field_tag :page, params[:page] if params[:page] %>
+  <%= hidden_field_tag :direction, params[:direction] if params[:direction] %>
+  <%= hidden_field_tag :sort, params[:sort] if params[:sort]%>
+
+  <div class="input-group">
+    <%= search_field_tag :q, params[:q], placeholder: 'Search by email or display name...', class: 'form-control' %>
+    <span class="input-group-btn">
+      <%= submit_tag "Search", class: "btn btn-secondary" %>
+    </span>
+  </div>
+<% end %>
+
+
+<p>Displaying <%= @users.count %> of <%= @users_count %> total users.</p>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= sortable 'id' %></th>
+      <th><%= sortable 'email' %></th>
+      <th><%= sortable 'display_name' %></th>
+      <th><%= sortable 'created_at' %></th>
+    </tr>
+  </thead>
+  <tbody>
+  <% if @users.present? %>
+    <% @users.each do |user| %>
+      <tr>
+        <td><%= user.id %></td>
+        <td><%= link_to user.email, admin_user_path(user) %></td>
+        <td><%= user.display_name %></td>
+        <td><%= user.created_at %></td>
+      </tr>
+    <% end %>
+  <% else %>
+    <tr>
+      <td colspan="5" class="text-center">
+        No users were found.
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<%= paginate @users %>

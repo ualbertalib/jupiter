@@ -9,4 +9,13 @@ class User < ApplicationRecord
 
   validates :display_name, presence: true
 
+  def self.search(search)
+    # searches display_name, email
+    if search.present?
+      where('email LIKE ?', "%#{search}%").or(where('display_name LIKE ?', "%#{search}%"))
+    else
+      self
+    end
+  end
+
 end

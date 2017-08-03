@@ -16,9 +16,24 @@ Rails.application.routes.draw do
   namespace :admin, constraints: AdminConstraint.new do
     root to: 'dashboard#index'
 
+    resources :users, only: [:index, :show] do
+      member do
+        patch :block
+        patch :unblock
+        patch :grant_admin
+        patch :revoke_admin
+        post :impersonate
+      end
+      # collection do
+      # constraint prevents this from being accessible
+      #   post :reverse_impersonate
+      # end
+    end
+
     resources :communities_and_collections, only: [:create, :new, :index]
   end
 
+  post '/admin/users/reverse_impersonate', to: 'admin/users#reverse_impersonate'
   get 'login', to: 'sessions#new'
   match '/auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
   match '/auth/failure', to: 'sessions#failure', via: [:get, :post]
