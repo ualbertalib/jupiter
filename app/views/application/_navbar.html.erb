@@ -55,7 +55,7 @@
 
               <% if session[:impersonator_id] %>
                 <div class="dropdown-divider"></div>
-                <%= link_to "Stop impersonation", admin_users_reverse_impersonate_path, method: :post, class: 'dropdown-item' %>
+                <%= link_to "Stop impersonation", reverse_impersonate_path, method: :post, class: 'dropdown-item' %>
               <% end %>
 
               <% if current_user.admin? %>

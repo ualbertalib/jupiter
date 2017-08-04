@@ -9,9 +9,6 @@ class Admin::UsersController < Admin::AdminController
                                     :revoke_admin,
                                     :impersonate]
 
-  skip_before_action :ensure_admin, only: [:reverse_impersonate]
-  skip_after_action :verify_authorized, only: [:reverse_impersonate]
-
   def index
     # filters for admin/blocked/active/no works etc?
     @users = User.search(params[:q]).order("#{sort_column} #{sort_direction}").page params[:page]
@@ -53,36 +50,20 @@ class Admin::UsersController < Admin::AdminController
   end
 
   def impersonate
-    if !@user.blocked? || !@user.admin?
+    if !@user.blocked? && !@user.admin? && @user != current_user
       session[:impersonator_id] = current_user.id
 
       sign_in(@user)
 
-      # Gitlab::AppLogger.info("User #{current_user.display_name} has started impersonating #{@user.display_name}")
+      # Rails.logger.info("User #{current_user.display_name} has started impersonating #{@user.display_name}")
 
       flash[:notice] = "You are now impersonating #{@user.display_name}"
 
       redirect_to root_path
     else
-      flash[:alert] = 'You cannot impersonate a blocked user or another admin'
-      redirect_to admin_user_path(user)
+      flash[:alert] = 'You cannot impersonate a blocked user, an admin user or yourself'
+      redirect_to admin_user_path(@user)
     end
-  end
-
-  def reverse_impersonate
-    impersonator = User.find(session[:impersonator_id]) if session[:impersonator_id]
-
-    return if impersonator.blank? && !impersonator.admin? && impersonator.blocked?
-
-    original_user = current_user
-    sign_in(impersonator)
-
-    # Gitlab::AppLogger.info("User #{impersonator.display_name} has stopped impersonating #{original_user.display_name}")
-
-    session[:impersonator_id] = nil
-    flash[:notice] = "You are no longer impersonating #{original_user.display_name}"
-
-    redirect_to admin_user_path(original_user)
   end
 
   private

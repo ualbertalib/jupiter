@@ -1,22 +1,35 @@
+<%= link_to 'Back to Users', admin_users_path, class: 'btn btn-link' %>
+
 <p><%= @user.display_name %></p>
 <p><%= @user.email %></p>
 <p><%= @user.admin? %></p>
+<p><%= @user.blocked? %></p>
 <p><%= @user.created_at %></p>
 <p><%= @user.updated_at %></p>
 
 <% if @user.blocked? %>
-  <%= link_to("unblock", unblock_admin_user_path(@user), method: :patch) %>
+  <%= link_to("Enable User", unblock_admin_user_path(@user), method: :patch,
+   class: 'btn btn-primary',
+   data: { confirm: "Are you sure you want to enable #{@user.display_name}?" }) %>
 <% else %>
-  <%= link_to("block", block_admin_user_path(@user), method: :patch) %>
+  <%= link_to("Block User", block_admin_user_path(@user), method: :patch,
+   class: 'btn btn-primary',
+   data: { confirm: "Are you sure you want to block #{@user.display_name}?" }) %>
 <% end %>
 
 <% if @user.admin? %>
-  <%= link_to("Revoke Admin Access", revoke_admin_admin_user_path(@user), method: :patch) %>
+  <%= link_to("Revoke Admin Access", revoke_admin_admin_user_path(@user), method: :patch,
+   class: 'btn btn-primary',
+   data: { confirm: "Are you sure you want to revoke admin abilities from #{@user.display_name}?" }) %>
 <% else %>
-  <%= link_to("Grant Admin Access", grant_admin_admin_user_path(@user), method: :patch) %>
+  <%= link_to("Grant Admin Access", grant_admin_admin_user_path(@user), method: :patch,
+   class: 'btn btn-primary',
+   data: { confirm: "Are you sure you want to grant admin abilities from #{@user.display_name}?" }) %>
 <% end %>
 
-<%= link_to("Impersonate", impersonate_admin_user_path(@user), method: :post) %>
+<%= link_to("Impersonate", impersonate_admin_user_path(@user), method: :post,
+ class: 'btn btn-primary',
+ data: { confirm: "Are you sure you want to impersonate #{@user.display_name}?" }) %>
 
 
 

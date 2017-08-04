@@ -55,4 +55,21 @@ class SessionsController < ApplicationController
     redirect_to login_path, alert: I18n.t('omniauth.error')
   end
 
+  def reverse_impersonate
+    impersonator = User.find(session[:impersonator_id]) if session[:impersonator_id]
+
+    return if impersonator.blank? || !impersonator.admin? || impersonator.blocked?
+
+    original_user = current_user
+
+    sign_in(impersonator)
+
+    # Rails.logger.info("User #{impersonator.display_name} has stopped impersonating #{original_user.display_name}")
+
+    session[:impersonator_id] = nil
+    flash[:notice] = "You are no longer impersonating #{original_user.display_name}"
+
+    redirect_to admin_user_path(original_user)
+  end
+
 end

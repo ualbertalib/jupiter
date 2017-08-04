@@ -7,6 +7,10 @@
             <% end %>
 
             <%= render 'sidebar_group', title: 'Users' do %>
+                <li><%= link_to 'Manage Users', admin_users_path %></li>
+            <% end %>
+
+            <%= render 'sidebar_group', title: 'Communities & Collections' do %>
                 <li><a href="">Manage Communities / Collections</a></li>
                 <li><a href="">Add New Community</a></li>
                 <li><a href="">Add New Collection</a></li>
