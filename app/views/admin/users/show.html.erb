@@ -1,37 +1,44 @@
-<%= link_to 'Back to Users', admin_users_path, class: 'btn btn-link' %>
+<ol class="breadcrumb">
+  <li class="breadcrumb-item"><%= link_to 'Admin', admin_root_path %></li>
+  <li class="breadcrumb-item"><%= link_to 'Users', admin_users_path %></li>
+  <li class="breadcrumb-item active"><%=@user.display_name %></li>
+</ol>
 
-<p><%= @user.display_name %></p>
-<p><%= @user.email %></p>
-<p><%= @user.admin? %></p>
-<p><%= @user.blocked? %></p>
-<p><%= @user.created_at %></p>
-<p><%= @user.updated_at %></p>
+<h1><%= @user.display_name %></h1>
+<p>Email: <%= @user.email %></p>
+<p>Admin: <%= @user.admin? %></p>
+<p>Blocked: <%= @user.blocked? %></p>
+<p>Created At: <%= @user.created_at %></p>
+<p>Updated At: <%= @user.updated_at %></p>
 
 <% if @user.blocked? %>
   <%= link_to("Enable User", unblock_admin_user_path(@user), method: :patch,
-   class: 'btn btn-primary',
-   data: { confirm: "Are you sure you want to enable #{@user.display_name}?" }) %>
+    class: 'btn btn-primary',
+    data: { confirm: "Are you sure you want to enable #{@user.display_name}?" })
+  %>
 <% else %>
   <%= link_to("Block User", block_admin_user_path(@user), method: :patch,
-   class: 'btn btn-primary',
-   data: { confirm: "Are you sure you want to block #{@user.display_name}?" }) %>
+    class: 'btn btn-primary',
+    data: { confirm: "Are you sure you want to block #{@user.display_name}?" })
+  %>
 <% end %>
 
 <% if @user.admin? %>
   <%= link_to("Revoke Admin Access", revoke_admin_admin_user_path(@user), method: :patch,
-   class: 'btn btn-primary',
-   data: { confirm: "Are you sure you want to revoke admin abilities from #{@user.display_name}?" }) %>
+    class: 'btn btn-primary',
+    data: { confirm: "Are you sure you want to revoke admin abilities from #{@user.display_name}?" })
+  %>
 <% else %>
   <%= link_to("Grant Admin Access", grant_admin_admin_user_path(@user), method: :patch,
-   class: 'btn btn-primary',
-   data: { confirm: "Are you sure you want to grant admin abilities from #{@user.display_name}?" }) %>
+    class: 'btn btn-primary',
+    data: { confirm: "Are you sure you want to grant admin abilities from #{@user.display_name}?" })
+  %>
 <% end %>
 
 <%= link_to("Impersonate", impersonate_admin_user_path(@user), method: :post,
- class: 'btn btn-primary',
- data: { confirm: "Are you sure you want to impersonate #{@user.display_name}?" }) %>
-
-
+  class: 'btn btn-primary',
+  data: { confirm: "Are you sure you want to impersonate #{@user.display_name}?" })
+%>
 
 <div class="row mt-3">
   <div class="col">
