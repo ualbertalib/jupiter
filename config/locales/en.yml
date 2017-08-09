@@ -64,21 +64,29 @@ en:
     user_not_authorized: 'Sorry, you are not authorized to perform this action.'
     user_not_authorized_try_logging_in: 'Sorry, you are not authorized to perform this action. Try logging in?'
   admin:
+    header: 'Admin'
     users:
       show:
         block_link_text: 'Block User'
         block_dialog: "Are you sure you want to block %{user}?"
+        block_flash: 'User has successfully been blocked'
         unblock_link_text: 'Activate User'
         unblock_dialog: "Are you sure you want to activate %{user}?"
+        unblock_flash: 'User has successfully been unblocked'
         grant_admin_link_text: 'Grant Admin Access'
         grant_admin_dialog: "Are you sure you want to grant admin abilities to %{user}?"
+        grant_admin_flash: 'User has successfully been granted admin access'
         revoke_admin_link_text: 'Revoke Admin Access'
         revoke_admin_dialog: "Are you sure you want to revoke admin abilities from %{user}?"
+        revoke_admin_flash: 'User has successfully been revoked admin access'
         impersonate_link_text: 'Impersonate'
         impersonate_dialog: "Are you sure you want to impersonate %{user}?"
+        impersonate_success_flash: "You are now impersonating %{user}"
+        impersonate_fail_flash: 'You cannot impersonate a blocked user, an admin user or yourself'
         no_works_found: 'There are no works for this user'
       index:
         no_users_found: 'We could not find any users matching your search.'
         display_users_count: "Displaying %{users_count} of %{total_users_count} total users."
         search_placeholder: 'Search by email or display name...'
         search_button: 'Search'
+        header: 'Users'

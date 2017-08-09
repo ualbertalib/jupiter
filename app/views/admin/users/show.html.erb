@@ -1,6 +1,6 @@
 <ol class="breadcrumb mb-5">
-  <li class="breadcrumb-item"><%= link_to 'Admin', admin_root_path %></li>
-  <li class="breadcrumb-item"><%= link_to 'Users', admin_users_path %></li>
+  <li class="breadcrumb-item"><%= link_to t('admin.header'), admin_root_path %></li>
+  <li class="breadcrumb-item"><%= link_to t('admin.users.index.header'), admin_users_path %></li>
   <li class="breadcrumb-item active"><%=@user.id %></li>
 </ol>
 

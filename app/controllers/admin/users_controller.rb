@@ -15,18 +15,17 @@ class Admin::UsersController < Admin::AdminController
   end
 
   def show
-    @works = Work.all # TODO: need to get works off user somehow?
+    @works = Work.all # TODO: need to get works off user somehow? like so:
     # @works = @user.works.order(:name).page params[:page]
   end
 
-  # TODO: log all actions
   def block
     @user.blocked = true
     @user.save
 
     logger.info("Admin '#{current_user.display_name}' has blocked '#{@user.display_name}'")
 
-    flash[:notice] = 'User has successfully been blocked'
+    flash[:notice] = I18n.t('admin.users.show.block_flash')
     redirect_to admin_user_path(@user)
   end
 
@@ -36,7 +35,7 @@ class Admin::UsersController < Admin::AdminController
 
     logger.info("Admin '#{current_user.display_name}' has unblocked '#{@user.display_name}'")
 
-    flash[:notice] = 'User has successfully been unblocked'
+    flash[:notice] = I18n.t('admin.users.show.unblock_flash')
     redirect_to admin_user_path(@user)
   end
 
@@ -46,7 +45,7 @@ class Admin::UsersController < Admin::AdminController
 
     logger.info("Admin '#{current_user.display_name}' has granted admin access to '#{@user.display_name}'")
 
-    flash[:notice] = 'User has successfully been granted admin access'
+    flash[:notice] =  I18n.t('admin.users.show.grant_admin_flash')
     redirect_to admin_user_path(@user)
   end
 
@@ -56,7 +55,7 @@ class Admin::UsersController < Admin::AdminController
 
     logger.info("Admin '#{current_user.display_name}' has revoked admin access from '#{@user.display_name}'")
 
-    flash[:notice] = 'User has successfully been revoked admin access'
+    flash[:notice] =  I18n.t('admin.users.show.revoke_admin_flash')
     redirect_to admin_user_path(@user)
   end
 
@@ -68,11 +67,11 @@ class Admin::UsersController < Admin::AdminController
 
       logger.info("Admin '#{current_user.display_name}' has started impersonating '#{@user.display_name}'")
 
-      flash[:notice] = "You are now impersonating #{@user.display_name}"
+      flash[:notice] =  I18n.t('admin.users.show.impersonate_success_flash', user: @user.display_name)
 
       redirect_to root_path
     else
-      flash[:alert] = 'You cannot impersonate a blocked user, an admin user or yourself'
+      flash[:alert] =  I18n.t('admin.users.show.impersonate_fail_flash')
       redirect_to admin_user_path(@user)
     end
   end
