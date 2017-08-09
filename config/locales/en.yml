@@ -67,6 +67,11 @@ en:
     header: 'Admin'
     users:
       show:
+        email: 'Email'
+        blocked: 'Blocked?'
+        admin: 'Admin?'
+        created_at: 'Created At'
+        updated_at: 'Updated At'
         block_link_text: 'Block User'
         block_dialog: "Are you sure you want to block %{user}?"
         block_flash: 'User has successfully been blocked'

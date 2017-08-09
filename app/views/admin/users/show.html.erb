@@ -4,12 +4,35 @@
   <li class="breadcrumb-item active"><%=@user.id %></li>
 </ol>
 
-<h1><%= @user.display_name %></h1>
-<p>Email: <%= @user.email %></p>
-<p>Admin: <%= @user.admin? %></p>
-<p>Blocked: <%= @user.blocked? %></p>
-<p>Created At: <%= @user.created_at %></p>
-<p>Updated At: <%= @user.updated_at %></p>
+<h1 class="mb-3"><%= @user.display_name %></h1>
+
+<dl class="row">
+  <dt class="col-sm-3"><%= t('.email')%></dt>
+  <dd class="col-sm-9">
+    <%= @user.email %>
+  </dd>
+
+  <dt class="col-sm-3"><%= t('.admin') %></dt>
+  <dd class="col-sm-9">
+    <%= @user.admin? %>
+  </dd>
+
+  <dt class="col-sm-3"><%= t('.blocked') %></dt>
+  <dd class="col-sm-9">
+    <%= @user.blocked? %>
+  </dd>
+
+  <dt class="col-sm-3"><%= t('.created_at') %></dt>
+  <dd class="col-sm-9">
+    <%= time_ago_in_words(@user.created_at) %>
+  </dd>
+
+  <dt class="col-sm-3"><%= t('.updated_at') %></dt>
+  <dd class="col-sm-9">
+    <%= time_ago_in_words(@user.updated_at) %>
+  </dd>
+</dl>
+
 
 <% if @user.blocked? %>
   <%= link_to(t('.unblock_link_text'), unblock_admin_user_path(@user), method: :patch,

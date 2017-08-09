@@ -7,8 +7,7 @@
 <h2 class="m-3"><%= t('.header') %></h2>
 
 <%= form_tag admin_users_path, method:'get' do %>
-  <%# preserve previous params when submitting form %>
-  <%= hidden_field_tag :page, params[:page] if params[:page] %>
+  <%# preserve previous sort params when submitting form %>
   <%= hidden_field_tag :direction, params[:direction] if params[:direction] %>
   <%= hidden_field_tag :sort, params[:sort] if params[:sort]%>
 
