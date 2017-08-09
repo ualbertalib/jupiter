@@ -13,6 +13,13 @@ class ApplicationController < ActionController::Base
   # Returns the current logged-in user (if any).
   def current_user
     @current_user ||= User.find_by(id: session[:user_id])
+
+    if @current_user && @current_user.blocked?
+      log_off_user
+      return redirect_to root_path, alert: I18n.t('login.user_blocked')
+    end
+
+    @current_user
   end
 
   # Let views be able to access current_user

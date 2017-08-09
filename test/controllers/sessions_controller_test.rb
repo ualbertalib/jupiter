@@ -30,7 +30,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
         assert_equal 'saml', identity.provider
         assert_equal 'johndoe', identity.uid
         assert_redirected_to root_url
-        assert_equal I18n.t('omniauth.success', kind: 'saml'), flash[:notice]
+        assert_equal I18n.t('login.success', kind: 'saml'), flash[:notice]
         assert logged_in?
       end
     end
@@ -51,7 +51,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
         end
 
         assert_redirected_to root_url
-        assert_equal I18n.t('omniauth.success', kind: 'saml'), flash[:notice]
+        assert_equal I18n.t('login.success', kind: 'saml'), flash[:notice]
         assert logged_in?
       end
 
@@ -73,7 +73,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
         assert_equal 'twitter-012345', identity.uid
 
         assert_redirected_to root_url
-        assert_equal I18n.t('omniauth.success', kind: 'twitter'), flash[:notice]
+        assert_equal I18n.t('login.success', kind: 'twitter'), flash[:notice]
         assert logged_in?
       end
     end
@@ -87,7 +87,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
         end
 
         assert_redirected_to login_url
-        assert_equal I18n.t('omniauth.error'), flash[:alert]
+        assert_equal I18n.t('login.error'), flash[:alert]
         assert_not logged_in?
       end
     end
@@ -102,7 +102,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
     get logout_url
     assert_redirected_to root_url
-    assert_equal I18n.t('omniauth.signed_out'), flash[:notice]
+    assert_equal I18n.t('session.destroy.signed_out'), flash[:notice]
 
     assert_not logged_in?
   end
@@ -110,7 +110,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   test 'session omniauth failure' do
     get auth_failure_url
     assert_redirected_to login_url
-    assert_equal I18n.t('omniauth.error'), flash[:alert]
+    assert_equal I18n.t('login.error'), flash[:alert]
   end
 
 end

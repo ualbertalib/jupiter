@@ -1,4 +1,4 @@
-<ol class="breadcrumb">
+<ol class="breadcrumb mb-5">
   <li class="breadcrumb-item"><%= link_to 'Admin', admin_root_path %></li>
   <li class="breadcrumb-item">Users</li>
 </ol>
@@ -13,43 +13,56 @@
   <%= hidden_field_tag :sort, params[:sort] if params[:sort]%>
 
   <div class="input-group">
-    <%= search_field_tag :q, params[:q], placeholder: 'Search by email or display name...', class: 'form-control' %>
+    <%= search_field_tag :q, params[:q], placeholder: t('.search_placeholder'), class: 'form-control' %>
     <span class="input-group-btn">
-      <%= submit_tag "Search", class: "btn btn-secondary" %>
+      <%= button_tag name: nil, type: 'submit', class: "btn btn-secondary" do %>
+      <%= fa_icon 'search' %>
+       <%= t('.search_button') %>
+      <% end %>
     </span>
   </div>
 <% end %>
 
 
-<p>Displaying <%= @users.count %> of <%= @users_count %> total users.</p>
+<p class="text-center"><%= t('.display_users_count', users_count: @users.count, total_users_count: User.count) %></p>
 
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th><%= sortable 'id' %></th>
-      <th><%= sortable 'email' %></th>
-      <th><%= sortable 'display_name' %></th>
-      <th><%= sortable 'created_at' %></th>
-    </tr>
-  </thead>
-  <tbody>
-  <% if @users.present? %>
-    <% @users.each do |user| %>
+<%# Bug in current bootstrap with table-responsive not being 100%,
+wrapping in div is a workaround https://github.com/twbs/bootstrap/issues/21577 %>
+<div class="table-responsive">
+  <table class="table table-bordered">
+    <thead>
       <tr>
-        <td><%= user.id %></td>
-        <td><%= link_to user.email, admin_user_path(user) %></td>
-        <td><%= user.display_name %></td>
-        <td><%= user.created_at %></td>
+        <th><%= sortable 'id' %></th>
+        <th><%= sortable 'email' %></th>
+        <th><%= sortable 'display_name' %></th>
+        <th><%= sortable 'created_at' %></th>
+        <th><%= sortable 'updated_at' %></th>
+        <th><%= sortable 'admin' %></th>
+        <th><%= sortable 'blocked' %></th>
+      </tr>
+    </thead>
+    <tbody>
+    <% if @users.present? %>
+      <% @users.each do |user| %>
+        <tr>
+          <th scope="row"><%= user.id %></th>
+          <td><%= link_to user.email, admin_user_path(user) %></td>
+          <td><%= user.display_name %></td>
+          <td><%= time_ago_in_words(user.created_at) %></td>
+          <td><%= time_ago_in_words(user.updated_at) %></td>
+          <td><%= user.admin %></td>
+          <td><%= user.blocked %></td>
+        </tr>
+      <% end %>
+    <% else %>
+      <tr>
+        <td colspan="7" class="text-center">
+          <%= t('.no_users_found') %>
+        </td>
       </tr>
     <% end %>
-  <% else %>
-    <tr>
-      <td colspan="5" class="text-center">
-        No users were found.
-      </td>
-    </tr>
-  <% end %>
-  </tbody>
-</table>
+    </tbody>
+  </table>
+</div>
 
 <%= paginate @users %>

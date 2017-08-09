@@ -1,4 +1,8 @@
-<div class="admin-dashboard">
+<div class='admin-dashboard'>
+  <ol class="breadcrumb mb-5">
+    <li class="breadcrumb-item">Admin</li>
+  </ol>
+
   <h2>Versions</h2>
   <div class="row">
     <div class="col-md-4">
@@ -52,8 +56,7 @@
       <div class="card text-center">
         <div class="card-block">
           <h4 class="card-title">Users</h4>
-          <%= link_to '#todo', class: 'card-text' do %>
-          <%#= link_to admin_users_path do %>
+          <%= link_to admin_users_path,  class: 'card-text' do %>
               <%= number_with_delimiter(User.count) %>
           <% end %>
         </div>
@@ -88,7 +91,7 @@
   <hr/>
 
   <h2>Recent Activity</h2>
-  <div class="row prepend-top-10">
+  <div class="row">
     <div class="col-md-4">
       <h4>Latest works</h4>
       <ul class="list-group">
@@ -107,20 +110,17 @@
     </div>
     <div class="col-md-4">
       <h4>Latest users</h4>
-      <ul class="list-group">
+      <div class="list-group">
         <% @users.each do |user| %>
-          <li class="list-group-item justify-content-between">
-            <%#= link_to [:admin, user] do %>
+            <%= link_to [:admin, user], class: "list-group-item  list-group-item-action justify-content-between" do %>
               <%= user.display_name %>
-            <%# end %>
-            <span class="badge badge-default badge-pill">
+              <span class="badge badge-default badge-pill">
               <%#= TODO timeago or momementjs  time stamps %>
-              <%= user.created_at %>
+              <%= time_ago_in_words(user.created_at) %>
             </span>
-          </li>
+            <% end %>
         <% end %>
-      </ul>
+      </div>
     </div>
   </div>
 </div>
-

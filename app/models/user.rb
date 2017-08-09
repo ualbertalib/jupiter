@@ -1,5 +1,7 @@
 class User < ApplicationRecord
 
+  paginates_per 15
+
   has_many :identities, dependent: :destroy
 
   # We don't need to validate the format of an email address here,

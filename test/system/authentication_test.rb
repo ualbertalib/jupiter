@@ -20,7 +20,7 @@ class AuthenticationTest < ApplicationSystemTestCase
 
       click_link I18n.t('sessions.new.saml_link')
 
-      assert_text I18n.t('omniauth.success', kind: 'saml')
+      assert_text I18n.t('login.success', kind: 'saml')
 
       assert_text 'John Doe'
 
@@ -28,7 +28,7 @@ class AuthenticationTest < ApplicationSystemTestCase
 
       click_link I18n.t('application.navbar.links.logout')
 
-      assert_text I18n.t('omniauth.signed_out')
+      assert_text I18n.t('session.destroy.signed_out')
       assert_selector 'a', text: I18n.t('application.navbar.links.login')
     end
 
@@ -42,7 +42,7 @@ class AuthenticationTest < ApplicationSystemTestCase
 
       click_link I18n.t('sessions.new.saml_link')
 
-      assert_text I18n.t('omniauth.error')
+      assert_text I18n.t('login.error')
 
       assert_selector 'a', text: I18n.t('application.navbar.links.login')
     end
@@ -66,7 +66,7 @@ class AuthenticationTest < ApplicationSystemTestCase
 
       click_link I18n.t('sessions.new.saml_link')
 
-      assert_text I18n.t('omniauth.success', kind: 'saml')
+      assert_text I18n.t('login.success', kind: 'saml')
 
       # TODO: fix this view and i18n this
       assert_text 'Create a new work'

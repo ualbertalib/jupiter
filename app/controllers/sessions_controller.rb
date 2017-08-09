@@ -33,26 +33,30 @@ class SessionsController < ApplicationController
       user.identities.create(provider: auth_hash.provider, uid: auth_hash.uid)
     end
 
+    if user.blocked?
+      return redirect_to login_path, alert: I18n.t('login.user_blocked')
+    end
+
     # Sign the user in, if they exist
     sign_in(user)
 
     if current_user.present?
       # Was signed in successfully, redirect them back to where they came from or to the homepage
-      flash[:notice] = I18n.t('omniauth.success', kind: auth_hash.provider)
+      flash[:notice] = I18n.t('login.success', kind: auth_hash.provider)
       redirect_back_to
     else
       # Else something went wrong along the way with omniauth
-      redirect_to login_path, alert: I18n.t('omniauth.error')
+      redirect_to login_path, alert: I18n.t('login.error')
     end
   end
 
   def destroy
     log_off_user
-    redirect_to root_url, notice: I18n.t('omniauth.signed_out')
+    redirect_to root_url, notice: I18n.t('sessions.destroy.signed_out')
   end
 
   def failure
-    redirect_to login_path, alert: I18n.t('omniauth.error')
+    redirect_to login_path, alert: I18n.t('login.error')
   end
 
   def reverse_impersonate
@@ -64,10 +68,10 @@ class SessionsController < ApplicationController
 
     sign_in(impersonator)
 
-    # Rails.logger.info("User #{impersonator.display_name} has stopped impersonating #{original_user.display_name}")
+    logger.info("Admin '#{impersonator.display_name}' has stopped impersonating '#{original_user.display_name}'")
 
     session[:impersonator_id] = nil
-    flash[:notice] = "You are no longer impersonating #{original_user.display_name}"
+    flash[:notice] = I18n.t('sessions.reverse_impersonate.flash', original_user: original_user.display_name)
 
     redirect_to admin_user_path(original_user)
   end

@@ -12,7 +12,6 @@ class Admin::UsersController < Admin::AdminController
   def index
     # filters for admin/blocked/active/no works etc?
     @users = User.search(params[:q]).order("#{sort_column} #{sort_direction}").page params[:page]
-    @users_count = User.count
   end
 
   def show
@@ -24,6 +23,9 @@ class Admin::UsersController < Admin::AdminController
   def block
     @user.blocked = true
     @user.save
+
+    logger.info("Admin '#{current_user.display_name}' has blocked '#{@user.display_name}'")
+
     flash[:notice] = 'User has successfully been blocked'
     redirect_to admin_user_path(@user)
   end
@@ -31,6 +33,9 @@ class Admin::UsersController < Admin::AdminController
   def unblock
     @user.blocked = false
     @user.save
+
+    logger.info("Admin '#{current_user.display_name}' has unblocked '#{@user.display_name}'")
+
     flash[:notice] = 'User has successfully been unblocked'
     redirect_to admin_user_path(@user)
   end
@@ -38,6 +43,9 @@ class Admin::UsersController < Admin::AdminController
   def grant_admin
     @user.admin = true
     @user.save
+
+    logger.info("Admin '#{current_user.display_name}' has granted admin access to '#{@user.display_name}'")
+
     flash[:notice] = 'User has successfully been granted admin access'
     redirect_to admin_user_path(@user)
   end
@@ -45,6 +53,9 @@ class Admin::UsersController < Admin::AdminController
   def revoke_admin
     @user.admin = false
     @user.save
+
+    logger.info("Admin '#{current_user.display_name}' has revoked admin access from '#{@user.display_name}'")
+
     flash[:notice] = 'User has successfully been revoked admin access'
     redirect_to admin_user_path(@user)
   end
@@ -55,7 +66,7 @@ class Admin::UsersController < Admin::AdminController
 
       sign_in(@user)
 
-      # Rails.logger.info("User #{current_user.display_name} has started impersonating #{@user.display_name}")
+      logger.info("Admin '#{current_user.display_name}' has started impersonating '#{@user.display_name}'")
 
       flash[:notice] = "You are now impersonating #{@user.display_name}"
 

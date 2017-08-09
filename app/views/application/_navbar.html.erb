@@ -26,9 +26,12 @@
           <form class="form-inline">
             <div class="input-group">
               <%= search_field_tag 'search', nil, placeholder: t('.search.placeholder'), class: "form-control" %>
-              <button type="submit" class="input-group-addon btn btn-outline-secondary">
-                <%= link_to t('.search.button_text') %>
-              </button>
+              <div class="input-group-btn">
+                <button type="submit" class="btn btn-secondary">
+                  <%= fa_icon 'search' %>
+                  <%= t('.search.button_text') %>
+                </button>
+              </div>
             </div>
           </form>
         </li>
@@ -49,8 +52,8 @@
               </div>
               <div class="dropdown-divider"></div>
               <%= link_to t('.links.profile'), "#TODO", class: 'dropdown-item' %>
-              <div class="dropdown-divider"></div>
               <%= link_to t('.links.settings'), "#TODO", class: 'dropdown-item' %>
+              <div class="dropdown-divider"></div>
               <%= link_to t('.links.logout'), logout_path, class: 'dropdown-item' %>
 
               <% if session[:impersonator_id] %>

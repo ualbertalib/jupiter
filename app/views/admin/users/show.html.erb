@@ -1,7 +1,7 @@
-<ol class="breadcrumb">
+<ol class="breadcrumb mb-5">
   <li class="breadcrumb-item"><%= link_to 'Admin', admin_root_path %></li>
   <li class="breadcrumb-item"><%= link_to 'Users', admin_users_path %></li>
-  <li class="breadcrumb-item active"><%=@user.display_name %></li>
+  <li class="breadcrumb-item active"><%=@user.id %></li>
 </ol>
 
 <h1><%= @user.display_name %></h1>
@@ -12,32 +12,32 @@
 <p>Updated At: <%= @user.updated_at %></p>
 
 <% if @user.blocked? %>
-  <%= link_to("Enable User", unblock_admin_user_path(@user), method: :patch,
+  <%= link_to(t('.unblock_link_text'), unblock_admin_user_path(@user), method: :patch,
     class: 'btn btn-primary',
-    data: { confirm: "Are you sure you want to enable #{@user.display_name}?" })
+    data: { confirm: t('.unblock_dialog', user: @user.display_name) })
   %>
 <% else %>
-  <%= link_to("Block User", block_admin_user_path(@user), method: :patch,
+  <%= link_to(t('.block_link_text'), block_admin_user_path(@user), method: :patch,
     class: 'btn btn-primary',
-    data: { confirm: "Are you sure you want to block #{@user.display_name}?" })
+    data: { confirm: t('.block_dialog', user: @user.display_name) })
   %>
 <% end %>
 
 <% if @user.admin? %>
-  <%= link_to("Revoke Admin Access", revoke_admin_admin_user_path(@user), method: :patch,
+  <%= link_to(t('.revoke_admin_link_text'), revoke_admin_admin_user_path(@user), method: :patch,
     class: 'btn btn-primary',
-    data: { confirm: "Are you sure you want to revoke admin abilities from #{@user.display_name}?" })
+    data: { confirm: t('.revoke_admin_dialog', user: @user.display_name) })
   %>
 <% else %>
-  <%= link_to("Grant Admin Access", grant_admin_admin_user_path(@user), method: :patch,
+  <%= link_to(t('.grant_admin_link_text'), grant_admin_admin_user_path(@user), method: :patch,
     class: 'btn btn-primary',
-    data: { confirm: "Are you sure you want to grant admin abilities from #{@user.display_name}?" })
+    data: { confirm: t('.grant_admin_dialog', user: @user.display_name) })
   %>
 <% end %>
 
-<%= link_to("Impersonate", impersonate_admin_user_path(@user), method: :post,
+<%= link_to(t('.impersonate_link_text'), impersonate_admin_user_path(@user), method: :post,
   class: 'btn btn-primary',
-  data: { confirm: "Are you sure you want to impersonate #{@user.display_name}?" })
+  data: { confirm: t('.impersonate_dialog', user: @user.display_name) })
 %>
 
 <div class="row mt-3">
@@ -48,7 +48,7 @@
   				<%= link_to work.title, work_path(work), class: 'list-group-item list-group-item-action'%>
         <% end %>
       <% else %>
-				<p>There are no works for this user</p>
+				<p><%= t('.no_works_found') %></p>
       <% end %>
     </div>
   </div>

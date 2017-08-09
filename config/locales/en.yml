@@ -52,10 +52,33 @@ en:
       description_html: 'ERA is now a <a href="https://ist.ualberta.ca/services/ccid-passwords/campus-computing-id">CCID</a> (Campus Computing ID) enabled service. If you have a CCID please use it to log in to ERA.'
       saml_link: 'Sign in with University of Alberta CCID (Campus Computing ID)'
       developer_link: Sign in with Developer Account
-  omniauth:
-    error: 'There is an error authorizing from your CCID account.'
+    reverse_impersonate:
+      flash: "You are no longer impersonating %{original_user}"
+    destroy:
+      signed_out: "Signed out successfully."
+  login:
+    error: 'There was an error authenticating from your account. Please try again, or contact a staff member.'
     success: "Successfully authenticated from %{kind} account."
-    signed_out: "Signed out successfully."
+    user_blocked: 'Sorry, your account has been suspended. If you believe this is an error, please contact a staff member.'
   authorization:
     user_not_authorized: 'Sorry, you are not authorized to perform this action.'
     user_not_authorized_try_logging_in: 'Sorry, you are not authorized to perform this action. Try logging in?'
+  admin:
+    users:
+      show:
+        block_link_text: 'Block User'
+        block_dialog: "Are you sure you want to block %{user}?"
+        unblock_link_text: 'Activate User'
+        unblock_dialog: "Are you sure you want to activate %{user}?"
+        grant_admin_link_text: 'Grant Admin Access'
+        grant_admin_dialog: "Are you sure you want to grant admin abilities to %{user}?"
+        revoke_admin_link_text: 'Revoke Admin Access'
+        revoke_admin_dialog: "Are you sure you want to revoke admin abilities from %{user}?"
+        impersonate_link_text: 'Impersonate'
+        impersonate_dialog: "Are you sure you want to impersonate %{user}?"
+        no_works_found: 'There are no works for this user'
+      index:
+        no_users_found: 'We could not find any users matching your search.'
+        display_users_count: "Displaying %{users_count} of %{total_users_count} total users."
+        search_placeholder: 'Search by email or display name...'
+        search_button: 'Search'
