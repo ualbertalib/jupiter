@@ -4,7 +4,7 @@
   <li class="breadcrumb-item active"><%=@user.id %></li>
 </ol>
 
-<h1 class="mb-3"><%= @user.display_name %></h1>
+<h1 class="mb-3"><%= @user.name %></h1>
 
 <dl class="row">
   <dt class="col-sm-3"><%= t('.email')%></dt>
@@ -17,9 +17,9 @@
     <%= @user.admin? %>
   </dd>
 
-  <dt class="col-sm-3"><%= t('.blocked') %></dt>
+  <dt class="col-sm-3"><%= t('.suspended') %></dt>
   <dd class="col-sm-9">
-    <%= @user.blocked? %>
+    <%= @user.suspended? %>
   </dd>
 
   <dt class="col-sm-3"><%= t('.created_at') %></dt>
@@ -33,40 +33,38 @@
   </dd>
 </dl>
 
-
-<% if policy([:admin, @user]).block? %>
-  <%= link_to(t('.block_link_text'), block_admin_user_path(@user), method: :patch,
+<% if policy([:admin, @user]).suspend? %>
+  <%= link_to(t('.suspend_link_text'), suspend_admin_user_path(@user), method: :patch,
     class: 'btn btn-primary',
-    data: { confirm: t('.block_dialog', user: @user.display_name) })
+    data: { confirm: t('.suspend_dialog', user: @user.name) })
   %>
 <% end %>
 
-<% if policy([:admin, @user]).unblock? %>
-  <%= link_to(t('.unblock_link_text'), unblock_admin_user_path(@user), method: :patch,
+<% if policy([:admin, @user]).unsuspend? %>
+  <%= link_to(t('.unsuspend_link_text'), unsuspend_admin_user_path(@user), method: :patch,
     class: 'btn btn-primary',
-    data: { confirm: t('.unblock_dialog', user: @user.display_name) })
+    data: { confirm: t('.unsuspend_dialog', user: @user.name) })
   %>
 <% end %>
-
 
 <% if policy([:admin, @user]).revoke_admin? %>
   <%= link_to(t('.revoke_admin_link_text'), revoke_admin_admin_user_path(@user), method: :patch,
     class: 'btn btn-primary',
-    data: { confirm: t('.revoke_admin_dialog', user: @user.display_name) })
+    data: { confirm: t('.revoke_admin_dialog', user: @user.name) })
   %>
 <% end %>
 
 <% if policy([:admin, @user]).grant_admin? %>
   <%= link_to(t('.grant_admin_link_text'), grant_admin_admin_user_path(@user), method: :patch,
     class: 'btn btn-primary',
-    data: { confirm: t('.grant_admin_dialog', user: @user.display_name) })
+    data: { confirm: t('.grant_admin_dialog', user: @user.name) })
   %>
 <% end %>
 
 <% if policy([:admin, @user]).impersonate? %>
   <%= link_to(t('.impersonate_link_text'), impersonate_admin_user_path(@user), method: :post,
     class: 'btn btn-primary',
-    data: { confirm: t('.impersonate_dialog', user: @user.display_name) })
+    data: { confirm: t('.impersonate_dialog', user: @user.name) })
   %>
 <% end %>
 

@@ -1,42 +1,41 @@
 <% content_for(:content) do %>
-    <div class="row" >
-        <div class="col-md-2" >
-            <%= render 'sidebar_group', title: 'Items' do %>
-                <li><a href="">Manage Items</a></li>
-                <li><a href="">Add New Item</a></li>
-            <% end %>
+  <div class="row" >
+    <div class="col-md-2" >
+      <%= render 'sidebar_group', title: 'Items' do %>
+        <li><a href="">Manage Items</a></li>
+        <li><a href="">Add New Item</a></li>
+      <% end %>
 
-            <%= render 'sidebar_group', title: 'Users' do %>
-                <li><%= link_to 'Manage Users', admin_users_path %></li>
-            <% end %>
+      <%= render 'sidebar_group', title: 'Users' do %>
+        <li><%= link_to 'Manage Users', admin_users_path %></li>
+      <% end %>
 
-            <%= render 'sidebar_group', title: 'Communities & Collections' do %>
-                <li><a href="">Manage Communities / Collections</a></li>
-                <li><a href="">Add New Community</a></li>
-                <li><a href="">Add New Collection</a></li>
-            <% end %>
+      <%= render 'sidebar_group', title: 'Communities & Collections' do %>
+        <li><a href="">Manage Communities / Collections</a></li>
+        <li><a href="">Add New Community</a></li>
+        <li><a href="">Add New Collection</a></li>
+      <% end %>
 
-            <%= render 'sidebar_group', title: 'Administrator Notifications' do %>
-                <li><a href="">Manage Notifications</a></li>
-            <% end %>
+      <%= render 'sidebar_group', title: 'Administrator Notifications' do %>
+        <li><a href="">Manage Notifications</a></li>
+      <% end %>
 
-            <%= render 'sidebar_group', title: 'Pages' do %>
-                <li><a href="">Manage Pages</a></li>
-                <li><a href="">Add New Page</a></li>
-                <li><a href="">Edit Footer</a></li>
-            <% end %>
+      <%= render 'sidebar_group', title: 'Pages' do %>
+        <li><a href="">Manage Pages</a></li>
+        <li><a href="">Add New Page</a></li>
+        <li><a href="">Edit Footer</a></li>
+      <% end %>
 
-            <%= render 'sidebar_group', title: 'Analytics' do %>
-                <li><a href="">View Analytics</a></li>
-            <% end %>
-
-        </div>
-
-        <div class="col-md-10" >
-            <%= yield  %>
-        </div>
-
+      <%= render 'sidebar_group', title: 'Analytics' do %>
+        <li><a href="">View Analytics</a></li>
+      <% end %>
     </div>
+
+    <div class="col-md-10" >
+        <%= yield  %>
+    </div>
+
+  </div>
 <% end %>
 
 <%= render template: 'layouts/application' %>

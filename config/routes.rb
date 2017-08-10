@@ -18,8 +18,8 @@ Rails.application.routes.draw do
 
     resources :users, only: [:index, :show] do
       member do
-        patch :block
-        patch :unblock
+        patch :suspend
+        patch :unsuspend
         patch :grant_admin
         patch :revoke_admin
         post :impersonate

@@ -3,14 +3,14 @@ class Admin::UsersController < Admin::AdminController
   helper_method :sort_column, :sort_direction
 
   before_action :fetch_user, only: [:show,
-                                    :block,
-                                    :unblock,
+                                    :suspend,
+                                    :unsuspend,
                                     :grant_admin,
                                     :revoke_admin,
                                     :impersonate]
 
   def index
-    # filters for admin/blocked/active/no works etc?
+    # filters for admin/suspended/active/no works etc?
     @users = User.search(params[:q]).order("#{sort_column} #{sort_direction}").page params[:page]
   end
 
@@ -19,28 +19,26 @@ class Admin::UsersController < Admin::AdminController
     # @works = @user.works.order(:name).page params[:page]
   end
 
-  def block
+  def suspend
     authorize [:admin, @user]
 
-    @user.blocked = true
+    @user.suspended = true
     @user.save
 
-    logger.info("Admin '#{current_user.display_name}' has blocked '#{@user.display_name}'")
+    logger.info("Admin '#{current_user.name}' has suspended '#{@user.name}'")
 
-    flash[:notice] = t('admin.users.show.block_flash')
-    redirect_to admin_user_path(@user)
+    redirect_to admin_user_path(@user), notice: t('admin.users.show.suspend_flash')
   end
 
-  def unblock
+  def unsuspend
     authorize [:admin, @user]
 
-    @user.blocked = false
+    @user.suspended = false
     @user.save
 
-    logger.info("Admin '#{current_user.display_name}' has unblocked '#{@user.display_name}'")
+    logger.info("Admin '#{current_user.name}' has unsuspended '#{@user.name}'")
 
-    flash[:notice] = t('admin.users.show.unblock_flash')
-    redirect_to admin_user_path(@user)
+    redirect_to admin_user_path(@user), notice: t('admin.users.show.unsuspend_flash')
   end
 
   def grant_admin
@@ -49,10 +47,9 @@ class Admin::UsersController < Admin::AdminController
     @user.admin = true
     @user.save
 
-    logger.info("Admin '#{current_user.display_name}' has granted admin access to '#{@user.display_name}'")
+    logger.info("Admin '#{current_user.name}' has granted admin access to '#{@user.name}'")
 
-    flash[:notice] = t('admin.users.show.grant_admin_flash')
-    redirect_to admin_user_path(@user)
+    redirect_to admin_user_path(@user), notice: t('admin.users.show.grant_admin_flash')
   end
 
   def revoke_admin
@@ -61,10 +58,9 @@ class Admin::UsersController < Admin::AdminController
     @user.admin = false
     @user.save
 
-    logger.info("Admin '#{current_user.display_name}' has revoked admin access from '#{@user.display_name}'")
+    logger.info("Admin '#{current_user.name}' has revoked admin access from '#{@user.name}'")
 
-    flash[:notice] = t('admin.users.show.revoke_admin_flash')
-    redirect_to admin_user_path(@user)
+    redirect_to admin_user_path(@user), notice: t('admin.users.show.revoke_admin_flash')
   end
 
   def impersonate
@@ -74,11 +70,9 @@ class Admin::UsersController < Admin::AdminController
 
     sign_in(@user)
 
-    logger.info("Admin '#{current_user.display_name}' has started impersonating '#{@user.display_name}'")
+    logger.info("Admin '#{current_user.name}' has started impersonating '#{@user.name}'")
 
-    flash[:notice] = t('admin.users.show.impersonate_flash', user: @user.display_name)
-
-    redirect_to root_path
+    redirect_to root_path, notice: t('admin.users.show.impersonate_flash', user: @user.name)
   end
 
   private

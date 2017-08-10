@@ -17,7 +17,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def reverse_impersonate?
-    record && record.admin? && !record.blocked?
+    record && record.admin? && !record.suspended?
   end
 
   def owned?

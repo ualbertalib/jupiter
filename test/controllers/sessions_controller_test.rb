@@ -25,7 +25,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
         user = User.last
         identity = user.identities.last
-        assert_equal 'John Doe', user.display_name
+        assert_equal 'John Doe', user.name
         assert_equal 'johndoe@ualberta.ca', user.email
         assert_equal 'saml', identity.provider
         assert_equal 'johndoe', identity.uid
@@ -43,7 +43,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
         OmniAuth.config.mock_auth[:saml] = OmniAuth::AuthHash.new(
           provider: 'saml',
           uid: identity.uid,
-          info: { email: user.email, name: user.display_name }
+          info: { email: user.email, name: user.name }
         )
 
         assert_no_difference ['User.count', 'Identity.count'] do
@@ -61,7 +61,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
         Rails.application.env_config['omniauth.auth'] = OmniAuth::AuthHash.new(
           provider: 'twitter',
           uid: 'twitter-012345',
-          info: { email: user.email, name: user.display_name }
+          info: { email: user.email, name: user.name }
         )
 
         assert_no_difference ['User.count'] do

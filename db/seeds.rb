@@ -12,7 +12,7 @@ if Rails.env.development?
 
   # Seed an admin user
   unless User.find_by(email: 'admin@ualberta.ca')
-    admin = User.create(display_name: 'Admin', email: 'admin@ualberta.ca', admin: true)
+    admin = User.create(name: 'Admin', email: 'admin@ualberta.ca', admin: true)
     admin.identities.create(provider: 'developer', uid: 'admin@ualberta.ca')
   end
 

@@ -27,14 +27,14 @@ class SessionsController < ApplicationController
 
       if user.nil?
         user = User.create(email: auth_hash.info.email,
-                           display_name: auth_hash.info.name)
+                           name: auth_hash.info.name)
       end
 
       user.identities.create(provider: auth_hash.provider, uid: auth_hash.uid)
     end
 
-    if user.blocked?
-      return redirect_to login_path, alert: t('login.user_blocked')
+    if user.suspended?
+      return redirect_to login_path, alert: t('login.user_suspended')
     end
 
     # Sign the user in, if they exist
@@ -65,15 +65,12 @@ class SessionsController < ApplicationController
     authorize impersonator
 
     original_user = current_user
-
     sign_in(impersonator)
-
-    logger.info("Admin '#{impersonator.display_name}' has stopped impersonating '#{original_user.display_name}'")
+    logger.info("Admin '#{impersonator.name}' has stopped impersonating '#{original_user.name}'")
 
     session[:impersonator_id] = nil
-    flash[:notice] = t('.flash', original_user: original_user.display_name)
 
-    redirect_to admin_user_path(original_user)
+    redirect_to admin_user_path(original_user), notice: t('.flash', original_user: original_user.name)
   end
 
 end

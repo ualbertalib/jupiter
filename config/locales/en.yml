@@ -45,7 +45,7 @@ en:
         profile: 'Your Profile'
         settings: 'Settings'
       user_dropdown:
-        heading_html: "Signed in as <strong>%{display_name}</strong>"
+        heading_html: "Signed in as <strong>%{name}</strong>"
   sessions:
     new:
       header: 'Login to ERA'
@@ -59,7 +59,7 @@ en:
   login:
     error: 'There was an error authenticating from your account. Please try again, or contact a staff member.'
     success: "Successfully authenticated from %{kind} account."
-    user_blocked: 'Sorry, your account has been suspended. If you believe this is an error, please contact a staff member.'
+    user_suspended: 'Sorry, your account has been suspended. If you believe this is an error, please contact a staff member.'
   authorization:
     user_not_authorized: 'Sorry, you are not authorized to perform this action.'
     user_not_authorized_try_logging_in: 'Sorry, you are not authorized to perform this action. Try logging in?'
@@ -68,16 +68,16 @@ en:
     users:
       show:
         email: 'Email'
-        blocked: 'Blocked?'
+        suspended: 'Suspended?'
         admin: 'Admin?'
         created_at: 'Created At'
         updated_at: 'Updated At'
-        block_link_text: 'Block User'
-        block_dialog: "Are you sure you want to block %{user}?"
-        block_flash: 'User has successfully been blocked'
-        unblock_link_text: 'Activate User'
-        unblock_dialog: "Are you sure you want to activate %{user}?"
-        unblock_flash: 'User has successfully been unblocked'
+        suspend_link_text: 'Suspend User'
+        suspend_dialog: "Are you sure you want to suspend %{user}?"
+        suspend_flash: 'User has successfully been suspended'
+        unsuspend_link_text: 'Unsuspend User'
+        unsuspend_dialog: "Are you sure you want to unsuspend %{user}?"
+        unsuspend_flash: 'User has successfully been unsuspended'
         grant_admin_link_text: 'Grant Admin Access'
         grant_admin_dialog: "Are you sure you want to grant admin abilities to %{user}?"
         grant_admin_flash: 'User has successfully been granted admin access'

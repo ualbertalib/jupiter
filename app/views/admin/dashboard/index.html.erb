@@ -113,7 +113,7 @@
       <div class="list-group">
         <% @users.each do |user| %>
             <%= link_to [:admin, user], class: "list-group-item  list-group-item-action justify-content-between" do %>
-              <%= user.display_name %>
+              <%= user.name %>
               <span class="badge badge-default badge-pill">
               <%#= TODO timeago or momementjs  time stamps %>
               <%= time_ago_in_words(user.created_at) %>

@@ -1,11 +1,11 @@
 class Admin::UserPolicy < ApplicationPolicy
 
-  def block?
+  def suspend?
     regular_user? && not_self?
   end
 
-  def unblock?
-    record.last.blocked?
+  def unsuspend?
+    record.last.suspended?
   end
 
   def grant_admin?
@@ -23,7 +23,7 @@ class Admin::UserPolicy < ApplicationPolicy
   protected
 
   def regular_user?
-    !record.last.blocked? && !record.last.admin?
+    !record.last.suspended? && !record.last.admin?
   end
 
   def not_self?

@@ -5,11 +5,11 @@
 # below each fixture, per the syntax in the comments below
 #
 admin:
-  display_name: Admin
+  name: Admin
   email: admin@example.com
   admin: true
 
 user:
-  display_name: Random User
+  name: Random User
   email: random_user@example.com
   admin: false

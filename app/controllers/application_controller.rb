@@ -14,9 +14,9 @@ class ApplicationController < ActionController::Base
   def current_user
     @current_user ||= User.find_by(id: session[:user_id])
 
-    if @current_user && @current_user.blocked?
+    if @current_user && @current_user.suspended?
       log_off_user
-      return redirect_to root_path, alert: t('login.user_blocked')
+      return redirect_to root_path, alert: t('login.user_suspended')
     end
 
     @current_user
@@ -50,8 +50,7 @@ class ApplicationController < ActionController::Base
       end
     else
       session[:forwarding_url] = request.original_url if request.get?
-      flash[:alert] = t('authorization.user_not_authorized_try_logging_in')
-      redirect_to login_url
+      redirect_to login_url, alert: t('authorization.user_not_authorized_try_logging_in')
     end
   end
 

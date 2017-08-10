@@ -9,12 +9,12 @@ class User < ApplicationRecord
   validates :email, presence: true,
                     uniqueness: { case_sensitive: false }
 
-  validates :display_name, presence: true
+  validates :name, presence: true
 
   def self.search(search)
-    # searches display_name, email
+    # searches name, email
     if search.present?
-      where('email LIKE ?', "%#{search}%").or(where('display_name LIKE ?', "%#{search}%"))
+      where('email LIKE ?', "%#{search}%").or(where('name LIKE ?', "%#{search}%"))
     else
       self
     end

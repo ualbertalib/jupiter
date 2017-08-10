@@ -33,11 +33,11 @@ wrapping in div is a workaround https://github.com/twbs/bootstrap/issues/21577 %
       <tr>
         <th><%= sortable 'id' %></th>
         <th><%= sortable 'email' %></th>
-        <th><%= sortable 'display_name' %></th>
+        <th><%= sortable 'name' %></th>
         <th><%= sortable 'created_at' %></th>
         <th><%= sortable 'updated_at' %></th>
         <th><%= sortable 'admin' %></th>
-        <th><%= sortable 'blocked' %></th>
+        <th><%= sortable 'suspended' %></th>
       </tr>
     </thead>
     <tbody>
@@ -46,11 +46,11 @@ wrapping in div is a workaround https://github.com/twbs/bootstrap/issues/21577 %
         <tr>
           <th scope="row"><%= user.id %></th>
           <td><%= link_to user.email, admin_user_path(user) %></td>
-          <td><%= user.display_name %></td>
+          <td><%= user.name %></td>
           <td><%= time_ago_in_words(user.created_at) %></td>
           <td><%= time_ago_in_words(user.updated_at) %></td>
           <td><%= user.admin %></td>
-          <td><%= user.blocked %></td>
+          <td><%= user.suspended %></td>
         </tr>
       <% end %>
     <% else %>
