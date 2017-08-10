@@ -28,7 +28,7 @@ class AuthenticationTest < ApplicationSystemTestCase
 
       click_link I18n.t('application.navbar.links.logout')
 
-      assert_text I18n.t('session.destroy.signed_out')
+      assert_text I18n.t('sessions.destroy.signed_out')
       assert_selector 'a', text: I18n.t('application.navbar.links.login')
     end
 

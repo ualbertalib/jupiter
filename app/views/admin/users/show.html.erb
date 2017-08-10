@@ -34,34 +34,41 @@
 </dl>
 
 
-<% if @user.blocked? %>
-  <%= link_to(t('.unblock_link_text'), unblock_admin_user_path(@user), method: :patch,
-    class: 'btn btn-primary',
-    data: { confirm: t('.unblock_dialog', user: @user.display_name) })
-  %>
-<% else %>
+<% if policy([:admin, @user]).block? %>
   <%= link_to(t('.block_link_text'), block_admin_user_path(@user), method: :patch,
     class: 'btn btn-primary',
     data: { confirm: t('.block_dialog', user: @user.display_name) })
   %>
 <% end %>
 
-<% if @user.admin? %>
+<% if policy([:admin, @user]).unblock? %>
+  <%= link_to(t('.unblock_link_text'), unblock_admin_user_path(@user), method: :patch,
+    class: 'btn btn-primary',
+    data: { confirm: t('.unblock_dialog', user: @user.display_name) })
+  %>
+<% end %>
+
+
+<% if policy([:admin, @user]).revoke_admin? %>
   <%= link_to(t('.revoke_admin_link_text'), revoke_admin_admin_user_path(@user), method: :patch,
     class: 'btn btn-primary',
     data: { confirm: t('.revoke_admin_dialog', user: @user.display_name) })
   %>
-<% else %>
+<% end %>
+
+<% if policy([:admin, @user]).grant_admin? %>
   <%= link_to(t('.grant_admin_link_text'), grant_admin_admin_user_path(@user), method: :patch,
     class: 'btn btn-primary',
     data: { confirm: t('.grant_admin_dialog', user: @user.display_name) })
   %>
 <% end %>
 
-<%= link_to(t('.impersonate_link_text'), impersonate_admin_user_path(@user), method: :post,
-  class: 'btn btn-primary',
-  data: { confirm: t('.impersonate_dialog', user: @user.display_name) })
-%>
+<% if policy([:admin, @user]).impersonate? %>
+  <%= link_to(t('.impersonate_link_text'), impersonate_admin_user_path(@user), method: :post,
+    class: 'btn btn-primary',
+    data: { confirm: t('.impersonate_dialog', user: @user.display_name) })
+  %>
+<% end %>
 
 <div class="row mt-3">
   <div class="col">

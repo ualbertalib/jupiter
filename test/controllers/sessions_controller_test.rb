@@ -102,7 +102,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
     get logout_url
     assert_redirected_to root_url
-    assert_equal I18n.t('session.destroy.signed_out'), flash[:notice]
+    assert_equal I18n.t('sessions.destroy.signed_out'), flash[:notice]
 
     assert_not logged_in?
   end

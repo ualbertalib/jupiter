@@ -20,60 +20,65 @@ class Admin::UsersController < Admin::AdminController
   end
 
   def block
+    authorize [:admin, @user]
+
     @user.blocked = true
     @user.save
 
     logger.info("Admin '#{current_user.display_name}' has blocked '#{@user.display_name}'")
 
-    flash[:notice] = I18n.t('admin.users.show.block_flash')
+    flash[:notice] = t('admin.users.show.block_flash')
     redirect_to admin_user_path(@user)
   end
 
   def unblock
+    authorize [:admin, @user]
+
     @user.blocked = false
     @user.save
 
     logger.info("Admin '#{current_user.display_name}' has unblocked '#{@user.display_name}'")
 
-    flash[:notice] = I18n.t('admin.users.show.unblock_flash')
+    flash[:notice] = t('admin.users.show.unblock_flash')
     redirect_to admin_user_path(@user)
   end
 
   def grant_admin
+    authorize [:admin, @user]
+
     @user.admin = true
     @user.save
 
     logger.info("Admin '#{current_user.display_name}' has granted admin access to '#{@user.display_name}'")
 
-    flash[:notice] = I18n.t('admin.users.show.grant_admin_flash')
+    flash[:notice] = t('admin.users.show.grant_admin_flash')
     redirect_to admin_user_path(@user)
   end
 
   def revoke_admin
+    authorize [:admin, @user]
+
     @user.admin = false
     @user.save
 
     logger.info("Admin '#{current_user.display_name}' has revoked admin access from '#{@user.display_name}'")
 
-    flash[:notice] = I18n.t('admin.users.show.revoke_admin_flash')
+    flash[:notice] = t('admin.users.show.revoke_admin_flash')
     redirect_to admin_user_path(@user)
   end
 
   def impersonate
-    if !@user.blocked? && !@user.admin? && @user != current_user
-      session[:impersonator_id] = current_user.id
+    authorize [:admin, @user]
 
-      sign_in(@user)
+    session[:impersonator_id] = current_user.id
 
-      logger.info("Admin '#{current_user.display_name}' has started impersonating '#{@user.display_name}'")
+    sign_in(@user)
 
-      flash[:notice] = I18n.t('admin.users.show.impersonate_success_flash', user: @user.display_name)
+    logger.info("Admin '#{current_user.display_name}' has started impersonating '#{@user.display_name}'")
 
-      redirect_to root_path
-    else
-      flash[:alert] = I18n.t('admin.users.show.impersonate_fail_flash')
-      redirect_to admin_user_path(@user)
-    end
+    flash[:notice] = t('admin.users.show.impersonate_flash', user: @user.display_name)
+
+    redirect_to root_path
   end
 
   private

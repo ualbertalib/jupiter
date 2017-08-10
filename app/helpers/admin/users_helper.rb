@@ -5,6 +5,6 @@ module Admin::UsersHelper
     direction = column == sort_column && sort_direction == 'asc' ? 'desc' : 'asc'
 
     link_to "#{title} #{fa_icon font_awesome_icon}".html_safe,
-            params: { page: params[:page], q: params[:q], sort: column, direction: direction }
+            params: { q: params[:q], sort: column, direction: direction }
   end
 end

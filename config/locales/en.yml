@@ -86,8 +86,7 @@ en:
         revoke_admin_flash: 'User has successfully been revoked admin access'
         impersonate_link_text: 'Impersonate'
         impersonate_dialog: "Are you sure you want to impersonate %{user}?"
-        impersonate_success_flash: "You are now impersonating %{user}"
-        impersonate_fail_flash: 'You cannot impersonate a blocked user, an admin user or yourself'
+        impersonate_flash: "You are now impersonating %{user}"
         no_works_found: 'There are no works for this user'
       index:
         no_users_found: 'We could not find any users matching your search.'

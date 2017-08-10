@@ -6,7 +6,7 @@ class SessionsController < ApplicationController
   # TODO just limit this to development mode? since this doesnt effect saml?
   skip_before_action :verify_authenticity_token, only: :create
 
-  skip_after_action :verify_authorized
+  skip_after_action :verify_authorized, only: [:new, :create, :destroy, :failure]
 
   def new
     # renders login page (views/sessions/new.html.erb)
@@ -34,7 +34,7 @@ class SessionsController < ApplicationController
     end
 
     if user.blocked?
-      return redirect_to login_path, alert: I18n.t('login.user_blocked')
+      return redirect_to login_path, alert: t('login.user_blocked')
     end
 
     # Sign the user in, if they exist
@@ -42,27 +42,27 @@ class SessionsController < ApplicationController
 
     if current_user.present?
       # Was signed in successfully, redirect them back to where they came from or to the homepage
-      flash[:notice] = I18n.t('login.success', kind: auth_hash.provider)
+      flash[:notice] = t('login.success', kind: auth_hash.provider)
       redirect_back_to
     else
       # Else something went wrong along the way with omniauth
-      redirect_to login_path, alert: I18n.t('login.error')
+      redirect_to login_path, alert: t('login.error')
     end
   end
 
   def destroy
     log_off_user
-    redirect_to root_url, notice: I18n.t('sessions.destroy.signed_out')
+    redirect_to root_url, notice: t('.signed_out')
   end
 
   def failure
-    redirect_to login_path, alert: I18n.t('login.error')
+    redirect_to login_path, alert: t('login.error')
   end
 
   def reverse_impersonate
     impersonator = User.find(session[:impersonator_id]) if session[:impersonator_id]
 
-    return if impersonator.blank? || !impersonator.admin? || impersonator.blocked?
+    authorize impersonator
 
     original_user = current_user
 
@@ -71,7 +71,7 @@ class SessionsController < ApplicationController
     logger.info("Admin '#{impersonator.display_name}' has stopped impersonating '#{original_user.display_name}'")
 
     session[:impersonator_id] = nil
-    flash[:notice] = I18n.t('sessions.reverse_impersonate.flash', original_user: original_user.display_name)
+    flash[:notice] = t('.flash', original_user: original_user.display_name)
 
     redirect_to admin_user_path(original_user)
   end

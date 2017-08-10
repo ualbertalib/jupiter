@@ -16,6 +16,10 @@ class UserPolicy < ApplicationPolicy
     update?
   end
 
+  def reverse_impersonate?
+    record && record.admin? && !record.blocked?
+  end
+
   def owned?
     record && user && record == user
   end
