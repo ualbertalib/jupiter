@@ -13,6 +13,8 @@ module JupiterCore
     include ActiveModel::Model
     include ActiveModel::Serializers::JSON
 
+    include Kaminari::ConfigurationMethods
+
     # Prefix added to subclass names to derive the name of their corresponding +ActiveFedora+ LDP object
     AF_CLASS_PREFIX = 'IR'.freeze
 
@@ -174,17 +176,24 @@ module JupiterCore
     # Accepts a string id of an object in the LDP, and returns a +LockedLDPObjects+ representation of that object
     # or raises <tt>JupiterCore::ObjectNotFound</tt> if there is no object corresponding to that id
     def self.find(id)
-      results_count, results, = perform_solr_query(%Q(_query_:"{!raw f=id}#{id}"), '', false)
+      results_count, results, = JupiterCore::Search.perform_solr_query(q: %Q(_query_:"{!raw f=id}#{id}"),
+                                                                       restrict_to_model: derived_af_class)
+
       raise ObjectNotFound, "Couldn't find #{self} with id='#{id}'" if results_count == 0
       raise MultipleIdViolationError if results_count > 1
 
       new(solr_doc: results.first)
     end
 
+    def self.count
+      results_count, = JupiterCore::Search.perform_solr_query(q: '', restrict_to_model: derived_af_class, rows: 0)
+      results_count
+    end
+
     # Returns an array of all +LockedLDPObject+ in the LDP
+    # def self.all(limit:, offset: )
     def self.all
-      _, results, = perform_solr_query('', '', false)
-      results.map { |res| new(solr_doc: res) }
+      JupiterCore::DeferredSolrQuery.new(self)
     end
 
     # Accepts a hash of name-value pairs to query for, and returns an Array of matching +LockedLDPObject+
@@ -193,36 +202,39 @@ module JupiterCore
     #   Work.where(title: 'Test upload')
     #    => [#<Work id: "e5f4a074-5bcb-48a4-99ee-12bc83cef291", title: "Test upload", subject: "", creator: "", contributor: "", description: "", publisher: "", date_created: "", language: "", doi: "", member_of_paths: ["98124366-c8b2-487a-95f0-a1c18c805ddd/799e2eee-5435-4f08-bf3d-fc256fee9447"]>
     def self.where(attributes)
-      attr_queries = []
-      attr_queries << attributes.map do |k, v|
-        solr_key = self.attribute_metadata(k)[:solr_names].first
-        %Q(_query_:"{!field f=#{solr_key}}#{v}")
-      end
-
-      _, results = perform_solr_query(attr_queries, '', false)
-      results.map { |res| new(solr_doc: res) }
+      all.where(attributes)
     end
 
-    # Performs a solr search using the given query and filtered query strings.
-    # Returns an instance of +SearchResult+ providing result counts, +LockedLDPObject+ representing results, and
-    # access to result facets.
-    def self.search(q: '', fq: '', as: nil)
-      raise ArgumentError, 'as: must specify a user!' if as.present? && !as.is_a?(User)
-      base_query = []
-      ownership_query = calculate_ownership_query(as)
+    # num, an Integer limiting the number of results returned
+    def self.limit(num)
+      all.limit(num)
+    end
 
-      # Our query permissions are white-list based. You only get public results unless the results of +calculate_ownership_query+
-      # assign you additional permissions based on the user passed to it.
-      base_query << %Q((_query_:"{!raw f=visibility_ssim}public"#{ownership_query}))
-      base_query << q if q.present?
+    # num, an Integer indicating the offset the results returned begin at
+    def self.offset(num)
+      all.offset(num)
+    end
 
-      results_count, results, facets = perform_solr_query(base_query, fq, true, self.facets.map(&:to_s))
-
-      SearchResults.new(self, results_count, facets, results.map { |res| new(solr_doc: res) })
+    # attr, a string attribute name and sort order
+    def self.sort(attr)
+      all.sort(attr)
     end
 
     def self.valid_visibilities
       [:public, :private, :authenticated]
+    end
+
+    # Used to dynamically turn an arbitrary Solr document into an isntance of its originating class
+    #
+    # eg)
+    #    2.4.0 :003 > solr_doc
+    #    => {"system_create_dtsi"=>"2017-08-01T17:07:08Z", "system_modified_dtsi"=>"2017-08-01T17:07:08Z", "has_model_ssim"=>["IRWork"], "id"=>"88489b6e-12dd-4eea-b833-af08782c419e", "visibility_ssim"=>["public"], "owner_ssim"=>[""], "title_tesim"=>["Test"], "subject_tesim"=>[""], "creator_tesim"=>[""], "contributor_tesim"=>[""], "description_tesim"=>[""], "publisher_tesim"=>[""], "date_created_tesim"=>[""], "date_created_ssi"=>"", "language_tesim"=>[""], "doi_ssim"=>[""], "member_of_paths_dpsim"=>["6d0a8efa-ec6e-4fb9-bd67-e7877376c5ca/7e5d0653-fcb0-45a1-bb9c-ec3b896afcba"], "embargo_end_date_tesim"=>[""], "embargo_end_date_ssi"=>"", "_version_"=>1574549301238956032, "timestamp"=>"2017-08-01T17:07:08.507Z", "score"=>2.5686157}
+    #    2.4.0 :004 > JupiterCore::LockedLdpObject.reify_solr_doc(solr_doc)
+    #    => #<Work id: "88489b6e-12dd-4eea-b833-af08782c419e", visibility: "public", owner: "", title: "Test", subject: "", creator: "", contributor: "", description: "", publisher: "", date_created: "", language: "", doi: "", member_of_paths: ["6d0a8efa-ec6e-4fb9-bd67-e7877376c5ca/7e5d0653-fcb0-45a1-bb9c-ec3b896afcba"], embargo_end_date: "">
+    #
+    def self.reify_solr_doc(solr_doc)
+      raise ArgumentError, 'Not a valid LockedLDPObject representation' unless solr_doc['has_model_ssim'].present?
+      solr_doc['has_model_ssim'].first.constantize.owning_class.send(:new, solr_doc: solr_doc)
     end
 
     private
@@ -256,22 +268,12 @@ module JupiterCore
     # private class methods
     class << self
 
+      # Kaminari integration
+      define_method Kaminari.config.page_method_name, (proc { |num|
+        limit(default_per_page).offset(default_per_page * ([num.to_i, 1].max - 1))
+      })
+
       private
-
-      def perform_solr_query(q, fq, facet, facet_fields = [])
-        query = []
-        query << %Q(_query_:"{!raw f=has_model_ssim}#{derived_af_class_name}")
-        query.append(q) if q.present?
-
-        response = ActiveFedora::SolrService.instance.conn.get('select', params: { q: query.join(' AND '),
-                                                                                   fq: fq,
-                                                                                   facet: facet,
-                                                                                   'facet.field': facet_fields })
-
-        raise SearchFailed unless response['responseHeader']['status'] == 0
-
-        [response['response']['numFound'], response['response']['docs'], response['facet_counts']]
-      end
 
       # Clones inherited arrays/maps so that local mutation doesn't propogate to the parent
       # also sets up basic attributes that every child class has: +id+, +owner+, and +visibility+
@@ -298,23 +300,6 @@ module JupiterCore
 
       def ldp_object_includes(module_name)
         derived_af_class.send(:include, module_name)
-      end
-
-      # derive additional restriction or broadening of the visibilitily query on top of the default
-      # "where visibility is public" restriction
-      def calculate_ownership_query(user)
-        # non-logged-in users don't get anything else
-        return '' unless user.present?
-
-        # You can see what you own, regardless of visibility
-        # TODO: owner is...? db id? ccid? email?
-        return %Q( OR _query_:"{!raw f=owner_ssim}#{user.id}") unless user.admin?
-
-        # make any visibility setting, including a missing visibility specifier, visible to admins
-        #
-        # this translates into non-insane query language as "OR visibility is null ([* TO *] AND *:*") OR visibility
-        # is any non-null value (*)
-        ' OR _query_:"-visibility_ssim:[* TO *] AND *:*" OR _query_:"visibility_ssim:*"'
       end
 
       def derived_af_class_name

@@ -53,6 +53,10 @@ Metrics/ModuleLength:
 Metrics/PerceivedComplexity:
   Enabled: false
 
+Metrics/ParameterLists:
+  Exclude:
+    - app/models/jupiter_core/search.rb
+
 # indentation is an endangered resource
 Style/ClassAndModuleChildren:
   EnforcedStyle: compact
