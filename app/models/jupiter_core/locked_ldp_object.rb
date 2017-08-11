@@ -224,7 +224,7 @@ module JupiterCore
       [:public, :private, :authenticated]
     end
 
-    # Used to dynamically turn an arbitrary Solr document into an isntance of its originating class
+    # Used to dynamically turn an arbitrary Solr document into an instance of its originating class
     #
     # eg)
     #    2.4.0 :003 > solr_doc
