@@ -30,10 +30,12 @@ class ActiveSupport::TestCase
   def sign_in_as(user)
     # grab first user identitiy, dont care just need to login user
     identity = user.identities.first
-    Rails.application.env_config['omniauth.auth'] = OmniAuth::AuthHash.new(
-      provider: identity.provider,
-      uid: identity.uid
-    )
+
+    Rails.application.env_config['omniauth.auth'] =
+      OmniAuth.config.mock_auth[identity.provider.to_sym] =
+        OmniAuth::AuthHash.new(provider: identity.provider,
+                               uid: identity.uid)
+
     post "/auth/#{identity.provider}/callback"
   end
 

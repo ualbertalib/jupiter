@@ -93,7 +93,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test 'session destroy' do
+  should 'handle session destroying aka logout properly' do
     user = users(:user)
 
     sign_in_as user
@@ -107,10 +107,37 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_not logged_in?
   end
 
-  test 'session omniauth failure' do
+  should 'return properly flash message on a omniauth failure' do
     get auth_failure_url
     assert_redirected_to login_url
     assert_equal I18n.t('login.error'), flash[:alert]
+  end
+
+  context '#reverse_impersonate' do
+    should 'log admin back in and redirect to user show page' do
+      user = users(:user)
+      admin = users(:admin)
+
+      # impersonate user as admin
+      sign_in_as admin
+
+      post impersonate_admin_user_url(user)
+
+      assert_redirected_to root_url
+      assert_equal I18n.t('admin.users.show.impersonate_flash', user: user.name), flash[:notice]
+
+      assert_equal session[:user_id], user.id
+      assert_equal session[:impersonator_id], admin.id
+
+      # reverse impersonate back to admin
+      post reverse_impersonate_url
+
+      assert_redirected_to admin_user_url(user)
+      assert_equal I18n.t('sessions.reverse_impersonate.flash', original_user: user.name), flash[:notice]
+
+      assert_equal session[:user_id], admin.id
+      assert_nil session[:impersonator_id]
+    end
   end
 
 end

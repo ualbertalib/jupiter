@@ -91,6 +91,6 @@ en:
       index:
         no_users_found: 'We could not find any users matching your search.'
         display_users_count: "Displaying %{users_count} of %{total_users_count} total users."
-        search_placeholder: 'Search by email or display name...'
+        search_placeholder: 'Search by email or name...'
         search_button: 'Search'
         header: 'Users'

@@ -33,7 +33,7 @@ class SessionsController < ApplicationController
       user.identities.create(provider: auth_hash.provider, uid: auth_hash.uid)
     end
 
-    if user.suspended?
+    if user && user.suspended?
       return redirect_to login_path, alert: t('login.user_suspended')
     end
 
@@ -60,7 +60,7 @@ class SessionsController < ApplicationController
   end
 
   def reverse_impersonate
-    impersonator = User.find(session[:impersonator_id]) if session[:impersonator_id]
+    impersonator = User.find(session[:impersonator_id])
 
     authorize impersonator
 
