@@ -18,6 +18,7 @@ end
 gem 'haml'
 gem 'hydra-works'
 gem 'jquery-rails'
+gem 'kaminari'
 gem 'mysql2', '>= 0.3.18', '< 0.5'
 gem 'puma', '~> 3.7'
 gem 'rails', '~> 5.1.1'
