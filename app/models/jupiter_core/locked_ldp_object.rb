@@ -176,8 +176,8 @@ module JupiterCore
     # Accepts a string id of an object in the LDP, and returns a +LockedLDPObjects+ representation of that object
     # or raises <tt>JupiterCore::ObjectNotFound</tt> if there is no object corresponding to that id
     def self.find(id)
-      results_count, results, = JupiterCore::Search.perform_solr_query(q: %Q(_query_:"{!raw f=id}#{id}"),
-                                                                       restrict_to_model: derived_af_class)
+      results_count, results, _ = JupiterCore::Search.perform_solr_query(q: %Q(_query_:"{!raw f=id}#{id}"),
+                                                                         restrict_to_model: derived_af_class)
 
       raise ObjectNotFound, "Couldn't find #{self} with id='#{id}'" if results_count == 0
       raise MultipleIdViolationError if results_count > 1
@@ -186,7 +186,7 @@ module JupiterCore
     end
 
     def self.count
-      results_count, = JupiterCore::Search.perform_solr_query(q: '', restrict_to_model: derived_af_class, rows: 0)
+      results_count, _ = JupiterCore::Search.perform_solr_query(q: '', restrict_to_model: derived_af_class, rows: 0)
       results_count
     end
 

@@ -112,3 +112,6 @@ Style/SingleLineMethods:
 Style/TrivialAccessors:
   Exclude:
     - app/models/jupiter_core/locked_ldp_object.rb
+
+Style/TrailingUnderscoreVariable:
+  Enabled: false

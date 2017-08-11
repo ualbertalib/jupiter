@@ -51,11 +51,12 @@ class JupiterCore::DeferredSolrQuery
   end
 
   def total_count
-    results_count, = JupiterCore::Search.perform_solr_query(q: where_clause,
-                                                            restrict_to_model: criteria[:model].send(:derived_af_class),
-                                                            rows: 0,
-                                                            start: criteria[:offset],
-                                                            sort: criteria[:sort])
+    af_model = criteria[:model].send(:derived_af_class)
+    results_count, _ = JupiterCore::Search.perform_solr_query(q: where_clause,
+                                                              restrict_to_model: af_model,
+                                                              rows: 0,
+                                                              start: criteria[:offset],
+                                                              sort: criteria[:sort])
     results_count
   end
 
@@ -79,11 +80,11 @@ class JupiterCore::DeferredSolrQuery
   end
 
   def reified_result_set
-    _, results = JupiterCore::Search.perform_solr_query(q: where_clause,
-                                                        restrict_to_model: criteria[:model].send(:derived_af_class),
-                                                        rows: criteria[:limit],
-                                                        start: criteria[:offset],
-                                                        sort: criteria[:sort])
+    _, results, _ = JupiterCore::Search.perform_solr_query(q: where_clause,
+                                                           restrict_to_model: criteria[:model].send(:derived_af_class),
+                                                           rows: criteria[:limit],
+                                                           start: criteria[:offset],
+                                                           sort: criteria[:sort])
     results
   end
 
