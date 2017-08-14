@@ -43,10 +43,19 @@ class ActiveSupport::TestCase
       define_method :current_user, -> { return user }
     end
 
+    AdminConstraint.class_eval do
+      alias_method :old_matches, :matches?
+      define_method :matches?, ->(_request) { return user.admin? }
+    end
+
     yield
 
     ApplicationController.class_eval do
       alias_method :current_user, :old_current_user
+    end
+
+    AdminConstraint.class_eval do
+      alias_method :matches?, :old_matches
     end
   end
 

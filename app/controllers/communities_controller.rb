@@ -26,13 +26,13 @@ class CommunitiesController < ApplicationController
 
     redirect_to @community
   end
-  
+
   def update
-      @community = Community.find(params[:id])
-      @community.unlock_and_fetch_ldp_object do |unlocked_community|
-          unlocked_community.update!(community_params)
-      end
-      redirect_to @community
+    @community = Community.find(params[:id])
+    @community.unlock_and_fetch_ldp_object do |unlocked_community|
+      unlocked_community.update!(community_params)
+    end
+    redirect_to @community
   end
 
   def destroy

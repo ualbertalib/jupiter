@@ -17,7 +17,7 @@ class Work < JupiterCore::LockedLdpObject
   has_attribute :embargo_end_date, ::RDF::Vocab::DC.modified, solrize_for: [:search, :sort]
 
   solr_index :doi_without_label, solrize_for: :exact_match,
-             as: -> { doi.gsub('doi:', '') if doi.present? }
+                                 as: -> { doi.gsub('doi:', '') if doi.present? }
 
   def self.display_attribute_names
     super - [:member_of_paths]

@@ -8,7 +8,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     has_attribute :creator, ::RDF::Vocab::DC.creator, solrize_for: [:search, :facet]
     has_multival_attribute :member_of_paths, ::VOCABULARY[:ualib].path, solrize_for: :pathing
 
-    solr_index :my_solr_doc_attr, solrize_for: :search, as: -> { title.upcase if title }
+    solr_index :my_solr_doc_attr, solrize_for: :search, as: -> { title&.upcase }
 
     def locked_method_shouldnt_mutate(attempted_title)
       self.title = attempted_title
@@ -70,7 +70,6 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     obj = @@klass.new_locked_ldp_object(title: title)
 
     obj.unlock_and_fetch_ldp_object do |uo|
-
       solr_doc = uo.to_solr
 
       assert solr_doc.key? 'my_solr_doc_attr_tesim'

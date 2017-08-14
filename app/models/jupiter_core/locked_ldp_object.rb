@@ -385,7 +385,6 @@ module JupiterCore
         @derived_af_class ||= generate_af_class
       end
 
-
       # Write properties directly to the solr index for an LDP object, without having to back them in the LDP
       # a lambda, +as+, controls how it is calculated.
       # Examples:
