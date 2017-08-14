@@ -37,7 +37,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
     context 'with valid existing user' do
       should 'use existing identity if present' do
-        user = users(:user)
+        user = users(:regular_user)
         identity = identities(:user_saml)
 
         OmniAuth.config.mock_auth[:saml] = OmniAuth::AuthHash.new(
@@ -56,7 +56,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
       end
 
       should 'create a new identity if not present' do
-        user = users(:user)
+        user = users(:regular_user)
 
         Rails.application.env_config['omniauth.auth'] = OmniAuth::AuthHash.new(
           provider: 'twitter',
@@ -64,7 +64,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
           info: { email: user.email, name: user.name }
         )
 
-        assert_no_difference ['User.count'] do
+        assert_difference ['Identity.count'], 1 do
           post '/auth/twitter/callback'
         end
 
@@ -91,10 +91,34 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
         assert_not logged_in?
       end
     end
+
+    context 'with a suspended user' do
+      should 'give an error message and user is not logged in' do
+        user = users(:suspended_user)
+
+        Rails.application.env_config['omniauth.auth'] = OmniAuth::AuthHash.new(
+          provider: 'twitter',
+          uid: 'twitter-012345',
+          info: { email: user.email, name: user.name }
+        )
+
+        assert_difference ['Identity.count'] do
+          post '/auth/twitter/callback'
+        end
+
+        identity = user.identities.last
+        assert_equal 'twitter', identity.provider
+        assert_equal 'twitter-012345', identity.uid
+
+        assert_redirected_to login_path
+        assert_equal I18n.t('login.user_suspended'), flash[:alert]
+        refute logged_in?
+      end
+    end
   end
 
   should 'handle session destroying aka logout properly' do
-    user = users(:user)
+    user = users(:regular_user)
 
     sign_in_as user
 
@@ -115,7 +139,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
   context '#reverse_impersonate' do
     should 'log admin back in and redirect to user show page' do
-      user = users(:user)
+      user = users(:regular_user)
       admin = users(:admin)
 
       # impersonate user as admin

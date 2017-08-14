@@ -3,8 +3,22 @@ admin:
   name: Admin
   email: admin@example.com
   admin: true
+  suspended: false
 
-user:
-  name: Random User
-  email: random_user@example.com
+admin_user:
+  name: Tyrion Lannister
+  email: tyrion_lannister@example.com
+  admin: true
+  suspended: false
+
+regular_user:
+  name: John Snow
+  email: john_snow@example.com
   admin: false
+  suspended: false
+
+suspended_user:
+  name: Joffrey Baratheon
+  email: joffrey_baratheon@example.com
+  admin: false
+  suspended: true

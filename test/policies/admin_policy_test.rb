@@ -3,7 +3,7 @@ require 'test_helper'
 class AdminPolicyTest < ActiveSupport::TestCase
 
   test 'should deny normal user' do
-    current_user = users(:user)
+    current_user = users(:regular_user)
     assert_equal false, AdminPolicy.new(current_user, :admin).access?
   end
 

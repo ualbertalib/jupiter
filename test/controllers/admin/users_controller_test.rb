@@ -1,34 +1,45 @@
 require 'test_helper'
 
 class Admin::UsersControllerTest < ActionDispatch::IntegrationTest
+  setup do
+    @admin = users(:admin)
+    sign_in_as @admin
+  end
+
 
   context '#index' do
     should 'be able to get to admin users index as admin user' do
-      admin = users(:admin)
-      sign_in_as admin
-
       get admin_users_url
       assert_response :success
     end
+
+    # should 'be able to search' do
+    #   get admin_users_url
+    #   assert_response :success
+    # end
+
+    # should 'be able to sort' do
+    #   get admin_users_url
+    #   assert_response :success
+    # end
+
+    # should 'be able to paginate' do
+    #   get admin_users_url
+    #   assert_response :success
+    # end
   end
 
   context '#show' do
     should 'be able to get to admin users show as admin user' do
-      admin = users(:admin)
-      sign_in_as admin
-
-      get admin_user_url(admin)
+      get admin_user_url(@admin)
       assert_response :success
     end
   end
 
   context '#suspend' do
     should 'be able to suspend a user' do
-      user = users(:user)
-      admin = users(:admin)
-      sign_in_as admin
+      user = users(:regular_user)
 
-      refute user.suspended?
       patch suspend_admin_user_url(user)
 
       assert_redirected_to admin_user_url(user)
@@ -41,15 +52,7 @@ class Admin::UsersControllerTest < ActionDispatch::IntegrationTest
 
   context '#unsuspend' do
     should 'be able to unsuspend a user' do
-      user = users(:user)
-      admin = users(:admin)
-
-      sign_in_as admin
-
-      user.suspended = true
-      user.save
-
-      assert user.suspended?
+      user = users(:suspended_user)
 
       patch unsuspend_admin_user_url(user)
 
@@ -63,12 +66,7 @@ class Admin::UsersControllerTest < ActionDispatch::IntegrationTest
 
   context '#grant_admin' do
     should 'be able to grant admin to a user' do
-      user = users(:user)
-      admin = users(:admin)
-
-      sign_in_as admin
-
-      refute user.admin?
+      user = users(:regular_user)
 
       patch grant_admin_admin_user_url(user)
       assert_redirected_to admin_user_url(user)
@@ -81,15 +79,7 @@ class Admin::UsersControllerTest < ActionDispatch::IntegrationTest
 
   context '#revoke_admin' do
     should 'be able to revoke admin to an admin' do
-      user = users(:user)
-      admin = users(:admin)
-
-      sign_in_as admin
-
-      user.admin = true
-      user.save
-
-      assert user.admin?
+      user = users(:admin_user)
 
       patch revoke_admin_admin_user_url(user)
 
@@ -103,17 +93,14 @@ class Admin::UsersControllerTest < ActionDispatch::IntegrationTest
 
   context '#impersonate' do
     should 'be able to impersonate another user' do
-      user = users(:user)
-      admin = users(:admin)
-
-      sign_in_as admin
+      user = users(:regular_user)
 
       post impersonate_admin_user_url(user)
       assert_redirected_to root_url
       assert_equal I18n.t('admin.users.show.impersonate_flash', user: user.name), flash[:notice]
 
       assert_equal session[:user_id], user.id
-      assert_equal session[:impersonator_id], admin.id
+      assert_equal session[:impersonator_id], @admin.id
     end
   end
 

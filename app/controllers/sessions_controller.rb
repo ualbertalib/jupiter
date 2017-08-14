@@ -6,7 +6,7 @@ class SessionsController < ApplicationController
   # TODO just limit this to development mode? since this doesnt effect saml?
   skip_before_action :verify_authenticity_token, only: :create
 
-  skip_after_action :verify_authorized, only: [:new, :create, :destroy, :failure]
+  skip_after_action :verify_authorized
 
   def new
     # renders login page (views/sessions/new.html.erb)
@@ -62,7 +62,7 @@ class SessionsController < ApplicationController
   def reverse_impersonate
     impersonator = User.find(session[:impersonator_id])
 
-    authorize impersonator
+    raise Pundit::NotAuthorizedError if !impersonator.admin? || impersonator.suspended?
 
     original_user = current_user
     sign_in(impersonator)
