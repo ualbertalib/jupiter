@@ -2,8 +2,8 @@ class JupiterCore::FacetResult
 
   attr_accessor :name, :values
 
-  def initialize(searched_class, name, values)
-    self.name = searched_class.solr_name_to_attribute_name(name).to_s.titleize
+  def initialize(facet_map, name, values)
+    self.name = facet_map[name].to_s.titleize
 
     # values are just a key => value hash of facet text to count
     # we have to filter out all of the useless "" facets Solr sends back for non-required fields

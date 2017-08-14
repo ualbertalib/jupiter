@@ -6,6 +6,8 @@ class SessionsController < ApplicationController
   # TODO just limit this to development mode? since this doesnt effect saml?
   skip_before_action :verify_authenticity_token, only: :create
 
+  skip_after_action :verify_authorized
+
   def new
     # renders login page (views/sessions/new.html.erb)
   end
@@ -34,11 +36,14 @@ class SessionsController < ApplicationController
     # Sign the user in, if they exist
     sign_in(user)
 
-    # If signed in successfully, redirect them to the homepage
-    return redirect_to root_url, notice: I18n.t('omniauth.success', kind: auth_hash.provider) if current_user.present?
-
-    # Else something went wrong along the way with omniauth
-    redirect_to login_path, alert: I18n.t('omniauth.error')
+    if current_user.present?
+      # Was signed in successfully, redirect them back to where they came from or to the homepage
+      flash[:notice] = I18n.t('omniauth.success', kind: auth_hash.provider)
+      redirect_back_to
+    else
+      # Else something went wrong along the way with omniauth
+      redirect_to login_path, alert: I18n.t('omniauth.error')
+    end
   end
 
   def destroy

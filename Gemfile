@@ -18,6 +18,7 @@ end
 gem 'haml'
 gem 'hydra-works'
 gem 'jquery-rails'
+gem 'kaminari'
 gem 'mysql2', '>= 0.3.18', '< 0.5'
 gem 'puma', '~> 3.7'
 gem 'rails', '~> 5.1.1'
@@ -32,6 +33,9 @@ gem 'uglifier', '>= 1.3.0'
 # Authentication
 gem 'omniauth'
 gem 'omniauth-saml'
+
+# Authorization
+gem 'pundit'
 
 group :development, :test do
   gem 'capybara', '~> 2.13'

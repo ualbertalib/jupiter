@@ -1,3 +1,5 @@
+require_dependency 'admin_constraint'
+
 Rails.application.routes.draw do
   root to: 'welcome#index'
 
@@ -11,10 +13,12 @@ Rails.application.routes.draw do
     resources :collections
   end
 
-  namespace :admin do
+  namespace :admin, constraints: AdminConstraint.new do
+    root to: 'dashboard#index'
+
     resources :communities_and_collections, only: [:create, :new, :index]
   end
-  
+
   get 'login', to: 'sessions#new'
   match '/auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
   match '/auth/failure', to: 'sessions#failure', via: [:get, :post]
