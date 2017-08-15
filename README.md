@@ -119,6 +119,8 @@ And everything else is how you would normally develop in a rails project.
   ```
 - If your switching between docker-compose and local development on your machine, you may encounter in weird permissions on files that docker has created (logs/tmp/etc.). Simply just `sudo rm` them.
 
+- If you would like to run MySQL in a container, but docker-compose reports that port 3306 is already in use, you likely have a MySQL instance already running on the host. You will need to shutdown MySQL before you can start the container. On Ubuntu, `sudo service mysql stop` on the host will do the trick. Another option is to configure docker and the rails app to look for MySQL using a different port.
+
 ## Configuring SAML
 
 * Update `secrets.yml` (and maybe `omniauth.rb`) for the SAML implementation (you may need to generate a certificate/key for certain environments)
