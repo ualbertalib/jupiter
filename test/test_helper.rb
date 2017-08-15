@@ -30,33 +30,13 @@ class ActiveSupport::TestCase
   def sign_in_as(user)
     # grab first user identitiy, dont care just need to login user
     identity = user.identities.first
-    Rails.application.env_config['omniauth.auth'] = OmniAuth::AuthHash.new(
-      provider: identity.provider,
-      uid: identity.uid
-    )
+
+    Rails.application.env_config['omniauth.auth'] =
+      OmniAuth.config.mock_auth[identity.provider.to_sym] =
+        OmniAuth::AuthHash.new(provider: identity.provider,
+                               uid: identity.uid)
+
     post "/auth/#{identity.provider}/callback"
-  end
-
-  def as_user(user)
-    ApplicationController.class_eval do
-      alias_method :old_current_user, :current_user
-      define_method :current_user, -> { return user }
-    end
-
-    AdminConstraint.class_eval do
-      alias_method :old_matches, :matches?
-      define_method :matches?, ->(_request) { return user.admin? }
-    end
-
-    yield
-
-    ApplicationController.class_eval do
-      alias_method :current_user, :old_current_user
-    end
-
-    AdminConstraint.class_eval do
-      alias_method :matches?, :old_matches
-    end
   end
 
   # Returns true if a test user is logged in.

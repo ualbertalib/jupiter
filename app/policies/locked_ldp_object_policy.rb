@@ -11,4 +11,12 @@ class LockedLdpObjectPolicy < ApplicationPolicy
     record.is_a?(Class) ? record : record.class
   end
 
+  def owned?
+    record.owner == user.id
+  end
+
+  def public?
+    record.public?
+  end
+
 end
