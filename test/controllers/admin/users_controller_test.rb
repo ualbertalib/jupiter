@@ -1,32 +1,17 @@
 require 'test_helper'
 
 class Admin::UsersControllerTest < ActionDispatch::IntegrationTest
+
   setup do
     @admin = users(:admin)
     sign_in_as @admin
   end
-
 
   context '#index' do
     should 'be able to get to admin users index as admin user' do
       get admin_users_url
       assert_response :success
     end
-
-    # should 'be able to search' do
-    #   get admin_users_url
-    #   assert_response :success
-    # end
-
-    # should 'be able to sort' do
-    #   get admin_users_url
-    #   assert_response :success
-    # end
-
-    # should 'be able to paginate' do
-    #   get admin_users_url
-    #   assert_response :success
-    # end
   end
 
   context '#show' do

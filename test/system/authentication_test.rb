@@ -9,14 +9,16 @@ class AuthenticationTest < ApplicationSystemTestCase
       click_on I18n.t('application.navbar.links.login')
       assert_selector 'h1', text: I18n.t('sessions.new.header')
 
-      OmniAuth.config.mock_auth[:saml] = OmniAuth::AuthHash.new(
-        provider: 'saml',
-        uid: 'johndoe',
-        info: {
-          email: 'johndoe@ualberta.ca',
-          name: 'John Doe'
-        }
-      )
+      Rails.application.env_config['omniauth.auth'] =
+        OmniAuth.config.mock_auth[:saml] =
+          OmniAuth::AuthHash.new(
+            provider: 'saml',
+            uid: 'johndoe',
+            info: {
+              email: 'johndoe@ualberta.ca',
+              name: 'John Doe'
+            }
+          )
 
       click_link I18n.t('sessions.new.saml_link')
 
@@ -38,7 +40,8 @@ class AuthenticationTest < ApplicationSystemTestCase
       click_on I18n.t('application.navbar.links.login')
       assert_selector 'h1', text: I18n.t('sessions.new.header')
 
-      OmniAuth.config.mock_auth[:saml] = :invalid_credentials
+      Rails.application.env_config['omniauth.auth'] =
+        OmniAuth.config.mock_auth[:saml] = :invalid_credentials
 
       click_link I18n.t('sessions.new.saml_link')
 
@@ -55,14 +58,16 @@ class AuthenticationTest < ApplicationSystemTestCase
       assert_text I18n.t('authorization.user_not_authorized_try_logging_in')
       assert_selector 'h1', text: I18n.t('sessions.new.header')
 
-      OmniAuth.config.mock_auth[:saml] = OmniAuth::AuthHash.new(
-        provider: 'saml',
-        uid: 'johndoe',
-        info: {
-          email: 'johndoe@ualberta.ca',
-          name: 'John Doe'
-        }
-      )
+      Rails.application.env_config['omniauth.auth'] =
+        OmniAuth.config.mock_auth[:saml] =
+          OmniAuth::AuthHash.new(
+            provider: 'saml',
+            uid: 'johndoe',
+            info: {
+              email: 'johndoe@ualberta.ca',
+              name: 'John Doe'
+            }
+          )
 
       click_link I18n.t('sessions.new.saml_link')
 
@@ -72,27 +77,28 @@ class AuthenticationTest < ApplicationSystemTestCase
       assert_text 'Create a new work'
     end
 
-    should 'get redirected to login then back to root page with error, if user is unauthorized' do
+    should 'get redirected to login then back to login page with error, if user is unauthorized' do
       visit new_community_url # only admins can do this
 
       assert_text I18n.t('authorization.user_not_authorized_try_logging_in')
       assert_selector 'h1', text: I18n.t('sessions.new.header')
 
-      OmniAuth.config.mock_auth[:saml] = OmniAuth::AuthHash.new(
-        provider: 'saml',
-        uid: 'johndoe',
-        info: {
-          email: 'johndoe@ualberta.ca',
-          name: 'John Doe'
-        }
-      )
+      Rails.application.env_config['omniauth.auth'] =
+        OmniAuth.config.mock_auth[:saml] =
+          OmniAuth::AuthHash.new(
+            provider: 'saml',
+            uid: 'johndoe',
+            info: {
+              email: 'johndoe@ualberta.ca',
+              name: 'John Doe'
+            }
+          )
 
       click_link I18n.t('sessions.new.saml_link')
 
       assert_text I18n.t('authorization.user_not_authorized')
 
-      # TODO: fix this view and i18n this, probably will be users dashboard as well?
-      assert_text 'Welcome'
+      assert_selector 'h1', text: I18n.t('sessions.new.header')
     end
   end
 
