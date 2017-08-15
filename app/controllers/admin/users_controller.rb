@@ -10,7 +10,7 @@ class Admin::UsersController < Admin::AdminController
                                     :impersonate]
 
   def index
-    # filters for admin/suspended/active/no works etc?
+    # TODO: Add filters for admin/suspended/active/no works etc?
     @users = User.search(params[:query]).order("#{sort_column} #{sort_direction}").page params[:page]
   end
 

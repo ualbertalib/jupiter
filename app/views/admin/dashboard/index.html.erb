@@ -115,13 +115,13 @@
       <h4>Latest users</h4>
       <div class="list-group">
         <% @users.each do |user| %>
-            <%= link_to [:admin, user], class: "list-group-item  list-group-item-action justify-content-between" do %>
-              <%= user.name %>
-              <span class="badge badge-default badge-pill">
-              <%#= TODO timeago or momementjs  time stamps %>
-              <%= time_ago_in_words(user.created_at) %>
+          <%= link_to [:admin, user], class: "list-group-item  list-group-item-action justify-content-between" do %>
+            <%= user.name %>
+            <span class="badge badge-default badge-pill">
+              <%# should be last_sign_in_at instead %>
+              <%= time_ago_in_words(user.updated_at) %>
             </span>
-            <% end %>
+          <% end %>
         <% end %>
       </div>
     </div>

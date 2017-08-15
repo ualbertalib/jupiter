@@ -71,12 +71,12 @@
 <div class="row mt-3">
   <div class="col">
     <div class="list-group">
-			<% if @works.present? %>
-				<% @works.each do |work| %>
-  				<%= link_to work.title, work_path(work), class: 'list-group-item list-group-item-action'%>
+      <% if @works.present? %>
+        <% @works.each do |work| %>
+          <%= link_to work.title, work_path(work), class: 'list-group-item list-group-item-action'%>
         <% end %>
       <% else %>
-				<p><%= t('.no_works_found') %></p>
+        <p><%= t('.no_works_found') %></p>
       <% end %>
     </div>
   </div>

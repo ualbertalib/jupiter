@@ -1,19 +1,3 @@
-
-# should 'be able to search' do
-#   get admin_users_url
-#   assert_response :success
-# end
-
-# should 'be able to sort' do
-#   get admin_users_url
-#   assert_response :success
-# end
-
-# should 'be able to paginate' do
-#   get admin_users_url
-#   assert_response :success
-# end
-
 require 'application_system_test_case'
 
 class AdminUsersTest < ApplicationSystemTestCase
