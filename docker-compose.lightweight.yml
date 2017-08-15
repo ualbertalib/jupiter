@@ -22,7 +22,7 @@ services:
   #     MYSQL_ROOT_PASSWORD: mysecretpassword
   #   volumes:
   #     - mysql:/var/lib/mysql
-  #   port:
+  #   ports:
   #     - "3306:3306"
 
   solr:
@@ -46,6 +46,6 @@ services:
   #   image: redis:alpine
   #   volumes:
   #     - redis:/data
-  #   port:
+  #   ports:
   #     - "6379:6379"
 

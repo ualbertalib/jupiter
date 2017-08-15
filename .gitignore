@@ -20,3 +20,6 @@
 .byebug_history
 .ruby-version
 .ruby-gemset
+
+/docker-compose.*custom*.yml
+vendor/bundle

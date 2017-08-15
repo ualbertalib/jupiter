@@ -221,34 +221,6 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     end
 
     assert @@klass.find(obj.id).present?
-
-    search_results = @@klass.search(q: '')
-
-    assert search_results.count == 2
-
-    search_results.results.each do |res|
-      assert_includes [obj, another_obj].map(&:id), res.id
-    end
-
-    search_results.each_facet_with_results do |facet|
-      assert_includes ['Title', 'Creator', 'Visibility'], facet.name
-      if facet.name == 'Title'
-        assert facet.values.keys.count == 2
-        assert facet.values.key?(first_title)
-        assert facet.values.key?(second_title)
-        [first_title, second_title].each do |title|
-          assert facet.values[title] == 1
-        end
-      elsif facet.name == 'Creator'
-        assert facet.values.keys.count == 1
-        assert facet.values.key?(creator)
-        assert facet.values[creator] == 2
-      elsif facet.name == 'Visibility'
-        assert facet.values.keys.count == 1
-        assert facet.values.key?('public')
-        assert facet.values['public'] == 2
-      end
-    end
   end
 
 end
