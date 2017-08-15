@@ -24,10 +24,13 @@ class CollectionsController < ApplicationController
   def edit
     @community = Community.find(params[:community_id])
     @collection = Collection.find(params[:id])
+    authorize @community
+    authorize @collection
   end
 
   def update
     @collection = Collection.find(params[:id])
+    authorize @collection
     @collection.unlock_and_fetch_ldp_object do |unlocked_collection|
       unlocked_collection.update!(collection_params)
     end
@@ -37,6 +40,7 @@ class CollectionsController < ApplicationController
 
   def destroy
     collection = Collection.find(params[:id])
+    authorize collection
     collection.unlock_and_fetch_ldp_object do |uo|
       if uo.destroy
         flash[:notice] = 'Collection deleted'

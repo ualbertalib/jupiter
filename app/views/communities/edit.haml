@@ -1,9 +1,5 @@
 %h2.mt-3 Create Community
-.row.mt-3
-  .col
-    = simple_form_for @community do |f|
-      .form-group.col
-        .row
-          = f.input :title
-        .row
-          = f.button :submit, class: 'btn btn-primary'
+= simple_form_for @community do |f|
+  .form-group
+    = f.input :title
+    = f.button :submit, class: 'btn btn-primary'

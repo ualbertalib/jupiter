@@ -19,6 +19,11 @@ class CommunitiesController < ApplicationController
     authorize @community
   end
 
+  def edit
+    @community = Community.find(params[:id])
+    authorize @community
+  end
+
   def create
     @community = Community.new_locked_ldp_object(permitted_attributes(Community))
     authorize @community
@@ -37,6 +42,7 @@ class CommunitiesController < ApplicationController
 
   def destroy
     community = Community.find(params[:id])
+    authorize community
     community.unlock_and_fetch_ldp_object do |uo|
       if uo.destroy
         flash[:notice] = 'Community deleted'
