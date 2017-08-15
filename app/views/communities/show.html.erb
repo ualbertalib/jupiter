@@ -16,8 +16,10 @@
     </div>
 </div>
 
-<div class="row mt-3" >
-    <div class="col" >
-        <%= link_to 'Create New Collection', new_community_collection_path(@community), class: 'btn btn-primary' %>
-    </div>
-</div>
+<% if policy(:collection).create? %>
+  <div class="row mt-3" >
+      <div class="col" >
+          <%= link_to 'Create New Collection', new_community_collection_path(@community), class: 'btn btn-primary' %>
+      </div>
+  </div>
+<% end %>
