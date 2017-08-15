@@ -29,7 +29,7 @@ Rails.application.routes.draw do
     resources :communities_and_collections, only: [:create, :new, :index]
   end
 
-  post '/reverse_impersonate', to: 'sessions#reverse_impersonate'
+  post '/stop_impersonating', to: 'sessions#stop_impersonating'
   get 'login', to: 'sessions#new'
   match '/auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
   match '/auth/failure', to: 'sessions#failure', via: [:get, :post]

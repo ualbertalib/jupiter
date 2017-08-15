@@ -44,7 +44,7 @@ en:
         logout: 'Logout'
         profile: 'Your Profile'
         settings: 'Settings'
-        stop_impersonation: 'Stop Impersonation'
+        stop_impersonating: 'Stop Impersonating'
       user_dropdown:
         heading_html: "Signed in as <strong>%{name}</strong>"
   sessions:
@@ -53,7 +53,7 @@ en:
       description_html: 'ERA is now a <a href="https://ist.ualberta.ca/services/ccid-passwords/campus-computing-id">CCID</a> (Campus Computing ID) enabled service. If you have a CCID please use it to log in to ERA.'
       saml_link: 'Sign in with University of Alberta CCID (Campus Computing ID)'
       developer_link: Sign in with Developer Account
-    reverse_impersonate:
+    stop_impersonating:
       flash: "You are no longer impersonating %{original_user}"
     destroy:
       signed_out: "Signed out successfully."

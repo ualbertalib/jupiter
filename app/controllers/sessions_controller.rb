@@ -59,7 +59,7 @@ class SessionsController < ApplicationController
     redirect_to login_path, alert: t('login.error')
   end
 
-  def reverse_impersonate
+  def stop_impersonating
     impersonator = User.find(session[:impersonator_id])
 
     raise Pundit::NotAuthorizedError if !impersonator.admin? || impersonator.suspended?

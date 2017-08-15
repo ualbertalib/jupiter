@@ -137,7 +137,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_equal I18n.t('login.error'), flash[:alert]
   end
 
-  context '#reverse_impersonate' do
+  context '#stop_impersonating' do
     should 'log admin back in and redirect to user show page' do
       user = users(:regular_user)
       admin = users(:admin)
@@ -153,11 +153,11 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
       assert_equal session[:user_id], user.id
       assert_equal session[:impersonator_id], admin.id
 
-      # reverse impersonate back to admin
-      post reverse_impersonate_url
+      # stop impersonating and return back to admin
+      post stop_impersonating_url
 
       assert_redirected_to admin_user_url(user)
-      assert_equal I18n.t('sessions.reverse_impersonate.flash', original_user: user.name), flash[:notice]
+      assert_equal I18n.t('sessions.stop_impersonating.flash', original_user: user.name), flash[:notice]
 
       assert_equal session[:user_id], admin.id
       assert_nil session[:impersonator_id]

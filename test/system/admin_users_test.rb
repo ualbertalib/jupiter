@@ -182,8 +182,8 @@ class AdminUsersTest < ApplicationSystemTestCase
 
       # we stop impersonation and get redirected back to admin user show page
       click_link user.name # opens user dropdown which has the stop impersonating link
-      click_link I18n.t('application.navbar.links.stop_impersonation')
-      assert_text I18n.t('sessions.reverse_impersonate.flash', original_user: user.name)
+      click_link I18n.t('application.navbar.links.stop_impersonating')
+      assert_text I18n.t('sessions.stop_impersonating.flash', original_user: user.name)
       assert_selector 'h1', text: user.name
     end
   end
