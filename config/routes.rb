@@ -16,7 +16,7 @@ Rails.application.routes.draw do
   namespace :admin, constraints: AdminConstraint.new do
     root to: 'dashboard#index'
 
-    resources :communities_and_collections, only: [:create, :new, :index]
+    resources :communities_and_collections, only: [:show, :create, :new, :index]
     resources :site_notifications, only: [:new, :destroy, :create]
   end
 
