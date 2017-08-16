@@ -72,6 +72,7 @@ class Admin::UsersController < Admin::AdminController
 
     logger.info("Admin '#{current_user.name}' has started impersonating '#{@user.name}'")
 
+    # TODO: goes to users dashboard once implemented
     redirect_to root_path, notice: t('admin.users.show.impersonate_flash', user: @user.name)
   end
 

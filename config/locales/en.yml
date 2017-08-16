@@ -60,7 +60,7 @@ en:
   login:
     error: 'There was an error authenticating from your account. Please try again, or contact a staff member.'
     success: "Successfully authenticated from %{kind} account."
-    user_suspended: 'Sorry, your account has been suspended. If you believe this is an error, please contact a staff member.'
+    user_suspended: 'Sorry, your ERA account has been suspended. Please contact the ERA HelpDesk at erahelp@ualberta.ca for more information.'
   authorization:
     user_not_authorized: 'Sorry, you are not authorized to perform this action.'
     user_not_authorized_try_logging_in: 'Sorry, you are not authorized to perform this action. Try logging in?'
