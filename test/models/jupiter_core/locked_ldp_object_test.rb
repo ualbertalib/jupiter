@@ -19,6 +19,13 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     end
 
     unlocked do
+      before_validation :before_validation_method
+      after_validation :after_validation_method
+
+      def before_validation_method; end
+
+      def after_validation_method; end
+
       def unlocked_method_can_mutate(attempted_title)
         self.title = attempted_title
       end
@@ -221,6 +228,29 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     end
 
     assert @@klass.find(obj.id).present?
+  end
+
+  #  (╯°□°）╯︵ ┻━┻)
+  test 'Validation callbacks actually, yknow, run. Seriously. I have to test for this.' do
+    obj = @@klass.new_locked_ldp_object(title: generate_random_string)
+
+    obj.unlock_and_fetch_ldp_object do |uo|
+      before_mock = MiniTest::Mock.new
+      before_mock.expect :call, true
+
+      uo.stub :before_validation_method, before_mock do
+        obj.valid?
+      end
+      assert_mock before_mock
+
+      after_mock = MiniTest::Mock.new
+      after_mock.expect :call, true
+
+      uo.stub :after_validation_method, after_mock do
+        obj.valid?
+      end
+      assert_mock after_mock
+    end
   end
 
 end

@@ -67,6 +67,9 @@ Style/ClassAndModuleChildren:
 Style/Documentation:
   Enabled: false
 
+Style/AsciiComments:
+  Enabled: false
+
 Style/FileName:
   Exclude:
     - Dangerfile

@@ -363,6 +363,16 @@ module JupiterCore
             errors.add(:visibility, "#{visibility} is not a known visibility")
           end
 
+          # Paper over a 2 year old bug in ActiveFedora where it simply SILENTLY IGNORES validation callbacks
+          # (https://github.com/samvera/active_fedora/issues/914)
+          # ...
+          # don't try to write your own ORM, kids
+          def run_validations!
+            run_callbacks(:validation) do
+              super
+            end
+          end
+
           def owning_class
             self.class.owning_class
           end

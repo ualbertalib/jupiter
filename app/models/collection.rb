@@ -26,10 +26,9 @@ class Collection < JupiterCore::LockedLdpObject
 
   unlocked do
     before_destroy :can_be_destroyed?
-    before_create :set_visibility_public
 
-    def set_visibility_public
-      self.visibility = 'public'
+    before_validation do
+      self.visibility = JupiterCore::VISIBILITY_PUBLIC
     end
 
     def can_be_destroyed?
