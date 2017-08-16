@@ -37,6 +37,7 @@ class CommunitiesController < ApplicationController
     @community.unlock_and_fetch_ldp_object do |unlocked_community|
       unlocked_community.update!(community_params)
     end
+    flash[:notice] = I18n.t('application.communities.updated')
     redirect_to @community
   end
 
@@ -45,9 +46,9 @@ class CommunitiesController < ApplicationController
     authorize community
     community.unlock_and_fetch_ldp_object do |uo|
       if uo.destroy
-        flash[:notice] = 'Community deleted'
+        flash[:notice] = I18n.t('application.communities.deleted')
       else
-        flash[:alert] = 'Cannot delete a non-empty Community'
+        flash[:alert] = I18n.t('application.communities.not_empty_error')
       end
 
       redirect_to admin_communities_and_collections_path

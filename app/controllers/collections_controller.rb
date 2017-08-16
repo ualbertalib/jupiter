@@ -34,7 +34,7 @@ class CollectionsController < ApplicationController
     @collection.unlock_and_fetch_ldp_object do |unlocked_collection|
       unlocked_collection.update!(collection_params)
     end
-    flash[:notice] = 'Collection updated'
+    flash[:notice] = I18n.t('application.collections.updated')
     redirect_to admin_communities_and_collections_path
   end
 
@@ -43,9 +43,9 @@ class CollectionsController < ApplicationController
     authorize collection
     collection.unlock_and_fetch_ldp_object do |uo|
       if uo.destroy
-        flash[:notice] = 'Collection deleted'
+        flash[:notice] = I18n.t('application.collections.deleted')
       else
-        flash[:alert] = 'Cannot delete a non-empty Collection'
+        flash[:alert] = I18n.t('application.collections.not_empty_error')
       end
 
       redirect_to admin_communities_and_collections_path
