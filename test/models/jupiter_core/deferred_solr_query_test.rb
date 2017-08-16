@@ -23,7 +23,6 @@ class DeferredSolrQueryTest < ActiveSupport::TestCase
     assert @@klass.all.present?
     assert_equal @@klass.all.total_count, 1
     assert @@klass.where(title: 'foo').first.id == obj.id
-
   end
 
 end
