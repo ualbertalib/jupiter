@@ -60,6 +60,12 @@ class JupiterCore::DeferredSolrQuery
     results_count
   end
 
+  # ActiveSupport#present? and other related protocols depend on this
+  # semantically indicating the number of results from the query
+  def empty?
+    total_count == 0
+  end
+
   private
 
   # Defer to Kaminari configuration in the +LockedLdpObject+ model
@@ -73,10 +79,6 @@ class JupiterCore::DeferredSolrQuery
 
   def respond_to_missing?(method, include_private = false)
     super || criteria[:model].respond_to?(method, include_private)
-  end
-
-  def model
-    criteria[:model]
   end
 
   def reified_result_set
