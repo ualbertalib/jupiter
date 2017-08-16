@@ -18,6 +18,7 @@ gem 'uglifier', '>= 1.3.0'
 gem 'bootstrap', '~> 4.0.0.beta'
 
 # View stuff
+gem 'activestorage'
 gem 'simple_form'
 
 # Hydra stuff
