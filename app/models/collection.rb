@@ -4,6 +4,13 @@ class Collection < JupiterCore::LockedLdpObject
 
   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
   has_attribute :community_id, ::VOCABULARY[:ualib].path, solrize_for: :pathing
+  has_attribute :tag, ::VOCABULARY[:ualib].temp_tag, solrize_for: :facet
+
+  # description for collections
+
+  def community
+    Community.find(community_id)
+  end
 
   def path
     "#{community_id}/#{id}"
@@ -15,6 +22,21 @@ class Collection < JupiterCore::LockedLdpObject
 
   def as_json(_options)
     super(only: [:title, :id])
+  end
+
+  unlocked do
+    before_destroy :can_be_destroyed?
+    before_create :set_visibility_public
+
+    def set_visibility_public
+      self.visibility = 'public'
+    end
+
+    def can_be_destroyed?
+      return true if member_works.count == 0
+      errors.add(:member_works, 'must be empty. Currently: ' + member_works.map(&:title).join(', '))
+      throw(:abort)
+    end
   end
 
 end

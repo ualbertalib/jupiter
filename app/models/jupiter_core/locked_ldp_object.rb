@@ -8,6 +8,10 @@ module JupiterCore
   class AlreadyDefinedError < StandardError; end
   class LockedInstanceError < StandardError; end
 
+  VISIBILITY_PUBLIC = 'public'.freeze
+  VISIBILITY_PRIVATE = 'private'.freeze
+  VISIBILITY_AUTHENTICATED = 'authenticated'.freeze
+
   class LockedLdpObject
 
     include ActiveModel::Model
@@ -221,7 +225,19 @@ module JupiterCore
     end
 
     def self.valid_visibilities
-      [:public, :private, :authenticated]
+      [VISIBILITY_PUBLIC, VISIBILITY_PRIVATE, VISIBILITY_AUTHENTICATED]
+    end
+
+    def public?
+      visibility == VISIBILITY_PUBLIC
+    end
+
+    def private?
+      visibility == VISIBILITY_PRIVATE
+    end
+
+    def authenticated?
+      visibility == VISIBILITY_AUTHENTICATED
     end
 
     # Used to dynamically turn an arbitrary Solr document into an instance of its originating class
@@ -260,8 +276,11 @@ module JupiterCore
 
     def ldp_object=(obj)
       @ldp_object = obj
-      @solr_representation = @ldp_object.to_solr
       @ldp_object.owning_object = self
+
+      # NOTE: it's important to establish the owning object PRIOR to calling to_solr, as solr_calc_properties
+      # could need to call methods that get forwarded to the owning object
+      @solr_representation = @ldp_object.to_solr
       @ldp_object
     end
 
@@ -274,6 +293,21 @@ module JupiterCore
       })
 
       private
+
+      def perform_solr_query(q, fq, facet, facet_fields = [])
+        query = []
+        query << %Q(_query_:"{!raw f=has_model_ssim}#{derived_af_class_name}")
+        query.append(q) if q.present?
+
+        response = ActiveFedora::SolrService.instance.conn.get('select', params: { q: query.join(' AND '),
+                                                                                   fq: fq,
+                                                                                   facet: facet,
+                                                                                   'facet.field': facet_fields })
+
+        raise SearchFailed unless response['responseHeader']['status'] == 0
+
+        [response['response']['numFound'], response['response']['docs'], response['facet_counts']]
+      end
 
       # Clones inherited arrays/maps so that local mutation doesn't propogate to the parent
       # also sets up basic attributes that every child class has: +id+, +owner+, and +visibility+
@@ -342,6 +376,8 @@ module JupiterCore
             JupiterCore::Indexer
           end
 
+          # Methods defined on the +owning_object+ can be called by the "unlocked" methods defined on the ActiveFedora
+          # object
           def method_missing(name, *args, &block)
             if owning_object.respond_to?(name, true)
               owning_object.send(name, *args, &block)
@@ -365,13 +401,19 @@ module JupiterCore
         @derived_af_class ||= generate_af_class
       end
 
-      def solr_calculated_attribute(name, solrize_for:, &callable)
-        raise PropertyInvalidError unless callable.respond_to?(:call)
+      # Write properties directly to the solr index for an LDP object, without having to back them in the LDP
+      # a lambda, +as+, controls how it is calculated.
+      # Examples:
+      #
+      #    solr_index :downcased_title, solrize_for: :exact_match, as: -> { title.downcase }
+      #
+      def solr_index(name, solrize_for:, as:)
+        raise PropertyInvalidError unless as.respond_to?(:call)
         raise PropertyInvalidError unless name.present?
         raise PropertyInvalidError unless solrize_for.present? && solrize_for.is_a?(Symbol)
 
         self.solr_calc_attributes ||= {}
-        self.solr_calc_attributes[name] = { type: SOLR_DESCRIPTOR_MAP[solrize_for], callable: callable }
+        self.solr_calc_attributes[name] = { type: SOLR_DESCRIPTOR_MAP[solrize_for], callable: as }
       end
 
       def has_multival_attribute(name, predicate, solrize_for: [], type: :string)

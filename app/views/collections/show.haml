@@ -9,3 +9,5 @@
 					= link_to w.title, work_path(w), class: 'list-group-item list-group-item-action'
 			- else
 				There are no works in this Collection
+
+= link_to 'Edit', edit_community_collection_path(@community, @collection), class:'btn btn-secondary'

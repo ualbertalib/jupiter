@@ -3,9 +3,9 @@
   <head>
     <title>Jupiter</title>
     <%= csrf_meta_tags %>
-
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= yield(:head) %>
     <% if Rails.env.development? %>
       <%= favicon_link_tag 'mc_360.png' %>
     <% end %>
@@ -14,8 +14,12 @@
   </head>
 
   <body>
-    <%= render partial:'navbar' %>
-    <div class="container">    
+
+    <div class="container">
+      <%= render partial:'navbar' %>
+
+      <div class="container">
+      <%= render partial: 'site_notification' %>
       <%= render partial: 'flash' %>
       <%= content_for?(:content) ? yield(:content) : yield %>
     </div>
