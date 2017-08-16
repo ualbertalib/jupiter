@@ -38,13 +38,15 @@ class WorkTest < ActiveSupport::TestCase
   test 'embargo_end_date must be blank for non-embargo visibilities' do
     work = Work.new_locked_ldp_object
     work.unlock_and_fetch_ldp_object do |unlocked_work|
-      unlocked_work.visibility = :public
+      unlocked_work.visibility = JupiterCore::VISIBILITY_PUBLIC
       unlocked_work.embargo_end_date = '1992-02-01'
     end
 
     assert_not work.valid?
     assert work.errors[:embargo_end_date].present?
     assert_includes work.errors[:embargo_end_date], 'must be blank'
+
+    refute work.errors[:visibility].present?
   end
 
   test '#add_to_path assigns paths properly' do
