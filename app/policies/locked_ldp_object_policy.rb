@@ -12,6 +12,7 @@ class LockedLdpObjectPolicy < ApplicationPolicy
   end
 
   def owned?
+    return false unless user.present? && user.id.present?
     record.owner == user.id
   end
 

@@ -2,6 +2,8 @@ class Work < JupiterCore::LockedLdpObject
 
   ldp_object_includes Hydra::Works::WorkBehavior
 
+  VISIBILITY_EMBARGO = 'embargo'.freeze
+
   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
   has_attribute :subject, ::RDF::Vocab::DC.subject, solrize_for: [:search, :facet]
   has_attribute :creator, ::RDF::Vocab::DC.creator, solrize_for: [:search, :facet]
@@ -24,12 +26,12 @@ class Work < JupiterCore::LockedLdpObject
   end
 
   def self.valid_visibilities
-    super + ['embargo']
+    super + [VISIBILITY_EMBARGO]
   end
 
   unlocked do
-    validates :embargo_end_date, presence: true, if: ->(work) { work.visibility == :embargo }
-    validates :embargo_end_date, absence: true, if: ->(work) { work.visibility != :embargo }
+    validates :embargo_end_date, presence: true, if: ->(work) { work.visibility == VISIBILITY_EMBARGO }
+    validates :embargo_end_date, absence: true, if: ->(work) { work.visibility != VISIBILITY_EMBARGO }
 
     def add_to_path(community_id, collection_id)
       self.member_of_paths += ["#{community_id}/#{collection_id}"]

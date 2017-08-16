@@ -16,14 +16,13 @@ class DeferredSolrQueryTest < ActiveSupport::TestCase
     assert @@klass.limit(5).is_a?(JupiterCore::DeferredSolrQuery)
     assert @@klass.offset(5).is_a?(JupiterCore::DeferredSolrQuery)
 
-    obj = @@klass.new_locked_ldp_object(title: 'foo', visibility: :public)
+    obj = @@klass.new_locked_ldp_object(title: 'foo', visibility: JupiterCore::VISIBILITY_PUBLIC)
 
     obj.unlock_and_fetch_ldp_object(&:save!)
 
     assert @@klass.all.present?
     assert_equal @@klass.all.total_count, 1
     assert @@klass.where(title: 'foo').first.id == obj.id
-
   end
 
 end

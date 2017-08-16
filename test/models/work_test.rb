@@ -27,7 +27,7 @@ class WorkTest < ActiveSupport::TestCase
   test 'embargo_end_date must be present if visibility is embargo' do
     work = Work.new_locked_ldp_object
     work.unlock_and_fetch_ldp_object do |unlocked_work|
-      unlocked_work.visibility = :embargo
+      unlocked_work.visibility = Work::VISIBILITY_EMBARGO
     end
 
     assert_not work.valid?

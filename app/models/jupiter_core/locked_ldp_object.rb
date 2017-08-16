@@ -8,6 +8,10 @@ module JupiterCore
   class AlreadyDefinedError < StandardError; end
   class LockedInstanceError < StandardError; end
 
+  VISIBILITY_PUBLIC = 'public'.freeze
+  VISIBILITY_PRIVATE = 'private'.freeze
+  VISIBILITY_AUTHENTICATED = 'authenticated'.freeze
+
   class LockedLdpObject
 
     include ActiveModel::Model
@@ -221,7 +225,19 @@ module JupiterCore
     end
 
     def self.valid_visibilities
-      ['public', 'private', 'authenticated']
+      [VISIBILITY_PUBLIC, VISIBILITY_PRIVATE, VISIBILITY_AUTHENTICATED]
+    end
+
+    def public?
+      visibility == VISIBILITY_PUBLIC
+    end
+
+    def private?
+      visibility == VISIBILITY_PRIVATE
+    end
+
+    def authenticated?
+      visibility == VISIBILITY_AUTHENTICATED
     end
 
     # Used to dynamically turn an arbitrary Solr document into an instance of its originating class
