@@ -4,4 +4,8 @@ class CollectionPolicy < LockedLdpObjectPolicy
     true
   end
 
+  def create?
+    admin?
+  end
+
 end

@@ -41,8 +41,7 @@
         <div class="data">
           <%= link_to '#todo', class: 'card-text' do %>
           <%#= admin_works_path do %>
-              <%#= number_with_delimiter(Work.count) %>
-              99
+              <%= number_with_delimiter(Work.count) %>
           <% end %>
         </div>
         </div>
@@ -65,8 +64,7 @@
         <h4 class="card-title">Communities</h4>
           <%= link_to '#todo', class: 'card-text' do %>
           <%#= link_to admin_communities_path do %>
-              <%#= number_with_delimiter(Communities.count) %>
-              99
+              <%= number_with_delimiter(Community.count) %>
           <% end %>
         </div>
       </div>
@@ -77,8 +75,7 @@
           <h4 class="card-title">Collections</h4>
           <%= link_to '#todo', class: 'card-text' do %>
           <%#= link_to admin_collections_path do %>
-              <%#= number_with_delimiter(Collections.count) %>
-              99
+              <%= number_with_delimiter(Collection.count) %>
           <% end %>
         </div>
       </div>
@@ -123,4 +120,3 @@
     </div>
   </div>
 </div>
-

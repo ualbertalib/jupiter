@@ -1,7 +1,6 @@
 class WorksController < ApplicationController
 
-  # TODO: Show/edit/etc pages?
-  before_action :load_work, only: [:update]
+  before_action :load_work, only: [:show, :edit, :update]
 
   def new
     @work = Work.new_locked_ldp_object
@@ -54,6 +53,7 @@ class WorksController < ApplicationController
 
   def load_work
     @work = Work.find(params[:id])
+    authorize @work
   end
 
 end

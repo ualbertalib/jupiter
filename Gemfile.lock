@@ -114,6 +114,8 @@ GEM
     faraday-encoding (0.0.4)
       faraday
     ffi (1.9.18)
+    font-awesome-rails (4.7.0.2)
+      railties (>= 3.2, < 5.2)
     globalid (0.4.0)
       activesupport (>= 4.2.0)
     haikunator (1.1.0)
@@ -350,6 +352,7 @@ DEPENDENCIES
   binding_of_caller
   bootstrap (~> 4.0.0.alpha6)
   capybara (~> 2.13)
+  font-awesome-rails
   haikunator
   haml
   hydra-works
