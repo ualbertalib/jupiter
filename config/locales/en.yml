@@ -67,3 +67,14 @@ en:
   authorization:
     user_not_authorized: 'Sorry, you are not authorized to perform this action.'
     user_not_authorized_try_logging_in: 'Sorry, you are not authorized to perform this action. Try logging in?'
+  communities:
+    index:
+      header: 'Communities'
+      create_new_community: 'Create New Community'
+    new:
+      header: 'Create Community'
+    show:
+      create_new_collection: 'Create New Collection'
+      edit: 'Edit'
+      no_collections: 'There are no Collections in this Community'
+    title: 'Community: %{title}'
