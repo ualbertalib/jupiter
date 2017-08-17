@@ -21,4 +21,35 @@ class CollectionsController < ApplicationController
     redirect_to community_collection_path(@community, @collection)
   end
 
+  def edit
+    @community = Community.find(params[:community_id])
+    authorize @community
+    @collection = Collection.find(params[:id])
+    authorize @collection
+  end
+
+  def update
+    @collection = Collection.find(params[:id])
+    authorize @collection
+    @collection.unlock_and_fetch_ldp_object do |unlocked_collection|
+      unlocked_collection.update!(permitted_attributes(Collection))
+    end
+    flash[:notice] = I18n.t('application.collections.updated')
+    redirect_to admin_communities_and_collections_path
+  end
+
+  def destroy
+    collection = Collection.find(params[:id])
+    authorize collection
+    collection.unlock_and_fetch_ldp_object do |uo|
+      if uo.destroy
+        flash[:notice] = I18n.t('application.collections.deleted')
+      else
+        flash[:alert] = I18n.t('application.collections.not_empty_error')
+      end
+
+      redirect_to admin_communities_and_collections_path
+    end
+  end
+
 end

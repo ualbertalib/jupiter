@@ -30,11 +30,11 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  site_name: 'Jupiter'
+  site_name: 'ERA'
   application:
     navbar:
       search:
-        placeholder: "Search Jupiter..."
+        placeholder: "Search ERA..."
         button_text: 'Search'
       links:
         communities: 'Communities'
@@ -46,6 +46,14 @@ en:
         settings: 'Settings'
       user_dropdown:
         heading_html: "Signed in as <strong>%{display_name}</strong>"
+      communities:
+        updated: 'Community updated'
+        deleted: 'Community deleted'
+        not_empty_error: 'Cannot delete a non-empty Community'
+      collections:
+        updated: 'Collection updated'
+        deleted: 'Collection deleted'
+        not_empty_error: 'Cannot delete a non-empty Collection'
   sessions:
     new:
       header: 'Login to ERA'
