@@ -97,6 +97,8 @@ en:
         impersonate_dialog: "Are you sure you want to impersonate %{user}?"
         impersonate_flash: "You are now impersonating %{user}"
         no_works_found: 'There are no works for this user'
+        works: 'Works'
+        edit_work: 'Edit'
       index:
         no_users_found: 'We could not find any users matching your search.'
         display_users_count: "Displaying %{users_count} of %{total_users_count} total users."

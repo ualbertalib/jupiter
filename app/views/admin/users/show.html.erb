@@ -82,14 +82,24 @@
 </dl>
 
 <div class="row mt-3">
-  <div class="col">
+  <h2 class="mb-3"><%= t('.works') %></h2>
+  <%# TODO sort and pagination this list %>
+  <div class="col-md-12">
     <div class="list-group">
       <% if @works.present? %>
         <% @works.each do |work| %>
-          <%= link_to work.title, work_path(work), class: 'list-group-item list-group-item-action'%>
+          <div class='list-group-item list-group-item-action d-flex justify-content-between align-items-center'>
+            <%= link_to work.title, work_path(work) %>
+            <%= link_to edit_work_path(work), class: 'btn btn-secondary' do %>
+              <%= fa_icon 'pencil-square-o' %>
+              <%= t('.edit_work') %>
+              <% end %>
+          </div>
         <% end %>
       <% else %>
-        <p><%= t('.no_works_found') %></p>
+        <div class='list-group-item'>
+          <%= t('.no_works_found') %>
+        </div>
       <% end %>
     </div>
   </div>

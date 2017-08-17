@@ -1,7 +1,5 @@
 class User < ApplicationRecord
 
-  paginates_per 15
-
   has_many :identities, dependent: :destroy
   has_many :site_notifications, dependent: :destroy
 
@@ -12,13 +10,15 @@ class User < ApplicationRecord
 
   validates :name, presence: true
 
-  def self.search(search)
-    # searches name, email
-    if search.present?
-      where('email LIKE ?', "%#{search}%").or(where('name LIKE ?', "%#{search}%"))
-    else
-      self
+  scope :search, lambda { |query|
+    if query.present?
+      where('lower(email) LIKE ?', "%#{query.downcase}%")
+        .or(where('lower(name) LIKE ?', "%#{query.downcase}%"))
     end
+  }
+
+  def works
+    Work.where(owner: id)
   end
 
 end

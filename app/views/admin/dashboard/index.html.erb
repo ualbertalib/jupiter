@@ -1,12 +1,9 @@
 <div class='admin-dashboard'>
-  <ol class="breadcrumb mb-5">
-    <li class="breadcrumb-item active"><%= t('admin.header') %></li>
-  </ol>
   <h1><%= t('admin.header') %></h1>
 
   <hr/>
 
-  <h2>Versions</h2>
+  <h2 class="mb-3">Versions</h2>
   <div class="row">
     <div class="col-md-4">
       <p>
@@ -39,7 +36,7 @@
 
   <hr/>
 
-  <h2>Statistics</h2>
+  <h2 class="mb-3">Statistics</h2>
   <div class="row">
     <div class="col-md-4">
       <div class="card text-center">
@@ -90,9 +87,9 @@
 
   <hr/>
 
-  <h2>Recent Activity</h2>
+  <h2 class="mb-3">Recent Activity</h2>
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
       <h4>Latest works</h4>
       <ul class="list-group">
         <% @works.each do |work| %>
@@ -100,15 +97,14 @@
             <%#= link_to [:admin, work] %>
             <%= work.title %>
             <%# end %>
-            <span  class="badge badge-default badge-pill">
-              <%#= TODO timeago or momementjs  time stamps %>
-              <%#= what is this called in LockedLDPObject? work.date_created or work.created_at? %>
+            <span class="badge badge-default badge-pill">
+              <%= time_ago_in_words(work.date_created) %>
             </span>
           </li>
         <% end %>
       </ul>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-6">
       <h4>Latest users</h4>
       <div class="list-group">
         <% @users.each do |user| %>

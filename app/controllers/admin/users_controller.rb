@@ -15,8 +15,8 @@ class Admin::UsersController < Admin::AdminController
   end
 
   def show
-    @works = Work.all # TODO: need to get works off user somehow? like so:
-    # @works = @user.works.order(:name).page params[:page]
+    # TODO: need sort and pagination, review after PR#66
+    @works = @user.works # TODO: .sort(params[:sort_column], order=params[sort_direction]).page params[:page]
   end
 
   def suspend
