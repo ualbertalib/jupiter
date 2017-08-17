@@ -14,11 +14,8 @@
   </head>
 
   <body>
-
     <div class="container">
       <%= render partial:'navbar' %>
-
-      <div class="container">
       <%= render partial: 'site_notification' %>
       <%= render partial: 'flash' %>
       <%= content_for?(:content) ? yield(:content) : yield %>
