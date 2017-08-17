@@ -357,6 +357,7 @@ module JupiterCore
           attr_accessor :owning_object
 
           validate :visibility_must_be_known
+          validates :owner, presence: true
 
           def visibility_must_be_known
             return true if visibility.present? && owning_object.class.valid_visibilities.include?(visibility)
