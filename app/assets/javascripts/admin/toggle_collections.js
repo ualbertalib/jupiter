@@ -1,7 +1,7 @@
 $(document).on('turbolinks:load', function() {
 
 
-    $('a.close-btn').click(function(event) {
+    $('button.close-btn').click(function(event) {
         community_id = $(this).data('communityId');
 
         $(this).hide();

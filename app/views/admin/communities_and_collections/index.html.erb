@@ -13,7 +13,7 @@
             Collections <%= fa_icon('chevron-down') %>
           <% end %>
 
-          <%= link_to '', class: 'btn btn-secondary close-btn hidden-xs-up', data: {community_id: community.id } do %>
+          <%= button_tag type: 'button', class: 'btn btn-secondary close-btn hidden-xs-up', data: {community_id: community.id } do %>
             Close <%= fa_icon('chevron-up') %>
           <% end %>
 
