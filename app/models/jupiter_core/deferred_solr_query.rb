@@ -27,10 +27,12 @@ class JupiterCore::DeferredSolrQuery
     self
   end
 
-  def sort(attr, order=:asc)
-    raise ArgumentError, "order must be :asc or :desc" unless [:asc, :desc].include?(order)
+  def sort(attr, order = :asc)
+    raise ArgumentError, 'order must be :asc or :desc' unless [:asc, :desc].include?(order)
 
     metadata = criteria[:model].attribute_metadata(attr)
+    raise ArgumentError, "No metadata found for attribute #{attr}" unless metadata.present?
+
     sort_attr_index = metadata[:solrize_for].index(:sort)
     raise ArgumentError, "The given attribute, #{attr}, is not solrized for sorting" unless sort_attr_index.present?
 
@@ -105,7 +107,7 @@ class JupiterCore::DeferredSolrQuery
     if criteria[:where].present?
       attr_queries = []
       attr_queries << criteria[:where].map do |k, v|
-        solr_key = criteria[:model].attribute_metadata(k)[:solr_names].last
+        solr_key = criteria[:model].attribute_metadata(k)[:solr_names].first
         %Q(_query_:"{!field f=#{solr_key}}#{v}")
       end
     else

@@ -220,7 +220,7 @@ module JupiterCore
     end
 
     # attr, a string attribute name and sort order
-    def self.sort(attr, order=:asc)
+    def self.sort(attr, order = :asc)
       all.sort(attr, order)
     end
 
