@@ -1,6 +1,12 @@
+<% content_for(:head) do %>
+  <%= javascript_include_tag 'admin' %>
+<% end %>
+
 <% content_for(:content) do %>
   <div class="row" >
     <div class="col-md-2" >
+      <h2>Admin</h2>
+
       <%= render 'sidebar_group', title: 'Items' do %>
         <li><a href="">Manage Items</a></li>
         <li><a href="">Add New Item</a></li>
@@ -10,14 +16,14 @@
         <li><%= link_to 'Manage Users', admin_users_path %></li>
       <% end %>
 
-      <%= render 'sidebar_group', title: 'Communities & Collections' do %>
-        <li><a href="">Manage Communities / Collections</a></li>
-        <li><a href="">Add New Community</a></li>
-        <li><a href="">Add New Collection</a></li>
+
+      <%= render 'sidebar_group', title: 'Communities and Collections' do %>
+        <li><%= link_to 'Manage Communities / Collections', admin_communities_and_collections_path %></li>
+        <li><%= link_to 'Add new Community', new_community_path %></li>
       <% end %>
 
       <%= render 'sidebar_group', title: 'Administrator Notifications' do %>
-        <li><a href="">Manage Notifications</a></li>
+        <li><%= link_to 'Manage Notifications', new_admin_site_notification_path %></li>
       <% end %>
 
       <%= render 'sidebar_group', title: 'Pages' do %>
@@ -32,7 +38,7 @@
     </div>
 
     <div class="col-md-10" >
-        <%= yield  %>
+      <%= yield  %>
     </div>
 
   </div>

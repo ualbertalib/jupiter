@@ -6,6 +6,8 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
 
+  helper_method :current_site_notifications
+
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   protected
@@ -57,6 +59,10 @@ class ApplicationController < ActionController::Base
   def redirect_back_to
     redirect_to session[:forwarding_url] || root_path
     session.delete(:forwarding_url)
+  end
+
+  def current_site_notifications
+    SiteNotification.current
   end
 
 end

@@ -26,7 +26,8 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :communities_and_collections, only: [:create, :new, :index]
+    resources :communities_and_collections, only: [:show, :create, :new, :index]
+    resources :site_notifications, only: [:new, :destroy, :create]
   end
 
   post '/stop_impersonating', to: 'sessions#stop_impersonating'

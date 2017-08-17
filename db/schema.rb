@@ -22,6 +22,15 @@ ActiveRecord::Schema.define(version: 20170803165717) do
     t.index ["user_id"], name: "index_identities_on_user_id"
   end
 
+  create_table "site_notifications", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.text "message", null: false
+    t.bigint "user_id", null: false
+    t.datetime "removed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_site_notifications_on_user_id"
+  end
+
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "email", null: false
     t.string "name", null: false
@@ -37,4 +46,5 @@ ActiveRecord::Schema.define(version: 20170803165717) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "site_notifications", "users"
 end
