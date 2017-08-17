@@ -9,6 +9,11 @@ test:
   password: fedoraAdmin
   url: <%= ENV['FCREPO_URL'] || 'http://localhost:8080/fcrepo/rest' %>
   base_path: /test
+staging:
+  user: <%= ENV['FCREPO_USER'] %>
+  password: <%= ENV['FCREPO_PASSWORD'] %>
+  url: <%= ENV['FCREPO_URL'] %>
+  base_path: /staging
 production:
   user: <%= ENV['FCREPO_USER'] %>
   password: <%= ENV['FCREPO_PASSWORD'] %>
