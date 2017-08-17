@@ -23,8 +23,8 @@ class CollectionsController < ApplicationController
 
   def edit
     @community = Community.find(params[:community_id])
-    @collection = Collection.find(params[:id])
     authorize @community
+    @collection = Collection.find(params[:id])
     authorize @collection
   end
 
@@ -32,7 +32,7 @@ class CollectionsController < ApplicationController
     @collection = Collection.find(params[:id])
     authorize @collection
     @collection.unlock_and_fetch_ldp_object do |unlocked_collection|
-      unlocked_collection.update!(collection_params)
+      unlocked_collection.update!(permitted_attributes(Collection))
     end
     flash[:notice] = I18n.t('application.collections.updated')
     redirect_to admin_communities_and_collections_path
@@ -50,12 +50,6 @@ class CollectionsController < ApplicationController
 
       redirect_to admin_communities_and_collections_path
     end
-  end
-
-  protected
-
-  def collection_params
-    params[:collection].permit(Collection.attribute_names)
   end
 
 end

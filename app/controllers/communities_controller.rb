@@ -35,7 +35,7 @@ class CommunitiesController < ApplicationController
   def update
     @community = Community.find(params[:id])
     @community.unlock_and_fetch_ldp_object do |unlocked_community|
-      unlocked_community.update!(community_params)
+      unlocked_community.update!(permitted_attributes(Community))
     end
     flash[:notice] = I18n.t('application.communities.updated')
     redirect_to @community
@@ -53,12 +53,6 @@ class CommunitiesController < ApplicationController
 
       redirect_to admin_communities_and_collections_path
     end
-  end
-
-  protected
-
-  def community_params
-    params[:community].permit(Community.attribute_names)
   end
 
 end

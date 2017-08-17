@@ -389,11 +389,8 @@ module JupiterCore
           # Methods defined on the +owning_object+ can be called by the "unlocked" methods defined on the ActiveFedora
           # object
           def method_missing(name, *args, &block)
-            if owning_object.respond_to?(name, true)
-              owning_object.send(name, *args, &block)
-            else
-              super
-            end
+            return owning_object.send(name, *args, &block) if owning_object.respond_to?(name, true)
+            super
           end
 
           def respond_to_missing?(name, include_private = false)

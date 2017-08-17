@@ -238,17 +238,15 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
       before_mock = MiniTest::Mock.new
       before_mock.expect :call, true
 
-      uo.stub :before_validation_method, before_mock do
-        obj.valid?
-      end
-      assert_mock before_mock
-
       after_mock = MiniTest::Mock.new
       after_mock.expect :call, true
 
-      uo.stub :after_validation_method, after_mock do
-        obj.valid?
+      uo.stub :before_validation_method, before_mock do
+        uo.stub :after_validation_method, after_mock do
+          obj.valid?
+        end
       end
+      assert_mock before_mock
       assert_mock after_mock
     end
   end

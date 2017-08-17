@@ -20,7 +20,6 @@
   terms:
     - doi
     - path
-    - temp_tag
 
 - vocabulary: jupiter_core
   schema: 'http://fake.figurethisout.todo'
