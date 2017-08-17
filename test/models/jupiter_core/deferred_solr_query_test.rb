@@ -28,7 +28,6 @@ class DeferredSolrQueryTest < ActiveSupport::TestCase
     assert @@klass.where(title: 'foo').first.id == obj.id
 
     assert_equal @@klass.sort(:title, :desc).map(&:id), [another_obj.id, obj.id]
-
   end
 
   test 'sort constraints' do
