@@ -105,3 +105,14 @@ en:
         search_placeholder: 'Search by email or name...'
         search_button: 'Search Users'
         header: 'Users'
+  communities:
+    index:
+      header: 'Communities'
+      create_new_community: 'Create New Community'
+    new:
+      header: 'Create Community'
+    show:
+      create_new_collection: 'Create New Collection'
+      edit: 'Edit'
+      no_collections: 'There are no Collections in this Community'
+    title: 'Community: %{title}'
