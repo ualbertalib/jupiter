@@ -33,11 +33,11 @@ class SearchTest < ActiveSupport::TestCase
     creator = generate_random_string
 
     obj = @@klass.new_locked_ldp_object(title: first_title, creator: creator, visibility: 'public',
-                                        owner: users(:user).id)
+                                        owner: users(:regular_user).id)
     another_obj = @@klass.new_locked_ldp_object(title: second_title, creator: creator, visibility: 'public',
-                                                owner: users(:user).id)
+                                                owner: users(:regular_user).id)
     a_private_object = @@klass.new_locked_ldp_object(title: generate_random_string, creator: generate_random_string,
-                                                     visibility: 'private', owner: users(:user).id)
+                                                     visibility: 'private', owner: users(:regular_user).id)
 
     obj.unlock_and_fetch_ldp_object(&:save!)
     another_obj.unlock_and_fetch_ldp_object(&:save!)

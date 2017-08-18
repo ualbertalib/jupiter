@@ -17,9 +17,9 @@ class DeferredSolrQueryTest < ActiveSupport::TestCase
     assert @@klass.limit(5).is_a?(JupiterCore::DeferredSolrQuery)
     assert @@klass.offset(5).is_a?(JupiterCore::DeferredSolrQuery)
 
-    obj = @@klass.new_locked_ldp_object(title: 'foo',  owner: users(:regular_user).id, 
+    obj = @@klass.new_locked_ldp_object(title: 'foo', owner: users(:regular_user).id,
                                         visibility: JupiterCore::VISIBILITY_PUBLIC)
-    another_obj = @@klass.new_locked_ldp_object(title: 'zoo', , owner: users(:regular_user).id,
+    another_obj = @@klass.new_locked_ldp_object(title: 'zoo', owner: users(:regular_user).id,
                                                 visibility: JupiterCore::VISIBILITY_PUBLIC)
 
     obj.unlock_and_fetch_ldp_object(&:save!)

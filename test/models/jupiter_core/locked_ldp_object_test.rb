@@ -192,7 +192,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     obj.unlock_and_fetch_ldp_object do |uo|
       uo.title = 'Title'
       uo.visibility = JupiterCore::VISIBILITY_PUBLIC
-      uo.owner = users(:user).id
+      uo.owner = users(:regular_user).id
     end
 
     assert_predicate obj, :changed?
@@ -205,7 +205,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     creator = generate_random_string
     first_title = generate_random_string
 
-    obj = @@klass.new_locked_ldp_object(title: first_title, creator: creator, owner: users(:user).id,
+    obj = @@klass.new_locked_ldp_object(title: first_title, creator: creator, owner: users(:regular_user).id,
                                         visibility: 'public')
     obj.unlock_and_fetch_ldp_object(&:save!)
 
@@ -217,7 +217,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
 
     second_title = generate_random_string
 
-    another_obj = @@klass.new_locked_ldp_object(title: second_title, creator: creator, owner: users(:user).id,
+    another_obj = @@klass.new_locked_ldp_object(title: second_title, creator: creator, owner: users(:regular_user).id,
                                                 visibility: 'public')
     another_obj.unlock_and_fetch_ldp_object(&:save!)
 
