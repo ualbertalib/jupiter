@@ -13,8 +13,8 @@ class UserTest < ActiveSupport::TestCase
       should allow_value('random@example.com').for(:email)
     end
 
-    context '#display_name' do
-      should validate_presence_of(:display_name)
+    context '#name' do
+      should validate_presence_of(:name)
     end
   end
 

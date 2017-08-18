@@ -19,7 +19,7 @@ class CommunityPolicyTest < ActiveSupport::TestCase
 
   context 'general user' do
     should 'only be able to see index and show of communities' do
-      current_user = users(:user)
+      current_user = users(:regular_user)
       community = Community.new_locked_ldp_object
 
       assert CommunityPolicy.new(current_user, community).index?

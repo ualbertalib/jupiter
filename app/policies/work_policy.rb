@@ -8,6 +8,10 @@ class WorkPolicy < LockedLdpObjectPolicy
     owned? || admin? || public?
   end
 
+  def new?
+    user.present?
+  end
+
   def create?
     owned? || admin?
   end

@@ -19,7 +19,7 @@ class WorkPolicyTest < ActiveSupport::TestCase
 
   context 'general user' do
     should 'only be able to access your own works' do
-      current_user = users(:user)
+      current_user = users(:regular_user)
       work = Work.new_locked_ldp_object(owner: current_user.id)
 
       assert WorkPolicy.new(current_user, work).index?
@@ -33,7 +33,7 @@ class WorkPolicyTest < ActiveSupport::TestCase
     end
 
     should 'not have access to other works' do
-      current_user = users(:user)
+      current_user = users(:regular_user)
       another_user = users(:admin)
 
       work = Work.new_locked_ldp_object(owner: another_user.id, visibility: JupiterCore::VISIBILITY_PUBLIC)
