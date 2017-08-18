@@ -23,7 +23,6 @@ source 'https://rails-assets.org' do
 end
 
 gem 'activestorage'
-gem 'font-awesome-rails'
 
 # View stuff
 gem 'haml'
