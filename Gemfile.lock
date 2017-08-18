@@ -75,7 +75,6 @@ GEM
     ast (2.3.0)
     autoprefixer-rails (7.1.2.3)
       execjs
-    bcrypt (3.1.11)
     better_errors (2.1.1)
       coderay (>= 1.0.0)
       erubis (>= 2.6.6)
@@ -190,7 +189,7 @@ GEM
     mime-types-data (3.2016.0521)
     mini_magick (4.8.0)
     mini_portile2 (2.2.0)
-    minitest (5.10.2)
+    minitest (5.10.3)
     minitest-hooks (1.4.0)
     multi_json (1.12.1)
     multipart-post (2.0.0)
@@ -347,7 +346,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bcrypt (~> 3.1.7)
   better_errors
   binding_of_caller
   bootstrap (~> 4.0.0.alpha6)

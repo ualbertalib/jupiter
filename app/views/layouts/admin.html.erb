@@ -4,7 +4,7 @@
 
 <% content_for(:content) do %>
   <div class="row" >
-    <div class="col-2" >
+    <div class="col-md-2" >
       <h2>Admin</h2>
 
       <%= render 'sidebar_group', title: 'Items' do %>
@@ -13,7 +13,7 @@
       <% end %>
 
       <%= render 'sidebar_group', title: 'Users' do %>
-        <li><a href="">Manage Users</a></li>
+        <li><%= link_to 'Manage Users', admin_users_path %></li>
       <% end %>
 
 
@@ -35,10 +35,9 @@
       <%= render 'sidebar_group', title: 'Analytics' do %>
         <li><a href="">View Analytics</a></li>
       <% end %>
-
     </div>
 
-    <div class="col" >
+    <div class="col-md-10" >
       <%= yield  %>
     </div>
 

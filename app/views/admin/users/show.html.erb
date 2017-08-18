@@ -1,0 +1,106 @@
+<ol class="breadcrumb mb-5">
+  <li class="breadcrumb-item"><%= link_to t('admin.header'), admin_root_path %></li>
+  <li class="breadcrumb-item"><%= link_to t('admin.users.index.header'), admin_users_path %></li>
+  <li class="breadcrumb-item active"><%=@user.id %></li>
+</ol>
+
+<div class="float-right">
+  <% if policy([:admin, @user]).suspend? %>
+    <%= link_to(suspend_admin_user_path(@user), method: :patch,
+      class: 'btn btn-secondary',
+      data: { confirm: t('.suspend_dialog', user: @user.name) }) do %>
+      <%= fa_icon 'ban' %>
+      <%= t('.suspend_link_text') %>
+    <% end %>
+  <% end %>
+
+  <% if policy([:admin, @user]).unsuspend? %>
+    <%= link_to(unsuspend_admin_user_path(@user), method: :patch,
+      class: 'btn btn-secondary',
+      data: { confirm: t('.unsuspend_dialog', user: @user.name) }) do %>
+      <%= fa_icon 'check-circle' %>
+      <%= t('.unsuspend_link_text') %>
+    <% end %>
+  <% end %>
+
+  <% if policy([:admin, @user]).revoke_admin? %>
+    <%= link_to(revoke_admin_admin_user_path(@user), method: :patch,
+      class: 'btn btn-secondary',
+      data: { confirm: t('.revoke_admin_dialog', user: @user.name) }) do %>
+      <%= fa_icon 'minus-circle' %>
+      <%= t('.revoke_admin_link_text') %>
+    <% end %>
+  <% end %>
+
+  <% if policy([:admin, @user]).grant_admin? %>
+    <%= link_to(grant_admin_admin_user_path(@user), method: :patch,
+      class: 'btn btn-secondary',
+      data: { confirm: t('.grant_admin_dialog', user: @user.name) }) do %>
+      <%= fa_icon 'shield' %>
+      <%= t('.grant_admin_link_text') %>
+    <% end %>
+  <% end %>
+
+  <% if policy([:admin, @user]).impersonate? %>
+    <%= link_to(impersonate_admin_user_path(@user), method: :post,
+      class: 'btn btn-secondary',
+      data: { confirm: t('.impersonate_dialog', user: @user.name) }) do %>
+      <%= fa_icon 'user-secret' %>
+      <%= t('.impersonate_link_text') %>
+    <% end %>
+  <% end %>
+</div>
+
+<h1 class="mb-3"><%= @user.name %></h1>
+
+
+<dl class="row">
+  <dt class="col-sm-3"><%= t('.email')%></dt>
+  <dd class="col-sm-9">
+    <%= @user.email %>
+  </dd>
+
+  <dt class="col-sm-3"><%= t('.admin') %></dt>
+  <dd class="col-sm-9">
+    <%= @user.admin? %>
+  </dd>
+
+  <dt class="col-sm-3"><%= t('.suspended') %></dt>
+  <dd class="col-sm-9">
+    <%= @user.suspended? %>
+  </dd>
+
+  <dt class="col-sm-3"><%= t('.created_at') %></dt>
+  <dd class="col-sm-9">
+    <%= time_ago_in_words(@user.created_at) %>
+  </dd>
+
+  <dt class="col-sm-3"><%= t('.updated_at') %></dt>
+  <dd class="col-sm-9">
+    <%= time_ago_in_words(@user.updated_at) %>
+  </dd>
+</dl>
+
+<div class="row mt-3">
+  <h2 class="mb-3"><%= t('.works') %></h2>
+  <%# TODO sort and pagination this list %>
+  <div class="col-md-12">
+    <div class="list-group">
+      <% if @works.present? %>
+        <% @works.each do |work| %>
+          <div class='list-group-item list-group-item-action d-flex justify-content-between align-items-center'>
+            <%= link_to work.title, work_path(work) %>
+            <%= link_to edit_work_path(work), class: 'btn btn-secondary' do %>
+              <%= fa_icon 'pencil-square-o' %>
+              <%= t('.edit_work') %>
+              <% end %>
+          </div>
+        <% end %>
+      <% else %>
+        <div class='list-group-item'>
+          <%= t('.no_works_found') %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
