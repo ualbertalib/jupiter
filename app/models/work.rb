@@ -4,7 +4,7 @@ class Work < JupiterCore::LockedLdpObject
 
   VISIBILITY_EMBARGO = 'embargo'.freeze
 
-  has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
+  has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet, :sort]
   has_attribute :subject, ::RDF::Vocab::DC.subject, solrize_for: [:search, :facet]
   has_attribute :creator, ::RDF::Vocab::DC.creator, solrize_for: [:search, :facet]
   has_attribute :contributor, ::RDF::Vocab::DC.contributor, solrize_for: [:search, :facet]
