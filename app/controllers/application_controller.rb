@@ -15,6 +15,13 @@ class ApplicationController < ActionController::Base
   # Returns the current logged-in user (if any).
   def current_user
     @current_user ||= User.find_by(id: session[:user_id])
+
+    if @current_user && @current_user.suspended?
+      log_off_user
+      return redirect_to root_path, alert: t('login.user_suspended')
+    end
+
+    @current_user
   end
 
   # Let views be able to access current_user
@@ -34,12 +41,18 @@ class ApplicationController < ActionController::Base
 
   def user_not_authorized
     if current_user.present?
-      flash[:alert] = I18n.t('authorization.user_not_authorized')
-      redirect_to root_path
+      flash[:alert] = t('authorization.user_not_authorized')
+
+      # referer gets funky with omniauth and all the redirects it does,
+      # so handle this sanely by ignoring any referer coming from omniauth (/auth/) path
+      if request.referer && request.referer !~ /auth/
+        redirect_to request.referer
+      else
+        redirect_to root_path
+      end
     else
       session[:forwarding_url] = request.original_url if request.get?
-      flash[:alert] = I18n.t('authorization.user_not_authorized_try_logging_in')
-      redirect_to login_url
+      redirect_to login_url, alert: t('authorization.user_not_authorized_try_logging_in')
     end
   end
 

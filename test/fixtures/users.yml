@@ -1,15 +1,24 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-# This model initially had no columns defined. If you add columns to the
-# model remove the '{}' from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
-#
 admin:
-  display_name: Admin
-  email: admin@example.com
+  name: Administrator
+  email: administrator@example.com
   admin: true
+  suspended: false
 
-user:
-  display_name: Random User
-  email: random_user@example.com
+admin_user:
+  name: Tyrion Lannister
+  email: tyrion_lannister@example.com
+  admin: true
+  suspended: false
+
+regular_user:
+  name: John Snow
+  email: john_snow@example.com
   admin: false
+  suspended: false
+
+suspended_user:
+  name: Joffrey Baratheon
+  email: joffrey_baratheon@example.com
+  admin: false
+  suspended: true

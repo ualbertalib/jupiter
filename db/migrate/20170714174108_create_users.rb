@@ -5,9 +5,6 @@ class CreateUsers < ActiveRecord::Migration[5.1]
       t.string   :display_name, null: false
       t.boolean  :admin, null: false, default: false
 
-      # avatar?
-      # orcid?
-
       # login stats columns
       t.integer  :sign_in_count, default: 0, null: false
       t.datetime :current_sign_in_at

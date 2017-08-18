@@ -44,8 +44,9 @@ en:
         logout: 'Logout'
         profile: 'Your Profile'
         settings: 'Settings'
+        stop_impersonating: 'Stop Impersonating'
       user_dropdown:
-        heading_html: "Signed in as <strong>%{display_name}</strong>"
+        heading_html: "Signed in as <strong>%{name}</strong>"
       communities:
         updated: 'Community updated'
         deleted: 'Community deleted'
@@ -60,10 +61,58 @@ en:
       description_html: 'ERA is now a <a href="https://ist.ualberta.ca/services/ccid-passwords/campus-computing-id">CCID</a> (Campus Computing ID) enabled service. If you have a CCID please use it to log in to ERA.'
       saml_link: 'Sign in with University of Alberta CCID (Campus Computing ID)'
       developer_link: Sign in with Developer Account
-  omniauth:
-    error: 'There is an error authorizing from your CCID account.'
+    stop_impersonating:
+      flash: "You are no longer impersonating %{original_user}"
+    destroy:
+      signed_out: "Signed out successfully."
+  login:
+    error: 'There was an error authenticating from your account. Please try again, or contact a staff member.'
     success: "Successfully authenticated from %{kind} account."
-    signed_out: "Signed out successfully."
+    user_suspended: 'Sorry, your ERA account has been suspended. Please contact the ERA HelpDesk at erahelp@ualberta.ca for more information.'
   authorization:
     user_not_authorized: 'Sorry, you are not authorized to perform this action.'
     user_not_authorized_try_logging_in: 'Sorry, you are not authorized to perform this action. Try logging in?'
+  admin:
+    header: 'Admin'
+    users:
+      show:
+        email: 'Email'
+        suspended: 'Suspended?'
+        admin: 'Admin?'
+        created_at: 'Created At'
+        updated_at: 'Updated At'
+        suspend_link_text: 'Suspend User'
+        suspend_dialog: "Are you sure you want to suspend %{user}?"
+        suspend_flash: 'User has successfully been suspended'
+        unsuspend_link_text: 'Unsuspend User'
+        unsuspend_dialog: "Are you sure you want to unsuspend %{user}?"
+        unsuspend_flash: 'User has successfully been unsuspended'
+        grant_admin_link_text: 'Grant Admin Access'
+        grant_admin_dialog: "Are you sure you want to grant admin abilities to %{user}?"
+        grant_admin_flash: 'User has successfully been granted admin access'
+        revoke_admin_link_text: 'Revoke Admin Access'
+        revoke_admin_dialog: "Are you sure you want to revoke admin abilities from %{user}?"
+        revoke_admin_flash: 'User has successfully been revoked admin access'
+        impersonate_link_text: 'Impersonate'
+        impersonate_dialog: "Are you sure you want to impersonate %{user}?"
+        impersonate_flash: "You are now impersonating %{user}"
+        no_works_found: 'There are no works for this user'
+        works: 'Works'
+        edit_work: 'Edit'
+      index:
+        no_users_found: 'We could not find any users matching your search.'
+        display_users_count: "Displaying %{users_count} of %{total_users_count} total users."
+        search_placeholder: 'Search by email or name...'
+        search_button: 'Search Users'
+        header: 'Users'
+  communities:
+    index:
+      header: 'Communities'
+      create_new_community: 'Create New Community'
+    new:
+      header: 'Create Community'
+    show:
+      create_new_collection: 'Create New Collection'
+      edit: 'Edit'
+      no_collections: 'There are no Collections in this Community'
+    title: 'Community: %{title}'

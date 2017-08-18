@@ -32,9 +32,12 @@
           <form class="form-inline">
             <div class="input-group">
               <%= search_field_tag 'search', nil, placeholder: t('.search.placeholder'), class: "form-control" %>
-              <button type="submit" class="input-group-addon btn btn-outline-secondary">
-                <%= link_to t('.search.button_text') %>
-              </button>
+              <div class="input-group-btn">
+                <button type="submit" class="btn btn-secondary">
+                  <%= fa_icon 'search' %>
+                  <%= t('.search.button_text') %>
+                </button>
+              </div>
             </div>
           </form>
         </li>
@@ -48,18 +51,23 @@
               data-toggle="dropdown"
               aria-haspopup="true"
               aria-expanded="false">
-              <%= current_user.display_name %> <span class="caret"></span>
+              <%= current_user.name %> <span class="caret"></span>
             </a>
 
             <div role="menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="#jupiter-user-nav-downdown">
               <div class="dropdown-header">
-                <%= t('.user_dropdown.heading_html', display_name: current_user.display_name) %>
+                <%= t('.user_dropdown.heading_html', name: current_user.name) %>
               </div>
               <div class="dropdown-divider"></div>
               <%= link_to t('.links.profile'), "#TODO", class: 'dropdown-item' %>
-              <div class="dropdown-divider"></div>
               <%= link_to t('.links.settings'), "#TODO", class: 'dropdown-item' %>
+              <div class="dropdown-divider"></div>
               <%= link_to t('.links.logout'), logout_path, class: 'dropdown-item' %>
+
+              <% if session[:impersonator_id] %>
+                <div class="dropdown-divider"></div>
+                <%= link_to t('.links.stop_impersonating'), stop_impersonating_path, method: :post, class: 'dropdown-item' %>
+              <% end %>
 
               <% if current_user.admin? %>
                 <div class="dropdown-divider"></div>

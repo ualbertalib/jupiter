@@ -27,10 +27,14 @@ class SessionsController < ApplicationController
 
       if user.nil?
         user = User.create(email: auth_hash.info.email,
-                           display_name: auth_hash.info.name)
+                           name: auth_hash.info.name)
       end
 
       user.identities.create(provider: auth_hash.provider, uid: auth_hash.uid)
+    end
+
+    if user && user.suspended?
+      return redirect_to login_path, alert: t('login.user_suspended')
     end
 
     # Sign the user in, if they exist
@@ -38,21 +42,35 @@ class SessionsController < ApplicationController
 
     if current_user.present?
       # Was signed in successfully, redirect them back to where they came from or to the homepage
-      flash[:notice] = I18n.t('omniauth.success', kind: auth_hash.provider)
+      flash[:notice] = t('login.success', kind: auth_hash.provider)
       redirect_back_to
     else
       # Else something went wrong along the way with omniauth
-      redirect_to login_path, alert: I18n.t('omniauth.error')
+      redirect_to login_path, alert: t('login.error')
     end
   end
 
   def destroy
     log_off_user
-    redirect_to root_url, notice: I18n.t('omniauth.signed_out')
+    redirect_to root_url, notice: t('.signed_out')
   end
 
   def failure
-    redirect_to login_path, alert: I18n.t('omniauth.error')
+    redirect_to login_path, alert: t('login.error')
+  end
+
+  def stop_impersonating
+    impersonator = User.find(session[:impersonator_id])
+
+    raise Pundit::NotAuthorizedError if !impersonator.admin? || impersonator.suspended?
+
+    original_user = current_user
+    sign_in(impersonator)
+    logger.info("Admin '#{impersonator.name}' has stopped impersonating '#{original_user.name}'")
+
+    session[:impersonator_id] = nil
+
+    redirect_to admin_user_path(original_user), notice: t('.flash', original_user: original_user.name)
   end
 
 end
