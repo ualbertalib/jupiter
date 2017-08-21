@@ -25,18 +25,18 @@ class CommunitiesController < ApplicationController
   end
 
   def create
-    @community = Community.new_locked_ldp_object(permitted_attributes(Community))
+    @community =
+      Community.new_locked_ldp_object(permitted_attributes(Community)
+                                       .merge(owner: current_user.name))
     authorize @community
-    @community.unlock_and_fetch_ldp_object do |uo|
-      uo.owner = current_user.name
-      uo.save!
-    end
+    @community.unlock_and_fetch_ldp_object(&:save!)
 
     redirect_to @community
   end
 
   def update
     @community = Community.find(params[:id])
+    authorize @community
     @community.unlock_and_fetch_ldp_object do |unlocked_community|
       unlocked_community.update!(permitted_attributes(Community))
     end
