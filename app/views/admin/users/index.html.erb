@@ -1,0 +1,67 @@
+<ol class="breadcrumb mb-5">
+  <li class="breadcrumb-item"><%= link_to t('admin.header'), admin_root_path %></li>
+  <li class="breadcrumb-item active"><%= t('.header') %></li>
+</ol>
+
+
+<h1 class="m-3"><%= t('.header') %></h1>
+
+<%= form_tag admin_users_path, method:'get' do %>
+  <%# preserve previous sort params when submitting form %>
+  <%= hidden_field_tag :direction, params[:direction] if params[:direction] %>
+  <%= hidden_field_tag :sort, params[:sort] if params[:sort]%>
+
+  <div class="input-group">
+    <%= search_field_tag :query, params[:query], placeholder: t('.search_placeholder'), class: 'form-control' %>
+    <span class="input-group-btn">
+      <%= button_tag name: nil, type: 'submit', class: "btn btn-secondary" do %>
+      <%= fa_icon 'search' %>
+       <%= t('.search_button') %>
+      <% end %>
+    </span>
+  </div>
+<% end %>
+
+
+<p class="text-center"><%= t('.display_users_count', users_count: @users.count, total_users_count: User.count) %></p>
+
+<%# Bug in current bootstrap with table-responsive not being 100%,
+wrapping in div is a workaround https://github.com/twbs/bootstrap/issues/21577 %>
+<div class="table-responsive">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th><%= sortable 'id' %></th>
+        <th><%= sortable 'email' %></th>
+        <th><%= sortable 'name' %></th>
+        <th><%= sortable 'created_at' %></th>
+        <th><%= sortable 'updated_at' %></th>
+        <th><%= sortable 'admin' %></th>
+        <th><%= sortable 'suspended' %></th>
+      </tr>
+    </thead>
+    <tbody>
+    <% if @users.present? %>
+      <% @users.each do |user| %>
+        <tr>
+          <th scope="row"><%= user.id %></th>
+          <td><%= link_to user.email, admin_user_path(user) %></td>
+          <td><%= user.name %></td>
+          <td><%= time_ago_in_words(user.created_at) %></td>
+          <td><%= time_ago_in_words(user.updated_at) %></td>
+          <td><%= user.admin %></td>
+          <td><%= user.suspended %></td>
+        </tr>
+      <% end %>
+    <% else %>
+      <tr>
+        <td colspan="7" class="text-center">
+          <%= t('.no_users_found') %>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
+
+<%= paginate @users %>

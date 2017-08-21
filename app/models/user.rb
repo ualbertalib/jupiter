@@ -8,6 +8,17 @@ class User < ApplicationRecord
   validates :email, presence: true,
                     uniqueness: { case_sensitive: false }
 
-  validates :display_name, presence: true
+  validates :name, presence: true
+
+  scope :search, lambda { |query|
+    if query.present?
+      where('lower(email) LIKE ?', "%#{query.downcase}%")
+        .or(where('lower(name) LIKE ?', "%#{query.downcase}%"))
+    end
+  }
+
+  def works
+    Work.where(owner: id)
+  end
 
 end

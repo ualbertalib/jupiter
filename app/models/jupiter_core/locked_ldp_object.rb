@@ -220,8 +220,8 @@ module JupiterCore
     end
 
     # attr, a string attribute name and sort order
-    def self.sort(attr)
-      all.sort(attr)
+    def self.sort(attr, order = :asc)
+      all.sort(attr, order)
     end
 
     def self.valid_visibilities
@@ -357,6 +357,7 @@ module JupiterCore
           attr_accessor :owning_object
 
           validate :visibility_must_be_known
+          validates :owner, presence: true
 
           def visibility_must_be_known
             return true if visibility.present? && owning_object.class.valid_visibilities.include?(visibility)
