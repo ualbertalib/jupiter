@@ -38,12 +38,12 @@
 
   <h2 class="mb-3">Statistics</h2>
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-3">
       <div class="card text-center">
-      <div class="card-block">
+      <div class="card-body">
         <h4 class="card-title">Works</h4>
         <div class="data">
-          <%= link_to '#todo', class: 'card-text' do %>
+          <%= link_to '#todo', class: 'card-link' do %>
           <%#= admin_works_path do %>
               <%= number_with_delimiter(Work.count) %>
           <% end %>
@@ -51,32 +51,32 @@
         </div>
       </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
       <div class="card text-center">
-        <div class="card-block">
+        <div class="card-body">
           <h4 class="card-title">Users</h4>
-          <%= link_to admin_users_path,  class: 'card-text' do %>
+          <%= link_to admin_users_path,  class: 'card-link' do %>
               <%= number_with_delimiter(User.count) %>
           <% end %>
         </div>
       </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
       <div class="card text-center">
-        <div class="card-block">
-        <h4 class="card-title">Communities</h4>
-          <%= link_to '#todo', class: 'card-text' do %>
-          <%#= link_to admin_communities_path do %>
-              <%= number_with_delimiter(Community.count) %>
-          <% end %>
+        <div class="card-body">
+          <h4 class="card-title">Communities</h4>
+            <%= link_to '#todo', class: 'card-link' do %>
+            <%#= link_to admin_communities_path do %>
+                <%= number_with_delimiter(Community.count) %>
+            <% end %>
         </div>
       </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
       <div class="card text-center">
-        <div class="card-block">
+        <div class="card-body">
           <h4 class="card-title">Collections</h4>
-          <%= link_to '#todo', class: 'card-text' do %>
+          <%= link_to '#todo', class: 'card-link' do %>
           <%#= link_to admin_collections_path do %>
               <%= number_with_delimiter(Collection.count) %>
           <% end %>
