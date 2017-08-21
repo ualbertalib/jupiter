@@ -1,22 +1,24 @@
-<header class="navbar navbar-inverse fixed-top navbar-toggleable-md bg-primary">
+<header class="navbar navbar-dark fixed-top navbar-expand-md bg-primary">
   <nav class="container">
 
-    <div class="d-flex justify-content-between">
-      <%= link_to t('site_name'), root_path, class: 'navbar-brand' %>
+    <%= link_to root_path, class: 'navbar-brand' do %>
+      <%# TODO: temporary logo for now...replace me! %>
+      <%= image_tag 'mc_360.png', width: '30', height: '30', class: 'd-inline-block align-top', alt: 'ERA logo' %>
+      <%= t('site_name') %>
+    <% end %>
 
-      <button type="button"
-              class="navbar-toggler collapsed btn btn-primary"
-              data-toggle="collapse"
-              data-target="#jupiter-main-nav"
-              aria-controls="jupiter-main-nav"
-              aria-expanded="false"
-              aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-    </div>
+    <button type="button"
+            class="navbar-toggler"
+            data-toggle="collapse"
+            data-target="#jupiter-main-nav"
+            aria-controls="jupiter-main-nav"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-    <div class="navbar-collapse collapse" id="jupiter-main-nav" aria-expanded="false">
-      <ul class="nav navbar-nav mr-auto">
+    <div class="collapse navbar-collapse" id="jupiter-main-nav" aria-expanded="false">
+      <ul class="navbar-nav mr-auto">
         <li role="presentation" class="nav-item">
           <%= link_to t('.links.communities'), communities_path, class: "nav-link" %>
         </li>
@@ -26,7 +28,7 @@
         </li>
       </ul>
 
-      <ul class="nav navbar-nav pull-xs-right mr-2">
+      <ul class="navbar-nav pull-xs-right mr-2">
         <li role="presentation" class="nav-item mr-3">
 
           <form class="form-inline">
