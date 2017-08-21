@@ -1,5 +1,7 @@
 class CollectionsController < ApplicationController
 
+  before_action -> { authorize :application, :admin? }, except: [:index, :show]
+
   def show
     @collection = Collection.find(params[:id])
     authorize @collection
@@ -15,7 +17,7 @@ class CollectionsController < ApplicationController
   def create
     @collection =
       Collection.new_locked_ldp_object(permitted_attributes(Collection)
-                                        .merge(owner: current_user.name))
+                                        .merge(owner: current_user&.id))
     authorize @collection
     @collection.unlock_and_fetch_ldp_object(&:save!)
 

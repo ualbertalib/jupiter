@@ -1,5 +1,7 @@
 class CommunitiesController < ApplicationController
 
+  before_action -> { authorize :application, :admin? }, except: [:index, :show]
+
   def show
     @community = Community.find(params[:id])
     authorize @community
@@ -27,7 +29,7 @@ class CommunitiesController < ApplicationController
   def create
     @community =
       Community.new_locked_ldp_object(permitted_attributes(Community)
-                                       .merge(owner: current_user.name))
+                                       .merge(owner: current_user&.id))
     authorize @community
     @community.unlock_and_fetch_ldp_object(&:save!)
 
