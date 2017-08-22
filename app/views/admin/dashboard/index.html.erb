@@ -93,14 +93,13 @@
       <h4>Latest works</h4>
       <ul class="list-group">
         <% @works.each do |work| %>
-          <li class="list-group-item justify-content-between">
-            <%#= link_to [:admin, work] %>
+         <%# TODO: FIX links when work CRUD is completed %>
+          <%= link_to work, class: "list-group-item  list-group-item-action justify-content-between" do %>
             <%= work.title %>
-            <%# end %>
             <span class="badge badge-default badge-pill">
               <%= time_ago_in_words(work.date_created) %>
             </span>
-          </li>
+          <% end %>
         <% end %>
       </ul>
     </div>

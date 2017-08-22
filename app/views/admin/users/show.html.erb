@@ -81,11 +81,31 @@
   </dd>
 </dl>
 
-<h2 class="mb-3"><%= t('.works') %></h2>
 
-<div class="row mt-3">
-  <%# TODO sort and pagination this list %>
+
+<div class="row my-5">
   <div class="col-md-12">
+    <%# TODO: FIX links when work CRUD is completed %>
+    <div class="dropdown pull-right">
+      <button class="btn btn-secondary dropdown-toggle"
+       type="button"
+       id="sortWorksDropdown"
+       data-toggle="dropdown"
+       aria-haspopup="true"
+       aria-expanded="false">
+        <%= t('.sort') %>
+      </button>
+      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="sortWorksDropdown">
+        <h6 class="dropdown-header"><%= t('.sort_by') %></h6>
+       <%= works_sort_link 'date_created', 'desc', t('.latest') %>
+       <%= works_sort_link 'date_created', 'asc', t('.oldest') %>
+       <%= works_sort_link 'title', 'asc', t('.title_asc') %>
+       <%= works_sort_link 'title', 'desc', t('.title_desc') %>
+      </div>
+    </div>
+    <h2 class="mb-3"><%= t('.works') %></h2>
+
+    <p class="text-center"><%= t('.display_works_count', works_count: @works.count, total_works_count: @user.works.count) %></p>
     <div class="list-group">
       <% if @works.present? %>
         <% @works.each do |work| %>
@@ -97,6 +117,8 @@
               <% end %>
           </div>
         <% end %>
+        <%#= TODO: `paginate @works` is throwing errors? %>
+        <%#= paginate @works %>
       <% else %>
         <div class='list-group-item'>
           <%= t('.no_works_found') %>
