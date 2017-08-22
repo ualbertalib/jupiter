@@ -8,4 +8,9 @@ class CommunityTest < ActiveSupport::TestCase
     assert_equal c.visibility, JupiterCore::VISIBILITY_PUBLIC
   end
 
+  test 'needs title' do
+    c = Community.new_locked_ldp_object(owner: users(:admin).id)
+    assert !c.valid?
+  end
+
 end
