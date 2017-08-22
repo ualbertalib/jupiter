@@ -17,8 +17,7 @@ class Admin::UsersController < Admin::AdminController
   def show
     @works = @user.works
     @works = @works.sort(work_sort_column, sort_direction) if work_sort_column && sort_direction
-    @works = @works.page params[:page] if params[:page]
-    @works
+    @works = @works.page params[:page]
   end
 
   def suspend

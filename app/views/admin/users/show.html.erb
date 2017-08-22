@@ -106,7 +106,7 @@
     <h2 class="mb-3"><%= t('.works') %></h2>
 
     <p class="text-center"><%= t('.display_works_count', works_count: @works.count, total_works_count: @user.works.count) %></p>
-    <div class="list-group">
+    <div class="list-group mb-3">
       <% if @works.present? %>
         <% @works.each do |work| %>
           <div class='list-group-item list-group-item-action d-flex justify-content-between align-items-center'>
@@ -117,13 +117,12 @@
               <% end %>
           </div>
         <% end %>
-        <%#= TODO: `paginate @works` is throwing errors? %>
-        <%#= paginate @works %>
       <% else %>
         <div class='list-group-item'>
           <%= t('.no_works_found') %>
         </div>
       <% end %>
     </div>
+    <%= paginate @works %>
   </div>
 </div>
