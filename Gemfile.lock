@@ -346,7 +346,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  better_errors
+  better_errors (>= 2.3.0)
   binding_of_caller
   bootstrap (~> 4.0.0.beta)
   capybara (~> 2.13)
