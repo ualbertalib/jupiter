@@ -7,7 +7,7 @@ class CommunitiesControllerTest < ActionDispatch::IntegrationTest
     sign_in_as @admin
 
     # TODO: setup proper fixtures for LockedLdpObjects
-    @community = Community.new_locked_ldp_object(title: 'Nice book',
+    @community = Community.new_locked_ldp_object(title: 'Nice community',
                                                  owner: @admin.id)
     @community.unlock_and_fetch_ldp_object(&:save!)
   end
@@ -24,7 +24,7 @@ class CommunitiesControllerTest < ActionDispatch::IntegrationTest
 
   test 'should create community' do
     assert_difference('Community.count') do
-      post communities_url, params: { community: { title: 'New Book' } }
+      post communities_url, params: { community: { title: 'New community' } }
     end
 
     # TODO: implement a method to fetch most recently created, e.g. 'last'
@@ -42,7 +42,7 @@ class CommunitiesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should update community' do
-    patch community_url(@community), params: { community: { title: 'Updated Book' } }
+    patch community_url(@community), params: { community: { title: 'Updated community' } }
     assert_redirected_to community_url(@community)
   end
 
