@@ -56,7 +56,8 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
   end
 
   test 'attribute definitions are working' do
-    assert_equal [:creator, :id, :member_of_paths, :owner, :title, :visibility], @@klass.attribute_names.sort
+    assert_equal [:creator, :id, :member_of_paths, :owner, :record_created_at, :title, :visibility],
+                 @@klass.attribute_names.sort
   end
 
   test 'attribute metadata is being tracked properly' do
@@ -154,8 +155,8 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
   test '#inspect works as expected' do
     title = generate_random_string
     obj = @@klass.new_locked_ldp_object(title: title)
-    assert_equal "#<AnonymousClass id: nil, visibility: nil, owner: nil, title: \"#{title}\", creator: nil,"\
-                 ' member_of_paths: []>', obj.inspect
+    assert_equal "#<AnonymousClass id: nil, visibility: nil, owner: nil, record_created_at: nil, title: \"#{title}\","\
+                 ' creator: nil, member_of_paths: []>', obj.inspect
   end
 
   test 'attribute inheritance is working' do
@@ -163,9 +164,11 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
       has_attribute :subject, ::RDF::Vocab::DC.subject, solrize_for: :search
     end
 
-    assert_equal [:creator, :id, :member_of_paths, :owner, :subject, :title, :visibility], subclass.attribute_names.sort
+    assert_equal [:creator, :id, :member_of_paths, :owner, :record_created_at, :subject, :title, :visibility],
+                 subclass.attribute_names.sort
     # ensure mutating subclass attribute lists isn't trickling back to the superclass
-    assert_equal [:creator, :id, :member_of_paths, :owner, :title, :visibility], @@klass.attribute_names.sort
+    assert_equal [:creator, :id, :member_of_paths, :owner, :record_created_at, :title, :visibility],
+                 @@klass.attribute_names.sort
   end
 
   test 'attributes are declaring properly' do
@@ -207,9 +210,15 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
 
     obj = @@klass.new_locked_ldp_object(title: first_title, creator: creator, owner: users(:regular_user).id,
                                         visibility: 'public')
-    obj.unlock_and_fetch_ldp_object(&:save!)
 
-    assert obj.id.present?
+    assert obj.record_created_at.nil?
+
+    freeze_time do
+      obj.unlock_and_fetch_ldp_object(&:save!)
+      assert obj.id.present?
+      assert obj.record_created_at.present?
+      assert_equal obj.record_created_at, Time.now
+    end
 
     assert @@klass.all.count == 1
 
@@ -231,6 +240,9 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     end
 
     assert @@klass.find(obj.id).present?
+
+    assert_equal @@klass.first.id, obj.id
+    assert_equal @@klass.last.id, obj.id
   end
 
   #  (╯°□°）╯︵ ┻━┻)

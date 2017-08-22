@@ -10,6 +10,10 @@ require 'shoulda'
 
 class ActiveSupport::TestCase
 
+  def freeze_time(&block)
+    travel_to DateTime.now, &block
+  end
+
   include Minitest::Hooks
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all

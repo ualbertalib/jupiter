@@ -26,3 +26,4 @@
   terms:
     - visibility
     - owner
+    - record_created_at
