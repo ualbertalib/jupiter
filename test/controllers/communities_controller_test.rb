@@ -12,6 +12,10 @@ class CommunitiesControllerTest < ActionDispatch::IntegrationTest
     @community.unlock_and_fetch_ldp_object(&:save!)
   end
 
+  teardown do
+    ActiveFedora::Cleaner.clean!
+  end
+
   test 'should get index' do
     get communities_url
     assert_response :success

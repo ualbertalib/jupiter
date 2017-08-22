@@ -16,6 +16,10 @@ class CollectionsControllerTest < ActionDispatch::IntegrationTest
     @collection.unlock_and_fetch_ldp_object(&:save!)
   end
 
+  teardown do
+    ActiveFedora::Cleaner.clean!
+  end
+
   # Note: this controller has no #index action
 
   test 'should get new' do
