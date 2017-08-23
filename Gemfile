@@ -15,12 +15,7 @@ gem 'jquery-rails'
 gem 'turbolinks', '~> 5'
 gem 'uglifier', '>= 1.3.0'
 
-gem 'bootstrap', '~> 4.0.0.alpha6'
-# Review this after and update once bootstrap V4.0.0.alpha6+ come out,
-#  latest versions use popper instead of tether
-source 'https://rails-assets.org' do
-  gem 'rails-assets-tether', '>= 1.3.3'
-end
+gem 'bootstrap', '~> 4.0.0.beta'
 
 # View stuff
 gem 'haml'
