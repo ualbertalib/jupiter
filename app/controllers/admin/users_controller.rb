@@ -1,6 +1,6 @@
 class Admin::UsersController < Admin::AdminController
 
-  helper_method :sort_column, :sort_direction
+  helper_method :user_sort_column, :sort_direction
 
   before_action :fetch_user, only: [:show,
                                     :suspend,
@@ -11,12 +11,13 @@ class Admin::UsersController < Admin::AdminController
 
   def index
     # TODO: Add filters for admin/suspended/active/no works etc?
-    @users = User.search(params[:query]).order("#{sort_column} #{sort_direction}").page params[:page]
+    @users = User.search(params[:query]).order("#{user_sort_column} #{sort_direction}").page params[:page]
   end
 
   def show
-    # TODO: need sort and pagination, review after PR#66
-    @works = @user.works # TODO: .sort(params[:sort_column], order=params[sort_direction]).page params[:page]
+    @works = @user.works
+    @works = @works.sort(work_sort_column, sort_direction) if work_sort_column && sort_direction
+    @works = @works.page params[:page]
   end
 
   def suspend
@@ -82,8 +83,12 @@ class Admin::UsersController < Admin::AdminController
     @user = User.find(params[:id])
   end
 
-  def sort_column
+  def user_sort_column
     User.column_names.include?(params[:sort]) ? params[:sort] : 'email'
+  end
+
+  def work_sort_column
+    ['title', 'date_created'].include?(params[:sort]) ? params[:sort] : 'date_created'
   end
 
   def sort_direction

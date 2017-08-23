@@ -95,14 +95,13 @@
       <h4>Latest works</h4>
       <ul class="list-group">
         <% @works.each do |work| %>
-          <li class="list-group-item justify-content-between">
-            <%#= link_to [:admin, work] %>
+         <%# TODO: FIX links when work CRUD is completed %>
+          <%= link_to work, class: "list-group-item list-group-item-action d-flex justify-content-between" do %>
             <%= work.title %>
-            <%# end %>
-            <span class="badge badge-default badge-pill">
+            <span class="badge badge-secondary">
               <%= time_ago_in_words(work.date_created) %>
             </span>
-          </li>
+          <% end %>
         <% end %>
       </ul>
     </div>
@@ -110,9 +109,9 @@
       <h4>Latest users</h4>
       <div class="list-group">
         <% @users.each do |user| %>
-          <%= link_to [:admin, user], class: "list-group-item  list-group-item-action justify-content-between" do %>
+          <%= link_to [:admin, user], class: "list-group-item list-group-item-action d-flex justify-content-between" do %>
             <%= user.name %>
-            <span class="badge badge-default badge-pill">
+            <span class="badge badge-secondary">
               <%# should be last_sign_in_at instead %>
               <%= time_ago_in_words(user.updated_at) %>
             </span>
