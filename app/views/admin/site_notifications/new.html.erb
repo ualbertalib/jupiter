@@ -1,3 +1,5 @@
+<% provide(:page_title, "Manage Notifications | #{t('admin.header')}") %>
+
 <h4>Manage Notifications</h4>
   <%= simple_form_for [:admin, @new_notification] do |f| %>
     <%= f.input :message %>

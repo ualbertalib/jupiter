@@ -1,3 +1,5 @@
+- provide(:page_title, @work.title)
+
 %h2.mt-3="Work: #{@work.title}"
 .row.mt-3
 	.col
@@ -6,7 +8,7 @@
 				.list-group-item="#{name.titlecase} : #{value}"
 
 			.list-group-item.flex-column
-				Member of: 
+				Member of:
 				- @work.member_of_paths.each do |path|
 					.d-flex
 						=to_named_path(path)

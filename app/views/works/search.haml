@@ -1,3 +1,6 @@
+- provide(:page_title, 'Search Work')
+
+
 - if @results.count > 0
 	%h2.mt-3 Found #{@results.count} results
 	.row.mt-3
@@ -12,7 +15,7 @@
 							.row
 								.col
 									#{link_to name, ''}, #{count}
- 
+
 		.col-md-10
 			- @results.results.each do |result|
 				.row
