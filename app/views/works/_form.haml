@@ -18,8 +18,13 @@
   .file_upload
     .row
       .col-6
-        = f.input :file, as: :file, label: 'File: ', input_html: {name: 'work[file][]'}
+        = f.input :file,
+                  as: :file,
+                  label: 'File: ',
+                  input_html: {name: 'work[file][]'}
       .col-6
-        = link_to 'Add another file', '#', class: 'btn btn-secondary add-file'
+        = link_to 'Add another file',
+                  '#',
+                  class: 'btn btn-secondary add-file'
 
   = f.button :submit
