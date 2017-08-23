@@ -2,26 +2,26 @@
 
 %h2.mt-3="Work: #{@work.title}"
 .row.mt-3
-	.col
-		.list-group
-			- @work.display_attributes.each do |name, value|
-				.list-group-item="#{name.titlecase} : #{value}"
+  .col
+    .list-group
+      - @work.display_attributes.each do |name, value|
+        .list-group-item="#{name.titlecase} : #{value}"
 
-			.list-group-item.flex-column
-				Member of:
-				- @work.member_of_paths.each do |path|
-					.d-flex
-						=to_named_path(path)
+      .list-group-item.flex-column
+        Member of:
+        - @work.member_of_paths.each do |path|
+          .d-flex
+            =to_named_path(path)
 .row.mt-3
-	.col
-		%h4 Contains files:
-		%table.table
-			%thead
-				%tr
-					%th FileSet
-					%th Original Filename
-					%th MIME Type
-			%tbody
+  .col
+    %h4 Contains files:
+    %table.table
+      %thead
+        %tr
+          %th FileSet
+          %th Original Filename
+          %th MIME Type
+      %tbody
 -# 				- @work.file_sets.each_with_index do |fs,idx|
 -# 					- fs.files.each do |file|
 -# 						%tr
@@ -29,5 +29,7 @@
 -# 							%td=file.original_name
 -# 							%td=file.mime_type
 -# .row.mt-3
-	.col
-		= link_to 'Edit', edit_work_path(@work), class: 'btn btn-primary pull-right'
+  .col
+    = link_to 'Edit',
+              edit_work_path(@work),
+              class: 'btn btn-primary pull-right'
