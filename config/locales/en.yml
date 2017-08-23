@@ -99,6 +99,14 @@ en:
         no_works_found: 'There are no works for this user'
         works: 'Works'
         edit_work: 'Edit'
+        display_works_count: "Displaying %{works_count} of %{total_works_count} total works."
+        # TODO: most of these are generic enough to be moved up in a common namespace
+        sort: 'Sort'
+        sort_by: 'Sort options'
+        latest: 'Latest'
+        oldest: 'Oldest'
+        title_asc: 'Title (A to Z)'
+        title_desc: 'Title (Z to A)'
       index:
         no_users_found: 'We could not find any users matching your search.'
         display_users_count: "Displaying %{users_count} of %{total_users_count} total users."
