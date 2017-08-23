@@ -22,9 +22,10 @@ gem 'haml'
 gem 'simple_form'
 
 # Hydra stuff
+gem 'active-fedora', github: 'mbarnett/active_fedora', branch: 'fix_types_literally_do_nothing'
 gem 'hydra-works'
 gem 'rdf-vocab'
-gem 'solrizer', github: 'mbarnett/solrizer', branch: 'solrizable_path_types'
+gem 'solrizer', github: 'mbarnett/solrizer', branch: 'literally_types'
 
 # Database stuff
 gem 'mysql2', '>= 0.3.18', '< 0.5'

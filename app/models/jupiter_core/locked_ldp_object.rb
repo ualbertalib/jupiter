@@ -84,6 +84,8 @@ module JupiterCore
                         %Q("#{val}")
                       elsif val.nil?
                         'nil'
+                      elsif val.is_a?(DateTime)
+                        val.utc.iso8601(3)
                       elsif val.is_a?(Enumerable) && val.empty?
                         '[]'
                       else
@@ -189,15 +191,15 @@ module JupiterCore
       new(solr_doc: results.first)
     end
 
-    def self.count
-      results_count, _ = JupiterCore::Search.perform_solr_query(q: '', restrict_to_model: derived_af_class, rows: 0)
-      results_count
-    end
-
     # Returns an array of all +LockedLDPObject+ in the LDP
     # def self.all(limit:, offset: )
     def self.all
       JupiterCore::DeferredSolrQuery.new(self)
+    end
+
+    # Integer, the number of records in Solr/Fedora
+    def self.count
+      all.count
     end
 
     # Accepts a hash of name-value pairs to query for, and returns an Array of matching +LockedLDPObject+
@@ -222,6 +224,16 @@ module JupiterCore
     # attr, a string attribute name and sort order
     def self.sort(attr, order = :asc)
       all.sort(attr, order)
+    end
+
+    # the least recently created record in Solr, as determined by the record_created_at timestamp
+    def self.first
+      all.limit(1).sort(:record_created_at, :asc).first
+    end
+
+    # the most recently created record in Solr, as determined by the record_created_at timestamp
+    def self.last
+      all.limit(1).sort(:record_created_at, :desc).first
     end
 
     def self.valid_visibilities
@@ -294,21 +306,6 @@ module JupiterCore
 
       private
 
-      def perform_solr_query(q, fq, facet, facet_fields = [])
-        query = []
-        query << %Q(_query_:"{!raw f=has_model_ssim}#{derived_af_class_name}")
-        query.append(q) if q.present?
-
-        response = ActiveFedora::SolrService.instance.conn.get('select', params: { q: query.join(' AND '),
-                                                                                   fq: fq,
-                                                                                   facet: facet,
-                                                                                   'facet.field': facet_fields })
-
-        raise SearchFailed unless response['responseHeader']['status'] == 0
-
-        [response['response']['numFound'], response['response']['docs'], response['facet_counts']]
-      end
-
       # Clones inherited arrays/maps so that local mutation doesn't propogate to the parent
       # also sets up basic attributes that every child class has: +id+, +owner+, and +visibility+
       def inherited(child)
@@ -328,6 +325,10 @@ module JupiterCore
           end
           unless attribute_names.include?(:owner)
             has_attribute :owner, ::VOCABULARY[:jupiter_core].owner, solrize_for: [:exact_match]
+          end
+          unless attribute_names.include?(:record_created_at)
+            has_attribute :record_created_at, ::VOCABULARY[:jupiter_core].record_created_at, type: :date,
+                                                                                             solrize_for: [:sort]
           end
         end
       end
@@ -358,6 +359,15 @@ module JupiterCore
 
           validate :visibility_must_be_known
           validates :owner, presence: true
+          validates :record_created_at, presence: true
+
+          before_validation :set_record_created_at, on: :create
+
+          # ActiveFedora gives us system_create_dtsi, but that only exists in Solr, because what everyone wants
+          # is a created_at that jumps around when you rebuild your index
+          def set_record_created_at
+            self.record_created_at = Time.current.utc.iso8601(3)
+          end
 
           def visibility_must_be_known
             return true if visibility.present? && owning_object.class.valid_visibilities.include?(visibility)
@@ -465,9 +475,14 @@ module JupiterCore
         }
 
         define_method name do
-          return ldp_object.send(name).freeze if ldp_object.present?
-          val = solr_representation[solr_name_cache.first]
-          return val.freeze if val.nil? || multiple
+          val = if ldp_object.present?
+                  ldp_object.send(name)
+                else
+                  solr_representation[solr_name_cache.first]
+                end
+          return if val.nil?
+          return DateTime.parse(val).freeze if type == :date
+          return val.freeze if val.nil? || multiple || !val.is_a?(Array)
           return val.first.freeze
         end
 
