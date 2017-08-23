@@ -84,6 +84,8 @@ module JupiterCore
                         %Q("#{val}")
                       elsif val.nil?
                         'nil'
+                      elsif val.is_a?(DateTime)
+                        val.utc.iso8601(3)
                       elsif val.is_a?(Enumerable) && val.empty?
                         '[]'
                       else
@@ -364,7 +366,7 @@ module JupiterCore
           # ActiveFedora gives us system_create_dtsi, but that only exists in Solr, because what everyone wants
           # is a created_at that jumps around when you rebuild your index
           def set_record_created_at
-            self.record_created_at = DateTime.now
+            self.record_created_at = Time.current.utc.iso8601(3)
           end
 
           def visibility_must_be_known
@@ -473,8 +475,13 @@ module JupiterCore
         }
 
         define_method name do
-          return ldp_object.send(name).freeze if ldp_object.present?
-          val = solr_representation[solr_name_cache.first]
+          val = if ldp_object.present?
+                  ldp_object.send(name)
+                else
+                  solr_representation[solr_name_cache.first]
+                end
+          return if val.nil?
+          return DateTime.parse(val).freeze if type == :date
           return val.freeze if val.nil? || multiple || !val.is_a?(Array)
           return val.first.freeze
         end

@@ -217,7 +217,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
       obj.unlock_and_fetch_ldp_object(&:save!)
       assert obj.id.present?
       assert obj.record_created_at.present?
-      assert_equal obj.record_created_at, Time.now
+      assert_equal obj.record_created_at, Time.current
     end
 
     assert @@klass.all.count == 1
@@ -242,8 +242,10 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     assert @@klass.find(obj.id).present?
 
     assert_equal @@klass.first.id, obj.id
-    assert_equal @@klass.last.id, obj.id
+    assert_equal @@klass.last.id, another_obj.id
   end
+
+  # TODO: maybe "upstream" deserves its own section in our test suite
 
   #  (╯°□°）╯︵ ┻━┻)
   test 'Validation callbacks actually, yknow, run. Seriously. I have to test for this.' do
@@ -264,6 +266,35 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
       assert_mock before_mock
       assert_mock after_mock
     end
+  end
+
+  # You might ask yourself, "Should we be writing tests to validate basic functionality of upstream dependencies?"
+  #
+  # No.
+  # We should not _have_ to.
+  #
+  # (ﾉ °益°)ﾉ 彡 ┻━┻
+  test 'we are using a branch of ActiveFedora and Solrizer where index type works' do
+    klass = Class.new(ActiveFedora::Base) do
+      property :foo, predicate: ::RDF::Vocab::DC.created, multiple: false do |index|
+        index.type :date
+        index.as :stored_sortable
+      end
+    end
+
+    # This should work even with vanilla AF/Solrizer
+    instance = klass.new
+    instance.foo = DateTime.now
+
+    assert instance.to_solr.key? 'foo_dtsi'
+    refute instance.to_solr.key? 'foo_ssi'
+
+    # This will be broken on vanilla AF/Solrizer. Assigning a string will reveal that the index.type is non-functional
+    # and ignored. foo will be solrized as a stored sortable string, foo_ssi, and not a date.
+    instance.foo = DateTime.now.utc.iso8601(3)
+
+    assert instance.to_solr.key? 'foo_dtsi'
+    refute instance.to_solr.key? 'foo_ssi'
   end
 
 end

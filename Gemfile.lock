@@ -1,7 +1,24 @@
 GIT
+  remote: https://github.com/mbarnett/active_fedora.git
+  revision: 052c2bcd6fa2a5e810671bea471b4808150004d8
+  branch: fix_types_literally_do_nothing
+  specs:
+    active-fedora (11.4.0)
+      active-triples (~> 0.11.0)
+      activemodel (>= 4.2, < 6)
+      activesupport (>= 4.2.4, < 6)
+      deprecation
+      faraday (~> 0.12.1)
+      faraday-encoding (= 0.0.4)
+      ldp (~> 0.7.0)
+      rsolr (>= 1.1.2, < 3)
+      ruby-progressbar (~> 1.0)
+      solrizer (>= 3.4, < 5)
+
+GIT
   remote: https://github.com/mbarnett/solrizer.git
-  revision: 0dee582e6bab368693de3d2aedd49bed61345be5
-  branch: solrizable_path_types
+  revision: 4c9712f9309b99e1552a0c2a092a2b4a91eaf52c
+  branch: literally_types
   specs:
     solrizer (3.4.0)
       activesupport
@@ -37,17 +54,6 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.3)
-    active-fedora (11.4.0)
-      active-triples (~> 0.11.0)
-      activemodel (>= 4.2, < 6)
-      activesupport (>= 4.2.4, < 6)
-      deprecation
-      faraday (~> 0.12.1)
-      faraday-encoding (= 0.0.4)
-      ldp (~> 0.7.0)
-      rsolr (>= 1.1.2, < 3)
-      ruby-progressbar (~> 1.0)
-      solrizer (>= 3.4, < 5)
     active-triples (0.11.0)
       activemodel (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -345,6 +351,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  active-fedora!
   better_errors (>= 2.3.0)
   binding_of_caller
   bootstrap (~> 4.0.0.alpha6)

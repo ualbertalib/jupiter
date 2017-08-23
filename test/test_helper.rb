@@ -11,7 +11,7 @@ require 'shoulda'
 class ActiveSupport::TestCase
 
   def freeze_time(&block)
-    travel_to DateTime.now, &block
+    travel_to Time.current, &block
   end
 
   include Minitest::Hooks
