@@ -5,6 +5,7 @@ class JupiterCore::DeferredSolrQuery
 
   def initialize(klass)
     criteria[:model] = klass
+    sort(:record_created_at, :desc)
   end
 
   def criteria
@@ -27,7 +28,7 @@ class JupiterCore::DeferredSolrQuery
     self
   end
 
-  def sort(attr, order = :asc)
+  def sort(attr, order = :desc)
     raise ArgumentError, 'order must be :asc or :desc' unless [:asc, :desc].include?(order.to_sym)
 
     metadata = criteria[:model].attribute_metadata(attr.to_sym)
