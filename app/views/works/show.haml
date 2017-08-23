@@ -5,13 +5,13 @@
   .col
     .list-group
       - @work.display_attributes.each do |name, value|
-        .list-group-item="#{name.titlecase} : #{value}"
+        .list-group-item= "#{name.titlecase} : #{value}"
 
       .list-group-item.flex-column
         Member of:
         - @work.member_of_paths.each do |path|
           .d-flex
-            =to_named_path(path)
+            = to_named_path(path)
 .row.mt-3
   .col
     %h4 Contains files:
