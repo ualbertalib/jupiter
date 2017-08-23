@@ -1,7 +1,7 @@
 <h4>Manage Notifications</h4>
   <%= simple_form_for [:admin, @new_notification] do |f| %>
     <%= f.input :message %>
-    <%= f.submit 'Post', class: 'float-right'%>
+    <%= f.button :submit, 'Post' %>
   <% end %>
 
   <h5 class="mt-5">Current Notifications:</h5>
@@ -38,5 +38,5 @@
           <p><em>Removed at: <%= notification.removed_at %></em></p>
         </div>
       </div>
-    <% end %>>
+    <% end %>
   </div>

@@ -5,6 +5,7 @@ class JupiterCore::DeferredSolrQuery
 
   def initialize(klass)
     criteria[:model] = klass
+    sort(:record_created_at, :desc)
   end
 
   def criteria
@@ -27,10 +28,10 @@ class JupiterCore::DeferredSolrQuery
     self
   end
 
-  def sort(attr, order = :asc)
-    raise ArgumentError, 'order must be :asc or :desc' unless [:asc, :desc].include?(order)
+  def sort(attr, order = :desc)
+    raise ArgumentError, 'order must be :asc or :desc' unless [:asc, :desc].include?(order.to_sym)
 
-    metadata = criteria[:model].attribute_metadata(attr)
+    metadata = criteria[:model].attribute_metadata(attr.to_sym)
     raise ArgumentError, "No metadata found for attribute #{attr}" unless metadata.present?
 
     sort_attr_index = metadata[:solrize_for].index(:sort)
@@ -79,7 +80,7 @@ class JupiterCore::DeferredSolrQuery
 
   # Defer to Kaminari configuration in the +LockedLdpObject+ model
   def method_missing(method, *args, &block)
-    if [:default_per_page, :max_per_page, :max_pages, :max_pages_per].include? method
+    if [:default_per_page, :max_per_page, :max_pages, :max_pages_per, :page].include? method
       criteria[:model].send(method, *args, &block) if criteria[:model].respond_to?(method)
     else
       super
