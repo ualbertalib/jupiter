@@ -10,7 +10,7 @@ class CommunityTest < ActiveSupport::TestCase
 
   test 'needs title' do
     c = Community.new_locked_ldp_object(owner: users(:admin).id)
-    assert !c.valid?
+    refute c.valid?
   end
 
 end
