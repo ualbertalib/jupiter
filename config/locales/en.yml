@@ -47,14 +47,6 @@ en:
         stop_impersonating: 'Stop Impersonating'
       user_dropdown:
         heading_html: "Signed in as <strong>%{name}</strong>"
-      communities:
-        updated: 'Community updated'
-        deleted: 'Community deleted'
-        not_empty_error: 'Cannot delete a non-empty Community'
-      collections:
-        updated: 'Collection updated'
-        deleted: 'Collection deleted'
-        not_empty_error: 'Cannot delete a non-empty Collection'
   sessions:
     new:
       header: 'Login to ERA'
@@ -113,14 +105,28 @@ en:
         search_placeholder: 'Search by email or name...'
         search_button: 'Search Users'
         header: 'Users'
+  collections:
+    destroy:
+      deleted: 'Collection deleted'
+      not_empty_error: 'Cannot delete a non-empty Collection'
+    update:
+      updated: 'Collection updated'
   communities:
+    destroy:
+      deleted: 'Community deleted'
+      not_empty_error: 'Cannot delete a non-empty Community'
     index:
       header: 'Communities'
       create_new_community: 'Create New Community'
     new:
-      header: 'Create Community'
+      header: 'Add New Community'
     show:
-      create_new_collection: 'Create New Collection'
+      collections_list_header: 'Collections in this Community'
+      create_new_collection: 'Add Collection'
+      delete: 'Delete'
+      delete_confirm: 'Are you sure you want to delete the community %{title}'
       edit: 'Edit'
       no_collections: 'There are no Collections in this Community'
+    update:
+      updated: 'Community updated'
     title: 'Community: %{title}'

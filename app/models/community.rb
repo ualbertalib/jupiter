@@ -1,6 +1,7 @@
 class Community < JupiterCore::LockedLdpObject
 
   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
+  has_attribute :description, ::RDF::Vocab::DC.description, solrize_for: [:search]
 
   # this method can be used on the SolrCached object OR the ActiveFedora object
   def member_collections
@@ -9,6 +10,8 @@ class Community < JupiterCore::LockedLdpObject
 
   unlocked do
     before_destroy :can_be_destroyed?
+
+    validates :title, presence: true
 
     before_validation do
       self.visibility = JupiterCore::VISIBILITY_PUBLIC
