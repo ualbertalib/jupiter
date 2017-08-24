@@ -2,32 +2,28 @@ require 'test_helper'
 
 class CommunityShowTest < ActionDispatch::IntegrationTest
 
-  setup do
-    admin = users(:admin_user)
+  def before_all
+    super
 
     # TODO: setup proper fixtures for LockedLdpObjects
 
     # A community with two collections
-    @community1 = Community.new_locked_ldp_object(title: 'Two collection community',
-                                                  owner: admin.id)
-    @community1.unlock_and_fetch_ldp_object(&:save!)
-    @collection1 = Collection.new_locked_ldp_object(community_id: @community1.id,
-                                                    title: 'Nice collection',
-                                                    owner: admin.id)
-    @collection1.unlock_and_fetch_ldp_object(&:save!)
-    @collection2 = Collection.new_locked_ldp_object(community_id: @community1.id,
-                                                    title: 'Another collection',
-                                                    owner: admin.id)
-    @collection2.unlock_and_fetch_ldp_object(&:save!)
+    @community1 = Community
+                  .new_locked_ldp_object(title: 'Two collection community', owner: 1)
+                  .unlock_and_fetch_ldp_object(&:save!)
+    @collection1 = Collection
+                   .new_locked_ldp_object(community_id: @community1.id,
+                                          title: 'Nice collection', owner: 1)
+                   .unlock_and_fetch_ldp_object(&:save!)
+    @collection2 = Collection
+                   .new_locked_ldp_object(community_id: @community1.id,
+                                          title: 'Another collection', owner: 1)
+                   .unlock_and_fetch_ldp_object(&:save!)
 
     # A community with no collections
-    @community2 = Community.new_locked_ldp_object(title: 'Empty community',
-                                                  owner: admin.id)
-    @community2.unlock_and_fetch_ldp_object(&:save!)
-  end
-
-  teardown do
-    ActiveFedora::Cleaner.clean!
+    @community2 = Community
+                  .new_locked_ldp_object(title: 'Empty community', owner: 1)
+                  .unlock_and_fetch_ldp_object(&:save!)
   end
 
   test 'visiting the show page for a community with two collections as an admin' do
