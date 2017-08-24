@@ -105,6 +105,11 @@ en:
         search_placeholder: 'Search by email or name...'
         search_button: 'Search Users'
         header: 'Users'
+    communities_and_collections:
+      collection:
+        delete: 'Delete'
+        delete_confirm: 'Are you sure you want to delete collection "%{title}"?'
+        edit: 'Edit'
   collections:
     destroy:
       deleted: 'Collection deleted'
