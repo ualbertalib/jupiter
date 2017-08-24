@@ -102,9 +102,9 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
 
   def test_collection_admin_links(true_false)
     count = true_false ? 1 : 0
-    [ @collection1, @collection2 ].each do |collection|
+    [@collection1, @collection2].each do |collection|
       assert_select "a[href='#{edit_community_collection_path(@community1, collection)}']"\
-                    ".edit-collection",
+                    '.edit-collection',
                     text: 'Edit', count: count
       assert_select "form[action='#{community_collection_path(@community1, collection)}'] "\
                     "input.delete-collection[value='Delete']",
