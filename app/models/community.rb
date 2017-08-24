@@ -19,7 +19,9 @@ class Community < JupiterCore::LockedLdpObject
 
     def can_be_destroyed?
       return true if member_collections.count == 0
-      errors.add(:member_collections, 'must be empty')
+      errors.add(:member_collections,
+                 I18n.t('communities.errors.member_collections_must_be_empty',
+                        list_of_collections: member_collections.map(&:title).join(', ')))
       throw(:abort)
     end
   end

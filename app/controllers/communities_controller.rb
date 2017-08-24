@@ -33,6 +33,7 @@ class CommunitiesController < ApplicationController
     authorize @community
     @community.unlock_and_fetch_ldp_object(&:save!)
 
+    # TODO: success flash message?
     redirect_to @community
   end
 

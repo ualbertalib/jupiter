@@ -32,6 +32,10 @@
 en:
   site_name: 'ERA'
   application:
+    edit: 'Edit'
+    delete: 'Delete'
+    close: 'Close'
+    remove: 'Remove'
     navbar:
       search:
         placeholder: "Search ERA..."
@@ -66,6 +70,43 @@ en:
     user_not_authorized_try_logging_in: 'Sorry, you are not authorized to perform this action. Try logging in?'
   admin:
     header: 'Admin'
+    dashboard:
+      index:
+        versions: 'Versions'
+        jupiter: 'Jupiter'
+        ruby: 'Ruby'
+        rails: 'Rails'
+        statistics: 'Statistics'
+        recent_activity: 'Recent Activity'
+        latest_works: 'Latest works'
+        latest_users: 'Latest users'
+    communities_and_collections:
+      index:
+        header: 'Manage Communities / Collections'
+      new:
+        header: 'Add New Community'
+    site_notifications:
+      new:
+        header: 'Manage Notifications'
+        new_button_text: 'Post'
+        current_notifications: 'Current Notifications'
+        no_current_notifications: 'No Current Notifications'
+        posted_at: "Posted at %{created_at}"
+        removed_at: "Removed at %{removed_at}"
+        past_notifications: 'Past Notifications'
+        no_past_notifications: 'No Past Notifications'
+        are_you_sure_you_want_to_remove: 'Are you sure you want to remove this message?'
+    pages:
+      index:
+        header: 'Manage Pages'
+    analytics:
+      index:
+        header: 'View Analytics'
+    works:
+      index:
+        header: 'Manage Items'
+      new:
+        header: 'Add New Item'
     users:
       show:
         email: 'Email'
@@ -106,11 +147,23 @@ en:
         search_button: 'Search Users'
         header: 'Users'
   collections:
+    index:
+      header: 'Collections'
     destroy:
       deleted: 'Collection deleted'
       not_empty_error: 'Cannot delete a non-empty Collection'
     update:
       updated: 'Collection updated'
+    edit:
+      header: 'Edit Collection'
+    new:
+      header: 'Create Collection'
+    show:
+      header: "Collection: %{title}"
+      parent_community: "Parent Community: %{title}"
+      no_works_in_collection: 'There are no works in this Collection'
+    errors:
+      member_works_must_be_empty: "must be empty. Currently: %{list_of_works}"
   communities:
     destroy:
       deleted: 'Community deleted'
@@ -130,3 +183,31 @@ en:
     update:
       updated: 'Community updated'
     title: 'Community: %{title}'
+    errors:
+      member_collections_must_be_empty: "must be empty. Currently: %{list_of_collections}"
+  welcome:
+    index:
+      header: 'ERA (Education & Research Archive)'
+      cta_lead_text: 'Keep it. Share it. Use it. Welcome to University of Alberta’s Digital Repository and Asset Management Services.'
+      cta_link_text: 'Check Me Out on GitHub'
+  works:
+    index:
+      header: 'Works'
+    edit:
+      header: 'Edit Work'
+    show:
+      header: "Work: %{title}"
+      member_of: 'Member of'
+      contain_files: 'Contains files'
+      fileset: 'FileSet'
+      original_filename: 'Original Filename'
+      mime_type: 'MIME Type'
+    new:
+      header: 'Create a new work'
+    search:
+      header: 'Works'
+      found_results: "Found %{count} results"
+      refine_your_search: 'Refine your search'
+      no_results_found: No results found
+    file_label: 'File'
+    add_another_file: 'Add another file'

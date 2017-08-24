@@ -20,12 +20,12 @@
       <div class="col-6">
         <%= f.input :file,
           as: :file,
-          label: 'File: ',
+          label: t('works.file_label'),
           input_html: {name: 'work[file][]'}
         %>
       </div>
       <div class="col-6">
-        <%= link_to 'Add another file',
+        <%= link_to t('works.add_another_file'),
           '#',
           class: 'btn btn-secondary add-file'
         %>

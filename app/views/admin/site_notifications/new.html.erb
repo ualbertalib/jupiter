@@ -1,32 +1,36 @@
-<h4>Manage Notifications</h4>
+<h4><%= t('.header') %></h4>
   <%= simple_form_for [:admin, @new_notification] do |f| %>
     <%= f.input :message %>
-    <%= f.button :submit, 'Post' %>
+    <%= f.button :submit, t('.new_button_text') %>
   <% end %>
 
-  <h5 class="mt-5">Current Notifications:</h5>
+  <h5 class="mt-5"><%= t('.current_notifications') %></h5>
 
   <div class="list-group">
     <% unless current_notifications.present? %>
-      <div class="list-group-item">No Current Notifications</div>
+      <div class="list-group-item"><%= t('.no_current_notifications') %></div>
     <% end %>
 
     <% current_notifications.each do |notification| %>
       <div class="list-group-item flex-column align-items-start justify-content-between">
         <div class="d-flex w-100 justify-content-between">
           <h6><%= notification.message %></h6>
-          <%= button_to "Remove", admin_site_notification_path(notification), method: :delete, class: 'btn btn-danger', data: {confirm: 'Are you sure you want to remove this message?'} %>
+          <%= button_to t('application.remove'),
+                        admin_site_notification_path(notification),
+                        method: :delete,
+                        class: 'btn btn-danger',
+                        data: {confirm: t('.are_you_sure_you_want_to_remove')} %>
         </div>
-        <p><em>Posted at: <%= notification.created_at %></em></p>
+        <p><em><%= t('.posted_at', created_at: notification.created_at) %></em></p>
       </div>
     <% end %>
   </div>
 
-  <h5 class="mt-5">Past Notifications:</h5>
+  <h5 class="mt-5"><%= t('.past_notifications') %></h5>
 
   <div class="list-group">
     <% unless past_notifications.present? %>
-      <div class="list-group-item">No Past Notifications</div>
+      <div class="list-group-item"><%= t('.no_past_notifications') %></div>
     <% end %>
 
     <% past_notifications.each do |notification| %>
@@ -34,8 +38,8 @@
         <h6><%= notification.message %></h6>
 
         <div class="d-flex w-100 justify-content-between">
-          <p><em>Posted at: <%= notification.created_at %></em></p>
-          <p><em>Removed at: <%= notification.removed_at %></em></p>
+          <p><em><%= t('.posted_at', created_at: notification.created_at) %></em></p>
+          <p><em><%= t('.removed_at', removed_at: notification.removed_at) %></em></p>
         </div>
       </div>
     <% end %>
