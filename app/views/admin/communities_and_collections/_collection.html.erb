@@ -6,11 +6,11 @@
     <div class="col ml-auto text-right">
       <div class="btn-group">
         <% if policy(collection).edit? %>
-          <%= link_to t('.edit'), edit_community_collection_path(community, collection),
+          <%= link_to t('edit'), edit_community_collection_path(community, collection),
               class:'btn btn-secondary edit-collection' %>
         <% end %>
         <% if policy(collection).destroy? %>
-          <%= button_to t('.delete'), community_collection_path(community, collection),
+          <%= button_to t('delete'), community_collection_path(community, collection),
               class: 'btn btn-danger delete-collection', method: :delete,
               data: { confirm: t('.delete_confirm', title: collection.title) } %>
         <% end %>

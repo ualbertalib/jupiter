@@ -2,22 +2,20 @@ require 'test_helper'
 
 class CollectionsControllerTest < ActionDispatch::IntegrationTest
 
-  setup do
-    @admin = users(:admin)
-    sign_in_as @admin
-
-    # TODO: setup proper fixtures for LockedLdpObjects
+  def before_all
+    super
     @community = Community.new_locked_ldp_object(title: 'Nice community',
-                                                 owner: @admin.id)
+                                                 owner: 1)
     @community.unlock_and_fetch_ldp_object(&:save!)
     @collection = Collection.new_locked_ldp_object(community_id: @community.id,
                                                    title: 'Nice collection',
-                                                   owner: @admin.id)
+                                                   owner: 1)
     @collection.unlock_and_fetch_ldp_object(&:save!)
   end
 
-  teardown do
-    ActiveFedora::Cleaner.clean!
+  def setup
+    @admin = users(:admin)
+    sign_in_as @admin
   end
 
   # Note: this controller has no #index action
@@ -32,9 +30,7 @@ class CollectionsControllerTest < ActionDispatch::IntegrationTest
       post community_collections_url(@community),
            params: { collection: { title: 'New collection' } }
     end
-
-    # TODO: implement a method to fetch most recently created, e.g. 'last'
-    # assert_redirected_to collection_url(Collection.last)
+    assert_redirected_to community_collection_url(@community, Collection.last)
   end
 
   test 'should show collection' do
@@ -56,8 +52,13 @@ class CollectionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should destroy collection' do
+    community = Community.new_locked_ldp_object(title: 'Nice community',
+                                                owner: 1).unlock_and_fetch_ldp_object(&:save!)
+    collection = Collection.new_locked_ldp_object(community_id: @community.id,
+                                                  title: 'Nice collection',
+                                                  owner: 1).unlock_and_fetch_ldp_object(&:save!)
     assert_difference('Collection.count', -1) do
-      delete community_collection_url(@community, @collection)
+      delete community_collection_url(community, collection)
     end
 
     assert_redirected_to admin_communities_and_collections_url

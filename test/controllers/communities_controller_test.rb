@@ -2,18 +2,15 @@ require 'test_helper'
 
 class CommunitiesControllerTest < ActionDispatch::IntegrationTest
 
-  setup do
-    @admin = users(:admin)
-    sign_in_as @admin
-
-    # TODO: setup proper fixtures for LockedLdpObjects
+  def before_all
+    super
     @community = Community.new_locked_ldp_object(title: 'Nice community',
-                                                 owner: @admin.id)
+                                                 owner: 1)
     @community.unlock_and_fetch_ldp_object(&:save!)
   end
 
-  teardown do
-    ActiveFedora::Cleaner.clean!
+  def setup
+    sign_in_as users(:admin)
   end
 
   test 'should get index' do
@@ -31,8 +28,7 @@ class CommunitiesControllerTest < ActionDispatch::IntegrationTest
       post communities_url, params: { community: { title: 'New community' } }
     end
 
-    # TODO: implement a method to fetch most recently created, e.g. 'last'
-    # assert_redirected_to community_url(Community.last)
+    assert_redirected_to community_url(Community.last)
   end
 
   test 'should show community' do
@@ -51,8 +47,10 @@ class CommunitiesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should destroy community' do
+    community = Community.new_locked_ldp_object(title: 'Delete me',
+                                                owner: users(:admin).id).unlock_and_fetch_ldp_object(&:save!)
     assert_difference('Community.count', -1) do
-      delete community_url(@community)
+      delete community_url(community)
     end
 
     assert_redirected_to admin_communities_and_collections_url

@@ -11,8 +11,13 @@ class Admin::SiteNotificationsController < Admin::AdminController
     @new_notification.user = current_user
 
     if @new_notification.save
+      # TODO: Flash success?
       redirect_to new_admin_site_notification_path
     else
+      # TODO: This drops the url to /admin/site_notifications
+      # (without the /new) so a page refresh will 500...which is annoying
+      # You could `redirect to new_admin_site_notification_path` but you lose the errors object
+      # unless you put it in the flash message which is probably okay here?
       render action: 'new'
     end
   end
@@ -21,6 +26,8 @@ class Admin::SiteNotificationsController < Admin::AdminController
     notification = SiteNotification.find(params[:id])
     notification.removed_at = DateTime.now
     notification.save!
+
+    # TODO: Flash success?
     redirect_to new_admin_site_notification_path
   end
 
