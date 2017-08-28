@@ -1,10 +1,7 @@
 module ApplicationHelper
-  def page_title(page_title)
-    base_title = I18n.t('site_name')
-    if page_title.blank?
-      base_title
-    else
-      "#{page_title} | #{base_title}"
-    end
+  def page_title(title)
+    @page_title ||= []
+    @page_title.push(title) if title.present?
+    @page_title.join(' | ')
   end
 end

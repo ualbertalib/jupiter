@@ -1,4 +1,4 @@
-<% provide(:page_title, t('communities.title', title: @community.title)) %>
+<% page_title(t('communities.title', title: @community.title)) %>
 
 <h2 class="mt-3"><%= t('communities.title', title: @community.title) %></h2>
 <%= render partial: 'form' %>

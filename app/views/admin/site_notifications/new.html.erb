@@ -1,4 +1,4 @@
-<% provide(:page_title, "#{t('.header')} | #{t('admin.header')}") %>
+<% page_title('.header') %>
 
 <h4><%= t('.header') %></h4>
   <%= simple_form_for [:admin, @new_notification] do |f| %>
