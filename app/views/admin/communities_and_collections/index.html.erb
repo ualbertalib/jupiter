@@ -15,13 +15,13 @@
           <% end %>
 
           <%= button_tag type: 'button', class: 'btn btn-secondary close-btn hidden-xs-up', data: {community_id: community.id } do %>
-            <%= t('application.close') %>
+            <%= t('close') %>
             <%= fa_icon('chevron-up') %>
           <% end %>
 
           <div class="btn-group">
-            <%= link_to t('application.edit'), edit_community_path(community), class:'btn btn-secondary' %>
-            <%= button_to t('application.delete'), community_path(community), class: 'btn btn-danger', method: :delete, data: {confirm: 'Are you sure?' } %>
+            <%= link_to t('edit'), edit_community_path(community), class:'btn btn-secondary' %>
+            <%= button_to t('delete'), community_path(community), class: 'btn btn-danger', method: :delete, data: {confirm: 'Are you sure?' } %>
           </div>
         </div>
       </li>

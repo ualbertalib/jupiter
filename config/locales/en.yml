@@ -31,11 +31,15 @@
 
 en:
   site_name: 'ERA'
+
+  edit: 'Edit'
+  delete: 'Delete'
+  close: 'Close'
+  remove: 'Remove'
+  created_at: 'Created At'
+  updated_at: 'Updated At'
+
   application:
-    edit: 'Edit'
-    delete: 'Delete'
-    close: 'Close'
-    remove: 'Remove'
     navbar:
       search:
         placeholder: "Search ERA..."
@@ -51,9 +55,11 @@ en:
         stop_impersonating: 'Stop Impersonating'
       user_dropdown:
         heading_html: "Signed in as <strong>%{name}</strong>"
+
   locked_ldp_object:
     errors:
       invalid_visibility: "%{visibility} is not a known visibility"
+
   sessions:
     new:
       header: 'Login to ERA'
@@ -64,13 +70,16 @@ en:
       flash: "You are no longer impersonating %{original_user}"
     destroy:
       signed_out: "Signed out successfully."
+
   login:
     error: 'There was an error authenticating from your account. Please try again, or contact a staff member.'
     success: "Successfully authenticated from %{kind} account."
     user_suspended: 'Sorry, your ERA account has been suspended. Please contact the ERA HelpDesk at erahelp@ualberta.ca for more information.'
+
   authorization:
     user_not_authorized: 'Sorry, you are not authorized to perform this action.'
     user_not_authorized_try_logging_in: 'Sorry, you are not authorized to perform this action. Try logging in?'
+
   admin:
     header: 'Admin'
     dashboard:
@@ -121,8 +130,6 @@ en:
         email: 'Email'
         suspended: 'Suspended?'
         admin: 'Admin?'
-        created_at: 'Created At'
-        updated_at: 'Updated At'
         suspend_link_text: 'Suspend User'
         suspend_dialog: "Are you sure you want to suspend %{user}?"
         suspend_flash: 'User has successfully been suspended'
@@ -139,8 +146,7 @@ en:
         impersonate_dialog: "Are you sure you want to impersonate %{user}?"
         impersonate_flash: "You are now impersonating %{user}"
         no_works_found: 'There are no works for this user'
-        works: 'Works'
-        edit_work: 'Edit'
+        user_works: 'User works'
         display_works_count: "Displaying %{works_count} of %{total_works_count} total works."
         # TODO: most of these are generic enough to be moved up in a common namespace
         sort: 'Sort'
@@ -154,7 +160,8 @@ en:
         display_users_count: "Displaying %{users_count} of %{total_users_count} total users."
         search_placeholder: 'Search by email or name...'
         search_button: 'Search Users'
-        header: 'Users'
+        header: 'Manage Users'
+
   collections:
     index:
       header: 'Collections'
@@ -173,6 +180,7 @@ en:
       no_works_in_collection: 'There are no works in this Collection'
     errors:
       member_works_must_be_empty: "must be empty. Currently: %{list_of_works}"
+
   communities:
     destroy:
       deleted: 'Community deleted'
@@ -194,11 +202,13 @@ en:
     title: 'Community: %{title}'
     errors:
       member_collections_must_be_empty: "must be empty. Currently: %{list_of_collections}"
+
   welcome:
     index:
       header: 'ERA (Education & Research Archive)'
       cta_lead_text: 'Keep it. Share it. Use it. Welcome to University of Alberta’s Digital Repository and Asset Management Services.'
       cta_link_text: 'Check Me Out on GitHub'
+
   works:
     index:
       header: 'Works'
