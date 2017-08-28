@@ -371,7 +371,7 @@ module JupiterCore
 
           def visibility_must_be_known
             return true if visibility.present? && owning_object.class.valid_visibilities.include?(visibility)
-            errors.add(:visibility, "#{visibility} is not a known visibility")
+            errors.add(:visibility, I18n.t('locked_ldp_object.errors.invalid_visibility', visibility: visibility))
           end
 
           # Paper over a 2 year old bug in ActiveFedora where it simply SILENTLY IGNORES validation callbacks

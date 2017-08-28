@@ -33,6 +33,7 @@ class CommunitiesController < ApplicationController
     authorize @community
     @community.unlock_and_fetch_ldp_object(&:save!)
 
+    # TODO: success flash message?
     redirect_to @community
   end
 
@@ -42,7 +43,7 @@ class CommunitiesController < ApplicationController
     @community.unlock_and_fetch_ldp_object do |unlocked_community|
       unlocked_community.update!(permitted_attributes(Community))
     end
-    flash[:notice] = I18n.t('application.communities.updated')
+    flash[:notice] = t('.updated')
     redirect_to @community
   end
 
@@ -51,9 +52,9 @@ class CommunitiesController < ApplicationController
     authorize community
     community.unlock_and_fetch_ldp_object do |uo|
       if uo.destroy
-        flash[:notice] = I18n.t('application.communities.deleted')
+        flash[:notice] = t('.deleted')
       else
-        flash[:alert] = I18n.t('application.communities.not_empty_error')
+        flash[:alert] = t('.not_empty_error')
       end
 
       redirect_to admin_communities_and_collections_path
