@@ -16,7 +16,7 @@ ActiveRecord::Schema.define(version: 20170815200404) do
     t.string "name"
     t.string "record_gid"
     t.integer "blob_id"
-    t.time "created_at"
+    t.datetime "created_at"
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_gid", "blob_id"], name: "index_active_storage_attachments_on_record_gid_and_blob_id", unique: true
     t.index ["record_gid", "name"], name: "index_active_storage_attachments_on_record_gid_and_name"
@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(version: 20170815200404) do
     t.text "metadata"
     t.integer "byte_size"
     t.string "checksum"
-    t.time "created_at"
+    t.datetime "created_at"
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
