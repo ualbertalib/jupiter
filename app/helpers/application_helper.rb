@@ -1,6 +1,6 @@
 module ApplicationHelper
   def page_title(page_title)
-    base_title = 'ERA'
+    base_title = I18n.t('site_name')
     if page_title.blank?
       base_title
     else
