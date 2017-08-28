@@ -72,12 +72,12 @@
     <%= @user.suspended? %>
   </dd>
 
-  <dt class="col-sm-3"><%= t('.created_at') %></dt>
+  <dt class="col-sm-3"><%= t('created_at') %></dt>
   <dd class="col-sm-9">
     <%= time_ago_in_words(@user.created_at) %>
   </dd>
 
-  <dt class="col-sm-3"><%= t('.updated_at') %></dt>
+  <dt class="col-sm-3"><%= t('updated_at') %></dt>
   <dd class="col-sm-9">
     <%= time_ago_in_words(@user.updated_at) %>
   </dd>
@@ -105,7 +105,7 @@
        <%= works_sort_link 'title', 'desc', t('.title_desc') %>
       </div>
     </div>
-    <h2 class="mb-3"><%= t('.works') %></h2>
+    <h2 class="mb-3"><%= t('.user_works') %></h2>
 
     <p class="text-center"><%= t('.display_works_count', works_count: @works.count, total_works_count: @user.works.count) %></p>
     <div class="list-group mb-3">
@@ -115,7 +115,7 @@
             <%= link_to work.title, work_path(work) %>
             <%= link_to edit_work_path(work), class: 'btn btn-secondary' do %>
               <%= fa_icon 'pencil-square-o' %>
-              <%= t('.edit_work') %>
+              <%= t('edit') %>
               <% end %>
           </div>
         <% end %>
