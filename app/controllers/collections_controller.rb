@@ -22,6 +22,8 @@ class CollectionsController < ApplicationController
     @collection.unlock_and_fetch_ldp_object(&:save!)
 
     @community = Community.find(params[:community_id])
+
+    # TODO: success flash message?
     redirect_to community_collection_path(@community, @collection)
   end
 

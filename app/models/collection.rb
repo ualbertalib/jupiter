@@ -32,7 +32,9 @@ class Collection < JupiterCore::LockedLdpObject
 
     def can_be_destroyed?
       return true if member_works.count == 0
-      errors.add(:member_works, 'must be empty. Currently: ' + member_works.map(&:title).join(', '))
+      errors.add(:member_works,
+                 I18n.t('collections.errors.member_works_must_be_empty',
+                        list_of_works: member_works.map(&:title).join(', ')))
       throw(:abort)
     end
   end

@@ -162,7 +162,7 @@ class AdminUsersTest < ApplicationSystemTestCase
       # we signed in as user and have been redirected to homepage
       assert_text I18n.t('admin.users.show.impersonate_flash', user: user.name)
       assert_text user.name
-      assert_selector 'h1', text: 'Welcome' # TODO: change this once we i18n homepage
+      assert_selector 'h1', text: I18n.t('welcome.index.header')
 
       # we stop impersonation and get redirected back to admin user show page
       click_link user.name # opens user dropdown which has the stop impersonating link

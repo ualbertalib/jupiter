@@ -1,0 +1,36 @@
+<%= simple_form_for work, html: {multipart: true} do |f| %>
+  <% work.display_attributes.each do |prop, _| %>
+    <%= f.input prop %>
+  <% end %>
+  <%= f.input :community,
+    as: :unread_select,
+    collection: Community.all,
+    label_method: :title,
+    value_method: :id,
+    input_html: {name: 'work[community][]'}
+  %>
+  <%= f.input :collection,
+    as: :unread_select,
+    disabled: true,
+    collection: [],
+    input_html: {name: 'work[collection][]'}
+  %>
+  <div class="file_upload">
+    <div class="row">
+      <div class="col-6">
+        <%= f.input :file,
+          as: :file,
+          label: t('works.file_label'),
+          input_html: {name: 'work[file][]'}
+        %>
+      </div>
+      <div class="col-6">
+        <%= link_to t('works.add_another_file'),
+          '#',
+          class: 'btn btn-secondary add-file'
+        %>
+      </div>
+    </div>
+  </div>
+  <%= f.button :submit %>
+<% end %>
