@@ -51,6 +51,9 @@ en:
         stop_impersonating: 'Stop Impersonating'
       user_dropdown:
         heading_html: "Signed in as <strong>%{name}</strong>"
+  locked_ldp_object:
+    errors:
+      invalid_visibility: "%{visibility} is not a known visibility"
   sessions:
     new:
       header: 'Login to ERA'
@@ -81,11 +84,13 @@ en:
         latest_works: 'Latest works'
         latest_users: 'Latest users'
     communities_and_collections:
+      title: Communities and Collections
       index:
         header: 'Manage Communities / Collections'
       new:
         header: 'Add New Community'
     site_notifications:
+      title: 'Site Notifications'
       new:
         header: 'Manage Notifications'
         new_button_text: 'Post'
@@ -97,17 +102,21 @@ en:
         no_past_notifications: 'No Past Notifications'
         are_you_sure_you_want_to_remove: 'Are you sure you want to remove this message?'
     pages:
+      title: 'Pages'
       index:
         header: 'Manage Pages'
     analytics:
+      title: 'Analytics'
       index:
         header: 'View Analytics'
     works:
+      title: 'Items'
       index:
         header: 'Manage Items'
       new:
         header: 'Add New Item'
     users:
+      title: 'Users'
       show:
         email: 'Email'
         suspended: 'Suspended?'

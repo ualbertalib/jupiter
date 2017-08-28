@@ -7,29 +7,29 @@
     <div class="col-md-2" >
       <h2><%= t('admin.header') %></h2>
 
-      <%= render 'sidebar_group', title: 'Items' do %>
+      <%= render 'sidebar_group', title: t('admin.works.title') do %>
         <li><%= link_to t('admin.works.index.header'), '#' %></li>
         <li><%= link_to t('admin.works.new.header'), '#' %></li>
       <% end %>
 
-      <%= render 'sidebar_group', title: 'Users' do %>
+      <%= render 'sidebar_group', title: t('admin.users.title') do %>
         <li><%= link_to t('admin.users.index.header'), admin_users_path %></li>
       <% end %>
 
-      <%= render 'sidebar_group', title: 'Communities and Collections' do %>
+      <%= render 'sidebar_group', title: t('admin.communities_and_collections.title') do %>
         <li><%= link_to t('admin.communities_and_collections.index.header'), admin_communities_and_collections_path %></li>
         <li><%= link_to t('admin.communities_and_collections.new.header'), new_community_path %></li>
       <% end %>
 
-      <%= render 'sidebar_group', title: 'Administrator Notifications' do %>
+      <%= render 'sidebar_group', title: t('admin.site_notifications.title') do %>
         <li><%= link_to t('admin.site_notifications.new.header'), new_admin_site_notification_path %></li>
       <% end %>
 
-      <%= render 'sidebar_group', title: 'Pages' do %>
+      <%= render 'sidebar_group', title: t('admin.pages.title') do %>
         <li><%= link_to t('admin.pages.index.header'), '#' %></li>
       <% end %>
 
-      <%= render 'sidebar_group', title: 'Analytics' do %>
+      <%= render 'sidebar_group', title: t('admin.analytics.title') do %>
         <li><%= link_to t('admin.analytics.index.header'), '#' %></li>
       <% end %>
     </div>
