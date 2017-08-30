@@ -57,7 +57,6 @@ group :development do
   gem 'binding_of_caller'
 
   gem 'listen', '>= 3.0.5', '< 3.2'
-  gem 'sdoc'
   gem 'web-console', '>= 3.3.0'
 end
 
