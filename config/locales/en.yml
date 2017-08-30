@@ -98,6 +98,8 @@ en:
         header: 'Manage Communities / Collections'
       new:
         header: 'Add New Community'
+      collection:
+        delete_confirm: 'Are you sure you want to delete collection "%{title}"?'
     site_notifications:
       title: 'Site Notifications'
       new:
