@@ -56,7 +56,7 @@ if ENV["RACK_ENV"] == 'uat' || ENV["RAILS_ENV"] == 'uat'
   preload_app!
   on_worker_boot do
     ActiveSupport.on_load(:active_record) do
-      config = ActiveRecord::Base.configurations[Rails.env] || 
+      config = ActiveRecord::Base.configurations[Rails.env] ||
                Rails.application.config.database_configuration[Rails.env]
       config['pool'] = ENV['MAX_THREADS'] || 5
       ActiveRecord::Base.establish_connection(config)
