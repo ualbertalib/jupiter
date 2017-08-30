@@ -51,12 +51,13 @@ environment ENV.fetch('RAILS_ENV') { 'development' }
 #   ActiveRecord::Base.establish_connection if defined?(ActiveRecord)
 # end
 #
-if ENV['RACK_ENV'] == 'uat' || ENV['RAILS_ENV'] == 'uat'
+if ENV['RAILS_ENV'] == 'uat'
   workers ENV.fetch('WEB_CONCURRENCY') { 3 }
   preload_app!
   on_worker_boot do
+    
     ActiveSupport.on_load(:active_record) do
-      ActiveRecord::Base.establish_connection(config)
+      ActiveRecord::Base.establish_connection
     end
   end
 end
