@@ -13,7 +13,9 @@
     <% @communities.each do |community| %>
 
       <li class="list-group-item list-group-item-action">
-        <%= link_to community.title, community_path(community)%>
+        <%= link_to community_path(community) do %>
+          <h4><%= community.title %></h4>
+        <% end %>
 
         <div class="d-flex justify-content-between">
           <%= link_to admin_communities_and_collection_path(community), data: {community_id: community.id }, class: 'btn btn-secondary collection-btn', remote: true do %>
