@@ -1,20 +1,17 @@
-<li class="list-group-item list-group-item-info">
-  <div class="row">
-    <div class="col pl-4" >
-      <%= link_to collection.title, community_collection_path(community, collection) %>
-    </div>
-    <div class="col ml-auto text-right">
-      <div class="btn-group">
-        <% if policy(collection).edit? %>
-          <%= link_to t('edit'), edit_community_collection_path(community, collection),
-              class:'btn btn-secondary edit-collection' %>
-        <% end %>
-        <% if policy(collection).destroy? %>
-          <%= button_to t('delete'), community_collection_path(community, collection),
-              class: 'btn btn-danger delete-collection', method: :delete,
-              data: { confirm: t('.delete_confirm', title: collection.title) } %>
-        <% end %>
-      </div>
+<li class="list-group-item list-group-item-action">
+  <div class="d-flex justify-content-between">
+    <%= link_to collection.title, community_collection_path(community, collection) %>
+
+    <div class="btn-group">
+      <% if policy(collection).edit? %>
+        <%= link_to t('edit'), edit_community_collection_path(community, collection),
+            class:'btn btn-secondary edit-collection' %>
+      <% end %>
+      <% if policy(collection).destroy? %>
+        <%= link_to t('delete'), community_collection_path(community, collection),
+            class: 'btn btn-danger delete-collection', method: :delete,
+            data: { confirm: t('.delete_confirm', title: collection.title) } %>
+      <% end %>
     </div>
   </div>
 </li>

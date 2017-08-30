@@ -28,30 +28,21 @@
   </div>
 </div>
 
-<div class="row mt-3">
-  <div class="col">
+<div class="row d-flex justify-content-between mt-3">
     <h4 class="collections-header">
-      <% if @community.member_collections.count > 0 %>
-        <%= t('.collections_list_header') %>
-      <% else %>
-        <%= t('.no_collections') %>
-      <% end %>
+      <%= t('.collections_list_header') %>
     </h4>
-  </div>
   <% if policy(:collection).create? %>
-    <div class="col text-right">
       <%= link_to t('.create_new_collection'), new_community_collection_path(@community),
           class: 'btn btn-primary' %>
-    </div>
   <% end %>
 </div>
-<% if @community.member_collections.count > 0 %>
-  <div class="row mt-3">
-    <div class="col">
-      <div class="list-group">
-        <%= render partial: 'admin/communities_and_collections/collection',
-            collection: @community.member_collections, locals: { community: @community } %>
-      </div>
+
+<div class="row mt-3">
+  <div class="col">
+    <div class="list-group">
+      <%# should be reversed, admin should be using communities partial not vice versa %>
+      <%= render partial: 'admin/communities_and_collections/collections_list' %>
     </div>
   </div>
-<% end %>
+</div>
