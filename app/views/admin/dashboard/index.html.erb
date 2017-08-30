@@ -3,11 +3,11 @@
 
   <hr/>
 
-  <h2 class="mb-3">Versions</h2>
+  <h2 class="mb-3"><%= t('.versions') %></h2>
   <div class="row">
     <div class="col-md-4">
       <p>
-        Jupiter
+        <%= t('.jupiter') %>
         <span class="badge badge-primary">
           0.0.1
           <%# TODO: Add version file in jupiter %>
@@ -17,7 +17,7 @@
     </div>
     <div class="col-md-4">
       <p>
-        Ruby
+        <%= t('.ruby') %>
         <span class="badge badge-primary">
           <%= "#{RUBY_VERSION}p#{RUBY_PATCHLEVEL}" %>
         </span>
@@ -25,7 +25,7 @@
     </div>
     <div class="col-md-4">
       <p>
-        Rails
+        <%= t('.rails') %>
         <span class="badge badge-primary">
           <%= "#{Rails::VERSION::STRING}" %>
         </span>
@@ -36,12 +36,12 @@
 
   <hr/>
 
-  <h2 class="mb-3">Statistics</h2>
+  <h2 class="mb-3"><%= t('.statistics') %></h2>
   <div class="row">
     <div class="col-md-3">
       <div class="card text-center">
       <div class="card-body">
-        <h4 class="card-title">Works</h4>
+        <h4 class="card-title"><%= t('works.index.header') %></h4>
         <div class="data">
           <%= link_to '#todo', class: 'card-link' do %>
           <%#= admin_works_path do %>
@@ -54,7 +54,7 @@
     <div class="col-md-3">
       <div class="card text-center">
         <div class="card-body">
-          <h4 class="card-title">Users</h4>
+          <h4 class="card-title"><%= t('admin.users.index.header') %></h4>
           <%= link_to admin_users_path,  class: 'card-link' do %>
               <%= number_with_delimiter(User.count) %>
           <% end %>
@@ -64,7 +64,7 @@
     <div class="col-md-3">
       <div class="card text-center">
         <div class="card-body">
-          <h4 class="card-title">Communities</h4>
+          <h4 class="card-title"><%= t('communities.index.header') %></h4>
             <%= link_to '#todo', class: 'card-link' do %>
             <%#= link_to admin_communities_path do %>
                 <%= number_with_delimiter(Community.count) %>
@@ -75,7 +75,7 @@
     <div class="col-md-3">
       <div class="card text-center">
         <div class="card-body">
-          <h4 class="card-title">Collections</h4>
+          <h4 class="card-title"><%= t('collections.index.header') %></h4>
           <%= link_to '#todo', class: 'card-link' do %>
           <%#= link_to admin_collections_path do %>
               <%= number_with_delimiter(Collection.count) %>
@@ -87,30 +87,29 @@
 
   <hr/>
 
-  <h2 class="mb-3">Recent Activity</h2>
+  <h2 class="mb-3"><%= t('.recent_activity') %></h2>
   <div class="row">
     <div class="col-md-6">
-      <h4>Latest works</h4>
+      <h4><%= t('.latest_works') %></h4>
       <ul class="list-group">
         <% @works.each do |work| %>
-          <li class="list-group-item justify-content-between">
-            <%#= link_to [:admin, work] %>
+         <%# TODO: FIX links when work CRUD is completed %>
+          <%= link_to work, class: "list-group-item list-group-item-action d-flex justify-content-between" do %>
             <%= work.title %>
-            <%# end %>
-            <span class="badge badge-default badge-pill">
+            <span class="badge badge-secondary">
               <%= time_ago_in_words(work.date_created) %>
             </span>
-          </li>
+          <% end %>
         <% end %>
       </ul>
     </div>
     <div class="col-md-6">
-      <h4>Latest users</h4>
+      <h4><%= t('.latest_users') %></h4>
       <div class="list-group">
         <% @users.each do |user| %>
-          <%= link_to [:admin, user], class: "list-group-item  list-group-item-action justify-content-between" do %>
+          <%= link_to [:admin, user], class: "list-group-item list-group-item-action d-flex justify-content-between" do %>
             <%= user.name %>
-            <span class="badge badge-default badge-pill">
+            <span class="badge badge-secondary">
               <%# should be last_sign_in_at instead %>
               <%= time_ago_in_words(user.updated_at) %>
             </span>

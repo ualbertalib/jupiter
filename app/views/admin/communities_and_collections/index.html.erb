@@ -1,4 +1,6 @@
-<h2>Manage Communities</h2>
+<% page_title(t('.header')) %>
+
+<h2><%= t('.header') %></h2>
 
 <div class="col my-4" >
   <ul id="admin-collection-list" class="list-group">
@@ -10,16 +12,18 @@
 
         <div class="ml-auto">
           <%= link_to admin_communities_and_collection_path(community), data: {community_id: community.id }, class: 'btn btn-secondary collection-btn', remote: true do %>
-            Collections <%= fa_icon('chevron-down') %>
+            <%= t('collections.header') %>
+            <%= fa_icon('chevron-down') %>
           <% end %>
 
           <%= button_tag type: 'button', class: 'btn btn-secondary close-btn hidden-xs-up', data: {community_id: community.id } do %>
-            Close <%= fa_icon('chevron-up') %>
+            <%= t('close') %>
+            <%= fa_icon('chevron-up') %>
           <% end %>
 
           <div class="btn-group">
-            <%= link_to 'Edit', edit_community_path(community), class:'btn btn-secondary' %>
-            <%= button_to "Delete", community_path(community), class: 'btn btn-danger', method: :delete, data: {confirm: 'Are you sure?' } %>
+            <%= link_to t('edit'), edit_community_path(community), class:'btn btn-secondary' %>
+            <%= button_to t('delete'), community_path(community), class: 'btn btn-danger', method: :delete, data: {confirm: 'Are you sure?' } %>
           </div>
         </div>
       </li>

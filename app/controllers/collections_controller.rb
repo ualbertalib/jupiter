@@ -22,6 +22,8 @@ class CollectionsController < ApplicationController
     @collection.unlock_and_fetch_ldp_object(&:save!)
 
     @community = Community.find(params[:community_id])
+
+    # TODO: success flash message?
     redirect_to community_collection_path(@community, @collection)
   end
 
@@ -38,7 +40,7 @@ class CollectionsController < ApplicationController
     @collection.unlock_and_fetch_ldp_object do |unlocked_collection|
       unlocked_collection.update!(permitted_attributes(Collection))
     end
-    flash[:notice] = I18n.t('application.collections.updated')
+    flash[:notice] = t('.updated')
     redirect_to admin_communities_and_collections_path
   end
 
@@ -47,9 +49,9 @@ class CollectionsController < ApplicationController
     authorize collection
     collection.unlock_and_fetch_ldp_object do |uo|
       if uo.destroy
-        flash[:notice] = I18n.t('application.collections.deleted')
+        flash[:notice] = t('.deleted')
       else
-        flash[:alert] = I18n.t('application.collections.not_empty_error')
+        flash[:alert] = t('.not_empty_error')
       end
 
       redirect_to admin_communities_and_collections_path

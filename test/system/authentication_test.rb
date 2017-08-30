@@ -74,7 +74,7 @@ class AuthenticationTest < ApplicationSystemTestCase
       assert_text I18n.t('login.success', kind: 'saml')
 
       # TODO: fix this view and i18n this
-      assert_text 'Create a new work'
+      assert_text I18n.t('works.new.header')
     end
 
     should 'get redirected to login then back to login page with error, if user is unauthorized' do
