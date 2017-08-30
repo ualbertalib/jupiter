@@ -68,7 +68,3 @@ group :test do
   gem 'minitest-hooks'
   gem 'shoulda', require: false
 end
-
-group :staging, :production do
-  gem 'tzinfo-data'
-end

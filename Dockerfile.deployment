@@ -1,5 +1,5 @@
 FROM ruby:2.3.4
-MAINTAINER Murny
+LABEL maintainer="University of Alberta Libraries"
 
 # Need to add jessie-backports repo so we can get FFMPEG, doesn't come with jessie debian by default
 # RUN echo 'deb http://ftp.debian.org/debian jessie-backports main'  >> /etc/apt/sources.list
@@ -8,6 +8,7 @@ RUN apt-get update -qq \
     && apt-get install -y build-essential \
                           mysql-client \
                           nodejs \
+                          tzdata \
                           # npm \
                           # nodejs-legacy \
                           # libreoffice \
@@ -39,14 +40,14 @@ COPY Gemfile  ./
 COPY Gemfile.lock ./
 RUN bundle install --without development test 
 
-COPY config/puma/deployment.rb config/puma.rb
+COPY config/puma.rb config/puma.rb
 
 # *NOW* we copy the codebase in
 
 ADD . /app
 
 # Precompile Rails assets. We set a dummy secret key
-RUN RAILS_ENV=production bundle exec rake assets:precompile
+RUN RAILS_ENV=uat bundle exec rake assets:precompile
 
 EXPOSE 3000
 

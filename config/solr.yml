@@ -3,6 +3,8 @@ development:
   url: <%= ENV['SOLR_URL'] || 'http://localhost:8983/solr/development' %>
 test:
   url: <%= ENV['SOLR_TEST_URL'] || 'http://localhost:8983/solr/test' %>
+uat:
+  url: <%= ENV['SOLR_URL'] %>
 staging:
   url: <%= ENV['SOLR_URL'] %>
 production:

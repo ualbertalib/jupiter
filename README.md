@@ -70,7 +70,7 @@ Now that everything is up and running, you can setup the rails database (only ne
 docker-compose run web rails db:setup
 ```
 
-### For deployment (on UAT/staging environment)
+### For deployment (on UAT environment)
 To setup the environment variables needed for deployment, modify the sample .env_deployment file with variable values needed for the deployment:
 ```shell
 cp .env_deployment_sample .env_deployment
