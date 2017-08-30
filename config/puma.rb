@@ -52,11 +52,12 @@ environment ENV.fetch('RAILS_ENV') { 'development' }
 # end
 #
 if ENV["RACK_ENV"] == 'uat' || ENV["RAILS_ENV"] == 'uat' 
-  workers ENV.fetch('WEB_CONCURRENCY') { 3 } 
+  workers ENV.fetch('WEB_CONCURRENCY') { 3 }
   preload_app!
   on_worker_boot do
     ActiveSupport.on_load(:active_record) do
-      config = ActiveRecord::Base.configurations[Rails.env] || Rails.application.config.database_configuration[Rails.env]
+      config = ActiveRecord::Base.configurations[Rails.env] || 
+               Rails.application.config.database_configuration[Rails.env]
       config['pool'] = ENV['MAX_THREADS'] || 5
       ActiveRecord::Base.establish_connection(config)
     end
