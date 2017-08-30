@@ -38,6 +38,7 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
     test_collections_header(true)
     test_no_collections_message(false)
     test_collection_links(true)
+    test_collection_admin_links(true)
   end
 
   test 'visiting the show page for a community with two collections as a regular user' do
@@ -52,6 +53,7 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
     test_collections_header(true)
     test_no_collections_message(false)
     test_collection_links(true)
+    test_collection_admin_links(false)
   end
 
   test 'visiting a community with no collections' do
@@ -95,6 +97,18 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
                     text: @collection1.title
       assert_select 'a[href=?]', community_collection_path(@community1, @collection2),
                     text: @collection2.title
+    end
+  end
+
+  def test_collection_admin_links(true_false)
+    count = true_false ? 1 : 0
+    [@collection1, @collection2].each do |collection|
+      assert_select "a[href='#{edit_community_collection_path(@community1, collection)}']"\
+                    '.edit-collection',
+                    text: 'Edit', count: count
+      assert_select "form[action='#{community_collection_path(@community1, collection)}'] "\
+                    "input.delete-collection[value='Delete']",
+                    count: count
     end
   end
 

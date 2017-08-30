@@ -1,11 +1,20 @@
 <li class="list-group-item list-group-item-info">
-  <div class="pl-4" >
-    <%= link_to collection.title, community_collection_path(community, collection) %>
-  </div>
-  <div class="ml-auto">
-    <div class="btn-group">
-      <%= link_to t('edit'), edit_community_collection_path(community, collection), class:'btn btn-secondary' %>
-      <%= button_to t('delete'), community_collection_path(community, collection), class: 'btn btn-danger', method: :delete, data: {confirm: 'Are you sure?' } %>
+  <div class="row">
+    <div class="col pl-4" >
+      <%= link_to collection.title, community_collection_path(community, collection) %>
+    </div>
+    <div class="col ml-auto text-right">
+      <div class="btn-group">
+        <% if policy(collection).edit? %>
+          <%= link_to t('edit'), edit_community_collection_path(community, collection),
+              class:'btn btn-secondary edit-collection' %>
+        <% end %>
+        <% if policy(collection).destroy? %>
+          <%= button_to t('delete'), community_collection_path(community, collection),
+              class: 'btn btn-danger delete-collection', method: :delete,
+              data: { confirm: t('.delete_confirm', title: collection.title) } %>
+        <% end %>
+      </div>
     </div>
   </div>
 </li>

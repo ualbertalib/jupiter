@@ -5,14 +5,17 @@
 <% if policy(@community).edit? || policy(@community).destroy? %>
   <div class="row mt-3" >
     <div class="col text-right" >
-      <% if policy(@community).edit? %>
-        <%= link_to t('.edit'), edit_community_path(@community), class:'btn btn-secondary' %>
-      <% end %>
-      <% if policy(@community).destroy? %>
-        <%= link_to t('.delete'), community_path(@community), method: :delete,
-            class:'btn btn-danger',
-            data: { confirm: t('.delete_confirm', title: @community.title) } %>
+      <div class="btn-group">
+        <% if policy(@community).edit? %>
+          <%= link_to t('.edit'), edit_community_path(@community),
+              class:'btn btn-secondary' %>
         <% end %>
+        <% if policy(@community).destroy? %>
+          <%= link_to t('.delete'), community_path(@community), method: :delete,
+              class:'btn btn-danger',
+              data: { confirm: t('.delete_confirm', title: @community.title) } %>
+        <% end %>
+      </div>
     </div>
   </div>
 <% end %>
@@ -46,10 +49,8 @@
   <div class="row mt-3">
     <div class="col">
       <div class="list-group">
-        <% @community.member_collections.each do |c| %>
-          <%= link_to c.title, community_collection_path(@community.id, c),
-              class: 'list-group-item list-group-item-action' %>
-        <% end %>
+        <%= render partial: 'admin/communities_and_collections/collection',
+            collection: @community.member_collections, locals: { community: @community } %>
       </div>
     </div>
   </div>
