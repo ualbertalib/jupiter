@@ -5,7 +5,7 @@
 <p><%= t('.description_html') %></p>
 <%= link_to t('.saml_link'), '/auth/saml', class: 'btn btn-primary' %>
 
-<%- if Rails.env.development? %>
+<%- if Rails.configuration.allow_dev_logins %>
   <%# TODO: Temporary login form for local development until IST shibboleth issues gets resolved %>
   <%= link_to t('.developer_link'), '/auth/developer', class: 'btn btn-primary' %>
 <% end %>
