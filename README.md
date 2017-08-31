@@ -59,6 +59,7 @@ cd jupiter
 
 ## Step 3: Start docker and docker compose
 
+### For development environment
 To build, create, start and setup your docker containers simply run:
 ```shell
 docker-compose up -d
@@ -69,10 +70,28 @@ Now that everything is up and running, you can setup the rails database (only ne
 docker-compose run web rails db:setup
 ```
 
+### For deployment (on UAT environment)
+To setup the environment variables needed for deployment, modify the sample .env_deployment file with variable values needed for the deployment:
+```shell
+cp .env_deployment_sample .env_deployment
+vi .env_deployment
+```
+To build, create, start and setup your docker containers simply run:
+```shell
+docker-compose -f docker-compose.deployment.yml up -d
+```
+
+For the first time of the deployment, set up the database:
+```shell
+docker-compose run web rails db:setup
+```
+
 ## Step 4: Open and view Jupiter!
 Now everything is ready, you can go and view Jupiter! Just open your favorite browser and go to the following url:
 
-[localhost:3000](http://localhost:3000)
+
+  - Development environment: [localhost:3000](http://localhost:3000)
+  - Deployment environment: servername
 
 (Note: ip address may be different if you are using `docker-machine`)
 
