@@ -1,0 +1,9 @@
+<% if @community.logo.attached? %>
+  <%= link_to image_tag(@community.logo.url, class: "img-thumbnail community-logo-small"),
+      @community.logo.url, target: :_blank %>
+<% else %>
+  <div class="img-thumbnail community-logo-small no-logo">
+    <i class="fa fa-3x fa-picture-o" aria-hidden="true"></i>
+    <p class="community-no-logo-text">Community has no logo</p>
+  </div>
+<% end %>

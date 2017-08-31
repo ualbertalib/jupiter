@@ -1,0 +1,16 @@
+$no_logo: #888888;
+
+.community-logo-small {
+  height: 100px !important;
+  width: 100px !important;
+}
+
+.community-logo-small.no-logo {
+  color: $no_logo;
+
+  p {
+    font-size: 8pt;
+    font-style: italic;
+    margin-bottom: 0px;
+  }
+}

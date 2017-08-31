@@ -16,6 +16,23 @@ class Community < JupiterCore::LockedLdpObject
       (@active_storage_attached_logo = ActiveStorage::Attached::One.new(:logo, self))
   end
 
+  # A virtual attribute to handle removing logos on forms ...
+  def remove_logo
+    # Never want the checkbox checked by default
+    false
+  end
+
+  def remove_logo=(val)
+    if logo.attached? && (val == "true")
+      # This should probably be 'purge_later', but then we have problems on page reload
+      logo.attachment.purge
+    end
+  end
+
+  def self.safe_attributes
+    super + [:remove_logo]
+  end
+
   unlocked do
     before_destroy :can_be_destroyed?
     before_destroy -> { logo.purge_later }
