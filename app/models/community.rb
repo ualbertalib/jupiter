@@ -23,10 +23,9 @@ class Community < JupiterCore::LockedLdpObject
   end
 
   def remove_logo=(val)
-    if logo.attached? && (val == "true")
-      # This should probably be 'purge_later', but then we have problems on page reload
-      logo.attachment.purge
-    end
+    return unless logo.attached? && (val == 'true')
+    # This should probably be 'purge_later', but then we have problems on page reload
+    logo.attachment.purge
   end
 
   def self.safe_attributes
