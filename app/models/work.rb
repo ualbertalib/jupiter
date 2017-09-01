@@ -1,5 +1,7 @@
 class Work < JupiterCore::LockedLdpObject
 
+  Path = Struct.new(:community, :collection)
+
   ldp_object_includes Hydra::Works::WorkBehavior
 
   VISIBILITY_EMBARGO = 'embargo'.freeze
@@ -29,6 +31,15 @@ class Work < JupiterCore::LockedLdpObject
     super + [VISIBILITY_EMBARGO]
   end
 
+  def paths
+    return [] unless self.member_of_paths.present?
+    # Return array of structs
+    self.member_of_paths.map { |path|
+      community_id, collection_id = path.split('/')
+      Path.new(Community.find(community_id), Collection.find(collection_id))
+    }
+  end
+
   unlocked do
     validates :embargo_end_date, presence: true, if: ->(work) { work.visibility == VISIBILITY_EMBARGO }
     validates :embargo_end_date, absence: true, if: ->(work) { work.visibility != VISIBILITY_EMBARGO }
@@ -36,6 +47,7 @@ class Work < JupiterCore::LockedLdpObject
     def add_to_path(community_id, collection_id)
       self.member_of_paths += ["#{community_id}/#{collection_id}"]
     end
+
   end
 
 end
