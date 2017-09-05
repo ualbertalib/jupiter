@@ -96,9 +96,11 @@
          <%# TODO: FIX links when work CRUD is completed %>
           <%= link_to work, class: "list-group-item list-group-item-action d-flex justify-content-between" do %>
             <%= work.title %>
-            <span class="badge badge-secondary">
-              <%= time_ago_in_words(work.date_created) %>
-            </span>
+            <% if work.date_created.present? %>
+              <span class="badge badge-secondary">
+                <%= time_ago_in_words(work.date_created) %>
+              </span>
+            <% end %>
           <% end %>
         <% end %>
       </ul>
