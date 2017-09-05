@@ -8,7 +8,7 @@
       <div class="btn-group">
         <% if policy(@community).edit? %>
           <%= link_to t('.edit'), edit_community_path(@community),
-              class:'btn btn-secondary' %>
+              class:'btn btn-outline-primary' %>
         <% end %>
         <% if policy(@community).destroy? %>
           <%= link_to t('.delete'), community_path(@community), method: :delete,
@@ -28,7 +28,7 @@
   </div>
 </div>
 
-<div class="row d-flex justify-content-between mt-3">
+<div class="d-flex justify-content-between mt-3">
     <h4 class="collections-header">
       <%= t('.collections_list_header') %>
     </h4>
@@ -42,7 +42,17 @@
   <div class="col-md-12">
     <ul class="list-group">
       <%# should be reversed, admin should be using communities partial not vice versa %>
-      <%= render partial: 'admin/communities_and_collections/collections_list' %>
+      <%# haaaack TODO remove me%>
+      <% if policy(:admin).access? %>
+        <%= render partial: 'admin/communities_and_collections/collections_list' %>
+      <% else %>
+        <% if @community.member_collections.count > 0 %>
+          <% @community.member_collections.each do |collection| %>
+            <%= link_to collection.title, community_collection_path(@community, collection),
+                class: 'list-group-item list-group-item-action' %>
+            <% end %>
+        <% end %>
+      <% end %>
     </ul>
   </div>
 </div>

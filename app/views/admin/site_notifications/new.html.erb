@@ -6,7 +6,7 @@
 </ol>
 
 
-<h4><%= t('.header') %></h4>
+<h2><%= t('.header') %></h2>
   <%= simple_form_for [:admin, @new_notification] do |f| %>
     <%= f.input :message %>
     <%= f.button :submit, t('.new_button_text') %>
