@@ -1,8 +1,9 @@
-//= require communities
 @import "bootstrap";
 
 // TODO: weird bug? had to .css this
 @import "font-awesome.css";
+
+@import "communities";
 
 // TODO: move this stuff below to a general jupiter.scss
 // padding for fixed header.
