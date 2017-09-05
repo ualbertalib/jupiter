@@ -29,7 +29,11 @@ By default, `rails test` will not run the system tests. To run them use:
 
 `$ bundle exec rake rerdoc`
 
+# UAT Environment 
 
+The UAT server is accessible on all library staff workstation, and through VPN on any external IP address.  More details regarding access and deployment can be found:
+[Jupiter UAT Setup](https://github.com/ualbertalib/di_internal/blob/master/System-Adminstration/UAT-Environment.md) 
+ 
 # Docker
 This project comes with a docker setup to easily setup your own local development environment for jupiter in just a few steps.
 
