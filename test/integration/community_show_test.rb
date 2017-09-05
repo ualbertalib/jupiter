@@ -80,10 +80,10 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
 
     # Should show 2 collections with a heading
     assert_select 'h4.collections-header', text: I18n.t('communities.show.collections_list_header')
-    assert_select 'ul.list-group li', count: 2
+    assert_select 'div.list-group a.list-group-item', count: 2
 
-    # Collections should have a linkable title but no edit/delete buttons
-    assert_select 'ul.list-group li.list-group-item a[href=?]',
+    # Collections should have be linkable but no edit/delete buttons should be displayed
+    assert_select 'div.list-group a.list-group-item[href=?]',
                   community_collection_path(@community1, @collection1),
                   text: @collection1.title
     assert_select "a[href='#{edit_community_collection_path(@community1, @collection1)}']"\
@@ -95,21 +95,9 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
   end
 
   test 'visiting a community with no collections' do
-    user = users(:admin)
+    user = users(:regular_user)
     sign_in_as user
     get community_url(@community2)
-
-    # Community delete, edit and create new collection buttons should be shown
-    assert_select 'a[href=?]',
-                  community_path(@community2),
-                  text: I18n.t('delete')
-    assert_select 'a[href=?]',
-                  edit_community_path(@community2),
-                  text: I18n.t('edit')
-
-    assert_select 'a[href=?]',
-                  new_community_collection_path(@community2),
-                  text: I18n.t('communities.show.create_new_collection')
 
     # No collections should no be shown
     assert_select 'h4.collections-header', text: I18n.t('communities.show.collections_list_header')
