@@ -32,12 +32,12 @@ class Work < JupiterCore::LockedLdpObject
   end
 
   def paths
-    return [] unless self.member_of_paths.present?
+    return [] unless member_of_paths.present?
     # Return array of structs
-    self.member_of_paths.map { |path|
+    member_of_paths.map do |path|
       community_id, collection_id = path.split('/')
       Path.new(Community.find(community_id), Collection.find(collection_id))
-    }
+    end
   end
 
   unlocked do
@@ -47,7 +47,6 @@ class Work < JupiterCore::LockedLdpObject
     def add_to_path(community_id, collection_id)
       self.member_of_paths += ["#{community_id}/#{collection_id}"]
     end
-
   end
 
 end
