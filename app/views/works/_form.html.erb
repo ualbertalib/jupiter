@@ -1,7 +1,13 @@
 <%= simple_form_for work, html: {multipart: true} do |f| %>
   <% work.display_attributes.each do |prop, _| %>
+    <% next if ['visibility', 'owner', 'record_created_at', 'doi', 'embargo_end_date'].include? prop %>
     <%= f.input prop %>
   <% end %>
+  <%= f.input :visibility,
+  as: :unread_select,
+  collection: ['public', 'private', 'authenticated'],
+  input_html: {name: 'work[visibility]'}
+  %>
   <%= f.input :community,
     as: :unread_select,
     collection: Community.all,
