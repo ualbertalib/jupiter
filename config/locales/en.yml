@@ -84,6 +84,7 @@ en:
     header: 'Admin'
     dashboard:
       index:
+        header: 'Dashboard'
         versions: 'Versions'
         jupiter: 'Jupiter'
         ruby: 'Ruby'
@@ -180,6 +181,7 @@ en:
     show:
       header: "Collection: %{title}"
       parent_community: "Parent Community: %{title}"
+      works_list_header: 'Works in this Collection'
       no_works_in_collection: 'There are no works in this Collection'
     errors:
       member_works_must_be_empty: "must be empty. Currently: %{list_of_works}"

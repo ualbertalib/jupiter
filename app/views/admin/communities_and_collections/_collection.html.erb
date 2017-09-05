@@ -5,7 +5,7 @@
     <div class="btn-group">
       <% if policy(collection).edit? %>
         <%= link_to t('edit'), edit_community_collection_path(community, collection),
-            class:'btn btn-secondary edit-collection' %>
+            class:'btn btn-outline-primary edit-collection' %>
       <% end %>
       <% if policy(collection).destroy? %>
         <%= link_to t('delete'), community_collection_path(community, collection),
