@@ -12,8 +12,7 @@ class Community < JupiterCore::LockedLdpObject
   end
 
   def logo
-    @active_storage_attached_logo ||
-      (@active_storage_attached_logo = ActiveStorage::Attached::One.new(:logo, self))
+    @active_storage_attached_logo ||= ActiveStorage::Attached::One.new(:logo, self)
   end
 
   # A virtual attribute to handle removing logos on forms ...
