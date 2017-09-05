@@ -1,5 +1,5 @@
-$("ul#<%=@community.id%>").html("<%= escape_javascript(render partial: 'collection', collection: @community.member_collections, locals: {community: @community}) %>");
+$("ul#<%=@community.id%>").html("<%= escape_javascript(render partial: 'collections_list') %>");
 $("ul#<%=@community.id%>").show();
 $(".collection-btn[data-community-id='<%=@community.id%>']").hide();
-$(".close-btn[data-community-id='<%=@community.id%>']").removeClass('hidden-xs-up');
+$(".close-btn[data-community-id='<%=@community.id%>']").removeClass('d-none');
 $(".close-btn[data-community-id='<%=@community.id%>']").show();
