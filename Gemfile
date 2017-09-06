@@ -10,12 +10,12 @@ gem 'puma', '~> 3.7'
 gem 'rails', '~> 5.1.1'
 
 # Assets (CSS/JS) stuff
+gem 'bootstrap', '~> 4.0.0.beta'
 gem 'font-awesome-rails'
 gem 'jquery-rails'
+gem 'sass-rails', '~> 5.0'
 gem 'turbolinks', '~> 5'
 gem 'uglifier', '>= 1.3.0'
-
-gem 'bootstrap', '~> 4.0.0.beta'
 
 # View stuff
 gem 'simple_form'
@@ -40,9 +40,10 @@ gem 'pundit'
 
 # Misc Utilities
 gem 'kaminari'
-gem 'sdoc'
 
 group :development, :test do
+  gem 'sdoc', require: false
+
   gem 'capybara', '~> 2.13'
   gem 'selenium-webdriver', require: false
 
