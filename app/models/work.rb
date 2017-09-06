@@ -29,6 +29,10 @@ class Work < JupiterCore::LockedLdpObject
     super + [VISIBILITY_EMBARGO]
   end
 
+  def member_file_sets
+    FileSet.where(is_member_of: id)
+  end
+
   unlocked do
     validates :embargo_end_date, presence: true, if: ->(work) { work.visibility == VISIBILITY_EMBARGO }
     validates :embargo_end_date, absence: true, if: ->(work) { work.visibility != VISIBILITY_EMBARGO }
