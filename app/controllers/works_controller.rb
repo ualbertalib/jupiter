@@ -16,6 +16,8 @@ class WorksController < ApplicationController
 
     # TODO: add validations?
     @work.unlock_and_fetch_ldp_object do |unlocked_work|
+      unlocked_work.owner = current_user.id
+
       communities.each_with_index do |community, idx|
         # TODO: raises undefined method `[]' for nil:NilClass on empty form
         unlocked_work.add_to_path(community, collections[idx])
