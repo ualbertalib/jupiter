@@ -1,6 +1,12 @@
 <% page_title('.header') %>
 
-<h4><%= t('.header') %></h4>
+<ol class="breadcrumb mb-5">
+  <li class="breadcrumb-item"><%= link_to t('admin.header'), admin_root_path %></li>
+  <li class="breadcrumb-item active"><%= t('.header') %></li>
+</ol>
+
+
+<h1><%= t('.header') %></h1>
   <%= simple_form_for [:admin, @new_notification] do |f| %>
     <%= f.input :message %>
     <%= f.button :submit, t('.new_button_text') %>

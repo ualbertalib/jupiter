@@ -1,29 +1,36 @@
 <% page_title(t('.header')) %>
 
-<h2><%= t('.header') %></h2>
+<ol class="breadcrumb mb-5">
+  <li class="breadcrumb-item"><%= link_to t('admin.header'), admin_root_path %></li>
+  <li class="breadcrumb-item active"><%= t('.header') %></li>
+</ol>
 
-<div class="col my-4" >
+<h1><%= t('.header') %></h1>
+
+<div class="my-4" >
   <ul id="admin-collection-list" class="list-group">
 
     <% @communities.each do |community| %>
 
-      <li class="list-group-item">
-        <%= link_to community.title, community_path(community)%>
+      <li class="list-group-item list-group-item-action">
+        <%= link_to community_path(community) do %>
+          <h4><%= community.title %></h4>
+        <% end %>
 
-        <div class="ml-auto">
-          <%= link_to admin_communities_and_collection_path(community), data: {community_id: community.id }, class: 'btn btn-secondary collection-btn', remote: true do %>
-            <%= t('collections.header') %>
+        <div class="d-flex justify-content-between">
+          <%= link_to admin_communities_and_collection_path(community), data: {community_id: community.id }, class: 'btn btn-outline-primary collection-btn', remote: true do %>
+            <%= t('collections.index.header') %>
             <%= fa_icon('chevron-down') %>
           <% end %>
 
-          <%= button_tag type: 'button', class: 'btn btn-secondary close-btn hidden-xs-up', data: {community_id: community.id } do %>
+          <%= button_tag type: 'button', class: 'btn btn-outline-primary close-btn d-none', data: {community_id: community.id } do %>
             <%= t('close') %>
             <%= fa_icon('chevron-up') %>
           <% end %>
 
-          <div class="btn-group">
-            <%= link_to t('edit'), edit_community_path(community), class:'btn btn-secondary' %>
-            <%= button_to t('delete'), community_path(community), class: 'btn btn-danger', method: :delete, data: {confirm: 'Are you sure?' } %>
+          <div class="btn-group" role="group" aria-label="Community Actions">
+            <%= link_to t('edit'), edit_community_path(community), class:'btn btn-outline-primary' %>
+            <%= link_to t('delete'), community_path(community), class: 'btn btn-danger', method: :delete, data: {confirm: t('.delete_confirm', title: community.title) } %>
           </div>
         </div>
       </li>
