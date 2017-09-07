@@ -11,7 +11,7 @@ class AdminUsersTest < ApplicationSystemTestCase
       click_link admin.name # opens user dropdown which has the admin link
       click_link I18n.t('application.navbar.links.admin')
 
-      assert_selector 'h1', text: I18n.t('admin.header')
+      assert_selector 'h1', text: I18n.t('admin.dashboard.index.header')
 
       click_link I18n.t('admin.users.index.header')
       assert_selector 'h1', text: I18n.t('admin.users.index.header')
@@ -39,7 +39,7 @@ class AdminUsersTest < ApplicationSystemTestCase
       click_link admin.name # opens user dropdown which has the admin link
       click_link I18n.t('application.navbar.links.admin')
 
-      assert_selector 'h1', text: I18n.t('admin.header')
+      assert_selector 'h1', text: I18n.t('admin.dashboard.index.header')
 
       click_link I18n.t('admin.users.index.header')
       assert_selector 'h1', text: I18n.t('admin.users.index.header')
@@ -67,7 +67,7 @@ class AdminUsersTest < ApplicationSystemTestCase
       click_link admin.name # opens user dropdown which has the admin link
       click_link I18n.t('application.navbar.links.admin')
 
-      assert_selector 'h1', text: I18n.t('admin.header')
+      assert_selector 'h1', text: I18n.t('admin.dashboard.index.header')
 
       click_link I18n.t('admin.users.index.header')
       assert_selector 'h1', text: I18n.t('admin.users.index.header')
@@ -138,7 +138,7 @@ class AdminUsersTest < ApplicationSystemTestCase
       click_link admin.name # opens user dropdown which has the admin link
       click_link I18n.t('application.navbar.links.admin')
 
-      assert_selector 'h1', text: I18n.t('admin.header')
+      assert_selector 'h1', text: I18n.t('admin.dashboard.index.header')
 
       click_link I18n.t('admin.users.index.header')
       assert_selector 'h1', text: I18n.t('admin.users.index.header')
