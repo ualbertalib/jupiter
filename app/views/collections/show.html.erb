@@ -15,19 +15,19 @@
   </div>
 <% end %>
 
-<h5 class="works-header">
-  <%= t('.works_list_header') %>
+<h5 class="items-header">
+  <%= t('.items_list_header') %>
 </h5>
 
 <div class="row mt-3">
   <div class="col">
     <div class="list-group">
-      <% if @collection.member_works.count > 0 %>
-        <% @collection.member_works.each do |w| %>
-          <%= link_to w.title, work_path(w), class: 'list-group-item list-group-item-action' %>
+      <% if @collection.member_items.count > 0 %>
+        <% @collection.member_items.each do |item| %>
+          <%= link_to item.title, item_path(item), class: 'list-group-item list-group-item-action' %>
         <% end %>
       <% else %>
-          <%= t('.no_works_in_collection') %>
+          <%= t('.no_items_in_collection') %>
       <% end %>
     </div>
   </div>

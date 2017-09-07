@@ -1,4 +1,4 @@
-class WorkPolicy < LockedLdpObjectPolicy
+class ItemPolicy < LockedLdpObjectPolicy
 
   def index?
     true
