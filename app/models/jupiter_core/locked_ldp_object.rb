@@ -40,7 +40,7 @@ module JupiterCore
     # inheritable class attributes (not all class-level attributes in this class should be inherited,
     # these are the inheritance-safe attributes)
     class_attribute :af_parent_class, :attribute_cache, :attribute_names, :facets,
-                    :solr_name_cache, :reverse_solr_name_cache, :solr_calc_attributes
+                    :reverse_solr_name_cache, :solr_calc_attributes
 
     # Returns the id of the object in LDP as a String
     def id
@@ -118,6 +118,14 @@ module JupiterCore
     def errors
       return super unless ldp_object.present?
       ldp_object.errors
+    end
+
+    def read_solr_index(name)
+      raise PropertyInvalidError unless name.is_a? Symbol
+      type = self.solr_calc_attributes[name]
+      raise PropertyInvalidError unless type.present?
+      solr_name = Solrizer.solr_name(name, :symbol, type: type)
+      solr_representation[solr_name]
     end
 
     # Use this to create a new +LockedLDPObjects+ and its underlying LDP instance. attrs populate the new object's
@@ -425,62 +433,13 @@ module JupiterCore
       #
       #    solr_index :downcased_title, solrize_for: :exact_match, as: -> { title.downcase }
       #
-      def solr_index(name, solrize_for:, as:, type: :string)
+      def solr_index(name, solrize_for:, as:)
         raise PropertyInvalidError unless as.respond_to?(:call)
-        raise PropertyInvalidError unless solrize_for.is_a?(Symbol)
-
-        add_to_solr_index(name, solrize_for: solrize_for, type: type)
+        raise PropertyInvalidError unless name.present?
+        raise PropertyInvalidError unless solrize_for.present? && solrize_for.is_a?(Symbol)
 
         self.solr_calc_attributes ||= {}
-        self.solr_calc_attributes[name] = { type: SOLR_DESCRIPTOR_MAP[solrize_for],
-                                            callable: as }
-      end
-
-      def add_to_solr_index(name, solrize_for:, multiple: false, type: :string)
-        raise PropertyInvalidError unless name.is_a? Symbol
-        raise PropertyInvalidError unless solrize_for.present?
-
-        solrize_for = Array(solrize_for)
-
-        # Index should contain only some combination of:
-        #      :search, :sort, :facet, :symbol, and :path
-        # this isn't an exhaustive layering over this mess
-        # https://github.com/mbarnett/solrizer/blob/e5dd2bd571b9ebdb8a8ab214574075c28951e53e/lib/solrizer/default_descriptors.rb
-        # but it helps
-        raise PropertyInvalidError if
-          solrize_for.count { |item| !SOLR_DESCRIPTOR_MAP.keys.include?(item) } > 0
-
-        # TODO: type validation
-
-        self.solr_name_cache ||= {}
-        self.solr_name_cache[name] ||= []
-        solrize_for.each do |descriptor|
-          solr_name = Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[descriptor], type: type)
-          self.solr_name_cache[name] << solr_name
-          self.reverse_solr_name_cache[solr_name] = name
-        end
-
-        if solrize_for.include?(:facet)
-          self.facets <<
-            Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[:facet], type: type)
-        end
-        if solrize_for.include?(:path)
-          self.facets <<
-            Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[:path], type: type)
-        end
-
-        # Define getter
-        define_method name do
-          val = if ldp_object.present?
-                  ldp_object.send(name)
-                else
-                  solr_representation[self.class.solr_name_cache[name].first]
-                end
-          return if val.nil?
-          return DateTime.parse(val).freeze if type == :date
-          return val.freeze if val.nil? || multiple || !val.is_a?(Array)
-          return val.first.freeze
-        end
+        self.solr_calc_attributes[name] = { type: SOLR_DESCRIPTOR_MAP[solrize_for], callable: as }
       end
 
       def has_multival_attribute(name, predicate, solrize_for: [], type: :string)
@@ -489,28 +448,55 @@ module JupiterCore
 
       # a utility DSL for declaring attributes which allows us to store knowledge of them.
       def has_attribute(name, predicate, multiple: false, solrize_for: [], type: :string)
+        raise PropertyInvalidError unless name.is_a? Symbol
         raise PropertyInvalidError unless predicate.present?
 
-        solrize_for = Array(solrize_for)
+        # TODO: keep this conveinience, or push responsibility for [] onto the callsite?
+        solrize_for = [solrize_for] unless solrize_for.is_a? Array
 
-        # Set's up the getter
-        add_to_solr_index(name, solrize_for: solrize_for, multiple: multiple, type: type)
+        # index should contain only some combination of :search, :sort, :facet, :symbol, and :path
+        # this isn't an exhaustive layering over this mess
+        # https://github.com/mbarnett/solrizer/blob/e5dd2bd571b9ebdb8a8ab214574075c28951e53e/lib/solrizer/default_descriptors.rb
+        # but it helps
+        raise PropertyInvalidError if solrize_for.count { |item| !SOLR_DESCRIPTOR_MAP.keys.include?(item) } > 0
+
+        # TODO: type validation
 
         self.attribute_names << name
+
+        solr_name_cache ||= []
+        solrize_for.each do |descriptor|
+          solr_name = Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[descriptor], type: type)
+          solr_name_cache << solr_name
+          self.reverse_solr_name_cache[solr_name] = name
+        end
+
+        self.facets << Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[:facet], type: type) if solrize_for.include?(:facet)
+        self.facets << Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[:path], type: type) if solrize_for.include?(:path)
 
         self.attribute_cache[name] = {
           predicate: predicate,
           multiple: multiple,
           solrize_for: solrize_for,
           type: type,
-          solr_names: self.solr_name_cache[name]
+          solr_names: solr_name_cache
         }
 
+        define_method name do
+          val = if ldp_object.present?
+                  ldp_object.send(name)
+                else
+                  solr_representation[solr_name_cache.first]
+                end
+          return if val.nil?
+          return DateTime.parse(val).freeze if type == :date
+          return val.freeze if val.nil? || multiple || !val.is_a?(Array)
+          return val.first.freeze
+        end
+
         define_method "#{name}=" do |*_args|
-          raise LockedInstanceError,
-                'The Locked LDP object cannot be mutated outside of an '\
-                'unlocked block or without calling unlock_and_fetch_ldp_object '\
-                'to load a writable copy (SLOW).'
+          raise LockedInstanceError, 'The Locked LDP object cannot be mutated outside of an unlocked block or without'\
+                                     'calling unlock_and_fetch_ldp_object to load a writable copy (SLOW).'
         end
 
         derived_af_class.class_eval do
