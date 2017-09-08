@@ -1,8 +1,7 @@
+require 'sidekiq/web'
 require_dependency 'admin_constraint'
 
 Rails.application.routes.draw do
-  root to: 'welcome#index'
-
   resources :works do
     collection do
       get 'search'
@@ -35,4 +34,13 @@ Rails.application.routes.draw do
   match '/auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
   match '/auth/failure', to: 'sessions#failure', via: [:get, :post]
   match '/logout', to: 'sessions#destroy', via: [:get, :post]
+
+  # Sidekiq panel
+  if Rails.env.development?
+    mount Sidekiq::Web => '/sidekiq'
+  else
+    mount Sidekiq::Web => '/sidekiq', constraints: AdminConstraint.new
+  end
+
+  root to: 'welcome#index'
 end

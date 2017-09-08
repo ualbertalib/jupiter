@@ -36,14 +36,11 @@ RUN mkdir -p $APP_ROOT
 WORKDIR $APP_ROOT
 
 # Preinstall gems in an earlier layer so we don't reinstall every time any file changes.
-COPY Gemfile  ./
-COPY Gemfile.lock ./
-RUN bundle install --without development test 
-
-COPY config/puma.rb config/puma.rb
+COPY Gemfile  /app
+COPY Gemfile.lock /app
+RUN bundle install --without development test
 
 # *NOW* we copy the codebase in
-
 ADD . /app
 
 # Precompile Rails assets. We set a dummy secret key
