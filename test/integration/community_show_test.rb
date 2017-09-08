@@ -7,7 +7,8 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
     super
 
     # TODO: setup proper fixtures for LockedLdpObjects
-    # A community with two collections
+
+    # A community with two collections and a logo
     @community1 = Community
                   .new_locked_ldp_object(title: 'Two collection community', owner: 1)
                   .unlock_and_fetch_ldp_object(&:save!)
@@ -19,6 +20,8 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
                    .new_locked_ldp_object(community_id: @community1.id,
                                           title: 'Another collection', owner: 1)
                    .unlock_and_fetch_ldp_object(&:save!)
+    @community1.logo.attach io: File.open(Rails.root + 'app/assets/images/mc_360.png'),
+                            filename: 'mc_360.png', content_type: 'image/png'
 
     # A community with no collections
     @community2 = Community
@@ -30,6 +33,10 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
     admin = users(:admin)
     sign_in_as admin
     get community_url(@community1)
+
+    # Logo should be shown
+    assert_select 'img.community-logo-small', count: 1
+    assert_select 'div.community-logo-small.no-logo', count: 0
 
     # Community delete, edit and create new collection buttons should be shown
     assert_select 'a[href=?]',
@@ -60,10 +67,15 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
                   text: I18n.t('delete')
   end
 
-  test 'visiting the show page for a community with two collections as a regular user' do
+  test 'visiting the show page for a community with two collections and a logo '\
+       'as a regular user' do
     user = users(:regular_user)
     sign_in_as user
     get community_url(@community1)
+
+    # Logo should be shown
+    assert_select 'img.community-logo-small', count: 1
+    assert_select 'div.community-logo-small.no-logo', count: 0
 
     # Community delete, edit and create new collection buttons should not be shown
     assert_select 'a[href=?]',
@@ -94,10 +106,14 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
                   false
   end
 
-  test 'visiting a community with no collections' do
+  test 'visiting a community with no collections or logo' do
     user = users(:regular_user)
     sign_in_as user
     get community_url(@community2)
+
+    # Logo should not be shown
+    assert_select 'img.community-logo-small', count: 0
+    assert_select 'div.community-logo-small.no-logo', count: 1
 
     # No collections should no be shown
     assert_select 'h4.collections-header', text: I18n.t('communities.show.collections_list_header')

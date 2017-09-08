@@ -1,0 +1,16 @@
+.community-logo-small {
+  height: 100px;
+  width: 100px;
+  max-width: inherit;
+}
+
+.community-logo-small.no-logo {
+  color: gray;
+  max-width: 100%;
+
+  p {
+    font-size: 8pt;
+    font-style: italic;
+    margin-bottom: 0px;
+  }
+}
