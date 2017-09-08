@@ -1,0 +1,10 @@
+<%= link_to community_path(community) do %>
+  <% if community.logo.attached? %>
+    <%= image_tag(community.logo.url, class: "img-thumbnail community-logo-small") %>
+  <% else %>
+    <div class="img-thumbnail community-logo-small no-logo">
+      <i class="fa fa-3x fa-picture-o" aria-hidden="true"></i>
+      <p class="community-no-logo-text"><%= t('.has_no_logo') %></p>
+    </div>
+  <% end %>
+<% end %>
