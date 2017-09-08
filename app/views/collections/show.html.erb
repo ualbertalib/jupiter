@@ -1,8 +1,8 @@
 <% page_title(@collection.title) %>
 
-<h2 class="mt-3">
+<h1 class="mt-3">
     <%= t('.header', title: @collection.title) %>
-</h2>
+</h1>
 
 <% if policy(@collection).edit? %>
   <div class="d-flex justify-content-between mt-3">
