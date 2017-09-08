@@ -24,3 +24,6 @@
 
 /docker-compose.*custom*.yml
 vendor/bundle
+
+# ActiveStorage local storage
+/storage
