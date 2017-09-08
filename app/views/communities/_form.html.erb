@@ -1,7 +1,9 @@
 <%= simple_form_for @community do |f| %>
   <div class="form-group">
+    <%= render partial: 'logo' %>
+    <%= render partial: 'logo_form', locals: { f: f } %>
     <%= f.input :title %>
-    <%= f.input :description %>
+    <%= f.input :description, as: :text %>
     <%= f.button :submit %>
   </div>
 <% end %>

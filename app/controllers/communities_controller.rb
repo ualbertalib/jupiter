@@ -32,6 +32,9 @@ class CommunitiesController < ApplicationController
                                        .merge(owner: current_user&.id))
     authorize @community
     @community.unlock_and_fetch_ldp_object(&:save!)
+    if params[:community][:logo].present?
+      @community.logo.attach(params[:community][:logo])
+    end
 
     # TODO: success flash message?
     redirect_to @community
@@ -43,6 +46,11 @@ class CommunitiesController < ApplicationController
     @community.unlock_and_fetch_ldp_object do |unlocked_community|
       unlocked_community.update!(permitted_attributes(Community))
     end
+    if params[:community][:logo].present?
+      # Note: monkey patch to ActiveStorage removes any previous versions
+      @community.logo.attach(params[:community][:logo])
+    end
+
     flash[:notice] = t('.updated')
     redirect_to @community
   end
