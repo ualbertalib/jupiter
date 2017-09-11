@@ -183,6 +183,7 @@ en:
       parent_community: "Parent Community: %{title}"
       works_list_header: 'Works in this Collection'
       no_works_in_collection: 'There are no works in this Collection'
+      work_delete_confirm: 'Are you sure you want to delete work "%{title}"?'
     errors:
       member_works_must_be_empty: "must be empty. Currently: %{list_of_works}"
 
