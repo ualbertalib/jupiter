@@ -17,31 +17,23 @@ class WorksController < ApplicationController
     # TODO: add validations?
     @work.unlock_and_fetch_ldp_object do |unlocked_work|
       unlocked_work.owner = current_user.id
-
-      communities.each_with_index do |community, idx|
-        # TODO: raises undefined method `[]' for nil:NilClass on empty form
-        unlocked_work.add_to_path(community, collections[idx])
-      end
-
-      # see also https://github.com/samvera/hydra-works/wiki/Lesson%3A-Add-attached-files
-      params[:work][:file].each do |file|
-        fileset = FileSet.new
-        Hydra::Works::AddFileToFileSet.call(fileset, file, :original_file, update_existing: false, versioning: false)
-        fileset.save!
-        # pull in hydra derivatives, set temp file base
-        # Hydra::Works::CharacterizationService.run(fileset.characterization_proxy, filename)
-        unlocked_work.members << fileset
-      end
-
+      unlocked_work.add_communities_and_collections(communities, collections)
+      unlocked_work.add_files(params)
       unlocked_work.save!
     end
     redirect_to @work
   end
 
   def update
+    communities = params[:work].delete :community
+    collections = params[:work].delete :collection
+
     authorize @work
     @work.unlock_and_fetch_ldp_object do |unlocked_work|
-      unlocked_work.update!(permitted_attributes(@work))
+      unlocked_work.update_attributes(permitted_attributes(@work))
+      unlocked_work.add_communities_and_collections(communities, collections)
+      unlocked_work.add_files(params)
+      unlocked_work.save!
     end
     redirect_to @work
   end
