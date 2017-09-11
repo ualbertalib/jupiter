@@ -30,7 +30,7 @@ class Work < JupiterCore::LockedLdpObject
   end
 
   def member_file_sets
-    FileSet.where(is_member_of: id)
+    FileSet.where(member_of_collections: id)
   end
 
   unlocked do
@@ -39,6 +39,22 @@ class Work < JupiterCore::LockedLdpObject
 
     def add_to_path(community_id, collection_id)
       self.member_of_paths += ["#{community_id}/#{collection_id}"]
+    end
+
+    def add_communities_and_collections(communities, collections)
+      return unless communities.present? && collections.present?
+      communities.each_with_index do |community, idx|
+        add_to_path(community, collections[idx])
+      end
+    end
+
+    def add_files(params)
+      # Need a work id for file sets to point to
+      save! if id.nil? && params[:work][:file].any?
+
+      params[:work][:file].each do |file|
+        fileset = FileSet.add_new_to_work(file, self)
+      end
     end
   end
 
