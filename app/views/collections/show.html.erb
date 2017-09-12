@@ -34,7 +34,7 @@
         <% @collection.member_works.each do |work| %>
           <div class="list-group-item list-group-item-action d-flex justify-content-between">
             <%= link_to work.title, work_path(work) %>
-            <div class="btn-group">
+            <div class="btn-group align-self-center">
               <% if policy(@collection).edit? %>
                 <%= link_to t('edit'), edit_work_path(work), class:'btn btn-outline-primary' %>
               <% end %>
