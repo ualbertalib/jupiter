@@ -9,9 +9,9 @@
     <div class="col-md-2" >
       <h2><%= link_to t('admin.header'), admin_root_path %></h2>
 
-      <%= render 'sidebar_group', title: t('admin.works.title') do %>
-        <li class="nav-item"><%= link_to t('admin.works.index.header'), '#', class: 'nav-link' %></li>
-        <li class="nav-item"><%= link_to t('admin.works.new.header'), new_work_path, class: 'nav-link' %></li>
+      <%= render 'sidebar_group', title: t('admin.items.title') do %>
+        <li class="nav-item"><%= link_to t('admin.items.index.header'), '#', class: 'nav-link' %></li>
+        <li class="nav-item"><%= link_to t('admin.items.new.header'), new_item_path, class: 'nav-link' %></li>
       <% end %>
 
       <%= render 'sidebar_group', title: t('admin.users.title') do %>

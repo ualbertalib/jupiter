@@ -17,8 +17,8 @@ class User < ApplicationRecord
     end
   }
 
-  def works
-    Work.where(owner: id)
+  def items
+    Item.where(owner: id)
   end
 
 end
