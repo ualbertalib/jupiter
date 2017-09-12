@@ -1,37 +1,37 @@
-<%= simple_form_for work, html: {multipart: true} do |f| %>
-  <% work.display_attributes.each do |prop, _| %>
+<%= simple_form_for item, html: {multipart: true} do |f| %>
+  <% item.display_attributes.each do |prop, _| %>
     <% next if ['visibility', 'owner', 'record_created_at', 'doi', 'embargo_end_date'].include? prop %>
     <%= f.input prop %>
   <% end %>
   <%= f.input :visibility,
   as: :unread_select,
   collection: ['public', 'private', 'authenticated'],
-  input_html: {name: 'work[visibility]'}
+  input_html: {name: 'item[visibility]'}
   %>
   <%= f.input :community,
     as: :unread_select,
     collection: Community.all,
     label_method: :title,
     value_method: :id,
-    input_html: {name: 'work[community][]'}
+    input_html: {name: 'item[community][]'}
   %>
   <%= f.input :collection,
     as: :unread_select,
     disabled: true,
     collection: [],
-    input_html: {name: 'work[collection][]'}
+    input_html: {name: 'item[collection][]'}
   %>
   <div class="file_upload">
     <div class="row">
       <div class="col-6">
         <%= f.input :file,
           as: :file,
-          label: t('works.file_label'),
-          input_html: {name: 'work[file][]'}
+          label: t('items.file_label'),
+          input_html: {name: 'item[file][]'}
         %>
       </div>
       <div class="col-6">
-        <%= link_to t('works.add_another_file'),
+        <%= link_to t('items.add_another_file'),
           '#',
           class: 'btn btn-secondary add-file'
         %>
