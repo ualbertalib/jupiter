@@ -41,6 +41,7 @@ gem 'pundit'
 
 # Misc Utilities
 gem 'kaminari'
+gem 'faker'
 
 group :development, :test do
   gem 'sdoc', require: false
