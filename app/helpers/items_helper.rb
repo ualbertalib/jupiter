@@ -1,4 +1,4 @@
-module WorksHelper
+module ItemsHelper
   def to_named_path(path)
     return unless path
     community_id, collection_id = path.split('/')

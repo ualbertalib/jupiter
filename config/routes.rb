@@ -3,7 +3,7 @@ require_dependency 'admin_constraint'
 Rails.application.routes.draw do
   root to: 'welcome#index'
 
-  resources :works do
+  resources :items do
     collection do
       get 'search'
     end

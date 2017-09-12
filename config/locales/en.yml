@@ -46,7 +46,7 @@ en:
         button_text: 'Search'
       links:
         communities: 'Communities'
-        new_work: 'Upload'
+        new_item: 'Upload'
         login: 'Log In'
         admin: 'Admin'
         logout: 'Logout'
@@ -91,7 +91,7 @@ en:
         rails: 'Rails'
         statistics: 'Statistics'
         recent_activity: 'Recent Activity'
-        latest_works: 'Latest works'
+        latest_items: 'Latest items'
         latest_users: 'Latest users'
     communities_and_collections:
       title: Communities and Collections
@@ -122,7 +122,7 @@ en:
       title: 'Analytics'
       index:
         header: 'View Analytics'
-    works:
+    items:
       title: 'Items'
       index:
         header: 'Manage Items'
@@ -149,9 +149,9 @@ en:
         impersonate_link_text: 'Impersonate'
         impersonate_dialog: "Are you sure you want to impersonate %{user}?"
         impersonate_flash: "You are now impersonating %{user}"
-        no_works_found: 'There are no works for this user'
-        user_works: 'User works'
-        display_works_count: "Displaying %{works_count} of %{total_works_count} total works."
+        no_items_found: 'There are no items for this user'
+        user_items: 'User items'
+        display_items_count: "Displaying %{items_count} of %{total_items_count} total items."
         # TODO: most of these are generic enough to be moved up in a common namespace
         sort: 'Sort'
         sort_by: 'Sort options'
@@ -181,11 +181,11 @@ en:
     show:
       header: "Collection: %{title}"
       parent_community: "Parent Community: %{title}"
-      works_list_header: 'Works in this Collection'
-      no_works_in_collection: 'There are no works in this Collection'
-      work_delete_confirm: 'Are you sure you want to delete work "%{title}"?'
+      items_list_header: 'Items in this Collection'
+      no_items_in_collection: 'There are no items in this Collection'
+      item_delete_confirm: 'Are you sure you want to delete item "%{title}"?'
     errors:
-      member_works_must_be_empty: "must be empty. Currently: %{list_of_works}"
+      member_items_must_be_empty: "must be empty. Currently: %{list_of_items}"
 
   communities:
     destroy:
@@ -217,22 +217,22 @@ en:
       cta_lead_text: 'Keep it. Share it. Use it. Welcome to University of Alberta’s Digital Repository and Asset Management Services.'
       cta_link_text: 'Check Me Out on GitHub'
 
-  works:
+  items:
     index:
-      header: 'Works'
+      header: 'Items'
     edit:
-      header: 'Edit Work'
+      header: 'Edit Item'
     show:
-      header: "Work: %{title}"
+      header: "Item: %{title}"
       member_of: 'Member of'
       contain_files: 'Contains files'
       fileset: 'FileSet'
       original_filename: 'Original Filename'
       mime_type: 'MIME Type'
     new:
-      header: 'Create a new work'
+      header: 'Create a new item'
     search:
-      header: 'Search Works'
+      header: 'Search Items'
       found_results: "Found %{count} results"
       refine_your_search: 'Refine your search'
       no_results_found: No results found

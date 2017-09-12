@@ -30,30 +30,30 @@
   </div>
 </div>
 
-<h5 class="works-header">
-  <%= t('.works_list_header') %>
+<h5 class="items-header">
+  <%= t('.items_list_header') %>
 </h5>
 
 <div class="row mt-3">
   <div class="col">
-    <div class="list-group collection-works">
-      <% if @collection.member_works.count > 0 %>
-        <% @collection.member_works.each do |work| %>
+    <div class="list-group collection-items">
+      <% if @collection.member_items.count > 0 %>
+        <% @collection.member_items.each do |item| %>
           <div class="list-group-item list-group-item-action d-flex justify-content-between">
-            <%= link_to work.title, work_path(work) %>
+            <%= link_to item.title, item_path(item) %>
             <div class="btn-group align-self-center">
               <% if policy(@collection).edit? %>
-                <%= link_to t('edit'), edit_work_path(work), class:'btn btn-outline-primary' %>
+                <%= link_to t('edit'), edit_item_path(item), class:'btn btn-outline-primary' %>
               <% end %>
               <% if policy(@collection).destroy? %>
-                <%= link_to t('delete'), work_path(work), method: :delete, class:'btn btn-danger',
-                    data: { confirm: t('.work_delete_confirm', title: work.title) } %>
+                <%= link_to t('delete'), item_path(item), method: :delete, class:'btn btn-danger',
+                    data: { confirm: t('.item_delete_confirm', title: item.title) } %>
               <% end %>
             </div>
           </div>
         <% end %>
       <% else %>
-          <%= t('.no_works_in_collection') %>
+          <%= t('.no_items_in_collection') %>
       <% end %>
     </div>
   </div>
