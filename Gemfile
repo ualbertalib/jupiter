@@ -40,8 +40,8 @@ gem 'omniauth-saml'
 gem 'pundit'
 
 # Misc Utilities
-gem 'kaminari'
 gem 'faker'
+gem 'kaminari'
 
 group :development, :test do
   gem 'sdoc', require: false
