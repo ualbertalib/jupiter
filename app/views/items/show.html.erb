@@ -1,6 +1,19 @@
 <% page_title( t('.header', title: @item.title)) %>
 
-<%= render partial: 'breadcrumbs' %>
+<div class="item-breadcrumb">
+  <% @item.paths.each do |path| %>
+    <ol class="breadcrumb mb-1">
+      <li class="breadcrumb-item">
+        <%= link_to(path.community.title, community_path(path.community)) %>
+      </li>
+      <li class="breadcrumb-item">
+        <%= link_to(path.collection.title,
+            community_collection_path(path.community, path.collection)) %>
+      </li>
+      <li class="breadcrumb-item active"><%= @item.title %></li>
+    </ol>
+  <% end %>
+</div>
 
 <h1 class="mt-3">
   <%= t('.header', title: @item.title) %>

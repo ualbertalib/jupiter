@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class WorkShowTest < ActionDispatch::IntegrationTest
+class ItemShowTest < ActionDispatch::IntegrationTest
 
   def before_all
     super
@@ -19,8 +19,8 @@ class WorkShowTest < ActionDispatch::IntegrationTest
                    .new_locked_ldp_object(community_id: @community1.id,
                                           title: 'Another collection', owner: 1)
                    .unlock_and_fetch_ldp_object(&:save!)
-    @work1 = Work.new_locked_ldp_object.unlock_and_fetch_ldp_object do |uo|
-      uo.title = 'Fantastic work'
+    @item1 = Item.new_locked_ldp_object.unlock_and_fetch_ldp_object do |uo|
+      uo.title = 'Fantastic item'
       uo.owner = 1
       uo.visibility = 'public'
       uo.add_to_path(@community1.id, @collection1.id)
@@ -32,7 +32,7 @@ class WorkShowTest < ActionDispatch::IntegrationTest
   test 'visiting the show page for an item with two collections as an admin' do
     user = users(:admin)
     sign_in_as user
-    get work_url(@work1)
+    get item_url(@item1)
 
     # Shows two sets of breadcrumbs to the two collections
     assert_select 'ol.breadcrumb', count: 2
