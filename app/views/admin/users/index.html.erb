@@ -1,6 +1,5 @@
 <% page_title(t('.header')) %>
 
-
 <ol class="breadcrumb mb-5">
   <li class="breadcrumb-item"><%= link_to t('admin.header'), admin_root_path %></li>
   <li class="breadcrumb-item active"><%= t('.header') %></li>
@@ -13,12 +12,16 @@
   <%= hidden_field_tag :direction, params[:direction] if params[:direction] %>
   <%= hidden_field_tag :sort, params[:sort] if params[:sort]%>
 
-  <div class="input-group">
-    <%= search_field_tag :query, params[:query], placeholder: t('.search_placeholder'), class: 'form-control' %>
+  <div class="input-group search-field has-clear d-flex justify-content-between">
+    <div class="input-group">
+      <%= search_field_tag :query, params[:query], placeholder: t('.search_placeholder'),
+          class: 'form-control search-text' %>
+      <%= fa_icon 'times', class: 'search-clear', style: "display: none;" %>
+    </div>
     <span class="input-group-btn">
       <%= button_tag name: nil, type: 'submit', class: "btn btn-secondary" do %>
-      <%= fa_icon 'search' %>
-       <%= t('.search_button') %>
+        <%= fa_icon 'search' %>
+        <%= t('.search_button') %>
       <% end %>
     </span>
   </div>
