@@ -3,7 +3,7 @@ require 'test_helper'
 # TODO: This test would be better as an System Acceptance test instead?
 class CollectionShowTest < ActionDispatch::IntegrationTest
 
-  # TODO: add tests involving non-public works
+  # TODO: add tests involving non-public items
 
   def before_all
     super
@@ -16,9 +16,9 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
     @collection = Collection.new_locked_ldp_object(community_id: @community.id, title: 'Nice collection', owner: 1)
                             .unlock_and_fetch_ldp_object(&:save!)
     @items = (0..1).map do |i|
-      Work.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
+      Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                  owner: 1,
-                                 title: "Fancy Work and/or Item #{i}").unlock_and_fetch_ldp_object do |uo|
+                                 title: "Fancy Item #{i}").unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(@community.id, @collection.id)
         uo.save!
       end
@@ -48,11 +48,11 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
     assert delete.first.attributes['data-method'].to_s == 'delete'
 
     # Items are shown
-    assert_select 'div.collection-works .list-group-item', count: 2
+    assert_select 'div.collection-items .list-group-item', count: 2
 
     # Links to items
     @items.each do |item|
-      item_links = css_select "div.collection-works .list-group-item a[href='#{work_path(item)}']"
+      item_links = css_select "div.collection-items .list-group-item a[href='#{item_path(item)}']"
       assert item_links.count == 2
       # Link to item
       assert item_links.first.text == item.title
@@ -61,7 +61,7 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
       assert item_links.last.attributes['data-method'].to_s == 'delete'
 
       # Link to edit item
-      assert_select "div.collection-works .list-group-item a[href='#{edit_work_path(item)}']", text: 'Edit'
+      assert_select "div.collection-items .list-group-item a[href='#{edit_item_path(item)}']", text: 'Edit'
     end
   end
 
@@ -87,18 +87,18 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
                   count: 0
 
     # Items are shown
-    assert_select 'div.collection-works .list-group-item', count: 2
+    assert_select 'div.collection-items .list-group-item', count: 2
 
     # Links to items
     @items.each do |item|
-      item_links = css_select "div.collection-works .list-group-item a[href='#{work_path(item)}']"
+      item_links = css_select "div.collection-items .list-group-item a[href='#{item_path(item)}']"
       assert item_links.count == 1
       # Link to item
       assert item_links.first.text == item.title
       # No link to delete item
       assert item_links.first.attributes['data-method'].to_s != 'delete'
       # No link to edit item
-      assert_select "div.collection-works .list-group-item a[href='#{edit_work_path(item)}']", count: 0
+      assert_select "div.collection-items .list-group-item a[href='#{edit_item_path(item)}']", count: 0
     end
   end
 
