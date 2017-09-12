@@ -18,7 +18,7 @@ module Admin::UsersHelper
             params: { query: params[:query], sort: column, direction: direction }
   end
 
-  def works_sort_link(column, sort, title = nil)
+  def items_sort_link(column, sort, title = nil)
     title ||= "#{column} #{sort}"
     klass = 'dropdown-item'
     klass += ' active' if params[:sort] == column && params[:direction] == sort

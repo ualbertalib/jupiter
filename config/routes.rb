@@ -2,7 +2,7 @@ require 'sidekiq/web'
 require_dependency 'admin_constraint'
 
 Rails.application.routes.draw do
-  resources :works do
+  resources :items do
     collection do
       get 'search'
     end

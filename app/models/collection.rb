@@ -15,8 +15,8 @@ class Collection < JupiterCore::LockedLdpObject
     "#{community_id}/#{id}"
   end
 
-  def member_works
-    Work.where(member_of_paths: path)
+  def member_items
+    Item.where(member_of_paths: path)
   end
 
   def as_json(_options)
@@ -31,10 +31,10 @@ class Collection < JupiterCore::LockedLdpObject
     end
 
     def can_be_destroyed?
-      return true if member_works.count == 0
-      errors.add(:member_works,
-                 I18n.t('collections.errors.member_works_must_be_empty',
-                        list_of_works: member_works.map(&:title).join(', ')))
+      return true if member_items.count == 0
+      errors.add(:member_items,
+                 I18n.t('collections.errors.member_items_must_be_empty',
+                        list_of_items: member_items.map(&:title).join(', ')))
       throw(:abort)
     end
   end
