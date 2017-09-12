@@ -41,6 +41,12 @@ class CollectionsController < ApplicationController
       unlocked_collection.update!(permitted_attributes(Collection))
     end
     flash[:notice] = t('.updated')
+
+    # TODO: Needs to be rethinked (and destroy action for both communties and collections)
+    # You can access this from both admin communties and collections index as well as communities show page
+    # When your in communities show page and go to edit the collection this shouldn't be redirecting to
+    # the admin communities and collections index page, it should go back to the communities show page...no?
+    # Perhaps better to only allow this behaviour from admin communities and collections?
     redirect_to admin_communities_and_collections_path
   end
 

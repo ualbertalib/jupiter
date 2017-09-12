@@ -1,4 +1,4 @@
-class Work < JupiterCore::LockedLdpObject
+class Item < JupiterCore::LockedLdpObject
 
   Path = Struct.new(:community, :collection)
 
@@ -41,8 +41,8 @@ class Work < JupiterCore::LockedLdpObject
   end
 
   unlocked do
-    validates :embargo_end_date, presence: true, if: ->(work) { work.visibility == VISIBILITY_EMBARGO }
-    validates :embargo_end_date, absence: true, if: ->(work) { work.visibility != VISIBILITY_EMBARGO }
+    validates :embargo_end_date, presence: true, if: ->(item) { item.visibility == VISIBILITY_EMBARGO }
+    validates :embargo_end_date, absence: true, if: ->(item) { item.visibility != VISIBILITY_EMBARGO }
 
     def add_to_path(community_id, collection_id)
       self.member_of_paths += ["#{community_id}/#{collection_id}"]

@@ -135,15 +135,15 @@ module JupiterCore
     # attribute for forms to modify. Subclasses should override this and remove any other sensitive attributes from
     # this array
     #
-    # a Work +LockedLDPObject+ might choose to protect its +owner+ attribute by overriding this method:
+    # a Item +LockedLDPObject+ might choose to protect its +owner+ attribute by overriding this method:
     #
     #  def self.safe_attributes
     #    super - [:owner]
     #  end
     #
-    # and then enforce that in a controller like works_controller.rb:
-    #    def work_params
-    #      params[:work].permit(Work.safe_attributes)
+    # and then enforce that in a controller like items_controller.rb:
+    #    def item_params
+    #      params[:item].permit(Item.safe_attributes)
     #    end
     def self.safe_attributes
       self.attribute_names - [:id]
@@ -152,10 +152,10 @@ module JupiterCore
     # Accepts a symbol representing the attribute name, and returns a Hash containing
     # metadata about an object's attributes.
     #
-    # Given a subclass +Work+ with an attribute declaration:
+    # Given a subclass +Item+ with an attribute declaration:
     #   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
     #
-    # then the Hash returned by <tt>Work.attribute_metadata(:title)</tt> would be:
+    # then the Hash returned by <tt>Item.attribute_metadata(:title)</tt> would be:
     #   {
     #      :predicate => #<RDF::Vocabulary::Term:0x3fe32a1d1a30 URI:http://purl.org/dc/terms/title>,
     #      :multiple => false,
@@ -169,11 +169,11 @@ module JupiterCore
 
     # Accepts a String name of a name-mangled solr field, and returns the symbol of the attribute that corresponds to it
     #
-    # Given a subclass +Work+ with an attribute declaration:
+    # Given a subclass +Item+ with an attribute declaration:
     #   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
     #
     # then:
-    #   Work.solr_name_to_attribute_name('title_tesim')
+    #   Item.solr_name_to_attribute_name('title_tesim')
     #   => :title
     def self.solr_name_to_attribute_name(solr_name)
       self.reverse_solr_name_cache[solr_name]
@@ -205,8 +205,8 @@ module JupiterCore
     # Accepts a hash of name-value pairs to query for, and returns an Array of matching +LockedLDPObject+
     #
     # For example:
-    #   Work.where(title: 'Test upload')
-    #    => [#<Work id: "e5f4a074-5bcb-48a4-99ee-12bc83cef291", title: "Test upload", subject: "", creator: "", contributor: "", description: "", publisher: "", date_created: "", language: "", doi: "", member_of_paths: ["98124366-c8b2-487a-95f0-a1c18c805ddd/799e2eee-5435-4f08-bf3d-fc256fee9447"]>
+    #   Item.where(title: 'Test upload')
+    #    => [#<Item id: "e5f4a074-5bcb-48a4-99ee-12bc83cef291", title: "Test upload", subject: "", creator: "", contributor: "", description: "", publisher: "", date_created: "", language: "", doi: "", member_of_paths: ["98124366-c8b2-487a-95f0-a1c18c805ddd/799e2eee-5435-4f08-bf3d-fc256fee9447"]>
     def self.where(attributes)
       all.where(attributes)
     end
@@ -256,9 +256,9 @@ module JupiterCore
     #
     # eg)
     #    2.4.0 :003 > solr_doc
-    #    => {"system_create_dtsi"=>"2017-08-01T17:07:08Z", "system_modified_dtsi"=>"2017-08-01T17:07:08Z", "has_model_ssim"=>["IRWork"], "id"=>"88489b6e-12dd-4eea-b833-af08782c419e", "visibility_ssim"=>["public"], "owner_ssim"=>[""], "title_tesim"=>["Test"], "subject_tesim"=>[""], "creator_tesim"=>[""], "contributor_tesim"=>[""], "description_tesim"=>[""], "publisher_tesim"=>[""], "date_created_tesim"=>[""], "date_created_ssi"=>"", "language_tesim"=>[""], "doi_ssim"=>[""], "member_of_paths_dpsim"=>["6d0a8efa-ec6e-4fb9-bd67-e7877376c5ca/7e5d0653-fcb0-45a1-bb9c-ec3b896afcba"], "embargo_end_date_tesim"=>[""], "embargo_end_date_ssi"=>"", "_version_"=>1574549301238956032, "timestamp"=>"2017-08-01T17:07:08.507Z", "score"=>2.5686157}
+    #    => {"system_create_dtsi"=>"2017-08-01T17:07:08Z", "system_modified_dtsi"=>"2017-08-01T17:07:08Z", "has_model_ssim"=>["IRItem"], "id"=>"88489b6e-12dd-4eea-b833-af08782c419e", "visibility_ssim"=>["public"], "owner_ssim"=>[""], "title_tesim"=>["Test"], "subject_tesim"=>[""], "creator_tesim"=>[""], "contributor_tesim"=>[""], "description_tesim"=>[""], "publisher_tesim"=>[""], "date_created_tesim"=>[""], "date_created_ssi"=>"", "language_tesim"=>[""], "doi_ssim"=>[""], "member_of_paths_dpsim"=>["6d0a8efa-ec6e-4fb9-bd67-e7877376c5ca/7e5d0653-fcb0-45a1-bb9c-ec3b896afcba"], "embargo_end_date_tesim"=>[""], "embargo_end_date_ssi"=>"", "_version_"=>1574549301238956032, "timestamp"=>"2017-08-01T17:07:08.507Z", "score"=>2.5686157}
     #    2.4.0 :004 > JupiterCore::LockedLdpObject.reify_solr_doc(solr_doc)
-    #    => #<Work id: "88489b6e-12dd-4eea-b833-af08782c419e", visibility: "public", owner: "", title: "Test", subject: "", creator: "", contributor: "", description: "", publisher: "", date_created: "", language: "", doi: "", member_of_paths: ["6d0a8efa-ec6e-4fb9-bd67-e7877376c5ca/7e5d0653-fcb0-45a1-bb9c-ec3b896afcba"], embargo_end_date: "">
+    #    => #<Item id: "88489b6e-12dd-4eea-b833-af08782c419e", visibility: "public", owner: "", title: "Test", subject: "", creator: "", contributor: "", description: "", publisher: "", date_created: "", language: "", doi: "", member_of_paths: ["6d0a8efa-ec6e-4fb9-bd67-e7877376c5ca/7e5d0653-fcb0-45a1-bb9c-ec3b896afcba"], embargo_end_date: "">
     #
     def self.reify_solr_doc(solr_doc)
       raise ArgumentError, 'Not a valid LockedLDPObject representation' unless solr_doc['has_model_ssim'].present?

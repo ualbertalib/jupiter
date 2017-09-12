@@ -33,9 +33,10 @@
             <%= link_to t('delete'), community_path(community), class: 'btn btn-danger', method: :delete, data: {confirm: t('.delete_confirm', title: community.title) } %>
           </div>
         </div>
+
+        <ul class="list-group mt-3" id="<%=community.id%>"></ul>
       </li>
 
-      <ul class="list-group" id="<%=community.id%>"></ul>
 
     <% end %>
   </ul>

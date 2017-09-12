@@ -10,14 +10,14 @@ class Admin::UsersController < Admin::AdminController
                                     :impersonate]
 
   def index
-    # TODO: Add filters for admin/suspended/active/no works etc?
+    # TODO: Add filters for admin/suspended/active/no items etc?
     @users = User.search(params[:query]).order("#{user_sort_column} #{sort_direction}").page params[:page]
   end
 
   def show
-    @works = @user.works
-    @works = @works.sort(work_sort_column, sort_direction) if work_sort_column && sort_direction
-    @works = @works.page params[:page]
+    @items = @user.items
+    @items = @items.sort(item_sort_column, sort_direction) if item_sort_column && sort_direction
+    @items = @items.page params[:page]
   end
 
   def suspend
@@ -87,7 +87,8 @@ class Admin::UsersController < Admin::AdminController
     User.column_names.include?(params[:sort]) ? params[:sort] : 'email'
   end
 
-  def work_sort_column
+  # TODO: Should be record_created_at?
+  def item_sort_column
     ['title', 'date_created'].include?(params[:sort]) ? params[:sort] : 'date_created'
   end
 
