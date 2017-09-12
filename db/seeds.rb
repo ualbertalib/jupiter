@@ -19,7 +19,7 @@ if Rails.env.development?
   admin = User.create(name: 'Admin', email: 'admin@ualberta.ca', admin: true)
   admin.identities.create(provider: 'developer', uid: 'admin@ualberta.ca')
 
-  [ "cat", "dog", "unicorn", "hamburger"].each_with_index do |thing, idx|
+  [ "cat", "dog", "unicorn", "hamburger", "librarian"].each_with_index do |thing, idx|
     if idx % 2 == 0
       title = "The department of #{thing.capitalize}"
     else
