@@ -7,20 +7,19 @@
     <%= t('.header', title: @collection.title) %>
   </h1>
 
-  <div>
-    <div class="btn-group">
-      <% if policy(@collection).edit? %>
-        <%= link_to t('edit'),
-            edit_community_collection_path(@community, @collection),
-            class:'btn btn-outline-primary' %>
-      <% end %>
-      <% if policy(@collection).destroy? %>
-        <%= link_to t('delete'), community_collection_path(@community, @collection), method: :delete,
-            class:'btn btn-danger',
-            data: { confirm: t('admin.communities_and_collections.collection.delete_confirm',
-                    title: @collection.title) } %>
-      <% end %>
-    </div>
+  <%# "align-self-center" stops buttons from growing to size of H1 in this flexbox %>
+  <div class="btn-group align-self-center">
+    <% if policy(@collection).edit? %>
+      <%= link_to t('edit'),
+          edit_community_collection_path(@community, @collection),
+          class:'btn btn-outline-primary' %>
+    <% end %>
+    <% if policy(@collection).destroy? %>
+      <%= link_to t('delete'), community_collection_path(@community, @collection), method: :delete,
+          class:'btn btn-danger',
+          data: { confirm: t('admin.communities_and_collections.collection.delete_confirm',
+                  title: @collection.title) } %>
+    <% end %>
   </div>
 </div>
 
