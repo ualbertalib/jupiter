@@ -193,6 +193,8 @@ en:
     index:
       header: 'Communities'
       create_new_community: 'Create New Community'
+    logo:
+      has_no_logo: 'Community has no logo'
     new:
       header: 'Add New Community'
     show:
