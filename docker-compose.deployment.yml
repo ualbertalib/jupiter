@@ -45,9 +45,6 @@ services:
       - redis:/data
 
   web:
-    build: 
-      context: .
-      dockerfile: Dockerfile.deployment
     image: ualbertalib/jupiter
     env_file: .env_deployment
     environment:

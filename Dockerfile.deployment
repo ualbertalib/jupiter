@@ -1,6 +1,8 @@
 FROM ruby:2.3.4
 LABEL maintainer="University of Alberta Libraries"
 
+ENV DEPLOY_UID 1000
+RUN useradd -u $DEPLOY_UID deploy
 # Need to add jessie-backports repo so we can get FFMPEG, doesn't come with jessie debian by default
 # RUN echo 'deb http://ftp.debian.org/debian jessie-backports main'  >> /etc/apt/sources.list
 
@@ -35,6 +37,7 @@ ENV APP_ROOT /app
 RUN mkdir -p $APP_ROOT
 WORKDIR $APP_ROOT
 
+USER deploy
 # Preinstall gems in an earlier layer so we don't reinstall every time any file changes.
 COPY Gemfile  ./
 COPY Gemfile.lock ./
@@ -47,6 +50,8 @@ COPY config/puma.rb config/puma.rb
 ADD . /app
 
 # Precompile Rails assets. We set a dummy secret key
+ENV DATABASE_URL mysql2:assets_throwaway.db
+ENV  SECRET_KEY_BASE thisisatopsecret
 RUN RAILS_ENV=uat bundle exec rake assets:precompile
 
 EXPOSE 3000
