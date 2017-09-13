@@ -8,6 +8,7 @@
 
 if Rails.env.development?
   require 'active_fedora/cleaner'
+  require "open-uri"
 
   puts 'Starting seeding of dev database...'
 
@@ -30,6 +31,23 @@ if Rails.env.development?
       title: title,
       description: Faker::Lorem.sentence(20, false, 0).chop
     ).unlock_and_fetch_ldp_object(&:save!)
+
+    # Attach logos, if possible
+    filename = File.expand_path(Rails.root + "tmp/#{thing}.png")
+    unless File.exist?(filename)
+      if ENV['DOWNLOAD_COMMUNITY_LOGOS'].present?
+        set = (thing == 'cat') ? 'set4' : 'set1'
+        url = Faker::Avatar.image(thing, "100x100", "png", set)
+        unless File.exist?(filename)
+          File.open(filename, 'wb') do |fo|
+            fo.write open(url).read 
+          end
+        end
+      end
+    end
+    if File.exist?(filename)
+      community.logo.attach(io: File.open(filename), filename: "#{thing}.png", content_type: "image/png")
+    end
 
     collection_first = collection_last = nil
     [ "Theses about #{thing.pluralize}",
