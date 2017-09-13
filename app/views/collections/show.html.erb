@@ -30,6 +30,12 @@
   </div>
 </div>
 
+<% if @collection.description.present? %>
+  <div class="p-3">
+    <p><%= @collection.description %></p>
+  </div>
+<% end %>
+
 <h5 class="items-header">
   <%= t('.items_list_header') %>
 </h5>
