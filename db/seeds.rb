@@ -13,7 +13,7 @@ if Rails.env.development?
   puts 'Starting seeding of dev database...'
 
   # start fresh
-  User.destroy_all
+  [ SiteNotification, ActiveStorage::Blob, ActiveStorage::Attachment, Identity, User ].each(&:destroy_all)
   ActiveFedora::Cleaner.clean!
 
   # Seed an admin user
@@ -38,10 +38,8 @@ if Rails.env.development?
       if ENV['DOWNLOAD_COMMUNITY_LOGOS'].present?
         set = (thing == 'cat') ? 'set4' : 'set1'
         url = Faker::Avatar.image(thing, "100x100", "png", set)
-        unless File.exist?(filename)
-          File.open(filename, 'wb') do |fo|
-            fo.write open(url).read 
-          end
+        File.open(filename, 'wb') do |fo|
+          fo.write open(url).read
         end
       end
     end
