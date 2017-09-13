@@ -1,5 +1,6 @@
 <% if @community.member_collections.count > 0 %>
-  <%= render partial: 'admin/communities_and_collections/collection', collection: @community.member_collections, locals: {community: @community}  %>
+  <%= render partial: 'communities/collection', collection: @community.member_collections,
+      locals: {community: @community} %>
 <% else %>
   <li class="list-group-item list-group-item-action">
     <%= t('communities.show.no_collections') %>

@@ -2,7 +2,7 @@
   <div class="d-flex justify-content-between">
     <%= link_to collection.title, community_collection_path(community, collection) %>
 
-    <div class="btn-group">
+    <div class="btn-group align-self-center">
       <% if policy(collection).edit? %>
         <%= link_to t('edit'), edit_community_collection_path(community, collection),
             class:'btn btn-outline-primary edit-collection' %>
