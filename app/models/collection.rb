@@ -26,6 +26,8 @@ class Collection < JupiterCore::LockedLdpObject
   unlocked do
     before_destroy :can_be_destroyed?
 
+    validates :title, presence: true
+
     before_validation do
       self.visibility = JupiterCore::VISIBILITY_PUBLIC
     end

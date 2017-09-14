@@ -170,14 +170,16 @@ en:
     index:
       header: 'Collections'
     destroy:
-      deleted: 'Collection deleted'
+      deleted: 'Collection was successfully deleted!'
       not_empty_error: 'Cannot delete a non-empty Collection'
     update:
-      updated: 'Collection updated'
+      updated: 'Collection was successfully updated!'
     edit:
       header: 'Edit Collection'
     new:
       header: 'Create Collection'
+    create:
+      created: 'Collection was successfully created!'
     show:
       header: "Collection: %{title}"
       parent_community: "Parent Community: %{title}"
@@ -198,6 +200,8 @@ en:
       has_no_logo: 'Community has no logo'
     new:
       header: 'Add New Community'
+    create:
+      created: 'Community was successfully created!'
     show:
       collections_list_header: 'Collections in this Community'
       create_new_collection: 'Add Collection'
@@ -206,7 +210,7 @@ en:
       edit: 'Edit'
       no_collections: 'There are no Collections in this Community'
     update:
-      updated: 'Community updated'
+      updated: 'Community was successfully updated!'
     title: 'Community: %{title}'
     errors:
       member_collections_must_be_empty: "must be empty. Currently: %{list_of_collections}"
