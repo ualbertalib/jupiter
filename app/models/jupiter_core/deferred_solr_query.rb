@@ -60,6 +60,11 @@ class JupiterCore::DeferredSolrQuery
     criteria[:limit]
   end
 
+  # Kaminari integration
+  define_method Kaminari.config.page_method_name, (proc { |num|
+    limit(default_per_page).offset(default_per_page * ([num.to_i, 1].max - 1))
+  })
+
   def total_count
     af_model = criteria[:model].send(:derived_af_class)
     results_count, _ = JupiterCore::Search.perform_solr_query(q: where_clause,
