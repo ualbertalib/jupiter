@@ -16,12 +16,9 @@ class JupiterCore::Search
     base_query << %Q((_query_:"{!raw f=visibility_ssim}public"#{ownership_query}))
     base_query << q if q.present?
 
-    results_count, results, facets = perform_solr_query(q: base_query, fq: fq, facet: true,
-                                                        facet_fields: models.map(&:facets).flatten.uniq,
-                                                        restrict_to_model: models.map { |m| m.send(:derived_af_class) })
-
-    JupiterCore::SearchResults.new(construct_facet_map(models), results_count, facets,
-                                   results.map { |res| JupiterCore::LockedLdpObject.reify_solr_doc(res) })
+    JupiterCore::SearchResults.new(q: base_query, fq: fq, facet_map: construct_facet_map(models),
+    facet_fields: models.map(&:facets).flatten.uniq, restrict_to_model: models.map { |m| m.send(:derived_af_class) },
+    facet_value_presenters: construct_facet_presenter_map(models))
   end
 
   # derive additional restriction or broadening of the visibilitily query on top of the default
@@ -67,6 +64,11 @@ class JupiterCore::Search
     params[:start] = start if start.present?
     params[:sort] = sort if sort.present?
 
+    puts "*" * 40
+    puts params.inspect
+    puts "Caller: #{caller[0]}"
+    puts "^" * 40
+
     response = ActiveFedora::SolrService.instance.conn.get('select', params: params)
 
     raise SearchFailed unless response['responseHeader']['status'] == 0
@@ -81,6 +83,11 @@ class JupiterCore::Search
     # combine the facet maps (solr_name => attribute_name) of all of the models being searched
     def construct_facet_map(models)
       models.map(&:reverse_solr_name_cache).reduce(&:merge)
+    end
+
+    # combine the facet maps (solr_name => facet_value_presenter) of all of the models being searched
+    def construct_facet_presenter_map(models)
+      models.map(&:facet_value_presenters).reduce(&:merge)
     end
 
   end

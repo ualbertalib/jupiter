@@ -47,8 +47,8 @@ class WorksController < ApplicationController
   end
 
   def search
-    @results = Work.search(q: params[:q])
-    authorize @results, :index?
+    @results = JupiterCore::Search.search(q: params[:q], fq: params[:fq], models: Work)
+    authorize Work, :search?
   end
 
   private

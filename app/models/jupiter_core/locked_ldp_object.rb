@@ -39,7 +39,7 @@ module JupiterCore
 
     # inheritable class attributes (not all class-level attributes in this class should be inherited,
     # these are the inheritance-safe attributes)
-    class_attribute :af_parent_class, :attribute_cache, :attribute_names, :facets,
+    class_attribute :af_parent_class, :attribute_cache, :attribute_names, :facets, :facet_value_presenters,
                     :reverse_solr_name_cache, :solr_calc_attributes
 
     # Returns the id of the object in LDP as a String
@@ -315,6 +315,7 @@ module JupiterCore
         child.attribute_cache = self.attribute_cache ? self.attribute_cache.dup : {}
         child.facets = self.facets ? self.facets.dup : []
         child.solr_calc_attributes = self.solr_calc_attributes.present? ? self.solr_calc_attributes.dup : {}
+        child.facet_value_presenters = self.facet_value_presenters.present? ? self.facet_value_presenters.dup : {}
         # child.derived_af_class
 
         # If there's no class between +LockedLdpObject+ and this child that's
@@ -434,19 +435,20 @@ module JupiterCore
         self.solr_calc_attributes[name] = { type: SOLR_DESCRIPTOR_MAP[solrize_for], callable: as }
       end
 
-      def has_multival_attribute(name, predicate, solrize_for: [], type: :string)
-        has_attribute(name, predicate, multiple: true, solrize_for: solrize_for, type: type)
+      def has_multival_attribute(name, predicate, solrize_for: [], type: :string, facet_value_presenter: nil)
+        has_attribute(name, predicate, multiple: true, solrize_for: solrize_for, type: type,
+                      facet_value_presenter: facet_value_presenter)
       end
 
       # a utility DSL for declaring attributes which allows us to store knowledge of them.
-      def has_attribute(name, predicate, multiple: false, solrize_for: [], type: :string)
+      def has_attribute(name, predicate, multiple: false, solrize_for: [], type: :string, facet_value_presenter: nil)
         raise PropertyInvalidError unless name.is_a? Symbol
         raise PropertyInvalidError unless predicate.present?
 
         # TODO: keep this conveinience, or push responsibility for [] onto the callsite?
         solrize_for = [solrize_for] unless solrize_for.is_a? Array
 
-        # index should contain only some combination of :search, :sort, :facet, :symbol, and :path
+        # index should contain only some combination of :search, :sort, :facet, :symbol, and :pathing
         # this isn't an exhaustive layering over this mess
         # https://github.com/mbarnett/solrizer/blob/e5dd2bd571b9ebdb8a8ab214574075c28951e53e/lib/solrizer/default_descriptors.rb
         # but it helps
@@ -463,8 +465,14 @@ module JupiterCore
           self.reverse_solr_name_cache[solr_name] = name
         end
 
-        self.facets << Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[:facet], type: type) if solrize_for.include?(:facet)
-        self.facets << Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[:path], type: type) if solrize_for.include?(:path)
+        facet_name = if solrize_for.include?(:facet)
+          Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[:facet], type: type)
+        elsif solrize_for.include?(:pathing)
+          Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[:pathing], type: type)
+        end
+
+        self.facets << facet_name if facet_name.present?
+        self.facet_value_presenters[facet_name] = facet_value_presenter if facet_name && facet_value_presenter.present?
 
         self.attribute_cache[name] = {
           predicate: predicate,

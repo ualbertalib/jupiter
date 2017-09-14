@@ -24,4 +24,8 @@ class WorkPolicy < LockedLdpObjectPolicy
     create?
   end
 
+  def search?
+    true
+  end
+
 end

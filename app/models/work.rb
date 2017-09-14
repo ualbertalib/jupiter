@@ -15,7 +15,12 @@ class Work < JupiterCore::LockedLdpObject
   has_attribute :language, ::RDF::Vocab::DC.language, solrize_for: [:search, :facet]
   has_attribute :doi, ::VOCABULARY[:ualib].doi, solrize_for: :exact_match
 
-  has_multival_attribute :member_of_paths, ::VOCABULARY[:ualib].path, solrize_for: :pathing
+  has_multival_attribute :member_of_paths, ::VOCABULARY[:ualib].path, solrize_for: :pathing,
+                         facet_value_presenter: -> (value) {
+                           ids = value.split('/')
+                           return Community.find(ids.first).title unless ids.count > 1
+                           return "#{Community.find(ids.first).title}/#{Collection.find(ids.second).title}"
+                         }
   has_attribute :embargo_end_date, ::RDF::Vocab::DC.modified, solrize_for: [:search, :sort]
 
   solr_index :doi_without_label, solrize_for: :exact_match,

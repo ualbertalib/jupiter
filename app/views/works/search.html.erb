@@ -14,7 +14,7 @@
             <% facet.each_facet_value do |name, count| %>
               <div class="row">
                 <div class="col">
-                  <%= "#{link_to name, ''}, #{count}" %>
+                  <%= link_to name, '' %>, <%= count %>
                 </div>
               </div>
             <% end %>
@@ -23,7 +23,7 @@
       <% end %>
     </div>
     <div class="col-md-10">
-      <% @results.results.each do |result| %>
+      <% @results.each do |result| %>
         <div class="row">
           <div class="col">
             <%= link_to result.title, work_path(result.id) %>
