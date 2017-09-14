@@ -21,7 +21,7 @@ if Rails.env.development?
   admin.identities.create(provider: 'developer', uid: 'admin@ualberta.ca')
 
   # Seed a non-admin user
-  non_admin = User.create(name: 'Admin', email: 'non_admin@ualberta.ca', admin: false)
+  non_admin = User.create(name: 'Non-admin', email: 'non_admin@ualberta.ca', admin: false)
   non_admin.identities.create(provider: 'developer', uid: 'non_admin@ualberta.ca')
 
   [ "cat", "dog", "unicorn", "hamburger", "librarian"].each_with_index do |thing, idx|
