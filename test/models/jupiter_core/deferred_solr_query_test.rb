@@ -39,6 +39,13 @@ class DeferredSolrQueryTest < ActiveSupport::TestCase
     assert items.send(:criteria).include? :where
   end
 
+  # regression test for #137
+  test 'setting an absurdly high limit on results by default' do
+    items = @@klass.where(title: 'foo')
+    assert items.send(:criteria).include? :limit
+    assert_equal items.send(:criteria)[:limit], JupiterCore::Search::MAX_RESULTS
+  end
+
   test 'sort constraints' do
     assert_raises ArgumentError do
       @@klass.sort(:title, :blah)
