@@ -1,14 +1,14 @@
 <% page_title( t('.header', title: @item.title)) %>
 
 <div class="item-breadcrumb">
-  <% @item.paths.each do |path| %>
-    <ol class="breadcrumb mb-1">
+  <% @item.each_community_collection do |community, collection| %>
+    <ol class="breadcrumb my-0 py-0">
       <li class="breadcrumb-item">
-        <%= link_to(path.community.title, community_path(path.community)) %>
+        <%= link_to(community.title, community_path(community)) %>
       </li>
       <li class="breadcrumb-item">
-        <%= link_to(path.collection.title,
-            community_collection_path(path.community, path.collection)) %>
+        <%= link_to(collection.title,
+            community_collection_path(community, collection)) %>
       </li>
       <li class="breadcrumb-item active"><%= @item.title %></li>
     </ol>

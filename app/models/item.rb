@@ -1,7 +1,5 @@
 class Item < JupiterCore::LockedLdpObject
 
-  Path = Struct.new(:community, :collection)
-
   ldp_object_includes Hydra::Works::WorkBehavior
 
   VISIBILITY_EMBARGO = 'embargo'.freeze
@@ -31,12 +29,10 @@ class Item < JupiterCore::LockedLdpObject
     super + [VISIBILITY_EMBARGO]
   end
 
-  def paths
-    return [] unless member_of_paths.present?
-    # Return array of structs
-    member_of_paths.map do |path|
+  def each_community_collection
+    member_of_paths.each do |path|
       community_id, collection_id = path.split('/')
-      Path.new(Community.find(community_id), Collection.find(collection_id))
+      yield Community.find(community_id), Collection.find(collection_id)
     end
   end
 
