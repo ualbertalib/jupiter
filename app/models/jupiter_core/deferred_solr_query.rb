@@ -5,6 +5,7 @@ class JupiterCore::DeferredSolrQuery
 
   def initialize(klass)
     criteria[:model] = klass
+    criteria[:limit] = JupiterCore::Search::MAX_RESULTS
     sort(:record_created_at, :desc)
   end
 
@@ -59,6 +60,11 @@ class JupiterCore::DeferredSolrQuery
   def limit_value
     criteria[:limit]
   end
+
+  # Kaminari integration
+  define_method Kaminari.config.page_method_name, (proc { |num|
+    limit(default_per_page).offset(default_per_page * ([num.to_i, 1].max - 1))
+  })
 
   def total_count
     af_model = criteria[:model].send(:derived_af_class)
