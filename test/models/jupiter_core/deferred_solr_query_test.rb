@@ -32,6 +32,20 @@ class DeferredSolrQueryTest < ActiveSupport::TestCase
     assert_equal @@klass.sort(:title, :desc).map(&:id), [another_obj.id, obj.id]
   end
 
+  # regression test for #138
+  test 'loss of clauses regression when paging' do
+    items = @@klass.where(title: 'foo')
+    items = items.page 1
+    assert items.send(:criteria).include? :where
+  end
+
+  # regression test for #137
+  test 'setting an absurdly high limit on results by default' do
+    items = @@klass.where(title: 'foo')
+    assert items.send(:criteria).include? :limit
+    assert_equal items.send(:criteria)[:limit], JupiterCore::Search::MAX_RESULTS
+  end
+
   test 'sort constraints' do
     assert_raises ArgumentError do
       @@klass.sort(:title, :blah)
