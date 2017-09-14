@@ -2,7 +2,7 @@
 
 <div class="item-breadcrumb">
   <% @item.each_community_collection do |community, collection| %>
-    <ol class="breadcrumb my-0 py-0">
+    <ol class="breadcrumb mb-1">
       <li class="breadcrumb-item">
         <%= link_to(community.title, community_path(community)) %>
       </li>
