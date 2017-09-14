@@ -33,39 +33,37 @@
 </div>
 
 <div class="d-flex justify-content-between mt-3">
-    <h4 class="collections-header">
-      <%= t('.collections_list_header') %>
-    </h4>
+  <h4 class="collections-header">
+    <%= t('.collections_list_header') %>
+  </h4>
   <% if policy(:collection).create? %>
       <%= link_to t('.create_new_collection'), new_community_collection_path(@community),
-          class: 'btn btn-primary' %>
+          class: 'btn btn-primary align-self-center' %>
   <% end %>
 </div>
 
 <div class="row mt-3">
   <div class="col-md-12">
-      <%# should be reversed, admin should be using communities partial not vice versa %>
-      <%# TODO: FIX ALL THIS... %>
-      <% if policy(:admin).access? %>
-        <ul class="list-group">
-          <%= render partial: 'admin/communities_and_collections/collections_list' %>
-        </ul>
-      <% else %>
-          <% if @community.member_collections.count > 0 %>
-            <div class="list-group">
-              <% @community.member_collections.each do |collection| %>
-                <%= link_to collection.title, community_collection_path(@community, collection),
-                    class: 'list-group-item list-group-item-action' %>
-                <% end %>
-            </div>
-          <% else %>
-            <ul class="list-group">
-              <li class="list-group-item list-group-item-action">
-                <%= t('communities.show.no_collections') %>
-              </li>
-            </ul>
+    <%# TODO: FIX ALL THIS... %>
+    <% if policy(:admin).access? %>
+      <ul class="list-group">
+        <%= render partial: 'collections_list' %>
+      </ul>
+    <% else %>
+      <% if @community.member_collections.count > 0 %>
+        <div class="list-group">
+          <% @community.member_collections.each do |collection| %>
+            <%= link_to collection.title, community_collection_path(@community, collection),
+                class: 'list-group-item list-group-item-action' %>
           <% end %>
+        </div>
+      <% else %>
+        <ul class="list-group">
+          <li class="list-group-item list-group-item-action">
+            <%= t('communities.show.no_collections') %>
+          </li>
+        </ul>
       <% end %>
-    </ul>
+    <% end %>
   </div>
 </div>
