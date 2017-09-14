@@ -32,6 +32,13 @@ class DeferredSolrQueryTest < ActiveSupport::TestCase
     assert_equal @@klass.sort(:title, :desc).map(&:id), [another_obj.id, obj.id]
   end
 
+  # regression test for #138
+  test 'loss of clauses regression when paging' do
+    items = @@klass.where(title: 'foo')
+    items = items.page 1
+    assert items.send(:criteria).include? :where
+  end
+
   test 'sort constraints' do
     assert_raises ArgumentError do
       @@klass.sort(:title, :blah)
