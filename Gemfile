@@ -29,7 +29,7 @@ gem 'solrizer', github: 'mbarnett/solrizer', branch: 'literally_types'
 
 # Database stuff
 gem 'mysql2', '>= 0.3.18', '< 0.5'
-gem 'redis', '~> 3.0'
+gem 'redis', '~> 3.3'
 gem 'rsolr'
 
 # Authentication
@@ -38,6 +38,10 @@ gem 'omniauth-saml'
 
 # Authorization
 gem 'pundit'
+
+# Background tasks
+gem 'sidekiq', '~> 5.0'
+gem 'sinatra' # used by sidekiq/web
 
 # Misc Utilities
 gem 'kaminari'

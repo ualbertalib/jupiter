@@ -12,14 +12,15 @@ volumes:
 
 services:
   mysql:
+    restart: always
     image: mysql:5.7
     env_file: .env_deployment
     volumes:
       - mysql:/var/lib/mysql
 
   solr:
+    restart: always
     image: solr
-    # Uncomment this if you want to access SOLR's web interface
     ports:
       - "8983:8983"
     volumes:
@@ -32,66 +33,48 @@ services:
       - /config
 
   fcrepo:
+    restart: always
     image: murny/docker-fcrepo4
     volumes:
       - fcrepo:/fcrepo4-data
-    # Uncomment this if you want to access Fedora's web interface
     ports:
       - "8080:8080"
 
   redis:
+    restart: always
     image: redis:alpine
     volumes:
       - redis:/data
 
-  web:
-    build: 
+  # Sidekiq
+  worker: &rails
+    restart: always
+    build:
       context: .
       dockerfile: Dockerfile.deployment
     image: ualbertalib/jupiter
+    command: bundle exec sidekiq
     env_file: .env_deployment
-    environment:
-      RAILS_SERVE_STATIC_FILES: enabled
-    command: bundle exec puma -e uat
-    volumes:
-      - .:/app
-    expose:
-      - "3000"
     depends_on:
       - mysql
       - fcrepo
       - redis
       - solr
 
+  # Rails
+  web:
+    <<: *rails
+    environment:
+      RAILS_SERVE_STATIC_FILES: enabled
+    command: bundle exec puma -e uat
+
   nginx:
+    restart: always
     image: nginx
-    depends_on: 
+    depends_on:
       - web
     env_file: .env_deployment
     volumes:
       - ./config/nginx.conf:/etc/nginx/conf.d/default.conf
-      - .:/app
     ports:
       - "80:80"
-
-  # No worker yet, uncomment this when we add something...preferablly sidekiq?
-  # worker:
-  #   build: .
-  #   image: ualbertalib/jupiter
-  #   command: bundle exec sidekiq
-  #   environment:
-  #     RAILS_ENV: development
-  #     DATABASE_URL: 'mysql2://root:mysecretpassword@mysql/'
-  #     FCREPO_URL: http://fcrepo:8080/fcrepo/rest
-  #     SOLR_URL: http://solr:8983/solr/development
-  #     SOLR_TEST_URL: http://solr:8983/solr/test
-  #     REDIS_URL: 'redis://redis/1'
-  #   volumes:
-  #     - .:/app
-  #   ports:
-  #     - "3000:3000"
-  #   depends_on:
-  #     - mysql
-  #     - fcrepo
-  #     - redis
-  #     - solr
