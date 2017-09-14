@@ -9,6 +9,7 @@ volumes:
     driver: local
   redis:
     driver: local
+  approot:
 
 services:
   mysql:
@@ -49,12 +50,11 @@ services:
   # Sidekiq
   worker: &rails
     restart: always
-    build:
-      context: .
-      dockerfile: Dockerfile.deployment
-    image: ualbertalib/jupiter
+    image: ualbertalib/jupiter:deployment
     command: bundle exec sidekiq
     env_file: .env_deployment
+    volumes:
+      - approot:/app
     depends_on:
       - mysql
       - fcrepo
@@ -76,5 +76,6 @@ services:
     env_file: .env_deployment
     volumes:
       - ./config/nginx.conf:/etc/nginx/conf.d/default.conf
+      - approot:/app
     ports:
       - "80:80"
