@@ -1,6 +1,6 @@
 class CollectionsController < ApplicationController
 
-  before_action -> { authorize :application, :admin? }, except: [:index, :show]
+  before_action -> { authorize :application, :admin? }, except: [:show]
 
   def show
     @collection = Collection.find(params[:id])
@@ -25,7 +25,7 @@ class CollectionsController < ApplicationController
       if unlocked_collection.save
         redirect_to community_collection_path(@community, @collection), notice: t('.created')
       else
-        render :new
+        render :new, status: :bad_request
       end
     end
   end
@@ -52,7 +52,7 @@ class CollectionsController < ApplicationController
         # Perhaps better to only allow this behaviour from admin communities and collections?
         redirect_to admin_communities_and_collections_path, notice: t('.updated')
       else
-        render :edit
+        render :edit, status: :bad_request
       end
     end
   end

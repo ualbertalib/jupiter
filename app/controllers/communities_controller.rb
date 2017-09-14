@@ -38,7 +38,7 @@ class CommunitiesController < ApplicationController
       if unlocked_community.save
         redirect_to @community, notice: t('.created')
       else
-        render :new
+        render :new, status: :bad_request
       end
     end
   end
@@ -56,7 +56,7 @@ class CommunitiesController < ApplicationController
       if unlocked_community.update(permitted_attributes(Community))
         redirect_to @community, notice: t('.updated')
       else
-        render :edit
+        render :edit, status: :bad_request
       end
     end
   end
