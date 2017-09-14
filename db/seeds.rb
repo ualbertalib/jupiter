@@ -20,6 +20,10 @@ if Rails.env.development?
   admin = User.create(name: 'Admin', email: 'admin@ualberta.ca', admin: true)
   admin.identities.create(provider: 'developer', uid: 'admin@ualberta.ca')
 
+  # Seed a non-admin user
+  non_admin = User.create(name: 'Admin', email: 'non_admin@ualberta.ca', admin: false)
+  non_admin.identities.create(provider: 'developer', uid: 'non_admin@ualberta.ca')
+
   [ "cat", "dog", "unicorn", "hamburger", "librarian"].each_with_index do |thing, idx|
     if idx % 2 == 0
       title = "The department of #{thing.capitalize}"
@@ -72,6 +76,57 @@ if Rails.env.development?
           uo.save!
         end
       end
+
+      # Add an private item
+      Item.new_locked_ldp_object(
+        owner: admin.id,
+        visibility: JupiterCore::VISIBILITY_PRIVATE,
+        title: "Private #{thing.pluralize}, public lives: a survey of social media trends",
+        description: Faker::Lorem.sentence(20, false, 0).chop,
+        date_created: Time.zone.now.to_s
+      ).unlock_and_fetch_ldp_object do |uo|
+        uo.add_to_path(community.id, collection.id)
+        uo.save!
+      end
+
+      # Add a currently embargoed item
+      Item.new_locked_ldp_object(
+        owner: admin.id,
+        visibility: Item::VISIBILITY_EMBARGO,
+        title: "Embargo and #{Faker::Address.country}: were the #{thing.pluralize} left behind?",
+        description: Faker::Lorem.sentence(20, false, 0).chop,
+        date_created: Time.zone.now.to_s
+      ).unlock_and_fetch_ldp_object do |uo|
+        uo.add_to_path(community.id, collection.id)
+        uo.embargo_end_date = (Time.now + 20.years).to_date
+        uo.save!
+      end
+
+      # Add a formerly embargoed item
+      Item.new_locked_ldp_object(
+        owner: admin.id,
+        visibility: Item::VISIBILITY_EMBARGO,
+        title: "Former embargo of #{Faker::Address.country}: the day the #{thing.pluralize} were free",
+        description: Faker::Lorem.sentence(20, false, 0).chop,
+        date_created: Time.zone.now.to_s
+      ).unlock_and_fetch_ldp_object do |uo|
+        uo.add_to_path(community.id, collection.id)
+        uo.embargo_end_date = (Time.now - 2.days).to_date
+        uo.save!
+      end
+
+      # Add an item owned by non-admin
+      Item.new_locked_ldp_object(
+        owner: non_admin.id,
+        visibility: JupiterCore::VISIBILITY_PUBLIC,
+        title: "Impact of non-admin users on #{thing.pluralize}",
+        description: Faker::Lorem.sentence(20, false, 0).chop,
+        date_created: Time.zone.now.to_s
+      ).unlock_and_fetch_ldp_object do |uo|
+        uo.add_to_path(community.id, collection.id)
+        uo.save!
+      end
+
     end
 
     # Want one multi-collection item per community
