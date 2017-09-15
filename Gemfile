@@ -56,6 +56,9 @@ group :development, :test do
   gem 'pry-rails'
 
   gem 'rubocop', require: false
+
+  # Seeds
+  gem 'faker', require: false
 end
 
 group :development do
