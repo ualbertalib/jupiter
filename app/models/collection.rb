@@ -4,6 +4,7 @@ class Collection < JupiterCore::LockedLdpObject
 
   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
   has_attribute :community_id, ::VOCABULARY[:ualib].path, solrize_for: :pathing
+  has_attribute :description, ::RDF::Vocab::DC.description, solrize_for: [:search]
 
   # description for collections
 
