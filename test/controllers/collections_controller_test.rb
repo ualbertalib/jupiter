@@ -10,9 +10,7 @@ class CollectionsControllerTest < ActionDispatch::IntegrationTest
     @collection = Collection.new_locked_ldp_object(community_id: @community.id,
                                                    title: 'Nice collection',
                                                    owner: 1)
-    #                                               binding.pry
     @collection.unlock_and_fetch_ldp_object(&:save!)
-    # binding.pry
   end
 
   def setup
