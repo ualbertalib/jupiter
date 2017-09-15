@@ -58,7 +58,8 @@ if Rails.env.development?
       collection = Collection.new_locked_ldp_object(
         owner: admin.id,
         title: title,
-        community_id: community.id
+        community_id: community.id,
+        description: Faker::Lorem.sentence(40, false, 0).chop
       ).unlock_and_fetch_ldp_object(&:save!)
 
       collection_first ||= collection
