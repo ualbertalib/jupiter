@@ -5,7 +5,7 @@
   <% end %>
   <%= f.input :visibility,
     as: :unread_select,
-    collection: ['public', 'private', 'authenticated'],
+    collection: Item::VISIBILITIES,
     selected: item.visibility,
     input_html: { name: 'item[visibility]' }
   %>

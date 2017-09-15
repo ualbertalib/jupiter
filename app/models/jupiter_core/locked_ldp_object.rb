@@ -12,6 +12,8 @@ module JupiterCore
   VISIBILITY_PRIVATE = 'private'.freeze
   VISIBILITY_AUTHENTICATED = 'authenticated'.freeze
 
+  VISIBILITIES = [VISIBILITY_PUBLIC, VISIBILITY_PRIVATE, VISIBILITY_AUTHENTICATED].freeze
+
   class LockedLdpObject
 
     include ActiveModel::Model
