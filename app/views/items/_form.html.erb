@@ -4,9 +4,10 @@
     <%= f.input prop %>
   <% end %>
   <%= f.input :visibility,
-  as: :unread_select,
-  collection: ['public', 'private', 'authenticated'],
-  input_html: {name: 'item[visibility]'}
+    as: :unread_select,
+    collection: Item::VISIBILITIES,
+    selected: item.visibility,
+    input_html: { name: 'item[visibility]' }
   %>
   <%= f.input :community,
     as: :unread_select,
