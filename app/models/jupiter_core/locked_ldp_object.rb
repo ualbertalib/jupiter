@@ -593,7 +593,7 @@ module JupiterCore
         #    (Time.now + 20.years).class
         #    => Time
         #
-        # 3) a 7 year old bug in the RDF gem (https://github.com/ruby-rdf/rdf/blob/develop/lib/rdf/model/literal.rb#L123)
+        # 3) a 7 year old bug in the RDF gem (https://github.com/ruby-rdf/rdf/blob/d7add8de9ce12c10192eaadb654fa5adc1a66277/lib/rdf/model/literal.rb#L123)
         # based on the erroneous assumption that they can treat the Ruby Time class as representing a time-of-day
         # independent of date, despite this never having ever been remotely true of the Ruby Time class, which
         # represents seconds since the UNIX epoch, and thus has always _fundamentally_ represented a specific date AND
