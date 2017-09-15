@@ -103,6 +103,4 @@ class CommunitiesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-
-
 end
