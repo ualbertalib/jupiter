@@ -40,7 +40,7 @@ if Rails.env.development?
     # Attach logos, if possible
     filename = File.expand_path(Rails.root + "tmp/#{thing}.png")
     unless File.exist?(filename)
-      if ENV['DOWNLOAD_COMMUNITY_LOGOS'].present?
+      unless ENV['SKIP_DOWNLOAD_COMMUNITY_LOGOS'].present?
         set = (thing == 'cat') ? 'set4' : 'set1'
         url = Faker::Avatar.image(thing, "100x100", "png", set)
         File.open(filename, 'wb') do |fo|
