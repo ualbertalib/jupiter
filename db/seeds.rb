@@ -9,6 +9,7 @@
 if Rails.env.development?
   require 'active_fedora/cleaner'
   require "open-uri"
+  require 'faker'
 
   puts 'Starting seeding of dev database...'
 
