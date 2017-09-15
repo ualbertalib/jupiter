@@ -3,6 +3,7 @@ class Item < JupiterCore::LockedLdpObject
   ldp_object_includes Hydra::Works::WorkBehavior
 
   VISIBILITY_EMBARGO = 'embargo'.freeze
+  VISIBILITIES = (JupiterCore::VISIBILITIES + [VISIBILITY_EMBARGO]).freeze
 
   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet, :sort]
   has_attribute :subject, ::RDF::Vocab::DC.subject, solrize_for: [:search, :facet]
