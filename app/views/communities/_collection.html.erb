@@ -2,7 +2,7 @@
   <div class="d-flex justify-content-between">
     <%= link_to collection.title, community_collection_path(community, collection) %>
 
-    <div class="btn-group">
+    <div class="btn-group align-self-center">
       <% if policy(collection).edit? %>
         <%= link_to t('edit'), edit_community_collection_path(community, collection),
             class:'btn btn-outline-primary edit-collection' %>
@@ -10,7 +10,7 @@
       <% if policy(collection).destroy? %>
         <%= link_to t('delete'), community_collection_path(community, collection),
             class: 'btn btn-danger delete-collection', method: :delete,
-            data: { confirm: t('.delete_confirm', title: collection.title) } %>
+            data: { confirm: t('collections.show.delete_confirm', title: collection.title) } %>
       <% end %>
     </div>
   </div>

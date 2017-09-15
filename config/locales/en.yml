@@ -100,8 +100,6 @@ en:
         delete_confirm: 'Are you sure you want to delete community "%{title}"?'
       new:
         header: 'Add New Community'
-      collection:
-        delete_confirm: 'Are you sure you want to delete collection "%{title}"?'
     site_notifications:
       title: 'Site Notifications'
       new:
@@ -181,6 +179,7 @@ en:
     create:
       created: 'Collection was successfully created!'
     show:
+      delete_confirm: 'Are you sure you want to delete collection "%{title}"?'
       header: "Collection: %{title}"
       parent_community: "Parent Community: %{title}"
       items_list_header: 'Items in this Collection'
