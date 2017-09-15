@@ -1,5 +1,9 @@
 class JupiterCore::Search
 
+  # How dumb is this? Seems pretty dumb, but that's the official recommendation I guess:
+  # https://wiki.apache.org/solr/CommonQueryParameters
+  MAX_RESULTS = 10_000_000
+
   # Performs a solr search using the given query and filtered query strings.
   # Returns an instance of +SearchResult+ providing result counts, +LockedLDPObject+ representing results, and
   # access to result facets.
@@ -42,7 +46,7 @@ class JupiterCore::Search
   end
 
   def self.perform_solr_query(q:, fq: '', facet: false, facet_fields: [],
-                              restrict_to_model: nil, rows: nil, start: nil, sort: nil)
+                              restrict_to_model: nil, rows: MAX_RESULTS, start: nil, sort: nil)
     query = []
     restrict_to_model = [restrict_to_model] unless restrict_to_model.is_a?(Array)
 
@@ -60,10 +64,10 @@ class JupiterCore::Search
       q: query.join(' AND '),
       fq: fq,
       facet: facet,
+      rows: rows,
       'facet.field': facet_fields
     }
 
-    params[:rows] = rows if rows.present?
     params[:start] = start if start.present?
     params[:sort] = sort if sort.present?
 

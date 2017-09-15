@@ -7,20 +7,18 @@ before_script:
   - docker version
   - docker-compose version
 
-  - docker-compose build
-  - docker-compose up -d
+  - docker-compose build web
+  - docker-compose up -d web
 
   - sleep 10 # wait for containers to finish setting up
   - docker ps
 
-  - docker-compose run --rm web rails db:setup
+  - docker-compose run --rm -e RAILS_ENV=test web rails db:create
+  - docker-compose run --rm -e RAILS_ENV=test web rails db:migrate
 
 script:
   - docker-compose run --rm web rails test
   - docker-compose run --rm web rubocop
-
-after_script:
-  - docker-compose down
 
 # after_success:
  # Do autodeploy magic here to UAT
