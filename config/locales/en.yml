@@ -178,7 +178,6 @@ en:
       header: 'Create Collection'
     show:
       delete_confirm: 'Are you sure you want to delete collection "%{title}"?'
-      header: "Collection: %{title}"
       parent_community: "Parent Community: %{title}"
       items_list_header: 'Items in this Collection'
       no_items_in_collection: 'There are no items in this Collection'
@@ -222,7 +221,6 @@ en:
     edit:
       header: 'Edit Item'
     show:
-      header: "Item: %{title}"
       member_of: 'Member of'
       contain_files: 'Contains files'
       fileset: 'FileSet'
