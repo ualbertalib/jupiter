@@ -13,13 +13,13 @@
     <% @communities.each do |community| %>
 
       <li class="list-group-item list-group-item-action">
-        <%= link_to community_path(community) do %>
+        <%= link_to admin_community_path(community) do %>
           <h4><%= community.title %></h4>
         <% end %>
 
         <div class="d-flex justify-content-between">
-          <%= link_to admin_communities_and_collection_path(community), data: {community_id: community.id }, class: 'btn btn-outline-primary collection-btn', remote: true do %>
-            <%= t('collections.index.header') %>
+          <%= link_to admin_community_path(community), data: {community_id: community.id }, class: 'btn btn-outline-primary collection-btn', remote: true do %>
+            <%= t('admin.collections.title') %>
             <%= fa_icon('chevron-down') %>
           <% end %>
 
@@ -29,8 +29,8 @@
           <% end %>
 
           <div class="btn-group" role="group" aria-label="Community Actions">
-            <%= link_to t('edit'), edit_community_path(community), class:'btn btn-outline-primary' %>
-            <%= link_to t('delete'), community_path(community), class: 'btn btn-danger', method: :delete, data: {confirm: t('.delete_confirm', title: community.title) } %>
+            <%= link_to t('edit'), edit_admin_community_path(community), class:'btn btn-outline-primary' %>
+            <%= link_to t('delete'), admin_community_path(community), class: 'btn btn-danger', method: :delete, data: {confirm: t('.delete_confirm', title: community.title) } %>
           </div>
         </div>
 

@@ -39,11 +39,11 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
     assert_select items, 'a', text: @collection.title, count: 0
     assert_select items, '.active', text: @collection.title
 
-    # Edit community link
-    assert_select "a[href='#{edit_community_collection_path(@community, @collection)}']", text: 'Edit'
+    # Edit collection link
+    assert_select "a[href='#{edit_admin_community_collection_path(@community, @collection)}']", text: 'Edit'
 
-    # Delete community link
-    delete = css_select "a[href='#{community_collection_path(@community, @collection)}']"
+    # Delete collection link
+    delete = css_select "a[href='#{admin_community_collection_path(@community, @collection)}']"
     assert delete.count == 1
     assert delete.first.attributes['data-method'].to_s == 'delete'
 
@@ -80,10 +80,10 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
     assert_select items, '.active', text: @collection.title
 
     # No edit community link
-    assert_select "a[href='#{edit_community_collection_path(@community, @collection)}']",
+    assert_select "a[href='#{edit_admin_community_collection_path(@community, @collection)}']",
                   count: 0
     # No delete community link
-    assert_select "a[href='#{community_collection_path(@community, @collection)}']",
+    assert_select "a[href='#{admin_community_collection_path(@community, @collection)}']",
                   count: 0
 
     # Items are shown

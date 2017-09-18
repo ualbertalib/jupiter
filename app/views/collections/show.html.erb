@@ -16,11 +16,11 @@
   <div class="btn-group align-self-center">
     <% if policy(@collection).edit? %>
       <%= link_to t('edit'),
-          edit_community_collection_path(@community, @collection),
+          edit_admin_community_collection_path(@community, @collection),
           class:'btn btn-outline-primary' %>
     <% end %>
     <% if policy(@collection).destroy? %>
-      <%= link_to t('delete'), community_collection_path(@community, @collection), method: :delete,
+      <%= link_to t('delete'), admin_community_collection_path(@community, @collection), method: :delete,
           class:'btn btn-danger', data: { confirm: t('.delete_confirm', title: @collection.title) } %>
     <% end %>
   </div>

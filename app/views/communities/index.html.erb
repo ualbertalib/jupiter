@@ -7,7 +7,18 @@
     <div class="list-group">
       <% @communities.each do |community| %>
         <div class="d-flex justify-content-between">
-          <%= render partial: 'logo_index', locals: {community: community} %>
+
+          <%= link_to community_path(community) do %>
+            <% if community.logo.attached? %>
+              <%= image_tag(community.logo.url, class: "img-thumbnail community-logo-small") %>
+            <% else %>
+              <div class="img-thumbnail community-logo-small no-logo">
+                <i class="fa fa-3x fa-picture-o" aria-hidden="true"></i>
+                <p class="community-no-logo-text"><%= t('communities.has_no_logo') %></p>
+              </div>
+            <% end %>
+          <% end %>
+
           <%= link_to community.title, community_path(community),
               class: 'list-group-item list-group-item-action' %>
         </div>
@@ -19,7 +30,7 @@
 <div class="row mt-3">
   <div class="col">
     <% if policy(Community).create? %>
-      <%= link_to t('.create_new_community'), new_community_path,
+      <%= link_to t('.create_new_community'), new_admin_community_path,
           class: 'btn btn-primary' %>
     <% end %>
   </div>
