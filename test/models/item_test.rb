@@ -12,7 +12,7 @@ class ItemTest < ActiveSupport::TestCase
     item = Item.new_locked_ldp_object
 
     item.unlock_and_fetch_ldp_object do |unlocked_item|
-      unlocked_item.visibility = :some_fake_visibility
+      unlocked_item.visibility = 'some_fake_visibility'
     end
 
     assert_not item.valid?
