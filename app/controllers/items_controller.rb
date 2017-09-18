@@ -17,31 +17,23 @@ class ItemsController < ApplicationController
     # TODO: add validations?
     @item.unlock_and_fetch_ldp_object do |unlocked_item|
       unlocked_item.owner = current_user.id
-
-      communities.each_with_index do |community, idx|
-        # TODO: raises undefined method `[]' for nil:NilClass on empty form
-        unlocked_item.add_to_path(community, collections[idx])
-      end
-
-      # see also https://github.com/samvera/hydra-works/wiki/Lesson%3A-Add-attached-files
-      params[:item][:file].each do |file|
-        fileset = FileSet.new
-        Hydra::Works::AddFileToFileSet.call(fileset, file, :original_file, update_existing: false, versioning: false)
-        fileset.save!
-        # pull in hydra derivatives, set temp file base
-        # Hydra::Works::CharacterizationService.run(fileset.characterization_proxy, filename)
-        unlocked_item.members << fileset
-      end
-
+      unlocked_item.add_communities_and_collections(communities, collections)
+      unlocked_item.add_files(params)
       unlocked_item.save!
     end
     redirect_to @item
   end
 
   def update
+    communities = params[:item].delete :community
+    collections = params[:item].delete :collection
+
     authorize @item
     @item.unlock_and_fetch_ldp_object do |unlocked_item|
-      unlocked_item.update!(permitted_attributes(@item))
+      unlocked_item.update_attributes(permitted_attributes(@item))
+      unlocked_item.add_communities_and_collections(communities, collections)
+      unlocked_item.add_files(params)
+      unlocked_item.save!
     end
     redirect_to @item
   end

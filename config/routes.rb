@@ -8,6 +8,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :file_sets, only: [] do
+    member do
+      match '*file_name' => 'file_sets#download_original', :format => false, via: :get
+    end
+  end
+
   resources :communities do
     resources :collections, except: [:index]
   end

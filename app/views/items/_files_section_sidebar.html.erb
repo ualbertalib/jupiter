@@ -1,0 +1,19 @@
+<div class="col">
+  <h4><%= t('.contain_files') %></h4>
+  <table class="table">
+    <thead>
+      <tr>
+        <th><%= t('.original_filename') %></th>
+        <th><%= t('.mime_type') %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @item.file_sets.each_with_index do |file_set, idx| %>
+        <tr>
+          <td><%= link_to_original_file(file_set) %></td>
+          <td><%= file_set.original_mime_type %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
