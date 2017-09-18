@@ -3,6 +3,7 @@ class Item < JupiterCore::LockedLdpObject
   ldp_object_includes Hydra::Works::WorkBehavior
 
   VISIBILITY_EMBARGO = 'embargo'.freeze
+  VISIBILITIES = (JupiterCore::VISIBILITIES + [VISIBILITY_EMBARGO]).freeze
 
   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet, :sort]
   has_attribute :subject, ::RDF::Vocab::DC.subject, solrize_for: [:search, :facet]
@@ -15,8 +16,8 @@ class Item < JupiterCore::LockedLdpObject
   has_attribute :language, ::RDF::Vocab::DC.language, solrize_for: [:search, :facet]
   has_attribute :doi, ::VOCABULARY[:ualib].doi, solrize_for: :exact_match
 
-  has_multival_attribute :member_of_paths, ::VOCABULARY[:ualib].path, solrize_for: :pathing
-  has_attribute :embargo_end_date, ::RDF::Vocab::DC.modified, solrize_for: [:search, :sort]
+  has_multival_attribute :member_of_paths, ::VOCABULARY[:ualib].path, type: :path, solrize_for: :pathing
+  has_attribute :embargo_end_date, ::RDF::Vocab::DC.modified, type: :date, solrize_for: [:sort]
 
   solr_index :doi_without_label, solrize_for: :exact_match,
                                  as: -> { doi.gsub('doi:', '') if doi.present? }

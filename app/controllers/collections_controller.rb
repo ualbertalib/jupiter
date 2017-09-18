@@ -1,6 +1,6 @@
 class CollectionsController < ApplicationController
 
-  before_action -> { authorize :application, :admin? }, except: [:index, :show]
+  before_action -> { authorize :application, :admin? }, except: [:show]
 
   def show
     @collection = Collection.find(params[:id])
@@ -16,15 +16,18 @@ class CollectionsController < ApplicationController
 
   def create
     @collection =
-      Collection.new_locked_ldp_object(permitted_attributes(Collection)
-                                        .merge(owner: current_user&.id))
-    authorize @collection
-    @collection.unlock_and_fetch_ldp_object(&:save!)
+      Collection.new_locked_ldp_object(permitted_attributes(Collection).merge(owner: current_user&.id))
 
+    authorize @collection
     @community = Community.find(params[:community_id])
 
-    # TODO: success flash message?
-    redirect_to community_collection_path(@community, @collection)
+    @collection.unlock_and_fetch_ldp_object do |unlocked_collection|
+      if unlocked_collection.save
+        redirect_to community_collection_path(@community, @collection), notice: t('.created')
+      else
+        render :new, status: :bad_request
+      end
+    end
   end
 
   def edit
@@ -37,24 +40,28 @@ class CollectionsController < ApplicationController
   def update
     @collection = Collection.find(params[:id])
     authorize @collection
-    @collection.unlock_and_fetch_ldp_object do |unlocked_collection|
-      unlocked_collection.update!(permitted_attributes(Collection))
-    end
-    flash[:notice] = t('.updated')
 
-    # TODO: Needs to be rethinked (and destroy action for both communties and collections)
-    # You can access this from both admin communties and collections index as well as communities show page
-    # When your in communities show page and go to edit the collection this shouldn't be redirecting to
-    # the admin communities and collections index page, it should go back to the communities show page...no?
-    # Perhaps better to only allow this behaviour from admin communities and collections?
-    redirect_to admin_communities_and_collections_path
+    @community = Community.find(params[:community_id])
+    @collection.unlock_and_fetch_ldp_object do |unlocked_collection|
+      if unlocked_collection.update(permitted_attributes(Collection))
+
+        # TODO: Needs to be rethinked (and destroy action for both communties and collections)
+        # You can access this from both admin communties and collections index as well as communities show page
+        # When your in communities show page and go to edit the collection this shouldn't be redirecting to
+        # the admin communities and collections index page, it should go back to the communities show page...no?
+        # Perhaps better to only allow this behaviour from admin communities and collections?
+        redirect_to admin_communities_and_collections_path, notice: t('.updated')
+      else
+        render :edit, status: :bad_request
+      end
+    end
   end
 
   def destroy
     collection = Collection.find(params[:id])
     authorize collection
-    collection.unlock_and_fetch_ldp_object do |uo|
-      if uo.destroy
+    collection.unlock_and_fetch_ldp_object do |unlocked_collection|
+      if unlocked_collection.destroy
         flash[:notice] = t('.deleted')
       else
         flash[:alert] = t('.not_empty_error')

@@ -5,6 +5,7 @@ class JupiterCore::DeferredSolrQuery
 
   def initialize(klass)
     criteria[:model] = klass
+    criteria[:limit] = JupiterCore::Search::MAX_RESULTS
     sort(:record_created_at, :desc)
   end
 

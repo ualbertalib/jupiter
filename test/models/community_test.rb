@@ -13,6 +13,7 @@ class CommunityTest < ActiveSupport::TestCase
   test 'needs title' do
     c = Community.new_locked_ldp_object(owner: users(:admin).id)
     refute c.valid?
+    assert_equal "Title can't be blank", c.errors.full_messages.first
   end
 
   test 'a logo can be attached' do
