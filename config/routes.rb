@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   end
 
   resources :communities do
-    resources :collections
+    resources :collections, except: [:index]
   end
 
   namespace :admin, constraints: AdminConstraint.new do
