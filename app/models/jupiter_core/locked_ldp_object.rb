@@ -1,6 +1,5 @@
 # JupiterCore::LockedLdpObject classes are lightweight, read-only objects
-# TODO: this file could benefit from some reorganization, possibly into several
-# files
+# TODO: this file could benefit from some reorganization, possibly into several files
 module JupiterCore
   class ObjectNotFound < StandardError; end
   class PropertyInvalidError < StandardError; end
@@ -298,6 +297,31 @@ module JupiterCore
       @ldp_object
     end
 
+    def coerce_value(value, to:)
+      case to
+      when :string, :text
+        value.to_s
+      when :bool
+        value
+      when :int
+        value.to_i
+      when :float
+        value.to_f
+      when :path
+        value
+      when :date
+        if value.is_a?(String)
+          DateTime.parse(value)
+        elsif value.is_a?(DateTime)
+          value
+        elsif value.is_a?(Date) || value.is_a?(Time)
+          DateTime.parse(value.iso8601(3))
+        end
+      else
+        raise TypeError, "Unknown coercion type: #{type}"
+      end
+    end
+
     # private class methods
     class << self
 
@@ -326,7 +350,7 @@ module JupiterCore
             has_attribute :visibility, ::VOCABULARY[:jupiter_core].visibility, solrize_for: [:exact_match, :facet]
           end
           unless attribute_names.include?(:owner)
-            has_attribute :owner, ::VOCABULARY[:jupiter_core].owner, solrize_for: [:exact_match]
+            has_attribute :owner, ::VOCABULARY[:jupiter_core].owner, type: :int, solrize_for: [:exact_match]
           end
           unless attribute_names.include?(:record_created_at)
             has_attribute :record_created_at, ::VOCABULARY[:jupiter_core].record_created_at, type: :date,
@@ -374,6 +398,42 @@ module JupiterCore
           def visibility_must_be_known
             return true if visibility.present? && owning_object.class.valid_visibilities.include?(visibility)
             errors.add(:visibility, I18n.t('locked_ldp_object.errors.invalid_visibility', visibility: visibility))
+          end
+
+          def convert_value(value, to:)
+            case to
+            when :string, :text
+              unless value.is_a?(String)
+                raise TypeError, "#{value} isn't a String. Call to_s explicitly if "\
+                                 "that's what you want"
+              end
+              value
+            when :date
+              # ActiveFedora/RDF does the wrong thing with Time (see below) AND
+              # it serializes every other Date type to a string internally at a very low precision (second granularity)
+              # so we convert all date types into strings ourselves to bypass ActiveFedora's serialization, and then
+              # use our modifications to Solrizer to save them in solr in a proper date index.
+              if value.is_a?(String)
+                value
+              elsif value.respond_to?(:iso8601)
+                value.utc.iso8601(3)
+              else
+                raise TypeError, "#{value} is not a Date type"
+              end
+            when :bool
+              raise TyperError, "#{value} is not a boolean" unless [true, false].include?(value)
+              value
+            when :int
+              raise TypeError, "#{value} is not a integer value" unless value.is_a?(Integer)
+              value
+            when :path
+              value
+            when :float
+              raise TypeError, "#{value} is not a float value" unless value.is_a?(Float)
+              value
+            else
+              raise 'NOT IMPLEMENTED'
+            end
           end
 
           # Paper over a 2 year old bug in ActiveFedora where it simply SILENTLY IGNORES validation callbacks
@@ -454,7 +514,8 @@ module JupiterCore
         # but it helps
         raise PropertyInvalidError if solrize_for.count { |item| !SOLR_DESCRIPTOR_MAP.keys.include?(item) } > 0
 
-        # TODO: type validation
+        raise PropertyInvalidError, "Unknown type #{type}" unless [:string, :text, :path, :bool, :date, :int,
+                                                                   :float].include?(type)
 
         self.attribute_names << name
 
@@ -483,9 +544,12 @@ module JupiterCore
                   solr_representation[solr_name_cache.first]
                 end
           return if val.nil?
-          return DateTime.parse(val).freeze if type == :date
-          return val.freeze if val.nil? || multiple || !val.is_a?(Array)
-          return val.first.freeze
+          val = val.first if val.is_a?(Array) && !multiple
+          return coerce_value(val, to: type).freeze unless multiple
+          coerced_values = val.map do |v|
+            coerce_value(v, to: type).freeze
+          end
+          return coerced_values.freeze
         end
 
         define_method "#{name}=" do |*_args|
@@ -497,6 +561,71 @@ module JupiterCore
           property name, predicate: predicate, multiple: multiple do |index|
             index.type type if type.present?
             index.as(*(solrize_for.map { |idx| SOLR_DESCRIPTOR_MAP[idx] }))
+          end
+        end
+
+        # A thrilling tale of Yet Another Community Bug™
+        #
+        # Suppose you have an ActiveFedora class, Item, with a property, embargo_date, type: date.
+        #
+        #    item.embargo_date = Time.now + 20.years
+        #    => #<Item id: "829ad1b6-c54d-460f-a3c5-6dd716464f06", embargo_date: 2037-09-15T15:59:58.724Z>
+        #
+        # Looks good!
+        #
+        #    item.save
+        #    => true
+        #    item
+        #    => #<Item id: "829ad1b6-c54d-460f-a3c5-6dd716464f06", embargo_date: 2017-09-15T22:05:15.000Z>
+        #
+        # WHAT JUST HAPPENED TO OUR EMBARGO DATE?!
+        #
+        # We verified that the date was correct in the item, until we saved, at which IT SILENTLY BECAME TODAY (!!!!)
+        #
+        # Dive about 30 layers deep into the call stack, and you'll eventually discover that this happens because:
+        #
+        # 1) ActiveFedora pretty much ignores declared types and just slings around whatever an object happens to be
+        # after assignment, type declarations on properties be damned.
+        #
+        # Combined with:
+        #
+        # 2)
+        #    (Time.now + 20.years).class
+        #    => Time
+        #
+        # 3) a 7 year old bug in the RDF gem (https://github.com/ruby-rdf/rdf/blob/d7add8de9ce12c10192eaadb654fa5adc1a66277/lib/rdf/model/literal.rb#L123)
+        # based on the erroneous assumption that they can treat the Ruby Time class as representing a time-of-day
+        # independent of date, despite this never having ever been remotely true of the Ruby Time class, which
+        # represents seconds since the UNIX epoch, and thus has always _fundamentally_ represented a specific date AND
+        # time, despite the comment on that code suggesting that this is some kind of odd and unexpected corner case.
+        #
+        # I don't think that anyone would claim that this kind of silent, destructive data-loss "works as intended", or
+        # represents sane and safe API design, but at this point the semantics of all of the above, however poorly
+        # thought out, appear to be deeply entrenched in a lot of people's code in a lot of projects, and I don't see
+        # a way to fix that other than breaking a lot of years-old assumptions and refactoring the way ActiveFedora,
+        # Solrizer, ActiveTriples, and RDF (fail to) talk to one another -- so the cleanest and easiest way to fix this
+        # appears to be to paper over it all on our end.
+        #
+        # Prior to discovering this mess, we just let the ActiveFedora property declartion in the derived AF class
+        # create the setters on the unlocked object. Now, we're going to shadow all of ActiveFedora's property
+        # setters, coerce the argument to the declared type or complain if that burden should fall on the caller, and
+        # then pass it along to ActiveFedora, in the hope that this way we can limit the opportunities for the rest
+        # of the stack to silently do the wrong thing by confining ourselves to types where the behaviour (so far)
+        # seems moderately sane.
+        #
+        # (ﾉಥ益ಥ）ﾉ﻿ ┻━┻
+        derived_af_class.class_eval do
+          # alias AF assignment method
+          alias_method :"shadowed_assign_#{name}", :"#{name}="
+
+          define_method "#{name}=" do |arg|
+            converted_arg = if arg.is_a?(Array)
+                              arg.map { |val| convert_value(val, to: type) }
+                            else
+                              convert_value(arg, to: type)
+                            end
+            # call the shadowed AF assignment method
+            self.send("shadowed_assign_#{name}", converted_arg)
           end
         end
       end
