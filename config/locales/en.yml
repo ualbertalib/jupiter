@@ -236,6 +236,8 @@ en:
     file_label: 'File'
     add_another_file: 'Add another file'
     files_section_sidebar:
-      contain_files: 'Contains files'
-      original_filename: 'Original Filename'
-      mime_type: 'MIME Type'
+      header: 'Files'
+      view: 'View'
+      download: 'Download'
+    thumbnail:
+      thumbnail: 'Thumbnail'
