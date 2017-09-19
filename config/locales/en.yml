@@ -163,6 +163,15 @@ en:
         search_placeholder: 'Search by email or name...'
         search_button: 'Search Users'
         header: 'Manage Users'
+        name: 'Name'
+        role: 'Role'
+        admin_role: 'Admin'
+        user_role: 'User'
+        status: 'Status'
+        active_status: 'Active'
+        suspended_status: 'Suspended'
+        updated: 'Updated'
+        created: 'Created'
 
   collections:
     index:
