@@ -14,12 +14,10 @@ class Admin::CommunitiesController < Admin::AdminController
 
   def new
     @community = Community.new_locked_ldp_object
-    authorize @community
   end
 
   def edit
     @community = Community.find(params[:id])
-    authorize @community
   end
 
   def create
