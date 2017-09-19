@@ -1,0 +1,4 @@
+input[type="search"]::-webkit-search-cancel-button {
+  /*Bootstrap 4 override*/
+  -webkit-appearance: searchfield-cancel-button;
+}
