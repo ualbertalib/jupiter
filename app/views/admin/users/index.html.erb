@@ -30,12 +30,12 @@
 <table class="table table-responsive table-bordered">
   <thead>
     <tr>
-      <th><%= sortable t('admin.users.show.email') %></th>
-      <th><%= sortable t('.name') %></th>
-      <th><%= sortable t('.created') %></th>
-      <th><%= sortable t('.updated') %></th>
-      <th><%= sortable t('.role') %></th>
-      <th><%= sortable t('.status') %></th>
+      <th><%= sortable 'email', t('admin.users.show.email') %></th>
+      <th><%= sortable 'name', t('.name') %></th>
+      <th><%= sortable 'created_at', t('.created') %></th>
+      <th><%= sortable 'updated_at', t('.updated') %></th>
+      <th><%= sortable 'admin', t('.role') %></th>
+      <th><%= sortable 'suspended', t('.status') %></th>
     </tr>
   </thead>
   <tbody>
