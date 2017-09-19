@@ -93,13 +93,35 @@ en:
         recent_activity: 'Recent Activity'
         latest_items: 'Latest items'
         latest_users: 'Latest users'
-    communities_and_collections:
+    communities:
       title: Communities and Collections
       index:
         header: 'Manage Communities & Collections'
         delete_confirm: 'Are you sure you want to delete community "%{title}"?'
       new:
         header: 'Add New Community'
+      create:
+        created: 'Community was successfully created!'
+      update:
+        updated: 'Community was successfully updated!'
+      destroy:
+        deleted: 'Community deleted'
+        not_empty_error: 'Cannot delete a non-empty Community'
+
+    collections:
+      title: 'Collections'
+      new:
+        header: 'Create Collection'
+      create:
+        created: 'Collection was successfully created!'
+      edit:
+        header: 'Edit Collection'
+      update:
+        updated: 'Collection was successfully updated!'
+      destroy:
+        deleted: 'Collection was successfully deleted!'
+        not_empty_error: 'Cannot delete a non-empty Collection'
+
     site_notifications:
       title: 'Site Notifications'
       new:
@@ -174,19 +196,6 @@ en:
         created: 'Created'
 
   collections:
-    index:
-      header: 'Collections'
-    destroy:
-      deleted: 'Collection was successfully deleted!'
-      not_empty_error: 'Cannot delete a non-empty Collection'
-    update:
-      updated: 'Collection was successfully updated!'
-    edit:
-      header: 'Edit Collection'
-    new:
-      header: 'Create Collection'
-    create:
-      created: 'Collection was successfully created!'
     show:
       delete_confirm: 'Are you sure you want to delete collection "%{title}"?'
       parent_community: "Parent Community: %{title}"
@@ -197,28 +206,16 @@ en:
       member_items_must_be_empty: "must be empty. Currently: %{list_of_items}"
 
   communities:
-    destroy:
-      deleted: 'Community deleted'
-      not_empty_error: 'Cannot delete a non-empty Community'
+    title: '%{title}'
+    has_no_logo: 'Community has no logo'
     index:
       header: 'Communities'
       create_new_community: 'Create New Community'
-    logo:
-      has_no_logo: 'Community has no logo'
-    new:
-      header: 'Add New Community'
-    create:
-      created: 'Community was successfully created!'
     show:
       collections_list_header: 'Collections in this Community'
       create_new_collection: 'Add Collection'
-      delete: 'Delete'
       delete_confirm: 'Are you sure you want to delete the community %{title}'
-      edit: 'Edit'
       no_collections: 'There are no Collections in this Community'
-    update:
-      updated: 'Community was successfully updated!'
-    title: 'Community: %{title}'
     errors:
       member_collections_must_be_empty: "must be empty. Currently: %{list_of_collections}"
 
