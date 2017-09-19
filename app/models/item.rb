@@ -30,6 +30,13 @@ class Item < JupiterCore::LockedLdpObject
     super + [VISIBILITY_EMBARGO]
   end
 
+  def each_community_collection
+    member_of_paths.each do |path|
+      community_id, collection_id = path.split('/')
+      yield Community.find(community_id), Collection.find(collection_id)
+    end
+  end
+
   unlocked do
     validates :embargo_end_date, presence: true, if: ->(item) { item.visibility == VISIBILITY_EMBARGO }
     validates :embargo_end_date, absence: true, if: ->(item) { item.visibility != VISIBILITY_EMBARGO }
