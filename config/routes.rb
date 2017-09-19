@@ -10,7 +10,8 @@ Rails.application.routes.draw do
 
   resources :file_sets, only: [] do
     member do
-      match '*file_name' => 'file_sets#download_original', :format => false, via: :get
+      match 'download/*file_name' => 'file_sets#download_original', :format => false, via: :get
+      match '*file_name' => 'file_sets#view_original', :format => false, via: :get
     end
   end
 
