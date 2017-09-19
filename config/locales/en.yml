@@ -152,8 +152,6 @@ en:
       title: 'Users'
       show:
         email: 'Email'
-        suspended: 'Suspended?'
-        admin: 'Admin?'
         suspend_link_text: 'Suspend User'
         suspend_dialog: "Are you sure you want to suspend %{user}?"
         suspend_flash: 'User has successfully been suspended'
