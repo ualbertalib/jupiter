@@ -1,10 +1,5 @@
-<% page_title(t('.header')) %>
-
 <ol class="breadcrumb mb-5">
   <li class="breadcrumb-item"><%= link_to t('admin.header'), admin_root_path %></li>
   <li class="breadcrumb-item"><%= link_to t('admin.communities.index.header'), admin_communities_path %></li>
-  <li class="breadcrumb-item active"><%= t('.header') %></li>
+  <li class="breadcrumb-item active"><%= t('communities.title', title: @community.title) %></li>
 </ol>
-
-<h1 class="mt-3"><%= t('.header') %></h1>
-<%= render partial: 'form' %>

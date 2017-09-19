@@ -1,13 +1,6 @@
 <% page_title(@collection.title) %>
 
-<div class="collection-breadcrumb">
-  <ol class="breadcrumb mb-1">
-    <li class="breadcrumb-item">
-      <%= link_to(@community.title, community_path(@community)) %>
-    </li>
-    <li class="breadcrumb-item active"><%= @collection.title %></li>
-  </ol>
-</div>
+<%= render partial: 'show_breadcrumbs' %>
 
 <div class="d-flex justify-content-between mt-3">
   <h1><%= @collection.title %></h1>

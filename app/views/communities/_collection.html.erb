@@ -1,0 +1,19 @@
+<li class="list-group-item list-group-item-action">
+  <div class="d-flex justify-content-between">
+      <%= link_to collection.title, community_collection_path(@community, collection) %>
+
+      <% if policy(:admin).access? %>
+        <div class="btn-group align-self-center">
+          <% if policy(collection).edit? %>
+            <%= link_to t('edit'), edit_admin_community_collection_path(community, collection),
+                class:'btn btn-outline-primary edit-collection' %>
+          <% end %>
+          <% if policy(collection).destroy? %>
+            <%= link_to t('delete'), admin_community_collection_path(community, collection),
+                class: 'btn btn-danger delete-collection', method: :delete,
+                data: { confirm: t('collections.show.delete_confirm', title: collection.title) } %>
+          <% end %>
+        </div>
+      <% end %>
+  </div>
+</li>

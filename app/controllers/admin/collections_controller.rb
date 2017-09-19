@@ -5,7 +5,6 @@ class Admin::CollectionsController < Admin::AdminController
     @collection = Collection.find(params[:id])
 
     respond_to do |format|
-      format.js
       format.html { render template: 'collections/show' }
     end
   end

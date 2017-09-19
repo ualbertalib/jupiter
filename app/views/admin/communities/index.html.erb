@@ -7,6 +7,9 @@
 
 <h1><%= t('.header') %></h1>
 
+<%= link_to t('communities.index.create_new_community'), new_admin_community_path,
+      class: 'btn btn-primary' %>
+
 <div class="my-4" >
   <ul id="admin-collection-list" class="list-group">
 

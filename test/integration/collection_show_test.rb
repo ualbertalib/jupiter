@@ -31,13 +31,11 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
     get community_collection_url(@community, @collection)
 
     # Breadcrumb
-    breadcrumbs = css_select 'div.collection-breadcrumb'
-    assert breadcrumbs.count == 1
-    items = css_select breadcrumbs, 'li.breadcrumb-item'
-    assert items.count == 2
-    assert_select items, 'a', text: @community.title
-    assert_select items, 'a', text: @collection.title, count: 0
-    assert_select items, '.active', text: @collection.title
+    assert_select 'ol.breadcrumb', count: 1
+    assert_select 'li.breadcrumb-item', count: 2
+    assert_select 'li.breadcrumb-item a', text: @community.title
+    assert_select 'li.breadcrumb-item a', text: @collection.title, count: 0
+    assert_select 'li.breadcrumb-item.active', text: @collection.title
 
     # Edit collection link
     assert_select "a[href='#{edit_admin_community_collection_path(@community, @collection)}']", text: 'Edit'
@@ -71,13 +69,11 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
     get community_collection_url(@community, @collection)
 
     # Breadcrumb
-    breadcrumbs = css_select 'div.collection-breadcrumb'
-    assert breadcrumbs.count == 1
-    items = css_select breadcrumbs, 'li.breadcrumb-item'
-    assert items.count == 2
-    assert_select items, 'a', text: @community.title
-    assert_select items, 'a', text: @collection.title, count: 0
-    assert_select items, '.active', text: @collection.title
+    assert_select 'ol.breadcrumb', count: 1
+    assert_select 'li.breadcrumb-item', count: 2
+    assert_select 'li.breadcrumb-item a', text: @community.title
+    assert_select 'li.breadcrumb-item a', text: @collection.title, count: 0
+    assert_select 'li.breadcrumb-item.active', text: @collection.title
 
     # No edit community link
     assert_select "a[href='#{edit_admin_community_collection_path(@community, @collection)}']",

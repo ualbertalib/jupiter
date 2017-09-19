@@ -197,7 +197,7 @@ en:
       member_items_must_be_empty: "must be empty. Currently: %{list_of_items}"
 
   communities:
-    title: 'Community: %{title}'
+    title: '%{title}'
     has_no_logo: 'Community has no logo'
     index:
       header: 'Communities'
