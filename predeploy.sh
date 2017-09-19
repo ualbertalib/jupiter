@@ -1,5 +1,7 @@
 # This script will be sitting in /home/deploy directory, and is for setting up directories and pulling required files for docker deployment
-# This script should be either rsynced, or manually copied to the UAT server when setting up fresh server. 
+# This script should be either rsynced or copied to the UAT server when setting up fresh server. 
+# For more information, please see the documentation: https://github.com/ualbertalib/di_internal/blob/master/System-Adminstration/UAT-Environment.md
+
 BRANCH='master'
 DIR=/home/deploy/jupiter
 mkdir -p $DIR
