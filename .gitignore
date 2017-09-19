@@ -11,6 +11,8 @@
 /docs/rdoc/*
 /coverage/*
 /tmp/*
+#!/tmp/pids
+!/tmp/pids/.keep
 !/log/.keep
 !/tmp/.keep
 
