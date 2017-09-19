@@ -1,11 +1,12 @@
 class Admin::CommunitiesController < Admin::AdminController
 
+  before_action :fetch_community, only: [:show, :edit, :update, :destroy]
+
   def index
     @communities = Community.all
   end
 
   def show
-    @community = Community.find(params[:id])
     respond_to do |format|
       format.js
       format.html { render template: 'communities/show' }
@@ -14,10 +15,6 @@ class Admin::CommunitiesController < Admin::AdminController
 
   def new
     @community = Community.new_locked_ldp_object
-  end
-
-  def edit
-    @community = Community.find(params[:id])
   end
 
   def create
@@ -38,9 +35,9 @@ class Admin::CommunitiesController < Admin::AdminController
     end
   end
 
-  def update
-    @community = Community.find(params[:id])
+  def edit; end
 
+  def update
     if params[:community][:logo].present?
       # Note: monkey patch to ActiveStorage removes any previous versions
       @community.logo.attach(params[:community][:logo])
@@ -56,8 +53,7 @@ class Admin::CommunitiesController < Admin::AdminController
   end
 
   def destroy
-    community = Community.find(params[:id])
-    community.unlock_and_fetch_ldp_object do |unlocked_community|
+    @community.unlock_and_fetch_ldp_object do |unlocked_community|
       if unlocked_community.destroy
         flash[:notice] = t('.deleted')
       else
@@ -66,6 +62,12 @@ class Admin::CommunitiesController < Admin::AdminController
 
       redirect_to admin_communities_path
     end
+  end
+
+  private
+
+  def fetch_community
+    @community = Community.find(params[:id])
   end
 
 end
