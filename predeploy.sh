@@ -4,7 +4,7 @@ BRANCH='master'
 DIR=/home/deploy/jupiter
 mkdir -p $DIR
 mkdir -p $DIR/config
-#curl -o $DIR/deploy.sh https://raw.githubusercontent.com/ualbertalib/jupiter/$BRANCH/deploy.sh
+curl -o $DIR/deploy.sh https://raw.githubusercontent.com/ualbertalib/jupiter/$BRANCH/deploy.sh
 curl -o $DIR/docker-compose.deployment.yml https://raw.githubusercontent.com/ualbertalib/jupiter/$BRANCH/docker-compose.deployment.yml
 curl -o $DIR/config/nginx.conf https://raw.githubusercontent.com/ualbertalib/jupiter/$BRANCH/config/nginx.conf
 if [[ ! -e .env_deployment ]]; then
