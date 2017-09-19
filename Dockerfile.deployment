@@ -44,6 +44,8 @@ RUN bundle install --without development test
 COPY . $APP_ROOT
 
 # Precompile Rails assets. We set a dummy secret key
+ENV DATABASE_URL mysql2:assets_throwaway.db
+ENV  SECRET_KEY_BASE thisisatopsecret
 RUN RAILS_ENV=uat bundle exec rake assets:precompile
 
 EXPOSE 3000
