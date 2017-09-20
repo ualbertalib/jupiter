@@ -13,11 +13,11 @@ before_script:
   - sleep 15 # wait for containers to finish setting up
   - docker ps
 
-  - docker-compose run --rm -e RAILS_ENV=test web bundle exec rails db:create && bundle exec rails db:migrate
+  - docker-compose run --rm -e RAILS_ENV=test web rails db:create && rails db:migrate
 
 script:
-  - docker-compose run --rm web bundle exec rails test
-  - docker-compose run --rm web bundle exec rubocop
+  - docker-compose run --rm web rails test
+  - docker-compose run --rm web rubocop
 
 # after_success:
  # Do autodeploy magic here to UAT
