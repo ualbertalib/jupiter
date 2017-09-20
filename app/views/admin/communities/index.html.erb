@@ -43,6 +43,10 @@
             <%= t('close') %>
             <%= fa_icon('chevron-up') %>
           <% end %>
+
+          <%= link_to t('communities.show.create_new_collection'),
+                      new_admin_community_collection_path(community),
+                      class:'btn btn-outline-primary' %>
         </div>
 
         <ul class="list-group mt-3" id="<%=community.id%>"></ul>
