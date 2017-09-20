@@ -26,8 +26,8 @@ class CommunityEditTest < ActionDispatch::IntegrationTest
     get edit_admin_community_url(@community1)
 
     # Logo should be shown
-    assert_select 'img.community-logo-small', count: 1
-    assert_select 'div.community-logo-small.no-logo', count: 0
+    assert_select 'img.logo-small', count: 1
+    assert_select 'div.logo-small.no-logo', count: 0
 
     # Upload button should be shown
     assert_select 'input[type="file"][name="community[logo]"]', count: 1
@@ -42,8 +42,8 @@ class CommunityEditTest < ActionDispatch::IntegrationTest
     get edit_admin_community_url(@community2)
 
     # Logo should not be shown
-    assert_select 'img.community-logo-small', count: 0
-    assert_select 'div.community-logo-small.no-logo', count: 1
+    assert_select 'img.logo-small', count: 0
+    assert_select 'div.logo-small.no-logo', count: 1
 
     # Upload button should be shown
     assert_select 'input[type="file"][name="community[logo]"]', count: 1
