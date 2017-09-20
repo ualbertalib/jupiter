@@ -2,6 +2,20 @@ require 'test_helper'
 
 class ItemTest < ActiveSupport::TestCase
 
+  test 'a valid item can be constructed' do
+    community = Community.new_locked_ldp_object(title: 'Community', owner: 1, visibility: 'public')
+    community.unlock_and_fetch_ldp_object(&:save!)
+    collection = Collection.new_locked_ldp_object(title: 'Collection', owner: 1, visibility: 'public',
+                                                  community_id: community.id)
+    collection.unlock_and_fetch_ldp_object(&:save!)
+    item = Item.new_locked_ldp_object(title: 'Item', owner: 1, visibility: 'public')
+    item.unlock_and_fetch_ldp_object do |unlocked_item|
+      unlocked_item.add_to_path(community.id, collection.id)
+      unlocked_item.save!
+    end
+    assert item.valid?
+  end
+
   test 'there is no default visibility' do
     item = Item.new_locked_ldp_object
 
@@ -63,6 +77,27 @@ class ItemTest < ActiveSupport::TestCase
 
   test 'member_of_paths is not a display attribute' do
     assert_not_includes Item.display_attribute_names, :member_of_paths
+  end
+
+  test 'a community/collection path must be present' do
+    item = Item.new_locked_ldp_object
+    item.unlock_and_fetch_ldp_object {}
+
+    assert_not item.valid?
+    assert_includes item.errors[:member_of_paths], "can't be blank"
+  end
+
+  test 'community/collection must exist' do
+    item = Item.new_locked_ldp_object
+    community_id = generate_random_string
+    collection_id = generate_random_string
+    item.unlock_and_fetch_ldp_object do |unlocked|
+      unlocked.add_to_path(community_id, collection_id)
+    end
+
+    assert_not item.valid?
+    assert_includes item.errors[:member_of_paths], "is missing community with ID \"#{community_id}\""
+    assert_includes item.errors[:member_of_paths], "is missing collection with ID \"#{collection_id}\""
   end
 
 end

@@ -28,7 +28,8 @@ class Collection < JupiterCore::LockedLdpObject
     before_destroy :can_be_destroyed?
 
     validates :title, presence: true
-
+    validates :community_id, presence: true
+    validate :community_validations
     before_validation do
       self.visibility = JupiterCore::VISIBILITY_PUBLIC
     end
@@ -39,6 +40,15 @@ class Collection < JupiterCore::LockedLdpObject
                  I18n.t('collections.errors.member_items_must_be_empty',
                         list_of_items: member_items.map(&:title).join(', ')))
       throw(:abort)
+    end
+
+    def community_validations
+      return unless community_id
+      begin
+        Community.find(community_id)
+      rescue JupiterCore::ObjectNotFound
+        errors.add(:community_id, :community_not_found, id: community_id)
+      end
     end
   end
 
