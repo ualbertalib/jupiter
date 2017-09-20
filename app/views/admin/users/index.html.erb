@@ -30,26 +30,24 @@
 <table class="table table-responsive table-bordered">
   <thead>
     <tr>
-      <th><%= sortable 'id' %></th>
-      <th><%= sortable 'email' %></th>
-      <th><%= sortable 'name' %></th>
-      <th><%= sortable 'created_at' %></th>
-      <th><%= sortable 'updated_at' %></th>
-      <th><%= sortable 'admin' %></th>
-      <th><%= sortable 'suspended' %></th>
+      <th><%= sortable 'email', t('admin.users.show.email') %></th>
+      <th><%= sortable 'name', t('.name') %></th>
+      <th><%= sortable 'created_at', t('.created') %></th>
+      <th><%= sortable 'updated_at', t('.updated') %></th>
+      <th><%= sortable 'admin', t('.role') %></th>
+      <th><%= sortable 'suspended', t('.status') %></th>
     </tr>
   </thead>
   <tbody>
   <% if @users.present? %>
     <% @users.each do |user| %>
       <tr>
-        <th scope="row"><%= user.id %></th>
-        <td><%= link_to user.email, admin_user_path(user) %></td>
+        <th scope="row"><%= link_to user.email, admin_user_path(user) %></th>
         <td><%= user.name %></td>
-        <td><%= time_ago_in_words(user.created_at) %></td>
-        <td><%= time_ago_in_words(user.updated_at) %></td>
-        <td><%= user.admin %></td>
-        <td><%= user.suspended %></td>
+        <td><%= time_tag user.created_at, format: '%F' %></td>
+        <td><%= time_tag user.updated_at, format: '%F' %></td>
+        <td><%= user_role(user) %></td>
+        <td><%= user_status(user) %></td>
       </tr>
     <% end %>
   <% else %>

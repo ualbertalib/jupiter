@@ -25,4 +25,12 @@ module Admin::UsersHelper
 
     link_to title, { params: { sort: column, direction: sort } }, class: klass
   end
+
+  def user_role(user)
+    user.admin ? t('admin.users.index.admin_role') : t('admin.users.index.user_role')
+  end
+
+  def user_status(user)
+    user.suspended ? t('admin.users.index.suspended_status') : t('admin.users.index.active_status')
+  end
 end
