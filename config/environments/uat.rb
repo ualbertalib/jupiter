@@ -86,4 +86,7 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  # Which ActiveStorage service to use
+  config.active_storage.service = (ENV['ACTIVE_STORAGE_SERVICE'] || :local).to_sym
 end
