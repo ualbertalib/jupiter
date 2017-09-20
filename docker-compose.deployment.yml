@@ -9,6 +9,7 @@ volumes:
     driver: local
   redis:
     driver: local
+  assets:
 
 services:
   mysql:
@@ -63,6 +64,8 @@ services:
     <<: *rails
     environment:
       RAILS_SERVE_STATIC_FILES: enabled
+    volumes:
+      - assets:/app/public/assets/
     command: bundle exec puma -e uat
 
   nginx:
@@ -73,5 +76,6 @@ services:
     env_file: .env_deployment
     volumes:
       - ./config/nginx.conf:/etc/nginx/conf.d/default.conf
+      - assets:/app/public/assets/
     ports:
       - "80:80"
