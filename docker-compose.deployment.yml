@@ -62,8 +62,6 @@ services:
   # Rails
   web:
     <<: *rails
-    environment:
-      RAILS_SERVE_STATIC_FILES: enabled
     volumes:
       - assets:/app/public/assets/
     command: bundle exec puma -e uat
