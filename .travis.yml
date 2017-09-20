@@ -13,7 +13,8 @@ before_script:
   - sleep 15 # wait for containers to finish setting up
   - docker ps
 
-  - docker-compose run --rm -e RAILS_ENV=test web rails db:create && rails db:migrate
+  - docker-compose run --rm -e RAILS_ENV=test web rails db:create
+  - docker-compose run --rm -e RAILS_ENV=test web rails db:migrate
 
 script:
   - docker-compose run --rm web rails test
