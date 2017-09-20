@@ -421,6 +421,7 @@ module JupiterCore
               # it serializes every other Date type to a string internally at a very low precision (second granularity)
               # so we convert all date types into strings ourselves to bypass ActiveFedora's serialization, and then
               # use our modifications to Solrizer to save them in solr in a proper date index.
+              value = value.to_datetime if value.is_a?(Date)
               if value.is_a?(String)
                 value
               elsif value.respond_to?(:iso8601)

@@ -46,6 +46,11 @@ gem 'sinatra' # used by sidekiq/web
 # Misc Utilities
 gem 'kaminari'
 
+# Seeds
+group :development, :test, :uat do
+  gem 'faker', require: false
+end
+
 group :development, :test do
   gem 'sdoc', require: false
 
@@ -56,9 +61,6 @@ group :development, :test do
   gem 'pry-rails'
 
   gem 'rubocop', require: false
-
-  # Seeds
-  gem 'faker', require: false
 end
 
 group :development do

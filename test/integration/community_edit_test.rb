@@ -23,7 +23,7 @@ class CommunityEditTest < ActionDispatch::IntegrationTest
   test 'visiting the edit page for a community with a logo as an admin' do
     user = users(:admin)
     sign_in_as user
-    get edit_community_url(@community1)
+    get edit_admin_community_url(@community1)
 
     # Logo should be shown
     assert_select 'img.community-logo-small', count: 1
@@ -39,7 +39,7 @@ class CommunityEditTest < ActionDispatch::IntegrationTest
   test 'visiting edit page of a community with no logo' do
     user = users(:admin)
     sign_in_as user
-    get edit_community_url(@community2)
+    get edit_admin_community_url(@community2)
 
     # Logo should not be shown
     assert_select 'img.community-logo-small', count: 0
@@ -55,10 +55,11 @@ class CommunityEditTest < ActionDispatch::IntegrationTest
   test 'visiting the edit page for a community as a regular user' do
     user = users(:regular_user)
     sign_in_as user
-    get edit_community_url(@community1)
 
-    # Should redirect
-    assert_redirected_to root_url
+    # Should return 404
+    assert_raises ActionController::RoutingError do
+      get edit_admin_community_url(@community1)
+    end
   end
 
 end
