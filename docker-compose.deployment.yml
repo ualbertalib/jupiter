@@ -10,6 +10,7 @@ volumes:
   redis:
     driver: local
   assets:
+  file-storage:
 
 services:
   mysql:
@@ -64,6 +65,7 @@ services:
     <<: *rails
     volumes:
       - assets:/app/public/assets/
+      - file-storage:/app/storage/  
     command: bundle exec puma -e uat
 
   nginx:
