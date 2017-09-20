@@ -3,6 +3,7 @@ group: deprecated-2017Q3
 language: bash
 services: docker
 
+
 before_script:
   - docker version
   - docker-compose version
