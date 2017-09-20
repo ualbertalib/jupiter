@@ -36,7 +36,7 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
 
     # Logo should be shown
     assert_select 'img.logo-small', count: 1
-    assert_select 'div.logo-small.no-logo', count: 0
+    assert_select 'div.logo-small small i.fa', count: 0
 
     # Community delete, edit and create new collection buttons should be shown
     assert_select 'a[href=?]',
@@ -75,7 +75,7 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
 
     # Logo should be shown
     assert_select 'img.logo-small', count: 1
-    assert_select 'div.logo-small.no-logo', count: 0
+    assert_select 'div.logo-small small i.fa', count: 0
 
     # Community delete, edit and create new collection buttons should not be shown
     assert_select 'a[href=?]',
@@ -113,7 +113,7 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
 
     # Logo should not be shown
     assert_select 'img.logo-small', count: 0
-    assert_select 'div.logo-small.no-logo', count: 1
+    assert_select 'div.logo-small small i.fa', count: 1
 
     # No collections should no be shown
     assert_select 'h4.collections-header', text: I18n.t('communities.show.collections_list_header')
