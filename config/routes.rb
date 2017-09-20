@@ -8,8 +8,8 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :communities do
-    resources :collections
+  resources :communities, only: [:index, :show] do
+    resources :collections, only: [:show]
   end
 
   namespace :admin, constraints: AdminConstraint.new do
@@ -25,7 +25,10 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :communities_and_collections, only: [:show, :create, :new, :index]
+    resources :communities do
+      resources :collections, except: [:index]
+    end
+
     resources :site_notifications, only: [:new, :destroy, :create]
   end
 

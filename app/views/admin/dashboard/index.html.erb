@@ -64,8 +64,8 @@
     <div class="col-md-3">
       <div class="card text-center">
         <div class="card-body">
-          <h4 class="card-title"><%= t('communities.index.header') %></h4>
-            <%= link_to admin_communities_and_collections_path, class: 'btn btn-outline-primary' do %>
+          <h4 class="card-title"><%= t('admin.communities.title') %></h4>
+            <%= link_to admin_communities_path, class: 'btn btn-outline-primary' do %>
               <%= number_with_delimiter(Community.count) %>
             <% end %>
         </div>
@@ -74,8 +74,8 @@
     <div class="col-md-3">
       <div class="card text-center">
         <div class="card-body">
-          <h4 class="card-title"><%= t('collections.index.header') %></h4>
-          <%= link_to admin_communities_and_collections_path, class: 'btn btn-outline-primary' do %>
+          <h4 class="card-title"><%= t('admin.collections.title') %></h4>
+          <%= link_to admin_communities_path, class: 'btn btn-outline-primary' do %>
             <%= number_with_delimiter(Collection.count) %>
           <% end %>
         </div>

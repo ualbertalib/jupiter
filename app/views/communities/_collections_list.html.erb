@@ -1,5 +1,5 @@
 <% if @community.member_collections.count > 0 %>
-  <%= render partial: 'communities/collection', collection: @community.member_collections,
+  <%= render partial: 'collection', collection: @community.member_collections,
       locals: {community: @community} %>
 <% else %>
   <li class="list-group-item list-group-item-action">

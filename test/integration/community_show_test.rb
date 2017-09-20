@@ -40,15 +40,15 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
 
     # Community delete, edit and create new collection buttons should be shown
     assert_select 'a[href=?]',
-                  community_path(@community1),
+                  admin_community_path(@community1),
                   text: I18n.t('delete')
 
     assert_select 'a[href=?]',
-                  edit_community_path(@community1),
+                  edit_admin_community_path(@community1),
                   text: I18n.t('edit')
 
     assert_select 'a[href=?]',
-                  new_community_collection_path(@community1),
+                  new_admin_community_collection_path(@community1),
                   text: I18n.t('communities.show.create_new_collection')
 
     # Should show 2 collections with a heading
@@ -59,10 +59,10 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
     assert_select 'ul.list-group li.list-group-item a[href=?]',
                   community_collection_path(@community1, @collection1),
                   text: @collection1.title
-    assert_select "a[href='#{edit_community_collection_path(@community1, @collection1)}']"\
+    assert_select "a[href='#{edit_admin_community_collection_path(@community1, @collection1)}']"\
                   '.edit-collection',
                   text: I18n.t('edit')
-    assert_select "a[href='#{community_collection_path(@community1, @collection1)}']"\
+    assert_select "a[href='#{admin_community_collection_path(@community1, @collection1)}']"\
                   '.delete-collection',
                   text: I18n.t('delete')
   end
@@ -79,29 +79,29 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
 
     # Community delete, edit and create new collection buttons should not be shown
     assert_select 'a[href=?]',
-                  community_path(@community1),
+                  admin_community_path(@community1),
                   false
 
     assert_select 'a[href=?]',
-                  edit_community_path(@community1),
+                  edit_admin_community_path(@community1),
                   false
 
     assert_select 'a[href=?]',
-                  new_community_collection_path(@community1),
+                  new_admin_community_collection_path(@community1),
                   false
 
     # Should show 2 collections with a heading
     assert_select 'h4.collections-header', text: I18n.t('communities.show.collections_list_header')
-    assert_select 'div.list-group a.list-group-item', count: 2
+    assert_select 'ul.list-group li.list-group-item', count: 2
 
     # Collections should have be linkable but no edit/delete buttons should be displayed
-    assert_select 'div.list-group a.list-group-item[href=?]',
+    assert_select 'ul.list-group li.list-group-item a[href=?]',
                   community_collection_path(@community1, @collection1),
                   text: @collection1.title
-    assert_select "a[href='#{edit_community_collection_path(@community1, @collection1)}']"\
+    assert_select "a[href='#{edit_admin_community_collection_path(@community1, @collection1)}']"\
                   '.edit-collection',
                   false
-    assert_select "a[href='#{community_collection_path(@community1, @collection1)}']"\
+    assert_select "a[href='#{admin_community_collection_path(@community1, @collection1)}']"\
                   '.delete-collection',
                   false
   end

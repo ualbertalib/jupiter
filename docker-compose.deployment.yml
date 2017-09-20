@@ -49,10 +49,7 @@ services:
   # Sidekiq
   worker: &rails
     restart: always
-    build:
-      context: .
-      dockerfile: Dockerfile.deployment
-    image: ualbertalib/jupiter
+    image: ualbertalib/jupiter:deployment
     command: bundle exec sidekiq
     env_file: .env_deployment
     depends_on:
