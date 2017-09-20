@@ -72,7 +72,7 @@ if Rails.env.development? || Rails.env.uat?
           title: "The effects of #{Faker::Beer.name} on #{thing.pluralize}",
           description: Faker::Lorem.sentence(20, false, 0).chop,
           # will not be required in future, probably will have a created_at field
-          date_created: Time.zone.now.to_s
+          date_created: Time.now
         ).unlock_and_fetch_ldp_object do |uo|
           uo.add_to_path(community.id, collection.id)
           uo.save!
@@ -85,7 +85,7 @@ if Rails.env.development? || Rails.env.uat?
         visibility: JupiterCore::VISIBILITY_PRIVATE,
         title: "Private #{thing.pluralize}, public lives: a survey of social media trends",
         description: Faker::Lorem.sentence(20, false, 0).chop,
-        date_created: Time.zone.now.to_s
+        date_created: Time.now
       ).unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(community.id, collection.id)
         uo.save!
@@ -97,7 +97,7 @@ if Rails.env.development? || Rails.env.uat?
         visibility: Item::VISIBILITY_EMBARGO,
         title: "Embargo and #{Faker::Address.country}: were the #{thing.pluralize} left behind?",
         description: Faker::Lorem.sentence(20, false, 0).chop,
-        date_created: Time.zone.now.to_s
+        date_created: Time.now
       ).unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(community.id, collection.id)
         uo.embargo_end_date = (Time.now + 20.years).to_date
@@ -110,7 +110,7 @@ if Rails.env.development? || Rails.env.uat?
         visibility: Item::VISIBILITY_EMBARGO,
         title: "Former embargo of #{Faker::Address.country}: the day the #{thing.pluralize} were free",
         description: Faker::Lorem.sentence(20, false, 0).chop,
-        date_created: Time.zone.now.to_s
+        date_created: Time.now
       ).unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(community.id, collection.id)
         uo.embargo_end_date = (Time.now - 2.days).to_date
@@ -123,7 +123,7 @@ if Rails.env.development? || Rails.env.uat?
         visibility: JupiterCore::VISIBILITY_PUBLIC,
         title: "Impact of non-admin users on #{thing.pluralize}",
         description: Faker::Lorem.sentence(20, false, 0).chop,
-        date_created: Time.zone.now.to_s
+        date_created: Time.now
       ).unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(community.id, collection.id)
         uo.save!
@@ -138,7 +138,7 @@ if Rails.env.development? || Rails.env.uat?
       title: "Multi-collection random images of #{thing.pluralize}",
       description: Faker::Lorem.sentence(20, false, 0).chop,
       # will not be required in future, probably will have a created_at field
-      date_created: Time.zone.now.to_s
+      date_created: Time.now
     ).unlock_and_fetch_ldp_object do |uo|
       uo.add_to_path(community.id, collection_first.id)
       uo.add_to_path(community.id, collection_last.id)
@@ -148,4 +148,3 @@ if Rails.env.development? || Rails.env.uat?
 
   puts 'Database seeded successfully!'
 end
-
