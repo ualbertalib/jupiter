@@ -30,6 +30,10 @@ class Item < JupiterCore::LockedLdpObject
     super + [VISIBILITY_EMBARGO]
   end
 
+  def file_sets
+    FileSet.where(member_of_collections: id)
+  end
+
   def each_community_collection
     member_of_paths.each do |path|
       community_id, collection_id = path.split('/')
@@ -43,6 +47,23 @@ class Item < JupiterCore::LockedLdpObject
 
     def add_to_path(community_id, collection_id)
       self.member_of_paths += ["#{community_id}/#{collection_id}"]
+    end
+
+    def add_communities_and_collections(communities, collections)
+      return unless communities.present? && collections.present?
+      communities.each_with_index do |community, idx|
+        add_to_path(community, collections[idx])
+      end
+    end
+
+    def add_files(params)
+      return unless params[:item][:file].present?
+      # Need a item id for file sets to point to
+      save! if id.nil?
+
+      params[:item][:file].each do |file|
+        FileSet.add_new_to_item(file, self)
+      end
     end
   end
 
