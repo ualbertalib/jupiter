@@ -1,8 +1,8 @@
 <li class="list-group-item list-group-item-action">
-  <div class="d-flex justify-content-between">
+  <div class="d-flex justify-content-between align-items-start">
     <%= link_to collection.title, admin_community_collection_path(community, collection) %>
 
-    <div class="btn-group align-self-center">
+    <div class="btn-group">
       <% if policy(collection).edit? %>
         <%= link_to t('edit'), edit_admin_community_collection_path(community, collection),
             class:'btn btn-outline-primary edit-collection' %>

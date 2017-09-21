@@ -205,7 +205,6 @@ en:
 
   communities:
     title: '%{title}'
-    has_no_logo: 'Community has no logo'
     index:
       header: 'Communities'
       create_new_community: 'Create New Community'
