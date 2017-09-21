@@ -243,6 +243,8 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
 
     assert_equal @@klass.first.id, obj.id
     assert_equal @@klass.last.id, another_obj.id
+
+    assert_equal @@klass.where(id: obj.id).first.id, obj.id
   end
 
   # TODO: maybe "upstream" deserves its own section in our test suite
