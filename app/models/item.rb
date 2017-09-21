@@ -40,9 +40,22 @@ class Item < JupiterCore::LockedLdpObject
   unlocked do
     validates :embargo_end_date, presence: true, if: ->(item) { item.visibility == VISIBILITY_EMBARGO }
     validates :embargo_end_date, absence: true, if: ->(item) { item.visibility != VISIBILITY_EMBARGO }
+    validates :member_of_paths, presence: true
+    validate :communities_and_collections_validations
 
     def add_to_path(community_id, collection_id)
       self.member_of_paths += ["#{community_id}/#{collection_id}"]
+    end
+
+    def communities_and_collections_validations
+      return unless member_of_paths.present?
+      member_of_paths.each do |path|
+        community_id, collection_id = path.split('/')
+        community = Community.where(id: community_id).first
+        errors.add(:member_of_paths, :community_not_found, id: community_id) unless community.present?
+        collection = Collection.where(id: collection_id).first
+        errors.add(:member_of_paths, :collection_not_found, id: collection_id) unless collection.present?
+      end
     end
   end
 

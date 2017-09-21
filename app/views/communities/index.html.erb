@@ -1,37 +1,28 @@
 <% page_title(t('.header')) %>
 
-<h1 class="mt-3"><%= t('.header') %></h1>
+<div class="d-flex flex-wrap justify-content-between mt-3">
+  <h1><%= t('.header') %></h1>
 
-<div class="row mt-3">
-  <div class="col">
-    <div class="list-group">
-      <% @communities.each do |community| %>
-        <div class="d-flex justify-content-between">
-
-          <%= link_to community_path(community) do %>
-            <% if community.logo.attached? %>
-              <%= image_tag(community.logo.url, class: "img-thumbnail community-logo-small") %>
-            <% else %>
-              <div class="img-thumbnail community-logo-small no-logo">
-                <i class="fa fa-3x fa-picture-o" aria-hidden="true"></i>
-                <p class="community-no-logo-text"><%= t('communities.has_no_logo') %></p>
-              </div>
-            <% end %>
-          <% end %>
-
-          <%= link_to community.title, community_path(community),
-              class: 'list-group-item list-group-item-action' %>
-        </div>
-      <% end %>
-    </div>
-  </div>
+  <% if policy(Community).create? %>
+    <%= link_to t('.create_new_community'), new_admin_community_path,
+      class: 'btn btn-primary align-self-center' %>
+  <% end %>
 </div>
 
 <div class="row mt-3">
-  <div class="col">
-    <% if policy(Community).create? %>
-      <%= link_to t('.create_new_community'), new_admin_community_path,
-          class: 'btn btn-primary' %>
+  <div class="col-md-12">
+    <ul class="list-group">
+    <% @communities.each do |community| %>
+      <li class="list-group-item list-group-item-action">
+      <%= link_to community_path(community), class: 'media' do %>
+        <%= render partial: 'logo', locals: {object: community} %>
+        <div class="media-body">
+          <h5 class="mt-0"><%= community.title %></h5>
+          <p class="text-muted"><%= community.description %></p>
+        </div>
+      <% end %>
+      </li>
     <% end %>
+    </ul>
   </div>
 </div>
