@@ -401,6 +401,7 @@ module JupiterCore
           end
 
           def convert_value(value, to:)
+            return value if value.nil?
             case to
             when :string, :text
               unless value.is_a?(String)
