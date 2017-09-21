@@ -81,7 +81,6 @@ class ItemTest < ActiveSupport::TestCase
 
   test 'a community/collection path must be present' do
     item = Item.new_locked_ldp_object
-    item.unlock_and_fetch_ldp_object {}
 
     assert_not item.valid?
     assert_includes item.errors[:member_of_paths], "can't be blank"
@@ -96,8 +95,12 @@ class ItemTest < ActiveSupport::TestCase
     end
 
     assert_not item.valid?
-    assert_includes item.errors[:member_of_paths], "is missing community with ID \"#{community_id}\""
-    assert_includes item.errors[:member_of_paths], "is missing collection with ID \"#{collection_id}\""
+    assert_includes item.errors[:member_of_paths],
+                    I18n.t('activemodel.errors.models.ir_item.attributes.member_of_paths.community_not_found',
+                           id: community_id)
+    assert_includes item.errors[:member_of_paths],
+                    I18n.t('activemodel.errors.models.ir_item.attributes.member_of_paths.collection_not_found',
+                           id: collection_id)
   end
 
 end

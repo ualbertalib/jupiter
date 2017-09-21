@@ -16,7 +16,7 @@ class Admin::CollectionsController < Admin::AdminController
   def create
     @collection =
       Collection.new_locked_ldp_object(permitted_attributes(Collection)
-                .merge(owner: current_user&.id, community_id: @community.id))
+                .merge(owner: current_user.id, community_id: @community.id))
     @collection.unlock_and_fetch_ldp_object do |unlocked_collection|
       if unlocked_collection.save
         redirect_to admin_community_collection_path(@community, @collection), notice: t('.created')

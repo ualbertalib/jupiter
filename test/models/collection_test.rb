@@ -23,7 +23,6 @@ class CollectionTest < ActiveSupport::TestCase
 
   test 'a community_id must be present' do
     collection = Collection.new_locked_ldp_object(title: 'foo', owner: users(:regular_user).id)
-    collection.unlock_and_fetch_ldp_object {}
 
     assert_not collection.valid?
     assert_includes collection.errors[:community_id], "can't be blank"
@@ -33,10 +32,11 @@ class CollectionTest < ActiveSupport::TestCase
     community_id = generate_random_string
     collection = Collection.new_locked_ldp_object(title: 'foo', owner: users(:regular_user).id,
                                                   community_id: community_id)
-    collection.unlock_and_fetch_ldp_object {}
 
     assert_not collection.valid?
-    assert_includes collection.errors[:community_id], "is missing community with ID \"#{community_id}\""
+    assert_includes collection.errors[:community_id],
+                    I18n.t('activemodel.errors.models.ir_collection.attributes.community_id.community_not_found',
+                           id: community_id)
   end
 
 end

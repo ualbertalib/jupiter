@@ -44,11 +44,8 @@ class Collection < JupiterCore::LockedLdpObject
 
     def community_validations
       return unless community_id
-      begin
-        Community.find(community_id)
-      rescue JupiterCore::ObjectNotFound
-        errors.add(:community_id, :community_not_found, id: community_id)
-      end
+      community = Community.where(id: community_id).first
+      errors.add(:community_id, :community_not_found, id: community_id) unless community.present?
     end
   end
 
