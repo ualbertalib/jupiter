@@ -1,16 +1,8 @@
 <%= simple_form_for [:admin, @community] do |f| %>
   <div class="form-group">
-    <% if @community.logo.attached? %>
-      <%= link_to image_tag(@community.logo.url, class: "img-thumbnail community-logo-small"),
-          @community.logo.url, target: :_blank %>
-    <% else %>
-      <div class="img-thumbnail community-logo-small no-logo">
-        <i class="fa fa-3x fa-picture-o" aria-hidden="true"></i>
-        <p class="community-no-logo-text"><%= t('communities.has_no_logo') %></p>
-      </div>
-    <% end %>
+    <%= render partial: 'logo', locals: {object: @community} %>
 
-    <%= f.file_field :logo %>
+    <%= f.input :logo, as: :file, label: false, wrapper_html: { class: 'mt-3' } %>
 
     <% if @community.logo.attached? %>
       <%= f.input :remove_logo, as: :boolean, checked_value: true, unchecked_value: false %>

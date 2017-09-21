@@ -12,17 +12,17 @@
     <%= f.button :submit, t('.new_button_text') %>
   <% end %>
 
-  <h5 class="mt-5"><%= t('.current_notifications') %></h5>
+  <h2 class="mt-5"><%= t('.current_notifications') %></h5>
 
-  <div class="list-group">
+  <ul class="list-group">
     <% unless current_notifications.present? %>
-      <div class="list-group-item"><%= t('.no_current_notifications') %></div>
+      <li class="list-group-item"><%= t('.no_current_notifications') %></li>
     <% end %>
 
     <% current_notifications.each do |notification| %>
-      <div class="list-group-item flex-column align-items-start justify-content-between">
-        <div class="d-flex w-100 justify-content-between">
-          <h6><%= notification.message %></h6>
+      <li class="list-group-item">
+        <div class="d-flex justify-content-between align-items-start">
+          <h4><%= notification.message %></h4>
           <%= button_to t('remove'),
                         admin_site_notification_path(notification),
                         method: :delete,
@@ -30,25 +30,23 @@
                         data: {confirm: t('.are_you_sure_you_want_to_remove')} %>
         </div>
         <p><em><%= t('.posted_at', created_at: notification.created_at) %></em></p>
-      </div>
+      </li>
     <% end %>
-  </div>
+  </ul>
 
-  <h5 class="mt-5"><%= t('.past_notifications') %></h5>
+  <h2 class="mt-5"><%= t('.past_notifications') %></h2>
 
-  <div class="list-group">
+  <ul class="list-group">
     <% unless past_notifications.present? %>
-      <div class="list-group-item"><%= t('.no_past_notifications') %></div>
+      <li class="list-group-item"><%= t('.no_past_notifications') %></li>
     <% end %>
 
     <% past_notifications.each do |notification| %>
-      <div class="list-group-item flex-column align-items-start justify-content-between">
-        <h6><%= notification.message %></h6>
+      <li class="list-group-item">
+        <h4><%= notification.message %></h4>
 
-        <div class="d-flex w-100 justify-content-between">
-          <p><em><%= t('.posted_at', created_at: notification.created_at) %></em></p>
-          <p><em><%= t('.removed_at', removed_at: notification.removed_at) %></em></p>
-        </div>
-      </div>
+        <p><em><%= t('.posted_at', created_at: notification.created_at) %></em></p>
+        <p><em><%= t('.removed_at', removed_at: notification.removed_at) %></em></p>
+      </li>
     <% end %>
-  </div>
+  </ul>
