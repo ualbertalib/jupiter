@@ -2,21 +2,22 @@
 
 <%= render partial: 'show_breadcrumbs' %>
 
-<div class="d-flex justify-content-between mt-3">
+<div class="d-flex flex-wrap justify-content-between mt-3">
   <h1><%= @collection.title %></h1>
 
-  <%# "align-self-center" stops buttons from growing to size of H1 in this flexbox %>
-  <div class="btn-group align-self-center">
-    <% if policy(@collection).edit? %>
-      <%= link_to t('edit'),
-          edit_admin_community_collection_path(@community, @collection),
-          class:'btn btn-outline-primary' %>
-    <% end %>
-    <% if policy(@collection).destroy? %>
-      <%= link_to t('delete'), admin_community_collection_path(@community, @collection), method: :delete,
-          class:'btn btn-danger', data: { confirm: t('.delete_confirm', title: @collection.title) } %>
-    <% end %>
-  </div>
+  <% if policy(@collection).edit? || policy(@collection).destroy? %>
+    <div class="btn-group align-self-center">
+      <% if policy(@collection).edit? %>
+        <%= link_to t('edit'),
+            edit_admin_community_collection_path(@community, @collection),
+            class:'btn btn-outline-primary' %>
+      <% end %>
+      <% if policy(@collection).destroy? %>
+        <%= link_to t('delete'), admin_community_collection_path(@community, @collection), method: :delete,
+            class:'btn btn-danger', data: { confirm: t('.delete_confirm', title: @collection.title) } %>
+      <% end %>
+    </div>
+  <% end %>
 </div>
 
 <% if @collection.description.present? %>
@@ -34,9 +35,9 @@
     <div class="list-group collection-items">
       <% if @collection.member_items.count > 0 %>
         <% @collection.member_items.each do |item| %>
-          <div class="list-group-item list-group-item-action d-flex justify-content-between">
+          <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-start">
             <%= link_to item.title, item_path(item) %>
-            <div class="btn-group align-self-center">
+            <div class="btn-group">
               <% if policy(@collection).edit? %>
                 <%= link_to t('edit'), edit_item_path(item), class:'btn btn-outline-primary' %>
               <% end %>

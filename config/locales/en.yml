@@ -152,8 +152,6 @@ en:
       title: 'Users'
       show:
         email: 'Email'
-        suspended: 'Suspended?'
-        admin: 'Admin?'
         suspend_link_text: 'Suspend User'
         suspend_dialog: "Are you sure you want to suspend %{user}?"
         suspend_flash: 'User has successfully been suspended'
@@ -185,6 +183,15 @@ en:
         search_placeholder: 'Search by email or name...'
         search_button: 'Search Users'
         header: 'Manage Users'
+        name: 'Name'
+        role: 'Role'
+        admin_role: 'Admin'
+        user_role: 'User'
+        status: 'Status'
+        active_status: 'Active'
+        suspended_status: 'Suspended'
+        updated: 'Updated'
+        created: 'Created'
 
   collections:
     show:
@@ -198,7 +205,6 @@ en:
 
   communities:
     title: '%{title}'
-    has_no_logo: 'Community has no logo'
     index:
       header: 'Communities'
       create_new_community: 'Create New Community'
