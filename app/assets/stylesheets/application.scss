@@ -1,11 +1,7 @@
 @import "bootstrap";
 @import "font-awesome";
 
+@import "jupiter";
+@import "communities";
 @import "logo";
 @import "search";
-
-// TODO: move this stuff below to a general jupiter.scss
-// padding for fixed header.
-body {
-  padding-top: 80px;
-}
