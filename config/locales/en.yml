@@ -41,6 +41,7 @@ en:
 
   application:
     navbar:
+      logo_alt: 'ERA Logo'
       search:
         placeholder: "Search ERA..."
         button_text: 'Search'
