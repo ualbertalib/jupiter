@@ -114,7 +114,7 @@ class JupiterCore::DeferredSolrQuery
     if criteria[:where].present?
       attr_queries = []
       attr_queries << criteria[:where].map do |k, v|
-        solr_key = criteria[:model].attribute_metadata(k)[:solr_names].first
+        solr_key = k == :id ? k : criteria[:model].attribute_metadata(k)[:solr_names].first
         %Q(_query_:"{!field f=#{solr_key}}#{v}")
       end
     else

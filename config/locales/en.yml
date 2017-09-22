@@ -39,6 +39,18 @@ en:
   created_at: 'Created At'
   updated_at: 'Updated At'
 
+  activemodel:
+    errors:
+      models:
+        ir_item:
+          attributes:
+            member_of_paths:
+              community_not_found: 'is missing community with ID "%{id}"'
+              collection_not_found: 'is missing collection with ID "%{id}"'
+        ir_collection:
+          attributes:
+            community_id:
+              community_not_found: 'is missing community with ID "%{id}"'
   application:
     navbar:
       logo_alt: 'ERA Logo'
