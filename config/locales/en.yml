@@ -53,6 +53,7 @@ en:
               community_not_found: 'is missing community with ID "%{id}"'
   application:
     navbar:
+      logo_alt: 'ERA Logo'
       search:
         placeholder: "Search ERA..."
         button_text: 'Search'

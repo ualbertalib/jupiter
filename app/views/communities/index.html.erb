@@ -13,7 +13,7 @@
   <div class="col-md-12">
     <ul class="list-group">
     <% @communities.each do |community| %>
-      <li class="list-group-item list-group-item-action">
+      <li class="list-group-item list-group-item-action jupiter-community-list-item">
       <%= link_to community_path(community), class: 'media' do %>
         <%= render partial: 'logo', locals: {object: community} %>
         <div class="media-body">
