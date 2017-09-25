@@ -192,6 +192,13 @@ module JupiterCore
       new(solr_doc: results.first)
     end
 
+    # find with "return nil if no object with that ID is found" semantics
+    def self.find_by(id)
+      self.find(id)
+    rescue ObjectNotFound
+      return nil
+    end
+
     # Returns an array of all +LockedLDPObject+ in the LDP
     # def self.all(limit:, offset: )
     def self.all
