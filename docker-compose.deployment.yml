@@ -22,7 +22,7 @@ services:
 
   solr:
     restart: always
-    image: solr
+    image: solr:6.6
     ports:
       - "8983:8983"
     volumes:
@@ -65,7 +65,7 @@ services:
     <<: *rails
     volumes:
       - assets:/app/public/assets/
-      - file-storage:/app/storage/  
+      - file-storage:/app/storage/
     command: bundle exec puma -e uat
 
   nginx:
