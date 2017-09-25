@@ -58,7 +58,7 @@ module JupiterCore
     #    ldp_object.save
     #  end
     def unlock_and_fetch_ldp_object
-      self.ldp_object = self.class.send(:derived_af_class).find(self.id) unless @ldp_object.present?
+      self.ldp_object = self.class.send(:derived_af_class).find(self.id) if @ldp_object.blank?
       yield @ldp_object
       self
     end
@@ -99,25 +99,25 @@ module JupiterCore
     # Has this object been persisted? (Defined for ActiveModel compatibility)
     def persisted?
       # if we haven't had to load the internal ldp_object, by definition we must by synced to disk
-      return true unless ldp_object.present?
+      return true if ldp_object.blank?
       ldp_object.persisted?
     end
 
     # Has this object been changed since being loaded? (Defined for ActiveModel compatibility)
     def changed?
-      return false unless ldp_object.present?
+      return false if ldp_object.blank?
       ldp_object.changed?
     end
 
     # Do this object's validations pass? (Defined for ActiveModel compatibility)
     def valid?(*args)
-      return super(*args) unless ldp_object.present?
+      return super(*args) if ldp_object.blank?
       ldp_object.valid?(*args)
     end
 
     # Do this object's validations pass? (Defined for ActiveModel compatibility)
     def errors
-      return super unless ldp_object.present?
+      return super if ldp_object.blank?
       ldp_object.errors
     end
 
@@ -193,6 +193,8 @@ module JupiterCore
     end
 
     # find with "return nil if no object with that ID is found" semantics
+    # Note: This behaves differently then AR find_by.
+    # As it can only take a single argument which is an ID (which is a limitation from ActiveFedora)
     def self.find_by(id)
       self.find(id)
     rescue ObjectNotFound
@@ -269,7 +271,7 @@ module JupiterCore
     #    => #<Item id: "88489b6e-12dd-4eea-b833-af08782c419e", visibility: "public", owner: "", title: "Test", subject: "", creator: "", contributor: "", description: "", publisher: "", date_created: "", language: "", doi: "", member_of_paths: ["6d0a8efa-ec6e-4fb9-bd67-e7877376c5ca/7e5d0653-fcb0-45a1-bb9c-ec3b896afcba"], embargo_end_date: "">
     #
     def self.reify_solr_doc(solr_doc)
-      raise ArgumentError, 'Not a valid LockedLDPObject representation' unless solr_doc['has_model_ssim'].present?
+      raise ArgumentError, 'Not a valid LockedLDPObject representation' if solr_doc['has_model_ssim'].blank?
       solr_doc['has_model_ssim'].first.constantize.owning_class.send(:new, solr_doc: solr_doc)
     end
 
@@ -319,11 +321,11 @@ module JupiterCore
         value
       when :date
         if value.is_a?(String)
-          DateTime.parse(value)
+          DateTime.parse(value).utc
         elsif value.is_a?(DateTime)
           value
         elsif value.is_a?(Date) || value.is_a?(Time)
-          DateTime.parse(value.iso8601(3))
+          DateTime.parse(value.iso8601(3)).utc
         end
       else
         raise TypeError, "Unknown coercion type: #{type}"
@@ -499,7 +501,7 @@ module JupiterCore
       #
       def solr_index(name, solrize_for:, as:)
         raise PropertyInvalidError unless as.respond_to?(:call)
-        raise PropertyInvalidError unless name.present?
+        raise PropertyInvalidError if name.blank?
         raise PropertyInvalidError unless solrize_for.present? && solrize_for.is_a?(Symbol)
 
         self.solr_calc_attributes ||= {}
@@ -513,7 +515,7 @@ module JupiterCore
       # a utility DSL for declaring attributes which allows us to store knowledge of them.
       def has_attribute(name, predicate, multiple: false, solrize_for: [], type: :string)
         raise PropertyInvalidError unless name.is_a? Symbol
-        raise PropertyInvalidError unless predicate.present?
+        raise PropertyInvalidError if predicate.blank?
 
         # TODO: keep this conveinience, or push responsibility for [] onto the callsite?
         solrize_for = [solrize_for] unless solrize_for.is_a? Array

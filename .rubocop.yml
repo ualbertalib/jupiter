@@ -71,6 +71,9 @@ Naming/FileName:
     - Rakefile
     - Gemfile
 
+Rails:
+  Enabled: true
+
 # indentation is an endangered resource
 Style/ClassAndModuleChildren:
   EnforcedStyle: compact
