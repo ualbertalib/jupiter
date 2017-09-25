@@ -21,3 +21,10 @@ linters:
   # from the variable's value.
   SpaceAfterVariableColon:
     enabled: true
+
+  # HoundCI must be using old scss-lint version, let's enforce this ourselves to be single quotes
+  # Enforces that string literals should be written with a consistent form
+  # of quotes (single or double).
+  StringQuotes:
+    enabled: true
+    style: single_quotes # or double_quotes
