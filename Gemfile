@@ -60,7 +60,9 @@ group :development, :test do
   gem 'pry'
   gem 'pry-rails'
 
-  gem 'rubocop', require: false
+  # TODO: Pointing rubocop at master to resolve this bug: https://github.com/bbatsov/rubocop/pull/4749
+  # Once 0.50.1 or something lands, point back to the gem
+  gem 'rubocop', github: 'bbatsov/rubocop', require: false
   gem 'scss_lint', require: false
 end
 

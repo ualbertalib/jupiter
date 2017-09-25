@@ -287,6 +287,8 @@ module JupiterCore
     # Looks pointless, but keeps rubocop happy because of the error-message refining +method_missing+ above
     def respond_to_missing?(*_args); super; end
 
+    # TODO: Fix this? @mbarnett
+    # rubocop:disable Lint/Void
     def ldp_object=(obj)
       @ldp_object = obj
       @ldp_object.owning_object = self
@@ -296,6 +298,7 @@ module JupiterCore
       @solr_representation = @ldp_object.to_solr
       @ldp_object
     end
+    # rubocop:enable Lint/Void
 
     def coerce_value(value, to:)
       case to

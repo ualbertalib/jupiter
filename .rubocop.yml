@@ -57,6 +57,16 @@ Metrics/ParameterLists:
   Exclude:
     - app/models/jupiter_core/search.rb
 
+Naming/PredicateName:
+  Exclude:
+    - app/models/jupiter_core/locked_ldp_object.rb
+
+Naming/FileName:
+  Exclude:
+    - Dangerfile
+    - Rakefile
+    - Gemfile
+
 # indentation is an endangered resource
 Style/ClassAndModuleChildren:
   EnforcedStyle: compact
@@ -69,12 +79,6 @@ Style/Documentation:
 
 Style/AsciiComments:
   Enabled: false
-
-Style/FileName:
-  Exclude:
-    - Dangerfile
-    - Rakefile
-    - Gemfile
 
 Style/RedundantSelf:
   Exclude:
@@ -104,10 +108,6 @@ Style/NumericPredicate:
 Style/ClassVars:
   Exclude:
     - !ruby/regexp /_test\.rb$/
-
-Style/PredicateName:
-  Exclude:
-    - app/models/jupiter_core/locked_ldp_object.rb
 
 Style/SingleLineMethods:
   Enabled: false
