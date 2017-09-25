@@ -21,6 +21,10 @@ Layout/IndentationConsistency:
   Enabled: true
   EnforcedStyle: normal
 
+Lint/Void:
+  Exclude:
+    - app/models/jupiter_core/locked_ldp_object.rb
+
 # A calculated magnitude based on number of assignments,
 # branches, and conditions.
 Metrics/AbcSize:
