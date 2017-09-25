@@ -19,7 +19,7 @@ services:
       - mysql:/var/lib/mysql
 
   solr:
-    image: solr
+    image: solr:6.6
     # Uncomment this if you want to access SOLR's web interface
     # ports:
     #   - "8983:8983"
