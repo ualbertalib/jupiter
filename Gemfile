@@ -61,6 +61,7 @@ group :development, :test do
   gem 'pry-rails'
 
   gem 'rubocop', require: false
+  gem 'scss_lint', require: false
 end
 
 group :development do
