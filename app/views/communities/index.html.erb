@@ -17,7 +17,7 @@
       <%= link_to community_path(community), class: 'media' do %>
         <%= render partial: 'logo', locals: {object: community} %>
         <div class="media-body">
-          <h5 class="mt-0"><%= community.title %></h5>
+          <h4 class="mt-0"><%= community.title %></h5>
           <p class="text-muted"><%= community.description %></p>
         </div>
       <% end %>
