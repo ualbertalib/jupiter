@@ -295,7 +295,6 @@ module JupiterCore
       # could need to call methods that get forwarded to the owning object
       @solr_representation = @ldp_object.to_solr
 
-      # TODO: rubocop Lint/Void throwing cop violation here Fix this? @mbarnett
       @ldp_object
     end
 
