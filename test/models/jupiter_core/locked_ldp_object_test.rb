@@ -343,6 +343,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     end
 
     assert instance.member_of_works.include? instance2.id
+    assert_equal klass.where(member_of_works: instance2.id).first.id, instance.id
   end
 
 end

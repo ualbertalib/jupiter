@@ -532,6 +532,14 @@ module JupiterCore
         raise ArgumentError, "No such association" unless association_names.include? association
         raise ArgumentError, "Invalid association" if derived_af_class.reflect_on_all_associations[association].is_a? ActiveFedora::Reflection::HasSubresourceReflection
 
+        self.attribute_cache[using_name] = {
+          predicate: nil,
+          multiple: true,
+          solrize_for: [:search],
+          type: :string,
+          solr_names: [Solrizer.solr_name(using_name, SOLR_DESCRIPTOR_MAP[:search], type: :string)]
+        }
+
         self.association_indexes ||= []
         self.association_indexes << using_name
 
@@ -543,7 +551,7 @@ module JupiterCore
                      end}
         # add a reader to the locked object
         define_cached_reader(using_name, multiple:true, type: :string,
-          canonical_solr_name:Solrizer.solr_name(using_name, SOLR_DESCRIPTOR_MAP[:search], type: :string),
+          canonical_solr_name: Solrizer.solr_name(using_name, SOLR_DESCRIPTOR_MAP[:search], type: :string),
           specialized_reader: -> {
             self.send(association)&.map do |member|
               member.id
