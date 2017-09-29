@@ -95,7 +95,7 @@ module JupiterCore
                       end
         "#{name}: #{val_display}"
       end
-      return "#<#{self.class.name || 'AnonymousClass'} " + debugstr.join(', ') + '>'
+      "#<#{self.class.name || 'AnonymousClass'} " + debugstr.join(', ') + '>'
     end
 
     # Has this object been persisted? (Defined for ActiveModel compatibility)
@@ -491,13 +491,13 @@ module JupiterCore
         @derived_af_class ||= generate_af_class
       end
 
-      def define_cached_reader(name, multiple:, type:, canonical_solr_name:, specialized_reader:nil)
+      def define_cached_reader(name, multiple:, type:, canonical_solr_name:, specialized_reader: nil)
         define_method name do
           val = if ldp_object.present?
-                  unless specialized_reader.present?
-                    ldp_object.send(name)
-                  else
+                  if specialized_reader.present?
                     ldp_object.instance_exec(&specialized_reader)
+                  else
+                    ldp_object.send(name)
                   end
                 else
                   solr_representation[canonical_solr_name]
@@ -527,10 +527,12 @@ module JupiterCore
         self.solr_calc_attributes[name] = { type: SOLR_DESCRIPTOR_MAP[solrize_for], callable: as }
       end
 
-      def use_existing_association(association, using_name: )
+      def use_existing_association(association, using_name:)
         association_names = derived_af_class.reflect_on_all_associations.keys
-        raise ArgumentError, "No such association" unless association_names.include? association
-        raise ArgumentError, "Invalid association" if derived_af_class.reflect_on_all_associations[association].is_a? ActiveFedora::Reflection::HasSubresourceReflection
+        raise ArgumentError, 'No such association' unless association_names.include? association
+        raise ArgumentError, 'Invalid association' if derived_af_class.reflect_on_all_associations[association].is_a?(
+          ActiveFedora::Reflection::HasSubresourceReflection
+        )
 
         self.attribute_cache[using_name] = {
           predicate: nil,
@@ -545,28 +547,31 @@ module JupiterCore
 
         # fix this not-in-solr idiocy
         additional_search_index using_name, solrize_for: :search,
-                   as: -> {
-                     self.send(association)&.map do |member|
-                       member.id
-                     end}
+                                            as: lambda {
+                                                  self.send(association)&.map do |member|
+                                                    member.id
+                                                  end
+                                                }
         # add a reader to the locked object
-        define_cached_reader(using_name, multiple:true, type: :string,
-          canonical_solr_name: Solrizer.solr_name(using_name, SOLR_DESCRIPTOR_MAP[:search], type: :string),
-          specialized_reader: -> {
-            self.send(association)&.map do |member|
-              member.id
-            end})
+        define_cached_reader(using_name, multiple: true, type: :string,
+                                         canonical_solr_name: Solrizer.solr_name(using_name,
+                                                                                 SOLR_DESCRIPTOR_MAP[:search],
+                                                                                 type: :string),
+                                         specialized_reader: lambda {
+                                                               self.send(association)&.map do |member|
+                                                                 member.id
+                                                               end
+                                                             })
 
         # let people use the "better name" when unlocked, for sheer sanity
         # eg. if you index the awful "member_of_collections" as "member_of_works" on FileSet to better reflect that it
         # has nothing whatsoever to do with collections, let people use and assign to that when unlocked
         # this also simplifies functioning of method forwarding between the locked and unlocked object
         # as that generally assumes that "attribute" names are identically named on both objects
-        if association != using_name
-          derived_af_class.class_eval do
-            alias_method using_name, association
-            alias_method :"#{using_name}=", :"#{association}="
-          end
+        return unless association != using_name
+        derived_af_class.class_eval do
+          alias_method using_name, association
+          alias_method :"#{using_name}=", :"#{association}="
         end
       end
 
@@ -612,7 +617,7 @@ module JupiterCore
         }
 
         # define the read-only attribute method for the locked object
-        define_cached_reader(name, multiple:multiple, type:type, canonical_solr_name:solr_name_cache.first)
+        define_cached_reader(name, multiple: multiple, type: type, canonical_solr_name: solr_name_cache.first)
 
         define_method "#{name}=" do |*_args|
           raise LockedInstanceError, 'The Locked LDP object cannot be mutated outside of an unlocked block or without'\
