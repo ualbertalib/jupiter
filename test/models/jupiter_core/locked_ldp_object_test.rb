@@ -334,17 +334,20 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     assert instance.respond_to?(:member_of_works)
     assert_equal instance.inspect, '#<AnonymousClass id: nil, visibility: "public", owner: 1,'\
                                    ' record_created_at: nil, member_of_works: []>'
-    instance2 = klass.new_locked_ldp_object(owner: 1, visibility: JupiterCore::VISIBILITY_PUBLIC)
-    instance2.unlock_and_fetch_ldp_object do |uo2|
-      uo2.save!
-      instance.unlock_and_fetch_ldp_object do |uo|
-        uo.member_of_works += [uo2]
-        uo.save!
-      end
-    end
+    instance.unlock_and_fetch_ldp_object do |uo|
+      uo.save
 
-    assert instance.member_of_works.include? instance2.id
-    assert_equal klass.where(member_of_works: instance2.id).first.id, instance.id
+      instance2 = klass.new_locked_ldp_object(owner: 1,
+                                              visibility: JupiterCore::VISIBILITY_PUBLIC, member_of_works: [uo])
+
+      instance2.unlock_and_fetch_ldp_object(&:save)
+      assert instance2.member_of_works.include? instance.id
+
+      fetched_object = klass.where(member_of_works: instance.id).first
+
+      assert fetched_object.present?
+      assert_equal fetched_object.id, instance2.id
+    end
   end
 
 end
