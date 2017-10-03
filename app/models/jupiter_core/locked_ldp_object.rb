@@ -40,7 +40,7 @@ module JupiterCore
 
     # inheritable class attributes (not all class-level attributes in this class should be inherited,
     # these are the inheritance-safe attributes)
-    class_attribute :af_parent_class, :attribute_cache, :attribute_names, :facets,
+    class_attribute :af_parent_class, :attribute_cache, :attribute_names, :facets, :association_indexes,
                     :reverse_solr_name_cache, :solr_calc_attributes
 
     # Returns the id of the object in LDP as a String
@@ -79,7 +79,8 @@ module JupiterCore
 
     # A better debug representation for LDP Objects
     def inspect
-      "#<#{self.class.name || 'AnonymousClass'} " + self.class.attribute_names.map do |name|
+      attrs = self.class.attribute_names + self.class.association_indexes
+      debugstr = attrs.map do |name|
         val = self.send(name)
         val_display = if val.is_a?(String)
                         %Q("#{val}")
@@ -93,7 +94,8 @@ module JupiterCore
                         val.to_s
                       end
         "#{name}: #{val_display}"
-      end.join(', ') + '>'
+      end
+      "#<#{self.class.name || 'AnonymousClass'} " + debugstr.join(', ') + '>'
     end
 
     # Has this object been persisted? (Defined for ActiveModel compatibility)
@@ -348,8 +350,7 @@ module JupiterCore
         child.attribute_cache = self.attribute_cache ? self.attribute_cache.dup : {}
         child.facets = self.facets ? self.facets.dup : []
         child.solr_calc_attributes = self.solr_calc_attributes.present? ? self.solr_calc_attributes.dup : {}
-        # child.derived_af_class
-
+        child.association_indexes = self.association_indexes.present? ? self.association_indexes.dup : []
         # If there's no class between +LockedLdpObject+ and this child that's
         # already had +visibility+ and +owner+ defined, define them.
         child.class_eval do
@@ -490,19 +491,88 @@ module JupiterCore
         @derived_af_class ||= generate_af_class
       end
 
+      def define_cached_reader(name, multiple:, type:, canonical_solr_name:, specialized_reader: nil)
+        define_method name do
+          val = if ldp_object.present?
+                  if specialized_reader.present?
+                    ldp_object.instance_exec(&specialized_reader)
+                  else
+                    ldp_object.send(name)
+                  end
+                else
+                  solr_representation[canonical_solr_name]
+                end
+          return if val.nil?
+          val = val.first if val.is_a?(Array) && !multiple
+          return coerce_value(val, to: type).freeze unless multiple
+          coerced_values = val.map do |v|
+            coerce_value(v, to: type).freeze
+          end
+          return coerced_values.freeze
+        end
+      end
+
       # Write properties directly to the solr index for an LDP object, without having to back them in the LDP
       # a lambda, +as+, controls how it is calculated.
       # Examples:
       #
-      #    solr_index :downcased_title, solrize_for: :exact_match, as: -> { title.downcase }
+      #    additional_search_index :downcased_title, solrize_for: :exact_match, as: -> { title.downcase }
       #
-      def solr_index(name, solrize_for:, as:)
+      def additional_search_index(name, solrize_for:, as:)
         raise PropertyInvalidError unless as.respond_to?(:call)
         raise PropertyInvalidError unless name.present?
         raise PropertyInvalidError unless solrize_for.present? && solrize_for.is_a?(Symbol)
 
         self.solr_calc_attributes ||= {}
         self.solr_calc_attributes[name] = { type: SOLR_DESCRIPTOR_MAP[solrize_for], callable: as }
+      end
+
+      def use_existing_association(association, using_name:)
+        association_names = derived_af_class.reflect_on_all_associations.keys
+        raise ArgumentError, 'No such association' unless association_names.include? association
+        raise ArgumentError, 'Invalid association' if derived_af_class.reflect_on_all_associations[association].is_a?(
+          ActiveFedora::Reflection::HasSubresourceReflection
+        )
+
+        self.attribute_cache[using_name] = {
+          predicate: nil,
+          multiple: true,
+          solrize_for: [:search],
+          type: :string,
+          solr_names: [Solrizer.solr_name(using_name, SOLR_DESCRIPTOR_MAP[:search], type: :string)]
+        }
+
+        self.association_indexes ||= []
+        self.association_indexes << using_name
+
+        # fix this not-in-solr idiocy
+        additional_search_index using_name, solrize_for: :search,
+                                            as: lambda {
+                                                  self.send(association)&.map do |member|
+                                                    member.id
+                                                  end
+                                                }
+        # add a reader to the locked object
+        define_cached_reader(using_name, multiple: true, type: :string,
+                                         canonical_solr_name: Solrizer.solr_name(using_name,
+                                                                                 SOLR_DESCRIPTOR_MAP[:search],
+                                                                                 type: :string),
+                                         specialized_reader: lambda {
+                                                               self.send(association)&.map do |member|
+                                                                 member.id
+                                                               end
+                                                             })
+
+        # let people use the "better name" when unlocked, for sheer sanity
+        # eg. if you index the awful "member_of_collections" as "member_of_works" on FileSet to better reflect that it
+        # has nothing whatsoever to do with collections, let people use and assign to that when unlocked
+        # this also simplifies functioning of method forwarding between the locked and unlocked object
+        # as that generally assumes that "attribute" names are identically named on both objects
+        return unless association != using_name
+        derived_af_class.class_eval do
+          alias_method using_name, association
+          alias_method :"#{using_name}=", :"#{association}="
+        end
       end
 
       def has_multival_attribute(name, predicate, solrize_for: [], type: :string)
@@ -546,20 +616,8 @@ module JupiterCore
           solr_names: solr_name_cache
         }
 
-        define_method name do
-          val = if ldp_object.present?
-                  ldp_object.send(name)
-                else
-                  solr_representation[solr_name_cache.first]
-                end
-          return if val.nil?
-          val = val.first if val.is_a?(Array) && !multiple
-          return coerce_value(val, to: type).freeze unless multiple
-          coerced_values = val.map do |v|
-            coerce_value(v, to: type).freeze
-          end
-          return coerced_values.freeze
-        end
+        # define the read-only attribute method for the locked object
+        define_cached_reader(name, multiple: multiple, type: type, canonical_solr_name: solr_name_cache.first)
 
         define_method "#{name}=" do |*_args|
           raise LockedInstanceError, 'The Locked LDP object cannot be mutated outside of an unlocked block or without'\
