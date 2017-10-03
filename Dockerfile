@@ -31,7 +31,7 @@ WORKDIR /app
 # Preinstall gems in an earlier layer so we don't reinstall every time any file changes.
 COPY Gemfile /app
 COPY Gemfile.lock /app
-RUN bundle install
+RUN bundle install --jobs=3 --retry=3
 
 # *NOW* we copy the codebase in
 ADD . /app
