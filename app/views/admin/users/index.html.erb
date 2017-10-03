@@ -8,22 +8,11 @@
 
 <h1 class="my-3"><%= t('.header') %></h1>
 
-<%= form_tag admin_users_path, method:'get' do %>
-  <%# preserve previous sort params when submitting form %>
-  <%= hidden_field_tag :direction, params[:direction] if params[:direction] %>
-  <%= hidden_field_tag :sort, params[:sort] if params[:sort]%>
-
-  <div class="input-group">
-    <%= search_field_tag :query, params[:query], placeholder: t('.search_placeholder'), class: 'form-control' %>
-    <span class="input-group-btn">
-      <%= button_tag name: nil, type: 'submit', class: "btn btn-secondary" do %>
-        <%= fa_icon 'search' %>
-        <%= t('.search_button') %>
-      <% end %>
-    </span>
+<div class="d-flex justify-content-center">
+  <div class="p-3 scroll-typeahead-results">
+    <%= text_field_tag :query, params[:query], placeholder: t('.search_placeholder'), id: 'user-autocomplete' %>
   </div>
-<% end %>
-
+</div>
 
 <p class="text-center"><%= t('.display_users_count', users_count: @users.count, total_users_count: User.count) %></p>
 
@@ -61,3 +50,6 @@
 </table>
 
 <%= paginate @users %>
+<%= javascript_tag do %>
+  init_autocomplete('#user-autocomplete', '<%= autocomplete_admin_users_path %>', { 'display_key': 'name_email'});
+<% end %>

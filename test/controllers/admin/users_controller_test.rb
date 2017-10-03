@@ -89,4 +89,11 @@ class Admin::UsersControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  context '#autocomplete' do
+    should 'be able to autocomplete user' do
+      get autocomplete_admin_users_url
+      assert_response :success
+    end
+  end
+
 end

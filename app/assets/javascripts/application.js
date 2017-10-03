@@ -15,4 +15,5 @@
 //= require jquery3
 //= require popper
 //= require bootstrap
+//= require typeahead.bundle
 //= require_tree ./jupiter
