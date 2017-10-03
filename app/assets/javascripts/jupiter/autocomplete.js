@@ -6,8 +6,8 @@ function init_autocomplete(selector, query_path, options) {
   if (typeof options === "undefined") {
     options = {};
   }
-  if (!('limit' in options)) { options['limit'] = 50; }
-  if (!('display_key' in options)) { options['display_key'] = 'name'; }
+  if (!('limit' in options)) { options.limit = 50; }
+  if (!('display_key' in options)) { options.display_key = 'name'; }
   // See also 'selected' option below
 
   $(document).on('turbolinks:load', function() {
@@ -25,13 +25,13 @@ function init_autocomplete(selector, query_path, options) {
     },
     {
       source: fetch_from_path,
-      display: options['display_key'],
-      limit: options['limit']
+      display: options.display_key,
+      limit: options.limit
     });
     // Handler for selected item in autocomplete list
     if ('selected' in options) {
       $(selector).bind('typeahead:selected', function(event, datum, name) {
-        options['selected'](datum);
+        options.selected(datum);
       });
     }
     else {
