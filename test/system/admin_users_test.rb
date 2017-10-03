@@ -33,9 +33,9 @@ class AdminUsersTest < ApplicationSystemTestCase
       click_link I18n.t('admin.users.index.header')
 
       # Suggestions only appear when there is text
-      assert_selector '.tt-suggestion', count:0
+      assert_selector '.tt-suggestion', count: 0
       fill_in name: 'query', with: 'ad'
-      assert_selector '.tt-suggestion', count:1, text: "#{admin.name} (#{admin.email})"
+      assert_selector '.tt-suggestion', count: 1, text: "#{admin.name} (#{admin.email})"
 
       # Clicking a suggestion takes you to the page for the user
       find('.tt-suggestion').click
