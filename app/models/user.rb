@@ -12,26 +12,20 @@ class User < ApplicationRecord
 
   scope :search, lambda { |query|
     if query.present?
-      where('lower(email) LIKE ?', "%#{query.downcase}%")
-        .or(where('lower(name) LIKE ?', "%#{query.downcase}%"))
+      sanitized = sanitize_sql_like(query)
+      # Match start of first name, last name, email, hyphenated surnames
+      start_of_string = "#{sanitized}%".downcase
+      after_space = "% #{sanitized}%".downcase
+      after_hyphen = "%-#{sanitized}%".downcase
+      where('lower(name) like ?', start_of_string)
+        .or(User.where('lower(name) like ?', after_space))
+        .or(User.where('lower(name) like ?', after_hyphen))
+        .or(User.where('lower(email) like ?', start_of_string))
     end
   }
 
   def items
     Item.where(owner: id)
-  end
-
-  def self.autocomplete_name_email(query, limit)
-    sanitized = sanitize_sql_like(query)
-    # Match start of first name, last name, email, hyphenated surnames
-    start_of_string = "#{sanitized}%".downcase
-    after_space = "% #{sanitized}%".downcase
-    after_hyphen = "%-#{sanitized}%".downcase
-    User.where('lower(name) like ?', start_of_string)
-        .or(User.where('lower(name) like ?', after_space))
-        .or(User.where('lower(name) like ?', after_hyphen))
-        .or(User.where('lower(email) like ?', start_of_string))
-        .limit(limit)
   end
 
 end
