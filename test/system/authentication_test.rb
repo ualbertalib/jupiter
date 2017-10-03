@@ -77,29 +77,32 @@ class AuthenticationTest < ApplicationSystemTestCase
       assert_text I18n.t('items.new.header')
     end
 
-    should 'get redirected to login then back to login page with error, if user is unauthorized' do
-      visit new_community_url # only admins can do this
+    # TODO: Nothing currently exist to nicely test this behaviour, Comment this out for time being
+    # Once user dashboards or something is implemented we can renable this test
+    #
+    # should 'get redirected to login then back to login page with error, if user is unauthorized' do
+    #   visit 'TODO visit url that you need special permission' # only admins can do this
 
-      assert_text I18n.t('authorization.user_not_authorized_try_logging_in')
-      assert_selector 'h1', text: I18n.t('sessions.new.header')
+    #   assert_text I18n.t('authorization.user_not_authorized_try_logging_in')
+    #   assert_selector 'h1', text: I18n.t('sessions.new.header')
 
-      Rails.application.env_config['omniauth.auth'] =
-        OmniAuth.config.mock_auth[:saml] =
-          OmniAuth::AuthHash.new(
-            provider: 'saml',
-            uid: 'johndoe',
-            info: {
-              email: 'johndoe@ualberta.ca',
-              name: 'John Doe'
-            }
-          )
+    #   Rails.application.env_config['omniauth.auth'] =
+    #     OmniAuth.config.mock_auth[:saml] =
+    #       OmniAuth::AuthHash.new(
+    #         provider: 'saml',
+    #         uid: 'johndoe',
+    #         info: {
+    #           email: 'johndoe@ualberta.ca',
+    #           name: 'John Doe'
+    #         }
+    #       )
 
-      click_link I18n.t('sessions.new.saml_link')
+    #   click_link I18n.t('sessions.new.saml_link')
 
-      assert_text I18n.t('authorization.user_not_authorized')
+    #   assert_text I18n.t('authorization.user_not_authorized')
 
-      assert_selector 'h1', text: I18n.t('sessions.new.header')
-    end
+    #   assert_selector 'h1', text: I18n.t('sessions.new.header')
+    # end
   end
 
 end
