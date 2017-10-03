@@ -11,6 +11,10 @@ volumes:
     driver: local
 
 services:
+  # Selenium using chrome driver for system tests
+  chrome:
+    image: selenium/standalone-chrome-debug
+
   mysql:
     image: mysql:5.7
     environment:
@@ -60,6 +64,7 @@ services:
       - fcrepo
       - redis
       - solr
+      - chrome
 
   # Rails server
   web:

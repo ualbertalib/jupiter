@@ -9,8 +9,6 @@ RUN apt-get update -qq \
                           mysql-client \
                           nodejs \
                           tzdata \
-                          # npm \
-                          # nodejs-legacy \
                           # libreoffice \
                           # imagemagick \
                           # ghostscript \
@@ -27,9 +25,6 @@ RUN apt-get update -qq \
 #     && rm  fits-1.0.6.zip \
 #     && chmod a+x /usr/local/fits/fits-1.0.6/fits.sh \
 #     && ln -s /usr/local/fits/fits-1.0.6/fits.sh /usr/bin/fits
-
-# install phantomjs for capybara as we are using poltergeist
-# RUN npm install -g phantomjs-prebuilt
 
 ENV APP_ROOT /app
 RUN mkdir -p $APP_ROOT
