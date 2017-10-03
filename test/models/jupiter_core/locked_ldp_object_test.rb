@@ -327,23 +327,23 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
   test 'hoisted activefedora associations' do
     klass = Class.new(JupiterCore::LockedLdpObject) do
       ldp_object_includes Hydra::Works::FileSetBehavior
-      use_existing_association :member_of_collections, using_name: :member_of_works
+      use_existing_association :member_of_collections, using_name: :items
     end
     instance = klass.new_locked_ldp_object(owner: 1, visibility: JupiterCore::VISIBILITY_PUBLIC)
 
-    assert instance.respond_to?(:member_of_works)
+    assert instance.respond_to?(:items)
     assert_equal instance.inspect, '#<AnonymousClass id: nil, visibility: "public", owner: 1,'\
-                                   ' record_created_at: nil, member_of_works: []>'
+                                   ' record_created_at: nil, items: []>'
     instance.unlock_and_fetch_ldp_object do |uo|
       uo.save
 
       instance2 = klass.new_locked_ldp_object(owner: 1,
-                                              visibility: JupiterCore::VISIBILITY_PUBLIC, member_of_works: [uo])
+                                              visibility: JupiterCore::VISIBILITY_PUBLIC, items: [uo])
 
       instance2.unlock_and_fetch_ldp_object(&:save)
-      assert instance2.member_of_works.include? instance.id
+      assert instance2.items.include? instance.id
 
-      fetched_object = klass.where(member_of_works: instance.id).first
+      fetched_object = klass.where(items: instance.id).first
 
       assert fetched_object.present?
       assert_equal fetched_object.id, instance2.id
