@@ -3,7 +3,7 @@ require 'application_system_test_case'
 class AdminUsersTest < ApplicationSystemTestCase
 
   context 'Admin users index page' do
-    should 'be able to search and sort columns' do
+    should 'be able to sort columns' do
       admin = users(:admin)
 
       login_as_user(admin)
@@ -21,12 +21,25 @@ class AdminUsersTest < ApplicationSystemTestCase
       click_link 'Email'
 
       assert_selector 'tbody tr:last-child th[scope="row"]', text: admin.email
+    end
 
-      fill_in name: 'query', with: 'admin'
-      click_button I18n.t('admin.users.index.search_button')
+    should 'be able to autocomplete a user' do
+      admin = users(:admin)
 
-      assert_selector 'tbody tr', count: 1
-      assert_selector 'tbody tr:first-child th[scope="row"]', text: admin.email
+      login_as_user(admin)
+
+      click_link admin.name # opens user dropdown which has the admin link
+      click_link I18n.t('application.navbar.links.admin')
+      click_link I18n.t('admin.users.index.header')
+
+      # Suggestions only appear when there is text
+      assert_selector '.tt-suggestion', count:0
+      fill_in name: 'query', with: 'ad'
+      assert_selector '.tt-suggestion', count:1, text: "#{admin.name} (#{admin.email})"
+
+      # Clicking a suggestion takes you to the page for the user
+      find('.tt-suggestion').click
+      assert_equal URI.parse(current_url).path, admin_user_path(admin)
     end
   end
 
