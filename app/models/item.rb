@@ -11,7 +11,6 @@ class Item < JupiterCore::LockedLdpObject
   has_attribute :contributor, ::RDF::Vocab::DC.contributor, solrize_for: [:search, :facet]
   has_attribute :description, ::RDF::Vocab::DC.description, type: :text, solrize_for: :search
   has_attribute :publisher, ::RDF::Vocab::DC.publisher, solrize_for: [:search, :facet]
-  has_attribute :date_created, ::RDF::Vocab::DC.created, type: :date, solrize_for: [:search, :sort]
   # has_attribute :date_modified, ::RDF::Vocab::DC.modified, type: :date, solrize_for: :sort
   has_attribute :language, ::RDF::Vocab::DC.language, solrize_for: [:search, :facet]
   has_attribute :doi, ::VOCABULARY[:ualib].doi, solrize_for: :exact_match

@@ -102,10 +102,10 @@
         </button>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="sortItemsDropdown">
           <h6 class="dropdown-header"><%= t('.sort_by') %></h6>
-        <%= items_sort_link 'date_created', 'desc', t('.latest') %>
-        <%= items_sort_link 'date_created', 'asc', t('.oldest') %>
-        <%= items_sort_link 'title', 'asc', t('.title_asc') %>
-        <%= items_sort_link 'title', 'desc', t('.title_desc') %>
+          <%= items_sort_link 'record_created_at', 'desc', t('.latest') %>
+          <%= items_sort_link 'record_created_at', 'asc', t('.oldest') %>
+          <%= items_sort_link 'title', 'asc', t('.title_asc') %>
+          <%= items_sort_link 'title', 'desc', t('.title_desc') %>
         </div>
       </div>
     </div>
