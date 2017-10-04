@@ -2,7 +2,11 @@ require 'test_helper'
 
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
 
-  driven_by :selenium, using: :chrome, screen_size: [1400, 1400], options: { url: 'http://chrome:4444/wd/hub' }
+  # Set options if you have a special selenium url (like if your running selenium in a docker container)
+  # Otherwise just use the defaults by providing empty hash
+  options = ENV['SELENIUM_URL'].present? ? { url: ENV['SELENIUM_URL'] } : {}
+
+  driven_by :selenium, using: :chrome, screen_size: [1400, 1400], options: options
 
   def setup
     host! "http://#{IPSocket.getaddress(Socket.gethostname)}"
