@@ -288,7 +288,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
 
     # This should work even with vanilla AF/Solrizer
     instance = klass.new
-    instance.foo = DateTime.now
+    instance.foo = DateTime.current
 
     assert instance.to_solr.key? 'foo_dtsi'
     refute instance.to_solr.key? 'foo_ssi'
@@ -309,11 +309,11 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     instance = klass.new_locked_ldp_object(owner: 1, visibility: JupiterCore::VISIBILITY_PUBLIC)
 
     instance.unlock_and_fetch_ldp_object do |unlocked_instance|
-      unlocked_instance.embargo_date = Time.now + 200.years
+      unlocked_instance.embargo_date = Time.current + 200.years
     end
 
     # So far so good. Things should be what we set them to be.
-    assert_equal instance.embargo_date.year, Time.now.year + 200
+    assert_equal instance.embargo_date.year, Time.current.year + 200
 
     # Here's where things get stupid
     instance.unlock_and_fetch_ldp_object(&:save)
@@ -321,7 +321,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     # ActiveFedora / RDF completely screw up the serialization of Time objects, and end up losing the date aspects
     # of the time, causing our embargo date to silently become today when saved.
     # This test will fail if we haven't succesfully corrected for this in JupiterCore::LockedLdpObject
-    assert instance.embargo_date.year != Time.now.year
+    assert instance.embargo_date.year != Time.current.year
   end
 
 end

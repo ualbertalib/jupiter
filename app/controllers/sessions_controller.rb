@@ -33,7 +33,7 @@ class SessionsController < ApplicationController
       user.identities.create(provider: auth_hash.provider, uid: auth_hash.uid)
     end
 
-    if user && user.suspended?
+    if user&.suspended?
       return redirect_to login_path, alert: t('login.user_suspended')
     end
 
