@@ -1,4 +1,5 @@
 # coding: utf-8
+
 # JupiterCore::LockedLdpObject classes are lightweight, read-only objects
 # TODO: this file could benefit from some reorganization, possibly into several files
 module JupiterCore
@@ -422,18 +423,16 @@ module JupiterCore
               # it serializes every other Date type to a string internally at a very low precision (second granularity)
               # so we convert all date types into strings ourselves to bypass ActiveFedora's serialization, and then
               # use our modifications to Solrizer to save them in solr in a proper date index.
-              if (value.is_a?(Date) || value.is_a?(String))
+              if value.is_a?(Date) || value.is_a?(String)
                 begin
                   value = value.to_datetime
                 rescue ArgumentError
-                  # Exception will get raised below
+                  # bbatsov is making me do this ...
+                  raise TypeError, "#{value} is not a Date type"
                 end
               end
-              if value.respond_to?(:iso8601)
-                value.utc.iso8601(3)
-              else
-                raise TypeError, "#{value} is not a Date type"
-              end
+              raise TypeError, "#{value} is not a Date type" unless value.respond_to?(:iso8601)
+              value.utc.iso8601(3)
             when :bool
               raise TyperError, "#{value} is not a boolean" unless [true, false].include?(value)
               value
