@@ -19,7 +19,8 @@ before_script:
 script:
   - docker-compose run --rm -e RAILS_ENV=test web rails test
   - docker-compose run --rm -e RAILS_ENV=test web rails test:system
-  - docker-compose run --rm -e RAILS_ENV=test web rubocop
+  - docker-compose run --rm web rubocop
+  - docker-compose run --rm web scss-lint
 
 # after_success:
  # Do autodeploy magic here to UAT
