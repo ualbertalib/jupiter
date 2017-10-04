@@ -1,0 +1,30 @@
+# Linter Documentation:
+# https://github.com/brigade/scss-lint/blob/master/lib/scss_lint/linter/README.md
+
+scss_files: 'app/assets/stylesheets/**/*.scss'
+
+linters:
+
+  # `scss-lint:disable` control comments should be preceded by a comment
+  # explaining why these linters are being disabled for this file.
+  # See https://github.com/brigade/scss-lint#disabling-linters-via-source for
+  # more information.
+  DisableLinterReason:
+    enabled: true
+
+  # TODO: Might enable this if this gets annoying
+  # Avoid qualifying elements in selectors (also known as "tag-qualifying").
+  # QualifyingElement:
+  #   enabled: false
+
+  # Variables should be formatted with a single space separating the colon
+  # from the variable's value.
+  SpaceAfterVariableColon:
+    enabled: true
+
+  # HoundCI must be using old scss-lint version, let's enforce this ourselves to be single quotes
+  # Enforces that string literals should be written with a consistent form
+  # of quotes (single or double).
+  StringQuotes:
+    enabled: true
+    style: single_quotes # or double_quotes
