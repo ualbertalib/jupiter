@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# This script will be sitting in /home/deploy directory, and is for setting up directories and pulling required files for docker deployment
+# This script should be either rsynced or copied to the UAT server when setting up fresh server.
+# For more information, please see the documentation: https://github.com/ualbertalib/di_internal/blob/master/System-Adminstration/UAT-Environment.md
+
+set -o errexit
+set -o pipefail
+set -o nounset
+[[ "${TRACE}" ]] && set -o xtrace
+
+
+readonly branch_name="master"
+readonly install_directory="/home/deploy/jupiter"
+
+mkdir -p "${install_directory}"
+mkdir -p "${install_directory}/config"
+curl -o "${install_directory}/deploy" "https://raw.githubusercontent.com/ualbertalib/jupiter/${branch_name}/deploy"
+curl -o "${install_directory}/docker-compose.yml" "https://raw.githubusercontent.com/ualbertalib/jupiter/${branch_name}/docker-compose.deployment.yml"
+curl -o "${install_directory}/config/nginx.conf" "https://raw.githubusercontent.com/ualbertalib/jupiter/${branch_name}/config/nginx.conf"
+
+if [[ ! -f "${install_directory}/.env_deployment" ]]
+then
+  curl -o "${install_directory}/.env_deployment" "https://raw.githubusercontent.com/ualbertalib/jupiter/${branch_name}/.env_deployment_sample"
+fi
