@@ -5,15 +5,13 @@ module ApplicationHelper
     @page_title.join(' | ')
   end
 
-  def link_for_facet(facet_name, value)
-    query = params[:q]
+  def facetable_query_params(facet_name, value)
+    query_params = {q: params[:q]}
     active_facets = params[:facets] if params[:facets]
-    if active_facets[facet_name].present?
-      active_facets[facet_name] << value
-    else
-      active_facets[facet_name] = [value]
-    end
+    active_facets ||= {}
+    active_facets[facet_name] = value
+    query_params[:facets] = active_facets
 
-
+    query_params
   end
 end

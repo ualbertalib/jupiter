@@ -47,8 +47,9 @@ class ItemsController < ApplicationController
   end
 
   def search
-    @results = Item.search(q: params[:q])
-    authorize @results, :index?
+    params[:facets].permit! if params[:facets].present?
+    @results = JupiterCore::Search.search(q: params[:q], facets: params[:facets], models: Item)
+    authorize Item.new_locked_ldp_object
   end
 
   private

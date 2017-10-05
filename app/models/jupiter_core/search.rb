@@ -7,10 +7,11 @@ class JupiterCore::Search
   # Performs a solr search using the given query and filtered query strings.
   # Returns an instance of +SearchResult+ providing result counts, +LockedLDPObject+ representing results, and
   # access to result facets.
-  def self.search(q: '', fq: '', models: [], as: nil)
+  def self.search(q: '', facets: [], models: [], as: nil)
     raise ArgumentError, 'as: must specify a user!' if as.present? && !as.is_a?(User)
     raise ArgumentError, 'must provide at least one model to search for!' if models.blank?
     models = [models] unless models.is_a?(Array)
+    facets = [] unless facets.present?
 
     base_query = []
     ownership_query = calculate_ownership_query(as)
@@ -20,7 +21,14 @@ class JupiterCore::Search
     base_query << %Q((_query_:"{!raw f=visibility_ssim}public"#{ownership_query}))
     base_query << q if q.present?
 
-    JupiterCore::SearchResults.new(q: base_query, fq: fq, facet_map: construct_facet_map(models),
+    fq = []
+    facets.each do |key, value|
+      fq << %Q(#{key}: "#{value}")
+    end
+
+  #  raise 'asdf'
+
+    JupiterCore::SearchResults.new(q: base_query, fq: fq.join(" AND "), facet_map: construct_facet_map(models),
     facet_fields: models.map(&:facets).flatten.uniq, restrict_to_model: models.map { |m| m.send(:derived_af_class) },
     facet_value_presenters: construct_facet_presenter_map(models))
   end
@@ -68,10 +76,10 @@ class JupiterCore::Search
     params[:start] = start if start.present?
     params[:sort] = sort if sort.present?
 
-    puts "*" * 40
-    puts params.inspect
-    puts "Caller: #{caller[0]}"
-    puts "^" * 40
+    # puts "*" * 40
+    # puts params.inspect
+    # puts "Caller: #{caller[0]}"
+    # puts "^" * 40
 
     response = ActiveFedora::SolrService.instance.conn.get('select', params: params)
 
