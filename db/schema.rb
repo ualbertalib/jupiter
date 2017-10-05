@@ -10,7 +10,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170803165717) do
+ActiveRecord::Schema.define(version: 20170815200404) do
+
+  create_table "active_storage_attachments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "name"
+    t.string "record_gid"
+    t.integer "blob_id"
+    t.datetime "created_at"
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_gid", "blob_id"], name: "index_active_storage_attachments_on_record_gid_and_blob_id", unique: true
+    t.index ["record_gid", "name"], name: "index_active_storage_attachments_on_record_gid_and_name"
+    t.index ["record_gid"], name: "index_active_storage_attachments_on_record_gid"
+  end
+
+  create_table "active_storage_blobs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "key"
+    t.string "filename"
+    t.string "content_type"
+    t.text "metadata"
+    t.integer "byte_size"
+    t.string "checksum"
+    t.datetime "created_at"
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
 
   create_table "identities", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "user_id", null: false

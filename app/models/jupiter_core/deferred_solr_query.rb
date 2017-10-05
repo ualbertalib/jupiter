@@ -5,6 +5,7 @@ class JupiterCore::DeferredSolrQuery
 
   def initialize(klass)
     criteria[:model] = klass
+    criteria[:limit] = JupiterCore::Search::MAX_RESULTS
     sort(:record_created_at, :desc)
   end
 
@@ -32,10 +33,10 @@ class JupiterCore::DeferredSolrQuery
     raise ArgumentError, 'order must be :asc or :desc' unless [:asc, :desc].include?(order.to_sym)
 
     metadata = criteria[:model].attribute_metadata(attr.to_sym)
-    raise ArgumentError, "No metadata found for attribute #{attr}" unless metadata.present?
+    raise ArgumentError, "No metadata found for attribute #{attr}" if metadata.blank?
 
     sort_attr_index = metadata[:solrize_for].index(:sort)
-    raise ArgumentError, "The given attribute, #{attr}, is not solrized for sorting" unless sort_attr_index.present?
+    raise ArgumentError, "The given attribute, #{attr}, is not solrized for sorting" if sort_attr_index.blank?
 
     criteria[:sort] = metadata[:solr_names][sort_attr_index]
     criteria[:sort_order] = order
@@ -59,6 +60,11 @@ class JupiterCore::DeferredSolrQuery
   def limit_value
     criteria[:limit]
   end
+
+  # Kaminari integration
+  define_method Kaminari.config.page_method_name, (proc { |num|
+    limit(default_per_page).offset(default_per_page * ([num.to_i, 1].max - 1))
+  })
 
   def total_count
     af_model = criteria[:model].send(:derived_af_class)
@@ -108,7 +114,7 @@ class JupiterCore::DeferredSolrQuery
     if criteria[:where].present?
       attr_queries = []
       attr_queries << criteria[:where].map do |k, v|
-        solr_key = criteria[:model].attribute_metadata(k)[:solr_names].first
+        solr_key = k == :id ? k : criteria[:model].attribute_metadata(k)[:solr_names].first
         %Q(_query_:"{!field f=#{solr_key}}#{v}")
       end
     else

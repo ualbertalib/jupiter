@@ -11,22 +11,22 @@ class AdminUsersTest < ApplicationSystemTestCase
       click_link admin.name # opens user dropdown which has the admin link
       click_link I18n.t('application.navbar.links.admin')
 
-      assert_selector 'h1', text: I18n.t('admin.header')
+      assert_selector 'h1', text: I18n.t('admin.dashboard.index.header')
 
       click_link I18n.t('admin.users.index.header')
       assert_selector 'h1', text: I18n.t('admin.users.index.header')
       assert_selector 'tbody tr', count: 4
-      assert_selector 'tbody tr:first-child td:nth-child(2)', text: admin.email
+      assert_selector 'tbody tr:first-child th[scope="row"]', text: admin.email
 
       click_link 'Email'
 
-      assert_selector 'tbody tr:last-child td:nth-child(2)', text: admin.email
+      assert_selector 'tbody tr:last-child th[scope="row"]', text: admin.email
 
       fill_in name: 'query', with: 'admin'
       click_button I18n.t('admin.users.index.search_button')
 
       assert_selector 'tbody tr', count: 1
-      assert_selector 'tbody tr:first-child td:nth-child(2)', text: admin.email
+      assert_selector 'tbody tr:first-child th[scope="row"]', text: admin.email
     end
   end
 
@@ -39,12 +39,12 @@ class AdminUsersTest < ApplicationSystemTestCase
       click_link admin.name # opens user dropdown which has the admin link
       click_link I18n.t('application.navbar.links.admin')
 
-      assert_selector 'h1', text: I18n.t('admin.header')
+      assert_selector 'h1', text: I18n.t('admin.dashboard.index.header')
 
       click_link I18n.t('admin.users.index.header')
       assert_selector 'h1', text: I18n.t('admin.users.index.header')
       assert_selector 'tbody tr', count: 4
-      assert_selector 'tbody tr:first-child td:nth-child(2)', text: admin.email
+      assert_selector 'tbody tr:first-child th[scope="row"]', text: admin.email
 
       click_link admin.email
 
@@ -67,12 +67,12 @@ class AdminUsersTest < ApplicationSystemTestCase
       click_link admin.name # opens user dropdown which has the admin link
       click_link I18n.t('application.navbar.links.admin')
 
-      assert_selector 'h1', text: I18n.t('admin.header')
+      assert_selector 'h1', text: I18n.t('admin.dashboard.index.header')
 
       click_link I18n.t('admin.users.index.header')
       assert_selector 'h1', text: I18n.t('admin.users.index.header')
       assert_selector 'tbody tr', count: 4
-      assert_selector 'tbody tr:first-child td:nth-child(2)', text: admin.email
+      assert_selector 'tbody tr:first-child th[scope="row"]', text: admin.email
 
       click_link user.email
 
@@ -138,12 +138,12 @@ class AdminUsersTest < ApplicationSystemTestCase
       click_link admin.name # opens user dropdown which has the admin link
       click_link I18n.t('application.navbar.links.admin')
 
-      assert_selector 'h1', text: I18n.t('admin.header')
+      assert_selector 'h1', text: I18n.t('admin.dashboard.index.header')
 
       click_link I18n.t('admin.users.index.header')
       assert_selector 'h1', text: I18n.t('admin.users.index.header')
       assert_selector 'tbody tr', count: 4
-      assert_selector 'tbody tr:first-child td:nth-child(2)', text: admin.email
+      assert_selector 'tbody tr:first-child th[scope="row"]', text: admin.email
 
       click_link user.email
 

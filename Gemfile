@@ -10,14 +10,15 @@ gem 'puma', '~> 3.7'
 gem 'rails', '~> 5.1.1'
 
 # Assets (CSS/JS) stuff
+gem 'bootstrap', '~> 4.0.0.beta'
 gem 'font-awesome-rails'
 gem 'jquery-rails'
+gem 'sass-rails', '~> 5.0'
 gem 'turbolinks', '~> 5'
 gem 'uglifier', '>= 1.3.0'
 
-gem 'bootstrap', '~> 4.0.0.beta'
-
 # View stuff
+gem 'activestorage'
 gem 'simple_form'
 
 # Hydra stuff
@@ -28,7 +29,7 @@ gem 'solrizer', github: 'mbarnett/solrizer', branch: 'literally_types'
 
 # Database stuff
 gem 'mysql2', '>= 0.3.18', '< 0.5'
-gem 'redis', '~> 3.0'
+gem 'redis', '~> 3.3'
 gem 'rsolr'
 
 # Authentication
@@ -38,18 +39,31 @@ gem 'omniauth-saml'
 # Authorization
 gem 'pundit'
 
+# Background tasks
+gem 'sidekiq', '~> 5.0'
+gem 'sinatra' # used by sidekiq/web
+
 # Misc Utilities
 gem 'kaminari'
-gem 'sdoc'
+
+# Seeds
+group :development, :test, :uat do
+  gem 'faker', require: false
+end
 
 group :development, :test do
+  gem 'sdoc', require: false
+
   gem 'capybara', '~> 2.13'
   gem 'selenium-webdriver', require: false
 
   gem 'pry'
   gem 'pry-rails'
 
-  gem 'rubocop', require: false
+  # TODO: Pointing rubocop at master to resolve this bug: https://github.com/bbatsov/rubocop/pull/4749
+  # Once 0.50.1 or something lands, point back to the gem
+  gem 'rubocop', github: 'bbatsov/rubocop', require: false
+  gem 'scss_lint', require: false
 end
 
 group :development do

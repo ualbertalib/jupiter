@@ -1,0 +1,43 @@
+<%= simple_form_for item, html: {multipart: true} do |f| %>
+  <% item.display_attributes.each do |prop, _| %>
+    <% next if ['visibility', 'owner', 'record_created_at', 'doi', 'embargo_end_date'].include? prop %>
+    <%= f.input prop %>
+  <% end %>
+  <%= f.input :visibility,
+    as: :unread_select,
+    collection: Item::VISIBILITIES,
+    selected: item.visibility,
+    input_html: { name: 'item[visibility]' }
+  %>
+  <%= f.input :community,
+    as: :unread_select,
+    collection: Community.all,
+    label_method: :title,
+    value_method: :id,
+    input_html: {name: 'item[community][]'}
+  %>
+  <%= f.input :collection,
+    as: :unread_select,
+    disabled: true,
+    collection: [],
+    input_html: {name: 'item[collection][]'}
+  %>
+  <div class="file_upload">
+    <div class="row">
+      <div class="col-6">
+        <%= f.input :file,
+          as: :file,
+          label: t('items.file_label'),
+          input_html: {name: 'item[file][]'}
+        %>
+      </div>
+      <div class="col-6">
+        <%= link_to t('items.add_another_file'),
+          '#',
+          class: 'btn btn-secondary add-file'
+        %>
+      </div>
+    </div>
+  </div>
+  <%= f.button :submit %>
+<% end %>

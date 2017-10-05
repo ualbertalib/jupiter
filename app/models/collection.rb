@@ -3,7 +3,8 @@ class Collection < JupiterCore::LockedLdpObject
   ldp_object_includes Hydra::Works::CollectionBehavior
 
   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
-  has_attribute :community_id, ::VOCABULARY[:ualib].path, solrize_for: :pathing
+  has_attribute :community_id, ::VOCABULARY[:ualib].path, type: :path, solrize_for: :pathing
+  has_attribute :description, ::RDF::Vocab::DC.description, solrize_for: [:search]
 
   # description for collections
 
@@ -15,8 +16,8 @@ class Collection < JupiterCore::LockedLdpObject
     "#{community_id}/#{id}"
   end
 
-  def member_works
-    Work.where(member_of_paths: path)
+  def member_items
+    Item.where(member_of_paths: path)
   end
 
   def as_json(_options)
@@ -26,16 +27,25 @@ class Collection < JupiterCore::LockedLdpObject
   unlocked do
     before_destroy :can_be_destroyed?
 
+    validates :title, presence: true
+    validates :community_id, presence: true
+    validate :community_validations
     before_validation do
       self.visibility = JupiterCore::VISIBILITY_PUBLIC
     end
 
     def can_be_destroyed?
-      return true if member_works.count == 0
-      errors.add(:member_works,
-                 I18n.t('collections.errors.member_works_must_be_empty',
-                        list_of_works: member_works.map(&:title).join(', ')))
+      return true if member_items.count == 0
+      errors.add(:member_items,
+                 I18n.t('collections.errors.member_items_must_be_empty',
+                        list_of_items: member_items.map(&:title).join(', ')))
       throw(:abort)
+    end
+
+    def community_validations
+      return unless community_id
+      community = Community.find_by(community_id)
+      errors.add(:community_id, :community_not_found, id: community_id) if community.blank?
     end
   end
 

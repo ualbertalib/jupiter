@@ -1,10 +1,7 @@
-@import "bootstrap";
+@import 'bootstrap';
+@import 'font-awesome';
 
-// TODO: weird bug? had to .css this
-@import "font-awesome.css";
-
-// TODO: move this stuff below to a general jupiter.scss
-// padding for fixed header.
-body {
-  padding-top: 80px;
-}
+@import 'jupiter';
+@import 'communities';
+@import 'logo';
+@import 'search';

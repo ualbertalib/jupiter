@@ -1,11 +1,15 @@
 class JupiterCore::Search
 
+  # How dumb is this? Seems pretty dumb, but that's the official recommendation I guess:
+  # https://wiki.apache.org/solr/CommonQueryParameters
+  MAX_RESULTS = 10_000_000
+
   # Performs a solr search using the given query and filtered query strings.
   # Returns an instance of +SearchResult+ providing result counts, +LockedLDPObject+ representing results, and
   # access to result facets.
   def self.search(q: '', fq: '', models: [], as: nil)
     raise ArgumentError, 'as: must specify a user!' if as.present? && !as.is_a?(User)
-    raise ArgumentError, 'must provide at least one model to search for!' unless models.present?
+    raise ArgumentError, 'must provide at least one model to search for!' if models.blank?
     models = [models] unless models.is_a?(Array)
 
     base_query = []
@@ -25,7 +29,7 @@ class JupiterCore::Search
   # "where visibility is public" restriction
   def self.calculate_ownership_query(user)
     # non-logged-in users don't get anything else
-    return '' unless user.present?
+    return '' if user.blank?
 
     # You can see what you own, regardless of visibility
     # TODO: owner is...? db id? ccid? email?
@@ -39,7 +43,7 @@ class JupiterCore::Search
   end
 
   def self.perform_solr_query(q:, fq: '', facet: false, facet_fields: [],
-                              restrict_to_model: nil, rows: nil, start: nil, sort: nil)
+                              restrict_to_model: nil, rows: MAX_RESULTS, start: nil, sort: nil)
     query = []
     restrict_to_model = [restrict_to_model] unless restrict_to_model.is_a?(Array)
 
@@ -57,10 +61,10 @@ class JupiterCore::Search
       q: query.join(' AND '),
       fq: fq,
       facet: facet,
+      rows: rows,
       'facet.field': facet_fields
     }
 
-    params[:rows] = rows if rows.present?
     params[:start] = start if start.present?
     params[:sort] = sort if sort.present?
 

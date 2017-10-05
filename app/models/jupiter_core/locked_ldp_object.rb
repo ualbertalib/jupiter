@@ -1,6 +1,5 @@
 # JupiterCore::LockedLdpObject classes are lightweight, read-only objects
-# TODO: this file could benefit from some reorganization, possibly into several
-# files
+# TODO: this file could benefit from some reorganization, possibly into several files
 module JupiterCore
   class ObjectNotFound < StandardError; end
   class PropertyInvalidError < StandardError; end
@@ -11,6 +10,8 @@ module JupiterCore
   VISIBILITY_PUBLIC = 'public'.freeze
   VISIBILITY_PRIVATE = 'private'.freeze
   VISIBILITY_AUTHENTICATED = 'authenticated'.freeze
+
+  VISIBILITIES = [VISIBILITY_PUBLIC, VISIBILITY_PRIVATE, VISIBILITY_AUTHENTICATED].freeze
 
   class LockedLdpObject
 
@@ -57,7 +58,7 @@ module JupiterCore
     #    ldp_object.save
     #  end
     def unlock_and_fetch_ldp_object
-      self.ldp_object = self.class.send(:derived_af_class).find(self.id) unless @ldp_object.present?
+      self.ldp_object = self.class.send(:derived_af_class).find(self.id) if @ldp_object.blank?
       yield @ldp_object
       self
     end
@@ -98,25 +99,25 @@ module JupiterCore
     # Has this object been persisted? (Defined for ActiveModel compatibility)
     def persisted?
       # if we haven't had to load the internal ldp_object, by definition we must by synced to disk
-      return true unless ldp_object.present?
+      return true if ldp_object.blank?
       ldp_object.persisted?
     end
 
     # Has this object been changed since being loaded? (Defined for ActiveModel compatibility)
     def changed?
-      return false unless ldp_object.present?
+      return false if ldp_object.blank?
       ldp_object.changed?
     end
 
     # Do this object's validations pass? (Defined for ActiveModel compatibility)
     def valid?(*args)
-      return super(*args) unless ldp_object.present?
+      return super(*args) if ldp_object.blank?
       ldp_object.valid?(*args)
     end
 
     # Do this object's validations pass? (Defined for ActiveModel compatibility)
     def errors
-      return super unless ldp_object.present?
+      return super if ldp_object.blank?
       ldp_object.errors
     end
 
@@ -135,15 +136,15 @@ module JupiterCore
     # attribute for forms to modify. Subclasses should override this and remove any other sensitive attributes from
     # this array
     #
-    # a Work +LockedLDPObject+ might choose to protect its +owner+ attribute by overriding this method:
+    # a Item +LockedLDPObject+ might choose to protect its +owner+ attribute by overriding this method:
     #
     #  def self.safe_attributes
     #    super - [:owner]
     #  end
     #
-    # and then enforce that in a controller like works_controller.rb:
-    #    def work_params
-    #      params[:work].permit(Work.safe_attributes)
+    # and then enforce that in a controller like items_controller.rb:
+    #    def item_params
+    #      params[:item].permit(Item.safe_attributes)
     #    end
     def self.safe_attributes
       self.attribute_names - [:id]
@@ -152,10 +153,10 @@ module JupiterCore
     # Accepts a symbol representing the attribute name, and returns a Hash containing
     # metadata about an object's attributes.
     #
-    # Given a subclass +Work+ with an attribute declaration:
+    # Given a subclass +Item+ with an attribute declaration:
     #   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
     #
-    # then the Hash returned by <tt>Work.attribute_metadata(:title)</tt> would be:
+    # then the Hash returned by <tt>Item.attribute_metadata(:title)</tt> would be:
     #   {
     #      :predicate => #<RDF::Vocabulary::Term:0x3fe32a1d1a30 URI:http://purl.org/dc/terms/title>,
     #      :multiple => false,
@@ -169,11 +170,11 @@ module JupiterCore
 
     # Accepts a String name of a name-mangled solr field, and returns the symbol of the attribute that corresponds to it
     #
-    # Given a subclass +Work+ with an attribute declaration:
+    # Given a subclass +Item+ with an attribute declaration:
     #   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
     #
     # then:
-    #   Work.solr_name_to_attribute_name('title_tesim')
+    #   Item.solr_name_to_attribute_name('title_tesim')
     #   => :title
     def self.solr_name_to_attribute_name(solr_name)
       self.reverse_solr_name_cache[solr_name]
@@ -191,6 +192,15 @@ module JupiterCore
       new(solr_doc: results.first)
     end
 
+    # find with "return nil if no object with that ID is found" semantics
+    # Note: This behaves differently then AR find_by.
+    # As it can only take a single argument which is an ID (which is a limitation from ActiveFedora)
+    def self.find_by(id)
+      self.find(id)
+    rescue ObjectNotFound
+      return nil
+    end
+
     # Returns an array of all +LockedLDPObject+ in the LDP
     # def self.all(limit:, offset: )
     def self.all
@@ -205,8 +215,8 @@ module JupiterCore
     # Accepts a hash of name-value pairs to query for, and returns an Array of matching +LockedLDPObject+
     #
     # For example:
-    #   Work.where(title: 'Test upload')
-    #    => [#<Work id: "e5f4a074-5bcb-48a4-99ee-12bc83cef291", title: "Test upload", subject: "", creator: "", contributor: "", description: "", publisher: "", date_created: "", language: "", doi: "", member_of_paths: ["98124366-c8b2-487a-95f0-a1c18c805ddd/799e2eee-5435-4f08-bf3d-fc256fee9447"]>
+    #   Item.where(title: 'Test upload')
+    #    => [#<Item id: "e5f4a074-5bcb-48a4-99ee-12bc83cef291", title: "Test upload", subject: "", creator: "", contributor: "", description: "", publisher: "", date_created: "", language: "", doi: "", member_of_paths: ["98124366-c8b2-487a-95f0-a1c18c805ddd/799e2eee-5435-4f08-bf3d-fc256fee9447"]>
     def self.where(attributes)
       all.where(attributes)
     end
@@ -256,12 +266,12 @@ module JupiterCore
     #
     # eg)
     #    2.4.0 :003 > solr_doc
-    #    => {"system_create_dtsi"=>"2017-08-01T17:07:08Z", "system_modified_dtsi"=>"2017-08-01T17:07:08Z", "has_model_ssim"=>["IRWork"], "id"=>"88489b6e-12dd-4eea-b833-af08782c419e", "visibility_ssim"=>["public"], "owner_ssim"=>[""], "title_tesim"=>["Test"], "subject_tesim"=>[""], "creator_tesim"=>[""], "contributor_tesim"=>[""], "description_tesim"=>[""], "publisher_tesim"=>[""], "date_created_tesim"=>[""], "date_created_ssi"=>"", "language_tesim"=>[""], "doi_ssim"=>[""], "member_of_paths_dpsim"=>["6d0a8efa-ec6e-4fb9-bd67-e7877376c5ca/7e5d0653-fcb0-45a1-bb9c-ec3b896afcba"], "embargo_end_date_tesim"=>[""], "embargo_end_date_ssi"=>"", "_version_"=>1574549301238956032, "timestamp"=>"2017-08-01T17:07:08.507Z", "score"=>2.5686157}
+    #    => {"system_create_dtsi"=>"2017-08-01T17:07:08Z", "system_modified_dtsi"=>"2017-08-01T17:07:08Z", "has_model_ssim"=>["IRItem"], "id"=>"88489b6e-12dd-4eea-b833-af08782c419e", "visibility_ssim"=>["public"], "owner_ssim"=>[""], "title_tesim"=>["Test"], "subject_tesim"=>[""], "creator_tesim"=>[""], "contributor_tesim"=>[""], "description_tesim"=>[""], "publisher_tesim"=>[""], "date_created_tesim"=>[""], "date_created_ssi"=>"", "language_tesim"=>[""], "doi_ssim"=>[""], "member_of_paths_dpsim"=>["6d0a8efa-ec6e-4fb9-bd67-e7877376c5ca/7e5d0653-fcb0-45a1-bb9c-ec3b896afcba"], "embargo_end_date_tesim"=>[""], "embargo_end_date_ssi"=>"", "_version_"=>1574549301238956032, "timestamp"=>"2017-08-01T17:07:08.507Z", "score"=>2.5686157}
     #    2.4.0 :004 > JupiterCore::LockedLdpObject.reify_solr_doc(solr_doc)
-    #    => #<Work id: "88489b6e-12dd-4eea-b833-af08782c419e", visibility: "public", owner: "", title: "Test", subject: "", creator: "", contributor: "", description: "", publisher: "", date_created: "", language: "", doi: "", member_of_paths: ["6d0a8efa-ec6e-4fb9-bd67-e7877376c5ca/7e5d0653-fcb0-45a1-bb9c-ec3b896afcba"], embargo_end_date: "">
+    #    => #<Item id: "88489b6e-12dd-4eea-b833-af08782c419e", visibility: "public", owner: "", title: "Test", subject: "", creator: "", contributor: "", description: "", publisher: "", date_created: "", language: "", doi: "", member_of_paths: ["6d0a8efa-ec6e-4fb9-bd67-e7877376c5ca/7e5d0653-fcb0-45a1-bb9c-ec3b896afcba"], embargo_end_date: "">
     #
     def self.reify_solr_doc(solr_doc)
-      raise ArgumentError, 'Not a valid LockedLDPObject representation' unless solr_doc['has_model_ssim'].present?
+      raise ArgumentError, 'Not a valid LockedLDPObject representation' if solr_doc['has_model_ssim'].blank?
       solr_doc['has_model_ssim'].first.constantize.owning_class.send(:new, solr_doc: solr_doc)
     end
 
@@ -293,7 +303,33 @@ module JupiterCore
       # NOTE: it's important to establish the owning object PRIOR to calling to_solr, as solr_calc_properties
       # could need to call methods that get forwarded to the owning object
       @solr_representation = @ldp_object.to_solr
+
       @ldp_object
+    end
+
+    def coerce_value(value, to:)
+      case to
+      when :string, :text
+        value.to_s
+      when :bool
+        value
+      when :int
+        value.to_i
+      when :float
+        value.to_f
+      when :path
+        value
+      when :date
+        if value.is_a?(String)
+          DateTime.parse(value).utc
+        elsif value.is_a?(DateTime)
+          value
+        elsif value.is_a?(Date) || value.is_a?(Time)
+          DateTime.parse(value.iso8601(3)).utc
+        end
+      else
+        raise TypeError, "Unknown coercion type: #{type}"
+      end
     end
 
     # private class methods
@@ -325,7 +361,7 @@ module JupiterCore
             has_attribute :visibility, ::VOCABULARY[:jupiter_core].visibility, solrize_for: [:exact_match, :facet]
           end
           unless attribute_names.include?(:owner)
-            has_attribute :owner, ::VOCABULARY[:jupiter_core].owner, solrize_for: [:exact_match]
+            has_attribute :owner, ::VOCABULARY[:jupiter_core].owner, type: :int, solrize_for: [:exact_match]
           end
           unless attribute_names.include?(:record_created_at)
             has_attribute :record_created_at, ::VOCABULARY[:jupiter_core].record_created_at, type: :date,
@@ -373,6 +409,44 @@ module JupiterCore
           def visibility_must_be_known
             return true if visibility.present? && owning_object.class.valid_visibilities.include?(visibility)
             errors.add(:visibility, I18n.t('locked_ldp_object.errors.invalid_visibility', visibility: visibility))
+          end
+
+          def convert_value(value, to:)
+            return value if value.nil?
+            case to
+            when :string, :text
+              unless value.is_a?(String)
+                raise TypeError, "#{value} isn't a String. Call to_s explicitly if "\
+                                 "that's what you want"
+              end
+              value
+            when :date
+              # ActiveFedora/RDF does the wrong thing with Time (see below) AND
+              # it serializes every other Date type to a string internally at a very low precision (second granularity)
+              # so we convert all date types into strings ourselves to bypass ActiveFedora's serialization, and then
+              # use our modifications to Solrizer to save them in solr in a proper date index.
+              value = value.to_datetime if value.is_a?(Date)
+              if value.is_a?(String)
+                value
+              elsif value.respond_to?(:iso8601)
+                value.utc.iso8601(3)
+              else
+                raise TypeError, "#{value} is not a Date type"
+              end
+            when :bool
+              raise TyperError, "#{value} is not a boolean" unless [true, false].include?(value)
+              value
+            when :int
+              raise TypeError, "#{value} is not a integer value" unless value.is_a?(Integer)
+              value
+            when :path
+              value
+            when :float
+              raise TypeError, "#{value} is not a float value" unless value.is_a?(Float)
+              value
+            else
+              raise 'NOT IMPLEMENTED'
+            end
           end
 
           # Paper over a 2 year old bug in ActiveFedora where it simply SILENTLY IGNORES validation callbacks
@@ -428,7 +502,7 @@ module JupiterCore
       #
       def solr_index(name, solrize_for:, as:)
         raise PropertyInvalidError unless as.respond_to?(:call)
-        raise PropertyInvalidError unless name.present?
+        raise PropertyInvalidError if name.blank?
         raise PropertyInvalidError unless solrize_for.present? && solrize_for.is_a?(Symbol)
 
         self.solr_calc_attributes ||= {}
@@ -443,7 +517,7 @@ module JupiterCore
       # a utility DSL for declaring attributes which allows us to store knowledge of them.
       def has_attribute(name, predicate, multiple: false, solrize_for: [], type: :string, facet_value_presenter: nil)
         raise PropertyInvalidError unless name.is_a? Symbol
-        raise PropertyInvalidError unless predicate.present?
+        raise PropertyInvalidError if predicate.blank?
 
         # TODO: keep this conveinience, or push responsibility for [] onto the callsite?
         solrize_for = [solrize_for] unless solrize_for.is_a? Array
@@ -454,7 +528,8 @@ module JupiterCore
         # but it helps
         raise PropertyInvalidError if solrize_for.count { |item| !SOLR_DESCRIPTOR_MAP.keys.include?(item) } > 0
 
-        # TODO: type validation
+        raise PropertyInvalidError, "Unknown type #{type}" unless [:string, :text, :path, :bool, :date, :int,
+                                                                   :float].include?(type)
 
         self.attribute_names << name
 
@@ -489,9 +564,12 @@ module JupiterCore
                   solr_representation[solr_name_cache.first]
                 end
           return if val.nil?
-          return DateTime.parse(val).freeze if type == :date
-          return val.freeze if val.nil? || multiple || !val.is_a?(Array)
-          return val.first.freeze
+          val = val.first if val.is_a?(Array) && !multiple
+          return coerce_value(val, to: type).freeze unless multiple
+          coerced_values = val.map do |v|
+            coerce_value(v, to: type).freeze
+          end
+          return coerced_values.freeze
         end
 
         define_method "#{name}=" do |*_args|
@@ -503,6 +581,71 @@ module JupiterCore
           property name, predicate: predicate, multiple: multiple do |index|
             index.type type if type.present?
             index.as(*(solrize_for.map { |idx| SOLR_DESCRIPTOR_MAP[idx] }))
+          end
+        end
+
+        # A thrilling tale of Yet Another Community Bug™
+        #
+        # Suppose you have an ActiveFedora class, Item, with a property, embargo_date, type: date.
+        #
+        #    item.embargo_date = Time.now + 20.years
+        #    => #<Item id: "829ad1b6-c54d-460f-a3c5-6dd716464f06", embargo_date: 2037-09-15T15:59:58.724Z>
+        #
+        # Looks good!
+        #
+        #    item.save
+        #    => true
+        #    item
+        #    => #<Item id: "829ad1b6-c54d-460f-a3c5-6dd716464f06", embargo_date: 2017-09-15T22:05:15.000Z>
+        #
+        # WHAT JUST HAPPENED TO OUR EMBARGO DATE?!
+        #
+        # We verified that the date was correct in the item, until we saved, at which IT SILENTLY BECAME TODAY (!!!!)
+        #
+        # Dive about 30 layers deep into the call stack, and you'll eventually discover that this happens because:
+        #
+        # 1) ActiveFedora pretty much ignores declared types and just slings around whatever an object happens to be
+        # after assignment, type declarations on properties be damned.
+        #
+        # Combined with:
+        #
+        # 2)
+        #    (Time.now + 20.years).class
+        #    => Time
+        #
+        # 3) a 7 year old bug in the RDF gem (https://github.com/ruby-rdf/rdf/blob/d7add8de9ce12c10192eaadb654fa5adc1a66277/lib/rdf/model/literal.rb#L123)
+        # based on the erroneous assumption that they can treat the Ruby Time class as representing a time-of-day
+        # independent of date, despite this never having ever been remotely true of the Ruby Time class, which
+        # represents seconds since the UNIX epoch, and thus has always _fundamentally_ represented a specific date AND
+        # time, despite the comment on that code suggesting that this is some kind of odd and unexpected corner case.
+        #
+        # I don't think that anyone would claim that this kind of silent, destructive data-loss "works as intended", or
+        # represents sane and safe API design, but at this point the semantics of all of the above, however poorly
+        # thought out, appear to be deeply entrenched in a lot of people's code in a lot of projects, and I don't see
+        # a way to fix that other than breaking a lot of years-old assumptions and refactoring the way ActiveFedora,
+        # Solrizer, ActiveTriples, and RDF (fail to) talk to one another -- so the cleanest and easiest way to fix this
+        # appears to be to paper over it all on our end.
+        #
+        # Prior to discovering this mess, we just let the ActiveFedora property declartion in the derived AF class
+        # create the setters on the unlocked object. Now, we're going to shadow all of ActiveFedora's property
+        # setters, coerce the argument to the declared type or complain if that burden should fall on the caller, and
+        # then pass it along to ActiveFedora, in the hope that this way we can limit the opportunities for the rest
+        # of the stack to silently do the wrong thing by confining ourselves to types where the behaviour (so far)
+        # seems moderately sane.
+        #
+        # (ﾉಥ益ಥ）ﾉ﻿ ┻━┻
+        derived_af_class.class_eval do
+          # alias AF assignment method
+          alias_method :"shadowed_assign_#{name}", :"#{name}="
+
+          define_method "#{name}=" do |arg|
+            converted_arg = if arg.is_a?(Array)
+                              arg.map { |val| convert_value(val, to: type) }
+                            else
+                              convert_value(arg, to: type)
+                            end
+            # call the shadowed AF assignment method
+            self.send("shadowed_assign_#{name}", converted_arg)
           end
         end
       end

@@ -1,0 +1,10 @@
+// remove the underlines from everything in the media object since its a link
+.media.jupiter-community-media {
+  text-decoration: none;
+
+  // hover darkens the h4, lets not do this
+  // since theres a tiny bit of padding within the li which gives a weird effect
+  h4 {
+    color: theme-color('primary');
+  }
+}

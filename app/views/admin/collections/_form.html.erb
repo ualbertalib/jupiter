@@ -1,0 +1,6 @@
+<%= simple_form_for [:admin, community, collection] do |f| %>
+  <%= f.input :title %>
+  <%= f.input :description, as: :text %>
+  <%= f.input :community_id, as: :hidden %>
+  <%= f.button :submit %>
+<% end %>

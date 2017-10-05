@@ -23,13 +23,25 @@ By default, `rails test` will not run the system tests. To run them use:
 
 `$ bundle exec rails test:system`
 
+# Seed your development database
+
+`$ bundle exec rake db:seed`
+
+Please note that by default the seeding process will download community logos
+from the web. If you are not on a network, or otherwise wish to prevent this
+behaviour, please set the enviroment variable `SKIP_DOWNLOAD_COMMUNITY_LOGOS`.
+
 ***Note***: You may need chromedriver and perhaps a few other dependencies installed to run these system tests in selenium.
 
 # REGenerate Documentation
 
 `$ bundle exec rake rerdoc`
 
+# UAT Environment 
 
+The UAT server is accessible on all library staff workstation, and through VPN on any external IP address.  More details regarding access and deployment can be found:
+[Jupiter UAT Setup](https://github.com/ualbertalib/di_internal/blob/master/System-Adminstration/UAT-Environment.md) 
+ 
 # Docker
 This project comes with a docker setup to easily setup your own local development environment for jupiter in just a few steps.
 

@@ -1,0 +1,57 @@
+<% page_title(t('.header')) %>
+
+<ol class="breadcrumb mb-5">
+  <li class="breadcrumb-item"><%= link_to t('admin.header'), admin_root_path %></li>
+  <li class="breadcrumb-item active"><%= t('.header') %></li>
+</ol>
+
+<div class="d-flex flex-wrap justify-content-between align-items-start mt-3">
+  <h1><%= t('.header') %></h1>
+
+  <%= link_to t('communities.index.create_new_community'), new_admin_community_path,
+    class: 'btn btn-primary' %>
+</div>
+
+<div class="my-4" >
+  <ul id="admin-collection-list" class="list-group">
+
+    <% @communities.each do |community| %>
+      <li class="list-group-item list-group-item-action">
+
+        <div class="d-flex justify-content-between align-items-start mb-3">
+          <%= link_to admin_community_path(community), class: 'media jupiter-community-media' do %>
+            <%= render partial: 'logo', locals: {object: community} %>
+            <div class="media-body">
+              <h4 class="mt-0"><%= community.title %></h4>
+              <p class="text-muted"><%= community.description %></p>
+            </div>
+          <% end %>
+
+          <div class="btn-group" role="group" aria-label="Community Actions">
+            <%= link_to t('edit'), edit_admin_community_path(community), class:'btn btn-outline-primary' %>
+            <%= link_to t('delete'), admin_community_path(community), class: 'btn btn-danger', method: :delete, data: {confirm: t('.delete_confirm', title: community.title) } %>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-start">
+          <%= link_to admin_community_path(community), data: {community_id: community.id }, class: 'btn btn-outline-primary collection-btn', remote: true do %>
+            <%= t('admin.collections.title') %>
+            <%= fa_icon('chevron-down') %>
+          <% end %>
+
+          <%= button_tag type: 'button', class: 'btn btn-outline-primary close-btn d-none', data: {community_id: community.id } do %>
+            <%= t('close') %>
+            <%= fa_icon('chevron-up') %>
+          <% end %>
+
+          <%= link_to t('communities.show.create_new_collection'),
+                      new_admin_community_collection_path(community),
+                      class:'btn btn-outline-primary' %>
+        </div>
+
+        <ul class="list-group mt-3" id="<%=community.id%>"></ul>
+
+      </li>
+    <% end %>
+  </ul>
+</div>

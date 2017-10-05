@@ -11,6 +11,8 @@
 /docs/rdoc/*
 /coverage/*
 /tmp/*
+#!/tmp/pids
+!/tmp/pids/.keep
 !/log/.keep
 !/tmp/.keep
 
@@ -24,3 +26,6 @@
 
 /docker-compose.*custom*.yml
 vendor/bundle
+
+# ActiveStorage local storage
+/storage

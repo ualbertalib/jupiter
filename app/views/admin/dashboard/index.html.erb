@@ -1,5 +1,5 @@
 <div class='admin-dashboard'>
-  <h2><%= t('.header') %></h2>
+  <h1><%= t('.header') %></h1>
 
   <hr/>
 
@@ -41,11 +41,11 @@
     <div class="col-md-3">
       <div class="card text-center">
       <div class="card-body">
-        <h4 class="card-title"><%= t('works.index.header') %></h4>
+        <h4 class="card-title"><%= t('items.index.header') %></h4>
         <div class="data">
           <%= link_to '#todo', class: 'btn btn-outline-primary' do %>
-          <%#= admin_works_path do %>
-              <%= number_with_delimiter(Work.count) %>
+          <%#= admin_items_path do %>
+              <%= number_with_delimiter(Item.count) %>
           <% end %>
         </div>
         </div>
@@ -64,8 +64,8 @@
     <div class="col-md-3">
       <div class="card text-center">
         <div class="card-body">
-          <h4 class="card-title"><%= t('communities.index.header') %></h4>
-            <%= link_to admin_communities_and_collections_path, class: 'btn btn-outline-primary' do %>
+          <h4 class="card-title"><%= t('admin.communities.title') %></h4>
+            <%= link_to admin_communities_path, class: 'btn btn-outline-primary' do %>
               <%= number_with_delimiter(Community.count) %>
             <% end %>
         </div>
@@ -74,8 +74,8 @@
     <div class="col-md-3">
       <div class="card text-center">
         <div class="card-body">
-          <h4 class="card-title"><%= t('collections.index.header') %></h4>
-          <%= link_to admin_communities_and_collections_path, class: 'btn btn-outline-primary' do %>
+          <h4 class="card-title"><%= t('admin.collections.title') %></h4>
+          <%= link_to admin_communities_path, class: 'btn btn-outline-primary' do %>
             <%= number_with_delimiter(Collection.count) %>
           <% end %>
         </div>
@@ -88,26 +88,27 @@
   <h2 class="mb-3"><%= t('.recent_activity') %></h2>
   <div class="row">
     <div class="col-md-6">
-      <h4><%= t('.latest_works') %></h4>
-      <ul class="list-group">
-        <% @works.each do |work| %>
-         <%# TODO: FIX links when work CRUD is completed %>
-          <%= link_to work, class: "list-group-item list-group-item-action d-flex justify-content-between" do %>
-            <%= work.title %>
-            <% if work.date_created.present? %>
+      <h4><%= t('.latest_items') %></h4>
+      <div class="list-group">
+        <% @items.each do |item| %>
+         <%# TODO: FIX links when item CRUD is completed %>
+          <%= link_to item, class: "list-group-item list-group-item-action d-flex justify-content-between align-items-start" do %>
+            <%= item.title %>
+            <% if item.date_created.present? %>
+              <%# TODO: If check shouldn't be needed once this gets moved to record_created_at %>
               <span class="badge badge-secondary">
-                <%= time_ago_in_words(work.date_created) %>
+                <%= time_ago_in_words(item.date_created) %>
               </span>
             <% end %>
           <% end %>
         <% end %>
-      </ul>
+      </div>
     </div>
     <div class="col-md-6">
       <h4><%= t('.latest_users') %></h4>
       <div class="list-group">
         <% @users.each do |user| %>
-          <%= link_to [:admin, user], class: "list-group-item list-group-item-action d-flex justify-content-between" do %>
+          <%= link_to [:admin, user], class: "list-group-item list-group-item-action d-flex justify-content-between align-items-start" do %>
             <%= user.name %>
             <span class="badge badge-secondary">
               <%# should be last_sign_in_at instead %>

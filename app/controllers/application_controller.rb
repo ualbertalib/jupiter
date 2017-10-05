@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
   def current_user
     @current_user ||= User.find_by(id: session[:user_id])
 
-    if @current_user && @current_user.suspended?
+    if @current_user&.suspended?
       log_off_user
       return redirect_to root_path, alert: t('login.user_suspended')
     end

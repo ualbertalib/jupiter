@@ -36,17 +36,16 @@ RUN mkdir -p $APP_ROOT
 WORKDIR $APP_ROOT
 
 # Preinstall gems in an earlier layer so we don't reinstall every time any file changes.
-COPY Gemfile  ./
-COPY Gemfile.lock ./
-RUN bundle install --without development test 
-
-COPY config/puma.rb config/puma.rb
+COPY Gemfile  $APP_ROOT
+COPY Gemfile.lock $APP_ROOT
+RUN bundle install --without development test
 
 # *NOW* we copy the codebase in
-
-ADD . /app
+COPY . $APP_ROOT
 
 # Precompile Rails assets. We set a dummy secret key
+ENV DATABASE_URL mysql2:assets_throwaway.db
+ENV  SECRET_KEY_BASE thisisatopsecret
 RUN RAILS_ENV=uat bundle exec rake assets:precompile
 
 EXPOSE 3000

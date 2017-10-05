@@ -19,7 +19,7 @@ services:
       - mysql:/var/lib/mysql
 
   solr:
-    image: solr
+    image: solr:6.6
     # Uncomment this if you want to access SOLR's web interface
     # ports:
     #   - "8983:8983"
@@ -41,10 +41,11 @@ services:
     volumes:
       - redis:/data
 
-  web:
+  # Sidekiq
+  worker: &rails
     build: .
     image: ualbertalib/jupiter
-    command: bash -c 'rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b "0.0.0.0"'
+    command: bundle exec sidekiq
     environment:
       RAILS_ENV: development
       DATABASE_URL: 'mysql2://root:mysecretpassword@mysql/'
@@ -54,32 +55,15 @@ services:
       REDIS_URL: 'redis://redis/1'
     volumes:
       - .:/app
-    ports:
-      - "3000:3000"
     depends_on:
       - mysql
       - fcrepo
       - redis
       - solr
 
-  # No worker yet, uncomment this when we add something...preferablly sidekiq?
-  # worker:
-  #   build: .
-  #   image: ualbertalib/jupiter
-  #   command: bundle exec sidekiq
-  #   environment:
-  #     RAILS_ENV: development
-  #     DATABASE_URL: 'mysql2://root:mysecretpassword@mysql/'
-  #     FCREPO_URL: http://fcrepo:8080/fcrepo/rest
-  #     SOLR_URL: http://solr:8983/solr/development
-  #     SOLR_TEST_URL: http://solr:8983/solr/test
-  #     REDIS_URL: 'redis://redis/1'
-  #   volumes:
-  #     - .:/app
-  #   ports:
-  #     - "3000:3000"
-  #   depends_on:
-  #     - mysql
-  #     - fcrepo
-  #     - redis
-  #     - solr
+  # Rails server
+  web:
+    <<: *rails
+    command: bash -c 'rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b "0.0.0.0"'
+    ports:
+      - "3000:3000"

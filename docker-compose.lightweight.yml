@@ -26,7 +26,7 @@ services:
   #     - "3306:3306"
 
   solr:
-    image: solr
+    image: solr:6.6
     ports:
       - "8983:8983"
     volumes:
