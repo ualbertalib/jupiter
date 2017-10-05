@@ -511,7 +511,7 @@ module JupiterCore
 
       def has_multival_attribute(name, predicate, solrize_for: [], type: :string, facet_value_presenter: nil)
         has_attribute(name, predicate, multiple: true, solrize_for: solrize_for, type: type,
-                      facet_value_presenter: facet_value_presenter)
+                                       facet_value_presenter: facet_value_presenter)
       end
 
       # a utility DSL for declaring attributes which allows us to store knowledge of them.
@@ -541,10 +541,10 @@ module JupiterCore
         end
 
         facet_name = if solrize_for.include?(:facet)
-          Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[:facet], type: type)
-        elsif solrize_for.include?(:pathing)
-          Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[:pathing], type: type)
-        end
+                       Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[:facet], type: type)
+                     elsif solrize_for.include?(:pathing)
+                       Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[:pathing], type: type)
+                     end
 
         self.facets << facet_name if facet_name.present?
         self.facet_value_presenters[facet_name] = facet_value_presenter if facet_name && facet_value_presenter.present?

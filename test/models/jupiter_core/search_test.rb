@@ -47,7 +47,7 @@ class SearchTest < ActiveSupport::TestCase
 
     assert search_results.count == 2
 
-    search_results.results.each do |res|
+    search_results.each do |res|
       assert_includes [obj, another_obj].map(&:id), res.id
       assert_not res.id == a_private_object.id
     end

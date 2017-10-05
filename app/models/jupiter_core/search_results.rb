@@ -4,7 +4,7 @@ class JupiterCore::SearchResults
   include Kaminari::PageScopeMethods
   include Kaminari::ConfigurationMethods
 
-  def initialize(q:, fq:, facet_map:,facet_fields:, facet_value_presenters:, restrict_to_model:)
+  def initialize(q:, fq:, facet_map:, facet_fields:, facet_value_presenters:, restrict_to_model:)
     criteria[:q] = q
     criteria[:fq] = fq
     criteria[:facet_map] = facet_map
@@ -16,7 +16,6 @@ class JupiterCore::SearchResults
   def criteria
     @criteria ||= {}
   end
-
 
   def limit(num)
     uncache!
@@ -82,12 +81,12 @@ class JupiterCore::SearchResults
   def reify_result_set
     return @results if @results.present?
     _, @results, facet_data = JupiterCore::Search.perform_solr_query(q: criteria[:q],
-                                                                  fq: criteria[:fq],
-                                                                  facet: true,
-                                                                  facet_fields: criteria[:facet_fields],
-                                                                  restrict_to_model: criteria[:restrict_to_model],
-                                                                  rows: criteria[:limit],
-                                                                  start: criteria[:offset])
+                                                                     fq: criteria[:fq],
+                                                                     facet: true,
+                                                                     facet_fields: criteria[:facet_fields],
+                                                                     restrict_to_model: criteria[:restrict_to_model],
+                                                                     rows: criteria[:limit],
+                                                                     start: criteria[:offset])
 
     @facets = facet_data['facet_fields'].map do |k, v|
       presenter = criteria[:facet_value_presenters][k]

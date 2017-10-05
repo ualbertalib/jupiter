@@ -60,6 +60,9 @@ Metrics/PerceivedComplexity:
 Metrics/ParameterLists:
   Exclude:
     - app/models/jupiter_core/search.rb
+    - app/models/jupiter_core/locked_ldp_object.rb
+    - app/models/jupiter_core/search_results.rb
+
 
 Naming/PredicateName:
   Exclude:

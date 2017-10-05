@@ -6,7 +6,7 @@ module ApplicationHelper
   end
 
   def facetable_query_params(facet_name, value)
-    query_params = {q: params[:q]}
+    query_params = { q: params[:q] }
     active_facets = params[:facets] if params[:facets]
     active_facets ||= {}
     active_facets[facet_name] = value

@@ -11,7 +11,7 @@ class JupiterCore::Search
     raise ArgumentError, 'as: must specify a user!' if as.present? && !as.is_a?(User)
     raise ArgumentError, 'must provide at least one model to search for!' if models.blank?
     models = [models] unless models.is_a?(Array)
-    facets = [] unless facets.present?
+    facets = [] if facets.blank?
 
     base_query = []
     ownership_query = calculate_ownership_query(as)
@@ -26,9 +26,10 @@ class JupiterCore::Search
       fq << %Q(#{key}: "#{value}")
     end
 
-    JupiterCore::SearchResults.new(q: base_query, fq: fq.join(" AND "), facet_map: construct_facet_map(models),
-    facet_fields: models.map(&:facets).flatten.uniq, restrict_to_model: models.map { |m| m.send(:derived_af_class) },
-    facet_value_presenters: construct_facet_presenter_map(models))
+    JupiterCore::SearchResults.new(q: base_query, fq: fq.join(' AND '), facet_map: construct_facet_map(models),
+                                   facet_fields: models.map(&:facets).flatten.uniq,
+                                   restrict_to_model: models.map { |m| m.send(:derived_af_class) },
+                                   facet_value_presenters: construct_facet_presenter_map(models))
   end
 
   # derive additional restriction or broadening of the visibilitily query on top of the default
