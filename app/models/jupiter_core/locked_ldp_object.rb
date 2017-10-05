@@ -307,6 +307,7 @@ module JupiterCore
     end
 
     def coerce_value(value, to:)
+      return nil if value.nil?
       case to
       when :string, :text
         value.to_s
@@ -408,6 +409,9 @@ module JupiterCore
             errors.add(:visibility, I18n.t('locked_ldp_object.errors.invalid_visibility', visibility: visibility))
           end
 
+          # this is the nice version of coerce_value. This is used for data going _in_ to Fedora/Solr, so it
+          # sanity checks the conversion. coerce_value blindly does the conversion, for assumed-good data being
+          # read back from Fedora/Solr
           def convert_value(value, to:)
             return value if value.nil?
             case to
@@ -491,11 +495,11 @@ module JupiterCore
         @derived_af_class ||= generate_af_class
       end
 
-      def define_cached_reader(name, multiple:, type:, canonical_solr_name:, specialized_reader: nil)
+      def define_cached_reader(name, multiple:, type:, canonical_solr_name:, specialized_ldp_reader: nil)
         define_method name do
           val = if ldp_object.present?
-                  if specialized_reader.present?
-                    ldp_object.instance_exec(&specialized_reader)
+                  if specialized_ldp_reader.present?
+                    ldp_object.instance_exec(&specialized_ldp_reader)
                   else
                     ldp_object.send(name)
                   end
@@ -527,51 +531,83 @@ module JupiterCore
         self.solr_calc_attributes[name] = { type: SOLR_DESCRIPTOR_MAP[solrize_for], callable: as }
       end
 
-      def use_existing_association(association, using_name:)
+      def belongs_to(name, using_existing_association:)
+        index_and_hoist_existing_association(using_existing_association, as_name: name, multiple: false)
+      end
+
+      def has_many(name, using_existing_association:)
+        index_and_hoist_existing_association(using_existing_association, as_name: name, multiple: true)
+      end
+
+      def has_one(name, using_existing_association:)
+        index_and_hoist_existing_association(using_existing_association, as_name: name, multiple: false)
+      end
+
+      def index_and_hoist_existing_association(association, as_name:, multiple:)
         association_names = derived_af_class.reflect_on_all_associations.keys
         raise ArgumentError, 'No such association' unless association_names.include? association
         raise ArgumentError, 'Invalid association' if derived_af_class.reflect_on_all_associations[association].is_a?(
           ActiveFedora::Reflection::HasSubresourceReflection
         )
 
-        self.attribute_cache[using_name] = {
+        # Add to cache for use in queries
+        self.attribute_cache[as_name] = {
           predicate: nil,
-          multiple: true,
+          multiple: multiple,
           solrize_for: [:search],
           type: :string,
-          solr_names: [Solrizer.solr_name(using_name, SOLR_DESCRIPTOR_MAP[:search], type: :string)]
+          solr_names: [Solrizer.solr_name(as_name, SOLR_DESCRIPTOR_MAP[:search], type: :string)]
         }
 
         self.association_indexes ||= []
-        self.association_indexes << using_name
+        self.association_indexes << as_name
 
-        # fix this not-in-solr idiocy
-        additional_search_index using_name, solrize_for: :search,
-                                            as: lambda {
-                                                  self.send(association)&.map do |member|
-                                                    member.id
-                                                  end
-                                                }
+        # Get association ids into solr
+        additional_search_index as_name, solrize_for: :search,
+                                         as: lambda {
+                                               self.send(association)&.map do |member|
+                                                 member.id
+                                               end
+                                             }
         # add a reader to the locked object
-        define_cached_reader(using_name, multiple: true, type: :string,
-                                         canonical_solr_name: Solrizer.solr_name(using_name,
-                                                                                 SOLR_DESCRIPTOR_MAP[:search],
-                                                                                 type: :string),
-                                         specialized_reader: lambda {
-                                                               self.send(association)&.map do |member|
-                                                                 member.id
-                                                               end
-                                                             })
+        define_cached_reader(as_name, multiple: multiple, type: :string,
+                                      canonical_solr_name: Solrizer.solr_name(as_name,
+                                                                              SOLR_DESCRIPTOR_MAP[:search],
+                                                                              type: :string),
+                                      specialized_ldp_reader: lambda {
+                                                                self.send(association)&.map do |member|
+                                                                  member.id
+                                                                end
+                                                              })
 
         # let people use the "better name" when unlocked, for sheer sanity
         # eg. if you index the awful "member_of_collections" as "member_of_works" on FileSet to better reflect that it
         # has nothing whatsoever to do with collections, let people use and assign to that when unlocked
         # this also simplifies functioning of method forwarding between the locked and unlocked object
         # as that generally assumes that "attribute" names are identically named on both objects
-        return unless association != using_name
-        derived_af_class.class_eval do
-          alias_method using_name, association
-          alias_method :"#{using_name}=", :"#{association}="
+
+        # TODO this block could reaaaaally use some consolidation.
+        if multiple
+          derived_af_class.class_eval do
+            alias_method(as_name, association) if association != as_name
+            define_method "#{as_name}=" do |args|
+              args = args.map do |arg|
+                arg.is_a?(LockedLdpObject) ? arg.send(:ldp_object) : arg
+              end
+
+              self.send("#{association}=", args)
+            end
+          end
+        else
+          derived_af_class.class_eval do
+            define_method as_name do
+              self.send(association).first
+            end
+            define_method "#{as_name}=" do |arg|
+              arg = arg.send(:ldp_object) if arg.is_a?(LockedLdpObject)
+              self.send("#{association}=", [arg])
+            end
+          end
         end
       end
 
