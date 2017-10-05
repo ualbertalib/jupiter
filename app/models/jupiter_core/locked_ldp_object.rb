@@ -586,7 +586,7 @@ module JupiterCore
         # this also simplifies functioning of method forwarding between the locked and unlocked object
         # as that generally assumes that "attribute" names are identically named on both objects
 
-        # TODO this block could reaaaaally use some consolidation.
+        # TODO: this block could reaaaaally use some consolidation.
         if multiple
           derived_af_class.class_eval do
             alias_method(as_name, association) if association != as_name
