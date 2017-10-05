@@ -14,7 +14,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
              name: ['urn:oid:2.16.840.1.113730.3.1.241'] # displayName
            }
 
-  provider :developer if Rails.configuration.allow_dev_logins
+  provider :developer if Rails.env.development? || Rails.env.uat?
 
   # By default in development mode, omniauth raises an exception when authentication fails
   # comment this line if you want to see the stacktrace from the actual provider when in `development`
