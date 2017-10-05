@@ -37,7 +37,6 @@ class JupiterCore::SearchResults
   end
 
   def each
-    puts "Each called for: #{caller[0]}"
     reify_result_set.map do |res|
       obj = JupiterCore::LockedLdpObject.reify_solr_doc(res)
       yield(obj)
@@ -81,7 +80,6 @@ class JupiterCore::SearchResults
   end
 
   def reify_result_set
-    puts "reifying for #{caller[0]}"
     return @results if @results.present?
     _, @results, facet_data = JupiterCore::Search.perform_solr_query(q: criteria[:q],
                                                                   fq: criteria[:fq],

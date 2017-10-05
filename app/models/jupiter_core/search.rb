@@ -26,8 +26,6 @@ class JupiterCore::Search
       fq << %Q(#{key}: "#{value}")
     end
 
-  #  raise 'asdf'
-
     JupiterCore::SearchResults.new(q: base_query, fq: fq.join(" AND "), facet_map: construct_facet_map(models),
     facet_fields: models.map(&:facets).flatten.uniq, restrict_to_model: models.map { |m| m.send(:derived_af_class) },
     facet_value_presenters: construct_facet_presenter_map(models))
