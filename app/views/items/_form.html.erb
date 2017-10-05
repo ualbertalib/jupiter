@@ -9,19 +9,35 @@
     selected: item.visibility,
     input_html: { name: 'item[visibility]' }
   %>
-  <%= f.input :community,
-    as: :unread_select,
-    collection: Community.all,
-    label_method: :title,
-    value_method: :id,
-    input_html: {name: 'item[community][]'}
-  %>
-  <%= f.input :collection,
-    as: :unread_select,
-    disabled: true,
-    collection: [],
-    input_html: {name: 'item[collection][]'}
-  %>
+  <div class="communities-collections card p-3 mb-3">
+    <div class="card-block">
+      <h3 class="card-title">
+        <span class='required'>*</span>
+        <span><%= t('admin.communities.title') %></span>
+        <span class='tooltip'>?</span>
+      </h3>
+
+      <div class="communities-collections-list">
+        <% if @item.member_of_paths.any? %>
+          <% @item.member_of_paths.each do |path| %>
+            <% community_id, collection_id = path.split('/') %>
+            <% collections = Collection.where(community_id: community_id) %>
+            <%= render partial: 'community_collection_input',
+                locals: { f: f, community_id: community_id, collection_id: collection_id, collections: collections } %>
+          <% end %>
+        <% else %>
+          <%= render partial: 'community_collection_input', locals: { f: f } %>
+        <% end %>
+      </div>
+
+      <div class="d-flex flex-row-reverse">
+        <div class="p-3">
+          <%= link_to t(:add_another), '#', class: 'btn btn-secondary add-community-collection' %>
+        </div>
+      </div>
+
+    </div>
+  </div>
   <div class="file_upload">
     <div class="row">
       <div class="col-6">

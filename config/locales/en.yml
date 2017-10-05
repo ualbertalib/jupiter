@@ -36,6 +36,7 @@ en:
   delete: 'Delete'
   close: 'Close'
   remove: 'Remove'
+  add_another: 'Add another'
   created_at: 'Created At'
   updated_at: 'Updated At'
 
