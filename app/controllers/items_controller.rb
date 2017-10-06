@@ -53,7 +53,7 @@ class ItemsController < ApplicationController
     @results = JupiterCore::Search.faceted_search(q: params[:q], facets: params[:facets],
                                                   models: [Item, Collection, Community])
     @results.sort(:title, :asc).page params[:page]
-    authorize Item, :search?
+    authorize Item
   end
 
   private
