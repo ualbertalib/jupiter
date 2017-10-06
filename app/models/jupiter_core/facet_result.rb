@@ -4,6 +4,9 @@ class JupiterCore::FacetResult
 
   def initialize(facet_map, facet_name, values, presenter: nil)
     self.facet_name = facet_name
+
+    # TODO: figute out how to let people customize the facet category name. The most obvious demand for this will
+    # be in present Items' member_of_path facet as something other than "Member of Path" in the interface
     self.name = facet_map[facet_name].to_s.titleize
 
     # Either a property specified a custom presenter in its has_property definition,

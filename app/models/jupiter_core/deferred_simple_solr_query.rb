@@ -1,4 +1,4 @@
-class JupiterCore::DeferredSolrQuery
+class JupiterCore::DeferredSimpleSolrQuery
 
   include Enumerable
   include Kaminari::PageScopeMethods

@@ -5,7 +5,7 @@ class Item < JupiterCore::LockedLdpObject
   VISIBILITY_EMBARGO = 'embargo'.freeze
   VISIBILITIES = (JupiterCore::VISIBILITIES + [VISIBILITY_EMBARGO]).freeze
 
-  has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet, :sort]
+  has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :sort]
   has_attribute :subject, ::RDF::Vocab::DC.subject, solrize_for: [:search, :facet]
   has_attribute :creator, ::RDF::Vocab::DC.creator, solrize_for: [:search, :facet]
   has_attribute :contributor, ::RDF::Vocab::DC.contributor, solrize_for: [:search, :facet]
@@ -19,6 +19,7 @@ class Item < JupiterCore::LockedLdpObject
                          type: :path,
                          solrize_for: :pathing,
                          facet_value_presenter: ->(path) { Item.path_to_titles(path) }
+
   has_attribute :embargo_end_date, ::RDF::Vocab::DC.modified, type: :date, solrize_for: [:sort]
 
   additional_search_index :doi_without_label, solrize_for: :exact_match,
@@ -28,6 +29,9 @@ class Item < JupiterCore::LockedLdpObject
     super - [:member_of_paths]
   end
 
+  # This would be the seam where we may want to introduce a more efficient cache for mapping
+  # community_id/collection_id paths to titles, as this is going to get hit a lot on facet results
+  # If names were unique, we wouldn't have to do this translation, but c'est la vie
   def self.path_to_titles(path)
     community_id, collection_id = path.split('/')
     community_title = Community.find(community_id).title
@@ -58,6 +62,9 @@ class Item < JupiterCore::LockedLdpObject
 
     def add_to_path(community_id, collection_id)
       self.member_of_paths += ["#{community_id}/#{collection_id}"]
+      # TODO: also add the collection (not the community) to the Item's memberOf relation, as metadata
+      # wants to continue to model this relationship in pure PCDM terms, and member_of_path is really for our needs
+      # so that we can facet by community and/or collection properly
     end
 
     def communities_and_collections_validations
