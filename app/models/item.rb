@@ -29,6 +29,9 @@ class Item < JupiterCore::LockedLdpObject
     super - [:member_of_paths]
   end
 
+  # This would be the seam where we may want to introduce a more efficient cache for mapping
+  # community_id/collection_id paths to titles, as this is going to get hit a lot on facet results
+  # If names were unique, we wouldn't have to do this translation, but c'est la vie
   def self.path_to_titles(path)
     community_id, collection_id = path.split('/')
     community_title = Community.find(community_id).title
