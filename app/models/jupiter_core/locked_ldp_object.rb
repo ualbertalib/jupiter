@@ -670,6 +670,12 @@ module JupiterCore
         }
 
         # define the read-only attribute method for the locked object
+        #
+        # TODO: right now the "canonical solr name" is the solr name we use for the value retrived by the reader method
+        # ie. if you have title_tesim, title_sim, title_ssi etc in your solr document, the canonical_solr_name is one
+        # of those, and its that key's value that the +title+ method returns. Right now we use the first +solrize_for+
+        # value as the "canonical solr name", but it should probably be selected more intelligently, somehow, by, say
+        # prefering :sort, or something.
         define_cached_reader(name, multiple: multiple, type: type, canonical_solr_name: solr_name_cache.first)
 
         define_method "#{name}=" do |*_args|
