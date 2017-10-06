@@ -1,6 +1,14 @@
 $cc-background: $gray-100;
 
-.community-collection .card {
-  // TODO: have real designer pick this
-  background-color: $cc-background;
+.communities-collections {
+  .invalid-feedback {
+    display: block;
+  }
+}
+
+.community-collection {
+  .card {
+    // TODO: have real designer pick this
+    background-color: $cc-background;
+  }
 }

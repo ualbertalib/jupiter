@@ -16,7 +16,7 @@
         <span><%= t('admin.communities.title') %></span>
         <span class='tooltip'>?</span>
       </h3>
-
+      <%= f.full_error(:member_of_paths) %>
       <div class="communities-collections-list">
         <% if @item.member_of_paths.any? %>
           <% @item.member_of_paths.each do |path| %>
