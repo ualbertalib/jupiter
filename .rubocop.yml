@@ -60,6 +60,9 @@ Metrics/PerceivedComplexity:
 Metrics/ParameterLists:
   Exclude:
     - app/models/jupiter_core/search.rb
+    - app/models/jupiter_core/locked_ldp_object.rb
+    - app/models/jupiter_core/search_results.rb
+
 
 Naming/PredicateName:
   Exclude:
@@ -73,6 +76,10 @@ Naming/FileName:
 
 Rails:
   Enabled: true
+
+# There comes a point where I question Rubocop's maintainer's sanity
+Rails/UnknownEnv:
+  Enabled: false
 
 # indentation is an endangered resource
 Style/ClassAndModuleChildren:

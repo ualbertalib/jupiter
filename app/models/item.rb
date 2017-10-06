@@ -16,7 +16,10 @@ class Item < JupiterCore::LockedLdpObject
   has_attribute :language, ::RDF::Vocab::DC.language, solrize_for: [:search, :facet]
   has_attribute :doi, ::VOCABULARY[:ualib].doi, solrize_for: :exact_match
 
-  has_multival_attribute :member_of_paths, ::VOCABULARY[:ualib].path, type: :path, solrize_for: :pathing
+  has_multival_attribute :member_of_paths, ::VOCABULARY[:ualib].path,
+                         type: :path,
+                         solrize_for: :pathing,
+                         facet_value_presenter: ->(path) { Item.path_to_titles(path) }
   has_attribute :embargo_end_date, ::RDF::Vocab::DC.modified, type: :date, solrize_for: [:sort]
 
   additional_search_index :doi_without_label, solrize_for: :exact_match,
@@ -24,6 +27,17 @@ class Item < JupiterCore::LockedLdpObject
 
   def self.display_attribute_names
     super - [:member_of_paths]
+  end
+
+  def self.path_to_titles(path)
+    community_id, collection_id = path.split('/')
+    community_title = Community.find(community_id).title
+    collection_title = if collection_id
+                         '/' + Collection.find(collection_id).title
+                       else
+                         ''
+                       end
+    community_title + collection_title
   end
 
   def self.valid_visibilities
