@@ -49,9 +49,14 @@ class ItemsController < ApplicationController
     redirect_to @item
   end
 
+  # put this in its own controller
   def search
-    @results = Item.search(q: params[:q])
-    authorize @results, :index?
+    params[:facets].permit! if params[:facets].present?
+
+    @results = JupiterCore::Search.faceted_search(q: params[:q], facets: params[:facets],
+                                                  models: [Item, Collection, Community])
+    @results.sort(:title, :asc).page params[:page]
+    authorize Item
   end
 
   private

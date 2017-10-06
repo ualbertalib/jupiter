@@ -89,7 +89,7 @@ class Admin::UsersController < Admin::AdminController
 
   # TODO: Should be record_created_at?
   def item_sort_column
-    ['title', 'date_created'].include?(params[:sort]) ? params[:sort] : 'date_created'
+    ['title', 'record_created_at'].include?(params[:sort]) ? params[:sort] : 'record_created_at'
   end
 
   def sort_direction
