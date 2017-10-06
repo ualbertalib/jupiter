@@ -218,7 +218,6 @@ module JupiterCore
     #
     # For example:
     #   Item.where(title: 'Test upload')
-    #    => [#<Item id: "e5f4a074-5bcb-48a4-99ee-12bc83cef291", title: "Test upload", subject: "", creator: "", contributor: "", description: "", publisher: "", language: "", doi: "", member_of_paths: ["98124366-c8b2-487a-95f0-a1c18c805ddd/799e2eee-5435-4f08-bf3d-fc256fee9447"]>
     def self.where(attributes)
       all.where(attributes)
     end
@@ -268,10 +267,9 @@ module JupiterCore
     #
     # eg)
     #    2.4.0 :003 > solr_doc
-    #    => {"system_create_dtsi"=>"2017-08-01T17:07:08Z", "system_modified_dtsi"=>"2017-08-01T17:07:08Z", "has_model_ssim"=>["IRItem"], "id"=>"88489b6e-12dd-4eea-b833-af08782c419e", "visibility_ssim"=>["public"], "owner_ssim"=>[""], "title_tesim"=>["Test"], "subject_tesim"=>[""], "creator_tesim"=>[""], "contributor_tesim"=>[""], "description_tesim"=>[""], "publisher_tesim"=>[""], "language_tesim"=>[""], "doi_ssim"=>[""], "member_of_paths_dpsim"=>["6d0a8efa-ec6e-4fb9-bd67-e7877376c5ca/7e5d0653-fcb0-45a1-bb9c-ec3b896afcba"], "embargo_end_date_tesim"=>[""], "embargo_end_date_ssi"=>"", "_version_"=>1574549301238956032, "timestamp"=>"2017-08-01T17:07:08.507Z", "score"=>2.5686157}
+    #    => {<lots of solr garbage>}
     #    2.4.0 :004 > JupiterCore::LockedLdpObject.reify_solr_doc(solr_doc)
-    #    => #<Item id: "88489b6e-12dd-4eea-b833-af08782c419e", visibility: "public", owner: "", title: "Test", subject: "", creator: "", contributor: "", description: "", publisher: "", language: "", doi: "", member_of_paths: ["6d0a8efa-ec6e-4fb9-bd67-e7877376c5ca/7e5d0653-fcb0-45a1-bb9c-ec3b896afcba"], embargo_end_date: "">
-    #
+    #    => #<Item id: "88489b6e-12dd-4eea-b833-af08782c419e", <other properties>>  #
     def self.reify_solr_doc(solr_doc)
       raise ArgumentError, 'Not a valid LockedLDPObject representation' if solr_doc['has_model_ssim'].blank?
       solr_doc['has_model_ssim'].first.constantize.owning_class.send(:new, solr_doc: solr_doc)
@@ -499,6 +497,9 @@ module JupiterCore
         @derived_af_class ||= generate_af_class
       end
 
+      # add a method to the +LockedLdpObject that reads from the solr representation or defers to the ldp_object
+      # if one is present. Allows for the specification of a "specialized ldp reader", a lambda mostly intended
+      # for use when reading associations on the AF object that have been given a better name when hoisted
       def define_cached_reader(name, multiple:, type:, canonical_solr_name:, specialized_ldp_reader: nil)
         define_method name do
           val = if ldp_object.present?
@@ -669,6 +670,12 @@ module JupiterCore
         }
 
         # define the read-only attribute method for the locked object
+        #
+        # TODO: right now the "canonical solr name" is the solr name we use for the value retrived by the reader method
+        # ie. if you have title_tesim, title_sim, title_ssi etc in your solr document, the canonical_solr_name is one
+        # of those, and its that key's value that the +title+ method returns. Right now we use the first +solrize_for+
+        # value as the "canonical solr name", but it should probably be selected more intelligently, somehow, by, say
+        # prefering :sort, or something.
         define_cached_reader(name, multiple: multiple, type: type, canonical_solr_name: solr_name_cache.first)
 
         define_method "#{name}=" do |*_args|
