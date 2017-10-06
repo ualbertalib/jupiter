@@ -2,7 +2,7 @@ class Collection < JupiterCore::LockedLdpObject
 
   ldp_object_includes Hydra::Works::CollectionBehavior
 
-  has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
+  has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search]
   has_attribute :community_id, ::VOCABULARY[:ualib].path,
                 type: :path,
                 solrize_for: :pathing,
