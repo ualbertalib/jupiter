@@ -515,6 +515,11 @@ module JupiterCore
       end
 
       # a utility DSL for declaring attributes which allows us to store knowledge of them.
+      #
+      # facet_value_presenters provide a simple way to transform a facet result value for display purposes.
+      # ie) a bunch of items in the same community will have a common facet result value of that community's GUID
+      # a presenter lambda can be provided for that attribute to transform the GUID into the Community's title
+      # for presentation
       def has_attribute(name, predicate, multiple: false, solrize_for: [], type: :string, facet_value_presenter: nil)
         raise PropertyInvalidError unless name.is_a? Symbol
         raise PropertyInvalidError if predicate.blank?

@@ -20,6 +20,7 @@ class Item < JupiterCore::LockedLdpObject
                          type: :path,
                          solrize_for: :pathing,
                          facet_value_presenter: ->(path) { Item.path_to_titles(path) }
+
   has_attribute :embargo_end_date, ::RDF::Vocab::DC.modified, type: :date, solrize_for: [:sort]
 
   solr_index :doi_without_label, solrize_for: :exact_match,
