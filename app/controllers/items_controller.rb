@@ -51,9 +51,9 @@ class ItemsController < ApplicationController
     params[:facets].permit! if params[:facets].present?
 
     @results = JupiterCore::Search.faceted_search(q: params[:q], facets: params[:facets],
-                                                  models: [Item, Collection, Community])
+                                                  models: [Item, Collection, Community], as: current_user)
     @results.sort(:title, :asc).page params[:page]
-    authorize Item, :search?
+    authorize Item
   end
 
   private

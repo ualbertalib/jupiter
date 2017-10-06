@@ -6,7 +6,7 @@ class Admin::CommunitiesController < Admin::AdminController
     # anybody have a better idea for doing this? Lame to have to litter it everywhere
     params[:facets].permit! if params[:facets].present?
     # Populate via search, so that admins can facet
-    @communities = JupiterCore::Search.faceted_search(facets: params[:facets], models: Community)
+    @communities = JupiterCore::Search.faceted_search(facets: params[:facets], models: Community, as: current_user)
     @communities.page params[:page]
   end
 
