@@ -14,8 +14,11 @@ module Admin::UsersHelper
                   'asc'
                 end
 
-    link_to "#{title} #{fa_icon font_awesome_icon}".html_safe,
-            params: { query: params[:query], sort: column, direction: direction }
+    # html_safe is used securely here
+    # The only param that is being consumed here is `params[:direction]` which is being sanitized by the "sort_direction" method
+    link_to "#{title} #{fa_icon font_awesome_icon}".html_safe, # rubocop:disable Rails/OutputSafety
+            params: { query: params[:query],
+                      sort: column, direction: direction }
   end
 
   def items_sort_link(column, sort, title = nil)

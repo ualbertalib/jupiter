@@ -48,13 +48,13 @@ class Item < JupiterCore::LockedLdpObject
     end
 
     def communities_and_collections_validations
-      return unless member_of_paths.present?
+      return if member_of_paths.blank?
       member_of_paths.each do |path|
         community_id, collection_id = path.split('/')
-        community = Community.where(id: community_id).first
-        errors.add(:member_of_paths, :community_not_found, id: community_id) unless community.present?
-        collection = Collection.where(id: collection_id).first
-        errors.add(:member_of_paths, :collection_not_found, id: collection_id) unless collection.present?
+        community = Community.find_by(community_id)
+        errors.add(:member_of_paths, :community_not_found, id: community_id) if community.blank?
+        collection = Collection.find_by(collection_id)
+        errors.add(:member_of_paths, :collection_not_found, id: collection_id) if collection.blank?
       end
     end
   end

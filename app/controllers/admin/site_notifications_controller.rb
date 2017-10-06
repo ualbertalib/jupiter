@@ -24,7 +24,7 @@ class Admin::SiteNotificationsController < Admin::AdminController
 
   def destroy
     notification = SiteNotification.find(params[:id])
-    notification.removed_at = DateTime.now
+    notification.removed_at = DateTime.current
     notification.save!
 
     # TODO: Flash success?

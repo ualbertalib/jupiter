@@ -9,7 +9,7 @@ class JupiterCore::Search
   # access to result facets.
   def self.search(q: '', fq: '', models: [], as: nil)
     raise ArgumentError, 'as: must specify a user!' if as.present? && !as.is_a?(User)
-    raise ArgumentError, 'must provide at least one model to search for!' unless models.present?
+    raise ArgumentError, 'must provide at least one model to search for!' if models.blank?
     models = [models] unless models.is_a?(Array)
 
     base_query = []
@@ -32,7 +32,7 @@ class JupiterCore::Search
   # "where visibility is public" restriction
   def self.calculate_ownership_query(user)
     # non-logged-in users don't get anything else
-    return '' unless user.present?
+    return '' if user.blank?
 
     # You can see what you own, regardless of visibility
     # TODO: owner is...? db id? ccid? email?
