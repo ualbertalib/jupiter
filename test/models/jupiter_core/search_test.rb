@@ -6,7 +6,7 @@ class SearchTest < ActiveSupport::TestCase
     has_attribute :creator, ::RDF::Vocab::DC.creator, solrize_for: [:search, :facet]
     has_multival_attribute :member_of_paths, ::VOCABULARY[:ualib].path, type: :path, solrize_for: :pathing
 
-    solr_index :my_solr_doc_attr, solrize_for: :search, as: -> { 'a_test_value' }
+    additional_search_index :my_solr_doc_attr, solrize_for: :search, as: -> { 'a_test_value' }
 
     def locked_method_shouldnt_mutate(attempted_title)
       self.title = attempted_title

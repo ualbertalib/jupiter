@@ -11,6 +11,11 @@ volumes:
     driver: local
 
 services:
+
+  # Selenium with chrome driver for system tests
+  selenium:
+    image: selenium/standalone-chrome
+
   mysql:
     image: mysql:5.7
     environment:
@@ -53,6 +58,7 @@ services:
       SOLR_URL: http://solr:8983/solr/development
       SOLR_TEST_URL: http://solr:8983/solr/test
       REDIS_URL: 'redis://redis/1'
+      SELENIUM_URL: 'http://selenium:4444/wd/hub'
     volumes:
       - .:/app
     depends_on:
@@ -60,6 +66,7 @@ services:
       - fcrepo
       - redis
       - solr
+      - selenium
 
   # Rails server
   web:
