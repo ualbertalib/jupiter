@@ -6,7 +6,7 @@ class JupiterCore::Search
 
   # Performs a solr search using the given query and filtered query strings.
   # Returns an instance of +DeferredFacetedSolrQuery+ providing result counts, +LockedLDPObject+ representing results,
-  #and access to result facets. Results are lazily generated when you attempt to enumerate them, so that you can
+  # and access to result facets. Results are lazily generated when you attempt to enumerate them, so that you can
   # chain this call with pagination, sorting, etc
   #
   # TODO: probably someone will request not showing some of the default facets in some context,
