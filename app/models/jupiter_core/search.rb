@@ -75,11 +75,6 @@ class JupiterCore::Search
     params[:start] = start if start.present?
     params[:sort] = sort if sort.present?
 
-    # puts "*" * 40
-    # puts params.inspect
-    # puts "Caller: #{caller[0]}"
-    # puts "^" * 40
-
     response = ActiveFedora::SolrService.instance.conn.get('select', params: params)
 
     raise SearchFailed unless response['responseHeader']['status'] == 0
