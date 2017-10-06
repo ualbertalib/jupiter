@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/bbatsov/rubocop.git
-  revision: e7cfdc47c0a7522c4de64af82f0ea0e04b22f1c8
+  revision: 9f7548a90d0f18314a2b140172f381f4a6b11efb
   specs:
     rubocop (0.50.0)
       parallel (~> 1.10)
@@ -297,7 +297,7 @@ GEM
     rsolr (2.0.2)
       builder (>= 2.1.2)
       faraday
-    ruby-progressbar (1.8.3)
+    ruby-progressbar (1.9.0)
     ruby-saml (1.5.0)
       nokogiri (>= 1.5.10)
     ruby_dep (1.5.0)

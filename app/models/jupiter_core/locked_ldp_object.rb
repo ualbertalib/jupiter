@@ -40,8 +40,8 @@ module JupiterCore
 
     # inheritable class attributes (not all class-level attributes in this class should be inherited,
     # these are the inheritance-safe attributes)
-    class_attribute :af_parent_class, :attribute_cache, :attribute_names, :facets,
-                    :reverse_solr_name_cache, :solr_calc_attributes
+    class_attribute :af_parent_class, :attribute_cache, :attribute_names, :facets, :facet_value_presenters,
+                    :association_indexes, :reverse_solr_name_cache, :solr_calc_attributes
 
     # Returns the id of the object in LDP as a String
     def id
@@ -79,7 +79,8 @@ module JupiterCore
 
     # A better debug representation for LDP Objects
     def inspect
-      "#<#{self.class.name || 'AnonymousClass'} " + self.class.attribute_names.map do |name|
+      attrs = self.class.attribute_names + self.class.association_indexes
+      debugstr = attrs.map do |name|
         val = self.send(name)
         val_display = if val.is_a?(String)
                         %Q("#{val}")
@@ -93,7 +94,8 @@ module JupiterCore
                         val.to_s
                       end
         "#{name}: #{val_display}"
-      end.join(', ') + '>'
+      end
+      "#<#{self.class.name || 'AnonymousClass'} " + debugstr.join(', ') + '>'
     end
 
     # Has this object been persisted? (Defined for ActiveModel compatibility)
@@ -308,6 +310,7 @@ module JupiterCore
     end
 
     def coerce_value(value, to:)
+      return nil if value.nil?
       case to
       when :string, :text
         value.to_s
@@ -351,8 +354,8 @@ module JupiterCore
         child.attribute_cache = self.attribute_cache ? self.attribute_cache.dup : {}
         child.facets = self.facets ? self.facets.dup : []
         child.solr_calc_attributes = self.solr_calc_attributes.present? ? self.solr_calc_attributes.dup : {}
-        # child.derived_af_class
-
+        child.association_indexes = self.association_indexes.present? ? self.association_indexes.dup : []
+        child.facet_value_presenters = self.facet_value_presenters.present? ? self.facet_value_presenters.dup : {}
         # If there's no class between +LockedLdpObject+ and this child that's
         # already had +visibility+ and +owner+ defined, define them.
         child.class_eval do
@@ -410,6 +413,9 @@ module JupiterCore
             errors.add(:visibility, I18n.t('locked_ldp_object.errors.invalid_visibility', visibility: visibility))
           end
 
+          # this is the nice version of coerce_value. This is used for data going _in_ to Fedora/Solr, so it
+          # sanity checks the conversion. coerce_value blindly does the conversion, for assumed-good data being
+          # read back from Fedora/Solr
           def convert_value(value, to:)
             return value if value.nil?
             case to
@@ -493,13 +499,34 @@ module JupiterCore
         @derived_af_class ||= generate_af_class
       end
 
+      def define_cached_reader(name, multiple:, type:, canonical_solr_name:, specialized_ldp_reader: nil)
+        define_method name do
+          val = if ldp_object.present?
+                  if specialized_ldp_reader.present?
+                    ldp_object.instance_exec(&specialized_ldp_reader)
+                  else
+                    ldp_object.send(name)
+                  end
+                else
+                  solr_representation[canonical_solr_name]
+                end
+          return if val.nil?
+          val = val.first if val.is_a?(Array) && !multiple
+          return coerce_value(val, to: type).freeze unless multiple
+          coerced_values = val.map do |v|
+            coerce_value(v, to: type).freeze
+          end
+          return coerced_values.freeze
+        end
+      end
+
       # Write properties directly to the solr index for an LDP object, without having to back them in the LDP
       # a lambda, +as+, controls how it is calculated.
       # Examples:
       #
-      #    solr_index :downcased_title, solrize_for: :exact_match, as: -> { title.downcase }
+      #    additional_search_index :downcased_title, solrize_for: :exact_match, as: -> { title.downcase }
       #
-      def solr_index(name, solrize_for:, as:)
+      def additional_search_index(name, solrize_for:, as:)
         raise PropertyInvalidError unless as.respond_to?(:call)
         raise PropertyInvalidError if name.blank?
         raise PropertyInvalidError unless solrize_for.present? && solrize_for.is_a?(Symbol)
@@ -508,19 +535,100 @@ module JupiterCore
         self.solr_calc_attributes[name] = { type: SOLR_DESCRIPTOR_MAP[solrize_for], callable: as }
       end
 
-      def has_multival_attribute(name, predicate, solrize_for: [], type: :string)
-        has_attribute(name, predicate, multiple: true, solrize_for: solrize_for, type: type)
+      def belongs_to(name, using_existing_association:)
+        index_and_hoist_existing_association(using_existing_association, as_name: name, multiple: false)
+      end
+
+      def has_many(name, using_existing_association:)
+        index_and_hoist_existing_association(using_existing_association, as_name: name, multiple: true)
+      end
+
+      def has_one(name, using_existing_association:)
+        index_and_hoist_existing_association(using_existing_association, as_name: name, multiple: false)
+      end
+
+      def index_and_hoist_existing_association(association, as_name:, multiple:)
+        association_names = derived_af_class.reflect_on_all_associations.keys
+        raise ArgumentError, 'No such association' unless association_names.include? association
+        raise ArgumentError, 'Invalid association' if derived_af_class.reflect_on_all_associations[association].is_a?(
+          ActiveFedora::Reflection::HasSubresourceReflection
+        )
+
+        # Add to cache for use in queries
+        self.attribute_cache[as_name] = {
+          predicate: nil,
+          multiple: multiple,
+          solrize_for: [:search],
+          type: :string,
+          solr_names: [Solrizer.solr_name(as_name, SOLR_DESCRIPTOR_MAP[:search], type: :string)]
+        }
+
+        self.association_indexes ||= []
+        self.association_indexes << as_name
+
+        # Get association ids into solr
+        additional_search_index as_name, solrize_for: :search,
+                                         as: lambda {
+                                               self.send(association)&.map do |member|
+                                                 member.id
+                                               end
+                                             }
+        # add a reader to the locked object
+        define_cached_reader(as_name, multiple: multiple, type: :string,
+                                      canonical_solr_name: Solrizer.solr_name(as_name,
+                                                                              SOLR_DESCRIPTOR_MAP[:search],
+                                                                              type: :string),
+                                      specialized_ldp_reader: lambda {
+                                                                self.send(association)&.map do |member|
+                                                                  member.id
+                                                                end
+                                                              })
+
+        # let people use the "better name" when unlocked, for sheer sanity
+        # eg. if you index the awful "member_of_collections" as "member_of_works" on FileSet to better reflect that it
+        # has nothing whatsoever to do with collections, let people use and assign to that when unlocked
+        # this also simplifies functioning of method forwarding between the locked and unlocked object
+        # as that generally assumes that "attribute" names are identically named on both objects
+
+        # TODO: this block could reaaaaally use some consolidation.
+        if multiple
+          derived_af_class.class_eval do
+            alias_method(as_name, association) if association != as_name
+            define_method "#{as_name}=" do |args|
+              args = args.map do |arg|
+                arg.is_a?(LockedLdpObject) ? arg.send(:ldp_object) : arg
+              end
+
+              self.send("#{association}=", args)
+            end
+          end
+        else
+          derived_af_class.class_eval do
+            define_method as_name do
+              self.send(association).first
+            end
+            define_method "#{as_name}=" do |arg|
+              arg = arg.send(:ldp_object) if arg.is_a?(LockedLdpObject)
+              self.send("#{association}=", [arg])
+            end
+          end
+        end
+      end
+
+      def has_multival_attribute(name, predicate, solrize_for: [], type: :string, facet_value_presenter: nil)
+        has_attribute(name, predicate, multiple: true, solrize_for: solrize_for, type: type,
+                                       facet_value_presenter: facet_value_presenter)
       end
 
       # a utility DSL for declaring attributes which allows us to store knowledge of them.
-      def has_attribute(name, predicate, multiple: false, solrize_for: [], type: :string)
+      def has_attribute(name, predicate, multiple: false, solrize_for: [], type: :string, facet_value_presenter: nil)
         raise PropertyInvalidError unless name.is_a? Symbol
         raise PropertyInvalidError if predicate.blank?
 
         # TODO: keep this conveinience, or push responsibility for [] onto the callsite?
         solrize_for = [solrize_for] unless solrize_for.is_a? Array
 
-        # index should contain only some combination of :search, :sort, :facet, :symbol, and :path
+        # index should contain only some combination of :search, :sort, :facet, :symbol, and :pathing
         # this isn't an exhaustive layering over this mess
         # https://github.com/mbarnett/solrizer/blob/e5dd2bd571b9ebdb8a8ab214574075c28951e53e/lib/solrizer/default_descriptors.rb
         # but it helps
@@ -538,8 +646,14 @@ module JupiterCore
           self.reverse_solr_name_cache[solr_name] = name
         end
 
-        self.facets << Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[:facet], type: type) if solrize_for.include?(:facet)
-        self.facets << Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[:path], type: type) if solrize_for.include?(:path)
+        facet_name = if solrize_for.include?(:facet)
+                       Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[:facet], type: type)
+                     elsif solrize_for.include?(:pathing)
+                       Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[:pathing], type: type)
+                     end
+
+        self.facets << facet_name if facet_name.present?
+        self.facet_value_presenters[facet_name] = facet_value_presenter if facet_name && facet_value_presenter.present?
 
         self.attribute_cache[name] = {
           predicate: predicate,
@@ -549,20 +663,8 @@ module JupiterCore
           solr_names: solr_name_cache
         }
 
-        define_method name do
-          val = if ldp_object.present?
-                  ldp_object.send(name)
-                else
-                  solr_representation[solr_name_cache.first]
-                end
-          return if val.nil?
-          val = val.first if val.is_a?(Array) && !multiple
-          return coerce_value(val, to: type).freeze unless multiple
-          coerced_values = val.map do |v|
-            coerce_value(v, to: type).freeze
-          end
-          return coerced_values.freeze
-        end
+        # define the read-only attribute method for the locked object
+        define_cached_reader(name, multiple: multiple, type: type, canonical_solr_name: solr_name_cache.first)
 
         define_method "#{name}=" do |*_args|
           raise LockedInstanceError, 'The Locked LDP object cannot be mutated outside of an unlocked block or without'\
