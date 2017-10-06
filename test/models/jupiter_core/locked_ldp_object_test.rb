@@ -8,7 +8,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     has_attribute :creator, ::RDF::Vocab::DC.creator, solrize_for: [:search, :facet]
     has_multival_attribute :member_of_paths, ::VOCABULARY[:ualib].path, solrize_for: :pathing
 
-    solr_index :my_solr_doc_attr, solrize_for: :search, as: -> { title&.upcase }
+    additional_search_index :my_solr_doc_attr, solrize_for: :search, as: -> { title&.upcase }
 
     def locked_method_shouldnt_mutate(attempted_title)
       self.title = attempted_title
@@ -288,7 +288,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
 
     # This should work even with vanilla AF/Solrizer
     instance = klass.new
-    instance.foo = DateTime.now
+    instance.foo = DateTime.current
 
     assert instance.to_solr.key? 'foo_dtsi'
     refute instance.to_solr.key? 'foo_ssi'
@@ -309,11 +309,11 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     instance = klass.new_locked_ldp_object(owner: 1, visibility: JupiterCore::VISIBILITY_PUBLIC)
 
     instance.unlock_and_fetch_ldp_object do |unlocked_instance|
-      unlocked_instance.embargo_date = Time.now + 200.years
+      unlocked_instance.embargo_date = Time.current + 200.years
     end
 
     # So far so good. Things should be what we set them to be.
-    assert_equal instance.embargo_date.year, Time.now.year + 200
+    assert_equal instance.embargo_date.year, Time.current.year + 200
 
     # Here's where things get stupid
     instance.unlock_and_fetch_ldp_object(&:save)
@@ -321,7 +321,53 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     # ActiveFedora / RDF completely screw up the serialization of Time objects, and end up losing the date aspects
     # of the time, causing our embargo date to silently become today when saved.
     # This test will fail if we haven't succesfully corrected for this in JupiterCore::LockedLdpObject
-    assert instance.embargo_date.year != Time.now.year
+    assert instance.embargo_date.year != Time.current.year
+  end
+
+  test 'hoisted activefedora associations' do
+    klass = Class.new(JupiterCore::LockedLdpObject) do
+      ldp_object_includes Hydra::Works::FileSetBehavior
+      belongs_to :item, using_existing_association: :member_of_collections
+    end
+    instance = klass.new_locked_ldp_object(owner: 1, visibility: JupiterCore::VISIBILITY_PUBLIC)
+
+    assert instance.respond_to?(:item)
+    assert_nil instance.item, nil
+    assert_equal instance.inspect, '#<AnonymousClass id: nil, visibility: "public", owner: 1,'\
+                                   ' record_created_at: nil, item: nil>'
+    instance.unlock_and_fetch_ldp_object(&:save)
+
+    instance2 = klass.new_locked_ldp_object(owner: 1,
+                                            visibility: JupiterCore::VISIBILITY_PUBLIC, item: instance)
+
+    instance2.unlock_and_fetch_ldp_object(&:save)
+    assert_equal instance2.item, instance.id
+
+    fetched_object = klass.where(item: instance.id).first
+
+    assert fetched_object.present?
+    assert_equal fetched_object.id, instance2.id
+
+    another_klass = Class.new(JupiterCore::LockedLdpObject) do
+      ldp_object_includes Hydra::Works::FileSetBehavior
+      has_many :items, using_existing_association: :member_of_collections
+    end
+
+    another_instance = another_klass.new_locked_ldp_object(owner: 1, visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                                           items: [instance])
+    assert another_instance.items.is_a?(Array)
+    assert_equal another_instance.items.first, instance.id
+
+    assert_raises JupiterCore::LockedInstanceError do
+      another_instance.items = [instance, instance2]
+    end
+
+    another_instance.unlock_and_fetch_ldp_object do |uo|
+      uo.items = [instance, instance2]
+    end
+
+    assert_equal another_instance.items.first, instance.id
+    assert_equal another_instance.items.last, instance2.id
   end
 
 end

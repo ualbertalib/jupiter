@@ -1,4 +1,4 @@
-class JupiterCore::DeferredSolrQuery
+class JupiterCore::DeferredSimpleSolrQuery
 
   include Enumerable
   include Kaminari::PageScopeMethods
@@ -33,10 +33,10 @@ class JupiterCore::DeferredSolrQuery
     raise ArgumentError, 'order must be :asc or :desc' unless [:asc, :desc].include?(order.to_sym)
 
     metadata = criteria[:model].attribute_metadata(attr.to_sym)
-    raise ArgumentError, "No metadata found for attribute #{attr}" unless metadata.present?
+    raise ArgumentError, "No metadata found for attribute #{attr}" if metadata.blank?
 
     sort_attr_index = metadata[:solrize_for].index(:sort)
-    raise ArgumentError, "The given attribute, #{attr}, is not solrized for sorting" unless sort_attr_index.present?
+    raise ArgumentError, "The given attribute, #{attr}, is not solrized for sorting" if sort_attr_index.blank?
 
     criteria[:sort] = metadata[:solr_names][sort_attr_index]
     criteria[:sort_order] = order

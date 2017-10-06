@@ -21,6 +21,10 @@ Layout/IndentationConsistency:
   Enabled: true
   EnforcedStyle: normal
 
+Lint/Void:
+  Exclude:
+    - app/models/jupiter_core/locked_ldp_object.rb
+
 # A calculated magnitude based on number of assignments,
 # branches, and conditions.
 Metrics/AbcSize:
@@ -56,6 +60,26 @@ Metrics/PerceivedComplexity:
 Metrics/ParameterLists:
   Exclude:
     - app/models/jupiter_core/search.rb
+    - app/models/jupiter_core/locked_ldp_object.rb
+    - app/models/jupiter_core/deferred_faceted_solr_query.rb
+
+
+Naming/PredicateName:
+  Exclude:
+    - app/models/jupiter_core/locked_ldp_object.rb
+
+Naming/FileName:
+  Exclude:
+    - Dangerfile
+    - Rakefile
+    - Gemfile
+
+Rails:
+  Enabled: true
+
+# There comes a point where I question Rubocop's maintainer's sanity
+Rails/UnknownEnv:
+  Enabled: false
 
 # indentation is an endangered resource
 Style/ClassAndModuleChildren:
@@ -69,12 +93,6 @@ Style/Documentation:
 
 Style/AsciiComments:
   Enabled: false
-
-Style/FileName:
-  Exclude:
-    - Dangerfile
-    - Rakefile
-    - Gemfile
 
 Style/RedundantSelf:
   Exclude:
@@ -104,10 +122,6 @@ Style/NumericPredicate:
 Style/ClassVars:
   Exclude:
     - !ruby/regexp /_test\.rb$/
-
-Style/PredicateName:
-  Exclude:
-    - app/models/jupiter_core/locked_ldp_object.rb
 
 Style/SingleLineMethods:
   Enabled: false
