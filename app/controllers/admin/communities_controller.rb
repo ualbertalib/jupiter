@@ -3,7 +3,11 @@ class Admin::CommunitiesController < Admin::AdminController
   before_action :fetch_community, only: [:show, :edit, :update, :destroy]
 
   def index
-    @communities = Community.all
+    # anybody have a better idea for doing this? Lame to have to litter it everywhere
+    params[:facets].permit! if params[:facets].present?
+    # Populate via search, so that admins can facet
+    @communities = JupiterCore::Search.faceted_search(facets: params[:facets], models: Community)
+    @communities.page params[:page]
   end
 
   def show

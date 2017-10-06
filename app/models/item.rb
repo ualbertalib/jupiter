@@ -59,6 +59,9 @@ class Item < JupiterCore::LockedLdpObject
 
     def add_to_path(community_id, collection_id)
       self.member_of_paths += ["#{community_id}/#{collection_id}"]
+      # TODO: also add the collection (not the community) to the Item's memberOf relation, as metadata
+      # wants to continue to model this relationship in pure PCDM terms, and member_of_path is really for our needs
+      # so that we can facet by community and/or collection properly
     end
 
     def communities_and_collections_validations

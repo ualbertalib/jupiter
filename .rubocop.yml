@@ -61,7 +61,7 @@ Metrics/ParameterLists:
   Exclude:
     - app/models/jupiter_core/search.rb
     - app/models/jupiter_core/locked_ldp_object.rb
-    - app/models/jupiter_core/search_results.rb
+    - app/models/jupiter_core/deferred_faceted_solr_query.rb
 
 
 Naming/PredicateName:

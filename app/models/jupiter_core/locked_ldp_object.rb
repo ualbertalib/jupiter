@@ -204,7 +204,7 @@ module JupiterCore
     # Returns an array of all +LockedLDPObject+ in the LDP
     # def self.all(limit:, offset: )
     def self.all
-      JupiterCore::DeferredSolrQuery.new(self)
+      JupiterCore::DeferredSimpleSolrQuery.new(self)
     end
 
     # Integer, the number of records in Solr/Fedora

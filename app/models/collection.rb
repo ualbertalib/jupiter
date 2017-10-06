@@ -3,7 +3,11 @@ class Collection < JupiterCore::LockedLdpObject
   ldp_object_includes Hydra::Works::CollectionBehavior
 
   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
-  has_attribute :community_id, ::VOCABULARY[:ualib].path, type: :path, solrize_for: :pathing
+  has_attribute :community_id, ::VOCABULARY[:ualib].path,
+                type: :path,
+                solrize_for: :pathing,
+                facet_value_presenter: ->(community_id) { Community.find(community_id).title }
+
   has_attribute :description, ::RDF::Vocab::DC.description, solrize_for: [:search]
 
   # description for collections
