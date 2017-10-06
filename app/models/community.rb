@@ -1,5 +1,7 @@
 class Community < JupiterCore::LockedLdpObject
 
+  ldp_object_includes Hydra::PCDM::ObjectBehavior
+
   # Needed for ActiveStorage (logo)...
   include GlobalID::Identification
 
@@ -32,6 +34,8 @@ class Community < JupiterCore::LockedLdpObject
   end
 
   unlocked do
+    type [::Hydra::PCDM::Vocab::PCDMTerms.Object, ::VOCABULARY[:jupiter_core].community]
+
     before_destroy :can_be_destroyed?
     before_destroy -> { logo.purge_later }
 
