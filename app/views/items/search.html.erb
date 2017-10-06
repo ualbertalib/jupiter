@@ -26,10 +26,11 @@
       <% @results.each do |result| %>
         <div class="row">
           <div class="col">
-            <%= link_to result.title, item_path(result.id) %>
+            <%= link_to result.title, path_for_result(result) %>
           </div>
         </div>
       <% end %>
+      <%= paginate @results %>
     </div>
   </div>
 <% else %>

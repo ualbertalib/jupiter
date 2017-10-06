@@ -5,9 +5,14 @@ class JupiterCore::Search
   MAX_RESULTS = 10_000_000
 
   # Performs a solr search using the given query and filtered query strings.
-  # Returns an instance of +SearchResult+ providing result counts, +LockedLDPObject+ representing results, and
-  # access to result facets.
-  def self.search(q: '', facets: [], models: [], as: nil)
+  # Returns an instance of +DeferredFacetedSolrQuery+ providing result counts, +LockedLDPObject+ representing results,
+  # and access to result facets. Results are lazily generated when you attempt to enumerate them, so that you can
+  # chain this call with pagination, sorting, etc
+  #
+  # TODO: probably someone will request not showing some of the default facets in some context,
+  # so one potential path forward would be to add a facet exclusions param and subtract it out of the facet_fields
+  # when creating the DeferredFacetedSolrQuery
+  def self.faceted_search(q: '', facets: [], models: [], as: nil)
     raise ArgumentError, 'as: must specify a user!' if as.present? && !as.is_a?(User)
     raise ArgumentError, 'must provide at least one model to search for!' if models.blank?
     models = [models] unless models.is_a?(Array)
@@ -26,10 +31,11 @@ class JupiterCore::Search
       fq << %Q(#{key}: "#{value}")
     end
 
-    JupiterCore::SearchResults.new(q: base_query, fq: fq.join(' AND '), facet_map: construct_facet_map(models),
-                                   facet_fields: models.map(&:facets).flatten.uniq,
-                                   restrict_to_model: models.map { |m| m.send(:derived_af_class) },
-                                   facet_value_presenters: construct_facet_presenter_map(models))
+    JupiterCore::DeferredFacetedSolrQuery.new(q: base_query, fq: fq.join(' AND '),
+                                              facet_map: construct_facet_map(models),
+                                              facet_fields: models.map(&:facets).flatten.uniq,
+                                              restrict_to_model: models.map { |m| m.send(:derived_af_class) },
+                                              facet_value_presenters: construct_facet_presenter_map(models))
   end
 
   # derive additional restriction or broadening of the visibilitily query on top of the default

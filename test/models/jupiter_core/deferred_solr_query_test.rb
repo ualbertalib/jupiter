@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class DeferredSolrQueryTest < ActiveSupport::TestCase
+class DeferredSimpleSolrQueryTest < ActiveSupport::TestCase
 
   @@klass = Class.new(JupiterCore::LockedLdpObject) do
     ldp_object_includes Hydra::Works::WorkBehavior
@@ -12,10 +12,10 @@ class DeferredSolrQueryTest < ActiveSupport::TestCase
     assert_not @@klass.all.present?
     assert_equal @@klass.all.total_count, 0
 
-    assert @@klass.where(title: 'foo').is_a?(JupiterCore::DeferredSolrQuery)
-    assert @@klass.sort(:title).is_a?(JupiterCore::DeferredSolrQuery)
-    assert @@klass.limit(5).is_a?(JupiterCore::DeferredSolrQuery)
-    assert @@klass.offset(5).is_a?(JupiterCore::DeferredSolrQuery)
+    assert @@klass.where(title: 'foo').is_a?(JupiterCore::DeferredSimpleSolrQuery)
+    assert @@klass.sort(:title).is_a?(JupiterCore::DeferredSimpleSolrQuery)
+    assert @@klass.limit(5).is_a?(JupiterCore::DeferredSimpleSolrQuery)
+    assert @@klass.offset(5).is_a?(JupiterCore::DeferredSimpleSolrQuery)
 
     obj = @@klass.new_locked_ldp_object(title: 'foo', owner: users(:regular_user).id,
                                         visibility: JupiterCore::VISIBILITY_PUBLIC)
