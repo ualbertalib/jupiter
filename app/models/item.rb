@@ -54,6 +54,7 @@ class Item < JupiterCore::LockedLdpObject
     validates :embargo_end_date, presence: true, if: ->(item) { item.visibility == VISIBILITY_EMBARGO }
     validates :embargo_end_date, absence: true, if: ->(item) { item.visibility != VISIBILITY_EMBARGO }
     validates :member_of_paths, presence: true
+    validates :title, presence: true
     validate :communities_and_collections_validations
 
     def add_to_path(community_id, collection_id)

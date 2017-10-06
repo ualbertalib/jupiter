@@ -30,9 +30,12 @@ class ItemsController < ApplicationController
         unlocked_item.members << fileset
       end
 
-      unlocked_item.save!
+      if unlocked_item.save
+        redirect_to @item, notice: t('.created')
+      else
+        render :new, status: :bad_request
+      end
     end
-    redirect_to @item
   end
 
   def update
@@ -44,9 +47,12 @@ class ItemsController < ApplicationController
     @item.unlock_and_fetch_ldp_object do |unlocked_item|
       unlocked_item.update_attributes(permitted_attributes(@item))
       unlocked_item.update_communities_and_collections(communities, collections)
-      unlocked_item.save!
+      if unlocked_item.save
+        redirect_to @item, notice: t('.updated')
+      else
+        render :edit, status: :bad_request
+      end
     end
-    redirect_to @item
   end
 
   # put this in its own controller
