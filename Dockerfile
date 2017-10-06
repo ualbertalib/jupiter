@@ -8,8 +8,6 @@ RUN apt-get update -qq \
     && apt-get install -y build-essential \
                           mysql-client \
                           nodejs \
-                          # npm \
-                          # nodejs-legacy \
                           # libreoffice \
                           # imagemagick \
                           # ghostscript \
@@ -27,16 +25,13 @@ RUN apt-get update -qq \
 #     && chmod a+x /usr/local/fits/fits-1.0.6/fits.sh \
 #     && ln -s /usr/local/fits/fits-1.0.6/fits.sh /usr/bin/fits
 
-# install phantomjs for capybara as we are using poltergeist
-# RUN npm install -g phantomjs-prebuilt
-
 RUN mkdir -p /app
 WORKDIR /app
 
 # Preinstall gems in an earlier layer so we don't reinstall every time any file changes.
 COPY Gemfile /app
 COPY Gemfile.lock /app
-RUN bundle install
+RUN bundle install --jobs=3 --retry=3
 
 # *NOW* we copy the codebase in
 ADD . /app

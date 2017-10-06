@@ -22,8 +22,8 @@ class Item < JupiterCore::LockedLdpObject
                          facet_value_presenter: ->(path) { Item.path_to_titles(path) }
   has_attribute :embargo_end_date, ::RDF::Vocab::DC.modified, type: :date, solrize_for: [:sort]
 
-  solr_index :doi_without_label, solrize_for: :exact_match,
-                                 as: -> { doi.gsub('doi:', '') if doi.present? }
+  additional_search_index :doi_without_label, solrize_for: :exact_match,
+                                              as: -> { doi.gsub('doi:', '') if doi.present? }
 
   def self.display_attribute_names
     super - [:member_of_paths]

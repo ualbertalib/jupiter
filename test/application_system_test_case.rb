@@ -2,7 +2,16 @@ require 'test_helper'
 
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
 
-  driven_by :selenium, using: :chrome, screen_size: [1400, 1400]
+  # Set options if you have a special selenium url (like if your running selenium in a docker container)
+  # Otherwise just use the defaults by providing empty hash
+  options = ENV['SELENIUM_URL'].present? ? { url: ENV['SELENIUM_URL'] } : {}
+
+  driven_by :selenium, using: :chrome, screen_size: [1400, 1400], options: options
+
+  def setup
+    host! "http://#{IPSocket.getaddress(Socket.gethostname)}"
+    super
+  end
 
   # Logs in a test user. Used for system tests.
   def login_as_user(user)
@@ -12,6 +21,7 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
       OmniAuth.config.mock_auth[:saml] =
         OmniAuth::AuthHash.new(provider: identity.provider,
                                uid: identity.uid)
+
     visit root_url
 
     click_on I18n.t('application.navbar.links.login')
