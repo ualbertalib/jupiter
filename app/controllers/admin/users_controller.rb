@@ -80,7 +80,7 @@ class Admin::UsersController < Admin::AdminController
   end
 
   def autocomplete
-    return render(json: '') unless params[:query].present?
+    return render(json: '') if params[:query].blank?
     render json: User.search(params[:query]).limit(AUTOCOMPLETE_LIMIT)
                      .map { |user|
                        # send URL and an attibute that combines name/email with each hit
