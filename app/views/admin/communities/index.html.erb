@@ -56,6 +56,7 @@
   </ul>
   <%= paginate @communities %>
 
+  <h5> Hey check out some facets</h5>
   <% @communities.each_facet_with_results do |facet| %>
     <div class="row mt-3">
         <%= facet.name %>
