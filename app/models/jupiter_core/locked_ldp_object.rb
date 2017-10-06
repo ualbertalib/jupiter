@@ -40,8 +40,8 @@ module JupiterCore
 
     # inheritable class attributes (not all class-level attributes in this class should be inherited,
     # these are the inheritance-safe attributes)
-    class_attribute :af_parent_class, :attribute_cache, :attribute_names, :facets, :facet_value_presenters,:association_indexes,
-                    :reverse_solr_name_cache, :solr_calc_attributes
+    class_attribute :af_parent_class, :attribute_cache, :attribute_names, :facets, :facet_value_presenters,
+                    :association_indexes, :reverse_solr_name_cache, :solr_calc_attributes
 
     # Returns the id of the object in LDP as a String
     def id

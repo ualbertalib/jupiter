@@ -77,6 +77,10 @@ Naming/FileName:
 Rails:
   Enabled: true
 
+# There comes a point where I question Rubocop's maintainer's sanity
+Rails/UnknownEnv:
+  Enabled: false
+
 # indentation is an endangered resource
 Style/ClassAndModuleChildren:
   EnforcedStyle: compact
