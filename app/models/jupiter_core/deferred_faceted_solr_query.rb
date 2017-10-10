@@ -1,3 +1,8 @@
+# TODO: There's enough overlap that we could look at combining this with DeferredSimpleSolrQuery although
+# the wide difference in what we need to pass in and get out of the two different kinds of uses of Solr, particularly
+# wrt the need for this to support results mixing multiple models, may make that trickier than just living with the
+# similarities. Also, DeferredSimpleSolrQuery probably goes away if we move to ActiveRecord, as it's mostly just an
+# AR-finder simulation layer of low value
 class JupiterCore::DeferredFacetedSolrQuery
 
   include Enumerable
