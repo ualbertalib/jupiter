@@ -22,6 +22,7 @@ class Admin::AutocompleteUsersTest < ActionDispatch::IntegrationTest
     output = JSON.parse(response.body)
     name_emails = output.map { |hit| hit['name_email'] }.sort
     assert_equal name_emails, ['Dave Thomas (jumbalaya@example.com)',
+                               'Harland Sanders (that.joker@example.com)',
                                'Joe Camel (foo@example.com)',
                                'Joffrey Baratheon (joffrey_baratheon@example.com)',
                                'John Deere (juser.1@example.com)',
@@ -36,7 +37,8 @@ class Admin::AutocompleteUsersTest < ActionDispatch::IntegrationTest
     get autocomplete_admin_users_path(query: 'jo')
     output = JSON.parse(response.body)
     name_emails = output.map { |hit| hit['name_email'] }.sort
-    assert_equal name_emails, ['Joe Camel (foo@example.com)',
+    assert_equal name_emails, ['Harland Sanders (that.joker@example.com)',
+                               'Joe Camel (foo@example.com)',
                                'Joffrey Baratheon (joffrey_baratheon@example.com)',
                                'John Deere (juser.1@example.com)',
                                'John Snow (john_snow@example.com)',
@@ -88,7 +90,10 @@ class Admin::AutocompleteUsersTest < ActionDispatch::IntegrationTest
     sign_in_as user
     get autocomplete_admin_users_path(query: '_')
     output = JSON.parse(response.body)
-    assert_equal output.count, 0
+    name_emails = output.map { |hit| hit['name_email'] }.sort
+    assert_equal name_emails, ['Joffrey Baratheon (joffrey_baratheon@example.com)',
+                               'John Snow (john_snow@example.com)',
+                               'Tyrion Lannister (tyrion_lannister@example.com)']
   end
 
 end
