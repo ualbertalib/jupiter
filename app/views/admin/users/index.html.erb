@@ -10,7 +10,9 @@
 
 <div class="d-flex justify-content-center">
   <div class="p-3 scroll-typeahead-results">
-    <%= text_field_tag :query, params[:query], placeholder: t('.search_placeholder'), id: 'user-autocomplete' %>
+    <%= text_field_tag :query, params[:query], placeholder: t('.search_placeholder'),
+        class: 'jupiter-autocomplete',
+        data: { 'query-path' => autocomplete_admin_users_path, 'display-key' => 'name_email' } %>
   </div>
 </div>
 
@@ -50,6 +52,3 @@
 </table>
 
 <%= paginate @users %>
-<%= javascript_tag do %>
-  init_autocomplete('#user-autocomplete', '<%= autocomplete_admin_users_path %>', { 'display_key': 'name_email'});
-<% end %>

@@ -1,16 +1,18 @@
-function init_autocomplete(selector, query_path, options) {
-  // Setup the DOM element identified by selector to do autocomplete via typeahead,
-  // grabbing data from query_path.
+$(document).on('turbolinks:load', function() {
+  $('.jupiter-autocomplete').each(function() {
+    var query_path = $(this).data('query-path');
+    var display_key = $(this).data('display-key');
+    var limit = $(this).data('query-limit');
+    // 'selected' defines what to do when clicking selected item (default: visit url if present in returned data)
+    var selected = $(this).data('selected-action');
 
-  // Options and defaults
-  if (typeof options === "undefined") {
-    options = {};
-  }
-  if (!('limit' in options)) { options.limit = 50; }
-  if (!('display_key' in options)) { options.display_key = 'name'; }
-  // See also 'selected' option below
+    if (!limit) {
+      limit = 50;
+    }
+    if (!display_key) {
+      display_key = 'name';
+    }
 
-  $(document).on('turbolinks:load', function() {
     var fetch_from_path = new Bloodhound({
       datumTokenizer: Bloodhound.tokenizers.whitespace,
       queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -19,28 +21,28 @@ function init_autocomplete(selector, query_path, options) {
         wildcard: '%QUERY'
       }
     });
-    $(selector).typeahead({
+    $(this).typeahead({
       highlight: true,
       hint: false,
     },
     {
       source: fetch_from_path,
-      display: options.display_key,
-      limit: options.limit
+      display: display_key,
+      limit: limit
     });
     // Handler for selected item in autocomplete list
-    if ('selected' in options) {
-      $(selector).bind('typeahead:selected', function(event, datum, name) {
-        options.selected(datum);
+    if (selected) {
+      $(this).bind('typeahead:selected', function(event, datum, name) {
+        selected(datum);
       });
     }
     else {
       // If json has a 'url' attribute, go to the URL on select
-      $(selector).bind('typeahead:selected', function(event, datum, name) {
+      $(this).bind('typeahead:selected', function(event, datum, name) {
         if ('url' in datum) {
           window.location = datum.url;
         }
       });
     }
   });
-}
+});
