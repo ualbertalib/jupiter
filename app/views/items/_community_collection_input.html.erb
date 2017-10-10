@@ -10,6 +10,7 @@
                     collection: @communities,
                     label_method: :title,
                     value_method: :id,
+                    required: true,
                     input_html: { name: 'item[community][]', id: nil, class: 'community-select' }
                   }.tap { | options| options[:selected] = community_id if community_id }
       %>
@@ -18,6 +19,7 @@
           disabled: !collections.present?,
           collection: collections,
           selected: collection_id,
+          required: true,
           input_html: { name: 'item[collection][]', id: nil, class: 'collection-select' }
       %>
     </div>
