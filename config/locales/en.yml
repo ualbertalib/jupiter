@@ -241,6 +241,8 @@ en:
       header: 'Items'
     edit:
       header: 'Edit Item'
+    update:
+      updated: 'Item was successfully updated!'
     show:
       member_of: 'Member of'
       contain_files: 'Contains files'
@@ -249,6 +251,8 @@ en:
       mime_type: 'MIME Type'
     new:
       header: 'Create a new item'
+    create:
+      created: 'Item was successfully created!'
     search:
       header: 'Search Items'
       found_results: "Found %{count} results"
