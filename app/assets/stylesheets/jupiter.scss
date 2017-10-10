@@ -3,9 +3,9 @@ body {
   padding-top: 80px;
 }
 
-label.required abbr, span.required abbr {
-  color: red;
-  font-weight: bold;
+.required abbr {
+  color: $red;
   cursor: inherit;
+  font-weight: bold;
   text-decoration: inherit;
 }
