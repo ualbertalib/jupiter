@@ -2,3 +2,10 @@
 body {
   padding-top: 80px;
 }
+
+label.required abbr, span.required abbr {
+  color: red;
+  font-weight: bold;
+  cursor: inherit;
+  text-decoration: inherit;
+}
