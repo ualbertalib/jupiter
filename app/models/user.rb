@@ -12,15 +12,8 @@ class User < ApplicationRecord
 
   scope :search, lambda { |query|
     if query.present?
-      sanitized = sanitize_sql_like(query)
-      # Match start of first name, last name, email, hyphenated surnames
-      start_of_string = "#{sanitized}%".downcase
-      after_space = "% #{sanitized}%".downcase
-      after_hyphen = "%-#{sanitized}%".downcase
-      where('lower(name) like ?', start_of_string)
-        .or(User.where('lower(name) like ?', after_space))
-        .or(User.where('lower(name) like ?', after_hyphen))
-        .or(User.where('lower(email) like ?', start_of_string))
+      sanitized_query = "%#{sanitize_sql_like(query.downcase)}%"
+      where('lower(name) like ?', sanitized_query).or(User.where('lower(email) like ?', sanitized_query))
     end
   }
 
