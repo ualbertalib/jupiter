@@ -21,4 +21,8 @@ module ApplicationHelper
 
     query_params
   end
+
+  def qmark_tooltip(text)
+    content_tag(:span, fa_icon('question-circle'), title: text)
+  end
 end

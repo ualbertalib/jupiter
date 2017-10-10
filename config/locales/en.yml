@@ -253,6 +253,8 @@ en:
       header: 'Create a new item'
     create:
       created: 'Item was successfully created!'
+    form:
+      community_collection_tooltip: 'TODO: add tooltip text'
     search:
       header: 'Search Items'
       found_results: "Found %{count} results"
