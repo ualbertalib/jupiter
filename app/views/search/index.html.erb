@@ -14,7 +14,7 @@
             <% facet.each_facet_value do |presentation_value, raw_value, count| %>
               <div class="row">
                 <div class="col">
-                  <%= link_to presentation_value, search_items_path(facetable_query_params(facet.facet_name, raw_value)) %>, <%= count %>
+                  <%= link_to presentation_value, search_path(facetable_query_params(facet.facet_name, raw_value)) %>, <%= count %>
                 </div>
               </div>
             <% end %>
