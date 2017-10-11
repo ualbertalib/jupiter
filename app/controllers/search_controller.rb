@@ -8,7 +8,6 @@ class SearchController < ApplicationController
     @results = JupiterCore::Search.faceted_search(q: params[:search], facets: params[:facets],
                                                   models: [Item, Collection, Community], as: current_user)
     @results.sort(:title, :asc).page params[:page]
-    authorize Item
   end
 
 end
