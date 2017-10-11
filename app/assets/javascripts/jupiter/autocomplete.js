@@ -1,48 +1,20 @@
 $(document).on('turbolinks:load', function() {
-  $('.jupiter-autocomplete').each(function() {
-    var query_path = $(this).data('query-path');
-    var display_key = $(this).data('display-key');
-    var limit = $(this).data('query-limit');
-    // 'selected' defines what to do when clicking selected item (default: visit url if present in returned data)
-    var selected = $(this).data('selected-action');
-
-    if (!limit) {
-      limit = 50;
-    }
-    if (!display_key) {
-      display_key = 'name';
-    }
-
-    var fetch_from_path = new Bloodhound({
-      datumTokenizer: Bloodhound.tokenizers.whitespace,
-      queryTokenizer: Bloodhound.tokenizers.whitespace,
-      remote: {
-        url: query_path + '?query=%QUERY',
-        wildcard: '%QUERY'
-      }
-    });
-    $(this).typeahead({
-      highlight: true,
-      hint: false,
-    },
-    {
-      source: fetch_from_path,
-      display: display_key,
-      limit: limit
-    });
-    // Handler for selected item in autocomplete list
-    if (selected) {
-      $(this).bind('typeahead:selected', function(event, datum, name) {
-        selected(datum);
-      });
-    }
-    else {
-      // If json has a 'url' attribute, go to the URL on select
-      $(this).bind('typeahead:selected', function(event, datum, name) {
-        if ('url' in datum) {
-          window.location = datum.url;
-        }
-      });
-    }
+  // Fetch new table when clickin headers and pagination links
+  $('.jupiter-autocomplete-results').on('click', 'thead a, a.page-link', function() {
+    $.getScript(this.href);
+    return false;
   });
+  // Fetch new table for autocomplete widget
+  $('.jupiter-autocomplete').on('keyup', function() {
+    render_new_table($(this));
+    return false;
+  });
+  function render_new_table($changed_element) {
+    var $form = $changed_element.closest('form');
+    var action = $form.attr('action');
+    if (!action) {
+      action=window.location.href;
+    }
+    $.get(action, $form.serialize(), null, "script");
+  }
 });

@@ -20,10 +20,6 @@ class Admin::UserPolicy < ApplicationPolicy
     regular_user? && not_self?
   end
 
-  def autocomplete?
-    admin?
-  end
-
   protected
 
   def regular_user?

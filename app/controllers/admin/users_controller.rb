@@ -1,7 +1,5 @@
 class Admin::UsersController < Admin::AdminController
 
-  AUTOCOMPLETE_LIMIT = 50
-
   helper_method :user_sort_column, :sort_direction
 
   before_action :fetch_user, only: [:show,
@@ -77,15 +75,6 @@ class Admin::UsersController < Admin::AdminController
 
     # TODO: goes to users dashboard once implemented
     redirect_to root_path, notice: t('admin.users.show.impersonate_flash', user: @user.name)
-  end
-
-  def autocomplete
-    return render(json: '') if params[:query].blank?
-    render json: User.search(params[:query]).limit(AUTOCOMPLETE_LIMIT)
-                     .map { |user|
-                       # send URL and an attibute that combines name/email with each hit
-                       { url: admin_user_path(user), name_email: "#{user.name} (#{user.email})" }
-                     }
   end
 
   private

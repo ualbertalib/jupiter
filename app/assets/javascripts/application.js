@@ -15,11 +15,4 @@
 //= require jquery3
 //= require popper
 //= require bootstrap
-
-// Note typeahead fork downloaded from:
-// https://raw.githubusercontent.com/coopy/typeahead.js/fix-async-render-dist/dist/typeahead.bundle.min.js
-// Fixes this bad bug: https://github.com/twitter/typeahead.js/pull/1212
-// Typeahead is infrequently updated, so no estimated date for a fix in production script.
-//= require typeahead.bundle
-
 //= require_tree ./jupiter

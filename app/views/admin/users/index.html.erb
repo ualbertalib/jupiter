@@ -1,6 +1,5 @@
 <% page_title(t('.header')) %>
 
-
 <ol class="breadcrumb mb-5">
   <li class="breadcrumb-item"><%= link_to t('admin.header'), admin_root_path %></li>
   <li class="breadcrumb-item active"><%= t('.header') %></li>
@@ -8,47 +7,15 @@
 
 <h1 class="my-3"><%= t('.header') %></h1>
 
-<div class="d-flex justify-content-center">
-  <div class="p-3 scroll-typeahead-results">
-    <%= text_field_tag :query, params[:query], placeholder: t('.search_placeholder'),
-        class: 'jupiter-autocomplete',
-        data: { 'query-path' => autocomplete_admin_users_path, 'display-key' => 'name_email' } %>
+<form id="user-search">
+  <div class="d-flex justify-content-center">
+    <div class="p-3 scroll-typeahead-results">
+      <%= text_field_tag :query, params[:query], placeholder: t('.search_placeholder'),
+          class: 'jupiter-autocomplete',
+          data: { 'query-path' => autocomplete_admin_users_path, 'display-key' => 'name_email' } %>
+    </div>
   </div>
-</div>
-
-<p class="text-center"><%= t('.display_users_count', users_count: @users.count, total_users_count: User.count) %></p>
-
-<table class="table table-responsive table-bordered">
-  <thead>
-    <tr>
-      <th><%= sortable 'email', t('admin.users.show.email') %></th>
-      <th><%= sortable 'name', t('.name') %></th>
-      <th><%= sortable 'created_at', t('.created') %></th>
-      <th><%= sortable 'updated_at', t('.updated') %></th>
-      <th><%= sortable 'admin', t('.role') %></th>
-      <th><%= sortable 'suspended', t('.status') %></th>
-    </tr>
-  </thead>
-  <tbody>
-  <% if @users.present? %>
-    <% @users.each do |user| %>
-      <tr>
-        <th scope="row"><%= link_to user.email, admin_user_path(user) %></th>
-        <td><%= user.name %></td>
-        <td><%= time_tag user.created_at, format: '%F' %></td>
-        <td><%= time_tag user.updated_at, format: '%F' %></td>
-        <td><%= user_role(user) %></td>
-        <td><%= user_status(user) %></td>
-      </tr>
-    <% end %>
-  <% else %>
-    <tr>
-      <td colspan="7" class="text-center">
-        <%= t('.no_users_found') %>
-      </td>
-    </tr>
-  <% end %>
-  </tbody>
-</table>
-
-<%= paginate @users %>
+  <div id="users" class='jupiter-autocomplete-results'>
+    <%= render partial: 'users' %>
+  </div>
+</form>

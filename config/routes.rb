@@ -14,9 +14,6 @@ Rails.application.routes.draw do
     root to: 'dashboard#index'
 
     resources :users, only: [:index, :show] do
-      collection do
-        get :autocomplete
-      end
       member do
         patch :suspend
         patch :unsuspend
