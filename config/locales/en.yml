@@ -248,10 +248,12 @@ en:
       mime_type: 'MIME Type'
     new:
       header: 'Create a new item'
-    search:
+    file_label: 'File'
+    add_another_file: 'Add another file'
+
+  search:
+    index:
       header: 'Search Items'
       found_results: "Found %{count} results"
       refine_your_search: 'Refine your search'
       no_results_found: No results found
-    file_label: 'File'
-    add_another_file: 'Add another file'

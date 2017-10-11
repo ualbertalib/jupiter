@@ -2,11 +2,9 @@ require 'sidekiq/web'
 require_dependency 'admin_constraint'
 
 Rails.application.routes.draw do
-  resources :items do
-    collection do
-      get 'search'
-    end
-  end
+  resources :items
+
+  get 'search', to: 'search#index'
 
   resources :communities, only: [:index, :show] do
     resources :collections, only: [:show]
