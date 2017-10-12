@@ -25,6 +25,14 @@ if Rails.env.development? || Rails.env.uat?
   non_admin = User.create(name: 'Bill Non-admin', email: 'non_admin@ualberta.ca', admin: false)
   non_admin.identities.create(provider: 'developer', uid: 'non_admin@ualberta.ca')
 
+  # Seed an suspended admin user
+  bad_admin = User.create(name: 'Joe Bad-admin', email: 'bad_admin@ualberta.ca', admin: true, suspended: true)
+  bad_admin.identities.create(provider: 'developer', uid: 'bad_admin@ualberta.ca')
+
+  # Seed an suspended regular user
+  bad_user = User.create(name: 'Jill Bad-user', email: 'bad_user@ualberta.ca', admin: false, suspended: true)
+  bad_user.identities.create(provider: 'developer', uid: 'bad_user@ualberta.ca')
+
   # A bunch of non-identity users for to manipulate in the admin interface
   (0..100).each do
     name = Faker::GameOfThrones.unique.character
