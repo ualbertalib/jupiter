@@ -5,10 +5,11 @@ $(document).on('turbolinks:load', function() {
     return false;
   });
   // Fetch new table for autocomplete widget
-  $('.jupiter-autocomplete').on('keyup', function() {
-    render_new_table($(this));
-    return false;
-  });
+  $('.jupiter-autocomplete').bind("change keyup input search", function() {
+      render_new_table($(this));
+      return false;
+  })
+
   function render_new_table($changed_element) {
     var $form = $changed_element.closest('form');
     var action = $form.attr('action');
