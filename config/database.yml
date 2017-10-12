@@ -33,7 +33,7 @@ test:
   # rails 5 will provision both dev and test database when running db:* rake tasks but it only uses the DATABASE_URL
   # for the dev database. A fix for this is upstream in rails here https://github.com/rails/rails/pull/28933
   # More information can be found here: https://github.com/rails/rails/issues/28827
-  url: <%= ENV['DATABASE_URL'] %>
+  # url: <%= ENV['DATABASE_URL'] %>
 
 # As with config/secrets.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
