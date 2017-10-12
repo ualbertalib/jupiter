@@ -91,14 +91,4 @@ class Admin::UserPolicyTest < ActiveSupport::TestCase
     end
   end
 
-  context '#autocomplete?' do
-    should 'not be able to unsuspend an unsupended user' do
-      refute Admin::UserPolicy.new(@current_user, [:admin, @user]).unsuspend?
-    end
-
-    should 'be able to autocomplete user' do
-      assert Admin::UserPolicy.new(@current_user, nil).autocomplete?
-    end
-  end
-
 end
