@@ -7,14 +7,32 @@
 
 <h1 class="my-3"><%= t('.header') %></h1>
 
-<form id="user-search">
-  <div class="d-flex justify-content-center">
-    <div class="p-3 scroll-typeahead-results">
-      <%= search_field_tag :query, params[:query],
-          placeholder: t('.search_placeholder'), class: 'jupiter-autocomplete' %>
+<%= simple_form_for :user_search, html: { class: 'jupiter-autocomplete' } do |f| %>
+  <div class="d-flex justify-content-between mt-3">
+    <div>
+      <%= f.input :query,
+          as: :search,
+          label: false,
+          placeholder: t('.search_placeholder'),
+          input_html: {
+            name: 'query',
+          }
+      %>
+    </div>
+    <div>
+      <%= f.input :filter,
+          as: :select,
+          prompt: t(:filter_by),
+          label: false,
+          collection: User::FILTER_MAP.map {|k, v| [v, k] },
+          input_html: {
+            name: 'filter'
+          }
+      %>
     </div>
   </div>
+
   <div id="users" class='jupiter-autocomplete-results'>
     <%= render partial: 'users' %>
   </div>
-</form>
+<% end %>

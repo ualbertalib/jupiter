@@ -18,7 +18,8 @@ module Admin::UsersHelper
     # The only param that is being consumed here is `params[:direction]` which is being sanitized by
     # the "sort_direction" method
     link_to "#{title} #{fa_icon font_awesome_icon}".html_safe, # rubocop:disable Rails/OutputSafety
-            { params: { query: params[:query], sort: column, direction: direction } }, remote: true
+            { params: { query: params[:query], filter: params[:filter], sort: column, direction: direction } },
+            remote: true
   end
 
   def items_sort_link(column, sort, title = nil)

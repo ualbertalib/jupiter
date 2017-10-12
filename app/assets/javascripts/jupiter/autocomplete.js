@@ -1,13 +1,13 @@
 $(document).on('turbolinks:load', function() {
-  // Fetch new table when clickin headers and pagination links
+  // Fetch new table when clicking headers and pagination links
   $('.jupiter-autocomplete-results').on('click', 'thead a, a.page-link', function() {
     $.getScript(this.href);
     return false;
   });
-  // Fetch new table for autocomplete widget
-  $('.jupiter-autocomplete').bind("change keyup input search", function() {
-      render_new_table($(this));
-      return false;
+  // Fetch new table for autocomplete and filter widgets
+  $('.jupiter-autocomplete input,select').bind("change keyup input search", function() {
+    render_new_table($(this));
+    return false;
   })
 
   function render_new_table($changed_element) {

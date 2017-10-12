@@ -32,11 +32,14 @@
 en:
   site_name: 'ERA'
 
-  edit: 'Edit'
-  delete: 'Delete'
+  # Generic terms
+  all: 'All'
   close: 'Close'
-  remove: 'Remove'
   created_at: 'Created At'
+  delete: 'Delete'
+  edit: 'Edit'
+  filter_by: 'Filter by'
+  remove: 'Remove'
   updated_at: 'Updated At'
 
   activemodel:

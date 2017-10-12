@@ -11,7 +11,8 @@ class Admin::UsersController < Admin::AdminController
 
   def index
     # TODO: Add filters for admin/suspended/active/no items etc?
-    @users = User.search(params[:query]).order("#{user_sort_column} #{sort_direction}").page params[:page]
+    @users = User.filter(params[:filter]).search(params[:query])
+                 .order("#{user_sort_column} #{sort_direction}").page params[:page]
   end
 
   def show
