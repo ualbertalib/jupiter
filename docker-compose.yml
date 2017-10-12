@@ -53,7 +53,7 @@ services:
     command: bundle exec sidekiq
     environment:
       RAILS_ENV: development
-      DATABASE_URL: 'mysql2://root:mysecretpassword@mysql/'
+      DATABASE_URL: 'mysql2://root:mysecretpassword@mysql:3306'
       FCREPO_URL: http://fcrepo:8080/fcrepo/rest
       SOLR_URL: http://solr:8983/solr/development
       SOLR_TEST_URL: http://solr:8983/solr/test
