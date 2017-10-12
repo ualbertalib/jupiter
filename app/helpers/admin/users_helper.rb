@@ -15,7 +15,8 @@ module Admin::UsersHelper
                 end
 
     # html_safe is used securely here
-    # The only param that is being consumed here is `params[:direction]` which is being sanitized by the "sort_direction" method
+    # The only param that is being consumed here is `params[:direction]` which is being sanitized by
+    # the "sort_direction" method
     link_to "#{title} #{fa_icon font_awesome_icon}".html_safe, # rubocop:disable Rails/OutputSafety
             { params: { query: params[:query],
                       sort: column, direction: direction }}, remote: true
@@ -29,11 +30,22 @@ module Admin::UsersHelper
     link_to title, { params: { sort: column, direction: sort } }, class: klass
   end
 
+  # html_safe is used securely in the next two methods
+  # rubocop:disable Rails/OutputSafety
   def user_role(user)
-    user.admin ? t('admin.users.admin_role') : t('admin.users.user_role')
+    if user.admin
+      "<span class='user-admin'>#{fa_icon('shield')} #{t('admin.users.admin_role')}</span>".html_safe
+    else
+      t('admin.users.user_role')
+    end
   end
 
   def user_status(user)
-    user.suspended ? t('admin.users.suspended_status') : t('admin.users.active_status')
+    if user.suspended
+      "<span class='user-suspended'>#{fa_icon('ban')} #{t('admin.users.suspended_status')}</span>".html_safe
+    else
+      t('admin.users.active_status')
+    end
   end
+  # rubocop:enable Rails/OutputSafety
 end
