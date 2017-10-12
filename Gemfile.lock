@@ -293,7 +293,7 @@ GEM
     rdf-vocab (2.2.6)
       rdf (~> 2.2)
     rdoc (4.3.0)
-    redis (3.3.3)
+    redis (3.3.5)
     rsolr (2.0.2)
       builder (>= 2.1.2)
       faraday
