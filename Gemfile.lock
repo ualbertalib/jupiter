@@ -309,7 +309,7 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (>= 1.1, < 3)
-    scss_lint (0.54.0)
+    scss_lint (0.55.0)
       rake (>= 0.9, < 13)
       sass (~> 3.4.20)
     sdoc (0.4.2)
