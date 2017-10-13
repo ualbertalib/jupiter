@@ -205,7 +205,7 @@ en:
       index:
         search_placeholder: 'Search by email or name...'
         search_button: 'Search Users'
-        header: 'Manage Users'
+        header: 'Users'
       users:
         display_users_count:
           "Displaying %{shown_users_count} of %{matching_users_count} matching users.
