@@ -30,4 +30,8 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     click_link I18n.t('sessions.new.saml_link')
   end
 
+  def logout_user
+    visit logout_url
+  end
+
 end

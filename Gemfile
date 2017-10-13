@@ -79,5 +79,7 @@ group :test do
   # Faker added 0.5 seconds to the test suite per call. Haikunator seems much faster for faking strings
   gem 'haikunator'
   gem 'minitest-hooks'
+  # Allows access to controller instance variables ('assigns') in controller/integration tests
+  gem 'rails-controller-testing'
   gem 'shoulda', require: false
 end
