@@ -29,7 +29,7 @@ gem 'solrizer', github: 'mbarnett/solrizer', branch: 'literally_types'
 
 # Database stuff
 gem 'mysql2', '>= 0.3.18', '< 0.5'
-gem 'redis', '~> 3.3'
+gem 'redis', '~> 4.0'
 gem 'rsolr'
 
 # Authentication
@@ -54,7 +54,7 @@ end
 group :development, :test do
   gem 'sdoc', require: false
 
-  gem 'capybara', '~> 2.13'
+  gem 'capybara', '~> 2.15'
   gem 'selenium-webdriver', require: false
 
   gem 'pry'
