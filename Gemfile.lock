@@ -293,7 +293,7 @@ GEM
     rdf-vocab (2.2.6)
       rdf (~> 2.2)
     rdoc (4.3.0)
-    redis (3.3.5)
+    redis (4.0.1)
     rsolr (2.0.2)
       builder (>= 2.1.2)
       faraday
@@ -403,7 +403,7 @@ DEPENDENCIES
   pundit
   rails (~> 5.1.1)
   rdf-vocab
-  redis (~> 3.3)
+  redis (~> 4.0)
   rsolr
   rubocop!
   sass-rails (~> 5.0)
