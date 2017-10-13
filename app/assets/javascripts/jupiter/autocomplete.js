@@ -8,7 +8,7 @@ $(document).on('turbolinks:load', function() {
   $('.jupiter-autocomplete input,select').bind("change keyup input search", function() {
     render_new_table($(this));
     return false;
-  })
+  });
 
   function render_new_table($changed_element) {
     var $form = $changed_element.closest('form');
