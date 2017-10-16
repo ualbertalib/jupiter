@@ -58,6 +58,7 @@ class Item < JupiterCore::LockedLdpObject
     validates :embargo_end_date, presence: true, if: ->(item) { item.visibility == VISIBILITY_EMBARGO }
     validates :embargo_end_date, absence: true, if: ->(item) { item.visibility != VISIBILITY_EMBARGO }
     validates :member_of_paths, presence: true
+    validates :title, presence: true
     validate :communities_and_collections_validations
 
     def add_to_path(community_id, collection_id)
@@ -65,6 +66,13 @@ class Item < JupiterCore::LockedLdpObject
       # TODO: also add the collection (not the community) to the Item's memberOf relation, as metadata
       # wants to continue to model this relationship in pure PCDM terms, and member_of_path is really for our needs
       # so that we can facet by community and/or collection properly
+    end
+
+    def update_communities_and_collections(communities, collections)
+      return unless communities.present? && collections.present?
+      self.member_of_paths = communities.map.with_index do |community_id, idx|
+        "#{community_id}/#{collections[idx]}"
+      end
     end
 
     def communities_and_collections_validations

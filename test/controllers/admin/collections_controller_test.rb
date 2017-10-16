@@ -95,6 +95,7 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
     should 'not destroy collection if has items' do
       # Give the collection an item
       Item.new_locked_ldp_object(
+        title: 'thesis blocking deletion',
         owner: 1,
         visibility: JupiterCore::VISIBILITY_PRIVATE
       ).unlock_and_fetch_ldp_object do |unlocked_item|
