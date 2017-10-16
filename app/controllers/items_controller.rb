@@ -2,6 +2,7 @@ class ItemsController < ApplicationController
 
   before_action :load_item, only: [:show, :edit, :update]
   before_action :load_communities, only: [:new, :create, :edit, :update]
+  before_action :initialize_communities_and_collections, only: [:edit]
 
   def new
     @item = Item.new_locked_ldp_object
@@ -33,6 +34,7 @@ class ItemsController < ApplicationController
       if unlocked_item.save
         redirect_to @item, notice: t('.created')
       else
+        initialize_communities_and_collections
         render :new, status: :bad_request
       end
     end
@@ -50,6 +52,7 @@ class ItemsController < ApplicationController
       if unlocked_item.save
         redirect_to @item, notice: t('.updated')
       else
+        initialize_communities_and_collections
         render :edit, status: :bad_request
       end
     end
@@ -64,6 +67,21 @@ class ItemsController < ApplicationController
 
   def load_communities
     @communities = Community.all
+  end
+
+  def initialize_communities_and_collections
+    @communities = Community.all
+
+    @item_communities = []
+    @item_collections = []
+    @collection_choices = []
+
+    return if @item.nil?
+    @item.each_community_collection do |community, collection|
+      @item_communities << community
+      @item_collections << collection
+      @collection_choices << community.member_collections
+    end
   end
 
 end

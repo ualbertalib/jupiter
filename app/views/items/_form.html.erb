@@ -18,14 +18,14 @@
       <%= f.error(:member_of_paths) %>
       <div class="communities-collections-list">
         <% if @item.member_of_paths.any? %>
-          <% @item.member_of_paths.each do |path| %>
-            <% community_id, collection_id = path.split('/') %>
-            <% collections = Collection.where(community_id: community_id) %>
+          <% @item_communities.each_with_index do |community, index| %>
             <%= render partial: 'community_collection_input',
-                locals: { f: f, community_id: community_id, collection_id: collection_id, collections: collections } %>
+                locals: { f: f, community_id: community.id, collection_id: @item_collections[index].id,
+                collections: @collection_choices[index] } %>
           <% end %>
         <% else %>
-          <%= render partial: 'community_collection_input', locals: { f: f } %>
+          <%= render partial: 'community_collection_input',
+              locals: { f: f, community_id: nil, collection_id: nil, collections: [] } %>
         <% end %>
       </div>
       <div class="d-flex flex-row-reverse">
