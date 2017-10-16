@@ -97,7 +97,7 @@ GEM
     ast (2.3.0)
     autoprefixer-rails (7.1.4.1)
       execjs
-    better_errors (2.3.0)
+    better_errors (2.4.0)
       coderay (>= 1.0.0)
       erubi (>= 1.0.0)
       rack (>= 0.9.0)
