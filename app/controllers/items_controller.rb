@@ -1,8 +1,7 @@
 class ItemsController < ApplicationController
 
   before_action :load_item, only: [:show, :edit, :update]
-  before_action :load_communities, only: [:new, :create, :edit, :update]
-  before_action :initialize_communities_and_collections, only: [:edit]
+  before_action :initialize_communities_and_collections, only: [:new, :edit]
 
   def new
     @item = Item.new_locked_ldp_object
@@ -63,10 +62,6 @@ class ItemsController < ApplicationController
   def load_item
     @item = Item.find(params[:id])
     authorize @item
-  end
-
-  def load_communities
-    @communities = Community.all
   end
 
   def initialize_communities_and_collections

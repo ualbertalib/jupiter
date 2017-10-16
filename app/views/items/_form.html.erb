@@ -17,7 +17,7 @@
       <%= help_tooltip(t('.community_collection_tooltip')) %>
       <%= f.error(:member_of_paths) %>
       <div class="communities-collections-list">
-        <% if @item.member_of_paths.any? %>
+        <% if @item_communities.any? %>
           <% @item_communities.each_with_index do |community, index| %>
             <%= render partial: 'community_collection_input',
                 locals: { f: f, community_id: community.id, collection_id: @item_collections[index].id,
