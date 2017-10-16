@@ -1,5 +1,5 @@
 $(document).on('turbolinks:load', function() {
-  $('#item-form')
+  $('form')
     .on('change', '.community-select', function() {
       update_collection_select($(this));
     })
@@ -18,8 +18,8 @@ $(document).on('turbolinks:load', function() {
 });
 
 function update_collection_select($community_select) {
-  $collection_select = collection_select($community_select);
-  id =  $community_select.find('option:selected').val();
+  var $collection_select = collection_select($community_select);
+  var id =  $community_select.find('option:selected').val();
   // Bad value? Disable the collection select
   if (!id) {
     $collection_select.attr('disabled', true).val(null);
@@ -36,12 +36,12 @@ function update_collection_select($community_select) {
 
 // Find collection select
 function collection_select($element) {
-  $root = $element.hasClass('.community-collection') ? $element : $element.closest('.community-collection');
+  var $root = $element.hasClass('.community-collection') ? $element : $element.closest('.community-collection');
   return $root.find('.collection-select');
 }
 
 function add_community_collection_input() {
-  $new_input = $("div.community-collection").first().clone();
+  var $new_input = $("div.community-collection").first().clone();
   // Clear selections and disable collection select
   $new_input.find('.community-select').val(null);
   collection_select($new_input).attr('disabled', true).val(null);
