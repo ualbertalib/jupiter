@@ -14,7 +14,7 @@
     <div class="card-block">
       <%= f.label :member_of_paths, label: t('admin.communities.title'),
           class: 'card-title', required: true %>
-      <%= qmark_tooltip(t('.community_collection_tooltip')) %>
+      <%= help_tooltip(t('.community_collection_tooltip')) %>
       <%= f.error(:member_of_paths) %>
       <div class="communities-collections-list">
         <% if @item.member_of_paths.any? %>
