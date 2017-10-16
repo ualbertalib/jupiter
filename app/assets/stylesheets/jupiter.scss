@@ -2,3 +2,10 @@
 body {
   padding-top: 80px;
 }
+
+.required abbr {
+  color: $red;
+  cursor: inherit;
+  font-weight: bold;
+  text-decoration: inherit;
+}

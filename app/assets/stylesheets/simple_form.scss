@@ -1,0 +1,8 @@
+// We don't control the underscore in .simple_form, but it displeases scss-lint
+// scss-lint:disable SelectorFormat
+.simple_form {
+  .invalid-feedback {
+    display: block;
+  }
+}
+// scss-lint:enable SelectorFormat

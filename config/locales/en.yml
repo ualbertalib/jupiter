@@ -36,6 +36,7 @@ en:
   delete: 'Delete'
   close: 'Close'
   remove: 'Remove'
+  add_another: 'Add another'
   created_at: 'Created At'
   updated_at: 'Updated At'
 
@@ -240,6 +241,8 @@ en:
       header: 'Items'
     edit:
       header: 'Edit Item'
+    update:
+      updated: 'Item was successfully updated!'
     show:
       member_of: 'Member of'
       contain_files: 'Contains files'
@@ -248,6 +251,10 @@ en:
       mime_type: 'MIME Type'
     new:
       header: 'Create a new item'
+    create:
+      created: 'Item was successfully created!'
+    form:
+      community_collection_tooltip: 'TODO: add tooltip text'
     file_label: 'File'
     add_another_file: 'Add another file'
 
