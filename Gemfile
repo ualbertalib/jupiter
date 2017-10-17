@@ -80,6 +80,5 @@ group :test do
   gem 'haikunator'
   gem 'minitest-hooks'
   # Allows access to controller instance variables ('assigns') in controller/integration tests
-  gem 'rails-controller-testing'
   gem 'shoulda', require: false
 end

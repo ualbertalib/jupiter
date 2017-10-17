@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class Admin::IndexTest < ActionDispatch::IntegrationTest
+class Admin::UsersIndexTest < ActionDispatch::IntegrationTest
 
   def setup
     super
@@ -18,17 +18,20 @@ class Admin::IndexTest < ActionDispatch::IntegrationTest
   test 'with no query' do
     user = users(:admin)
     sign_in_as user
-    get admin_users_path
-    assert_equal assigns[:users].sort, User.all.sort
-    assert_equal assigns[:users].count, 12
+    get admin_users_path(format: :json)
+    json_response = JSON.parse(@response.body)
+
+    assert_equal json_response.map { |u| u['id'] }.sort, User.all.map { |u| u['id'] }.sort
+    assert_equal json_response.count, User.count
   end
 
   test 'with query "j" regular sort' do
     user = users(:admin)
     sign_in_as user
-    get admin_users_path(query: 'j')
+    get admin_users_path(query: 'j', format: :json)
+    json_response = JSON.parse(@response.body)
 
-    assert_equal assigns[:users].map(&:email),
+    assert_equal json_response.map { |u| u['email'] },
                  ['foo@example.com',
                   'joffrey_baratheon@example.com',
                   'john_snow@example.com',
@@ -42,9 +45,10 @@ class Admin::IndexTest < ActionDispatch::IntegrationTest
   test 'with query "jo", sort by name descending' do
     user = users(:admin)
     sign_in_as user
-    get admin_users_path(query: 'jo', sort: 'name', direction: 'desc')
+    get admin_users_path(query: 'jo', sort: 'name', direction: 'desc', format: :json)
+    json_response = JSON.parse(@response.body)
 
-    assert_equal assigns[:users].map(&:name),
+    assert_equal json_response.map { |u| u['name'] },
                  ['Trader Joe',
                   'Mayor McCheese-Jojoba',
                   'John Snow',
@@ -57,8 +61,10 @@ class Admin::IndexTest < ActionDispatch::IntegrationTest
   test 'with query "jo", order by name ascending, filter by active users' do
     user = users(:admin)
     sign_in_as user
-    get admin_users_path(query: 'jo', sort: 'name', direction: 'asc', filter: 'active')
-    assert_equal assigns[:users].map(&:name),
+    get admin_users_path(query: 'jo', sort: 'name', direction: 'asc', filter: 'active', format: :json)
+    json_response = JSON.parse(@response.body)
+
+    assert_equal json_response.map { |u| u['name'] },
                  ['Joe Camel',
                   'John Deere',
                   'John Snow',
@@ -69,8 +75,10 @@ class Admin::IndexTest < ActionDispatch::IntegrationTest
   test 'with query "jo", order by role descending, filter by suspended users' do
     user = users(:admin)
     sign_in_as user
-    get admin_users_path(query: 'jo', sort: 'is_admin', direction: 'desc', filter: 'suspended')
-    assert_equal assigns[:users].map(&:name),
+    get admin_users_path(query: 'jo', sort: 'is_admin', direction: 'desc', filter: 'suspended', format: :json)
+    json_response = JSON.parse(@response.body)
+
+    assert_equal json_response.map { |u| u['name'] },
                  ['Harland Sanders', # is_admin = true
                   'Joffrey Baratheon'] # is_admin = false
   end
@@ -78,8 +86,10 @@ class Admin::IndexTest < ActionDispatch::IntegrationTest
   test 'with query "jo", order by status ascending, filter by admin' do
     user = users(:admin)
     sign_in_as user
-    get admin_users_path(query: 'jo', sort: 'is_suspended', direction: 'asc', filter: 'admin')
-    assert_equal assigns[:users].map(&:name),
+    get admin_users_path(query: 'jo', sort: 'is_suspended', direction: 'asc', filter: 'admin', format: :json)
+    json_response = JSON.parse(@response.body)
+
+    assert_equal json_response.map { |u| u['name'] },
                  ['Harland Sanders', # is_suspended = true
                   'Mayor McCheese-Jojoba'] # is_suspended = false
   end
@@ -87,23 +97,28 @@ class Admin::IndexTest < ActionDispatch::IntegrationTest
   test 'with query "john snow" (space in name)' do
     user = users(:admin)
     sign_in_as user
-    get admin_users_path(query: 'john_')
-    assert_equal assigns[:users].map(&:name), ['John Snow']
+    get admin_users_path(query: 'john_', format: :json)
+    json_response = JSON.parse(@response.body)
+    assert_equal json_response.map { |u| u['name'] }, ['John Snow']
   end
 
   test 'with query "john_fallafel" (no match)' do
     user = users(:admin)
     sign_in_as user
-    get admin_users_path(query: 'john_fallafel')
-    assert_equal assigns[:users], []
+    get admin_users_path(query: 'john_fallafel', format: :json)
+    json_response = JSON.parse(@response.body)
+
+    assert_equal json_response, []
   end
 
   # Wildcards for like
   test 'with query "%"' do
     user = users(:admin)
     sign_in_as user
-    get admin_users_path(query: '%')
-    assert_equal assigns[:users], []
+    get admin_users_path(query: '%', format: :json)
+    json_response = JSON.parse(@response.body)
+
+    assert_equal json_response, []
   end
 
   # '_' is a single-character wildcard for SQL 'like' statements
@@ -111,8 +126,10 @@ class Admin::IndexTest < ActionDispatch::IntegrationTest
   test 'with query "_"' do
     user = users(:admin)
     sign_in_as user
-    get admin_users_path(query: '_')
-    assert_equal assigns[:users].map(&:email),
+    get admin_users_path(query: '_', format: :json)
+    json_response = JSON.parse(@response.body)
+
+    assert_equal json_response.map { |u| u['email'] },
                  ['joffrey_baratheon@example.com',
                   'john_snow@example.com',
                   'tyrion_lannister@example.com']
