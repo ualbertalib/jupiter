@@ -25,7 +25,7 @@ class ApplicationController < ActionController::Base
     end
 
     if @current_user.last_seen_at.blank? || @current_user.last_seen_at < 5.minutes.ago
-      UpdateUserActivityJob.perform_later(@current_user.id, Time.now.to_s, request.remote_ip)
+      UpdateUserActivityJob.perform_later(@current_user.id, Time.now.utc.to_s, request.remote_ip)
     end
 
     @current_user
@@ -38,7 +38,7 @@ class ApplicationController < ActionController::Base
   def sign_in(user)
     @current_user = user
     session[:user_id] = user.try(:id)
-    UpdateUserActivityJob.perform_later(@current_user.id, Time.now.to_s, request.remote_ip, sign_in: true)
+    UpdateUserActivityJob.perform_later(@current_user.id, Time.now.utc.to_s, request.remote_ip, sign_in: true)
   end
 
   # Logs out the current user.

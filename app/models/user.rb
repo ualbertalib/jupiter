@@ -22,8 +22,8 @@ class User < ApplicationRecord
   end
 
   def update_activity!(remote_ip, now, sign_in: false)
-    raise InvalidParameter, :remote_ip unless remote_ip.present?
-    raise InvalidParameter, :now unless now.present?
+    raise InvalidParameter, :remote_ip if remote_ip.blank?
+    raise InvalidParameter, :now if now.blank?
     # Is the user signing in now?
     if sign_in
       self.previous_sign_in_at = last_sign_in_at
@@ -33,7 +33,7 @@ class User < ApplicationRecord
     end
     self.last_seen_at = now
     self.last_seen_ip = remote_ip
-    self.save!
+    save!
   end
 
 end
