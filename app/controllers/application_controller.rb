@@ -14,11 +14,18 @@ class ApplicationController < ActionController::Base
 
   # Returns the current logged-in user (if any).
   def current_user
-    @current_user ||= User.find_by(id: session[:user_id])
+    return @current_user if @current_user.present?
+    @current_user = User.find_by(id: session[:user_id])
 
-    if @current_user&.suspended?
+    return nil if @current_user.blank?
+
+    if @current_user.suspended?
       log_off_user
       return redirect_to root_path, alert: t('login.user_suspended')
+    end
+
+    if @current_user.last_seen_at.blank? || @current_user.last_seen_at < 5.minutes.ago
+      UpdateUserActivityJob.perform_later(@current_user.id, Time.now.to_s, request.remote_ip)
     end
 
     @current_user
@@ -31,6 +38,7 @@ class ApplicationController < ActionController::Base
   def sign_in(user)
     @current_user = user
     session[:user_id] = user.try(:id)
+    UpdateUserActivityJob.perform_later(@current_user.id, Time.now.to_s, request.remote_ip, sign_in: true)
   end
 
   # Logs out the current user.

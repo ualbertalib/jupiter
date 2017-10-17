@@ -21,4 +21,19 @@ class User < ApplicationRecord
     Item.where(owner: id)
   end
 
+  def update_activity!(remote_ip, now, sign_in: false)
+    raise InvalidParameter, :remote_ip unless remote_ip.present?
+    raise InvalidParameter, :now unless now.present?
+    # Is the user signing in now?
+    if sign_in
+      self.previous_sign_in_at = last_sign_in_at
+      self.previous_sign_in_ip = last_sign_in_ip
+      self.last_sign_in_at = now
+      self.last_sign_in_ip = remote_ip
+    end
+    self.last_seen_at = now
+    self.last_seen_ip = remote_ip
+    self.save!
+  end
+
 end
