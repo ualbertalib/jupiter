@@ -1,6 +1,7 @@
 require 'test_helper'
 
 class UpdateUserActivityJobTest < ActiveJob::TestCase
+
   test 'the activity columns get updated when not signing-in' do
     user = users(:regular_user)
     assert user.last_seen_at.blank?
