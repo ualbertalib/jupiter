@@ -24,7 +24,7 @@
           as: :select,
           prompt: t(:filter_by),
           label: false,
-          collection: User::FILTER_MAP.map {|k, v| [v, k] },
+          collection: user_filter_choices,
           input_html: {
             name: 'filter'
           }
