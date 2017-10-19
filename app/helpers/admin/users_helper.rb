@@ -1,12 +1,12 @@
 module Admin::UsersHelper
-  FILTER_MAP = { all: I18n.t(:all),
-                 admin: I18n.t('admin.users.admin_role'),
-                 user: I18n.t('admin.users.user_role'),
-                 suspended: I18n.t('admin.users.suspended_status'),
-                 active: I18n.t('admin.users.active_status') }.freeze
+  FILTER_MAP = { all: :all,
+                 admin: 'admin.users.admin_role',
+                 user: 'admin.users.user_role',
+                 suspended: 'admin.users.suspended_status',
+                 active: 'admin.users.active_status' }.freeze
 
   def user_filter_choices
-    FILTER_MAP.map { |k, v| [v, k] }
+    FILTER_MAP.map { |k, v| [t(v), k] }
   end
 
   def sortable(column, title = nil)
