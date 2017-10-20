@@ -259,7 +259,9 @@ en:
     create:
       created: 'Item was successfully created!'
     form:
-      community_collection_tooltip: 'TODO: add tooltip text'
+      community_collection_tooltip:
+        'Choose the Community and Collection that best match your item(s).
+        If you need a new collection, email erahelp@ualberta.ca'
     file_label: 'File'
     add_another_file: 'Add another file'
 
