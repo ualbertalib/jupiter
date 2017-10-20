@@ -41,23 +41,43 @@ class UserActivityTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test 'visiting a page after a sufficient time enqueues a job to update user activity' do
+  test 'visiting a page after a sufficient time updates user activity' do
     user = users(:regular_user)
     sign_in_as user
 
-    # Less than five minutes
+    # Note, the previous line updated the columns of interest (won't be nil, stash values here)
+    user.reload
+    last_seen_at1 = user.last_seen_at
+    last_seen_ip1 = user.last_seen_ip
+    last_sign_in_at1 = user.last_sign_in_at
+
+    # Less than five minutes in the future, user activity job doesn't run on page visit
     travel 4.minutes do
-      assert_no_enqueued_jobs do
+      perform_enqueued_jobs do
         get communities_url
       end
+      assert_performed_jobs 0
+      user.reload
+      # Nothing change
+      assert_equal user.last_seen_at, last_seen_at1
+      assert_equal user.last_seen_ip, last_seen_ip1
+      assert_equal user.last_sign_in_at, last_sign_in_at1
     end
 
-    # More than five minutes
+    # More than five minutes, user activity job runs and `last_seen_at` changes
     travel 6.minutes do
       now = Time.now.utc.to_s
-      assert_enqueued_with(job: UpdateUserActivityJob, args: [user.id, now, '127.0.0.1']) do
+      perform_enqueued_jobs do
         get communities_url
       end
+      assert_performed_jobs 1
+      user.reload
+      # `last_seen_at` changed
+      refute_equal user.last_seen_at, last_seen_at1
+      assert_equal user.last_seen_at.to_s, now
+      # `last_seen_ip` and `last_sign_in_at` stay the same
+      assert_equal user.last_seen_ip, last_seen_ip1
+      assert_equal user.last_sign_in_at, last_sign_in_at1
     end
   end
 

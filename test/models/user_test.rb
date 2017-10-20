@@ -91,7 +91,6 @@ class UserTest < ActiveSupport::TestCase
           assert_equal user.previous_sign_in_ip, ip1
         end
       end
-
     end
   end
 
