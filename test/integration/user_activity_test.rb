@@ -8,7 +8,6 @@ class UserActivityTest < ActionDispatch::IntegrationTest
     # Sign-in calls `UpdateUserActivityJob.perform_now`, but this doesn't allow for testing
     # with the ActiveJob test helpers. Can't stub either on arbitrary instances of UpdateUserActivityJob
     # without pulling in another gem, so we test the effect on User directly.
-    # See also test/jobs/update_user_activity_job_test.rb for expanded tests.
 
     # First sign-in
     now1 = nil
