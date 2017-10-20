@@ -8,7 +8,7 @@ class UpdateUserActivityJob < ApplicationJob
     raise ArgumentError, :last_ip_address if last_ip_address.blank?
 
     current_user = User.find_by(id: current_user_id)
-    current_user.update_activity!(last_ip_address, now, sign_in: sign_in)
+    current_user.update_activity!(now, last_ip_address, sign_in: sign_in)
   end
 
 end
