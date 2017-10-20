@@ -7,7 +7,7 @@
 
 <h1 class="my-3"><%= t('.header') %></h1>
 
-<%= simple_form_for :user_search, html: { class: 'jupiter-autocomplete' } do |f| %>
+<%= simple_form_for :user_search, html: { class: 'user-autocomplete' } do |f| %>
   <div class="d-flex justify-content-between mt-3">
     <div>
       <%= f.input :query,
@@ -32,7 +32,7 @@
     </div>
   </div>
 
-  <div id="users" class='jupiter-autocomplete-results'>
+  <div id="users">
     <%= render partial: 'users' %>
   </div>
 <% end %>
