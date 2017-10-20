@@ -58,27 +58,27 @@
 </div>
 
 <dl class="row">
-  <dt class="col-sm-3"><%= t('.email')%></dt>
+  <dt class="col-sm-3"><%= t('admin.users.email')%></dt>
   <dd class="col-sm-9">
     <%= @user.email %>
   </dd>
 
-  <dt class="col-sm-3"><%= t('admin.users.index.role') %></dt>
+  <dt class="col-sm-3"><%= t('admin.users.role') %></dt>
   <dd class="col-sm-9">
     <%= user_role(@user) %>
   </dd>
 
-  <dt class="col-sm-3"><%= t('admin.users.index.status') %></dt>
+  <dt class="col-sm-3"><%= t('admin.users.status') %></dt>
   <dd class="col-sm-9">
     <%= user_status(@user) %>
   </dd>
 
-  <dt class="col-sm-3"><%= t('admin.users.index.created') %></dt>
+  <dt class="col-sm-3"><%= t('admin.users.created') %></dt>
   <dd class="col-sm-9">
     <%= time_tag @user.created_at, format: '%F' %>
   </dd>
 
-  <dt class="col-sm-3"><%= t('admin.users.index.updated') %></dt>
+  <dt class="col-sm-3"><%= t('admin.users.updated') %></dt>
   <dd class="col-sm-9">
     <%= time_tag @user.updated_at, format: '%F' %>
   </dd>

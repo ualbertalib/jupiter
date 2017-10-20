@@ -12,8 +12,23 @@ class User < ApplicationRecord
 
   scope :search, lambda { |query|
     if query.present?
-      where('lower(email) LIKE ?', "%#{query.downcase}%")
-        .or(where('lower(name) LIKE ?', "%#{query.downcase}%"))
+      sanitized_query = "%#{sanitize_sql_like(query.downcase)}%"
+      where('lower(name) like ?', sanitized_query).or(User.where('lower(email) like ?', sanitized_query))
+    end
+  }
+  scope :filter, lambda { |filter|
+    if filter.present?
+      case filter
+      when 'user'
+        where(admin: false)
+      when 'admin'
+        where(admin: true)
+      when 'active'
+        where(suspended: false)
+      when 'suspended'
+        where(suspended: true)
+      end
+      # we just ignore everything else (including 'all' -- means unscoped)
     end
   }
 
