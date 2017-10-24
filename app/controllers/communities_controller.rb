@@ -12,7 +12,7 @@ class CommunitiesController < ApplicationController
       format.html
       format.json do
         # Used in items.js
-        render json: @community.member_collections
+        render json: @community.attributes.merge(collections: @community.member_collections)
       end
     end
   end

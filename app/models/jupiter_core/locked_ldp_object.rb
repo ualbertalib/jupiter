@@ -322,11 +322,11 @@ module JupiterCore
         value
       when :date
         if value.is_a?(String)
-          DateTime.parse(value).utc
+          Time.zone.parse(value)
         elsif value.is_a?(DateTime)
           value
         elsif value.is_a?(Date) || value.is_a?(Time)
-          DateTime.parse(value.iso8601(3)).utc
+          Time.zone.parse(value)
         end
       else
         raise TypeError, "Unknown coercion type: #{type}"

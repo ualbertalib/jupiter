@@ -4,3 +4,9 @@
 :queues:
   - default
   - mailers
+development:
+  :logfile: log/sidekiq_development.log
+production:
+  :logfile: log/sidekiq_production.log
+staging:
+  :logfile: log/sidekiq_staging.log

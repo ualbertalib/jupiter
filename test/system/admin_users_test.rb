@@ -3,7 +3,7 @@ require 'application_system_test_case'
 class AdminUsersTest < ApplicationSystemTestCase
 
   context 'Admin users index page' do
-    should 'be able to search and sort columns' do
+    should 'be able to sort columns' do
       admin = users(:admin)
 
       login_as_user(admin)
@@ -22,11 +22,30 @@ class AdminUsersTest < ApplicationSystemTestCase
 
       assert_selector 'tbody tr:last-child th[scope="row"]', text: admin.email
 
-      fill_in name: 'query', with: 'admin'
-      click_button I18n.t('admin.users.index.search_button')
+      logout_user
+    end
 
+    should 'be able to autocomplete and filter' do
+      admin = users(:admin)
+      suspended = users(:suspended_user)
+
+      login_as_user(admin)
+      click_link admin.name # opens user dropdown which has the admin link
+      click_link I18n.t('application.navbar.links.admin')
+      click_link I18n.t('admin.users.index.header')
+
+      # Autocomplete 'admin'
+      fill_in name: 'query', with: 'admin'
       assert_selector 'tbody tr', count: 1
       assert_selector 'tbody tr:first-child th[scope="row"]', text: admin.email
+
+      # Filter to show suspended user(s)
+      fill_in name: 'query', with: ''
+      select('Suspended', from: 'user_search_filter')
+      assert_selector 'tbody tr', count: 1
+      assert_selector 'tbody tr:first-child th[scope="row"]', text: suspended.email
+
+      logout_user
     end
   end
 
@@ -56,6 +75,8 @@ class AdminUsersTest < ApplicationSystemTestCase
       refute_selector :link, text: I18n.t('admin.users.show.impersonate_text')
       refute_selector :link, text: I18n.t('admin.users.show.unsuspend_link_text')
       refute_selector :link, text: I18n.t('admin.users.show.revoke_admin_link_text')
+
+      logout_user
     end
 
     should 'be able to toggle suspended/admin a regular user' do
@@ -127,6 +148,8 @@ class AdminUsersTest < ApplicationSystemTestCase
       assert_selector :link, text: I18n.t('admin.users.show.impersonate_link_text')
       refute_selector :link, text: I18n.t('admin.users.show.unsuspend_link_text')
       refute_selector :link, text: I18n.t('admin.users.show.revoke_admin_link_text')
+
+      logout_user
     end
 
     should 'be able to impersonate a regular user' do
@@ -169,6 +192,8 @@ class AdminUsersTest < ApplicationSystemTestCase
       click_link I18n.t('application.navbar.links.stop_impersonating')
       assert_text I18n.t('sessions.stop_impersonating.flash', original_user: user.name)
       assert_selector 'h1', text: user.name
+
+      logout_user
     end
   end
 

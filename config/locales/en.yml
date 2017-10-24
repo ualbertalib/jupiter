@@ -32,11 +32,15 @@
 en:
   site_name: 'ERA'
 
-  edit: 'Edit'
-  delete: 'Delete'
+  # Generic terms
+  add_another: 'Add another'
+  all: 'All'
   close: 'Close'
-  remove: 'Remove'
   created_at: 'Created At'
+  delete: 'Delete'
+  edit: 'Edit'
+  filter_by: 'Filter by'
+  remove: 'Remove'
   updated_at: 'Updated At'
 
   activemodel:
@@ -162,9 +166,18 @@ en:
       new:
         header: 'Add New Item'
     users:
+      active_status: 'Active'
+      admin_role: 'Admin'
+      created: 'Created'
+      email: 'Email'
+      name: 'Name'
+      role: 'Role'
+      status: 'Status'
+      suspended_status: 'Suspended'
       title: 'Users'
+      updated: 'Updated'
+      user_role: 'User'
       show:
-        email: 'Email'
         suspend_link_text: 'Suspend User'
         suspend_dialog: "Are you sure you want to suspend %{user}?"
         suspend_flash: 'User has successfully been suspended'
@@ -191,21 +204,14 @@ en:
         title_asc: 'Title (A to Z)'
         title_desc: 'Title (Z to A)'
       index:
-        no_users_found: 'We could not find any users matching your search.'
-        display_users_count: "Displaying %{users_count} of %{total_users_count} total users."
         search_placeholder: 'Search by email or name...'
         search_button: 'Search Users'
-        header: 'Manage Users'
-        name: 'Name'
-        role: 'Role'
-        admin_role: 'Admin'
-        user_role: 'User'
-        status: 'Status'
-        active_status: 'Active'
-        suspended_status: 'Suspended'
-        updated: 'Updated'
-        created: 'Created'
-
+        header: 'Users'
+      users:
+        display_users_count:
+          "Displaying %{shown_users_count} of %{matching_users_count} matching users.
+          (%{total_users_count} total users.)"
+        no_users_found: 'We could not find any users matching your search.'
   collections:
     show:
       delete_confirm: 'Are you sure you want to delete collection "%{title}"?'
@@ -240,6 +246,8 @@ en:
       header: 'Items'
     edit:
       header: 'Edit Item'
+    update:
+      updated: 'Item was successfully updated!'
     show:
       member_of: 'Member of'
       contain_files: 'Contains files'
@@ -248,6 +256,12 @@ en:
       mime_type: 'MIME Type'
     new:
       header: 'Create a new item'
+    create:
+      created: 'Item was successfully created!'
+    form:
+      community_collection_tooltip:
+        'Choose the Community and Collection that best match your item(s).
+        If you need a new collection, email erahelp@ualberta.ca'
     file_label: 'File'
     add_another_file: 'Add another file'
 
