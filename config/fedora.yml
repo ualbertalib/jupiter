@@ -1,9 +1,9 @@
 # Needed and used by active fedora, to specify where to find fedora
 default: &default
-  user: <%= Rails.application.secrets.fedora_user %>
-  password: <%= Rails.application.secrets.fedora_user %>
-  url: <%= Rails.application.secrets.fedora_user %>
-  base_path: <%= Rails.application.secrets.fedora_user %>
+  user: <%= Rails.application.secrets.fcrepo_user %>
+  password: <%= Rails.application.secrets.fcrepo_password %>
+  url: <%= Rails.application.secrets.fcrepo_url %>
+  base_path: <%= Rails.application.secrets.fcrepo_basepath %>
 development:
   <<: *default
 test:
