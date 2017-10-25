@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/bbatsov/rubocop.git
-  revision: a6b6786ede8cf97447d0cdb9154c4e22d78d6071
+  revision: 9e0e8a5e0a5d94205ffcfdfe17eaee8e77080d04
   specs:
     rubocop (0.51.0)
       parallel (~> 1.10)
@@ -279,7 +279,7 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rainbow (2.2.2)
       rake
-    rake (12.1.0)
+    rake (12.2.1)
     rb-fsevent (0.10.2)
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
