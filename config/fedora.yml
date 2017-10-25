@@ -3,7 +3,7 @@ default: &default
   user: <%= Rails.application.secrets.fcrepo_user %>
   password: <%= Rails.application.secrets.fcrepo_password %>
   url: <%= Rails.application.secrets.fcrepo_url %>
-  base_path: <%= Rails.application.secrets.fcrepo_basepath %>
+  base_path: <%= Rails.application.secrets.fcrepo_base_path %>
 development:
   <<: *default
 test:
