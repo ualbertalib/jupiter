@@ -18,6 +18,7 @@ gem 'turbolinks', '~> 5'
 gem 'uglifier', '>= 1.3.0'
 
 # View stuff
+gem 'active_link_to'
 gem 'activestorage'
 gem 'simple_form'
 

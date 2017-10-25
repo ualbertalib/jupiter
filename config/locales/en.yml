@@ -111,9 +111,8 @@ en:
         latest_items: 'Latest items'
         latest_users: 'Latest users'
     communities:
-      title: Communities and Collections
       index:
-        header: 'Manage Communities & Collections'
+        header: 'Communities and Collections'
         delete_confirm: 'Are you sure you want to delete community "%{title}"?'
       new:
         header: 'Add New Community'
@@ -126,7 +125,6 @@ en:
         not_empty_error: 'Cannot delete a non-empty Community'
 
     collections:
-      title: 'Collections'
       new:
         header: 'Create Collection'
       create:
@@ -140,9 +138,8 @@ en:
         not_empty_error: 'Cannot delete a non-empty Collection'
 
     site_notifications:
-      title: 'Site Notifications'
       new:
-        header: 'Manage Notifications'
+        header: 'Announcements'
         new_button_text: 'Post'
         current_notifications: 'Current Notifications'
         no_current_notifications: 'No Current Notifications'
@@ -152,19 +149,16 @@ en:
         no_past_notifications: 'No Past Notifications'
         are_you_sure_you_want_to_remove: 'Are you sure you want to remove this message?'
     pages:
-      title: 'Pages'
       index:
-        header: 'Manage Pages'
+        header: 'Static Pages'
     analytics:
-      title: 'Analytics'
       index:
-        header: 'View Analytics'
+        header: 'Analytics'
     items:
-      title: 'Items'
       index:
-        header: 'Manage Items'
+        header: 'Items'
       new:
-        header: 'Add New Item'
+        header: 'Deposit Item'
     users:
       active_status: 'Active'
       admin_role: 'Admin'
@@ -174,7 +168,6 @@ en:
       role: 'Role'
       status: 'Status'
       suspended_status: 'Suspended'
-      title: 'Users'
       updated: 'Updated'
       user_role: 'User'
       show:
@@ -213,6 +206,7 @@ en:
           (%{total_users_count} total users.)"
         no_users_found: 'We could not find any users matching your search.'
   collections:
+    title: 'Collections'
     show:
       delete_confirm: 'Are you sure you want to delete collection "%{title}"?'
       parent_community: "Parent Community: %{title}"
@@ -223,7 +217,7 @@ en:
       member_items_must_be_empty: "must be empty. Currently: %{list_of_items}"
 
   communities:
-    title: '%{title}'
+    title: 'Communities'
     index:
       header: 'Communities'
       create_new_community: 'Create New Community'
