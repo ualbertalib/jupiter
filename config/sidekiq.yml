@@ -1,7 +1,14 @@
 ---
 :concurrency: 5
-:pidfile: <%= Rails.application.secrets.sidekiq_pidfile %>
+:pidfile: tmp/pids/sidekiq.pid
 :queues:
   - default
   - mailers
-:logfile: <%= Rails.application.secrets.sidekiq_logfile %>
+development:
+  :logfile: log/sidekiq_development.log
+uat:
+  :logfile: log/sidekiq_uat.log
+production:
+  :logfile: log/sidekiq_production.log
+staging:
+  :logfile: log/sidekiq_staging.log
