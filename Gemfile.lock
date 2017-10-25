@@ -1,16 +1,4 @@
 GIT
-  remote: https://github.com/bbatsov/rubocop.git
-  revision: a6b6786ede8cf97447d0cdb9154c4e22d78d6071
-  specs:
-    rubocop (0.51.0)
-      parallel (~> 1.10)
-      parser (>= 2.3.3.1, < 3.0)
-      powerpack (~> 0.1)
-      rainbow (>= 2.2.2, < 3.0)
-      ruby-progressbar (~> 1.7)
-      unicode-display_width (~> 1.0, >= 1.0.1)
-
-GIT
   remote: https://github.com/mbarnett/active_fedora.git
   revision: 052c2bcd6fa2a5e810671bea471b4808150004d8
   branch: fix_types_literally_do_nothing
@@ -298,6 +286,13 @@ GEM
     rsolr (2.0.2)
       builder (>= 2.1.2)
       faraday
+    rubocop (0.51.0)
+      parallel (~> 1.10)
+      parser (>= 2.3.3.1, < 3.0)
+      powerpack (~> 0.1)
+      rainbow (>= 2.2.2, < 3.0)
+      ruby-progressbar (~> 1.7)
+      unicode-display_width (~> 1.0, >= 1.0.1)
     ruby-progressbar (1.9.0)
     ruby-saml (1.5.0)
       nokogiri (>= 1.5.10)
@@ -407,7 +402,7 @@ DEPENDENCIES
   rdf-vocab
   redis (~> 4.0)
   rsolr
-  rubocop!
+  rubocop (~> 0.51.0)
   sass-rails (~> 5)
   sdoc
   selenium-webdriver
