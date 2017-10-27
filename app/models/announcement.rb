@@ -1,4 +1,4 @@
-class SiteNotification < ApplicationRecord
+class Announcement < ApplicationRecord
 
   belongs_to :user
 

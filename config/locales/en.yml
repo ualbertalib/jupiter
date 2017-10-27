@@ -62,8 +62,8 @@ en:
         placeholder: "Search ERA..."
         button_text: 'Search'
       links:
-        communities: 'Communities'
-        new_item: 'Upload'
+        communities: 'Browse'
+        new_item: 'Deposit'
         login: 'Log In'
         admin: 'Admin'
         logout: 'Logout'
@@ -137,17 +137,17 @@ en:
         deleted: 'Collection was successfully deleted!'
         not_empty_error: 'Cannot delete a non-empty Collection'
 
-    site_notifications:
+    announcements:
       new:
         header: 'Announcements'
         new_button_text: 'Post'
-        current_notifications: 'Current Notifications'
-        no_current_notifications: 'No Current Notifications'
+        current_announcements: 'Current Announcements'
+        no_current_announcements: 'No Current Announcements'
         posted_at: "Posted at %{created_at}"
         removed_at: "Removed at %{removed_at}"
-        past_notifications: 'Past Notifications'
-        no_past_notifications: 'No Past Notifications'
-        are_you_sure_you_want_to_remove: 'Are you sure you want to remove this message?'
+        past_announcements: 'Past Announcements'
+        no_past_announcements: 'No Past Announcements'
+        are_you_sure_you_want_to_remove: 'Are you sure you want to remove this announcement?'
     pages:
       index:
         header: 'Static Pages'
