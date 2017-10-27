@@ -3,40 +3,7 @@
 
   <hr/>
 
-  <h2 class="mb-3"><%= t('.versions') %></h2>
-  <div class="row">
-    <div class="col-md-4">
-      <p>
-        <%= t('.jupiter') %>
-        <span class="badge badge-primary">
-          0.0.1
-          <%# TODO: Add version file in jupiter %>
-          <%#= Jupiter::VERSION %>
-        </span>
-      </p>
-    </div>
-    <div class="col-md-4">
-      <p>
-        <%= t('.ruby') %>
-        <span class="badge badge-primary">
-          <%= "#{RUBY_VERSION}p#{RUBY_PATCHLEVEL}" %>
-        </span>
-      </p>
-    </div>
-    <div class="col-md-4">
-      <p>
-        <%= t('.rails') %>
-        <span class="badge badge-primary">
-          <%= "#{Rails::VERSION::STRING}" %>
-        </span>
-      </p>
-    </div>
-    </div>
-  </div>
-
-  <hr/>
-
-  <h2 class="mb-3"><%= t('.statistics') %></h2>
+<h2 class="mb-3"><%= t('.statistics') %></h2>
   <div class="row">
     <div class="col-md-3">
       <div class="card text-center">
@@ -83,6 +50,8 @@
     </div>
   </div>
 
+
+
   <hr/>
 
   <h2 class="mb-3"><%= t('.recent_activity') %></h2>
@@ -116,4 +85,47 @@
       </div>
     </div>
   </div>
+
+  <hr/>
+
+  <h2 class="mb-3"><%= t('.versions') %></h2>
+  <div class="row">
+    <div class="col-md-3">
+      <p>
+        <%= t('.jupiter') %>
+        <span class="badge badge-primary">
+          0.0.1
+          <%# TODO: Add version file in jupiter %>
+          <%#= Jupiter::VERSION %>
+        </span>
+      </p>
+    </div>
+    <div class="col-md-3">
+      <p>
+        <%= t('.ruby') %>
+        <span class="badge badge-primary">
+          <%= "#{RUBY_VERSION}p#{RUBY_PATCHLEVEL}" %>
+        </span>
+      </p>
+    </div>
+    <div class="col-md-3">
+      <p>
+        <%= t('.rails') %>
+        <span class="badge badge-primary">
+          <%= "#{Rails::VERSION::STRING}" %>
+        </span>
+      </p>
+    </div>
+    <div class="col-md-3">
+      <p>
+        <%= link_to sidekiq_web_path, target: :_blank do %>
+          <%= t('.sidekiq') %>
+          <span class="badge badge-primary">
+            <%= "#{Sidekiq::VERSION}" %>
+          </span>
+        <% end %>
+      </p>
+    </div>
+  </div>
+
 </div>

@@ -106,6 +106,7 @@ en:
         jupiter: 'Jupiter'
         ruby: 'Ruby'
         rails: 'Rails'
+        sidekiq: 'Sidekiq'
         statistics: 'Statistics'
         recent_activity: 'Recent Activity'
         latest_items: 'Latest items'
