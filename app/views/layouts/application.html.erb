@@ -14,12 +14,12 @@
   </head>
 
   <body>
-    <%= render partial:'navbar' %>
+    <%= render partial: 'navbar' %>
+    <%= render partial: 'announcement' %>
 
-    <div class="container">
-      <%= render partial: 'announcement' %>
+    <main class="container mt-5">
       <%= render partial: 'flash' %>
       <%= content_for?(:content) ? yield(:content) : yield %>
-    </div>
+    </main>
   </body>
 </html>
