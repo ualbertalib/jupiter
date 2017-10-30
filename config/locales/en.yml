@@ -36,12 +36,12 @@ en:
   add_another: 'Add another'
   all: 'All'
   close: 'Close'
-  created_at: 'Created At'
   delete: 'Delete'
-  edit: 'Edit'
-  filter_by: 'Filter by'
   remove: 'Remove'
-  updated_at: 'Updated At'
+  edit: 'Edit'
+  filter_label: 'Filter By'
+  search_label: 'Search'
+
 
   activemodel:
     errors:
@@ -109,12 +109,14 @@ en:
         sidekiq: 'Sidekiq'
         statistics: 'Statistics'
         recent_activity: 'Recent Activity'
-        latest_items: 'Latest items'
-        latest_users: 'Latest users'
+        latest_items: 'Latest Items'
+        latest_users: 'Latest Users'
     communities:
       index:
         header: 'Communities and Collections'
         delete_confirm: 'Are you sure you want to delete community "%{title}"?'
+        browse_all: 'Browse All'
+        search_placeholder: 'collection name or community name... (TODO not implemented)'
       new:
         header: 'Add New Community'
       create:
@@ -163,13 +165,13 @@ en:
     users:
       active_status: 'Active'
       admin_role: 'Admin'
-      created: 'Created'
+      created: 'Registered'
       email: 'Email'
       name: 'Name'
       role: 'Role'
       status: 'Status'
       suspended_status: 'Suspended'
-      last_seen_at: 'Last Seen At'
+      last_seen_at: 'Last Seen'
       user_role: 'User'
       show:
         suspend_link_text: 'Suspend User'
@@ -188,7 +190,7 @@ en:
         impersonate_dialog: "Are you sure you want to impersonate %{user}?"
         impersonate_flash: "You are now impersonating %{user}"
         no_items_found: 'There are no items for this user'
-        user_items: 'User items'
+        user_items: "User's Items"
         display_items_count: "Displaying %{items_count} of %{total_items_count} total items."
         # TODO: most of these are generic enough to be moved up in a common namespace
         sort: 'Sort'
@@ -199,8 +201,6 @@ en:
         title_desc: 'Title (Z to A)'
       index:
         search_placeholder: 'email or name...'
-        search_label: 'Search'
-        filter_label: 'Filter By'
         header: 'Users'
       users:
         display_users_count:

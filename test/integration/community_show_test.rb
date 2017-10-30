@@ -59,11 +59,9 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
     assert_select 'ul.list-group li.list-group-item a[href=?]',
                   community_collection_path(@community1, @collection1),
                   text: @collection1.title
-    assert_select "a[href='#{edit_admin_community_collection_path(@community1, @collection1)}']"\
-                  '.edit-collection',
+    assert_select "a[href='#{edit_admin_community_collection_path(@community1, @collection1)}']",
                   text: I18n.t('edit')
-    assert_select "a[href='#{admin_community_collection_path(@community1, @collection1)}']"\
-                  '.delete-collection',
+    assert_select "a[href='#{admin_community_collection_path(@community1, @collection1)}']",
                   text: I18n.t('delete')
   end
 
@@ -98,11 +96,9 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
     assert_select 'ul.list-group li.list-group-item a[href=?]',
                   community_collection_path(@community1, @collection1),
                   text: @collection1.title
-    assert_select "a[href='#{edit_admin_community_collection_path(@community1, @collection1)}']"\
-                  '.edit-collection',
+    assert_select "a[href='#{edit_admin_community_collection_path(@community1, @collection1)}']",
                   false
-    assert_select "a[href='#{admin_community_collection_path(@community1, @collection1)}']"\
-                  '.delete-collection',
+    assert_select "a[href='#{admin_community_collection_path(@community1, @collection1)}']",
                   false
   end
 

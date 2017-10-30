@@ -7,7 +7,23 @@
     class: 'btn btn-primary' %>
 </div>
 
+<form>
+  <div class="form-group">
+    <label class="mr-sm-2" for="query"><%= t('search_label') %></label>
+    <%= search_field_tag :query,
+        params[:query],
+        placeholder: t('.search_placeholder'),
+        class: 'form-control' %>
+  </div>
+</form>
+
 <div class="my-4" >
+  <div class="d-flex flex-wrap justify-content-between align-items-start mt-3">
+    <h2><%= t('.browse_all') %></h2>
+
+    <%# TODO: Sort dropdown goes here %>
+  </div>
+
   <ul id="admin-collection-list" class="list-group">
 
     <% @communities.each do |community| %>
@@ -23,8 +39,15 @@
           <% end %>
 
           <div class="btn-group" role="group" aria-label="Community Actions">
-            <%= link_to t('edit'), edit_admin_community_path(community), class:'btn btn-outline-primary' %>
-            <%= link_to t('delete'), admin_community_path(community), class: 'btn btn-danger', method: :delete, data: {confirm: t('.delete_confirm', title: community.title) } %>
+            <%= link_to edit_admin_community_path(community), class:'btn btn-outline-secondary' do %>
+              <%= fa_icon('pencil-square-o') %>
+              <%= t('edit') %>
+            <% end %>
+
+            <%= link_to admin_community_path(community), class: 'btn btn-outline-secondary', method: :delete, data: {confirm: t('.delete_confirm', title: community.title) } do %>
+             <%= fa_icon('trash') %>
+             <%= t('delete') %>
+            <% end %>
           </div>
         </div>
 
@@ -39,9 +62,11 @@
             <%= fa_icon('chevron-up') %>
           <% end %>
 
-          <%= link_to t('communities.show.create_new_collection'),
-                      new_admin_community_collection_path(community),
-                      class:'btn btn-outline-primary' %>
+          <%= link_to new_admin_community_collection_path(community),
+                      class:'btn btn-outline-primary' do %>
+            <%= fa_icon('plus-circle') %>
+            <%= t('communities.show.create_new_collection') %>
+          <% end %>
         </div>
 
         <ul class="list-group mt-3" id="<%=community.id%>"></ul>

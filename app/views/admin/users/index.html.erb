@@ -2,9 +2,9 @@
 
 <h1 class="my-3"><%= t('.header') %></h1>
 
-<%= form_tag admin_users_path, method: :get, class: 'js-user-autocomplete d-flex justify-content-between mt-3 form-inline' %>
+<%= form_tag admin_users_path, method: :get, class: 'js-user-autocomplete d-flex justify-content-between mt-3 form-inline' do %>
   <div class="form-group">
-    <label class="mr-sm-2" for="query"><%= t('.search_label') %></label>
+    <label class="mr-sm-2" for="query"><%= t('search_label') %></label>
     <%= search_field_tag :query,
         params[:query],
         placeholder: t('.search_placeholder'),
@@ -12,7 +12,7 @@
   </div>
 
   <div class="form-group">
-    <label class="mr-sm-2" for="filter"><%= t('.filter_label') %></label>
+    <label class="mr-sm-2" for="filter"><%= t('filter_label') %></label>
     <%= select_tag :filter,
         options_for_select([ [t('all'), :all],
         [t('admin.users.admin_role'), :admin],
@@ -21,7 +21,7 @@
         [t('admin.users.active_status'), :active] ], :all),
         class: 'form-control' %>
   </div>
-</form>
+<% end %>
 
 <div id="js-users">
   <%= render partial: 'users' %>
