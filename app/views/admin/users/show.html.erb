@@ -46,12 +46,12 @@
       <% end %>
     <% end %>
 
-    <% if policy([:admin, @user]).impersonate? %>
-      <%= link_to(impersonate_admin_user_path(@user), method: :post,
+    <% if policy([:admin, @user]).login_as_user? %>
+      <%= link_to(login_as_user_admin_user_path(@user), method: :post,
         class: 'btn btn-secondary',
-        data: { confirm: t('.impersonate_dialog', user: @user.name) }) do %>
+        data: { confirm: t('.login_as_user_dialog', user: @user.name) }) do %>
         <%= fa_icon 'user-secret' %>
-        <%= t('.impersonate_link_text') %>
+        <%= t('.login_as_user_link_text') %>
       <% end %>
     <% end %>
   </div>

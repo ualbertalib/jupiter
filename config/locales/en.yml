@@ -69,7 +69,7 @@ en:
         logout: 'Logout'
         profile: 'Your Profile'
         settings: 'Settings'
-        stop_impersonating: 'Stop Impersonating'
+        logout_as_user: 'Logout as User'
       user_dropdown:
         heading_html: "Signed in as <strong>%{name}</strong>"
 
@@ -83,8 +83,8 @@ en:
       description_html: 'ERA is now a <a href="https://ist.ualberta.ca/services/ccid-passwords/campus-computing-id">CCID</a> (Campus Computing ID) enabled service. If you have a CCID please use it to log in to ERA.'
       saml_link: 'Sign in with University of Alberta CCID (Campus Computing ID)'
       developer_link: Sign in with Developer Account
-    stop_impersonating:
-      flash: "You are no longer impersonating %{original_user}"
+    logout_as_user:
+      flash: "You are now logout as user %{original_user}"
     destroy:
       signed_out: "Signed out successfully."
 
@@ -183,9 +183,9 @@ en:
         revoke_admin_link_text: 'Revoke Admin Access'
         revoke_admin_dialog: "Are you sure you want to revoke admin abilities from %{user}?"
         revoke_admin_flash: 'User has successfully been revoked admin access'
-        impersonate_link_text: 'Impersonate'
-        impersonate_dialog: "Are you sure you want to impersonate %{user}?"
-        impersonate_flash: "You are now impersonating %{user}"
+        login_as_user_link_text: 'Login As User'
+        login_as_user_dialog: "Are you sure you want to login as %{user}?"
+        login_as_user_flash: "You are now logged in as %{user}"
         no_items_found: 'There are no items for this user'
         user_items: "User's Items"
         display_items_count: "Displaying %{items_count} of %{total_items_count} total items."

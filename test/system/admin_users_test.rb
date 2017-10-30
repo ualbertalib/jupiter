@@ -6,7 +6,7 @@ class AdminUsersTest < ApplicationSystemTestCase
     should 'be able to sort columns' do
       admin = users(:admin)
 
-      login_as_user(admin)
+      login_user(admin)
 
       click_link admin.name # opens user dropdown which has the admin link
       click_link I18n.t('application.navbar.links.admin')
@@ -16,9 +16,12 @@ class AdminUsersTest < ApplicationSystemTestCase
       click_link I18n.t('admin.users.index.header')
       assert_selector 'h1', text: I18n.t('admin.users.index.header')
       assert_selector 'tbody tr', count: 4
+
+      click_link 'Email' # email ascending
+
       assert_selector 'tbody tr:first-child th[scope="row"]', text: admin.email
 
-      click_link 'Email'
+      click_link 'Email' # email descending
 
       assert_selector 'tbody tr:last-child th[scope="row"]', text: admin.email
 
@@ -29,7 +32,7 @@ class AdminUsersTest < ApplicationSystemTestCase
       admin = users(:admin)
       suspended = users(:suspended_user)
 
-      login_as_user(admin)
+      login_user(admin)
       click_link admin.name # opens user dropdown which has the admin link
       click_link I18n.t('application.navbar.links.admin')
       click_link I18n.t('admin.users.index.header')
@@ -41,7 +44,7 @@ class AdminUsersTest < ApplicationSystemTestCase
 
       # Filter to show suspended user(s)
       fill_in name: 'query', with: ''
-      select('Suspended', from: 'user_search_filter')
+      select('Suspended', from: 'filter')
       assert_selector 'tbody tr', count: 1
       assert_selector 'tbody tr:first-child th[scope="row"]', text: suspended.email
 
@@ -50,10 +53,10 @@ class AdminUsersTest < ApplicationSystemTestCase
   end
 
   context 'Admin users show page' do
-    should 'not be able to toggle suspended/admin or impersonate yourself' do
+    should 'not be able to toggle suspended/admin or login as yourself' do
       admin = users(:admin)
 
-      login_as_user(admin)
+      login_user(admin)
 
       click_link admin.name # opens user dropdown which has the admin link
       click_link I18n.t('application.navbar.links.admin')
@@ -69,12 +72,12 @@ class AdminUsersTest < ApplicationSystemTestCase
 
       assert_selector 'h1', text: admin.name
 
-      # shouldn't be any toggle suspend/admin or impersonate buttons on this page
+      # shouldn't be any toggle suspend/admin or login as buttons on this page
       refute_selector :link, text: I18n.t('admin.users.show.suspend_link_text')
-      refute_selector :link, text: I18n.t('admin.users.show.revoke_admin_text')
-      refute_selector :link, text: I18n.t('admin.users.show.impersonate_text')
       refute_selector :link, text: I18n.t('admin.users.show.unsuspend_link_text')
+      refute_selector :link, text: I18n.t('admin.users.show.grant_admin_link_text')
       refute_selector :link, text: I18n.t('admin.users.show.revoke_admin_link_text')
+      refute_selector :link, text: I18n.t('admin.users.show.login_as_user_link_text')
 
       logout_user
     end
@@ -83,7 +86,7 @@ class AdminUsersTest < ApplicationSystemTestCase
       admin = users(:admin)
       user = users(:regular_user)
 
-      login_as_user(admin)
+      login_user(admin)
 
       click_link admin.name # opens user dropdown which has the admin link
       click_link I18n.t('application.navbar.links.admin')
@@ -101,7 +104,7 @@ class AdminUsersTest < ApplicationSystemTestCase
 
       assert_selector :link, text: I18n.t('admin.users.show.suspend_link_text')
       assert_selector :link, text: I18n.t('admin.users.show.grant_admin_link_text')
-      assert_selector :link, text: I18n.t('admin.users.show.impersonate_link_text')
+      assert_selector :link, text: I18n.t('admin.users.show.login_as_user_link_text')
       refute_selector :link, text: I18n.t('admin.users.show.unsuspend_link_text')
       refute_selector :link, text: I18n.t('admin.users.show.revoke_admin_link_text')
 
@@ -114,7 +117,7 @@ class AdminUsersTest < ApplicationSystemTestCase
       refute_selector :link, text: I18n.t('admin.users.show.suspend_link_text')
       refute_selector :link, text: I18n.t('admin.users.show.unsuspend_link_text')
       refute_selector :link, text: I18n.t('admin.users.show.grant_admin_link_text')
-      refute_selector :link, text: I18n.t('admin.users.show.impersonate_link_text')
+      refute_selector :link, text: I18n.t('admin.users.show.login_as_user_link_text')
 
       accept_confirm do
         click_link I18n.t('admin.users.show.revoke_admin_link_text')
@@ -123,7 +126,7 @@ class AdminUsersTest < ApplicationSystemTestCase
       assert_text I18n.t('admin.users.show.revoke_admin_flash', user: user.name)
       assert_selector :link, text: I18n.t('admin.users.show.suspend_link_text')
       assert_selector :link, text: I18n.t('admin.users.show.grant_admin_link_text')
-      assert_selector :link, text: I18n.t('admin.users.show.impersonate_link_text')
+      assert_selector :link, text: I18n.t('admin.users.show.login_as_user_link_text')
       refute_selector :link, text: I18n.t('admin.users.show.unsuspend_link_text')
       refute_selector :link, text: I18n.t('admin.users.show.revoke_admin_link_text')
 
@@ -136,7 +139,7 @@ class AdminUsersTest < ApplicationSystemTestCase
       refute_selector :link, text: I18n.t('admin.users.show.suspend_link_text')
       refute_selector :link, text: I18n.t('admin.users.show.grant_admin_link_text')
       refute_selector :link, text: I18n.t('admin.users.show.revoke_admin_link_text')
-      refute_selector :link, text: I18n.t('admin.users.show.impersonate_link_text')
+      refute_selector :link, text: I18n.t('admin.users.show.login_as_user_link_text')
 
       accept_confirm do
         click_link I18n.t('admin.users.show.unsuspend_link_text')
@@ -145,18 +148,18 @@ class AdminUsersTest < ApplicationSystemTestCase
       assert_text I18n.t('admin.users.show.unsuspend_flash', user: user.name)
       assert_selector :link, text: I18n.t('admin.users.show.suspend_link_text')
       assert_selector :link, text: I18n.t('admin.users.show.grant_admin_link_text')
-      assert_selector :link, text: I18n.t('admin.users.show.impersonate_link_text')
+      assert_selector :link, text: I18n.t('admin.users.show.login_as_user_link_text')
       refute_selector :link, text: I18n.t('admin.users.show.unsuspend_link_text')
       refute_selector :link, text: I18n.t('admin.users.show.revoke_admin_link_text')
 
       logout_user
     end
 
-    should 'be able to impersonate a regular user' do
+    should 'be able to login as a regular user' do
       admin = users(:admin)
       user = users(:regular_user)
 
-      login_as_user(admin)
+      login_user(admin)
 
       click_link admin.name # opens user dropdown which has the admin link
       click_link I18n.t('application.navbar.links.admin')
@@ -174,23 +177,23 @@ class AdminUsersTest < ApplicationSystemTestCase
 
       assert_selector :link, text: I18n.t('admin.users.show.suspend_link_text')
       assert_selector :link, text: I18n.t('admin.users.show.grant_admin_link_text')
-      assert_selector :link, text: I18n.t('admin.users.show.impersonate_link_text')
+      assert_selector :link, text: I18n.t('admin.users.show.login_as_user_link_text')
       refute_selector :link, text: I18n.t('admin.users.show.unsuspend_link_text')
       refute_selector :link, text: I18n.t('admin.users.show.revoke_admin_link_text')
 
       accept_confirm do
-        click_link I18n.t('admin.users.show.impersonate_link_text')
+        click_link I18n.t('admin.users.show.login_as_user_link_text')
       end
 
       # we signed in as user and have been redirected to homepage
-      assert_text I18n.t('admin.users.show.impersonate_flash', user: user.name)
+      assert_text I18n.t('admin.users.show.login_as_user_flash', user: user.name)
       assert_text user.name
       assert_selector 'h1', text: I18n.t('welcome.index.header')
 
-      # we stop impersonation and get redirected back to admin user show page
-      click_link user.name # opens user dropdown which has the stop impersonating link
-      click_link I18n.t('application.navbar.links.stop_impersonating')
-      assert_text I18n.t('sessions.stop_impersonating.flash', original_user: user.name)
+      # we log out as user and get redirected back to admin user show page
+      click_link user.name # opens user dropdown which has the logout as user link
+      click_link I18n.t('application.navbar.links.logout_as_user')
+      assert_text I18n.t('sessions.logout_as_user.flash', original_user: user.name)
       assert_selector 'h1', text: user.name
 
       logout_user

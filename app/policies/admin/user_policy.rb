@@ -16,7 +16,7 @@ class Admin::UserPolicy < ApplicationPolicy
     record.last.admin? && not_self?
   end
 
-  def impersonate?
+  def login_as_user?
     regular_user? && not_self?
   end
 

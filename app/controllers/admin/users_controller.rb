@@ -7,7 +7,7 @@ class Admin::UsersController < Admin::AdminController
                                     :unsuspend,
                                     :grant_admin,
                                     :revoke_admin,
-                                    :impersonate]
+                                    :login_as_user]
 
   def index
     @users = User.filter(params[:filter]).search(params[:query])
@@ -71,17 +71,17 @@ class Admin::UsersController < Admin::AdminController
     redirect_to admin_user_path(@user), notice: t('admin.users.show.revoke_admin_flash')
   end
 
-  def impersonate
+  def login_as_user
     authorize [:admin, @user]
 
-    session[:impersonator_id] = current_user.id
+    session[:admin_id] = current_user.id
 
     sign_in(@user)
 
-    logger.info("Admin '#{current_user.name}' has started impersonating '#{@user.name}'")
+    logger.info("Admin '#{current_user.name}' has now logged in as'#{@user.name}'")
 
     # TODO: goes to users dashboard once implemented
-    redirect_to root_path, notice: t('admin.users.show.impersonate_flash', user: @user.name)
+    redirect_to root_path, notice: t('admin.users.show.login_as_user_flash', user: @user.name)
   end
 
   private

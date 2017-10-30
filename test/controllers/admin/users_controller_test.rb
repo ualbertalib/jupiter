@@ -76,16 +76,16 @@ class Admin::UsersControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  context '#impersonate' do
-    should 'be able to impersonate another user' do
+  context '#login_as_user' do
+    should 'be able to login as user' do
       user = users(:regular_user)
 
-      post impersonate_admin_user_url(user)
+      post login_as_user_admin_user_url(user)
       assert_redirected_to root_url
-      assert_equal I18n.t('admin.users.show.impersonate_flash', user: user.name), flash[:notice]
+      assert_equal I18n.t('admin.users.show.login_as_user_flash', user: user.name), flash[:notice]
 
       assert_equal session[:user_id], user.id
-      assert_equal session[:impersonator_id], @admin.id
+      assert_equal session[:admin_id], @admin.id
     end
   end
 
