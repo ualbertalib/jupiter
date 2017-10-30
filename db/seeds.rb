@@ -39,6 +39,10 @@ if Rails.env.development? || Rails.env.uat?
     User.create(name: name, email: "#{name.gsub(/ +/, '.').downcase}@example.edu", admin: false)
   end
 
+  # Lets pick 10 prolific creators, 10 contributors
+  creators = (0..9).map { "#{Faker::Cat.unique.name} #{Faker::Cat.unique.breed}" }
+  contributors = (0..9).map { Faker::FunnyName.unique.name_with_initial }
+
   [ "cat", "dog", "unicorn", "hamburger", "librarian"].each_with_index do |thing, idx|
     if idx % 2 == 0
       title = "The department of #{thing.capitalize}"
@@ -82,9 +86,12 @@ if Rails.env.development? || Rails.env.uat?
       (0..20).each do
         Item.new_locked_ldp_object(
           owner: admin.id,
+          creator: creators[rand(10)],
+          contributor: contributors[rand(10)],
           visibility: JupiterCore::VISIBILITY_PUBLIC,
           title: "The effects of #{Faker::Beer.name} on #{thing.pluralize}",
-          description: Faker::Lorem.sentence(20, false, 0).chop
+          description: Faker::Lorem.sentence(20, false, 0).chop,
+          language: rand(10) > 2 ? 'English' : 'French'
         ).unlock_and_fetch_ldp_object do |uo|
           uo.add_to_path(community.id, collection.id)
           uo.save!
