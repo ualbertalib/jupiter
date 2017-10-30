@@ -2,7 +2,7 @@
   <div class="card-header"><%= facet.name %></div>
 
   <ul class="list-group list-group-flush">
-    <% facet.each_facet_value(0..@max_facets) do |presentation_value, raw_value, count| %>
+    <% facet.each_facet_value(0..@max_facets-1) do |presentation_value, raw_value, count| %>
       <%= render partial: 'facet_value', locals: { facet_name: facet.facet_name,
                                                    raw_value: raw_value,
                                                    presentation_value: presentation_value,
@@ -12,7 +12,7 @@
       <%# Other results collapsed by default %>
       <div class='hideshow'>
         <div class="collapse" id='<%= "#{facet.facet_name}_hidden" %>'>
-          <% facet.each_facet_value((@max_facets + 1)..-1) do |presentation_value, raw_value, count| %>
+          <% facet.each_facet_value(@max_facets..-1) do |presentation_value, raw_value, count| %>
             <%= render partial: 'facet_value', locals: { facet_name: facet.facet_name,
                 raw_value: raw_value,
                 presentation_value: presentation_value,
