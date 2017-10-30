@@ -51,13 +51,13 @@
           </div>
         </div>
 
-        <div class="d-flex justify-content-between align-items-start">
-          <%= link_to admin_community_path(community), data: {community_id: community.id }, class: 'btn btn-outline-primary collection-btn', remote: true do %>
+        <div class="d-flex justify-content-between align-items-start mb-3">
+          <%= link_to admin_community_path(community), data: {community_id: community.id }, class: 'btn btn-outline-primary js-collection-btn', remote: true do %>
             <%= t('collections.title') %>
             <%= fa_icon('chevron-down') %>
           <% end %>
 
-          <%= button_tag type: 'button', class: 'btn btn-outline-primary close-btn d-none', data: {community_id: community.id } do %>
+          <%= button_tag type: 'button', class: 'btn btn-outline-primary d-none js-close-btn', data: {community_id: community.id } do %>
             <%= t('close') %>
             <%= fa_icon('chevron-up') %>
           <% end %>
@@ -69,14 +69,14 @@
           <% end %>
         </div>
 
-        <ul class="list-group mt-3" id="<%=community.id%>"></ul>
+        <ul class="list-group" id="<%=community.id%>"></ul>
 
       </li>
     <% end %>
   </ul>
   <%= paginate @communities %>
 
-  <h5> Hey check out some facets</h5>
+  <h5> TODO: Hey check out some facets</h5>
   <% @communities.each_facet_with_results do |facet| %>
     <div class="row mt-3">
         <%= facet.name %>

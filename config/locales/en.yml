@@ -102,15 +102,12 @@ en:
     dashboard:
       index:
         header: 'Dashboard'
-        versions: 'Versions'
         jupiter: 'Jupiter'
         ruby: 'Ruby'
         rails: 'Rails'
         sidekiq: 'Sidekiq'
-        statistics: 'Statistics'
-        recent_activity: 'Recent Activity'
-        latest_items: 'Latest Items'
-        latest_users: 'Latest Users'
+        recent_items: 'Recent Items'
+        recent_users: 'Recent Users'
     communities:
       index:
         header: 'Communities and Collections'
