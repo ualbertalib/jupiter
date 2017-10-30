@@ -4,5 +4,5 @@ $(document).on('turbolinks:load', function() {
     .on('click', function() {
       var $hideshow = $(this).closest('.hideshow');
       $hideshow.find('.hideshow-control').toggle();
-    })
+    });
 });

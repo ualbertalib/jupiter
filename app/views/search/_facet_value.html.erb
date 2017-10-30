@@ -3,12 +3,12 @@
     <div>
       <% if params[:facets]&.fetch(facet_name, nil) == raw_value %>
         <%= link_to search_path(query_params_without_facet(facet_name)) do %>
-          <input id = "termsCheck" type="checkbox" name="terms" checked />
+          <%= content_tag(:input, '', type: 'checkbox', 'aria-label' => raw_value, checked: true) %>
           <%= presentation_value %>
         <% end %>
       <% else %>
         <%= link_to search_path(query_params_with_facet(facet_name, raw_value)) do %>
-          <input id = "termsCheck" type="checkbox" name="terms" />
+          <%= content_tag(:input, '', type: 'checkbox', 'aria-label' => raw_value) %>
           <%= presentation_value %>
         <% end %>
       <% end %>
