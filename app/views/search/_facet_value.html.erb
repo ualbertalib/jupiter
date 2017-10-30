@@ -1,0 +1,20 @@
+<li class="list-group-item">
+  <div class="d-flex flex-wrap justify-content-between">
+    <div>
+      <% if params[:facets]&.fetch(facet_name, nil) == raw_value %>
+        <%= link_to search_path(query_params_without_facet(facet_name)) do %>
+          <input id = "termsCheck" type="checkbox" name="terms" checked />
+          <%= presentation_value %>
+        <% end %>
+      <% else %>
+        <%= link_to search_path(query_params_with_facet(facet_name, raw_value)) do %>
+          <input id = "termsCheck" type="checkbox" name="terms" />
+          <%= presentation_value %>
+        <% end %>
+      <% end %>
+    </div>
+    <div>
+      <%= count %>
+    </div>
+  </div>
+</li>
