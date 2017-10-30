@@ -1,6 +1,6 @@
 $(document).on('turbolinks:load', function() {
   // Fetch new table for autocomplete and filter widgets
-  $('.user-autocomplete input,select').bind("change keyup input search", function() {
+  $('.js-user-autocomplete input,select').bind("change keyup input search", function() {
     render_new_table($(this));
     return false;
   });

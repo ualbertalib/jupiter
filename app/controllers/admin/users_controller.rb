@@ -91,7 +91,7 @@ class Admin::UsersController < Admin::AdminController
   end
 
   def user_sort_column
-    User.column_names.include?(params[:sort]) ? params[:sort] : 'email'
+    User.column_names.include?(params[:sort]) ? params[:sort] : 'last_seen_at'
   end
 
   # TODO: Should be record_created_at?
@@ -100,7 +100,7 @@ class Admin::UsersController < Admin::AdminController
   end
 
   def sort_direction
-    ['asc', 'desc'].include?(params[:direction]) ? params[:direction] : 'asc'
+    ['asc', 'desc'].include?(params[:direction]) ? params[:direction] : 'desc'
   end
 
 end

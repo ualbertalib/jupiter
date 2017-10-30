@@ -169,7 +169,7 @@ en:
       role: 'Role'
       status: 'Status'
       suspended_status: 'Suspended'
-      updated: 'Updated'
+      last_seen_at: 'Last Seen At'
       user_role: 'User'
       show:
         suspend_link_text: 'Suspend User'
@@ -198,8 +198,9 @@ en:
         title_asc: 'Title (A to Z)'
         title_desc: 'Title (Z to A)'
       index:
-        search_placeholder: 'Search by email or name...'
-        search_button: 'Search Users'
+        search_placeholder: 'email or name...'
+        search_label: 'Search'
+        filter_label: 'Filter By'
         header: 'Users'
       users:
         display_users_count:

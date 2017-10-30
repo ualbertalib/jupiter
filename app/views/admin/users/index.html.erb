@@ -1,38 +1,28 @@
 <% page_title(t('.header')) %>
 
-<ol class="breadcrumb mb-5">
-  <li class="breadcrumb-item"><%= link_to t('admin.header'), admin_root_path %></li>
-  <li class="breadcrumb-item active"><%= t('.header') %></li>
-</ol>
-
 <h1 class="my-3"><%= t('.header') %></h1>
 
-<%= simple_form_for :user_search, html: { class: 'user-autocomplete' } do |f| %>
-  <div class="d-flex justify-content-between mt-3">
-    <div>
-      <%= f.input :query,
-          as: :search,
-          label: false,
-          placeholder: t('.search_placeholder'),
-          input_html: {
-            name: 'query',
-          }
-      %>
-    </div>
-    <div>
-      <%= f.input :filter,
-          as: :select,
-          prompt: t(:filter_by),
-          label: false,
-          collection: user_filter_choices,
-          input_html: {
-            name: 'filter'
-          }
-      %>
-    </div>
+<%= form_tag admin_users_path, method: :get, class: 'js-user-autocomplete d-flex justify-content-between mt-3 form-inline' %>
+  <div class="form-group">
+    <label class="mr-sm-2" for="query"><%= t('.search_label') %></label>
+    <%= search_field_tag :query,
+        params[:query],
+        placeholder: t('.search_placeholder'),
+        class: 'form-control' %>
   </div>
 
-  <div id="users">
-    <%= render partial: 'users' %>
+  <div class="form-group">
+    <label class="mr-sm-2" for="filter"><%= t('.filter_label') %></label>
+    <%= select_tag :filter,
+        options_for_select([ [t('all'), :all],
+        [t('admin.users.admin_role'), :admin],
+        [t('admin.users.user_role'), :user],
+        [t('admin.users.suspended_status'), :suspended],
+        [t('admin.users.active_status'), :active] ], :all),
+        class: 'form-control' %>
   </div>
-<% end %>
+</form>
+
+<div id="js-users">
+  <%= render partial: 'users' %>
+</div>

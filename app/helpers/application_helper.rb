@@ -25,4 +25,12 @@ module ApplicationHelper
   def help_tooltip(text)
     content_tag(:span, fa_icon('question-circle'), title: text)
   end
+
+  # Simple wrapper around time_tag to handle nil case (otherwise time_tag 500s)
+  # TODO: expand this to include displaying of a nice tooltip/title
+  # Issue here: https://github.com/ualbertalib/jupiter/issues/159
+  def jupiter_time_tag(date, format = '%F')
+    return '' if date.blank?
+    time_tag date, format: format
+  end
 end
