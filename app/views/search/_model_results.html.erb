@@ -16,7 +16,7 @@
 
   <%# Results panel %>
   <div class="col-md-9 col-sm-10 card">
-    <div class='p-2'>
+    <div class='p-3'>
       <div>
         <h3><%= t('search.results_for', search: params[:search]) %></h3>
       </div>
@@ -35,14 +35,19 @@
     <%# Results list %>
     <div>
       <% @results[model].each do |result| %>
-        <div class="row">
-          <div class="col">
-            <%= link_to result.title, path_for_result(result) %>
-          </div>
+      <div class="row">
+        <div class="col">
+          <%= link_to result.title, path_for_result(result) %>
         </div>
+      </div>
       <% end %>
-      <%= paginate @results[model] %>
     </div>
+    <div class="p-2 d-flex justify-content-center">
+      <div>
+        <%= results_range(@results[model]) %>
+      </div>
+    </div>
+    <%= paginate @results[model] %>
 
   </div>
 </div>

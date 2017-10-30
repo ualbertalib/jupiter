@@ -40,4 +40,10 @@ module SearchHelper
     end
     content_tag(:li, inner_tag, class: 'nav-item')
   end
+
+  def results_range(results)
+    first = results.offset_value + 1
+    last = results.offset_value + results.count
+    t('search.page_range', first: first, last: last, total: results.total_count)
+  end
 end
