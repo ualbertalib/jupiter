@@ -25,10 +25,10 @@ class Admin::UsersIndexTest < ActionDispatch::IntegrationTest
     assert_equal json_response.count, User.count
   end
 
-  test 'with query "j" regular sort' do
+  test 'with query "j" sorted by email' do
     user = users(:admin)
     sign_in_as user
-    get admin_users_path(query: 'j', format: :json)
+    get admin_users_path(query: 'j', sort: 'email', direction: 'asc', format: :json)
     json_response = JSON.parse(@response.body)
 
     assert_equal json_response.map { |u| u['email'] },
@@ -75,23 +75,23 @@ class Admin::UsersIndexTest < ActionDispatch::IntegrationTest
   test 'with query "jo", order by role descending, filter by suspended users' do
     user = users(:admin)
     sign_in_as user
-    get admin_users_path(query: 'jo', sort: 'is_admin', direction: 'desc', filter: 'suspended', format: :json)
+    get admin_users_path(query: 'jo', sort: 'admin', direction: 'desc', filter: 'suspended', format: :json)
     json_response = JSON.parse(@response.body)
 
     assert_equal json_response.map { |u| u['name'] },
-                 ['Harland Sanders', # is_admin = true
-                  'Joffrey Baratheon'] # is_admin = false
+                 ['Harland Sanders', # admin? = true
+                  'Joffrey Baratheon'] # admin? = false
   end
 
   test 'with query "jo", order by status ascending, filter by admin' do
     user = users(:admin)
     sign_in_as user
-    get admin_users_path(query: 'jo', sort: 'is_suspended', direction: 'asc', filter: 'admin', format: :json)
+    get admin_users_path(query: 'jo', sort: 'suspended', direction: 'desc', filter: 'admin', format: :json)
     json_response = JSON.parse(@response.body)
 
     assert_equal json_response.map { |u| u['name'] },
-                 ['Harland Sanders', # is_suspended = true
-                  'Mayor McCheese-Jojoba'] # is_suspended = false
+                 ['Harland Sanders', # suspended? = true
+                  'Mayor McCheese-Jojoba'] # suspended? = false
   end
 
   test 'with query "john snow" (space in name)' do
@@ -126,7 +126,7 @@ class Admin::UsersIndexTest < ActionDispatch::IntegrationTest
   test 'with query "_"' do
     user = users(:admin)
     sign_in_as user
-    get admin_users_path(query: '_', format: :json)
+    get admin_users_path(query: '_', sort: 'email', direction: 'asc', format: :json)
     json_response = JSON.parse(@response.body)
 
     assert_equal json_response.map { |u| u['email'] },
