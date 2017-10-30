@@ -1,6 +1,6 @@
 module SearchHelper
   def search_params_hash
-    params.permit(:search, { facets: {} }, :tab).to_h
+    params.permit(:search, { facets: {} }, :tab, :sort, :direction).to_h
   end
 
   def query_params_with_facet(facet_name, value)
@@ -26,6 +26,14 @@ module SearchHelper
     query_params
   end
 
+  def query_params_with_sort(sort, direction = 'asc')
+    query_params = search_params_hash
+    query_params[:sort] = sort
+    query_params[:direction] = direction
+
+    query_params
+  end
+
   def results_model_tab_link(model)
     # Create bootstrap nav-item, make it a link if there are results for the model
     classes = 'nav-link'
@@ -39,6 +47,15 @@ module SearchHelper
       inner_tag = content_tag(:a, text, class: classes, href: search_path(query_params_with_tab(model)))
     end
     content_tag(:li, inner_tag, class: 'nav-item')
+  end
+
+  def sort_link(sort, direction)
+    content_tag(:a, sort_label(sort, direction), class: 'dropdown-item',
+                                                 href: search_path(query_params_with_sort(sort, direction)))
+  end
+
+  def sort_label(sort, direction)
+    t("search.sort_#{sort}_#{direction}")
   end
 
   def results_range(results)

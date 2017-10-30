@@ -2,7 +2,7 @@ class Collection < JupiterCore::LockedLdpObject
 
   ldp_object_includes Hydra::Works::CollectionBehavior
 
-  has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search]
+  has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :sort]
 
   # TODO: this should probably be renamed to share a name with member_of_paths on Item, so that their
   # facet results can be coalesced when Collections are mixed into search results along with Items, as in the
