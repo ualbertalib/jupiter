@@ -59,6 +59,7 @@ services:
       SOLR_TEST_URL: http://solr:8983/solr/test
       REDIS_URL: 'redis://redis/1'
       SELENIUM_URL: 'http://selenium:4444/wd/hub'
+      CAPYBARA_NO_HEADLESS: 'true'
     volumes:
       - .:/app
     depends_on:
@@ -74,5 +75,3 @@ services:
     command: bash -c 'rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b "0.0.0.0"'
     ports:
       - "3000:3000"
-    environment:
-      - CAPYBARA_NO_HEADLESS: 'true'
