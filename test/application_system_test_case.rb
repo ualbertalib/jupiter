@@ -3,19 +3,11 @@ require 'selenium-webdriver'
 
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
 
-  if ENV['CAPYBARA_NO_HEADLESS']
-    driver = :selenium
-  else
-    Capybara.register_driver :selenium_chrome_headless do |app|
-      chrome_options = {
-        browser: :chrome,
-        options: ::Selenium::WebDriver::Chrome::Options.new
-      }
-      chrome_options[:options].args << 'headless'
-      Capybara::Selenium::Driver.new(app, chrome_options)
-    end
-    driver = :selenium_chrome_headless
-  end
+  driver = if ENV['CAPYBARA_NO_HEADLESS']
+             :selenium
+           else
+             :selenium_chrome_headless
+           end
 
   # Set options if you have a special selenium url (like if your running selenium in a docker container)
   # Otherwise just use the defaults by providing empty hash

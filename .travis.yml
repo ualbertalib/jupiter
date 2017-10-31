@@ -17,7 +17,7 @@ before_script:
 
 script:
   - docker-compose run --rm -e RAILS_ENV=test web rails test
-  - docker-compose run --rm -e RAILS_ENV=test -e CAPYBARA_NO_HEADLESS=true web rails test:system
+  - docker-compose run --rm -e RAILS_ENV=test web rails test:system
   - docker-compose run --rm web rubocop
   # - docker-compose run --rm web scss-lint
 
