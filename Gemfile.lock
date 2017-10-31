@@ -106,7 +106,6 @@ GEM
       xpath (~> 2.0)
     childprocess (0.8.0)
       ffi (~> 1.0, >= 1.0.11)
-    cliver (0.3.2)
     coderay (1.1.2)
     concurrent-ruby (1.0.5)
     connection_pool (2.2.1)
@@ -227,10 +226,6 @@ GEM
     parallel (1.12.0)
     parser (2.4.0.0)
       ast (~> 2.2)
-    poltergeist (1.16.0)
-      capybara (~> 2.1)
-      cliver (~> 0.3.1)
-      websocket-driver (>= 0.2.0)
     popper_js (1.12.5)
     powerpack (0.1.1)
     pry (0.11.2)
@@ -399,7 +394,6 @@ DEPENDENCIES
   mysql2 (>= 0.3.18, < 0.5)
   omniauth
   omniauth-saml
-  poltergeist
   pry
   pry-rails
   puma (~> 3.7)
