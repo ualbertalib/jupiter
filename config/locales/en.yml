@@ -38,6 +38,7 @@ en:
   close: 'Close'
   delete: 'Delete'
   remove: 'Remove'
+  cancel: 'Cancel'
   edit: 'Edit'
   filter_label: 'Filter By'
   search_label: 'Search'

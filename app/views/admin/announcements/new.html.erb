@@ -3,7 +3,7 @@
 <h1><%= t('.header') %></h1>
   <%= simple_form_for [:admin, @new_announcement] do |f| %>
     <%= f.input :message %>
-    <%= f.button :submit, t('.new_button_text') %>
+    <%= f.button :submit, t('.new_button_text'), class: 'float-right' %>
   <% end %>
 
   <h2 class="mt-5"><%= t('.current_announcements') %></h5>
