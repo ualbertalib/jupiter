@@ -55,6 +55,7 @@ group :development, :test do
   gem 'sdoc', require: false
 
   gem 'capybara', '~> 2.15'
+  gem 'poltergeist', require: false
   gem 'selenium-webdriver', require: false
 
   gem 'pry'

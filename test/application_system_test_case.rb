@@ -1,14 +1,25 @@
 require 'test_helper'
+require 'capybara/poltergeist' if ENV['CAPYBARA_PHANTOMJS']
 
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
 
-  # Set options if you have a special selenium url (like if your running selenium in a docker container)
-  # Otherwise just use the defaults by providing empty hash
-  options = ENV['SELENIUM_URL'].present? ? { url: ENV['SELENIUM_URL'] } : {}
+  if ENV['CAPYBARA_PHANTOMJS']
+    driven_by :poltergeist, screen_size: [1920, 6000]
+  else
+    # Set options if you have a special selenium url (like if your running selenium in a docker container)
+    # Otherwise just use the defaults by providing empty hash
+    options = ENV['SELENIUM_URL'].present? ? { url: ENV['SELENIUM_URL'] } : {}
 
-  driven_by :selenium, using: :chrome, screen_size: [1400, 1400], options: options
+    driven_by :selenium, using: :chrome, screen_size: [1400, 1400], options: options
+  end
 
   def setup
+    if ENV['CAPYBARA_PHANTOMJS']
+      # Click to user menu fails sometimes. This advice helps:
+      # https://github.com/mattheworiordan/capybara-screenshot/issues/154#issuecomment-288174420
+      page.driver.restart if defined?(page.driver.restart)
+    end
+
     host! "http://#{IPSocket.getaddress(Socket.gethostname)}"
     super
   end
