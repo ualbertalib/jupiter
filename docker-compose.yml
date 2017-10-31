@@ -75,4 +75,4 @@ services:
     ports:
       - "3000:3000"
     environment:
-      CAPYBARA_NO_HEADLESS: true
+      CAPYBARA_NO_HEADLESS: 'true'
