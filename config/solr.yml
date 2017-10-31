@@ -1,11 +1,13 @@
 # Needed and used by active fedora, to specify where to find solr
+default: &default
+  url: <%= Rails.application.secrets.solr_url %>
 development:
   url: <%= ENV['SOLR_URL'] || 'http://localhost:8983/solr/development' %>
 test:
   url: <%= ENV['SOLR_TEST_URL'] || 'http://localhost:8983/solr/test' %>
 uat:
-  url: <%= ENV['SOLR_URL'] %>
+  <<: *default
 staging:
-  url: <%= ENV['SOLR_URL'] %>
+  <<: *default
 production:
-  url: <%= ENV['SOLR_URL'] %>
+  <<: *default
