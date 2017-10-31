@@ -10,10 +10,10 @@ gem 'puma', '~> 3.7'
 gem 'rails', '~> 5.1.1'
 
 # Assets (CSS/JS) stuff
-gem 'bootstrap', '~> 4.0.0.beta'
+gem 'bootstrap', '~> 4.0.0.beta2.1'
 gem 'font-awesome-rails'
 gem 'jquery-rails'
-gem 'sass-rails', '~> 5.0'
+gem 'sass-rails', '~> 5'
 gem 'turbolinks', '~> 5'
 gem 'uglifier', '>= 1.3.0'
 
@@ -60,10 +60,11 @@ group :development, :test do
   gem 'pry'
   gem 'pry-rails'
 
-  # TODO: Pointing rubocop at master to resolve this bug: https://github.com/bbatsov/rubocop/pull/4749
-  # Once 0.50.1 or something lands, point back to the gem
-  gem 'rubocop', github: 'bbatsov/rubocop', require: false
-  gem 'scss_lint', require: false
+  gem 'rubocop', '~> 0.51.0', require: false
+
+  # Need to wait till scss_lint is using sass 3.5+
+  # More details here: https://github.com/brigade/scss-lint/issues/877
+  # gem 'scss_lint', '>= 0.55.0', require: false
 end
 
 group :development do
