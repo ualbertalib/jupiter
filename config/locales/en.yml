@@ -66,7 +66,7 @@ en:
     navbar:
       logo_alt: 'ERA Logo'
       search:
-        placeholder: "Search ERA..."
+        placeholder: 'Search ERA...'
         button_text: 'Search'
       links:
         communities: 'Browse'
@@ -75,7 +75,6 @@ en:
         admin: 'Admin'
         logout: 'Logout'
         profile: 'Your Profile'
-        settings: 'Settings'
         logout_as_user: 'Logout as User'
       user_dropdown:
         heading_html: "Signed in as <strong>%{name}</strong>"
@@ -91,13 +90,13 @@ en:
       saml_link: 'Sign in with University of Alberta CCID (Campus Computing ID)'
       developer_link: Sign in with Developer Account
     logout_as_user:
-      flash: "You are now logout as user %{original_user}"
+      flash: 'You are now logout as user %{original_user}'
     destroy:
-      signed_out: "Signed out successfully."
+      signed_out: 'Signed out successfully.'
 
   login:
     error: 'There was an error authenticating from your account. Please try again, or contact a staff member.'
-    success: "Successfully authenticated from %{kind} account."
+    success: 'Successfully authenticated from %{kind} account.'
     user_suspended: 'Sorry, your ERA account has been suspended. Please contact the ERA HelpDesk at erahelp@ualberta.ca for more information.'
 
   authorization:
@@ -122,9 +121,11 @@ en:
         browse_all: 'Browse All'
         search_placeholder: 'collection name or community name... (TODO not implemented)'
       new:
-        header: 'Add New Community'
+        header: 'Create Community'
       create:
         created: 'Community was successfully created!'
+      edit:
+        header: 'Edit %{title}'
       update:
         updated: 'Community was successfully updated!'
       destroy:
@@ -136,7 +137,7 @@ en:
       create:
         created: 'Collection was successfully created!'
       edit:
-        header: 'Edit Collection'
+        header: 'Edit %{title}'
       update:
         updated: 'Collection was successfully updated!'
       destroy:
@@ -222,10 +223,10 @@ en:
     title: 'Communities'
     index:
       header: 'Communities'
-      create_new_community: 'Create New Community'
+      create_community: 'Create Community'
     show:
       collections_list_header: 'Collections in this Community'
-      create_new_collection: 'Add Collection'
+      create_collection: 'Create Collection'
       delete_confirm: 'Are you sure you want to delete the community %{title}'
       no_collections: 'There are no Collections in this Community'
 

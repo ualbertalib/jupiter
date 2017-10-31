@@ -49,7 +49,7 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
 
     assert_select 'a[href=?]',
                   new_admin_community_collection_path(@community1),
-                  text: I18n.t('communities.show.create_new_collection')
+                  text: I18n.t('communities.show.create_collection')
 
     # Should show 2 collections with a heading
     assert_select 'h4', text: I18n.t('communities.show.collections_list_header')

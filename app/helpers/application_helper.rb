@@ -38,5 +38,4 @@ module ApplicationHelper
     return blank_message if date.blank?
     time_ago_in_words(date)
   end
-
 end

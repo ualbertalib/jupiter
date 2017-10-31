@@ -32,7 +32,7 @@
     <%= t('.collections_list_header') %>
   </h4>
   <% if policy(:collection).create? %>
-      <%= link_to t('.create_new_collection'), new_admin_community_collection_path(@community),
+      <%= link_to t('.create_collection'), new_admin_community_collection_path(@community),
           class: 'btn btn-primary' %>
   <% end %>
 </div>
