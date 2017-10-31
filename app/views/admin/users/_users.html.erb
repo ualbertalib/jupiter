@@ -22,9 +22,9 @@
       <tr>
         <th scope="row"><%= link_to user.email, admin_user_path(user) %></th>
         <td><%= user.name %></td>
-        <td><%= jupiter_time_tag user.created_at %></td>
+        <td><%= jupiter_time_tag(user.created_at) %></td>
         <td>
-          <%= jupiter_time_tag user.last_seen_at %>
+          <%= jupiter_time_ago_in_words(user.last_seen_at, blank_message: t('never_signed_in')) %>
         </td>
         <td><%= user_role(user) %></td>
         <td><%= user_status(user) %></td>

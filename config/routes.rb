@@ -27,6 +27,8 @@ Rails.application.routes.draw do
       resources :collections, except: [:index]
     end
 
+    resources :items, only: [:index]
+
     resources :announcements, only: [:new, :destroy, :create]
   end
 

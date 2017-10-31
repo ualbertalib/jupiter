@@ -41,7 +41,7 @@ en:
   edit: 'Edit'
   filter_label: 'Filter By'
   search_label: 'Search'
-
+  never_signed_in: 'Never Signed In'
 
   activemodel:
     errors:

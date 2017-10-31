@@ -94,7 +94,6 @@ class Admin::UsersController < Admin::AdminController
     User.column_names.include?(params[:sort]) ? params[:sort] : 'last_seen_at'
   end
 
-  # TODO: Should be record_created_at?
   def item_sort_column
     ['title', 'record_created_at'].include?(params[:sort]) ? params[:sort] : 'record_created_at'
   end

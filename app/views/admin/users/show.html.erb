@@ -75,12 +75,12 @@
 
   <dt class="col-sm-3"><%= t('admin.users.created') %></dt>
   <dd class="col-sm-9">
-    <%= jupiter_time_tag @user.created_at %>
+    <%= jupiter_time_tag(@user.created_at) %>
   </dd>
 
   <dt class="col-sm-3"><%= t('admin.users.last_seen_at') %></dt>
   <dd class="col-sm-9">
-    <%= jupiter_time_tag @user.last_seen_at %>
+    <%= jupiter_time_ago_in_words(@user.last_seen_at, blank_message: t('never_signed_in')) %>
   </dd>
 </dl>
 
