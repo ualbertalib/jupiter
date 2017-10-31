@@ -1,16 +1,12 @@
 require 'test_helper'
-require 'selenium-webdriver'
 
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
 
-  if ENV['CAPYBARA_NO_HEADLESS']
-    # Set options if you have a special selenium url (like if your running selenium in a docker container)
-    # Otherwise just use the defaults by providing empty hash
-    options = ENV['SELENIUM_URL'].present? ? { url: ENV['SELENIUM_URL'] } : {}
-    driven_by :selenium, using: :chrome, screen_size: [1400, 1400], options: options
-  else
-    driven_by :selenium_chrome_headless
-  end
+  # Set options if you have a special selenium url (like if your running selenium in a docker container)
+  # Otherwise just use the defaults by providing empty hash
+  options = ENV['SELENIUM_URL'].present? ? { url: ENV['SELENIUM_URL'] } : {}
+
+  driven_by :selenium, using: :chrome, screen_size: [1400, 1400], options: options
 
   def setup
     host! "http://#{IPSocket.getaddress(Socket.gethostname)}"
