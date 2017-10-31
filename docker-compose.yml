@@ -59,6 +59,7 @@ services:
       SOLR_TEST_URL: http://solr:8983/solr/test
       REDIS_URL: 'redis://redis/1'
       SELENIUM_URL: 'http://selenium:4444/wd/hub'
+      CAPYBARA_NO_HEADLESS: 'true'
     volumes:
       - .:/app
     depends_on:
