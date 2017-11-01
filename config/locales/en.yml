@@ -147,11 +147,14 @@ en:
     announcements:
       new:
         header: 'Announcements'
+        post_new_announcement: 'Post a new announcement'
         new_button_text: 'Post'
         current_announcements: 'Current Announcements'
         no_current_announcements: 'No Current Announcements'
-        posted_at: "Posted at %{created_at}"
-        removed_at: "Removed at %{removed_at}"
+        posted: 'Posted %{created_at} ago'
+        messsage: 'Message'
+        posted_at: 'Posted'
+        removed_at: 'Removed'
         past_announcements: 'Past Announcements'
         no_past_announcements: 'No Past Announcements'
         are_you_sure_you_want_to_remove: 'Are you sure you want to remove this announcement?'
