@@ -18,7 +18,7 @@
         [t('admin.users.admin_role'), :admin],
         [t('admin.users.user_role'), :user],
         [t('admin.users.suspended_status'), :suspended],
-        [t('admin.users.active_status'), :active] ], :all),
+        [t('admin.users.active_status'), :active] ], params[:filter] || :all),
         class: 'form-control' %>
   </div>
 <% end %>
