@@ -1,7 +1,7 @@
-<div class="row mt-3">
+<div class="row mt-3 jupiter-model-results">
 
   <%# Facets panel %>
-  <div class="col-md-3 col-sm-2">
+  <div class="col-md-3 col-sm-2 jupiter-facets">
     <div class="card">
       <div class="card-header">
         <%= t('search.filter') %>
@@ -15,7 +15,7 @@
   </div>
 
   <%# Results panel %>
-  <div class="col-md-9 col-sm-10 card">
+  <div class="col-md-9 col-sm-10 card jupiter-results">
     <div class='p-3'>
       <div class="d-flex flex-wrap justify-content-between">
         <div>
@@ -28,18 +28,20 @@
       </div>
 
       <%# Facet Badges %>
-      <% @results[model].each_facet_with_results do |facet| %>
-        <% facet.each_facet_value do |presentation_value, raw_value, count| %>
-          <% if params[:facets]&.fetch(facet.facet_name, nil) == raw_value %>
-            <%= render partial: 'facet_badge', locals: { presentation_value: presentation_value,
-                                                         facet_name: facet.facet_name } %>
+      <div class='jupiter-facet-badges'>
+        <% @results[model].each_facet_with_results do |facet| %>
+          <% facet.each_facet_value do |presentation_value, raw_value, count| %>
+            <% if params[:facets]&.fetch(facet.facet_name, nil) == raw_value %>
+              <%= render partial: 'facet_badge', locals: { presentation_value: presentation_value,
+                         facet_name: facet.facet_name } %>
+            <% end %>
           <% end %>
         <% end %>
-      <% end %>
+      </div>
     </div>
 
     <%# Results list %>
-    <div>
+    <div class='jupiter-results-list'>
       <% @results[model].each do |result| %>
       <div class="row">
         <div class="col">
