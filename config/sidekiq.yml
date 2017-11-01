@@ -6,6 +6,8 @@
   - mailers
 development:
   :logfile: log/sidekiq_development.log
+uat:
+  :logfile: log/sidekiq_uat.log
 production:
   :logfile: log/sidekiq_production.log
 staging:
