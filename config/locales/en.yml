@@ -35,12 +35,15 @@ en:
   # Generic terms
   add_another: 'Add another'
   all: 'All'
+  browse_all: 'Browse all'
   close: 'Close'
   created_at: 'Created At'
   delete: 'Delete'
   edit: 'Edit'
   filter_by: 'Filter by'
+  page_range: '%{first} - %{last} of %{total}'
   remove: 'Remove'
+  sort_by: 'Sort by'
   updated_at: 'Updated At'
 
   activemodel:
@@ -224,6 +227,10 @@ en:
 
   communities:
     title: '%{title}'
+    sort_title_asc: 'Name (A-Z)'
+    sort_title_desc: 'Name (Z-A)'
+    sort_record_created_at_asc: 'Date (oldest first)'
+    sort_record_created_at_desc: 'Date (newest first)'
     index:
       header: 'Communities'
       create_new_community: 'Create New Community'

@@ -12,6 +12,16 @@
     class: 'btn btn-primary' %>
 </div>
 
+<div class="d-flex flex-wrap justify-content-between mt-3">
+  <div>
+    <h3><%= t(:browse_all) %></h3>
+  </div>
+
+  <div>
+    <%= render partial: 'communities/sort' %>
+  </div>
+</div>
+
 <div class="my-4" >
   <ul id="admin-collection-list" class="list-group">
 
@@ -54,21 +64,13 @@
       </li>
     <% end %>
   </ul>
+
+  <div class="p-2 d-flex justify-content-center">
+    <div>
+      <%= results_range(@communities) %>
+    </div>
+  </div>
+
   <%= paginate @communities %>
 
-  <h5> Hey check out some facets</h5>
-  <% @communities.each_facet_with_results do |facet| %>
-    <div class="row mt-3">
-        <%= facet.name %>
-      <div class="col">
-        <% facet.each_facet_value do |presentation_value, raw_value, count| %>
-          <div class="row">
-            <div class="col">
-              <%= link_to presentation_value, admin_communities_path(facetable_query_params(facet.facet_name, raw_value)) %>, <%= count %>
-            </div>
-          </div>
-        <% end %>
-      </div>
-    </div>
-  <% end %>
 </div>

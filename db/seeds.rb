@@ -1,3 +1,4 @@
+# coding: utf-8
 # This file should contain all the record creation needed to seed the database with its default values.
 # The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
 #
@@ -10,6 +11,14 @@ if Rails.env.development? || Rails.env.uat?
   require 'active_fedora/cleaner'
   require "open-uri"
   require 'faker'
+
+  # For the main community/collections
+  THINGS = [ 'cat', 'dog', 'unicorn', 'hamburger', 'librarian'].freeze
+  # For padding community/collection lists for pagination (need at least 26)
+  EXTRA_THINGS = [ 'rabbit', 'sandwich', 'library', 'ravioli', 'salsa', 'tambourine', 'donair',
+                   'hardrive', 'magpie', 'toque', 'samosa', 'sombrero', 'muskrat', 'blender', 'yeti',
+                   'mimosa', 'smartphone', 'ukulele', 'wasabi', 'tourtière', 'whale', 'gorilla',
+                   'falafel', 'calculator', 'papusa', 'frontispiece', 'jellyfish'].freeze
 
   puts 'Starting seeding of dev database...'
 
@@ -39,7 +48,7 @@ if Rails.env.development? || Rails.env.uat?
     User.create(name: name, email: "#{name.gsub(/ +/, '.').downcase}@example.edu", admin: false)
   end
 
-  [ "cat", "dog", "unicorn", "hamburger", "librarian"].each_with_index do |thing, idx|
+  THINGS.each_with_index do |thing, idx|
     if idx % 2 == 0
       title = "The department of #{thing.capitalize}"
     else
@@ -152,5 +161,29 @@ if Rails.env.development? || Rails.env.uat?
     end
   end
 
+  # Pad with empty communities for pagination (starts with Z for sort order)
+  EXTRA_THINGS.each do |thing|
+    Community.new_locked_ldp_object(
+      owner: admin.id,
+      title: "Zoo#{thing}ology Institute of North-Eastern Upper Alberta (and Saskatchewan)",
+      description: Faker::Lorem.sentence(20, false, 0).chop
+    ).unlock_and_fetch_ldp_object(&:save!)
+  end
+
+  # One community with a lot of empty collections
+  community = Community.new_locked_ldp_object(
+    owner: admin.id,
+    title: "The Everything Department",
+    description: Faker::Lorem.sentence(20, false, 0).chop
+  ).unlock_and_fetch_ldp_object(&:save!)
+
+  EXTRA_THINGS.each do |thing|
+    collection = Collection.new_locked_ldp_object(
+      owner: admin.id,
+      title: "Articles about the relationship between #{thing.pluralize} and non-#{thing.pluralize}",
+      community_id: community.id,
+      description: Faker::Lorem.sentence(40, false, 0).chop
+    ).unlock_and_fetch_ldp_object(&:save!)
+  end
   puts 'Database seeded successfully!'
 end

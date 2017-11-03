@@ -9,20 +9,41 @@
   <% end %>
 </div>
 
-<div class="row mt-3">
-  <div class="col-md-12">
-    <ul class="list-group">
-    <% @communities.each do |community| %>
-      <li class="list-group-item list-group-item-action">
-      <%= link_to community_path(community), class: 'media jupiter-community-media' do %>
-        <%= render partial: 'logo', locals: {object: community} %>
-        <div class="media-body">
-          <h4 class="mt-0"><%= community.title %></h5>
-          <p class="text-muted"><%= community.description %></p>
-        </div>
-      <% end %>
-      </li>
-    <% end %>
-    </ul>
+<div class="d-flex flex-wrap justify-content-between">
+  <div>
+    <h3><%= t(:browse_all) %></h3>
   </div>
+
+  <div>
+    <%= render partial: 'sort' %>
+  </div>
+</div>
+
+<div class='p-3'>
+
+  <div class="row mt-3">
+    <div class="col-md-12">
+      <ul class="list-group">
+        <% @communities.each do |community| %>
+          <li class="list-group-item list-group-item-action">
+             <%= link_to community_path(community), class: 'media jupiter-community-media' do %>
+               <%= render partial: 'logo', locals: {object: community} %>
+               <div class="media-body">
+                 <h4 class="mt-0"><%= community.title %></h4>
+                 <p class="text-muted"><%= community.description %></p>
+               </div>
+             <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+
+  <div class="p-2 d-flex justify-content-center">
+    <div>
+      <%= results_range(@communities) %>
+    </div>
+  </div>
+
+  <%= paginate @communities %>
 </div>

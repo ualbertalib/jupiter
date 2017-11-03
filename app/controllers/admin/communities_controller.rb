@@ -1,19 +1,20 @@
 class Admin::CommunitiesController < Admin::AdminController
 
+  include PaginateAndSortMethods
+
   before_action :fetch_community, only: [:show, :edit, :update, :destroy]
 
   def index
-    # anybody have a better idea for doing this? Lame to have to litter it everywhere
-    params[:facets].permit! if params[:facets].present?
-    # Populate via search, so that admins can facet
-    @communities = JupiterCore::Search.faceted_search(facets: params[:facets], models: Community, as: current_user)
-    @communities.page params[:page]
+    @communities = Community.sort(sort_column, sort_direction).page params[:page]
   end
 
   def show
     respond_to do |format|
       format.js
-      format.html { render template: 'communities/show' }
+      format.html do
+        @collections = @community.member_collections.sort(sort_column, sort_direction).page params[:page]
+        render template: 'communities/show'
+      end
     end
   end
 

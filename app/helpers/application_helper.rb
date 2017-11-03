@@ -25,4 +25,11 @@ module ApplicationHelper
   def help_tooltip(text)
     content_tag(:span, fa_icon('question-circle'), title: text)
   end
+
+  def results_range(results)
+    # results come from a Jupiter query/search with pagination
+    first = results.offset_value + 1
+    last = results.offset_value + results.count
+    t(:page_range, first: first, last: last, total: results.total_count)
+  end
 end
