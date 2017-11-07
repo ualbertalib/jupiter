@@ -63,9 +63,7 @@ group :development, :test do
 
   gem 'rubocop', '~> 0.51.0', require: false
 
-  # Need to wait till scss_lint is using sass 3.5+
-  # More details here: https://github.com/brigade/scss-lint/issues/877
-  # gem 'scss_lint', '>= 0.55.0', require: false
+  gem 'scss_lint', '>= 0.56.0', require: false
 end
 
 group :development do
