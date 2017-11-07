@@ -312,7 +312,7 @@ GEM
     sdoc (0.4.2)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
-    selenium-webdriver (3.6.0)
+    selenium-webdriver (3.7.0)
       childprocess (~> 0.5)
       rubyzip (~> 1.0)
     shoulda (3.5.0)
