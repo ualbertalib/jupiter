@@ -1,7 +1,5 @@
 class Admin::CommunitiesController < Admin::AdminController
 
-  include PaginateAndSortMethods
-
   before_action :fetch_community, only: [:show, :edit, :update, :destroy]
 
   def index

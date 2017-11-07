@@ -1,7 +1,5 @@
 class CommunitiesController < ApplicationController
 
-  include PaginateAndSortMethods
-
   def index
     authorize Community
     @communities = Community.sort(sort_column, sort_direction).page params[:page]
