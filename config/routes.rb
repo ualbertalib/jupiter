@@ -19,7 +19,7 @@ Rails.application.routes.draw do
         patch :unsuspend
         patch :grant_admin
         patch :revoke_admin
-        post :impersonate
+        post :login_as_user
       end
     end
 
@@ -27,10 +27,12 @@ Rails.application.routes.draw do
       resources :collections, except: [:index]
     end
 
-    resources :site_notifications, only: [:new, :destroy, :create]
+    resources :items, only: [:index]
+
+    resources :announcements, only: [:index, :destroy, :create]
   end
 
-  post '/stop_impersonating', to: 'sessions#stop_impersonating'
+  post '/logout_as_user', to: 'sessions#logout_as_user'
   get 'login', to: 'sessions#new'
   match '/auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
   match '/auth/failure', to: 'sessions#failure', via: [:get, :post]

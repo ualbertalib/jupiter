@@ -46,12 +46,12 @@
       <% end %>
     <% end %>
 
-    <% if policy([:admin, @user]).impersonate? %>
-      <%= link_to(impersonate_admin_user_path(@user), method: :post,
+    <% if policy([:admin, @user]).login_as_user? %>
+      <%= link_to(login_as_user_admin_user_path(@user), method: :post,
         class: 'btn btn-secondary',
-        data: { confirm: t('.impersonate_dialog', user: @user.name) }) do %>
+        data: { confirm: t('.login_as_user_dialog', user: @user.name) }) do %>
         <%= fa_icon 'user-secret' %>
-        <%= t('.impersonate_link_text') %>
+        <%= t('.login_as_user_link_text') %>
       <% end %>
     <% end %>
   </div>
@@ -75,12 +75,12 @@
 
   <dt class="col-sm-3"><%= t('admin.users.created') %></dt>
   <dd class="col-sm-9">
-    <%= time_tag @user.created_at, format: '%F' %>
+    <%= jupiter_time_tag(@user.created_at) %>
   </dd>
 
-  <dt class="col-sm-3"><%= t('admin.users.updated') %></dt>
+  <dt class="col-sm-3"><%= t('admin.users.last_seen_at') %></dt>
   <dd class="col-sm-9">
-    <%= time_tag @user.updated_at, format: '%F' %>
+    <%= jupiter_time_ago_in_words(@user.last_seen_at, blank_message: t('never_signed_in')) %>
   </dd>
 </dl>
 

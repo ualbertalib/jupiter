@@ -49,21 +49,19 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
 
     assert_select 'a[href=?]',
                   new_admin_community_collection_path(@community1),
-                  text: I18n.t('communities.show.create_new_collection')
+                  text: I18n.t('communities.show.create_collection')
 
     # Should show 2 collections with a heading
-    assert_select 'h4.collections-header', text: I18n.t('communities.show.collections_list_header')
+    assert_select 'h4', text: I18n.t('communities.show.collections_list_header')
     assert_select 'ul.list-group li', count: 2
 
     # Collections should have a linkable title and edit/delete buttons
     assert_select 'ul.list-group li.list-group-item a[href=?]',
                   community_collection_path(@community1, @collection1),
                   text: @collection1.title
-    assert_select "a[href='#{edit_admin_community_collection_path(@community1, @collection1)}']"\
-                  '.edit-collection',
+    assert_select "a[href='#{edit_admin_community_collection_path(@community1, @collection1)}']",
                   text: I18n.t('edit')
-    assert_select "a[href='#{admin_community_collection_path(@community1, @collection1)}']"\
-                  '.delete-collection',
+    assert_select "a[href='#{admin_community_collection_path(@community1, @collection1)}']",
                   text: I18n.t('delete')
   end
 
@@ -91,18 +89,16 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
                   false
 
     # Should show 2 collections with a heading
-    assert_select 'h4.collections-header', text: I18n.t('communities.show.collections_list_header')
+    assert_select 'h4', text: I18n.t('communities.show.collections_list_header')
     assert_select 'ul.list-group li.list-group-item', count: 2
 
     # Collections should have be linkable but no edit/delete buttons should be displayed
     assert_select 'ul.list-group li.list-group-item a[href=?]',
                   community_collection_path(@community1, @collection1),
                   text: @collection1.title
-    assert_select "a[href='#{edit_admin_community_collection_path(@community1, @collection1)}']"\
-                  '.edit-collection',
+    assert_select "a[href='#{edit_admin_community_collection_path(@community1, @collection1)}']",
                   false
-    assert_select "a[href='#{admin_community_collection_path(@community1, @collection1)}']"\
-                  '.delete-collection',
+    assert_select "a[href='#{admin_community_collection_path(@community1, @collection1)}']",
                   false
   end
 
@@ -116,7 +112,7 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
     assert_select 'div.logo-small small i.fa', count: 1
 
     # No collections should no be shown
-    assert_select 'h4.collections-header', text: I18n.t('communities.show.collections_list_header')
+    assert_select 'h4', text: I18n.t('communities.show.collections_list_header')
     assert_select 'ul.list-group li', count: 1
     assert_select 'ul.list-group li.list-group-item', text: I18n.t('communities.show.no_collections')
   end

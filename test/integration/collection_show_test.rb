@@ -46,11 +46,11 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
     assert delete.first.attributes['data-method'].to_s == 'delete'
 
     # Items are shown
-    assert_select 'div.collection-items .list-group-item', count: 2
+    assert_select 'div.list-group .list-group-item', count: 2
 
     # Links to items
     @items.each do |item|
-      item_links = css_select "div.collection-items .list-group-item a[href='#{item_path(item)}']"
+      item_links = css_select "div.list-group .list-group-item a[href='#{item_path(item)}']"
       assert item_links.count == 2
       # Link to item
       assert item_links.first.text == item.title
@@ -59,7 +59,7 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
       assert item_links.last.attributes['data-method'].to_s == 'delete'
 
       # Link to edit item
-      assert_select "div.collection-items .list-group-item a[href='#{edit_item_path(item)}']", text: 'Edit'
+      assert_select "div.list-group .list-group-item a[href='#{edit_item_path(item)}']", text: 'Edit'
     end
   end
 
@@ -83,18 +83,18 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
                   count: 0
 
     # Items are shown
-    assert_select 'div.collection-items .list-group-item', count: 2
+    assert_select 'div.list-group .list-group-item', count: 2
 
     # Links to items
     @items.each do |item|
-      item_links = css_select "div.collection-items .list-group-item a[href='#{item_path(item)}']"
+      item_links = css_select "div.list-group .list-group-item a[href='#{item_path(item)}']"
       assert item_links.count == 1
       # Link to item
       assert item_links.first.text == item.title
       # No link to delete item
       assert item_links.first.attributes['data-method'].to_s != 'delete'
       # No link to edit item
-      assert_select "div.collection-items .list-group-item a[href='#{edit_item_path(item)}']", count: 0
+      assert_select "div.list-group .list-group-item a[href='#{edit_item_path(item)}']", count: 0
     end
   end
 

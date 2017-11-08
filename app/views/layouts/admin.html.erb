@@ -5,42 +5,31 @@
 <% end %>
 
 <% content_for(:content) do %>
-  <div class="row" >
-    <div class="col-md-2" >
-      <h2><%= link_to t('admin.header'), admin_root_path %></h2>
+  <ul class="nav nav-tabs my-3">
+    <li class="nav-item">
+      <%= active_link_to t('admin.dashboard.index.header'), admin_root_path, class: 'nav-link', active: :exclusive %>
+    </li>
+    <li class="nav-item">
+      <%= active_link_to t('admin.users.index.header'), admin_users_path, class: 'nav-link', active: :exclusive  %>
+    </li>
+    <li class="nav-item">
+      <%= active_link_to t('admin.announcements.index.header'), admin_announcements_path, class: 'nav-link', active: :exclusive  %>
+    </li>
+    <li class="nav-item">
+      <%= active_link_to t('admin.communities.index.header'), admin_communities_path, class: 'nav-link', active: :exclusive  %>
+    </li>
+    <li class="nav-item">
+      <%= active_link_to t('admin.items.index.header'), admin_items_path, class: 'nav-link', active: :exclusive  %>
+    </li>
+    <li class="nav-item">
+      <%= active_link_to t('admin.pages.index.header'), '#', class: 'nav-link', active: :exclusive  %>
+    </li>
+    <li class="nav-item">
+      <%= active_link_to t('admin.analytics.index.header'), '#', class: 'nav-link', active: :exclusive  %>
+    </li>
+  </ul>
 
-      <%= render 'sidebar_group', title: t('admin.items.title') do %>
-        <li class="nav-item"><%= link_to t('admin.items.index.header'), '#', class: 'nav-link' %></li>
-        <li class="nav-item"><%= link_to t('admin.items.new.header'), new_item_path, class: 'nav-link' %></li>
-      <% end %>
-
-      <%= render 'sidebar_group', title: t('admin.users.title') do %>
-        <li class="nav-item"><%= link_to t('admin.users.index.header'), admin_users_path, class: 'nav-link' %></li>
-      <% end %>
-
-      <%= render 'sidebar_group', title: t('admin.communities.title') do %>
-        <li class="nav-item"><%= link_to t('admin.communities.index.header'), admin_communities_path, class: 'nav-link' %></li>
-        <li class="nav-item"><%= link_to t('admin.communities.new.header'), new_admin_community_path, class: 'nav-link' %></li>
-      <% end %>
-
-      <%= render 'sidebar_group', title: t('admin.site_notifications.title') do %>
-        <li class="nav-item"><%= link_to t('admin.site_notifications.new.header'), new_admin_site_notification_path, class: 'nav-link' %></li>
-      <% end %>
-
-      <%= render 'sidebar_group', title: t('admin.pages.title') do %>
-        <li class="nav-item"><%= link_to t('admin.pages.index.header'), '#', class: 'nav-link' %></li>
-      <% end %>
-
-      <%= render 'sidebar_group', title: t('admin.analytics.title') do %>
-        <li class="nav-item"><%= link_to t('admin.analytics.index.header'), '#', class: 'nav-link' %></li>
-      <% end %>
-    </div>
-
-    <div class="col-md-10" >
-      <%= yield  %>
-    </div>
-
-  </div>
+  <%= yield  %>
 <% end %>
 
 <%= render template: 'layouts/application' %>

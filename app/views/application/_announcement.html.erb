@@ -1,0 +1,8 @@
+<% current_announcements.each do |announcement| %>
+  <div class="alert alert-primary mb-0 rounded-0" role="alert">
+    <p class="mb-0 text-center">
+      <%= fa_icon "exclamation-triangle" %>
+      <%= announcement.message %>
+    </p>
+  </div>
+<% end %>

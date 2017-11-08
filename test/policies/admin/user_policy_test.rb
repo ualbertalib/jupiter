@@ -73,21 +73,21 @@ class Admin::UserPolicyTest < ActiveSupport::TestCase
     end
   end
 
-  context '#impersonate?' do
-    should 'not be able to impersonate a supended user' do
-      refute Admin::UserPolicy.new(@current_user, [:admin, @suspended_user]).impersonate?
+  context '#login_as_user?' do
+    should 'not be able to login as a supended user' do
+      refute Admin::UserPolicy.new(@current_user, [:admin, @suspended_user]).login_as_user?
     end
 
-    should 'not be able to impersonate yourself' do
-      refute Admin::UserPolicy.new(@current_user, [:admin, @current_user]).impersonate?
+    should 'not be able to login as yourself' do
+      refute Admin::UserPolicy.new(@current_user, [:admin, @current_user]).login_as_user?
     end
 
-    should 'not be able to impersonate an admin user' do
-      refute Admin::UserPolicy.new(@current_user, [:admin, @admin_user]).impersonate?
+    should 'not be able to login as an admin user' do
+      refute Admin::UserPolicy.new(@current_user, [:admin, @admin_user]).login_as_user?
     end
 
-    should 'be able to impersonate a regular user' do
-      assert Admin::UserPolicy.new(@current_user, [:admin, @user]).impersonate?
+    should 'be able to login as a regular user' do
+      assert Admin::UserPolicy.new(@current_user, [:admin, @user]).login_as_user?
     end
   end
 

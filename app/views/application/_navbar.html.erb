@@ -63,13 +63,12 @@
               </div>
               <div class="dropdown-divider"></div>
               <%= link_to t('.links.profile'), "#TODO", class: 'dropdown-item' %>
-              <%= link_to t('.links.settings'), "#TODO", class: 'dropdown-item' %>
               <div class="dropdown-divider"></div>
               <%= link_to t('.links.logout'), logout_path, class: 'dropdown-item' %>
 
-              <% if session[:impersonator_id] %>
+              <% if session[:admin_id] %>
                 <div class="dropdown-divider"></div>
-                <%= link_to t('.links.stop_impersonating'), stop_impersonating_path, method: :post, class: 'dropdown-item' %>
+                <%= link_to t('.links.logout_as_user'), logout_as_user_path, method: :post, class: 'dropdown-item' %>
               <% end %>
 
               <% if current_user.admin? %>

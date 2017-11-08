@@ -1,0 +1,56 @@
+<% page_title(t('.header')) %>
+
+<h1><%= t('.header') %></h1>
+
+<%= simple_form_for [:admin, @new_announcement] do |f| %>
+  <fieldset>
+    <legend><%= t('.post_new_announcement')%></legend>
+
+    <%= f.input :message %>
+    <%= f.button :submit, t('.new_button_text'), class: 'float-right' %>
+  </fieldset>
+<% end %>
+
+<h2 class="mt-5"><%= t('.current_announcements') %></h5>
+
+<ul class="list-group">
+  <% if @current_announcements.present? %>
+    <% @current_announcements.each do |announcement| %>
+    <li class="list-group-item">
+      <div class="d-flex justify-content-between align-items-start">
+        <h4><%= announcement.message %></h4>
+        <%= button_to t('remove'),
+                      admin_announcement_path(announcement),
+                      method: :delete,
+                      class: 'btn btn-danger',
+                      data: {confirm: t('.are_you_sure_you_want_to_remove')} %>
+      </div>
+      <p>
+        <%= t('.created_by') %>
+        <%= link_to announcement.user.name, admin_user_path(announcement.user) %>
+      </p>
+      <p class="badge badge-secondary"><%= t('.posted', created_at: jupiter_time_ago_in_words(announcement.created_at)) %></p>
+    </li>
+    <% end %>
+  <% else %>
+    <li class="list-group-item"><%= t('.no_current_announcements') %></li>
+  <% end %>
+</ul>
+
+<h2 class="mt-5"><%= t('.past_announcements') %></h2>
+
+<%= search_form_for @search, url: admin_announcements_path,
+                        html: { method: :get, class: 'js-autocomplete mt-3 form-inline'} do |f| %>
+
+  <div class="form-group">
+    <%= f.label :message_cont, t('search_label'), class: 'mr-sm-2' %>
+    <%= f.search_field :message_cont,
+          placeholder: t('.search_placeholder'),
+          class: 'form-control' %>
+  </div>
+<% end %>
+
+
+<div id="js-ajax-table">
+  <%= render partial: 'past_announcements' %>
+</div>

@@ -1,5 +1,5 @@
 $("ul#<%=@community.id%>").html("<%= escape_javascript(render partial: 'communities/collections_list') %>");
 $("ul#<%=@community.id%>").show();
-$(".collection-btn[data-community-id='<%=@community.id%>']").hide();
-$(".close-btn[data-community-id='<%=@community.id%>']").removeClass('d-none');
-$(".close-btn[data-community-id='<%=@community.id%>']").show();
+$(".js-collection-btn[data-community-id='<%=@community.id%>']").hide();
+$(".js-close-btn[data-community-id='<%=@community.id%>']").removeClass('d-none');
+$(".js-close-btn[data-community-id='<%=@community.id%>']").show();
