@@ -10,7 +10,7 @@ class User < ApplicationRecord
 
   validates :name, presence: true
 
-  scope :search, lambda { |query|
+  scope :search_users, lambda { |query|
     if query.present?
       sanitized_query = "%#{sanitize_sql_like(query.downcase)}%"
       where('lower(name) like ?', sanitized_query).or(User.where('lower(email) like ?', sanitized_query))

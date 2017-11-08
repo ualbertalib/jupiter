@@ -46,6 +46,7 @@ gem 'sinatra' # used by sidekiq/web
 
 # Misc Utilities
 gem 'kaminari'
+gem 'ransack'
 
 # Seeds
 group :development, :test, :uat do

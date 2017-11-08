@@ -1,8 +1,16 @@
 class Admin::AnnouncementsController < Admin::AdminController
 
-  helper_method :current_announcements, :past_announcements
+  def index
+    @current_announcements = Announcement.current
 
-  def new
+    @search = Announcement.past
+                          .ransack(params[:q])
+
+    @search.sorts = 'removed_at desc' if @search.sorts.empty?
+
+    @past_announcements = @search.result.includes(:user)
+                                 .page(params[:page])
+
     @new_announcement = Announcement.new
   end
 
@@ -11,14 +19,10 @@ class Admin::AnnouncementsController < Admin::AdminController
     @new_announcement.user = current_user
 
     if @new_announcement.save
-      # TODO: Flash success?
-      redirect_to new_admin_announcement_path
+      redirect_to admin_announcements_path, notice: t('.posted')
     else
-      # TODO: This drops the url to /admin/announcements
-      # (without the /new) so a page refresh will 500...which is annoying
-      # You could `redirect to new_admin_announcement_path` but you lose the errors object
-      # unless you put it in the flash message which is probably okay here?
-      render action: 'new'
+      redirect_to admin_announcements_path,
+                  alert: t('.post_error_html', error_message: @new_announcement.errors.full_messages.first)
     end
   end
 
@@ -27,19 +31,10 @@ class Admin::AnnouncementsController < Admin::AdminController
     announcement.removed_at = Time.current
     announcement.save!
 
-    # TODO: Flash success?
-    redirect_to new_admin_announcement_path
+    redirect_to admin_announcements_path, notice: t('.removed')
   end
 
   protected
-
-  def current_announcements
-    Announcement.current
-  end
-
-  def past_announcements
-    Announcement.past
-  end
 
   def announcement_params
     params[:announcement].permit(:message)

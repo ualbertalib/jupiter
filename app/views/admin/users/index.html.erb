@@ -2,7 +2,7 @@
 
 <h1 class="my-3"><%= t('.header') %></h1>
 
-<%= form_tag admin_users_path, method: :get, class: 'js-user-autocomplete d-flex justify-content-between mt-3 form-inline' do %>
+<%= form_tag admin_users_path, method: :get, class: 'js-autocomplete d-flex justify-content-between mt-3 form-inline' do %>
   <div class="form-group">
     <label class="mr-sm-2" for="query"><%= t('search_label') %></label>
     <%= search_field_tag :query,

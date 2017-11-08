@@ -10,7 +10,7 @@ class Admin::UsersController < Admin::AdminController
                                     :login_as_user]
 
   def index
-    @users = User.filter(params[:filter]).search(params[:query])
+    @users = User.filter(params[:filter]).search_users(params[:query])
                  .order("#{user_sort_column} #{sort_direction}").page params[:page]
     respond_to do |format|
       format.html

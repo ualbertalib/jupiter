@@ -29,7 +29,7 @@ Rails.application.routes.draw do
 
     resources :items, only: [:index]
 
-    resources :announcements, only: [:new, :destroy, :create]
+    resources :announcements, only: [:index, :destroy, :create]
   end
 
   post '/logout_as_user', to: 'sessions#logout_as_user'

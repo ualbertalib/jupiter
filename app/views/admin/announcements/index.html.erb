@@ -14,11 +14,8 @@
 <h2 class="mt-5"><%= t('.current_announcements') %></h5>
 
 <ul class="list-group">
-  <% unless current_announcements.present? %>
-    <li class="list-group-item"><%= t('.no_current_announcements') %></li>
-  <% end %>
-
-  <% current_announcements.each do |announcement| %>
+  <% if @current_announcements.present? %>
+    <% @current_announcements.each do |announcement| %>
     <li class="list-group-item">
       <div class="d-flex justify-content-between align-items-start">
         <h4><%= announcement.message %></h4>
@@ -28,36 +25,32 @@
                       class: 'btn btn-danger',
                       data: {confirm: t('.are_you_sure_you_want_to_remove')} %>
       </div>
+      <p>
+        <%= t('.created_by') %>
+        <%= link_to announcement.user.name, admin_user_path(announcement.user) %>
+      </p>
       <p class="badge badge-secondary"><%= t('.posted', created_at: jupiter_time_ago_in_words(announcement.created_at)) %></p>
     </li>
+    <% end %>
+  <% else %>
+    <li class="list-group-item"><%= t('.no_current_announcements') %></li>
   <% end %>
 </ul>
 
 <h2 class="mt-5"><%= t('.past_announcements') %></h2>
 
-<table class="table table-responsive-md table-hover">
-  <thead>
-    <tr>
-      <th><%= t('.messsage') %></th>
-      <th><%= t('.posted_at') %></th>
-      <th><%= t('.removed_at') %></th>
-    </tr>
-  </thead>
-  <tbody>
-      <% if past_announcements.present? %>
-        <% past_announcements.each do |announcement| %>
-          <tr>
-            <td><%= announcement.message %></td>
-            <td><%= jupiter_time_tag(announcement.created_at) %></td>
-            <td><%= jupiter_time_ago_in_words(announcement.removed_at) %></td>
-          </tr>
-        <% end %>
-      <% else %>
-        <tr>
-          <td colspan="3" class="text-center">
-            <%= t('.no_past_announcements') %>
-          </td>
-        </tr>
-      <% end %>
-  </tbody>
-</table>
+<%= search_form_for @search, url: admin_announcements_path,
+                        html: { method: :get, class: 'js-autocomplete mt-3 form-inline'} do |f| %>
+
+  <div class="form-group">
+    <%= f.label :message_cont, t('search_label'), class: 'mr-sm-2' %>
+    <%= f.search_field :message_cont,
+          placeholder: t('.search_placeholder'),
+          class: 'form-control' %>
+  </div>
+<% end %>
+
+
+<div id="js-ajax-table">
+  <%= render partial: 'past_announcements' %>
+</div>

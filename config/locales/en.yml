@@ -145,19 +145,30 @@ en:
         deleted: 'Collection was successfully deleted!'
 
     announcements:
-      new:
+      index:
         header: 'Announcements'
         post_new_announcement: 'Post a new announcement'
         new_button_text: 'Post'
         current_announcements: 'Current Announcements'
         no_current_announcements: 'No Current Announcements'
         posted: 'Posted %{created_at} ago'
+        are_you_sure_you_want_to_remove: 'Are you sure you want to remove this announcement?'
+        created_by: 'Created by'
+        past_announcements: 'Past Announcements'
+        search_placeholder: 'messages...'
+      past_announcements:
         messsage: 'Message'
+        creator: 'Creator'
         posted_at: 'Posted'
         removed_at: 'Removed'
-        past_announcements: 'Past Announcements'
         no_past_announcements: 'No Past Announcements'
-        are_you_sure_you_want_to_remove: 'Are you sure you want to remove this announcement?'
+        display_past_announcements_count: 'Displaying %{past_announcements_count} of %{total_past_announcements_count} total items.'
+      create:
+        post_error_html: 'There was an issue with your announcement creation.
+          The following error message was given: "%{error_message}"'
+        posted: 'Announcement was successfully posted!'
+      destroy:
+        removed: 'Announcement was successfully removed!'
     pages:
       index:
         header: 'Static Pages'
