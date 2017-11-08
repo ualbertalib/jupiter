@@ -4,7 +4,7 @@
   <h1><%= t('.header') %></h1>
 
   <% if policy(Community).create? %>
-    <%= link_to t('.create_new_community'), new_admin_community_path,
+    <%= link_to t('.create_community'), new_admin_community_path,
       class: 'btn btn-primary align-self-center' %>
   <% end %>
 </div>

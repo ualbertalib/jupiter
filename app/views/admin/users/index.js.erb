@@ -1,1 +1,4 @@
-$("#users").html("<%= escape_javascript(render("users")) %>");
+$("#js-ajax-table").hide();
+$("#js-ajax-table")
+  .html("<%= escape_javascript(render("users")) %>")
+  .fadeIn(500);

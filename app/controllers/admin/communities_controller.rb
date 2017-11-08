@@ -60,7 +60,7 @@ class Admin::CommunitiesController < Admin::AdminController
       if unlocked_community.destroy
         flash[:notice] = t('.deleted')
       else
-        flash[:alert] = t('.not_empty_error')
+        flash[:alert] = unlocked_community.errors.full_messages.first
       end
 
       redirect_to admin_communities_path

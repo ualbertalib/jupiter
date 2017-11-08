@@ -1,8 +1,8 @@
 class Admin::DashboardController < Admin::AdminController
 
   def index
-    @items = Item.limit(10) # Default order: record_created_at (desc)
-    @users = User.limit(10) # TODO: Ordered by last_sign_in_at once implemented
+    @items = Item.limit(10).sort(:record_created_at, :desc)
+    @users = User.limit(10).order(last_seen_at: :desc)
   end
 
 end

@@ -1,38 +1,35 @@
 <% page_title(t('.header')) %>
 
-<ol class="breadcrumb mb-5">
-  <li class="breadcrumb-item"><%= link_to t('admin.header'), admin_root_path %></li>
-  <li class="breadcrumb-item active"><%= t('.header') %></li>
-</ol>
-
 <h1 class="my-3"><%= t('.header') %></h1>
 
-<%= simple_form_for :user_search, html: { class: 'user-autocomplete' } do |f| %>
-  <div class="d-flex justify-content-between mt-3">
-    <div>
-      <%= f.input :query,
-          as: :search,
-          label: false,
+
+<%= search_form_for @search, url: admin_users_path,
+                        html: { method: :get, class: 'js-autocomplete d-flex mt-3 form-inline'} do |f| %>
+
+  <div class="form-group mr-auto">
+    <%= f.label :name_or_email_cont, t('search_label'), class: 'mr-sm-2' %>
+    <%= f.search_field :name_or_email_cont,
           placeholder: t('.search_placeholder'),
-          input_html: {
-            name: 'query',
-          }
-      %>
-    </div>
-    <div>
-      <%= f.input :filter,
-          as: :select,
-          prompt: t(:filter_by),
-          label: false,
-          collection: user_filter_choices,
-          input_html: {
-            name: 'filter'
-          }
-      %>
-    </div>
+          class: 'form-control' %>
   </div>
 
-  <div id="users">
-    <%= render partial: 'users' %>
+  <div class="form-group p-2">
+    <%= f.label :admin_eq, t('admin.users.role'), class: 'mr-2' %>
+    <%= f.select :admin_eq, options_for_select([
+          [t('admin.users.admin_role'), true],
+          [t('admin.users.user_role'), false]
+        ], @q), { include_blank: t('all') }, { class: 'form-control' } %>
+  </div>
+
+  <div class="form-group p-2">
+    <%= f.label :suspended_eq, t('admin.users.status'), class: 'mr-2' %>
+    <%= f.select :suspended_eq, options_for_select([
+          [t('admin.users.suspended_status'), true],
+          [t('admin.users.active_status'), false]
+        ], @q), { include_blank: t('all') }, { class: 'form-control' } %>
   </div>
 <% end %>
+
+<div id="js-ajax-table">
+  <%= render partial: 'users' %>
+</div>

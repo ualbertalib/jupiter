@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
 
-  helper_method :current_site_notifications
+  helper_method :current_announcements
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
@@ -69,8 +69,8 @@ class ApplicationController < ActionController::Base
     session.delete(:forwarding_url)
   end
 
-  def current_site_notifications
-    SiteNotification.current
+  def current_announcements
+    Announcement.current
   end
 
   def sort_column(columns: ['title', 'record_created_at'], default: 'title')

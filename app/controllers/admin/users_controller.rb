@@ -1,24 +1,17 @@
 class Admin::UsersController < Admin::AdminController
 
-  helper_method :user_sort_column, :sort_direction
-
   before_action :fetch_user, only: [:show,
                                     :suspend,
                                     :unsuspend,
                                     :grant_admin,
                                     :revoke_admin,
-                                    :impersonate]
+                                    :login_as_user]
 
   def index
-    @users = User.filter(params[:filter]).search(params[:query])
-                 .order("#{user_sort_column} #{sort_direction}").page params[:page]
-    respond_to do |format|
-      format.html
-      format.json do
-        render json: @users
-      end
-      format.js
-    end
+    @search = User.ransack(params[:q])
+    @search.sorts = 'last_seen_at desc' if @search.sorts.empty?
+
+    @users = @search.result.page(params[:page])
   end
 
   def show
@@ -71,17 +64,17 @@ class Admin::UsersController < Admin::AdminController
     redirect_to admin_user_path(@user), notice: t('admin.users.show.revoke_admin_flash')
   end
 
-  def impersonate
+  def login_as_user
     authorize [:admin, @user]
 
-    session[:impersonator_id] = current_user.id
+    session[:admin_id] = current_user.id
 
     sign_in(@user)
 
-    logger.info("Admin '#{current_user.name}' has started impersonating '#{@user.name}'")
+    logger.info("Admin '#{current_user.name}' has now logged in as'#{@user.name}'")
 
     # TODO: goes to users dashboard once implemented
-    redirect_to root_path, notice: t('admin.users.show.impersonate_flash', user: @user.name)
+    redirect_to root_path, notice: t('admin.users.show.login_as_user_flash', user: @user.name)
   end
 
   private
@@ -90,17 +83,12 @@ class Admin::UsersController < Admin::AdminController
     @user = User.find(params[:id])
   end
 
-  def user_sort_column
-    User.column_names.include?(params[:sort]) ? params[:sort] : 'email'
-  end
-
-  # TODO: Should be record_created_at?
   def item_sort_column
     ['title', 'record_created_at'].include?(params[:sort]) ? params[:sort] : 'record_created_at'
   end
 
   def sort_direction
-    ['asc', 'desc'].include?(params[:direction]) ? params[:direction] : 'asc'
+    ['asc', 'desc'].include?(params[:direction]) ? params[:direction] : 'desc'
   end
 
 end

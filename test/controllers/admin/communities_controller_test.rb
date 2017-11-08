@@ -99,7 +99,9 @@ class Admin::CommunitiesControllerTest < ActionDispatch::IntegrationTest
       end
 
       assert_redirected_to admin_communities_url
-      assert_equal I18n.t('admin.communities.destroy.not_empty_error'), flash[:alert]
+
+      assert_match I18n.t('activemodel.errors.models.ir_community.attributes.member_collections.must_be_empty',
+                          list_of_collections: @community.member_collections.map(&:title).join(', ')), flash[:alert]
     end
   end
 

@@ -2,5 +2,14 @@
   <%= f.input :title %>
   <%= f.input :description, as: :text %>
   <%= f.input :community_id, as: :hidden %>
-  <%= f.button :submit %>
+
+  <%= f.button :submit, class: 'float-right ml-2' %>
+
+  <% if collection.persisted? %>
+    <%= link_to t('cancel'), [:admin, community, collection], class: 'btn btn-secondary float-right' %>
+  <% else %>
+    <%= link_to t('cancel'), [:admin, community], class: 'btn btn-secondary float-right' %>
+  <% end %>
+
+
 <% end %>

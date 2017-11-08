@@ -59,16 +59,16 @@ class SessionsController < ApplicationController
     redirect_to login_path, alert: t('login.error')
   end
 
-  def stop_impersonating
-    impersonator = User.find(session[:impersonator_id])
+  def logout_as_user
+    admin_user = User.find(session[:admin_id])
 
-    raise Pundit::NotAuthorizedError if !impersonator.admin? || impersonator.suspended?
+    raise Pundit::NotAuthorizedError if !admin_user.admin? || admin_user.suspended?
 
     original_user = current_user
-    sign_in(impersonator)
-    logger.info("Admin '#{impersonator.name}' has stopped impersonating '#{original_user.name}'")
+    sign_in(admin_user)
+    logger.info("Admin '#{admin_user.name}' has now logged out as '#{original_user.name}'")
 
-    session[:impersonator_id] = nil
+    session[:admin_id] = nil
 
     redirect_to admin_user_path(original_user), notice: t('.flash', original_user: original_user.name)
   end

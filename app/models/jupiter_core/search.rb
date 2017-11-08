@@ -31,7 +31,10 @@ class JupiterCore::Search
       fq << %Q(#{key}: "#{value}")
     end
 
+    # queried fields, by default, are all of the fields marked as :search (see calculate_queried_fields).
+    # We can revist if we need to customize this more granularly
     JupiterCore::DeferredFacetedSolrQuery.new(q: base_query, fq: fq.join(' AND '),
+                                              qf: calculate_queried_fields(models),
                                               facet_map: construct_facet_map(models),
                                               facet_fields: models.map(&:facets).flatten.uniq,
                                               restrict_to_model: models.map { |m| m.send(:derived_af_class) },
@@ -55,7 +58,7 @@ class JupiterCore::Search
     ' OR _query_:"-visibility_ssim:[* TO *] AND *:*" OR _query_:"visibility_ssim:*"'
   end
 
-  def self.perform_solr_query(q:, fq: '', facet: false, facet_fields: [],
+  def self.perform_solr_query(q:, qf: '', fq: '', facet: false, facet_fields: [],
                               restrict_to_model: nil, rows: MAX_RESULTS, start: nil, sort: nil)
     query = []
     restrict_to_model = [restrict_to_model] unless restrict_to_model.is_a?(Array)
@@ -72,6 +75,7 @@ class JupiterCore::Search
 
     params = {
       q: query.join(' AND '),
+      qf: qf,
       fq: fq,
       facet: facet,
       rows: rows,
@@ -91,6 +95,19 @@ class JupiterCore::Search
   class << self
 
     private
+
+    # Solr's "qf" indicates the solr index names of every field to be searched, separated by a blank space
+    # note that we are not adding scores here, meaning the default weightings are used
+    def calculate_queried_fields(models)
+      queried_fields = []
+      models.each do |model|
+        model.attribute_cache.each_value do |properties|
+          idx = properties[:solrize_for].find_index(:search)
+          queried_fields << properties[:solr_names][idx] if idx.present?
+        end
+      end
+      queried_fields.join(' ')
+    end
 
     # combine the facet maps (solr_name => attribute_name) of all of the models being searched
     def construct_facet_map(models)
