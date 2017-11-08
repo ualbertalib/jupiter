@@ -162,7 +162,9 @@ en:
         posted_at: 'Posted'
         removed_at: 'Removed'
         no_past_announcements: 'No Past Announcements'
-        display_past_announcements_count: 'Displaying %{past_announcements_count} of %{total_past_announcements_count} total items.'
+        display_past_announcements_count:
+          'Displaying %{past_announcements_count} of %{matching_past_announcements_count} matching past announcements
+          ( %{total_past_announcements_count} total past announcements)'
       create:
         post_error_html: 'There was an issue with your announcement creation.
           The following error message was given: "%{error_message}"'
@@ -222,8 +224,8 @@ en:
         header: 'Users'
       users:
         display_users_count:
-          "Displaying %{shown_users_count} of %{matching_users_count} matching users.
-          (%{total_users_count} total users.)"
+          "Displaying %{shown_users_count} of %{matching_users_count} matching users
+          (%{total_users_count} total users)"
         no_users_found: 'We could not find any users matching your search.'
   collections:
     title: 'Collections'

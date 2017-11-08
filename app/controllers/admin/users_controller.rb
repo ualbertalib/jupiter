@@ -10,15 +10,10 @@ class Admin::UsersController < Admin::AdminController
                                     :login_as_user]
 
   def index
-    @users = User.filter(params[:filter]).search_users(params[:query])
-                 .order("#{user_sort_column} #{sort_direction}").page params[:page]
-    respond_to do |format|
-      format.html
-      format.json do
-        render json: @users
-      end
-      format.js
-    end
+    @search = User.ransack(params[:q])
+    @search.sorts = 'last_seen_at desc' if @search.sorts.empty?
+
+    @users = @search.result.page(params[:page])
   end
 
   def show

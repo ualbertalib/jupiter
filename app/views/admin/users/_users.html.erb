@@ -1,18 +1,12 @@
-<p class="text-center">
-  <%= t('.display_users_count', shown_users_count: @users.count,
-                                matching_users_count: @users.total_count,
-                                total_users_count: User.count) %>
-</p>
-
 <table class="table table-responsive-md table-hover">
   <thead>
     <tr>
-      <th><%= sortable 'email', t('admin.users.email') %></th>
-      <th><%= sortable 'name', t('admin.users.name') %></th>
-      <th><%= sortable 'created_at', t('admin.users.created') %></th>
-      <th><%= sortable 'last_seen_at', t('admin.users.last_seen_at') %></th>
-      <th><%= sortable 'admin', t('admin.users.role') %></th>
-      <th><%= sortable 'suspended', t('admin.users.status') %></th>
+      <th><%= sort_link(@search, :email, t('admin.users.email')) %></th>
+      <th><%= sort_link(@search, :name, t('admin.users.name')) %></th>
+      <th><%= sort_link(@search, :created_at, t('admin.users.created')) %></th>
+      <th><%= sort_link(@search, :last_seen_at, t('admin.users.last_seen_at')) %></th>
+      <th><%= sort_link(@search, :admin, t('admin.users.role')) %></th>
+      <th><%= sort_link(@search, :suspended, t('admin.users.status')) %></th>
     </tr>
   </thead>
   <tbody>
@@ -38,5 +32,10 @@
   <% end %>
   </tbody>
 </table>
-
-<%= paginate @users, remote: true %>
+<p class="text-center">
+  <%# TODO: Switch to chris' application helper results count instead %>
+  <%= t('.display_users_count', shown_users_count: @users.count,
+                                matching_users_count: @users.total_count,
+                                total_users_count: User.count) %>
+</p>
+<%= paginate @users %>

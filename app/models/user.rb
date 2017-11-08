@@ -10,28 +10,6 @@ class User < ApplicationRecord
 
   validates :name, presence: true
 
-  scope :search_users, lambda { |query|
-    if query.present?
-      sanitized_query = "%#{sanitize_sql_like(query.downcase)}%"
-      where('lower(name) like ?', sanitized_query).or(User.where('lower(email) like ?', sanitized_query))
-    end
-  }
-  scope :filter, lambda { |filter|
-    if filter.present?
-      case filter
-      when 'user'
-        where(admin: false)
-      when 'admin'
-        where(admin: true)
-      when 'active'
-        where(suspended: false)
-      when 'suspended'
-        where(suspended: true)
-      end
-      # we just ignore everything else (including 'all' -- means unscoped)
-    end
-  }
-
   def items
     Item.where(owner: id)
   end
