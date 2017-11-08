@@ -4,7 +4,7 @@
 
 
 <%= search_form_for @search, url: admin_users_path,
-                        html: { method: :get, class: 'js-autocomplete d-flex mt-3 form-inline'} do |f| %>
+                        html: { method: :get, class: 'js-autocomplete d-flex my-3 form-inline'} do |f| %>
 
   <div class="form-group mr-auto">
     <%= f.label :name_or_email_cont, t('search_label'), class: 'mr-sm-2' %>

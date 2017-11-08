@@ -8,13 +8,18 @@
   <% if policy(@collection).edit? || policy(@collection).destroy? %>
     <div class="btn-group align-self-center">
       <% if policy(@collection).edit? %>
-        <%= link_to t('edit'),
-            edit_admin_community_collection_path(@community, @collection),
-            class:'btn btn-outline-primary' %>
+        <%= link_to edit_admin_community_collection_path(@community, @collection),
+            class:'btn btn-outline-secondary' do %>
+          <%= fa_icon('pencil-square-o') %>
+          <%= t('edit') %>
+        <% end %>
       <% end %>
       <% if policy(@collection).destroy? %>
-        <%= link_to t('delete'), admin_community_collection_path(@community, @collection), method: :delete,
-            class:'btn btn-danger', data: { confirm: t('.delete_confirm', title: @collection.title) } %>
+        <%= link_to admin_community_collection_path(@community, @collection), method: :delete,
+            class:'btn btn-outline-secondary', data: { confirm: t('.delete_confirm', title: @collection.title) } do %>
+          <%= fa_icon('trash') %>
+          <%= t('delete') %>
+        <% end %>
       <% end %>
     </div>
   <% end %>
@@ -39,11 +44,17 @@
             <%= link_to item.title, item_path(item) %>
             <div class="btn-group">
               <% if policy(@collection).edit? %>
-                <%= link_to t('edit'), edit_item_path(item), class:'btn btn-outline-primary' %>
+                <%= link_to edit_item_path(item), class:'btn btn-outline-secondary'  do %>
+                  <%= fa_icon('trash') %>
+                  <%= t('edit') %>
+                <% end %>
               <% end %>
               <% if policy(@collection).destroy? %>
-                <%= link_to t('delete'), item_path(item), method: :delete, class:'btn btn-danger',
-                    data: { confirm: t('.item_delete_confirm', title: item.title) } %>
+                <%= link_to item_path(item), method: :delete, class:'btn btn-outline-secondary',
+                    data: { confirm: t('.item_delete_confirm', title: item.title) }  do %>
+                  <%= fa_icon('trash') %>
+                  <%= t('delete') %>
+                <% end %>
               <% end %>
             </div>
           </div>
