@@ -1,0 +1,4 @@
+$("#js-ajax-table").hide();
+$("#js-ajax-table")
+  .html("<%= escape_javascript(render("past_announcements")) %>")
+  .fadeIn(500);

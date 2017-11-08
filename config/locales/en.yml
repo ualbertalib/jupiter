@@ -36,12 +36,13 @@ en:
   add_another: 'Add another'
   all: 'All'
   close: 'Close'
-  created_at: 'Created At'
   delete: 'Delete'
-  edit: 'Edit'
-  filter_by: 'Filter by'
   remove: 'Remove'
-  updated_at: 'Updated At'
+  cancel: 'Cancel'
+  edit: 'Edit'
+  filter_label: 'Filter By'
+  search_label: 'Search'
+  never_signed_in: 'Never Signed In'
 
   activemodel:
     errors:
@@ -53,23 +54,29 @@ en:
               collection_not_found: 'is missing collection with ID "%{id}"'
         ir_collection:
           attributes:
+            # TODO: Just show the count of items? If collection has lots of items, this looks poorly
+            member_items:
+              must_be_empty: "must be empty. Could not delete collection. Currently contains: %{list_of_items}"
             community_id:
               community_not_found: 'is missing community with ID "%{id}"'
+        ir_community:
+          attributes:
+            member_collections:
+              must_be_empty: "must be empty. Could not delete community. Currently contains: %{list_of_collections}"
   application:
     navbar:
       logo_alt: 'ERA Logo'
       search:
-        placeholder: "Search ERA..."
+        placeholder: 'Search ERA...'
         button_text: 'Search'
       links:
-        communities: 'Communities'
-        new_item: 'Upload'
+        communities: 'Browse'
+        new_item: 'Deposit'
         login: 'Log In'
         admin: 'Admin'
         logout: 'Logout'
         profile: 'Your Profile'
-        settings: 'Settings'
-        stop_impersonating: 'Stop Impersonating'
+        logout_as_user: 'Logout as User'
       user_dropdown:
         heading_html: "Signed in as <strong>%{name}</strong>"
 
@@ -83,14 +90,14 @@ en:
       description_html: 'ERA is now a <a href="https://ist.ualberta.ca/services/ccid-passwords/campus-computing-id">CCID</a> (Campus Computing ID) enabled service. If you have a CCID please use it to log in to ERA.'
       saml_link: 'Sign in with University of Alberta CCID (Campus Computing ID)'
       developer_link: Sign in with Developer Account
-    stop_impersonating:
-      flash: "You are no longer impersonating %{original_user}"
+    logout_as_user:
+      flash: 'You are now logout as user %{original_user}'
     destroy:
-      signed_out: "Signed out successfully."
+      signed_out: 'Signed out successfully.'
 
   login:
     error: 'There was an error authenticating from your account. Please try again, or contact a staff member.'
-    success: "Successfully authenticated from %{kind} account."
+    success: 'Successfully authenticated from %{kind} account.'
     user_suspended: 'Sorry, your ERA account has been suspended. Please contact the ERA HelpDesk at erahelp@ualberta.ca for more information.'
 
   authorization:
@@ -102,80 +109,89 @@ en:
     dashboard:
       index:
         header: 'Dashboard'
-        versions: 'Versions'
         jupiter: 'Jupiter'
         ruby: 'Ruby'
         rails: 'Rails'
-        statistics: 'Statistics'
-        recent_activity: 'Recent Activity'
-        latest_items: 'Latest items'
-        latest_users: 'Latest users'
+        sidekiq: 'Sidekiq'
+        recent_items: 'Recent Items'
+        recent_users: 'Recent Users'
     communities:
-      title: Communities and Collections
       index:
-        header: 'Manage Communities & Collections'
+        header: 'Communities and Collections'
         delete_confirm: 'Are you sure you want to delete community "%{title}"?'
+        browse_all: 'Browse All'
+        search_placeholder: 'collection name or community name... (TODO not implemented)'
       new:
-        header: 'Add New Community'
+        header: 'Create Community'
       create:
         created: 'Community was successfully created!'
+      edit:
+        header: 'Edit %{title}'
       update:
         updated: 'Community was successfully updated!'
       destroy:
         deleted: 'Community deleted'
-        not_empty_error: 'Cannot delete a non-empty Community'
 
     collections:
-      title: 'Collections'
       new:
         header: 'Create Collection'
       create:
         created: 'Collection was successfully created!'
       edit:
-        header: 'Edit Collection'
+        header: 'Edit %{title}'
       update:
         updated: 'Collection was successfully updated!'
       destroy:
         deleted: 'Collection was successfully deleted!'
-        not_empty_error: 'Cannot delete a non-empty Collection'
 
-    site_notifications:
-      title: 'Site Notifications'
-      new:
-        header: 'Manage Notifications'
+    announcements:
+      index:
+        header: 'Announcements'
+        post_new_announcement: 'Post a new announcement'
         new_button_text: 'Post'
-        current_notifications: 'Current Notifications'
-        no_current_notifications: 'No Current Notifications'
-        posted_at: "Posted at %{created_at}"
-        removed_at: "Removed at %{removed_at}"
-        past_notifications: 'Past Notifications'
-        no_past_notifications: 'No Past Notifications'
-        are_you_sure_you_want_to_remove: 'Are you sure you want to remove this message?'
+        current_announcements: 'Current Announcements'
+        no_current_announcements: 'No Current Announcements'
+        posted: 'Posted %{created_at} ago'
+        are_you_sure_you_want_to_remove: 'Are you sure you want to remove this announcement?'
+        created_by: 'Created by'
+        past_announcements: 'Past Announcements'
+        search_placeholder: 'messages...'
+      past_announcements:
+        messsage: 'Message'
+        creator: 'Creator'
+        posted_at: 'Posted'
+        removed_at: 'Removed'
+        no_past_announcements: 'No Past Announcements'
+        display_past_announcements_count:
+          'Displaying %{past_announcements_count} of %{matching_past_announcements_count} matching past announcements
+          ( %{total_past_announcements_count} total past announcements)'
+      create:
+        post_error_html: 'There was an issue with your announcement creation.
+          The following error message was given: "%{error_message}"'
+        posted: 'Announcement was successfully posted!'
+      destroy:
+        removed: 'Announcement was successfully removed!'
     pages:
-      title: 'Pages'
       index:
-        header: 'Manage Pages'
+        header: 'Static Pages'
     analytics:
-      title: 'Analytics'
       index:
-        header: 'View Analytics'
+        header: 'Analytics'
     items:
-      title: 'Items'
       index:
-        header: 'Manage Items'
+        header: 'Items'
       new:
-        header: 'Add New Item'
+        header: 'Deposit Item'
     users:
       active_status: 'Active'
       admin_role: 'Admin'
-      created: 'Created'
+      created: 'Registered'
       email: 'Email'
       name: 'Name'
       role: 'Role'
       status: 'Status'
       suspended_status: 'Suspended'
-      title: 'Users'
-      updated: 'Updated'
+      last_seen_at: 'Last Seen'
       user_role: 'User'
       show:
         suspend_link_text: 'Suspend User'
@@ -190,11 +206,11 @@ en:
         revoke_admin_link_text: 'Revoke Admin Access'
         revoke_admin_dialog: "Are you sure you want to revoke admin abilities from %{user}?"
         revoke_admin_flash: 'User has successfully been revoked admin access'
-        impersonate_link_text: 'Impersonate'
-        impersonate_dialog: "Are you sure you want to impersonate %{user}?"
-        impersonate_flash: "You are now impersonating %{user}"
+        login_as_user_link_text: 'Login As User'
+        login_as_user_dialog: "Are you sure you want to login as %{user}?"
+        login_as_user_flash: "You are now logged in as %{user}"
         no_items_found: 'There are no items for this user'
-        user_items: 'User items'
+        user_items: "User's Items"
         display_items_count: "Displaying %{items_count} of %{total_items_count} total items."
         # TODO: most of these are generic enough to be moved up in a common namespace
         sort: 'Sort'
@@ -204,36 +220,32 @@ en:
         title_asc: 'Title (A to Z)'
         title_desc: 'Title (Z to A)'
       index:
-        search_placeholder: 'Search by email or name...'
-        search_button: 'Search Users'
+        search_placeholder: 'email or name...'
         header: 'Users'
       users:
         display_users_count:
-          "Displaying %{shown_users_count} of %{matching_users_count} matching users.
-          (%{total_users_count} total users.)"
+          "Displaying %{shown_users_count} of %{matching_users_count} matching users
+          (%{total_users_count} total users)"
         no_users_found: 'We could not find any users matching your search.'
   collections:
+    title: 'Collections'
     show:
       delete_confirm: 'Are you sure you want to delete collection "%{title}"?'
       parent_community: "Parent Community: %{title}"
       items_list_header: 'Items in this Collection'
       no_items_in_collection: 'There are no items in this Collection'
       item_delete_confirm: 'Are you sure you want to delete item "%{title}"?'
-    errors:
-      member_items_must_be_empty: "must be empty. Currently: %{list_of_items}"
 
   communities:
-    title: '%{title}'
+    title: 'Communities'
     index:
       header: 'Communities'
-      create_new_community: 'Create New Community'
+      create_community: 'Create Community'
     show:
       collections_list_header: 'Collections in this Community'
-      create_new_collection: 'Add Collection'
+      create_collection: 'Create Collection'
       delete_confirm: 'Are you sure you want to delete the community %{title}'
       no_collections: 'There are no Collections in this Community'
-    errors:
-      member_collections_must_be_empty: "must be empty. Currently: %{list_of_collections}"
 
   welcome:
     index:

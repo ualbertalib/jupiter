@@ -18,6 +18,7 @@ gem 'turbolinks', '~> 5'
 gem 'uglifier', '>= 1.3.0'
 
 # View stuff
+gem 'active_link_to'
 gem 'activestorage'
 gem 'simple_form'
 
@@ -45,6 +46,7 @@ gem 'sinatra' # used by sidekiq/web
 
 # Misc Utilities
 gem 'kaminari'
+gem 'ransack'
 
 # Seeds
 group :development, :test, :uat do
@@ -62,9 +64,7 @@ group :development, :test do
 
   gem 'rubocop', '~> 0.51.0', require: false
 
-  # Need to wait till scss_lint is using sass 3.5+
-  # More details here: https://github.com/brigade/scss-lint/issues/877
-  # gem 'scss_lint', '>= 0.55.0', require: false
+  gem 'scss_lint', '>= 0.56.0', require: false
 end
 
 group :development do

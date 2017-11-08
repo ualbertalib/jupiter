@@ -1,0 +1,36 @@
+<table class="table table-responsive-md table-hover">
+  <thead>
+    <tr>
+      <th><%= sort_link(@search, :message, t('.messsage')) %></th>
+      <th><%= sort_link(@search, :user_name, t('.creator')) %></th>
+      <th><%= sort_link(@search, :posted_at, t('.posted_at')) %></th>
+      <th><%= sort_link(@search, :removed_at, t('.removed_at')) %></th>
+    </tr>
+  </thead>
+  <tbody>
+      <% if @past_announcements.present? %>
+        <% @past_announcements.each do |announcement| %>
+          <tr>
+            <td><%= announcement.message %></td>
+            <td><%= link_to(announcement.user.name, admin_user_path(announcement.user)) %></td>
+            <td><%= jupiter_time_tag(announcement.created_at) %></td>
+            <td><%= jupiter_time_ago_in_words(announcement.removed_at) %></td>
+          </tr>
+        <% end %>
+      <% else %>
+        <tr>
+          <td colspan="4" class="text-center">
+            <%= t('.no_past_announcements') %>
+          </td>
+        </tr>
+      <% end %>
+  </tbody>
+</table>
+<p class="text-center">
+  <%# TODO: Switch to chris' application helper results count instead once merged %>
+  <%= t('.display_past_announcements_count',
+      past_announcements_count: @past_announcements.count,
+      matching_past_announcements_count: @past_announcements.total_count,
+      total_past_announcements_count: Announcement.past.count) %>
+</p>
+<%= paginate @past_announcements %>

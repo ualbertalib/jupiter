@@ -14,7 +14,7 @@ if Rails.env.development? || Rails.env.uat?
   puts 'Starting seeding of dev database...'
 
   # start fresh
-  [ SiteNotification, ActiveStorage::Blob, ActiveStorage::Attachment, Identity, User ].each(&:destroy_all)
+  [Announcement, ActiveStorage::Blob, ActiveStorage::Attachment, Identity, User].each(&:destroy_all)
   ActiveFedora::Cleaner.clean!
 
   # Seed an admin user

@@ -1,4 +1,4 @@
-<% page_title(t('.header')) %>
+<% page_title(t('.header', title: @collection.title)) %>
 
 <ol class="breadcrumb mb-1">
   <li class="breadcrumb-item">
@@ -6,8 +6,8 @@
   </li>
   <li class="breadcrumb-item"><%= link_to(t('admin.communities.index.header'), admin_communities_path)%></li>
   <li class="breadcrumb-item"><%= link_to(@community.title, admin_community_path(@community)) %></li>
-  <li class="breadcrumb-item active"><%= @collection.title %></li>
+  <li class="breadcrumb-item active"><%= t('.header', title: @collection.title) %></li>
 </ol>
 
-<h1 class="mt-3"><%= t('.header') %></h1>
+<h1 class="mt-3"><%= t('.header', title: @collection.title) %></h1>
 <%= render partial: 'form', locals: {community: @community, collection: @collection}%>

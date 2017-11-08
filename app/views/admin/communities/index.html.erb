@@ -1,18 +1,29 @@
 <% page_title(t('.header')) %>
 
-<ol class="breadcrumb mb-5">
-  <li class="breadcrumb-item"><%= link_to t('admin.header'), admin_root_path %></li>
-  <li class="breadcrumb-item active"><%= t('.header') %></li>
-</ol>
-
-<div class="d-flex flex-wrap justify-content-between align-items-start mt-3">
+<div class="d-flex flex-wrap justify-content-between align-items-center mt-3">
   <h1><%= t('.header') %></h1>
 
-  <%= link_to t('communities.index.create_new_community'), new_admin_community_path,
+  <%= link_to t('communities.index.create_community'), new_admin_community_path,
     class: 'btn btn-primary' %>
 </div>
 
+<form>
+  <div class="form-group">
+    <label class="mr-sm-2" for="query"><%= t('search_label') %></label>
+    <%= search_field_tag :query,
+        params[:query],
+        placeholder: t('.search_placeholder'),
+        class: 'form-control' %>
+  </div>
+</form>
+
 <div class="my-4" >
+  <div class="d-flex flex-wrap justify-content-between align-items-start mt-3">
+    <h2><%= t('.browse_all') %></h2>
+
+    <%# TODO: Sort dropdown goes here %>
+  </div>
+
   <ul id="admin-collection-list" class="list-group">
 
     <% @communities.each do |community| %>
@@ -28,35 +39,44 @@
           <% end %>
 
           <div class="btn-group" role="group" aria-label="Community Actions">
-            <%= link_to t('edit'), edit_admin_community_path(community), class:'btn btn-outline-primary' %>
-            <%= link_to t('delete'), admin_community_path(community), class: 'btn btn-danger', method: :delete, data: {confirm: t('.delete_confirm', title: community.title) } %>
+            <%= link_to edit_admin_community_path(community), class:'btn btn-outline-secondary' do %>
+              <%= fa_icon('pencil-square-o') %>
+              <%= t('edit') %>
+            <% end %>
+
+            <%= link_to admin_community_path(community), class: 'btn btn-outline-secondary', method: :delete, data: {confirm: t('.delete_confirm', title: community.title) } do %>
+             <%= fa_icon('trash') %>
+             <%= t('delete') %>
+            <% end %>
           </div>
         </div>
 
-        <div class="d-flex justify-content-between align-items-start">
-          <%= link_to admin_community_path(community), data: {community_id: community.id }, class: 'btn btn-outline-primary collection-btn', remote: true do %>
-            <%= t('admin.collections.title') %>
+        <div class="d-flex justify-content-between align-items-start mb-3">
+          <%= link_to admin_community_path(community), data: {community_id: community.id }, class: 'btn btn-outline-primary js-collection-btn', remote: true do %>
+            <%= t('collections.title') %>
             <%= fa_icon('chevron-down') %>
           <% end %>
 
-          <%= button_tag type: 'button', class: 'btn btn-outline-primary close-btn d-none', data: {community_id: community.id } do %>
+          <%= button_tag type: 'button', class: 'btn btn-outline-primary d-none js-close-btn', data: {community_id: community.id } do %>
             <%= t('close') %>
             <%= fa_icon('chevron-up') %>
           <% end %>
 
-          <%= link_to t('communities.show.create_new_collection'),
-                      new_admin_community_collection_path(community),
-                      class:'btn btn-outline-primary' %>
+          <%= link_to new_admin_community_collection_path(community),
+                      class:'btn btn-outline-primary' do %>
+            <%= fa_icon('plus-circle') %>
+            <%= t('communities.show.create_collection') %>
+          <% end %>
         </div>
 
-        <ul class="list-group mt-3" id="<%=community.id%>"></ul>
+        <ul class="list-group" id="<%=community.id%>"></ul>
 
       </li>
     <% end %>
   </ul>
   <%= paginate @communities %>
 
-  <h5> Hey check out some facets</h5>
+  <h5> TODO: Hey check out some facets</h5>
   <% @communities.each_facet_with_results do |facet| %>
     <div class="row mt-3">
         <%= facet.name %>

@@ -18,7 +18,7 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   end
 
   # Logs in a test user. Used for system tests.
-  def login_as_user(user)
+  def login_user(user)
     identity = user.identities.first
 
     Rails.application.env_config['omniauth.auth'] =
