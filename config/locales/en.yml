@@ -211,6 +211,7 @@ en:
         login_as_user_dialog: "Are you sure you want to login as %{user}?"
         login_as_user_flash: "You are now logged in as %{user}"
         no_items_found: 'There are no items for this user'
+        draft_user_items: "Draft User's Items"
         user_items: "User's Items"
         display_items_count: "Displaying %{items_count} of %{total_items_count} total items."
         # TODO: most of these are generic enough to be moved up in a common namespace
