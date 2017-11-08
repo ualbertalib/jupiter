@@ -1,7 +1,5 @@
 class Admin::UsersController < Admin::AdminController
 
-  helper_method :user_sort_column, :sort_direction
-
   before_action :fetch_user, only: [:show,
                                     :suspend,
                                     :unsuspend,
@@ -83,10 +81,6 @@ class Admin::UsersController < Admin::AdminController
 
   def fetch_user
     @user = User.find(params[:id])
-  end
-
-  def user_sort_column
-    User.column_names.include?(params[:sort]) ? params[:sort] : 'last_seen_at'
   end
 
   def item_sort_column

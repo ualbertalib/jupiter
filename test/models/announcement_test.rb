@@ -8,6 +8,7 @@ class AnnouncementTest < ActiveSupport::TestCase
 
   context 'validations' do
     should validate_presence_of(:message)
+    should validate_length_of(:message).is_at_most(500)
     should validate_presence_of(:user)
   end
 
