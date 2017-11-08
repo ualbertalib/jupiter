@@ -31,10 +31,11 @@ class SearchTest < ActiveSupport::TestCase
     first_title = generate_random_string
     second_title = generate_random_string
     creator = generate_random_string
+    creator2 = generate_random_string
 
     obj = @@klass.new_locked_ldp_object(title: first_title, creator: creator, visibility: 'public',
                                         owner: users(:regular_user).id)
-    another_obj = @@klass.new_locked_ldp_object(title: second_title, creator: creator, visibility: 'public',
+    another_obj = @@klass.new_locked_ldp_object(title: second_title, creator: creator2, visibility: 'public',
                                                 owner: users(:regular_user).id)
     a_private_object = @@klass.new_locked_ldp_object(title: generate_random_string, creator: generate_random_string,
                                                      visibility: 'private', owner: users(:regular_user).id)
@@ -62,15 +63,20 @@ class SearchTest < ActiveSupport::TestCase
           assert facet.values[title] == 1
         end
       elsif facet.name == 'Creator'
-        assert facet.values.keys.count == 1
+        assert facet.values.keys.count == 2
         assert facet.values.key?(creator)
-        assert facet.values[creator] == 2
+        assert facet.values[creator] == 1
       elsif facet.name == 'Visibility'
         assert facet.values.keys.count == 1
         assert facet.values.key?('public')
         assert facet.values['public'] == 2
       end
     end
+
+    search_results = JupiterCore::Search.faceted_search(models: @@klass, q: creator2)
+
+    assert search_results.count == 1
+    assert_equal search_results.first.id, another_obj.id
   end
 
 end

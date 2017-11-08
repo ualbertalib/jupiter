@@ -9,8 +9,9 @@ class JupiterCore::DeferredFacetedSolrQuery
   include Kaminari::PageScopeMethods
   include Kaminari::ConfigurationMethods::ClassMethods
 
-  def initialize(q:, fq:, facet_map:, facet_fields:, facet_value_presenters:, restrict_to_model:)
+  def initialize(q:, qf:, fq:, facet_map:, facet_fields:, facet_value_presenters:, restrict_to_model:)
     criteria[:q] = q
+    criteria[:qf] = qf
     criteria[:fq] = fq
     criteria[:facet_map] = facet_map
     criteria[:facet_fields] = facet_fields
@@ -86,6 +87,7 @@ class JupiterCore::DeferredFacetedSolrQuery
 
   def total_count
     results_count, _ = JupiterCore::Search.perform_solr_query(q: criteria[:q],
+                                                              qf: criteria[:qf],
                                                               fq: criteria[:fq],
                                                               restrict_to_model: criteria[:restrict_to_model],
                                                               rows: 0,
@@ -109,6 +111,7 @@ class JupiterCore::DeferredFacetedSolrQuery
   def reify_result_set
     return @results if @results.present?
     _, @results, facet_data = JupiterCore::Search.perform_solr_query(q: criteria[:q],
+                                                                     qf: criteria[:qf],
                                                                      fq: criteria[:fq],
                                                                      facet: true,
                                                                      facet_fields: criteria[:facet_fields],
