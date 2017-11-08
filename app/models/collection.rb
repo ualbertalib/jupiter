@@ -1,5 +1,7 @@
 class Collection < JupiterCore::LockedLdpObject
 
+  COLLECTIONS_PER_PAGE = 10
+
   ldp_object_includes Hydra::Works::CollectionBehavior
 
   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :sort]
@@ -13,6 +15,8 @@ class Collection < JupiterCore::LockedLdpObject
                 facet_value_presenter: ->(community_id) { Community.find(community_id).title }
 
   has_attribute :description, ::RDF::Vocab::DC.description, solrize_for: [:search]
+
+  paginates_per COLLECTIONS_PER_PAGE
 
   # description for collections
 

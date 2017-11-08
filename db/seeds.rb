@@ -15,10 +15,8 @@ if Rails.env.development? || Rails.env.uat?
   # For the main community/collections
   THINGS = [ 'cat', 'dog', 'unicorn', 'hamburger', 'librarian'].freeze
   # For padding community/collection lists for pagination (need at least 26)
-  EXTRA_THINGS = [ 'rabbit', 'sandwich', 'library', 'ravioli', 'salsa', 'tambourine', 'donair',
-                   'hardrive', 'magpie', 'toque', 'samosa', 'sombrero', 'muskrat', 'blender', 'yeti',
-                   'mimosa', 'smartphone', 'ukulele', 'wasabi', 'tourtière', 'whale', 'gorilla',
-                   'falafel', 'calculator', 'papusa', 'frontispiece', 'jellyfish'].freeze
+  EXTRA_THINGS = [ 'library', 'donair', 'magpie', 'toque', 'sombrero', 'yeti', 'mimosa', 'ukulele', 'tourtière',
+                   'falafel', 'calculator', 'papusa'].freeze
 
   puts 'Starting seeding of dev database...'
 
