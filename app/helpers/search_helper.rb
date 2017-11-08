@@ -49,12 +49,12 @@ module SearchHelper
     content_tag(:li, inner_tag, class: 'nav-item')
   end
 
-  def sort_link(sort, direction)
-    content_tag(:a, sort_label(sort, direction), class: 'dropdown-item',
-                                                 href: search_path(query_params_with_sort(sort, direction)))
+  def search_sort_link(sort, direction)
+    content_tag(:a, search_sort_label(sort, direction),
+                class: 'dropdown-item', href: search_path(query_params_with_sort(sort, direction)))
   end
 
-  def sort_label(sort, direction)
+  def search_sort_label(sort, direction)
     t("search.sort_#{sort}_#{direction}")
   end
 

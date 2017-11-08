@@ -240,7 +240,7 @@ class SearchTest < ApplicationSystemTestCase
   context 'Searching as admin user' do
     should 'be able to filter the public and private items' do
       admin = users(:admin)
-      login_as_user(admin)
+      login_user(admin)
 
       # Search box should be on any page we happen to be on
       fill_in name: 'search', with: 'Fancy'
