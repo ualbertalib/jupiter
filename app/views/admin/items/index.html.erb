@@ -1,6 +1,15 @@
 <% page_title(t('.header')) %>
 
-<h1 class="my-3">(TODO: Not implemented) <%= t('.header') %></h1>
+<div class="d-flex flex-wrap align-items-center justify-content-between my-3">
+  <h1>
+    (TODO: Not implemented) <%= t('.header') %>
+  </h1>
+  <%= link_to new_item_path,
+      class: 'btn btn-primary' do %>
+    <%= fa_icon('plus-circle') %>
+    <%= t('items.new.header') %>
+  <% end %>
+</div>
 
 <div class="list-group">
   <% @items.each do |item| %>

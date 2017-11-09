@@ -1,11 +1,14 @@
 <% page_title(t('.header')) %>
 
-<div class="d-flex flex-wrap justify-content-between mt-3">
+<div class="d-flex flex-wrap justify-content-between align-items-center mt-3">
   <h1><%= t('.header') %></h1>
 
   <% if policy(Community).create? %>
-    <%= link_to t('.create_community'), new_admin_community_path,
-      class: 'btn btn-primary align-self-center' %>
+    <%= link_to new_admin_community_path,
+        class: 'btn btn-primary' do %>
+      <%= fa_icon('plus-circle') %>
+      <%= t('.create_community') %>
+    <% end %>
   <% end %>
 </div>
 
