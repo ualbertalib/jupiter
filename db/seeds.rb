@@ -1,3 +1,4 @@
+# coding: utf-8
 # This file should contain all the record creation needed to seed the database with its default values.
 # The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
 #
@@ -13,8 +14,8 @@ if Rails.env.development? || Rails.env.uat?
 
   # For the main community/collections
   THINGS = [ 'cat', 'dog', 'unicorn', 'hamburger', 'librarian'].freeze
-  # For padding community/collection lists for pagination (need at least 26)
-  EXTRA_THINGS = [ 'library', 'donair', 'magpie', 'toque', 'sombrero', 'yeti', 'mimosa', 'ukulele', 'tourtière',
+  # For padding community/collection lists for pagination (need at least 26, a couple uppercase to confirm sort)
+  EXTRA_THINGS = [ 'Library', 'DONAIR', 'magpie', 'toque', 'sombrero', 'yeti', 'mimosa', 'ukulele', 'tourtière',
                    'falafel', 'calculator', 'papusa'].freeze
 
   puts 'Starting seeding of dev database...'
