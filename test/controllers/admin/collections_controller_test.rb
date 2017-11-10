@@ -32,7 +32,7 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
     should 'create collection when given valid information' do
       assert_difference('Collection.count', +1) do
         post admin_community_collections_url(@community),
-             params: { collection: { title: 'New collection' } }
+             params: { collection: { title: 'New collection', community_id: @community.id } }
       end
 
       assert_redirected_to admin_community_collection_url(@community, Collection.last)

@@ -1,7 +1,7 @@
 <%= simple_form_for [:admin, community, collection] do |f| %>
   <%= f.input :title %>
   <%= f.input :description, as: :text %>
-  <%= f.input :community_id, as: :hidden %>
+  <%= f.input :community_id, collection: @communities, include_blank: false %>
 
   <%= f.button :submit, class: 'float-right ml-2' %>
 
