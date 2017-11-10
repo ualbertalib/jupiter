@@ -38,4 +38,11 @@ module ApplicationHelper
     return blank_message if date.blank?
     t('time_ago', time: time_ago_in_words(date))
   end
+
+  def results_range(results)
+    # results come from a Jupiter query/search with pagination
+    first = results.offset_value + 1
+    last = results.offset_value + results.count
+    t(:page_range, first: first, last: last, total: results.total_count)
+  end
 end

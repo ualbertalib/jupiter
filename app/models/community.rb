@@ -5,7 +5,7 @@ class Community < JupiterCore::LockedLdpObject
   # Needed for ActiveStorage (logo)...
   include GlobalID::Identification
 
-  has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search]
+  has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :sort]
   has_attribute :description, ::RDF::Vocab::DC.description, solrize_for: [:search]
 
   # this method can be used on the SolrCached object OR the ActiveFedora object
