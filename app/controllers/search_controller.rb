@@ -12,6 +12,7 @@ class SearchController < ApplicationController
     @results = {}
 
     # TODO: Likely we want to do one search and segregate the results by model
+    # TODO: Check performance of this when we have more objects in use
     [:item, :collection, :community].each do |model|
       # Only facet for the current tab or the result count will be wrong on the tab header
       options = { q: params[:search], models: model.to_s.classify.constantize, as: current_user }
