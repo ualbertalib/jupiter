@@ -3,8 +3,10 @@
 <div class="d-flex flex-wrap justify-content-between align-items-center mt-3">
   <h1><%= t('.header') %></h1>
 
-  <%= link_to t('communities.index.create_community'), new_admin_community_path,
-    class: 'btn btn-primary' %>
+  <%= link_to new_admin_community_path, class: 'btn btn-primary' do %>
+    <%= fa_icon('plus-circle') %>
+    <%=  t('communities.index.create_community') %>
+  <% end %>
 </div>
 
 <form>

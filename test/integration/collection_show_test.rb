@@ -55,7 +55,7 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
       # Link to item
       assert item_links.first.text == item.title
       # Link to delete item
-      assert item_links.last.text == 'Delete'
+      assert_match 'Delete', item_links.last.text
       assert item_links.last.attributes['data-method'].to_s == 'delete'
 
       # Link to edit item
