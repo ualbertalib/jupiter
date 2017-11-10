@@ -35,14 +35,18 @@ en:
   # Generic terms
   add_another: 'Add another'
   all: 'All'
+  browse_all: 'Browse all'
+  cancel: 'Cancel'
   close: 'Close'
   delete: 'Delete'
-  remove: 'Remove'
-  cancel: 'Cancel'
   edit: 'Edit'
-  filter_label: 'Filter By'
-  search_label: 'Search'
+  filter_by: 'Filter by'
   never_signed_in: 'Never Signed In'
+  page_range: '%{first} - %{last} of %{total}'
+  remove: 'Remove'
+  sort_by: 'Sort by'
+  updated_at: 'Updated At'
+  search_label: 'Search'
 
   activemodel:
     errors:
@@ -237,6 +241,10 @@ en:
       item_delete_confirm: 'Are you sure you want to delete item "%{title}"?'
 
   communities:
+    sort_record_created_at_asc: 'Date (oldest first)'
+    sort_record_created_at_desc: 'Date (newest first)'
+    sort_title_asc: 'Name (A-Z)'
+    sort_title_desc: 'Name (Z-A)'
     title: 'Communities'
     index:
       header: 'Communities'

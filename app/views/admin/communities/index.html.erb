@@ -21,7 +21,9 @@
   <div class="d-flex flex-wrap justify-content-between align-items-start mt-3">
     <h2><%= t('.browse_all') %></h2>
 
-    <%# TODO: Sort dropdown goes here %>
+    <div>
+      <%= render partial: 'communities/sort' %>
+    </div>
   </div>
 
   <ul id="admin-collection-list" class="list-group">
@@ -74,5 +76,13 @@
       </li>
     <% end %>
   </ul>
+
+  <div class="p-2 d-flex justify-content-center">
+    <div>
+      <%= results_range(@communities) %>
+    </div>
+  </div>
+
   <%= paginate @communities %>
+
 </div>
