@@ -10,7 +10,7 @@
     <% end %>
     <% if facet.count > @max_facets %>
       <%# Other results collapsed by default %>
-      <div class='hideshow'>
+      <div class='js-hideshow'>
         <div class="collapse" id='<%= "#{facet.facet_name}_hidden" %>'>
           <% facet.each_facet_value(@max_facets..-1) do |presentation_value, raw_value, count| %>
             <%= render partial: 'facet_value', locals: { facet_name: facet.facet_name,
@@ -22,14 +22,14 @@
         <%# Show/Hide controls in card footer %>
         <div class="card-footer">
           <a data-toggle="collapse"
-             data-parent=".hideshow"
+             data-parent=".js-hideshow"
              href="#<%= "#{facet.facet_name}_hidden" %>"
              aria-expanded="false"
              aria-controls="<%= "#{facet.facet_name}_hidden" %>">
-            <span class='hideshow-control'>
+            <span class='js-hideshow-control'>
               <%= t('search.show_count_more', count: facet.count - @max_facets) %>
             </span>
-            <span class='hideshow-control' style='display:none;'>
+            <span class='js-hideshow-control' style='display:none;'>
               <%= t('search.hide_last_count', count: facet.count - @max_facets) %>
             </span>
           </a>
