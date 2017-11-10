@@ -288,8 +288,20 @@ en:
     add_another_file: 'Add another file'
 
   search:
+    filter: 'Filter'
+    hide_last_count: 'Hide last %{count}'
+    page_range: '%{first} - %{last} of %{total}'
+    results_for: 'Results for "%{search}"'
+    show_count_more: 'Show %{count} more ...'
+    sort_by: 'Sort by'
+    sort_record_created_at_asc: 'Date (oldest first)'
+    sort_record_created_at_desc: 'Date (newest first)'
+    sort_title_asc: 'Title (A-Z)'
+    sort_title_desc: 'Title (Z-A)'
+    tab_header_items_with_count: 'Items (%{count})'
+    tab_header_collections_with_count: 'Collections (%{count})'
+    tab_header_communities_with_count: 'Communities (%{count})'
+
     index:
       header: 'Search Items'
-      found_results: "Found %{count} results"
-      refine_your_search: 'Refine your search'
       no_results_found: No results found
