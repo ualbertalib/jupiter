@@ -6,14 +6,14 @@ class SearchTest < ApplicationSystemTestCase
     super
     @community = Community.new_locked_ldp_object(title: 'Fancy Community', owner: 1)
                           .unlock_and_fetch_ldp_object(&:save!)
-    @collections = (0..1).map do |i|
+    @collections = 2.times.map do |i|
       Collection.new_locked_ldp_object(community_id: @community.id,
                                        title: "Fancy Collection #{i}", owner: 1)
                 .unlock_and_fetch_ldp_object(&:save!)
     end
 
     # Half items have 'Fancy' in title, others have 'Nice', distributed between the two collections
-    @items = (0..9).map do |i|
+    @items = 10.times.map do |i|
       Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                  owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Item #{i}")
           .unlock_and_fetch_ldp_object do |uo|
@@ -22,7 +22,7 @@ class SearchTest < ApplicationSystemTestCase
       end
     end
     # 10 more items. these are private (some 'Fancy' some 'Nice')
-    @items += (0..9).map do |i|
+    @items += 10.times.map do |i|
       Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PRIVATE,
                                  owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Private Item #{i + 10}")
           .unlock_and_fetch_ldp_object do |uo|
@@ -32,7 +32,7 @@ class SearchTest < ApplicationSystemTestCase
     end
 
     # Create extra items/collections/communities to test 'show more'
-    (0..9).each do |i|
+    10.times do |i|
       community = Community.new_locked_ldp_object(title: "Extra Community #{i}", owner: 1)
                            .unlock_and_fetch_ldp_object(&:save!)
       collection = Collection.new_locked_ldp_object(community_id: community.id,

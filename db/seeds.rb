@@ -40,14 +40,14 @@ if Rails.env.development? || Rails.env.uat?
   bad_user.identities.create(provider: 'developer', uid: 'bad_user@ualberta.ca')
 
   # A bunch of non-identity users for to manipulate in the admin interface
-  (0..100).each do
+  100.times do
     name = Faker::GameOfThrones.unique.character
     User.create(name: name, email: "#{name.gsub(/ +/, '.').downcase}@example.edu", admin: false)
   end
 
   # Lets pick 10 prolific creators, 10 contributors
-  creators = (0..9).map { "#{Faker::Cat.unique.name} #{Faker::Cat.unique.breed}" }
-  contributors = (0..9).map { Faker::FunnyName.unique.name_with_initial }
+  creators = 10.times.map { "#{Faker::Cat.unique.name} #{Faker::Cat.unique.breed}" }
+  contributors = 10.times.map { Faker::FunnyName.unique.name_with_initial }
 
   THINGS.each_with_index do |thing, idx|
     if idx % 2 == 0
@@ -89,7 +89,7 @@ if Rails.env.development? || Rails.env.uat?
       collection_first ||= collection
       collection_last = collection
 
-      (0..20).each do
+      20.times do
         Item.new_locked_ldp_object(
           owner: admin.id,
           creator: creators[rand(10)],
