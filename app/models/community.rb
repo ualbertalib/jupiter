@@ -1,7 +1,5 @@
 class Community < JupiterCore::LockedLdpObject
 
-  COMMUNITIES_PER_PAGE = 10
-
   ldp_object_includes Hydra::PCDM::ObjectBehavior
 
   # Needed for ActiveStorage (logo)...
@@ -9,8 +7,6 @@ class Community < JupiterCore::LockedLdpObject
 
   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :sort]
   has_attribute :description, ::RDF::Vocab::DC.description, solrize_for: [:search]
-
-  paginates_per COMMUNITIES_PER_PAGE
 
   # this method can be used on the SolrCached object OR the ActiveFedora object
   def member_collections
