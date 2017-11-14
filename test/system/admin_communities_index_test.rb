@@ -8,7 +8,7 @@ class AdminCommunitiesIndexTest < ApplicationSystemTestCase
     2.times do |i|
       Collection.new_locked_ldp_object(title: "Fancy Collection #{i}", owner: 1,
                                        community_id: @community.id)
-        .unlock_and_fetch_ldp_object(&:save!)
+                .unlock_and_fetch_ldp_object(&:save!)
     end
   end
 
@@ -45,4 +45,5 @@ class AdminCommunitiesIndexTest < ApplicationSystemTestCase
 
     logout_user
   end
+
 end
