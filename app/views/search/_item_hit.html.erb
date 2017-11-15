@@ -7,12 +7,25 @@
 ￼   </div>
   <% end %>
   <div class="media-body">
-    <div class="d-flex justify-content-between">
+    <div class="d-flex flex-wrap flex-lg-nowrap justify-content-between align-items-start">
       <h5 class="mt-0"><%= link_to result.title, path_for_result(result) %></h5>
-      <div>
+      <div class="btn-group">
         <%= link_to '#', class: 'btn btn-secondary' do %>
           <%= fa_icon 'cloud-download' %>
           <%= t('download') %>
+        <% end %>
+        <% if policy(result).update? %>
+          <%= link_to edit_item_path(result), class:'btn btn-outline-secondary'  do %>
+            <%= fa_icon('trash') %>
+            <%= t('edit') %>
+          <% end %>
+        <% end %>
+        <% if policy(result).destroy? %>
+          <%= link_to item_path(result), method: :delete, class:'btn btn-outline-secondary',
+              data: { confirm: t('collections.show.item_delete_confirm', title: result.title) } do %>
+            <%= fa_icon('trash') %>
+            <%= t('delete') %>
+          <% end %>
         <% end %>
       </div>
     </div>
