@@ -6,9 +6,11 @@ class Item < JupiterCore::LockedLdpObject
   VISIBILITIES = (JupiterCore::VISIBILITIES + [VISIBILITY_EMBARGO]).freeze
 
   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :sort]
+  has_multival_attribute :creator, ::RDF::Vocab::DC.creator, solrize_for: [:search, :facet]
+  has_multival_attribute :contributor, ::RDF::Vocab::DC.contributor, solrize_for: [:search, :facet]
+  has_attribute :created, ::RDF::Vocab::DC.created, solrize_for: [:search, :sort]
+  has_attribute :sort_year, ::VOCABULARY[:ualib].sort_year, solrize_for: [:search, :sort]
   has_attribute :subject, ::RDF::Vocab::DC.subject, solrize_for: [:search, :facet]
-  has_attribute :creator, ::RDF::Vocab::DC.creator, solrize_for: [:search, :facet]
-  has_attribute :contributor, ::RDF::Vocab::DC.contributor, solrize_for: [:search, :facet]
   has_attribute :description, ::RDF::Vocab::DC.description, type: :text, solrize_for: :search
   has_attribute :publisher, ::RDF::Vocab::DC.publisher, solrize_for: [:search, :facet]
   # has_attribute :date_modified, ::RDF::Vocab::DC.modified, type: :date, solrize_for: :sort
@@ -60,6 +62,11 @@ class Item < JupiterCore::LockedLdpObject
     validates :member_of_paths, presence: true
     validates :title, presence: true
     validate :communities_and_collections_validations
+
+    before_validation do
+      # TODO: for theses, the sort_year attribute should be derived from ual:graduationDate
+      self.sort_year = Date.parse(created).year.to_s if created.present?
+    end
 
     def add_to_path(community_id, collection_id)
       self.member_of_paths += ["#{community_id}/#{collection_id}"]

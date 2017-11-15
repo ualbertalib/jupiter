@@ -1,8 +1,23 @@
 $cc-background: $gray-100;
+$bogus-thumbnail-background: $gray-400;
+$bogus-thumbnail-foreground: $white;
 
 .community-collection {
   .card {
     // TODO: have real designer pick this
     background-color: $cc-background;
   }
+}
+
+// For item thumbnails on the search results pages
+.item-thumbnail-small {
+  height: 150px;
+  width: 120px;
+}
+
+// TODO: remove me after real thumbnails are sorted out
+// This is for temporary placeholders for thumbnails in item/search views
+.bogus-thumbnail {
+  background-color: $bogus-thumbnail-background;
+  color: $bogus-thumbnail-foreground;
 }

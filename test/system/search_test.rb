@@ -70,7 +70,7 @@ class SearchTest < ApplicationSystemTestCase
       assert_selector 'li div', text: /Fancy Collection 1.*2/
 
       # Exactly 5 items shown
-      assert_selector 'div.jupiter-results-list a', count: 5
+      assert_selector 'div.jupiter-results-list li.list-group-item', count: 5
       assert_selector 'a', text: 'Fancy Item 0'
       assert_selector 'a', text: 'Fancy Item 2'
       assert_selector 'a', text: 'Fancy Item 4'
@@ -110,7 +110,7 @@ class SearchTest < ApplicationSystemTestCase
       assert checkbox.checked?
 
       # 2 items shown, 3 not shown
-      assert_selector 'div.jupiter-results-list a', count: 2
+      assert_selector 'div.jupiter-results-list li.list-group-item', count: 2
       assert_selector 'a', text: 'Fancy Item 6'
       assert_selector 'a', text: 'Fancy Item 8'
       assert_selector 'a', text: 'Fancy Item 0', count: 0
@@ -264,7 +264,7 @@ class SearchTest < ApplicationSystemTestCase
       assert_selector 'li div', text: /Fancy Collection 1.*4/
 
       # Exactly 10 items shown
-      assert_selector 'div.jupiter-results-list a', count: 10
+      assert_selector 'div.jupiter-results-list li.list-group-item', count: 10
       assert_selector 'a', text: 'Fancy Item 0'
       assert_selector 'a', text: 'Fancy Item 2'
       assert_selector 'a', text: 'Fancy Item 4'
