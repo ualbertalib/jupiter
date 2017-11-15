@@ -17,11 +17,11 @@ class ItemPolicy < LockedLdpObjectPolicy
   end
 
   def update?
-    create?
+    admin?
   end
 
   def destroy?
-    create?
+    admin?
   end
 
 end
