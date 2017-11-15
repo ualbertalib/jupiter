@@ -56,7 +56,7 @@ end
 group :development, :test do
   gem 'sdoc', require: false
 
-  gem 'capybara', '~> 2.15'
+  gem 'capybara', '~> 2.16'
   gem 'selenium-webdriver', require: false
 
   gem 'pry'
