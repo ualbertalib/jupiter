@@ -19,12 +19,8 @@ class ItemsController < ApplicationController
     @item.unlock_and_fetch_ldp_object do |unlocked_item|
       unlocked_item.owner = current_user.id
       unlocked_item.add_communities_and_collections(communities, collections)
-      unlocked_item.add_files(params)
+      unlocked_item.add_files(params[:item][:file])
       unlocked_item.save!
-        # pull in hydra derivatives, set temp file base
-        # Hydra::Works::CharacterizationService.run(fileset.characterization_proxy, filename)
-        unlocked_item.members << fileset
-      end
 
       if unlocked_item.save
         redirect_to @item, notice: t('.created')
@@ -41,13 +37,14 @@ class ItemsController < ApplicationController
     communities = params[:item].delete :community
     collections = params[:item].delete :collection
 
-    authorize @item
     @item.unlock_and_fetch_ldp_object do |unlocked_item|
       unlocked_item.update_attributes(permitted_attributes(@item))
       unlocked_item.add_communities_and_collections(communities, collections)
-      unlocked_item.add_files(params)
+      unlocked_item.add_files(params[:item][:file])
+
+      if unlocked_item.save
         redirect_to @item, notice: t('.updated')
-      unlocked_item.save!
+      else
         initialize_communities_and_collections
         render :edit, status: :bad_request
       end

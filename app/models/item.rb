@@ -21,7 +21,15 @@ class Item < JupiterCore::LockedLdpObject
                          facet_value_presenter: ->(path) { Item.path_to_titles(path) }
 
   has_attribute :embargo_end_date, ::RDF::Vocab::DC.modified, type: :date, solrize_for: [:sort]
+  # embargo_target_visibility
+  # storage only
+  # embargo_log as multival
+  #fedora3id
+  #ingestbatch
+  #fedora3handle
 
+  # related object fedora 3 foxml
+  # related object old stats
   additional_search_index :doi_without_label, solrize_for: :exact_match,
                                               as: -> { doi.gsub('doi:', '') if doi.present? }
 
@@ -48,7 +56,7 @@ class Item < JupiterCore::LockedLdpObject
   end
 
   def file_sets
-    FileSet.where(member_of_collections: id)
+    FileSet.where(item: id)
   end
 
   def each_community_collection
@@ -70,6 +78,7 @@ class Item < JupiterCore::LockedLdpObject
       # TODO: also add the collection (not the community) to the Item's memberOf relation, as metadata
       # wants to continue to model this relationship in pure PCDM terms, and member_of_path is really for our needs
       # so that we can facet by community and/or collection properly
+      # TODO: add collection_id to member_of_collections
     end
 
     def update_communities_and_collections(communities, collections)
@@ -97,13 +106,26 @@ class Item < JupiterCore::LockedLdpObject
       end
     end
 
-    def add_files(params)
-      return unless params[:item][:file].present?
+    def add_files(files)
+      return unless files.present?
       # Need a item id for file sets to point to
+      # TODO should this be a side effect? should we throw an exception if there's no id? Food for thought
       save! if id.nil?
 
-      params[:item][:file].each do |file|
-        FileSet.add_new_to_item(file, self)
+      files.each do |file|
+        FileSet.new_locked_ldp_object.unlock_and_fetch_ldp_object do |unlocked_fileset|
+          unlocked_fileset.owner = self.owner
+          unlocked_fileset.visibility = self.visibility
+          Hydra::Works::AddFileToFileSet.call(unlocked_fileset, file, :original_file,
+                                              update_existing: false, versioning: false)
+          unlocked_fileset.member_of_collections += [self]
+          # Temporarily cache the file name for storing in Solr
+          unlocked_fileset.contained_filename = file.original_filename
+          unlocked_fileset.save!
+          self.members += [unlocked_fileset]
+          # pull in hydra derivatives, set temp file base
+          # Hydra::Works::CharacterizationService.run(fileset.characterization_proxy, filename)
+        end
       end
     end
   end
