@@ -123,6 +123,14 @@ module JupiterCore
       ldp_object.errors
     end
 
+    def read_solr_index(name)
+      raise PropertyInvalidError unless name.is_a? Symbol
+      type = self.solr_calc_attributes[name]
+      raise PropertyInvalidError unless type.present?
+      solr_name = Solrizer.solr_name(name, :symbol, type: type)
+      solr_representation[solr_name]
+    end
+
     # Use this to create a new +LockedLDPObjects+ and its underlying LDP instance. attrs populate the new object's
     # attributes
     def self.new_locked_ldp_object(*attrs)

@@ -6,6 +6,13 @@ Rails.application.routes.draw do
 
   get 'search', to: 'search#index'
 
+  resources :file_sets, only: [] do
+    member do
+      match 'download/*file_name' => 'file_sets#download_original', :format => false, via: :get
+      match '*file_name' => 'file_sets#view_original', :format => false, via: :get
+    end
+  end
+
   resources :communities, only: [:index, :show] do
     resources :collections, only: [:show]
   end

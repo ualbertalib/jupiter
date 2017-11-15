@@ -118,6 +118,7 @@ en:
         rails: 'Rails'
         sidekiq: 'Sidekiq'
         recent_items: 'Recent Items'
+        latest_items: 'Latest items'
         recent_users: 'Recent Users'
     communities:
       index:
@@ -270,10 +271,6 @@ en:
       updated: 'Item was successfully updated!'
     show:
       member_of: 'Member of'
-      contain_files: 'Contains files'
-      fileset: 'FileSet'
-      original_filename: 'Original Filename'
-      mime_type: 'MIME Type'
     new:
       header: 'Create a new item'
     create:
@@ -291,3 +288,11 @@ en:
       found_results: "Found %{count} results"
       refine_your_search: 'Refine your search'
       no_results_found: No results found
+    file_label: 'File'
+    add_another_file: 'Add another file'
+    files_section_sidebar:
+      header: 'Files'
+      view: 'View'
+      download: 'Download'
+    thumbnail:
+      thumbnail: 'Thumbnail'
