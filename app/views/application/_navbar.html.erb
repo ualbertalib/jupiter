@@ -34,7 +34,7 @@
           <form class="form-inline" action="<%= search_path %>">
             <div class="input-group">
               <%= search_field_tag 'search', nil, placeholder: t('.search.placeholder'),
-                  value: params[:search], class: "form-control" %>
+                  value: params[:search], id: 'navbar-search', class: "form-control" %>
               <div class="input-group-btn">
                 <button type="submit" class="btn btn-secondary">
                   <%= fa_icon 'search' %>
