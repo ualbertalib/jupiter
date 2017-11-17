@@ -9,7 +9,9 @@ class Admin::CommunitiesController < Admin::AdminController
   def show
     respond_to do |format|
       format.js do
+        # Used for the collapsable dropdown to show member collections
         @collections = @community.member_collections
+        render template: 'communities/show'
       end
       format.html do
         @collections = @community.member_collections.sort(sort_column, sort_direction).page params[:page]
