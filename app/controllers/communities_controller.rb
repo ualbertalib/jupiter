@@ -3,6 +3,7 @@ class CommunitiesController < ApplicationController
   def index
     authorize Community
     @communities = Community.sort(sort_column, sort_direction).page params[:page]
+    @title = t('.header')
   end
 
   def show

@@ -4,6 +4,8 @@ class Admin::CommunitiesController < Admin::AdminController
 
   def index
     @communities = Community.sort(sort_column, sort_direction).page params[:page]
+    @title = t('.header')
+    render template: 'communities/index'
   end
 
   def show
