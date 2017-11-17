@@ -6,7 +6,7 @@ $(document).on('turbolinks:load', function() {
       .find('.js-more-less')
       .toggleClass('fa-plus fa-minus');
   }
-  $('#accordion .card').on('hidden.bs.collapse', toggleIcon);
-  $('#accordion .card').on('shown.bs.collapse', toggleIcon);
+  $('#license-accordion .card').on('hidden.bs.collapse', toggleIcon);
+  $('#license-accordion .card').on('shown.bs.collapse', toggleIcon);
 
 });
