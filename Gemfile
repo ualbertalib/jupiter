@@ -45,8 +45,9 @@ gem 'sidekiq', '~> 5.0'
 gem 'sinatra' # used by sidekiq/web
 
 # Misc Utilities
-gem 'kaminari'
-gem 'ransack'
+gem 'kaminari' # Pagination
+gem 'ransack' # ActiveRecord search/filter
+gem 'wicked' # Multi-step wizard
 
 # Seeds
 group :development, :test, :uat do

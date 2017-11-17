@@ -3,6 +3,7 @@ require_dependency 'admin_constraint'
 
 Rails.application.routes.draw do
   resources :items
+  resources :deposit_item
 
   get 'search', to: 'search#index'
 

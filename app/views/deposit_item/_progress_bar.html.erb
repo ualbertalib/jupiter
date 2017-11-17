@@ -1,0 +1,27 @@
+<% page_title( t('deposit_item.header')) %>
+<h1 class="mt-3"><%= t('deposit_item.header') %></h1>
+
+<section>
+  <nav class="navigator mb-3">
+    <ul class="nav nav-pills nav-fill">
+      <% wizard_steps.each do |wizard_step| %>
+        <li class="nav-item">
+          <%= link_to I18n.t("deposit_item.#{wizard_step}.header"),
+            wizard_path(wizard_step),
+            class: "nav-link #{progress_bar_step_class(wizard_step)}" %>
+        </li>
+      <% end %>
+    </ul>
+  </nav>
+  <div class="progress">
+    <%= content_tag :div,
+      "#{progress_bar_percentage} %",
+      class: "progress-bar",
+      role: "progressbar",
+      style: "width: #{progress_bar_percentage}%",
+      'aria-valuenow' => progress_bar_percentage,
+      'aria-valuemin' => "0",
+      'aria-valuemax' => "100"
+    %>
+  </div>
+</section>

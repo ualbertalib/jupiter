@@ -286,6 +286,17 @@ en:
         If you need a new collection, email erahelp@ualberta.ca'
     file_label: 'File'
     add_another_file: 'Add another file'
+  deposit_item:
+    header: Deposit Item
+    describe_item:
+      header: Describe Item
+    choose_license_and_visibility:
+      header: Choose License and Visibility
+    upload_files:
+      header: Upload Files
+    review_and_deposit_item:
+      header: Review and Deposit Item
+
 
   search:
     filter: 'Filter'
