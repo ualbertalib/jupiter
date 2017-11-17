@@ -49,7 +49,6 @@ en:
   sort_by: 'Sort by'
   updated_at: 'Updated At'
   search_label: 'Search'
-  thumbnail: 'Thumbnail'
 
   activemodel:
     errors:
@@ -266,7 +265,6 @@ en:
       cta_link_text: 'Check Me Out on GitHub'
 
   items:
-    thumbnail_for: "Thumbnail for '%{title}'"
     index:
       header: 'Items'
     edit:

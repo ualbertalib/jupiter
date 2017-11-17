@@ -20,7 +20,7 @@
   terms:
     - doi
     - path
-    - sort_path
+    - sort_year
 
 - vocabulary: jupiter_core
   schema: 'http://fake.figurethisout.todo#'

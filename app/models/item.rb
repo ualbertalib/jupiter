@@ -56,6 +56,11 @@ class Item < JupiterCore::LockedLdpObject
     end
   end
 
+  # TODO: implement me
+  def thumbnail
+    nil
+  end
+
   unlocked do
     validates :embargo_end_date, presence: true, if: ->(item) { item.visibility == VISIBILITY_EMBARGO }
     validates :embargo_end_date, absence: true, if: ->(item) { item.visibility != VISIBILITY_EMBARGO }

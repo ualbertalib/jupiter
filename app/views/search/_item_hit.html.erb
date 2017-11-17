@@ -1,10 +1,6 @@
 <div class="media mb-3">
-  <%# TODO: add real thumbnail after filesets are solidified %>
   <%= link_to path_for_result(result) do %>
-    <div class="img-thumbnail item-thumbnail-small bogus-thumbnail d-flex justify-content-center align-items-center mb-3 mr-3"
-         title='<%= t('items.thumbnail_for', title: result.title) %>'>
-￼     <p class="my-1 mr-3"><%= t('thumbnail') %></p>
-￼   </div>
+    <%= render partial: 'thumbnail', locals: { object: result } %>
   <% end %>
   <div class="media-body">
     <div class="d-flex flex-wrap flex-lg-nowrap justify-content-between align-items-start">
