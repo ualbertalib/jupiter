@@ -182,6 +182,23 @@ module JupiterCore
       self.reverse_solr_name_cache[solr_name]
     end
 
+    # Accepts the symbolic name of an attribute, and the "solrize_for" role, and returns the string
+    # representing the mangled solr name for that role. eg)
+    #
+    # Given a subclass +Item+ with an attribute declaration:
+    #   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
+    #
+    # then:
+    #   Item.solr_name_for(:title, role: :search)
+    #   => "title_tesim"
+    def self.solr_name_for(attribute_name, role:)
+      attribute_metadata = self.attribute_cache[attribute_name]
+      raise ArgumentError, "No such attribute is defined, #{attribute_name}" if attribute_metadata.blank?
+      sort_attr_index = attribute_metadata[:solrize_for].index(role)
+      raise ArgumentError, "No such solr role is defined for #{attribute_name}" if sort_attr_index.blank?
+      attribute_metadata[:solr_names][sort_attr_index]
+    end
+
     # Accepts a string id of an object in the LDP, and returns a +LockedLDPObjects+ representation of that object
     # or raises <tt>JupiterCore::ObjectNotFound</tt> if there is no object corresponding to that id
     def self.find(id)

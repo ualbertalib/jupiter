@@ -130,6 +130,10 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     end
   end
 
+  test 'solr_name_for' do
+    assert_equal @@klass.solr_name_for(:title, role: :search), 'title_tesim'
+  end
+
   test 'unlocked methods can perform mutation' do
     orig_title = generate_random_string
     obj = @@klass.new_locked_ldp_object(title: orig_title)
