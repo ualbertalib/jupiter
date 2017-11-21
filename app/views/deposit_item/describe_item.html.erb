@@ -6,154 +6,142 @@
 
 
 <form>
-  <p class="text-muted">Required fields marked with <span class="text-danger">*</span></p>
+  <p class="text-muted"><%= t('required_fields_html') %></p>
 
   <div class="form-group">
-    <label>
+    <%= label_tag 'title' do %>
       <span class="text-danger">*</span>
-      Title
-    </label>
-    <input type="text" class="form-control" placeholder="Enter title">
-  </div>
+      <%= t('.title') %>
+    <% end %>
+    <%= text_field_tag 'title', nil, class: 'form-control', placeholder: t('.title_placeholder') %>  </div>
+
   <div class="form-group">
-    <label>Alternate Title</label>
-    <input type="text" class="form-control" placeholder="Enter alternate title">
-    <small class="form-text text-muted">Enter a secondary/translated title, if appropriate.</small>
+    <%= label_tag 'alternate_title', t('.alternate_title') %>
+    <%= text_field_tag 'alternate_title', nil, class: 'form-control', placeholder: t('.alternate_title_placeholder') %>
+    <small class="form-text text-muted"><%= t('.alternate_title_help') %></small>
   </div>
+
   <div class="form-group">
-    <label>
+    <%= label_tag 'type_of_item' do %>
       <span class="text-danger">*</span>
-      Type of Item
-    </label>
-    <select class="form-control">
-      <option>EXAMPLE</option>
-      <option>EXAMPLE</option>
-      <option>EXAMPLE</option>
-      <option>EXAMPLE</option>
-      <option>EXAMPLE</option>
-    </select>
-    <small class="form-text text-muted">If you do not see an appropriate item type, please contact erahelp@ualberta.ca</small>
+      <%= t('.type_of_item') %>
+    <% end %>
+    <%= select_tag 'type_of_item',  raw('<option>EXAMPLE</option><option>EXAMPLE</option><option>EXAMPLE</option>'), class: 'form-control' %>
+    <small class="form-text text-muted"><%= t('.type_of_item_help') %></small>
   </div>
+
   <div class="form-group">
-    <label>
+    <%= label_tag 'language' do %>
       <span class="text-danger">*</span>
-      Language
-    </label>
-    <input type="text" class="form-control" placeholder="Select2 input goes here">
+      <%= t('.language') %>
+    <% end %>
+    <%# TODO: Select 2 this input field %>
+    <%= text_field_tag 'language', nil, class: 'form-control' %>
   </div>
+
   <div class="form-group">
-    <label>
+    <%= label_tag 'creator' do %>
       <span class="text-danger">*</span>
-      Author/Creator
-    </label>
-    <input type="text" class="form-control" placeholder="Select2 input goes here">
-    <small class="form-text text-muted">One author per box. Example:  Doe, Jane B.</small>
+      <%= t('.creator') %>
+    <% end %>
+    <%# TODO: Select 2 this input field %>
+    <%= text_field_tag 'creator', nil, class: 'form-control' %>
+    <small class="form-text text-muted"><%= t('.creator_help') %></small>
   </div>
+
   <div class="form-group">
-    <label>
+    <%= label_tag 'subject' do %>
       <span class="text-danger">*</span>
-      Subject/Keywords
-    </label>
-    <input type="text" class="form-control" placeholder="Select2 input goes here">
-    <small class="form-text text-muted">
-      Enter subjects or keywords that describe the item. These are the words that will be used when someone searches for your item.
-    </small>
+      <%= t('.subject') %>
+    <% end %>
+    <%# TODO: Select 2 this input field %>
+    <%= text_field_tag 'subject', nil, class: 'form-control' %>
+    <small class="form-text text-muted"><%= t('.subject_help') %></small>
   </div>
+
   <div class="form-group">
-    <label>
+    <%= label_tag 'date_created' do %>
       <span class="text-danger">*</span>
-      Date created
-    </label>
+      <%= t('.date_created') %>
+    <% end %>
     <div class="d-md-flex justify-content-between">
         <%= date_select('item', 'date_created',  {order: [:year, :month, :day],  prompt: { day: 'Select day', month: 'Select month', year: 'Select year' }}, {class: 'form-control  mr-2 mb-2'}) %>
     </div>
   </div>
+
   <div class="form-group">
-    <label>Description or Abstract</label>
-    <textarea class="form-control" name="" id="" placeholder="Enter description or abstract" cols="30" rows="10"></textarea>
+    <%= label_tag 'description' do %>
+      <span class="text-danger">*</span>
+      <%= t('.description') %>
+    <% end %>
+    <%= text_area_tag 'description', nil, size: '25x10', class: 'form-control', placeholder: t('.description_placeholder') %>
   </div>
 
   <fieldset>
     <legend class="mb-0">
       <span class="text-danger">*</span>
-      Community and Collection
+      <%= t('.community_and_collection') %>
     </legend>
     <small class="mb-3 form-text text-muted">
-      Choose the Community and Collection that best match your item(s).
-      If you need a new collection, email erahelp@ualberta.ca
+      <%= t('.community_and_collection_help') %>
     </small>
     <div class="form-group">
-      <label>Community</label>
-      <select class="form-control">
-        <option>EXAMPLE</option>
-        <option>EXAMPLE</option>
-        <option>EXAMPLE</option>
-        <option>EXAMPLE</option>
-        <option>EXAMPLE</option>
-      </select>
+      <label><%= t('.community') %></label>
+    <%= select_tag 'community',  raw('<option>EXAMPLE</option><option>EXAMPLE</option><option>EXAMPLE</option>'), class: 'form-control' %>
     </div>
     <div class="form-group">
-      <label>Collection</label>
-      <select class="form-control">
-        <option>EXAMPLE</option>
-        <option>EXAMPLE</option>
-        <option>EXAMPLE</option>
-        <option>EXAMPLE</option>
-        <option>EXAMPLE</option>
-      </select>
+      <label><%= t('.collection') %></label>
+    <%= select_tag 'collection',  raw('<option>EXAMPLE</option><option>EXAMPLE</option><option>EXAMPLE</option>'), class: 'form-control' %>
     </div>
   </fieldset>
 
   <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#collapseAdditionalFields" aria-expanded="false" aria-controls="collapseAdditionalFields">
-   Additional fields <%= fa_icon 'chevron-down' %> (TODO handle toggling of icon)
+    <%= t('.additional_fields') %>
+    <%= fa_icon 'chevron-down' %>
   </button>
+
   <div class="collapse mt-3" id="collapseAdditionalFields">
+
     <div class="form-group">
-      <label>Additional Contributer</label>
-      <input type="text" class="form-control" placeholder="Select2 input goes here">
-      <small class="form-text text-muted">
-        A person or group you want to recognize for playing a role in the creation of this item, but not the primary role. If there is a specific role you would like noted, include it in parentheses, e.g. "Jones, Mary (Advisor)."
-      </small>
+      <%= label_tag 'contributor', t('.contributor') %>
+      <%# TODO: Select 2 this input field %>
+      <%= text_field_tag 'contributor', nil, class: 'form-control' %>
+      <small class="form-text text-muted"><%= t('.contributor_help') %></small>
     </div>
+
     <div class="form-group">
-      <label>Is this item about a place?</label>
-      <input type="text" class="form-control" placeholder="Select2 input goes here">
-      <small class="form-text text-muted">
-        A place name related to the item, such as the city, province, or country the item's contents are about.
-      </small>
+      <%= label_tag 'place', t('.place') %>
+      <%# TODO: Select 2 this input field %>
+      <%= text_field_tag 'place', nil, class: 'form-control' %>
+      <small class="form-text text-muted"><%= t('.place_help') %></small>
     </div>
+
     <div class="form-group">
-      <label>Is this item about a time?</label>
-      <input type="text" class="form-control" placeholder="Select2 input goes here">
-      <small class="form-text text-muted">Examples:
-        <ul>
-          <li>a specific date: 2009/12/31</li>
-          <li>a date range:  2003/2010</li>
-          <li>a time period: the Enlightenment</li>
-        </ul>
-      </small>
+      <%= label_tag 'time', t('.time') %>
+      <%# TODO: Select 2 this input field %>
+      <%= text_field_tag 'time', nil, class: 'form-control' %>
+      <small class="form-text text-muted"><%= t('.time_help_html') %></small>
     </div>
+
     <div class="form-group">
-      <label>Citation for previous publication</label>
-      <input type="text" class="form-control" placeholder="Select2 input goes here">
-      <small class="form-text text-muted">
-        If your item has been previously published, provide a citation
-      </small>
+      <%= label_tag 'citation', t('.citation') %>
+      <%# TODO: Select 2 this input field %>
+      <%= text_field_tag 'citation', nil, class: 'form-control' %>
+      <small class="form-text text-muted"><%= t('.citation_help') %></small>
     </div>
+
     <div class="form-group">
-      <label>Source</label>
-      <input type="text" class="form-control">
-      <small class="form-text text-muted">
-        Brief information about an item from which this item was derived.
-      </small>
+      <%= label_tag 'source', t('.source') %>
+      <%= text_field_tag 'source', nil, class: 'form-control' %>
+      <small class="form-text text-muted"><%= t('.source_help') %></small>
     </div>
+
     <div class="form-group">
-      <label>Link to related item</label>
-      <input type="text" class="form-control">
-      <small class="form-text text-muted">
-        Must be a url. Example: http://www.ualberta.ca
-      </small>
+      <%= label_tag 'related_item', t('.related_item') %>
+      <%= text_field_tag 'related_item', nil, class: 'form-control' %>
+      <small class="form-text text-muted"><%= t('.related_item_help') %></small>
     </div>
+
   </div>
 
   <div class="mt-5">

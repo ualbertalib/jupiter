@@ -48,6 +48,7 @@ en:
   sort_by: 'Sort by'
   updated_at: 'Updated At'
   search_label: 'Search'
+  required_fields_html: 'Required fields marked with <span class="text-danger">*</span>'
 
   activemodel:
     errors:
@@ -259,7 +260,8 @@ en:
   welcome:
     index:
       header: 'ERA (Education & Research Archive)'
-      cta_lead_text: 'Keep it. Share it. Use it. Welcome to University of Alberta’s Digital Repository and Asset Management Services.'
+      cta_lead_text: 'Keep it. Share it. Use it.
+        Welcome to University of Alberta’s Digital Repository and Asset Management Services.'
       cta_link_text: 'Check Me Out on GitHub'
 
   items:
@@ -285,16 +287,60 @@ en:
         If you need a new collection, email erahelp@ualberta.ca'
     file_label: 'File'
     add_another_file: 'Add another file'
+
   deposit_item:
-    header: Deposit Item
+    header: 'Deposit Item'
     describe_item:
-      header: Describe Item
+      header: 'Describe Item'
+      title: 'Title'
+      title_placeholder: 'Enter title'
+      alternate_title: 'Alternate Title'
+      alternate_title_placeholder: 'Enter alternate title'
+      alternate_title_help: 'Enter a secondary/translated title, if appropriate.'
+      type_of_item: 'Type of Item'
+      type_of_item_help: 'If you do not see an appropriate item type, please contact erahelp@ualberta.ca'
+      language: 'Language'
+      creator: 'Author/Creator'
+      creator_help: 'One author per box. Example:  Doe, Jane B.'
+      subject: 'Subject/Keywords'
+      subject_help: 'Enter subjects or keywords that describe the item.
+        These are the words that will be used when someone searches for your item.'
+      date_created: 'Date created'
+      description: 'Description or Abstract'
+      description_placeholder: 'Enter description or abstract'
+      community_and_collection: Community and Collection
+      community_and_collection_help: 'Choose the Community and Collection that best match your item(s).
+        If you need a new collection, email erahelp@ualberta.ca'
+      community: 'Community'
+      collection: 'Collection'
+      additional_fields: 'Additional fields'
+      contributor: 'Additional contributor'
+      contributor_help: 'A person or group you want to recognize for playing a role in the creation of this item,
+        but not the primary role. If there is a specific role you would like noted, include it in parentheses,
+        e.g. "Jones, Mary (Advisor)."'
+      place: 'Is this item about a place?'
+      place_help: "A place name related to the item, such as the city,
+        province, or country the item's contents are about."
+      time: 'Is this item about a time?'
+      time_help_html: 'Examples:
+        <ul>
+          <li>a specific date: 2009/12/31</li>
+          <li>a date range:  2003/2010</li>
+          <li>a time period: the Enlightenment</li>
+        </ul>'
+      citation: 'Citation for previous publication'
+      citation_help: 'If your item has been previously published, provide a citation'
+      source: 'Source'
+      source_help: 'Brief information about an item from which this item was derived.'
+      related_item: Link to related item
+      related_item_help: 'Must be a url. Example: http://www.ualberta.ca'
+
     choose_license_and_visibility:
-      header: Choose License and Visibility
+      header: 'Choose License and Visibility'
     upload_files:
-      header: Upload Files
+      header: 'Upload Files'
     review_and_deposit_item:
-      header: Review and Deposit Item
+      header: 'Review and Deposit Item'
 
 
   search:

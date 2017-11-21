@@ -5,6 +5,9 @@ class Item < JupiterCore::LockedLdpObject
   VISIBILITY_EMBARGO = 'embargo'.freeze
   VISIBILITIES = (JupiterCore::VISIBILITIES + [VISIBILITY_EMBARGO]).freeze
 
+  # TODO: Add fields: alternate_title, type of item, date created, time, place, citation, source, related items
+
+
   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :sort]
   has_attribute :subject, ::RDF::Vocab::DC.subject, solrize_for: [:search, :facet]
   has_attribute :creator, ::RDF::Vocab::DC.creator, solrize_for: [:search, :facet]
