@@ -123,9 +123,6 @@ en:
     communities:
       index:
         header: 'Communities and Collections'
-        delete_confirm: 'Are you sure you want to delete community "%{title}"?'
-        browse_all: 'Browse All'
-        search_placeholder: 'collection name or community name... (TODO not implemented)'
       new:
         header: 'Create Community'
       create:
@@ -250,7 +247,9 @@ en:
     title: 'Communities'
     index:
       header: 'Communities'
+      delete_confirm: 'Are you sure you want to delete community "%{title}"?'
       create_community: 'Create Community'
+      search_placeholder: 'collection name or community name... (TODO not implemented)'
     show:
       collections_list_header: 'Collections in this Community'
       create_collection: 'Create Collection'
