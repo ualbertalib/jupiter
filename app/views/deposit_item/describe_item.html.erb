@@ -4,8 +4,7 @@
 
 <h2 class="mt-3"><%= t('.header') %></h2>
 
-
-<form>
+<form class="js-deposit-item">
   <p class="text-muted"><%= t('required_fields_html') %></p>
 
   <div class="form-group">
@@ -104,53 +103,61 @@
     </div>
   </fieldset>
 
-  <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#collapseAdditionalFields" aria-expanded="false" aria-controls="collapseAdditionalFields">
-    <%= t('.additional_fields') %>
-    <%= fa_icon 'chevron-down' %>
-  </button>
+  <div id="js-additional-fields-accordion" role="tablist">
+    <div class="card">
+      <div class="card-header" role="tab" id="js-heading-additional-fields">
+        <h5 class="mb-0">
+          <a data-toggle="collapse" href="#js-collapse-additional-fields" aria-expanded="false" aria-controls="js-collapse-additional-fields">
+            <%= t('.additional_fields') %>
+            <%= fa_icon "chevron-down", class: "js-more-less pull-right" %>
+          </a>
+        </h5>
+      </div>
 
-  <div class="collapse mt-3" id="collapseAdditionalFields">
+      <div id="js-collapse-additional-fields" class="collapse" role="tabpanel" aria-labelledby="js-heading-additional-fields" data-parent="#js-additional-fields-accordion">
+        <div class="card-body">
+          <div class="form-group">
+            <%= label_tag 'contributor', t('.contributor') %>
+            <%# TODO: Select 2 this input field %>
+            <%= text_field_tag 'contributor', nil, class: 'form-control' %>
+            <small class="form-text text-muted"><%= t('.contributor_help') %></small>
+          </div>
 
-    <div class="form-group">
-      <%= label_tag 'contributor', t('.contributor') %>
-      <%# TODO: Select 2 this input field %>
-      <%= text_field_tag 'contributor', nil, class: 'form-control' %>
-      <small class="form-text text-muted"><%= t('.contributor_help') %></small>
+          <div class="form-group">
+            <%= label_tag 'place', t('.place') %>
+            <%# TODO: Select 2 this input field %>
+            <%= text_field_tag 'place', nil, class: 'form-control' %>
+            <small class="form-text text-muted"><%= t('.place_help') %></small>
+          </div>
+
+          <div class="form-group">
+            <%= label_tag 'time', t('.time') %>
+            <%# TODO: Select 2 this input field %>
+            <%= text_field_tag 'time', nil, class: 'form-control' %>
+            <small class="form-text text-muted"><%= t('.time_help_html') %></small>
+          </div>
+
+          <div class="form-group">
+            <%= label_tag 'citation', t('.citation') %>
+            <%# TODO: Select 2 this input field %>
+            <%= text_field_tag 'citation', nil, class: 'form-control' %>
+            <small class="form-text text-muted"><%= t('.citation_help') %></small>
+          </div>
+
+          <div class="form-group">
+            <%= label_tag 'source', t('.source') %>
+            <%= text_field_tag 'source', nil, class: 'form-control' %>
+            <small class="form-text text-muted"><%= t('.source_help') %></small>
+          </div>
+
+          <div class="form-group">
+            <%= label_tag 'related_item', t('.related_item') %>
+            <%= text_field_tag 'related_item', nil, class: 'form-control' %>
+            <small class="form-text text-muted"><%= t('.related_item_help') %></small>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <div class="form-group">
-      <%= label_tag 'place', t('.place') %>
-      <%# TODO: Select 2 this input field %>
-      <%= text_field_tag 'place', nil, class: 'form-control' %>
-      <small class="form-text text-muted"><%= t('.place_help') %></small>
-    </div>
-
-    <div class="form-group">
-      <%= label_tag 'time', t('.time') %>
-      <%# TODO: Select 2 this input field %>
-      <%= text_field_tag 'time', nil, class: 'form-control' %>
-      <small class="form-text text-muted"><%= t('.time_help_html') %></small>
-    </div>
-
-    <div class="form-group">
-      <%= label_tag 'citation', t('.citation') %>
-      <%# TODO: Select 2 this input field %>
-      <%= text_field_tag 'citation', nil, class: 'form-control' %>
-      <small class="form-text text-muted"><%= t('.citation_help') %></small>
-    </div>
-
-    <div class="form-group">
-      <%= label_tag 'source', t('.source') %>
-      <%= text_field_tag 'source', nil, class: 'form-control' %>
-      <small class="form-text text-muted"><%= t('.source_help') %></small>
-    </div>
-
-    <div class="form-group">
-      <%= label_tag 'related_item', t('.related_item') %>
-      <%= text_field_tag 'related_item', nil, class: 'form-control' %>
-      <small class="form-text text-muted"><%= t('.related_item_help') %></small>
-    </div>
-
   </div>
 
   <div class="mt-5">

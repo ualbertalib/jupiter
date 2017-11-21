@@ -4,25 +4,25 @@
 
 <h2 class="mt-3"><%= t('.header') %></h2>
 
-<form>
+<form class="js-deposit-item">
   <fieldset class="my-3">
     <legend>
       <span class="text-danger">*</span>
       <%= t('.license.header') %>
     </legend>
 
-    <div id="license-accordion" role="tablist">
+    <div id="js-license-accordion" role="tablist">
       <div class="card">
-        <div class="card-header" role="tab" id="headingMostCommon">
+        <div class="card-header" role="tab" id="js-heading-most-common">
           <h5 class="mb-0">
-            <a data-toggle="collapse" href="#collapseMostCommon" aria-expanded="true" aria-controls="collapseMostCommon">
+            <a data-toggle="collapse" href="#js-collapse-most-common" aria-expanded="true" aria-controls="js-collapse-most-common">
               <%= t('.license.most_commonly_used') %>
-              <%= fa_icon "minus", class: "js-more-less pull-right" %>
+              <%= fa_icon "chevron-up", class: "js-more-less pull-right" %>
             </a>
           </h5>
         </div>
 
-        <div id="collapseMostCommon" class="collapse show" role="tabpanel" aria-labelledby="headingMostCommon" data-parent="#license-accordion">
+        <div id="js-collapse-most-common" class="collapse show" role="tabpanel" aria-labelledby="js-heading-most-common" data-parent="#js-license-accordion">
           <div class="card-body">
             <div class="form-check">
               <label class="form-check-label">
@@ -35,16 +35,16 @@
       </div>
 
       <div class="card">
-        <div class="card-header" role="tab" id="headingOtherCCLicenses">
+        <div class="card-header" role="tab" id="js-heading-other-collective-common-licenses">
           <h5 class="mb-0">
-            <a data-toggle="collapse" href="#collapseOtherCCLicenses" aria-expanded="false" aria-controls="collapseOtherCCLicenses">
+            <a data-toggle="collapse" href="#js-collapse-other-collective-common-licenses" aria-expanded="false" aria-controls="js-collapse-other-collective-common-licenses">
               <%= t('.license.other_creative_commons_licenses') %>
-              <%= fa_icon "plus", class: "js-more-less pull-right" %>
+              <%= fa_icon "chevron-down", class: "js-more-less pull-right" %>
             </a>
           </h5>
         </div>
 
-        <div id="collapseOtherCCLicenses" class="collapse" role="tabpanel" aria-labelledby="headingOtherCCLicenses" data-parent="#license-accordion">
+        <div id="js-collapse-other-collective-common-licenses" class="collapse" role="tabpanel" aria-labelledby="js-heading-other-collective-common-licenses" data-parent="#js-license-accordion">
           <div class="card-body">
 
             <div class="form-check">
@@ -89,16 +89,16 @@
       </div>
 
       <div class="card">
-        <div class="card-header" role="tab" id="headingPublicDomain">
+        <div class="card-header" role="tab" id="js-heading-public-domain">
           <h5 class="mb-0">
-            <a data-toggle="collapse" href="#collapsePublicDomain" aria-expanded="false" aria-controls="collapsePublicDomain">
+            <a data-toggle="collapse" href="#js-collapse-public-domain" aria-expanded="false" aria-controls="js-collapse-public-domain">
               <%= t('.license.public_domain') %>
-              <%= fa_icon "plus", class: "js-more-less pull-right" %>
+              <%= fa_icon "chevron-down", class: "js-more-less pull-right" %>
             </a>
           </h5>
         </div>
 
-        <div id="collapsePublicDomain" class="collapse" role="tabpanel" aria-labelledby="headingPublicDomain" data-parent="#license-accordion">
+        <div id="js-collapse-public-domain" class="collapse" role="tabpanel" aria-labelledby="js-heading-public-domain" data-parent="#js-license-accordion">
           <div class="card-body">
             <div class="form-check">
               <label class="form-check-label">
@@ -111,16 +111,16 @@
       </div>
 
       <div class="card">
-        <div class="card-header" role="tab" id="headingLinkToAnotherLicense">
+        <div class="card-header" role="tab" id="js-heading-link-to-another-license">
           <h5 class="mb-0">
-            <a data-toggle="collapse" href="#collapseLinkToAnotherLicense" aria-expanded="false" aria-controls="collapseLinkToAnotherLicense">
+            <a data-toggle="collapse" href="#js-collapse-link-to-another-license" aria-expanded="false" aria-controls="js-collapse-link-to-another-license">
               <%= t('.license.link_to_another_license') %>
-              <%= fa_icon "plus", class: "js-more-less pull-right" %>
+              <%= fa_icon "chevron-down", class: "js-more-less pull-right" %>
             </a>
           </h5>
         </div>
 
-        <div id="collapseLinkToAnotherLicense" class="collapse" role="tabpanel" aria-labelledby="headingLinkToAnotherLicense" data-parent="#license-accordion">
+        <div id="js-collapse-link-to-another-license" class="collapse" role="tabpanel" aria-labelledby="js-heading-link-to-another-license" data-parent="#js-license-accordion">
           <div class="card-body">
 
             <div class="form-check">
