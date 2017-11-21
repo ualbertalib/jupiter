@@ -49,6 +49,9 @@ en:
   updated_at: 'Updated At'
   search_label: 'Search'
   required_fields_html: 'Required fields marked with <span class="text-danger">*</span>'
+  select_a_year: Select a year
+  select_a_month: Select a month
+  select_a_day: Select a day
 
   activemodel:
     errors:
@@ -93,7 +96,10 @@ en:
   sessions:
     new:
       header: 'Login to ERA'
-      description_html: 'ERA is now a <a href="https://ist.ualberta.ca/services/ccid-passwords/campus-computing-id">CCID</a> (Campus Computing ID) enabled service. If you have a CCID please use it to log in to ERA.'
+      description_html: 'ERA is now a
+        <a href="https://ist.ualberta.ca/services/ccid-passwords/campus-computing-id" target="_blank">CCID</a>
+        (Campus Computing ID) enabled service.
+        If you have a CCID please use it to log in to ERA.'
       saml_link: 'Sign in with University of Alberta CCID (Campus Computing ID)'
       developer_link: Sign in with Developer Account
     logout_as_user:
@@ -104,7 +110,8 @@ en:
   login:
     error: 'There was an error authenticating from your account. Please try again, or contact a staff member.'
     success: 'Successfully authenticated from %{kind} account.'
-    user_suspended: 'Sorry, your ERA account has been suspended. Please contact the ERA HelpDesk at erahelp@ualberta.ca for more information.'
+    user_suspended: 'Sorry, your ERA account has been suspended. Please contact the ERA HelpDesk at
+      erahelp@ualberta.ca for more information.'
 
   authorization:
     user_not_authorized: 'Sorry, you are not authorized to perform this action.'
@@ -298,7 +305,8 @@ en:
       alternate_title_placeholder: 'Enter alternate title'
       alternate_title_help: 'Enter a secondary/translated title, if appropriate.'
       type_of_item: 'Type of Item'
-      type_of_item_help: 'If you do not see an appropriate item type, please contact erahelp@ualberta.ca'
+      type_of_item_help_html: 'If you do not see an appropriate item type, please contact
+        <a href="mailto:erahelp@ualberta.ca">erahelp@ualberta.ca</a>'
       language: 'Language'
       creator: 'Author/Creator'
       creator_help: 'One author per box. Example:  Doe, Jane B.'
@@ -309,8 +317,8 @@ en:
       description: 'Description or Abstract'
       description_placeholder: 'Enter description or abstract'
       community_and_collection: Community and Collection
-      community_and_collection_help: 'Choose the Community and Collection that best match your item(s).
-        If you need a new collection, email erahelp@ualberta.ca'
+      community_and_collection_help_html: 'Choose the Community and Collection that best match your item(s).
+        If you need a new collection, email <a href="mailto:erahelp@ualberta.ca">erahelp@ualberta.ca</a>'
       community: 'Community'
       collection: 'Collection'
       additional_fields: 'Additional fields'
@@ -334,9 +342,44 @@ en:
       source_help: 'Brief information about an item from which this item was derived.'
       related_item: Link to related item
       related_item_help: 'Must be a url. Example: http://www.ualberta.ca'
-
     choose_license_and_visibility:
       header: 'Choose License and Visibility'
+      license:
+        header: 'License'
+        most_commonly_used: 'Most commonly used'
+        attribution_noncommercial_html: 'Attribution-NonCommercial 4.0 International
+          (<a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>)'
+        other_creative_commons_licenses: 'Other Creative Commons Licenses'
+        attribution_html: 'Attribution 4.0 International
+          (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC BY 4.0</a>)'
+        attribution_noncommercial_noderivatives_html: 'Attribution-NonCommercial-NoDerivatives 4.0 International
+          (<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a>)'
+        attribution_noncommercial_sharealike_html: 'Attribution-NonCommercial-ShareAlike 4.0 International
+          (<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a>)'
+        attribution_noderivatives_html: 'Attribution-NoDerivatives 4.0 International
+          (<a href="https://creativecommons.org/licenses/by-nd/4.0/" target="_blank">CC BY-ND 4.0</a>)'
+        attribution_sharealike_html: 'Attribution-ShareAlike 4.0 International
+          (<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">CC BY-SA 4.0</a>)'
+        cco_universal_html: 'CC0 1.0 Universal
+          (<a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank">CC0 1.0</a>)'
+        public_domain: 'This work is in the public domain'
+        public_domain_mark_html: 'Public Domain Mark 1.0
+          (<a href="https://creativecommons.org/publicdomain/mark/1.0/" target="_blank">PDM 1.0</a>)'
+        link_to_another_license: 'I am required to use / link to another license'
+        license_text_or_url: License text / URL
+        help_html: 'Your item will be hosted in an open access environment.
+          Please select one of the licenses described below.
+          For additional assistance selecting a license please see
+          <a href="http://creativecommons.org/choose/" target="_blank">http://creativecommons.org/choose/</a>,
+          or contact <a href="mailto:erahelp@ualberta.ca">erahelp@ualberta.ca</a>'
+      visibility:
+        header: 'Visibility'
+        public: 'Open access now (will be seen by everyone)'
+        embargo: 'Will be open access on'
+        authenticated: 'CCID Protected'
+        private: 'Private'
+
+
     upload_files:
       header: 'Upload Files'
     review_and_deposit_item:

@@ -27,7 +27,7 @@
       <%= t('.type_of_item') %>
     <% end %>
     <%= select_tag 'type_of_item',  raw('<option>EXAMPLE</option><option>EXAMPLE</option><option>EXAMPLE</option>'), class: 'form-control' %>
-    <small class="form-text text-muted"><%= t('.type_of_item_help') %></small>
+    <small class="form-text text-muted"><%= t('.type_of_item_help_html') %></small>
   </div>
 
   <div class="form-group">
@@ -65,7 +65,16 @@
       <%= t('.date_created') %>
     <% end %>
     <div class="d-md-flex justify-content-between">
-        <%= date_select('item', 'date_created',  {order: [:year, :month, :day],  prompt: { day: 'Select day', month: 'Select month', year: 'Select year' }}, {class: 'form-control  mr-2 mb-2'}) %>
+        <%= date_select('item', 'date_created',
+          { order: [:year, :month, :day],
+            prompt: { day: t('select_a_day'),
+                      month: t('select_a_month'),
+                      year: t('select_a_year')
+                    },
+            start_year: Date.today.year - 100,
+            end_year: Date.today.year + 1
+          }, { class: 'form-control  mr-2 mb-2' }) %>
+
     </div>
   </div>
 
@@ -83,7 +92,7 @@
       <%= t('.community_and_collection') %>
     </legend>
     <small class="mb-3 form-text text-muted">
-      <%= t('.community_and_collection_help') %>
+      <%= t('.community_and_collection_help_html') %>
     </small>
     <div class="form-group">
       <label><%= t('.community') %></label>

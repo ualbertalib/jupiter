@@ -8,7 +8,7 @@
   <fieldset class="my-3">
     <legend>
       <span class="text-danger">*</span>
-      License
+      <%= t('.license.header') %>
     </legend>
 
     <div id="license-accordion" role="tablist">
@@ -16,7 +16,7 @@
         <div class="card-header" role="tab" id="headingMostCommon">
           <h5 class="mb-0">
             <a data-toggle="collapse" href="#collapseMostCommon" aria-expanded="true" aria-controls="collapseMostCommon">
-              Most commonly used
+              <%= t('.license.most_commonly_used') %>
               <%= fa_icon "minus", class: "js-more-less pull-right" %>
             </a>
           </h5>
@@ -24,14 +24,12 @@
 
         <div id="collapseMostCommon" class="collapse show" role="tabpanel" aria-labelledby="headingMostCommon" data-parent="#license-accordion">
           <div class="card-body">
-
             <div class="form-check">
               <label class="form-check-label">
-                <input class="form-check-input" type="radio" value="option1" checked>
-                Attribution-NonCommercial 4.0 International  (<a href="">CC BY-NC 4.0</a>)
+                <%= radio_button_tag 'license', 'attribution_noncommercial', true, class: 'form-check-input' %>
+                <%= t('.license.attribution_noncommercial_html') %>
               </label>
             </div>
-
           </div>
         </div>
       </div>
@@ -40,7 +38,7 @@
         <div class="card-header" role="tab" id="headingOtherCCLicenses">
           <h5 class="mb-0">
             <a data-toggle="collapse" href="#collapseOtherCCLicenses" aria-expanded="false" aria-controls="collapseOtherCCLicenses">
-              Other Creative Commons Licenses
+              <%= t('.license.other_creative_commons_licenses') %>
               <%= fa_icon "plus", class: "js-more-less pull-right" %>
             </a>
           </h5>
@@ -51,38 +49,38 @@
 
             <div class="form-check">
               <label class="form-check-label">
-                <input class="form-check-input" type="radio" value="option2">
-                Attribution 4.0 International  (<a href="">CC BY 4.0</a>)
+                <%= radio_button_tag 'license', 'attribution', false, class: 'form-check-input' %>
+                <%= t('.license.attribution_html') %>
               </label>
             </div>
             <div class="form-check">
               <label class="form-check-label">
-                <input class="form-check-input" type="radio" value="option3">
-                Attribution-NonCommercial-NoDerivatives 4.0 International  (<a href="">CC BY-NC-ND 4.0</a>)
+                <%= radio_button_tag 'license', 'attribution_noncommercial_noderivatives', false, class: 'form-check-input' %>
+                <%= t('.license.attribution_noncommercial_noderivatives_html') %>
               </label>
             </div>
             <div class="form-check">
               <label class="form-check-label">
-                <input class="form-check-input" type="radio" value="option3">
-                Attribution-NonCommercial-ShareAlike 4.0 International  (<a href="">CC BY-NC-SA 4.0</a>)
+                <%= radio_button_tag 'license', 'attribution_noncommercial_sharealike', false, class: 'form-check-input' %>
+                <%= t('.license.attribution_noncommercial_sharealike_html') %>
               </label>
             </div>
             <div class="form-check">
               <label class="form-check-label">
-                <input class="form-check-input" type="radio" value="option3">
-                Attribution-NoDerivatives 4.0 International  (<a href="">CC BY-ND 4.0</a>)
+                <%= radio_button_tag 'license', 'attribution_noderivatives', false, class: 'form-check-input' %>
+                <%= t('.license.attribution_noderivatives_html') %>
               </label>
             </div>
             <div class="form-check">
               <label class="form-check-label">
-                <input class="form-check-input" type="radio" value="option3">
-                Attribution-ShareAlike 4.0 International  (<a href="">CC BY-SA 4.0</a>)
+                <%= radio_button_tag 'license', 'attribution_sharealike', false, class: 'form-check-input' %>
+                <%= t('.license.attribution_sharealike_html') %>
               </label>
             </div>
             <div class="form-check">
               <label class="form-check-label">
-                <input class="form-check-input" type="radio" value="option3">
-                CC0 1.0 Universal (<a href="">CC0 1.0</a>)
+                <%= radio_button_tag 'license', 'cco_universal', false, class: 'form-check-input' %>
+                <%= t('.license.cco_universal_html') %>
               </label>
             </div>
 
@@ -94,7 +92,7 @@
         <div class="card-header" role="tab" id="headingPublicDomain">
           <h5 class="mb-0">
             <a data-toggle="collapse" href="#collapsePublicDomain" aria-expanded="false" aria-controls="collapsePublicDomain">
-              This work is in the public domain
+              <%= t('.license.public_domain') %>
               <%= fa_icon "plus", class: "js-more-less pull-right" %>
             </a>
           </h5>
@@ -104,8 +102,8 @@
           <div class="card-body">
             <div class="form-check">
               <label class="form-check-label">
-                <input class="form-check-input" type="radio" value="option3">
-                Public Domain Mark 1.0
+                <%= radio_button_tag 'license', 'public_domain_mark', false, class: 'form-check-input' %>
+                <%= t('.license.public_domain_mark_html') %>
               </label>
             </div>
           </div>
@@ -116,7 +114,7 @@
         <div class="card-header" role="tab" id="headingLinkToAnotherLicense">
           <h5 class="mb-0">
             <a data-toggle="collapse" href="#collapseLinkToAnotherLicense" aria-expanded="false" aria-controls="collapseLinkToAnotherLicense">
-              I'm required to use / link to another license
+              <%= t('.license.link_to_another_license') %>
               <%= fa_icon "plus", class: "js-more-less pull-right" %>
             </a>
           </h5>
@@ -127,52 +125,58 @@
 
             <div class="form-check">
               <label class="form-check-label">
-                <input class="form-check-input" type="radio" value="option3">
-                License text / URL
+                <%= radio_button_tag 'license', 'license_text_or_url', false, class: 'form-check-input' %>
+                <%= t('.license.license_text_or_url') %>
               </label>
             </div>
             <div class="form-group">
               <textarea name="" id="" cols="30" rows="5" placeholder="Copy/paste the URL or license" class="form-control"></textarea>
             </div>
-
           </div>
         </div>
       </div>
     </div>
     <small class="form-text text-muted">
-      Your item will be hosted in an open access environment. Please select one of the licenses described below. For additional assistance selecting a license please see http://creativecommons.org/choose/, or contact erahelp@ualberta.ca.
+      <%= t('.license.help_html') %>
     </small>
   </fieldset>
   <fieldset class="my-3">
     <legend>
       <span class="text-danger">*</span>
-      Visibility
+      <%= t('.visibility.header') %>
     </legend>
     <div class="form-check">
       <label class="form-check-label">
-        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
-        Open Access Now (Will be seen by everyone)
+        <%= radio_button_tag 'visibility', 'public', true, class: 'form-check-input' %>
+        <%= t('.visibility.public') %>
       </label>
     </div>
     <div class="form-check">
       <label class="form-check-label">
-        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
-        Will be open access on:
+        <%= radio_button_tag 'visibility', 'embargo', false, class: 'form-check-input' %>
+        <%= t('.visibility.embargo') %>
       </label>
       <div class="d-md-flex justify-content-between">
-        <%= date_select('item', 'embargo_date',  { order: [:year, :month, :day],  prompt: { day: 'Select day', month: 'Select month', year: 'Select year' }}, {class: 'form-control  mr-2 mb-2'}) %>
+        <%= date_select('item', 'embargo_date',
+                        { order: [:year, :month, :day],
+                          prompt: { day: t('select_a_day'),
+                                    month: t('select_a_month'),
+                                    year: t('select_a_year')
+                                  },
+                          start_year: Date.today.year
+                        }, { class: 'form-control  mr-2 mb-2' }) %>
       </div>
     </div>
     <div class="form-check disabled">
       <label class="form-check-label">
-        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option3" disabled>
-        CCID Protected
+        <%= radio_button_tag 'visibility', 'authenticated', false, class: 'form-check-input', disabled: true %>
+        <%= t('.visibility.authenticated') %>
       </label>
     </div>
     <div class="form-check disabled">
       <label class="form-check-label">
-        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option3" disabled>
-        Private
+        <%= radio_button_tag 'visibility', 'authenticated', false, class: 'form-check-input', disabled: true %>
+        <%= t('.visibility.private') %>
       </label>
     </div>
   </fieldset>
