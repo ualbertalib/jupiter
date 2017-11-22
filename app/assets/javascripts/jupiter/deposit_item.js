@@ -25,6 +25,37 @@ $(document).on('turbolinks:load', function() {
     return unsavedChanges = false;
   });
 
+  // bring over community/collection select from items (tweaked a bit)
+  // (we only need to handle one pairing for time being)
+  $('form.js-deposit-item .js-community-select').change(function() {
+    var id =  $(this).find('option:selected').val();
+    if (!id) {
+      $('.js-collection-select').prop('disabled', true).empty();
+    } else {
+      $.getJSON('/communities/' + id + '.json').done(function(data) {
+        var items = "<option value>Select a collection</option>";
+
+        $.each(data.collections, function(idx, item) {
+          items += '<option value="' + item.id + '">' + item.title + '</option>';
+        });
+        $('.js-collection-select').prop('disabled', false)
+                                  .empty().append(items);
+      });
+    }
+  })
+
+  // select2 initailizations
+  $('.js-select2-languages').select2({
+    theme: 'bootstrap',
+    allowClear: true
+  });
+
+  $('.js-select2-tags').select2({
+    theme: 'bootstrap',
+    placeholder: 'Enter multiple values',
+    tags: true,
+    allowClear: true
+  });
 });
 
 $(document).on('turbolinks:before-visit', function() {

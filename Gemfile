@@ -20,6 +20,7 @@ gem 'uglifier', '>= 1.3.0'
 # View stuff
 gem 'active_link_to'
 gem 'activestorage'
+gem 'select2-rails', '~> 4'
 gem 'simple_form'
 
 # Hydra stuff
