@@ -1,9 +1,19 @@
 class CommunitiesController < ApplicationController
 
+  include CommunitiesCollectionsTypeahead
+
   def index
     authorize Community
-    @communities = Community.sort(sort_column, sort_direction).page params[:page]
-    @title = t('.header')
+    respond_to do |format|
+      format.html do
+        @communities = Community.sort(sort_column, sort_direction).page params[:page]
+        @title = t('.header')
+      end
+      format.json do
+        results = typeahead_results(params[:query])
+        render json: { results: results }
+      end
+    end
   end
 
   def show
@@ -23,6 +33,17 @@ class CommunitiesController < ApplicationController
         render json: @community.attributes.merge(collections: @community.member_collections)
       end
     end
+  end
+
+  private
+
+  # Duck-types so that both admin and non-admin paths can reuse code
+  def path_to_community(community)
+    community_path(community)
+  end
+
+  def path_to_collection(collection)
+    community_collection_path(collection.community, collection)
   end
 
 end

@@ -1,11 +1,21 @@
 class Admin::CommunitiesController < Admin::AdminController
 
+  include CommunitiesCollectionsTypeahead
+
   before_action :fetch_community, only: [:show, :edit, :update, :destroy]
 
   def index
-    @communities = Community.sort(sort_column, sort_direction).page params[:page]
-    @title = t('.header')
-    render template: 'communities/index'
+    respond_to do |format|
+      format.html do
+        @communities = Community.sort(sort_column, sort_direction).page params[:page]
+        @title = t('.header')
+        render template: 'communities/index'
+      end
+      format.json do
+        results = typeahead_results(params[:query])
+        render json: { results: results }
+      end
+    end
   end
 
   def show
@@ -77,6 +87,15 @@ class Admin::CommunitiesController < Admin::AdminController
 
   def fetch_community
     @community = Community.find(params[:id])
+  end
+
+  # Duck-types so that both admin and non-admin paths can reuse code
+  def path_to_community(community)
+    admin_community_path(community)
+  end
+
+  def path_to_collection(collection)
+    admin_community_collection_path(collection.community, collection)
   end
 
 end
