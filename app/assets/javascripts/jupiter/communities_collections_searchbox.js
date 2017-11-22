@@ -3,9 +3,8 @@ $(document).on('turbolinks:load', function() {
     $(this).select2({
       theme: 'bootstrap',
       ajax: {
-        // The '.json' fixes issues with chrome cacheing
-        url: 'communities.json',
-        allowClear: true,
+        url: 'communities',
+        cache: false,
         dataType: 'json',
         data: function(params) {
           var query = {
@@ -17,8 +16,8 @@ $(document).on('turbolinks:load', function() {
     }).on('select2:select', function(e) {
       var data = e.params.data;
       if (data.path) {
-        // To ensure we get the placeholder when user clicks back (firefox)
-        $(this).val('');
+        // To ensure we get the placeholder text when user clicks selection then back button (firefox)
+        $(this).val(null).trigger("change");
         window.location.href = data.path;
       }
     });
