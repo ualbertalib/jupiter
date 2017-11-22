@@ -10,7 +10,7 @@ $(document).on('turbolinks:load', function() {
         data: function(params) {
           var query = {
             query: params.term
-          }
+          };
           return query;
         }
       }
