@@ -14,6 +14,7 @@ gem 'bootstrap', '~> 4.0.0.beta2.1'
 gem 'font-awesome-rails'
 gem 'jquery-rails'
 gem 'sass-rails', '~> 5'
+gem 'select2-rails'
 gem 'turbolinks', '~> 5'
 gem 'uglifier', '>= 1.3.0'
 

@@ -249,7 +249,7 @@ en:
       header: 'Communities'
       delete_confirm: 'Are you sure you want to delete community "%{title}"?'
       create_community: 'Create Community'
-      search_placeholder: 'collection name or community name... (TODO not implemented)'
+      search_placeholder: 'Type all or part of a community or collection name ...'
     show:
       collections_list_header: 'Collections in this Community'
       create_collection: 'Create Collection'
