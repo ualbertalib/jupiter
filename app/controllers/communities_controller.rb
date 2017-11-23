@@ -35,15 +35,4 @@ class CommunitiesController < ApplicationController
     end
   end
 
-  private
-
-  # Duck-types so that both admin and non-admin paths can reuse code
-  def path_to_community(community)
-    community_path(community)
-  end
-
-  def path_to_collection(collection)
-    community_collection_path(collection.community, collection)
-  end
-
 end
