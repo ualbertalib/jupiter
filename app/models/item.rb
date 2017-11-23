@@ -1,4 +1,3 @@
-# TURN OFF DOIs FOR INITIAL MIGRATION
 
 class Item < JupiterCore::LockedLdpObject
 
@@ -23,15 +22,6 @@ class Item < JupiterCore::LockedLdpObject
                          facet_value_presenter: ->(path) { Item.path_to_titles(path) }
 
   has_attribute :embargo_end_date, ::RDF::Vocab::DC.modified, type: :date, solrize_for: [:sort]
-  # embargo_target_visibility
-  # storage only
-  # embargo_log as multival
-  # fedora3id
-  # ingestbatch
-  # fedora3handle
-
-  # related object fedora 3 foxml
-  # related object old stats
   additional_search_index :doi_without_label, solrize_for: :exact_match,
                                               as: -> { doi.gsub('doi:', '') if doi.present? }
 

@@ -16,11 +16,10 @@ class FileSetsController < ApplicationController
   def load_and_authorize_fileset
     @file_name = params[:file_name]
     @file_set = FileSet.find(params[:id])
-    @owning_item = Item.find(@file_set.item)
     return render status: :not_found if @file_set.blank?
     return render status: :not_found unless @file_name == @file_set.contained_filename
 
-    authorize @owning_item, :download?
+    authorize @file_set.owning_item, :download?
   end
 
   def stream_from_fedora(disposition: nil, content_type: nil)
