@@ -89,7 +89,7 @@ class Admin::CommunitiesController < Admin::AdminController
     @community = Community.find(params[:id])
   end
 
-  # Duck-types so that both admin and non-admin paths can reuse code
+  # Override the regular non-admin paths set in CommunitiesCollectionsTypeahead
   def path_to_community(community)
     admin_community_path(community)
   end

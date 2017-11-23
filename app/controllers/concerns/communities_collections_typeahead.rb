@@ -1,5 +1,4 @@
 module CommunitiesCollectionsTypeahead
-  # Note: needs these duck-typed methods: `path_to_community`, `path_to_collection`
   def typeahead_results(term)
     results = []
     if term.present?
@@ -24,5 +23,16 @@ module CommunitiesCollectionsTypeahead
       end
     end
     results
+  end
+
+  private
+
+  # Note: these get overridden in admin communities controller
+  def path_to_community(community)
+    community_path(community)
+  end
+
+  def path_to_collection(collection)
+    community_collection_path(collection.community, collection)
   end
 end
