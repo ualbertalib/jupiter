@@ -132,3 +132,6 @@ Style/TrivialAccessors:
 
 Style/TrailingUnderscoreVariable:
   Enabled: false
+
+Performance/TimesMap:
+  Enabled: false

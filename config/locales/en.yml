@@ -40,10 +40,11 @@ en:
   close: 'Close'
   delete: 'Delete'
   edit: 'Edit'
-  filter_by: 'Filter by'
-  never_signed_in: 'Never Signed In'
-  page_range: '%{first} - %{last} of %{total}'
   remove: 'Remove'
+  never_signed_in: 'Never Signed In'
+  time_ago: '%{time} ago'
+  page_range: '%{first} - %{last} of %{total}'
+  filter_by: 'Filter by'
   sort_by: 'Sort by'
   updated_at: 'Updated At'
   search_label: 'Search'
@@ -123,9 +124,6 @@ en:
     communities:
       index:
         header: 'Communities and Collections'
-        delete_confirm: 'Are you sure you want to delete community "%{title}"?'
-        browse_all: 'Browse All'
-        search_placeholder: 'collection name or community name... (TODO not implemented)'
       new:
         header: 'Create Community'
       create:
@@ -156,7 +154,7 @@ en:
         new_button_text: 'Post'
         current_announcements: 'Current Announcements'
         no_current_announcements: 'No Current Announcements'
-        posted: 'Posted %{created_at} ago'
+        posted: 'Posted %{created_at}'
         are_you_sure_you_want_to_remove: 'Are you sure you want to remove this announcement?'
         created_by: 'Created by'
         past_announcements: 'Past Announcements'
@@ -166,7 +164,7 @@ en:
         creator: 'Creator'
         posted_at: 'Posted'
         removed_at: 'Removed'
-        no_past_announcements: 'No Past Announcements'
+        no_past_announcements: 'We could not find any past announcements matching your search.'
         display_past_announcements_count:
           'Displaying %{past_announcements_count} of %{matching_past_announcements_count} matching past announcements
           ( %{total_past_announcements_count} total past announcements)'
@@ -215,6 +213,7 @@ en:
         login_as_user_dialog: "Are you sure you want to login as %{user}?"
         login_as_user_flash: "You are now logged in as %{user}"
         no_items_found: 'There are no items for this user'
+        draft_user_items: "Draft User's Items"
         user_items: "User's Items"
         display_items_count: "Displaying %{items_count} of %{total_items_count} total items."
         # TODO: most of these are generic enough to be moved up in a common namespace
@@ -240,7 +239,7 @@ en:
       items_list_header: 'Items in this Collection'
       no_items_in_collection: 'There are no items in this Collection'
       item_delete_confirm: 'Are you sure you want to delete item "%{title}"?'
-
+      deposit_item: 'Deposit Item'
   communities:
     sort_record_created_at_asc: 'Date (oldest first)'
     sort_record_created_at_desc: 'Date (newest first)'
@@ -249,7 +248,9 @@ en:
     title: 'Communities'
     index:
       header: 'Communities'
+      delete_confirm: 'Are you sure you want to delete community "%{title}"?'
       create_community: 'Create Community'
+      search_placeholder: 'collection name or community name... (TODO not implemented)'
     show:
       collections_list_header: 'Collections in this Community'
       create_collection: 'Create Collection'
@@ -277,7 +278,7 @@ en:
       view: 'View Original'
       download: 'Download'
     new:
-      header: 'Create a new item'
+      header: 'Deposit Item'
     create:
       created: 'Item was successfully created!'
     form:
@@ -288,10 +289,22 @@ en:
     add_another_file: 'Add another file'
 
   search:
+    filter: 'Filter'
+    hide_last_count: 'Hide last %{count}'
+    page_range: '%{first} - %{last} of %{total}'
+    results_for: 'Results for "%{search}"'
+    show_count_more: 'Show %{count} more ...'
+    sort_by: 'Sort by'
+    sort_record_created_at_asc: 'Date (oldest first)'
+    sort_record_created_at_desc: 'Date (newest first)'
+    sort_title_asc: 'Title (A-Z)'
+    sort_title_desc: 'Title (Z-A)'
+    tab_header_items_with_count: 'Items (%{count})'
+    tab_header_collections_with_count: 'Collections (%{count})'
+    tab_header_communities_with_count: 'Communities (%{count})'
+
     index:
       header: 'Search Items'
-      found_results: "Found %{count} results"
-      refine_your_search: 'Refine your search'
       no_results_found: No results found
     file_label: 'File'
     add_another_file: 'Add another file'

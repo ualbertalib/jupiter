@@ -24,8 +24,20 @@ class JupiterCore::FacetResult
     @values.keys.present?
   end
 
-  def each_facet_value
-    @values.each do |raw_value, count|
+  def count
+    @values.count
+  end
+
+  def each_facet_value(*range_args)
+    # When many facets are iterated, we need to segregate into ranges based on what is shown or not
+    range = if range_args.present?
+              range_args
+            else
+              [0..-1]
+            end
+    keys = @values.keys.slice(*range)
+    keys.each do |raw_value|
+      count = @values[raw_value]
       if raw_value.present?
         presentable_value = presenter.call(raw_value)
         yield presentable_value, raw_value, count

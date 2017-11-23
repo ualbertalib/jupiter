@@ -2,19 +2,25 @@
 
 <%= render partial: 'show_breadcrumbs' %>
 
-<div class="d-flex flex-wrap align-items-start justify-content-between mt-3">
+<div class="d-flex flex-wrap align-items-center justify-content-between mt-3">
   <h1><%= @community.title %></h1>
 
   <% if policy(@community).edit? || policy(@community).destroy? %>
     <div class="btn-group">
     <% if policy(@community).edit? %>
-        <%= link_to t('edit'), edit_admin_community_path(@community),
-            class:'btn btn-outline-primary' %>
+        <%= link_to edit_admin_community_path(@community),
+            class:'btn btn-outline-secondary' do %>
+          <%= fa_icon('pencil-square-o') %>
+          <%= t('edit') %>
+        <% end %>
       <% end %>
           <% if policy(@community).destroy? %>
-        <%= link_to t('delete'), admin_community_path(@community), method: :delete,
-            class:'btn btn-danger',
-            data: { confirm: t('.delete_confirm', title: @community.title) } %>
+        <%= link_to admin_community_path(@community), method: :delete,
+            class:'btn btn-outline-secondary',
+            data: { confirm: t('.delete_confirm', title: @community.title) } do %>
+          <%= fa_icon('trash') %>
+          <%= t('delete') %>
+        <% end %>
       <% end %>
     </div>
   <% end %>
@@ -27,20 +33,23 @@
   </div>
 </div>
 
-<div class="d-flex flex-wrap align-items-start justify-content-between mt-3">
+<div class="d-flex flex-wrap align-items-center justify-content-between mt-3">
   <h4>
     <%= t('.collections_list_header') %>
   </h4>
   <% if policy(:collection).create? %>
-      <%= link_to t('.create_collection'), new_admin_community_collection_path(@community),
-          class: 'btn btn-primary' %>
+      <%= link_to new_admin_community_collection_path(@community),
+          class: 'btn btn-primary' do %>
+        <%= fa_icon('plus-circle') %>
+        <%= t('.create_collection') %>
+      <% end %>
   <% end %>
 </div>
 
 <div class="row mt-3">
   <div class="col-md-12">
     <ul class="list-group">
-      <%= render partial: 'communities/collections_list' %>
+      <%= render partial: 'communities/collections_list_sort_paginate' %>
     </ul>
   </div>
 </div>

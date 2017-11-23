@@ -13,15 +13,6 @@ module ApplicationHelper
     end
   end
 
-  def facetable_query_params(facet_name, value)
-    query_params = { search: params[:search] }
-    active_facets = params[:facets] || {}
-    active_facets[facet_name] = value
-    query_params[:facets] = active_facets
-
-    query_params
-  end
-
   def help_tooltip(text)
     content_tag(:span, fa_icon('question-circle'), title: text)
   end
@@ -36,7 +27,7 @@ module ApplicationHelper
 
   def jupiter_time_ago_in_words(date, blank_message: '')
     return blank_message if date.blank?
-    time_ago_in_words(date)
+    t('time_ago', time: time_ago_in_words(date))
   end
 
   def results_range(results)

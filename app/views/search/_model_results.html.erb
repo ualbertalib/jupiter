@@ -1,0 +1,61 @@
+<div class="row mt-3 jupiter-model-results">
+
+  <%# Facets panel %>
+  <div class="col-md-3 col-sm-2 jupiter-facets">
+    <div class="card">
+      <div class="card-header">
+        <%= t('search.filter') %>
+      </div>
+      <div class="card-body p-2">
+        <% @results[model].each_facet_with_results do |facet| %>
+          <%= render partial: 'facet_results', locals: { facet: facet } %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <%# Results panel %>
+  <div class="col-md-9 col-sm-10 card jupiter-results">
+    <div class='p-3'>
+      <div class="d-flex flex-wrap justify-content-between">
+        <div>
+          <h3><%= t('search.results_for', search: params[:search]) %></h3>
+        </div>
+
+        <div>
+          <%= render partial: 'sort' %>
+        </div>
+      </div>
+
+      <%# Facet Badges %>
+      <div class='jupiter-facet-badges'>
+        <% @results[model].each_facet_with_results do |facet| %>
+          <% facet.each_facet_value do |presentation_value, raw_value, count| %>
+            <% if params[:facets]&.fetch(facet.facet_name, nil) == raw_value %>
+              <%= render partial: 'facet_badge', locals: { presentation_value: presentation_value,
+                         facet_name: facet.facet_name } %>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+
+    <%# Results list %>
+    <div class='jupiter-results-list'>
+      <% @results[model].each do |result| %>
+      <div class="row">
+        <div class="col">
+          <%= link_to result.title, path_for_result(result) %>
+        </div>
+      </div>
+      <% end %>
+    </div>
+    <div class="p-2 d-flex justify-content-center">
+      <div>
+        <%= results_range(@results[model]) %>
+      </div>
+    </div>
+    <%= paginate @results[model] %>
+
+  </div>
+</div>
