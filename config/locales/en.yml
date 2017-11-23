@@ -271,6 +271,11 @@ en:
       updated: 'Item was successfully updated!'
     show:
       member_of: 'Member of'
+    thumbnail:
+      thumbnail: 'thumbnail'
+    files_section_sidebar:
+      view: 'View Original'
+      download: 'Download'
     new:
       header: 'Create a new item'
     create:

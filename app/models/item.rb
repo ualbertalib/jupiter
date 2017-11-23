@@ -1,3 +1,5 @@
+# TURN OFF DOIs FOR INITIAL MIGRATION
+
 class Item < JupiterCore::LockedLdpObject
 
   ldp_object_includes Hydra::Works::WorkBehavior
@@ -24,9 +26,9 @@ class Item < JupiterCore::LockedLdpObject
   # embargo_target_visibility
   # storage only
   # embargo_log as multival
-  #fedora3id
-  #ingestbatch
-  #fedora3handle
+  # fedora3id
+  # ingestbatch
+  # fedora3handle
 
   # related object fedora 3 foxml
   # related object old stats
@@ -107,15 +109,15 @@ class Item < JupiterCore::LockedLdpObject
     end
 
     def add_files(files)
-      return unless files.present?
+      return if files.blank?
       # Need a item id for file sets to point to
       # TODO should this be a side effect? should we throw an exception if there's no id? Food for thought
       save! if id.nil?
 
       files.each do |file|
         FileSet.new_locked_ldp_object.unlock_and_fetch_ldp_object do |unlocked_fileset|
-          unlocked_fileset.owner = self.owner
-          unlocked_fileset.visibility = self.visibility
+          unlocked_fileset.owner = owner
+          unlocked_fileset.visibility = visibility
           Hydra::Works::AddFileToFileSet.call(unlocked_fileset, file, :original_file,
                                               update_existing: false, versioning: false)
           unlocked_fileset.member_of_collections += [self]

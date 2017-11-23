@@ -2,16 +2,14 @@ require 'sidekiq/web'
 require_dependency 'admin_constraint'
 
 Rails.application.routes.draw do
-  resources :items
-
-  get 'search', to: 'search#index'
-
-  resources :file_sets, only: [] do
+  resources :items do
     member do
-      match 'download/*file_name' => 'file_sets#download_original', :format => false, via: :get
-      match '*file_name' => 'file_sets#view_original', :format => false, via: :get
+      match 'download/*file_name' => 'file_sets#download', :format => false, via: :get
+      match '*file_name' => 'file_sets#show', :format => false, via: :get
     end
   end
+
+  get 'search', to: 'search#index'
 
   resources :communities, only: [:index, :show] do
     resources :collections, only: [:show]

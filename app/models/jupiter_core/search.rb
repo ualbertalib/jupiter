@@ -106,7 +106,7 @@ class JupiterCore::Search
           queried_fields << properties[:solr_names][idx] if idx.present?
         end
       end
-      queried_fields.join(' ')
+      queried_fields.uniq.join(' ')
     end
 
     # combine the facet maps (solr_name => attribute_name) of all of the models being searched

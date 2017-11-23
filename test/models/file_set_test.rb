@@ -33,6 +33,7 @@ class FileSetTest < ActiveSupport::TestCase
                                                   community_id: community.id).unlock_and_fetch_ldp_object(&:save!)
 
     item = Item.new_locked_ldp_object(title: generate_random_string, visibility: 'public', owner: 1)
+
     item.unlock_and_fetch_ldp_object do |unlocked_item|
       unlocked_item.add_to_path(community.id, collection.id)
       unlocked_item.save!
@@ -42,11 +43,10 @@ class FileSetTest < ActiveSupport::TestCase
 
     file_set = item.file_sets.first
     refute file_set.nil?
-    binding.pry
-    assert file_set.contained_filename == 'logo_test.png'
-    # assert file_set.original_mime_type == 'image/png'
-    # assert file_set.original_size_bytes == 62_432
-    # assert file_set.original_uri =~ /http.*fcrepo\/rest\/.*#{file_set.id}\/files\/.*/
+    assert_equal file_set.contained_filename, 'logo_test.png'
+    file_set.unlock_and_fetch_ldp_object do |unlocked_fileset|
+      assert unlocked_fileset.original_file.uri =~ /http.*fcrepo\/rest\/.*#{file_set.id}\/files\/.*/
+    end
   end
 
 end

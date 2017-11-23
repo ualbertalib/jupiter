@@ -126,7 +126,7 @@ module JupiterCore
     def read_solr_index(name)
       raise PropertyInvalidError unless name.is_a? Symbol
       type = self.solr_calc_attributes[name]
-      raise PropertyInvalidError unless type.present?
+      raise PropertyInvalidError if type.blank?
       solr_name = Solrizer.solr_name(name, :symbol, type: type)
       solr_representation[solr_name]
     end
@@ -638,6 +638,7 @@ module JupiterCore
       def has_attribute(name, predicate, multiple: false, solrize_for: [], type: :string, facet_value_presenter: nil)
         raise PropertyInvalidError unless name.is_a? Symbol
         raise PropertyInvalidError if predicate.blank?
+        raise PropertyInvalidError if solrize_for.blank?
 
         # TODO: keep this conveinience, or push responsibility for [] onto the callsite?
         solrize_for = [solrize_for] unless solrize_for.is_a? Array
