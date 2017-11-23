@@ -34,7 +34,7 @@
       <span class="text-danger">*</span>
       <%= t('.language') %>
     <% end %>
-    <%= select_tag 'language', options_for_select(@languages), multiple: true, class: 'form-control js-select2-languages' %>
+    <%= select_tag 'language', options_for_select(@languages), multiple: true, data: { placeholder: t('.language_placeholder') }, class: 'form-control js-select2' %>
   </div>
 
   <div class="form-group">
@@ -42,7 +42,7 @@
       <span class="text-danger">*</span>
       <%= t('.creator') %>
     <% end %>
-    <%= select_tag 'creator', nil, multiple: true, class: 'form-control js-select2-tags' %>
+    <%= select_tag 'creator', nil, multiple: true, data: { tags: true, placeholder: t('.creator_placeholder') }, class: 'form-control js-select2' %>
     <small class="form-text text-muted"><%= t('.creator_help') %></small>
   </div>
 
@@ -51,7 +51,7 @@
       <span class="text-danger">*</span>
       <%= t('.subject') %>
     <% end %>
-    <%= select_tag 'subject', nil, multiple: true, class: 'form-control js-select2-tags' %>
+    <%= select_tag 'subject', nil, multiple: true, data: { tags: true, placeholder: t('.subject_placeholder') }, class: 'form-control js-select2' %>
     <small class="form-text text-muted"><%= t('.subject_help') %></small>
   </div>
 
@@ -92,25 +92,13 @@
     </small>
     <div class="form-group">
       <label><%= t('.community') %></label>
-    <%= select_tag 'community',  options_from_collection_for_select(@communities, :id, :title), prompt: "Select a community", class: 'form-control js-community-select' %>
+    <%= select_tag 'community',  options_from_collection_for_select(@communities, :id, :title), prompt: t('.community_placeholder'), class: 'form-control js-community-select' %>
     </div>
     <div class="form-group">
       <label><%= t('.collection') %></label>
-    <%= select_tag 'collection',  nil, class: 'form-control js-collection-select', disabled: true %>
+    <%= select_tag 'collection',  nil, data: { placeholder: t('.collection_placeholder') }, class: 'form-control js-collection-select', disabled: true %>
     </div>
   </fieldset>
-
-
-      <%#= f.input :collection,
-          as: :unread_select,
-          disabled: !collections.present?,
-          collection: collections,
-          selected: collection_id,
-          required: true,
-          input_html: { name: 'item[collection][]', id: nil, class: 'collection-select' }
-      %>
-
-
 
   <div id="js-additional-fields-accordion" role="tablist">
     <div class="card">
@@ -127,25 +115,25 @@
         <div class="card-body">
           <div class="form-group">
             <%= label_tag 'contributor', t('.contributor') %>
-            <%= select_tag 'contributor', nil, multiple: true, class: 'form-control js-select2-tags' %>
+            <%= select_tag 'contributor', nil, multiple: true, data: { tags: true, placeholder: t('.contributor_placeholder') }, class: 'form-control js-select2' %>
             <small class="form-text text-muted"><%= t('.contributor_help') %></small>
           </div>
 
           <div class="form-group">
             <%= label_tag 'place', t('.place') %>
-            <%= select_tag 'place', nil, multiple: true, class: 'form-control js-select2-tags' %>
+            <%= select_tag 'place', nil, multiple: true, data: { tags: true, placeholder: t('.place_placeholder') }, class: 'form-control js-select2' %>
             <small class="form-text text-muted"><%= t('.place_help') %></small>
           </div>
 
           <div class="form-group">
             <%= label_tag 'time', t('.time') %>
-            <%= select_tag 'time', nil, multiple: true, class: 'form-control js-select2-tags' %>
+            <%= select_tag 'time', nil, multiple: true, data: { tags: true, placeholder: t('.time_placeholder') }, class: 'form-control js-select2' %>
             <small class="form-text text-muted"><%= t('.time_help_html') %></small>
           </div>
 
           <div class="form-group">
             <%= label_tag 'citation', t('.citation') %>
-            <%= select_tag 'citation', nil, multiple: true, class: 'form-control js-select2-tags' %>
+            <%= select_tag 'citation', nil, multiple: true, data: { tags: true, placeholder: t('.citation_placeholder') }, class: 'form-control js-select2' %>
             <small class="form-text text-muted"><%= t('.citation_help') %></small>
           </div>
 

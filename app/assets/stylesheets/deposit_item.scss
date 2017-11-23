@@ -2,20 +2,13 @@
 // (for example the additonal fields section on describe item)
 // More info here: https://github.com/select2/select2/issues/291
 
-// This also fixes mobile resizing widths and select2 inputs being
-// a larger width then normal bootstrap inputs
-
-// Warning: A bug still exists if the placeholder text is really long, it will be truncated.
-
-// Scoping to deposit item form only for now. If this is being used elsewhere
-// and being effected in same matter, maybe we generalize this
-.js-deposit-item{
-  // This one fixes the placeholders width on hidden
+// Scoping to the accordion only for now. If this is an issue elsewhere, maybe we generalize this
+.js-deposit-item #js-additional-fields-accordion {
+  // Kinda fixes the placeholders width on hidden container...
+  // but if placeholder is really long (which most are...) than we still got an issue
+  // PR here for an actual fix here that needs to be merged
+  // https://github.com/select2/select2/pull/4898/
   .select2-selection--multiple .select2-search--inline .select2-search__field {
-    width: auto !important;
-  }
-  // This fixes the actual input field width
-  .select2-container {
     width: auto !important;
   }
 }
