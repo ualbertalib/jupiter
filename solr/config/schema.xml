@@ -143,6 +143,13 @@
         -->
         <filter class="solr.TrimFilterFactory"/>
       </analyzer>
+      <analyzer type="multiterm">
+        <tokenizer class="solr.ICUTokenizerFactory"/>
+        <filter class="solr.ICUFoldingFilterFactory"/>
+        <filter class="solr.EnglishPossessiveFilterFactory"/>
+        <filter class="solr.EnglishMinimalStemFilterFactory"/>
+        <filter class="solr.TrimFilterFactory"/>
+      </analyzer>
     </fieldType>
 
     <!-- queries for paths match documents at that path, or in descendent paths -->

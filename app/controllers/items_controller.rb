@@ -22,17 +22,9 @@ class ItemsController < ApplicationController
     # TODO: add validations?
     @item.unlock_and_fetch_ldp_object do |unlocked_item|
       unlocked_item.owner = current_user.id
-      unlocked_item.update_communities_and_collections(communities, collections)
-
-      # see also https://github.com/samvera/hydra-works/wiki/Lesson%3A-Add-attached-files
-      params[:item][:file]&.each do |file|
-        fileset = FileSet.new
-        Hydra::Works::AddFileToFileSet.call(fileset, file, :original_file, update_existing: false, versioning: false)
-        fileset.save!
-        # pull in hydra derivatives, set temp file base
-        # Hydra::Works::CharacterizationService.run(fileset.characterization_proxy, filename)
-        unlocked_item.members << fileset
-      end
+      unlocked_item.add_communities_and_collections(communities, collections)
+      unlocked_item.add_files(params[:item][:file])
+      unlocked_item.save!
 
       if unlocked_item.save
         redirect_to @item, notice: t('.created')
@@ -56,7 +48,9 @@ class ItemsController < ApplicationController
 
     @item.unlock_and_fetch_ldp_object do |unlocked_item|
       unlocked_item.update_attributes(permitted_attributes(@item))
-      unlocked_item.update_communities_and_collections(communities, collections)
+      unlocked_item.add_communities_and_collections(communities, collections)
+      unlocked_item.add_files(params[:item][:file])
+
       if unlocked_item.save
         redirect_to @item, notice: t('.updated')
       else

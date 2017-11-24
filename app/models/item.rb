@@ -1,3 +1,4 @@
+
 class Item < JupiterCore::LockedLdpObject
 
   ldp_object_includes Hydra::Works::WorkBehavior
@@ -23,7 +24,6 @@ class Item < JupiterCore::LockedLdpObject
                          facet_value_presenter: ->(path) { Item.path_to_titles(path) }
 
   has_attribute :embargo_end_date, ::RDF::Vocab::DC.modified, type: :date, solrize_for: [:sort]
-
   additional_search_index :doi_without_label, solrize_for: :exact_match,
                                               as: -> { doi.gsub('doi:', '') if doi.present? }
 
@@ -49,6 +49,10 @@ class Item < JupiterCore::LockedLdpObject
     super + [VISIBILITY_EMBARGO]
   end
 
+  def file_sets
+    FileSet.where(item: id)
+  end
+
   def each_community_collection
     member_of_paths.each do |path|
       community_id, collection_id = path.split('/')
@@ -63,20 +67,6 @@ class Item < JupiterCore::LockedLdpObject
     validates :title, presence: true
     validate :communities_and_collections_validations
 
-    def add_to_path(community_id, collection_id)
-      self.member_of_paths += ["#{community_id}/#{collection_id}"]
-      # TODO: also add the collection (not the community) to the Item's memberOf relation, as metadata
-      # wants to continue to model this relationship in pure PCDM terms, and member_of_path is really for our needs
-      # so that we can facet by community and/or collection properly
-    end
-
-    def update_communities_and_collections(communities, collections)
-      return unless communities.present? && collections.present?
-      self.member_of_paths = communities.map.with_index do |community_id, idx|
-        "#{community_id}/#{collections[idx]}"
-      end
-    end
-
     def communities_and_collections_validations
       return if member_of_paths.blank?
       member_of_paths.each do |path|
@@ -85,6 +75,44 @@ class Item < JupiterCore::LockedLdpObject
         errors.add(:member_of_paths, :community_not_found, id: community_id) if community.blank?
         collection = Collection.find_by(collection_id)
         errors.add(:member_of_paths, :collection_not_found, id: collection_id) if collection.blank?
+      end
+    end
+
+    def add_to_path(community_id, collection_id)
+      self.member_of_paths += ["#{community_id}/#{collection_id}"]
+      # TODO: also add the collection (not the community) to the Item's memberOf relation, as metadata
+      # wants to continue to model this relationship in pure PCDM terms, and member_of_path is really for our needs
+      # so that we can facet by community and/or collection properly
+      # TODO: add collection_id to member_of_collections
+    end
+
+    def add_communities_and_collections(communities, collections)
+      return unless communities.present? && collections.present?
+      communities.each_with_index do |community, idx|
+        add_to_path(community, collections[idx])
+      end
+    end
+
+    def add_files(files)
+      return if files.blank?
+      # Need a item id for file sets to point to
+      # TODO should this be a side effect? should we throw an exception if there's no id? Food for thought
+      save! if id.nil?
+
+      files.each do |file|
+        FileSet.new_locked_ldp_object.unlock_and_fetch_ldp_object do |unlocked_fileset|
+          unlocked_fileset.owner = owner
+          unlocked_fileset.visibility = visibility
+          Hydra::Works::AddFileToFileSet.call(unlocked_fileset, file, :original_file,
+                                              update_existing: false, versioning: false)
+          unlocked_fileset.member_of_collections += [self]
+          # Temporarily cache the file name for storing in Solr
+          unlocked_fileset.contained_filename = file.original_filename
+          unlocked_fileset.save!
+          self.members += [unlocked_fileset]
+          # pull in hydra derivatives, set temp file base
+          # Hydra::Works::CharacterizationService.run(fileset.characterization_proxy, filename)
+        end
       end
     end
   end
