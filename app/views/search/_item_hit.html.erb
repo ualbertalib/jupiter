@@ -6,9 +6,11 @@
     <div class="d-flex flex-wrap flex-lg-nowrap justify-content-between align-items-start">
       <h5 class="mt-0"><%= link_to result.title, path_for_result(result) %></h5>
       <div class="btn-group">
-        <%= link_to '#', class: 'btn btn-secondary' do %>
-          <%= fa_icon 'cloud-download' %>
-          <%= t('download') %>
+        <% if result.file_sets.count > 0 %>
+          <%= link_to fileset_uri(result.file_sets.first, :download), class: 'btn btn-secondary' do %>
+            <%= fa_icon 'cloud-download' %>
+            <%= t('download') %>
+          <% end %>
         <% end %>
         <% if policy(result).update? %>
           <%= link_to edit_item_path(result), class:'btn btn-outline-secondary'  do %>
