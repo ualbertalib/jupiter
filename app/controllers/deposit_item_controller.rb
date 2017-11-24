@@ -14,8 +14,8 @@ class DepositItemController < ApplicationController
       @communities = Community.all
     when 'wicked_finish'
       flash[:notice] = 'Success!'
-    # else
-    #   @item = Item.find(params[:item_id])
+      # else
+      #   @item = Item.find(params[:item_id])
     end
     # authorize @item
     render_wizard
@@ -38,7 +38,7 @@ class DepositItemController < ApplicationController
 
     # @item = ItemDraft.create(permitted_attributes(Item))
     # authorize @item
-    redirect_to wizard_path(steps.second) #, :item_id => @item.id)
+    redirect_to wizard_path(steps.second) # , :item_id => @item.id)
   end
 
   private

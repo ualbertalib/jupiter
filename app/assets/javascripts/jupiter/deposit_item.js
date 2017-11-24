@@ -28,12 +28,12 @@ $(document).on('turbolinks:load', function() {
   // disables links to future steps
   $('.nav-item .disabled').click(function(e){
     e.preventDefault();
- })
+  });
 
   // bring over community/collection select from items (tweaked a bit)
   // (we only need to handle one pairing for time being)
   $('form.js-deposit-item .js-community-select').change(function() {
-    var $collectionSelect = $('.js-collection-select')
+    var $collectionSelect = $('.js-collection-select');
     var id =  $(this).find('option:selected').val();
     if (!id) {
       $collectionSelect.prop('disabled', true).empty();
@@ -47,7 +47,7 @@ $(document).on('turbolinks:load', function() {
                                   .empty().append(items);
       });
     }
-  })
+  });
 
   // global select2 initailization (could be moved elsewhere)
   // We going to make heavy use of data-attrs to customize this instead
