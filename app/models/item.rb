@@ -107,11 +107,11 @@ class Item < JupiterCore::LockedLdpObject
           # Temporarily cache the file name for storing in Solr
           # if the file was uploaded, it responds to +original_filename+
           # if it's a Ruby File object, it has a +basename+. This distinction seems arbitrary.
-          if file.respond_to?(:original_filename)
-            unlocked_fileset.contained_filename = file.original_filename
-          else
-            unlocked_fileset.contained_filename = File.basename(file)
-          end
+          unlocked_fileset.contained_filename = if file.respond_to?(:original_filename)
+                                                  file.original_filename
+                                                else
+                                                  File.basename(file)
+                                                end
           unlocked_fileset.save!
           self.members += [unlocked_fileset]
           # pull in hydra derivatives, set temp file base
