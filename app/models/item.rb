@@ -73,13 +73,6 @@ class Item < JupiterCore::LockedLdpObject
       # TODO: add collection_id to member_of_collections
     end
 
-    def update_communities_and_collections(communities, collections)
-      return unless communities.present? && collections.present?
-      self.member_of_paths = communities.map.with_index do |community_id, idx|
-        "#{community_id}/#{collections[idx]}"
-      end
-    end
-
     def communities_and_collections_validations
       return if member_of_paths.blank?
       member_of_paths.each do |path|

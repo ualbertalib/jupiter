@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   resources :items do
     member do
       match 'download/*file_name' => 'file_sets#download', :format => false, via: :get
-      match '*file_name' => 'file_sets#show', :format => false, via: :get
+      match 'view/*file_name' => 'file_sets#show', :format => false, via: :get
     end
   end
 

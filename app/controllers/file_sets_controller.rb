@@ -24,8 +24,9 @@ class FileSetsController < ApplicationController
 
   def stream_from_fedora(disposition: nil, content_type: nil)
     disposition ||= 'inline'
-    content_type ||= @file_set.original_mime_type
     @file_set.unlock_and_fetch_ldp_object do |unlocked_fileset|
+      content_type ||= unlocked_fileset.original_file.mime_type
+
       uri = URI(unlocked_fileset.original_file.uri)
       request = Net::HTTP::Get.new(uri)
       response = Net::HTTP.start(uri.hostname, uri.port) do |http|
