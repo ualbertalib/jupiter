@@ -17,4 +17,5 @@
 //= require bootstrap
 //= require select2
 //= require dropzone
+//= require Sortable
 //= require_tree ./jupiter
