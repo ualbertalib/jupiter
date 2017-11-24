@@ -1,9 +1,19 @@
 class CommunitiesController < ApplicationController
 
+  include CommunitiesCollectionsTypeahead
+
   def index
     authorize Community
-    @communities = Community.sort(sort_column, sort_direction).page params[:page]
-    @title = t('.header')
+    respond_to do |format|
+      format.html do
+        @communities = Community.sort(sort_column, sort_direction).page params[:page]
+        @title = t('.header')
+      end
+      format.json do
+        results = typeahead_results(params[:query])
+        render json: { results: results }
+      end
+    end
   end
 
   def show

@@ -108,7 +108,7 @@ class JupiterCore::DeferredSimpleSolrQuery
       attr_queries = []
       attr_queries << criteria[:where].map do |k, v|
         solr_key = k == :id ? k : criteria[:model].attribute_metadata(k)[:solr_names].first
-        %Q(_query_:"{!field f=#{solr_key}}#{v}")
+        %Q(_query_:"#{solr_key}:#{v}")
       end
     else
       ''

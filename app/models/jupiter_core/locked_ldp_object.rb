@@ -132,6 +132,14 @@ module JupiterCore
       %Q(#{solr_attr_name}:"#{self.send(attr_name)}")
     end
 
+    def read_solr_index(name)
+      raise PropertyInvalidError unless name.is_a? Symbol
+      type = self.solr_calc_attributes[name]
+      raise PropertyInvalidError if type.blank?
+      solr_name = Solrizer.solr_name(name, :symbol, type: type)
+      solr_representation[solr_name]
+    end
+
     # Use this to create a new +LockedLDPObjects+ and its underlying LDP instance. attrs populate the new object's
     # attributes
     def self.new_locked_ldp_object(*attrs)
@@ -656,6 +664,7 @@ module JupiterCore
       def has_attribute(name, predicate, multiple: false, solrize_for: [], type: :string, facet_value_presenter: nil)
         raise PropertyInvalidError unless name.is_a? Symbol
         raise PropertyInvalidError if predicate.blank?
+        raise PropertyInvalidError if solrize_for.blank?
 
         # TODO: keep this conveinience, or push responsibility for [] onto the callsite?
         solrize_for = [solrize_for] unless solrize_for.is_a? Array
