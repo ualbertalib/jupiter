@@ -8,11 +8,15 @@ class DepositItemController < ApplicationController
   def show
     case wizard_value(step)
     when :describe_item
+      # @item = ItemDraft.new_locked_ldp_object
       @languages = languages
       @item_types = item_types
       @communities = Community.all
+    when 'wicked_finish'
+      flash[:notice] = 'Success!'
+    # else
+    #   @item = Item.find(params[:item_id])
     end
-    # @item = Item.find(params[:item_id])
     # authorize @item
     render_wizard
   end
@@ -21,13 +25,20 @@ class DepositItemController < ApplicationController
     # @item = Item.find(params[:item_id])
     # authorize @item
     # @item.update_attributes(params[:item])
-    render_wizard # @item
+    # render_wizard @item
+
+    redirect_to next_wizard_path
   end
 
   def create
-    # @item = Item.create
+    # TODO: Need to create the object before getting to the wizard... how to do this?
+    # Could be a nested route... item_deposit and item_deposit/:item_id/build where build is the actual wizard
+    # So first form of the wizard isnt actually part of the wizard,
+    # then preceeding forms are the actual wizard if this makes sense
+
+    # @item = ItemDraft.create(permitted_attributes(Item))
     # authorize @item
-    redirect_to wizard_path(steps.first) # , item_id: item.id)
+    redirect_to wizard_path(steps.second) #, :item_id => @item.id)
   end
 
   private

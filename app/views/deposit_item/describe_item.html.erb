@@ -4,7 +4,9 @@
 
 <h2 class="mt-3"><%= t('.header') %></h2>
 
-<form class="js-deposit-item">
+<%# TODO: Need to figure out data model and migrate everything to use form_for and it's helpers
+= form_for @item, url: wizard_path, method: :post, class:'js-deposit-item' do |f| %>
+<%= form_tag deposit_item_index_path, class:'js-deposit-item' do %>
   <p class="text-muted"><%= t('required_fields_html') %></p>
 
   <div class="form-group">
@@ -155,8 +157,6 @@
 
   <div class="mt-5">
     <%= link_to 'Cancel', root_path, class: 'btn btn-secondary' %>
-    <%= link_to 'Save and Continue', next_wizard_path, class: 'btn btn-primary' %>
+    <%=  submit_tag 'Save and Continue', class: 'btn btn-primary' %>
   </div>
-</form>
-
-
+<% end %>

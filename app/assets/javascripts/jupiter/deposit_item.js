@@ -18,12 +18,17 @@ $(document).on('turbolinks:load', function() {
 
 
   $('form.js-deposit-item input').change(function() {
-    return unsavedChanges = true;
+    unsavedChanges = true;
   });
 
   $('form.js-deposit-item').submit(function() {
-    return unsavedChanges = false;
+    unsavedChanges = false;
   });
+
+  // disables links to future steps
+  $('.nav-item .disabled').click(function(e){
+    e.preventDefault();
+ })
 
   // bring over community/collection select from items (tweaked a bit)
   // (we only need to handle one pairing for time being)
