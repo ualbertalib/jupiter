@@ -65,14 +65,6 @@ class Item < JupiterCore::LockedLdpObject
     validates :title, presence: true
     validate :communities_and_collections_validations
 
-    def add_to_path(community_id, collection_id)
-      self.member_of_paths += ["#{community_id}/#{collection_id}"]
-      # TODO: also add the collection (not the community) to the Item's memberOf relation, as metadata
-      # wants to continue to model this relationship in pure PCDM terms, and member_of_path is really for our needs
-      # so that we can facet by community and/or collection properly
-      # TODO: add collection_id to member_of_collections
-    end
-
     def communities_and_collections_validations
       return if member_of_paths.blank?
       member_of_paths.each do |path|
@@ -82,6 +74,14 @@ class Item < JupiterCore::LockedLdpObject
         collection = Collection.find_by(collection_id)
         errors.add(:member_of_paths, :collection_not_found, id: collection_id) if collection.blank?
       end
+    end
+
+    def add_to_path(community_id, collection_id)
+      self.member_of_paths += ["#{community_id}/#{collection_id}"]
+      # TODO: also add the collection (not the community) to the Item's memberOf relation, as metadata
+      # wants to continue to model this relationship in pure PCDM terms, and member_of_path is really for our needs
+      # so that we can facet by community and/or collection properly
+      # TODO: add collection_id to member_of_collections
     end
 
     def add_communities_and_collections(communities, collections)
