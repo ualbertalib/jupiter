@@ -71,6 +71,11 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     assert_equal ['title_tesim', 'title_sim'], title_metadata[:solr_names]
 
     assert @@klass.attribute_metadata(:member_of_paths)[:multiple]
+
+    title = generate_random_string
+    obj = @@klass.new_locked_ldp_object(title: title)
+
+    assert_equal obj.search_term_for(:title), %Q(title_tesim:"#{title}")
   end
 
   test 'solr calculated attributes are working properly' do
@@ -128,6 +133,10 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     obj.unlock_and_fetch_ldp_object do |uo|
       assert_equal "Title is: #{title}", uo.safe_locked_method
     end
+  end
+
+  test 'solr_name_for' do
+    assert_equal @@klass.solr_name_for(:title, role: :search), 'title_tesim'
   end
 
   test 'unlocked methods can perform mutation' do
