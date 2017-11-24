@@ -24,4 +24,8 @@ class ItemPolicy < LockedLdpObjectPolicy
     create?
   end
 
+  def download?
+    show?
+  end
+
 end
