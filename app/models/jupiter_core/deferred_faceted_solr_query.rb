@@ -38,16 +38,7 @@ class JupiterCore::DeferredFacetedSolrQuery
 
   def sort(attr, order = :desc)
     raise ArgumentError, 'order must be :asc or :desc' unless [:asc, :desc].include?(order.to_sym)
-
-    # Right now we're just going to look this up on the first model, but for this to make sense,
-    # as something results can be sorted by, all models should have the same attribute name, solrized_for_sorting
-    metadata = criteria[:restrict_to_model].first.owning_class.attribute_metadata(attr.to_sym)
-    raise ArgumentError, "No metadata found for attribute #{attr}" if metadata.blank?
-
-    sort_attr_index = metadata[:solrize_for].index(:sort)
-    raise ArgumentError, "The given attribute, #{attr}, is not solrized for sorting" if sort_attr_index.blank?
-
-    criteria[:sort] = metadata[:solr_names][sort_attr_index]
+    criteria[:sort] = criteria[:restrict_to_model].first.owning_class.solr_name_for(attr.to_sym, role: :sort)
     criteria[:sort_order] = order
     self
   end
