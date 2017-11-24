@@ -71,6 +71,11 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     assert_equal ['title_tesim', 'title_sim'], title_metadata[:solr_names]
 
     assert @@klass.attribute_metadata(:member_of_paths)[:multiple]
+
+    title = generate_random_string
+    obj = @@klass.new_locked_ldp_object(title: title)
+
+    assert_equal obj.search_term_for(:title), %Q(title_tesim:"#{title}")
   end
 
   test 'solr calculated attributes are working properly' do

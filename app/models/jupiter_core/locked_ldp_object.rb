@@ -123,6 +123,15 @@ module JupiterCore
       ldp_object.errors
     end
 
+    # Derives a solr-formatted (mangled_attr_name: value) search term for an instance's attribute.
+    # eg)
+    #    obj.search_term_for(:title)
+    #    => "title_tesim:\"The effects of Celebrator Doppelbock on cats\""
+    def search_term_for(attr_name)
+      solr_attr_name = self.class.solr_name_for(attr_name, role: :search)
+      %Q(#{solr_attr_name}:"#{self.send(attr_name)}")
+    end
+
     # Use this to create a new +LockedLDPObjects+ and its underlying LDP instance. attrs populate the new object's
     # attributes
     def self.new_locked_ldp_object(*attrs)
@@ -195,7 +204,7 @@ module JupiterCore
       attribute_metadata = self.attribute_cache[attribute_name]
       raise ArgumentError, "No such attribute is defined, #{attribute_name}" if attribute_metadata.blank?
       sort_attr_index = attribute_metadata[:solrize_for].index(role)
-      raise ArgumentError, "No such solr role is defined for #{attribute_name}" if sort_attr_index.blank?
+      raise ArgumentError, "No #{role} solr role is defined for #{attribute_name}" if sort_attr_index.blank?
       attribute_metadata[:solr_names][sort_attr_index]
     end
 
