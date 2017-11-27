@@ -60,7 +60,8 @@
 </form>
 
 <% if @results.count > 0 %>
-  <%= render partial: 'search/model_results', locals: { results: @results, search_term: params[:query] } %>
+  <%= render partial: 'search/model_results', locals: { results: @results, model: :item,
+                                                        search_term: params[:query] } %>
 <% else %>
   <div>
     <p class="mt-3"><%= t('.no_items_in_collection') %></p>

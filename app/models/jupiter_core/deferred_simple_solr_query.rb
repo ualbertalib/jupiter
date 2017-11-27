@@ -31,14 +31,7 @@ class JupiterCore::DeferredSimpleSolrQuery
 
   def sort(attr, order = :desc)
     raise ArgumentError, 'order must be :asc or :desc' unless [:asc, :desc].include?(order.to_sym)
-
-    metadata = criteria[:model].attribute_metadata(attr.to_sym)
-    raise ArgumentError, "No metadata found for attribute #{attr}" if metadata.blank?
-
-    sort_attr_index = metadata[:solrize_for].index(:sort)
-    raise ArgumentError, "The given attribute, #{attr}, is not solrized for sorting" if sort_attr_index.blank?
-
-    criteria[:sort] = metadata[:solr_names][sort_attr_index]
+    criteria[:sort] = criteria[:model].solr_name_for(attr.to_sym, role: :sort)
     criteria[:sort_order] = order
     self
   end
@@ -115,7 +108,7 @@ class JupiterCore::DeferredSimpleSolrQuery
       attr_queries = []
       attr_queries << criteria[:where].map do |k, v|
         solr_key = k == :id ? k : criteria[:model].attribute_metadata(k)[:solr_names].first
-        %Q(_query_:"{!field f=#{solr_key}}#{v}")
+        %Q(_query_:"#{solr_key}:#{v}")
       end
     else
       ''

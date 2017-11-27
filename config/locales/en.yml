@@ -39,6 +39,7 @@ en:
   cancel: 'Cancel'
   close: 'Close'
   delete: 'Delete'
+  download: 'Download'
   edit: 'Edit'
   remove: 'Remove'
   never_signed_in: 'Never Signed In'
@@ -119,6 +120,7 @@ en:
         rails: 'Rails'
         sidekiq: 'Sidekiq'
         recent_items: 'Recent Items'
+        latest_items: 'Latest items'
         recent_users: 'Recent Users'
     communities:
       index:
@@ -251,7 +253,7 @@ en:
       header: 'Communities'
       delete_confirm: 'Are you sure you want to delete community "%{title}"?'
       create_community: 'Create Community'
-      search_placeholder: 'collection name or community name... (TODO not implemented)'
+      search_placeholder: 'Type all or part of a community or collection name ...'
     show:
       collections_list_header: 'Collections in this Community'
       create_collection: 'Create Collection'
@@ -273,10 +275,12 @@ en:
       updated: 'Item was successfully updated!'
     show:
       member_of: 'Member of'
-      contain_files: 'Contains files'
-      fileset: 'FileSet'
-      original_filename: 'Original Filename'
-      mime_type: 'MIME Type'
+    thumbnail:
+      thumbnail: 'thumbnail'
+    files_section_sidebar:
+      view: 'View Original'
+      download: 'Download'
+      header: 'Files'
     new:
       header: 'Deposit Item'
     create:
@@ -306,3 +310,11 @@ en:
     index:
       header: 'Search Items'
       no_results_found: No results found
+    file_label: 'File'
+    add_another_file: 'Add another file'
+    files_section_sidebar:
+      header: 'Files'
+      view: 'View'
+      download: 'Download'
+    thumbnail:
+      thumbnail: 'Thumbnail'

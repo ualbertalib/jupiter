@@ -123,6 +123,23 @@ module JupiterCore
       ldp_object.errors
     end
 
+    # Derives a solr-formatted (mangled_attr_name: value) search term for an instance's attribute.
+    # eg)
+    #    obj.search_term_for(:title)
+    #    => "title_tesim:\"The effects of Celebrator Doppelbock on cats\""
+    def search_term_for(attr_name)
+      solr_attr_name = self.class.solr_name_for(attr_name, role: :search)
+      %Q(#{solr_attr_name}:"#{self.send(attr_name)}")
+    end
+
+    def read_solr_index(name)
+      raise PropertyInvalidError unless name.is_a? Symbol
+      type = self.solr_calc_attributes[name]
+      raise PropertyInvalidError if type.blank?
+      solr_name = Solrizer.solr_name(name, :symbol, type: type)
+      solr_representation[solr_name]
+    end
+
     # Use this to create a new +LockedLDPObjects+ and its underlying LDP instance. attrs populate the new object's
     # attributes
     def self.new_locked_ldp_object(*attrs)
@@ -180,6 +197,23 @@ module JupiterCore
     #   => :title
     def self.solr_name_to_attribute_name(solr_name)
       self.reverse_solr_name_cache[solr_name]
+    end
+
+    # Accepts the symbolic name of an attribute, and the "solrize_for" role, and returns the string
+    # representing the mangled solr name for that role. eg)
+    #
+    # Given a subclass +Item+ with an attribute declaration:
+    #   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
+    #
+    # then:
+    #   Item.solr_name_for(:title, role: :search)
+    #   => "title_tesim"
+    def self.solr_name_for(attribute_name, role:)
+      attribute_metadata = self.attribute_cache[attribute_name]
+      raise ArgumentError, "No such attribute is defined, #{attribute_name}" if attribute_metadata.blank?
+      sort_attr_index = attribute_metadata[:solrize_for].index(role)
+      raise ArgumentError, "No #{role} solr role is defined for #{attribute_name}" if sort_attr_index.blank?
+      attribute_metadata[:solr_names][sort_attr_index]
     end
 
     # Accepts a string id of an object in the LDP, and returns a +LockedLDPObjects+ representation of that object
@@ -630,6 +664,7 @@ module JupiterCore
       def has_attribute(name, predicate, multiple: false, solrize_for: [], type: :string, facet_value_presenter: nil)
         raise PropertyInvalidError unless name.is_a? Symbol
         raise PropertyInvalidError if predicate.blank?
+        raise PropertyInvalidError if solrize_for.blank?
 
         # TODO: keep this conveinience, or push responsibility for [] onto the callsite?
         solrize_for = [solrize_for] unless solrize_for.is_a? Array

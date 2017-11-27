@@ -21,7 +21,11 @@ class ItemPolicy < LockedLdpObjectPolicy
   end
 
   def destroy?
-    create?
+    admin?
+  end
+
+  def download?
+    show?
   end
 
 end

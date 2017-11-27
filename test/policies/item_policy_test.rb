@@ -18,18 +18,18 @@ class ItemPolicyTest < ActiveSupport::TestCase
   end
 
   context 'general user' do
-    should 'only be able to access your own items' do
+    should 'only be able to create, see and modify, but not delete, your own items' do
       current_user = users(:regular_user)
       item = Item.new_locked_ldp_object(owner: current_user.id)
 
       assert ItemPolicy.new(current_user, item).index?
       assert ItemPolicy.new(current_user, item).show?
+      assert ItemPolicy.new(current_user, item).edit?
+      assert ItemPolicy.new(current_user, item).update?
 
       assert ItemPolicy.new(current_user, item).create?
       assert ItemPolicy.new(current_user, item).new?
-      assert ItemPolicy.new(current_user, item).edit?
-      assert ItemPolicy.new(current_user, item).update?
-      assert ItemPolicy.new(current_user, item).destroy?
+      refute ItemPolicy.new(current_user, item).destroy?
     end
 
     should 'not have access to other items' do

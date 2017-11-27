@@ -6,7 +6,7 @@ git_source(:github) do |repo_name|
 end
 
 # Core Rails stuff
-gem 'puma', '~> 3.7'
+gem 'puma', '~> 3.11'
 gem 'rails', '~> 5.1.1'
 
 # Assets (CSS/JS) stuff
@@ -14,6 +14,7 @@ gem 'bootstrap', '~> 4.0.0.beta2.1'
 gem 'font-awesome-rails'
 gem 'jquery-rails'
 gem 'sass-rails', '~> 5'
+gem 'select2-rails'
 gem 'turbolinks', '~> 5'
 gem 'uglifier', '>= 1.3.0'
 
