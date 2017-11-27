@@ -17,7 +17,7 @@ $(document).on('turbolinks:load', function() {
   $('#js-additional-fields-accordion .card').on('shown.bs.collapse', toggleIcon);
 
 
-  $('form.js-deposit-item input').change(function() {
+  $('form.js-deposit-item').on('change', 'input, select, textarea', function() {
     unsavedChanges = true;
   });
 
