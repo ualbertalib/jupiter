@@ -1,3 +1,7 @@
+$(document).on("turbolinks:before-cache", function() {
+    $('.js-communities-collections-searchbox').select2('destroy');
+});
+
 $(document).on('turbolinks:load', function() {
   $('.js-communities-collections-searchbox').select2({
     theme: 'bootstrap',
