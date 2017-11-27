@@ -1,7 +1,12 @@
 <%= simple_form_for item, html: {multipart: true} do |f| %>
   <% item.display_attributes.each do |prop, _| %>
     <% next if ['visibility', 'owner', 'record_created_at', 'doi', 'embargo_end_date'].include? prop %>
-    <%= f.input prop %>
+    <% if ['creator', 'contributor'].include? prop %>
+      <%# Multi-valued, handle it the easy way for now %>
+      <%= f.input prop, input_html: { multiple: true } %>
+    <% else %>
+      <%= f.input prop %>
+    <% end %>
   <% end %>
   <%= f.input :visibility,
     as: :unread_select,

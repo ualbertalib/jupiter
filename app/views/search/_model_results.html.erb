@@ -42,13 +42,17 @@
 
     <%# Results list %>
     <div class='jupiter-results-list'>
-      <% @results[model].each do |result| %>
-      <div class="row">
-        <div class="col">
-          <%= link_to result.title, path_for_result(result) %>
-        </div>
-      </div>
-      <% end %>
+      <ul class="list-group">
+        <% @results[model].each do |result| %>
+          <li class="list-group-item list-group-item-action">
+            <% if model == :item %>
+              <%= render partial: 'item_hit', locals: { result: result } %>
+            <% else %>
+              <%= link_to result.title, path_for_result(result) %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
     </div>
     <div class="p-2 d-flex justify-content-center">
       <div>

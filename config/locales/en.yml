@@ -39,6 +39,7 @@ en:
   cancel: 'Cancel'
   close: 'Close'
   delete: 'Delete'
+  download: 'Download'
   edit: 'Edit'
   remove: 'Remove'
   never_signed_in: 'Never Signed In'
