@@ -1,0 +1,15 @@
+<%# TODO: might want to add a size parameter (e.g. list view vs item view) %>
+<% size_class = if local_assigns[:size].present? && size == :large
+                  'logo-large'
+                else
+                  'logo-small'
+                end %>
+<% if object.thumbnail&.attached? %>
+  <%= image_tag(object.thumbnail.url, class: "d-flex mr-3 img-thumbnail #{size_class}") %>
+<% else %>
+  <div class="d-flex justify-content-center align-items-center mr-3 img-thumbnail <%= size_class %>">
+    <small class="text-muted">
+      <i class="fa fa-5x fa-picture-o" aria-hidden="true"></i>
+    </small>
+  </div>
+<% end %>

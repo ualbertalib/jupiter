@@ -9,9 +9,11 @@ class Item < JupiterCore::LockedLdpObject
   # TODO: Add fields: alternate_title, type of item, date created, time, place, citation, source, related items, license
 
   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :sort]
+  has_multival_attribute :creator, ::RDF::Vocab::DC.creator, solrize_for: [:search, :facet]
+  has_multival_attribute :contributor, ::RDF::Vocab::DC.contributor, solrize_for: [:search, :facet]
+  has_attribute :created, ::RDF::Vocab::DC.created, solrize_for: [:search, :sort]
+  has_attribute :sort_year, ::VOCABULARY[:ualib].sort_year, solrize_for: [:search, :sort]
   has_attribute :subject, ::RDF::Vocab::DC.subject, solrize_for: [:search, :facet]
-  has_attribute :creator, ::RDF::Vocab::DC.creator, solrize_for: [:search, :facet]
-  has_attribute :contributor, ::RDF::Vocab::DC.contributor, solrize_for: [:search, :facet]
   has_attribute :description, ::RDF::Vocab::DC.description, type: :text, solrize_for: :search
   has_attribute :publisher, ::RDF::Vocab::DC.publisher, solrize_for: [:search, :facet]
   # has_attribute :date_modified, ::RDF::Vocab::DC.modified, type: :date, solrize_for: :sort
@@ -60,12 +62,22 @@ class Item < JupiterCore::LockedLdpObject
     end
   end
 
+  # TODO: implement me
+  def thumbnail
+    nil
+  end
+
   unlocked do
     validates :embargo_end_date, presence: true, if: ->(item) { item.visibility == VISIBILITY_EMBARGO }
     validates :embargo_end_date, absence: true, if: ->(item) { item.visibility != VISIBILITY_EMBARGO }
     validates :member_of_paths, presence: true
     validates :title, presence: true
     validate :communities_and_collections_validations
+
+    before_validation do
+      # TODO: for theses, the sort_year attribute should be derived from ual:graduationDate
+      self.sort_year = Date.parse(created).year.to_s if created.present?
+    end
 
     def communities_and_collections_validations
       return if member_of_paths.blank?
@@ -107,7 +119,13 @@ class Item < JupiterCore::LockedLdpObject
                                               update_existing: false, versioning: false)
           unlocked_fileset.member_of_collections += [self]
           # Temporarily cache the file name for storing in Solr
-          unlocked_fileset.contained_filename = file.original_filename
+          # if the file was uploaded, it responds to +original_filename+
+          # if it's a Ruby File object, it has a +basename+. This distinction seems arbitrary.
+          unlocked_fileset.contained_filename = if file.respond_to?(:original_filename)
+                                                  file.original_filename
+                                                else
+                                                  File.basename(file)
+                                                end
           unlocked_fileset.save!
           self.members += [unlocked_fileset]
           # pull in hydra derivatives, set temp file base

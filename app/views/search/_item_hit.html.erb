@@ -1,0 +1,44 @@
+<div class="media mb-3">
+  <%= link_to path_for_result(result) do %>
+    <%= render partial: 'thumbnail', locals: { object: result } %>
+  <% end %>
+  <div class="media-body">
+    <div class="d-flex flex-wrap flex-lg-nowrap justify-content-between align-items-start">
+      <h5 class="mt-0"><%= link_to result.title, path_for_result(result) %></h5>
+      <div class="btn-group">
+        <% if result.file_sets.count > 0 %>
+          <%= link_to fileset_uri(result.file_sets.first, :download), class: 'btn btn-secondary' do %>
+            <%= fa_icon 'cloud-download' %>
+            <%= t('download') %>
+          <% end %>
+        <% end %>
+        <% if policy(result).update? %>
+          <%= link_to edit_item_path(result), class:'btn btn-outline-secondary'  do %>
+            <%= fa_icon('trash') %>
+            <%= t('edit') %>
+          <% end %>
+        <% end %>
+        <% if policy(result).destroy? %>
+          <%= link_to item_path(result), method: :delete, class:'btn btn-outline-secondary',
+              data: { confirm: t('collections.show.item_delete_confirm', title: result.title) } do %>
+            <%= fa_icon('trash') %>
+            <%= t('delete') %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="mt-0">
+      <%= result.sort_year %>
+    </div>
+    <div>
+      <%# TODO: the search path may need to be revisited %>
+      <%= result.creator&.map { |creator| link_to creator, search_path(search: result.search_term_for(:creator)) }
+                        &.join(', ')&.html_safe %>
+    </div>
+    <div>
+      <%# TODO: for long description, implement 'more ...' / 'less ...' %>
+      <%= result.description %>
+    </div>
+  </div>
+</div>

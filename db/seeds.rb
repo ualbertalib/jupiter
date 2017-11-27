@@ -46,7 +46,7 @@ if Rails.env.development? || Rails.env.uat?
   end
 
   # Lets pick 10 prolific creators, 10 contributors
-  creators = 10.times.map { "#{Faker::Cat.unique.name} #{Faker::Cat.unique.breed}" }
+  creators = 10.times.map { "#{Faker::Cat.unique.name} #{Faker::Cat.unique.breed.gsub(/[ ,]+/, '-')}" }
   contributors = 10.times.map { Faker::FunnyName.unique.name_with_initial }
 
   THINGS.each_with_index do |thing, idx|
@@ -89,15 +89,34 @@ if Rails.env.development? || Rails.env.uat?
       collection_first ||= collection
       collection_last = collection
 
-      20.times do
+      20.times do |i|
+        seed = rand(10)
+        creator = [creators[seed]]
+        # Add the occasional double-author work
+        creator << creators[(seed + 5) % 10] if i % 7 == 3
+        # Add one with a ton of authors
+        creator += 6.times.map { |j| creators[(seed + 3 * j) % 10] } if i == 18
+        # Add an occasional verbose description
+        description = if i % 10 == 5
+                        Faker::Lorem.sentence(100, false, 0).chop
+                      else
+                        Faker::Lorem.sentence(20, false, 0).chop
+                      end
+        # 20% French
+        language = if seed > 2
+                     'English'
+                   else
+                     'French'
+                   end
         Item.new_locked_ldp_object(
           owner: admin.id,
-          creator: creators[rand(10)],
-          contributor: contributors[rand(10)],
+          creator: creator.uniq,
+          contributor: [contributors[rand(10)]],
+          created: (Time.now - rand(20_000).days).to_s,
           visibility: JupiterCore::VISIBILITY_PUBLIC,
           title: "The effects of #{Faker::Beer.name} on #{thing.pluralize}",
-          description: Faker::Lorem.sentence(20, false, 0).chop,
-          language: rand(10) > 2 ? 'English' : 'French'
+          description: description,
+          language: language
         ).unlock_and_fetch_ldp_object do |uo|
           uo.add_to_path(community.id, collection.id)
           uo.save!
