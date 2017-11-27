@@ -6,60 +6,38 @@
 
 <%# TODO: Need to figure out data model and migrate everything to use form_for and it's helpers
 = form_for @item, url: wizard_path, method: :put, class:'js-deposit-item' do |f| %>
-<%= form_tag wizard_path, method: :put, class:'js-deposit-item js-dropzone' do %>
+<%= form_tag wizard_path, method: :put, multipart: true, class:'js-deposit-item js-dropzone' do %>
   <div class="row">
     <div class="col">
       <!-- The fileinput-button span is used to style the file input field as button -->
-      <button type="button" class="btn btn-success fileinput-button">
+      <button type="button" class="btn btn-primary js-add-files">
         <%= fa_icon 'plus' %>
-        Add files...
+        Add files
       </button>
-      <button type="button" class="btn btn-primary start">
-       <%= fa_icon 'upload' %>
-        Start all uploads
-      </button>
-      <button type="reset" class="btn btn-secondary cancel">
-        <%= fa_icon 'ban' %>
-        Cancel all uploads
+      <button type="reset" class="btn btn-secondary js-cancel-files">
+        <%= fa_icon 'minus' %>
+        Remove files
       </button>
     </div>
   </div>
 
-  <div class="row my-3">
-    <div class="col">
-      <!-- The global file processing state -->
-      <span class="fileupload-process">
-        <div id="total-progress" class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-          <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
-        </div>
-      </span>
-    </div>
-  </div>
-
-
-  <ul class="list-unstyled files" id="previews">
+  <ul class="list-unstyled js-files" id="previews">
     <li id="template" class="media my-3 p-3 border file-row">
       <!-- This is used as the file preview template -->
       <img data-dz-thumbnail class="mr-3">
-
       <div class="media-body">
         <div class="pull-right">
-          <button type="button" class="btn btn-primary start">
-              <%= fa_icon 'upload' %>
-              <span>Start</span>
-          </button>
-          <button type="button" data-dz-remove class="btn btn-secondary cancel">
-              <%= fa_icon 'ban' %>
-              <span>Cancel</span>
+          <button type="button" data-dz-remove class="btn btn-secondary">
+              <%= fa_icon 'minus' %>
+              <span>Remove</span>
           </button>
         </div>
         <h5 class="mt-0 mb-1" class="name" data-dz-name></h5>
         <strong class="error text-danger" data-dz-errormessage></strong>
         <p class="size" data-dz-size></p>
-        <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-          <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
+        <div class="progress">
+          <div class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"  data-dz-uploadprogress></div>
         </div>
-
 
       </div>
     </li>
