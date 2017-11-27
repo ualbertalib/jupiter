@@ -300,6 +300,8 @@ en:
 
   deposit_item:
     header: 'Deposit Item'
+    previous: 'Previous'
+    save_and_continue: 'Save and continue'
     describe_item:
       header: 'Describe Item'
       title: 'Title'

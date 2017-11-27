@@ -69,6 +69,14 @@
     <%= file_field_tag 'files', multiple: true, class: 'form-control-file' %>
   </div>
 
-  <%= link_to 'Previous', previous_wizard_path, class: 'btn btn-secondary' %>
-  <%= submit_tag 'Save and Continue', class: 'btn btn-primary' %>
+  <div class="mt-3 pull-right">
+    <%= link_to previous_wizard_path, class: 'btn btn-secondary' do %>
+      <%= fa_icon 'chevron-left' %>
+      <%= t('deposit_item.previous') %>
+    <% end %>
+    <%= button_tag type: :submit, class: 'btn btn-primary' do %>
+      <%= t('deposit_item.save_and_continue') %>
+      <%= fa_icon 'chevron-right' %>
+    <% end %>
+  </div>
 <% end %>
