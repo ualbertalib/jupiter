@@ -98,12 +98,16 @@ class Item < JupiterCore::LockedLdpObject
     validates :member_of_paths, presence: true
     validates :title, presence: true
     validates :language, presence: true
+    validates :doi, presence: true
     validate :communities_and_collections_validations
     validate :language_validations
 
     before_validation do
       # TODO: for theses, the sortyear attribute should be derived from ual:graduationDate
       self.sortyear = Date.parse(created).year.to_s if created.present?
+
+      # TODO: replace with real DOI ...
+      self.doi = "bogus-doi-#{Time.current.utc.iso8601(3)}" if doi.nil?
     end
 
     def communities_and_collections_validations

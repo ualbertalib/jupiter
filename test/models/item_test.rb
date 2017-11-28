@@ -121,4 +121,11 @@ class ItemTest < ActiveSupport::TestCase
     refute_includes item.errors.keys, :language
   end
 
+  test 'a DOI must be present' do
+    item = Item.new_locked_ldp_object(doi: '')
+
+    assert_not item.valid?
+    assert_includes item.errors[:doi], "can't be blank"
+  end
+
 end
