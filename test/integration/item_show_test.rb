@@ -24,6 +24,7 @@ class ItemShowTest < ActionDispatch::IntegrationTest
       uo.owner = 1
       uo.visibility = 'public'
       uo.language = ['http://id.loc.gov/vocabulary/iso639-2/eng']
+      uo.license = 'http://creativecommons.org/licenses/by/4.0/'
       uo.add_to_path(@community1.id, @collection1.id)
       uo.add_to_path(@community1.id, @collection2.id)
       uo.save!

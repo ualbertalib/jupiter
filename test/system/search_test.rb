@@ -16,7 +16,8 @@ class SearchTest < ApplicationSystemTestCase
     @items = 10.times.map do |i|
       Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                  owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Item #{i}",
-                                 language: ['http://id.loc.gov/vocabulary/iso639-2/eng'])
+                                 language: ['http://id.loc.gov/vocabulary/iso639-2/eng'],
+                                 license: 'http://creativecommons.org/licenses/by/4.0/')
           .unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(@community.id, @collections[i / 5].id)
         uo.save!
@@ -26,7 +27,8 @@ class SearchTest < ApplicationSystemTestCase
     @items += 10.times.map do |i|
       Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PRIVATE,
                                  owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Private Item #{i + 10}",
-                                 language: ['http://id.loc.gov/vocabulary/iso639-2/eng'])
+                                 language: ['http://id.loc.gov/vocabulary/iso639-2/eng'],
+                                 license: 'http://creativecommons.org/licenses/by/4.0/')
           .unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(@community.id, @collections[i / 5].id)
         uo.save!
@@ -42,7 +44,8 @@ class SearchTest < ApplicationSystemTestCase
                              .unlock_and_fetch_ldp_object(&:save!)
       Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                  owner: 1, title: "Extra Item #{i}",
-                                 language: ['http://id.loc.gov/vocabulary/iso639-2/eng'])
+                                 language: ['http://id.loc.gov/vocabulary/iso639-2/eng'],
+                                 license: 'http://creativecommons.org/licenses/by/4.0/')
           .unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(community.id, collection.id)
         uo.save!

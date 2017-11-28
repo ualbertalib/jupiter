@@ -67,13 +67,23 @@ class Item < JupiterCore::LockedLdpObject
     super + [VISIBILITY_EMBARGO]
   end
 
+  # Some URI --> text functions
   def self.language_text(language_uri)
     CONTROLLED_VOCABULARIES[:language].each do |lang|
       if lang[:uri] == language_uri
-        return I18n.t("controlled_vocabularies.dcterms_language.#{lang[:code]}")
+        return I18n.t("controlled_vocabularies.language.#{lang[:code]}")
       end
     end
     raise ApplicationError("Language not found for #{language_uri}")
+  end
+
+  def self.license_text(license_uri)
+    CONTROLLED_VOCABULARIES[:license].each do |lic|
+      if lic[:uri] == license_uri
+        return I18n.t("controlled_vocabularies.license.#{lic[:code]}")
+      end
+    end
+    raise ApplicationError("License not found for #{license_uri}")
   end
 
   def file_sets
@@ -98,9 +108,11 @@ class Item < JupiterCore::LockedLdpObject
     validates :member_of_paths, presence: true
     validates :title, presence: true
     validates :language, presence: true
+    validates :license, presence: true
     validates :doi, presence: true
     validate :communities_and_collections_validations
     validate :language_validations
+    validate :license_validations
 
     before_validation do
       # TODO: for theses, the sort_year attribute should be derived from ual:graduationDate
@@ -170,6 +182,11 @@ class Item < JupiterCore::LockedLdpObject
       language.each do |lang|
         errors.add(:language, :not_recognized) unless uris.include?(lang)
       end
+    end
+
+    def license_validations
+      return if ::CONTROLLED_VOCABULARIES[:license].any? { |lic| lic[:uri] == license }
+      errors.add(:license, :not_recognized)
     end
   end
 

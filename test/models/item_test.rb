@@ -9,7 +9,8 @@ class ItemTest < ActiveSupport::TestCase
                                                   community_id: community.id)
     collection.unlock_and_fetch_ldp_object(&:save!)
     item = Item.new_locked_ldp_object(title: 'Item', owner: 1, visibility: 'public',
-                                      language: ['http://id.loc.gov/vocabulary/iso639-2/eng'])
+                                      language: ['http://id.loc.gov/vocabulary/iso639-2/eng'],
+                                      license: 'http://creativecommons.org/licenses/by/4.0/')
     item.unlock_and_fetch_ldp_object do |unlocked_item|
       unlocked_item.add_to_path(community.id, collection.id)
       unlocked_item.save!
@@ -119,6 +120,23 @@ class ItemTest < ActiveSupport::TestCase
     item = Item.new_locked_ldp_object(language: ['http://id.loc.gov/vocabulary/iso639-2/eng'])
     assert_not item.valid?
     refute_includes item.errors.keys, :language
+  end
+
+  test 'a license must be present' do
+    item = Item.new_locked_ldp_object
+
+    assert_not item.valid?
+    assert_includes item.errors[:license], "can't be blank"
+  end
+
+  test 'a license must be from the controlled vocabulary' do
+    item = Item.new_locked_ldp_object(license: 'whatever')
+    assert_not item.valid?
+    assert_includes item.errors[:license], 'is not recognized'
+
+    item = Item.new_locked_ldp_object(license: 'http://creativecommons.org/licenses/by/4.0/')
+    assert_not item.valid?
+    refute_includes item.errors.keys, :license
   end
 
   test 'a DOI must be present' do

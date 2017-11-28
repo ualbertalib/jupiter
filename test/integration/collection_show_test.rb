@@ -19,6 +19,7 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
       Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                  owner: 1,
                                  language: ['http://id.loc.gov/vocabulary/iso639-2/eng'],
+                                 license: 'http://creativecommons.org/licenses/by/4.0/',
                                  title: "Fancy Item #{i}").unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(@community.id, @collection.id)
         uo.save!

@@ -33,7 +33,8 @@ class FileSetTest < ActiveSupport::TestCase
                                                   community_id: community.id).unlock_and_fetch_ldp_object(&:save!)
 
     item = Item.new_locked_ldp_object(title: generate_random_string, visibility: 'public', owner: 1,
-                                      language: ['http://id.loc.gov/vocabulary/iso639-2/eng'])
+                                      language: ['http://id.loc.gov/vocabulary/iso639-2/eng'],
+                                      license: 'http://creativecommons.org/licenses/by/4.0/')
 
     item.unlock_and_fetch_ldp_object do |unlocked_item|
       unlocked_item.add_to_path(community.id, collection.id)
