@@ -23,6 +23,7 @@ class ItemShowTest < ActionDispatch::IntegrationTest
       uo.title = 'Fantastic item'
       uo.owner = 1
       uo.visibility = 'public'
+      uo.language = ['http://id.loc.gov/vocabulary/iso639-2/eng']
       uo.add_to_path(@community1.id, @collection1.id)
       uo.add_to_path(@community1.id, @collection2.id)
       uo.save!

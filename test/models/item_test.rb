@@ -8,7 +8,8 @@ class ItemTest < ActiveSupport::TestCase
     collection = Collection.new_locked_ldp_object(title: 'Collection', owner: 1, visibility: 'public',
                                                   community_id: community.id)
     collection.unlock_and_fetch_ldp_object(&:save!)
-    item = Item.new_locked_ldp_object(title: 'Item', owner: 1, visibility: 'public')
+    item = Item.new_locked_ldp_object(title: 'Item', owner: 1, visibility: 'public',
+                                      language: ['http://id.loc.gov/vocabulary/iso639-2/eng'])
     item.unlock_and_fetch_ldp_object do |unlocked_item|
       unlocked_item.add_to_path(community.id, collection.id)
       unlocked_item.save!
@@ -101,6 +102,23 @@ class ItemTest < ActiveSupport::TestCase
     assert_includes item.errors[:member_of_paths],
                     I18n.t('activemodel.errors.models.ir_item.attributes.member_of_paths.collection_not_found',
                            id: collection_id)
+  end
+
+  test 'a language must be present' do
+    item = Item.new_locked_ldp_object
+
+    assert_not item.valid?
+    assert_includes item.errors[:language], "can't be blank"
+  end
+
+  test 'a language must be from the controlled vocabulary' do
+    item = Item.new_locked_ldp_object(language: ['whatever'])
+    assert_not item.valid?
+    assert_includes item.errors[:language], 'is not recognized'
+
+    item = Item.new_locked_ldp_object(language: ['http://id.loc.gov/vocabulary/iso639-2/eng'])
+    assert_not item.valid?
+    refute_includes item.errors.keys, :language
   end
 
 end

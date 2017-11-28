@@ -97,6 +97,7 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
       Item.new_locked_ldp_object(
         title: 'thesis blocking deletion',
         owner: 1,
+        language: ['http://id.loc.gov/vocabulary/iso639-2/eng'],
         visibility: JupiterCore::VISIBILITY_PRIVATE
       ).unlock_and_fetch_ldp_object do |unlocked_item|
         unlocked_item.add_to_path(@community.id, @collection.id)
