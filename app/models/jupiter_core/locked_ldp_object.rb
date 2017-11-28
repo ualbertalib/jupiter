@@ -136,7 +136,7 @@ module JupiterCore
       raise PropertyInvalidError unless name.is_a? Symbol
       type_info = self.solr_calc_attributes[name]
       raise PropertyInvalidError if type_info.blank?
-      solr_name = Solrizer.solr_name(name, type_info[:solr_descriptor], type: type_info[:type] )
+      solr_name = Solrizer.solr_name(name, type_info[:solr_descriptor], type: type_info[:type])
       solr_representation[solr_name]
     end
 
