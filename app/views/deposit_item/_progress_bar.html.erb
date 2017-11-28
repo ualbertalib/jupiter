@@ -6,22 +6,21 @@
     <ul class="nav nav-pills nav-fill">
       <% wizard_steps.each do |wizard_step| %>
         <li class="nav-item">
-          <%= link_to I18n.t("deposit_item.#{wizard_step}.header"),
-            wizard_path(wizard_step),
-            class: "nav-link #{progress_bar_step_class(wizard_step)}" %>
+          <%= link_to t("deposit_item.#{wizard_step}.header"),
+                      wizard_path(wizard_step),
+                      class: "nav-link #{progress_bar_step_class(wizard_step)}" %>
         </li>
       <% end %>
     </ul>
   </nav>
   <div class="progress">
     <%= content_tag :div,
-      "#{progress_bar_percentage} %",
-      class: "progress-bar",
-      role: "progressbar",
-      style: "width: #{progress_bar_percentage}%",
-      'aria-valuenow' => progress_bar_percentage,
-      'aria-valuemin' => "0",
-      'aria-valuemax' => "100"
-    %>
+                    "#{progress_bar_percentage} %",
+                    class: "progress-bar",
+                    style: "width: #{progress_bar_percentage}%",
+                    role: "progressbar",
+                    'aria-valuenow' => progress_bar_percentage,
+                    'aria-valuemin' => "0",
+                    'aria-valuemax' => "100" %>
   </div>
 </section>

@@ -7,11 +7,12 @@
 <%# TODO: Need to figure out data model and migrate everything to use form_for and it's helpers
 = form_for @item, url: wizard_path, method: :put, class:'js-deposit-item' do |f| %>
 <%= form_tag wizard_path, method: :put, class:'js-deposit-item' do %>
-  <p>Please review your item before depositing into ERA</p>
+  <p><%= t('.please_review_item') %></p>
 
-  TODO: Render Item Detail here
+  <%# should generalize item show page and rerender here and passing in object %>
 
-  <p>By depositing this item into ERA you agree to the <a href="#TODO">ERA Deposit Policy agreements</a></p>
+
+  <p><%= t('.legal_disclaimer_html') %></p>
 
   <div class="mt-3 pull-right">
     <%= link_to previous_wizard_path, class: 'btn btn-secondary' do %>

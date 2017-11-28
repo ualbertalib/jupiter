@@ -26,7 +26,6 @@ class DepositItemController < ApplicationController
     # authorize @item
     # @item.update_attributes(params[:item])
     # render_wizard @item
-
     redirect_to next_wizard_path
   end
 
