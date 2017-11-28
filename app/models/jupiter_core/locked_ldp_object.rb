@@ -223,7 +223,6 @@ module JupiterCore
         type = solr_metadata[:type]
         return Solrizer.solr_name(attribute_name, type, type: descriptor)
       end
-      raise ArgumentError, "No such attribute is defined, #{attribute_name}" if attribute_metadata.blank?
     end
 
     # Accepts a string id of an object in the LDP, and returns a +LockedLDPObjects+ representation of that object
@@ -578,7 +577,9 @@ module JupiterCore
         raise PropertyInvalidError unless type.present? && type.is_a?(Symbol)
 
         self.solr_calc_attributes ||= {}
-        self.solr_calc_attributes[name] = {type: type, solr_descriptor: SOLR_DESCRIPTOR_MAP[solrize_for], callable: as }
+        self.solr_calc_attributes[name] = { type: type,
+                                            solr_descriptor: SOLR_DESCRIPTOR_MAP[solrize_for],
+                                            callable: as }
       end
 
       def belongs_to(name, using_existing_association:)
