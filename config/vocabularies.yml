@@ -23,7 +23,7 @@
     - fedora3uuid
     - ingestbatch
     - path
-    - sort_year
+    - sortyear
     # Just making these up here ...
     - embargohistory
     - visibilityafterembargo

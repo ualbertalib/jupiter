@@ -11,7 +11,7 @@ class Item < JupiterCore::LockedLdpObject
   has_multival_attribute :creator, ::RDF::Vocab::DC.creator, solrize_for: [:search, :facet]
   has_multival_attribute :contributor, ::RDF::Vocab::DC.contributor, solrize_for: [:search, :facet]
   has_attribute :created, ::RDF::Vocab::DC.created, solrize_for: [:search, :sort]
-  has_attribute :sort_year, ::VOCABULARY[:ual].sort_year, solrize_for: [:search, :sort]
+  has_attribute :sortyear, ::VOCABULARY[:ual].sortyear, solrize_for: [:search, :sort]
   has_multival_attribute :subject, ::RDF::Vocab::DC.subject, solrize_for: [:search, :facet]
   has_attribute :description, ::RDF::Vocab::DC.description, type: :text, solrize_for: :search
   has_attribute :publisher, ::RDF::Vocab::DC.publisher, solrize_for: [:search, :facet]
@@ -28,7 +28,7 @@ class Item < JupiterCore::LockedLdpObject
   has_attribute :depositor, ::VOCABULARY[:ual].depositor, solrize_for: [:search]
   has_attribute :fedora3handle, ::VOCABULARY[:ual].fedora3handle, type: :text, solrize_for: :exact_match
   has_attribute :fedora3uuid, ::VOCABULARY[:ual].fedora3uuid, type: :text, solrize_for: :exact_match
-  has_attribute :ingest_batch, ::VOCABULARY[:ual].ingestbatch, type: :text, solrize_for: :exact_match
+  has_attribute :ingestbatch, ::VOCABULARY[:ual].ingestbatch, type: :text, solrize_for: :exact_match
   has_multival_attribute :member_of_paths, ::VOCABULARY[:ual].path,
                          type: :path,
                          solrize_for: :pathing,
@@ -102,8 +102,8 @@ class Item < JupiterCore::LockedLdpObject
     validate :language_validations
 
     before_validation do
-      # TODO: for theses, the sort_year attribute should be derived from ual:graduationDate
-      self.sort_year = Date.parse(created).year.to_s if created.present?
+      # TODO: for theses, the sortyear attribute should be derived from ual:graduationDate
+      self.sortyear = Date.parse(created).year.to_s if created.present?
     end
 
     def communities_and_collections_validations
