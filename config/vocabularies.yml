@@ -21,12 +21,12 @@
     - depositor
     - fedora3handle
     - fedora3uuid
-    - ingestBatch
+    - ingestbatch
     - path
     - sort_year
     # Just making these up here ...
-    - embargoHistory
-    - visibilityAfterEmbargo
+    - embargohistory
+    - visibilityafterembargo
 
 - vocabulary: prism
   schema: http://prismstandard.org/namespaces/basic/3.0/

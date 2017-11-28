@@ -26,9 +26,9 @@ class Item < JupiterCore::LockedLdpObject
 
   # UAL attributes
   has_attribute :depositor, ::VOCABULARY[:ual].depositor, solrize_for: [:search]
-  has_attribute :fedora3handle, ::VOCABULARY[:ual].fedora3Handle, type: :text, solrize_for: :exact_match
-  has_attribute :fedora3uuid, ::VOCABULARY[:ual].fedora3UUID, type: :text, solrize_for: :exact_match
-  has_attribute :ingest_batch, ::VOCABULARY[:ual].ingestBatch, type: :text, solrize_for: :exact_match
+  has_attribute :fedora3handle, ::VOCABULARY[:ual].fedora3handle, type: :text, solrize_for: :exact_match
+  has_attribute :fedora3uuid, ::VOCABULARY[:ual].fedora3uuid, type: :text, solrize_for: :exact_match
+  has_attribute :ingest_batch, ::VOCABULARY[:ual].ingestbatch, type: :text, solrize_for: :exact_match
   has_multival_attribute :member_of_paths, ::VOCABULARY[:ual].path,
                          type: :path,
                          solrize_for: :pathing,
