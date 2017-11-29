@@ -1,6 +1,7 @@
 module SearchHelper
   def search_params_hash
-    params.permit(:search, { facets: {} }, :tab, :sort, :direction).to_h
+    # Search controller uses param[:search], all others use params[:query]
+    params.permit(:search, :query, { facets: {} }, :tab, :sort, :direction).to_h
   end
 
   def query_params_with_facet(facet_name, value)
@@ -50,8 +51,7 @@ module SearchHelper
   end
 
   def search_sort_link(sort, direction)
-    content_tag(:a, search_sort_label(sort, direction),
-                class: 'dropdown-item', href: search_path(query_params_with_sort(sort, direction)))
+    link_to search_sort_label(sort, direction), query_params_with_sort(sort, direction), class: 'dropdown-item'
   end
 
   def search_sort_label(sort, direction)

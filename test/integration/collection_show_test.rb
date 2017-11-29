@@ -15,10 +15,10 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
                           .unlock_and_fetch_ldp_object(&:save!)
     @collection = Collection.new_locked_ldp_object(community_id: @community.id, title: 'Nice collection', owner: 1)
                             .unlock_and_fetch_ldp_object(&:save!)
-    @items = (0..1).map do |i|
+    @items = ['Fancy', 'Nice'].map do |adjective|
       Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                  owner: 1,
-                                 title: "Fancy Item #{i}").unlock_and_fetch_ldp_object do |uo|
+                                 title: "#{adjective} Item").unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(@community.id, @collection.id)
         uo.save!
       end
@@ -42,24 +42,28 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
 
     # Delete collection link
     delete = css_select "a[href='#{admin_community_collection_path(@community, @collection)}']"
-    assert delete.count == 1
-    assert delete.first.attributes['data-method'].to_s == 'delete'
+    assert_equal delete.count, 1
+    assert_equal delete.first.attributes['data-method'].to_s, 'delete'
 
     # Items are shown
-    assert_select 'div.list-group .list-group-item', count: 2
+    assert_select '.jupiter-results ul.list-group .list-group-item', count: 2
 
     # Links to items
     @items.each do |item|
-      item_links = css_select "div.list-group .list-group-item a[href='#{item_path(item)}']"
-      assert item_links.count == 2
-      # Link to item
-      assert item_links.first.text == item.title
+      item_links = css_select ".jupiter-results ul.list-group .list-group-item a[href='#{item_path(item)}']"
+
+      # Thumbnail, text link, and delete link
+      assert_equal item_links.count, 3
+      # Thumbnail link to item
+      assert_includes item_links.first.inner_html, 'img-thumbnail'
+      # Text link to item
+      assert_equal item_links[1].text, item.title
       # Link to delete item
       assert_match 'Delete', item_links.last.text
-      assert item_links.last.attributes['data-method'].to_s == 'delete'
+      assert_equal item_links.last.attributes['data-method'].to_s, 'delete'
 
       # Link to edit item
-      assert_select "div.list-group .list-group-item a[href='#{edit_item_path(item)}']", text: 'Edit'
+      assert_select "ul.list-group .list-group-item a[href='#{edit_item_path(item)}']", text: 'Edit'
     end
   end
 
@@ -83,19 +87,35 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
                   count: 0
 
     # Items are shown
-    assert_select 'div.list-group .list-group-item', count: 2
+    assert_select '.jupiter-results ul.list-group .list-group-item', count: 2
 
     # Links to items
     @items.each do |item|
-      item_links = css_select "div.list-group .list-group-item a[href='#{item_path(item)}']"
-      assert item_links.count == 1
+      item_links = css_select ".jupiter-results ul.list-group .list-group-item a[href='#{item_path(item)}']"
+      # Only thumbnail and text link expected
+      assert_equal item_links.count, 2
+      # Thumbnail link to item
+      assert_includes item_links.first.inner_html, 'img-thumbnail'
       # Link to item
-      assert item_links.first.text == item.title
+      assert_equal item_links.last.text, item.title
       # No link to delete item
-      assert item_links.first.attributes['data-method'].to_s != 'delete'
+      refute_equal item_links.first.attributes['data-method'].to_s, 'delete'
+      refute_equal item_links.last.attributes['data-method'].to_s, 'delete'
       # No link to edit item
-      assert_select "div.list-group .list-group-item a[href='#{edit_item_path(item)}']", count: 0
+      assert_select "ul.list-group .list-group-item a[href='#{edit_item_path(item)}']", count: 0
     end
+  end
+
+  test 'searching within the collection as a regular user' do
+    # TODO: should probably hook this up to a system test that submits the form
+    user = users(:regular_user)
+    sign_in_as user
+    get community_collection_url(@community, @collection, query: 'Fancy')
+
+    # Only 'Fancy' items are shown
+    assert_select '.jupiter-results ul.list-group .list-group-item', count: 1
+    assert_select '.jupiter-results ul.list-group .list-group-item a', text: 'Fancy Item', count: 1
+    assert_select '.jupiter-results ul.list-group .list-group-item a', text: 'Nice Item', count: 0
   end
 
 end
