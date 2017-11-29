@@ -10,7 +10,14 @@ module DepositItemHelper
   end
 
   def progress_bar_percentage
-    index = (wizard_steps.index(step) + 1)
-    ((index.to_f / wizard_steps.size) * 100).to_i
+    ((step_index(step).to_f / wizard_steps.size) * 100).to_i
+  end
+
+  def progress_bar_text
+    "#{step_index(step)} / #{wizard_steps.size}"
+  end
+
+  def step_index(wizard_step)
+    (wizard_steps.index(wizard_step) + 1)
   end
 end

@@ -2,7 +2,9 @@
 
 <%= render partial: 'progress_bar' %>
 
-<h2 class="mt-3"><%= t('.header') %></h2>
+<h2 class="mt-5">
+  <%= t('.header') %>
+</h2>
 
 <%# TODO: Need to figure out data model and migrate everything to use form_for and it's helpers
 = form_for @item, url: wizard_path, method: :put, class:'js-deposit-item' do |f| %>
@@ -10,18 +12,196 @@
   <p><%= t('.please_review_item') %></p>
 
   <%# should generalize item show page and rerender here and passing in object %>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="text-muted text-center img-thumbnail p-5 mb-3">
+        <%= fa_icon 'picture-o', class: 'fa-5x' %>
+      </div>
 
+      <div class="card mb-3">
+        <div class="card-header">
+          <%= link_to wizard_path(:upload_files), class: 'pull-right' do %>
+            <%= fa_icon 'pencil-square-o' %>
+            <%= t('edit') %>
+          <% end %>
+          <%=  t('deposit_item.upload_files.header') %>
+        </div>
+        <div class="card-body">
+          <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <%= fa_icon 'file-o' %>
+              Filename.pdf
+              <span class="badge badge-primary badge-pill">7.4 MB</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <%= fa_icon 'file-o' %>
+              Filename.pdf
+              <span class="badge badge-primary badge-pill">23.2 MB</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <%= fa_icon 'file-o' %>
+              Filename.img
+              <span class="badge badge-primary badge-pill">256 KB</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="card mb-3">
+        <div class="card-header">
+          <%= link_to wizard_path(:choose_license_and_visibility), class: 'pull-right' do %>
+            <%= fa_icon 'pencil-square-o' %>
+            <%= t('edit') %>
+          <% end %>
+          <%=  t('deposit_item.choose_license_and_visibility.header') %>
+        </div>
+        <div class="card-body">
+          <h4 class="card-title">License</h4>
+          <p class="card-text"><%=  t('deposit_item.choose_license_and_visibility.license.attribution_noncommercial_html') %></p>
+          <h4 class="card-title">Visibility</h4>
+          <p class="card-text">Open Access</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="card mb-3">
+        <div class="card-header">
+          <%= link_to wizard_path(:describe_item), class: 'pull-right' do %>
+            <%= fa_icon 'pencil-square-o' %>
+            <%= t('edit') %>
+          <% end %>
+          <%=  t('deposit_item.describe_item.header') %>
+        </div>
+        <div class="card-body">
+          <h6 class="card-subtitle mb-1 text-muted">
+            <%=  t('deposit_item.describe_item.title') %>
+          </h6>
+          <p class="card-text">An article regarding bears</p>
 
-  <p><%= t('.legal_disclaimer_html') %></p>
+          <h6 class="card-subtitle mb-1 text-muted">
+            <%=  t('deposit_item.describe_item.alternate_title') %>
+          </h6>
+          <p class="card-text">10 amazing facts about polar bears</p>
 
-  <div class="mt-3 pull-right">
-    <%= link_to previous_wizard_path, class: 'btn btn-secondary' do %>
-      <%= fa_icon 'chevron-left' %>
-      <%= t('deposit_item.previous') %>
-    <% end %>
-    <%= button_tag type: :submit, class: 'btn btn-primary' do %>
-      <%= fa_icon 'save' %>
-      <%= t('deposit_item.header') %>
-    <% end %>
+          <h6 class="card-subtitle mb-1 text-muted">
+            <%=  t('deposit_item.describe_item.item_type') %>
+          </h6>
+          <p class="card-text">
+            Article
+          </p>
+
+          <h6 class="card-subtitle mb-1 text-muted">
+            <%=  t('deposit_item.describe_item.language') %>
+          </h6>
+          <ul class="list-unstyled">
+            <li>English</li>
+            <li>French</li>
+            <li>Other</li>
+          </ul>
+
+          <h6 class="card-subtitle mb-1 text-muted">
+            <%=  t('deposit_item.describe_item.creator') %>
+          </h6>
+          <ul class="list-unstyled">
+            <li>Jane Doe</li>
+            <li>Mark Smith</li>
+          </ul>
+
+          <h6 class="card-subtitle mb-1 text-muted">
+            <%=  t('deposit_item.describe_item.subject') %>
+          </h6>
+          <ul class="list-unstyled">
+            <li>Polar Bear</li>
+            <li>Grizzly Bear</li>
+          </ul>
+
+          <h6 class="card-subtitle mb-1 text-muted">
+            <%=  t('deposit_item.describe_item.date_created') %>
+          </h6>
+          <p class="card-text">
+            30-03-1900
+          </p>
+
+          <h6 class="card-subtitle mb-1 text-muted">
+            <%=  t('deposit_item.describe_item.description') %>
+          </h6>
+          <p class="card-text">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            Donec euismod urna nec eros rutrum, ut facilisis metus venenatis.
+            Nullam eu nisl volutpat nunc porta imperdiet.
+            Mauris ultricies lacus nec dui dapibus congue vitae vel massa.
+            Cras ipsum lectus, imperdiet at tortor vel, viverra dignissim orci.
+            Phasellus placerat convallis aliquam. Aliquam ornare elementum sem vel vulputate.
+            Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
+            Nulla facilisi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;
+            Suspendisse ultricies mi at rutrum tincidunt.
+          </p>
+
+          <h6 class="card-subtitle mb-1 text-muted">
+            <%=  t('deposit_item.describe_item.community_and_collection') %>
+          </h6>
+          <ul class="list-unstyled">
+            <li>The Department of Librarian / Theses about Librarians</li>
+          </ul>
+
+          <h6 class="card-subtitle mb-1 text-muted">
+            <%=  t('deposit_item.describe_item.contributor') %>
+          </h6>
+          <ul class="list-unstyled">
+            <li>Waylon Dalton</li>
+            <li>Justine Henderson</li>
+            <li>Marcus Cruz</li>
+          </ul>
+
+          <h6 class="card-subtitle mb-1 text-muted">
+            <%=  t('deposit_item.describe_item.place') %>
+          </h6>
+          <ul class="list-unstyled">
+            <li>Alaska</li>
+            <li>Canada</li>
+          </ul>
+
+          <h6 class="card-subtitle mb-1 text-muted">
+            <%=  t('deposit_item.describe_item.time') %>
+          </h6>
+          <ul class="list-unstyled">
+            <li>World War II</li>
+            <li>1900s</li>
+          </ul>
+
+          <h6 class="card-subtitle mb-1 text-muted">
+            <%=  t('deposit_item.describe_item.citation') %>
+          </h6>
+          <ul class="list-unstyled">
+            <li>Stirling, I. Polar bear. Canadian Wildlife Service, 2002.</li>
+            <li>Stone, Jason, et al. Polar bear. Blackbirch Press, 2000.</li>
+          </ul>
+
+          <h6 class="card-subtitle mb-1 text-muted">
+            <%=  t('deposit_item.describe_item.source') %>
+          </h6>
+          <p class="card-text">
+            National Geographic
+          </p>
+
+          <h6 class="card-subtitle mb-1 text-muted">
+            <%=  t('deposit_item.describe_item.related_item') %>
+          </h6>
+          <p class="card-text">
+            https://era.library.ca/files/blahblah
+          </p>
+        </div>
+      </div>
+      <p><%= t('.legal_disclaimer_html') %></p>
+      <div class="mb-3 pull-right">
+        <%= link_to previous_wizard_path, class: 'btn btn-secondary' do %>
+          <%= fa_icon 'chevron-left' %>
+          <%= t('deposit_item.previous') %>
+        <% end %>
+        <%= button_tag type: :submit, class: 'btn btn-primary' do %>
+          <%= fa_icon 'save' %>
+          <%= t('deposit_item.header') %>
+        <% end %>
+      </div>
+    </div>
   </div>
 <% end %>

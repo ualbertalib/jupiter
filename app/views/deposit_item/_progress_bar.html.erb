@@ -1,21 +1,10 @@
 <% page_title( t('deposit_item.header')) %>
-<h1 class="mt-3"><%= t('deposit_item.header') %></h1>
+<h1 class="mb-3"><%= t('deposit_item.header') %></h1>
 
 <section>
-  <nav class="navigator mb-3">
-    <ul class="nav nav-pills nav-fill">
-      <% wizard_steps.each do |wizard_step| %>
-        <li class="nav-item">
-          <%= link_to t("deposit_item.#{wizard_step}.header"),
-                      wizard_path(wizard_step),
-                      class: "nav-link #{progress_bar_step_class(wizard_step)}" %>
-        </li>
-      <% end %>
-    </ul>
-  </nav>
   <div class="progress">
     <%= content_tag :div,
-                    "#{progress_bar_percentage} %",
+                    progress_bar_text,
                     class: "progress-bar",
                     style: "width: #{progress_bar_percentage}%",
                     role: "progressbar",
@@ -23,4 +12,20 @@
                     'aria-valuemin' => "0",
                     'aria-valuemax' => "100" %>
   </div>
+  <nav class="navigator mt-3">
+    <ul class="nav nav-pills nav-fill">
+      <% wizard_steps.each do |wizard_step| %>
+        <li class="nav-item">
+          <%= link_to wizard_path(wizard_step),
+                      class: "nav-link border rounded-0 #{progress_bar_step_class(wizard_step)}" do %>
+            <%= fa_icon t("deposit_item.#{wizard_step}.header_icon") %>
+            <div class="d-block">
+              <%= "Step #{step_index(wizard_step)}:" %>
+              <%= t("deposit_item.#{wizard_step}.header") %>
+            </div>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </nav>
 </section>

@@ -2,7 +2,9 @@
 
 <%= render partial: 'progress_bar' %>
 
-<h2 class="mt-3"><%= t('.header') %></h2>
+<h2 class="mt-5">
+  <%= t('.header') %>
+</h2>
 
 <%# TODO: Need to figure out data model and migrate everything to use form_for and it's helpers
 = form_for @item, url: wizard_path, method: :put, class:'js-deposit-item' do |f| %>
@@ -218,7 +220,7 @@
         <%= t('.visibility.embargo') %>
       </label>
       <div class="d-md-flex justify-content-between">
-        <%= date_select('item', 'embargo_date',
+        <%= date_select('item', 'embargo_end_date',
                         { order: [:year, :month, :day],
                           prompt: { day: t('select_a_day'),
                                     month: t('select_a_month'),

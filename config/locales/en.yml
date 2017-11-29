@@ -301,17 +301,19 @@ en:
 
   deposit_item:
     header: 'Deposit Item'
-    previous: 'Previous'
-    save_and_continue: 'Save and continue'
+    previous: 'Previous step'
+    save_and_continue: 'Save and continue to next step'
+
     describe_item:
       header: 'Describe Item'
+      header_icon: 'info-circle'
       title: 'Title'
       title_placeholder: 'Enter title'
       alternate_title: 'Alternate Title'
       alternate_title_placeholder: 'Enter alternate title'
       alternate_title_help: 'Enter a secondary/translated title, if appropriate.'
-      type_of_item: 'Type of Item'
-      type_of_item_help_html: 'If you do not see an appropriate item type, please contact
+      item_type: 'Type of Item'
+      item_type_help_html: 'If you do not see an appropriate item type, please contact
         <a href="mailto:erahelp@ualberta.ca">erahelp@ualberta.ca</a>'
       language: 'Language'
       language_placeholder: 'Enter one or multiple languages'
@@ -357,8 +359,10 @@ en:
       source_help: 'Brief information about an item from which this item was derived.'
       related_item: Link to related item
       related_item_help: 'Must be a url. Example: http://www.ualberta.ca'
+
     choose_license_and_visibility:
       header: 'Choose License and Visibility'
+      header_icon: 'cc'
       license:
         header: 'License'
         most_commonly_used: 'Most commonly used'
@@ -398,12 +402,15 @@ en:
 
     upload_files:
       header: 'Upload Files'
+      header_icon: 'files-o'
       attach_files: 'Attach Files'
       remove_files: 'Remove Files'
       drag_and_drop_files: 'Drag and drop files into desired order'
       thumbnail_of_first_file: 'A thumbnail of the first file will be displayed as the image for this item.'
+
     review_and_deposit_item:
       header: 'Review and Deposit Item'
+      header_icon: 'check-square-o'
       please_review_item: 'Please review your item before depositing into ERA'
       legal_disclaimer_html: 'By depositing this item into ERA you agree to the <a href="/policies">ERA Deposit Policy agreements</a>'
 
