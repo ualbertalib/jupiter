@@ -11,13 +11,14 @@ class JupiterCore::DeferredFacetedSolrQuery
 
   def initialize(q:, qf:, fq:, facet_map:, facet_fields:, facet_value_presenters:, restrict_to_model:)
     criteria[:q] = q
-    criteria[:qf] = qf
-    criteria[:fq] = fq
+    criteria[:qf] = qf # Query Fields
+    criteria[:fq] = fq # Facet Query
     criteria[:facet_map] = facet_map
     criteria[:facet_fields] = facet_fields
     criteria[:restrict_to_model] = restrict_to_model
     criteria[:facet_value_presenters] = facet_value_presenters
-    sort(:record_created_at, :desc)
+    criteria[:sort] = []
+    criteria[:sort_order] = []
   end
 
   def criteria
@@ -38,8 +39,8 @@ class JupiterCore::DeferredFacetedSolrQuery
 
   def sort(attr, order = :desc)
     raise ArgumentError, 'order must be :asc or :desc' unless [:asc, :desc].include?(order.to_sym)
-    criteria[:sort] = criteria[:restrict_to_model].first.owning_class.solr_name_for(attr.to_sym, role: :sort)
-    criteria[:sort_order] = order
+    criteria[:sort] << criteria[:restrict_to_model].first.owning_class.solr_name_for(attr.to_sym, role: :sort)
+    criteria[:sort_order] << order
     self
   end
 
@@ -120,7 +121,12 @@ class JupiterCore::DeferredFacetedSolrQuery
   end
 
   def sort_clause
-    "#{criteria[:sort]} #{criteria[:sort_order]}"
+    sort(:record_created_at, :desc) unless criteria[:sort].present?
+    sorts = []
+    criteria[:sort].each_with_index do |sort_col, idx|
+      sorts << "#{sort_col} #{criteria[:sort_order][idx]}"
+    end
+    sorts.join(',')
   end
 
 end

@@ -6,7 +6,8 @@ class JupiterCore::DeferredSimpleSolrQuery
   def initialize(klass)
     criteria[:model] = klass
     criteria[:limit] = JupiterCore::Search::MAX_RESULTS
-    sort(:record_created_at, :desc)
+    criteria[:sort] = []
+    criteria[:sort_order] = []
   end
 
   def criteria
@@ -31,8 +32,8 @@ class JupiterCore::DeferredSimpleSolrQuery
 
   def sort(attr, order = :desc)
     raise ArgumentError, 'order must be :asc or :desc' unless [:asc, :desc].include?(order.to_sym)
-    criteria[:sort] = criteria[:model].solr_name_for(attr.to_sym, role: :sort)
-    criteria[:sort_order] = order
+    criteria[:sort] << criteria[:model].solr_name_for(attr.to_sym, role: :sort)
+    criteria[:sort_order] << order
     self
   end
 
@@ -100,7 +101,12 @@ class JupiterCore::DeferredSimpleSolrQuery
   end
 
   def sort_clause
-    "#{criteria[:sort]} #{criteria[:sort_order]}"
+    sort(:record_created_at, :desc) unless criteria[:sort].present?
+    sorts = []
+    criteria[:sort].each_with_index do |sort_col, idx|
+      sorts << "#{sort_col} #{criteria[:sort_order][idx]}"
+    end
+    sorts.join(',')
   end
 
   def where_clause
