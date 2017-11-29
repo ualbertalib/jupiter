@@ -10,9 +10,7 @@ class Collection < JupiterCore::LockedLdpObject
   has_attribute :community_id, ::VOCABULARY[:ualib].path,
                 type: :path,
                 solrize_for: :pathing,
-                facet_value_presenter: {
-                  value: ->(community_id) { Community.find(community_id).title }
-                }
+                facet_value_presenter: ->(community_id) { Community.find(community_id).title }
 
   has_attribute :description, ::RDF::Vocab::DC.description, solrize_for: [:search]
 

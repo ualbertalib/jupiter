@@ -2,16 +2,20 @@ class JupiterCore::FacetResult
 
   attr_accessor :name, :values, :presenter, :facet_name
 
-  def initialize(facet_map, facet_name, values, presenter: {})
-    presenter ||= {}
+  def initialize(facet_map, facet_name, values, presenter: nil)
     self.facet_name = facet_name
 
-    # Allows the user to override the presentation name for the facet category
-    self.name = presenter[:name] || facet_map[facet_name].to_s.titleize
+    # Allows the user to override the presentation name for the facet category by customizing the
+    # facets.<attribute_name> in the locale file.
+    self.name = if I18n.exists?("facets.#{facet_map[facet_name]}")
+                  I18n.t("facets.#{facet_map[facet_name]}")
+                else
+                  facet_map[facet_name].to_s.titleize
+                end
 
     # Either a property specified a custom presenter in its has_property definition,
     # or we supply a default that simply displays the value as it appears in Solr
-    self.presenter = presenter[:value] || ->(value) { value }
+    self.presenter = presenter || ->(value) { value }
 
     # values are just a key => value hash of facet text to count
     # we have to filter out all of the useless "" facets Solr sends back for non-required fields

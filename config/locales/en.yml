@@ -289,8 +289,6 @@ en:
         If you need a new collection, email erahelp@ualberta.ca'
     file_label: 'File'
     add_another_file: 'Add another file'
-    facets:
-      member_of_paths: 'Collections'
 
   search:
     filter: 'Filter'
@@ -318,3 +316,6 @@ en:
       download: 'Download'
     thumbnail:
       thumbnail: 'Thumbnail'
+
+  facets:
+    member_of_paths: 'Collections'
