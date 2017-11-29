@@ -1,12 +1,14 @@
 class CollectionsController < ApplicationController
 
+  include ItemSearch
+
   before_action :fetch_and_authorize_community
   before_action :fetch_and_authorize_collection
 
-  # Collection must be fetched before we include this ...
-  include CollectionItemSearch
-
-  def show; end
+  def show
+    # TODO: could this solr-ness be hooked up to `search_term_for`?
+    item_search_setup("member_of_paths_dpsim:#{@collection.path}")
+  end
 
   private
 

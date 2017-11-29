@@ -1,13 +1,14 @@
 class Admin::CollectionsController < Admin::AdminController
 
+  include ItemSearch
+
   before_action :fetch_community
   before_action :fetch_collection, only: [:show, :edit, :update, :destroy]
 
-  # Collection must be fetched before we include this ...
-  include CollectionItemSearch
-
   def show
     respond_to do |format|
+      # TODO: could this solr-ness be hooked up to `search_term_for`?
+      item_search_setup("member_of_paths_dpsim:#{@collection.path}")
       format.html { render template: 'collections/show' }
     end
   end
