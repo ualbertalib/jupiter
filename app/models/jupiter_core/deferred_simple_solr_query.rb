@@ -101,7 +101,7 @@ class JupiterCore::DeferredSimpleSolrQuery
   end
 
   def sort_clause
-    sort(:record_created_at, :desc) unless criteria[:sort].present?
+    sort(:record_created_at, :desc) if criteria[:sort].blank?
     sorts = []
     criteria[:sort].each_with_index do |sort_col, idx|
       sorts << "#{sort_col} #{criteria[:sort_order][idx]}"
