@@ -5,7 +5,7 @@ class DeferredSimpleSolrQueryTest < ActiveSupport::TestCase
   @@klass = Class.new(JupiterCore::LockedLdpObject) do
     ldp_object_includes Hydra::Works::WorkBehavior
     has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet, :sort]
-    has_attribute :creator, ::RDF::Vocab::DC.title, solrize_for: [:facet]
+    has_attribute :creator, ::RDF::Vocab::DC.title, solrize_for: [:facet, :sort]
   end
 
   test 'basic relations' do
@@ -46,13 +46,21 @@ class DeferredSimpleSolrQueryTest < ActiveSupport::TestCase
     assert_equal items.send(:criteria)[:limit], JupiterCore::Search::MAX_RESULTS
   end
 
+  test 'multisort' do
+    deferred_query = @@klass.sort(:title).sort(:creator, :desc)
+
+    assert_equal deferred_query.send(:criteria)[:sort].count, 2
+    assert_includes deferred_query.send(:criteria)[:sort], 'title_ssi'
+    assert_includes deferred_query.send(:criteria)[:sort], 'creator_ssi'
+
+    assert_equal deferred_query.send(:criteria)[:sort_order].count, 2
+    assert_includes deferred_query.send(:criteria)[:sort_order], :desc
+    assert_includes deferred_query.send(:criteria)[:sort_order], :asc
+  end
+
   test 'sort constraints' do
     assert_raises ArgumentError do
       @@klass.sort(:title, :blah)
-    end
-
-    assert_raises ArgumentError do
-      @@klass.sort(:creator)
     end
 
     assert_raises ArgumentError do
