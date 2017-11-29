@@ -22,7 +22,7 @@ class Item < JupiterCore::LockedLdpObject
                          type: :path,
                          solrize_for: :pathing,
                          facet_value_presenter: {
-                           name: 'Collections',
+                           name: I18n.t('items.facets.member_of_paths'),
                            value: ->(path) { Item.path_to_titles(path) }
                          }
 
