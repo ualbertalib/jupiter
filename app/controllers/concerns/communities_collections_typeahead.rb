@@ -11,9 +11,9 @@ module CommunitiesCollectionsTypeahead
       if communities.any?
         results.append(text: 'Communities', children: communities)
       end
-      # TODO: sort by community name first, collection name second (see Issue #276)
       collections = JupiterCore::Search.faceted_search(q: "title_tesim:#{term}*",
                                                        models: [Collection], as: current_user)
+                                       .sort(:community_title, :asc)
                                        .sort(:title, :asc)
                                        .map do |c|
         { id: c.id, text: "#{c.community.title} -- #{c.title}", path: path_to_collection(c) }

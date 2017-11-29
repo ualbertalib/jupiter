@@ -3,6 +3,9 @@ class Admin::CollectionsController < Admin::AdminController
   before_action :fetch_community
   before_action :fetch_collection, only: [:show, :edit, :update, :destroy]
 
+  # Collection must be fetched before we include this ...
+  include CollectionItemSearch
+
   def show
     respond_to do |format|
       format.html { render template: 'collections/show' }
