@@ -104,6 +104,10 @@ class JupiterCore::Search
           idx = properties[:solrize_for].find_index(:search)
           queried_fields << properties[:solr_names][idx] if idx.present?
         end
+        model.solr_calc_attributes.each_value do |solr_properties|
+          idx = solr_properties.find_index(:search)
+          queried_fields << solr_properties[:solr_names][idx] if idx.present?
+        end
       end
       queried_fields.uniq.join(' ')
     end

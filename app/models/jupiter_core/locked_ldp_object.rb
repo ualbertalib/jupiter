@@ -136,8 +136,7 @@ module JupiterCore
       raise PropertyInvalidError unless name.is_a? Symbol
       type_info = self.solr_calc_attributes[name]
       raise PropertyInvalidError if type_info.blank?
-      solr_name = Solrizer.solr_name(name, type_info[:solr_descriptor], type: type_info[:type])
-      solr_representation[solr_name]
+      solr_representation[type_info[:solr_names].first]
     end
 
     # Use this to create a new +LockedLDPObjects+ and its underlying LDP instance. attrs populate the new object's
@@ -218,10 +217,10 @@ module JupiterCore
       else
         solr_metadata = self.solr_calc_attributes[attribute_name]
         raise ArgumentError, "No such attribute is defined, #{attribute_name}" if solr_metadata.blank?
-        descriptor = solr_metadata[:solr_descriptor]
-        raise ArgumentError, "#{attribute_name} not indexed for #{role}" unless descriptor == SOLR_DESCRIPTOR_MAP[role]
-        type = solr_metadata[:type]
-        return Solrizer.solr_name(attribute_name, descriptor, type: type)
+        solrize_for = solr_metadata[:solrize_for]
+        idx = solrize_for.find_index(role)
+        raise ArgumentError, "#{attribute_name} not indexed for #{role}" if idx.blank?
+        return solr_metadata[:solr_names][idx]
       end
     end
 
@@ -572,12 +571,23 @@ module JupiterCore
       def additional_search_index(name, solrize_for:, type: :symbol, as:)
         raise PropertyInvalidError unless as.respond_to?(:call)
         raise PropertyInvalidError if name.blank?
-        raise PropertyInvalidError unless solrize_for.present? && solrize_for.is_a?(Symbol)
         raise PropertyInvalidError unless type.present? && type.is_a?(Symbol)
+        solrize_for = [solrize_for] unless solrize_for.is_a?(Array)
 
-        self.solr_calc_attributes ||= {}
+        solr_descriptors = []
+        solr_names = []
+        solrize_for.each do |solr_role|
+          descriptor = SOLR_DESCRIPTOR_MAP[solr_role]
+          solr_name = Solrizer.solr_name(name, descriptor, type: type)
+          solr_names << solr_name
+          self.reverse_solr_name_cache[solr_name] = name
+          solr_descriptors << descriptor
+        end
+
         self.solr_calc_attributes[name] = { type: type,
-                                            solr_descriptor: SOLR_DESCRIPTOR_MAP[solrize_for],
+                                            solrize_for: solrize_for,
+                                            solr_descriptors: solr_descriptors,
+                                            solr_names: solr_names,
                                             callable: as }
       end
 
