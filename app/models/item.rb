@@ -11,7 +11,7 @@ class Item < JupiterCore::LockedLdpObject
   has_multival_attribute :creator, ::RDF::Vocab::DC.creator, solrize_for: [:search, :facet]
   has_multival_attribute :contributor, ::RDF::Vocab::DC.contributor, solrize_for: [:search, :facet]
   has_attribute :created, ::RDF::Vocab::DC.created, solrize_for: [:search, :sort]
-  has_attribute :sort_year, ::VOCABULARY[:ual].sortyear, solrize_for: [:search, :sort]
+  has_attribute :sort_year, ::VOCABULARY[:ual].sortyear, solrize_for: [:search, :sort, :facet]
   has_multival_attribute :subject, ::RDF::Vocab::DC.subject, solrize_for: [:search, :facet]
   has_attribute :description, ::RDF::Vocab::DC.description, type: :text, solrize_for: :search
   has_attribute :publisher, ::RDF::Vocab::DC.publisher, solrize_for: [:search, :facet]
