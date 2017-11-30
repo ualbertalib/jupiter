@@ -29,13 +29,16 @@
         </div>
       </div>
 
+
       <%# Facet Badges %>
+      <%# TODO clean this up by just inspecting params instead of this whole thing with re-iterating facets%>
       <div class='jupiter-facet-badges'>
         <% results.each_facet_with_results do |facet| %>
-          <% facet.each_facet_value do |presentation_value, raw_value, count| %>
-            <% if params[:facets]&.fetch(facet.facet_name, nil) == raw_value %>
-              <%= render partial: 'search/facet_badge', locals: { presentation_value: presentation_value,
-                         facet_name: facet.facet_name } %>
+          <% facet.each_facet_value do |facet_value| %>
+            <% if params[:facets]&.fetch(facet_value.solr_index, nil) == facet_value.value %>
+              FOOO FOOOF FOOOF
+              <%= render partial: 'search/facet_badge', locals: { value: present(facet_value).display,
+                         index: facet_value.solr_index } %>
             <% end %>
           <% end %>
         <% end %>

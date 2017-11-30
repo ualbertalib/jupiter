@@ -40,7 +40,7 @@ module JupiterCore
 
     # inheritable class attributes (not all class-level attributes in this class should be inherited,
     # these are the inheritance-safe attributes)
-    class_attribute :af_parent_class, :attribute_cache, :attribute_names, :facets, :facet_value_presenters,
+    class_attribute :af_parent_class, :attribute_cache, :attribute_names, :facets,
                     :association_indexes, :reverse_solr_name_cache, :solr_calc_attributes
 
     # Returns the id of the object in LDP as a String
@@ -396,7 +396,6 @@ module JupiterCore
         child.facets = self.facets ? self.facets.dup : []
         child.solr_calc_attributes = self.solr_calc_attributes.present? ? self.solr_calc_attributes.dup : {}
         child.association_indexes = self.association_indexes.present? ? self.association_indexes.dup : []
-        child.facet_value_presenters = self.facet_value_presenters.present? ? self.facet_value_presenters.dup : {}
         # If there's no class between +LockedLdpObject+ and this child that's
         # already had +visibility+ and +owner+ defined, define them.
         child.class_eval do
@@ -662,18 +661,12 @@ module JupiterCore
         end
       end
 
-      def has_multival_attribute(name, predicate, solrize_for: [], type: :string, facet_value_presenter: nil)
-        has_attribute(name, predicate, multiple: true, solrize_for: solrize_for, type: type,
-                                       facet_value_presenter: facet_value_presenter)
+      def has_multival_attribute(name, predicate, solrize_for: [], type: :string)
+        has_attribute(name, predicate, multiple: true, solrize_for: solrize_for, type: type)
       end
 
       # a utility DSL for declaring attributes which allows us to store knowledge of them.
-      #
-      # facet_value_presenters provide a simple way to transform a facet result value for display purposes.
-      # ie) a bunch of items in the same community will have a common facet result value of that community's GUID
-      # a presenter lambda can be provided for that attribute to transform the GUID into the Community's title
-      # for presentation
-      def has_attribute(name, predicate, multiple: false, solrize_for: [], type: :string, facet_value_presenter: nil)
+      def has_attribute(name, predicate, multiple: false, solrize_for: [], type: :string)
         raise PropertyInvalidError unless name.is_a? Symbol
         raise PropertyInvalidError if predicate.blank?
         raise PropertyInvalidError if solrize_for.blank?
@@ -706,7 +699,6 @@ module JupiterCore
                      end
 
         self.facets << facet_name if facet_name.present?
-        self.facet_value_presenters[facet_name] = facet_value_presenter if facet_name && facet_value_presenter.present?
 
         self.attribute_cache[name] = {
           predicate: predicate,

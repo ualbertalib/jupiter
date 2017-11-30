@@ -20,8 +20,7 @@ class Item < JupiterCore::LockedLdpObject
 
   has_multival_attribute :member_of_paths, ::VOCABULARY[:ualib].path,
                          type: :path,
-                         solrize_for: :pathing,
-                         facet_value_presenter: ->(path) { Item.path_to_titles(path) }
+                         solrize_for: :pathing
 
   has_attribute :embargo_end_date, ::RDF::Vocab::DC.modified, type: :date, solrize_for: [:sort]
   additional_search_index :doi_without_label, solrize_for: :exact_match,
