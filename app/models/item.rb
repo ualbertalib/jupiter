@@ -21,8 +21,6 @@ class Item < JupiterCore::LockedLdpObject
                          facet_value_presenter: ->(language) { Item.language_text(language) }
   has_attribute :embargo_end_date, ::RDF::Vocab::DC.modified, type: :date, solrize_for: [:sort]
   has_attribute :license, ::RDF::Vocab::DC.license, solrize_for: [:search]
-  # `type` is an ActiveFedora keyword, so we call it ...
-  has_attribute :item_type, ::RDF::Vocab::DC.type, solrize_for: [:search, :facet]
 
   # UAL attributes
   has_attribute :depositor, ::VOCABULARY[:ual].depositor, solrize_for: [:search]
@@ -36,10 +34,6 @@ class Item < JupiterCore::LockedLdpObject
 
   # Prism attributes
   has_attribute :doi, ::VOCABULARY[:prism].doi, solrize_for: :exact_match
-
-  # Not sure about these ...
-  has_attribute :embargo_history, ::VOCABULARY[:ual].embargoHistory, solrize_for: :exact_match
-  has_attribute :visibility_after_embargo, ::VOCABULARY[:ual].visibilityAfterEmbargo, solrize_for: :exact_match
 
   # Solr only
   additional_search_index :doi_without_label, solrize_for: :exact_match,
