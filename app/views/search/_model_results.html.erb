@@ -7,8 +7,8 @@
         <%= t('search.filter') %>
       </div>
       <div class="card-body p-2">
-        <% @results[model].each_facet_with_results do |facet| %>
-          <%= render partial: 'facet_results', locals: { facet: facet } %>
+        <% results.each_facet_with_results do |facet| %>
+          <%= render partial: 'search/facet_results', locals: { facet: facet } %>
         <% end %>
       </div>
     </div>
@@ -19,20 +19,22 @@
     <div class='p-3'>
       <div class="d-flex flex-wrap justify-content-between">
         <div>
-          <h3><%= t('search.results_for', search: params[:search]) %></h3>
+          <% if search_term.present? %>
+            <h3><%= t('search.results_for', search: search_term) %></h3>
+          <% end %>
         </div>
 
         <div>
-          <%= render partial: 'sort' %>
+          <%= render partial: 'search/sort' %>
         </div>
       </div>
 
       <%# Facet Badges %>
       <div class='jupiter-facet-badges'>
-        <% @results[model].each_facet_with_results do |facet| %>
+        <% results.each_facet_with_results do |facet| %>
           <% facet.each_facet_value do |presentation_value, raw_value, count| %>
             <% if params[:facets]&.fetch(facet.facet_name, nil) == raw_value %>
-              <%= render partial: 'facet_badge', locals: { presentation_value: presentation_value,
+              <%= render partial: 'search/facet_badge', locals: { presentation_value: presentation_value,
                          facet_name: facet.facet_name } %>
             <% end %>
           <% end %>
@@ -43,10 +45,10 @@
     <%# Results list %>
     <div class='jupiter-results-list'>
       <ul class="list-group">
-        <% @results[model].each do |result| %>
+        <% results.each do |result| %>
           <li class="list-group-item list-group-item-action">
             <% if model == :item %>
-              <%= render partial: 'item_hit', locals: { result: result } %>
+              <%= render partial: 'search/item_hit', locals: { result: result } %>
             <% else %>
               <%= link_to result.title, path_for_result(result) %>
             <% end %>
@@ -56,10 +58,10 @@
     </div>
     <div class="p-2 d-flex justify-content-center">
       <div>
-        <%= results_range(@results[model]) %>
+        <%= results_range(results) %>
       </div>
     </div>
-    <%= paginate @results[model] %>
+    <%= paginate results %>
 
   </div>
 </div>

@@ -134,9 +134,9 @@ module JupiterCore
 
     def read_solr_index(name)
       raise PropertyInvalidError unless name.is_a? Symbol
-      type = self.solr_calc_attributes[name]
-      raise PropertyInvalidError if type.blank?
-      solr_name = Solrizer.solr_name(name, :symbol, type: type)
+      type_info = self.solr_calc_attributes[name]
+      raise PropertyInvalidError if type_info.blank?
+      solr_name = Solrizer.solr_name(name, type_info[:solr_descriptor], type: type_info[:type])
       solr_representation[solr_name]
     end
 
@@ -210,10 +210,19 @@ module JupiterCore
     #   => "title_tesim"
     def self.solr_name_for(attribute_name, role:)
       attribute_metadata = self.attribute_cache[attribute_name]
-      raise ArgumentError, "No such attribute is defined, #{attribute_name}" if attribute_metadata.blank?
-      sort_attr_index = attribute_metadata[:solrize_for].index(role)
-      raise ArgumentError, "No #{role} solr role is defined for #{attribute_name}" if sort_attr_index.blank?
-      attribute_metadata[:solr_names][sort_attr_index]
+
+      if attribute_metadata.present?
+        sort_attr_index = attribute_metadata[:solrize_for].index(role)
+        raise ArgumentError, "No #{role} solr role is defined for #{attribute_name}" if sort_attr_index.blank?
+        return attribute_metadata[:solr_names][sort_attr_index]
+      else
+        solr_metadata = self.solr_calc_attributes[attribute_name]
+        raise ArgumentError, "No such attribute is defined, #{attribute_name}" if solr_metadata.blank?
+        descriptor = solr_metadata[:solr_descriptor]
+        raise ArgumentError, "#{attribute_name} not indexed for #{role}" unless descriptor == SOLR_DESCRIPTOR_MAP[role]
+        type = solr_metadata[:type]
+        return Solrizer.solr_name(attribute_name, descriptor, type: type)
+      end
     end
 
     # Accepts a string id of an object in the LDP, and returns a +LockedLDPObjects+ representation of that object
@@ -561,13 +570,16 @@ module JupiterCore
       #
       #    additional_search_index :downcased_title, solrize_for: :exact_match, as: -> { title.downcase }
       #
-      def additional_search_index(name, solrize_for:, as:)
+      def additional_search_index(name, solrize_for:, type: :symbol, as:)
         raise PropertyInvalidError unless as.respond_to?(:call)
         raise PropertyInvalidError if name.blank?
         raise PropertyInvalidError unless solrize_for.present? && solrize_for.is_a?(Symbol)
+        raise PropertyInvalidError unless type.present? && type.is_a?(Symbol)
 
         self.solr_calc_attributes ||= {}
-        self.solr_calc_attributes[name] = { type: SOLR_DESCRIPTOR_MAP[solrize_for], callable: as }
+        self.solr_calc_attributes[name] = { type: type,
+                                            solr_descriptor: SOLR_DESCRIPTOR_MAP[solrize_for],
+                                            callable: as }
       end
 
       def belongs_to(name, using_existing_association:)
