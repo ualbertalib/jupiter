@@ -1,5 +1,7 @@
 class Admin::UsersController < Admin::AdminController
 
+  include ItemSearch
+
   before_action :fetch_user, only: [:show,
                                     :suspend,
                                     :unsuspend,
@@ -15,9 +17,7 @@ class Admin::UsersController < Admin::AdminController
   end
 
   def show
-    @items = @user.items
-    @items = @items.sort(item_sort_column, sort_direction) if item_sort_column && sort_direction
-    @items = @items.page params[:page]
+    item_search_setup("owner_ssim:#{@user.id}")
   end
 
   def suspend

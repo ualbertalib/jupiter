@@ -148,4 +148,58 @@ class AdminUsersShowTest < ApplicationSystemTestCase
     logout_user
   end
 
+  should 'be able to view items owned by user' do
+    # Note: searching and faceting is covered more extensively in tests elsewhere
+    user = User.find_by(email: 'john_snow@example.com')
+    admin = users(:admin)
+
+    community = Community.new_locked_ldp_object(title: 'Fancy Community', owner: 1)
+                         .unlock_and_fetch_ldp_object(&:save!)
+    collection = Collection.new_locked_ldp_object(community_id: community.id,
+                                                  title: 'Fancy Collection', owner: 1)
+                           .unlock_and_fetch_ldp_object(&:save!)
+
+    # Two items owned by regular user
+    ['Fancy', 'Nice'].each do |adjective|
+      Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                 owner: user.id, title: "#{adjective} Item")
+          .unlock_and_fetch_ldp_object do |uo|
+        uo.add_to_path(community.id, collection.id)
+        uo.save!
+      end
+    end
+    # One item owned by admin
+    Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
+                               owner: admin.id, title: 'Admin Item')
+        .unlock_and_fetch_ldp_object do |uo|
+      uo.add_to_path(community.id, collection.id)
+      uo.save!
+    end
+
+    login_user(admin)
+
+    # Would like to do `visit admin_user_path(user)`, but seems broken (?)
+    click_link admin.name
+    click_link I18n.t('application.navbar.links.admin')
+    click_link I18n.t('admin.users.index.header')
+    click_link user.email
+
+    # Should be able to find the two items this guy owns
+    assert_selector 'div.jupiter-results-list li.list-group-item', count: 2
+    assert_selector 'div.jupiter-results-list li.list-group-item a', text: 'Fancy Item', count: 1
+    assert_selector 'div.jupiter-results-list li.list-group-item a', text: 'Nice Item', count: 1
+
+    # Should not be able to find the item owned by admin
+    refute_selector 'div.jupiter-results-list li.list-group-item a', text: 'Admin Item'
+
+    # Search items
+    fill_in name: 'query', with: 'Fancy'
+    click_button 'Search Items'
+    assert_selector 'div.jupiter-results-list li.list-group-item', count: 1
+    assert_selector 'div.jupiter-results-list li.list-group-item a', text: 'Fancy Item', count: 1
+    refute_selector 'div.jupiter-results-list li.list-group-item a', text: 'Nice Item'
+
+    logout_user
+  end
+
 end
