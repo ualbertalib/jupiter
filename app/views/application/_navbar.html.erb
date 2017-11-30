@@ -32,9 +32,9 @@
         <li role="presentation" class="nav-item mr-3">
 
           <form class="form-inline" action="<%= search_path %>">
-            <div class="input-group">
+            <div class="input-group" aria-label: "search">
               <%= search_field_tag 'search', nil, placeholder: t('.search.placeholder'),
-                  value: params[:search], id: 'navbar-search', class: "form-control" %>
+                  value: params[:search], id: 'navbar-search', 'aria-label': 'search-box', class: "form-control" %>
               <div class="input-group-btn">
                 <button type="submit" class="btn btn-secondary">
                   <%= fa_icon 'search' %>
