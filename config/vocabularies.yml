@@ -24,9 +24,6 @@
     - ingestbatch
     - path
     - sortyear
-    # Just making these up here ...
-    - embargohistory
-    - visibilityafterembargo
 
 - vocabulary: prism
   schema: http://prismstandard.org/namespaces/basic/3.0/
