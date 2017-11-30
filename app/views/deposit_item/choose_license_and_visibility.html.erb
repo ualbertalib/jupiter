@@ -2,7 +2,8 @@
 
 <%= render partial: 'progress_bar' %>
 
-<h2 class="mt-5">
+<h2 class="mt-3">
+  <%= fa_icon t('.header_icon') %>
   <%= t('.header') %>
 </h2>
 
@@ -10,11 +11,13 @@
 = form_for @item, url: wizard_path, method: :put, class:'js-deposit-item' do |f| %>
 <%= form_tag wizard_path, method: :put, class:'js-deposit-item' do %>
   <fieldset class="my-3">
-    <legend>
+    <legend class="mb-0">
       <span class="text-danger">*</span>
       <%= t('.license.header') %>
     </legend>
-
+    <small class="form-text text-muted mt-0 mb-3">
+      <%= t('.license.help_html') %>
+    </small>
     <div id="js-license-accordion" role="tablist">
       <div class="card">
         <div id="js-heading-most-common" class="card-header" role="tab">
@@ -199,9 +202,6 @@
         </div>
       </div>
     </div>
-    <small class="form-text text-muted">
-      <%= t('.license.help_html') %>
-    </small>
   </fieldset>
   <fieldset class="my-3">
     <legend>
@@ -230,6 +230,7 @@
                         }, { class: 'form-control  mr-2 mb-2' }) %>
       </div>
     </div>
+    <%#  TODO: Only if admin, do these radio buttons show below %>
     <div class="form-check disabled">
       <label class="form-check-label">
         <%= radio_button_tag 'visibility',

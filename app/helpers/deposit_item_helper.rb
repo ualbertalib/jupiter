@@ -1,5 +1,8 @@
 module DepositItemHelper
   def progress_bar_step_class(wizard_step)
+    # TODO: If future steps have already been completed,
+    # I should be able to still click ahead to them
+    # But if they haven't been completed then they should be disabled
     if wizard_step == step
       'active'
     elsif past_step?(wizard_step)
@@ -14,7 +17,7 @@ module DepositItemHelper
   end
 
   def progress_bar_text
-    "#{step_index(step)} / #{wizard_steps.size}"
+    t('deposit_item.progress_bar_text', step_index: step_index(step), total_steps: wizard_steps.size)
   end
 
   def step_index(wizard_step)

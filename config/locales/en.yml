@@ -303,10 +303,11 @@ en:
     header: 'Deposit Item'
     previous: 'Previous step'
     save_and_continue: 'Save and continue to next step'
-
+    progress_bar_text: 'Step %{step_index} of %{total_steps}'
+    step_number: 'Step %{step_number}'
     describe_item:
       header: 'Describe Item'
-      header_icon: 'info-circle'
+      header_icon: 'pencil'
       title: 'Title'
       title_placeholder: 'Enter title'
       alternate_title: 'Alternate Title'
@@ -362,13 +363,13 @@ en:
 
     choose_license_and_visibility:
       header: 'Choose License and Visibility'
-      header_icon: 'cc'
+      header_icon: 'creative-commons'
       license:
         header: 'License'
         most_commonly_used: 'Most commonly used'
         attribution_noncommercial_html: 'Attribution-NonCommercial 4.0 International
           (<a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>)'
-        other_creative_commons_licenses: 'Other Creative Commons Licenses'
+        other_creative_commons_licenses: 'Other Creative Commons licenses'
         attribution_html: 'Attribution 4.0 International
           (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC BY 4.0</a>)'
         attribution_noncommercial_noderivatives_html: 'Attribution-NonCommercial-NoDerivatives 4.0 International
@@ -383,7 +384,7 @@ en:
           (<a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank">CC0 1.0</a>)'
         public_domain: 'This work is in the public domain'
         public_domain_mark_html: 'Public Domain Mark 1.0
-          (<a href="https://creativecommons.org/publicdomain/mark/1.0/" target="_blank">PDM 1.0</a>)'
+          (<a href="https://creativecommons.org/publicdomain/mark/1.0/" target="_blank">Public Domain 1.0</a>)'
         link_to_another_license: 'I am required to use / link to another license'
         license_text: 'License text / URL'
         license_text_area_placeholder: 'Copy/paste the URL or license'
@@ -402,7 +403,7 @@ en:
 
     upload_files:
       header: 'Upload Files'
-      header_icon: 'files-o'
+      header_icon: 'paperclip'
       attach_files: 'Attach Files'
       remove_files: 'Remove Files'
       drag_and_drop_files: 'Drag and drop files into desired order'
