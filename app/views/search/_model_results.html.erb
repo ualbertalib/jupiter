@@ -36,7 +36,7 @@
           <% facet.each_facet_value do |facet_value| %>
             <% if params[:facets]&.fetch(facet_value.solr_index, nil) == facet_value.value %>
               <%= render partial: 'search/facet_badge', locals: { value: present(facet_value).display,
-                         index: facet_value.solr_index } %>
+                         solr_index: facet_value.solr_index } %>
             <% end %>
           <% end %>
         <% end %>
