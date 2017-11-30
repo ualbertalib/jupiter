@@ -14,7 +14,8 @@ class Collection < JupiterCore::LockedLdpObject
 
   has_attribute :description, ::RDF::Vocab::DC.description, solrize_for: [:search]
 
-  # description for collections
+  additional_search_index :community_title, solrize_for: :sort,
+                                            as: -> { Community.find_by(id: community_id)&.title }
 
   def community
     Community.find(community_id)

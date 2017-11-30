@@ -22,7 +22,7 @@ class Admin::CommunitiesController < Admin::AdminController
     respond_to do |format|
       format.js do
         # Used for the collapsable dropdown to show member collections
-        @collections = @community.member_collections
+        @collections = @community.member_collections.sort(sort_column, sort_direction)
         render template: 'communities/show'
       end
       format.html do
