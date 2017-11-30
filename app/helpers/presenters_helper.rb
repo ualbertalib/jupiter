@@ -1,6 +1,5 @@
 module PresentersHelper
-
-  class NoSuchPresenter < StandardError; end;
+  class NoSuchPresenter < StandardError; end
 
   def present(obj)
     # FacetValues are special insofar as they dynamically specify their own presenter per-attribute-name involved

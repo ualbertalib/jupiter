@@ -1,4 +1,5 @@
 class JupiterCore::FacetResult
+
   FacetValue = Struct.new(:attribute_name, :solr_index, :value, :count)
 
   attr_accessor :category_name, :attribute_name, :values, :solr_index
@@ -10,10 +11,10 @@ class JupiterCore::FacetResult
     # Allows the user to override the presentation name for the facet category by customizing the
     # facets.<attribute_name> in the locale file.
     self.category_name = if I18n.exists?("facets.#{attribute_name}")
-                  I18n.t("facets.#{attribute_name}")
-                else
-                  attribute_name.to_s.titleize
-                end
+                           I18n.t("facets.#{attribute_name}")
+                         else
+                           attribute_name.to_s.titleize
+                         end
 
     # values are just a key => value hash of facet text to count
     # we have to filter out all of the useless "" facets Solr sends back for non-required fields
@@ -31,7 +32,7 @@ class JupiterCore::FacetResult
   end
 
   # When many facets are iterated, we need to segregate into ranges based on what is shown or not
-  def each_facet_value(range=0..-1)
+  def each_facet_value(range = 0..-1)
     keys = @values.keys.slice(range)
     keys.each do |raw_value|
       count = @values[raw_value]
@@ -40,4 +41,5 @@ class JupiterCore::FacetResult
       end
     end
   end
+
 end

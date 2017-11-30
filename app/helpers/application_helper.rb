@@ -1,5 +1,4 @@
 module ApplicationHelper
-
   include PresentersHelper
 
   def page_title(title)
