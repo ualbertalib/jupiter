@@ -318,3 +318,6 @@ en:
       download: 'Download'
     thumbnail:
       thumbnail: 'Thumbnail'
+
+  facets:
+    member_of_paths: 'Collections'
