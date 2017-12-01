@@ -5,8 +5,8 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
   @@klass = Class.new(JupiterCore::LockedLdpObject) do
     ldp_object_includes Hydra::Works::WorkBehavior
     has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
-    has_attribute :creator, ::RDF::Vocab::DC.creator, solrize_for: [:search, :facet]
-    has_multival_attribute :member_of_paths, ::VOCABULARY[:ualib].path, solrize_for: :pathing
+    has_multival_attribute :creator, ::RDF::Vocab::DC.creator, solrize_for: [:search, :facet]
+    has_multival_attribute :member_of_paths, ::VOCABULARY[:ual].path, solrize_for: :pathing
 
     additional_search_index :my_solr_doc_attr, type: :string, solrize_for: :search, as: -> { title&.upcase }
 
@@ -173,7 +173,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     title = generate_random_string
     obj = @@klass.new_locked_ldp_object(title: title)
     assert_equal "#<AnonymousClass id: nil, visibility: nil, owner: nil, record_created_at: nil, title: \"#{title}\","\
-                 ' creator: nil, member_of_paths: []>', obj.inspect
+                 ' creator: [], member_of_paths: []>', obj.inspect
   end
 
   test 'attribute inheritance is working' do
@@ -222,7 +222,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
   test 'solr integration is working' do
     assert @@klass.all.count == 0
 
-    creator = generate_random_string
+    creator = [generate_random_string]
     first_title = generate_random_string
 
     obj = @@klass.new_locked_ldp_object(title: first_title, creator: creator, owner: users(:regular_user).id,
