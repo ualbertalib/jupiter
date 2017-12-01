@@ -5,9 +5,13 @@ class JupiterCore::FacetResult
   def initialize(facet_map, facet_name, values, presenter: nil)
     self.facet_name = facet_name
 
-    # TODO: figute out how to let people customize the facet category name. The most obvious demand for this will
-    # be in present Items' member_of_path facet as something other than "Member of Path" in the interface
-    self.name = facet_map[facet_name].to_s.titleize
+    # Allows the user to override the presentation name for the facet category by customizing the
+    # facets.<attribute_name> in the locale file.
+    self.name = if I18n.exists?("facets.#{facet_map[facet_name]}")
+                  I18n.t("facets.#{facet_map[facet_name]}")
+                else
+                  facet_map[facet_name].to_s.titleize
+                end
 
     # Either a property specified a custom presenter in its has_property definition,
     # or we supply a default that simply displays the value as it appears in Solr
