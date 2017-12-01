@@ -13,6 +13,8 @@ module PresentersHelper
     end
   end
 
+  private
+
   def present_facet(facet_value)
     @presenter_cache[facet_value] ||= begin
       klass_name = "Presenters::FacetValues::#{facet_value.attribute_name.to_s.camelize}"
@@ -23,8 +25,6 @@ module PresentersHelper
 
     @presenter_cache[facet_value].new(self, params[:facets], facet_value)
   end
-
-  private
 
   def presenter_for(obj)
     @presenter_cache[obj] ||= begin
