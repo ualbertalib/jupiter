@@ -6,23 +6,35 @@ class Item < JupiterCore::LockedLdpObject
   VISIBILITY_EMBARGO = 'embargo'.freeze
   VISIBILITIES = (JupiterCore::VISIBILITIES + [VISIBILITY_EMBARGO]).freeze
 
+  # Dublin Core attributes
   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :sort]
   has_multival_attribute :creator, ::RDF::Vocab::DC.creator, solrize_for: [:search, :facet]
   has_multival_attribute :contributor, ::RDF::Vocab::DC.contributor, solrize_for: [:search, :facet]
   has_attribute :created, ::RDF::Vocab::DC.created, solrize_for: [:search, :sort]
-  has_attribute :sort_year, ::VOCABULARY[:ualib].sort_year, solrize_for: [:search, :sort]
-  has_attribute :subject, ::RDF::Vocab::DC.subject, solrize_for: [:search, :facet]
+  has_attribute :sort_year, ::VOCABULARY[:ual].sortyear, solrize_for: [:search, :sort, :facet]
+  has_multival_attribute :subject, ::RDF::Vocab::DC.subject, solrize_for: [:search, :facet]
   has_attribute :description, ::RDF::Vocab::DC.description, type: :text, solrize_for: :search
   has_attribute :publisher, ::RDF::Vocab::DC.publisher, solrize_for: [:search, :facet]
   # has_attribute :date_modified, ::RDF::Vocab::DC.modified, type: :date, solrize_for: :sort
-  has_attribute :language, ::RDF::Vocab::DC.language, solrize_for: [:search, :facet]
-  has_attribute :doi, ::VOCABULARY[:ualib].doi, solrize_for: :exact_match
+  has_multival_attribute :language, ::RDF::Vocab::DC.language,
+                         solrize_for: [:search, :facet],
+                         facet_value_presenter: ->(language) { Item.language_text(language) }
+  has_attribute :embargo_end_date, ::RDF::Vocab::DC.modified, type: :date, solrize_for: [:sort]
+  has_attribute :license, ::RDF::Vocab::DC.license, solrize_for: [:search]
 
-  has_multival_attribute :member_of_paths, ::VOCABULARY[:ualib].path,
+  # UAL attributes
+  has_attribute :depositor, ::VOCABULARY[:ual].depositor, solrize_for: [:search]
+  has_attribute :fedora3_handle, ::VOCABULARY[:ual].fedora3handle, solrize_for: :exact_match
+  has_attribute :fedora3_uuid, ::VOCABULARY[:ual].fedora3uuid, solrize_for: :exact_match
+  has_attribute :ingest_batch, ::VOCABULARY[:ual].ingestbatch, solrize_for: :exact_match
+  has_multival_attribute :member_of_paths, ::VOCABULARY[:ual].path,
                          type: :path,
                          solrize_for: :pathing
 
-  has_attribute :embargo_end_date, ::RDF::Vocab::DC.modified, type: :date, solrize_for: [:sort]
+  # Prism attributes
+  has_attribute :doi, ::VOCABULARY[:prism].doi, solrize_for: :exact_match
+
+  # Solr only
   additional_search_index :doi_without_label, solrize_for: :exact_match,
                                               as: -> { doi.gsub('doi:', '') if doi.present? }
 
@@ -32,6 +44,25 @@ class Item < JupiterCore::LockedLdpObject
 
   def self.valid_visibilities
     super + [VISIBILITY_EMBARGO]
+  end
+
+  # Some URI --> text functions
+  def self.language_text(language_uri)
+    CONTROLLED_VOCABULARIES[:language].each do |lang|
+      if lang[:uri] == language_uri
+        return I18n.t("controlled_vocabularies.language.#{lang[:code]}")
+      end
+    end
+    raise ApplicationError("Language not found for #{language_uri}")
+  end
+
+  def self.license_text(license_uri)
+    CONTROLLED_VOCABULARIES[:license].each do |lic|
+      if lic[:uri] == license_uri
+        return I18n.t("controlled_vocabularies.license.#{lic[:code]}")
+      end
+    end
+    raise ApplicationError("License not found for #{license_uri}")
   end
 
   def file_sets
@@ -55,7 +86,11 @@ class Item < JupiterCore::LockedLdpObject
     validates :embargo_end_date, absence: true, if: ->(item) { item.visibility != VISIBILITY_EMBARGO }
     validates :member_of_paths, presence: true
     validates :title, presence: true
+    validates :language, presence: true
+    validates :license, presence: true
     validate :communities_and_collections_validations
+    validate :language_validations
+    validate :license_validations
 
     before_validation do
       # TODO: for theses, the sort_year attribute should be derived from ual:graduationDate
@@ -115,6 +150,18 @@ class Item < JupiterCore::LockedLdpObject
           # Hydra::Works::CharacterizationService.run(fileset.characterization_proxy, filename)
         end
       end
+    end
+
+    def language_validations
+      uris = ::CONTROLLED_VOCABULARIES[:language].map { |lang| lang[:uri] }
+      language.each do |lang|
+        errors.add(:language, :not_recognized) unless uris.include?(lang)
+      end
+    end
+
+    def license_validations
+      return if ::CONTROLLED_VOCABULARIES[:license].any? { |lic| lic[:uri] == license }
+      errors.add(:license, :not_recognized)
     end
   end
 
