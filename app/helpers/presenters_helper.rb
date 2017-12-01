@@ -2,6 +2,9 @@ module PresentersHelper
   class NoSuchPresenter < StandardError; end
 
   def present(obj)
+    # cache the obj => presenter mappings for the lifetime of the request, to avoid the overhead of
+    # string to class conversion dozens of times during facet rendering
+    @presenter_cache ||= {}
     # FacetValues are special insofar as they dynamically specify their own presenter per-attribute-name involved
     if obj.is_a?(JupiterCore::FacetResult::FacetValue)
       present_facet(obj)
@@ -11,23 +14,24 @@ module PresentersHelper
   end
 
   def present_facet(facet_value)
-    klass_name = "Presenters::FacetValues::#{facet_value.attribute_name.to_s.camelize}"
-
-    klass = begin
+    @presenter_cache[facet_value] ||= begin
+      klass_name = "Presenters::FacetValues::#{facet_value.attribute_name.to_s.camelize}"
       klass_name.constantize
     rescue NameError
       ::Presenters::FacetValues::DefaultPresenter
     end
 
-    klass.new(self, params[:facets], facet_value)
+    @presenter_cache[facet_value].new(self, params[:facets], facet_value)
   end
 
   private
 
   def presenter_for(obj)
-    klass_name = "Presenters::#{obj.class}"
-    klass_name.constantize
-  rescue NameError
-    raise NoSuchPresenter, "Presenter #{klass_name} is not defined for #{obj}"
+    @presenter_cache[obj] ||= begin
+      klass_name = "Presenters::#{obj.class}"
+      klass_name.constantize
+    rescue NameError
+      raise NoSuchPresenter, "Presenter #{klass_name} is not defined for #{obj}"
+    end
   end
 end

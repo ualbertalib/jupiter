@@ -581,6 +581,7 @@ module JupiterCore
           solr_name = Solrizer.solr_name(name, descriptor, type: type)
           solr_names << solr_name
           self.reverse_solr_name_cache[solr_name] = name
+          self.facets << solr_name if solr_role == :facet
           solr_descriptors << descriptor
         end
 
