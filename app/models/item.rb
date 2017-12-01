@@ -17,8 +17,7 @@ class Item < JupiterCore::LockedLdpObject
   has_attribute :publisher, ::RDF::Vocab::DC.publisher, solrize_for: [:search, :facet]
   # has_attribute :date_modified, ::RDF::Vocab::DC.modified, type: :date, solrize_for: :sort
   has_multival_attribute :language, ::RDF::Vocab::DC.language,
-                         solrize_for: [:search, :facet],
-                         facet_value_presenter: ->(language) { Item.language_text(language) }
+                         solrize_for: [:search, :facet]
   has_attribute :embargo_end_date, ::RDF::Vocab::DC.modified, type: :date, solrize_for: [:sort]
   has_attribute :license, ::RDF::Vocab::DC.license, solrize_for: [:search]
 
@@ -44,16 +43,6 @@ class Item < JupiterCore::LockedLdpObject
 
   def self.valid_visibilities
     super + [VISIBILITY_EMBARGO]
-  end
-
-  # Some URI --> text functions
-  def self.language_text(language_uri)
-    CONTROLLED_VOCABULARIES[:language].each do |lang|
-      if lang[:uri] == language_uri
-        return I18n.t("controlled_vocabularies.language.#{lang[:code]}")
-      end
-    end
-    raise ApplicationError("Language not found for #{language_uri}")
   end
 
   def self.license_text(license_uri)
