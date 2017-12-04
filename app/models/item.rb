@@ -68,7 +68,7 @@ class Item < JupiterCore::LockedLdpObject
         return I18n.t("controlled_vocabularies.language.#{lang[:code]}")
       end
     end
-    raise ApplicationError("Language not found for #{language_uri}")
+    raise ArgumentError("Language not found for #{language_uri}")
   end
 
   def self.license_text(license_uri)
@@ -77,7 +77,7 @@ class Item < JupiterCore::LockedLdpObject
         return I18n.t("controlled_vocabularies.license.#{lic[:code]}")
       end
     end
-    raise ApplicationError("License not found for #{license_uri}")
+    raise ArgumentError("License not found for #{license_uri}")
   end
 
   def file_sets
