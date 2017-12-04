@@ -5,7 +5,7 @@
                   'logo-small'
                 end %>
 <% if object.thumbnail&.attached? %>
-  <%= image_tag(object.thumbnail.url, alt: "#{object.title}", class: "d-flex mr-3 img-thumbnail #{size_class}") %>
+  <%= image_tag(object.thumbnail.url, alt: object.title, class: "d-flex mr-3 img-thumbnail #{size_class}") %>
 <% else %>
   <div class="d-flex justify-content-center align-items-center mr-3 img-thumbnail <%= size_class %>">
     <small class="text-muted">
