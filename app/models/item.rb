@@ -16,9 +16,7 @@ class Item < JupiterCore::LockedLdpObject
   has_attribute :description, ::RDF::Vocab::DC.description, type: :text, solrize_for: :search
   has_attribute :publisher, ::RDF::Vocab::DC.publisher, solrize_for: [:search, :facet]
   # has_attribute :date_modified, ::RDF::Vocab::DC.modified, type: :date, solrize_for: :sort
-  has_multival_attribute :language, ::RDF::Vocab::DC.language,
-                         solrize_for: [:search, :facet],
-                         facet_value_presenter: ->(language) { Item.uri_to_text(language, :language) }
+  has_multival_attribute :language, ::RDF::Vocab::DC.language, solrize_for: [:search, :facet]
   has_attribute :embargo_end_date, ::RDF::Vocab::DC.available, type: :date, solrize_for: [:sort]
   has_attribute :license, ::RDF::Vocab::DC.license, solrize_for: [:search]
   # `type` is an ActiveFedora keyword, so we call it `item_type`
@@ -32,8 +30,7 @@ class Item < JupiterCore::LockedLdpObject
   has_attribute :ingest_batch, ::VOCABULARY[:ual].ingestbatch, solrize_for: :exact_match
   has_multival_attribute :member_of_paths, ::VOCABULARY[:ual].path,
                          type: :path,
-                         solrize_for: :pathing,
-                         facet_value_presenter: ->(path) { Item.path_to_titles(path) }
+                         solrize_for: :pathing
 
   # Prism attributes
   has_attribute :doi, ::VOCABULARY[:prism].doi, solrize_for: :exact_match
@@ -59,27 +56,13 @@ class Item < JupiterCore::LockedLdpObject
     super - [:member_of_paths]
   end
 
-  # This would be the seam where we may want to introduce a more efficient cache for mapping
-  # community_id/collection_id paths to titles, as this is going to get hit a lot on facet results
-  # If names were unique, we wouldn't have to do this translation, but c'est la vie
-  def self.path_to_titles(path)
-    community_id, collection_id = path.split('/')
-    community_title = Community.find(community_id).title
-    collection_title = if collection_id
-                         '/' + Collection.find(collection_id).title
-                       else
-                         ''
-                       end
-    community_title + collection_title
-  end
-
   def self.valid_visibilities
     super + [VISIBILITY_EMBARGO]
   end
 
   # Some URI --> [text|code] functions for controlled vocabularies
   def self.uri_to_code(uri, vocabulary)
-    CONTROLLED_VOCABULARIES[:language].each do |term|
+    CONTROLLED_VOCABULARIES[vocabulary].each do |term|
       return term[:code] if term[:uri] == uri
     end
     raise ArgumentError, "#{uri} not found in controlled vocabulary #{vocabulary}"
