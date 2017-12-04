@@ -15,12 +15,20 @@
 #   => #<RDF::Vocabulary::Term:0x3fc87891aa0c URI:http://terms.library.ualberta.ca/identifiers/doi>
 #
 
-- vocabulary: ualib
+- vocabulary: ual
   schema: http://terms.library.ualberta.ca/identifiers/
   terms:
-    - doi
+    - depositor
+    - fedora3handle
+    - fedora3uuid
+    - ingestbatch
     - path
-    - sort_year
+    - sortyear
+
+- vocabulary: prism
+  schema: http://prismstandard.org/namespaces/basic/3.0/
+  terms:
+    - doi
 
 - vocabulary: jupiter_core
   schema: 'http://fake.figurethisout.todo#'
