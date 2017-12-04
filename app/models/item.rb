@@ -17,8 +17,7 @@ class Item < JupiterCore::LockedLdpObject
   has_attribute :publisher, ::RDF::Vocab::DC.publisher, solrize_for: [:search, :facet]
   # has_attribute :date_modified, ::RDF::Vocab::DC.modified, type: :date, solrize_for: :sort
   has_multival_attribute :language, ::RDF::Vocab::DC.language,
-                         solrize_for: [:search, :facet],
-                         facet_value_presenter: ->(language) { Item.language_text(language) }
+                         solrize_for: [:search, :facet]
   has_attribute :embargo_end_date, ::RDF::Vocab::DC.modified, type: :date, solrize_for: [:sort]
   has_attribute :license, ::RDF::Vocab::DC.license, solrize_for: [:search]
 
@@ -29,8 +28,7 @@ class Item < JupiterCore::LockedLdpObject
   has_attribute :ingest_batch, ::VOCABULARY[:ual].ingestbatch, solrize_for: :exact_match
   has_multival_attribute :member_of_paths, ::VOCABULARY[:ual].path,
                          type: :path,
-                         solrize_for: :pathing,
-                         facet_value_presenter: ->(path) { Item.path_to_titles(path) }
+                         solrize_for: :pathing
 
   # Prism attributes
   has_attribute :doi, ::VOCABULARY[:prism].doi, solrize_for: :exact_match
@@ -43,41 +41,8 @@ class Item < JupiterCore::LockedLdpObject
     super - [:member_of_paths]
   end
 
-  # This would be the seam where we may want to introduce a more efficient cache for mapping
-  # community_id/collection_id paths to titles, as this is going to get hit a lot on facet results
-  # If names were unique, we wouldn't have to do this translation, but c'est la vie
-  def self.path_to_titles(path)
-    community_id, collection_id = path.split('/')
-    community_title = Community.find(community_id).title
-    collection_title = if collection_id
-                         '/' + Collection.find(collection_id).title
-                       else
-                         ''
-                       end
-    community_title + collection_title
-  end
-
   def self.valid_visibilities
     super + [VISIBILITY_EMBARGO]
-  end
-
-  # Some URI --> text functions
-  def self.language_text(language_uri)
-    CONTROLLED_VOCABULARIES[:language].each do |lang|
-      if lang[:uri] == language_uri
-        return I18n.t("controlled_vocabularies.language.#{lang[:code]}")
-      end
-    end
-    raise ApplicationError("Language not found for #{language_uri}")
-  end
-
-  def self.license_text(license_uri)
-    CONTROLLED_VOCABULARIES[:license].each do |lic|
-      if lic[:uri] == license_uri
-        return I18n.t("controlled_vocabularies.license.#{lic[:code]}")
-      end
-    end
-    raise ApplicationError("License not found for #{license_uri}")
   end
 
   def file_sets

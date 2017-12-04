@@ -54,19 +54,19 @@ class SearchTest < ActiveSupport::TestCase
     end
 
     search_results.each_facet_with_results do |facet|
-      assert_includes ['Title', 'Creator', 'Visibility'], facet.name
-      if facet.name == 'Title'
+      assert_includes ['Title', 'Creator', 'Visibility'], facet.category_name
+      if facet.category_name == 'Title'
         assert facet.values.keys.count == 2
         assert facet.values.key?(first_title)
         assert facet.values.key?(second_title)
         [first_title, second_title].each do |title|
           assert facet.values[title] == 1
         end
-      elsif facet.name == 'Creator'
+      elsif facet.category_name == 'Creator'
         assert facet.values.keys.count == 2
         assert facet.values.key?(creator)
         assert facet.values[creator] == 1
-      elsif facet.name == 'Visibility'
+      elsif facet.category_name == 'Visibility'
         assert facet.values.keys.count == 1
         assert facet.values.key?('public')
         assert facet.values['public'] == 2
