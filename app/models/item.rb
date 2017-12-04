@@ -45,15 +45,6 @@ class Item < JupiterCore::LockedLdpObject
     super + [VISIBILITY_EMBARGO]
   end
 
-  def self.license_text(license_uri)
-    CONTROLLED_VOCABULARIES[:license].each do |lic|
-      if lic[:uri] == license_uri
-        return I18n.t("controlled_vocabularies.license.#{lic[:code]}")
-      end
-    end
-    raise ApplicationError("License not found for #{license_uri}")
-  end
-
   def file_sets
     FileSet.where(item: id)
   end
