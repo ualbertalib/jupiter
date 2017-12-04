@@ -18,9 +18,12 @@ class Item < JupiterCore::LockedLdpObject
   # has_attribute :date_modified, ::RDF::Vocab::DC.modified, type: :date, solrize_for: :sort
   has_multival_attribute :language, ::RDF::Vocab::DC.language,
                          solrize_for: [:search, :facet],
-                         facet_value_presenter: ->(language) { Item.language_text(language) }
-  has_attribute :embargo_end_date, ::RDF::Vocab::DC.modified, type: :date, solrize_for: [:sort]
+                         facet_value_presenter: ->(language) { Item.uri_to_text(language, :language) }
+  has_attribute :embargo_end_date, ::RDF::Vocab::DC.available, type: :date, solrize_for: [:sort]
   has_attribute :license, ::RDF::Vocab::DC.license, solrize_for: [:search]
+  # `type` is an ActiveFedora keyword, so we call it `item_type`
+  # Note also the `item_type_with_status` below for searching, faceting and forms
+  has_attribute :item_type, ::RDF::Vocab::DC.type, solrize_for: :exact_match
 
   # UAL attributes
   has_attribute :depositor, ::VOCABULARY[:ual].depositor, solrize_for: [:search]
@@ -35,9 +38,22 @@ class Item < JupiterCore::LockedLdpObject
   # Prism attributes
   has_attribute :doi, ::VOCABULARY[:prism].doi, solrize_for: :exact_match
 
+  # Bibo attributes
+  has_attribute :published_status, ::VOCABULARY[:bibo].status, solrize_for: :exact_match
+
+  # Project Hydra ACL attributes
+  has_attribute :embargo_history, ::VOCABULARY[:acl].embargoHistory, solrize_for: :exact_match
+  has_attribute :visibility_after_embargo, ::VOCABULARY[:acl].visibilityAfterEmbargo, solrize_for: :exact_match
+
   # Solr only
   additional_search_index :doi_without_label, solrize_for: :exact_match,
                                               as: -> { doi.gsub('doi:', '') if doi.present? }
+
+  # This combines both the controlled vocabulary codes from item_type and published_status above
+  # (but only for items that are articles)
+  additional_search_index :item_type_with_status,
+                          solrize_for: :exact_match,
+                          as: -> { item_type_with_status_code if item_type && publication_status }
 
   def self.display_attribute_names
     super - [:member_of_paths]
@@ -61,23 +77,28 @@ class Item < JupiterCore::LockedLdpObject
     super + [VISIBILITY_EMBARGO]
   end
 
-  # Some URI --> text functions
-  def self.language_text(language_uri)
-    CONTROLLED_VOCABULARIES[:language].each do |lang|
-      if lang[:uri] == language_uri
-        return I18n.t("controlled_vocabularies.language.#{lang[:code]}")
-      end
+  # Some URI --> [text|code] functions for controlled vocabularies
+  def self.uri_to_code(uri, vocabulary)
+    CONTROLLED_VOCABULARIES[:language].each do |term|
+      return term[:code] if term[:uri] == uri
     end
-    raise ApplicationError("Language not found for #{language_uri}")
+    raise ArgumentError, "#{uri} not found in controlled vocabulary #{vocabulary}"
   end
 
-  def self.license_text(license_uri)
-    CONTROLLED_VOCABULARIES[:license].each do |lic|
-      if lic[:uri] == license_uri
-        return I18n.t("controlled_vocabularies.license.#{lic[:code]}")
-      end
-    end
-    raise ApplicationError("License not found for #{license_uri}")
+  def self.code_to_text(code, vocabulary)
+    I18n.t("controlled_vocabularies.#{vocabulary}.#{code}")
+  end
+
+  def self.uri_to_text(uri, vocabulary)
+    code_to_text(uri_to_code(uri, vocabulary), vocabulary)
+  end
+
+  def item_type_with_status_code
+    # Return the item type code unless it's an article, then append publication status code
+    item_type_code = Item.uri_to_code(item_type, :item_type)
+    return item_type_code unless item_type_code == :article
+    publication_status_code = Item.uri_to_code(publication_status, :publication_status)
+    "#{item_type_code}_#{publication_status_code}"
   end
 
   def file_sets
@@ -106,6 +127,7 @@ class Item < JupiterCore::LockedLdpObject
     validate :communities_and_collections_validations
     validate :language_validations
     validate :license_validations
+    # validate :item_type_and_publication_status_validations
 
     before_validation do
       # TODO: for theses, the sort_year attribute should be derived from ual:graduationDate
@@ -168,15 +190,32 @@ class Item < JupiterCore::LockedLdpObject
     end
 
     def language_validations
-      uris = ::CONTROLLED_VOCABULARIES[:language].map { |lang| lang[:uri] }
       language.each do |lang|
-        errors.add(:language, :not_recognized) unless uris.include?(lang)
+        uri_validation(lang, :language)
       end
     end
 
     def license_validations
-      return if ::CONTROLLED_VOCABULARIES[:license].any? { |lic| lic[:uri] == license }
-      errors.add(:license, :not_recognized)
+      uri_validation(license, :license)
+    end
+
+    def item_type_and_publication_status_validations
+      return unless uri_validation(item_type, :item_type)
+      code = Item.uri_to_code(item_type)
+      return unless code == 'article'
+      if publication_status.blank?
+        errors.add(:publication_status, :required)
+      else
+        uri_validation(publication_status, :publication_status)
+      end
+    end
+
+    def uri_validation(value, attribute, vocabulary = nil)
+      # Most (all?) of the time the controlled vocabulary is named after the attribute
+      vocabulary = attribute if vocabulary.nil?
+      return true if ::CONTROLLED_VOCABULARIES[vocabulary].any? { |term| term[:uri] == value }
+      errors.add(attribute, :not_recognized)
+      false
     end
   end
 

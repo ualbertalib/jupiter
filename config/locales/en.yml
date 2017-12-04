@@ -324,6 +324,20 @@ en:
       thumbnail: 'Thumbnail'
 
   controlled_vocabularies:
+    item_type_with_status:
+      article_published: Article (Published)
+      article_draft: Article (Draft)
+      article_submitted: Article (Submitted)
+      book: Book
+      chapter: Chapter
+      image: Image
+      report: Report
+      research_material: 'Research Material'
+      conference_paper: 'Conference Paper'
+      conference_poster: 'Conference Poster'
+      dataset: Dataset
+      review: Review
+      learning_object: 'Learning Object'
     language:
       ukr: Ukrainian
       jpn: Japanese

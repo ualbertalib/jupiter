@@ -30,6 +30,18 @@
   terms:
     - doi
 
+- vocabulary: bibo
+  schema: http://purl.org/ontology/bibo/
+  terms:
+    - status
+
+# What about Hydra --> Samvera ???
+- vocabulary: acl
+  schema: 'http://projecthydra.org/ns/auth/acl#'
+  terms:
+    - embargoHistory
+    - visibilityAfterEmbargo
+
 - vocabulary: jupiter_core
   schema: 'http://fake.figurethisout.todo#'
   terms:
