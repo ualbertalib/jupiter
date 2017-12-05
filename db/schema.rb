@@ -49,29 +49,11 @@ ActiveRecord::Schema.define(version: 20171130222838) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "citations_draft_items", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.bigint "draft_item_id", null: false
-    t.bigint "citation_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["citation_id"], name: "index_citations_draft_items_on_citation_id"
-    t.index ["draft_item_id"], name: "index_citations_draft_items_on_draft_item_id"
-  end
-
   create_table "community_and_collections", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "community_id", null: false
     t.string "collection_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "community_and_collections_draft_items", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.bigint "draft_item_id", null: false
-    t.bigint "community_and_collection_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["community_and_collection_id"], name: "index_c_and_cs_draft_items_on_community_and_collection_id"
-    t.index ["draft_item_id"], name: "index_community_and_collections_draft_items_on_draft_item_id"
   end
 
   create_table "contributors", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -80,28 +62,10 @@ ActiveRecord::Schema.define(version: 20171130222838) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "contributors_draft_items", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.bigint "draft_item_id", null: false
-    t.bigint "contributor_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["contributor_id"], name: "index_contributors_draft_items_on_contributor_id"
-    t.index ["draft_item_id"], name: "index_contributors_draft_items_on_draft_item_id"
-  end
-
   create_table "creators", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "creators_draft_items", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.bigint "draft_item_id", null: false
-    t.bigint "creator_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["creator_id"], name: "index_creators_draft_items_on_creator_id"
-    t.index ["draft_item_id"], name: "index_creators_draft_items_on_draft_item_id"
   end
 
   create_table "draft_items", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -125,9 +89,45 @@ ActiveRecord::Schema.define(version: 20171130222838) do
     t.index ["user_id"], name: "index_draft_items_on_user_id"
   end
 
+  create_table "draft_items_citations", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.bigint "draft_item_id"
+    t.bigint "citation_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["citation_id"], name: "index_draft_items_citations_on_citation_id"
+    t.index ["draft_item_id"], name: "index_draft_items_citations_on_draft_item_id"
+  end
+
+  create_table "draft_items_community_and_collections", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.bigint "draft_item_id"
+    t.bigint "community_and_collection_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["community_and_collection_id"], name: "index_comm_and_colls_draft_items_on_comm_and_coll_id"
+    t.index ["draft_item_id"], name: "index_draft_items_community_and_collections_on_draft_item_id"
+  end
+
+  create_table "draft_items_contributors", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.bigint "draft_item_id"
+    t.bigint "contributor_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["contributor_id"], name: "index_draft_items_contributors_on_contributor_id"
+    t.index ["draft_item_id"], name: "index_draft_items_contributors_on_draft_item_id"
+  end
+
+  create_table "draft_items_creators", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.bigint "draft_item_id"
+    t.bigint "creator_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["creator_id"], name: "index_draft_items_creators_on_creator_id"
+    t.index ["draft_item_id"], name: "index_draft_items_creators_on_draft_item_id"
+  end
+
   create_table "draft_items_languages", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.bigint "draft_item_id", null: false
-    t.bigint "language_id", null: false
+    t.bigint "draft_item_id"
+    t.bigint "language_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["draft_item_id"], name: "index_draft_items_languages_on_draft_item_id"
@@ -135,8 +135,8 @@ ActiveRecord::Schema.define(version: 20171130222838) do
   end
 
   create_table "draft_items_places", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.bigint "draft_item_id", null: false
-    t.bigint "place_id", null: false
+    t.bigint "draft_item_id"
+    t.bigint "place_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["draft_item_id"], name: "index_draft_items_places_on_draft_item_id"
@@ -144,8 +144,8 @@ ActiveRecord::Schema.define(version: 20171130222838) do
   end
 
   create_table "draft_items_subjects", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.bigint "draft_item_id", null: false
-    t.bigint "subject_id", null: false
+    t.bigint "draft_item_id"
+    t.bigint "subject_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["draft_item_id"], name: "index_draft_items_subjects_on_draft_item_id"
@@ -153,8 +153,8 @@ ActiveRecord::Schema.define(version: 20171130222838) do
   end
 
   create_table "draft_items_time_periods", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.bigint "draft_item_id", null: false
-    t.bigint "time_period_id", null: false
+    t.bigint "draft_item_id"
+    t.bigint "time_period_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["draft_item_id"], name: "index_draft_items_time_periods_on_draft_item_id"

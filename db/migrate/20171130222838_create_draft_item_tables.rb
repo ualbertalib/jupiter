@@ -37,9 +37,9 @@ class CreateDraftItemTables < ActiveRecord::Migration[5.1]
       t.timestamps
     end
 
-    create_join_table :draft_items, :languages do |t|
-      t.index :draft_item_id
-      t.index :language_id
+    create_table :draft_items_languages, id: false do |t|
+      t.references :draft_item, index: true
+      t.references :language, index: true
 
       t.timestamps
     end
@@ -50,9 +50,9 @@ class CreateDraftItemTables < ActiveRecord::Migration[5.1]
       t.timestamps
     end
 
-    create_join_table :draft_items, :creators do |t|
-      t.index :draft_item_id
-      t.index :creator_id
+    create_table :draft_items_creators, id: false do |t|
+      t.references :draft_item, index: true
+      t.references :creator, index: true
 
       t.timestamps
     end
@@ -63,9 +63,9 @@ class CreateDraftItemTables < ActiveRecord::Migration[5.1]
       t.timestamps
     end
 
-    create_join_table :draft_items, :subjects do |t|
-      t.index :draft_item_id
-      t.index :subject_id
+    create_table :draft_items_subjects, id: false do |t|
+      t.references :draft_item, index: true
+      t.references :subject, index: true
 
       t.timestamps
     end
@@ -77,10 +77,10 @@ class CreateDraftItemTables < ActiveRecord::Migration[5.1]
       t.timestamps
     end
 
-    create_join_table :draft_items, :community_and_collections do |t|
-      t.index :draft_item_id
+    create_table :draft_items_community_and_collections, id: false do |t|
+      t.references :draft_item, index: true
       # Original index name was too long for MYSQL, shortened it by abbreviating community_and_collections
-      t.index :community_and_collection_id, name: 'index_c_and_cs_draft_items_on_community_and_collection_id'
+      t.references :community_and_collection, index: { name: 'index_comm_and_colls_draft_items_on_comm_and_coll_id' }
 
       t.timestamps
     end
@@ -91,9 +91,9 @@ class CreateDraftItemTables < ActiveRecord::Migration[5.1]
       t.timestamps
     end
 
-    create_join_table :draft_items, :contributors do |t|
-      t.index :draft_item_id
-      t.index :contributor_id
+    create_table :draft_items_contributors, id: false do |t|
+      t.references :draft_item, index: true
+      t.references :contributor, index: true
 
       t.timestamps
     end
@@ -104,9 +104,9 @@ class CreateDraftItemTables < ActiveRecord::Migration[5.1]
       t.timestamps
     end
 
-    create_join_table :draft_items, :places do |t|
-      t.index :draft_item_id
-      t.index :place_id
+    create_table :draft_items_places, id: false do |t|
+      t.references :draft_item, index: true
+      t.references :place, index: true
 
       t.timestamps
     end
@@ -117,9 +117,9 @@ class CreateDraftItemTables < ActiveRecord::Migration[5.1]
       t.timestamps
     end
 
-    create_join_table :draft_items, :time_periods do |t|
-      t.index :draft_item_id
-      t.index :time_period_id
+    create_table :draft_items_time_periods, id: false do |t|
+      t.references :draft_item, index: true
+      t.references :time_period, index: true
 
       t.timestamps
     end
@@ -130,9 +130,9 @@ class CreateDraftItemTables < ActiveRecord::Migration[5.1]
       t.timestamps
     end
 
-    create_join_table :draft_items, :citations do |t|
-      t.index :draft_item_id
-      t.index :citation_id
+    create_table :draft_items_citations, id: false do |t|
+      t.references :draft_item, index: true
+      t.references :citation, index: true
 
       t.timestamps
     end

@@ -1,5 +1,6 @@
 class Creator < ApplicationRecord
 
-  has_and_belongs_to_many :draft_items
+  has_many :draft_items_creators, dependent: :destroy
+  has_many :draft_items, through: :draft_items_creators
 
 end

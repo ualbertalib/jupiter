@@ -29,7 +29,6 @@ class DepositItemController < ApplicationController
   end
 
   def create
-    puts params[:draft_item]
     # TODO: Need to create the object before getting to the wizard... how to do this?
     # Could be a nested route... item_deposit and item_deposit/:item_id/build where build is the actual wizard
     # So first form of the wizard isnt actually part of the wizard,
