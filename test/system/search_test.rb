@@ -148,7 +148,7 @@ class SearchTest < ApplicationSystemTestCase
       # Visit community tab
       click_link 'Communities (1)'
       assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy', tab: 'community')
-      assert_selector 'a.nav-link', text: 'Items (10)'
+      assert_selector 'a.nav-link', text: 'Items (5)'
       assert_selector 'a.nav-link', text: 'Collections (2)'
       assert_selector 'a.nav-link.active', text: 'Communities (1)'
       # Only community hits shown
