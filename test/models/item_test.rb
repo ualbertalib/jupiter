@@ -164,11 +164,19 @@ class ItemTest < ActiveSupport::TestCase
     refute_includes item.errors.keys, :language
   end
 
-  test 'a license must be present' do
+  test 'a license or rights statement must be present' do
     item = Item.new_locked_ldp_object
 
     assert_not item.valid?
-    assert_includes item.errors[:license], "can't be blank"
+    assert_includes item.errors[:base], 'must have either a license or a rights statement'
+  end
+
+  test 'a rights statement must not be present if a license is present' do
+    item = Item.new_locked_ldp_object(rights: 'Share my work with everybody',
+                                      license: 'http://creativecommons.org/licenses/by/4.0/')
+
+    assert_not item.valid?
+    assert_includes item.errors[:base], 'should not have both a license and a rights statement'
   end
 
   test 'a license must be from the controlled vocabulary' do

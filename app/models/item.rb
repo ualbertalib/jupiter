@@ -19,6 +19,7 @@ class Item < JupiterCore::LockedLdpObject
   has_multival_attribute :language, ::RDF::Vocab::DC.language, solrize_for: [:search, :facet]
   has_attribute :embargo_end_date, ::RDF::Vocab::DC.available, type: :date, solrize_for: [:sort]
   has_attribute :license, ::RDF::Vocab::DC.license, solrize_for: [:search]
+  has_attribute :rights, ::RDF::Vocab::DC.rights, solrize_for: :exact_match
   # `type` is an ActiveFedora keyword, so we call it `item_type`
   # Note also the `item_type_with_status` below for searching, faceting and forms
   has_attribute :item_type, ::RDF::Vocab::DC.type, solrize_for: :exact_match
@@ -108,10 +109,9 @@ class Item < JupiterCore::LockedLdpObject
     validates :member_of_paths, presence: true
     validates :title, presence: true
     validates :language, presence: true
-    validates :license, presence: true
     validate :communities_and_collections_validations
     validate :language_validations
-    validate :license_validations
+    validate :license_and_rights_validations
     validate :visibility_after_embargo_validations
     # validate :item_type_and_publication_status_validations
 
@@ -181,8 +181,15 @@ class Item < JupiterCore::LockedLdpObject
       end
     end
 
-    def license_validations
-      uri_validation(license, :license)
+    def license_and_rights_validations
+      # Must have one of license or rights, not both
+      if license.blank?
+        errors.add(:base, :need_either_license_or_rights) if rights.blank?
+      else
+        # Controlled vocabulary check
+        uri_validation(license, :license)
+        errors.add(:base, :not_both_license_and_rights) if rights.present?
+      end
     end
 
     def visibility_after_embargo_validations

@@ -110,7 +110,8 @@ if Rails.env.development? || Rails.env.uat?
                    else
                      'http://id.loc.gov/vocabulary/iso639-2/ukr'
                    end
-        Item.new_locked_ldp_object(
+        licence_right = {}
+        attributes = {
           owner: admin.id,
           creator: creator.uniq,
           contributor: [contributors[rand(10)]],
@@ -118,9 +119,16 @@ if Rails.env.development? || Rails.env.uat?
           visibility: JupiterCore::VISIBILITY_PUBLIC,
           title: "The effects of #{Faker::Beer.name} on #{thing.pluralize}",
           description: description,
-          language: [language],
-          license: 'http://creativecommons.org/licenses/by/4.0/'
-        ).unlock_and_fetch_ldp_object do |uo|
+          language: [language]
+        }
+        if seed % 10 < 7
+          attributes[:license] = 'http://creativecommons.org/licenses/by/4.0/'
+        elsif seed % 10 < 8
+          attributes[:license] = 'http://creativecommons.org/publicdomain/mark/1.0/'
+        else
+          attributes[:rights] = 'Share my stuff with everybody'
+        end
+        Item.new_locked_ldp_object(attributes).unlock_and_fetch_ldp_object do |uo|
           uo.add_to_path(community.id, collection.id)
           uo.save!
         end

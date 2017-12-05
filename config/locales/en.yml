@@ -55,6 +55,9 @@ en:
       models:
         ir_item:
           attributes:
+            base:
+              need_either_license_or_rights: 'must have either a license or a rights statement'
+              not_both_license_and_rights: 'should not have both a license and a rights statement'
             member_of_paths:
               community_not_found: 'is missing community with ID "%{id}"'
               collection_not_found: 'is missing collection with ID "%{id}"'
