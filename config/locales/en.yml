@@ -73,6 +73,37 @@ en:
           attributes:
             member_collections:
               must_be_empty: "must be empty. Could not delete community. Currently contains: %{list_of_collections}"
+  activerecord:
+    attributes:
+      language:
+        names:
+          english: 'English'
+          french: 'French'
+          spanish: 'Spanish'
+          chinese: 'Chinese'
+          german: 'German'
+          italian: 'Italian'
+          russian:  'Russian'
+          ukrainian: 'Ukrainian'
+          japanese: 'Japanese'
+          no_linguistic_content: 'No linguistic content'
+          other: 'Other'
+      type:
+        names:
+          book: 'Book'
+          book_chapter: 'Book Chapter'
+          conference_workshop_poster: 'Conference/workshop Poster'
+          conference_workshop_presenation: 'Conference/workshop Presentation'
+          dataset: 'Dataset'
+          image: 'Image'
+          journal_article_draft: 'Journal Article (Draft-Submitted)'
+          journal_article_published: 'Journal Article (Published)'
+          learning_object: 'Learning Object'
+          report: 'Report'
+          research_material:  'Research Material'
+          review: 'Review'
+
+
   application:
     navbar:
       logo_alt: 'ERA Logo'
@@ -315,17 +346,17 @@ en:
       alternate_title: 'Alternate Title'
       alternate_title_placeholder: 'Enter alternate title'
       alternate_title_help: 'Enter a secondary/translated title, if appropriate.'
-      item_type: 'Type of Item'
-      item_type_help_html: 'If you do not see an appropriate item type, please contact
+      type_id: 'Type of Item'
+      type_id_help_html: 'If you do not see an appropriate item type, please contact
         <a href="mailto:erahelp@ualberta.ca">erahelp@ualberta.ca</a>'
-      language: 'Language'
-      language_placeholder: 'Enter one or multiple languages'
-      creator: 'Author/Creator'
-      creator_placeholder: 'Enter one or multiple author/creators'
-      creator_help: 'One author per box. Example:  Doe, Jane B.'
-      subject: 'Subject/Keywords'
-      subject_placeholder: 'Enter one or multiple subject/keywords'
-      subject_help: 'Enter subjects or keywords that describe the item.
+      languages: 'Languages'
+      languages_placeholder: 'Enter one or multiple languages'
+      creators: 'Authors/Creators'
+      creators_placeholder: 'Enter one or multiple author/creators'
+      creators_help: 'One author per box. Example:  Doe, Jane B.'
+      subjects: 'Subjects/Keywords'
+      subjects_placeholder: 'Enter one or multiple subject/keywords'
+      subjects_help: 'Enter subjects or keywords that describe the item.
         These are the words that will be used when someone searches for your item.'
       date_created: 'Date created'
       description: 'Description or Abstract'
@@ -338,26 +369,26 @@ en:
       collection: 'Collection'
       collection_placeholder: 'Select a collection'
       additional_fields: 'Additional fields'
-      contributor: 'Additional contributor'
-      contributor_placeholder: 'Enter one or multiple contributors'
-      contributor_help: 'A person or group you want to recognize for playing a role in the creation of this item,
+      contributors: 'Additional contributors'
+      contributors_placeholder: 'Enter one or multiple contributors'
+      contributors_help: 'A person or group you want to recognize for playing a role in the creation of this item,
         but not the primary role. If there is a specific role you would like noted, include it in parentheses,
         e.g. "Jones, Mary (Advisor)."'
-      place: 'Is this item about a place?'
-      place_placeholder: 'Enter one or multiple places'
-      place_help: "A place name related to the item, such as the city,
+      places: 'Is this item about a place?'
+      places_placeholder: 'Enter one or multiple places'
+      places_help: "A place name related to the item, such as the city,
         province, or country the item's contents are about."
-      time: 'Is this item about a time?'
-      time_placeholder: 'Enter one or multiple times'
-      time_help_html: 'Examples:
+      time_periods: 'Is this item about a time?'
+      time_periods_placeholder: 'Enter one or multiple times'
+      time_periods_help_html: 'Examples:
         <ul>
           <li>a specific date: 2009/12/31</li>
           <li>a date range:  2003/2010</li>
           <li>a time period: the Enlightenment</li>
         </ul>'
-      citation: 'Citation for previous publication'
-      citation_placeholder: 'Enter one or multiple citations'
-      citation_help: 'If your item has been previously published, provide a citation'
+      citations: 'Citations for previous publication'
+      citations_placeholder: 'Enter one or multiple citations'
+      citations_help: 'If your item has been previously published, provide a citation'
       source: 'Source'
       source_help: 'Brief information about an item from which this item was derived.'
       related_item: Link to related item

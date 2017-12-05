@@ -44,7 +44,7 @@ $(document).on('turbolinks:load', function() {
           items += '<option value="' + item.id + '">' + item.title + '</option>';
         });
         $collectionSelect.prop('disabled', false)
-                                  .empty().append(items);
+                         .empty().append(items);
       });
     }
   });

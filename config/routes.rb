@@ -9,7 +9,9 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :deposit_item
+  resources :deposit_item do
+    resources :build, controller: 'deposit_item'
+  end
 
   get 'search', to: 'search#index'
 
