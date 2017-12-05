@@ -1,0 +1,8 @@
+---
+visibility_after_embargo:
+  - code: authenticated
+    uri: http://terms.library.ualberta.ca/authenticated
+  - code: draft
+    uri: http://terms.library.ualberta.ca/draft
+  - code: public
+    uri: http://terms.library.ualberta.ca/public

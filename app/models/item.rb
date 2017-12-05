@@ -103,6 +103,8 @@ class Item < JupiterCore::LockedLdpObject
   unlocked do
     validates :embargo_end_date, presence: true, if: ->(item) { item.visibility == VISIBILITY_EMBARGO }
     validates :embargo_end_date, absence: true, if: ->(item) { item.visibility != VISIBILITY_EMBARGO }
+    validates :visibility_after_embargo, presence: true, if: ->(item) { item.visibility == VISIBILITY_EMBARGO }
+    validates :visibility_after_embargo, absence: true, if: ->(item) { item.visibility != VISIBILITY_EMBARGO }
     validates :member_of_paths, presence: true
     validates :title, presence: true
     validates :language, presence: true
@@ -110,6 +112,7 @@ class Item < JupiterCore::LockedLdpObject
     validate :communities_and_collections_validations
     validate :language_validations
     validate :license_validations
+    validate :visibility_after_embargo_validations
     # validate :item_type_and_publication_status_validations
 
     before_validation do
@@ -180,6 +183,11 @@ class Item < JupiterCore::LockedLdpObject
 
     def license_validations
       uri_validation(license, :license)
+    end
+
+    def visibility_after_embargo_validations
+      return if visibility_after_embargo.nil?
+      uri_validation(visibility_after_embargo, :visibility_after_embargo)
     end
 
     def item_type_and_publication_status_validations

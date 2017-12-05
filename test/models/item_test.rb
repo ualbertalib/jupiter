@@ -65,6 +65,46 @@ class ItemTest < ActiveSupport::TestCase
     refute item.errors[:visibility].present?
   end
 
+  test 'visibility_after_embargo must be present if visibility is embargo' do
+    item = Item.new_locked_ldp_object
+    item.unlock_and_fetch_ldp_object do |unlocked_item|
+      unlocked_item.visibility = Item::VISIBILITY_EMBARGO
+    end
+
+    assert_not item.valid?
+    assert item.errors[:visibility_after_embargo].present?
+    assert_includes item.errors[:visibility_after_embargo], "can't be blank"
+  end
+
+  test 'visibility_after_embargo must be blank for non-embargo visibilities' do
+    item = Item.new_locked_ldp_object
+    item.unlock_and_fetch_ldp_object do |unlocked_item|
+      unlocked_item.visibility = JupiterCore::VISIBILITY_PUBLIC
+      unlocked_item.visibility_after_embargo = 'http://terms.library.ualberta.ca/draft'
+    end
+
+    assert_not item.valid?
+    assert item.errors[:visibility_after_embargo].present?
+    assert_includes item.errors[:visibility_after_embargo], 'must be blank'
+    # Make sure no controlled vocabulary error
+    refute_includes item.errors[:visibility_after_embargo], 'is not recognized'
+
+    refute item.errors[:visibility].present?
+  end
+
+  test 'visibility_after_embargo must be from the controlled vocabulary' do
+    item = Item.new_locked_ldp_object
+    item.unlock_and_fetch_ldp_object do |unlocked_item|
+      unlocked_item.visibility = Item::VISIBILITY_EMBARGO
+      unlocked_item.visibility_after_embargo = 'whatever'
+    end
+
+    assert_not item.valid?
+    assert item.errors[:visibility_after_embargo].present?
+    assert_includes item.errors[:visibility_after_embargo], 'is not recognized'
+    refute item.errors[:visibility].present?
+  end
+
   test '#add_to_path assigns paths properly' do
     item = Item.new_locked_ldp_object
     community_id = generate_random_string

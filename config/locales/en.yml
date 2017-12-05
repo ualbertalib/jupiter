@@ -62,6 +62,8 @@ en:
               not_recognized: 'is not recognized'
             license:
               not_recognized: 'is not recognized'
+            visibility_after_embargo:
+              not_recognized: 'is not recognized'
         ir_collection:
           attributes:
             # TODO: Just show the count of items? If collection has lots of items, this looks poorly

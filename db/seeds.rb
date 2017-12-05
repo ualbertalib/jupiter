@@ -150,6 +150,7 @@ if Rails.env.development? || Rails.env.uat?
       ).unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(community.id, collection.id)
         uo.embargo_end_date = (Time.now + 20.years).to_date
+        uo.visibility_after_embargo = 'http://terms.library.ualberta.ca/public'
         uo.save!
       end
 
@@ -164,6 +165,7 @@ if Rails.env.development? || Rails.env.uat?
       ).unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(community.id, collection.id)
         uo.embargo_end_date = (Time.now - 2.days).to_date
+        uo.visibility_after_embargo = 'http://terms.library.ualberta.ca/public'
         uo.save!
       end
 
