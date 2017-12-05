@@ -66,7 +66,7 @@ class SearchTest < ApplicationSystemTestCase
 
       # Facets and counts
       assert_selector 'div.card-header', text: 'Visibility'
-      assert_selector 'li div', text: /public.*5/
+      assert_selector 'li div', text: /Public.*5/
       # Should not be a facet for 'private'
       assert_selector 'li div', text: /private/, count: 0
       # TODO: The 'Member of paths' text will likely change
@@ -103,7 +103,7 @@ class SearchTest < ApplicationSystemTestCase
 
       # Some facets are now gone, some with changed counts
       assert_selector 'div.card-header', text: 'Visibility'
-      assert_selector 'li div', text: /public.*2/
+      assert_selector 'li div', text: /Public.*2/
       assert_selector 'div.card-header', text: 'Collections'
       assert_selector 'li div', text: /Fancy Community.*2/
       assert_selector 'li div', text: /Fancy Collection 0/, count: 0
@@ -260,9 +260,9 @@ class SearchTest < ApplicationSystemTestCase
 
       # Facets and counts
       assert_selector 'div.card-header', text: 'Visibility'
-      assert_selector 'li div', text: /public.*5/
+      assert_selector 'li div', text: /Public.*5/
       # Should be a facet for 'private'
-      assert_selector 'li div', text: /private.*5/
+      assert_selector 'li div', text: /Private.*5/
       # TODO: The 'Member of paths' text will likely change
       assert_selector 'div.card-header', text: 'Collections'
       assert_selector 'li div', text: /Fancy Community.*10/
@@ -302,7 +302,7 @@ class SearchTest < ApplicationSystemTestCase
 
       # Some facets are now gone, some with changed counts
       assert_selector 'div.card-header', text: 'Visibility'
-      assert_selector 'li div', text: /public.*2/
+      assert_selector 'li div', text: /Public.*2/
       assert_selector 'div.card-header', text: 'Collections'
       assert_selector 'li div', text: /Fancy Community.*4/
       assert_selector 'li div', text: /Fancy Collection 0/, count: 0

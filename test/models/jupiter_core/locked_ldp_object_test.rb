@@ -226,7 +226,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     first_title = generate_random_string
 
     obj = @@klass.new_locked_ldp_object(title: first_title, creator: creator, owner: users(:regular_user).id,
-                                        visibility: 'public')
+                                        visibility: JupiterCore::VISIBILITY_PUBLIC)
 
     assert obj.record_created_at.nil?
 
@@ -244,7 +244,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     second_title = generate_random_string
 
     another_obj = @@klass.new_locked_ldp_object(title: second_title, creator: creator, owner: users(:regular_user).id,
-                                                visibility: 'public')
+                                                visibility: JupiterCore::VISIBILITY_PUBLIC)
     another_obj.unlock_and_fetch_ldp_object(&:save!)
 
     assert @@klass.all.count == 2
@@ -350,8 +350,8 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
 
     assert instance.respond_to?(:item)
     assert_nil instance.item, nil
-    assert_equal instance.inspect, '#<AnonymousClass id: nil, visibility: "public", owner: 1,'\
-                                   ' record_created_at: nil, item: nil>'
+    assert_equal instance.inspect, '#<AnonymousClass id: nil, visibility: "http://terms.library.ualberta.ca/public",'\
+                                   ' owner: 1, record_created_at: nil, item: nil>'
     instance.unlock_and_fetch_ldp_object(&:save)
 
     instance2 = klass.new_locked_ldp_object(owner: 1,

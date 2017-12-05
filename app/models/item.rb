@@ -3,7 +3,7 @@ class Item < JupiterCore::LockedLdpObject
 
   ldp_object_includes Hydra::Works::WorkBehavior
 
-  VISIBILITY_EMBARGO = 'embargo'.freeze
+  VISIBILITY_EMBARGO = 'http://terms.library.ualberta.ca/embargo'.freeze
   VISIBILITIES = (JupiterCore::VISIBILITIES + [VISIBILITY_EMBARGO]).freeze
 
   # Dublin Core attributes
@@ -199,14 +199,6 @@ class Item < JupiterCore::LockedLdpObject
       else
         uri_validation(publication_status, :publication_status)
       end
-    end
-
-    def uri_validation(value, attribute, vocabulary = nil)
-      # Most (all?) of the time the controlled vocabulary is named after the attribute
-      vocabulary = attribute if vocabulary.nil?
-      return true if ::CONTROLLED_VOCABULARIES[vocabulary].any? { |term| term[:uri] == value }
-      errors.add(attribute, :not_recognized)
-      false
     end
   end
 

@@ -363,6 +363,12 @@ en:
       public_domain_mark_1_0: 'Public Domain Mark 1.0'
       attribution_noncommercial_sharealike_4_0_international:
         'Attribution-NonCommercial-ShareAlike 4.0 International'
+    visibility:
+      authenticated: Authenticated
+      embargo: Embargo
+      draft: Draft
+      private: Private
+      public: Public
 
   facets:
     member_of_paths: 'Collections'

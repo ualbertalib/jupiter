@@ -3,12 +3,14 @@ require 'test_helper'
 class ItemTest < ActiveSupport::TestCase
 
   test 'a valid item can be constructed' do
-    community = Community.new_locked_ldp_object(title: 'Community', owner: 1, visibility: 'public')
+    community = Community.new_locked_ldp_object(title: 'Community', owner: 1,
+                                                visibility: JupiterCore::VISIBILITY_PUBLIC)
     community.unlock_and_fetch_ldp_object(&:save!)
-    collection = Collection.new_locked_ldp_object(title: 'Collection', owner: 1, visibility: 'public',
+    collection = Collection.new_locked_ldp_object(title: 'Collection', owner: 1,
+                                                  visibility: JupiterCore::VISIBILITY_PUBLIC,
                                                   community_id: community.id)
     collection.unlock_and_fetch_ldp_object(&:save!)
-    item = Item.new_locked_ldp_object(title: 'Item', owner: 1, visibility: 'public',
+    item = Item.new_locked_ldp_object(title: 'Item', owner: 1, visibility: JupiterCore::VISIBILITY_PUBLIC,
                                       language: ['http://id.loc.gov/vocabulary/iso639-2/eng'],
                                       license: 'http://creativecommons.org/licenses/by/4.0/')
     item.unlock_and_fetch_ldp_object do |unlocked_item|
@@ -37,7 +39,7 @@ class ItemTest < ActiveSupport::TestCase
   end
 
   test 'embargo is a valid visibility for items' do
-    assert_includes Item.valid_visibilities, 'embargo'
+    assert_includes Item.valid_visibilities, Item::VISIBILITY_EMBARGO
   end
 
   test 'embargo_end_date must be present if visibility is embargo' do

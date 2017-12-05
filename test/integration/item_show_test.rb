@@ -22,7 +22,7 @@ class ItemShowTest < ActionDispatch::IntegrationTest
     @item1 = Item.new_locked_ldp_object.unlock_and_fetch_ldp_object do |uo|
       uo.title = 'Fantastic item'
       uo.owner = 1
-      uo.visibility = 'public'
+      uo.visibility = JupiterCore::VISIBILITY_PUBLIC
       uo.language = ['http://id.loc.gov/vocabulary/iso639-2/eng']
       uo.license = 'http://creativecommons.org/licenses/by/4.0/'
       uo.add_to_path(@community1.id, @collection1.id)
