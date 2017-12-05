@@ -4,7 +4,7 @@ class SearchTest < ActiveSupport::TestCase
     ldp_object_includes Hydra::Works::WorkBehavior
     has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
     has_attribute :creator, ::RDF::Vocab::DC.creator, solrize_for: [:search, :facet]
-    has_multival_attribute :member_of_paths, ::VOCABULARY[:ualib].path, type: :path, solrize_for: :pathing
+    has_multival_attribute :member_of_paths, ::VOCABULARY[:ual].path, type: :path, solrize_for: :pathing
 
     additional_search_index :my_solr_doc_attr, solrize_for: :search, as: -> { 'a_test_value' }
 
@@ -54,19 +54,19 @@ class SearchTest < ActiveSupport::TestCase
     end
 
     search_results.each_facet_with_results do |facet|
-      assert_includes ['Title', 'Creator', 'Visibility'], facet.name
-      if facet.name == 'Title'
+      assert_includes ['Title', 'Creator', 'Visibility'], facet.category_name
+      if facet.category_name == 'Title'
         assert facet.values.keys.count == 2
         assert facet.values.key?(first_title)
         assert facet.values.key?(second_title)
         [first_title, second_title].each do |title|
           assert facet.values[title] == 1
         end
-      elsif facet.name == 'Creator'
+      elsif facet.category_name == 'Creator'
         assert facet.values.keys.count == 2
         assert facet.values.key?(creator)
         assert facet.values[creator] == 1
-      elsif facet.name == 'Visibility'
+      elsif facet.category_name == 'Visibility'
         assert facet.values.keys.count == 1
         assert facet.values.key?('public')
         assert facet.values['public'] == 2

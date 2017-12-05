@@ -7,8 +7,9 @@ class JupiterCore::Indexer < ActiveFedora::IndexingService
       object.owning_class.solr_calc_attributes.each do |name, metadata|
         value = object.instance_exec(&metadata[:callable])
         value.compact! if value.is_a? Array
-
-        Solrizer.insert_field(solr_doc, name, value, metadata[:solr_descriptor])
+        metadata[:solr_descriptors].each do |descriptor|
+          Solrizer.insert_field(solr_doc, name, value, descriptor)
+        end
       end
     end
   end
