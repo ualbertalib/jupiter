@@ -39,7 +39,7 @@ class Item < JupiterCore::LockedLdpObject
   has_attribute :published_status, ::VOCABULARY[:bibo].status, solrize_for: :exact_match
 
   # Project Hydra ACL attributes
-  has_attribute :embargo_history, ::VOCABULARY[:acl].embargoHistory, solrize_for: :exact_match
+  has_multival_attribute :embargo_history, ::VOCABULARY[:acl].embargoHistory, solrize_for: :exact_match
   has_attribute :visibility_after_embargo, ::VOCABULARY[:acl].visibilityAfterEmbargo, solrize_for: :exact_match
 
   # Solr only
