@@ -47,4 +47,5 @@ class DraftItem < ApplicationRecord
   def upload_files?
     active? && upload_files?
   end
+
 end
