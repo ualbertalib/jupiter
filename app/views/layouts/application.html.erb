@@ -17,7 +17,7 @@
     <%= render partial: 'navbar' %>
     <%= render partial: 'announcement' %>
 
-    <main class="container mt-5">
+    <main class="container mt-5" id="content-anchor">
       <%= render partial: 'flash' %>
       <%= content_for?(:content) ? yield(:content) : yield %>
     </main>

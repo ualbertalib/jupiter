@@ -9,3 +9,50 @@ body {
   font-weight: bold;
   text-decoration: inherit;
 }
+#skiptocontent a {
+	padding:6px;
+	position: absolute;
+	top:-40px;
+	left:0px;
+	color:white;
+	border-right:1px solid white;
+	border-bottom:1px solid white;
+	border-bottom-right-radius:8px;
+	background:transparent;
+	-webkit-transition: top 1s ease-out, background 1s linear;
+    transition: top 1s ease-out, background 1s linear;
+    z-index: 100;
+}
+
+#skiptocontent a:focus {
+	position:absolute;
+	left:0px;
+	top:0px;
+	background:$red;
+	outline:0;	
+	-webkit-transition: top .1s ease-in, background .5s linear;
+    transition: top .1s ease-in, background .5s linear;
+}
+#skiptoresults a {
+        padding:6px;
+        position: absolute;
+        left:-1000px;
+        color: $white;
+        border-right:1px solid $white;
+        border-bottom:1px solid $white;
+        border-bottom-right-radius:8px;
+        background:transparent;
+        -webkit-transition: top 1s ease-out, background 1s linear;
+    transition: top 1s ease-out, background 1s linear;
+    z-index: 100;
+}
+
+#skiptoresults a:focus {
+        position:absolute;
+        left:100px;
+        background:$red;
+        outline:0;
+        -webkit-transition: top .1s ease-in, background .5s linear;
+    transition: top .1s ease-in, background .5s linear;
+}
+
