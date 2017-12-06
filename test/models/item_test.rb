@@ -11,10 +11,10 @@ class ItemTest < ActiveSupport::TestCase
                                                   community_id: community.id)
     collection.unlock_and_fetch_ldp_object(&:save!)
     item = Item.new_locked_ldp_object(title: 'Item', owner: 1, visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                      language: ['http://id.loc.gov/vocabulary/iso639-2/eng'],
-                                      license: 'http://creativecommons.org/licenses/by/4.0/',
-                                      item_type: 'http://purl.org/ontology/bibo/Article',
-                                      publication_status: 'http://purl.org/ontology/bibo/status#draft')
+                                      language: [CONTROLLED_VOCABULARIES[:language].eng],
+                                      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                                      item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                                      publication_status: CONTROLLED_VOCABULARIES[:publication_status].draft)
     item.unlock_and_fetch_ldp_object do |unlocked_item|
       unlocked_item.add_to_path(community.id, collection.id)
       unlocked_item.save!
@@ -84,7 +84,7 @@ class ItemTest < ActiveSupport::TestCase
     item = Item.new_locked_ldp_object
     item.unlock_and_fetch_ldp_object do |unlocked_item|
       unlocked_item.visibility = JupiterCore::VISIBILITY_PUBLIC
-      unlocked_item.visibility_after_embargo = 'http://terms.library.ualberta.ca/draft'
+      unlocked_item.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].draft
     end
 
     assert_not item.valid?
@@ -161,7 +161,7 @@ class ItemTest < ActiveSupport::TestCase
     assert_not item.valid?
     assert_includes item.errors[:language], 'is not recognized'
 
-    item = Item.new_locked_ldp_object(language: ['http://id.loc.gov/vocabulary/iso639-2/eng'])
+    item = Item.new_locked_ldp_object(language: [CONTROLLED_VOCABULARIES[:language].eng])
     assert_not item.valid?
     refute_includes item.errors.keys, :language
   end
@@ -175,7 +175,7 @@ class ItemTest < ActiveSupport::TestCase
 
   test 'a rights statement must not be present if a license is present' do
     item = Item.new_locked_ldp_object(rights: 'Share my work with everybody',
-                                      license: 'http://creativecommons.org/licenses/by/4.0/')
+                                      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international)
 
     assert_not item.valid?
     assert_includes item.errors[:base], 'should not have both a license and a rights statement'
@@ -186,7 +186,7 @@ class ItemTest < ActiveSupport::TestCase
     assert_not item.valid?
     assert_includes item.errors[:license], 'is not recognized'
 
-    item = Item.new_locked_ldp_object(license: 'http://creativecommons.org/licenses/by/4.0/')
+    item = Item.new_locked_ldp_object(license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international)
     assert_not item.valid?
     refute_includes item.errors.keys, :license
   end
@@ -204,21 +204,21 @@ class ItemTest < ActiveSupport::TestCase
   end
 
   test 'publication status is needed for articles' do
-    item = Item.new_locked_ldp_object(item_type: 'http://purl.org/ontology/bibo/Article')
+    item = Item.new_locked_ldp_object(item_type: CONTROLLED_VOCABULARIES[:item_type].article)
     assert_not item.valid?
     assert_includes item.errors[:publication_status], 'is required for articles'
   end
 
   test 'publication status must come from controlled vocabulary' do
-    item = Item.new_locked_ldp_object(item_type: 'http://purl.org/ontology/bibo/Article',
+    item = Item.new_locked_ldp_object(item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                       publication_status: 'whatever')
     assert_not item.valid?
     assert_includes item.errors[:publication_status], 'is not recognized'
   end
 
   test 'publication status must be absent for non-articles' do
-    item = Item.new_locked_ldp_object(item_type: 'http://purl.org/ontology/bibo/Book',
-                                      publication_status: 'http://purl.org/ontology/bibo/status#draft')
+    item = Item.new_locked_ldp_object(item_type: CONTROLLED_VOCABULARIES[:item_type].book,
+                                      publication_status: CONTROLLED_VOCABULARIES[:publication_status].published)
     assert_not item.valid?
     assert_includes item.errors[:publication_status], 'must be absent for non-articles'
   end

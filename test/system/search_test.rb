@@ -16,10 +16,10 @@ class SearchTest < ApplicationSystemTestCase
     @items = 10.times.map do |i|
       Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                  owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Item #{i}",
-                                 language: ['http://id.loc.gov/vocabulary/iso639-2/eng'],
-                                 item_type: 'http://purl.org/ontology/bibo/Article',
-                                 publication_status: 'http://purl.org/ontology/bibo/status#published',
-                                 license: 'http://creativecommons.org/licenses/by/4.0/')
+                                 language: [CONTROLLED_VOCABULARIES[:language].eng],
+                                 item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                                 publication_status: CONTROLLED_VOCABULARIES[:publication_status].published,
+                                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international)
           .unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(@community.id, @collections[i / 5].id)
         uo.save!
@@ -29,10 +29,10 @@ class SearchTest < ApplicationSystemTestCase
     @items += 10.times.map do |i|
       Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PRIVATE,
                                  owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Private Item #{i + 10}",
-                                 language: ['http://id.loc.gov/vocabulary/iso639-2/eng'],
-                                 item_type: 'http://purl.org/ontology/bibo/Article',
-                                 publication_status: 'http://purl.org/ontology/bibo/status#published',
-                                 license: 'http://creativecommons.org/licenses/by/4.0/')
+                                 language: [CONTROLLED_VOCABULARIES[:language].eng],
+                                 item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                                 publication_status: CONTROLLED_VOCABULARIES[:publication_status].published,
+                                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international)
           .unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(@community.id, @collections[i / 5].id)
         uo.save!
@@ -48,10 +48,10 @@ class SearchTest < ApplicationSystemTestCase
                              .unlock_and_fetch_ldp_object(&:save!)
       Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                  owner: 1, title: "Extra Item #{i}",
-                                 language: ['http://id.loc.gov/vocabulary/iso639-2/eng'],
-                                 item_type: 'http://purl.org/ontology/bibo/Article',
-                                 publication_status: 'http://purl.org/ontology/bibo/status#published',
-                                 license: 'http://creativecommons.org/licenses/by/4.0/')
+                                 language: [CONTROLLED_VOCABULARIES[:language].eng],
+                                 item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                                 publication_status: CONTROLLED_VOCABULARIES[:publication_status].published,
+                                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international)
           .unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(community.id, collection.id)
         uo.save!

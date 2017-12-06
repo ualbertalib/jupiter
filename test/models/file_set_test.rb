@@ -35,9 +35,9 @@ class FileSetTest < ActiveSupport::TestCase
     item = Item.new_locked_ldp_object(title: generate_random_string,
                                       visibility: JupiterCore::VISIBILITY_PUBLIC,
                                       owner: 1,
-                                      item_type: 'http://purl.org/ontology/bibo/Report',
-                                      language: ['http://id.loc.gov/vocabulary/iso639-2/eng'],
-                                      license: 'http://creativecommons.org/licenses/by/4.0/')
+                                      item_type: CONTROLLED_VOCABULARIES[:item_type].report,
+                                      language: [CONTROLLED_VOCABULARIES[:language].eng],
+                                      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international)
 
     item.unlock_and_fetch_ldp_object do |unlocked_item|
       unlocked_item.add_to_path(community.id, collection.id)

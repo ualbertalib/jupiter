@@ -23,10 +23,10 @@ class ItemShowTest < ActionDispatch::IntegrationTest
       uo.title = 'Fantastic item'
       uo.owner = 1
       uo.visibility = JupiterCore::VISIBILITY_PUBLIC
-      uo.language = ['http://id.loc.gov/vocabulary/iso639-2/eng']
-      uo.license = 'http://creativecommons.org/licenses/by/4.0/'
-      uo.item_type = 'http://purl.org/ontology/bibo/Article'
-      uo.publication_status = 'http://purl.org/ontology/bibo/status#published'
+      uo.language = [CONTROLLED_VOCABULARIES[:language].eng]
+      uo.license = CONTROLLED_VOCABULARIES[:license].attribution_4_0_international
+      uo.item_type = CONTROLLED_VOCABULARIES[:item_type].article
+      uo.publication_status = CONTROLLED_VOCABULARIES[:publication_status].draft
       uo.add_to_path(@community1.id, @collection1.id)
       uo.add_to_path(@community1.id, @collection2.id)
       uo.save!

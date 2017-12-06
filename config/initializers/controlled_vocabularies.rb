@@ -8,4 +8,14 @@ config_files.each do |file|
   controlled_vocabularies.merge!(config)
 end
 
+# Add some helpers so that we can easily get a URI from a code.
+controlled_vocabularies.each do |name, vocabulary|
+  vocabulary.each do |term|
+    next unless term.key?(:code) && term.key?(:uri)
+    controlled_vocabularies[name].define_singleton_method(term[:code]) do
+      return term[:uri]
+    end
+  end
+end
+
 CONTROLLED_VOCABULARIES = controlled_vocabularies.freeze

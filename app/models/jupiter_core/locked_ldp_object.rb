@@ -7,9 +7,9 @@ module JupiterCore
   class AlreadyDefinedError < StandardError; end
   class LockedInstanceError < StandardError; end
 
-  VISIBILITY_PUBLIC = 'http://terms.library.ualberta.ca/public'.freeze
-  VISIBILITY_PRIVATE = 'http://terms.library.ualberta.ca/private'.freeze
-  VISIBILITY_AUTHENTICATED = 'http://terms.library.ualberta.ca/authenticated'.freeze
+  VISIBILITY_PUBLIC = CONTROLLED_VOCABULARIES[:visibility].public.freeze
+  VISIBILITY_PRIVATE = CONTROLLED_VOCABULARIES[:visibility].private.freeze
+  VISIBILITY_AUTHENTICATED = CONTROLLED_VOCABULARIES[:visibility].authenticated.freeze
 
   VISIBILITIES = [VISIBILITY_PUBLIC, VISIBILITY_PRIVATE, VISIBILITY_AUTHENTICATED].freeze
 

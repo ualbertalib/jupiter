@@ -3,8 +3,11 @@ class Item < JupiterCore::LockedLdpObject
 
   ldp_object_includes Hydra::Works::WorkBehavior
 
-  VISIBILITY_EMBARGO = 'http://terms.library.ualberta.ca/embargo'.freeze
+  VISIBILITY_EMBARGO = CONTROLLED_VOCABULARIES[:visibility].embargo.freeze
   VISIBILITIES = (JupiterCore::VISIBILITIES + [VISIBILITY_EMBARGO]).freeze
+  VISIBILITIES_AFTER_EMBARGO = [CONTROLLED_VOCABULARIES[:visibility].authenticated,
+                                CONTROLLED_VOCABULARIES[:visibility].draft,
+                                CONTROLLED_VOCABULARIES[:visibility].public].freeze
 
   # Dublin Core attributes
   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :sort]
@@ -200,7 +203,8 @@ class Item < JupiterCore::LockedLdpObject
 
     def visibility_after_embargo_validations
       return if visibility_after_embargo.nil?
-      uri_validation(visibility_after_embargo, :visibility_after_embargo)
+      return if VISIBILITIES_AFTER_EMBARGO.include?(visibility_after_embargo)
+      errors.add(:visibility_after_embargo, :not_recognized)
     end
 
     def item_type_and_publication_status_validations
