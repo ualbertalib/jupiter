@@ -64,30 +64,14 @@ class Item < JupiterCore::LockedLdpObject
     super + [VISIBILITY_EMBARGO]
   end
 
-  # Some URI --> [text|code] functions for controlled vocabularies
-  def self.uri_to_code(uri, vocabulary)
-    CONTROLLED_VOCABULARIES[vocabulary].each do |term|
-      return term[:code] if term[:uri] == uri
-    end
-    raise ArgumentError, "#{uri} not found in controlled vocabulary #{vocabulary}"
-  end
-
-  def self.code_to_text(code, vocabulary)
-    I18n.t("controlled_vocabularies.#{vocabulary}.#{code}")
-  end
-
-  def self.uri_to_text(uri, vocabulary)
-    code_to_text(uri_to_code(uri, vocabulary), vocabulary)
-  end
-
   # This is stored in solr: combination of item_type and publication_status
   def item_type_with_status_code
     return nil if item_type.blank?
     # Return the item type code unless it's an article, then append publication status code
-    item_type_code = Item.uri_to_code(item_type, :item_type)
+    item_type_code = CONTROLLED_VOCABULARIES[:item_type].uri_to_code(item_type)
     return item_type_code unless item_type_code == 'article'
     return nil if publication_status.blank?
-    publication_status_code = Item.uri_to_code(publication_status, :publication_status)
+    publication_status_code = CONTROLLED_VOCABULARIES[:publication_status].uri_to_code(publication_status)
     "#{item_type_code}_#{publication_status_code}"
   rescue ArgumentError
     return nil
@@ -209,7 +193,7 @@ class Item < JupiterCore::LockedLdpObject
 
     def item_type_and_publication_status_validations
       return unless uri_validation(item_type, :item_type)
-      code = Item.uri_to_code(item_type, :item_type)
+      code = CONTROLLED_VOCABULARIES[:item_type].uri_to_code(item_type)
       if code == 'article'
         if publication_status.blank?
           errors.add(:publication_status, :required_for_article)
