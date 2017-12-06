@@ -4,7 +4,7 @@
   <h1>
     (TODO: Not implemented) <%= t('.header') %>
   </h1>
-  <%= link_to deposit_item_path(:describe_item),
+  <%= link_to new_draft_items_path, method: :post,
       class: 'btn btn-primary' do %>
     <%= fa_icon('plus-circle') %>
     <%= t('items.new.header') %>

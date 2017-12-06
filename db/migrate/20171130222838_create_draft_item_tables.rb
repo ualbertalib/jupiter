@@ -10,23 +10,25 @@ class CreateDraftItemTables < ActiveRecord::Migration[5.1]
 
     create_table :draft_items do |t|
       t.string :uuid
-      t.boolean :complete, null: false, default: false
 
-      t.string :title, null: false
+      t.integer :status, default: 0, null: false
+      t.integer :wizard_step, default: 0, null: false
+
+      t.string :title
       t.string :alternate_title
-      t.date :date_created, null: false
-      t.text :description, null: false
+      t.date :date_created
+      t.text :description
       t.string :source
       t.string :related_item
 
-      t.string :license, null: false
+      t.string :license
       t.text :license_text_area
 
-      t.string :visibility, null: false
+      t.string :visibility
       t.datetime :embargo_date
 
-      t.belongs_to :type, null: false, foreign_key: true
-      t.belongs_to :user, null: false, foreign_key: true
+      t.references :type, index: true
+      t.references :user, null: false, index: true, foreign_key: true
 
       t.timestamps
     end

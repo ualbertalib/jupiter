@@ -17,7 +17,7 @@ module DepositItemHelper
   end
 
   def progress_bar_text
-    t('deposit_item.progress_bar_text', step_index: step_index(step), total_steps: wizard_steps.size)
+    t('items.draft.progress_bar_text', step_index: step_index(step), total_steps: wizard_steps.size)
   end
 
   def step_index(wizard_step)

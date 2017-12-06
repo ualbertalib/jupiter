@@ -7,7 +7,7 @@
   <%= t('.header') %>
 </h2>
 
-<%= form_for @draft_item, url: deposit_item_index_path, method: :post, html: { class:'js-deposit-item' } do |f| %>
+<%= form_for @draft_item, url: wizard_path, method: :put, html: { class:'js-deposit-item' } do |f| %>
   <p class="text-muted"><%= t('required_fields_html') %></p>
 
   <div class="form-group">
@@ -16,15 +16,15 @@
       <%= t('.title') %>
     <% end %>
     <%= f.text_field :title,
-                     class: 'form-control',
-                     placeholder: t('.title_placeholder') %>
+                      class: 'form-control',
+                      placeholder: t('.title_placeholder') %>
   </div>
 
   <div class="form-group">
     <%= f.label :alternate_title, t('.alternate_title') %>
     <%= f.text_field :alternate_title,
-                     class: 'form-control',
-                     placeholder: t('.alternate_title_placeholder') %>
+                      class: 'form-control',
+                      placeholder: t('.alternate_title_placeholder') %>
     <small class="form-text text-muted"><%= t('.alternate_title_help') %></small>
   </div>
 
@@ -131,17 +131,17 @@
     <div class="form-group">
       <label><%= t('.community') %></label>
       <%= select_tag 'draft_item[community_id]',
-                     options_from_collection_for_select(Community.all, :id, :title),
-                     prompt: t('.community_placeholder'),
-                     class: 'form-control js-community-select' %>
+                      options_from_collection_for_select(Community.all, :id, :title),
+                      prompt: t('.community_placeholder'),
+                      class: 'form-control js-community-select' %>
     </div>
     <div class="form-group">
       <label><%= t('.collection') %></label>
       <%= select_tag 'draft_item[collection_id]',
-                     nil,
-                     data: { placeholder: t('.collection_placeholder') },
-                     class: 'form-control js-collection-select',
-                     disabled: true %>
+                      nil,
+                      data: { placeholder: t('.collection_placeholder') },
+                      class: 'form-control js-collection-select',
+                      disabled: true %>
     </div>
   </fieldset>
 
@@ -150,9 +150,9 @@
       <div id="js-heading-additional-fields" class="card-header" role="tab">
         <h5 class="mb-0">
           <a data-toggle="collapse"
-             href="#js-collapse-additional-fields"
-             aria-expanded="false"
-             aria-controls="js-collapse-additional-fields">
+              href="#js-collapse-additional-fields"
+              aria-expanded="false"
+              aria-controls="js-collapse-additional-fields">
             <%= t('.additional_fields') %>
             <%= fa_icon "chevron-down", class: "js-more-less pull-right" %>
           </a>
@@ -160,19 +160,19 @@
       </div>
 
       <div id="js-collapse-additional-fields"
-           class="collapse"
-           data-parent="#js-additional-fields-accordion"
-           role="tabpanel"
-           aria-labelledby="js-heading-additional-fields">
+            class="collapse"
+            data-parent="#js-additional-fields-accordion"
+            role="tabpanel"
+            aria-labelledby="js-heading-additional-fields">
         <div class="card-body">
           <div class="form-group">
             <%= f.label 'contributors', t('.contributors') %>
             <%= f.select 'contributors',
                           {},
-                           multiple: true,
-                           data: { tags: true,
-                                   placeholder: t('.contributors_placeholder') },
-                           class: 'form-control js-select2' %>
+                            multiple: true,
+                            data: { tags: true,
+                                    placeholder: t('.contributors_placeholder') },
+                            class: 'form-control js-select2' %>
             <small class="form-text text-muted"><%= t('.contributors_help') %></small>
           </div>
 
@@ -180,10 +180,10 @@
             <%= f.label 'places', t('.places') %>
             <%= f.select 'places',
                           {},
-                           multiple: true,
-                           data: { tags: true,
-                                   placeholder: t('.places_placeholder') },
-                           class: 'form-control js-select2' %>
+                            multiple: true,
+                            data: { tags: true,
+                                    placeholder: t('.places_placeholder') },
+                            class: 'form-control js-select2' %>
             <small class="form-text text-muted"><%= t('.places_help') %></small>
           </div>
 
@@ -191,10 +191,10 @@
             <%= f.label 'time_periods', t('.time_periods') %>
             <%= f.select 'time_periods',
                           {},
-                           multiple: true,
-                           data: { tags: true,
-                                   placeholder: t('.time_periods_placeholder') },
-                           class: 'form-control js-select2' %>
+                            multiple: true,
+                            data: { tags: true,
+                                    placeholder: t('.time_periods_placeholder') },
+                            class: 'form-control js-select2' %>
             <small class="form-text text-muted"><%= t('.time_periods_help_html') %></small>
           </div>
 
@@ -202,10 +202,10 @@
             <%= f.label 'citations', t('.citations') %>
             <%= f.select 'citations',
                           {},
-                           multiple: true,
-                           data: { tags: true,
-                                   placeholder: t('.citations_placeholder') },
-                           class: 'form-control js-select2' %>
+                            multiple: true,
+                            data: { tags: true,
+                                    placeholder: t('.citations_placeholder') },
+                            class: 'form-control js-select2' %>
             <small class="form-text text-muted"><%= t('.citations_help') %></small>
           </div>
 
@@ -231,8 +231,9 @@
       <%= t('cancel') %>
     <% end %>
     <%= f.button type: :submit, class: 'btn btn-primary' do %>
-      <%= t('deposit_item.save_and_continue') %>
+      <%= t('items.draft.save_and_continue') %>
       <%= fa_icon 'chevron-right' %>
     <% end %>
   </div>
+
 <% end %>

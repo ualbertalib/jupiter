@@ -70,18 +70,19 @@ ActiveRecord::Schema.define(version: 20171130222838) do
 
   create_table "draft_items", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "uuid"
-    t.boolean "complete", default: false, null: false
-    t.string "title", null: false
+    t.integer "status", default: 0, null: false
+    t.integer "wizard_step", default: 0, null: false
+    t.string "title"
     t.string "alternate_title"
-    t.date "date_created", null: false
-    t.text "description", null: false
+    t.date "date_created"
+    t.text "description"
     t.string "source"
     t.string "related_item"
-    t.string "license", null: false
+    t.string "license"
     t.text "license_text_area"
-    t.string "visibility", null: false
+    t.string "visibility"
     t.datetime "embargo_date"
-    t.bigint "type_id", null: false
+    t.bigint "type_id"
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -219,6 +220,5 @@ ActiveRecord::Schema.define(version: 20171130222838) do
   end
 
   add_foreign_key "announcements", "users"
-  add_foreign_key "draft_items", "types"
   add_foreign_key "draft_items", "users"
 end

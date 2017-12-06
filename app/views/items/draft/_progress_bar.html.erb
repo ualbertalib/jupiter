@@ -1,5 +1,5 @@
-<% page_title( t('deposit_item.header')) %>
-<h1 class="mb-3"><%= t('deposit_item.header') %></h1>
+<% page_title( t('items.draft.header')) %>
+<h1 class="mb-3"><%= t('items.draft.header') %></h1>
 
 <section>
   <nav class="navigator mb-3">
@@ -8,9 +8,9 @@
         <li class="nav-item">
           <%= link_to wizard_path(wizard_step),
                       class: "nav-link border rounded-0 #{progress_bar_step_class(wizard_step)}" do %>
-            <p class="font-weight-bold mb-0"><%= t('deposit_item.step_number', step_number: step_index(wizard_step)) %></p>
-            <%= fa_icon t("deposit_item.#{wizard_step}.header_icon") %>
-            <%= t("deposit_item.#{wizard_step}.header") %>
+            <p class="font-weight-bold mb-0"><%= t('items.draft.step_number', step_number: step_index(wizard_step)) %></p>
+            <%= fa_icon t("items.draft.#{wizard_step}.header_icon") %>
+            <%= t("items.draft.#{wizard_step}.header") %>
           <% end %>
         </li>
       <% end %>

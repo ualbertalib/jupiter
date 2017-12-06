@@ -336,121 +336,122 @@ en:
     file_label: 'File'
     add_another_file: 'Add another file'
 
-  deposit_item:
-    header: 'Deposit Item'
-    previous: 'Previous step'
-    save_and_continue: 'Save and continue to next step'
-    progress_bar_text: 'Step %{step_index} of %{total_steps}'
-    step_number: 'Step %{step_number}'
-    describe_item:
-      header: 'Describe Item'
-      header_icon: 'pencil'
-      title: 'Title'
-      title_placeholder: 'Enter title'
-      alternate_title: 'Alternate Title'
-      alternate_title_placeholder: 'Enter alternate title'
-      alternate_title_help: 'Enter a secondary/translated title, if appropriate.'
-      type_id: 'Type of Item'
-      type_id_help_html: 'If you do not see an appropriate item type, please contact
-        <a href="mailto:erahelp@ualberta.ca">erahelp@ualberta.ca</a>'
-      languages: 'Languages'
-      languages_placeholder: 'Enter one or multiple languages'
-      creators: 'Authors/Creators'
-      creators_placeholder: 'Enter one or multiple author/creators'
-      creators_help: 'One author per box. Example:  Doe, Jane B.'
-      subjects: 'Subjects/Keywords'
-      subjects_placeholder: 'Enter one or multiple subject/keywords'
-      subjects_help: 'Enter subjects or keywords that describe the item.
-        These are the words that will be used when someone searches for your item.'
-      date_created: 'Date created'
-      description: 'Description or Abstract'
-      description_placeholder: 'Enter description or abstract'
-      community_and_collection: Community and Collection
-      community_and_collection_help_html: 'Choose the Community and Collection that best match your item(s).
-        If you need a new collection, email <a href="mailto:erahelp@ualberta.ca">erahelp@ualberta.ca</a>'
-      community: 'Community'
-      community_placeholder: 'Select a community'
-      collection: 'Collection'
-      collection_placeholder: 'Select a collection'
-      additional_fields: 'Additional fields'
-      contributors: 'Additional contributors'
-      contributors_placeholder: 'Enter one or multiple contributors'
-      contributors_help: 'A person or group you want to recognize for playing a role in the creation of this item,
-        but not the primary role. If there is a specific role you would like noted, include it in parentheses,
-        e.g. "Jones, Mary (Advisor)."'
-      places: 'Is this item about a place?'
-      places_placeholder: 'Enter one or multiple places'
-      places_help: "A place name related to the item, such as the city,
-        province, or country the item's contents are about."
-      time_periods: 'Is this item about a time?'
-      time_periods_placeholder: 'Enter one or multiple times'
-      time_periods_help_html: 'Examples:
-        <ul>
-          <li>a specific date: 2009/12/31</li>
-          <li>a date range:  2003/2010</li>
-          <li>a time period: the Enlightenment</li>
-        </ul>'
-      citations: 'Citations for previous publication'
-      citations_placeholder: 'Enter one or multiple citations'
-      citations_help: 'If your item has been previously published, provide a citation'
-      source: 'Source'
-      source_help: 'Brief information about an item from which this item was derived.'
-      related_item: Link to related item
-      related_item_help: 'Must be a url. Example: http://www.ualberta.ca'
+    draft:
+      header: 'Deposit Item'
+      previous: 'Previous step'
+      save_and_continue: 'Save and continue to next step'
+      progress_bar_text: 'Step %{step_index} of %{total_steps}'
+      step_number: 'Step %{step_number}'
 
-    choose_license_and_visibility:
-      header: 'Choose License and Visibility'
-      header_icon: 'creative-commons'
-      license:
-        header: 'License'
-        most_commonly_used: 'Most commonly used'
-        attribution_noncommercial_html: 'Attribution-NonCommercial 4.0 International
-          (<a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>)'
-        other_creative_commons_licenses: 'Other Creative Commons licenses'
-        attribution_html: 'Attribution 4.0 International
-          (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC BY 4.0</a>)'
-        attribution_noncommercial_noderivatives_html: 'Attribution-NonCommercial-NoDerivatives 4.0 International
-          (<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a>)'
-        attribution_noncommercial_sharealike_html: 'Attribution-NonCommercial-ShareAlike 4.0 International
-          (<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a>)'
-        attribution_noderivatives_html: 'Attribution-NoDerivatives 4.0 International
-          (<a href="https://creativecommons.org/licenses/by-nd/4.0/" target="_blank">CC BY-ND 4.0</a>)'
-        attribution_sharealike_html: 'Attribution-ShareAlike 4.0 International
-          (<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">CC BY-SA 4.0</a>)'
-        cco_universal_html: 'CC0 1.0 Universal
-          (<a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank">CC0 1.0</a>)'
-        public_domain: 'This work is in the public domain'
-        public_domain_mark_html: 'Public Domain Mark 1.0
-          (<a href="https://creativecommons.org/publicdomain/mark/1.0/" target="_blank">Public Domain 1.0</a>)'
-        link_to_another_license: 'I am required to use / link to another license'
-        license_text: 'License text / URL'
-        license_text_area_placeholder: 'Copy/paste the URL or license'
-        help_html: 'Your item will be hosted in an open access environment.
-          Please select one of the licenses described below.
-          For additional assistance selecting a license please see
-          <a href="http://creativecommons.org/choose/" target="_blank">http://creativecommons.org/choose/</a>,
-          or contact <a href="mailto:erahelp@ualberta.ca">erahelp@ualberta.ca</a>'
-      visibility:
-        header: 'Visibility'
-        public: 'Open access now (will be seen by everyone)'
-        embargo: 'Will be open access on'
-        authenticated: 'CCID Protected'
-        private: 'Private'
+      describe_item:
+        header: 'Describe Item'
+        header_icon: 'pencil'
+        title: 'Title'
+        title_placeholder: 'Enter title'
+        alternate_title: 'Alternate Title'
+        alternate_title_placeholder: 'Enter alternate title'
+        alternate_title_help: 'Enter a secondary/translated title, if appropriate.'
+        type_id: 'Type of Item'
+        type_id_help_html: 'If you do not see an appropriate item type, please contact
+          <a href="mailto:erahelp@ualberta.ca">erahelp@ualberta.ca</a>'
+        languages: 'Languages'
+        languages_placeholder: 'Enter one or multiple languages'
+        creators: 'Authors/Creators'
+        creators_placeholder: 'Enter one or multiple author/creators'
+        creators_help: 'One author per box. Example:  Doe, Jane B.'
+        subjects: 'Subjects/Keywords'
+        subjects_placeholder: 'Enter one or multiple subject/keywords'
+        subjects_help: 'Enter subjects or keywords that describe the item.
+          These are the words that will be used when someone searches for your item.'
+        date_created: 'Date created'
+        description: 'Description or Abstract'
+        description_placeholder: 'Enter description or abstract'
+        community_and_collection: Community and Collection
+        community_and_collection_help_html: 'Choose the Community and Collection that best match your item(s).
+          If you need a new collection, email <a href="mailto:erahelp@ualberta.ca">erahelp@ualberta.ca</a>'
+        community: 'Community'
+        community_placeholder: 'Select a community'
+        collection: 'Collection'
+        collection_placeholder: 'Select a collection'
+        additional_fields: 'Additional fields'
+        contributors: 'Additional contributors'
+        contributors_placeholder: 'Enter one or multiple contributors'
+        contributors_help: 'A person or group you want to recognize for playing a role in the creation of this item,
+          but not the primary role. If there is a specific role you would like noted, include it in parentheses,
+          e.g. "Jones, Mary (Advisor)."'
+        places: 'Is this item about a place?'
+        places_placeholder: 'Enter one or multiple places'
+        places_help: "A place name related to the item, such as the city,
+          province, or country the item's contents are about."
+        time_periods: 'Is this item about a time?'
+        time_periods_placeholder: 'Enter one or multiple times'
+        time_periods_help_html: 'Examples:
+          <ul>
+            <li>a specific date: 2009/12/31</li>
+            <li>a date range:  2003/2010</li>
+            <li>a time period: the Enlightenment</li>
+          </ul>'
+        citations: 'Citations for previous publication'
+        citations_placeholder: 'Enter one or multiple citations'
+        citations_help: 'If your item has been previously published, provide a citation'
+        source: 'Source'
+        source_help: 'Brief information about an item from which this item was derived.'
+        related_item: Link to related item
+        related_item_help: 'Must be a url. Example: http://www.ualberta.ca'
+
+      choose_license_and_visibility:
+        header: 'Choose License and Visibility'
+        header_icon: 'creative-commons'
+        license:
+          header: 'License'
+          most_commonly_used: 'Most commonly used'
+          attribution_noncommercial_html: 'Attribution-NonCommercial 4.0 International
+            (<a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>)'
+          other_creative_commons_licenses: 'Other Creative Commons licenses'
+          attribution_html: 'Attribution 4.0 International
+            (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC BY 4.0</a>)'
+          attribution_noncommercial_noderivatives_html: 'Attribution-NonCommercial-NoDerivatives 4.0 International
+            (<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a>)'
+          attribution_noncommercial_sharealike_html: 'Attribution-NonCommercial-ShareAlike 4.0 International
+            (<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a>)'
+          attribution_noderivatives_html: 'Attribution-NoDerivatives 4.0 International
+            (<a href="https://creativecommons.org/licenses/by-nd/4.0/" target="_blank">CC BY-ND 4.0</a>)'
+          attribution_sharealike_html: 'Attribution-ShareAlike 4.0 International
+            (<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">CC BY-SA 4.0</a>)'
+          cco_universal_html: 'CC0 1.0 Universal
+            (<a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank">CC0 1.0</a>)'
+          public_domain: 'This work is in the public domain'
+          public_domain_mark_html: 'Public Domain Mark 1.0
+            (<a href="https://creativecommons.org/publicdomain/mark/1.0/" target="_blank">Public Domain 1.0</a>)'
+          link_to_another_license: 'I am required to use / link to another license'
+          license_text: 'License text / URL'
+          license_text_area_placeholder: 'Copy/paste the URL or license'
+          help_html: 'Your item will be hosted in an open access environment.
+            Please select one of the licenses described below.
+            For additional assistance selecting a license please see
+            <a href="http://creativecommons.org/choose/" target="_blank">http://creativecommons.org/choose/</a>,
+            or contact <a href="mailto:erahelp@ualberta.ca">erahelp@ualberta.ca</a>'
+        visibility:
+          header: 'Visibility'
+          public: 'Open access now (will be seen by everyone)'
+          embargo: 'Will be open access on'
+          authenticated: 'CCID Protected'
+          private: 'Private'
 
 
-    upload_files:
-      header: 'Upload Files'
-      header_icon: 'paperclip'
-      attach_files: 'Attach Files'
-      remove_files: 'Remove Files'
-      drag_and_drop_files: 'Drag and drop files into desired order'
-      thumbnail_of_first_file: 'A thumbnail of the first file will be displayed as the image for this item.'
+      upload_files:
+        header: 'Upload Files'
+        header_icon: 'paperclip'
+        attach_files: 'Attach Files'
+        remove_files: 'Remove Files'
+        drag_and_drop_files: 'Drag and drop files into desired order'
+        thumbnail_of_first_file: 'A thumbnail of the first file will be displayed as the image for this item.'
 
-    review_and_deposit_item:
-      header: 'Review and Deposit Item'
-      header_icon: 'check-square-o'
-      please_review_item: 'Please review your item before depositing into ERA'
-      legal_disclaimer_html: 'By depositing this item into ERA you agree to the <a href="/policies">ERA Deposit Policy agreements</a>'
+      review_and_deposit_item:
+        header: 'Review and Deposit Item'
+        header_icon: 'check-square-o'
+        please_review_item: 'Please review your item before depositing into ERA'
+        legal_disclaimer_html: 'By depositing this item into ERA you agree to the <a href="/policies">ERA Deposit Policy agreements</a>'
 
 
   search:
