@@ -119,7 +119,7 @@ if Rails.env.development? || Rails.env.uat?
           visibility: JupiterCore::VISIBILITY_PUBLIC,
           title: "The effects of #{Faker::Beer.name} on #{thing.pluralize}",
           description: description,
-          language: [language]
+          language: [language],
         }
         if seed % 10 < 7
           attributes[:license] = 'http://creativecommons.org/licenses/by/4.0/'
@@ -127,6 +127,12 @@ if Rails.env.development? || Rails.env.uat?
           attributes[:license] = 'http://creativecommons.org/publicdomain/mark/1.0/'
         else
           attributes[:rights] = 'Share my stuff with everybody'
+        end
+        if idx % 2 == 0
+          attributes[:item_type] = 'http://purl.org/ontology/bibo/Article'
+          attributes[:publication_status] = 'http://purl.org/ontology/bibo/status#published'
+        else
+          attributes[:item_type] = 'http://purl.org/ontology/bibo/Report'
         end
         Item.new_locked_ldp_object(attributes).unlock_and_fetch_ldp_object do |uo|
           uo.add_to_path(community.id, collection.id)
@@ -141,7 +147,8 @@ if Rails.env.development? || Rails.env.uat?
         title: "Private #{thing.pluralize}, public lives: a survey of social media trends",
         description: Faker::Lorem.sentence(20, false, 0).chop,
         language: ['http://id.loc.gov/vocabulary/iso639-2/eng'],
-        license: 'http://creativecommons.org/licenses/by/4.0/'
+        license: 'http://creativecommons.org/licenses/by/4.0/',
+        item_type: 'http://purl.org/ontology/bibo/Chapter'
       ).unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(community.id, collection.id)
         uo.save!
@@ -154,7 +161,8 @@ if Rails.env.development? || Rails.env.uat?
         title: "Embargo and #{Faker::Address.country}: were the #{thing.pluralize} left behind?",
         description: Faker::Lorem.sentence(20, false, 0).chop,
         language: ['http://id.loc.gov/vocabulary/iso639-2/eng'],
-        license: 'http://creativecommons.org/licenses/by/4.0/'
+        license: 'http://creativecommons.org/licenses/by/4.0/',
+        item_type: 'http://vivoweb.org/ontology/core#ConferencePaper'
       ).unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(community.id, collection.id)
         uo.embargo_end_date = (Time.now + 20.years).to_date
@@ -169,7 +177,8 @@ if Rails.env.development? || Rails.env.uat?
         title: "Former embargo of #{Faker::Address.country}: the day the #{thing.pluralize} were free",
         description: Faker::Lorem.sentence(20, false, 0).chop,
         language: ['http://id.loc.gov/vocabulary/iso639-2/eng'],
-        license: 'http://creativecommons.org/licenses/by/4.0/'
+        license: 'http://creativecommons.org/licenses/by/4.0/',
+        item_type: 'http://vivoweb.org/ontology/core#Dataset'
       ).unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(community.id, collection.id)
         uo.embargo_end_date = (Time.now - 2.days).to_date
@@ -184,7 +193,8 @@ if Rails.env.development? || Rails.env.uat?
         title: "Impact of non-admin users on #{thing.pluralize}",
         description: Faker::Lorem.sentence(20, false, 0).chop,
         language: ['http://id.loc.gov/vocabulary/iso639-2/eng'],
-        license: 'http://creativecommons.org/licenses/by/4.0/'
+        license: 'http://creativecommons.org/licenses/by/4.0/',
+        item_type: 'http://terms.library.ualberta.ca/learningObject'
       ).unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(community.id, collection.id)
         uo.save!
@@ -200,7 +210,8 @@ if Rails.env.development? || Rails.env.uat?
       description: Faker::Lorem.sentence(20, false, 0).chop,
       # No linguistic content
       language: ['http://id.loc.gov/vocabulary/iso639-2/zxx'],
-      license: 'http://creativecommons.org/licenses/by/4.0/'
+      license: 'http://creativecommons.org/licenses/by/4.0/',
+      item_type: 'http://purl.org/ontology/bibo/Image'
     ).unlock_and_fetch_ldp_object do |uo|
       uo.add_to_path(community.id, collection_first.id)
       uo.add_to_path(community.id, collection_last.id)

@@ -20,6 +20,8 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
                                  owner: 1,
                                  language: ['http://id.loc.gov/vocabulary/iso639-2/eng'],
                                  license: 'http://creativecommons.org/licenses/by/4.0/',
+                                 item_type: 'http://purl.org/ontology/bibo/Article',
+                                 publication_status: 'http://purl.org/ontology/bibo/status#published',
                                  title: "#{adjective} Item").unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(@community.id, @collection.id)
         uo.save!

@@ -12,7 +12,9 @@ class ItemTest < ActiveSupport::TestCase
     collection.unlock_and_fetch_ldp_object(&:save!)
     item = Item.new_locked_ldp_object(title: 'Item', owner: 1, visibility: JupiterCore::VISIBILITY_PUBLIC,
                                       language: ['http://id.loc.gov/vocabulary/iso639-2/eng'],
-                                      license: 'http://creativecommons.org/licenses/by/4.0/')
+                                      license: 'http://creativecommons.org/licenses/by/4.0/',
+                                      item_type: 'http://purl.org/ontology/bibo/Article',
+                                      publication_status: 'http://purl.org/ontology/bibo/status#draft')
     item.unlock_and_fetch_ldp_object do |unlocked_item|
       unlocked_item.add_to_path(community.id, collection.id)
       unlocked_item.save!
@@ -187,6 +189,38 @@ class ItemTest < ActiveSupport::TestCase
     item = Item.new_locked_ldp_object(license: 'http://creativecommons.org/licenses/by/4.0/')
     assert_not item.valid?
     refute_includes item.errors.keys, :license
+  end
+
+  test 'an item type is required' do
+    item = Item.new_locked_ldp_object
+    assert_not item.valid?
+    assert_includes item.errors[:item_type], "can't be blank"
+  end
+
+  test 'an item type must come from the controlled vocabulary' do
+    item = Item.new_locked_ldp_object(item_type: 'whatever')
+    assert_not item.valid?
+    assert_includes item.errors[:item_type], 'is not recognized'
+  end
+
+  test 'publication status is needed for articles' do
+    item = Item.new_locked_ldp_object(item_type: 'http://purl.org/ontology/bibo/Article')
+    assert_not item.valid?
+    assert_includes item.errors[:publication_status], 'is required for articles'
+  end
+
+  test 'publication status must come from controlled vocabulary' do
+    item = Item.new_locked_ldp_object(item_type: 'http://purl.org/ontology/bibo/Article',
+                                      publication_status: 'whatever')
+    assert_not item.valid?
+    assert_includes item.errors[:publication_status], 'is not recognized'
+  end
+
+  test 'publication status must be absent for non-articles' do
+    item = Item.new_locked_ldp_object(item_type: 'http://purl.org/ontology/bibo/Book',
+                                      publication_status: 'http://purl.org/ontology/bibo/status#draft')
+    assert_not item.valid?
+    assert_includes item.errors[:publication_status], 'must be absent for non-articles'
   end
 
 end

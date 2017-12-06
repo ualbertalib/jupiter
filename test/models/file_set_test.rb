@@ -32,8 +32,11 @@ class FileSetTest < ActiveSupport::TestCase
     collection = Collection.new_locked_ldp_object(title: 'foo', owner: users(:regular_user).id,
                                                   community_id: community.id).unlock_and_fetch_ldp_object(&:save!)
 
-    item = Item.new_locked_ldp_object(title: generate_random_string, visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                      owner: 1, language: ['http://id.loc.gov/vocabulary/iso639-2/eng'],
+    item = Item.new_locked_ldp_object(title: generate_random_string,
+                                      visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                      owner: 1,
+                                      item_type: 'http://purl.org/ontology/bibo/Report',
+                                      language: ['http://id.loc.gov/vocabulary/iso639-2/eng'],
                                       license: 'http://creativecommons.org/licenses/by/4.0/')
 
     item.unlock_and_fetch_ldp_object do |unlocked_item|

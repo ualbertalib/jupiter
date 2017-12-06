@@ -37,7 +37,7 @@ class Item < JupiterCore::LockedLdpObject
   has_attribute :doi, ::VOCABULARY[:prism].doi, solrize_for: :exact_match
 
   # Bibo attributes
-  has_attribute :published_status, ::VOCABULARY[:bibo].status, solrize_for: :exact_match
+  has_attribute :publication_status, ::VOCABULARY[:bibo].status, solrize_for: :exact_match
 
   # Project Hydra ACL attributes
   has_multival_attribute :embargo_history, ::VOCABULARY[:acl].embargoHistory, solrize_for: :exact_match
@@ -50,8 +50,8 @@ class Item < JupiterCore::LockedLdpObject
   # This combines both the controlled vocabulary codes from item_type and published_status above
   # (but only for items that are articles)
   additional_search_index :item_type_with_status,
-                          solrize_for: :exact_match,
-                          as: -> { item_type_with_status_code if item_type && publication_status }
+                          solrize_for: :facet,
+                          as: -> { item_type_with_status_code }
 
   def self.display_attribute_names
     super - [:member_of_paths]
@@ -77,12 +77,17 @@ class Item < JupiterCore::LockedLdpObject
     code_to_text(uri_to_code(uri, vocabulary), vocabulary)
   end
 
+  # This is stored in solr: combination of item_type and publication_status
   def item_type_with_status_code
+    return nil if item_type.blank?
     # Return the item type code unless it's an article, then append publication status code
     item_type_code = Item.uri_to_code(item_type, :item_type)
-    return item_type_code unless item_type_code == :article
+    return item_type_code unless item_type_code == 'article'
+    return nil if publication_status.blank?
     publication_status_code = Item.uri_to_code(publication_status, :publication_status)
     "#{item_type_code}_#{publication_status_code}"
+  rescue ArgumentError
+    return nil
   end
 
   def file_sets
@@ -109,11 +114,12 @@ class Item < JupiterCore::LockedLdpObject
     validates :member_of_paths, presence: true
     validates :title, presence: true
     validates :language, presence: true
+    validates :item_type, presence: true
     validate :communities_and_collections_validations
     validate :language_validations
     validate :license_and_rights_validations
     validate :visibility_after_embargo_validations
-    # validate :item_type_and_publication_status_validations
+    validate :item_type_and_publication_status_validations
 
     before_validation do
       # TODO: for theses, the sort_year attribute should be derived from ual:graduationDate
@@ -199,12 +205,15 @@ class Item < JupiterCore::LockedLdpObject
 
     def item_type_and_publication_status_validations
       return unless uri_validation(item_type, :item_type)
-      code = Item.uri_to_code(item_type)
-      return unless code == 'article'
-      if publication_status.blank?
-        errors.add(:publication_status, :required)
-      else
-        uri_validation(publication_status, :publication_status)
+      code = Item.uri_to_code(item_type, :item_type)
+      if code == 'article'
+        if publication_status.blank?
+          errors.add(:publication_status, :required_for_article)
+        else
+          uri_validation(publication_status, :publication_status)
+        end
+      elsif publication_status.present?
+        errors.add(:publication_status, :must_be_absent_for_non_articles)
       end
     end
   end

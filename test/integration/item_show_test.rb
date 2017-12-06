@@ -25,6 +25,8 @@ class ItemShowTest < ActionDispatch::IntegrationTest
       uo.visibility = JupiterCore::VISIBILITY_PUBLIC
       uo.language = ['http://id.loc.gov/vocabulary/iso639-2/eng']
       uo.license = 'http://creativecommons.org/licenses/by/4.0/'
+      uo.item_type = 'http://purl.org/ontology/bibo/Article'
+      uo.publication_status = 'http://purl.org/ontology/bibo/status#published'
       uo.add_to_path(@community1.id, @collection1.id)
       uo.add_to_path(@community1.id, @collection2.id)
       uo.save!
