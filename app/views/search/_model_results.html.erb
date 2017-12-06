@@ -50,7 +50,7 @@
     <div class='jupiter-results-list' id="results-anchor">
       <ul class="list-group">
         <% results.each do |result| %>
-          <li class="list-group-item list-group-item-action" id="results-anchor">
+          <li class="list-group-item list-group-item-action">
             <% if model == :item %>
               <%= render partial: 'search/item_hit', locals: { result: result } %>
             <% else %>
