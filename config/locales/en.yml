@@ -89,6 +89,7 @@ en:
         logout_as_user: 'Logout as User'
       user_dropdown:
         heading_html: "Signed in as <strong>%{name}</strong>"
+      skip_to_main_content: "Skip to Main Content"
 
   locked_ldp_object:
     errors:
@@ -310,7 +311,7 @@ en:
     tab_header_items_with_count: 'Items (%{count})'
     tab_header_collections_with_count: 'Collections (%{count})'
     tab_header_communities_with_count: 'Communities (%{count})'
-
+    skip_to_results: 'Skip to Search Results'
     index:
       header: 'Search Items'
       no_results_found: No results found

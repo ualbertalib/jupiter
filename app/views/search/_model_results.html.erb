@@ -1,5 +1,5 @@
 <div id="skiptoresults">
-<%= link_to "Skip to Search Results", '#search-sort-button', id: "skip-link" %>
+<%= link_to t('search.skip_to_search', '#results-anchor', id: "skip-to-results" %>
 </div>
 
 <div class="row mt-3 jupiter-model-results">
@@ -47,7 +47,7 @@
     </div>
 
     <%# Results list %>
-    <div class='jupiter-results-list'>
+    <div class='jupiter-results-list' id="results-anchor">
       <ul class="list-group">
         <% results.each do |result| %>
           <li class="list-group-item list-group-item-action" id="results-anchor">
