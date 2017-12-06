@@ -5,11 +5,12 @@
                   'logo-small'
                 end %>
 <% if object.thumbnail&.attached? %>
-  <%= image_tag(object.thumbnail.url, class: "d-flex mr-3 img-thumbnail #{size_class}") %>
+  <%= image_tag(object.thumbnail.url, alt: "#{t('search.thumbnail.thumbnail')} - #{object.title}", class: "d-flex mr-3 img-thumbnail #{size_class}") %>
 <% else %>
   <div class="d-flex justify-content-center align-items-center mr-3 img-thumbnail <%= size_class %>">
     <small class="text-muted">
       <i class="fa fa-5x fa-picture-o" aria-hidden="true"></i>
+      <small class="sr-only"><%= "#{t('search.thumbnail.thumbnail')} - #{object.title}" %></small>
     </small>
   </div>
 <% end %>
