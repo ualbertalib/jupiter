@@ -8,7 +8,7 @@ class Admin::CollectionsController < Admin::AdminController
   def show
     respond_to do |format|
       # TODO: could this solr-ness be hooked up to `search_term_for`?
-      item_search_setup("member_of_paths_dpsim:#{@collection.path}")
+      item_search_setup(Item.search_term_for(:member_of_paths, @collection.path, role: :pathing))
       format.html { render template: 'collections/show' }
     end
   end

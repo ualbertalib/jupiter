@@ -17,7 +17,7 @@ class Admin::UsersController < Admin::AdminController
   end
 
   def show
-    item_search_setup("owner_ssim:#{@user.id}")
+    item_search_setup(Item.search_term_for(:owner, @user.id, role: :exact_match))
   end
 
   def suspend

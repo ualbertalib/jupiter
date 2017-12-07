@@ -7,7 +7,7 @@ class CollectionsController < ApplicationController
 
   def show
     # TODO: could this solr-ness be hooked up to `search_term_for`?
-    item_search_setup("member_of_paths_dpsim:#{@collection.path}")
+    item_search_setup(Item.search_term_for(:member_of_paths, @collection.path, role: :pathing))
   end
 
   private

@@ -190,18 +190,18 @@ class AdminUsersShowTest < ApplicationSystemTestCase
 
     # Should be able to find the two items this guy owns
     assert_selector 'div.jupiter-results-list li.list-group-item', count: 2
-    assert_selector 'div.jupiter-results-list li.list-group-item a', text: 'Fancy Item', count: 1
-    assert_selector 'div.jupiter-results-list li.list-group-item a', text: 'Nice Item', count: 1
+    assert_selector 'div.jupiter-results-list li.list-group-item .media-body a', text: 'Fancy Item', count: 1
+    assert_selector 'div.jupiter-results-list li.list-group-item .media-body a', text: 'Nice Item', count: 1
 
     # Should not be able to find the item owned by admin
-    refute_selector 'div.jupiter-results-list li.list-group-item a', text: 'Admin Item'
+    refute_selector 'div.jupiter-results-list li.list-group-item .media-body a', text: 'Admin Item'
 
     # Search items
     fill_in name: 'query', with: 'Fancy'
     click_button 'Search Items'
     assert_selector 'div.jupiter-results-list li.list-group-item', count: 1
-    assert_selector 'div.jupiter-results-list li.list-group-item a', text: 'Fancy Item', count: 1
-    refute_selector 'div.jupiter-results-list li.list-group-item a', text: 'Nice Item'
+    assert_selector 'div.jupiter-results-list li.list-group-item .media-body a', text: 'Fancy Item', count: 1
+    refute_selector 'div.jupiter-results-list li.list-group-item .media-body a', text: 'Nice Item'
 
     logout_user
   end
