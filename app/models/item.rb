@@ -14,7 +14,7 @@ class Item < JupiterCore::LockedLdpObject
   has_multival_attribute :creator, ::RDF::Vocab::DC.creator, solrize_for: [:search, :facet]
   has_multival_attribute :contributor, ::RDF::Vocab::DC.contributor, solrize_for: [:search, :facet]
   has_attribute :created, ::RDF::Vocab::DC.created, solrize_for: [:search, :sort]
-  has_attribute :sort_year, ::VOCABULARY[:ual].sortyear, solrize_for: [:search, :sort, :facet]
+  has_attribute :sort_year, ::TERMS[:ual].sortyear, solrize_for: [:search, :sort, :facet]
   has_multival_attribute :subject, ::RDF::Vocab::DC.subject, solrize_for: [:search, :facet]
   has_attribute :description, ::RDF::Vocab::DC.description, type: :text, solrize_for: :search
   has_attribute :publisher, ::RDF::Vocab::DC.publisher, solrize_for: [:search, :facet]
@@ -28,23 +28,23 @@ class Item < JupiterCore::LockedLdpObject
   has_attribute :item_type, ::RDF::Vocab::DC.type, solrize_for: :exact_match
 
   # UAL attributes
-  has_attribute :depositor, ::VOCABULARY[:ual].depositor, solrize_for: [:search]
-  has_attribute :fedora3_handle, ::VOCABULARY[:ual].fedora3handle, solrize_for: :exact_match
-  has_attribute :fedora3_uuid, ::VOCABULARY[:ual].fedora3uuid, solrize_for: :exact_match
-  has_attribute :ingest_batch, ::VOCABULARY[:ual].ingestbatch, solrize_for: :exact_match
-  has_multival_attribute :member_of_paths, ::VOCABULARY[:ual].path,
+  has_attribute :depositor, ::TERMS[:ual].depositor, solrize_for: [:search]
+  has_attribute :fedora3_handle, ::TERMS[:ual].fedora3handle, solrize_for: :exact_match
+  has_attribute :fedora3_uuid, ::TERMS[:ual].fedora3uuid, solrize_for: :exact_match
+  has_attribute :ingest_batch, ::TERMS[:ual].ingestbatch, solrize_for: :exact_match
+  has_multival_attribute :member_of_paths, ::TERMS[:ual].path,
                          type: :path,
                          solrize_for: :pathing
 
   # Prism attributes
-  has_attribute :doi, ::VOCABULARY[:prism].doi, solrize_for: :exact_match
+  has_attribute :doi, ::TERMS[:prism].doi, solrize_for: :exact_match
 
   # Bibo attributes
-  has_attribute :publication_status, ::VOCABULARY[:bibo].status, solrize_for: :exact_match
+  has_attribute :publication_status, ::TERMS[:bibo].status, solrize_for: :exact_match
 
   # Project Hydra ACL attributes
-  has_multival_attribute :embargo_history, ::VOCABULARY[:acl].embargoHistory, solrize_for: :exact_match
-  has_attribute :visibility_after_embargo, ::VOCABULARY[:acl].visibilityAfterEmbargo, solrize_for: :exact_match
+  has_multival_attribute :embargo_history, ::TERMS[:acl].embargoHistory, solrize_for: :exact_match
+  has_attribute :visibility_after_embargo, ::TERMS[:acl].visibilityAfterEmbargo, solrize_for: :exact_match
 
   # Solr only
   additional_search_index :doi_without_label, solrize_for: :exact_match,

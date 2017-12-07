@@ -6,7 +6,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     ldp_object_includes Hydra::Works::WorkBehavior
     has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
     has_multival_attribute :creator, ::RDF::Vocab::DC.creator, solrize_for: [:search, :facet]
-    has_multival_attribute :member_of_paths, ::VOCABULARY[:ual].path, solrize_for: :pathing
+    has_multival_attribute :member_of_paths, ::TERMS[:ual].path, solrize_for: :pathing
 
     additional_search_index :my_solr_doc_attr, type: :string, solrize_for: :search, as: -> { title&.upcase }
 

@@ -7,7 +7,7 @@ class Collection < JupiterCore::LockedLdpObject
   # TODO: this should probably be renamed to share a name with member_of_paths on Item, so that their
   # facet results can be coalesced when Collections are mixed into search results along with Items, as in the
   # main search results
-  has_attribute :community_id, ::VOCABULARY[:ual].path,
+  has_attribute :community_id, ::TERMS[:ual].path,
                 type: :path,
                 solrize_for: :pathing
 

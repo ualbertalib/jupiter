@@ -402,11 +402,11 @@ module JupiterCore
             has_attribute :visibility, ::RDF::Vocab::DC.accessRights, solrize_for: [:exact_match, :facet]
           end
           unless attribute_names.include?(:owner)
-            has_attribute :owner, ::VOCABULARY[:bibo].owner, type: :int, solrize_for: [:exact_match]
+            has_attribute :owner, ::TERMS[:bibo].owner, type: :int, solrize_for: [:exact_match]
           end
           unless attribute_names.include?(:record_created_at)
-            has_attribute :record_created_at, ::VOCABULARY[:jupiter_core].record_created_at, type: :date,
-                                                                                             solrize_for: [:sort]
+            has_attribute :record_created_at, ::TERMS[:jupiter_core].record_created_at, type: :date,
+                                                                                        solrize_for: [:sort]
           end
         end
       end

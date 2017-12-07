@@ -34,7 +34,7 @@ class Community < JupiterCore::LockedLdpObject
   end
 
   unlocked do
-    type [::Hydra::PCDM::Vocab::PCDMTerms.Object, ::VOCABULARY[:jupiter_core].community]
+    type [::Hydra::PCDM::Vocab::PCDMTerms.Object, ::TERMS[:jupiter_core].community]
 
     before_destroy :can_be_destroyed?
     before_destroy -> { logo.purge_later }
