@@ -2,9 +2,7 @@ class Items::DraftController < ApplicationController
 
   include Wicked::Wizard
 
-  # TODO: Should be able to use DraftItem.wizard_steps.keys instead of duplicating this,
-  #  but wicked not having any of it
-  steps :describe_item, :choose_license_and_visibility, :upload_files, :review_and_deposit_item
+  steps(*DraftItem.wizard_steps.keys)
 
   def show
     @draft_item = DraftItem.find(params[:item_id])
