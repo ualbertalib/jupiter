@@ -28,23 +28,24 @@ class DraftItem < ApplicationRecord
   validates :title, :type, :languages,
             :creators, :subjects, :date_created,
             :description, :community_and_collections,
-            presence: true, if: :describe_item?
+            presence: true, if: :validate_describe_item?
 
-  validates :license, :visibility, presence: true, if: :choose_license_and_visibility?
+  validates :license, :visibility, presence: true, if: :validate_choose_license_and_visibility?
 
-  validates :files, presence: true, if: :upload_files?
+  validates :files, presence: true, if: :validate_upload_files?
 
   private
 
-  def describe_item?
+  # TODO: turn on all validations on when reviewing (archived status)
+  def validate_describe_item?
     active? && describe_item?
   end
 
-  def choose_license_and_visibility?
+  def validate_choose_license_and_visibility?
     active? && choose_license_and_visibility?
   end
 
-  def upload_files?
+  def validate_upload_files?
     active? && upload_files?
   end
 

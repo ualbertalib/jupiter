@@ -17,9 +17,13 @@ class DraftItemPolicy < ApplicationPolicy
   end
 
   def permitted_attributes
-    [:title, :alternate_title, :languages, :creators, :subjects, :date_created, :description, :source,
-     :related_item, :license, :license_text_area, :visibility,
-     :embargo_date, :type_id]
+    [:title, :alternate_title, :type_id,
+     :date_created, :description,
+     :source, :related_item,
+     :license, :license_text_area, :visibility, :embargo_date,
+     :status, :wizard_step,
+     language_ids: [], creators_ids: [], subject_ids: [],
+     contributor_ids: [], place_ids: [], time_period_ids: [], citation_ids: []]
   end
 
 end

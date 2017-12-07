@@ -7,136 +7,123 @@
   <%= t('.header') %>
 </h2>
 
-<%= form_for @draft_item, url: wizard_path, method: :put, html: { class:'js-deposit-item' } do |f| %>
+<%= simple_form_for @draft_item, url: wizard_path, method: :put, html: { class:'js-deposit-item' } do |f| %>
   <p class="text-muted"><%= t('required_fields_html') %></p>
 
-  <div class="form-group">
-    <%= f.label :title do %>
-      <span class="text-danger">*</span>
-      <%= t('.title') %>
-    <% end %>
-    <%= f.text_field :title,
-                      class: 'form-control',
-                      placeholder: t('.title_placeholder') %>
-  </div>
+  <%= f.input :title,
+              label: t('.title'),
+              required: true,
+              placeholder: t('.title_placeholder') %>
 
-  <div class="form-group">
-    <%= f.label :alternate_title, t('.alternate_title') %>
-    <%= f.text_field :alternate_title,
-                      class: 'form-control',
-                      placeholder: t('.alternate_title_placeholder') %>
-    <small class="form-text text-muted"><%= t('.alternate_title_help') %></small>
-  </div>
+  <%= f.input :alternate_title,
+              label: t('.alternate_title'),
+              placeholder: t('.alternate_title_placeholder'),
+              hint: t('.alternate_title_help') %>
 
-  <div class="form-group">
-    <%= f.label :type_id do %>
-      <span class="text-danger">*</span>
-      <%= t('.type_id') %>
-    <% end %>
-    <%= f.collection_select :type_id,
-                            Type.all,
-                            :id,
-                            :translated_name,
-                            {},
-                            class: 'form-control' %>
-    <small class="form-text text-muted">
-      <%= t('.type_id_help_html') %>
-    </small>
-  </div>
+  <%= f.association :type,
+      label: t('.type_id'),
+      label_method: :translated_name,
+      value_method: :id,
+      # TODO: Bug in simple form: https://github.com/plataformatec/simple_form/issues/1427
+      # include_blank is not allowed with required true, so hack is to set empty prompt?
+      # include_blank: false,
+      required: true,
+      prompt: '',
+      hint: t('.type_id_help_html') %>
 
-  <div class="form-group">
-    <%= f.label :languages do %>
-      <span class="text-danger">*</span>
-      <%= t('.languages') %>
-    <% end %>
-    <%= f.collection_select :languages,
-                            Language.all,
-                            :id,
-                            :translated_name,
-                            {},
-                            multiple: true,
-                            data: { placeholder: t('.languages_placeholder') },
-                            class: 'form-control js-select2' %>
-  </div>
 
-  <div class="form-group">
-    <%= f.label :creators do %>
-      <span class="text-danger">*</span>
-      <%= t('.creators') %>
-    <% end %>
-    <%= f.collection_select :creators,
-                            Creator.all,
-                            :id,
-                            :name,
-                            {},
-                            multiple: true,
-                            data: { placeholder: t('.creators_placeholder') },
-                            class: 'form-control js-select2' %>
-    <small class="form-text text-muted"><%= t('.creators_help') %></small>
-  </div>
+  <%= f.association :languages,
+      label: t('.languages'),
+      label_method: :translated_name,
+      value_method: :id,
+      multiple: true,
+      input_html: {
+        data: { placeholder: t('.languages_placeholder') },
+        class: 'js-select2'
+      },
+      # TODO: Bug in simple form: https://github.com/plataformatec/simple_form/issues/1427
+      # include_blank is not allowed with required true, so hack is to set empty prompt?
+      # include_blank: false,
+      required: true,
+      prompt: '' %>
 
-  <div class="form-group">
-    <%= f.label :subject do %>
-      <span class="text-danger">*</span>
-      <%= t('.subjects') %>
-    <% end %>
-    <%= f.collection_select :subjects,
-                            Subject.all,
-                            :id,
-                            :name,
-                            {},
-                            multiple: true,
-                            data: { placeholder: t('.subjects_placeholder') },
-                            class: 'form-control js-select2' %>
-    <small class="form-text text-muted"><%= t('.subjects_help') %></small>
-  </div>
+  <%= f.association :creators,
+      label: t('.creators'),
+      label_method: :name,
+      value_method: :id,
+      multiple: true,
+      input_html: {
+        data: { tags: true, placeholder: t('.creators_placeholder') },
+        class: 'js-select2'
+      },
+      # TODO: Bug in simple form: https://github.com/plataformatec/simple_form/issues/1427
+      # include_blank is not allowed with required true, so hack is to set empty prompt?
+      # include_blank: false,
+      required: true,
+      prompt: '',
+      hint: t('.creators_help') %>
 
-  <div class="form-group">
-    <%= f.label :date_created do %>
-      <span class="text-danger">*</span>
-      <%= t('.date_created') %>
-    <% end %>
-    <div class="d-md-flex justify-content-between">
-        <%= f.date_select :date_created,
-                          { order: [:year, :month, :day],
-                            prompt: { day: t('select_a_day'),
-                                      month: t('select_a_month'),
-                                      year: t('select_a_year')
-                                    },
-                            start_year: Date.today.year - 100,
-                            end_year: Date.today.year + 1
-                          }, { class: 'form-control  mr-2 mb-2' } %>
-    </div>
-  </div>
+  <%= f.association :subjects,
+      label: t('.subjects'),
+      label_method: :name,
+      value_method: :id,
+      multiple: true,
+      input_html: {
+        data: { tags: true, placeholder: t('.subjects_placeholder') },
+        class: 'js-select2'
+      },
+      # TODO: Bug in simple form: https://github.com/plataformatec/simple_form/issues/1427
+      # include_blank is not allowed with required true, so hack is to set empty prompt?
+      # include_blank: false,
+      required: true,
+      prompt: '',
+      hint: t('.subjects_help') %>
 
-  <div class="form-group">
-    <%= f.label :description do %>
-      <span class="text-danger">*</span>
-      <%= t('.description') %>
-    <% end %>
-    <%= f.text_area :description,
-                    size: '25x10',
-                    class: 'form-control',
-                    placeholder: t('.description_placeholder') %>
-  </div>
+  <%= f.input :date_created,
+              as: :date,
+              label: t('.date_created'),
+              order: [:year, :month, :day],
+              prompt: {
+                day: t('select_a_day'),
+                month: t('select_a_month'),
+                year: t('select_a_year')
+              },
+              start_year: Date.today.year - 100,
+              end_year: Date.today.year + 1,
+              input_html: { class: 'mr-2 mb-2' },
+              required: true
+
+  %>
+
+  <%= f.input :description,
+              as: :text,
+              label: t('.description'),
+              input_html: { rows: '5' },
+              placeholder: t('.description_placeholder'),
+              required: true %>
 
   <fieldset>
     <legend class="mb-0">
-      <span class="text-danger">*</span>
       <%= t('.community_and_collection') %>
     </legend>
     <small class="mb-3 form-text text-muted">
       <%= t('.community_and_collection_help_html') %>
     </small>
     <div class="form-group">
-      <label><%= t('.community') %></label>
+      <label>
+        <span class="text-danger font-weight-bold">*</span>
+        <%= t('.community') %>
+      </label>
       <%= select_tag 'draft_item[community_id]',
                       options_from_collection_for_select(Community.all, :id, :title),
                       prompt: t('.community_placeholder'),
                       class: 'form-control js-community-select' %>
     </div>
     <div class="form-group">
-      <label><%= t('.collection') %></label>
+      <label>
+        <span class="text-danger font-weight-bold">*</span>
+        <%= t('.collection') %>
+      </label>
       <%= select_tag 'draft_item[collection_id]',
                       nil,
                       data: { placeholder: t('.collection_placeholder') },
@@ -165,61 +152,61 @@
             role="tabpanel"
             aria-labelledby="js-heading-additional-fields">
         <div class="card-body">
-          <div class="form-group">
-            <%= f.label 'contributors', t('.contributors') %>
-            <%= f.select 'contributors',
-                          {},
-                            multiple: true,
-                            data: { tags: true,
-                                    placeholder: t('.contributors_placeholder') },
-                            class: 'form-control js-select2' %>
-            <small class="form-text text-muted"><%= t('.contributors_help') %></small>
-          </div>
+          <%= f.association :contributors,
+              label: t('.contributors'),
+              label_method: :name,
+              value_method: :id,
+              multiple: true,
+              input_html: {
+                data: { tags: true, placeholder: t('.contributors_placeholder') },
+                class: 'js-select2'
+              },
+              include_blank: false,
+              hint: t('.contributors_help') %>
 
-          <div class="form-group">
-            <%= f.label 'places', t('.places') %>
-            <%= f.select 'places',
-                          {},
-                            multiple: true,
-                            data: { tags: true,
-                                    placeholder: t('.places_placeholder') },
-                            class: 'form-control js-select2' %>
-            <small class="form-text text-muted"><%= t('.places_help') %></small>
-          </div>
+          <%= f.association :places,
+              label: t('.places'),
+              label_method: :name,
+              value_method: :id,
+              multiple: true,
+              input_html: {
+                data: { tags: true, placeholder: t('.places_placeholder') },
+                class: 'js-select2'
+              },
+              include_blank: false,
+              hint: t('.places_help') %>
 
-          <div class="form-group">
-            <%= f.label 'time_periods', t('.time_periods') %>
-            <%= f.select 'time_periods',
-                          {},
-                            multiple: true,
-                            data: { tags: true,
-                                    placeholder: t('.time_periods_placeholder') },
-                            class: 'form-control js-select2' %>
-            <small class="form-text text-muted"><%= t('.time_periods_help_html') %></small>
-          </div>
+          <%= f.association :time_periods,
+              label: t('.time_periods'),
+              label_method: :name,
+              value_method: :id,
+              multiple: true,
+              input_html: {
+                data: { tags: true, placeholder: t('.time_periods_placeholder') },
+                class: 'js-select2'
+              },
+              include_blank: false,
+              hint: t('.time_periods_help_html') %>
 
-          <div class="form-group">
-            <%= f.label 'citations', t('.citations') %>
-            <%= f.select 'citations',
-                          {},
-                            multiple: true,
-                            data: { tags: true,
-                                    placeholder: t('.citations_placeholder') },
-                            class: 'form-control js-select2' %>
-            <small class="form-text text-muted"><%= t('.citations_help') %></small>
-          </div>
+          <%= f.association :citations,
+              label: t('.citations'),
+              label_method: :name,
+              value_method: :id,
+              multiple: true,
+              input_html: {
+                data: { tags: true, placeholder: t('.citations_placeholder') },
+                class: 'js-select2'
+              },
+              include_blank: false,
+              hint: t('.citations_help') %>
 
-          <div class="form-group">
-            <%= f.label 'source', t('.source') %>
-            <%= f.text_field 'source', class: 'form-control' %>
-            <small class="form-text text-muted"><%= t('.source_help') %></small>
-          </div>
+          <%= f.input :source,
+              label: t('.source'),
+              hint: t('.source_help') %>
 
-          <div class="form-group">
-            <%= f.label 'related_item', t('.related_item') %>
-            <%= f.text_field 'related_item', class: 'form-control' %>
-            <small class="form-text text-muted"><%= t('.related_item_help') %></small>
-          </div>
+          <%= f.input :related_item,
+              label: t('.related_item'),
+              hint: t('.related_item_help') %>
         </div>
       </div>
     </div>
@@ -230,7 +217,7 @@
       <%= fa_icon 'ban' %>
       <%= t('cancel') %>
     <% end %>
-    <%= f.button type: :submit, class: 'btn btn-primary' do %>
+    <%= f.button :button, type: :submit do %>
       <%= t('items.draft.save_and_continue') %>
       <%= fa_icon 'chevron-right' %>
     <% end %>

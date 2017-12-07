@@ -2,7 +2,7 @@ class Items::DraftController < ApplicationController
 
   include Wicked::Wizard
 
-  steps(*DraftItem.wizard_steps.keys)
+  steps(*DraftItem.wizard_steps.keys.map(&:to_sym))
 
   def show
     @draft_item = DraftItem.find(params[:item_id])
@@ -22,9 +22,19 @@ class Items::DraftController < ApplicationController
     @draft_item = DraftItem.find(params[:item_id])
     authorize @draft_item
 
-    params[:draft_item][:wizard_step] = step
-    params[:draft_item][:status] = DraftItem.status[:active]
-    params[:draft_item][:status] = DraftItem.status[:archived] if step == steps.last
+    params[:draft_item][:wizard_step] = DraftItem.wizard_steps[step]
+    params[:draft_item][:status] = DraftItem.statuses[:active]
+
+    case wizard_value(step)
+    when :describe_item
+
+      community = params[:draft_item].delete :community_id
+      collection = params[:draft_item].delete :collection_id
+
+      # TODO... save tags, and do a bunch of has many magic
+    when :review_and_deposit_item
+      params[:draft_item][:status] = DraftItem.statuses[:archived]
+    end
 
     @draft_item.update_attributes(permitted_attributes(DraftItem))
     render_wizard @draft_item
