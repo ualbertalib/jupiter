@@ -12,6 +12,8 @@ class Collection < JupiterCore::LockedLdpObject
                 solrize_for: :pathing
 
   has_attribute :description, ::RDF::Vocab::DC.description, solrize_for: [:search]
+  has_multival_attribute :creator, ::RDF::Vocab::DC.creator, solrize_for: :exact_match
+  has_attribute :fedora3_uuid, ::VOCABULARY[:ual].fedora3uuid, solrize_for: :exact_match
 
   additional_search_index :community_title, solrize_for: :sort,
                                             as: -> { Community.find_by(id: community_id)&.title }
@@ -38,8 +40,15 @@ class Collection < JupiterCore::LockedLdpObject
     validates :title, presence: true
     validates :community_id, presence: true
     validate :community_validations
+
     before_validation do
       self.visibility = JupiterCore::VISIBILITY_PUBLIC
+    end
+
+    before_save do
+      community.unlock_and_fetch_ldp_object do |uo|
+        self.member_of_collections += [uo]
+      end
     end
 
     def can_be_destroyed?
