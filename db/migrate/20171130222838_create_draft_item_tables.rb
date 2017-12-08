@@ -20,10 +20,10 @@ class CreateDraftItemTables < ActiveRecord::Migration[5.1]
       t.string :source
       t.string :related_item
 
-      t.string :license
+      t.integer :license, default: 0, null: false
       t.text :license_text_area
 
-      t.string :visibility
+      t.integer :visibility, default: 0, null: false
       t.datetime :embargo_date
 
       t.references :type, index: true

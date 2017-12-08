@@ -405,18 +405,18 @@ en:
         license:
           header: 'License'
           most_commonly_used: 'Most commonly used'
-          attribution_noncommercial_html: 'Attribution-NonCommercial 4.0 International
+          attribution_non_commercial_html: 'Attribution-NonCommercial 4.0 International
             (<a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>)'
           other_creative_commons_licenses: 'Other Creative Commons licenses'
           attribution_html: 'Attribution 4.0 International
             (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC BY 4.0</a>)'
-          attribution_noncommercial_noderivatives_html: 'Attribution-NonCommercial-NoDerivatives 4.0 International
+          attribution_non_commercial_no_derivatives_html: 'Attribution-NonCommercial-NoDerivatives 4.0 International
             (<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a>)'
-          attribution_noncommercial_sharealike_html: 'Attribution-NonCommercial-ShareAlike 4.0 International
+          attribution_non_commercial_share_alike_html: 'Attribution-NonCommercial-ShareAlike 4.0 International
             (<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a>)'
-          attribution_noderivatives_html: 'Attribution-NoDerivatives 4.0 International
+          attribution_no_derivatives_html: 'Attribution-NoDerivatives 4.0 International
             (<a href="https://creativecommons.org/licenses/by-nd/4.0/" target="_blank">CC BY-ND 4.0</a>)'
-          attribution_sharealike_html: 'Attribution-ShareAlike 4.0 International
+          attribution_share_alike_html: 'Attribution-ShareAlike 4.0 International
             (<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">CC BY-SA 4.0</a>)'
           cco_universal_html: 'CC0 1.0 Universal
             (<a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank">CC0 1.0</a>)'
@@ -433,7 +433,7 @@ en:
             or contact <a href="mailto:erahelp@ualberta.ca">erahelp@ualberta.ca</a>'
         visibility:
           header: 'Visibility'
-          public: 'Open access now (will be seen by everyone)'
+          open_access: 'Open access now (will be seen by everyone)'
           embargo: 'Will be open access on'
           authenticated: 'CCID Protected'
           private: 'Private'

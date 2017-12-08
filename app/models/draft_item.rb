@@ -1,7 +1,23 @@
 class DraftItem < ApplicationRecord
 
   enum status: { inactive: 0, active: 1, archived: 2 }
+
   enum wizard_step: { describe_item: 0, choose_license_and_visibility: 1, upload_files: 2, review_and_deposit_item: 3 }
+
+  enum license: { attribution_non_commercial: 0,
+                  attribution: 1,
+                  attribution_non_commercial_no_derivatives: 2,
+                  attribution_non_commercial_share_alike: 3,
+                  attribution_no_derivatives: 4,
+                  attribution_share_alike: 5,
+                  cco_universal: 6,
+                  public_domain_mark: 7,
+                  license_text: 8 }
+
+  # Can't use public as this is a ActiveRecord method
+  enum visibility: { open_access: 0,
+                     embargo: 1,
+                     authenticated: 2 }
 
   has_many :draft_items_languages, dependent: :destroy
   has_many :draft_items_creators, dependent: :destroy
@@ -31,6 +47,8 @@ class DraftItem < ApplicationRecord
             presence: true, if: :validate_describe_item?
 
   validates :license, :visibility, presence: true, if: :validate_choose_license_and_visibility?
+  validates :license_text_area, presence: true, if: :validate_if_license_is_text?
+  validates :embargo_date, presence: true, if: :validate_if_visibility_is_embargo?
 
   validates :files, presence: true, if: :validate_upload_files?
 
@@ -49,4 +67,11 @@ class DraftItem < ApplicationRecord
     active? && upload_files?
   end
 
+  def validate_if_license_is_text?
+    validate_choose_license_and_visibility? && license_text?
+  end
+
+  def validate_if_visibility_is_embargo?
+    validate_choose_license_and_visibility? && embargo?
+  end
 end

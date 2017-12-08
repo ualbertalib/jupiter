@@ -31,12 +31,15 @@ class Items::DraftController < ApplicationController
       community = params[:draft_item].delete :community_id
       collection = params[:draft_item].delete :collection_id
 
-      # TODO... save tags, and do a bunch of has many magic
+      # TODO: save tags, and do a bunch of has_many magic with creating tags on the fly
+    when :upload_files
+      # TODO: handle ajax of file uploads
     when :review_and_deposit_item
       params[:draft_item][:status] = DraftItem.statuses[:archived]
     end
 
     @draft_item.update_attributes(permitted_attributes(DraftItem))
+
     render_wizard @draft_item
   end
 

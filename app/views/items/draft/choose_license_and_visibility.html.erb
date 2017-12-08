@@ -7,12 +7,10 @@
   <%= t('.header') %>
 </h2>
 
-<%# TODO: Need to figure out data model and migrate everything to use form_for and it's helpers
-= form_for @item, url: wizard_path, method: :put, class:'js-deposit-item' do |f| %>
-<%= form_tag wizard_path, method: :put, class:'js-deposit-item' do %>
+<%= simple_form_for @draft_item, url: wizard_path, method: :put, html: { class:'js-deposit-item' } do |f| %>
   <fieldset class="my-3">
     <legend class="mb-0">
-      <span class="text-danger">*</span>
+      <span class="text-danger font-weight-bold">*</span>
       <%= t('.license.header') %>
     </legend>
     <small class="form-text text-muted mt-0 mb-3">
@@ -40,11 +38,10 @@
           <div class="card-body">
             <div class="form-check">
               <label class="form-check-label">
-                <%= radio_button_tag 'license',
-                                     'attribution_noncommercial',
-                                     true,
-                                     class: 'form-check-input' %>
-                <%= t('.license.attribution_noncommercial_html') %>
+                <%= f.radio_button :license,
+                                    :attribution_non_commercial,
+                                    class: 'form-check-input' %>
+                <%= t('.license.attribution_non_commercial_html') %>
               </label>
             </div>
           </div>
@@ -74,55 +71,49 @@
           <div class="card-body">
             <div class="form-check">
               <label class="form-check-label">
-                <%= radio_button_tag 'license',
-                                     'attribution',
-                                     false,
-                                     class: 'form-check-input' %>
+                <%= f.radio_button :license,
+                                   :attribution,
+                                   class: 'form-check-input' %>
                 <%= t('.license.attribution_html') %>
               </label>
             </div>
             <div class="form-check">
               <label class="form-check-label">
-                <%= radio_button_tag 'license',
-                                     'attribution_noncommercial_noderivatives',
-                                     false,
-                                     class: 'form-check-input' %>
-                <%= t('.license.attribution_noncommercial_noderivatives_html') %>
+                <%= f.radio_button :license,
+                                   :attribution_non_commercial_no_derivatives,
+                                   class: 'form-check-input' %>
+                <%= t('.license.attribution_non_commercial_no_derivatives_html') %>
               </label>
             </div>
             <div class="form-check">
               <label class="form-check-label">
-                <%= radio_button_tag 'license',
-                                     'attribution_noncommercial_sharealike',
-                                     false,
-                                     class: 'form-check-input' %>
-                <%= t('.license.attribution_noncommercial_sharealike_html') %>
+                <%= f.radio_button :license,
+                                   :attribution_non_commercial_share_alike,
+                                   class: 'form-check-input' %>
+                <%= t('.license.attribution_non_commercial_share_alike_html') %>
               </label>
             </div>
             <div class="form-check">
               <label class="form-check-label">
-                <%= radio_button_tag 'license',
-                                     'attribution_noderivatives',
-                                     false,
-                                     class: 'form-check-input' %>
-                <%= t('.license.attribution_noderivatives_html') %>
+                <%= f.radio_button :license,
+                                   :attribution_no_derivatives,
+                                   class: 'form-check-input' %>
+                <%= t('.license.attribution_no_derivatives_html') %>
               </label>
             </div>
             <div class="form-check">
               <label class="form-check-label">
-                <%= radio_button_tag 'license',
-                                     'attribution_sharealike',
-                                     false,
-                                     class: 'form-check-input' %>
-                <%= t('.license.attribution_sharealike_html') %>
+                <%= f.radio_button :license,
+                                   :attribution_share_alike,
+                                   class: 'form-check-input' %>
+                <%= t('.license.attribution_share_alike_html') %>
               </label>
             </div>
             <div class="form-check">
               <label class="form-check-label">
-                <%= radio_button_tag 'license',
-                                     'cco_universal',
-                                     false,
-                                     class: 'form-check-input' %>
+                <%= f.radio_button :license,
+                                   :cco_universal,
+                                   class: 'form-check-input' %>
                 <%= t('.license.cco_universal_html') %>
               </label>
             </div>
@@ -152,10 +143,9 @@
           <div class="card-body">
             <div class="form-check">
               <label class="form-check-label">
-                <%= radio_button_tag 'license',
-                                     'public_domain_mark',
-                                     false,
-                                     class: 'form-check-input' %>
+                <%= f.radio_button :license,
+                                   :public_domain_mark,
+                                   class: 'form-check-input' %>
                 <%= t('.license.public_domain_mark_html') %>
               </label>
             </div>
@@ -184,20 +174,18 @@
           <div class="card-body">
             <div class="form-check">
               <label class="form-check-label">
-                <%= radio_button_tag 'license',
-                                     'license_text',
-                                     false,
-                                     class: 'form-check-input' %>
+                <%= f.radio_button :license,
+                                   :license_text,
+                                   class: 'form-check-input' %>
                 <%= t('.license.license_text') %>
               </label>
+              <%= f.input :license_text_area,
+                          as: :text,
+                          label: false,
+                          input_html: { rows: '5' },
+                          placeholder: t('.license.license_text_area_placeholder') %>
             </div>
-            <div class="form-group">
-              <%= text_area_tag :license_text_area,
-                                nil,
-                                size: "25x10",
-                                placeholder: t('.license.license_text_area_placeholder'),
-                                class: 'form-control' %>
-            </div>
+
           </div>
         </div>
       </div>
@@ -205,50 +193,42 @@
   </fieldset>
   <fieldset class="my-3">
     <legend>
-      <span class="text-danger">*</span>
+      <span class="text-danger font-weight-bold">*</span>
       <%= t('.visibility.header') %>
     </legend>
     <div class="form-check">
       <label class="form-check-label">
-        <%= radio_button_tag 'visibility', 'public', true, class: 'form-check-input' %>
-        <%= t('.visibility.public') %>
+        <%= f.radio_button :visibility,
+                           :open_access,
+                           class: 'form-check-input' %>
+        <%= t('.visibility.open_access') %>
       </label>
     </div>
     <div class="form-check">
       <label class="form-check-label">
-        <%= radio_button_tag 'visibility', 'embargo', false, class: 'form-check-input' %>
+        <%= f.radio_button :visibility,
+                           :embargo,
+                           class: 'form-check-input' %>
         <%= t('.visibility.embargo') %>
       </label>
-      <div class="d-md-flex justify-content-between">
-        <%= date_select('item', 'embargo_end_date',
-                        { order: [:year, :month, :day],
-                          prompt: { day: t('select_a_day'),
-                                    month: t('select_a_month'),
-                                    year: t('select_a_year')
-                                  },
-                          start_year: Date.today.year
-                        }, { class: 'form-control  mr-2 mb-2' }) %>
-      </div>
+      <%= f.input :embargo_date,
+        as: :date,
+        label: false,
+        order: [:year, :month, :day],
+        prompt: {
+          day: t('select_a_day'),
+          month: t('select_a_month'),
+          year: t('select_a_year')
+        },
+        start_year: Date.today.year,
+        input_html: { class: 'mr-2 mb-2' } %>
     </div>
-    <%#  TODO: Only if admin, do these radio buttons show below %>
     <div class="form-check disabled">
       <label class="form-check-label">
-        <%= radio_button_tag 'visibility',
-                             'authenticated',
-                             false,
-                             class: 'form-check-input',
-                             disabled: true %>
+        <%= f.radio_button :visibility,
+                            :authenticated,
+                            class: 'form-check-input' %>
         <%= t('.visibility.authenticated') %>
-      </label>
-    </div>
-    <div class="form-check disabled">
-      <label class="form-check-label">
-        <%= radio_button_tag 'visibility',
-                             'private',
-                             false,
-                             class: 'form-check-input',
-                             disabled: true %>
-        <%= t('.visibility.private') %>
       </label>
     </div>
   </fieldset>

@@ -78,9 +78,9 @@ ActiveRecord::Schema.define(version: 20171130222838) do
     t.text "description"
     t.string "source"
     t.string "related_item"
-    t.string "license"
+    t.integer "license", default: 0, null: false
     t.text "license_text_area"
-    t.string "visibility"
+    t.integer "visibility", default: 0, null: false
     t.datetime "embargo_date"
     t.bigint "type_id"
     t.bigint "user_id", null: false
