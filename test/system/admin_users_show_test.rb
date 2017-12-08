@@ -163,8 +163,10 @@ class AdminUsersShowTest < ApplicationSystemTestCase
     ['Fancy', 'Nice'].each do |adjective|
       Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                  owner: user.id, title: "#{adjective} Item",
-                                 language: ['http://id.loc.gov/vocabulary/iso639-2/eng'],
-                                 license: 'http://creativecommons.org/licenses/by/4.0/')
+                                 language: [CONTROLLED_VOCABULARIES[:language].eng],
+                                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                                 item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                                 publication_status: CONTROLLED_VOCABULARIES[:publication_status].published)
           .unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(community.id, collection.id)
         uo.save!
@@ -173,8 +175,10 @@ class AdminUsersShowTest < ApplicationSystemTestCase
     # One item owned by admin
     Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                owner: admin.id, title: 'Admin Item',
-                               language: ['http://id.loc.gov/vocabulary/iso639-2/eng'],
-                               license: 'http://creativecommons.org/licenses/by/4.0/')
+                               language: [CONTROLLED_VOCABULARIES[:language].eng],
+                               license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                               item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                               publication_status: CONTROLLED_VOCABULARIES[:publication_status].published)
         .unlock_and_fetch_ldp_object do |uo|
       uo.add_to_path(community.id, collection.id)
       uo.save!
