@@ -22,16 +22,17 @@
           <h5 class="mb-0">
             <a data-toggle="collapse"
                href="#js-collapse-most-common"
-               aria-expanded="true"
+               aria-expanded="<%= license_accordion_open?(:most_commonly_used, @draft_item.license) %>"
                aria-controls="js-collapse-most-common">
               <%= t('.license.most_commonly_used') %>
-              <%= fa_icon "chevron-up", class: "js-more-less pull-right" %>
+              <%= fa_icon "#{license_accordion_open?(:most_commonly_used, @draft_item.license, 'chevron-up', 'chevron-down')}",
+                          class: "js-more-less pull-right" %>
             </a>
           </h5>
         </div>
 
         <div id="js-collapse-most-common"
-             class="collapse show"
+             class="collapse <%= license_accordion_open?(:most_commonly_used, @draft_item.license, 'show', '') %>"
              data-parent="#js-license-accordion"
              role="tabpanel"
              aria-labelledby="js-heading-most-common">
@@ -55,16 +56,20 @@
           <h5 class="mb-0">
             <a data-toggle="collapse"
                href="#js-collapse-other-collective-common-licenses"
-               aria-expanded="false"
+               aria-expanded="<%= license_accordion_open?(:other_creative_commons_licenses, @draft_item.license) %>"
                aria-controls="js-collapse-other-collective-common-licenses">
               <%= t('.license.other_creative_commons_licenses') %>
-              <%= fa_icon "chevron-down", class: "js-more-less pull-right" %>
+              <%= fa_icon "#{license_accordion_open?(:other_creative_commons_licenses,
+                                                     @draft_item.license,
+                                                     'chevron-up',
+                                                     'chevron-down')}",
+                          class: "js-more-less pull-right" %>
             </a>
           </h5>
         </div>
 
         <div id="js-collapse-other-collective-common-licenses"
-             class="collapse"
+             class="collapse <%= license_accordion_open?(:other_creative_commons_licenses, @draft_item.license, 'show', '') %>"
              data-parent="#js-license-accordion"
              role="tabpanel"
              aria-labelledby="js-heading-other-collective-common-licenses">
@@ -127,16 +132,17 @@
           <h5 class="mb-0">
             <a data-toggle="collapse"
                href="#js-collapse-public-domain"
-               aria-expanded="false"
+               aria-expanded="<%= license_accordion_open?(:public_domain, @draft_item.license) %>"
                aria-controls="js-collapse-public-domain">
               <%= t('.license.public_domain') %>
-              <%= fa_icon "chevron-down", class: "js-more-less pull-right" %>
+              <%= fa_icon "#{license_accordion_open?(:public_domain, @draft_item.license, 'chevron-up', 'chevron-down')}",
+                          class: "js-more-less pull-right" %>
             </a>
           </h5>
         </div>
 
         <div id="js-collapse-public-domain"
-             class="collapse"
+             class="collapse <%= license_accordion_open?(:public_domain, @draft_item.license, 'show', '') %>"
              data-parent="#js-license-accordion"
              role="tabpanel"
              aria-labelledby="js-heading-public-domain">
@@ -158,16 +164,17 @@
           <h5 class="mb-0">
             <a data-toggle="collapse"
                href="#js-collapse-link-to-another-license"
-               aria-expanded="false"
+               aria-expanded="<%= license_accordion_open?(:link_to_another_license, @draft_item.license) %>"
                aria-controls="js-collapse-link-to-another-license">
               <%= t('.license.link_to_another_license') %>
-              <%= fa_icon "chevron-down", class: "js-more-less pull-right" %>
+              <%= fa_icon "#{license_accordion_open?(:link_to_another_license, @draft_item.license, 'chevron-up', 'chevron-down')}",
+                          class: "js-more-less pull-right" %>
             </a>
           </h5>
         </div>
 
         <div id="js-collapse-link-to-another-license"
-             class="collapse"
+             class="collapse <%= license_accordion_open?(:link_to_another_license, @draft_item.license, 'show', '') %>"
              data-parent="#js-license-accordion"
              role="tabpanel"
              aria-labelledby="js-heading-link-to-another-license">
