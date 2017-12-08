@@ -14,8 +14,8 @@ module SearchHelper
 
   def query_params_without_facet_value(facet_name, value)
     query_params = search_params_hash
-    raise ArgumentError, "No facets are present" unless query_params.key?(:facets)
-    raise ArgumentError, "No query param is present for this facet" unless query_params[:facets].key?(facet_name)
+    raise ArgumentError, 'No facets are present' unless query_params.key?(:facets)
+    raise ArgumentError, 'No query param is present for this facet' unless query_params[:facets].key?(facet_name)
     query_params[:facets][facet_name].delete(value)
     query_params[:facets].delete(facet_name) if query_params[:facets][facet_name].empty?
     query_params.delete(:facets) if query_params[:facets].empty?
