@@ -30,10 +30,19 @@
   terms:
     - doi
 
+- vocabulary: bibo
+  schema: http://purl.org/ontology/bibo/
+  terms:
+    - status
+
+- vocabulary: acl
+  schema: 'http://projecthydra.org/ns/auth/acl#'
+  terms:
+    - embargoHistory
+    - visibilityAfterEmbargo
+
 - vocabulary: jupiter_core
   schema: 'http://fake.figurethisout.todo#'
   terms:
-    - visibility # sharon is looking into vocabularies related to this at the moment
-    - owner # not the same as depositor, potentially, as we may need to re-own works in the future while continue to record the original depositor
     - record_created_at # separate from date_created, we need to track a precise time the metadata record was created
     - community # rdf:type for community objects, which aren't merely rdf:objects but our own custom derivation

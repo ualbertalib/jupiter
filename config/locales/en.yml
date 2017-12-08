@@ -56,12 +56,23 @@ en:
       models:
         ir_item:
           attributes:
+            base:
+              need_either_license_or_rights: 'must have either a license or a rights statement'
+              not_both_license_and_rights: 'should not have both a license and a rights statement'
             member_of_paths:
               community_not_found: 'is missing community with ID "%{id}"'
               collection_not_found: 'is missing collection with ID "%{id}"'
             language:
               not_recognized: 'is not recognized'
             license:
+              not_recognized: 'is not recognized'
+            item_type:
+              not_recognized: 'is not recognized'
+            publication_status:
+              required_for_article: 'is required for articles'
+              not_recognized: 'is not recognized'
+              must_be_absent_for_non_articles: 'must be absent for non-articles'
+            visibility_after_embargo:
               not_recognized: 'is not recognized'
         ir_collection:
           attributes:
@@ -317,6 +328,20 @@ en:
       thumbnail: 'Thumbnail'
 
   controlled_vocabularies:
+    item_type_with_status:
+      article_published: Article (Published)
+      article_draft: Article (Draft)
+      article_submitted: Article (Submitted)
+      book: Book
+      chapter: Chapter
+      image: Image
+      report: Report
+      research_material: 'Research Material'
+      conference_paper: 'Conference Paper'
+      conference_poster: 'Conference Poster'
+      dataset: Dataset
+      review: Review
+      learning_object: 'Learning Object'
     language:
       ukr: Ukrainian
       jpn: Japanese
@@ -340,6 +365,13 @@ en:
       public_domain_mark_1_0: 'Public Domain Mark 1.0'
       attribution_noncommercial_sharealike_4_0_international:
         'Attribution-NonCommercial-ShareAlike 4.0 International'
+    visibility:
+      authenticated: Authenticated
+      embargo: Embargo
+      draft: Draft
+      private: Private
+      public: Public
 
   facets:
     member_of_paths: 'Collections'
+    item_type_with_status: 'Item type'

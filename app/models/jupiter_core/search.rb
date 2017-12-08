@@ -23,7 +23,7 @@ class JupiterCore::Search
 
     # Our query permissions are white-list based. You only get public results unless the results of +calculate_ownership_query+
     # assign you additional permissions based on the user passed to it.
-    base_query << %Q((_query_:"{!raw f=visibility_ssim}public"#{ownership_query}))
+    base_query << %Q((_query_:"{!raw f=visibility_ssim}#{JupiterCore::VISIBILITY_PUBLIC}"#{ownership_query}))
     base_query << q if q.present?
 
     fq = []

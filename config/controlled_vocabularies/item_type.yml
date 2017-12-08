@@ -1,0 +1,24 @@
+---
+item_type:
+  - code: article
+    uri: http://purl.org/ontology/bibo/Article
+  - code: book
+    uri: http://purl.org/ontology/bibo/Book
+  - code: chapter
+    uri: http://purl.org/ontology/bibo/Chapter
+  - code: image
+    uri: http://purl.org/ontology/bibo/Image
+  - code: report
+    uri: http://purl.org/ontology/bibo/Report
+  - code: research_material
+    uri: http://terms.library.ualberta.ca/researchMaterial
+  - code: conference_paper
+    uri: http://vivoweb.org/ontology/core#ConferencePaper
+  - code: conference_poster
+    uri: http://vivoweb.org/ontology/core#ConferencePoster
+  - code: dataset
+    uri: http://vivoweb.org/ontology/core#Dataset
+  - code: review
+    uri: http://vivoweb.org/ontology/core#Review
+  - code: learning_object
+    uri: http://terms.library.ualberta.ca/learningObject

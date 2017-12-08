@@ -97,9 +97,11 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
       Item.new_locked_ldp_object(
         title: 'thesis blocking deletion',
         owner: 1,
-        language: ['http://id.loc.gov/vocabulary/iso639-2/eng'],
-        license: 'http://creativecommons.org/licenses/by/4.0/',
-        visibility: JupiterCore::VISIBILITY_PRIVATE
+        language: [CONTROLLED_VOCABULARIES[:language].eng],
+        license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+        visibility: JupiterCore::VISIBILITY_PRIVATE,
+        item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+        publication_status: CONTROLLED_VOCABULARIES[:publication_status].published
       ).unlock_and_fetch_ldp_object do |unlocked_item|
         unlocked_item.add_to_path(@community.id, @collection.id)
         unlocked_item.save!
