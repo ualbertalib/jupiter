@@ -9,15 +9,16 @@ body {
   font-weight: bold;
   text-decoration: inherit;
 }
-#skip {
-  display: block;
-  padding: 1em;
-  color: #fff;
+
+.skip {
   background-color: $red;
+  color: $white;
+  display: block;
   outline: 0;
+  padding: 1em;
 
   .skiplink-text {
-    padding: .5em;
+    padding: 0.5em;
     outline: 1px dotted;
   }
 }
