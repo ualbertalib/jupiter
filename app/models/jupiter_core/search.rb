@@ -27,8 +27,10 @@ class JupiterCore::Search
     base_query << q if q.present?
 
     fq = []
-    facets.each do |key, value|
-      fq << %Q(#{key}: "#{value}")
+    facets.each do |key, values|
+      values.each do |value|
+        fq << %Q(#{key}: "#{value}")
+      end
     end
 
     # queried fields, by default, are all of the fields marked as :search (see calculate_queried_fields).
