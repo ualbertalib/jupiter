@@ -3,14 +3,18 @@ require 'test_helper'
 class ItemTest < ActiveSupport::TestCase
 
   test 'a valid item can be constructed' do
-    community = Community.new_locked_ldp_object(title: 'Community', owner: 1, visibility: 'public')
+    community = Community.new_locked_ldp_object(title: 'Community', owner: 1,
+                                                visibility: JupiterCore::VISIBILITY_PUBLIC)
     community.unlock_and_fetch_ldp_object(&:save!)
-    collection = Collection.new_locked_ldp_object(title: 'Collection', owner: 1, visibility: 'public',
+    collection = Collection.new_locked_ldp_object(title: 'Collection', owner: 1,
+                                                  visibility: JupiterCore::VISIBILITY_PUBLIC,
                                                   community_id: community.id)
     collection.unlock_and_fetch_ldp_object(&:save!)
-    item = Item.new_locked_ldp_object(title: 'Item', owner: 1, visibility: 'public',
-                                      language: ['http://id.loc.gov/vocabulary/iso639-2/eng'],
-                                      license: 'http://creativecommons.org/licenses/by/4.0/')
+    item = Item.new_locked_ldp_object(title: 'Item', owner: 1, visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                      language: [CONTROLLED_VOCABULARIES[:language].eng],
+                                      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                                      item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                                      publication_status: CONTROLLED_VOCABULARIES[:publication_status].draft)
     item.unlock_and_fetch_ldp_object do |unlocked_item|
       unlocked_item.add_to_path(community.id, collection.id)
       unlocked_item.save!
@@ -37,7 +41,7 @@ class ItemTest < ActiveSupport::TestCase
   end
 
   test 'embargo is a valid visibility for items' do
-    assert_includes Item.valid_visibilities, 'embargo'
+    assert_includes Item.valid_visibilities, Item::VISIBILITY_EMBARGO
   end
 
   test 'embargo_end_date must be present if visibility is embargo' do
@@ -62,6 +66,46 @@ class ItemTest < ActiveSupport::TestCase
     assert item.errors[:embargo_end_date].present?
     assert_includes item.errors[:embargo_end_date], 'must be blank'
 
+    refute item.errors[:visibility].present?
+  end
+
+  test 'visibility_after_embargo must be present if visibility is embargo' do
+    item = Item.new_locked_ldp_object
+    item.unlock_and_fetch_ldp_object do |unlocked_item|
+      unlocked_item.visibility = Item::VISIBILITY_EMBARGO
+    end
+
+    assert_not item.valid?
+    assert item.errors[:visibility_after_embargo].present?
+    assert_includes item.errors[:visibility_after_embargo], "can't be blank"
+  end
+
+  test 'visibility_after_embargo must be blank for non-embargo visibilities' do
+    item = Item.new_locked_ldp_object
+    item.unlock_and_fetch_ldp_object do |unlocked_item|
+      unlocked_item.visibility = JupiterCore::VISIBILITY_PUBLIC
+      unlocked_item.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].draft
+    end
+
+    assert_not item.valid?
+    assert item.errors[:visibility_after_embargo].present?
+    assert_includes item.errors[:visibility_after_embargo], 'must be blank'
+    # Make sure no controlled vocabulary error
+    refute_includes item.errors[:visibility_after_embargo], 'is not recognized'
+
+    refute item.errors[:visibility].present?
+  end
+
+  test 'visibility_after_embargo must be from the controlled vocabulary' do
+    item = Item.new_locked_ldp_object
+    item.unlock_and_fetch_ldp_object do |unlocked_item|
+      unlocked_item.visibility = Item::VISIBILITY_EMBARGO
+      unlocked_item.visibility_after_embargo = 'whatever'
+    end
+
+    assert_not item.valid?
+    assert item.errors[:visibility_after_embargo].present?
+    assert_includes item.errors[:visibility_after_embargo], 'is not recognized'
     refute item.errors[:visibility].present?
   end
 
@@ -117,16 +161,24 @@ class ItemTest < ActiveSupport::TestCase
     assert_not item.valid?
     assert_includes item.errors[:language], 'is not recognized'
 
-    item = Item.new_locked_ldp_object(language: ['http://id.loc.gov/vocabulary/iso639-2/eng'])
+    item = Item.new_locked_ldp_object(language: [CONTROLLED_VOCABULARIES[:language].eng])
     assert_not item.valid?
     refute_includes item.errors.keys, :language
   end
 
-  test 'a license must be present' do
+  test 'a license or rights statement must be present' do
     item = Item.new_locked_ldp_object
 
     assert_not item.valid?
-    assert_includes item.errors[:license], "can't be blank"
+    assert_includes item.errors[:base], 'must have either a license or a rights statement'
+  end
+
+  test 'a rights statement must not be present if a license is present' do
+    item = Item.new_locked_ldp_object(rights: 'Share my work with everybody',
+                                      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international)
+
+    assert_not item.valid?
+    assert_includes item.errors[:base], 'should not have both a license and a rights statement'
   end
 
   test 'a license must be from the controlled vocabulary' do
@@ -134,9 +186,41 @@ class ItemTest < ActiveSupport::TestCase
     assert_not item.valid?
     assert_includes item.errors[:license], 'is not recognized'
 
-    item = Item.new_locked_ldp_object(license: 'http://creativecommons.org/licenses/by/4.0/')
+    item = Item.new_locked_ldp_object(license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international)
     assert_not item.valid?
     refute_includes item.errors.keys, :license
+  end
+
+  test 'an item type is required' do
+    item = Item.new_locked_ldp_object
+    assert_not item.valid?
+    assert_includes item.errors[:item_type], "can't be blank"
+  end
+
+  test 'an item type must come from the controlled vocabulary' do
+    item = Item.new_locked_ldp_object(item_type: 'whatever')
+    assert_not item.valid?
+    assert_includes item.errors[:item_type], 'is not recognized'
+  end
+
+  test 'publication status is needed for articles' do
+    item = Item.new_locked_ldp_object(item_type: CONTROLLED_VOCABULARIES[:item_type].article)
+    assert_not item.valid?
+    assert_includes item.errors[:publication_status], 'is required for articles'
+  end
+
+  test 'publication status must come from controlled vocabulary' do
+    item = Item.new_locked_ldp_object(item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                                      publication_status: 'whatever')
+    assert_not item.valid?
+    assert_includes item.errors[:publication_status], 'is not recognized'
+  end
+
+  test 'publication status must be absent for non-articles' do
+    item = Item.new_locked_ldp_object(item_type: CONTROLLED_VOCABULARIES[:item_type].book,
+                                      publication_status: CONTROLLED_VOCABULARIES[:publication_status].published)
+    assert_not item.valid?
+    assert_includes item.errors[:publication_status], 'must be absent for non-articles'
   end
 
 end
