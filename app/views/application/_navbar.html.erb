@@ -1,14 +1,18 @@
 <header class="navbar navbar-dark fixed-top navbar-expand-md bg-primary">
   <nav class="container">
 
+
+    <a id="skip" class="sr-only sr-only-focusable" href="#content">
+      <div class="container">
+        <span class="skiplink-text"><%= t('.skip_to_main_content')%></span>
+      </div>
+    </a>
+
     <%= link_to root_path, class: 'navbar-brand' do %>
       <%# TODO: temporary logo for now...replace me! %>
       <%= image_tag 'mc_360.png', width: '30', height: '30', class: 'd-inline-block align-top', alt: t('.logo_alt') %>
       <%= t('site_name') %>
     <% end %>
-    <div id ="skiptocontent">
-      <%= link_to t('.skip_to_main_content'), '#main', id:"skip-nav" %>
-    </div>
 
     <button type="button"
             class="navbar-toggler"
