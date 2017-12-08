@@ -13,7 +13,7 @@ class Collection < JupiterCore::LockedLdpObject
 
   has_attribute :description, ::RDF::Vocab::DC.description, solrize_for: [:search]
   has_multival_attribute :creator, ::RDF::Vocab::DC.creator, solrize_for: :exact_match
-  has_attribute :fedora3_uuid, ::VOCABULARY[:ual].fedora3uuid, solrize_for: :exact_match
+  has_attribute :fedora3_uuid, ::TERMS[:ual].fedora3uuid, solrize_for: :exact_match
 
   additional_search_index :community_title, solrize_for: :sort,
                                             as: -> { Community.find_by(id: community_id)&.title }
