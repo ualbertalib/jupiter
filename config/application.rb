@@ -30,5 +30,8 @@ module Jupiter
     # Set ActiveJob adapter
     config.active_job.queue_adapter = :sidekiq
 
+    # Run skylight in UAT for performance metric monitoring pre-launch
+    config.skylight.environments += ['uat']
+
   end
 end

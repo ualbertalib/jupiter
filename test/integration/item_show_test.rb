@@ -22,9 +22,11 @@ class ItemShowTest < ActionDispatch::IntegrationTest
     @item1 = Item.new_locked_ldp_object.unlock_and_fetch_ldp_object do |uo|
       uo.title = 'Fantastic item'
       uo.owner = 1
-      uo.visibility = 'public'
-      uo.language = ['http://id.loc.gov/vocabulary/iso639-2/eng']
-      uo.license = 'http://creativecommons.org/licenses/by/4.0/'
+      uo.visibility = JupiterCore::VISIBILITY_PUBLIC
+      uo.language = [CONTROLLED_VOCABULARIES[:language].eng]
+      uo.license = CONTROLLED_VOCABULARIES[:license].attribution_4_0_international
+      uo.item_type = CONTROLLED_VOCABULARIES[:item_type].article
+      uo.publication_status = CONTROLLED_VOCABULARIES[:publication_status].draft
       uo.add_to_path(@community1.id, @collection1.id)
       uo.add_to_path(@community1.id, @collection2.id)
       uo.save!
