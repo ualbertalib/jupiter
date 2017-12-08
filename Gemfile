@@ -49,6 +49,9 @@ gem 'sinatra' # used by sidekiq/web
 gem 'kaminari'
 gem 'ransack'
 
+# Performance monitoring
+gem 'skylight'
+
 # Seeds
 group :development, :test, :uat do
   gem 'faker', require: false
