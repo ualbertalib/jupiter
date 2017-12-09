@@ -12,7 +12,7 @@ class Collection < JupiterCore::LockedLdpObject
                 solrize_for: :pathing
 
   has_attribute :description, ::RDF::Vocab::DC.description, solrize_for: [:search]
-  has_multival_attribute :creator, ::RDF::Vocab::DC.creator, solrize_for: :exact_match
+  has_multival_attribute :creators, ::RDF::Vocab::DC.creator, solrize_for: :exact_match
   has_attribute :fedora3_uuid, ::TERMS[:ual].fedora3uuid, solrize_for: :exact_match
 
   additional_search_index :community_title, solrize_for: :sort,
