@@ -21,7 +21,7 @@ class Items::DraftController < ApplicationController
   def update
     @draft_item = DraftItem.find(params[:item_id])
     authorize @draft_item
-
+    params[:draft_item] ||= {}
     params[:draft_item][:wizard_step] = DraftItem.wizard_steps[step]
     params[:draft_item][:status] = DraftItem.statuses[:active]
 
@@ -33,12 +33,18 @@ class Items::DraftController < ApplicationController
 
       # TODO: save tags, and do a bunch of has_many magic with creating tags on the fly
     when :upload_files
-      # TODO: handle ajax of file uploads
+      # ActiveStorage broken (or is it dropzone)? Need to loop through all files and save them individually
+      # Shouldn't have to do this
+      if params[:draft_item][:files].present?
+        params[:draft_item][:files].each do |file|
+          @draft_item.files.attach(params[:draft_item][:files][file])
+        end
+      end
     when :review_and_deposit_item
       params[:draft_item][:status] = DraftItem.statuses[:archived]
     end
 
-    @draft_item.update_attributes(permitted_attributes(DraftItem))
+    # @draft_item.update_attributes(permitted_attributes(DraftItem))
 
     render_wizard @draft_item
   end

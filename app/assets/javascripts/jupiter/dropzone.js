@@ -13,7 +13,7 @@ $(document).on('turbolinks:load', function() {
 
 
     var myDropzone = new Dropzone('form.js-dropzone', {
-      paramName: 'item[files]',
+      paramName: 'draft_item[files]',
       thumbnailWidth: 80,
       thumbnailHeight: 80,
       parallelUploads: 100,

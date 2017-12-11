@@ -9,11 +9,8 @@
 
 <%# TODO: Need to figure out data model and migrate everything to use form_for and it's helpers
 = form_for @item, url: wizard_path, method: :put, class:'js-deposit-item' do |f| %>
-<%= form_tag wizard_path,
-             method: :put,
-             multipart: true,
-             class:'js-deposit-item js-dropzone' do %>
 
+<%= simple_form_for @draft_item, url: wizard_path, method: :put, html: {  multipart: true, class:'js-deposit-item js-dropzone' } do |f| %>
   <div class="row">
     <div class="col">
       <button type="button" class="btn btn-primary js-add-files">
@@ -58,6 +55,10 @@
       <h5> <%= t('.drag_and_drop_files') %></h5>
       <p> <%= t('.thumbnail_of_first_file') %></p>
     </div>
+  </div>
+
+  <div class="fallback">
+    <%= f.file_field :files, multiple: true %>
   </div>
 
   <div class="mt-3 pull-right">

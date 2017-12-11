@@ -15,9 +15,14 @@
   <%# should generalize item show page and rerender here and passing in object %>
   <div class="row">
     <div class="col-md-4">
-      <div class="text-muted text-center img-thumbnail p-5 mb-3">
-        <%= fa_icon 'picture-o', class: 'fa-5x' %>
-      </div>
+
+      <% if @draft_item.files.first.url.present? %>
+        <%= image_tag @draft_item.files.first.url, alt: 'Preview Image', class: 'img-thumbnail' %>
+      <% else %>
+        <div class="text-muted text-center img-thumbnail p-5 mb-3">
+          <%= fa_icon 'picture-o', class: 'fa-5x' %>
+        </div>
+      <% end %>
 
       <div class="card mb-3">
         <div class="card-header">
@@ -29,21 +34,15 @@
         </div>
         <div class="card-body">
           <ul class="list-group">
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-              <%= fa_icon 'file-o' %>
-              Filename.pdf
-              <span class="badge badge-primary badge-pill">7.4 MB</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-              <%= fa_icon 'file-o' %>
-              Filename.pdf
-              <span class="badge badge-primary badge-pill">23.2 MB</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-              <%= fa_icon 'file-o' %>
-              Filename.img
-              <span class="badge badge-primary badge-pill">256 KB</span>
-            </li>
+            <%- @draft_item.files.each do |file|%>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <%= fa_icon 'file-o' %>
+                <%=file.filename %>
+                <span class="badge badge-primary badge-pill">
+                 <%= number_to_human_size(file.byte_size) %>
+                </span>
+              </li>
+            <% end %>
           </ul>
         </div>
       </div>
@@ -57,7 +56,7 @@
         </div>
         <div class="card-body">
           <h4 class="card-title">License</h4>
-          <p class="card-text"><%=  t('items.draft.choose_license_and_visibility.license.attribution_noncommercial_html') %></p>
+          <p class="card-text"><%=  t('items.draft.choose_license_and_visibility.license.attribution_non_commercial_html') %></p>
           <h4 class="card-title">Visibility</h4>
           <p class="card-text">Open Access</p>
         </div>

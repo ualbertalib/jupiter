@@ -19,6 +19,8 @@ class DraftItem < ApplicationRecord
                      embargo: 1,
                      authenticated: 2 }
 
+  has_many_attached :files
+
   has_many :draft_items_languages, dependent: :destroy
   has_many :draft_items_creators, dependent: :destroy
   has_many :draft_items_subjects, dependent: :destroy
