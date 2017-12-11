@@ -433,7 +433,7 @@ en:
             or contact <a href="mailto:erahelp@ualberta.ca">erahelp@ualberta.ca</a>'
         visibility:
           header: 'Visibility'
-          open_access: 'Open access now (will be seen by everyone)'
+          open_access: 'Open access (will be seen by everyone)'
           embargo: 'Will be open access on'
           authenticated: 'CCID Protected'
           private: 'Private'

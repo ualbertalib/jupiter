@@ -34,7 +34,7 @@
         </div>
         <div class="card-body">
           <ul class="list-group">
-            <%- @draft_item.files.each do |file|%>
+            <% @draft_item.files.each do |file|%>
               <li class="list-group-item d-flex justify-content-between align-items-center">
                 <%= fa_icon 'file-o' %>
                 <%=file.filename %>
@@ -56,9 +56,9 @@
         </div>
         <div class="card-body">
           <h4 class="card-title">License</h4>
-          <p class="card-text"><%=  t('items.draft.choose_license_and_visibility.license.attribution_non_commercial_html') %></p>
+          <p class="card-text"><%= t("items.draft.choose_license_and_visibility.license.#{@draft_item.license}_html") %></p>
           <h4 class="card-title">Visibility</h4>
-          <p class="card-text">Open Access</p>
+          <p class="card-text"><%= t("items.draft.choose_license_and_visibility.visibility.#{@draft_item.visibility}") %></p>
         </div>
       </div>
     </div>
