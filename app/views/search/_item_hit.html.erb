@@ -37,8 +37,7 @@
                         &.join(', ')&.html_safe %>
     </div>
     <div>
-      <%# TODO: for long description, implement 'more ...' / 'less ...' %>
-      <%= result.description %>
+      <%= truncate result.description, length: SearchHelper::DESCRIPTION_DISPLAY_MAX, separator: ' ' %>
     </div>
   </div>
 </div>

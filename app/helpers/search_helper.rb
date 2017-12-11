@@ -1,4 +1,6 @@
 module SearchHelper
+  DESCRIPTION_DISPLAY_MAX = 300
+
   def search_params_hash
     # Search controller uses param[:search], all others use params[:query]
     params.permit(:search, :query, { facets: {} }, :tab, :sort, :direction).to_h
