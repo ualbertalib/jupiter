@@ -1,18 +1,18 @@
-module CollectionItemSearch
+module ItemSearch
   extend ActiveSupport::Concern
 
   # How many facets are shown before it says 'Show more ...'
   MAX_FACETS = 6
 
-  included do
-    before_action :item_search_setup, only: :show
-  end
-
   private
 
-  def item_search_setup
+  def item_search_setup(base_query = nil)
     @max_facets = MAX_FACETS
-    query = ["member_of_paths_dpsim:#{@collection.path}"]
+    query = if base_query.present?
+              [base_query]
+            else
+              []
+            end
     query.append(params[:query]) if params[:query].present?
     options = { q: query, models: [Item], as: current_user }
     options[:facets] = params[:facets]

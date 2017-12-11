@@ -1,13 +1,13 @@
 class Admin::CollectionsController < Admin::AdminController
 
+  include ItemSearch
+
   before_action :fetch_community
   before_action :fetch_collection, only: [:show, :edit, :update, :destroy]
 
-  # Collection must be fetched before we include this ...
-  include CollectionItemSearch
-
   def show
     respond_to do |format|
+      item_search_setup(Item.search_term_for(:member_of_paths, @collection.path, role: :pathing))
       format.html { render template: 'collections/show' }
     end
   end
