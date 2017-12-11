@@ -11,7 +11,7 @@ class ItemTest < ActiveSupport::TestCase
                                                   community_id: community.id)
     collection.unlock_and_fetch_ldp_object(&:save!)
     item = Item.new_locked_ldp_object(title: 'Item', owner: 1, visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                      language: [CONTROLLED_VOCABULARIES[:language].eng],
+                                      languages: [CONTROLLED_VOCABULARIES[:language].eng],
                                       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
                                       item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                       publication_status: CONTROLLED_VOCABULARIES[:publication_status].draft)
@@ -42,6 +42,17 @@ class ItemTest < ActiveSupport::TestCase
 
   test 'embargo is a valid visibility for items' do
     assert_includes Item.valid_visibilities, Item::VISIBILITY_EMBARGO
+  end
+
+  test 'created allows fuzzy dates' do
+    item = Item.new_locked_ldp_object
+    assert_nothing_raised do
+      item.unlock_and_fetch_ldp_object do |unlocked_item|
+        unlocked_item.created = 'before 1997 or after 2084'
+      end
+    end
+    assert_not item.valid?
+    assert_equal '1997', item.sort_year
   end
 
   test 'embargo_end_date must be present if visibility is embargo' do
@@ -153,17 +164,17 @@ class ItemTest < ActiveSupport::TestCase
     item = Item.new_locked_ldp_object
 
     assert_not item.valid?
-    assert_includes item.errors[:language], "can't be blank"
+    assert_includes item.errors[:languages], "can't be blank"
   end
 
   test 'a language must be from the controlled vocabulary' do
-    item = Item.new_locked_ldp_object(language: ['whatever'])
+    item = Item.new_locked_ldp_object(languages: ['whatever'])
     assert_not item.valid?
-    assert_includes item.errors[:language], 'is not recognized'
+    assert_includes item.errors[:languages], 'is not recognized'
 
-    item = Item.new_locked_ldp_object(language: [CONTROLLED_VOCABULARIES[:language].eng])
+    item = Item.new_locked_ldp_object(languages: [CONTROLLED_VOCABULARIES[:language].eng])
     assert_not item.valid?
-    refute_includes item.errors.keys, :language
+    refute_includes item.errors.keys, :languages
   end
 
   test 'a license or rights statement must be present' do

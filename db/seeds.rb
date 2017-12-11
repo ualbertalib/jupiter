@@ -113,13 +113,13 @@ if Rails.env.development? || Rails.env.uat?
         licence_right = {}
         attributes = {
           owner: admin.id,
-          creator: creator.uniq,
-          contributor: [contributors[rand(10)]],
+          creators: creator.uniq,
+          contributors: [contributors[rand(10)]],
           created: (Time.now - rand(20_000).days).to_s,
           visibility: JupiterCore::VISIBILITY_PUBLIC,
           title: "The effects of #{Faker::Beer.name} on #{thing.pluralize}",
           description: description,
-          language: [language],
+          languages: [language],
         }
         if seed % 10 < 7
           attributes[:license] = CONTROLLED_VOCABULARIES[:license].attribution_4_0_international
@@ -146,7 +146,7 @@ if Rails.env.development? || Rails.env.uat?
         visibility: JupiterCore::VISIBILITY_PRIVATE,
         title: "Private #{thing.pluralize}, public lives: a survey of social media trends",
         description: Faker::Lorem.sentence(20, false, 0).chop,
-        language: [CONTROLLED_VOCABULARIES[:language].eng],
+        languages: [CONTROLLED_VOCABULARIES[:language].eng],
         license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
         item_type: CONTROLLED_VOCABULARIES[:item_type].chapter
       ).unlock_and_fetch_ldp_object do |uo|
@@ -160,7 +160,7 @@ if Rails.env.development? || Rails.env.uat?
         visibility: Item::VISIBILITY_EMBARGO,
         title: "Embargo and #{Faker::Address.country}: were the #{thing.pluralize} left behind?",
         description: Faker::Lorem.sentence(20, false, 0).chop,
-        language: [CONTROLLED_VOCABULARIES[:language].eng],
+        languages: [CONTROLLED_VOCABULARIES[:language].eng],
         license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
         item_type: CONTROLLED_VOCABULARIES[:item_type].conference_paper
       ).unlock_and_fetch_ldp_object do |uo|
@@ -176,7 +176,7 @@ if Rails.env.development? || Rails.env.uat?
         visibility: Item::VISIBILITY_EMBARGO,
         title: "Former embargo of #{Faker::Address.country}: the day the #{thing.pluralize} were free",
         description: Faker::Lorem.sentence(20, false, 0).chop,
-        language: [CONTROLLED_VOCABULARIES[:language].eng],
+        languages: [CONTROLLED_VOCABULARIES[:language].eng],
         license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
         item_type: CONTROLLED_VOCABULARIES[:item_type].dataset
       ).unlock_and_fetch_ldp_object do |uo|
@@ -192,7 +192,7 @@ if Rails.env.development? || Rails.env.uat?
         visibility: JupiterCore::VISIBILITY_PUBLIC,
         title: "Impact of non-admin users on #{thing.pluralize}",
         description: Faker::Lorem.sentence(20, false, 0).chop,
-        language: [CONTROLLED_VOCABULARIES[:language].eng],
+        languages: [CONTROLLED_VOCABULARIES[:language].eng],
         license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
         item_type: CONTROLLED_VOCABULARIES[:item_type].learning_object
       ).unlock_and_fetch_ldp_object do |uo|
@@ -209,7 +209,7 @@ if Rails.env.development? || Rails.env.uat?
       title: "Multi-collection random images of #{thing.pluralize}",
       description: Faker::Lorem.sentence(20, false, 0).chop,
       # No linguistic content
-      language: [CONTROLLED_VOCABULARIES[:language].zxx],
+      languages: [CONTROLLED_VOCABULARIES[:language].zxx],
       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
       item_type: CONTROLLED_VOCABULARIES[:item_type].image
     ).unlock_and_fetch_ldp_object do |uo|

@@ -11,15 +11,15 @@ class Item < JupiterCore::LockedLdpObject
 
   # Dublin Core attributes
   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :sort]
-  has_multival_attribute :creator, ::RDF::Vocab::DC.creator, solrize_for: [:search, :facet]
-  has_multival_attribute :contributor, ::RDF::Vocab::DC.contributor, solrize_for: [:search, :facet]
+  has_multival_attribute :creators, ::RDF::Vocab::DC.creator, solrize_for: [:search, :facet]
+  has_multival_attribute :contributors, ::RDF::Vocab::DC.contributor, solrize_for: [:search, :facet]
   has_attribute :created, ::RDF::Vocab::DC.created, solrize_for: [:search, :sort]
   has_attribute :sort_year, ::TERMS[:ual].sortyear, solrize_for: [:search, :sort, :facet]
   has_multival_attribute :subject, ::RDF::Vocab::DC.subject, solrize_for: [:search, :facet]
   has_attribute :description, ::RDF::Vocab::DC.description, type: :text, solrize_for: :search
   has_attribute :publisher, ::RDF::Vocab::DC.publisher, solrize_for: [:search, :facet]
   # has_attribute :date_modified, ::RDF::Vocab::DC.modified, type: :date, solrize_for: :sort
-  has_multival_attribute :language, ::RDF::Vocab::DC.language, solrize_for: [:search, :facet]
+  has_multival_attribute :languages, ::RDF::Vocab::DC.language, solrize_for: [:search, :facet]
   has_attribute :embargo_end_date, ::RDF::Vocab::DC.available, type: :date, solrize_for: [:sort]
   has_attribute :license, ::RDF::Vocab::DC.license, solrize_for: [:search]
   has_attribute :rights, ::RDF::Vocab::DC.rights, solrize_for: :exact_match
@@ -100,7 +100,7 @@ class Item < JupiterCore::LockedLdpObject
     validates :visibility_after_embargo, absence: true, if: ->(item) { item.visibility != VISIBILITY_EMBARGO }
     validates :member_of_paths, presence: true
     validates :title, presence: true
-    validates :language, presence: true
+    validates :languages, presence: true
     validates :item_type, presence: true
     validate :communities_and_collections_validations
     validate :language_validations
@@ -110,7 +110,13 @@ class Item < JupiterCore::LockedLdpObject
 
     before_validation do
       # TODO: for theses, the sort_year attribute should be derived from ual:graduationDate
-      self.sort_year = Date.parse(created).year.to_s if created.present?
+      begin
+        self.sort_year = Date.parse(created).year.to_s if created.present?
+      rescue ArgumentError
+        # date was unparsable, try to pull out the first 4 digit number as a year
+        capture = created.scan(/\d{4}/)
+        self.sort_year = capture[0] if capture.present?
+      end
     end
 
     def communities_and_collections_validations
@@ -169,8 +175,8 @@ class Item < JupiterCore::LockedLdpObject
     end
 
     def language_validations
-      language.each do |lang|
-        uri_validation(lang, :language)
+      languages.each do |lang|
+        uri_validation(lang, :languages, :language)
       end
     end
 
