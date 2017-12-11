@@ -12,12 +12,24 @@ class LockedLdpObjectPolicy < ApplicationPolicy
   end
 
   def owned?
-    return false unless user.present? && user.id.present?
+    return false unless user_is_authenticated?
     record.owner == user.id
   end
 
   def public?
     record.public?
+  end
+
+  def record_requires_authentication?
+    record.authenticated?
+  end
+
+  def user_is_authenticated?
+    user.present? && user.id.present?
+  end
+
+  def user_is_authenticated_for_record?
+    user_is_authenticated? && record_requires_authentication?
   end
 
 end
