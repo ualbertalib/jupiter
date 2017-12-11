@@ -97,7 +97,7 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
       Item.new_locked_ldp_object(
         title: 'thesis blocking deletion',
         owner: 1,
-        language: [CONTROLLED_VOCABULARIES[:language].eng],
+        languages: [CONTROLLED_VOCABULARIES[:language].eng],
         license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
         visibility: JupiterCore::VISIBILITY_PRIVATE,
         item_type: CONTROLLED_VOCABULARIES[:item_type].article,
