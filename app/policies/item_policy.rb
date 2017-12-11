@@ -25,7 +25,7 @@ class ItemPolicy < LockedLdpObjectPolicy
   end
 
   def download?
-    show?
+    admin? || owned? || public? || user_is_authenticated_for_record?
   end
 
 end
