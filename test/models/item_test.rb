@@ -44,6 +44,17 @@ class ItemTest < ActiveSupport::TestCase
     assert_includes Item.valid_visibilities, Item::VISIBILITY_EMBARGO
   end
 
+  test 'created allows fuzzy dates' do
+    item = Item.new_locked_ldp_object
+    assert_nothing_raised do
+      item.unlock_and_fetch_ldp_object do |unlocked_item|
+        unlocked_item.created = 'before 1997 or after 2084'
+      end
+    end
+    assert_not item.valid?
+    assert_equal '1997', item.sort_year
+  end
+
   test 'embargo_end_date must be present if visibility is embargo' do
     item = Item.new_locked_ldp_object
     item.unlock_and_fetch_ldp_object do |unlocked_item|
