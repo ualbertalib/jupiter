@@ -110,7 +110,13 @@ class Item < JupiterCore::LockedLdpObject
 
     before_validation do
       # TODO: for theses, the sort_year attribute should be derived from ual:graduationDate
-      self.sort_year = Date.parse(created).year.to_s if created.present?
+      begin
+        self.sort_year = Date.parse(created).year.to_s if created.present?
+      rescue ArgumentError
+        # date was unparsable, try to pull out the first 4 digit number as a year
+        capture = created.scan(/\d{4}/)
+        self.sort_year = capture[0] if capture.present?
+      end
     end
 
     def communities_and_collections_validations
