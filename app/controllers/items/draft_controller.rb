@@ -10,10 +10,6 @@ class Items::DraftController < ApplicationController
 
     case wizard_value(step)
     when :describe_item
-      @communities = Community.all
-      if @draft_item.community_and_collections['community_id']
-        @community = Community.find(@draft_item.community_and_collections['community_id'])
-      end
     when 'wicked_finish'
       flash[:notice] = 'Success!'
     end
@@ -30,11 +26,10 @@ class Items::DraftController < ApplicationController
 
     case wizard_value(step)
     when :describe_item
+      community_id = params[:draft_item].delete :community_id
+      collection_id = params[:draft_item].delete :collection_id
 
-      community = params[:draft_item].delete :community_id
-      collection = params[:draft_item].delete :collection_id
-
-      @draft_item.community_and_collections = { community_id: community, collection_id: collection }
+      @draft_item.member_of_paths = { 'community_id' => community_id, 'collection_id' => collection_id }
     when :upload_files
       # ActiveStorage broken (or is it dropzone)? Need to loop through all files and save them individually
       # Shouldn't have to do this
@@ -48,6 +43,7 @@ class Items::DraftController < ApplicationController
     end
 
     @draft_item.update_attributes(permitted_attributes(DraftItem))
+
 
     render_wizard @draft_item
   end

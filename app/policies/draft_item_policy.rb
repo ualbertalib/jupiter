@@ -20,7 +20,7 @@ class DraftItemPolicy < ApplicationPolicy
     [:title, :alternate_title, :type_id,
      :date_created, :description,
      :source, :related_item,
-     :license, :license_text_area, :visibility, :embargo_date,
+     :license, :license_text_area, :visibility, :embargo_end_date,
      :status, :wizard_step,
      language_ids: [], creators: [], subjects: [],
      contributors: [], places: [], time_periods: [], citations: []]

@@ -113,8 +113,14 @@
         <span class="text-danger font-weight-bold">*</span>
         <%= t('.community') %>
       </label>
+
+      <% @community = Community.find(@draft_item.member_of_paths['community_id']) if @draft_item.member_of_paths.present? %>
       <%= select_tag 'draft_item[community_id]',
-                      options_from_collection_for_select(Community.all, :id, :title, @community.id),
+                      options_from_collection_for_select(
+                        Community.all,
+                        :id,
+                        :title,
+                        @community&.id ),
                       prompt: t('.community_placeholder'),
                       class: 'form-control js-community-select' %>
     </div>
@@ -125,7 +131,11 @@
       </label>
       <% if @community.present? %>
             <%= select_tag 'draft_item[collection_id]',
-                           options_from_collection_for_select(@community.member_collections, :id, :title, @draft_item.community_and_collections['collection_id']),
+                           options_from_collection_for_select(
+                             @community.member_collections,
+                             :id,
+                             :title,
+                             @draft_item.member_of_paths['collection_id']),
                            data: { placeholder: t('.collection_placeholder')},
                            class: 'form-control js-collection-select' %>
       <% else %>

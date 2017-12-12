@@ -67,7 +67,7 @@
             <p class="card-text">
               <%= t("items.draft.choose_license_and_visibility.visibility.#{@draft_item.visibility}") %>
               <% if @draft_item.embargo? %>
-                <%= jupiter_time_tag(@draft_item.embargo_date) %>
+                <%= jupiter_time_tag(@draft_item.embargo_end_date) %>
               <% end %>
             </p>
         </div>
@@ -146,47 +146,55 @@
           </h6>
           <ul class="list-unstyled">
             <li>
-              <%= Community.find(@draft_item.community_and_collections['community_id']).title %>
+              <%= Community.find(@draft_item.member_of_paths['community_id']).title %>
               /
-              <%= Collection.find(@draft_item.community_and_collections['collection_id']).title %>
+              <%= Collection.find(@draft_item.member_of_paths['collection_id']).title %>
             </li>
           </ul>
 
-          <h6 class="card-subtitle mb-1 text-muted">
-            <%=  t('items.draft.describe_item.contributors') %>
-          </h6>
-          <ul class="list-unstyled">
-            <% @draft_item.contributors.each do |contributor| %>
-              <li><%= contributor %></li>
-            <% end %>
-          </ul>
+          <% if @draft_item.contributors.present? %>
+            <h6 class="card-subtitle mb-1 text-muted">
+              <%=  t('items.draft.describe_item.contributors') %>
+            </h6>
+            <ul class="list-unstyled">
+              <% @draft_item.contributors.each do |contributor| %>
+                <li><%= contributor %></li>
+              <% end %>
+            </ul>
+          <% end %>
 
-          <h6 class="card-subtitle mb-1 text-muted">
-            <%=  t('items.draft.describe_item.places') %>
-          </h6>
-          <ul class="list-unstyled">
-            <% @draft_item.places.each do |place| %>
-              <li><%= place %></li>
-            <% end %>
-          </ul>
+          <% if @draft_item.places.present? %>
+            <h6 class="card-subtitle mb-1 text-muted">
+              <%=  t('items.draft.describe_item.places') %>
+            </h6>
+            <ul class="list-unstyled">
+              <% @draft_item.places.each do |place| %>
+                <li><%= place %></li>
+              <% end %>
+            </ul>
+          <% end %>
 
-          <h6 class="card-subtitle mb-1 text-muted">
-            <%=  t('items.draft.describe_item.time_periods') %>
-          </h6>
-          <ul class="list-unstyled">
-            <% @draft_item.time_periods.each do |time_period| %>
-              <li><%= time_period %></li>
-            <% end %>
-          </ul>
+          <% if @draft_item.time_periods.present? %>
+            <h6 class="card-subtitle mb-1 text-muted">
+              <%=  t('items.draft.describe_item.time_periods') %>
+            </h6>
+            <ul class="list-unstyled">
+              <% @draft_item.time_periods.each do |time_period| %>
+                <li><%= time_period %></li>
+              <% end %>
+            </ul>
+          <% end %>
 
-          <h6 class="card-subtitle mb-1 text-muted">
-            <%=  t('items.draft.describe_item.citations') %>
-          </h6>
-          <ul class="list-unstyled">
-            <% @draft_item.citations.each do |citation| %>
-              <li><%= citation %></li>
-            <% end %>
-          </ul>
+          <% if @draft_item.citations.present? %>
+            <h6 class="card-subtitle mb-1 text-muted">
+              <%=  t('items.draft.describe_item.citations') %>
+            </h6>
+            <ul class="list-unstyled">
+              <% @draft_item.citations.each do |citation| %>
+                <li><%= citation %></li>
+              <% end %>
+            </ul>
+          <% end %>
 
           <h6 class="card-subtitle mb-1 text-muted">
             <%=  t('items.draft.describe_item.source') %>

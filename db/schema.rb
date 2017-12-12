@@ -47,6 +47,7 @@ ActiveRecord::Schema.define(version: 20171130222838) do
     t.string "uuid"
     t.integer "status", default: 0, null: false
     t.integer "wizard_step", default: 0, null: false
+    t.integer "thumbnail_id"
     t.string "title"
     t.string "alternate_title"
     t.date "date_created"
@@ -56,13 +57,13 @@ ActiveRecord::Schema.define(version: 20171130222838) do
     t.integer "license", default: 0, null: false
     t.text "license_text_area"
     t.integer "visibility", default: 0, null: false
-    t.datetime "embargo_date"
+    t.datetime "embargo_end_date"
+    t.integer "visibility_after_embargo", default: 0, null: false
     t.bigint "type_id"
     t.bigint "user_id", null: false
     t.json "creators"
-    t.json "json"
     t.json "subjects"
-    t.json "community_and_collections"
+    t.json "member_of_paths"
     t.json "contributors"
     t.json "places"
     t.json "time_periods"

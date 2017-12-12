@@ -19,6 +19,10 @@ class DraftItem < ApplicationRecord
                      embargo: 1,
                      authenticated: 2 }
 
+  # Can't reuse same keys as visibility, need to differentiate a bit
+  enum visibility_after_embargo: { opened: 0,
+                                   ccid_protected: 1 }
+
   has_many_attached :files
 
   has_many :draft_items_languages, dependent: :destroy
@@ -31,12 +35,12 @@ class DraftItem < ApplicationRecord
 
   validates :title, :type, :languages,
             :creators, :subjects, :date_created,
-            :description, :community_and_collections,
+            :description, :member_of_paths,
             presence: true, if: :validate_describe_item?
 
   validates :license, :visibility, presence: true, if: :validate_choose_license_and_visibility?
   validates :license_text_area, presence: true, if: :validate_if_license_is_text?
-  validates :embargo_date, presence: true, if: :validate_if_visibility_is_embargo?
+  validates :embargo_end_date, presence: true, if: :validate_if_visibility_is_embargo?
 
   validates :files, presence: true, if: :validate_upload_files?
 
