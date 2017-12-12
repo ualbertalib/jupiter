@@ -56,9 +56,20 @@
         </div>
         <div class="card-body">
           <h4 class="card-title">License</h4>
-          <p class="card-text"><%= t("items.draft.choose_license_and_visibility.license.#{@draft_item.license}_html") %></p>
+          <p class="card-text">
+            <% if @draft_item.license_text? %>
+              <%= @draft_item.license_text_area %>
+            <% else %>
+              <%= t("items.draft.choose_license_and_visibility.license.#{@draft_item.license}_html") %>
+            <% end %>
+          </p>
           <h4 class="card-title">Visibility</h4>
-          <p class="card-text"><%= t("items.draft.choose_license_and_visibility.visibility.#{@draft_item.visibility}") %></p>
+            <p class="card-text">
+              <%= t("items.draft.choose_license_and_visibility.visibility.#{@draft_item.visibility}") %>
+              <% if @draft_item.embargo? %>
+                <%= jupiter_time_tag(@draft_item.embargo_date) %>
+              <% end %>
+            </p>
         </div>
       </div>
     </div>
@@ -75,119 +86,120 @@
           <h6 class="card-subtitle mb-1 text-muted">
             <%=  t('items.draft.describe_item.title') %>
           </h6>
-          <p class="card-text">An article regarding bears</p>
+          <p class="card-text"><%= @draft_item.title %></p>
 
           <h6 class="card-subtitle mb-1 text-muted">
             <%=  t('items.draft.describe_item.alternate_title') %>
           </h6>
-          <p class="card-text">10 amazing facts about polar bears</p>
+          <p class="card-text"><%= @draft_item.alternate_title %></p>
 
           <h6 class="card-subtitle mb-1 text-muted">
             <%=  t('items.draft.describe_item.type_id') %>
           </h6>
           <p class="card-text">
-            Article
+            <%= @draft_item.type.translated_name %>
           </p>
 
           <h6 class="card-subtitle mb-1 text-muted">
             <%=  t('items.draft.describe_item.languages') %>
           </h6>
           <ul class="list-unstyled">
-            <li>English</li>
-            <li>French</li>
-            <li>Other</li>
+            <% @draft_item.languages.each do |language| %>
+            <li><%= language.translated_name %></li>
+            <% end %>
           </ul>
 
           <h6 class="card-subtitle mb-1 text-muted">
             <%=  t('items.draft.describe_item.creators') %>
           </h6>
           <ul class="list-unstyled">
-            <li>Jane Doe</li>
-            <li>Mark Smith</li>
+            <% @draft_item.creators.each do |creator| %>
+            <li><%= creator %></li>
+            <% end %>
           </ul>
 
           <h6 class="card-subtitle mb-1 text-muted">
             <%=  t('items.draft.describe_item.subjects') %>
           </h6>
           <ul class="list-unstyled">
-            <li>Polar Bear</li>
-            <li>Grizzly Bear</li>
+            <% @draft_item.subjects.each do |subject| %>
+            <li><%= subject %></li>
+            <% end %>
           </ul>
 
           <h6 class="card-subtitle mb-1 text-muted">
             <%=  t('items.draft.describe_item.date_created') %>
           </h6>
           <p class="card-text">
-            30-03-1900
+            <%= @draft_item.date_created %>
           </p>
 
           <h6 class="card-subtitle mb-1 text-muted">
             <%=  t('items.draft.describe_item.description') %>
           </h6>
           <p class="card-text">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            Donec euismod urna nec eros rutrum, ut facilisis metus venenatis.
-            Nullam eu nisl volutpat nunc porta imperdiet.
-            Mauris ultricies lacus nec dui dapibus congue vitae vel massa.
-            Cras ipsum lectus, imperdiet at tortor vel, viverra dignissim orci.
-            Phasellus placerat convallis aliquam. Aliquam ornare elementum sem vel vulputate.
-            Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
-            Nulla facilisi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;
-            Suspendisse ultricies mi at rutrum tincidunt.
+            <%= @draft_item.description %>
           </p>
 
           <h6 class="card-subtitle mb-1 text-muted">
             <%=  t('items.draft.describe_item.community_and_collection') %>
           </h6>
           <ul class="list-unstyled">
-            <li>The Department of Librarian / Theses about Librarians</li>
+            <li>
+              <%= Community.find(@draft_item.community_and_collections['community_id']).title %>
+              /
+              <%= Collection.find(@draft_item.community_and_collections['collection_id']).title %>
+            </li>
           </ul>
 
           <h6 class="card-subtitle mb-1 text-muted">
             <%=  t('items.draft.describe_item.contributors') %>
           </h6>
           <ul class="list-unstyled">
-            <li>Waylon Dalton</li>
-            <li>Justine Henderson</li>
-            <li>Marcus Cruz</li>
+            <% @draft_item.contributors.each do |contributor| %>
+              <li><%= contributor %></li>
+            <% end %>
           </ul>
 
           <h6 class="card-subtitle mb-1 text-muted">
             <%=  t('items.draft.describe_item.places') %>
           </h6>
           <ul class="list-unstyled">
-            <li>Alaska</li>
-            <li>Canada</li>
+            <% @draft_item.places.each do |place| %>
+              <li><%= place %></li>
+            <% end %>
           </ul>
 
           <h6 class="card-subtitle mb-1 text-muted">
             <%=  t('items.draft.describe_item.time_periods') %>
           </h6>
           <ul class="list-unstyled">
-            <li>World War II</li>
-            <li>1900s</li>
+            <% @draft_item.time_periods.each do |time_period| %>
+              <li><%= time_period %></li>
+            <% end %>
           </ul>
 
           <h6 class="card-subtitle mb-1 text-muted">
             <%=  t('items.draft.describe_item.citations') %>
           </h6>
           <ul class="list-unstyled">
-            <li>Stirling, I. Polar bear. Canadian Wildlife Service, 2002.</li>
-            <li>Stone, Jason, et al. Polar bear. Blackbirch Press, 2000.</li>
+            <% @draft_item.citations.each do |citation| %>
+              <li><%= citation %></li>
+            <% end %>
           </ul>
 
           <h6 class="card-subtitle mb-1 text-muted">
             <%=  t('items.draft.describe_item.source') %>
           </h6>
           <p class="card-text">
-            National Geographic
+            <%= @draft_item.source %>
           </p>
 
           <h6 class="card-subtitle mb-1 text-muted">
             <%=  t('items.draft.describe_item.related_item') %>
           </h6>
           <p class="card-text">
-            https://era.library.ca/files/blahblah
+            <%= @draft_item.related_item %>
           </p>
         </div>
       </div>

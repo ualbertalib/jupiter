@@ -47,12 +47,12 @@
       required: true,
       prompt: '' %>
 
-  <%= f.association :creators,
+  <%= f.input :creators,
       label: t('.creators'),
-      label_method: :name,
-      value_method: :id,
-      multiple: true,
+      collection: @draft_item.creators || [],
+      include_hidden: false, # TODO: figure out this, need to parse empty strings out in model
       input_html: {
+        multiple: true,
         data: { tags: true, placeholder: t('.creators_placeholder') },
         class: 'js-select2'
       },
@@ -63,12 +63,12 @@
       prompt: '',
       hint: t('.creators_help') %>
 
-  <%= f.association :subjects,
+  <%= f.input :subjects,
       label: t('.subjects'),
-      label_method: :name,
-      value_method: :id,
-      multiple: true,
+      collection: @draft_item.subjects || [],
+      include_hidden: false,
       input_html: {
+        multiple: true,
         data: { tags: true, placeholder: t('.subjects_placeholder') },
         class: 'js-select2'
       },
@@ -101,6 +101,7 @@
               required: true %>
 
   <fieldset>
+    <%# TODO: Handle displaying of error here when no community/collection is provided %>
     <legend class="mb-0">
       <%= t('.community_and_collection') %>
     </legend>
@@ -113,7 +114,7 @@
         <%= t('.community') %>
       </label>
       <%= select_tag 'draft_item[community_id]',
-                      options_from_collection_for_select(Community.all, :id, :title),
+                      options_from_collection_for_select(Community.all, :id, :title, @community.id),
                       prompt: t('.community_placeholder'),
                       class: 'form-control js-community-select' %>
     </div>
@@ -122,11 +123,18 @@
         <span class="text-danger font-weight-bold">*</span>
         <%= t('.collection') %>
       </label>
-      <%= select_tag 'draft_item[collection_id]',
-                      nil,
-                      data: { placeholder: t('.collection_placeholder') },
-                      class: 'form-control js-collection-select',
-                      disabled: true %>
+      <% if @community.present? %>
+            <%= select_tag 'draft_item[collection_id]',
+                           options_from_collection_for_select(@community.member_collections, :id, :title, @draft_item.community_and_collections['collection_id']),
+                           data: { placeholder: t('.collection_placeholder')},
+                           class: 'form-control js-collection-select' %>
+      <% else %>
+        <%= select_tag 'draft_item[collection_id]',
+                        nil,
+                        data: { placeholder: t('.collection_placeholder')},
+                        class: 'form-control js-collection-select',
+                        disabled: true %>
+      <% end %>
     </div>
   </fieldset>
 
@@ -150,48 +158,48 @@
             role="tabpanel"
             aria-labelledby="js-heading-additional-fields">
         <div class="card-body">
-          <%= f.association :contributors,
+          <%= f.input :contributors,
               label: t('.contributors'),
-              label_method: :name,
-              value_method: :id,
-              multiple: true,
+              collection: @draft_item.contributors || [],
+              include_hidden: false,
               input_html: {
+                multiple: true,
                 data: { tags: true, placeholder: t('.contributors_placeholder') },
                 class: 'js-select2'
               },
               include_blank: false,
               hint: t('.contributors_help') %>
 
-          <%= f.association :places,
+          <%= f.input :places,
               label: t('.places'),
-              label_method: :name,
-              value_method: :id,
-              multiple: true,
+              collection: @draft_item.places || [],
+              include_hidden: false,
               input_html: {
+                multiple: true,
                 data: { tags: true, placeholder: t('.places_placeholder') },
                 class: 'js-select2'
               },
               include_blank: false,
               hint: t('.places_help') %>
 
-          <%= f.association :time_periods,
+          <%= f.input :time_periods,
               label: t('.time_periods'),
-              label_method: :name,
-              value_method: :id,
-              multiple: true,
+              collection: @draft_item.time_periods || [],
+              include_hidden: false,
               input_html: {
+                multiple: true,
                 data: { tags: true, placeholder: t('.time_periods_placeholder') },
                 class: 'js-select2'
               },
               include_blank: false,
               hint: t('.time_periods_help_html') %>
 
-          <%= f.association :citations,
+          <%= f.input :citations,
               label: t('.citations'),
-              label_method: :name,
-              value_method: :id,
-              multiple: true,
+              collection: @draft_item.citations || [],
+              include_hidden: false,
               input_html: {
+                multiple: true,
                 data: { tags: true, placeholder: t('.citations_placeholder') },
                 class: 'js-select2'
               },
