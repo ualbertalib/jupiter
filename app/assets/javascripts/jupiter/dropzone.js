@@ -30,10 +30,12 @@ $(document).on('turbolinks:load', function() {
 
         // First change the button to actually tell Dropzone to process the queue.
         this.element.querySelector('button[type=submit]').addEventListener('click', function(e) {
-          // Make sure that the form isn't actually being sent.
-          e.preventDefault();
-          e.stopPropagation();
-          myDropzone.processQueue();
+          if(myDropzone.getQueuedFiles().length > 0){
+            // Make sure that the form isn't actually being sent.
+            e.preventDefault();
+            e.stopPropagation();
+            myDropzone.processQueue();
+          }
         });
 
         // Listen to the sendingmultiple event. In this case, it's the sendingmultiple event instead

@@ -52,13 +52,31 @@
 
   <div class="row">
     <div class="col">
-      <h5> <%= t('.drag_and_drop_files') %></h5>
-      <p> <%= t('.thumbnail_of_first_file') %></p>
+      <ul class="list-unstyled">
+        <% @draft_item.files.each_with_index do |file, index| %>
+          <li class="media my-3 p-3 border">
+            <%= image_tag file.url, alt: 'Preview Image', width:'120', height: '120', class: 'mr-3 img-fluid img-thumbnail' %>
+            <div class="media-body">
+              <div class="pull-right">
+                <button type="button" data-dz-remove class="btn btn-secondary">
+                  <%= fa_icon 'times' %>
+                  <%= t('remove') %>
+                </button>
+              </div>
+              <h5><%= index %> <%=file.filename %></h5>
+              <p><%= number_to_human_size(file.byte_size) %></p>
+            </div>
+          </li>
+        <% end %>
+      </ul>
     </div>
   </div>
 
-  <div class="fallback">
-    <%= f.file_field :files, multiple: true %>
+  <div class="row">
+    <div class="col">
+      <h5> <%= t('.drag_and_drop_files') %></h5>
+      <p> <%= t('.thumbnail_of_first_file') %></p>
+    </div>
   </div>
 
   <div class="mt-3 pull-right">

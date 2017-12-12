@@ -16,7 +16,7 @@
   <div class="row">
     <div class="col-md-4">
 
-      <% if @draft_item.files.first.url.present? %>
+      <% if @draft_item.files&.first&.url.present? %>
         <%= image_tag @draft_item.files.first.url, alt: 'Preview Image', class: 'img-thumbnail' %>
       <% else %>
         <div class="text-muted text-center img-thumbnail p-5 mb-3">
