@@ -46,6 +46,7 @@ class Collection < JupiterCore::LockedLdpObject
     end
 
     before_save do
+      # This adds the `pcdm::memberOf` predicate
       community.unlock_and_fetch_ldp_object do |uo|
         self.member_of_collections += [uo]
       end

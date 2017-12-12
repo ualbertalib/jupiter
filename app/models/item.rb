@@ -119,6 +119,18 @@ class Item < JupiterCore::LockedLdpObject
       end
     end
 
+    before_save do
+      # This adds the `pcdm::memberOf` predicate
+      member_of_paths.each do |path|
+        _community_id, collection_id = path.split('/')
+        collection = Collection.find_by(collection_id)
+
+        collection.unlock_and_fetch_ldp_object do |uo|
+          self.member_of_collections += [uo]
+        end
+      end
+    end
+
     def communities_and_collections_validations
       return if member_of_paths.blank?
       member_of_paths.each do |path|
