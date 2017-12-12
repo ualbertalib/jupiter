@@ -9,7 +9,6 @@ class Items::DraftController < ApplicationController
     authorize @draft_item
 
     case wizard_value(step)
-    when :describe_item
     when 'wicked_finish'
       flash[:notice] = 'Success!'
     end
@@ -43,7 +42,6 @@ class Items::DraftController < ApplicationController
     end
 
     @draft_item.update_attributes(permitted_attributes(DraftItem))
-
 
     render_wizard @draft_item
   end
