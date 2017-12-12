@@ -95,9 +95,10 @@ class SearchTest < ApplicationSystemTestCase
       # Click on facet
       # A checkbox for the facet should be unchecked, and link should turn on face
       path = "#{@community.id}/#{@collections[1].id}"
-      facet_path = search_path(search: 'Fancy', facets: { member_of_paths_dpsim: path })
+      facet_path = search_path(search: 'Fancy', facets: { member_of_paths_dpsim: [path] })
 
       facets = find('div.jupiter-facets')
+
       facet = facets.find_link('a', text: 'Fancy Collection 1', href: facet_path)
       checkbox = facet.find 'input'
       refute checkbox.checked?
@@ -294,7 +295,7 @@ class SearchTest < ApplicationSystemTestCase
       # Click on facet
       # A checkbox for the facet should be unchecked, and link should turn on face
       path = "#{@community.id}/#{@collections[1].id}"
-      facet_path = search_path(search: 'Fancy', facets: { member_of_paths_dpsim: path })
+      facet_path = search_path(search: 'Fancy', facets: { member_of_paths_dpsim: [path] })
 
       facets = find('div.jupiter-facets')
       facet = facets.find_link('a', text: 'Fancy Collection 1', href: facet_path)

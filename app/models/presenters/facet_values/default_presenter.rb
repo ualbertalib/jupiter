@@ -12,7 +12,7 @@ class Presenters::FacetValues::DefaultPresenter
 
   def facet_search_link
     if @active_facets[@solr_index].present? && @active_facets[@solr_index].include?(@value)
-      @view.link_to @view.query_params_without_facet(@solr_index) do
+      @view.link_to @view.query_params_without_facet_value(@solr_index, @value) do
         @view.concat(@view.content_tag(:input, '', type: 'checkbox', 'aria-label' => @value, checked: true,
                                                    class: 'mr-2'))
         @view.concat(display)
