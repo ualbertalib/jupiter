@@ -11,8 +11,11 @@ class Item < JupiterCore::LockedLdpObject
 
   # Dublin Core attributes
   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :sort]
-  has_multival_attribute :creators, ::RDF::Vocab::DC.creator, solrize_for: [:search, :facet]
-  has_multival_attribute :contributors, ::RDF::Vocab::DC.contributor, solrize_for: [:search, :facet]
+
+  # Contributors (faceted in `all_contributors`)
+  has_multival_attribute :creators, ::RDF::Vocab::DC.creator, solrize_for: [:search]
+  has_multival_attribute :contributors, ::RDF::Vocab::DC.contributor, solrize_for: [:search]
+
   has_attribute :created, ::RDF::Vocab::DC.created, solrize_for: [:search, :sort]
   has_attribute :sort_year, ::TERMS[:ual].sortyear, solrize_for: [:search, :sort, :facet]
   has_multival_attribute :subject, ::RDF::Vocab::DC.subject, solrize_for: [:search, :facet]
@@ -55,6 +58,10 @@ class Item < JupiterCore::LockedLdpObject
   additional_search_index :item_type_with_status,
                           solrize_for: :facet,
                           as: -> { item_type_with_status_code }
+
+  additional_search_index :all_contributors,
+                          solrize_for: :facet,
+                          as: -> { creators + contributors.to_a }
 
   def self.display_attribute_names
     super - [:member_of_paths]
