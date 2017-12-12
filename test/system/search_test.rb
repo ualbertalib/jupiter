@@ -19,7 +19,8 @@ class SearchTest < ApplicationSystemTestCase
                                  languages: [CONTROLLED_VOCABULARIES[:language].eng],
                                  item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                  publication_status: CONTROLLED_VOCABULARIES[:publication_status].published,
-                                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international)
+                                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                                 subject: ['Items'])
           .unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(@community.id, @collections[i / 5].id)
         uo.save!
@@ -32,7 +33,8 @@ class SearchTest < ApplicationSystemTestCase
                                  languages: [CONTROLLED_VOCABULARIES[:language].eng],
                                  item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                  publication_status: CONTROLLED_VOCABULARIES[:publication_status].published,
-                                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international)
+                                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                                 subject: ['Items'])
           .unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(@community.id, @collections[i / 5].id)
         uo.save!
@@ -51,7 +53,8 @@ class SearchTest < ApplicationSystemTestCase
                                  languages: [CONTROLLED_VOCABULARIES[:language].eng],
                                  item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                  publication_status: CONTROLLED_VOCABULARIES[:publication_status].published,
-                                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international)
+                                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                                 subject: ['Items'])
           .unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(community.id, collection.id)
         uo.save!
