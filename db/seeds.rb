@@ -106,23 +106,37 @@ if Rails.env.development? || Rails.env.uat?
                       end
         # Probabilistically about 70% English, 20% French, 10% Ukrainian
         language = if seed % 10 > 2
-                     'http://id.loc.gov/vocabulary/iso639-2/eng'
+                     CONTROLLED_VOCABULARIES[:language].eng
                    elsif seed % 10 > 0
-                     'http://id.loc.gov/vocabulary/iso639-2/fre'
+                     CONTROLLED_VOCABULARIES[:language].fre
                    else
-                     'http://id.loc.gov/vocabulary/iso639-2/ukr'
+                     CONTROLLED_VOCABULARIES[:language].ukr
                    end
-        Item.new_locked_ldp_object(
+        licence_right = {}
+        attributes = {
           owner: admin.id,
-          creator: creator.uniq,
-          contributor: [contributors[rand(10)]],
+          creators: creator.uniq,
+          contributors: [contributors[rand(10)]],
           created: (Time.now - rand(20_000).days).to_s,
           visibility: JupiterCore::VISIBILITY_PUBLIC,
           title: "The effects of #{Faker::Beer.name} on #{thing.pluralize}",
           description: description,
-          language: [language],
-          license: 'http://creativecommons.org/licenses/by/4.0/'
-        ).unlock_and_fetch_ldp_object do |uo|
+          languages: [language],
+        }
+        if seed % 10 < 7
+          attributes[:license] = CONTROLLED_VOCABULARIES[:license].attribution_4_0_international
+        elsif seed % 10 < 8
+          attributes[:license] = CONTROLLED_VOCABULARIES[:license].public_domain_mark_1_0
+        else
+          attributes[:rights] = 'Share my stuff with everybody'
+        end
+        if idx % 2 == 0
+          attributes[:item_type] = CONTROLLED_VOCABULARIES[:item_type].article
+          attributes[:publication_status] = CONTROLLED_VOCABULARIES[:publication_status].published
+        else
+          attributes[:item_type] = CONTROLLED_VOCABULARIES[:item_type].report
+        end
+        Item.new_locked_ldp_object(attributes).unlock_and_fetch_ldp_object do |uo|
           uo.add_to_path(community.id, collection.id)
           uo.save!
         end
@@ -134,8 +148,9 @@ if Rails.env.development? || Rails.env.uat?
         visibility: JupiterCore::VISIBILITY_PRIVATE,
         title: "Private #{thing.pluralize}, public lives: a survey of social media trends",
         description: Faker::Lorem.sentence(20, false, 0).chop,
-        language: ['http://id.loc.gov/vocabulary/iso639-2/eng'],
-        license: 'http://creativecommons.org/licenses/by/4.0/'
+        languages: [CONTROLLED_VOCABULARIES[:language].eng],
+        license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+        item_type: CONTROLLED_VOCABULARIES[:item_type].chapter
       ).unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(community.id, collection.id)
         uo.save!
@@ -147,11 +162,13 @@ if Rails.env.development? || Rails.env.uat?
         visibility: Item::VISIBILITY_EMBARGO,
         title: "Embargo and #{Faker::Address.country}: were the #{thing.pluralize} left behind?",
         description: Faker::Lorem.sentence(20, false, 0).chop,
-        language: ['http://id.loc.gov/vocabulary/iso639-2/eng'],
-        license: 'http://creativecommons.org/licenses/by/4.0/'
+        languages: [CONTROLLED_VOCABULARIES[:language].eng],
+        license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+        item_type: CONTROLLED_VOCABULARIES[:item_type].conference_paper
       ).unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(community.id, collection.id)
         uo.embargo_end_date = (Time.now + 20.years).to_date
+        uo.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].public
         uo.save!
       end
 
@@ -161,11 +178,13 @@ if Rails.env.development? || Rails.env.uat?
         visibility: Item::VISIBILITY_EMBARGO,
         title: "Former embargo of #{Faker::Address.country}: the day the #{thing.pluralize} were free",
         description: Faker::Lorem.sentence(20, false, 0).chop,
-        language: ['http://id.loc.gov/vocabulary/iso639-2/eng'],
-        license: 'http://creativecommons.org/licenses/by/4.0/'
+        languages: [CONTROLLED_VOCABULARIES[:language].eng],
+        license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+        item_type: CONTROLLED_VOCABULARIES[:item_type].dataset
       ).unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(community.id, collection.id)
         uo.embargo_end_date = (Time.now - 2.days).to_date
+        uo.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].public
         uo.save!
       end
 
@@ -175,8 +194,9 @@ if Rails.env.development? || Rails.env.uat?
         visibility: JupiterCore::VISIBILITY_PUBLIC,
         title: "Impact of non-admin users on #{thing.pluralize}",
         description: Faker::Lorem.sentence(20, false, 0).chop,
-        language: ['http://id.loc.gov/vocabulary/iso639-2/eng'],
-        license: 'http://creativecommons.org/licenses/by/4.0/'
+        languages: [CONTROLLED_VOCABULARIES[:language].eng],
+        license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+        item_type: CONTROLLED_VOCABULARIES[:item_type].learning_object
       ).unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(community.id, collection.id)
         uo.save!
@@ -191,8 +211,9 @@ if Rails.env.development? || Rails.env.uat?
       title: "Multi-collection random images of #{thing.pluralize}",
       description: Faker::Lorem.sentence(20, false, 0).chop,
       # No linguistic content
-      language: ['http://id.loc.gov/vocabulary/iso639-2/zxx'],
-      license: 'http://creativecommons.org/licenses/by/4.0/'
+      languages: [CONTROLLED_VOCABULARIES[:language].zxx],
+      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+      item_type: CONTROLLED_VOCABULARIES[:item_type].image
     ).unlock_and_fetch_ldp_object do |uo|
       uo.add_to_path(community.id, collection_first.id)
       uo.add_to_path(community.id, collection_last.id)

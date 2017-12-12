@@ -41,30 +41,42 @@ en:
   delete: 'Delete'
   download: 'Download'
   edit: 'Edit'
-  remove: 'Remove'
-  never_signed_in: 'Never Signed In'
-  time_ago: '%{time} ago'
-  page_range: '%{first} - %{last} of %{total}'
   filter_by: 'Filter by'
-  sort_by: 'Sort by'
-  updated_at: 'Updated At'
+  never_signed_in: 'Never Signed In'
+  page_range: '%{first} - %{last} of %{total}'
+  remove: 'Remove'
+  required_fields_html: 'Required fields marked with <span class="text-danger font-weight-bold">*</span>'
   search_label: 'Search'
-  required_fields_html: 'Required fields marked with <span class="text-danger">*</span>'
+  search_items: 'Search Items'
   select_a_year: Select a year
   select_a_month: Select a month
   select_a_day: Select a day
+  sort_by: 'Sort by'
+  time_ago: '%{time} ago'
+  updated_at: 'Updated At'
 
   activemodel:
     errors:
       models:
         ir_item:
           attributes:
+            base:
+              need_either_license_or_rights: 'must have either a license or a rights statement'
+              not_both_license_and_rights: 'should not have both a license and a rights statement'
             member_of_paths:
               community_not_found: 'is missing community with ID "%{id}"'
               collection_not_found: 'is missing collection with ID "%{id}"'
-            language:
+            languages:
               not_recognized: 'is not recognized'
             license:
+              not_recognized: 'is not recognized'
+            item_type:
+              not_recognized: 'is not recognized'
+            publication_status:
+              required_for_article: 'is required for articles'
+              not_recognized: 'is not recognized'
+              must_be_absent_for_non_articles: 'must be absent for non-articles'
+            visibility_after_embargo:
               not_recognized: 'is not recognized'
         ir_collection:
           attributes:
@@ -259,14 +271,7 @@ en:
         no_items_found: 'There are no items for this user'
         draft_user_items: "Draft User's Items"
         user_items: "User's Items"
-        display_items_count: "Displaying %{items_count} of %{total_items_count} total items."
-        # TODO: most of these are generic enough to be moved up in a common namespace
-        sort: 'Sort'
-        sort_by: 'Sort options'
-        latest: 'Latest'
-        oldest: 'Oldest'
-        title_asc: 'Title (A to Z)'
-        title_desc: 'Title (Z to A)'
+        search_items_placeholder: "Search this user's items ..."
       index:
         search_placeholder: 'email or name...'
         header: 'Users'
@@ -284,7 +289,6 @@ en:
       no_items_in_collection: 'There are no items in this Collection'
       item_delete_confirm: 'Are you sure you want to delete item "%{title}"?'
       deposit_item: 'Deposit Item'
-      search_items: 'Search Items'
       search_items_placeholder: 'Search this collection ...'
   communities:
     sort_record_created_at_asc: 'Date (oldest first)'
@@ -482,6 +486,20 @@ en:
       thumbnail: 'Thumbnail'
 
   controlled_vocabularies:
+    item_type_with_status:
+      article_published: Article (Published)
+      article_draft: Article (Draft)
+      article_submitted: Article (Submitted)
+      book: Book
+      chapter: Chapter
+      image: Image
+      report: Report
+      research_material: 'Research Material'
+      conference_paper: 'Conference Paper'
+      conference_poster: 'Conference Poster'
+      dataset: Dataset
+      review: Review
+      learning_object: 'Learning Object'
     language:
       ukr: Ukrainian
       jpn: Japanese
@@ -505,6 +523,13 @@ en:
       public_domain_mark_1_0: 'Public Domain Mark 1.0'
       attribution_noncommercial_sharealike_4_0_international:
         'Attribution-NonCommercial-ShareAlike 4.0 International'
+    visibility:
+      authenticated: Authenticated
+      embargo: Embargo
+      draft: Draft
+      private: Private
+      public: Public
 
   facets:
     member_of_paths: 'Collections'
+    item_type_with_status: 'Item type'

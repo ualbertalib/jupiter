@@ -51,6 +51,9 @@ gem 'kaminari' # Pagination
 gem 'ransack' # ActiveRecord search/filter
 gem 'wicked' # Multi-step wizard
 
+# Performance monitoring
+gem 'skylight'
+
 # Seeds
 group :development, :test, :uat do
   gem 'faker', require: false

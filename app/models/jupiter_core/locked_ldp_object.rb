@@ -7,9 +7,9 @@ module JupiterCore
   class AlreadyDefinedError < StandardError; end
   class LockedInstanceError < StandardError; end
 
-  VISIBILITY_PUBLIC = 'public'.freeze
-  VISIBILITY_PRIVATE = 'private'.freeze
-  VISIBILITY_AUTHENTICATED = 'authenticated'.freeze
+  VISIBILITY_PUBLIC = CONTROLLED_VOCABULARIES[:visibility].public.freeze
+  VISIBILITY_PRIVATE = CONTROLLED_VOCABULARIES[:visibility].private.freeze
+  VISIBILITY_AUTHENTICATED = CONTROLLED_VOCABULARIES[:visibility].authenticated.freeze
 
   VISIBILITIES = [VISIBILITY_PUBLIC, VISIBILITY_PRIVATE, VISIBILITY_AUTHENTICATED].freeze
 
@@ -128,8 +128,7 @@ module JupiterCore
     #    obj.search_term_for(:title)
     #    => "title_tesim:\"The effects of Celebrator Doppelbock on cats\""
     def search_term_for(attr_name)
-      solr_attr_name = self.class.solr_name_for(attr_name, role: :search)
-      %Q(#{solr_attr_name}:"#{self.send(attr_name)}")
+      self.class.search_term_for(attr_name, self.send(attr_name))
     end
 
     def read_solr_index(name)
@@ -209,7 +208,6 @@ module JupiterCore
     #   => "title_tesim"
     def self.solr_name_for(attribute_name, role:)
       attribute_metadata = self.attribute_cache[attribute_name]
-
       if attribute_metadata.present?
         sort_attr_index = attribute_metadata[:solrize_for].index(role)
         raise ArgumentError, "No #{role} solr role is defined for #{attribute_name}" if sort_attr_index.blank?
@@ -222,6 +220,21 @@ module JupiterCore
         raise ArgumentError, "#{attribute_name} not indexed for #{role}" if idx.blank?
         return solr_metadata[:solr_names][idx]
       end
+    end
+
+    # Accepts the symbolic name of an attribute, and a value to search for, and returns the string
+    # representing the solr search term. eg)
+    #
+    # Given a subclass +Item+ with an attribute declaration:
+    #   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
+    #
+    # then:
+    #   Item.search_term_for(:title, 'science')
+    #   => "title_tesim:science"
+    def self.search_term_for(attr_name, value, role: :search)
+      rails ArgumentError("search value can't be nil") if value.nil?
+      solr_attr_name = solr_name_for(attr_name, role: role)
+      %Q(#{solr_attr_name}:"#{value}")
     end
 
     # Accepts a string id of an object in the LDP, and returns a +LockedLDPObjects+ representation of that object
@@ -399,14 +412,14 @@ module JupiterCore
         # already had +visibility+ and +owner+ defined, define them.
         child.class_eval do
           unless attribute_names.include?(:visibility)
-            has_attribute :visibility, ::VOCABULARY[:jupiter_core].visibility, solrize_for: [:exact_match, :facet]
+            has_attribute :visibility, ::RDF::Vocab::DC.accessRights, solrize_for: [:exact_match, :facet]
           end
           unless attribute_names.include?(:owner)
-            has_attribute :owner, ::VOCABULARY[:jupiter_core].owner, type: :int, solrize_for: [:exact_match]
+            has_attribute :owner, ::TERMS[:bibo].owner, type: :int, solrize_for: [:exact_match]
           end
           unless attribute_names.include?(:record_created_at)
-            has_attribute :record_created_at, ::VOCABULARY[:jupiter_core].record_created_at, type: :date,
-                                                                                             solrize_for: [:sort]
+            has_attribute :record_created_at, ::TERMS[:jupiter_core].record_created_at, type: :date,
+                                                                                        solrize_for: [:sort]
           end
         end
       end
@@ -514,6 +527,15 @@ module JupiterCore
           # a single common indexer for all subclasses which leverages stored property metadata to DRY up indexing
           def self.indexer
             JupiterCore::Indexer
+          end
+
+          # Utility method for creating validations based on controlled vocabularies
+          def uri_validation(value, attribute, vocabulary = nil)
+            # Most (all?) of the time the controlled vocabulary is named after the attribute
+            vocabulary = attribute if vocabulary.nil?
+            return true if ::CONTROLLED_VOCABULARIES[vocabulary].any? { |term| term[:uri] == value }
+            errors.add(attribute, :not_recognized)
+            false
           end
 
           # Methods defined on the +owning_object+ can be called by the "unlocked" methods defined on the ActiveFedora

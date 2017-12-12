@@ -16,8 +16,10 @@ class SearchTest < ApplicationSystemTestCase
     @items = 10.times.map do |i|
       Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                  owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Item #{i}",
-                                 language: ['http://id.loc.gov/vocabulary/iso639-2/eng'],
-                                 license: 'http://creativecommons.org/licenses/by/4.0/')
+                                 languages: [CONTROLLED_VOCABULARIES[:language].eng],
+                                 item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                                 publication_status: CONTROLLED_VOCABULARIES[:publication_status].published,
+                                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international)
           .unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(@community.id, @collections[i / 5].id)
         uo.save!
@@ -27,8 +29,10 @@ class SearchTest < ApplicationSystemTestCase
     @items += 10.times.map do |i|
       Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PRIVATE,
                                  owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Private Item #{i + 10}",
-                                 language: ['http://id.loc.gov/vocabulary/iso639-2/eng'],
-                                 license: 'http://creativecommons.org/licenses/by/4.0/')
+                                 languages: [CONTROLLED_VOCABULARIES[:language].eng],
+                                 item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                                 publication_status: CONTROLLED_VOCABULARIES[:publication_status].published,
+                                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international)
           .unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(@community.id, @collections[i / 5].id)
         uo.save!
@@ -44,8 +48,10 @@ class SearchTest < ApplicationSystemTestCase
                              .unlock_and_fetch_ldp_object(&:save!)
       Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                  owner: 1, title: "Extra Item #{i}",
-                                 language: ['http://id.loc.gov/vocabulary/iso639-2/eng'],
-                                 license: 'http://creativecommons.org/licenses/by/4.0/')
+                                 languages: [CONTROLLED_VOCABULARIES[:language].eng],
+                                 item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                                 publication_status: CONTROLLED_VOCABULARIES[:publication_status].published,
+                                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international)
           .unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(community.id, collection.id)
         uo.save!
@@ -66,7 +72,7 @@ class SearchTest < ApplicationSystemTestCase
 
       # Facets and counts
       assert_selector 'div.card-header', text: 'Visibility'
-      assert_selector 'li div', text: /public.*5/
+      assert_selector 'li div', text: /Public.*5/
       # Should not be a facet for 'private'
       assert_selector 'li div', text: /private/, count: 0
       # TODO: The 'Member of paths' text will likely change
@@ -103,7 +109,7 @@ class SearchTest < ApplicationSystemTestCase
 
       # Some facets are now gone, some with changed counts
       assert_selector 'div.card-header', text: 'Visibility'
-      assert_selector 'li div', text: /public.*2/
+      assert_selector 'li div', text: /Public.*2/
       assert_selector 'div.card-header', text: 'Collections'
       assert_selector 'li div', text: /Fancy Community.*2/
       assert_selector 'li div', text: /Fancy Collection 0/, count: 0
@@ -141,7 +147,7 @@ class SearchTest < ApplicationSystemTestCase
       assert_selector 'a.nav-link', text: 'Communities (1)'
 
       # No community/collection results initially shown
-      assert_selector 'div.jupiter-results-list a', text: 'Item', count: 5
+      assert_selector 'div.jupiter-results-list a', text: 'Item', count: 10
       assert_selector 'div.jupiter-results-list a', text: 'Community', count: 0
       assert_selector 'div.jupiter-results-list a', text: 'Collection', count: 0
 
@@ -260,9 +266,9 @@ class SearchTest < ApplicationSystemTestCase
 
       # Facets and counts
       assert_selector 'div.card-header', text: 'Visibility'
-      assert_selector 'li div', text: /public.*5/
+      assert_selector 'li div', text: /Public.*5/
       # Should be a facet for 'private'
-      assert_selector 'li div', text: /private.*5/
+      assert_selector 'li div', text: /Private.*5/
       # TODO: The 'Member of paths' text will likely change
       assert_selector 'div.card-header', text: 'Collections'
       assert_selector 'li div', text: /Fancy Community.*10/
@@ -302,7 +308,7 @@ class SearchTest < ApplicationSystemTestCase
 
       # Some facets are now gone, some with changed counts
       assert_selector 'div.card-header', text: 'Visibility'
-      assert_selector 'li div', text: /public.*2/
+      assert_selector 'li div', text: /Public.*2/
       assert_selector 'div.card-header', text: 'Collections'
       assert_selector 'li div', text: /Fancy Community.*4/
       assert_selector 'li div', text: /Fancy Collection 0/, count: 0
