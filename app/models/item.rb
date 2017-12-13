@@ -13,8 +13,8 @@ class Item < JupiterCore::LockedLdpObject
   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :sort]
 
   # Contributors (faceted in `all_contributors`)
-  has_multival_attribute :creators, ::RDF::Vocab::DC.creator, solrize_for: [:search]
-  has_multival_attribute :contributors, ::RDF::Vocab::DC.contributor, solrize_for: [:search]
+  has_multival_attribute :creators, ::RDF::Vocab::DC11.creator, solrize_for: [:search]
+  has_multival_attribute :contributors, ::RDF::Vocab::DC11.contributor, solrize_for: [:search]
 
   has_attribute :created, ::RDF::Vocab::DC.created, solrize_for: [:search, :sort]
   has_attribute :sort_year, ::TERMS[:ual].sortyear, solrize_for: [:search, :sort, :facet]
