@@ -17,7 +17,7 @@ class Item < JupiterCore::LockedLdpObject
   has_attribute :sort_year, ::TERMS[:ual].sortyear, solrize_for: [:search, :sort, :facet]
 
   # Subject types (see `all_subjects` for faceting)
-  has_multival_attribute :subject, ::RDF::Vocab::DC.subject, solrize_for: [:search]
+  has_multival_attribute :subject, ::RDF::Vocab::DC11.subject, solrize_for: [:search]
   has_multival_attribute :temporal_subjects, ::RDF::Vocab::DC.temporal, solrize_for: [:search]
   has_multival_attribute :spatial_subjects, ::RDF::Vocab::DC.spatial, solrize_for: [:search]
 
