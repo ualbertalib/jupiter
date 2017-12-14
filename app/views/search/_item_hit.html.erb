@@ -33,8 +33,9 @@
     </div>
     <div>
       <%# TODO: the search path may need to be revisited %>
-      <%= result.creators&.map { |creator| link_to creator, search_path(search: result.search_term_for(:creators)) }
-                        &.join(', ')&.html_safe %>
+      <%= result.creators&.map { |creator| link_to creator,
+                                                   search_path(search: Item.search_term_for(:creators, creator)) }
+                         &.join(', ')&.html_safe %>
     </div>
     <div>
       <%# TODO: for long description, implement 'more ...' / 'less ...' %>
