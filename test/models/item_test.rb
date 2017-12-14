@@ -12,6 +12,7 @@ class ItemTest < ActiveSupport::TestCase
     collection.unlock_and_fetch_ldp_object(&:save!)
     item = Item.new_locked_ldp_object(title: 'Item', owner: 1, visibility: JupiterCore::VISIBILITY_PUBLIC,
                                       languages: [CONTROLLED_VOCABULARIES[:language].eng],
+                                      creators: ['Joe Blow'],
                                       subject: ['Things'],
                                       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
                                       item_type: CONTROLLED_VOCABULARIES[:item_type].article,
@@ -239,6 +240,12 @@ class ItemTest < ActiveSupport::TestCase
     item = Item.new_locked_ldp_object
     assert_not item.valid?
     assert_includes item.errors[:subject], "can't be blank"
+  end
+
+  test 'a creator is required' do
+    item = Item.new_locked_ldp_object
+    assert_not item.valid?
+    assert_includes item.errors[:creators], "can't be blank"
   end
 
 end

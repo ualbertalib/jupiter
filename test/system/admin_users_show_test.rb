@@ -163,6 +163,7 @@ class AdminUsersShowTest < ApplicationSystemTestCase
     ['Fancy', 'Nice'].each do |adjective|
       Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                  owner: user.id, title: "#{adjective} Item",
+                                 creators: ['Joe Blow'],
                                  languages: [CONTROLLED_VOCABULARIES[:language].eng],
                                  license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
                                  item_type: CONTROLLED_VOCABULARIES[:item_type].article,
@@ -176,6 +177,7 @@ class AdminUsersShowTest < ApplicationSystemTestCase
     # One item owned by admin
     Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                owner: admin.id, title: 'Admin Item',
+                               creators: ['Joe Blow'],
                                languages: [CONTROLLED_VOCABULARIES[:language].eng],
                                license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
                                item_type: CONTROLLED_VOCABULARIES[:item_type].article,

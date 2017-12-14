@@ -69,6 +69,7 @@ class Item < JupiterCore::LockedLdpObject
                           as: -> { item_type_with_status_code }
 
   # Combine creators and contributors for faceting
+  # Note that contributors is converted to an array because it can be nil
   additional_search_index :all_contributors,
                           solrize_for: :facet,
                           as: -> { creators + contributors.to_a }
@@ -125,6 +126,7 @@ class Item < JupiterCore::LockedLdpObject
     validates :languages, presence: true
     validates :item_type, presence: true
     validates :subject, presence: true
+    validates :creators, presence: true
     validate :communities_and_collections_validations
     validate :language_validations
     validate :license_and_rights_validations

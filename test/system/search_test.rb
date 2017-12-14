@@ -16,6 +16,7 @@ class SearchTest < ApplicationSystemTestCase
     @items = 10.times.map do |i|
       Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                  owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Item #{i}",
+                                 creators: ['Joe Blow'],
                                  languages: [CONTROLLED_VOCABULARIES[:language].eng],
                                  item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                  publication_status: CONTROLLED_VOCABULARIES[:publication_status].published,
@@ -30,6 +31,7 @@ class SearchTest < ApplicationSystemTestCase
     @items += 10.times.map do |i|
       Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PRIVATE,
                                  owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Private Item #{i + 10}",
+                                 creators: ['Joe Blow'],
                                  languages: [CONTROLLED_VOCABULARIES[:language].eng],
                                  item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                  publication_status: CONTROLLED_VOCABULARIES[:publication_status].published,
@@ -50,6 +52,7 @@ class SearchTest < ApplicationSystemTestCase
                              .unlock_and_fetch_ldp_object(&:save!)
       Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                  owner: 1, title: "Extra Item #{i}",
+                                 creators: ['Joe Blow'],
                                  languages: [CONTROLLED_VOCABULARIES[:language].eng],
                                  item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                  publication_status: CONTROLLED_VOCABULARIES[:publication_status].published,

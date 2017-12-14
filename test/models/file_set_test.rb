@@ -33,6 +33,7 @@ class FileSetTest < ActiveSupport::TestCase
                                                   community_id: community.id).unlock_and_fetch_ldp_object(&:save!)
 
     item = Item.new_locked_ldp_object(title: generate_random_string,
+                                      creators: [generate_random_string],
                                       visibility: JupiterCore::VISIBILITY_PUBLIC,
                                       owner: 1,
                                       item_type: CONTROLLED_VOCABULARIES[:item_type].report,
