@@ -64,6 +64,7 @@ class Item < JupiterCore::LockedLdpObject
                           solrize_for: :facet,
                           as: -> { item_type_with_status_code }
 
+  # Combine creators and contributors for faceting
   additional_search_index :all_contributors,
                           solrize_for: :facet,
                           as: -> { creators + contributors.to_a }
