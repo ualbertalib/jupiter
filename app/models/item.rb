@@ -127,7 +127,7 @@ class Item < JupiterCore::LockedLdpObject
           _community_id, collection_id = path.split('/')
           collection = Collection.find_by(collection_id)
 
-          # TODO: can this be streamlined so that a fetch from Fedora isn't needed
+          # TODO: can this be streamlined so that a fetch from Fedora isn't needed?
           collection.unlock_and_fetch_ldp_object do |unlocked_collection|
             self.member_of_collections += [unlocked_collection]
           end
