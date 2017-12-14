@@ -120,13 +120,17 @@ class Item < JupiterCore::LockedLdpObject
     end
 
     before_save do
-      # This adds the `pcdm::memberOf` predicate
-      member_of_paths.each do |path|
-        _community_id, collection_id = path.split('/')
-        collection = Collection.find_by(collection_id)
+      if member_of_paths_changed?
+        # This adds the `pcdm::memberOf` predicates, pointing to each collection
+        self.member_of_collections = []
+        member_of_paths.each do |path|
+          _community_id, collection_id = path.split('/')
+          collection = Collection.find_by(collection_id)
 
-        collection.unlock_and_fetch_ldp_object do |uo|
-          self.member_of_collections += [uo]
+          # TODO: can this be streamlined so that a fetch from Fedora isn't needed
+          collection.unlock_and_fetch_ldp_object do |unlocked_collection|
+            self.member_of_collections += [unlocked_collection]
+          end
         end
       end
     end
