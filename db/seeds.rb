@@ -120,6 +120,7 @@ if Rails.env.development? || Rails.env.uat?
           title: "The effects of #{Faker::Beer.name} on #{thing.pluralize}",
           description: description,
           languages: [language],
+          subject: [thing.capitalize]
         }
         if seed % 10 < 7
           attributes[:license] = CONTROLLED_VOCABULARIES[:license].attribution_4_0_international
@@ -148,7 +149,8 @@ if Rails.env.development? || Rails.env.uat?
         description: Faker::Lorem.sentence(20, false, 0).chop,
         languages: [CONTROLLED_VOCABULARIES[:language].eng],
         license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-        item_type: CONTROLLED_VOCABULARIES[:item_type].chapter
+        item_type: CONTROLLED_VOCABULARIES[:item_type].chapter,
+        subject: [thing.capitalize, 'Privacy']
       ).unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(community.id, collection.id)
         uo.save!
@@ -162,7 +164,8 @@ if Rails.env.development? || Rails.env.uat?
         description: Faker::Lorem.sentence(20, false, 0).chop,
         languages: [CONTROLLED_VOCABULARIES[:language].eng],
         license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-        item_type: CONTROLLED_VOCABULARIES[:item_type].conference_paper
+        item_type: CONTROLLED_VOCABULARIES[:item_type].conference_paper,
+        subject: [thing.capitalize, 'Embargoes']
       ).unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(community.id, collection.id)
         uo.embargo_end_date = (Time.now + 20.years).to_date
@@ -178,7 +181,8 @@ if Rails.env.development? || Rails.env.uat?
         description: Faker::Lorem.sentence(20, false, 0).chop,
         languages: [CONTROLLED_VOCABULARIES[:language].eng],
         license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-        item_type: CONTROLLED_VOCABULARIES[:item_type].dataset
+        item_type: CONTROLLED_VOCABULARIES[:item_type].dataset,
+        subject: [thing.capitalize, 'Freedom']
       ).unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(community.id, collection.id)
         uo.embargo_end_date = (Time.now - 2.days).to_date
@@ -194,7 +198,10 @@ if Rails.env.development? || Rails.env.uat?
         description: Faker::Lorem.sentence(20, false, 0).chop,
         languages: [CONTROLLED_VOCABULARIES[:language].eng],
         license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-        item_type: CONTROLLED_VOCABULARIES[:item_type].learning_object
+        item_type: CONTROLLED_VOCABULARIES[:item_type].learning_object,
+        subject: [thing.capitalize, 'Equality'],
+        # Add a temporal subject
+        temporal_subjects: ['The 1950s']
       ).unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(community.id, collection.id)
         uo.save!
@@ -211,7 +218,10 @@ if Rails.env.development? || Rails.env.uat?
       # No linguistic content
       languages: [CONTROLLED_VOCABULARIES[:language].zxx],
       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-      item_type: CONTROLLED_VOCABULARIES[:item_type].image
+      item_type: CONTROLLED_VOCABULARIES[:item_type].image,
+      subject: [thing.capitalize, 'Randomness', 'Pictures'],
+      # Add a spacial subject
+      spatial_subjects: ['Onoway']
     ).unlock_and_fetch_ldp_object do |uo|
       uo.add_to_path(community.id, collection_first.id)
       uo.add_to_path(community.id, collection_last.id)
