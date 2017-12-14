@@ -11,11 +11,19 @@ class Item < JupiterCore::LockedLdpObject
 
   # Dublin Core attributes
   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :sort]
-  has_multival_attribute :creators, ::RDF::Vocab::DC.creator, solrize_for: [:search, :facet]
-  has_multival_attribute :contributors, ::RDF::Vocab::DC.contributor, solrize_for: [:search, :facet]
+
+  # Contributors (faceted in `all_contributors`)
+  has_multival_attribute :creators, ::RDF::Vocab::DC11.creator, solrize_for: [:search]
+  has_multival_attribute :contributors, ::RDF::Vocab::DC11.contributor, solrize_for: [:search]
+
   has_attribute :created, ::RDF::Vocab::DC.created, solrize_for: [:search, :sort]
   has_attribute :sort_year, ::TERMS[:ual].sortyear, solrize_for: [:search, :sort, :facet]
-  has_multival_attribute :subject, ::RDF::Vocab::DC.subject, solrize_for: [:search, :facet]
+
+  # Subject types (see `all_subjects` for faceting)
+  has_multival_attribute :subject, ::RDF::Vocab::DC11.subject, solrize_for: [:search]
+  has_multival_attribute :temporal_subjects, ::RDF::Vocab::DC.temporal, solrize_for: [:search]
+  has_multival_attribute :spatial_subjects, ::RDF::Vocab::DC.spatial, solrize_for: [:search]
+
   has_attribute :description, ::RDF::Vocab::DC.description, type: :text, solrize_for: :search
   has_attribute :publisher, ::RDF::Vocab::DC.publisher, solrize_for: [:search, :facet]
   # has_attribute :date_modified, ::RDF::Vocab::DC.modified, type: :date, solrize_for: :sort
@@ -59,6 +67,16 @@ class Item < JupiterCore::LockedLdpObject
   additional_search_index :item_type_with_status,
                           solrize_for: :facet,
                           as: -> { item_type_with_status_code }
+
+  # Combine creators and contributors for faceting
+  additional_search_index :all_contributors,
+                          solrize_for: :facet,
+                          as: -> { creators + contributors.to_a }
+
+  # Combine all the subjects for faceting
+  additional_search_index :all_subjects,
+                          solrize_for: :facet,
+                          as: -> { subject + temporal_subjects.to_a + spatial_subjects.to_a }
 
   def self.display_attribute_names
     super - [:member_of_paths]
@@ -106,6 +124,7 @@ class Item < JupiterCore::LockedLdpObject
     validates :title, presence: true
     validates :languages, presence: true
     validates :item_type, presence: true
+    validates :subject, presence: true
     validate :communities_and_collections_validations
     validate :language_validations
     validate :license_and_rights_validations

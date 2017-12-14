@@ -101,7 +101,8 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
         license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
         visibility: JupiterCore::VISIBILITY_PRIVATE,
         item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-        publication_status: CONTROLLED_VOCABULARIES[:publication_status].published
+        publication_status: CONTROLLED_VOCABULARIES[:publication_status].published,
+        subject: ['Invincibility']
       ).unlock_and_fetch_ldp_object do |unlocked_item|
         unlocked_item.add_to_path(@community.id, @collection.id)
         unlocked_item.save!
