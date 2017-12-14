@@ -12,6 +12,7 @@ class ItemTest < ActiveSupport::TestCase
     collection.unlock_and_fetch_ldp_object(&:save!)
     item = Item.new_locked_ldp_object(title: 'Item', owner: 1, visibility: JupiterCore::VISIBILITY_PUBLIC,
                                       languages: [CONTROLLED_VOCABULARIES[:language].eng],
+                                      subject: ['Things'],
                                       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
                                       item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                       publication_status: CONTROLLED_VOCABULARIES[:publication_status].draft)
@@ -232,6 +233,12 @@ class ItemTest < ActiveSupport::TestCase
                                       publication_status: CONTROLLED_VOCABULARIES[:publication_status].published)
     assert_not item.valid?
     assert_includes item.errors[:publication_status], 'must be absent for non-articles'
+  end
+
+  test 'a subject is required' do
+    item = Item.new_locked_ldp_object
+    assert_not item.valid?
+    assert_includes item.errors[:subject], "can't be blank"
   end
 
 end

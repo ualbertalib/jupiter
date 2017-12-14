@@ -37,7 +37,8 @@ class FileSetTest < ActiveSupport::TestCase
                                       owner: 1,
                                       item_type: CONTROLLED_VOCABULARIES[:item_type].report,
                                       languages: [CONTROLLED_VOCABULARIES[:language].eng],
-                                      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international)
+                                      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                                      subject: ['Randomness'])
 
     item.unlock_and_fetch_ldp_object do |unlocked_item|
       unlocked_item.add_to_path(community.id, collection.id)
