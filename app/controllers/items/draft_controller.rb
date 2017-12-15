@@ -30,13 +30,6 @@ class Items::DraftController < ApplicationController
 
       @draft_item.member_of_paths = { 'community_id' => community_id, 'collection_id' => collection_id }
     when :upload_files
-      # ActiveStorage broken (or is it dropzone)? Need to loop through all files and save them individually
-      # Shouldn't have to do this
-      if params[:draft_item][:files].present?
-        params[:draft_item][:files].each do |file|
-          @draft_item.files.attach(params[:draft_item][:files][file])
-        end
-      end
     when :review_and_deposit_item
       params[:draft_item][:status] = DraftItem.statuses[:archived]
     end
