@@ -144,6 +144,7 @@ if Rails.env.development? || Rails.env.uat?
       # Add an private item
       Item.new_locked_ldp_object(
         owner: admin.id,
+        creators: [creators[rand(10)]],
         visibility: JupiterCore::VISIBILITY_PRIVATE,
         title: "Private #{thing.pluralize}, public lives: a survey of social media trends",
         description: Faker::Lorem.sentence(20, false, 0).chop,
@@ -159,6 +160,7 @@ if Rails.env.development? || Rails.env.uat?
       # Add a currently embargoed item
       Item.new_locked_ldp_object(
         owner: admin.id,
+        creators: [creators[rand(10)]],
         visibility: Item::VISIBILITY_EMBARGO,
         title: "Embargo and #{Faker::Address.country}: were the #{thing.pluralize} left behind?",
         description: Faker::Lorem.sentence(20, false, 0).chop,
@@ -176,6 +178,7 @@ if Rails.env.development? || Rails.env.uat?
       # Add a formerly embargoed item
       Item.new_locked_ldp_object(
         owner: admin.id,
+        creators: [creators[rand(10)]],
         visibility: Item::VISIBILITY_EMBARGO,
         title: "Former embargo of #{Faker::Address.country}: the day the #{thing.pluralize} were free",
         description: Faker::Lorem.sentence(20, false, 0).chop,
@@ -193,6 +196,7 @@ if Rails.env.development? || Rails.env.uat?
       # Add an item owned by non-admin
       Item.new_locked_ldp_object(
         owner: non_admin.id,
+        creators: [creators[rand(10)]],
         visibility: JupiterCore::VISIBILITY_PUBLIC,
         title: "Impact of non-admin users on #{thing.pluralize}",
         description: Faker::Lorem.sentence(20, false, 0).chop,
@@ -212,6 +216,7 @@ if Rails.env.development? || Rails.env.uat?
     # Want one multi-collection item per community
     Item.new_locked_ldp_object(
       owner: admin.id,
+      creators: [creators[rand(10)]],
       visibility: JupiterCore::VISIBILITY_PUBLIC,
       title: "Multi-collection random images of #{thing.pluralize}",
       description: Faker::Lorem.sentence(20, false, 0).chop,
