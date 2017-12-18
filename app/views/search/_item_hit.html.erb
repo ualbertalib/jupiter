@@ -38,8 +38,7 @@
                          &.join(', ')&.html_safe %>
     </div>
     <div>
-      <%# TODO: for long description, implement 'more ...' / 'less ...' %>
-      <%= result.description %>
+      <%= jupiter_truncate result.description %>
     </div>
   </div>
 </div>
