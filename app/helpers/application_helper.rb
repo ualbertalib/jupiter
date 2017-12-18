@@ -1,6 +1,8 @@
 module ApplicationHelper
   include PresentersHelper
 
+  TRUNCATE_CHARS_DEFAULT = 300
+
   def page_title(title)
     @page_title ||= []
     @page_title.push(title) if title.present?
@@ -37,5 +39,9 @@ module ApplicationHelper
     first = results.offset_value + 1
     last = results.offset_value + results.count
     t(:page_range, first: first, last: last, total: results.total_count)
+  end
+
+  def jupiter_truncate(text, length: TRUNCATE_CHARS_DEFAULT, separator: ' ', omission: '...')
+    truncate text, length: length, separator: separator, omission: omission
   end
 end

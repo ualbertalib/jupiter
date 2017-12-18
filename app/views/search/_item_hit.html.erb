@@ -38,7 +38,7 @@
                          &.join(', ')&.html_safe %>
     </div>
     <div>
-      <%= truncate result.description, length: SearchHelper::DESCRIPTION_DISPLAY_MAX, separator: ' ' %>
+      <%= jupiter_truncate result.description %>
     </div>
   </div>
 </div>
