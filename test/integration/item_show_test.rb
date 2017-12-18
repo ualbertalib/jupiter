@@ -40,20 +40,16 @@ class ItemShowTest < ActionDispatch::IntegrationTest
     sign_in_as user
     get item_url(@item1)
 
-    # Shows two sets of breadcrumbs to the two collections
-    assert_select 'ol.breadcrumb', count: 2
-    assert_select 'li.breadcrumb-item', count: 6
+    # Shows two sets of paths to the two collections
     # Both collections are in same community
-    assert_select 'li.breadcrumb-item a[href=?]', community_path(@community1),
+    assert_select 'div.card-body li.list-group-item a[href=?]', community_path(@community1),
                   text: @community1.title, count: 2
-    assert_select 'li.breadcrumb-item a[href=?]',
+    assert_select 'div.card-body li.list-group-item a[href=?]',
                   community_collection_path(@community1, @collection1),
                   text: @collection1.title, count: 1
-    assert_select 'li.breadcrumb-item a[href=?]',
+    assert_select 'div.card-body li.list-group-item a[href=?]',
                   community_collection_path(@community1, @collection2),
                   text: @collection2.title, count: 1
-    assert_select 'li.breadcrumb-item',
-                  text: @item1.title, count: 2
   end
 
 end

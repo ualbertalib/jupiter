@@ -41,6 +41,7 @@ en:
   delete: 'Delete'
   download: 'Download'
   edit: 'Edit'
+  home: 'Home'
   remove: 'Remove'
   never_signed_in: 'Never Signed In'
   time_ago: '%{time} ago'
@@ -282,7 +283,23 @@ en:
     update:
       updated: 'Item was successfully updated!'
     show:
+      communities_and_collections: 'Communities and Collections'
       member_of: 'Member of'
+      attributes:
+        creators: 'Author(s) / Creator(s)'
+        title: 'Title'
+        alternative_title: 'Alternate Title'
+        description: 'Description / Abstract'
+        sort_year: 'Date created'
+        subject: 'Subjects'
+        item_type_with_status: 'Type of item'
+        doi_url: 'DOI'
+        languages: 'Language'
+        license: 'License'
+        contributors: 'Additional contributors'
+        is_version_of: 'Citation for previous publication'
+        related_link: 'Link to related item'
+        derived_from: 'Source'
     thumbnail:
       thumbnail: 'thumbnail'
     files_section_sidebar:

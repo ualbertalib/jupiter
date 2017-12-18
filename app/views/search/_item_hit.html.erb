@@ -33,8 +33,7 @@
     </div>
     <div>
       <%# TODO: the search path may need to be revisited %>
-      <%= result.creators&.map { |creator| link_to creator,
-                                                   search_path(search: Item.search_term_for(:creators, creator)) }
+      <%= result.creators&.map { |creator| search_link_for(Item, :all_contributors, value: creator) }
                          &.join(', ')&.html_safe %>
     </div>
     <div>
