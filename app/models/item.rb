@@ -11,21 +11,33 @@ class Item < JupiterCore::LockedLdpObject
 
   # Dublin Core attributes
   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :sort]
-  has_multival_attribute :creators, ::RDF::Vocab::DC.creator, solrize_for: [:search, :facet]
-  has_multival_attribute :contributors, ::RDF::Vocab::DC.contributor, solrize_for: [:search, :facet]
+
+  # Contributors (faceted in `all_contributors`)
+  has_multival_attribute :creators, ::RDF::Vocab::DC11.creator, solrize_for: [:search]
+  has_multival_attribute :contributors, ::RDF::Vocab::DC11.contributor, solrize_for: [:search]
+
   has_attribute :created, ::RDF::Vocab::DC.created, solrize_for: [:search, :sort]
   has_attribute :sort_year, ::TERMS[:ual].sortyear, solrize_for: [:search, :sort, :facet]
-  has_multival_attribute :subject, ::RDF::Vocab::DC.subject, solrize_for: [:search, :facet]
+
+  # Subject types (see `all_subjects` for faceting)
+  has_multival_attribute :subject, ::RDF::Vocab::DC11.subject, solrize_for: [:search]
+  has_multival_attribute :temporal_subjects, ::RDF::Vocab::DC.temporal, solrize_for: [:search]
+  has_multival_attribute :spatial_subjects, ::RDF::Vocab::DC.spatial, solrize_for: [:search]
+
   has_attribute :description, ::RDF::Vocab::DC.description, type: :text, solrize_for: :search
   has_attribute :publisher, ::RDF::Vocab::DC.publisher, solrize_for: [:search, :facet]
   # has_attribute :date_modified, ::RDF::Vocab::DC.modified, type: :date, solrize_for: :sort
   has_multival_attribute :languages, ::RDF::Vocab::DC.language, solrize_for: [:search, :facet]
   has_attribute :embargo_end_date, ::RDF::Vocab::DC.available, type: :date, solrize_for: [:sort]
   has_attribute :license, ::RDF::Vocab::DC.license, solrize_for: [:search]
-  has_attribute :rights, ::RDF::Vocab::DC.rights, solrize_for: :exact_match
+  has_attribute :rights, ::RDF::Vocab::DC11.rights, solrize_for: :exact_match
   # `type` is an ActiveFedora keyword, so we call it `item_type`
   # Note also the `item_type_with_status` below for searching, faceting and forms
   has_attribute :item_type, ::RDF::Vocab::DC.type, solrize_for: :exact_match
+  has_attribute :derived_from, ::RDF::Vocab::DC.source, solrize_for: :exact_match
+  has_multival_attribute :is_version_of, ::RDF::Vocab::DC.isVersionOf, solrize_for: :exact_match
+  has_attribute :alternative_title, ::RDF::Vocab::DC.alternative, solrize_for: :search
+  has_attribute :related_link, ::RDF::Vocab::DC.relation, solrize_for: :exact_match
 
   # UAL attributes
   has_attribute :depositor, ::TERMS[:ual].depositor, solrize_for: [:search]
@@ -55,6 +67,17 @@ class Item < JupiterCore::LockedLdpObject
   additional_search_index :item_type_with_status,
                           solrize_for: :facet,
                           as: -> { item_type_with_status_code }
+
+  # Combine creators and contributors for faceting
+  # Note that contributors is converted to an array because it can be nil
+  additional_search_index :all_contributors,
+                          solrize_for: :facet,
+                          as: -> { creators + contributors.to_a }
+
+  # Combine all the subjects for faceting
+  additional_search_index :all_subjects,
+                          solrize_for: :facet,
+                          as: -> { subject + temporal_subjects.to_a + spatial_subjects.to_a }
 
   def self.display_attribute_names
     super - [:member_of_paths]
@@ -102,6 +125,8 @@ class Item < JupiterCore::LockedLdpObject
     validates :title, presence: true
     validates :languages, presence: true
     validates :item_type, presence: true
+    validates :subject, presence: true
+    validates :creators, presence: true
     validate :communities_and_collections_validations
     validate :language_validations
     validate :license_and_rights_validations
@@ -110,7 +135,29 @@ class Item < JupiterCore::LockedLdpObject
 
     before_validation do
       # TODO: for theses, the sort_year attribute should be derived from ual:graduationDate
-      self.sort_year = Date.parse(created).year.to_s if created.present?
+      begin
+        self.sort_year = Date.parse(created).year.to_s if created.present?
+      rescue ArgumentError
+        # date was unparsable, try to pull out the first 4 digit number as a year
+        capture = created.scan(/\d{4}/)
+        self.sort_year = capture[0] if capture.present?
+      end
+    end
+
+    before_save do
+      if member_of_paths_changed?
+        # This adds the `pcdm::memberOf` predicates, pointing to each collection
+        self.member_of_collections = []
+        member_of_paths.each do |path|
+          _community_id, collection_id = path.split('/')
+          collection = Collection.find_by(collection_id)
+
+          # TODO: can this be streamlined so that a fetch from Fedora isn't needed?
+          collection.unlock_and_fetch_ldp_object do |unlocked_collection|
+            self.member_of_collections += [unlocked_collection]
+          end
+        end
+      end
     end
 
     def communities_and_collections_validations

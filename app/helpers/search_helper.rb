@@ -9,14 +9,18 @@ module SearchHelper
   def query_params_with_facet(facet_name, value)
     query_params = search_params_hash
     query_params[:facets] ||= {}
-    query_params[:facets][facet_name] = value
+    query_params[:facets][facet_name] ||= []
+    query_params[:facets][facet_name] << value
     query_params
   end
 
-  def query_params_without_facet(facet_name)
+  def query_params_without_facet_value(facet_name, value)
     query_params = search_params_hash
-    query_params[:facets]&.delete(facet_name)
-    query_params.delete(:facets) if query_params[:facets]&.empty?
+    raise ArgumentError, 'No facets are present' unless query_params.key?(:facets)
+    raise ArgumentError, 'No query param is present for this facet' unless query_params[:facets].key?(facet_name)
+    query_params[:facets][facet_name].delete(value)
+    query_params[:facets].delete(facet_name) if query_params[:facets][facet_name].empty?
+    query_params.delete(:facets) if query_params[:facets].empty?
 
     query_params
   end

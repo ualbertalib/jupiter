@@ -46,8 +46,13 @@ class Collection < JupiterCore::LockedLdpObject
     end
 
     before_save do
-      community.unlock_and_fetch_ldp_object do |uo|
-        self.member_of_collections += [uo]
+      if community_id_changed?
+        # This adds the `pcdm::memberOf` predicate, pointing to the community
+        self.member_of_collections = []
+        # TODO: can this be streamlined so that a fetch from Fedora isn't needed?
+        community.unlock_and_fetch_ldp_object do |unlocked_community|
+          self.member_of_collections += [unlocked_community]
+        end
       end
     end
 

@@ -49,6 +49,7 @@ en:
   sort_by: 'Sort by'
   updated_at: 'Updated At'
   search_label: 'Search'
+  search_items: 'Search Items'
 
   activemodel:
     errors:
@@ -231,14 +232,7 @@ en:
         no_items_found: 'There are no items for this user'
         draft_user_items: "Draft User's Items"
         user_items: "User's Items"
-        display_items_count: "Displaying %{items_count} of %{total_items_count} total items."
-        # TODO: most of these are generic enough to be moved up in a common namespace
-        sort: 'Sort'
-        sort_by: 'Sort options'
-        latest: 'Latest'
-        oldest: 'Oldest'
-        title_asc: 'Title (A to Z)'
-        title_desc: 'Title (Z to A)'
+        search_items_placeholder: "Search this user's items ..."
       index:
         search_placeholder: 'email or name...'
         header: 'Users'
@@ -256,7 +250,6 @@ en:
       no_items_in_collection: 'There are no items in this Collection'
       item_delete_confirm: 'Are you sure you want to delete item "%{title}"?'
       deposit_item: 'Deposit Item'
-      search_items: 'Search Items'
       search_items_placeholder: 'Search this collection ...'
   communities:
     sort_record_created_at_asc: 'Date (oldest first)'
@@ -382,3 +375,5 @@ en:
   facets:
     member_of_paths: 'Collections'
     item_type_with_status: 'Item type'
+    all_contributors: 'Author / Creator / Contributor'
+    all_subjects: 'Subject / Keyword'

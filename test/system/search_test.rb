@@ -16,10 +16,12 @@ class SearchTest < ApplicationSystemTestCase
     @items = 10.times.map do |i|
       Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                  owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Item #{i}",
+                                 creators: ['Joe Blow'],
                                  languages: [CONTROLLED_VOCABULARIES[:language].eng],
                                  item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                  publication_status: CONTROLLED_VOCABULARIES[:publication_status].published,
-                                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international)
+                                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                                 subject: ['Items'])
           .unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(@community.id, @collections[i / 5].id)
         uo.save!
@@ -29,10 +31,12 @@ class SearchTest < ApplicationSystemTestCase
     @items += 10.times.map do |i|
       Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PRIVATE,
                                  owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Private Item #{i + 10}",
+                                 creators: ['Joe Blow'],
                                  languages: [CONTROLLED_VOCABULARIES[:language].eng],
                                  item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                  publication_status: CONTROLLED_VOCABULARIES[:publication_status].published,
-                                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international)
+                                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                                 subject: ['Items'])
           .unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(@community.id, @collections[i / 5].id)
         uo.save!
@@ -48,10 +52,12 @@ class SearchTest < ApplicationSystemTestCase
                              .unlock_and_fetch_ldp_object(&:save!)
       Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                  owner: 1, title: "Extra Item #{i}",
+                                 creators: ['Joe Blow'],
                                  languages: [CONTROLLED_VOCABULARIES[:language].eng],
                                  item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                  publication_status: CONTROLLED_VOCABULARIES[:publication_status].published,
-                                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international)
+                                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                                 subject: ['Items'])
           .unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(community.id, collection.id)
         uo.save!
@@ -92,9 +98,10 @@ class SearchTest < ApplicationSystemTestCase
       # Click on facet
       # A checkbox for the facet should be unchecked, and link should turn on face
       path = "#{@community.id}/#{@collections[1].id}"
-      facet_path = search_path(search: 'Fancy', facets: { member_of_paths_dpsim: path })
+      facet_path = search_path(search: 'Fancy', facets: { member_of_paths_dpsim: [path] })
 
       facets = find('div.jupiter-facets')
+
       facet = facets.find_link('a', text: 'Fancy Collection 1', href: facet_path)
       checkbox = facet.find 'input'
       refute checkbox.checked?
@@ -291,7 +298,7 @@ class SearchTest < ApplicationSystemTestCase
       # Click on facet
       # A checkbox for the facet should be unchecked, and link should turn on face
       path = "#{@community.id}/#{@collections[1].id}"
-      facet_path = search_path(search: 'Fancy', facets: { member_of_paths_dpsim: path })
+      facet_path = search_path(search: 'Fancy', facets: { member_of_paths_dpsim: [path] })
 
       facets = find('div.jupiter-facets')
       facet = facets.find_link('a', text: 'Fancy Collection 1', href: facet_path)

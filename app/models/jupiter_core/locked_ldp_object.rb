@@ -128,8 +128,7 @@ module JupiterCore
     #    obj.search_term_for(:title)
     #    => "title_tesim:\"The effects of Celebrator Doppelbock on cats\""
     def search_term_for(attr_name)
-      solr_attr_name = self.class.solr_name_for(attr_name, role: :search)
-      %Q(#{solr_attr_name}:"#{self.send(attr_name)}")
+      self.class.search_term_for(attr_name, self.send(attr_name))
     end
 
     def read_solr_index(name)
@@ -209,7 +208,6 @@ module JupiterCore
     #   => "title_tesim"
     def self.solr_name_for(attribute_name, role:)
       attribute_metadata = self.attribute_cache[attribute_name]
-
       if attribute_metadata.present?
         sort_attr_index = attribute_metadata[:solrize_for].index(role)
         raise ArgumentError, "No #{role} solr role is defined for #{attribute_name}" if sort_attr_index.blank?
@@ -222,6 +220,21 @@ module JupiterCore
         raise ArgumentError, "#{attribute_name} not indexed for #{role}" if idx.blank?
         return solr_metadata[:solr_names][idx]
       end
+    end
+
+    # Accepts the symbolic name of an attribute, and a value to search for, and returns the string
+    # representing the solr search term. eg)
+    #
+    # Given a subclass +Item+ with an attribute declaration:
+    #   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
+    #
+    # then:
+    #   Item.search_term_for(:title, 'science')
+    #   => "title_tesim:science"
+    def self.search_term_for(attr_name, value, role: :search)
+      rails ArgumentError("search value can't be nil") if value.nil?
+      solr_attr_name = solr_name_for(attr_name, role: role)
+      %Q(#{solr_attr_name}:"#{value}")
     end
 
     # Accepts a string id of an object in the LDP, and returns a +LockedLDPObjects+ representation of that object

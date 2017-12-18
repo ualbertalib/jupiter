@@ -120,6 +120,7 @@ if Rails.env.development? || Rails.env.uat?
           title: "The effects of #{Faker::Beer.name} on #{thing.pluralize}",
           description: description,
           languages: [language],
+          subject: [thing.capitalize]
         }
         if seed % 10 < 7
           attributes[:license] = CONTROLLED_VOCABULARIES[:license].attribution_4_0_international
@@ -143,12 +144,14 @@ if Rails.env.development? || Rails.env.uat?
       # Add an private item
       Item.new_locked_ldp_object(
         owner: admin.id,
+        creators: [creators[rand(10)]],
         visibility: JupiterCore::VISIBILITY_PRIVATE,
         title: "Private #{thing.pluralize}, public lives: a survey of social media trends",
         description: Faker::Lorem.sentence(20, false, 0).chop,
         languages: [CONTROLLED_VOCABULARIES[:language].eng],
         license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-        item_type: CONTROLLED_VOCABULARIES[:item_type].chapter
+        item_type: CONTROLLED_VOCABULARIES[:item_type].chapter,
+        subject: [thing.capitalize, 'Privacy']
       ).unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(community.id, collection.id)
         uo.save!
@@ -157,12 +160,14 @@ if Rails.env.development? || Rails.env.uat?
       # Add a currently embargoed item
       Item.new_locked_ldp_object(
         owner: admin.id,
+        creators: [creators[rand(10)]],
         visibility: Item::VISIBILITY_EMBARGO,
         title: "Embargo and #{Faker::Address.country}: were the #{thing.pluralize} left behind?",
         description: Faker::Lorem.sentence(20, false, 0).chop,
         languages: [CONTROLLED_VOCABULARIES[:language].eng],
         license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-        item_type: CONTROLLED_VOCABULARIES[:item_type].conference_paper
+        item_type: CONTROLLED_VOCABULARIES[:item_type].conference_paper,
+        subject: [thing.capitalize, 'Embargoes']
       ).unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(community.id, collection.id)
         uo.embargo_end_date = (Time.now + 20.years).to_date
@@ -173,12 +178,14 @@ if Rails.env.development? || Rails.env.uat?
       # Add a formerly embargoed item
       Item.new_locked_ldp_object(
         owner: admin.id,
+        creators: [creators[rand(10)]],
         visibility: Item::VISIBILITY_EMBARGO,
         title: "Former embargo of #{Faker::Address.country}: the day the #{thing.pluralize} were free",
         description: Faker::Lorem.sentence(20, false, 0).chop,
         languages: [CONTROLLED_VOCABULARIES[:language].eng],
         license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-        item_type: CONTROLLED_VOCABULARIES[:item_type].dataset
+        item_type: CONTROLLED_VOCABULARIES[:item_type].dataset,
+        subject: [thing.capitalize, 'Freedom']
       ).unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(community.id, collection.id)
         uo.embargo_end_date = (Time.now - 2.days).to_date
@@ -189,12 +196,16 @@ if Rails.env.development? || Rails.env.uat?
       # Add an item owned by non-admin
       Item.new_locked_ldp_object(
         owner: non_admin.id,
+        creators: [creators[rand(10)]],
         visibility: JupiterCore::VISIBILITY_PUBLIC,
         title: "Impact of non-admin users on #{thing.pluralize}",
         description: Faker::Lorem.sentence(20, false, 0).chop,
         languages: [CONTROLLED_VOCABULARIES[:language].eng],
         license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-        item_type: CONTROLLED_VOCABULARIES[:item_type].learning_object
+        item_type: CONTROLLED_VOCABULARIES[:item_type].learning_object,
+        subject: [thing.capitalize, 'Equality'],
+        # Add a temporal subject
+        temporal_subjects: ['The 1950s']
       ).unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(community.id, collection.id)
         uo.save!
@@ -205,13 +216,17 @@ if Rails.env.development? || Rails.env.uat?
     # Want one multi-collection item per community
     Item.new_locked_ldp_object(
       owner: admin.id,
+      creators: [creators[rand(10)]],
       visibility: JupiterCore::VISIBILITY_PUBLIC,
       title: "Multi-collection random images of #{thing.pluralize}",
       description: Faker::Lorem.sentence(20, false, 0).chop,
       # No linguistic content
       languages: [CONTROLLED_VOCABULARIES[:language].zxx],
       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-      item_type: CONTROLLED_VOCABULARIES[:item_type].image
+      item_type: CONTROLLED_VOCABULARIES[:item_type].image,
+      subject: [thing.capitalize, 'Randomness', 'Pictures'],
+      # Add a spacial subject
+      spatial_subjects: ['Onoway']
     ).unlock_and_fetch_ldp_object do |uo|
       uo.add_to_path(community.id, collection_first.id)
       uo.add_to_path(community.id, collection_last.id)

@@ -1,12 +1,13 @@
 class CollectionsController < ApplicationController
 
+  include ItemSearch
+
   before_action :fetch_and_authorize_community
   before_action :fetch_and_authorize_collection
 
-  # Collection must be fetched before we include this ...
-  include CollectionItemSearch
-
-  def show; end
+  def show
+    item_search_setup(Item.search_term_for(:member_of_paths, @collection.path, role: :pathing))
+  end
 
   private
 

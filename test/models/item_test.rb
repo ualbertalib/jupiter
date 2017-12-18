@@ -12,6 +12,8 @@ class ItemTest < ActiveSupport::TestCase
     collection.unlock_and_fetch_ldp_object(&:save!)
     item = Item.new_locked_ldp_object(title: 'Item', owner: 1, visibility: JupiterCore::VISIBILITY_PUBLIC,
                                       languages: [CONTROLLED_VOCABULARIES[:language].eng],
+                                      creators: ['Joe Blow'],
+                                      subject: ['Things'],
                                       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
                                       item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                       publication_status: CONTROLLED_VOCABULARIES[:publication_status].draft)
@@ -42,6 +44,17 @@ class ItemTest < ActiveSupport::TestCase
 
   test 'embargo is a valid visibility for items' do
     assert_includes Item.valid_visibilities, Item::VISIBILITY_EMBARGO
+  end
+
+  test 'created allows fuzzy dates' do
+    item = Item.new_locked_ldp_object
+    assert_nothing_raised do
+      item.unlock_and_fetch_ldp_object do |unlocked_item|
+        unlocked_item.created = 'before 1997 or after 2084'
+      end
+    end
+    assert_not item.valid?
+    assert_equal '1997', item.sort_year
   end
 
   test 'embargo_end_date must be present if visibility is embargo' do
@@ -221,6 +234,18 @@ class ItemTest < ActiveSupport::TestCase
                                       publication_status: CONTROLLED_VOCABULARIES[:publication_status].published)
     assert_not item.valid?
     assert_includes item.errors[:publication_status], 'must be absent for non-articles'
+  end
+
+  test 'a subject is required' do
+    item = Item.new_locked_ldp_object
+    assert_not item.valid?
+    assert_includes item.errors[:subject], "can't be blank"
+  end
+
+  test 'a creator is required' do
+    item = Item.new_locked_ldp_object
+    assert_not item.valid?
+    assert_includes item.errors[:creators], "can't be blank"
   end
 
 end
