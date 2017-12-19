@@ -12,6 +12,14 @@ class DraftItemPolicy < ApplicationPolicy
     create?
   end
 
+  def file_create?
+    owned? || admin?
+  end
+
+  def file_destroy?
+    owned? || admin?
+  end
+
   def owned?
     record && user && record.user.id == user.id
   end

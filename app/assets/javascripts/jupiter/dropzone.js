@@ -6,7 +6,7 @@ $(document).on('turbolinks:load', function() {
 
   if (document.querySelector('form.js-files-dropzone') !== null ) {
     var filesDropzone = new Dropzone('form.js-files-dropzone', {
-      paramName: 'draft_item[files]',
+      paramName: 'file',
       // thumbnailWidth: 80,
       // thumbnailHeight: 80,
       // parallelUploads: 100,
@@ -17,10 +17,6 @@ $(document).on('turbolinks:load', function() {
       // uploadMultiple: true,
       previewsContainer: '#js-previews-list', // Define the container to display the previews
       clickable: '.js-add-files', // Define the element that should be used as click trigger to select files.
-      headers: {
-        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-      },
-
       init: function() {
         this.on('success', function(file, response) {
           $('#js-files-list').prepend(response.file);
