@@ -8,7 +8,11 @@ Rails.application.routes.draw do
     end
 
     resources :draft, only: [:show, :update], controller: 'items/draft'
-    resources :files, only: [:create, :destroy], controller: 'items/files'
+    resources :files, only: [:create, :destroy], controller: 'items/files' do
+      member do
+        patch :set_thumbnail
+      end
+    end
 
     member do
       match 'download/*file_name' => 'file_sets#download', :format => false, via: :get

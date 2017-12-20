@@ -21,22 +21,22 @@
         <%= fa_icon 'files-o' %>
         <%= t('.attach_files') %>
       </button>
-      <button type="button" class="btn btn-secondary js-cancel-files">
+      <button type="button" class="btn btn-secondary js-clear-files">
         <%= fa_icon 'times' %>
-        <%= t('.remove_files') %>
+        <%= t('.clear_uploads') %>
       </button>
     </div>
   </div>
 
   <div class="row p-5 m-3 border">
     <div class="col">
-      <h4 class="text-center ">
-        Drag and Drop files here or click Attach Files button above.
+      <h4 class="text-center">
+        <%= t('.upload_files_instructions') %>
       </h4>
       <ul id="js-previews-list" class="list-unstyled">
       </ul>
       <div class="fallback">
-        <strong>Please enable javascript to upload files.</strong>
+        <strong><%= t('.no_js_fallback') %></strong>
       </div>
     </div>
   </div>
@@ -69,20 +69,12 @@
                     url: wizard_path,
                     method: :put,
                     html: { class:'js-deposit-item' } do |f| %>
-  <div class="row">
-    <div class="col">
-      <ul id="js-files-list" class="list-unstyled">
-        <%= render partial: 'files_list' %>
-      </ul>
-    </div>
-  </div>
 
-  <div class="row">
-    <div class="col">
-      <h5> <%= t('.drag_and_drop_files') %></h5>
-      <p> <%= t('.thumbnail_of_first_file') %></p>
-    </div>
-  </div>
+  <h4><%= t('.saved_files') %></h4>
+  <p><%= t('.thumbnail_of_first_file') %></p>
+  <ul id="js-files-list" class="list-unstyled">
+    <%= render partial: 'files_list' %>
+  </ul>
 
   <div class="mt-3 pull-right">
     <%= link_to previous_wizard_path, class: 'btn btn-secondary' do %>

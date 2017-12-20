@@ -19,14 +19,16 @@ $(document).on('turbolinks:load', function() {
       clickable: '.js-add-files', // Define the element that should be used as click trigger to select files.
       init: function() {
         this.on('success', function(file, response) {
-          $('#js-files-list').prepend(response.file);
+          $("#js-files-list").hide();
+          $("#js-files-list").html(response.files_list_html)
+                             .fadeIn(500);
         });
       }
     });
 
-    // document.querySelector('.js-files-dropzone .js-cancel-files').addEventListener('click', function() {
-    //   filesDropzone.removeAllFiles(true);
-    // });
+    document.querySelector('.js-files-dropzone .js-clear-files').addEventListener('click', function() {
+      filesDropzone.removeAllFiles(true);
+    });
 
     // Make files previews sortable
     // var el = document.querySelector('#js-previews');

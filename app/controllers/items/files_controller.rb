@@ -4,27 +4,20 @@ class Items::FilesController < ApplicationController
     @draft_item = DraftItem.find(params[:item_id])
     authorize  @draft_item, :file_create?
 
-
     # We upload files one at a time from UI
     if params[:file].present?
-      @draft_item.files.attach(params[:file])
-    end
+      if @draft_item.files.attach(params[:file])
+        file_partial = render_to_string(
+          'items/draft/_files_list',
+          layout: false,
+          formats: [:html],
+          object: @draft_item
+        )
 
-    @file = @draft_item.files.last
-
-    # Return a json response of the partial `file.html.erb` so Dropzone can append the uploaded image to the dom
-    if @file
-      # Reuse existing partial
-      file_partial = render_to_string(
-        'items/draft/_file',
-        layout: false,
-        formats: [:html],
-        locals: { file: @file }
-      )
-
-      render json: { file: file_partial }, status: 200
-    else
-      render json: @file.errors, status: 400
+        render json: { files_list_html: file_partial }, status: 200
+      else
+        render json: @file.errors, status: 400
+      end
     end
   end
 
@@ -34,6 +27,25 @@ class Items::FilesController < ApplicationController
 
     @file = @draft_item.files.find(params[:id])
 
+    if @file.id == @draft_item.thumbnail_id
+      @draft_item.update_attributes(thumbnail_id: nil)
+    end
+
     @file.purge
+
+    render :update_files_list
   end
+
+  def set_thumbnail
+    @draft_item = DraftItem.find(params[:item_id])
+    authorize  @draft_item, :set_thumbnail?
+
+    @draft_item.thumbnail_id = params[:id]
+    @draft_item.save
+
+    render :update_files_list
+  end
+
+
+
 end

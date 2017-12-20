@@ -1,7 +1,13 @@
 <li class="media my-3 p-3 border">
-  <%= image_tag file.url, alt: 'Preview Image', width:'120', height: '120', class: 'mr-3 img-fluid img-thumbnail' %>
+  <%= image_tag file.url, width:'120', height: '120', class: 'mr-3 img-fluid img-thumbnail' %>
   <div class="media-body">
     <div class="pull-right">
+      <% if @draft_item.thumbnail != file %>
+        <%= link_to set_thumbnail_item_file_path(@draft_item, file), method: :patch, remote: true, class: 'btn btn-secondary' do %>
+          <%= fa_icon 'file-image-o' %>
+          <%= t('.set_as_thumbnail') %>
+        <% end %>
+      <% end %>
       <%= link_to item_file_path(@draft_item, file), method: :delete, remote: true, class: 'btn btn-secondary' do %>
         <%= fa_icon 'times' %>
         <%= t('remove') %>

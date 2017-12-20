@@ -44,6 +44,16 @@ class DraftItem < ApplicationRecord
 
   validates :files, presence: true, if: :validate_upload_files?
 
+
+  def thumbnail
+    if self.thumbnail_id.present?
+      file = self.files.find(self.thumbnail_id)
+      return file if file.present?
+    end
+
+    self.files.first
+  end
+
   private
 
   # TODO: turn on all validations on when reviewing (archived status)

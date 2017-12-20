@@ -12,12 +12,16 @@ class DraftItemPolicy < ApplicationPolicy
     create?
   end
 
+  def set_thumbnail?
+    create?
+  end
+
   def file_create?
-    owned? || admin?
+    create?
   end
 
   def file_destroy?
-    owned? || admin?
+    create?
   end
 
   def owned?
