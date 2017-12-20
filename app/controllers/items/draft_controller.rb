@@ -29,7 +29,6 @@ class Items::DraftController < ApplicationController
       collection_id = params[:draft_item].delete :collection_id
 
       @draft_item.member_of_paths = { 'community_id' => community_id, 'collection_id' => collection_id }
-    when :upload_files
     when :review_and_deposit_item
       params[:draft_item][:status] = DraftItem.statuses[:archived]
     end

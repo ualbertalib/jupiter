@@ -29,24 +29,6 @@ $(document).on('turbolinks:load', function() {
     document.querySelector('.js-files-dropzone .js-clear-files').addEventListener('click', function() {
       filesDropzone.removeAllFiles(true);
     });
-
-    // Make files previews sortable
-    // var el = document.querySelector('#js-previews');
-    // var sortable = Sortable.create(el, {
-    //   // Called by any change to the list (add / update / remove)
-    //   onSort: function (/**Event*/evt) {
-    //     // Get the queued files
-    //     var files = filesDropzone.getQueuedFiles();
-    //     // Sort theme based on the DOM element index
-    //     files.sort(function(a, b){
-    //         return ($(a.previewElement).index() > $(b.previewElement).index()) ? 1 : -1;
-    //     });
-    //     // Clear the dropzone queue
-    //     filesDropzone.removeAllFiles();
-    //     // Add the reordered files to the queue
-    //     filesDropzone.handleFiles(files);
-    //   },
-    // });
   }
 });
 

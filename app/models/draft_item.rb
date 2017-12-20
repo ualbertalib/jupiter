@@ -44,14 +44,13 @@ class DraftItem < ApplicationRecord
 
   validates :files, presence: true, if: :validate_upload_files?
 
-
   def thumbnail
-    if self.thumbnail_id.present?
-      file = self.files.find(self.thumbnail_id)
+    if thumbnail_id.present?
+      file = files.find(thumbnail_id)
       return file if file.present?
     end
 
-    self.files.first
+    files.first
   end
 
   private
