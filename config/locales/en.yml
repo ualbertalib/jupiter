@@ -453,10 +453,10 @@ en:
         no_js_fallback: 'Please enable javascript to upload files.'
       files_list:
         no_saved_files: No files have been attached to this item
-        thumbnail_alt: Thumbnail Image
         item_thumbnail: 'Item Thumbnail'
         thumbnail_of_first_file: 'By default the first file will be displayed as the thumbnail image for this item. To change this, click on set as thumbnail button on the desired file.'
-
+      thumbnail:
+        thumbnail_alt: Thumbnail Image
       file:
         set_as_thumbnail: Set as Thumbnail
       review_and_deposit_item:

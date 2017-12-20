@@ -7,13 +7,8 @@
     <div class="col-md-4">
       <h4><%= t('.item_thumbnail') %></h4>
 
-      <% if image?(@draft_item.thumbnail) %>
-        <%= image_tag @draft_item.thumbnail.url, alt: t('.thumbnail_alt'), class: 'img-thumbnail' %>
-      <% else %>
-        <div class="text-muted text-center img-thumbnail">
-          <%= fa_icon file_icon(@draft_item.thumbnail.content_type), class: 'fa-5x' %>
-        </div>
-      <% end %>
+
+      <%= render partial: 'items/draft/thumbnail', locals: { thumbnail: @draft_item.thumbnail }%>
 
       <p class="text-muted"><%= t('.thumbnail_of_first_file') %></p>
     </div>

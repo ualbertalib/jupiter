@@ -1,15 +1,8 @@
 <li class="media my-3 p-3 border">
 
+  <%= render partial: 'items/draft/thumbnail', locals: { thumbnail: file }%>
 
-  <% if image?(file) %>
-    <%= image_tag file.url, alt: 'Uploaded Image', width:'120', height: '120', class: 'mr-3 img-fluid img-thumbnail' %>
-  <% else %>
-    <div class="text-muted text-center mr-3 img-fluid img-thumbnail">
-      <%= fa_icon file_icon(file.content_type), class: 'fa-5x' %>
-    </div>
-  <% end %>
-
-  <div class="media-body">
+  <div class="media-body my-3">
     <div class="pull-right">
       <% if @draft_item.thumbnail != file %>
         <%= link_to set_thumbnail_item_file_path(@draft_item, file), method: :patch, remote: true, class: 'btn btn-secondary' do %>

@@ -44,7 +44,6 @@ module Items::DraftHelper
     end
   end
 
-
   # Probably easier way of doing this?
   def file_icon(content_type)
     case content_type
@@ -61,13 +60,13 @@ module Items::DraftHelper
     when /zip/
       'file-archive-o'
     when /(excel|sheet)/
-     'file-excel-o'
+      'file-excel-o'
     when /(powerpoint|presentation)/
-     'file-powerpoint-o'
+      'file-powerpoint-o'
     when /word/
       'file-word-o'
     else
-     'file-o'
+      'file-o'
     end
   end
 
