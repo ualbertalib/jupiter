@@ -1,6 +1,6 @@
-xml.instruct! :xml, :version => "1.0"
+xml.instruct! :xml, version: '1.0'
 cache 'sitemap', expires_in: 24.hours do
-  xml.urlset(:xmlns => 'http://www.sitemaps.org/schemas/sitemap/0.9') do
+  xml.urlset(xmlns: 'http://www.sitemaps.org/schemas/sitemap/0.9') do
     xml.url do
       xml.loc        root_url
       xml.lastmod    Time.current.utc.iso8601
