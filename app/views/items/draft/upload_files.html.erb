@@ -7,6 +7,15 @@
   <%= t('.header') %>
 </h2>
 
+
+<% if @draft_item.errors.any? %>
+<ul class="list-unstyled alert alert-danger">
+ <% @draft_item.errors.full_messages.each do |message| %>
+  <li><%= message %></li>
+ <% end %>
+ </ul>
+<% end %>
+
 <%= simple_form_for @draft_item,
                     url: item_files_path,
                     method: :post,
@@ -28,7 +37,7 @@
     </div>
   </div>
 
-  <div class="row p-5 m-3 border">
+  <div class="row p-5 m-3 border js-add-files">
     <div class="col">
       <h4 class="text-center">
         <%= t('.upload_files_instructions') %>
@@ -71,7 +80,6 @@
                     html: { class:'js-deposit-item' } do |f| %>
 
   <h4><%= t('.saved_files') %></h4>
-  <p><%= t('.thumbnail_of_first_file') %></p>
   <ul id="js-files-list" class="list-unstyled">
     <%= render partial: 'files_list' %>
   </ul>

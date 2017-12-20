@@ -7,15 +7,12 @@
   <%= t('.header') %>
 </h2>
 
-<%# TODO: Need to figure out data model and migrate everything to use form_for and it's helpers
-= form_for @item, url: wizard_path, method: :put, class:'js-deposit-item' do |f| %>
-<%= form_tag wizard_path, method: :put, class:'js-deposit-item' do %>
+<%= simple_form_for @draft_item, url: wizard_path, method: :put, html: { class:'js-deposit-item' } do |f| %>
   <p><%= t('.please_review_item') %></p>
 
-  <%# should generalize item show page and rerender here and passing in object %>
   <div class="row">
-    <div class="col-md-4">
 
+    <div class="col-md-4">
       <% if @draft_item.thumbnail.url.present? %>
         <%= image_tag @draft_item.thumbnail.url, alt: 'Preview Image', class: 'img-thumbnail' %>
       <% else %>
@@ -73,6 +70,7 @@
         </div>
       </div>
     </div>
+
     <div class="col-md-8">
       <div class="card mb-3">
         <div class="card-header">
@@ -88,10 +86,12 @@
           </h6>
           <p class="card-text"><%= @draft_item.title %></p>
 
-          <h6 class="card-subtitle mb-1 text-muted">
-            <%=  t('items.draft.describe_item.alternate_title') %>
-          </h6>
-          <p class="card-text"><%= @draft_item.alternate_title %></p>
+          <% if @draft_item.alternate_title.present? %>
+            <h6 class="card-subtitle mb-1 text-muted">
+              <%=  t('items.draft.describe_item.alternate_title') %>
+            </h6>
+            <p class="card-text"><%= @draft_item.alternate_title %></p>
+          <% end %>
 
           <h6 class="card-subtitle mb-1 text-muted">
             <%=  t('items.draft.describe_item.type_id') %>
@@ -196,21 +196,26 @@
             </ul>
           <% end %>
 
-          <h6 class="card-subtitle mb-1 text-muted">
-            <%=  t('items.draft.describe_item.source') %>
-          </h6>
-          <p class="card-text">
-            <%= @draft_item.source %>
-          </p>
+          <% if @draft_item.source.present? %>
+            <h6 class="card-subtitle mb-1 text-muted">
+              <%=  t('items.draft.describe_item.source') %>
+            </h6>
+            <p class="card-text">
+              <%= @draft_item.source %>
+            </p>
+          <% end %>
 
-          <h6 class="card-subtitle mb-1 text-muted">
-            <%=  t('items.draft.describe_item.related_item') %>
-          </h6>
-          <p class="card-text">
-            <%= @draft_item.related_item %>
-          </p>
+          <% if @draft_item.related_item.present? %>
+            <h6 class="card-subtitle mb-1 text-muted">
+              <%=  t('items.draft.describe_item.related_item') %>
+            </h6>
+            <p class="card-text">
+              <%= @draft_item.related_item %>
+            </p>
+          <% end %>
         </div>
       </div>
+
       <p><%= t('.legal_disclaimer_html') %></p>
       <div class="mb-3 pull-right">
         <%= link_to previous_wizard_path, class: 'btn btn-secondary' do %>

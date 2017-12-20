@@ -1,5 +1,5 @@
 <li class="media my-3 p-3 border">
-  <%= image_tag file.url, width:'120', height: '120', class: 'mr-3 img-fluid img-thumbnail' %>
+  <%= image_tag file.url, alt: 'Uploaded Image', width:'120', height: '120', class: 'mr-3 img-fluid img-thumbnail' %>
   <div class="media-body">
     <div class="pull-right">
       <% if @draft_item.thumbnail != file %>

@@ -5,8 +5,9 @@
     </div>
   <% else %>
     <div class="col-md-4">
-      <h4><%= t('.current_thumbnail') %></h4>
+      <h4><%= t('.item_thumbnail') %></h4>
       <%= image_tag @draft_item.thumbnail.url, alt: t('.thumbnail_alt'), class: 'img-thumbnail' %>
+      <p class="text-muted"><%= t('.thumbnail_of_first_file') %></p>
     </div>
     <div class="col-md-8">
       <% @draft_item.files.each do |file| %>

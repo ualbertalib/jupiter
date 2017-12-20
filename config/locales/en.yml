@@ -448,14 +448,15 @@ en:
         header_icon: 'paperclip'
         attach_files: 'Attach Files'
         clear_uploads: 'Clear Uploads'
-        saved_files: 'Saved Files'
-        upload_files_instructions: 'Drag and Drop files here or click the Attach Files button.'
-        thumbnail_of_first_file: 'By default the first file will be displayed as the thumbnail image for this item. To change this, click on set as thumbnail button on the desired file.'
+        saved_files: 'Item File Attachments'
+        upload_files_instructions: 'Choose a file(s) or drag it here'
         no_js_fallback: 'Please enable javascript to upload files.'
       files_list:
-        no_saved_files: No files have been uploaded as of yet
+        no_saved_files: No files have been attached to this item
         thumbnail_alt: Thumbnail Image
-        current_thumbnail: 'Current Thumbnail'
+        item_thumbnail: 'Item Thumbnail'
+        thumbnail_of_first_file: 'By default the first file will be displayed as the thumbnail image for this item. To change this, click on set as thumbnail button on the desired file.'
+
       file:
         set_as_thumbnail: Set as Thumbnail
       review_and_deposit_item:

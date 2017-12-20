@@ -8,8 +8,7 @@ class Items::FilesController < ApplicationController
       file_partial = render_to_string(
         'items/draft/_files_list',
         layout: false,
-        formats: [:html],
-        object: @draft_item
+        formats: [:html]
       )
 
       render json: { files_list_html: file_partial }, status: 200
@@ -23,10 +22,6 @@ class Items::FilesController < ApplicationController
     authorize @draft_item, :file_destroy?
 
     @file = @draft_item.files.find(params[:id])
-
-    if @file.id == @draft_item.thumbnail_id
-      @draft_item.update_attributes(thumbnail_id: nil)
-    end
 
     @file.purge
 

@@ -7,14 +7,8 @@ $(document).on('turbolinks:load', function() {
   if (document.querySelector('form.js-files-dropzone') !== null ) {
     var filesDropzone = new Dropzone('form.js-files-dropzone', {
       paramName: 'file',
-      // thumbnailWidth: 80,
-      // thumbnailHeight: 80,
-      // parallelUploads: 100,
-      // maxFiles: 100,
       // acceptedFiles: 'image/*', TODO: is there a full list of what we accept?
       previewTemplate: $('#js-dropzone-preview-template').html(),
-      // autoProcessQueue: false,
-      // uploadMultiple: true,
       previewsContainer: '#js-previews-list', // Define the container to display the previews
       clickable: '.js-add-files', // Define the element that should be used as click trigger to select files.
       init: function() {
