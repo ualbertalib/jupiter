@@ -10,4 +10,5 @@ class SitemapController < ApplicationController
     @items = Item.all # should be non-private
     # TODO: Theses
   end
+
 end

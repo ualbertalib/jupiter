@@ -50,6 +50,6 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => '/sidekiq', constraints: AdminConstraint.new
   end
 
-  get 'sitemap.xml', to: 'sitemap#index', defaults:  {format: :xml}
+  get 'sitemap.xml', to: 'sitemap#index', defaults: { format: :xml }
   root to: 'welcome#index'
 end
