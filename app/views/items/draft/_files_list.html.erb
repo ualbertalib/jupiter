@@ -6,7 +6,15 @@
   <% else %>
     <div class="col-md-4">
       <h4><%= t('.item_thumbnail') %></h4>
-      <%= image_tag @draft_item.thumbnail.url, alt: t('.thumbnail_alt'), class: 'img-thumbnail' %>
+
+      <% if image?(@draft_item.thumbnail) %>
+        <%= image_tag @draft_item.thumbnail.url, alt: t('.thumbnail_alt'), class: 'img-thumbnail' %>
+      <% else %>
+        <div class="text-muted text-center img-thumbnail">
+          <%= fa_icon file_icon(@draft_item.thumbnail.content_type), class: 'fa-5x' %>
+        </div>
+      <% end %>
+
       <p class="text-muted"><%= t('.thumbnail_of_first_file') %></p>
     </div>
     <div class="col-md-8">
