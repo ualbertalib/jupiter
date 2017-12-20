@@ -13,7 +13,8 @@ cache 'sitemap', expires_in: 24.hours do
         xml.loc community_url(community)
         xml.changefreq 'weekly'
         xml.priority   1
-        xml.lastmod Time.current.utc.iso8601 # TODO
+        # TODO: replace with modified_at (needs indexing, Matt to add to LockedLDPObject)
+        xml.lastmod Time.current.utc.iso8601
       end
     end
 
@@ -22,7 +23,8 @@ cache 'sitemap', expires_in: 24.hours do
         xml.loc community_collection_url(collection.community, collection)
         xml.changefreq 'weekly'
         xml.priority   1
-        xml.lastmod Time.current.utc.iso8601 # TODO
+        # TODO: replace with modified_at (needs indexing, Matt to add to LockedLDPObject)
+        xml.lastmod Time.current.utc.iso8601
       end
     end
 
@@ -31,7 +33,8 @@ cache 'sitemap', expires_in: 24.hours do
         xml.loc item_url(item)
         xml.changefreq 'weekly'
         xml.priority   1
-        xml.lastmod Time.current.utc.iso8601 # TODO
+        # TODO: replace with modified_at (needs indexing, Matt to add to LockedLDPObject)
+        xml.lastmod Time.current.utc.iso8601
       end
     end
   end
