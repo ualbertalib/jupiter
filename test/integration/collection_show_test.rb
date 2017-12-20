@@ -19,7 +19,7 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
       Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                  owner: 1,
                                  creators: ['Joe Blow'],
-                                 languages: [CONTROLLED_VOCABULARIES[:language].eng],
+                                 languages: [CONTROLLED_VOCABULARIES[:language].english],
                                  license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
                                  item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                  publication_status: CONTROLLED_VOCABULARIES[:publication_status].published,
