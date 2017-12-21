@@ -60,7 +60,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
                  @@klass.attribute_names.sort
   end
 
-  test 'json_array attributess appear to be normal arrays, and maintain order' do
+  test 'json_array attributes appear to be normal arrays, and maintain order' do
     obj = @@klass.new_locked_ldp_object
     assert obj.creator.is_a?(Array)
     creator1 = generate_random_string
