@@ -421,6 +421,12 @@ module JupiterCore
             has_attribute :record_created_at, ::TERMS[:jupiter_core].record_created_at, type: :date,
                                                                                         solrize_for: [:sort]
           end
+          unless attribute_names.include?(:hydra_noid)
+            has_attribute :hydra_noid, ::TERMS[:ual].hydraNoid, solrize_for: [:exact_match]
+          end
+          unless attribute_names.include?(:date_ingested)
+            has_attribute :date_ingested, RDF::Vocab::EBUCore.dateIngested, type: :date, solrize_for: [:sort]
+          end
         end
       end
 
@@ -451,13 +457,20 @@ module JupiterCore
           validate :visibility_must_be_known
           validates :owner, presence: true
           validates :record_created_at, presence: true
+          validates :date_ingested, presence: true
 
           before_validation :set_record_created_at, on: :create
+          before_validation :set_date_ingested
 
           # ActiveFedora gives us system_create_dtsi, but that only exists in Solr, because what everyone wants
           # is a created_at that jumps around when you rebuild your index
           def set_record_created_at
             self.record_created_at = Time.current.utc.iso8601(3)
+          end
+
+          def set_date_ingested
+            return if date_ingested.present?
+            self.date_ingested = record_created_at
           end
 
           def visibility_must_be_known

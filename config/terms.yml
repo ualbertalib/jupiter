@@ -16,7 +16,7 @@
 #
 
 - vocabulary: ual
-  schema: http://terms.library.ualberta.ca/identifiers/
+  schema: http://terms.library.ualberta.ca/
   terms:
     - depositor
     - fedora3handle
@@ -24,6 +24,7 @@
     - ingestbatch
     - path
     - sortyear
+    - hydraNoid
 
 - vocabulary: prism
   schema: http://prismstandard.org/namespaces/basic/3.0/
