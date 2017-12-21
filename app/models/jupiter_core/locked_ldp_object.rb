@@ -718,7 +718,7 @@ module JupiterCore
         raise PropertyInvalidError if solrize_for.blank?
         # A "json_array" is a single valued property, because the array gets serialized to a single json string when saved
         # the main use-case for this is an ordered creator field
-        raise PropertyInvalidError if type == :json_array and multiple == true
+        raise PropertyInvalidError if (type == :json_array) && (multiple == true)
 
         # TODO: keep this conveinience, or push responsibility for [] onto the callsite?
         solrize_for = [solrize_for] unless solrize_for.is_a? Array
@@ -769,7 +769,7 @@ module JupiterCore
         define_cached_reader(name, multiple: multiple, type: type, canonical_solr_name: solr_name_cache.first)
 
         define_method "#{name}=" do |*_args|
-          raise LockedInstanceError, 'The Locked LDP object cannot be mutated outside of an unlocked block or without'\
+          raise LockedInstanceError, 'The Locked LDP object cannot be mutated outside of an unlocked block or without '\
                                      'calling unlock_and_fetch_ldp_object to load a writable copy (SLOW).'
         end
 
@@ -846,11 +846,11 @@ module JupiterCore
 
           # To work around a lack of ordering in multivalued attributes in Fedora, we need to serialize the :creators
           # array into a single-valued string, so that we can maintain a fixed order. We corerce it and other
-          #"json_array" properties back into arrays when reading them.
+          # "json_array" properties back into arrays when reading them.
           if type == :json_array
             alias_method :"shadowed_#{name}", :"#{name}"
 
-            define_method "#{name}" do
+            define_method name.to_s do
               owning_class.coerce_value(self.send("shadowed_#{name}"), to: :json_array)
             end
           end
