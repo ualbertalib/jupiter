@@ -41,12 +41,12 @@ module ApplicationHelper
     t(:page_range, first: first, last: last, total: results.total_count)
   end
 
-  def search_link_for(model, attribute, value: nil, facet: true, display: nil)
+  def search_link_for(object, attribute, value: nil, facet: true, display: nil)
     display ||= value
     if facet
-      link_to(display, search_path(facets: model.facet_term_for(attribute, value)))
+      link_to(display, search_path(facets: object.class.facet_term_for(attribute, value)))
     else
-      link_to(display, search_path(search: model.search_term_for(attribute, value)))
+      link_to(display, search_path(search: object.class.search_term_for(attribute, value)))
     end
   end
 

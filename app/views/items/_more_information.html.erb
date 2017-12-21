@@ -6,7 +6,7 @@
         <dd>
           <ul class="list-unstyled">
             <% @item.languages.each do |language| %>
-              <li><%= search_link_for(Item, :languages, value: language,
+              <li><%= search_link_for(@item, :languages, value: language,
                       display: CONTROLLED_VOCABULARIES[:language].uri_to_text(language)) %></li>
             <% end %>
           </ul>
@@ -22,7 +22,7 @@
         <dd>
           <ul class="list-unstyled">
             <% @item.contributors.each do |contributor| %>
-              <li><%= search_link_for(Item, :all_contributors, value: contributor) %></li>
+              <li><%= search_link_for(@item, :all_contributors, value: contributor) %></li>
             <% end %>
           </ul>
         </dd>

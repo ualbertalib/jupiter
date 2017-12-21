@@ -60,7 +60,7 @@
             <dd>
               <ul class="list-unstyled">
                 <% @item.creators.each do |creator| %>
-                  <li><%= search_link_for(Item, :all_contributors, value: creator) %></li>
+                  <li><%= search_link_for(@item, :all_contributors, value: creator) %></li>
                 <% end %>
               </ul>
             </dd>
@@ -78,7 +78,7 @@
         <li class="list-unstyled list-group-item-action">
           <dl>
             <dt><%= t('.attributes.sort_year') %></dt>
-            <dd><%= search_link_for(Item, :sort_year, value: @item.sort_year) %></dd>
+            <dd><%= search_link_for(@item, :sort_year, value: @item.sort_year) %></dd>
           </dl>
         </li>
       <% end %>
@@ -90,7 +90,7 @@
             <dd>
               <ul class="list-unstyled">
                 <% @item.all_subjects.each do |subject| %>
-                  <li><%= search_link_for(Item, :all_subjects, value: subject) %></li>
+                  <li><%= search_link_for(@item, :all_subjects, value: subject) %></li>
                 <% end %>
               </ul>
             </dd>
@@ -101,7 +101,7 @@
       <li class="list-unstyled list-group-item-action">
         <dl>
           <dt><%= t('.attributes.item_type_with_status') %></dt>
-          <dd><%= search_link_for(Item, :item_type_with_status, value: @item.item_type_with_status_code,
+          <dd><%= search_link_for(@item, :item_type_with_status, value: @item.item_type_with_status_code,
                                   display: t("controlled_vocabularies.item_type_with_status.#{@item.item_type_with_status_code}")) %></dd>
         </dl>
       </li>
