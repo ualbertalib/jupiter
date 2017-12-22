@@ -101,8 +101,7 @@
       <li class="list-unstyled list-group-item-action">
         <dl>
           <dt><%= t('.attributes.item_type_with_status') %></dt>
-          <dd><%= search_link_for(@item, :item_type_with_status, value: @item.item_type_with_status_code,
-                                  display: t("controlled_vocabularies.item_type_with_status.#{@item.item_type_with_status_code}")) %></dd>
+          <dd><%= item_type_search_link(@item) %></dd>
         </dl>
       </li>
 

@@ -6,8 +6,7 @@
         <dd>
           <ul class="list-unstyled">
             <% @item.languages.each do |language| %>
-              <li><%= search_link_for(@item, :languages, value: language,
-                      display: CONTROLLED_VOCABULARIES[:language].uri_to_text(language)) %></li>
+              <li><%= language_search_link(@item, language) %></li>
             <% end %>
           </ul>
         </dd>
