@@ -447,7 +447,6 @@ en:
         header: 'Upload Files'
         header_icon: 'paperclip'
         attach_files: 'Attach Files'
-        clear_uploads: 'Clear Uploads'
         saved_files: 'Item File Attachments'
         upload_files_instructions: 'Choose a file(s) or drag it here'
         no_js_fallback: 'Please enable javascript to upload files.'

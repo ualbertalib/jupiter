@@ -30,10 +30,6 @@
         <%= fa_icon 'files-o' %>
         <%= t('.attach_files') %>
       </button>
-      <button type="button" class="btn btn-secondary js-clear-files">
-        <%= fa_icon 'times' %>
-        <%= t('.clear_uploads') %>
-      </button>
     </div>
   </div>
 
@@ -55,7 +51,7 @@
 <%# Code below is used as the dropzone previewTemplate, will not be displayed to user %>
 <div id="js-dropzone-preview-template" class="d-none">
   <li class="media my-3 p-3 border">
-    <img data-dz-thumbnail class="mr-3" alt="Preview of uploaded file">
+    <img data-dz-thumbnail alt='' class='mr-3'>
     <div class="media-body">
       <h5 data-dz-name></h5>
       <strong class="text-danger" data-dz-errormessage></strong>
