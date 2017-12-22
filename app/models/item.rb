@@ -70,14 +70,10 @@ class Item < JupiterCore::LockedLdpObject
 
   # Combine creators and contributors for faceting
   # Note that contributors is converted to an array because it can be nil
-  additional_search_index :all_contributors,
-                          solrize_for: :facet,
-                          as: -> { creators + contributors.to_a }
+  additional_search_index :all_contributors, solrize_for: :facet, as: -> { creators + contributors.to_a }
 
   # Combine all the subjects for faceting
-  additional_search_index :all_subjects,
-                          solrize_for: :facet,
-                          as: -> { subject + temporal_subjects.to_a + spatial_subjects.to_a }
+  additional_search_index :all_subjects, solrize_for: :facet, as: -> { all_subjects }
 
   def self.display_attribute_names
     super - [:member_of_paths]
@@ -98,6 +94,14 @@ class Item < JupiterCore::LockedLdpObject
     "#{item_type_code}_#{publication_status_code}"
   rescue ArgumentError
     return nil
+  end
+
+  def doi_url
+    "https://doi.org/#{read_solr_index(:doi_without_label).first}"
+  end
+
+  def all_subjects
+    subject + temporal_subjects.to_a + spatial_subjects.to_a
   end
 
   def file_sets
