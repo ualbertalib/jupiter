@@ -458,6 +458,7 @@ en:
         thumbnail_alt: Thumbnail Image
       file:
         set_as_thumbnail: Set as Thumbnail
+        delete_file_dialog: Are you sure you want to delete this file?
       review_and_deposit_item:
         header: 'Review and Deposit Item'
         header_icon: 'check-square-o'

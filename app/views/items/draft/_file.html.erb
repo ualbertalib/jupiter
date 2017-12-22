@@ -10,7 +10,11 @@
           <%= t('.set_as_thumbnail') %>
         <% end %>
       <% end %>
-      <%= link_to item_file_path(@draft_item, file), method: :delete, remote: true, class: 'btn btn-secondary' do %>
+      <%= link_to item_file_path(@draft_item, file),
+                  method: :delete,
+                  remote: true,
+                  data: { confirm: t('.delete_file_dialog') },
+                  class: 'btn btn-secondary' do %>
         <%= fa_icon 'times' %>
         <%= t('remove') %>
       <% end %>
