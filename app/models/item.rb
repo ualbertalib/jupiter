@@ -70,14 +70,10 @@ class Item < JupiterCore::LockedLdpObject
 
   # Combine creators and contributors for faceting
   # Note that contributors is converted to an array because it can be nil
-  additional_search_index :all_contributors,
-                          solrize_for: :facet,
-                          as: -> { creators + contributors.to_a }
+  additional_search_index :all_contributors, solrize_for: :facet, as: -> { creators + contributors.to_a }
 
   # Combine all the subjects for faceting
-  additional_search_index :all_subjects,
-                          solrize_for: :facet,
-                          as: -> { all_subjects }
+  additional_search_index :all_subjects, solrize_for: :facet, as: -> { all_subjects }
 
   def self.display_attribute_names
     super - [:member_of_paths]
