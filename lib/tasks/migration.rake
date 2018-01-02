@@ -16,6 +16,41 @@ namespace :migration do
     end
   end
 
+  desc 'migrate collections to jupiter'
+  task :collections, [:dir] => :environment do |t, args|
+    begin
+      MigrationLogger.info "START: Migrate Collections"
+      dir = args.dir
+      #usage: rake migration:collections['<file directory to collection triple files, path included>']
+      if File.exist?(dir) && File.directory?(dir)
+        migrate_collections(dir)
+      else
+        MigrationLogger.error "Invalid directory #{dir}"
+      end
+      MigrationLogger.info "FINISHED: Migrate Collections"
+    rescue
+      raise
+    end
+  end
+
+  desc 'migrate items to jupiter'
+  task :items, [:dir] => :environment do |t, args|
+    begin
+      MigrationLogger.info "START: Migrate generic items"
+      dir = args.dir
+      #usage: rake migration:items['<file directory to item triple files, path included>']
+      if File.exist?(dir) && File.directory?(dir)
+        migrate_items(dir)
+      else
+        MigrationLogger.error "Invalid directory #{dir}"
+      end
+      MigrationLogger.info "FINISHED: Migrate generic items"
+    rescue
+      raise
+    end
+  end
+
+
   def user_id(email)
     user = User.find_or_create_by(email: email) do |u|
        u.name = user_name(email)
@@ -107,7 +142,7 @@ namespace :migration do
     end 
   end
 
-  def migrate_generic(dir)
+  def migrate_items(dir)
       collection_hash = community_collection_hash('collections.txt')
       collection_community = collection_parent_hash('collections.txt')   
       File.open('generic.txt','w+') do |f|
@@ -179,8 +214,6 @@ namespace :migration do
               depositor: depositor, owner: user_id(owner), visibility: visibility, fedora3_uuid: fedora3uuid, fedora3_handle: fedora3handle, 
              member_of_paths: [path], doi: doi)
 
-
-      
 
          item.unlock_and_fetch_ldp_object(&:save!)
          if !files.empty?
