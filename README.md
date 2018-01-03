@@ -8,7 +8,7 @@
 
 # View Documentation
 
-`$ open docs/rdoc/index.html`
+`$ open doc/index.html`
 
 # Check your style
 
