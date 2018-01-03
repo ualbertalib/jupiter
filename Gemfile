@@ -10,7 +10,7 @@ gem 'puma', '~> 3.11'
 gem 'rails', '~> 5.1.1'
 
 # Assets (CSS/JS) stuff
-gem 'bootstrap', '~> 4.0.0.beta2.1'
+gem 'bootstrap', '~> 4.0.0.beta3'
 gem 'font-awesome-rails'
 gem 'jquery-rails'
 gem 'sass-rails', '~> 5'
@@ -60,7 +60,7 @@ end
 group :development, :test do
   gem 'sdoc', require: false
 
-  gem 'capybara', '~> 2.16'
+  gem 'capybara', '~> 2.17'
   gem 'selenium-webdriver', require: false
 
   gem 'pry'
