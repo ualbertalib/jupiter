@@ -8,7 +8,9 @@
 
 # View Documentation
 
-`$ open doc/index.html`
+`$ open doc/index.html` is the location for docs created by rdoc
+
+`$ open docs/rdoc/index.html` is the location for docs created by rerdoc
 
 # Check your style
 
