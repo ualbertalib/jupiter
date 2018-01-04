@@ -38,6 +38,8 @@ class DraftItem < ApplicationRecord
             :description, :member_of_paths,
             presence: true, if: :validate_describe_item?
 
+  validate :communities_and_collections_validations, if: :validate_describe_item?
+
   validates :license, :visibility, presence: true, if: :validate_choose_license_and_visibility?
   validates :license_text_area, presence: true, if: :validate_if_license_is_text?
   validates :embargo_end_date, presence: true, if: :validate_if_visibility_is_embargo?
@@ -59,17 +61,24 @@ class DraftItem < ApplicationRecord
 
   private
 
-  # TODO: turn on all validations on when reviewing (archived status)
+  def communities_and_collections_validations
+    return if member_of_paths.blank? # caught by presence check
+    # member_of_paths.each do |path| # TODO eventually this will be an array of hashes
+      errors.add(:member_of_paths, :community_not_found) if member_of_paths['community_id'].blank?
+      errors.add(:member_of_paths, :collection_not_found) if member_of_paths['collection_id'].blank?
+    # end
+  end
+
   def validate_describe_item?
-    active? && describe_item?
+    (active? && describe_item?) || archived?
   end
 
   def validate_choose_license_and_visibility?
-    active? && choose_license_and_visibility?
+    (active? && choose_license_and_visibility?) || archived?
   end
 
   def validate_upload_files?
-    active? && upload_files?
+    (active? && upload_files?) || archived?
   end
 
   def validate_if_license_is_text?

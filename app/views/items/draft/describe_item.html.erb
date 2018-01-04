@@ -7,6 +7,13 @@
   <%= t('.header') %>
 </h2>
 
+<% if @draft_item.errors.any? %>
+  <p class="alert alert-danger">
+    <%= fa_icon 'exclamation-circle' %>
+    <%= t('items.draft.please_fix_errors') %>
+  </p>
+<% end %>
+
 <%= simple_form_for @draft_item, url: wizard_path, method: :put, html: { class:'js-deposit-item' } do |f| %>
   <p class="text-muted"><%= t('required_fields_html') %></p>
 
@@ -84,8 +91,8 @@
               label: t('.date_created'),
               order: [:year, :month, :day],
               prompt: {
-                day: t('select_a_day'),
-                month: t('select_a_month'),
+                day: false,
+                month: false,
                 year: t('select_a_year')
               },
               start_year: Date.today.year - 100,
@@ -108,13 +115,20 @@
     <small class="mb-3 form-text text-muted">
       <%= t('.community_and_collection_help_html') %>
     </small>
+    <% if @draft_item.errors.messages[:member_of_paths].any? %>
+      <ul class="list-unstyled alert alert-danger">
+        <% @draft_item.errors.messages[:member_of_paths].each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    <% end %>
     <div class="form-group">
       <label>
         <span class="text-danger font-weight-bold">*</span>
         <%= t('.community') %>
       </label>
 
-      <% @community = Community.find(@draft_item.member_of_paths['community_id']) if @draft_item.member_of_paths.present? %>
+      <% @community = Community.find(@draft_item.member_of_paths['community_id']) if @draft_item.member_of_paths && @draft_item.member_of_paths['community_id'].present? %>
       <%= select_tag 'draft_item[community_id]',
                       options_from_collection_for_select(
                         Community.all,
@@ -136,6 +150,7 @@
                              :id,
                              :title,
                              @draft_item.member_of_paths['collection_id']),
+                           prompt: t('.collection_placeholder'),
                            data: { placeholder: t('.collection_placeholder')},
                            class: 'form-control js-collection-select' %>
       <% else %>

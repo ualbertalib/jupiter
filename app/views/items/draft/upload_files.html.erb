@@ -9,11 +9,11 @@
 
 
 <% if @draft_item.errors.any? %>
-<ul class="list-unstyled alert alert-danger">
- <% @draft_item.errors.full_messages.each do |message| %>
-  <li><%= message %></li>
- <% end %>
- </ul>
+  <ul class="list-unstyled alert alert-danger">
+    <% @draft_item.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+  </ul>
 <% end %>
 
 <%= simple_form_for @draft_item,
