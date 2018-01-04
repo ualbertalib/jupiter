@@ -1,47 +1,156 @@
 <% page_title(@item.title) %>
 
+<%# Breadcrumbs here are for 'Home->Search->Item' %>
+<%# Community/collection based links appear in own section below' %>
 <div class="item-breadcrumb">
-  <% @item.each_community_collection do |community, collection| %>
-    <ol class="breadcrumb mb-1">
-      <li class="breadcrumb-item">
-        <%= link_to(community.title, community_path(community)) %>
-      </li>
-      <li class="breadcrumb-item">
-        <%= link_to(collection.title,
-            community_collection_path(community, collection)) %>
-      </li>
-      <li class="breadcrumb-item active"><%= @item.title %></li>
-    </ol>
-  <% end %>
+  <ol class="breadcrumb mb-1">
+    <li class="breadcrumb-item">
+      <%= link_to(t(:home), root_path) %>
+    </li>
+    <li class="breadcrumb-item">
+      <%= link_to(t(:search_label), search_path) %>
+    </li>
+    <li class="breadcrumb-item active"><%= @item.title %></li>
+  </ol>
 </div>
 
 <div class="d-flex justify-content-between m-3">
-  <%# FILES SIDEBAR %>
-  <%#raise 'asdf' %>
-  <% if @item.file_sets.present? %>
-    <div>
-      <%= render partial: 'files_section_sidebar' %>
+  <%# LEFT SIDE %>
+  <div class="mr-5">
+    <%# FILES SIDEBAR %>
+    <% if @item.file_sets.present? %>
+      <div class="mb-3">
+        <%= render partial: 'files_section_sidebar' %>
+      </div>
+    <% end %>
+
+    <%# COMMUNITY/COLLECTION PATHS %>
+    <div class="card">
+      <div class="card-header">
+        <%= t('.communities_and_collections') %>
+      </div>
+      <div class="card-body p-2">
+        <ul class="list-group">
+          <% @item.each_community_collection do |community, collection| %>
+            <li class="list-group-item list-group-item-action">
+              <%= link_to(community.title, community_path(community)) %> /
+              <%= link_to(collection.title, community_collection_path(community, collection)) %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
     </div>
-  <% end %>
+  </div>
 
   <%# MAIN CONTENT %>
   <div>
-    <h1 class="mt-3"><%= @item.title %></h1>
+    <h1 class="mt-3" title="<%= t('.attributes.title') %>"><%= @item.title %></h1>
 
-    <div class="row mt-3">
-      <div class="col">
-        <div class="list-group">
-          <% @item.display_attributes.each do |name, value| %>
-            <div class="list-group-item">
-              <%= "#{name.titlecase} : #{value}" %>
-            </div>
+    <ul class="list-group">
+      <% if @item.alternative_title.present? %>
+        <li class="list-unstyled list-group-item-action">
+          <p title="<%= t('.attributes.alternative_title') %>"><%= @item.alternative_title %></p>
+        </li>
+      <% end %>
+
+      <% if @item.creators.present? %>
+        <li class="list-unstyled list-group-item-action">
+          <dl>
+            <dt><%= t('.attributes.creators') %></dt>
+            <dd>
+              <ul class="list-unstyled">
+                <% @item.creators.each do |creator| %>
+                  <li><%= search_link_for(@item, :all_contributors, value: creator) %></li>
+                <% end %>
+              </ul>
+            </dd>
+          </dl>
+        </li>
+      <% end %>
+
+      <% if @item.description.present? %>
+        <li class="list-unstyled list-group-item-action">
+          <p title="<%= t('.attributes.description') %>"><%= @item.description %></p>
+        </li>
+      <% end %>
+
+      <% if @item.sort_year.present? %>
+        <li class="list-unstyled list-group-item-action">
+          <dl>
+            <dt><%= t('.attributes.sort_year') %></dt>
+            <dd><%= search_link_for(@item, :sort_year) %></dd>
+          </dl>
+        </li>
+      <% end %>
+
+      <% if @item.subject.present? %>
+        <li class="list-unstyled list-group-item-action">
+          <dl>
+            <dt><%= t('.attributes.subject') %></dt>
+            <dd>
+              <ul class="list-unstyled">
+                <% @item.all_subjects.each do |subject| %>
+                  <li><%= search_link_for(@item, :all_subjects, value: subject) %></li>
+                <% end %>
+              </ul>
+            </dd>
+          </dl>
+        </li>
+      <% end %>
+
+      <li class="list-unstyled list-group-item-action">
+        <dl>
+          <dt><%= t('.attributes.item_type_with_status') %></dt>
+          <dd><%= item_type_search_link(@item) %></dd>
+        </dl>
+      </li>
+
+      <% if @item.doi.present? %>
+        <li class="list-unstyled list-group-item-action">
+          <dl>
+            <dt><%= t('.attributes.doi_url') %></dt>
+            <dd><%= link_to @item.doi_url, @item.doi_url %></dd>
+          </dl>
+        </li>
+      <% end %>
+
+      <li class="list-unstyled list-group-item-action">
+        <dl>
+          <dt><%= t('.attributes.license') %></dt>
+          <% if @item.license.present? %>
+            <dd><%= link_to @item.license, @item.license %></dd>
+          <% else %>
+            <dd><%= @item.rights %></dd>
           <% end %>
-        </div>
-      </div>
-    </div>
+        </dl>
+      </li>
+    </ul>
 
-    <div class="col">
-      <%= link_to t('edit'), edit_item_path(@item), class: 'btn btn-primary pull-right' %>
+    <%# ADDITIONAL INFORMATION %>
+    <div class='js-hideshow'>
+      <a data-toggle="collapse"
+         data-parent=".js-hideshow"
+         href="#more-information-hidden"
+         aria-expanded="false"
+         aria-controls="more-information-hidden">
+        <span class='js-hideshow-control font-weight-bold font-italic'>
+          <%= t(:more_information) %>
+        </span>
+      </a>
+
+      <div class="collapse" id='more-information-hidden'>
+        <%= render partial: 'more_information' %>
+      </div>
+
+      <a data-toggle="collapse"
+         data-parent=".js-hideshow"
+         href="#more-information-hidden"
+         aria-expanded="false"
+         aria-controls="more-information-hidden">
+        <span class='js-hideshow-control font-weight-bold font-italic' style='display:none;'>
+          <%= t(:show_less) %>
+        </span>
+      </a>
     </div>
 
   </div>

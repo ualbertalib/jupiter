@@ -131,6 +131,14 @@ module JupiterCore
       self.class.search_term_for(attr_name, self.send(attr_name))
     end
 
+    # Creates a hash that can be used in the `facet` param for a search path/url
+    # eg)
+    #    obj.facet_term_for(:title)
+    #    => { "title_tesim" : ["The effects of Celebrator Doppelbock on cats\"] }
+    def facet_term_for(attr_name)
+      self.class.facet_term_for(attr_name, self.send(attr_name))
+    end
+
     def read_solr_index(name)
       raise PropertyInvalidError unless name.is_a? Symbol
       type_info = self.solr_calc_attributes[name]
@@ -232,9 +240,24 @@ module JupiterCore
     #   Item.search_term_for(:title, 'science')
     #   => "title_tesim:science"
     def self.search_term_for(attr_name, value, role: :search)
-      rails ArgumentError("search value can't be nil") if value.nil?
+      raise ArgumentError, "search value can't be nil" if value.nil?
       solr_attr_name = solr_name_for(attr_name, role: role)
       %Q(#{solr_attr_name}:"#{value}")
+    end
+
+    # Accepts the symbolic name of an attribute, and a value to facet on, and returns the hash
+    # representing the `facet` search parameter. eg)
+    #
+    # Given a subclass +Item+ with an attribute declaration:
+    #   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
+    #
+    # then:
+    #   Item.facet_term_for(:title, 'science')
+    #   => { 'title_tesim': ['science'] }
+    def self.facet_term_for(attr_name, value, role: :facet)
+      raise ArgumentError, "search value can't be nil" if value.nil?
+      solr_attr_name = solr_name_for(attr_name, role: role)
+      { solr_attr_name => [value].flatten }
     end
 
     # Accepts a string id of an object in the LDP, and returns a +LockedLDPObjects+ representation of that object
@@ -418,8 +441,14 @@ module JupiterCore
             has_attribute :owner, ::TERMS[:bibo].owner, type: :int, solrize_for: [:exact_match]
           end
           unless attribute_names.include?(:record_created_at)
-            has_attribute :record_created_at, ::TERMS[:jupiter_core].record_created_at, type: :date,
-                                                                                        solrize_for: [:sort]
+            has_attribute :record_created_at, ::TERMS[:ual].recordCreatedInJupiter, type: :date,
+                                                                                    solrize_for: [:sort]
+          end
+          unless attribute_names.include?(:hydra_noid)
+            has_attribute :hydra_noid, ::TERMS[:ual].hydraNoid, solrize_for: [:exact_match]
+          end
+          unless attribute_names.include?(:date_ingested)
+            has_attribute :date_ingested, RDF::Vocab::EBUCore.dateIngested, type: :date, solrize_for: [:sort]
           end
         end
       end
@@ -451,13 +480,20 @@ module JupiterCore
           validate :visibility_must_be_known
           validates :owner, presence: true
           validates :record_created_at, presence: true
+          validates :date_ingested, presence: true
 
           before_validation :set_record_created_at, on: :create
+          before_validation :set_date_ingested
 
           # ActiveFedora gives us system_create_dtsi, but that only exists in Solr, because what everyone wants
           # is a created_at that jumps around when you rebuild your index
           def set_record_created_at
             self.record_created_at = Time.current.utc.iso8601(3)
+          end
+
+          def set_date_ingested
+            return if date_ingested.present?
+            self.date_ingested = record_created_at
           end
 
           def visibility_must_be_known

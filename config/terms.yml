@@ -16,7 +16,7 @@
 #
 
 - vocabulary: ual
-  schema: http://terms.library.ualberta.ca/identifiers/
+  schema: http://terms.library.ualberta.ca/
   terms:
     - depositor
     - fedora3handle
@@ -24,6 +24,9 @@
     - ingestbatch
     - path
     - sortyear
+    - hydraNoid
+    # separate from date_created, we need to track a precise time the metadata record was created
+    - recordCreatedInJupiter
 
 - vocabulary: prism
   schema: http://prismstandard.org/namespaces/basic/3.0/
@@ -44,5 +47,4 @@
 - vocabulary: jupiter_core
   schema: 'http://fake.figurethisout.todo#'
   terms:
-    - record_created_at # separate from date_created, we need to track a precise time the metadata record was created
     - community # rdf:type for community objects, which aren't merely rdf:objects but our own custom derivation
