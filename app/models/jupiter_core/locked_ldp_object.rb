@@ -447,6 +447,9 @@ module JupiterCore
           unless attribute_names.include?(:hydra_noid)
             has_attribute :hydra_noid, ::TERMS[:ual].hydraNoid, solrize_for: [:exact_match]
           end
+          unless attribute_names.include?(:fedora3_uuid)
+            has_attribute :fedora3_uuid, ::TERMS[:ual].fedora3uuid, solrize_for: :exact_match
+          end
           unless attribute_names.include?(:date_ingested)
             has_attribute :date_ingested, RDF::Vocab::EBUCore.dateIngested, type: :date, solrize_for: [:sort]
           end

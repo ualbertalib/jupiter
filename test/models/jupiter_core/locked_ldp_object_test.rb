@@ -56,8 +56,8 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
   end
 
   test 'attribute definitions are working' do
-    assert_equal [:creator, :date_ingested, :hydra_noid, :id, :member_of_paths, :owner, :record_created_at, :title,
-                  :visibility], @@klass.attribute_names.sort
+    assert_equal [:creator, :date_ingested, :fedora3_uuid, :hydra_noid, :id, :member_of_paths, :owner,
+                  :record_created_at, :title, :visibility], @@klass.attribute_names.sort
   end
 
   test 'attribute metadata is being tracked properly' do
@@ -173,7 +173,8 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     title = generate_random_string
     obj = @@klass.new_locked_ldp_object(title: title)
     assert_equal '#<AnonymousClass id: nil, visibility: nil, owner: nil, record_created_at: nil, hydra_noid: nil, '\
-                 "date_ingested: nil, title: \"#{title}\", creator: [], member_of_paths: []>", obj.inspect
+                 "fedora3_uuid: nil, date_ingested: nil, title: \"#{title}\", creator: [], member_of_paths: []>",
+                 obj.inspect
   end
 
   test 'attribute inheritance is working' do
@@ -181,11 +182,11 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
       has_attribute :subject, ::RDF::Vocab::DC.subject, solrize_for: :search
     end
 
-    assert_equal [:creator, :date_ingested, :hydra_noid, :id, :member_of_paths, :owner, :record_created_at,
-                  :subject, :title, :visibility], subclass.attribute_names.sort
+    assert_equal [:creator, :date_ingested, :fedora3_uuid, :hydra_noid, :id, :member_of_paths, :owner,
+                  :record_created_at, :subject, :title, :visibility], subclass.attribute_names.sort
     # ensure mutating subclass attribute lists isn't trickling back to the superclass
-    assert_equal [:creator, :date_ingested, :hydra_noid, :id, :member_of_paths, :owner, :record_created_at,
-                  :title, :visibility], @@klass.attribute_names.sort
+    assert_equal [:creator, :date_ingested, :fedora3_uuid, :hydra_noid, :id, :member_of_paths, :owner,
+                  :record_created_at, :title, :visibility], @@klass.attribute_names.sort
   end
 
   test 'attributes are declaring properly' do
@@ -351,7 +352,8 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     assert instance.respond_to?(:item)
     assert_nil instance.item, nil
     assert_equal instance.inspect, '#<AnonymousClass id: nil, visibility: "http://terms.library.ualberta.ca/public",'\
-                                   ' owner: 1, record_created_at: nil, hydra_noid: nil, date_ingested: nil, item: nil>'
+                                   ' owner: 1, record_created_at: nil, hydra_noid: nil, fedora3_uuid: nil,'\
+                                   ' date_ingested: nil, item: nil>'
     instance.unlock_and_fetch_ldp_object(&:save)
 
     instance2 = klass.new_locked_ldp_object(owner: 1,
