@@ -28,10 +28,10 @@
 
           <ul class="list-group">
             <% @draft_item.files.each do |file|%>
-              <li class="list-group-item d-flex justify-content-between align-items-center">
+              <li class="list-group-item">
                 <%= fa_icon file_icon(file.content_type) %>
                 <%=file.filename %>
-                <span class="badge badge-primary badge-pill">
+                <span class="badge badge-primary badge-pill pull-right">
                  <%= number_to_human_size(file.byte_size) %>
                 </span>
               </li>
@@ -99,7 +99,7 @@
           <h6 class="card-subtitle mb-1 text-muted">
             <%=  t('items.draft.describe_item.languages') %>
           </h6>
-          <ul class="list-unstyled">
+          <ul>
             <% @draft_item.languages.each do |language| %>
             <li><%= language.translated_name %></li>
             <% end %>
@@ -108,7 +108,7 @@
           <h6 class="card-subtitle mb-1 text-muted">
             <%=  t('items.draft.describe_item.creators') %>
           </h6>
-          <ul class="list-unstyled">
+          <ul>
             <% @draft_item.creators.each do |creator| %>
             <li><%= creator %></li>
             <% end %>
@@ -117,7 +117,7 @@
           <h6 class="card-subtitle mb-1 text-muted">
             <%=  t('items.draft.describe_item.subjects') %>
           </h6>
-          <ul class="list-unstyled">
+          <ul>
             <% @draft_item.subjects.each do |subject| %>
             <li><%= subject %></li>
             <% end %>
@@ -140,7 +140,7 @@
           <h6 class="card-subtitle mb-1 text-muted">
             <%=  t('items.draft.describe_item.community_and_collection') %>
           </h6>
-          <ul class="list-unstyled">
+          <ul>
             <li>
               <%= Community.find(@draft_item.member_of_paths['community_id']).title %>
               /
@@ -152,7 +152,7 @@
             <h6 class="card-subtitle mb-1 text-muted">
               <%=  t('items.draft.describe_item.contributors') %>
             </h6>
-            <ul class="list-unstyled">
+            <ul>
               <% @draft_item.contributors.each do |contributor| %>
                 <li><%= contributor %></li>
               <% end %>
@@ -163,7 +163,7 @@
             <h6 class="card-subtitle mb-1 text-muted">
               <%=  t('items.draft.describe_item.places') %>
             </h6>
-            <ul class="list-unstyled">
+            <ul>
               <% @draft_item.places.each do |place| %>
                 <li><%= place %></li>
               <% end %>
@@ -174,7 +174,7 @@
             <h6 class="card-subtitle mb-1 text-muted">
               <%=  t('items.draft.describe_item.time_periods') %>
             </h6>
-            <ul class="list-unstyled">
+            <ul>
               <% @draft_item.time_periods.each do |time_period| %>
                 <li><%= time_period %></li>
               <% end %>
@@ -185,7 +185,7 @@
             <h6 class="card-subtitle mb-1 text-muted">
               <%=  t('items.draft.describe_item.citations') %>
             </h6>
-            <ul class="list-unstyled">
+            <ul>
               <% @draft_item.citations.each do |citation| %>
                 <li><%= citation %></li>
               <% end %>
