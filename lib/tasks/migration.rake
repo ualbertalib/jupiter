@@ -53,11 +53,10 @@ namespace :migration do
   end
 
   def user_id(email)
-    l = File.foreach('users.csv').grep(/#{email}/)
+    l = File.foreach('users.txt').grep /#{email}/ 
     ccid = l.first.split('|')[4].strip
     name = l.first.split('|')[1].strip
     email = ccid + '@ualberta.ca' if ccid.present?
-    puts email
     user = User.find_or_create_by(email: email) do |u|
       u.name = name
       u.save!
@@ -65,11 +64,18 @@ namespace :migration do
     user.id
   end
 
-  def object_value_from_predicate(graph, predicate)
+  def object_value_from_predicate(graph, predicate, multivalue=false)
     query_results = graph.query(predicate: predicate)
     values = query_results.enum_object.to_a
     return nil if values.count == 0
-    return values if values.count > 0
+    if values.count == 1
+      if multivalue
+        return values
+      else 
+        return values.first.to_s
+      end 
+    end
+    return values if values.count > 1
   end
 
   def community_collection_hash(record_file)
@@ -103,10 +109,11 @@ namespace :migration do
         title = object_value_from_predicate(graph, ::RDF::Vocab::DC.title)
         description = object_value_from_predicate(graph, ::RDF::Vocab::DC.description)
         fedora3uuid = object_value_from_predicate(graph, ::TERMS[:ual].fedora3UUID)
-        creators = object_value_from_predicate(graph, ::RDF::Vocab::DC11.creator)&.map! { |c| c.value }
+        creators = object_value_from_predicate(graph, ::RDF::Vocab::DC11.creator, true)&.map! { |c| c.value }
         owner = object_value_from_predicate(graph, ::TERMS[:bibo].owner)
+        owner = user_id(owner)
         community = Community.new_locked_ldp_object(title: title, description: description,
-                                                    fedora3_uuid: fedora3uuid, owner: user_id(owner),
+                                                    fedora3_uuid: fedora3uuid, owner: owner,
                                                     creators: creators)
         community.unlock_and_fetch_ldp_object(&:save!)
         puts "#{community.id}:#{hydra_noid}"
@@ -116,6 +123,7 @@ namespace :migration do
   end
 
   def migrate_collections(dir)
+    community_hash = community_collection_hash('communities.txt')
     File.open('collections.txt', 'w+') do |f|
       Dir[dir + '/*.nt'].each do |file|
         graph = RDF::Graph.load file
@@ -123,22 +131,26 @@ namespace :migration do
         title = object_value_from_predicate(graph, ::RDF::Vocab::DC.title)
         description = object_value_from_predicate(graph, ::RDF::Vocab::DC.description)
         fedora3uuid = object_value_from_predicate(graph, ::TERMS[:ual].fedora3UUID)
-        creators = object_value_from_predicate(graph, ::RDF::Vocab::DC11.creator)&.map! { |c| c.value }
+        creators = object_value_from_predicate(graph, ::RDF::Vocab::DC11.creator, true)&.map! { |c| c.value }
         owner = object_value_from_predicate(graph, ::TERMS[:bibo].owner)
         community = object_value_from_predicate(graph, ::Hydra::PCDM::Vocab::PCDMTerms.memberOf)
-        community_hash = community_collection_hash('communities.txt')
         if community.nil?
-          MigrationLogger.error "collection #{hydra_noid} don't have community"
+          MigrationLogger.error "collection #{hydra_noid} don't have community in HydraNorth"
           next
         else
-          community_noid = community_uri.split('/')[-1] unless community_uri.nil?
+          community_noid = community.split('/')[-1] unless community.nil?
           community_id = community_hash[community_noid]
-          collection = Collection.new_locked_ldp_object(title: title, description: description,
+          if community_id.nil?
+            MigrationLogger.error "collection #{hydra_noid}'s community #{community_noid} hasn't been migrated"
+            next
+          else
+            collection = Collection.new_locked_ldp_object(title: title, description: description,
                                                         fedora3_uuid: fedora3uuid, owner: user_id(owner),
                                                         creators: creators, community_id: community_id)
-          collection.unlock_and_fetch_ldp_object(&:save!)
-          puts "#{collection.id}:#{hydra_noid}:#{community_id}"
-          f.write "#{collection.id}:#{hydra_noid}:#{community_id}\n"
+            collection.unlock_and_fetch_ldp_object(&:save!)
+            puts "#{collection.id}:#{hydra_noid}:#{community_id}"
+            f.write "#{collection.id}:#{hydra_noid}:#{community_id}\n"
+          end
         end
       end
     end
@@ -151,25 +163,23 @@ namespace :migration do
       Dir[dir + '/*.nt'].each do |file|
         graph = RDF::Graph.load file
         hydra_noid = object_value_from_predicate(graph, ::TERMS[:ual].hydraNoid)
-
         title = object_value_from_predicate(graph, ::RDF::Vocab::DC.title)
         description = object_value_from_predicate(graph, ::RDF::Vocab::DC.description)
         fedora3uuid = object_value_from_predicate(graph, ::TERMS[:ual].fedora3UUID)
-        creators = object_value_from_predicate(graph, ::RDF::Vocab::DC11.creator)&.map! { |c| c.value }
-        owner = object_value_from_predicate(graph, ::TERMS[:bibo].owner)&.map! { |c| c.value }
+        creators = object_value_from_predicate(graph, ::RDF::Vocab::DC11.creator, true)&.map! { |c| c.value }
+        owner = object_value_from_predicate(graph, ::TERMS[:bibo].owner, true)&.map! { |c| c.value }
         # This is to assume the first owner of any multi-owner items becomes the sole owner of the object. Need review
         owner = owner.sort.first if owner.is_a? Array
 
-        depositor = object_value_from_predicate(graph.query(predicate: ::TERMS[:ual].depositor))
+        depositor = object_value_from_predicate(graph, ::TERMS[:ual].depositor)
         # if there is no owner, use the depositor as the owner
-        owner = depositor if owner.nil?
-
-        contributors = object_value_from_predicate(graph, ::RDF::Vocab::DC11.contributor)
+        owner = "ccinst@ualberta.ca" if depositor == "CDN_Circumpolar_Institute@hydranorth.ca"
+        contributors = object_value_from_predicate(graph, ::RDF::Vocab::DC11.contributor, true)&.map! { |c| c.value}
         created = object_value_from_predicate(graph, ::RDF::Vocab::DC.created)
         sort_year = object_value_from_predicate(graph, ::TERMS[:ual].sortyear)
-        subject = object_value_from_predicate(graph, ::RDF::Vocab::DC11.subject)&.map! { |c| c.value }
-        temporal_subjects = object_value_from_predicate(graph, ::RDF::Vocab::DC.temporal)&.map! { |c| c.value }
-        spatial_subjects = object_value_from_predicate(graph, ::RDF::Vocab::DC.spatial)&.map! { |c| c.value }
+        subject = object_value_from_predicate(graph, ::RDF::Vocab::DC11.subject, true)&.map! { |c| c.value }
+        temporal_subjects = object_value_from_predicate(graph, ::RDF::Vocab::DC.temporal, true)&.map! { |c| c.value }
+        spatial_subjects = object_value_from_predicate(graph, ::RDF::Vocab::DC.spatial, true)&.map! { |c| c.value }
 
         publisher = object_value_from_predicate(graph, ::RDF::Vocab::DC.publisher)
         language = object_value_from_predicate(graph, ::RDF::Vocab::DC.language)
@@ -182,14 +192,15 @@ namespace :migration do
         publication_status = object_value_from_predicate(graph, ::TERMS[:bibo].status)
 
         derived_from = object_value_from_predicate(graph, ::RDF::Vocab::DC.source)
-        is_version_of = object_value_from_predicate(graph, ::RDF::Vocab::DC.isVersionOf)&.map! { |c| c.value }
+        is_version_of = object_value_from_predicate(graph, ::RDF::Vocab::DC.isVersionOf, true)&.map! { |c| c.value }
         alternative_title = object_value_from_predicate(graph, ::RDF::Vocab::DC.alternative)
         related_link = object_value_from_predicate(graph, ::RDF::Vocab::DC.relation)
         fedora3handle = object_value_from_predicate(graph, ::TERMS[:ual].fedora3handle)
         doi = object_value_from_predicate(graph, ::TERMS[:prism].doi)
-        embargo_history = object_value_from_predicate(graph, ::TERMS[:acl].embargoHistory)&.map! { |c| c.value }
+        embargo_history = object_value_from_predicate(graph, ::TERMS[:acl].embargoHistory, true)&.map! { |c| c.value }
         visibility_after_embargo = object_value_from_predicate(graph, ::TERMS[:acl].visibilityAfterEmbargo)
-        visibility = object_value_from_predicate(graph, ::RDF::Vocab::DC.accessRights) || JupiterCore::VISIBILITY_PUBLIC
+        visibility = object_value_from_predicate(graph, ::RDF::Vocab::DC.accessRights)
+        visibility = "http://terms.library.ualberta.ca/public" if visibility.nil?
         collection = object_value_from_predicate(graph, ::Hydra::PCDM::Vocab::PCDMTerms.memberOf)
 
         if collection.nil?
@@ -200,14 +211,13 @@ namespace :migration do
           community_id = collection_community[collection_noid]
           path = "#{community_id}/#{collection_id}"
         end
-        file_dir = "tmp/#{hydra_noid}"
-        `mkdir -p #{file_dir} && cd #{file_dir} &&
-         wget --content-disposition -q -N https://era.library.ualberta.ca/downloads/#{hydra_noid}`
-        files = Dir["#{file_dir}/*"]
-        puts "path is #{path}"
         if path.nil? || path.blank? || path == '/'
           puts "#{hydra_noid} don't have community/collection"
         else
+          file_dir = "tmp/#{hydra_noid}"
+          `mkdir -p #{file_dir} && cd #{file_dir} &&
+           wget --content-disposition -q -N https://era.library.ualberta.ca/downloads/#{hydra_noid}`
+          files = Dir["#{file_dir}/*"]
           item = Item.new_locked_ldp_object(title: title, creators: creators, contributors: contributors,
                                             description: description, created: created, sort_year: sort_year,
                                             temporal_subjects: temporal_subjects, spatial_subjects: spatial_subjects,
@@ -233,6 +243,8 @@ namespace :migration do
           end
           puts "#{item.id}:#{hydra_noid}"
           f.write "#{item.id}:#{hydra_noid}\n"
+          completed = dir + "/completed/" 
+          `mv #{dir}/#{File.basename(file)} #{completed}`
         end
       end
     end
