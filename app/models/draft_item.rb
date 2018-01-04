@@ -64,8 +64,8 @@ class DraftItem < ApplicationRecord
   def communities_and_collections_validations
     return if member_of_paths.blank? # caught by presence check
     # member_of_paths.each do |path| # TODO eventually this will be an array of hashes
-      errors.add(:member_of_paths, :community_not_found) if member_of_paths['community_id'].blank?
-      errors.add(:member_of_paths, :collection_not_found) if member_of_paths['collection_id'].blank?
+    errors.add(:member_of_paths, :community_not_found) if member_of_paths['community_id'].blank?
+    errors.add(:member_of_paths, :collection_not_found) if member_of_paths['collection_id'].blank?
     # end
   end
 
