@@ -226,8 +226,8 @@ class Item < JupiterCore::LockedLdpObject
       # Must have one of license or rights, not both
       if license.blank?
         errors.add(:base, :need_either_license_or_rights) if rights.blank?
-      else
-        errors.add(:base, :not_both_license_and_rights) if rights.present?
+      elsif rights.present?
+        errors.add(:base, :not_both_license_and_rights)
       end
     end
 
