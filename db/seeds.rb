@@ -121,10 +121,12 @@ if Rails.env.development? || Rails.env.uat?
         }
         # Add the occasional double-author work
         attributes[:creators] << creators[(seed + 5) % 10] if i % 7 == 3
-        if seed % 10 < 7
+        if seed % 10 < 6
           attributes[:license] = CONTROLLED_VOCABULARIES[:license].attribution_4_0_international
-        elsif seed % 10 < 8
+        elsif seed % 10 < 7
           attributes[:license] = CONTROLLED_VOCABULARIES[:license].public_domain_mark_1_0
+        elsif seed % 10 < 8
+          attributes[:license] = CONTROLLED_VOCABULARIES[:old_license].attribution_3_0_international
         else
           attributes[:rights] = 'Share my stuff with everybody'
         end
