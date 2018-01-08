@@ -1,14 +1,11 @@
 module Items::DraftHelper
   def progress_bar_step_class(wizard_step)
-    # TODO: If future steps have already been completed,
-    # I should be able to still click ahead to them
-    # But if they haven't been completed then they should be disabled
-    if wizard_step == step
-      'active'
-    elsif past_step?(wizard_step)
-      'visted'
-    else
+    if @draft_item.uncompleted_step?(wizard_step)
       'disabled'
+    elsif wizard_step == step
+      'active'
+    else
+      'visted'
     end
   end
 

@@ -8,19 +8,29 @@ class Items::DraftController < ApplicationController
     @draft_item = DraftItem.find(params[:item_id])
     authorize @draft_item
 
-    case wizard_value(step)
-    when 'wicked_finish'
-      flash[:notice] = 'Success!'
+    # Do not allow users to skip to uncompleted steps
+    if @draft_item.uncompleted_step?(step)
+      redirect_to wizard_path(@draft_item.last_completed_step, item_id: @draft_item.id),
+                  alert: t('.please_follow_the_steps')
+    # Handles edge case of removing all files via ajax then attempting to directly view the review step
+    elsif step == steps.last && @draft_item.files.empty?
+      redirect_to wizard_path(:upload_files, item_id: @draft_item.id),
+                  alert: t('.files_are_required_to_continue')
+    else
+      render_wizard
     end
-
-    render_wizard
   end
 
   def update
     @draft_item = DraftItem.find(params[:item_id])
     authorize @draft_item
     params[:draft_item] ||= {}
-    params[:draft_item][:wizard_step] = DraftItem.wizard_steps[step]
+
+    # Only update the draft_item's step if it hasn't been completed yet
+    if DraftItem.wizard_steps[@draft_item.wizard_step] < DraftItem.wizard_steps[step]
+      params[:draft_item][:wizard_step] = DraftItem.wizard_steps[step]
+    end
+
     params[:draft_item][:status] = DraftItem.statuses[:active]
 
     case wizard_value(step)
@@ -29,13 +39,32 @@ class Items::DraftController < ApplicationController
       collection_id = params[:draft_item].delete :collection_id
 
       @draft_item.member_of_paths = { 'community_id' => community_id, 'collection_id' => collection_id }
+
+      @draft_item.update_attributes(permitted_attributes(DraftItem))
+
+      render_wizard @draft_item
     when :review_and_deposit_item
       params[:draft_item][:status] = DraftItem.statuses[:archived]
+
+      # TODO: Improve this
+      if @draft_item.update_attributes(permitted_attributes(DraftItem))
+
+        # TODO: DraftItem is completed! FILL ME OUT
+        # Now we need to ingest DraftItem into fedora
+        # and spin off derivative jobs and anything else that needs to take place here
+        # etc etc
+
+        # Redirect to the new item show page
+        redirect_to root_path, notice: 'Success!'
+      else
+        # handle errors
+        render_wizard @draft_item
+      end
+    else
+      @draft_item.update_attributes(permitted_attributes(DraftItem))
+
+      render_wizard @draft_item
     end
-
-    @draft_item.update_attributes(permitted_attributes(DraftItem))
-
-    render_wizard @draft_item
   end
 
   # Deposit link

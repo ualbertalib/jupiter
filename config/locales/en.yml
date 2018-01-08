@@ -372,6 +372,8 @@ en:
       progress_bar_text: 'Step %{step_index} of %{total_steps}'
       step_number: 'Step %{step_number}'
       please_fix_errors: 'Please correct all errors below and try again'
+      please_follow_the_steps: 'Looks like you tried to skip ahead. Please follow the steps accordingly'
+      files_are_required_to_continue: 'You are required at least one file attached before continuing'
       describe_item:
         header: 'Describe Item'
         header_icon: 'pencil'

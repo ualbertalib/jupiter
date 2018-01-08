@@ -59,6 +59,28 @@ class DraftItem < ApplicationRecord
     files.first
   end
 
+  def uncompleted_step?(step)
+    # Bit confusing here, but when were in an active state, aka draft item has data,
+    # the step saved on the object is actually a step behind. As it is only updated on an update for a new step.
+    # Hence we just do current step + one to get the actual step here.
+    # For an inactive/archived state we are what is expected as we are starting/ending on the same step as what's saved in the object
+    if active?
+      DraftItem.wizard_steps[wizard_step] + 1 < DraftItem.wizard_steps[step]
+    else
+      DraftItem.wizard_steps[wizard_step] < DraftItem.wizard_steps[step]
+    end
+  end
+
+  def last_completed_step
+    # Comment above in uncompleted_step? applies here with regards to the extra logic around active state
+    # and getting the next step instead of the current step
+    if active?
+      DraftItem.wizard_steps.key(DraftItem.wizard_steps.fetch(wizard_step) + 1).to_sym
+    else
+      wizard_step
+    end
+  end
+
   private
 
   def communities_and_collections_validations
@@ -70,11 +92,11 @@ class DraftItem < ApplicationRecord
   end
 
   def validate_describe_item?
-    (active? && describe_item?) || archived?
+    (active? && describe_item?) || validate_choose_license_and_visibility?
   end
 
   def validate_choose_license_and_visibility?
-    (active? && choose_license_and_visibility?) || archived?
+    (active? && choose_license_and_visibility?) || validate_upload_files?
   end
 
   def validate_upload_files?
