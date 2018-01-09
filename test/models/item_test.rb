@@ -194,13 +194,17 @@ class ItemTest < ActiveSupport::TestCase
     assert_includes item.errors[:base], 'should not have both a license and a rights statement'
   end
 
-  test 'a license must be from the controlled vocabulary' do
+  test 'a license must be either from the controlled vocabulary for new licenses or for old licenses' do
     item = Item.new_locked_ldp_object(license: 'whatever')
     assert_not item.valid?
     assert_includes item.errors[:license], 'is not recognized'
 
     item = Item.new_locked_ldp_object(license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international)
-    assert_not item.valid?
+    item.valid?
+    refute_includes item.errors.keys, :license
+
+    item = Item.new_locked_ldp_object(license: CONTROLLED_VOCABULARIES[:old_license].attribution_3_0_international)
+    item.valid?
     refute_includes item.errors.keys, :license
   end
 

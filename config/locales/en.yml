@@ -384,6 +384,15 @@ en:
       public_domain_mark_1_0: 'Public Domain Mark 1.0'
       attribution_noncommercial_sharealike_4_0_international:
         'Attribution-NonCommercial-ShareAlike 4.0 International'
+    old_license:
+      attribution_3_0_international: 'Attribution 3.0 International'
+      attribution_sharealike_3_0_international: 'Attribution-ShareAlike 3.0 International'
+      attribution_noncommercial_3_0_international: 'Attribution-NonCommercial 3.0 International'
+      attribution_noncommercial_noderivatives_3_0_international:
+        'Attribution-NonCommercial-NoDerivatives 3.0 International'
+      attribution_noncommercial_sharealike_2_5_canada:
+        'Attribution-NonCommercial-ShareAlike 2.5 Canada'
+
     visibility:
       authenticated: Authenticated
       embargo: Embargo
