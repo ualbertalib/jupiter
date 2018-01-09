@@ -87,10 +87,10 @@ class Item < JupiterCore::LockedLdpObject
   def item_type_with_status_code
     return nil if item_type.blank?
     # Return the item type code unless it's an article, then append publication status code
-    item_type_code = CONTROLLED_VOCABULARIES[:item_type].uri_to_code(item_type)
-    return item_type_code unless item_type_code == 'article'
+    item_type_code = CONTROLLED_VOCABULARIES[:item_type].from_uri(item_type)
+    return item_type_code unless item_type_code == :article
     return nil if publication_status.blank?
-    publication_status_code = CONTROLLED_VOCABULARIES[:publication_status].uri_to_code(publication_status)
+    publication_status_code = CONTROLLED_VOCABULARIES[:publication_status].from_uri(publication_status)
     "#{item_type_code}_#{publication_status_code}"
   rescue ArgumentError
     return nil
@@ -125,17 +125,20 @@ class Item < JupiterCore::LockedLdpObject
     validates :embargo_end_date, absence: true, if: ->(item) { item.visibility != VISIBILITY_EMBARGO }
     validates :visibility_after_embargo, presence: true, if: ->(item) { item.visibility == VISIBILITY_EMBARGO }
     validates :visibility_after_embargo, absence: true, if: ->(item) { item.visibility != VISIBILITY_EMBARGO }
+    validates :item_type, presence: true, uri: { in_vocabulary: :item_type }
+    validates :languages, presence: true, uri: { in_vocabulary: :language }
+    validates :license, uri: { in_vocabulary: :license }
     validates :member_of_paths, presence: true
+    validates :publication_status, uri: { in_vocabulary: :publication_status }
     validates :title, presence: true
     validates :languages, presence: true
     validates :item_type, presence: true
     validates :subject, presence: true
     validates :creators, presence: true
-    validate :communities_and_collections_validations
-    validate :language_validations
-    validate :license_and_rights_validations
-    validate :visibility_after_embargo_validations
-    validate :item_type_and_publication_status_validations
+    validate :communities_and_collections_must_exist
+    validate :license_xor_rights_must_be_present
+    validate :visibility_after_embargo_must_be_valid
+    validate :publication_status_must_appear_only_for_articles
 
     before_validation do
       # TODO: for theses, the sort_year attribute should be derived from ual:graduationDate
@@ -161,17 +164,6 @@ class Item < JupiterCore::LockedLdpObject
             self.member_of_collections += [unlocked_collection]
           end
         end
-      end
-    end
-
-    def communities_and_collections_validations
-      return if member_of_paths.blank?
-      member_of_paths.each do |path|
-        community_id, collection_id = path.split('/')
-        community = Community.find_by(community_id)
-        errors.add(:member_of_paths, :community_not_found, id: community_id) if community.blank?
-        collection = Collection.find_by(collection_id)
-        errors.add(:member_of_paths, :collection_not_found, id: collection_id) if collection.blank?
       end
     end
 
@@ -219,39 +211,36 @@ class Item < JupiterCore::LockedLdpObject
       end
     end
 
-    def language_validations
-      languages.each do |lang|
-        uri_validation(lang, :languages, :language)
+    def communities_and_collections_must_exist
+      return if member_of_paths.blank?
+      member_of_paths.each do |path|
+        community_id, collection_id = path.split('/')
+        community = Community.find_by(community_id)
+        errors.add(:member_of_paths, :community_not_found, id: community_id) if community.blank?
+        collection = Collection.find_by(collection_id)
+        errors.add(:member_of_paths, :collection_not_found, id: collection_id) if collection.blank?
       end
     end
 
-    def license_and_rights_validations
+    def license_xor_rights_must_be_present
       # Must have one of license or rights, not both
       if license.blank?
         errors.add(:base, :need_either_license_or_rights) if rights.blank?
-      else
-        # Controlled vocabulary check
-        uri_validation(license, :license)
-        errors.add(:base, :not_both_license_and_rights) if rights.present?
+      elsif rights.present?
+        errors.add(:base, :not_both_license_and_rights)
       end
     end
 
-    def visibility_after_embargo_validations
+    def visibility_after_embargo_must_be_valid
       return if visibility_after_embargo.nil?
       return if VISIBILITIES_AFTER_EMBARGO.include?(visibility_after_embargo)
       errors.add(:visibility_after_embargo, :not_recognized)
     end
 
-    def item_type_and_publication_status_validations
-      return unless uri_validation(item_type, :item_type)
-      code = CONTROLLED_VOCABULARIES[:item_type].uri_to_code(item_type)
-      if code == 'article'
-        if publication_status.blank?
-          errors.add(:publication_status, :required_for_article)
-        else
-          uri_validation(publication_status, :publication_status)
-        end
-      elsif publication_status.present?
+    def publication_status_must_appear_only_for_articles
+      if item_type == ::CONTROLLED_VOCABULARIES[:item_type].article && publication_status.blank?
+        errors.add(:publication_status, :required_for_article)
+      elsif item_type != ::CONTROLLED_VOCABULARIES[:item_type].article && publication_status.present?
         errors.add(:publication_status, :must_be_absent_for_non_articles)
       end
     end

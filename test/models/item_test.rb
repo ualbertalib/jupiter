@@ -11,7 +11,7 @@ class ItemTest < ActiveSupport::TestCase
                                                   community_id: community.id)
     collection.unlock_and_fetch_ldp_object(&:save!)
     item = Item.new_locked_ldp_object(title: 'Item', owner: 1, visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                      languages: [CONTROLLED_VOCABULARIES[:language].eng],
+                                      languages: [CONTROLLED_VOCABULARIES[:language].english],
                                       creators: ['Joe Blow'],
                                       subject: ['Things'],
                                       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
@@ -174,7 +174,7 @@ class ItemTest < ActiveSupport::TestCase
     assert_not item.valid?
     assert_includes item.errors[:languages], 'is not recognized'
 
-    item = Item.new_locked_ldp_object(languages: [CONTROLLED_VOCABULARIES[:language].eng])
+    item = Item.new_locked_ldp_object(languages: [CONTROLLED_VOCABULARIES[:language].english])
     assert_not item.valid?
     refute_includes item.errors.keys, :languages
   end

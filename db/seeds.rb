@@ -100,7 +100,7 @@ if Rails.env.development? || Rails.env.uat?
                       end
         # Probabilistically about 70% English, 20% French, 10% Ukrainian
         languages = if seed % 10 > 2
-                      [CONTROLLED_VOCABULARIES[:language].eng]
+                      [CONTROLLED_VOCABULARIES[:language].english]
                     elsif seed % 10 > 0
                       [CONTROLLED_VOCABULARIES[:language].fre]
                     else
@@ -176,7 +176,7 @@ if Rails.env.development? || Rails.env.uat?
         visibility: JupiterCore::VISIBILITY_PRIVATE,
         title: "Private #{thing.pluralize}, public lives: a survey of social media trends",
         description: Faker::Lorem.sentence(20, false, 0).chop,
-        languages: [CONTROLLED_VOCABULARIES[:language].eng],
+        languages: [CONTROLLED_VOCABULARIES[:language].english],
         license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
         item_type: CONTROLLED_VOCABULARIES[:item_type].chapter,
         subject: [thing.capitalize, 'Privacy'],
@@ -193,7 +193,7 @@ if Rails.env.development? || Rails.env.uat?
         visibility: Item::VISIBILITY_EMBARGO,
         title: "Embargo and #{Faker::Address.country}: were the #{thing.pluralize} left behind?",
         description: Faker::Lorem.sentence(20, false, 0).chop,
-        languages: [CONTROLLED_VOCABULARIES[:language].eng],
+        languages: [CONTROLLED_VOCABULARIES[:language].english],
         license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
         item_type: CONTROLLED_VOCABULARIES[:item_type].conference_paper,
         subject: [thing.capitalize, 'Embargoes'],
@@ -212,7 +212,7 @@ if Rails.env.development? || Rails.env.uat?
         visibility: Item::VISIBILITY_EMBARGO,
         title: "Former embargo of #{Faker::Address.country}: the day the #{thing.pluralize} were free",
         description: Faker::Lorem.sentence(20, false, 0).chop,
-        languages: [CONTROLLED_VOCABULARIES[:language].eng],
+        languages: [CONTROLLED_VOCABULARIES[:language].english],
         license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
         item_type: CONTROLLED_VOCABULARIES[:item_type].dataset,
         subject: [thing.capitalize, 'Freedom'],
@@ -231,7 +231,7 @@ if Rails.env.development? || Rails.env.uat?
         visibility: JupiterCore::VISIBILITY_PUBLIC,
         title: "Impact of non-admin users on #{thing.pluralize}",
         description: Faker::Lorem.sentence(20, false, 0).chop,
-        languages: [CONTROLLED_VOCABULARIES[:language].eng],
+        languages: [CONTROLLED_VOCABULARIES[:language].english],
         license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
         item_type: CONTROLLED_VOCABULARIES[:item_type].learning_object,
         subject: [thing.capitalize, 'Equality'],
