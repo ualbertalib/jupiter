@@ -12,7 +12,7 @@ class ProfileController < ApplicationController
   private
 
   def ensure_logged_in
-    authorize :profile, :index?
+    authorize :user, :logged_in?
   end
 
 end
