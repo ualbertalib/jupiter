@@ -9,6 +9,8 @@ class Item < JupiterCore::LockedLdpObject
                                 CONTROLLED_VOCABULARIES[:visibility].draft,
                                 CONTROLLED_VOCABULARIES[:visibility].public].freeze
 
+  ALLOWED_LICENSES = (CONTROLLED_VOCABULARIES[:license] + CONTROLLED_VOCABULARIES[:old_license]).freeze
+
   # Dublin Core attributes
   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :sort]
 
@@ -230,8 +232,10 @@ class Item < JupiterCore::LockedLdpObject
       if license.blank?
         errors.add(:base, :need_either_license_or_rights) if rights.blank?
       else
-        # Controlled vocabulary check
-        uri_validation(license, :license)
+        # Controlled vocabulary check, made more complicated by legacy licenses
+        unless ALLOWED_LICENSES.any? { |term| term[:uri] == license }
+          errors.add(:license, :not_recognized)
+        end
         errors.add(:base, :not_both_license_and_rights) if rights.present?
       end
     end
