@@ -19,7 +19,7 @@ class SearchTest < ApplicationSystemTestCase
                                  creators: ['Joe Blow'],
                                  languages: [CONTROLLED_VOCABULARIES[:language].eng],
                                  item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                 publication_status: CONTROLLED_VOCABULARIES[:publication_status].published,
+                                 publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
                                  license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
                                  subject: ['Items'])
           .unlock_and_fetch_ldp_object do |uo|
@@ -34,7 +34,7 @@ class SearchTest < ApplicationSystemTestCase
                                  creators: ['Joe Blow'],
                                  languages: [CONTROLLED_VOCABULARIES[:language].eng],
                                  item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                 publication_status: CONTROLLED_VOCABULARIES[:publication_status].published,
+                                 publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
                                  license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
                                  subject: ['Items'])
           .unlock_and_fetch_ldp_object do |uo|
@@ -55,7 +55,7 @@ class SearchTest < ApplicationSystemTestCase
                                  creators: ['Joe Blow'],
                                  languages: [CONTROLLED_VOCABULARIES[:language].eng],
                                  item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                 publication_status: CONTROLLED_VOCABULARIES[:publication_status].published,
+                                 publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
                                  license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
                                  subject: ['Items'])
           .unlock_and_fetch_ldp_object do |uo|

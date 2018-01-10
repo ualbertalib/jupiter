@@ -130,9 +130,13 @@ if Rails.env.development? || Rails.env.uat?
         else
           attributes[:rights] = 'Share my stuff with everybody'
         end
-        if idx % 2 == 0
+        if idx % 3 == 0
           attributes[:item_type] = CONTROLLED_VOCABULARIES[:item_type].article
-          attributes[:publication_status] = CONTROLLED_VOCABULARIES[:publication_status].published
+          attributes[:publication_status] = [CONTROLLED_VOCABULARIES[:publication_status].published]
+        elsif idx % 3 == 1
+          attributes[:item_type] = CONTROLLED_VOCABULARIES[:item_type].article
+          attributes[:publication_status] = [CONTROLLED_VOCABULARIES[:publication_status].draft,
+                                             CONTROLLED_VOCABULARIES[:publication_status].submitted]
         else
           attributes[:item_type] = CONTROLLED_VOCABULARIES[:item_type].report
         end
