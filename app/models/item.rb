@@ -36,15 +36,15 @@ class Item < JupiterCore::LockedLdpObject
   # `type` is an ActiveFedora keyword, so we call it `item_type`
   # Note also the `item_type_with_status` below for searching, faceting and forms
   has_attribute :item_type, ::RDF::Vocab::DC.type, solrize_for: :exact_match
-  has_attribute :derived_from, ::RDF::Vocab::DC.source, solrize_for: :exact_match
+  has_attribute :source, ::RDF::Vocab::DC.source, solrize_for: :exact_match
   has_multival_attribute :is_version_of, ::RDF::Vocab::DC.isVersionOf, solrize_for: :exact_match
   has_attribute :alternative_title, ::RDF::Vocab::DC.alternative, solrize_for: :search
   has_attribute :related_link, ::RDF::Vocab::DC.relation, solrize_for: :exact_match
+  has_multival_attribute :identifiers, ::RDF::Vocab::DC.identifier, solrize_for: :exact_match
 
   # UAL attributes
   has_attribute :depositor, ::TERMS[:ual].depositor, solrize_for: [:search]
   has_attribute :fedora3_handle, ::TERMS[:ual].fedora3handle, solrize_for: :exact_match
-  has_attribute :fedora3_uuid, ::TERMS[:ual].fedora3uuid, solrize_for: :exact_match
   has_attribute :ingest_batch, ::TERMS[:ual].ingestbatch, solrize_for: :exact_match
   has_multival_attribute :member_of_paths, ::TERMS[:ual].path,
                          type: :path,

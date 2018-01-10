@@ -301,7 +301,7 @@ en:
         contributors: 'Additional contributors'
         is_version_of: 'Citation for previous publication'
         related_link: 'Link to related item'
-        derived_from: 'Source'
+        source: 'Source'
     thumbnail:
       thumbnail: 'thumbnail'
     files_section_sidebar:
