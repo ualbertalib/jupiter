@@ -1,8 +1,8 @@
 class SitemapController < ApplicationController
 
-  def index
-    authorize :sitemap, :index?
+  skip_after_action :verify_authorized
 
+  def index
     @communities = Community.all
     @collections = Collection.all
     @items = Item.all # should be non-private
