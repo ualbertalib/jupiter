@@ -35,13 +35,13 @@ class SearchTest < ActiveSupport::TestCase
 
     obj = @@klass.new_locked_ldp_object(title: first_title, creator: creator,
                                         visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                        owner: users(:regular_user).id)
+                                        owner: users(:regular).id)
     another_obj = @@klass.new_locked_ldp_object(title: second_title, creator: creator2,
                                                 visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                                owner: users(:regular_user).id)
+                                                owner: users(:regular).id)
     a_private_object = @@klass.new_locked_ldp_object(title: generate_random_string, creator: generate_random_string,
                                                      visibility: JupiterCore::VISIBILITY_PRIVATE,
-                                                     owner: users(:regular_user).id)
+                                                     owner: users(:regular).id)
 
     obj.unlock_and_fetch_ldp_object(&:save!)
     another_obj.unlock_and_fetch_ldp_object(&:save!)

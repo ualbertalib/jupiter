@@ -6,13 +6,13 @@ class ItemsController < ApplicationController
   def show; end
 
   def new
-    # TODO: Remove for Deposit Item Controller
+    # TODO: Remove for Draft Item Controller
     @item = Item.new_locked_ldp_object
     authorize @item
   end
 
   def create
-    # TODO: Remove for Deposit Item Controller
+    # TODO: Remove for Draft Item Controller
     communities = params[:item].delete :community
     collections = params[:item].delete :collection
 
@@ -36,11 +36,11 @@ class ItemsController < ApplicationController
   end
 
   def edit
-    # TODO: Remove for Deposit Item Controller
+    # TODO: Remove for Draft Item Controller
   end
 
   def update
-    # TODO: Remove for Deposit Item Controller
+    # TODO: Remove for Draft Item Controller
     authorize @item
 
     communities = params[:item].delete :community

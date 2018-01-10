@@ -37,7 +37,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
     context 'with valid existing user' do
       should 'use existing identity if present' do
-        user = users(:regular_user)
+        user = users(:regular)
         identity = identities(:user_saml)
 
         OmniAuth.config.mock_auth[:saml] = OmniAuth::AuthHash.new(
@@ -56,7 +56,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
       end
 
       should 'create a new identity if not present' do
-        user = users(:regular_user)
+        user = users(:regular)
 
         Rails.application.env_config['omniauth.auth'] = OmniAuth::AuthHash.new(
           provider: 'twitter',
@@ -94,7 +94,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
     context 'with a suspended user' do
       should 'give an error message and user is not logged in' do
-        user = users(:suspended_user)
+        user = users(:suspended)
 
         Rails.application.env_config['omniauth.auth'] = OmniAuth::AuthHash.new(
           provider: 'twitter',
@@ -118,7 +118,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   should 'handle session destroying aka logout properly' do
-    user = users(:regular_user)
+    user = users(:regular)
 
     sign_in_as user
 
@@ -139,7 +139,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
   context '#logout_as_user' do
     should 'logout as user, login as admin and redirect to user show page' do
-      user = users(:regular_user)
+      user = users(:regular)
       admin = users(:admin)
 
       # login as user as admin

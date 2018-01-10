@@ -14,7 +14,7 @@ class DraftItem < ApplicationRecord
                   public_domain_mark: 7,
                   license_text: 8 }
 
-  # Can't use public as this is a ActiveRecord method
+  # Can't use public as this is a ActiveRecord method, using open_access instead
   enum visibility: { open_access: 0,
                      embargo: 1,
                      authenticated: 2 }
