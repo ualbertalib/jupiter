@@ -36,7 +36,7 @@ class ProfileIndexTest < ApplicationSystemTestCase
                                  languages: [CONTROLLED_VOCABULARIES[:language].eng],
                                  license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
                                  item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                 publication_status: CONTROLLED_VOCABULARIES[:publication_status].published,
+                                 publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
                                  subject: [adjective])
           .unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(community.id, collection.id)
@@ -50,7 +50,7 @@ class ProfileIndexTest < ApplicationSystemTestCase
                                languages: [CONTROLLED_VOCABULARIES[:language].eng],
                                license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
                                item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                               publication_status: CONTROLLED_VOCABULARIES[:publication_status].published,
+                               publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
                                subject: ['Ownership'])
         .unlock_and_fetch_ldp_object do |uo|
       uo.add_to_path(community.id, collection.id)
