@@ -86,6 +86,10 @@ class Item < JupiterCore::LockedLdpObject
     super + [VISIBILITY_EMBARGO]
   end
 
+  def self.public
+    Item.where(visibility: JupiterCore::VISIBILITY_PUBLIC)
+  end
+
   # This is stored in solr: combination of item_type and publication_status
   def item_type_with_status_code
     return nil if item_type.blank?
