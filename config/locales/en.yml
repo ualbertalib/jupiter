@@ -349,8 +349,7 @@ en:
   controlled_vocabularies:
     item_type_with_status:
       article_published: Article (Published)
-      article_draft: Article (Draft)
-      article_submitted: Article (Submitted)
+      article_submitted: Article (Draft / Submitted)
       book: Book
       chapter: Chapter
       image: Image
