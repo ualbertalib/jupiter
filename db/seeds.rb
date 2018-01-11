@@ -191,7 +191,7 @@ if Rails.env.development? || Rails.env.uat?
 
       # Every once in a while, create a mondo-thesis with full, rich metadata to help view-related work
       if i == 8
-        thesis_attributes[:title] = thesis_attributes[:title].gsub(/^Thesis/, 'Über-thesis')
+        thesis_attributes[:title] = thesis_attributes[:title].gsub(/^Thesis/, 'An über-thesis')
         thesis_attributes[:subject] += ['Mondo']
         thesis_attributes[:alternative_title] = "A full, holistic, #{thing}-tastic approach"
         thesis_attributes[:is_version_of] = ["The CDROM titled '#{thing.pluralize.capitalize}!'",
