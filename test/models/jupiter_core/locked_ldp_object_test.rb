@@ -266,6 +266,20 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     assert_equal @@klass.last.id, another_obj.id
 
     assert_equal @@klass.where(id: obj.id).first.id, obj.id
+
+    assert_raises ArgumentError do
+      @@klass.find(obj.id, types: @@klass)
+    end
+
+    assert_raises ArgumentError do
+      JupiterCore::LockedLdpObject.find(obj.id)
+    end
+
+    result = JupiterCore::LockedLdpObject.find(obj.id, types: @@klass)
+
+    assert result.present?
+    assert_equal result.id, obj.id
+    assert_equal result.class, @@klass
   end
 
   # TODO: maybe "upstream" deserves its own section in our test suite
