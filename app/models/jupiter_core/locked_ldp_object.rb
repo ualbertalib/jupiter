@@ -277,7 +277,7 @@ module JupiterCore
     # or raises <tt>JupiterCore::ObjectNotFound</tt> if there is no object corresponding to that id
     def self.find(id, types: [])
       if self == LockedLdpObject
-        raise ArgumentError, 'Must specify at least one type to find' if types.blank?
+        raise ArgumentError, 'Must specify types: to find' if types.blank?
         types = [types] unless types.is_a? Array
         af_types = types.map { |m| m.send(:derived_af_class) }
       else
