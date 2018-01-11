@@ -40,6 +40,11 @@ class ApplicationPolicy
     user.try(:admin?)
   end
 
+  def logged_in?
+    # Note: `ApplicationController#current_user` ensures user isn't suspended
+    user.present?
+  end
+
   def scope
     Pundit.policy_scope!(user, record.class)
   end
