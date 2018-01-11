@@ -289,7 +289,10 @@ module JupiterCore
 
       raise ObjectNotFound, "Couldn't find #{af_types.map(&:to_s).join(', ')} with id='#{id}'" if results_count == 0
       raise MultipleIdViolationError if results_count > 1
-      reify_solr_doc(results.first)
+      solr_doc = results.first
+
+      return new(solr_doc: solr_doc) unless self == LockedLdpObject
+      reify_solr_doc(solr_doc)
     end
 
     # find with "return nil if no object with that ID is found" semantics
@@ -370,7 +373,6 @@ module JupiterCore
     def self.reify_solr_doc(solr_doc)
       raise ArgumentError, 'Not a valid LockedLDPObject representation' if solr_doc['has_model_ssim'].blank?
       model_name = solr_doc['has_model_ssim'].first
-      new(solr_doc) if model_name == self.to_s
       model_name.constantize.owning_class.send(:new, solr_doc: solr_doc)
     end
 
