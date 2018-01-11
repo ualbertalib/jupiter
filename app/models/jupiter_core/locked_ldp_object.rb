@@ -438,7 +438,7 @@ module JupiterCore
             has_attribute :visibility, ::RDF::Vocab::DC.accessRights, solrize_for: [:exact_match, :facet]
           end
           unless attribute_names.include?(:owner)
-            has_attribute :owner, ::TERMS[:bibo].owner, type: :int, solrize_for: [:exact_match]
+            has_attribute :owner, ::RDF::Vocab::BIBO.owner, type: :int, solrize_for: [:exact_match]
           end
           unless attribute_names.include?(:record_created_at)
             has_attribute :record_created_at, ::TERMS[:ual].recordCreatedInJupiter, type: :date,

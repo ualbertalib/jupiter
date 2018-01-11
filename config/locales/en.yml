@@ -301,7 +301,7 @@ en:
         contributors: 'Additional contributors'
         is_version_of: 'Citation for previous publication'
         related_link: 'Link to related item'
-        derived_from: 'Source'
+        source: 'Source'
     thumbnail:
       thumbnail: 'thumbnail'
     files_section_sidebar:
@@ -360,6 +360,7 @@ en:
       dataset: Dataset
       review: Review
       learning_object: 'Learning Object'
+      thesis: 'Thesis'
     language:
       ukr: Ukrainian
       jpn: Japanese
@@ -398,6 +399,9 @@ en:
       draft: Draft
       private: Private
       public: Public
+    institution:
+      uofa: 'University of Alberta'
+      st_stephens: "St. Stephen's College"
 
   facets:
     member_of_paths: 'Collections'

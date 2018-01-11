@@ -156,7 +156,7 @@ if Rails.env.development? || Rails.env.uat?
           attributes[:related_link] = "http://www.example.com/#{thing}"
           attributes[:is_version_of] = ["The CDROM titled '#{thing.pluralize.capitalize}!'",
                                         'The original laserdisc series from Orange-on-a-Blue-Background studios']
-          attributes[:derived_from] = "Chapter 5 of '#{thing.pluralize.capitalize} and what they drink'"
+          attributes[:source] = "Chapter 5 of '#{thing.pluralize.capitalize} and what they drink'"
         end
 
         Item.new_locked_ldp_object(attributes).unlock_and_fetch_ldp_object do |uo|

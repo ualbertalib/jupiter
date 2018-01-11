@@ -1,8 +1,8 @@
 class Collection < JupiterCore::LockedLdpObject
 
-  ldp_object_includes Hydra::Works::CollectionBehavior
+  include CommonObjectProperties
 
-  has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :sort]
+  ldp_object_includes Hydra::Works::CollectionBehavior
 
   # TODO: this should probably be renamed to share a name with member_of_paths on Item, so that their
   # facet results can be coalesced when Collections are mixed into search results along with Items, as in the
@@ -13,7 +13,6 @@ class Collection < JupiterCore::LockedLdpObject
 
   has_attribute :description, ::RDF::Vocab::DC.description, solrize_for: [:search]
   has_multival_attribute :creators, ::RDF::Vocab::DC.creator, solrize_for: :exact_match
-  has_attribute :fedora3_uuid, ::TERMS[:ual].fedora3uuid, solrize_for: :exact_match
 
   additional_search_index :community_title, solrize_for: :sort,
                                             as: -> { Community.find_by(id: community_id)&.title }
@@ -37,7 +36,6 @@ class Collection < JupiterCore::LockedLdpObject
   unlocked do
     before_destroy :can_be_destroyed?
 
-    validates :title, presence: true
     validates :community_id, presence: true
     validate :community_validations
 

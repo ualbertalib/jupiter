@@ -44,11 +44,11 @@
     </li>
   <% end %>
 
-  <% if @item.derived_from.present? %>
+  <% if @item.source.present? %>
     <li class="list-unstyled list-group-item-action">
       <dl>
-        <dt><%= t('items.show.attributes.derived_from') %></dt>
-        <dd><%= @item.derived_from %></dd>
+        <dt><%= t('items.show.attributes.source') %></dt>
+        <dd><%= @item.source %></dd>
       </dl>
     </li>
   <% end %>
