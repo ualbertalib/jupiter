@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   end
 
   get 'search', to: 'search#index'
+  get 'profile', to: 'profile#index'
 
   resources :communities, only: [:index, :show] do
     resources :collections, only: [:show]

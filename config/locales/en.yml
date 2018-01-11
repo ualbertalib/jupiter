@@ -232,10 +232,10 @@ en:
         login_as_user_link_text: 'Login As User'
         login_as_user_dialog: "Are you sure you want to login as %{user}?"
         login_as_user_flash: "You are now logged in as %{user}"
+        draft_items_header: "Draft User's Items"
         no_items_found: 'There are no items for this user'
-        draft_user_items: "Draft User's Items"
-        user_items: "User's Items"
         search_items_placeholder: "Search this user's items ..."
+        items_header: "User's Items"
       index:
         search_placeholder: 'email or name...'
         header: 'Users'
@@ -244,6 +244,15 @@ en:
           "Displaying %{shown_users_count} of %{matching_users_count} matching users
           (%{total_users_count} total users)"
         no_users_found: 'We could not find any users matching your search.'
+
+  profile:
+    index:
+      my_profile: 'My profile'
+      draft_items_header: "My Draft Items"
+      no_items_found: 'No items found'
+      search_items_placeholder: "Search my items ..."
+      items_header: "My Items"
+      
   collections:
     title: 'Collections'
     show:
