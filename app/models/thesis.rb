@@ -20,13 +20,13 @@ class Thesis < JupiterCore::LockedLdpObject
   # This one is faceted in `all_contributors`, along with the Item creators/contributors
   has_attribute :dissertant, TERMS[:ual].dissertant, solrize_for: [:search, :sort]
   has_attribute :graduation_date, TERMS[:ual].graduationDate, type: :date, solrize_for: [:search, :sort]
-  has_multival_attribute :committee_member, TERMS[:ual].committeeMember, solrize_for: :exact_match
-  has_attribute :department, TERMS[:ual].department, solrize_for: :search
-  has_attribute :specialization, TERMS[:ual].specialization, solrize_for: :search
-  has_multival_attribute :supervisor, TERMS[:ual].supervisor, solrize_for: :exact_match
   has_attribute :thesis_level, TERMS[:ual].thesisLevel, solrize_for: :exact_match
   has_attribute :proquest, TERMS[:ual].proquest, solrize_for: :exact_match
   has_attribute :unicorn, TERMS[:ual].unicorn, solrize_for: :exact_match
+  has_multival_attribute :committee_member, TERMS[:ual].committeeMember, solrize_for: :exact_match
+  has_multival_attribute :department, TERMS[:ual].department, solrize_for: :search
+  has_multival_attribute :specialization, TERMS[:ual].specialization, solrize_for: :search
+  has_multival_attribute :supervisor, TERMS[:ual].supervisor, solrize_for: :exact_match
 
   # This gets mixed with the item types for `Item`
   additional_search_index :item_type_with_status,
@@ -35,6 +35,9 @@ class Thesis < JupiterCore::LockedLdpObject
 
   unlocked do
     validates :dissertant, presence: true
+    validates :graduation_date, presence: true
+    validate :language_validations
+    validate :institution_validations
 
     type [::Hydra::PCDM::Vocab::PCDMTerms.Object, ::RDF::Vocab::BIBO.Thesis]
 
@@ -47,6 +50,14 @@ class Thesis < JupiterCore::LockedLdpObject
         capture = graduation_date.scan(/\d{4}/)
         self.sort_year = capture[0] if capture.present?
       end
+    end
+
+    def language_validations
+      uri_validation(language, :language) if language.present?
+    end
+
+    def institution_validations
+      uri_validation(institution, :institution) if institution.present?
     end
   end
 

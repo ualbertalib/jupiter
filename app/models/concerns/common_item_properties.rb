@@ -15,7 +15,7 @@ module CommonItemProperties
     # `sort_year` is faceted differently for `Item` and `Thesis`
     has_attribute :sort_year, ::TERMS[:ual].sortyear, solrize_for: [:search, :sort, :facet]
     # `subject` is validated differently for `Item` and `Thesis`
-    has_multival_attribute :subject, ::RDF::Vocab::DC11.subject, solrize_for: [:search]
+    has_multival_attribute :subject, ::RDF::Vocab::DC11.subject, solrize_for: [:search, :facet]
     has_multival_attribute :is_version_of, ::RDF::Vocab::DC.isVersionOf, solrize_for: :exact_match
 
     # UAL attributes
