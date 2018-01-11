@@ -229,11 +229,13 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
                                         visibility: JupiterCore::VISIBILITY_PUBLIC)
 
     assert obj.record_created_at.nil?
+    assert obj.updated_at.nil?
 
     freeze_time do
       obj.unlock_and_fetch_ldp_object(&:save!)
       assert obj.id.present?
       assert obj.record_created_at.present?
+      assert obj.updated_at.present?
       assert_equal obj.record_created_at, Time.current
     end
 
