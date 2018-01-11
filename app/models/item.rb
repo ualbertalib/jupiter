@@ -54,7 +54,8 @@ class Item < JupiterCore::LockedLdpObject
   has_attribute :doi, ::TERMS[:prism].doi, solrize_for: :exact_match
 
   # Bibo attributes
-  has_attribute :publication_status, ::TERMS[:bibo].status, solrize_for: :exact_match
+  # This status is only for articles: either 'published' (alone) or two triples for 'draft'/'submitted'
+  has_multival_attribute :publication_status, ::TERMS[:bibo].status, solrize_for: :exact_match
 
   # Project Hydra ACL attributes
   has_multival_attribute :embargo_history, ::TERMS[:acl].embargoHistory, solrize_for: :exact_match
@@ -92,7 +93,9 @@ class Item < JupiterCore::LockedLdpObject
     item_type_code = CONTROLLED_VOCABULARIES[:item_type].uri_to_code(item_type)
     return item_type_code unless item_type_code == 'article'
     return nil if publication_status.blank?
-    publication_status_code = CONTROLLED_VOCABULARIES[:publication_status].uri_to_code(publication_status)
+    publication_status_code = CONTROLLED_VOCABULARIES[:publication_status].uri_to_code(publication_status.first)
+    # Next line of code means that 'article_submitted' exists, but 'article_draft' doesn't ("There can be only one!")
+    publication_status_code = 'submitted' if publication_status_code == 'draft'
     "#{item_type_code}_#{publication_status_code}"
   rescue ArgumentError
     return nil
@@ -253,7 +256,17 @@ class Item < JupiterCore::LockedLdpObject
         if publication_status.blank?
           errors.add(:publication_status, :required_for_article)
         else
-          uri_validation(publication_status, :publication_status)
+          begin
+            # Complication: need either 'published' alone or 'draft' and 'submitted' together
+            statuses = publication_status.map do |status|
+              CONTROLLED_VOCABULARIES[:publication_status].uri_to_code(status)
+            end.sort
+            if statuses != ['published'] && statuses != ['draft', 'submitted']
+              errors.add(:publication_status, :not_recognized)
+            end
+          rescue ArgumentError
+            errors.add(:publication_status, :not_recognized)
+          end
         end
       elsif publication_status.present?
         errors.add(:publication_status, :must_be_absent_for_non_articles)
