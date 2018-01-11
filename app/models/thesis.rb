@@ -33,6 +33,9 @@ class Thesis < JupiterCore::LockedLdpObject
                           solrize_for: :facet,
                           as: -> { 'thesis' }
 
+  # Dissertants are indexed with the Item creators/contributors
+  additional_search_index :all_contributors, solrize_for: :facet, as: -> { [dissertant] }
+
   unlocked do
     validates :dissertant, presence: true
     validates :graduation_date, presence: true
