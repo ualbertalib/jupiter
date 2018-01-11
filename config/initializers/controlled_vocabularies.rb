@@ -12,19 +12,21 @@ end
 controlled_vocabularies.each do |name, vocabulary|
   vocabulary.instance_variable_set(:@vocabulary, name)
   # URI --> [text|code] functions
-  def vocabulary.uri_to_code(uri)
+  def vocabulary.uri_to_code(uri, raise_error_on_missing: true)
     each do |term|
       return term[:code] if term[:uri] == uri
     end
+    return nil unless raise_error_on_missing
     raise ArgumentError, "#{uri} not found in controlled vocabulary: #{@vocabulary}"
   end
 
   def vocabulary.code_to_text(code)
+    return nil unless code
     I18n.t("controlled_vocabularies.#{@vocabulary}.#{code}")
   end
 
-  def vocabulary.uri_to_text(uri)
-    code_to_text(uri_to_code(uri))
+  def vocabulary.uri_to_text(uri, raise_error_on_missing: true)
+    code_to_text(uri_to_code(uri, raise_error_on_missing: raise_error_on_missing))
   end
 
   vocabulary.each do |term|
