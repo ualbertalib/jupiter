@@ -62,7 +62,6 @@ class Items::DraftController < ApplicationController
       end
     else
       @draft_item.update_attributes(permitted_attributes(DraftItem))
-
       render_wizard @draft_item
     end
   end

@@ -13,7 +13,7 @@ class Items::FilesController < ApplicationController
 
       render json: { files_list_html: file_partial }, status: 200
     else
-      render json: @file.errors, status: 400
+      render json: @draft_item.errors, status: 400
     end
   end
 
