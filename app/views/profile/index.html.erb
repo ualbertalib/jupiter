@@ -1,0 +1,24 @@
+<% page_title(@user.name) %>
+
+<div class="d-flex flex-wrap justify-content-between mb-3">
+  <h1><%= @user.name %></h1>
+</div>
+
+<dl class="row">
+  <dt class="col-sm-3"><%= t('admin.users.created') %></dt>
+  <dd class="col-sm-9">
+    <%= jupiter_time_tag(@user.created_at) %>
+  </dd>
+
+  <dt class="col-sm-3"><%= t('admin.users.email')%></dt>
+  <dd class="col-sm-9">
+    <%= @user.email %>
+  </dd>
+
+</dl>
+
+<%= render partial: 'user_items',
+           locals: { search_placeholder: t('.search_items_placeholder'),
+                     draft_items_header: t('.draft_items_header'),
+                     no_items_found: t('.no_items_found'),
+                     items_header: t('.items_header') } %>

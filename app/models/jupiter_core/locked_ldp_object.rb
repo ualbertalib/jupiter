@@ -49,6 +49,19 @@ module JupiterCore
       solr_representation['id'] if solr_representation
     end
 
+    # Modified date is indexed with a special name by ActiveFedora for some reason
+    # (Fedora: modified_date, solr: system_modified_dtsi)
+    # Using yet another name here for better similarity with ActiveRecord
+    #
+    # Listen, rubocop, I get it, but I need to be bug-for-bug compatible with
+    # https://github.com/samvera/active_fedora/blob/7e9c365c00ced6ce4175096a3ff7b423cc72bf64/lib/active_fedora/indexing_service.rb#L55
+    # or half the time this method will return one thing, and half another
+    # rubocop:disable Style/DateTime, Rails/TimeZone
+    def updated_at
+      return ldp_object.modified_date if ldp_object.present?
+      DateTime.parse(solr_representation['system_modified_dtsi']) if solr_representation
+    end
+
     # Provides structured, mediated interaction for mutating the underlying LDP object
     #
     # yields the underlying mutable +ActiveFedora+ object to the block and returns self for chaining
@@ -262,14 +275,24 @@ module JupiterCore
 
     # Accepts a string id of an object in the LDP, and returns a +LockedLDPObjects+ representation of that object
     # or raises <tt>JupiterCore::ObjectNotFound</tt> if there is no object corresponding to that id
-    def self.find(id)
+    def self.find(id, types: [])
+      if self == LockedLdpObject
+        raise ArgumentError, 'Must specify types: to find' if types.blank?
+        types = [types] unless types.is_a? Array
+        af_types = types.map { |m| m.send(:derived_af_class) }
+      else
+        raise ArgumentError, 'Use LockedLDPObject#find to do a polymorphic find' if types.present?
+        af_types = [derived_af_class]
+      end
       results_count, results, _ = JupiterCore::Search.perform_solr_query(q: %Q(_query_:"{!raw f=id}#{id}"),
-                                                                         restrict_to_model: derived_af_class)
+                                                                         restrict_to_model: af_types)
 
-      raise ObjectNotFound, "Couldn't find #{self} with id='#{id}'" if results_count == 0
+      raise ObjectNotFound, "Couldn't find #{af_types.map(&:to_s).join(', ')} with id='#{id}'" if results_count == 0
       raise MultipleIdViolationError if results_count > 1
+      solr_doc = results.first
 
-      new(solr_doc: results.first)
+      return new(solr_doc: solr_doc) unless self == LockedLdpObject
+      reify_solr_doc(solr_doc)
     end
 
     # find with "return nil if no object with that ID is found" semantics
@@ -282,7 +305,6 @@ module JupiterCore
     end
 
     # Returns an array of all +LockedLDPObject+ in the LDP
-    # def self.all(limit:, offset: )
     def self.all
       JupiterCore::DeferredSimpleSolrQuery.new(self)
     end
@@ -350,7 +372,8 @@ module JupiterCore
     #    => #<Item id: "88489b6e-12dd-4eea-b833-af08782c419e", <other properties>>  #
     def self.reify_solr_doc(solr_doc)
       raise ArgumentError, 'Not a valid LockedLDPObject representation' if solr_doc['has_model_ssim'].blank?
-      solr_doc['has_model_ssim'].first.constantize.owning_class.send(:new, solr_doc: solr_doc)
+      model_name = solr_doc['has_model_ssim'].first
+      model_name.constantize.owning_class.send(:new, solr_doc: solr_doc)
     end
 
     private

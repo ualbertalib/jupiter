@@ -62,7 +62,7 @@
                 <%= t('.user_dropdown.heading_html', name: current_user.name) %>
               </div>
               <div class="dropdown-divider"></div>
-              <%= link_to t('.links.profile'), "#TODO", class: 'dropdown-item' %>
+              <%= link_to t('.links.profile'), profile_path, class: 'dropdown-item' %>
               <div class="dropdown-divider"></div>
               <%= link_to t('.links.logout'), logout_path, class: 'dropdown-item' %>
 

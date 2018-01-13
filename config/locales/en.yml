@@ -232,10 +232,10 @@ en:
         login_as_user_link_text: 'Login As User'
         login_as_user_dialog: "Are you sure you want to login as %{user}?"
         login_as_user_flash: "You are now logged in as %{user}"
+        draft_items_header: "Draft User's Items"
         no_items_found: 'There are no items for this user'
-        draft_user_items: "Draft User's Items"
-        user_items: "User's Items"
         search_items_placeholder: "Search this user's items ..."
+        items_header: "User's Items"
       index:
         search_placeholder: 'email or name...'
         header: 'Users'
@@ -244,6 +244,15 @@ en:
           "Displaying %{shown_users_count} of %{matching_users_count} matching users
           (%{total_users_count} total users)"
         no_users_found: 'We could not find any users matching your search.'
+
+  profile:
+    index:
+      my_profile: 'My profile'
+      draft_items_header: "My Draft Items"
+      no_items_found: 'No items found'
+      search_items_placeholder: "Search my items ..."
+      items_header: "My Items"
+      
   collections:
     title: 'Collections'
     show:
@@ -349,8 +358,7 @@ en:
   controlled_vocabularies:
     item_type_with_status:
       article_published: Article (Published)
-      article_draft: Article (Draft)
-      article_submitted: Article (Submitted)
+      article_submitted: Article (Draft / Submitted)
       book: Book
       chapter: Chapter
       image: Image
@@ -384,6 +392,15 @@ en:
       public_domain_mark_1_0: 'Public Domain Mark 1.0'
       attribution_noncommercial_sharealike_4_0_international:
         'Attribution-NonCommercial-ShareAlike 4.0 International'
+    old_license:
+      attribution_3_0_international: 'Attribution 3.0 International'
+      attribution_sharealike_3_0_international: 'Attribution-ShareAlike 3.0 International'
+      attribution_noncommercial_3_0_international: 'Attribution-NonCommercial 3.0 International'
+      attribution_noncommercial_noderivatives_3_0_international:
+        'Attribution-NonCommercial-NoDerivatives 3.0 International'
+      attribution_noncommercial_sharealike_2_5_canada:
+        'Attribution-NonCommercial-ShareAlike 2.5 Canada'
+
     visibility:
       authenticated: Authenticated
       embargo: Embargo
