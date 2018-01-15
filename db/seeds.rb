@@ -49,6 +49,8 @@ if Rails.env.development? || Rails.env.uat?
   creators = 10.times.map { "#{Faker::Cat.unique.name} #{Faker::Cat.unique.breed.gsub(/[ ,]+/, '-')}" }
   contributors = 10.times.map { Faker::FunnyName.unique.name_with_initial }
 
+  institutions = [CONTROLLED_VOCABULARIES[:institution].uofa, CONTROLLED_VOCABULARIES[:institution].st_stephens]
+
   THINGS.each_with_index do |thing, idx|
     if idx % 2 == 0
       title = "The department of #{thing.capitalize}"
@@ -180,13 +182,22 @@ if Rails.env.development? || Rails.env.uat?
         end
       end
 
+      field = Faker::Job.field
+      level = ["Master's", 'Doctorate'][i % 2]
       thesis_attributes = base_attributes.merge({
         title: "Thesis about the effects of #{Faker::Beer.name} on #{thing.pluralize}",
-        graduation_date: (Time.now - rand(20_000).days).to_date,
+        graduation_date: "Fall #{(Time.now - rand(20_000).days).to_date.year}",
         dissertant: creators[seed],
         abstract: description,
         language: languages.last,
-        rights: 'Share my stuff with everybody'
+        specializations: [field],
+        departments: ["Deparment of #{field}"],
+        supervisors: ["#{contributors[seed]} (#{field})"],
+        committee_members: ["#{contributors[seed2]} (#{field})"],
+        rights: 'Share my stuff with everybody',
+        thesis_level: level,
+        degree: "#{level} of #{field}",
+        institution: institutions[(i / 10) % 2]
       })
 
       # Every once in a while, create a mondo-thesis with full, rich metadata to help view-related work
@@ -196,6 +207,11 @@ if Rails.env.development? || Rails.env.uat?
         thesis_attributes[:alternative_title] = "A full, holistic, #{thing}-tastic approach"
         thesis_attributes[:is_version_of] = ["The CDROM titled '#{thing.pluralize.capitalize}!'",
                                       'The original laserdisc series from Orange-on-a-Blue-Background studios']
+        department2 = 'Department of Everything'
+        thesis_attributes[:specializations] += ['Everything']
+        thesis_attributes[:departments] += [department2]
+        thesis_attributes[:supervisors] += ["#{contributors[(seed + 3 * seed2) % 10]} (#{department2})"]
+        thesis_attributes[:committee_members] += ["#{contributors[(seed + 7 * seed2) % 10]} (#{department2})"]
       end
 
       Thesis.new_locked_ldp_object(thesis_attributes).unlock_and_fetch_ldp_object do |uo|
