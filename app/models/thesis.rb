@@ -52,6 +52,7 @@ class Thesis < JupiterCore::LockedLdpObject
   unlocked do
     validates :dissertant, presence: true
     validates :graduation_date, presence: true
+    validates :sort_year, presence: true
     validate :language_validations
     validate :institution_validations
 
