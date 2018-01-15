@@ -28,21 +28,28 @@ class ProfileIndexTest < ApplicationSystemTestCase
                                                   title: 'Fancy Collection', owner: 1)
                            .unlock_and_fetch_ldp_object(&:save!)
 
-    # Two items owned by regular user
-    ['Fancy', 'Nice'].each do |adjective|
-      Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                 owner: user.id, title: "#{adjective} Item",
-                                 creators: ['Joe Blow'],
-                                 languages: [CONTROLLED_VOCABULARIES[:language].eng],
-                                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                                 item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                 publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-                                 subject: [adjective])
-          .unlock_and_fetch_ldp_object do |uo|
-        uo.add_to_path(community.id, collection.id)
-        uo.save!
-      end
+    # Two things owned by regular user
+    Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
+                               owner: user.id, title: 'Fancy Item',
+                               creators: ['Joe Blow'],
+                               languages: [CONTROLLED_VOCABULARIES[:language].eng],
+                               license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                               item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                               publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
+                               subject: ['Fancy things'])
+        .unlock_and_fetch_ldp_object do |uo|
+      uo.add_to_path(community.id, collection.id)
+      uo.save!
     end
+    Thesis.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                 owner: user.id, title: 'Nice Item',
+                                 dissertant: 'Joe Blow',
+                                 graduation_date: '2019')
+          .unlock_and_fetch_ldp_object do |uo|
+      uo.add_to_path(community.id, collection.id)
+      uo.save!
+    end
+
     # One item owned by admin
     Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                owner: admin.id, title: 'Admin Item',

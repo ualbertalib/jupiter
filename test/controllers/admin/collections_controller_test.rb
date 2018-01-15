@@ -95,7 +95,7 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
     should 'not destroy collection if has items' do
       # Give the collection an item
       Item.new_locked_ldp_object(
-        title: 'thesis blocking deletion',
+        title: 'item blocking deletion',
         owner: 1,
         creators: ['Joe Blow'],
         languages: [CONTROLLED_VOCABULARIES[:language].eng],
@@ -104,6 +104,28 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
         item_type: CONTROLLED_VOCABULARIES[:item_type].article,
         publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
         subject: ['Invincibility']
+      ).unlock_and_fetch_ldp_object do |unlocked_item|
+        unlocked_item.add_to_path(@community.id, @collection.id)
+        unlocked_item.save!
+      end
+
+      assert_no_difference('Collection.count') do
+        delete admin_community_collection_url(@community, @collection)
+      end
+
+      assert_redirected_to admin_community_url(@community)
+
+      assert_match I18n.t('activemodel.errors.models.ir_collection.attributes.member_items.must_be_empty',
+                          list_of_items: @collection.member_items.map(&:title).join(', ')), flash[:alert]
+    end
+
+    should 'not destroy collection if has theses' do
+      Thesis.new_locked_ldp_object(
+        title: 'thesis blocking deletion',
+        owner: 1,
+        dissertant: 'Joe Blow',
+        visibility: JupiterCore::VISIBILITY_PUBLIC,
+        graduation_date: '2017-03-31'
       ).unlock_and_fetch_ldp_object do |unlocked_item|
         unlocked_item.add_to_path(@community.id, @collection.id)
         unlocked_item.save!
