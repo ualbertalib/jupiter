@@ -22,7 +22,7 @@ class ThesisTest < ActiveSupport::TestCase
       unlocked_thesis.save!
       # Reload needed for dump below
       unlocked_thesis.reload
-      
+
       # Dump some triples for sanity checks
       triples = unlocked_thesis.resource.dump(:ntriples)
       # Ensure correct type triple was saved
@@ -207,5 +207,5 @@ class ThesisTest < ActiveSupport::TestCase
     refute thesis.errors[:sort_year].present?
     assert_equal thesis.sort_year, '2015'
   end
-  
+
 end
