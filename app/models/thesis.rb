@@ -6,7 +6,8 @@ class Thesis < JupiterCore::LockedLdpObject
   # Dublin Core attributes
   has_attribute :abstract, ::RDF::Vocab::DC.abstract, type: :text, solrize_for: :search
   # Note: language is single-valued for Thesis, but languages is multi-valued for Item
-  has_attribute :language, ::RDF::Vocab::DC.language, solrize_for: [:search, :facet]
+  # See below for faceting
+  has_attribute :language, ::RDF::Vocab::DC.language, solrize_for: :search
   has_attribute :date_accepted, ::RDF::Vocab::DC.dateAccepted, type: :date, solrize_for: :exact_match
   has_attribute :date_submitted, ::RDF::Vocab::DC.dateSubmitted, type: :date, solrize_for: :exact_match
 
@@ -39,6 +40,10 @@ class Thesis < JupiterCore::LockedLdpObject
   # Index subjects with Item subjects (topical, temporal, etc).
   additional_search_index :all_subjects, solrize_for: :facet, as: -> { subject }
 
+  # Making `language` consistent with Item `languages`
+  additional_search_index :languages,
+                          solrize_for: :facet,
+                          as: -> { [language] }
   def item_type_with_status_code
     # Keeping a consistent interface as Item
     'thesis'

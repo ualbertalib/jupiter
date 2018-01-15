@@ -189,7 +189,7 @@ if Rails.env.development? || Rails.env.uat?
         graduation_date: "Fall #{(Time.now - rand(20_000).days).to_date.year}",
         dissertant: creators[seed],
         abstract: description,
-        language: languages.last,
+        language: languages.first,
         specializations: [field],
         departments: ["Deparment of #{field}"],
         supervisors: ["#{contributors[seed]} (#{field})"],
