@@ -64,7 +64,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
           info: { email: user.email, name: user.name }
         )
 
-        assert_difference ['Identity.count'], 1 do
+        assert_difference('Identity.count', 1) do
           post '/auth/twitter/callback'
         end
 
@@ -102,7 +102,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
           info: { email: user.email, name: user.name }
         )
 
-        assert_difference ['Identity.count'] do
+        assert_difference('Identity.count', 1) do
           post '/auth/twitter/callback'
         end
 

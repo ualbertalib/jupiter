@@ -143,8 +143,65 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
     end
 
     # TODO: # wizard_step: :review_and_deposit_item
+    should 'be able to review and deposit a draft item properly when saving review_and_deposit_item form' do
+      sign_in_as @user
+
+      draft_item = draft_items(:completed_choose_license_and_visibility_step)
+
+      file_fixture = fixture_file_upload('/files/image-sample.jpeg', 'image/jpeg')
+      image_file = ActiveStorage::Blob.create_after_upload!(
+        io: file_fixture.open,
+        filename: file_fixture.original_filename, content_type: file_fixture.content_type
+      )
+
+      draft_item.files.attach image_file
+
+      draft_item.update_attributes(wizard_step: :upload_files)
+
+      patch item_draft_url(id: :review_and_deposit_item, item_id: draft_item.id)
+
+      # TODO: Check Item.count increased by 1 in size and check Item.last has all the approiate information
+
+      # TODO: Eventually this will be item show page with a better success flash notice
+      assert_redirected_to root_url
+      assert_equal 'Success!', flash[:notice]
+
+      draft_item.reload
+
+      assert_equal 'review_and_deposit_item', draft_item.wizard_step
+      assert_equal 'archived', draft_item.status
+    end
 
     # TODO: # updating old step shouldnt update wizard_step
+    should 'be able to update an old step without changing the current wizard_step of the draft item' do
+      sign_in_as @user
+
+      draft_item = draft_items(:completed_choose_license_and_visibility_step)
+
+      file_fixture = fixture_file_upload('/files/image-sample.jpeg', 'image/jpeg')
+      image_file = ActiveStorage::Blob.create_after_upload!(
+        io: file_fixture.open,
+        filename: file_fixture.original_filename, content_type: file_fixture.content_type
+      )
+
+      draft_item.files.attach image_file
+
+      draft_item.update_attributes(wizard_step: :upload_files)
+
+      patch item_draft_url(id: :choose_license_and_visibility, item_id: draft_item.id), params: {
+        draft_item: {
+          license: :public_domain_mark,
+        }
+      }
+
+      assert_redirected_to item_draft_path(id: :upload_files, item_id: draft_item.id)
+
+      draft_item.reload
+
+      # wizard step should still :upload_files (unchanged) instead of being updated to :choose_license_and_visibility
+      assert_equal 'upload_files', draft_item.wizard_step
+      assert_equal 'active', draft_item.status
+    end
   end
 
   context '#create' do

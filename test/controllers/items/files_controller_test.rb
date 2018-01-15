@@ -20,7 +20,7 @@ class Items::FilesControllerTest < ActionDispatch::IntegrationTest
 
   context '#create' do
     should 'be able to attach files to a draft item' do
-      assert_difference ['ActiveStorage::Attachment.count'], 1 do
+      assert_difference('ActiveStorage::Attachment.count', 1) do
         post item_files_url(@draft_item), params: { file: @file_attachment }, xhr: true
       end
 
@@ -41,7 +41,7 @@ class Items::FilesControllerTest < ActionDispatch::IntegrationTest
 
   context '#destroy' do
     should 'be able to remove files from a draft item' do
-      assert_difference ['ActiveStorage::Attachment.count'], -1 do
+      assert_difference('ActiveStorage::Attachment.count', -1) do
         delete item_file_url(@draft_item, @draft_item.files.first), xhr: true
       end
 
