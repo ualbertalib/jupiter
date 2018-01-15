@@ -29,6 +29,16 @@ class Collection < JupiterCore::LockedLdpObject
     Item.where(member_of_paths: path)
   end
 
+  def member_theses
+    Thesis.where(member_of_paths: path)
+  end
+
+  def member_objects
+    # TODO: probably replace me with something like:
+    #    JupiterCore::LockedLdpObject.where(member_of_paths: path, models: [Item, Thesis])
+    member_items.to_a + member_theses.to_a
+  end
+
   def as_json(_options)
     super(only: [:title, :id])
   end
@@ -55,9 +65,9 @@ class Collection < JupiterCore::LockedLdpObject
     end
 
     def can_be_destroyed?
-      return true if member_items.count == 0
-      errors.add(:member_items, :must_be_empty,
-                 list_of_items: member_items.map(&:title).join(', '))
+      return true if member_objects.count == 0
+      errors.add(:member_objects, :must_be_empty,
+                 list_of_objects: member_objects.map(&:title).join(', '))
       throw(:abort)
     end
 
