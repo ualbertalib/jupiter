@@ -1,0 +1,21 @@
+<!-- Google Scholar metadata -->
+<meta name="citation_title" content="<%= @item.title%>"/>
+<% @item.creators.each do |creator| %>
+<meta name="citation_author" content="<%= creator %>"/>
+<% end %>
+<% if @item.sort_year.present? %>
+<meta name="citation_publication_date" content="<%= @item.sort_year %>"/>
+<% end %>
+<% if @item.file_sets.count > 0 %>
+<meta name="citation_pdf_url" content="<%= fileset_uri(@item.file_sets.first, :download) %>"/>
+<% end %>
+<meta name="dc.identifier" content="<%= @item.doi %>"/>
+<meta name="citation_doi" content="<%= @item.doi %>"/>
+<!-- does not support these metadata -->
+<!--
+  <meta name="citation_journal_title" content=""/>
+  <meta name="citation_volume" content=""/>
+  <meta name="citation_issue" content=""/>
+  <meta name="citation_firstpage" content=""/>
+  <meta name="citation_lastpage" content=""/>
+-->
