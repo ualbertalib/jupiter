@@ -14,32 +14,56 @@ class SearchTest < ApplicationSystemTestCase
 
     # Half items have 'Fancy' in title, others have 'Nice', distributed between the two collections
     @items = 10.times.map do |i|
-      Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                 owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Item #{i}",
-                                 creators: ['Joe Blow'],
-                                 languages: [CONTROLLED_VOCABULARIES[:language].eng],
-                                 item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                 publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-                                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                                 subject: ['Items'])
-          .unlock_and_fetch_ldp_object do |uo|
-        uo.add_to_path(@community.id, @collections[i / 5].id)
-        uo.save!
+      if i < 5
+        Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                   owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Item #{i}",
+                                   creators: ['Joe Blow'],
+                                   languages: [CONTROLLED_VOCABULARIES[:language].eng],
+                                   item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                                   publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
+                                   license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                                   subject: ['Items'])
+            .unlock_and_fetch_ldp_object do |uo|
+          uo.add_to_path(@community.id, @collections[0].id)
+          uo.save!
+        end
+      else
+        Thesis.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                     owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Item #{i}",
+                                     dissertant: 'Joe Blow',
+                                     language: CONTROLLED_VOCABULARIES[:language].eng,
+                                     graduation_date: 'Fall 2017')
+              .unlock_and_fetch_ldp_object do |uo|
+          uo.add_to_path(@community.id, @collections[1].id)
+          uo.save!
+        end
       end
     end
     # 10 more items. these are private (some 'Fancy' some 'Nice')
     @items += 10.times.map do |i|
-      Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PRIVATE,
-                                 owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Private Item #{i + 10}",
-                                 creators: ['Joe Blow'],
-                                 languages: [CONTROLLED_VOCABULARIES[:language].eng],
-                                 item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                 publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-                                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                                 subject: ['Items'])
-          .unlock_and_fetch_ldp_object do |uo|
-        uo.add_to_path(@community.id, @collections[i / 5].id)
-        uo.save!
+      if i < 5
+        Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PRIVATE,
+                                   owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Private Item #{i + 10}",
+                                   creators: ['Joe Blow'],
+                                   languages: [CONTROLLED_VOCABULARIES[:language].eng],
+                                   item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                                   publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
+                                   license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                                   subject: ['Items'])
+            .unlock_and_fetch_ldp_object do |uo|
+          uo.add_to_path(@community.id, @collections[0].id)
+          uo.save!
+        end
+      else
+        Thesis.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PRIVATE,
+                                     owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Private Item #{i + 10}",
+                                     dissertant: 'Joe Blow',
+                                     language: CONTROLLED_VOCABULARIES[:language].eng,
+                                     graduation_date: 'Fall 2017')
+              .unlock_and_fetch_ldp_object do |uo|
+          uo.add_to_path(@community.id, @collections[1].id)
+          uo.save!
+        end
       end
     end
 
