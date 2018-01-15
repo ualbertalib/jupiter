@@ -220,6 +220,20 @@ class Item < JupiterCore::LockedLdpObject
                                                 else
                                                   File.basename(file)
                                                 end
+          # Store file properties in the format required by the sitemap
+          # for quick and easy retrieval -- nobody wants to wait 36hrs for this!
+          unlocked_fileset.sitemap_link = "<rs:ln \
+href=\"#{Rails.application.routes.url_helpers.url_for(controller: :file_sets,
+                                                      action: :download,
+                                                      id: unlocked_fileset.id,
+                                                      file_name: unlocked_fileset.contained_filename,
+                                                      only_path: true)}\" \
+rel=\"content\" \
+hash=\"#{unlocked_fileset.original_file.checksum.algorithm.downcase}:"\
+"#{unlocked_fileset.original_file.checksum.value}\" \
+length=\"#{unlocked_fileset.original_file.size}\" \
+type=\"#{unlocked_fileset.original_file.mime_type}\"\
+/>"
           unlocked_fileset.save!
           self.members += [unlocked_fileset]
           # pull in hydra derivatives, set temp file base
