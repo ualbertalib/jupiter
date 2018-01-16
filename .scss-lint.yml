@@ -3,6 +3,9 @@
 
 scss_files: 'app/assets/stylesheets/**/*.scss'
 
+exclude:
+  - "app/assets/stylesheets/item_draft.scss"
+
 linters:
 
   # `scss-lint:disable` control comments should be preceded by a comment
