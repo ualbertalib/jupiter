@@ -1,0 +1,16 @@
+<div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="search-sort-button"
+          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <% if params[:sort].present? %>
+      <%= search_sort_label(params[:sort], params[:direction]) %>
+    <% else %>
+      <%= t('search.sort_by') %>
+    <% end %>
+  </button>
+  <div class="dropdown-menu" aria-labelledby="search-sort-button">
+    <%= search_sort_link('title', 'asc') %>
+    <%= search_sort_link('title', 'desc') %>
+    <%= search_sort_link('sort_year', 'desc') %>
+    <%= search_sort_link('sort_year', 'asc') %>
+  </div>
+</div>

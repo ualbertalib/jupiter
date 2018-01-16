@@ -18,5 +18,11 @@ module ItemSearch
     options[:facets] = params[:facets]
     @results = JupiterCore::Search.faceted_search(options)
     @results.sort(sort_column, sort_direction).page params[:page]
+    # Toggle that we want to be able to sort by sort_year
+    @item_sort = true
+  end
+
+  def sort_column
+    ['title', 'sort_year'].include?(params[:sort]) ? params[:sort] : 'title'
   end
 end
