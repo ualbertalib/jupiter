@@ -24,6 +24,7 @@ class ItemShowTest < ActionDispatch::IntegrationTest
       uo.owner = 1
       uo.creators = ['Joe Blow']
       uo.visibility = JupiterCore::VISIBILITY_PUBLIC
+      uo.created = '1999-09-09'
       uo.languages = [CONTROLLED_VOCABULARIES[:language].eng]
       uo.license = CONTROLLED_VOCABULARIES[:license].attribution_4_0_international
       uo.item_type = CONTROLLED_VOCABULARIES[:item_type].article

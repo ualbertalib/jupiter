@@ -132,6 +132,8 @@ class Item < JupiterCore::LockedLdpObject
     validates :visibility_after_embargo, absence: true, if: ->(item) { item.visibility != VISIBILITY_EMBARGO }
     validates :member_of_paths, presence: true
     validates :title, presence: true
+    validates :created, presence: true
+    validates :sort_year, presence: true
     validates :languages, presence: true
     validates :item_type, presence: true
     validates :subject, presence: true
