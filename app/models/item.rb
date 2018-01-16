@@ -1,7 +1,8 @@
 class Item < JupiterCore::LockedLdpObject
 
-  include CommonObjectProperties
-  include CommonItemProperties
+  include ObjectProperties
+  include ItemProperties
+  ldp_object_includes Hydra::Works::WorkBehavior
 
   ALLOWED_LICENSES = (CONTROLLED_VOCABULARIES[:license] + CONTROLLED_VOCABULARIES[:old_license]).freeze
 

@@ -1,6 +1,6 @@
 class Collection < JupiterCore::LockedLdpObject
 
-  include CommonObjectProperties
+  include ObjectProperties
 
   ldp_object_includes Hydra::Works::CollectionBehavior
 

@@ -1,7 +1,8 @@
 class Thesis < JupiterCore::LockedLdpObject
 
-  include CommonObjectProperties
-  include CommonItemProperties
+  include ObjectProperties
+  include ItemProperties
+  ldp_object_includes Hydra::Works::WorkBehavior
 
   # Dublin Core attributes
   has_attribute :abstract, ::RDF::Vocab::DC.abstract, type: :text, solrize_for: :search

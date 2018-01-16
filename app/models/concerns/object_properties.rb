@@ -1,9 +1,7 @@
-module CommonObjectProperties
+module ObjectProperties
   extend ActiveSupport::Concern
 
   included do
-    ldp_object_includes Hydra::Works::WorkBehavior
-
     # Dublin Core attributes
     has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :sort]
 

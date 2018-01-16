@@ -1,4 +1,4 @@
-module CommonItemProperties
+module ItemProperties
   extend ActiveSupport::Concern
 
   VISIBILITY_EMBARGO = CONTROLLED_VOCABULARIES[:visibility].embargo.freeze
@@ -8,8 +8,6 @@ module CommonItemProperties
                                 CONTROLLED_VOCABULARIES[:visibility].public].freeze
 
   included do
-    ldp_object_includes Hydra::Works::WorkBehavior
-
     # Dublin Core attributes
     has_attribute :alternative_title, ::RDF::Vocab::DC.alternative, solrize_for: :search
     # `sort_year` is faceted differently for `Item` and `Thesis`
