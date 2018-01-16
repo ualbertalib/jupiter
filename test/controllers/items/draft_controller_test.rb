@@ -190,7 +190,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
 
       patch item_draft_url(id: :choose_license_and_visibility, item_id: draft_item.id), params: {
         draft_item: {
-          license: :public_domain_mark,
+          license: :public_domain_mark
         }
       }
 

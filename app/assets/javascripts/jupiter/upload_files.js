@@ -1,4 +1,3 @@
-
 $(document).on('turbolinks:load', function() {
 
   // Disable auto discover for all elements:
@@ -12,8 +11,8 @@ $(document).on('turbolinks:load', function() {
       previewTemplate: $('#js-dropzone-preview-template').html(),
       previewsContainer: '#js-previews-list', // Define the container to display the previews
       clickable: '.js-add-files', // Define the element that should be used as click trigger to select files.
-      init: function() {
 
+      init: function() {
         // TODO:
         // this.on('addedfile', function(file) {
         //   if (!file.type.match(/image.*/)) {
@@ -36,5 +35,3 @@ $(document).on('turbolinks:load', function() {
     });
   }
 });
-
-
