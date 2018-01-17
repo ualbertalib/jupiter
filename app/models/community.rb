@@ -1,14 +1,14 @@
 class Community < JupiterCore::LockedLdpObject
 
+  include ObjectProperties
+
   ldp_object_includes Hydra::PCDM::ObjectBehavior
 
   # Needed for ActiveStorage (logo)...
   include GlobalID::Identification
 
-  has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :sort]
   has_attribute :description, ::RDF::Vocab::DC.description, solrize_for: [:search]
   has_multival_attribute :creators, ::RDF::Vocab::DC.creator, solrize_for: :exact_match
-  has_attribute :fedora3_uuid, ::TERMS[:ual].fedora3uuid, solrize_for: :exact_match
 
   # this method can be used on the SolrCached object OR the ActiveFedora object
   def member_collections
@@ -36,7 +36,7 @@ class Community < JupiterCore::LockedLdpObject
   end
 
   unlocked do
-    type [::Hydra::PCDM::Vocab::PCDMTerms.Object, ::TERMS[:jupiter_core].community]
+    type [::Hydra::PCDM::Vocab::PCDMTerms.Object, ::TERMS[:ual].Community]
 
     before_destroy :can_be_destroyed?
     before_destroy -> { logo.purge_later }
