@@ -1,9 +1,12 @@
 <div class="col">
-  <%= render partial: 'thumbnail', locals: { object: @item, size: :large } %>
+  <div class="d-flex justify-content-center">
+    <%= render partial: 'thumbnail', locals: { object: @item, size: :large } %>
+  </div>
   <% if @item.file_sets.count == 1 %>
     <div class="d-flex justify-content-center mt-3">
       <div class="p-1">
-        <%= link_to(t('.view'), fileset_uri(@item.file_sets.first, :show), class: 'btn btn-outline-primary') %>
+        <%= link_to(t('.view'), fileset_uri(@item.file_sets.first, :show), class: 'btn btn-outline-primary',
+            target: :_blank) %>
       </div>
       <div class="p-1">
         <%= link_to(t('.download'), fileset_uri(@item.file_sets.first, :download), class: 'btn btn-outline-primary') %>

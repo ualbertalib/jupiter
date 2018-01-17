@@ -17,6 +17,11 @@ module ApplicationHelper
     end
   end
 
+  def thesis_path(result)
+    # Theses are viewed with the item controller, which breaks the `polymorphic_path` above
+    item_path(result)
+  end
+
   def help_tooltip(text)
     content_tag(:span, fa_icon('question-circle'), title: text)
   end
@@ -39,6 +44,16 @@ module ApplicationHelper
     first = results.offset_value + 1
     last = results.offset_value + results.count
     t(:page_range, first: first, last: last, total: results.total_count)
+  end
+
+  def search_link_for(object, attribute, value: nil, facet: true, display: nil)
+    value ||= object.send(attribute)
+    display ||= value
+    if facet
+      link_to(display, search_path(facets: object.class.facet_term_for(attribute, value)))
+    else
+      link_to(display, search_path(search: object.class.search_term_for(attribute, value)))
+    end
   end
 
   def jupiter_truncate(text, length: TRUNCATE_CHARS_DEFAULT, separator: ' ', omission: '...')

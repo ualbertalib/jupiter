@@ -1,48 +1,48 @@
 <% page_title(@item.title) %>
 
+<%# Breadcrumbs here are for 'Home->Search->Item' %>
+<%# Community/collection based links appear in own section below' %>
 <div class="item-breadcrumb">
-  <% @item.each_community_collection do |community, collection| %>
-    <ol class="breadcrumb mb-1">
-      <li class="breadcrumb-item">
-        <%= link_to(community.title, community_path(community)) %>
-      </li>
-      <li class="breadcrumb-item">
-        <%= link_to(collection.title,
-            community_collection_path(community, collection)) %>
-      </li>
-      <li class="breadcrumb-item active"><%= @item.title %></li>
-    </ol>
-  <% end %>
+  <ol class="breadcrumb mb-1">
+    <li class="breadcrumb-item">
+      <%= link_to(t(:home), root_path) %>
+    </li>
+    <li class="breadcrumb-item">
+      <%= link_to(t(:search_label), search_path) %>
+    </li>
+    <li class="breadcrumb-item active"><%= @item.title %></li>
+  </ol>
 </div>
 
 <div class="d-flex justify-content-between m-3">
-  <%# FILES SIDEBAR %>
-  <%#raise 'asdf' %>
-  <% if @item.file_sets.present? %>
-    <div>
-      <%= render partial: 'files_section_sidebar' %>
-    </div>
-  <% end %>
+  <%# LEFT SIDE %>
+  <div class="mr-5">
+    <%# FILES SIDEBAR %>
+    <% if @item.file_sets.present? %>
+      <div class="mb-3">
+        <%= render partial: 'files_section_sidebar' %>
+      </div>
+    <% end %>
 
-  <%# MAIN CONTENT %>
-  <div>
-    <h1 class="mt-3"><%= @item.title %></h1>
-
-    <div class="row mt-3">
-      <div class="col">
-        <div class="list-group">
-          <% @item.display_attributes.each do |name, value| %>
-            <div class="list-group-item">
-              <%= "#{name.titlecase} : #{value}" %>
-            </div>
+    <%# COMMUNITY/COLLECTION PATHS %>
+    <div class="card">
+      <div class="card-header">
+        <%= t('.communities_and_collections') %>
+      </div>
+      <div class="card-body p-2">
+        <ul class="list-group">
+          <% @item.each_community_collection do |community, collection| %>
+            <li class="list-group-item list-group-item-action">
+              <%= link_to(community.title, community_path(community)) %> /
+              <%= link_to(collection.title, community_collection_path(community, collection)) %>
+            </li>
           <% end %>
-        </div>
+        </ul>
       </div>
     </div>
-
-    <div class="col">
-      <%= link_to t('edit'), edit_item_path(@item), class: 'btn btn-primary pull-right' %>
-    </div>
-
   </div>
+
+  <%# MAIN CONTENT %>
+  <%= render @item %>
+
 </div>

@@ -56,8 +56,8 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
   end
 
   test 'attribute definitions are working' do
-    assert_equal [:creator, :id, :member_of_paths, :owner, :record_created_at, :title, :visibility],
-                 @@klass.attribute_names.sort
+    assert_equal [:creator, :date_ingested, :hydra_noid, :id, :member_of_paths, :owner, :record_created_at, :title,
+                  :visibility], @@klass.attribute_names.sort
   end
 
   test 'json_array attributes appear to be normal arrays, and maintain order' do
@@ -195,8 +195,8 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
   test '#inspect works as expected' do
     title = generate_random_string
     obj = @@klass.new_locked_ldp_object(title: title)
-    assert_equal "#<AnonymousClass id: nil, visibility: nil, owner: nil, record_created_at: nil, title: \"#{title}\","\
-                 ' creator: [], member_of_paths: []>', obj.inspect
+    assert_equal '#<AnonymousClass id: nil, visibility: nil, owner: nil, record_created_at: nil, hydra_noid: nil, '\
+                 "date_ingested: nil, title: \"#{title}\", creator: [], member_of_paths: []>", obj.inspect
   end
 
   test 'attribute inheritance is working' do
@@ -204,11 +204,11 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
       has_attribute :subject, ::RDF::Vocab::DC.subject, solrize_for: :search
     end
 
-    assert_equal [:creator, :id, :member_of_paths, :owner, :record_created_at, :subject, :title, :visibility],
-                 subclass.attribute_names.sort
+    assert_equal [:creator, :date_ingested, :hydra_noid, :id, :member_of_paths, :owner, :record_created_at,
+                  :subject, :title, :visibility], subclass.attribute_names.sort
     # ensure mutating subclass attribute lists isn't trickling back to the superclass
-    assert_equal [:creator, :id, :member_of_paths, :owner, :record_created_at, :title, :visibility],
-                 @@klass.attribute_names.sort
+    assert_equal [:creator, :date_ingested, :hydra_noid, :id, :member_of_paths, :owner, :record_created_at,
+                  :title, :visibility], @@klass.attribute_names.sort
   end
 
   test 'attributes are declaring properly' do
@@ -252,11 +252,13 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
                                         visibility: JupiterCore::VISIBILITY_PUBLIC)
 
     assert obj.record_created_at.nil?
+    assert obj.updated_at.nil?
 
     freeze_time do
       obj.unlock_and_fetch_ldp_object(&:save!)
       assert obj.id.present?
       assert obj.record_created_at.present?
+      assert obj.updated_at.present?
       assert_equal obj.record_created_at, Time.current
     end
 
@@ -287,6 +289,20 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     assert_equal @@klass.last.id, another_obj.id
 
     assert_equal @@klass.where(id: obj.id).first.id, obj.id
+
+    assert_raises ArgumentError do
+      @@klass.find(obj.id, types: @@klass)
+    end
+
+    assert_raises ArgumentError do
+      JupiterCore::LockedLdpObject.find(obj.id)
+    end
+
+    result = JupiterCore::LockedLdpObject.find(obj.id, types: @@klass)
+
+    assert result.present?
+    assert_equal result.id, obj.id
+    assert_equal result.class, @@klass
   end
 
   # TODO: maybe "upstream" deserves its own section in our test suite
@@ -374,7 +390,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     assert instance.respond_to?(:item)
     assert_nil instance.item, nil
     assert_equal instance.inspect, '#<AnonymousClass id: nil, visibility: "http://terms.library.ualberta.ca/public",'\
-                                   ' owner: 1, record_created_at: nil, item: nil>'
+                                   ' owner: 1, record_created_at: nil, hydra_noid: nil, date_ingested: nil, item: nil>'
     instance.unlock_and_fetch_ldp_object(&:save)
 
     instance2 = klass.new_locked_ldp_object(owner: 1,
