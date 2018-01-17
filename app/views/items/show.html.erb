@@ -118,7 +118,7 @@
         <dl>
           <dt><%= t('.attributes.license') %></dt>
           <% if @item.license.present? %>
-            <dd><%= link_to @item.license, @item.license %></dd>
+            <dd><%= license_link(@item.license) %></dd>
           <% else %>
             <dd><%= @item.rights %></dd>
           <% end %>

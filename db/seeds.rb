@@ -123,16 +123,22 @@ if Rails.env.development? || Rails.env.uat?
         }
         # Add the occasional double-author work
         attributes[:creators] << creators[(seed + 5) % 10] if i % 7 == 3
-        if seed % 10 < 7
+        if seed % 10 < 6
           attributes[:license] = CONTROLLED_VOCABULARIES[:license].attribution_4_0_international
-        elsif seed % 10 < 8
+        elsif seed % 10 < 7
           attributes[:license] = CONTROLLED_VOCABULARIES[:license].public_domain_mark_1_0
+        elsif seed % 10 < 8
+          attributes[:license] = CONTROLLED_VOCABULARIES[:old_license].attribution_3_0_international
         else
           attributes[:rights] = 'Share my stuff with everybody'
         end
-        if idx % 2 == 0
+        if idx % 3 == 0
           attributes[:item_type] = CONTROLLED_VOCABULARIES[:item_type].article
-          attributes[:publication_status] = CONTROLLED_VOCABULARIES[:publication_status].published
+          attributes[:publication_status] = [CONTROLLED_VOCABULARIES[:publication_status].published]
+        elsif idx % 3 == 1
+          attributes[:item_type] = CONTROLLED_VOCABULARIES[:item_type].article
+          attributes[:publication_status] = [CONTROLLED_VOCABULARIES[:publication_status].draft,
+                                             CONTROLLED_VOCABULARIES[:publication_status].submitted]
         else
           attributes[:item_type] = CONTROLLED_VOCABULARIES[:item_type].report
         end
@@ -176,6 +182,7 @@ if Rails.env.development? || Rails.env.uat?
         owner: admin.id,
         creators: [creators[rand(10)]],
         visibility: JupiterCore::VISIBILITY_PRIVATE,
+        created: (Time.now - rand(20_000).days).to_s,
         title: "Private #{thing.pluralize}, public lives: a survey of social media trends",
         description: Faker::Lorem.sentence(20, false, 0).chop,
         languages: [CONTROLLED_VOCABULARIES[:language].eng],
@@ -193,6 +200,7 @@ if Rails.env.development? || Rails.env.uat?
         owner: admin.id,
         creators: [creators[rand(10)]],
         visibility: Item::VISIBILITY_EMBARGO,
+        created: (Time.now - rand(20_000).days).to_s,
         title: "Embargo and #{Faker::Address.country}: were the #{thing.pluralize} left behind?",
         description: Faker::Lorem.sentence(20, false, 0).chop,
         languages: [CONTROLLED_VOCABULARIES[:language].eng],
@@ -211,6 +219,7 @@ if Rails.env.development? || Rails.env.uat?
       Item.new_locked_ldp_object(
         owner: admin.id,
         creators: [creators[rand(10)]],
+        created: (Time.now - rand(20_000).days).to_s,
         visibility: Item::VISIBILITY_EMBARGO,
         title: "Former embargo of #{Faker::Address.country}: the day the #{thing.pluralize} were free",
         description: Faker::Lorem.sentence(20, false, 0).chop,
@@ -231,6 +240,7 @@ if Rails.env.development? || Rails.env.uat?
         owner: non_admin.id,
         creators: [creators[rand(10)]],
         visibility: JupiterCore::VISIBILITY_PUBLIC,
+        created: (Time.now - rand(20_000).days).to_s,
         title: "Impact of non-admin users on #{thing.pluralize}",
         description: Faker::Lorem.sentence(20, false, 0).chop,
         languages: [CONTROLLED_VOCABULARIES[:language].eng],
@@ -252,6 +262,7 @@ if Rails.env.development? || Rails.env.uat?
       owner: admin.id,
       creators: [creators[rand(10)]],
       visibility: JupiterCore::VISIBILITY_PUBLIC,
+      created: (Time.now - rand(20_000).days).to_s,
       title: "Multi-collection random images of #{thing.pluralize}",
       description: Faker::Lorem.sentence(20, false, 0).chop,
       # No linguistic content

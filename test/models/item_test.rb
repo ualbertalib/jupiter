@@ -11,12 +11,14 @@ class ItemTest < ActiveSupport::TestCase
                                                   community_id: community.id)
     collection.unlock_and_fetch_ldp_object(&:save!)
     item = Item.new_locked_ldp_object(title: 'Item', owner: 1, visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                      created: '2017-02-02',
                                       languages: [CONTROLLED_VOCABULARIES[:language].eng],
                                       creators: ['Joe Blow'],
                                       subject: ['Things'],
                                       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
                                       item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                      publication_status: CONTROLLED_VOCABULARIES[:publication_status].draft)
+                                      publication_status: [CONTROLLED_VOCABULARIES[:publication_status].draft,
+                                                           CONTROLLED_VOCABULARIES[:publication_status].submitted])
     item.unlock_and_fetch_ldp_object do |unlocked_item|
       unlocked_item.add_to_path(community.id, collection.id)
       unlocked_item.save!
@@ -194,13 +196,17 @@ class ItemTest < ActiveSupport::TestCase
     assert_includes item.errors[:base], 'should not have both a license and a rights statement'
   end
 
-  test 'a license must be from the controlled vocabulary' do
+  test 'a license must be either from the controlled vocabulary for new licenses or for old licenses' do
     item = Item.new_locked_ldp_object(license: 'whatever')
     assert_not item.valid?
     assert_includes item.errors[:license], 'is not recognized'
 
     item = Item.new_locked_ldp_object(license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international)
-    assert_not item.valid?
+    item.valid?
+    refute_includes item.errors.keys, :license
+
+    item = Item.new_locked_ldp_object(license: CONTROLLED_VOCABULARIES[:old_license].attribution_3_0_international)
+    item.valid?
     refute_includes item.errors.keys, :license
   end
 
@@ -224,16 +230,53 @@ class ItemTest < ActiveSupport::TestCase
 
   test 'publication status must come from controlled vocabulary' do
     item = Item.new_locked_ldp_object(item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                      publication_status: 'whatever')
+                                      publication_status: ['whatever'])
     assert_not item.valid?
+    assert_includes item.errors[:publication_status], 'is not recognized'
+  end
+
+  test 'publication status must either be published or both draft/submitted' do
+    item = Item.new_locked_ldp_object(item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                                      publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published])
+    item.valid?
+    refute item.errors[:publication_status].present?
+
+    item = Item.new_locked_ldp_object(item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                                      publication_status: [CONTROLLED_VOCABULARIES[:publication_status].draft,
+                                                           CONTROLLED_VOCABULARIES[:publication_status].submitted])
+    item.valid?
+    refute item.errors[:publication_status].present?
+
+    item = Item.new_locked_ldp_object(item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                                      publication_status: [CONTROLLED_VOCABULARIES[:publication_status].draft])
+    item.valid?
+    assert_includes item.errors[:publication_status], 'is not recognized'
+
+    item = Item.new_locked_ldp_object(item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                                      publication_status: [CONTROLLED_VOCABULARIES[:publication_status].submitted])
+    item.valid?
     assert_includes item.errors[:publication_status], 'is not recognized'
   end
 
   test 'publication status must be absent for non-articles' do
     item = Item.new_locked_ldp_object(item_type: CONTROLLED_VOCABULARIES[:item_type].book,
-                                      publication_status: CONTROLLED_VOCABULARIES[:publication_status].published)
+                                      publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published])
     assert_not item.valid?
     assert_includes item.errors[:publication_status], 'must be absent for non-articles'
+  end
+
+  test 'item_type_with_status_code gets set correctly' do
+    item = Item.new_locked_ldp_object(item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                                      publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published])
+    assert_equal item.item_type_with_status_code, 'article_published'
+
+    item = Item.new_locked_ldp_object(item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                                      publication_status: [CONTROLLED_VOCABULARIES[:publication_status].draft,
+                                                           CONTROLLED_VOCABULARIES[:publication_status].submitted])
+    assert_equal item.item_type_with_status_code, 'article_submitted'
+
+    item = Item.new_locked_ldp_object(item_type: CONTROLLED_VOCABULARIES[:item_type].report)
+    assert_equal item.item_type_with_status_code, 'report'
   end
 
   test 'a subject is required' do
@@ -246,6 +289,25 @@ class ItemTest < ActiveSupport::TestCase
     item = Item.new_locked_ldp_object
     assert_not item.valid?
     assert_includes item.errors[:creators], "can't be blank"
+  end
+
+  test 'created is required' do
+    item = Item.new_locked_ldp_object
+    assert_not item.valid?
+    assert_includes item.errors[:created], "can't be blank"
+  end
+
+  test 'sort_year is required' do
+    item = Item.new_locked_ldp_object
+    assert_not item.valid?
+    assert_includes item.errors[:sort_year], "can't be blank"
+  end
+
+  test 'sort_year is derived from created' do
+    item = Item.new_locked_ldp_object(created: 'Fall 2015')
+    item.valid?
+    refute item.errors[:sort_year].present?
+    assert_equal item.sort_year, '2015'
   end
 
 end
