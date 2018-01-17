@@ -69,6 +69,8 @@ class Item < JupiterCore::LockedLdpObject
   end
 
   unlocked do
+    validates :created, presence: true
+    validates :sort_year, presence: true
     validates :languages, presence: true
     validates :item_type, presence: true
     validates :subject, presence: true

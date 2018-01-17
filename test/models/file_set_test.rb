@@ -35,6 +35,7 @@ class FileSetTest < ActiveSupport::TestCase
     item = Item.new_locked_ldp_object(title: generate_random_string,
                                       creators: [generate_random_string],
                                       visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                      created: '1978-01-01',
                                       owner: 1,
                                       item_type: CONTROLLED_VOCABULARIES[:item_type].report,
                                       languages: [CONTROLLED_VOCABULARIES[:language].eng],

@@ -99,6 +99,7 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
         title: 'item blocking deletion',
         owner: 1,
         creators: ['Joe Blow'],
+        created: '1972-08-08',
         languages: [CONTROLLED_VOCABULARIES[:language].eng],
         license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
         visibility: JupiterCore::VISIBILITY_PRIVATE,

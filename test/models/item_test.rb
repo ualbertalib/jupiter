@@ -11,6 +11,7 @@ class ItemTest < ActiveSupport::TestCase
                                                   community_id: community.id)
     collection.unlock_and_fetch_ldp_object(&:save!)
     item = Item.new_locked_ldp_object(title: 'Item', owner: 1, visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                      created: '2017-02-02',
                                       languages: [CONTROLLED_VOCABULARIES[:language].eng],
                                       creators: ['Joe Blow'],
                                       subject: ['Things'],
@@ -288,6 +289,25 @@ class ItemTest < ActiveSupport::TestCase
     item = Item.new_locked_ldp_object
     assert_not item.valid?
     assert_includes item.errors[:creators], "can't be blank"
+  end
+
+  test 'created is required' do
+    item = Item.new_locked_ldp_object
+    assert_not item.valid?
+    assert_includes item.errors[:created], "can't be blank"
+  end
+
+  test 'sort_year is required' do
+    item = Item.new_locked_ldp_object
+    assert_not item.valid?
+    assert_includes item.errors[:sort_year], "can't be blank"
+  end
+
+  test 'sort_year is derived from created' do
+    item = Item.new_locked_ldp_object(created: 'Fall 2015')
+    item.valid?
+    refute item.errors[:sort_year].present?
+    assert_equal item.sort_year, '2015'
   end
 
 end

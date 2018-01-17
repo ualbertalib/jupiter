@@ -333,7 +333,7 @@ en:
     thumbnail:
       thumbnail: 'thumbnail'
     files_section_sidebar:
-      view: 'View Original'
+      view: 'View'
       download: 'Download'
       header: 'Files'
     new:
