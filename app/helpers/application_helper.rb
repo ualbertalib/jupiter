@@ -9,6 +9,14 @@ module ApplicationHelper
     @page_title.join(' | ')
   end
 
+  def humanize_uri_code(vocab, code)
+    t("controlled_vocabularies.#{vocab}.#{code}")
+  end
+
+  def humanize_uri(vocab, uri)
+    humanize_uri_code(vocab, CONTROLLED_VOCABULARIES[vocab].from_uri(uri))
+  end
+
   def path_for_result(result)
     if result.is_a? Collection
       community_collection_path(result.community, result)

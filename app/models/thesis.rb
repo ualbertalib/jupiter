@@ -54,8 +54,8 @@ class Thesis < JupiterCore::LockedLdpObject
     validates :dissertant, presence: true
     validates :graduation_date, presence: true
     validates :sort_year, presence: true
-    validate :language_validations
-    validate :institution_validations
+    validates :language, uri: { in_vocabulary: :language }
+    validates :institution, uri: { in_vocabulary: :institution }
 
     type [::Hydra::PCDM::Vocab::PCDMTerms.Object, ::RDF::Vocab::BIBO.Thesis]
 
@@ -68,14 +68,6 @@ class Thesis < JupiterCore::LockedLdpObject
         capture = graduation_date.scan(/\d{4}/)
         self.sort_year = capture[0] if capture.present?
       end
-    end
-
-    def language_validations
-      uri_validation(language, :language) if language.present?
-    end
-
-    def institution_validations
-      uri_validation(institution, :institution) if institution.present?
     end
   end
 

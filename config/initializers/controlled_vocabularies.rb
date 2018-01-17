@@ -8,32 +8,17 @@ config_files.each do |file|
   controlled_vocabularies.merge!(config)
 end
 
-# Add some helpers so that we can easily get a URI from a code.
-controlled_vocabularies.each do |name, vocabulary|
-  vocabulary.instance_variable_set(:@vocabulary, name)
-  # URI --> [text|code] functions
-  def vocabulary.uri_to_code(uri, raise_error_on_missing: true)
-    each do |term|
-      return term[:code] if term[:uri] == uri
+config_files.each do |file|
+  config = YAML.safe_load(File.open(file)).deep_symbolize_keys.freeze
+  raise VocabularyInvalidError, 'There should be only one top-level vocabulary name key' unless config.keys.count == 1
+  vocab_name = config.keys.first
+  uri_mappings = config[vocab_name].invert
+  controlled_vocabularies[vocab_name] = OpenStruct.new(config[vocab_name]).tap do |vocab|
+    vocab.define_singleton_method(:from_uri) do |uri|
+      uri_mappings[uri]
     end
-    return nil unless raise_error_on_missing
-    raise ArgumentError, "#{uri} not found in controlled vocabulary: #{@vocabulary}"
-  end
-
-  def vocabulary.code_to_text(code)
-    return nil unless code
-    I18n.t("controlled_vocabularies.#{@vocabulary}.#{code}")
-  end
-
-  def vocabulary.uri_to_text(uri, raise_error_on_missing: true)
-    code_to_text(uri_to_code(uri, raise_error_on_missing: raise_error_on_missing))
-  end
-
-  vocabulary.each do |term|
-    next unless term.key?(:code) && term.key?(:uri)
-    # Code --> URI methods
-    controlled_vocabularies[name].define_singleton_method(term[:code]) do
-      return term[:uri]
+    vocab.define_singleton_method(:method_missing) do |name, *args, &block|
+      super(name, *args, &block) || (raise "Unknown #{vocab_name} key: #{name}")
     end
   end
 end
