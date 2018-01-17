@@ -78,7 +78,6 @@ class Item < JupiterCore::LockedLdpObject
     validate :item_type_and_publication_status_validations
 
     before_validation do
-      # Note: for Thesis, the sort_year attribute is derived from ual:graduationDate
       begin
         self.sort_year = Date.parse(created).year.to_s if created.present?
       rescue ArgumentError
