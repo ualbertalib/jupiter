@@ -17,7 +17,7 @@
   <% if @item.contributors.present? %>
     <li class="list-unstyled list-group-item-action">
       <dl>
-        <dt><%= t('items.item_show.contributors') %></dt>
+        <dt><%= t('items.item.contributors') %></dt>
         <dd>
           <ul class="list-unstyled">
             <% @item.contributors.each do |contributor| %>
@@ -47,7 +47,7 @@
   <% if @item.source.present? %>
     <li class="list-unstyled list-group-item-action">
       <dl>
-        <dt><%= t('items.item_show.source') %></dt>
+        <dt><%= t('items.item.source') %></dt>
         <dd><%= @item.source %></dd>
       </dl>
     </li>
@@ -56,7 +56,7 @@
   <% if @item.related_link.present? %>
     <li class="list-unstyled list-group-item-action">
       <dl>
-        <dt><%= t('items.item_show.related_link') %></dt>
+        <dt><%= t('items.item.related_link') %></dt>
         <dd><%= link_to @item.related_link, @item.related_link %></dd>
       </dl>
     </li>

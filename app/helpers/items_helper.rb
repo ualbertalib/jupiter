@@ -5,9 +5,9 @@ module ItemsHelper
                     display: t("controlled_vocabularies.item_type_with_status.#{item.item_type_with_status_code}"))
   end
 
-  def language_search_link(item, language_uri, attribute: :languages)
-    search_link_for(item, attribute, value: language_uri,
-                                     display: CONTROLLED_VOCABULARIES[:language].uri_to_text(language_uri))
+  def language_search_link(item, language_uri)
+    search_link_for(item, :languages, value: language_uri,
+                                      display: CONTROLLED_VOCABULARIES[:language].uri_to_text(language_uri))
   end
 
   def license_link(license)

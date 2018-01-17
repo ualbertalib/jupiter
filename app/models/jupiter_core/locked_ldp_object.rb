@@ -376,6 +376,11 @@ module JupiterCore
       model_name.constantize.owning_class.send(:new, solr_doc: solr_doc)
     end
 
+    # Override so that partials are found relative to view directory for each subclass
+    def to_partial_path
+      self.class.to_s.downcase
+    end
+
     private
 
     attr_reader :ldp_object

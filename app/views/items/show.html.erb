@@ -43,10 +43,6 @@
   </div>
 
   <%# MAIN CONTENT %>
-  <% if @item.is_a?(Thesis) %>
-    <%= render partial: 'thesis_show' %>
-  <% else %>
-    <%= render partial: 'item_show' %>
-  <% end %>
+  <%= render @item %>
 
 </div>

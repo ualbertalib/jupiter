@@ -311,14 +311,14 @@ en:
       doi_url: 'DOI'
       license: 'License'
       language: 'Language'
-    item_show:
+    item:
       creators: 'Author(s) / Creator(s)'
       description: 'Description / Abstract'
       sort_year: 'Date created'
       contributors: 'Additional contributors'
       related_link: 'Link to related item'
       source: 'Source'
-    thesis_show:
+    thesis:
       dissertant: 'Author / Creator'
       abstract: 'Description / Abstract'
       graduation_date: 'Graduation date'
