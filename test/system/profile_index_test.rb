@@ -3,7 +3,7 @@ require 'application_system_test_case'
 class ProfileIndexTest < ApplicationSystemTestCase
 
   should 'show basic information about the logged in user' do
-    user = users(:regular_user)
+    user = users(:regular)
 
     login_user(user)
 
