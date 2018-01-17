@@ -28,18 +28,8 @@ cache 'sitemap', expires_in: 24.hours do
       end
     end
 
-    @items.each do |item|
-      xml.url do
-        xml.loc item_url(item)
-        xml.changefreq 'weekly'
-        xml.priority   1
-        xml.lastmod item.updated_at
-        xml.rs :md, type: 'text/html'
-        item.file_sets.each do |file_set|
-          xml.rs :ln, rel: 'builder'
-          xml << "\t#{file_set.sitemap_link}\n"
-        end
-      end
-    end
+    xml << render(partial: 'object', locals: { objects: @items })
+    xml << render(partial: 'object', locals: { objects: @theses })
+
   end
 end
