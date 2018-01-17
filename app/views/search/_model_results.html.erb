@@ -25,11 +25,7 @@
         </div>
 
         <div>
-          <% if @item_sort.present? %>
-            <%= render partial: 'search/item_sort' %>
-          <% else %>
-            <%= render partial: 'search/sort' %>
-          <% end %>
+          <%= render partial: 'search/sort' %>
         </div>
       </div>
 
