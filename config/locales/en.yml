@@ -356,6 +356,8 @@ en:
     sort_by: 'Sort by'
     sort_record_created_at_asc: 'Date (oldest first)'
     sort_record_created_at_desc: 'Date (newest first)'
+    sort_sort_year_asc: 'Date (oldest first)'
+    sort_sort_year_desc: 'Date (newest first)'
     sort_title_asc: 'Title (A-Z)'
     sort_title_desc: 'Title (Z-A)'
     tab_header_items_with_count: 'Items (%{count})'
