@@ -18,7 +18,7 @@ class SearchTest < ApplicationSystemTestCase
         Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                    owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Item #{i}",
                                    creators: ['Joe Blow'],
-                                   created: '1938-01-02',
+                                   created: "19#{50 + i}-11-11",
                                    languages: [CONTROLLED_VOCABULARIES[:language].english],
                                    item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                    publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
@@ -33,7 +33,7 @@ class SearchTest < ApplicationSystemTestCase
                                      owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Item #{i}",
                                      dissertant: 'Joe Blow',
                                      language: CONTROLLED_VOCABULARIES[:language].english,
-                                     graduation_date: 'Fall 2017')
+                                     graduation_date: "19#{50 + i}-11-11")
               .unlock_and_fetch_ldp_object do |uo|
           uo.add_to_path(@community.id, @collections[1].id)
           uo.save!
@@ -46,7 +46,7 @@ class SearchTest < ApplicationSystemTestCase
         Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PRIVATE,
                                    owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Private Item #{i + 10}",
                                    creators: ['Joe Blow'],
-                                   created: '1983-11-11',
+                                   created: "19#{70 + i}-11-11",
                                    languages: [CONTROLLED_VOCABULARIES[:language].english],
                                    item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                    publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
@@ -61,7 +61,7 @@ class SearchTest < ApplicationSystemTestCase
                                      owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Private Item #{i + 10}",
                                      dissertant: 'Joe Blow',
                                      language: CONTROLLED_VOCABULARIES[:language].english,
-                                     graduation_date: 'Fall 2017')
+                                     graduation_date: "19#{70 + i}-11-11")
               .unlock_and_fetch_ldp_object do |uo|
           uo.add_to_path(@community.id, @collections[1].id)
           uo.save!
@@ -79,7 +79,7 @@ class SearchTest < ApplicationSystemTestCase
       Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                  owner: 1, title: "Extra Item #{i}",
                                  creators: ['Joe Blow'],
-                                 created: '2009-09-09',
+                                 created: "19#{90 + i}-11-11",
                                  languages: [CONTROLLED_VOCABULARIES[:language].english],
                                  item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                  publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
@@ -269,7 +269,7 @@ class SearchTest < ApplicationSystemTestCase
       click_button 'Title (A-Z)'
       click_link 'Date (newest first)'
       assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy',
-                                                                   sort: 'record_created_at', direction: 'desc')
+                                                                   sort: 'sort_year', direction: 'desc')
       assert_selector 'button', text: 'Date (newest first)'
       assert_match(/Fancy Item 8.*Fancy Item 6.*Fancy Item 4.*Fancy Item 2.*Fancy Item 0/, page.text)
 
@@ -277,7 +277,7 @@ class SearchTest < ApplicationSystemTestCase
       click_button 'Date (newest first)'
       click_link 'Date (oldest first)'
       assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy',
-                                                                   sort: 'record_created_at', direction: 'asc')
+                                                                   sort: 'sort_year', direction: 'asc')
       assert_selector 'button', text: 'Date (oldest first)'
       assert_match(/Fancy Item 0.*Fancy Item 2.*Fancy Item 4.*Fancy Item 6.*Fancy Item 8/, page.text)
     end
