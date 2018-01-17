@@ -52,5 +52,9 @@ Rails.application.routes.draw do
   end
 
   get 'sitemap.xml', to: 'sitemap#index', defaults: { format: :xml }
+  get 'sitemap-communities.xml', to: 'sitemap#communities', defaults: { format: :xml }
+  get 'sitemap-collections.xml', to: 'sitemap#collections', defaults: { format: :xml }
+  get 'sitemap-items.xml', to: 'sitemap#items', defaults: { format: :xml }
+  get 'sitemap-theses.xml', to: 'sitemap#theses', defaults: { format: :xml }
   root to: 'welcome#index'
 end

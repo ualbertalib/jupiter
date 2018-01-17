@@ -1,35 +1,8 @@
 xml.instruct! :xml, version: '1.0'
-cache 'sitemap', expires_in: 24.hours do
-  xml.urlset(xmlns: 'http://www.sitemaps.org/schemas/sitemap/0.9',
-             'xmlns:rs' => 'http://www.openarchives.org/rs/terms/') do
-    xml.rs :md, capability: 'resourcelist', at: Time.current.utc.iso8601
-    xml.url do
-      xml.loc        root_url
-      xml.lastmod    Time.current.utc.iso8601
-      xml.changefreq 'weekly'
-      xml.priority   1
+xml.sitemapindex xmlns: 'http://www.sitemaps.org/schemas/sitemap/0.9' do
+  [:items, :theses, :collections, :communities].each do |category|
+    xml.sitemap do
+      xml.loc url_for(action: category, controller: 'sitemap', only_path: false)
     end
-
-    @communities.each do |community|
-      xml.url do
-        xml.loc community_url(community)
-        xml.changefreq 'weekly'
-        xml.priority   1
-        xml.lastmod community.updated_at
-      end
-    end
-
-    @collections.each do |collection|
-      xml.url do
-        xml.loc community_collection_url(collection.community, collection)
-        xml.changefreq 'weekly'
-        xml.priority   1
-        xml.lastmod collection.updated_at
-      end
-    end
-
-    xml << render(partial: 'object', locals: { objects: @items })
-    xml << render(partial: 'object', locals: { objects: @theses })
-
   end
 end
