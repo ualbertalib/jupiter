@@ -77,11 +77,18 @@ en:
               must_be_absent_for_non_articles: 'must be absent for non-articles'
             visibility_after_embargo:
               not_recognized: 'is not recognized'
+        ir_thesis:
+          attributes:
+            member_of_paths:
+              community_not_found: 'is missing community with ID "%{id}"'
+              collection_not_found: 'is missing collection with ID "%{id}"'
+            visibility_after_embargo:
+              not_recognized: 'is not recognized'
         ir_collection:
           attributes:
             # TODO: Just show the count of items? If collection has lots of items, this looks poorly
-            member_items:
-              must_be_empty: "must be empty. Could not delete collection. Currently contains: %{list_of_items}"
+            member_objects:
+              must_be_empty: "must be empty. Could not delete collection. Currently contains: %{list_of_objects}"
             community_id:
               community_not_found: 'is missing community with ID "%{id}"'
         ir_community:
@@ -296,25 +303,37 @@ en:
     show:
       communities_and_collections: 'Communities and Collections'
       member_of: 'Member of'
-      attributes:
-        creators: 'Author(s) / Creator(s)'
-        title: 'Title'
-        alternative_title: 'Alternate Title'
-        description: 'Description / Abstract'
-        sort_year: 'Date created'
-        subject: 'Subjects'
-        item_type_with_status: 'Type of item'
-        doi_url: 'DOI'
-        languages: 'Language'
-        license: 'License'
-        contributors: 'Additional contributors'
-        is_version_of: 'Citation for previous publication'
-        related_link: 'Link to related item'
-        derived_from: 'Source'
+      title: 'Title'
+      alternative_title: 'Alternate Title'
+      is_version_of: 'Citation for previous publication'
+      subject: 'Subjects / Keywords'
+      item_type_with_status: 'Type of item'
+      doi_url: 'DOI'
+      license: 'License'
+      language: 'Language'
+    item:
+      creators: 'Author(s) / Creator(s)'
+      description: 'Description / Abstract'
+      sort_year: 'Date created'
+      contributors: 'Additional contributors'
+      related_link: 'Link to related item'
+      source: 'Source'
+    thesis:
+      dissertant: 'Author / Creator'
+      abstract: 'Description / Abstract'
+      graduation_date: 'Graduation date'
+      degree: 'Degree'
+    thesis_more_information:
+      thesis_level: 'Degree level'
+      institution: 'Institution'
+      departments: 'Department'
+      supervisors: 'Supervisor / co-supervisor and their department(s)'
+      specializations: 'Specialization'
+      committee_members: 'Examining committee members and their departments'
     thumbnail:
       thumbnail: 'thumbnail'
     files_section_sidebar:
-      view: 'View Original'
+      view: 'View'
       download: 'Download'
       header: 'Files'
     new:
@@ -369,6 +388,7 @@ en:
       dataset: Dataset
       review: Review
       learning_object: 'Learning Object'
+      thesis: 'Thesis'
     language:
       ukr: Ukrainian
       jpn: Japanese
@@ -407,6 +427,9 @@ en:
       draft: Draft
       private: Private
       public: Public
+    institution:
+      uofa: 'University of Alberta'
+      st_stephens: "St. Stephen's College"
 
   facets:
     member_of_paths: 'Collections'

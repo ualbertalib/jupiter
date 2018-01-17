@@ -17,6 +17,11 @@ module ApplicationHelper
     end
   end
 
+  def thesis_path(result)
+    # Theses are viewed with the item controller, which breaks the `polymorphic_path` above
+    item_path(result)
+  end
+
   def help_tooltip(text)
     content_tag(:span, fa_icon('question-circle'), title: text)
   end
