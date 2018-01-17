@@ -5,7 +5,7 @@ class Presenters::FacetValues::URIValue < Presenters::FacetValues::DefaultPresen
   def translate_uri(vocab, uri)
     raise ArgumentError unless vocab.is_a? Symbol
     raise ArgumentError, "Vocabulary not found: #{vocab}" unless CONTROLLED_VOCABULARIES.key?(vocab)
-    CONTROLLED_VOCABULARIES[vocab].uri_to_text(uri)
+    @view.humanize_uri(vocab, uri)
   end
 
 end

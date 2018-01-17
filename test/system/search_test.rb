@@ -19,7 +19,7 @@ class SearchTest < ApplicationSystemTestCase
                                    owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Item #{i}",
                                    creators: ['Joe Blow'],
                                    created: '1938-01-02',
-                                   languages: [CONTROLLED_VOCABULARIES[:language].eng],
+                                   languages: [CONTROLLED_VOCABULARIES[:language].english],
                                    item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                    publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
                                    license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
@@ -32,7 +32,7 @@ class SearchTest < ApplicationSystemTestCase
         Thesis.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                      owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Item #{i}",
                                      dissertant: 'Joe Blow',
-                                     language: CONTROLLED_VOCABULARIES[:language].eng,
+                                     language: CONTROLLED_VOCABULARIES[:language].english,
                                      graduation_date: 'Fall 2017')
               .unlock_and_fetch_ldp_object do |uo|
           uo.add_to_path(@community.id, @collections[1].id)
@@ -47,7 +47,7 @@ class SearchTest < ApplicationSystemTestCase
                                    owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Private Item #{i + 10}",
                                    creators: ['Joe Blow'],
                                    created: '1983-11-11',
-                                   languages: [CONTROLLED_VOCABULARIES[:language].eng],
+                                   languages: [CONTROLLED_VOCABULARIES[:language].english],
                                    item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                    publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
                                    license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
@@ -60,7 +60,7 @@ class SearchTest < ApplicationSystemTestCase
         Thesis.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PRIVATE,
                                      owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Private Item #{i + 10}",
                                      dissertant: 'Joe Blow',
-                                     language: CONTROLLED_VOCABULARIES[:language].eng,
+                                     language: CONTROLLED_VOCABULARIES[:language].english,
                                      graduation_date: 'Fall 2017')
               .unlock_and_fetch_ldp_object do |uo|
           uo.add_to_path(@community.id, @collections[1].id)
@@ -80,7 +80,7 @@ class SearchTest < ApplicationSystemTestCase
                                  owner: 1, title: "Extra Item #{i}",
                                  creators: ['Joe Blow'],
                                  created: '2009-09-09',
-                                 languages: [CONTROLLED_VOCABULARIES[:language].eng],
+                                 languages: [CONTROLLED_VOCABULARIES[:language].english],
                                  item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                  publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
                                  license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
