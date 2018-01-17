@@ -54,7 +54,7 @@ class ItemsController < ApplicationController
   private
 
   def load_item
-    @item = Item.find(params[:id])
+    @item = JupiterCore::LockedLdpObject.find(params[:id], types: [Item, Thesis])
     authorize @item
   end
 

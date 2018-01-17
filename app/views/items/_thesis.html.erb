@@ -1,0 +1,110 @@
+<div>
+  <h1 class="mt-3" title="<%= t('items.show.title') %>"><%= @item.title %></h1>
+
+  <ul class="list-group">
+    <% if @item.alternative_title.present? %>
+      <li class="list-unstyled list-group-item-action">
+        <p title="<%= t('items.show.alternative_title') %>"><%= @item.alternative_title %></p>
+      </li>
+    <% end %>
+
+    <li class="list-unstyled list-group-item-action">
+      <dl>
+        <dt><%= t('.dissertant') %></dt>
+        <dd><%= search_link_for(@item, :all_contributors, value: @item.dissertant) %></dd>
+      </dl>
+    </li>
+
+    <% if @item.abstract.present? %>
+      <li class="list-unstyled list-group-item-action">
+        <p title="<%= t('.abstract') %>"><%= @item.abstract %></p>
+      </li>
+    <% end %>
+
+    <% if @item.subject.present? %>
+      <li class="list-unstyled list-group-item-action">
+        <dl>
+          <dt><%= t('items.show.subject') %></dt>
+          <dd>
+            <ul class="list-unstyled">
+              <% @item.subject.each do |subject| %>
+                <li><%= search_link_for(@item, :all_subjects, value: subject) %></li>
+              <% end %>
+            </ul>
+          </dd>
+        </dl>
+      </li>
+    <% end %>
+
+    <% if @item.graduation_date.present? %>
+      <li class="list-unstyled list-group-item-action">
+        <dl>
+          <dt><%= t('.graduation_date') %></dt>
+          <dd><%= @item.graduation_date %></dd>
+        </dl>
+      </li>
+    <% end %>
+
+    <li class="list-unstyled list-group-item-action">
+      <dl>
+        <dt><%= t('items.show.item_type_with_status') %></dt>
+        <dd><%= item_type_search_link(@item) %></dd>
+      </dl>
+    </li>
+
+    <% if @item.degree.present? %>
+      <li class="list-unstyled list-group-item-action">
+        <dl>
+          <dt><%= t('.degree') %></dt>
+          <dd><%= @item.degree %></dd>
+        </dl>
+      </li>
+    <% end %>
+
+    <% if @item.doi.present? %>
+      <li class="list-unstyled list-group-item-action">
+        <dl>
+          <dt><%= t('items.show.doi_url') %></dt>
+          <dd><%= link_to @item.doi_url, @item.doi_url %></dd>
+        </dl>
+      </li>
+    <% end %>
+
+    <% if @item.rights.present? %>
+      <li class="list-unstyled list-group-item-action">
+        <dl>
+          <dt><%= t('items.show.license') %></dt>
+          <dd><%= @item.rights %></dd>
+        </dl>
+      </li>
+    <% end %>
+  </ul>
+
+  <%# ADDITIONAL INFORMATION %>
+  <div class='js-hideshow'>
+    <a data-toggle="collapse"
+       data-parent=".js-hideshow"
+       href="#more-information-hidden"
+       aria-expanded="false"
+       aria-controls="more-information-hidden">
+      <span class='js-hideshow-control font-weight-bold font-italic'>
+        <%= t(:more_information) %>
+      </span>
+    </a>
+
+    <div class="collapse" id='more-information-hidden'>
+      <%= render partial: 'thesis_more_information' %>
+    </div>
+
+    <a data-toggle="collapse"
+       data-parent=".js-hideshow"
+       href="#more-information-hidden"
+       aria-expanded="false"
+       aria-controls="more-information-hidden">
+      <span class='js-hideshow-control font-weight-bold font-italic' style='display:none;'>
+        <%= t(:show_less) %>
+      </span>
+    </a>
+  </div>
+
+</div>
