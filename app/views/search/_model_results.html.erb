@@ -49,11 +49,7 @@
       <ul class="list-group">
         <% results.each do |result| %>
           <li class="list-group-item list-group-item-action">
-            <% if model == :item %>
-              <%= render partial: 'search/item_hit', locals: { result: result } %>
-            <% else %>
-              <%= link_to result.title, path_for_result(result) %>
-            <% end %>
+            <%= render result %>
           </li>
         <% end %>
       </ul>
