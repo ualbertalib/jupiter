@@ -38,10 +38,10 @@ class JupiterCore::DeferredSimpleSolrQuery
     self
   end
 
-  def +(other_query)
-    combined_query = JupiterCore::DeferredSimpleSolrQuery.new([self.criteria[:model],
-      other_query.criteria[:model]].flatten)
-    [self.criteria[:where], other_query.criteria[:where]].compact.each do |where_criteria|
+  def +(other)
+    combined_query = JupiterCore::DeferredSimpleSolrQuery.new([criteria[:model],
+                                                               other.criteria[:model]].flatten)
+    [criteria[:where], other.criteria[:where]].compact.each do |where_criteria|
       combined_query.where(where_criteria)
     end
     combined_query
@@ -73,7 +73,7 @@ class JupiterCore::DeferredSimpleSolrQuery
   })
 
   def total_count
-    af_models = criteria[:model].map {|m| m.send(:derived_af_class)}
+    af_models = criteria[:model].map { |m| m.send(:derived_af_class) }
     results_count, _ = JupiterCore::Search.perform_solr_query(q: where_clause,
                                                               restrict_to_model: af_models,
                                                               rows: 0,
@@ -104,7 +104,7 @@ class JupiterCore::DeferredSimpleSolrQuery
   end
 
   def reified_result_set
-    af_models = criteria[:model].map {|m| m.send(:derived_af_class)}
+    af_models = criteria[:model].map { |m| m.send(:derived_af_class) }
     _, results, _ = JupiterCore::Search.perform_solr_query(q: where_clause,
                                                            restrict_to_model: af_models,
                                                            rows: criteria[:limit],
