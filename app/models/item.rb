@@ -69,23 +69,8 @@ class Item < JupiterCore::LockedLdpObject
   end
 
   unlocked do
+    before_validation :populate_sort_year
     before_save :copy_creators_to_unordered_predicate
-
-    def copy_creators_to_unordered_predicate
-      return unless creators_changed?
-      self.unordered_creators = []
-      creators.each { |c| self.unordered_creators += [c] }
-    end
-
-    before_validation do
-      begin
-        self.sort_year = Date.parse(created).year.to_s if created.present?
-      rescue ArgumentError
-        # date was unparsable, try to pull out the first 4 digit number as a year
-        capture = created.scan(/\d{4}/)
-        self.sort_year = capture[0] if capture.present?
-      end
-    end
 
     validates :created, presence: true
     validates :sort_year, presence: true
@@ -102,6 +87,20 @@ class Item < JupiterCore::LockedLdpObject
       item.item_type == CONTROLLED_VOCABULARIES[:item_type].article && item.publication_status.present?
     }
     validate :license_xor_rights_must_be_present
+
+    def populate_sort_year
+      self.sort_year = Date.parse(created).year.to_s if created.present?
+    rescue ArgumentError
+      # date was unparsable, try to pull out the first 4 digit number as a year
+      capture = created.scan(/\d{4}/)
+      self.sort_year = capture[0] if capture.present?
+    end
+
+    def copy_creators_to_unordered_predicate
+      return unless creators_changed?
+      self.unordered_creators = []
+      creators.each { |c| self.unordered_creators += [c] }
+    end
 
     def license_xor_rights_must_be_present
       # Must have one of license or rights, not both
