@@ -4,6 +4,7 @@ class JupiterCore::DeferredSimpleSolrQuery
   include Kaminari::PageScopeMethods
 
   def initialize(klass)
+    klass = [klass] unless klass.is_a?(Array)
     criteria[:model] = klass
     criteria[:limit] = JupiterCore::Search::MAX_RESULTS
     criteria[:sort] = []
@@ -32,10 +33,21 @@ class JupiterCore::DeferredSimpleSolrQuery
 
   def sort(attr, order = :desc)
     raise ArgumentError, 'order must be :asc or :desc' unless [:asc, :desc].include?(order.to_sym)
-    criteria[:sort] << criteria[:model].solr_name_for(attr.to_sym, role: :sort)
+    criteria[:sort] << criteria[:model].first.solr_name_for(attr.to_sym, role: :sort)
     criteria[:sort_order] << order
     self
   end
+
+  def +(other_query)
+    combined_query = JupiterCore::DeferredSimpleSolrQuery.new([self.criteria[:model],
+      other_query.criteria[:model]].flatten)
+    [self.criteria[:where], other_query.criteria[:where]].compact.each do |where_criteria|
+      combined_query.where(where_criteria)
+    end
+    combined_query
+  end
+
+  # Enumerable support
 
   def each
     reified_result_set.map do |res|
@@ -61,9 +73,9 @@ class JupiterCore::DeferredSimpleSolrQuery
   })
 
   def total_count
-    af_model = criteria[:model].send(:derived_af_class)
+    af_models = criteria[:model].map {|m| m.send(:derived_af_class)}
     results_count, _ = JupiterCore::Search.perform_solr_query(q: where_clause,
-                                                              restrict_to_model: af_model,
+                                                              restrict_to_model: af_models,
                                                               rows: 0,
                                                               start: criteria[:offset],
                                                               sort: sort_clause)
@@ -81,19 +93,20 @@ class JupiterCore::DeferredSimpleSolrQuery
   # Defer to Kaminari configuration in the +LockedLdpObject+ model
   def method_missing(method, *args, &block)
     if [:default_per_page, :max_per_page, :max_pages, :max_pages_per, :page].include? method
-      criteria[:model].send(method, *args, &block) if criteria[:model].respond_to?(method)
+      criteria[:model].first.send(method, *args, &block) if criteria[:model].first.respond_to?(method)
     else
       super
     end
   end
 
   def respond_to_missing?(method, include_private = false)
-    super || criteria[:model].respond_to?(method, include_private)
+    super || criteria[:model].first.respond_to?(method, include_private)
   end
 
   def reified_result_set
+    af_models = criteria[:model].map {|m| m.send(:derived_af_class)}
     _, results, _ = JupiterCore::Search.perform_solr_query(q: where_clause,
-                                                           restrict_to_model: criteria[:model].send(:derived_af_class),
+                                                           restrict_to_model: af_models,
                                                            rows: criteria[:limit],
                                                            start: criteria[:offset],
                                                            sort: sort_clause)
@@ -113,7 +126,7 @@ class JupiterCore::DeferredSimpleSolrQuery
     if criteria[:where].present?
       attr_queries = []
       attr_queries << criteria[:where].map do |k, v|
-        solr_key = k == :id ? k : criteria[:model].attribute_metadata(k)[:solr_names].first
+        solr_key = k == :id ? k : criteria[:model].first.attribute_metadata(k)[:solr_names].first
         %Q(_query_:"#{solr_key}:#{v}")
       end
     else

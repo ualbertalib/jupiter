@@ -69,15 +69,16 @@ class JupiterCore::Search
     restrict_to_model.each do |model|
       model_scopes << %Q(_query_:"{!raw f=has_model_ssim}#{model.name}")
     end
-
-    query << "(#{model_scopes.join(' OR ')})"
+    fquery = []
+    fquery << "(#{model_scopes.join(' OR ')})"
 
     query.append(q) if q.present?
+    fquery.append(fq) if fq.present?
 
     params = {
       q: query.join(' AND '),
       qf: qf,
-      fq: fq,
+      fq: fquery.join(' AND '),
       facet: facet,
       rows: rows,
       'facet.field': facet_fields

@@ -34,9 +34,7 @@ class Collection < JupiterCore::LockedLdpObject
   end
 
   def member_objects
-    # TODO: probably replace me with something like:
-    #    JupiterCore::LockedLdpObject.where(member_of_paths: path, models: [Item, Thesis])
-    member_items.to_a + member_theses.to_a
+    member_items + member_theses
   end
 
   def as_json(_options)
