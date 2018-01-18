@@ -81,6 +81,8 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
       # The correct ordering is in Fedora
       assert_equal [creator1, creator2, creator3], uo.creator
     end
+
+    obj.unlock_and_fetch_ldp_object(&:destroy)
   end
 
   test 'attribute metadata is being tracked properly' do
@@ -303,6 +305,9 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     assert result.present?
     assert_equal result.id, obj.id
     assert_equal result.class, @@klass
+
+    obj.unlock_and_fetch_ldp_object(&:destroy)
+    another_obj.unlock_and_fetch_ldp_object(&:destroy)
   end
 
   # TODO: maybe "upstream" deserves its own section in our test suite
@@ -378,6 +383,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     # of the time, causing our embargo date to silently become today when saved.
     # This test will fail if we haven't succesfully corrected for this in JupiterCore::LockedLdpObject
     assert instance.embargo_date.year != Time.current.year
+    instance.unlock_and_fetch_ldp_object(&:destroy)
   end
 
   test 'hoisted activefedora associations' do
