@@ -41,7 +41,7 @@ class JupiterCore::DeferredSimpleSolrQuery
   # Composes a query object out of other, possibly heterogenous, query objects.
   # Only where clauses are preserved in the combined query. Sort orders, limits, and offsets must be re-specified
   # For sorts and where clauses on the combined query to be meaningful, the properties involved must share a name
-  # and +solrize_for+ definitio across all involved models
+  # and +solrize_for+ definition across all involved models. No attempt is made to enforce this, however.
   #
   # Examples:
   #
@@ -156,9 +156,7 @@ class JupiterCore::DeferredSimpleSolrQuery
 
   protected
 
-  def children
-    @children
-  end
+  attr_reader :children
 
   def model
     criteria[:model] || children.first.model
