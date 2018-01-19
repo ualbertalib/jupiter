@@ -49,13 +49,10 @@ class Items::DraftController < ApplicationController
       # TODO: Improve this
       if @draft_item.update_attributes(permitted_attributes(DraftItem))
 
-        # TODO: DraftItem is completed! FILL ME OUT
-        # Now we need to ingest DraftItem into fedora
-        # and spin off derivative jobs and anything else that needs to take place here
-        # etc etc
+        item = @draft_item.ingest_into_fedora
 
         # Redirect to the new item show page
-        redirect_to root_path, notice: 'Success!'
+        redirect_to item_path(item), notice: 'Success!'
       else
         # handle errors
         render_wizard @draft_item

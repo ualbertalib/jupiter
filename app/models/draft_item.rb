@@ -81,7 +81,54 @@ class DraftItem < ApplicationRecord
     end
   end
 
+  # Creates an Item object from the draft_item attributes
+  def ingest_into_fedora
+    Item.new_locked_ldp_object(
+      owner: user.id,
+
+      title: title,
+      alternative_title: alternate_title,
+
+      # TODO:
+      # need check for article and put into draft or publish status
+      # if type == article
+      # publication_status: draft/publish
+      item_type: item_type_conversion_to_controlled_vocab_uri,
+      languages: languages_conversion_to_controlled_vocab_uri,
+      creators: creators,
+      subject: subjects,
+      created: date_created.to_s,
+      description: description,
+
+      # TODO:
+      # if visibility == embargo
+      # embargo_end_date: embargo_end_date
+      # visibility_after_embargo = visibility_after_embargo
+      visibility: visibility_conversion_to_controlled_vocab_uri,
+
+      # if license == license_text
+      # then set rights: license_text_area
+      # else
+      license: license_conversion_to_controlled_vocab_uri,
+
+      # Additional fields
+      contributors: contributors,
+      spatial_subjects: places,
+      temporal_subjects: time_periods,
+      # citations of previous publication apparently maps to is_version_of
+      is_version_of: citations,
+      source: source,
+      related_link: related_item
+    ).unlock_and_fetch_ldp_object do |unlocked_obj|
+      unlocked_obj.add_to_path(member_of_paths['community_id'], member_of_paths['collection_id'])
+      unlocked_obj.add_files(wrap_activestorage_files_as_file_objects)
+      unlocked_obj.save!
+    end
+  end
+
   private
+
+  # Validations
 
   def communities_and_collections_validations
     return if member_of_paths.blank? # caught by presence check
@@ -109,6 +156,95 @@ class DraftItem < ApplicationRecord
 
   def validate_if_visibility_is_embargo?
     validate_choose_license_and_visibility? && embargo?
+  end
+
+  # Fedora file handling
+
+  # Hacky...but works
+   def wrap_activestorage_files_as_file_objects
+    files.map do |file|
+      # Can ActiveStorage make this easier?
+      # Most of this low level file stuff are hidden behind private APIs
+      # Perhaps we can do this via `download_blob_to_tempfile`
+      # https://github.com/rails/rails/blob/master/activestorage/lib/active_storage/downloading.rb#L7
+      file_obj = Tempfile.open([file.filename.base, file.filename.extname]) do |temp|
+        # temp.write(file.download)
+        file.download { |chunk| temp.write(chunk) }
+        temp
+      end
+
+      File.open(file_obj.path, 'r')
+    end
+  end
+
+  # Control Vocab Conversations
+
+  # Maps Language names to CONTROLLED_VOCABULARIES[:language] codes
+  def languages_conversion_to_controlled_vocab_uri
+    conversions = { english: :eng,
+                    french: :fre,
+                    spanish: :spa,
+                    chinese: :zho,
+                    german: :ger,
+                    italian: :ita,
+                    russian: :rus,
+                    ukrainian: :ukr,
+                    japanese: :jpn,
+                    no_linguistic_content: :zxx,
+                    other: :other }
+
+    languages.pluck(:name).map do |language|
+      code = conversions.fetch(language.to_sym)
+      CONTROLLED_VOCABULARIES[:language].send(code)
+    end
+  end
+
+  # Maps ItemDraft.licenses to CONTROLLED_VOCABULARIES[:license]
+  def license_conversion_to_controlled_vocab_uri
+    # no mapping for `license_text` as this gets checked and ingested as a `rights` field in Fedora Item
+    # Also no handling of `CONTROLLED_VOCABULARIES[:old_license]`
+    conversions =
+      { attribution_non_commercial: :attribution_noncommercial_4_0_international,
+        attribution: :attribution_4_0_international,
+        attribution_non_commercial_no_derivatives: :attribution_noncommercial_noderivatives_4_0_international,
+        attribution_non_commercial_share_alike: :attribution_noncommercial_sharealike_4_0_international,
+        attribution_no_derivatives: :attribution_noderivatives_4_0_international,
+        attribution_share_alike: :attribution_sharealike_4_0_international,
+        cco_universal: :cc0_1_0_universal,
+        public_domain_mark: :public_domain_mark_1_0 }
+
+    code = conversions.fetch(license.to_sym)
+    CONTROLLED_VOCABULARIES[:license].send(code)
+  end
+
+  # Maps Type names to CONTROLLED_VOCABULARIES[:item_type]
+  def item_type_conversion_to_controlled_vocab_uri
+    conversions = { book: :book,
+                    book_chapter: :chapter,
+                    conference_workshop_poster: :conference_poster,
+                    conference_workshop_presenation: :conference_paper,
+                    dataset: :dataset,
+                    image: :image,
+                    journal_article_draft: :article,
+                    journal_article_published: :article,
+                    learning_object: :learning_object,
+                    report: :report,
+                    research_material: :research_material,
+                    review: :review }
+
+    code = conversions.fetch(type.name.to_sym)
+    CONTROLLED_VOCABULARIES[:item_type].send(code)
+  end
+
+  # Maps ItemDraft.visibilities to CONTROLLED_VOCABULARIES[:visibility]
+  def visibility_conversion_to_controlled_vocab_uri
+    # Can't have a private or draft visibilty so no mappings for this
+    conversions = { open_access: :public,
+                    embargo: :embargo,
+                    authenticated: :authenticated }
+
+    code = conversions.fetch(visibility.to_sym)
+    CONTROLLED_VOCABULARIES[:visibility].send(code)
   end
 
 end
