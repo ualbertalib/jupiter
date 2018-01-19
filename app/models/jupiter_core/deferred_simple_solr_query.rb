@@ -53,7 +53,7 @@ class JupiterCore::DeferredSimpleSolrQuery
   #
   #    Item.where(member_of_paths: path) + Thesis.where(member_of_paths: path)
   #
-  # All items belonging to path 1 and all theses belonging to  path 2:
+  # All items belonging to path 1 and all theses belonging to path 2:
   #
   #    Item.where(member_of_paths: path1) + Thesis.where(member_of_paths: path2)
   #
@@ -72,6 +72,10 @@ class JupiterCore::DeferredSimpleSolrQuery
   # A single query returning all Theses owned by user1, and all public Items where both Items and Theses are in a certain path
   #
   #    (Item.public + Thesis.where(owner: user_id)).where(member_of_paths: path)
+  #
+  # A count of all Collections in a community, all Theses owned by user1, and all public Items where both Items and Theses are in a certain path
+  #
+  #    (Collection.where(community_id: cid) + ((Item.public + Thesis.where(owner: user_id)).where(member_of_paths: path))).count
   #
   def +(other)
     combined_query = JupiterCore::DeferredSimpleSolrQuery.new(nil)
@@ -107,7 +111,7 @@ class JupiterCore::DeferredSimpleSolrQuery
   })
 
   def total_count
-    results_count, _ = JupiterCore::Search.perform_solr_query(q: '*:*',
+    results_count, _ = JupiterCore::Search.perform_solr_query(q: '',
                                                               fq: where_clause,
                                                               rows: 0,
                                                               start: criteria[:offset],
@@ -137,7 +141,7 @@ class JupiterCore::DeferredSimpleSolrQuery
   end
 
   def reified_result_set
-    _, results, _ = JupiterCore::Search.perform_solr_query(q: '*:*',
+    _, results, _ = JupiterCore::Search.perform_solr_query(q: '',
                                                            fq: where_clause,
                                                            rows: criteria[:limit],
                                                            start: criteria[:offset],
