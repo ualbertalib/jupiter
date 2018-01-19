@@ -88,18 +88,19 @@
       </ul>
     </div>
   </nav>
-</header>
-<div class="d-md-none m-3">
-  <form action="<%= search_path %>">
-    <div class="input-group" aria-label="navbar-search">
-      <%= search_field_tag 'search', nil, placeholder: t('.search.placeholder'),
-          value: params[:search], id: 'navbar-search-sm', 'aria-label': 'search-box', class: "form-control" %>
-      <div class="input-group-btn">
-        <button type="submit" class="btn btn-secondary">
-          <%= fa_icon 'search' %>
-          <%= t('.search.button_text') %>
-        </button>
+
+  <div class="d-md-none m-3 w-100">
+    <form action="<%= search_path %>">
+      <div class="input-group" aria-label="navbar-search">
+        <%= search_field_tag 'search', nil, placeholder: t('.search.placeholder'),
+            value: params[:search], id: 'navbar-search-sm', 'aria-label': 'search-box', class: "form-control" %>
+        <div class="input-group-btn">
+          <button type="submit" class="btn btn-secondary">
+            <%= fa_icon 'search' %>
+            <%= t('.search.button_text') %>
+          </button>
+        </div>
       </div>
-    </div>
-  </form>
-</div>
+    </form>
+  </div>
+</header>
