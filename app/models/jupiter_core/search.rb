@@ -66,11 +66,11 @@ class JupiterCore::Search
 
     model_scopes = []
 
-    restrict_to_model.each do |model|
+    restrict_to_model.compact.each do |model|
       model_scopes << %Q(_query_:"{!raw f=has_model_ssim}#{model.name}")
     end
     fquery = []
-    fquery << "(#{model_scopes.join(' OR ')})"
+    fquery << "(#{model_scopes.join(' OR ')})" if model_scopes.present?
 
     query.append(q) if q.present?
     fquery.append(fq) if fq.present?
