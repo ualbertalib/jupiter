@@ -18,23 +18,13 @@
     </button>
 
     <div class="collapse navbar-collapse" id="jupiter-main-nav" aria-expanded="false">
-      <ul class="navbar-nav mr-auto">
-        <li role="presentation" class="nav-item">
-          <%= link_to t('.links.communities'), communities_path, class: "nav-link" %>
-        </li>
+      <ul class="navbar-nav mr-auto d-none d-md-block">
 
-        <li role="presentation" class="nav-item">
-          <%= link_to t('.links.new_item'), new_item_path, class: "nav-link" %>
-        </li>
-      </ul>
-
-      <ul class="navbar-nav pull-xs-right mr-2">
         <li role="presentation" class="nav-item mr-3">
-
           <form class="form-inline" action="<%= search_path %>">
             <div class="input-group" aria-label="navbar-search">
               <%= search_field_tag 'search', nil, placeholder: t('.search.placeholder'),
-                  value: params[:search], id: 'navbar-search', 'aria-label': 'search-box', class: "form-control" %>
+                  value: params[:search], id: 'navbar-search-lg', 'aria-label': 'search-box', class: "form-control" %>
               <div class="input-group-btn">
                 <button type="submit" class="btn btn-secondary">
                   <%= fa_icon 'search' %>
@@ -43,6 +33,18 @@
               </div>
             </div>
           </form>
+        </li>
+
+      </ul>
+
+      <ul class="navbar-nav pull-xs-right mr-2">
+
+        <li role="presentation" class="nav-item">
+          <%= link_to t('.links.communities'), communities_path, class: "nav-link" %>
+        </li>
+
+        <li role="presentation" class="nav-item">
+          <%= link_to t('.links.new_item'), new_item_path, class: "nav-link" %>
         </li>
 
         <% if current_user.present? %>
@@ -87,3 +89,17 @@
     </div>
   </nav>
 </header>
+<div class="d-md-none m-3">
+  <form action="<%= search_path %>">
+    <div class="input-group" aria-label="navbar-search">
+      <%= search_field_tag 'search', nil, placeholder: t('.search.placeholder'),
+          value: params[:search], id: 'navbar-search-sm', 'aria-label': 'search-box', class: "form-control" %>
+      <div class="input-group-btn">
+        <button type="submit" class="btn btn-secondary">
+          <%= fa_icon 'search' %>
+          <%= t('.search.button_text') %>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
