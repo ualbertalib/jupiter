@@ -65,6 +65,10 @@ class JupiterCore::DeferredSimpleSolrQuery
   #
   #    (Item.all + Thesis.all).where(member_of_paths: path).where(owner: user_id)
   #
+  # A single query returning all items belonging to two different users:
+  #
+  #    Item.where(owner: user1.id) + Item.where(owner: user2.id)
+  #
   # A single query returning all Theses owned by user1, and all public Items:
   #
   #    Item.public + Thesis.where(owner: user_id)
