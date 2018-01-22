@@ -176,23 +176,10 @@ class DraftItem < ApplicationRecord
 
   # Control Vocab Conversions
 
-  # Maps Language names to CONTROLLED_VOCABULARIES[:language] codes
+  # Maps Language names to CONTROLLED_VOCABULARIES[:language] URIs
   def languages_conversion_to_controlled_vocab_uri
-    conversions = { english: :eng,
-                    french: :fre,
-                    spanish: :spa,
-                    chinese: :zho,
-                    german: :ger,
-                    italian: :ita,
-                    russian: :rus,
-                    ukrainian: :ukr,
-                    japanese: :jpn,
-                    no_linguistic_content: :zxx,
-                    other: :other }
-
     languages.pluck(:name).map do |language|
-      code = conversions.fetch(language.to_sym)
-      CONTROLLED_VOCABULARIES[:language].send(code)
+      CONTROLLED_VOCABULARIES[:language].send(language)
     end
   end
 
