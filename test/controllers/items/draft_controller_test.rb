@@ -172,7 +172,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
       end
 
       assert_redirected_to item_url(Item.last)
-      assert_equal 'Success!', flash[:notice]
+      assert_equal I18n.t('items.draft.successful_deposit'), flash[:notice]
 
       draft_item.reload
 

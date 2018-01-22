@@ -304,7 +304,7 @@ en:
       no_items_found: 'No items found'
       search_items_placeholder: "Search my items ..."
       items_header: "My Items"
-      
+
   collections:
     title: 'Collections'
     show:
@@ -402,6 +402,8 @@ en:
       please_fix_errors: 'Please correct all errors below and try again'
       please_follow_the_steps: 'Looks like you tried to skip ahead. Please follow the steps accordingly'
       files_are_required_to_continue: 'You are required at least one file attached before continuing'
+      successful_deposit: 'Item Deposit was successful!'
+
       describe_item:
         header: 'Describe Item'
         header_icon: 'pencil'
@@ -497,7 +499,6 @@ en:
           authenticated: 'CCID Protected'
           private: 'Private'
 
-
       upload_files:
         header: 'Upload Files'
         header_icon: 'paperclip'
@@ -505,6 +506,7 @@ en:
         saved_files: 'Item File Attachments'
         upload_files_instructions: 'Choose a file(s) or drag it here'
         no_js_fallback: 'Please enable javascript to upload files.'
+
       files_list:
         no_saved_files: No files have been attached to this item
         item_thumbnail: 'Item Thumbnail'
@@ -514,6 +516,7 @@ en:
       file:
         set_as_thumbnail: Set as Thumbnail
         delete_file_dialog: Are you sure you want to delete this file?
+
       review_and_deposit_item:
         header: 'Review and Deposit Item'
         header_icon: 'check-square-o'

@@ -200,7 +200,7 @@ class DraftItem < ApplicationRecord
   def license_conversion_to_controlled_vocab_uri
     # no mapping for `license_text` as this gets checked and ingested as a `rights` field in Fedora Item
     return nil if license == 'license_text'
-    # Also no handling of `CONTROLLED_VOCABULARIES[:old_license]`
+
     conversions =
       { attribution_non_commercial: :attribution_noncommercial_4_0_international,
         attribution: :attribution_4_0_international,

@@ -38,7 +38,7 @@ class Items::DraftController < ApplicationController
       community_id = params[:draft_item].delete :community_id
       collection_id = params[:draft_item].delete :collection_id
 
-      @draft_item.member_of_paths = { 'community_id' => community_id, 'collection_id' => collection_id }
+      @draft_item.member_of_paths = { 'community_id': community_id, 'collection_id': collection_id }
 
       @draft_item.update_attributes(permitted_attributes(DraftItem))
 
@@ -46,15 +46,15 @@ class Items::DraftController < ApplicationController
     when :review_and_deposit_item
       params[:draft_item][:status] = DraftItem.statuses[:archived]
 
-      # TODO: Improve this
       if @draft_item.update_attributes(permitted_attributes(DraftItem))
 
+        # TODO: Improve this? Is there a way to gracefully handle errors coming back from fedora?
         item = @draft_item.ingest_into_fedora
 
         # Redirect to the new item show page
-        redirect_to item_path(item), notice: 'Success!'
+        redirect_to item_path(item), notice: t('.successful_deposit')
       else
-        # handle errors
+        # handle errors on draft_item valdiations
         render_wizard @draft_item
       end
     else
