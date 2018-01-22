@@ -790,6 +790,8 @@ module JupiterCore
 
         self.attribute_names << name
 
+        # json arrays are stored in Solr and Fedora as a single string
+        # otherwise, things are stored as what they're declared as.
         solr_type = (type == :json_array ? :string : type)
 
         solr_name_cache ||= []
