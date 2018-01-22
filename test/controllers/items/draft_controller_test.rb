@@ -146,7 +146,16 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
     should 'be able to review and deposit a draft item properly when saving review_and_deposit_item form' do
       sign_in_as @user
 
+      # Setup a real community/collection pair as Item validates this
+      community = Community.new_locked_ldp_object(title: 'Books', owner: 1).unlock_and_fetch_ldp_object(&:save!)
+      collection = Collection.new_locked_ldp_object(title: 'Fantasy Books',
+                                                    owner: 1,
+                                                    community_id: community.id)
+                             .unlock_and_fetch_ldp_object(&:save!)
+
       draft_item = draft_items(:completed_choose_license_and_visibility_step)
+
+      draft_item.member_of_paths = { 'community_id': community.id, 'collection_id': collection.id }
 
       file_fixture = fixture_file_upload('/files/image-sample.jpeg', 'image/jpeg')
       image_file = ActiveStorage::Blob.create_after_upload!(
@@ -158,12 +167,11 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
 
       draft_item.update_attributes(wizard_step: :upload_files)
 
-      patch item_draft_url(id: :review_and_deposit_item, item_id: draft_item.id)
+      assert_difference('Item.count', 1) do
+        patch item_draft_url(id: :review_and_deposit_item, item_id: draft_item.id)
+      end
 
-      # TODO: Check Item.count increased by 1 in size and check Item.last has all the approiate information
-
-      # TODO: Eventually this will be item show page with a better success flash notice
-      assert_redirected_to root_url
+      assert_redirected_to item_url(Item.last)
       assert_equal 'Success!', flash[:notice]
 
       draft_item.reload

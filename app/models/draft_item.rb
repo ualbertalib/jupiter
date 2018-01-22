@@ -20,6 +20,7 @@ class DraftItem < ApplicationRecord
                      authenticated: 2 }
 
   # Can't reuse same keys as visibility, need to differentiate a bit
+  # Is there a way to set this from the UI? ¯\_(ツ)_/¯
   enum visibility_after_embargo: { opened: 0,
                                    ccid_protected: 1 }
 
@@ -89,27 +90,23 @@ class DraftItem < ApplicationRecord
       title: title,
       alternative_title: alternate_title,
 
-      # TODO:
-      # need check for article and put into draft or publish status
-      # if type == article
-      # publication_status: draft/publish
       item_type: item_type_conversion_to_controlled_vocab_uri,
+      publication_status: handle_publication_status,
+
       languages: languages_conversion_to_controlled_vocab_uri,
       creators: creators,
       subject: subjects,
       created: date_created.to_s,
       description: description,
 
-      # TODO:
-      # if visibility == embargo
-      # embargo_end_date: embargo_end_date
-      # visibility_after_embargo = visibility_after_embargo
+      # Handle visibility plus embargo logic
       visibility: visibility_conversion_to_controlled_vocab_uri,
+      visibility_after_embargo: visibility_after_embargo_conversion_to_controlled_vocab_uri,
+      embargo_end_date: embargo_end_date,
 
-      # if license == license_text
-      # then set rights: license_text_area
-      # else
+      # Handle license vs rights
       license: license_conversion_to_controlled_vocab_uri,
+      rights: license == 'license_text' ?  license_text_area : nil,
 
       # Additional fields
       contributors: contributors,
@@ -121,7 +118,7 @@ class DraftItem < ApplicationRecord
       related_link: related_item
     ).unlock_and_fetch_ldp_object do |unlocked_obj|
       unlocked_obj.add_to_path(member_of_paths['community_id'], member_of_paths['collection_id'])
-      unlocked_obj.add_files(wrap_activestorage_files_as_file_objects)
+      unlocked_obj.add_files(map_activestorage_files_as_file_objects)
       unlocked_obj.save!
     end
   end
@@ -130,6 +127,7 @@ class DraftItem < ApplicationRecord
 
   # Validations
 
+  # TODO: validate if community/collection ID's are actually in Fedora?
   def communities_and_collections_validations
     return if member_of_paths.blank? # caught by presence check
     # member_of_paths.each do |path| # TODO eventually this will be an array of hashes
@@ -159,25 +157,24 @@ class DraftItem < ApplicationRecord
   end
 
   # Fedora file handling
-
-  # Hacky...but works
-   def wrap_activestorage_files_as_file_objects
+  # Convert ActiveStorage objects into File objects so we can deposit them into fedora
+  def map_activestorage_files_as_file_objects
     files.map do |file|
       # Can ActiveStorage make this easier?
       # Most of this low level file stuff are hidden behind private APIs
-      # Perhaps we can do this via `download_blob_to_tempfile`
+      # Perhaps we can do this via `download_blob_to_tempfile` once on rails 5.2
       # https://github.com/rails/rails/blob/master/activestorage/lib/active_storage/downloading.rb#L7
-      file_obj = Tempfile.open([file.filename.base, file.filename.extname]) do |temp|
-        # temp.write(file.download)
-        file.download { |chunk| temp.write(chunk) }
-        temp
+      file_obj = Tempfile.open([file.filename.base, file.filename.extname]) do |temp_file|
+        file.download { |chunk| temp_file.write(chunk) }
+        temp_file
       end
 
+      # ActiveFedora is weird, it wants a File.open handle or something not a File object
       File.open(file_obj.path, 'r')
     end
   end
 
-  # Control Vocab Conversations
+  # Control Vocab Conversions
 
   # Maps Language names to CONTROLLED_VOCABULARIES[:language] codes
   def languages_conversion_to_controlled_vocab_uri
@@ -202,6 +199,7 @@ class DraftItem < ApplicationRecord
   # Maps ItemDraft.licenses to CONTROLLED_VOCABULARIES[:license]
   def license_conversion_to_controlled_vocab_uri
     # no mapping for `license_text` as this gets checked and ingested as a `rights` field in Fedora Item
+    return nil if license == 'license_text'
     # Also no handling of `CONTROLLED_VOCABULARIES[:old_license]`
     conversions =
       { attribution_non_commercial: :attribution_noncommercial_4_0_international,
@@ -215,6 +213,15 @@ class DraftItem < ApplicationRecord
 
     code = conversions.fetch(license.to_sym)
     CONTROLLED_VOCABULARIES[:license].send(code)
+  end
+
+  # silly stuff needed for handling multivalued publication status attribute when Item type is `Article`
+  def handle_publication_status
+    if type == :journal_article_draft
+      [CONTROLLED_VOCABULARIES[:publication_status].draft, CONTROLLED_VOCABULARIES[:publication_status].submitted]
+    elsif type == :journal_article_published
+      [CONTROLLED_VOCABULARIES[:publication_status].published]
+    end
   end
 
   # Maps Type names to CONTROLLED_VOCABULARIES[:item_type]
@@ -244,6 +251,15 @@ class DraftItem < ApplicationRecord
                     authenticated: :authenticated }
 
     code = conversions.fetch(visibility.to_sym)
+    CONTROLLED_VOCABULARIES[:visibility].send(code)
+  end
+
+  # Maps ItemDraft.visibility_after_embargo to CONTROLLED_VOCABULARIES[:visibility]
+  def visibility_after_embargo_conversion_to_controlled_vocab_uri
+    conversions = { opened: :public,
+                    ccid_protected: :authenticated }
+
+    code = conversions.fetch(visibility_after_embargo.to_sym)
     CONTROLLED_VOCABULARIES[:visibility].send(code)
   end
 

@@ -79,9 +79,8 @@ class DepositItemTest < ApplicationSystemTestCase
 
       # Success! Deposit Successful
 
-      # TODO: Should be the item detailed show page
       assert_text 'Success!'
-      assert_selector 'h1', text: I18n.t('welcome.index.header')
+      assert_selector 'h1', text: Item.last.title
     end
   end
 
