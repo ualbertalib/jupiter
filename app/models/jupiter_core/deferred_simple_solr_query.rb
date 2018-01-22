@@ -77,7 +77,8 @@ class JupiterCore::DeferredSimpleSolrQuery
   #
   #    (Item.public + Thesis.where(owner: user_id)).where(member_of_paths: path)
   #
-  # A count of all Collections in a community, all Theses owned by user1, and all public Items where both Items and Theses are in a certain path
+  # A single solr query returning a count of all Collections in a community, all Theses owned by user1, and all
+  # public Items where both Items and Theses are in a certain path
   #
   #    (Collection.where(community_id: cid) + ((Item.public + Thesis.where(owner: user_id)).where(member_of_paths: path))).count
   #
