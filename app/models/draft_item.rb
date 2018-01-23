@@ -187,7 +187,7 @@ class DraftItem < ApplicationRecord
     end
   end
 
-  # Maps ItemDraft.licenses to CONTROLLED_VOCABULARIES[:license]
+  # Maps DraftItem.licenses to CONTROLLED_VOCABULARIES[:license]
   def license_conversion_to_controlled_vocab_uri
     # no mapping for `license_text` as this gets checked and ingested as a `rights` field in Fedora Item
     return nil if license == 'license_text'
@@ -234,7 +234,7 @@ class DraftItem < ApplicationRecord
     CONTROLLED_VOCABULARIES[:item_type].send(code)
   end
 
-  # Maps ItemDraft.visibilities to CONTROLLED_VOCABULARIES[:visibility]
+  # Maps DraftItem.visibilities to CONTROLLED_VOCABULARIES[:visibility]
   def visibility_conversion_to_controlled_vocab_uri
     # Can't have a private or draft visibilty so no mappings for this
     conversions = { open_access: :public,
@@ -245,7 +245,7 @@ class DraftItem < ApplicationRecord
     CONTROLLED_VOCABULARIES[:visibility].send(code)
   end
 
-  # Maps ItemDraft.visibility_after_embargo to CONTROLLED_VOCABULARIES[:visibility]
+  # Maps DraftItem.visibility_after_embargo to CONTROLLED_VOCABULARIES[:visibility]
   def visibility_after_embargo_conversion_to_controlled_vocab_uri
     conversions = { opened: :public,
                     ccid_protected: :authenticated }

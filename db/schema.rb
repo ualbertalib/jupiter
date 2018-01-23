@@ -74,7 +74,7 @@ ActiveRecord::Schema.define(version: 20171130222838) do
     t.index ["user_id"], name: "index_draft_items_on_user_id"
   end
 
-  create_table "draft_items_languages", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "draft_items_languages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "draft_item_id"
     t.bigint "language_id"
     t.datetime "created_at", null: false

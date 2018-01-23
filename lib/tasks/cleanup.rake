@@ -6,9 +6,13 @@ namespace :cleanup do
   desc 'removes stale inactive draft items from the database'
   task inactive_draft_items: :environment do
     # Find all the inactive draft items older than yesterday
-    inactive_draft_items = DraftItem.where('DATE(created_at) < DATE(?)', Date.yesterday).where.not(status: :inactive)
+    inactive_draft_items = DraftItem.where('DATE(created_at) < DATE(?)', Date.yesterday).where(status: :inactive)
+
+    puts "Deleting #{inactive_draft_items.count} Inactive Draft Items..."
 
     # delete them all
-    inactive_draft_items.map(&:destroy)
+    inactive_draft_items.destroy_all
+
+    puts 'Cleanup of Inactive Draft Items now completed!'
   end
 end

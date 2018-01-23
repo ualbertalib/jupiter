@@ -48,7 +48,7 @@ class CreateDraftItemTables < ActiveRecord::Migration[5.1]
       t.timestamps
     end
 
-    create_table :draft_items_languages, id: false do |t|
+    create_table :draft_items_languages do |t|
       t.references :draft_item, index: true
       t.references :language, index: true
 
