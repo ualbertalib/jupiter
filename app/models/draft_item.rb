@@ -19,8 +19,12 @@ class DraftItem < ApplicationRecord
                      embargo: 1,
                      authenticated: 2 }
 
-  # Can't reuse same keys as visibility, need to differentiate a bit
-  # Is there a way to set this from the UI? ¯\_(ツ)_/¯
+  # Can't reuse same keys as visibility enum above, need to differentiate keys a bit
+  #
+  # According to requirement's this will not be set from the UI
+  # By default it will always be in `public`/`opened` status
+  # Only needed for for the odd chance they want to change an item's visibility_after_embargo
+  # to `ccid_authenticated`/`authenticated` from the console
   enum visibility_after_embargo: { opened: 0,
                                    ccid_protected: 1 }
 
