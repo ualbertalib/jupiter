@@ -21,9 +21,7 @@ class Items::FilesController < ApplicationController
     @draft_item = DraftItem.find(params[:item_id])
     authorize @draft_item, :file_destroy?
 
-    @file = @draft_item.files.find(params[:id])
-
-    @file.purge
+    @draft_item.files.find(params[:id]).purge
 
     render :update_files_list
   end
@@ -33,9 +31,12 @@ class Items::FilesController < ApplicationController
     authorize @draft_item, :set_thumbnail?
 
     @draft_item.thumbnail_id = params[:id]
-    @draft_item.save
 
-    render :update_files_list
+    if @draft_item.save
+      render :update_files_list
+    else
+      render json: @draft_item.errors, status: 400
+    end
   end
 
 end

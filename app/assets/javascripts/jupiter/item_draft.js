@@ -3,13 +3,6 @@ var unsavedChanges = false;
 $(document).on('turbolinks:load', function() {
   unsavedChanges = false;
 
-  function toggleIcon(e) {
-    $(e.target)
-      .prev('.card-header')
-      .find('.js-more-less')
-      .toggleClass('fa-chevron-down fa-chevron-up');
-  }
-
   $('#js-license-accordion .card').on('hidden.bs.collapse', toggleIcon);
   $('#js-license-accordion .card').on('shown.bs.collapse', toggleIcon);
 
@@ -50,7 +43,8 @@ $(document).on('turbolinks:load', function() {
   });
 
   // global select2 initailization (could be moved elsewhere)
-  // We going to make heavy use of data-attrs to customize this instead
+  // We going to make heavy use of data-attrs to customize this
+  // instead of intializing a many select2 methods with different options
   $('.js-select2').select2({
     theme: 'bootstrap',
     allowClear: true,
@@ -77,3 +71,9 @@ $(window).bind('beforeunload', function(event) {
     return msg;
   }
 });
+
+function toggleIcon(e) {
+  $(e.target).prev('.card-header')
+             .find('.js-more-less')
+             .toggleClass('fa-chevron-down fa-chevron-up');
+}

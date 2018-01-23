@@ -162,14 +162,23 @@ class DraftItem < ApplicationRecord
 
   # Fedora file handling
   # Convert ActiveStorage objects into File objects so we can deposit them into fedora
+  #
+  # TODO: How to handle thumbnail? Should it be the first file uploaded to fedora?
+  # See app/models/concerns/item_prooperties.rb#L154 for ItemProperties#thumbnail method once implemented
   def map_activestorage_files_as_file_objects
     files.map do |file|
       # Can ActiveStorage make this easier?
       # Most of this low level file stuff are hidden behind private APIs
       # Perhaps we can do this via `download_blob_to_tempfile` once on rails 5.2
       # https://github.com/rails/rails/blob/master/activestorage/lib/active_storage/downloading.rb#L7
+
+      # Tempfile vs File: Tempfile give unique file names which is good for avodiing name collisions in the same directory
+      # however this also means fedora takes this name as the filename and this is what gets displayed to the UI
+      # For example: `random-image.png` from the user becomes `random-image20180123-32229-4784ha.png` in fedora
+      # Another benefit is Tempfiles are deleted when the Tempfile object is garbage collected
       file_obj = Tempfile.open([file.filename.base, file.filename.extname]) do |temp_file|
-        file.download { |chunk| temp_file.write(chunk) }
+        # TODO: This may be slow if the file is huge? Probably should be chunking the file and streaming this in?
+        temp_file.write(file.download)
         temp_file
       end
 
@@ -208,9 +217,9 @@ class DraftItem < ApplicationRecord
 
   # silly stuff needed for handling multivalued publication status attribute when Item type is `Article`
   def handle_publication_status
-    if type == :journal_article_draft
+    if type.name == 'journal_article_draft'
       [CONTROLLED_VOCABULARIES[:publication_status].draft, CONTROLLED_VOCABULARIES[:publication_status].submitted]
-    elsif type == :journal_article_published
+    elsif type.name == 'journal_article_published'
       [CONTROLLED_VOCABULARIES[:publication_status].published]
     end
   end
@@ -247,6 +256,8 @@ class DraftItem < ApplicationRecord
 
   # Maps DraftItem.visibility_after_embargo to CONTROLLED_VOCABULARIES[:visibility]
   def visibility_after_embargo_conversion_to_controlled_vocab_uri
+    return nil unless embargo?
+
     conversions = { opened: :public,
                     ccid_protected: :authenticated }
 

@@ -24,6 +24,7 @@ class Items::DraftController < ApplicationController
   def update
     @draft_item = DraftItem.find(params[:item_id])
     authorize @draft_item
+
     params[:draft_item] ||= {}
 
     # Only update the draft_item's step if it hasn't been completed yet
@@ -31,13 +32,13 @@ class Items::DraftController < ApplicationController
       params[:draft_item][:wizard_step] = DraftItem.wizard_steps[step]
     end
 
-    params[:draft_item][:status] = DraftItem.statuses[:active]
-
     case wizard_value(step)
     when :describe_item
+      params[:draft_item][:status] = DraftItem.statuses[:active]
+
+      # TODO: Need to handle multiple community/collection pairs down the road
       community_id = params[:draft_item].delete :community_id
       collection_id = params[:draft_item].delete :collection_id
-
       @draft_item.member_of_paths = { 'community_id': community_id, 'collection_id': collection_id }
 
       @draft_item.update_attributes(permitted_attributes(DraftItem))
@@ -58,6 +59,8 @@ class Items::DraftController < ApplicationController
         render_wizard @draft_item
       end
     else
+      params[:draft_item][:status] = DraftItem.statuses[:active]
+
       @draft_item.update_attributes(permitted_attributes(DraftItem))
       render_wizard @draft_item
     end

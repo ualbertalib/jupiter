@@ -6,14 +6,20 @@ $(document).on('turbolinks:load', function() {
   if (document.querySelector('form.js-files-dropzone') !== null ) {
     var filesDropzone = new Dropzone('form.js-files-dropzone', {
       paramName: 'file',
+
+      // TODO: Need a decision here. Currently turned off image thumbnails as we allow many different file types
+      // Probably okay to keep this turned off since these files only show up in this dropzone list for 1 second before getting appended
+      // to the upload list, where we do a much better job of handling thumbnails for all file types
       createImageThumbnails: false, // TODO: Need a nice default image or better way to handle thumbnailing non-image types
-      // acceptedFiles: 'image/*', TODO: is there a full list of what we accept?
+
+      // acceptedFiles: 'image/*', TODO: is there a full list of what we accept? or do we just allow all file types? Like .exe files etc.
       previewTemplate: $('#js-dropzone-preview-template').html(),
       previewsContainer: '#js-previews-list', // Define the container to display the previews
       clickable: '.js-add-files', // Define the element that should be used as click trigger to select files.
 
       init: function() {
-        // TODO:
+
+        // TODO: See decision above regarding `createImageThumbnails` option, if we don't care about thumbnails this all can be removed
         // this.on('addedfile', function(file) {
         //   if (!file.type.match(/image.*/)) {
         //     // This is not an image, so Dropzone doesn't create a thumbnail.
