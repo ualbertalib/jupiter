@@ -15,14 +15,14 @@
     </div>
   </div>
 
-  <p class="mx-3 mt-3">
+  <p class="mx-3 mt-3 lead">
     <%= t('.explore_collections') %>
   </p>
 
   <%# Collection images, shown only on larger screens %>
-  <div class="d-none d-md-block px-3">
+  <div class="d-none d-md-block">
     <div class="d-flex flex-row">
-      <div class="image-with-text m-3 col-lg-5">
+      <div class="image-with-text mx-3 col-lg-5">
         <%= link_to '#TODO' do %>
           <%= image_tag 'dept-of-agriculture.jpg', alt: 'algriculture' %>
           <p class="small"><%= t('.afns_collection') %></p>
@@ -32,14 +32,14 @@
       <div class="d-flex flex-column align-items-end">
 
         <div class="d-flex flex-row mb-3">
-          <div class="image-with-text mr-3 mt-3">
+          <div class="image-with-text mr-3">
             <%= link_to '#TODO' do %>
               <%= image_tag 'images-of-research.jpg', alt: 'images of research' %>
               <p class="small"><%= t('.images_collection') %></p>
             <% end %>
           </div>
 
-          <div class="image-with-text mt-3">
+          <div class="image-with-text">
             <%= link_to '#TODO' do %>
               <%= image_tag 'theses.jpg', alt: 'theses' %>
               <p class="small"><%= t('.theses_collection') %></p>
@@ -48,7 +48,7 @@
 
         </div>
 
-      <div class="image-with-text mt-auto mb-3">
+      <div class="image-with-text mt-auto">
         <%= link_to '#TODO' do %>
           <%= image_tag 'oil-sands.jpg', alt: 'oil sands' %>
           <p class="small"><%= t('.osrin_collection') %></p>
