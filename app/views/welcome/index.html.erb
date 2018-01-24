@@ -1,21 +1,21 @@
 <div>
   <%# Two columns on large screens, wrap on smaller screens %>
   <div class="d-flex flex-row flex-wrap">
-    <div class="col-12 col-md-4 px-3">
+    <div class="col-12 col-md-5 px-3">
       <h4><%= t('.welcome_header') %></h4>
     </div>
-    <div class="px-3 align-self-center">
-      <p>
+    <div class="align-self-center px-3">
+      <p class="mb-0 lead">
         <%= t('.era_av_header') %>
       </p>
       <%# ERA-AV additional text not shown on smaller screens %>
-      <p class="d-none d-md-block">
+      <p class="d-none d-md-block small">
         <%= t('.era_av_text') %>
       </p>
     </div>
   </div>
 
-  <p class="mx-3 mt-3 lead">
+  <p class="mx-3 mt-3 mb-1 lead">
     <%= t('.explore_collections') %>
   </p>
 
