@@ -5,7 +5,8 @@ $header-height-small-screen: 136px;
 $body-bottom: 80px;
 $footer-height: 60px;
 
-$image-with-text-bg: rgba(0, 0, 0, 0.6);
+$image-with-text-bg: $jupiter-primary;
+$image-with-text-opacity: 0.8;
 
 .bg-jupiter-primary {
   background-color: $jupiter-primary;
@@ -69,10 +70,11 @@ body {
   p {
     background-color: $image-with-text-bg;
     bottom: 0px;
-    color: $white;
+    color: $black;
     left: 0px;
     margin-bottom: inherit;
-    padding: 10px 15px;
+    opacity: $image-with-text-opacity;
+    padding: 5px;
     position: absolute;
     text-align: center;
     width: 100%;
