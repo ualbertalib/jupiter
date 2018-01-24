@@ -1,10 +1,11 @@
-<header class="navbar navbar-dark fixed-top navbar-expand-md bg-primary">
+<header class="navbar navbar-light fixed-top navbar-expand-md bg-jupiter-primary">
   <nav class="container">
 
     <%= link_to root_path, class: 'navbar-brand' do %>
-      <%# TODO: temporary logo for now...replace me! %>
-      <%= image_tag 'mc_360.png', width: '30', height: '30', class: 'd-inline-block align-top', alt: t('.logo_alt') %>
-      <%= t('site_name') %>
+      <%= image_tag 'era-logo.png', width: '100px', class: 'align-top d-none d-md-block',
+          alt: t('.logo_alt') %>
+      <%= image_tag 'era-logo-without-text.png', width: '100px',
+          class: 'd-inline-block align-top d-md-none', alt: t('.logo_alt') %>
     <% end %>
 
     <button type="button"
@@ -45,6 +46,10 @@
 
         <li role="presentation" class="nav-item">
           <%= link_to t('.links.new_item'), new_item_path, class: "nav-link" %>
+        </li>
+
+        <li role="presentation" class="nav-item">
+          <%= link_to t('.links.about'), '#TODO', class: "nav-link" %>
         </li>
 
         <% if current_user.present? %>

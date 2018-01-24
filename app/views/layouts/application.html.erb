@@ -6,20 +6,19 @@
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
     <%= yield(:head) %>
-    <% if Rails.env.development? %>
-      <%= favicon_link_tag 'mc_360.png' %>
-    <% end %>
+    <%= favicon_link_tag 'era-logo-favicon.png' %>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   </head>
 
   <body>
     <%= render partial: 'navbar' %>
+    <%= render partial: 'banner' %>
     <%= render partial: 'announcement' %>
-
     <main class="container mt-5">
       <%= render partial: 'flash' %>
       <%= content_for?(:content) ? yield(:content) : yield %>
     </main>
+    <%= render partial: 'footer' %>
   </body>
 </html>

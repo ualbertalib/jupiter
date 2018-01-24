@@ -1,7 +1,80 @@
-<div class="jumbotron text-center">
-  <h1><%= t('.header') %></h1>
-  <p class="lead">
-    <%= t('.cta_lead_text') %>
+<div>
+  <%# Two columns on large screens, wrap on smaller screens %>
+  <div class="d-flex flex-row flex-wrap">
+    <div class="col-12 col-md-4 px-3">
+      <h4><%= t('.welcome_header') %></h4>
+    </div>
+    <div class="px-3 align-self-center">
+      <p>
+        <%= t('.era_av_header') %>
+      </p>
+      <%# ERA-AV additional text not shown on smaller screens %>
+      <p class="d-none d-md-block">
+        <%= t('.era_av_text') %>
+      </p>
+    </div>
+  </div>
+
+  <p class="mx-3 mt-3">
+    <%= t('.explore_collections') %>
   </p>
-  <%= link_to t('.cta_link_text'), 'https://github.com/ualbertalib/jupiter', class: 'btn btn-primary btn-large' %>
+
+  <%# Collection images, shown only on larger screens %>
+  <div class="d-none d-md-block px-3">
+    <div class="d-flex flex-row">
+      <div class="image-with-text m-3">
+        <%= link_to '#TODO' do %>
+          <%= image_tag 'dept-of-agriculture.jpg', alt: 'algriculture' %>
+          <p class="small"><%= t('.afns_collection') %></p>
+        <% end %>
+      </div>
+
+      <div class="d-flex flex-column">
+
+        <div class="d-flex flex-row">
+          <div class="image-with-text mr-3 mt-3">
+            <%= link_to '#TODO' do %>
+              <%= image_tag 'images-of-research.jpg', alt: 'images of research' %>
+              <p class="small"><%= t('.images_collection') %></p>
+            <% end %>
+          </div>
+
+          <div class="image-with-text mt-3">
+            <%= link_to '#TODO' do %>
+              <%= image_tag 'theses.jpg', alt: 'theses' %>
+              <p class="small"><%= t('.theses_collection') %></p>
+            <% end %>
+          </div>
+
+        </div>
+
+      <div class="image-with-text mt-3">
+        <%= link_to '#TODO' do %>
+          <%= image_tag 'oil-sands.jpg', alt: 'oil sands' %>
+          <p class="small"><%= t('.osrin_collection') %></p>
+        <% end %>
+      </div>
+
+      </div>
+    </div>
+  </div>
+
+  <%# List of collection links, shown only on smaller screens %>
+  <div class="d-md-none m-3 w-100">
+    <ul class="list-group">
+      <li class="list-group-item list-group-item-action">
+        <%= link_to t('.osrin_collection'), '#TODO' %>
+      </li>
+      <li class="list-group-item list-group-item-action">
+        <%= link_to t('.images_collection'), '#TODO' %>
+      </li>
+      <li class="list-group-item list-group-item-action">
+        <%= link_to t('.theses_collection'), '#TODO' %>
+      </li>
+      <li class="list-group-item list-group-item-action">
+        <%= link_to t('.afns_collection'), '#TODO' %>
+      </li>
+    </ul>
+  </div>
+
 </div>

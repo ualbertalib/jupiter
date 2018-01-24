@@ -24,7 +24,7 @@ class FileSetTest < ActiveSupport::TestCase
   test 'attaching files' do
     file = ActionDispatch::Http::UploadedFile.new(filename: 'logo_test.png',
                                                   content_type: 'image/png',
-                                                  tempfile: File.open(Rails.root + 'app/assets/images/mc_360.png'))
+                                                  tempfile: File.open(Rails.root + 'app/assets/images/era-logo.png'))
 
     # It seems unfortunate as a side-effect of improved item validations, we need to create these in tests that
     # don't care about them...

@@ -1,0 +1,15 @@
+<div class="footer w-100">
+  <div class="d-flex flex-wrap align-items-center justify-content-between bg-jupiter-primary px-3">
+    <%# Reverse order on small screens %>
+    <div class="order-last order-md-first">
+      <div><%= link_to t('application.footer.street_address'),
+               'https://www.google.ca/maps/place/University+of+Alberta',
+               class: 'text-dark small' %> |
+           <%= link_to t('application.footer.privacy_policy'),
+               '#TODO', class: 'text-dark small' %></div>
+    </div>
+    <div class="order-first">
+      <%= image_tag 'ualib-logo.png', class: 'logo', alt: 'logo' %>
+    </div>
+  </div>
+</div>

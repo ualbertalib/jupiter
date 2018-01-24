@@ -1,6 +1,34 @@
-// padding for fixed header.
+$jupiter-primary: #dbe1ef;
+
+$header-height-large-screen: 76px;
+$header-height-small-screen: 136px;
+$body-bottom: 80px;
+$footer-height: 60px;
+
+$image-with-text-bg: rgba(0, 0, 0, .6);
+
+.bg-jupiter-primary {
+  background-color: $jupiter-primary;
+}
+
+html {
+  min-height: 100%;
+  // needed for sticky footer
+  position: relative;
+}
+
 body {
-  padding-top: 56px;
+  // sticky footer height
+  margin-bottom: $body-bottom;
+  // padding for fixed header.
+  padding-top: $header-height-large-screen;
+}
+
+@include media-breakpoint-between(xs, sm) {
+  body {
+    // header needs more room on small screens for search box
+    padding-top: $header-height-small-screen;
+  }
 }
 
 .required abbr {
@@ -8,4 +36,40 @@ body {
   cursor: inherit;
   font-weight: bold;
   text-decoration: inherit;
+}
+
+.footer {
+  bottom: 0;
+  height: $footer-height;
+  line-height: $footer-height; // Vertically center the text there
+  position: absolute;
+  width: 100%;
+
+  img.logo {
+    height: 50px;
+  }
+}
+
+// Adapted from https://codepen.io/luisintosh/pen/gPGXOp
+.image-with-text {
+  padding: 0;
+  position: relative;
+  text-align: center;
+  width: 100%;
+
+  img {
+    width: 100%;
+  }
+
+  p {
+    background-color: $image-with-text-bg;
+    bottom: 0;
+    color: $white;
+    left: 0;
+    margin-bottom: inherit;
+    padding: 10px 15px;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+  }
 }
