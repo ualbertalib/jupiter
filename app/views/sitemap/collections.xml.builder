@@ -11,9 +11,9 @@ cache 'sitemap', expires_in: 24.hours do
     @collections.each do |collection|
       xml.url do
         xml.loc community_collection_url(collection.community, collection)
+        xml.lastmod collection.updated_at
         xml.changefreq 'weekly'
         xml.priority   1
-        xml.lastmod collection.updated_at
       end
     end
   end

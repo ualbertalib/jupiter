@@ -150,7 +150,7 @@ type=\"#{unlocked_fileset.original_file.mime_type}\"\
     end
 
     def public
-      Item.where(visibility: JupiterCore::VISIBILITY_PUBLIC)
+      where(visibility: JupiterCore::VISIBILITY_PUBLIC)
     end
   end
 

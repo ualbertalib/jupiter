@@ -24,12 +24,16 @@ class ItemTest < ActiveSupport::TestCase
       unlocked_item.save!
     end
     assert item.valid?
+    refute_equal 0, Item.public.count
+    assert_equal item.id, Item.public.first.id
+    item.unlock_and_fetch_ldp_object(&:destroy)
   end
 
   test 'there is no default visibility' do
     item = Item.new_locked_ldp_object
 
     assert_nil item.visibility
+    assert_equal 0, Item.public.count
   end
 
   test 'unknown visibilities are not valid' do
@@ -40,6 +44,7 @@ class ItemTest < ActiveSupport::TestCase
     end
 
     assert_not item.valid?
+    assert_equal 0, Item.public.count
     assert item.errors[:visibility].present?
     assert_includes item.errors[:visibility], 'some_fake_visibility is not a known visibility'
   end
@@ -91,6 +96,7 @@ class ItemTest < ActiveSupport::TestCase
     end
 
     assert_not item.valid?
+    assert_equal 0, Item.public.count
     assert item.errors[:visibility_after_embargo].present?
     assert_includes item.errors[:visibility_after_embargo], "can't be blank"
   end

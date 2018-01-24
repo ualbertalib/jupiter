@@ -6,22 +6,23 @@ class SitemapController < ApplicationController
 
   def communities
     @communities = Community.all
-    raise 'sitemap should contain less than 50,000 targets' if @communities.count > 50_000
+    # TODO: consider using Rollbar to catch this kind of thing
+    logger.warn 'communities sitemap should contain less than 50,000 targets' if @communities.count > 50_000
   end
 
   def collections
     @collections = Collection.all
-    raise 'sitemap should contain less than 50,000 targets' if @collections.count > 50_000
+    logger.warn 'collections sitemap should contain less than 50,000 targets' if @collections.count > 50_000
   end
 
   def items
     @items = Item.public
-    raise 'sitemap should contain less than 50,000 targets' if @items.count > 50_000
+    logger.warn 'items sitemap should contain less than 50,000 targets' if @items.count > 50_000
   end
 
   def theses
-    @theses = Thesis.all
-    raise 'sitemap should contain less than 50,000 targets' if @theses.count > 50_000
+    @theses = Thesis.public
+    logger.warn 'thesis sitemap should contain less than 50,000 targets' if @theses.count > 50_000
   end
 
 end

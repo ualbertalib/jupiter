@@ -51,10 +51,10 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => '/sidekiq', constraints: AdminConstraint.new
   end
 
-  get 'sitemap.xml', to: 'sitemap#index', defaults: { format: :xml }
-  get 'sitemap-communities.xml', to: 'sitemap#communities', defaults: { format: :xml }
-  get 'sitemap-collections.xml', to: 'sitemap#collections', defaults: { format: :xml }
-  get 'sitemap-items.xml', to: 'sitemap#items', defaults: { format: :xml }
+  get 'sitemap.xml', to: 'sitemap#index', defaults: { format: :xml }, as: :sitemapindex
+  get 'sitemap-communities.xml', to: 'sitemap#communities', defaults: { format: :xml }, as: :communities_sitemap
+  get 'sitemap-collections.xml', to: 'sitemap#collections', defaults: { format: :xml }, as: :collections_sitemap
+  get 'sitemap-items.xml', to: 'sitemap#items', defaults: { format: :xml }, as: :items_sitemap
   get 'sitemap-theses.xml', to: 'sitemap#theses', defaults: { format: :xml }
   root to: 'welcome#index'
 end
