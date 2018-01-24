@@ -2,7 +2,10 @@ class DraftItem < ApplicationRecord
 
   enum status: { inactive: 0, active: 1, archived: 2 }
 
-  enum wizard_step: { describe_item: 0, choose_license_and_visibility: 1, upload_files: 2, review_and_deposit_item: 3 }
+  enum wizard_step: { describe_item: 0,
+                      choose_license_and_visibility: 1,
+                      upload_files: 2,
+                      review_and_deposit_item: 3 }
 
   enum license: { attribution_non_commercial: 0,
                   attribution: 1,
@@ -31,7 +34,6 @@ class DraftItem < ApplicationRecord
   has_many_attached :files
 
   has_many :draft_items_languages, dependent: :destroy
-
   has_many :languages, through: :draft_items_languages
 
   # Rails 5 turns presence check on by default for belongs_to relationships
@@ -46,6 +48,7 @@ class DraftItem < ApplicationRecord
   validate :communities_and_collections_validations, if: :validate_describe_item?
 
   validates :license, :visibility, presence: true, if: :validate_choose_license_and_visibility?
+
   validates :license_text_area, presence: true, if: :validate_if_license_is_text?
   validates :embargo_end_date, presence: true, if: :validate_if_visibility_is_embargo?
 
@@ -58,7 +61,7 @@ class DraftItem < ApplicationRecord
       # is either an Attachment class (expected) or an Enumerator (?).
       # Easier just to get it directly from active storages table instead
       file = ActiveStorage::Attachment.find_by(id: thumbnail_id)
-      return file if file.present?
+      return file if file.present? # If not present, then fall below and just return first file
     end
 
     files.first
@@ -77,7 +80,7 @@ class DraftItem < ApplicationRecord
   end
 
   def last_completed_step
-    # Comment above in uncompleted_step? applies here with regards to the extra logic around active state
+    # Comment above in `#uncompleted_step?` applies here with regards to the extra logic around active state
     # and getting the next step instead of the current step
     if active?
       DraftItem.wizard_steps.key(DraftItem.wizard_steps.fetch(wizard_step) + 1).to_sym
@@ -86,7 +89,7 @@ class DraftItem < ApplicationRecord
     end
   end
 
-  # Creates an Item object from the draft_item attributes
+  # Creates a new Fedora Item from the draft_item attributes
   def ingest_into_fedora
     Item.new_locked_ldp_object(
       owner: user.id,
