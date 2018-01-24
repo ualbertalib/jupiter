@@ -44,9 +44,12 @@ body {
   line-height: $footer-height; // Vertically center the text there
   position: absolute;
   width: 100%;
+}
 
-  .logo {
-    height: 50px;
+@include media-breakpoint-between(xs, sm) {
+  // Too much space between stacked content on small screens
+  .footer {
+    line-height: 1.5;
   }
 }
 
