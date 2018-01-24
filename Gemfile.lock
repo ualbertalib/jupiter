@@ -86,7 +86,7 @@ GEM
       public_suffix (>= 2.0.2, < 4.0)
     arel (8.0.0)
     ast (2.3.0)
-    autoprefixer-rails (7.2.4)
+    autoprefixer-rails (7.2.5)
       execjs
     better_errors (2.4.0)
       coderay (>= 1.0.0)
@@ -95,9 +95,9 @@ GEM
     bindex (0.5.0)
     binding_of_caller (0.8.0)
       debug_inspector (>= 0.0.1)
-    bootstrap (4.0.0.beta3)
+    bootstrap (4.0.0)
       autoprefixer-rails (>= 6.0.3)
-      popper_js (>= 1.12.3, < 2)
+      popper_js (>= 1.12.9, < 2)
       sass (>= 3.5.2)
     builder (3.2.3)
     capybara (2.17.0)
@@ -309,7 +309,7 @@ GEM
       nokogiri (>= 1.5.10)
     ruby_dep (1.5.0)
     rubyzip (1.2.1)
-    sass (3.5.4)
+    sass (3.5.5)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
       rb-fsevent (~> 0.9, >= 0.9.4)
@@ -400,7 +400,7 @@ DEPENDENCIES
   activestorage
   better_errors (>= 2.3.0)
   binding_of_caller
-  bootstrap (~> 4.0.0.beta3)
+  bootstrap (~> 4.0.0)
   capybara (~> 2.17)
   faker
   font-awesome-rails
