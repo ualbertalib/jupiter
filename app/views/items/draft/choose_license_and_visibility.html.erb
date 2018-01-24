@@ -23,187 +23,54 @@
     <small class="form-text text-muted mt-0 mb-3">
       <%= t('.license.help_html') %>
     </small>
+
     <div id="js-license-accordion" role="tablist">
-      <div class="card">
-        <div id="js-heading-most-common" class="card-header" role="tab">
-          <h5 class="mb-0">
-            <a data-toggle="collapse"
-               href="#js-collapse-most-common"
-               aria-expanded="<%= license_accordion_open?(:most_commonly_used, @draft_item.license) %>"
-               aria-controls="js-collapse-most-common">
-              <%= t('.license.most_commonly_used') %>
-              <%= fa_icon "#{license_accordion_open?(:most_commonly_used, @draft_item.license, 'chevron-up', 'chevron-down')}",
-                          class: "js-more-less pull-right" %>
-            </a>
-          </h5>
-        </div>
 
-        <div id="js-collapse-most-common"
-             class="collapse <%= license_accordion_open?(:most_commonly_used, @draft_item.license, 'show', '') %>"
-             data-parent="#js-license-accordion"
-             role="tabpanel"
-             aria-labelledby="js-heading-most-common">
-          <div class="card-body">
-            <div class="form-check">
-              <label class="form-check-label">
-                <%= f.radio_button :license,
-                                    :attribution_non_commercial,
-                                    class: 'form-check-input' %>
-                <%= t('.license.attribution_non_commercial_html') %>
-              </label>
+      <% license_accordions.map do |accordion_name, licenses| %>
+        <div class="card">
+          <div id="js-<%= "#{accordion_name}" %>" class="card-header" role="tab">
+            <h5 class="mb-0">
+              <a data-toggle="collapse"
+                href="#js-collapse-<%= "#{accordion_name}" %>"
+                aria-expanded="<%= license_accordion_open?(accordion_name, @draft_item.license) %>"
+                aria-controls="js-collapse-<%= accordion_name %>">
+                <%= t(".license.#{accordion_name}") %>
+                <%= fa_icon "#{license_accordion_open?(accordion_name, @draft_item.license, 'chevron-up', 'chevron-down')}",
+                            class: "js-more-less pull-right" %>
+              </a>
+            </h5>
+          </div>
+
+          <div id="js-collapse-<%= "#{accordion_name}" %>"
+            class="collapse <%= license_accordion_open?(accordion_name, @draft_item.license, 'show', '') %>"
+            data-parent="#js-license-accordion"
+            role="tabpanel"
+            aria-labelledby="js-heading-<%= "#{accordion_name}" %>">
+            <div class="card-body">
+              <% licenses.each do |license| %>
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <%= f.radio_button :license,
+                                        license,
+                                        class: 'form-check-input' %>
+                    <%= t(".license.#{license}_html") %>
+                  </label>
+                  <%# Handle one off special case of license text needing a text area %>
+                  <% if license == :license_text %>
+                    <%= f.input :license_text_area,
+                            as: :text,
+                            label: false,
+                            input_html: { rows: '5' },
+                            placeholder: t('.license.license_text_area_placeholder') %>
+                  <% end %>
+                </div>
+              <% end %>
             </div>
           </div>
         </div>
-      </div>
-
-      <div class="card">
-        <div id="js-heading-other-collective-common-licenses"
-             class="card-header"
-             role="tab">
-          <h5 class="mb-0">
-            <a data-toggle="collapse"
-               href="#js-collapse-other-collective-common-licenses"
-               aria-expanded="<%= license_accordion_open?(:other_creative_commons_licenses, @draft_item.license) %>"
-               aria-controls="js-collapse-other-collective-common-licenses">
-              <%= t('.license.other_creative_commons_licenses') %>
-              <%= fa_icon "#{license_accordion_open?(:other_creative_commons_licenses,
-                                                     @draft_item.license,
-                                                     'chevron-up',
-                                                     'chevron-down')}",
-                          class: "js-more-less pull-right" %>
-            </a>
-          </h5>
-        </div>
-
-        <div id="js-collapse-other-collective-common-licenses"
-             class="collapse <%= license_accordion_open?(:other_creative_commons_licenses, @draft_item.license, 'show', '') %>"
-             data-parent="#js-license-accordion"
-             role="tabpanel"
-             aria-labelledby="js-heading-other-collective-common-licenses">
-          <div class="card-body">
-            <div class="form-check">
-              <label class="form-check-label">
-                <%= f.radio_button :license,
-                                   :attribution,
-                                   class: 'form-check-input' %>
-                <%= t('.license.attribution_html') %>
-              </label>
-            </div>
-            <div class="form-check">
-              <label class="form-check-label">
-                <%= f.radio_button :license,
-                                   :attribution_non_commercial_no_derivatives,
-                                   class: 'form-check-input' %>
-                <%= t('.license.attribution_non_commercial_no_derivatives_html') %>
-              </label>
-            </div>
-            <div class="form-check">
-              <label class="form-check-label">
-                <%= f.radio_button :license,
-                                   :attribution_non_commercial_share_alike,
-                                   class: 'form-check-input' %>
-                <%= t('.license.attribution_non_commercial_share_alike_html') %>
-              </label>
-            </div>
-            <div class="form-check">
-              <label class="form-check-label">
-                <%= f.radio_button :license,
-                                   :attribution_no_derivatives,
-                                   class: 'form-check-input' %>
-                <%= t('.license.attribution_no_derivatives_html') %>
-              </label>
-            </div>
-            <div class="form-check">
-              <label class="form-check-label">
-                <%= f.radio_button :license,
-                                   :attribution_share_alike,
-                                   class: 'form-check-input' %>
-                <%= t('.license.attribution_share_alike_html') %>
-              </label>
-            </div>
-            <div class="form-check">
-              <label class="form-check-label">
-                <%= f.radio_button :license,
-                                   :cco_universal,
-                                   class: 'form-check-input' %>
-                <%= t('.license.cco_universal_html') %>
-              </label>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div id="js-heading-public-domain" class="card-header" role="tab">
-          <h5 class="mb-0">
-            <a data-toggle="collapse"
-               href="#js-collapse-public-domain"
-               aria-expanded="<%= license_accordion_open?(:public_domain, @draft_item.license) %>"
-               aria-controls="js-collapse-public-domain">
-              <%= t('.license.public_domain') %>
-              <%= fa_icon "#{license_accordion_open?(:public_domain, @draft_item.license, 'chevron-up', 'chevron-down')}",
-                          class: "js-more-less pull-right" %>
-            </a>
-          </h5>
-        </div>
-
-        <div id="js-collapse-public-domain"
-             class="collapse <%= license_accordion_open?(:public_domain, @draft_item.license, 'show', '') %>"
-             data-parent="#js-license-accordion"
-             role="tabpanel"
-             aria-labelledby="js-heading-public-domain">
-          <div class="card-body">
-            <div class="form-check">
-              <label class="form-check-label">
-                <%= f.radio_button :license,
-                                   :public_domain_mark,
-                                   class: 'form-check-input' %>
-                <%= t('.license.public_domain_mark_html') %>
-              </label>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div id="js-heading-link-to-another-license" class="card-header" role="tab">
-          <h5 class="mb-0">
-            <a data-toggle="collapse"
-               href="#js-collapse-link-to-another-license"
-               aria-expanded="<%= license_accordion_open?(:link_to_another_license, @draft_item.license) %>"
-               aria-controls="js-collapse-link-to-another-license">
-              <%= t('.license.link_to_another_license') %>
-              <%= fa_icon "#{license_accordion_open?(:link_to_another_license, @draft_item.license, 'chevron-up', 'chevron-down')}",
-                          class: "js-more-less pull-right" %>
-            </a>
-          </h5>
-        </div>
-
-        <div id="js-collapse-link-to-another-license"
-             class="collapse <%= license_accordion_open?(:link_to_another_license, @draft_item.license, 'show', '') %>"
-             data-parent="#js-license-accordion"
-             role="tabpanel"
-             aria-labelledby="js-heading-link-to-another-license">
-          <div class="card-body">
-            <div class="form-check">
-              <label class="form-check-label">
-                <%= f.radio_button :license,
-                                   :license_text,
-                                   class: 'form-check-input' %>
-                <%= t('.license.license_text') %>
-              </label>
-              <%= f.input :license_text_area,
-                          as: :text,
-                          label: false,
-                          input_html: { rows: '5' },
-                          placeholder: t('.license.license_text_area_placeholder') %>
-            </div>
-
-          </div>
-        </div>
-      </div>
+      <% end %>
     </div>
+
   </fieldset>
   <fieldset class="my-3">
     <legend>

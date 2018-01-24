@@ -55,7 +55,7 @@ class DepositItemTest < ApplicationSystemTestCase
       # Open accordion
       click_on I18n.t('items.draft.choose_license_and_visibility.license.link_to_another_license')
 
-      choose I18n.t('items.draft.choose_license_and_visibility.license.license_text')
+      choose I18n.t('items.draft.choose_license_and_visibility.license.license_text_html')
       fill_in 'draft_item_license_text_area', with: 'License Text Goes Here!!!'
 
       choose I18n.t('items.draft.choose_license_and_visibility.visibility.embargo')

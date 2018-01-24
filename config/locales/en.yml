@@ -485,7 +485,7 @@ en:
           public_domain_mark_html: 'Public Domain Mark 1.0
             (<a href="https://creativecommons.org/publicdomain/mark/1.0/" target="_blank">Public Domain 1.0</a>)'
           link_to_another_license: 'I am required to use / link to another license'
-          license_text: 'License text / URL'
+          license_text_html: 'License text / URL'
           license_text_area_placeholder: 'Copy/paste the URL or license'
           help_html: 'Your item will be hosted in an open access environment.
             Please select one of the licenses described below.

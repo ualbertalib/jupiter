@@ -21,19 +21,21 @@ module Items::DraftHelper
     (wizard_steps.index(wizard_step) + 1)
   end
 
-  def license_accordion_open?(accordion, license, truthy_value = 'true', falsey_value = 'false')
-    license_accordions = { most_commonly_used: [:attribution_non_commercial],
-                           other_creative_commons_licenses: [
-                             :attribution,
-                             :attribution_non_commercial_no_derivatives,
-                             :attribution_non_commercial_share_alike,
-                             :attribution_no_derivatives,
-                             :attribution_share_alike,
-                             :cco_universal
-                           ],
-                           public_domain: [:public_domain_mark],
-                           link_to_another_license: [:license_text] }
+  def license_accordions
+    { most_commonly_used: [:attribution_non_commercial],
+      other_creative_commons_licenses: [
+        :attribution,
+        :attribution_non_commercial_no_derivatives,
+        :attribution_non_commercial_share_alike,
+        :attribution_no_derivatives,
+        :attribution_share_alike,
+        :cco_universal
+      ],
+      public_domain: [:public_domain_mark],
+      link_to_another_license: [:license_text] }
+  end
 
+  def license_accordion_open?(accordion, license, truthy_value = 'true', falsey_value = 'false')
     if license_accordions[accordion].include?(license.to_sym)
       truthy_value
     else
@@ -67,7 +69,7 @@ module Items::DraftHelper
     end
   end
 
-  # TODO: Remove this after upgrading activestorage
+  # TODO: Remove this after upgrading activestorage to rails 5.2
   # Returns true if the content_type of this blob is in the image range, like image/png.
   # https://github.com/rails/rails/blob/7b1dfac29146ddda82d1ee226cdb8ef281013502/activestorage/app/models/active_storage/blob.rb#L95
   def image?(file_attachment)
