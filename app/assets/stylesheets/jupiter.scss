@@ -5,7 +5,7 @@ $header-height-small-screen: 136px;
 $body-bottom: 80px;
 $footer-height: 60px;
 
-$image-with-text-bg: rgba(0, 0, 0, .6);
+$image-with-text-bg: rgba(0, 0, 0, 0.6);
 
 .bg-jupiter-primary {
   background-color: $jupiter-primary;
@@ -39,20 +39,20 @@ body {
 }
 
 .footer {
-  bottom: 0;
+  bottom: 0px;
   height: $footer-height;
   line-height: $footer-height; // Vertically center the text there
   position: absolute;
   width: 100%;
 
-  img.logo {
+  .logo {
     height: 50px;
   }
 }
 
 // Adapted from https://codepen.io/luisintosh/pen/gPGXOp
 .image-with-text {
-  padding: 0;
+  padding: 0px;
   position: relative;
   text-align: center;
   width: 100%;
@@ -63,9 +63,9 @@ body {
 
   p {
     background-color: $image-with-text-bg;
-    bottom: 0;
+    bottom: 0px;
     color: $white;
-    left: 0;
+    left: 0px;
     margin-bottom: inherit;
     padding: 10px 15px;
     position: absolute;
