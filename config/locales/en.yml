@@ -419,12 +419,12 @@ en:
         languages_placeholder: 'Enter one or multiple languages'
         creators: 'Authors/Creators'
         creators_placeholder: 'Enter one or multiple author/creators'
-        creators_help: 'One author per box. Example:  Doe, Jane B.'
         subjects: 'Subjects/Keywords'
         subjects_placeholder: 'Enter one or multiple subject/keywords'
         subjects_help: 'Enter subjects or keywords that describe the item.
           These are the words that will be used when someone searches for your item.'
         date_created: 'Date created'
+        date_created_help: 'Year is required. Month and Day are optional and can be left as is.'
         description: 'Description or Abstract'
         description_placeholder: 'Enter description or abstract'
         community_and_collection: Community and Collection
@@ -449,7 +449,7 @@ en:
         time_periods_help_html: 'Examples:
           <ul>
             <li>a specific date: 2009/12/31</li>
-            <li>a date range:  2003/2010</li>
+            <li>a date range:  2003-2010</li>
             <li>a time period: the Enlightenment</li>
           </ul>'
         citations: 'Citations for previous publication'

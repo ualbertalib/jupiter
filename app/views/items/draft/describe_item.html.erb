@@ -67,8 +67,7 @@
       # include_blank is not allowed with required true, so hack is to set empty prompt?
       # include_blank: false,
       required: true,
-      prompt: '',
-      hint: t('.creators_help') %>
+      prompt: '' %>
 
   <%= f.input :subjects,
       label: t('.subjects'),
@@ -98,7 +97,8 @@
               start_year: Date.today.year - 100,
               end_year: Date.today.year + 1,
               input_html: { class: 'mr-2 mb-2' },
-              required: true %>
+              required: true,
+              hint: t('.date_created_help') %>
 
   <%= f.input :description,
               as: :text,
