@@ -79,4 +79,14 @@ body {
     text-align: center;
     width: 100%;
   }
+
+}
+
+@include media-breakpoint-between(md, xl) {
+  .era-av {
+    background-image: image-url('era-av-background.png');
+    background-repeat: no-repeat;
+    height: 75px;
+    padding-left: 95px;
+  }
 }
