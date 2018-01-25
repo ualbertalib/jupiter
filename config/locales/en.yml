@@ -259,7 +259,7 @@ en:
       no_items_found: 'No items found'
       search_items_placeholder: "Search my items ..."
       items_header: "My Items"
-      
+
   collections:
     title: 'Collections'
     show:
@@ -356,6 +356,8 @@ en:
     sort_by: 'Sort by'
     sort_record_created_at_asc: 'Date (oldest first)'
     sort_record_created_at_desc: 'Date (newest first)'
+    sort_sort_year_asc: 'Date (oldest first)'
+    sort_sort_year_desc: 'Date (newest first)'
     sort_title_asc: 'Title (A-Z)'
     sort_title_desc: 'Title (Z-A)'
     tab_header_items_with_count: 'Items (%{count})'
@@ -390,17 +392,17 @@ en:
       learning_object: 'Learning Object'
       thesis: 'Thesis'
     language:
-      ukr: Ukrainian
-      jpn: Japanese
-      ger: German
+      ukrainian: Ukrainian
+      japanese: Japanese
+      german: German
       other: 'Other language'
-      ita: Italian
-      rus: Russian
-      zxx: 'No linguistic content'
-      eng: English
-      fre: French
-      zho: Chinese
-      spa: Spanish
+      italian: Italian
+      russian: Russian
+      no_linguistic_content: 'No linguistic content'
+      english: English
+      french: French
+      chinese: Chinese
+      spanish: Spanish
     license:
       attribution_4_0_international: 'Attribution 4.0 International'
       attribution_sharealike_4_0_international: 'Attribution-ShareAlike 4.0 International'

@@ -14,7 +14,7 @@ class SitemapTest < ActionDispatch::IntegrationTest
                                        owner: 1, title: 'Fancy Item',
                                        creators: ['Joe Blow'],
                                        created: '1938-01-02',
-                                       languages: [CONTROLLED_VOCABULARIES[:language].eng],
+                                       languages: [CONTROLLED_VOCABULARIES[:language].english],
                                        item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                        publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
                                        license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
@@ -30,7 +30,7 @@ class SitemapTest < ActionDispatch::IntegrationTest
     @thesis = Thesis.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                            owner: 1, title: 'Fancy Item',
                                            dissertant: 'Joe Blow',
-                                           language: CONTROLLED_VOCABULARIES[:language].eng,
+                                           language: CONTROLLED_VOCABULARIES[:language].english,
                                            graduation_date: 'Fall 2017')
                     .unlock_and_fetch_ldp_object do |uo|
                       uo.add_to_path(@community.id, @collection.id)
@@ -41,7 +41,7 @@ class SitemapTest < ActionDispatch::IntegrationTest
                                                owner: 1, title: 'Fancy Private Item',
                                                creators: ['Joe Blow'],
                                                created: '1983-11-11',
-                                               languages: [CONTROLLED_VOCABULARIES[:language].eng],
+                                               languages: [CONTROLLED_VOCABULARIES[:language].english],
                                                item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                                publication_status:
                                                [CONTROLLED_VOCABULARIES[:publication_status].published],

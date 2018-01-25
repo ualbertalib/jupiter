@@ -28,7 +28,7 @@
     <li class="list-unstyled list-group-item-action">
       <dl>
         <dt><%= t('.institution') %></dt>
-        <dd><%= CONTROLLED_VOCABULARIES[:institution].uri_to_text(@item.institution) %></dd>
+        <dd><%= humanize_uri(:institution, @item.institution) %></dd>
       </dl>
     </li>
   <% end %>

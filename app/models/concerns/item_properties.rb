@@ -43,8 +43,25 @@ module ItemProperties
       validates :visibility_after_embargo, presence: true, if: ->(item) { item.visibility == VISIBILITY_EMBARGO }
       validates :visibility_after_embargo, absence: true, if: ->(item) { item.visibility != VISIBILITY_EMBARGO }
       validates :member_of_paths, presence: true
-      validate :communities_and_collections_validations
-      validate :visibility_after_embargo_validations
+      validate :communities_and_collections_must_exist
+      validate :visibility_after_embargo_must_be_valid
+
+      def communities_and_collections_must_exist
+        return if member_of_paths.blank?
+        member_of_paths.each do |path|
+          community_id, collection_id = path.split('/')
+          community = Community.find_by(community_id)
+          errors.add(:member_of_paths, :community_not_found, id: community_id) if community.blank?
+          collection = Collection.find_by(collection_id)
+          errors.add(:member_of_paths, :collection_not_found, id: collection_id) if collection.blank?
+        end
+      end
+
+      def visibility_after_embargo_must_be_valid
+        return if visibility_after_embargo.nil?
+        return if VISIBILITIES_AFTER_EMBARGO.include?(visibility_after_embargo)
+        errors.add(:visibility_after_embargo, :not_recognized)
+      end
 
       before_save do
         if member_of_paths_changed?
@@ -60,17 +77,6 @@ module ItemProperties
               self.member_of_collections += [unlocked_collection]
             end
           end
-        end
-      end
-
-      def communities_and_collections_validations
-        return if member_of_paths.blank?
-        member_of_paths.each do |path|
-          community_id, collection_id = path.split('/')
-          community = Community.find_by(community_id)
-          errors.add(:member_of_paths, :community_not_found, id: community_id) if community.blank?
-          collection = Collection.find_by(collection_id)
-          errors.add(:member_of_paths, :collection_not_found, id: collection_id) if collection.blank?
         end
       end
 
@@ -130,12 +136,6 @@ type=\"#{unlocked_fileset.original_file.mime_type}\"\
             # Hydra::Works::CharacterizationService.run(fileset.characterization_proxy, filename)
           end
         end
-      end
-
-      def visibility_after_embargo_validations
-        return if visibility_after_embargo.nil?
-        return if VISIBILITIES_AFTER_EMBARGO.include?(visibility_after_embargo)
-        errors.add(:visibility_after_embargo, :not_recognized)
       end
     end
   end

@@ -12,7 +12,7 @@ class ItemTest < ActiveSupport::TestCase
     collection.unlock_and_fetch_ldp_object(&:save!)
     item = Item.new_locked_ldp_object(title: 'Item', owner: 1, visibility: JupiterCore::VISIBILITY_PUBLIC,
                                       created: '2017-02-02',
-                                      languages: [CONTROLLED_VOCABULARIES[:language].eng],
+                                      languages: [CONTROLLED_VOCABULARIES[:language].english],
                                       creators: ['Joe Blow'],
                                       subject: ['Things'],
                                       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
@@ -182,7 +182,7 @@ class ItemTest < ActiveSupport::TestCase
     assert_not item.valid?
     assert_includes item.errors[:languages], 'is not recognized'
 
-    item = Item.new_locked_ldp_object(languages: [CONTROLLED_VOCABULARIES[:language].eng])
+    item = Item.new_locked_ldp_object(languages: [CONTROLLED_VOCABULARIES[:language].english])
     assert_not item.valid?
     refute_includes item.errors.keys, :languages
   end
@@ -274,15 +274,15 @@ class ItemTest < ActiveSupport::TestCase
   test 'item_type_with_status_code gets set correctly' do
     item = Item.new_locked_ldp_object(item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                       publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published])
-    assert_equal item.item_type_with_status_code, 'article_published'
+    assert_equal :article_published, item.item_type_with_status_code
 
     item = Item.new_locked_ldp_object(item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                       publication_status: [CONTROLLED_VOCABULARIES[:publication_status].draft,
                                                            CONTROLLED_VOCABULARIES[:publication_status].submitted])
-    assert_equal item.item_type_with_status_code, 'article_submitted'
+    assert_equal :article_submitted, item.item_type_with_status_code
 
     item = Item.new_locked_ldp_object(item_type: CONTROLLED_VOCABULARIES[:item_type].report)
-    assert_equal item.item_type_with_status_code, 'report'
+    assert_equal :report, item.item_type_with_status_code
   end
 
   test 'a subject is required' do
