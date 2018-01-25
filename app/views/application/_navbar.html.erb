@@ -41,15 +41,15 @@
       <ul class="navbar-nav pull-xs-right mr-2">
 
         <li role="presentation" class="nav-item">
-          <%= link_to t('.links.communities'), communities_path, class: "nav-link" %>
+          <%= active_link_to t('.links.communities'), communities_path, class: "nav-link" %>
         </li>
 
         <li role="presentation" class="nav-item">
-          <%= link_to t('.links.new_item'), new_item_path, class: "nav-link" %>
+          <%= active_link_to t('.links.new_item'), new_item_path, class: "nav-link" %>
         </li>
 
         <li role="presentation" class="nav-item">
-          <%= link_to t('.links.about'), '#TODO', class: "nav-link" %>
+          <%= active_link_to t('.links.about'), '/about/#TODO', class: "nav-link" %>
         </li>
 
         <% if current_user.present? %>
@@ -69,25 +69,26 @@
                 <%= t('.user_dropdown.heading_html', name: current_user.name) %>
               </div>
               <div class="dropdown-divider"></div>
-              <%= link_to t('.links.profile'), profile_path, class: 'dropdown-item' %>
+              <%= active_link_to t('.links.profile'), profile_path, class: 'dropdown-item' %>
               <div class="dropdown-divider"></div>
-              <%= link_to t('.links.logout'), logout_path, class: 'dropdown-item' %>
+              <%= active_link_to t('.links.logout'), logout_path, class: 'dropdown-item' %>
 
               <% if session[:admin_id] %>
                 <div class="dropdown-divider"></div>
-                <%= link_to t('.links.logout_as_user'), logout_as_user_path, method: :post, class: 'dropdown-item' %>
+                <%= active_link_to t('.links.logout_as_user'), logout_as_user_path, method: :post,
+                    class: 'dropdown-item' %>
               <% end %>
 
               <% if current_user.admin? %>
                 <div class="dropdown-divider"></div>
-                <%= link_to t('.links.admin'), admin_root_path, class: 'dropdown-item' %>
+                <%= active_link_to t('.links.admin'), admin_root_path, class: 'dropdown-item' %>
               <% end %>
             </div>
 
           </li>
         <% else %>
           <li role="presentation" class="nav-item">
-            <%= link_to t('.links.login'), login_path, class: 'nav-item nav-link' %>
+            <%= active_link_to t('.links.login'), login_path, class: 'nav-item nav-link' %>
           </li>
         <% end %>
       </ul>
