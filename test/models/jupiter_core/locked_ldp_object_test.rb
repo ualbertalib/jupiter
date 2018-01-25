@@ -280,6 +280,46 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     assert result.present?
     assert_equal result.id, obj.id
     assert_equal result.class, @@klass
+
+    another_klass = Class.new(JupiterCore::LockedLdpObject) do
+      ldp_object_includes Hydra::Works::WorkBehavior
+      has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
+    end
+
+    different_obj = another_klass.new_locked_ldp_object(title: generate_random_string, owner: users(:regular_user).id,
+                                                        visibility: JupiterCore::VISIBILITY_PRIVATE)
+    different_obj.unlock_and_fetch_ldp_object(&:save!)
+
+    # combining queries work
+    query = @@klass.where(title: first_title) + @@klass.where(title: second_title) + another_klass.all
+    assert_equal 3, query.count
+
+    # query components don't leak between subqueries
+    query = @@klass.all + another_klass.where(visibility: JupiterCore::VISIBILITY_PRIVATE)
+    assert_equal 3, query.count
+
+    # results have the types we expect
+    query = @@klass.where(visibility: JupiterCore::VISIBILITY_PRIVATE) +
+            another_klass.where(visibility: JupiterCore::VISIBILITY_PRIVATE)
+    assert_equal 1, query.count
+    assert_equal query.first.class, another_klass
+
+    # we don't find the wrong kind of thing with a query that would match them
+    query = another_klass.where(title: first_title)
+    assert_equal 0, query.count
+
+    # shared query criteria works
+    query = (@@klass.all + another_klass.all).where(owner: users(:regular_user).id)
+    assert_equal 3, query.count
+
+    # everything is what we expect
+    query = @@klass.where(title: first_title) + another_klass.where(visibility: JupiterCore::VISIBILITY_PRIVATE)
+    assert_equal 2, query.count
+    assert_equal different_obj.id, query.first.id
+    assert_equal another_klass, query.first.class
+
+    assert_equal obj.id, query.first(2)[1].id
+    assert_equal @@klass, query.first(2)[1].class
   end
 
   # TODO: maybe "upstream" deserves its own section in our test suite

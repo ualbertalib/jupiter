@@ -116,11 +116,7 @@ class JupiterCore::DeferredSimpleSolrQuery
   })
 
   def total_count
-    results_count, _ = JupiterCore::Search.perform_solr_query(q: '',
-                                                              fq: where_clause,
-                                                              rows: 0,
-                                                              start: criteria[:offset],
-                                                              sort: sort_clause)
+    results_count, _ = JupiterCore::Search.perform_solr_query(search_args_with_limit(0))
     results_count
   end
 
@@ -128,6 +124,10 @@ class JupiterCore::DeferredSimpleSolrQuery
   # semantically indicating the number of results from the query
   def empty?
     total_count == 0
+  end
+
+  def inspect_query
+    JupiterCore::Search.prepare_solr_query(search_args_with_limit(criteria[:limit])).inspect
   end
 
   private
@@ -146,11 +146,7 @@ class JupiterCore::DeferredSimpleSolrQuery
   end
 
   def reified_result_set
-    _, results, _ = JupiterCore::Search.perform_solr_query(q: '',
-                                                           fq: where_clause,
-                                                           rows: criteria[:limit],
-                                                           start: criteria[:offset],
-                                                           sort: sort_clause)
+    _, results, _ = JupiterCore::Search.perform_solr_query(search_args_with_limit(criteria[:limit]))
     results
   end
 
@@ -195,6 +191,14 @@ class JupiterCore::DeferredSimpleSolrQuery
       query << common_attr_queries.join(' AND ')
     end
     query.join(' AND ')
+  end
+
+  def search_args_with_limit(limit)
+    { q: '',
+      fq: where_clause,
+      rows: limit,
+      start: criteria[:offset],
+      sort: sort_clause }
   end
 
 end
