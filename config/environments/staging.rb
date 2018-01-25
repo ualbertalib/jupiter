@@ -83,4 +83,7 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  # we can tell crawlers to go away during the beta launch phase
+  config.allow_crawlers = ENV['RAILS_ALLOW_CRAWLERS'].present?
 end

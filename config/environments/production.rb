@@ -86,4 +86,7 @@ Rails.application.configure do
 
   # Which ActiveStorage service to use
   config.active_storage.service = (ENV['ACTIVE_STORAGE_SERVICE'] || :local).to_sym
+
+  # we can tell crawlers to go away during the beta launch phase
+  config.allow_crawlers = ENV['RAILS_ALLOW_CRAWLERS'].present?
 end
