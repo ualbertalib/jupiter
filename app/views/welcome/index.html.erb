@@ -24,7 +24,7 @@
     <div class="d-flex flex-row">
       <div class="image-with-text mx-3 col-lg-5">
         <%= link_to '#TODO' do %>
-          <%= image_tag 'dept-of-agriculture.jpg', alt: 'algriculture' %>
+          <%= image_tag 'dept-of-agriculture.jpg', alt: t('.afns_collection') %>
           <p class="small"><%= t('.afns_collection') %></p>
         <% end %>
       </div>
@@ -34,14 +34,15 @@
         <div class="d-flex flex-row mb-3">
           <div class="image-with-text mr-3">
             <%= link_to '#TODO' do %>
-              <%= image_tag 'images-of-research.jpg', alt: 'images of research' %>
-              <p class="small"><%= t('.images_collection') %></p>
+              <%= image_tag 'images-of-research.jpg', alt: t('.images_of_research_collection'),
+                  title: t('.images_of_research_attribution') %>
+              <p class="small"><%= t('.images_of_research_collection') %></p>
             <% end %>
           </div>
 
           <div class="image-with-text">
             <%= link_to '#TODO' do %>
-              <%= image_tag 'theses.jpg', alt: 'theses' %>
+              <%= image_tag 'theses.jpg', alt: t('.theses_collection') %>
               <p class="small"><%= t('.theses_collection') %></p>
             <% end %>
           </div>
@@ -50,7 +51,8 @@
 
       <div class="image-with-text mt-auto">
         <%= link_to '#TODO' do %>
-          <%= image_tag 'oil-sands.jpg', alt: 'oil sands' %>
+          <%= image_tag 'oil-sands.jpg', alt: t('.osrin_collection'),
+              title: t('.osrin_attribution') %>
           <p class="small"><%= t('.osrin_collection') %></p>
         <% end %>
       </div>
@@ -66,7 +68,7 @@
         <%= link_to t('.osrin_collection'), '#TODO' %>
       </li>
       <li class="list-group-item list-group-item-action">
-        <%= link_to t('.images_collection'), '#TODO' %>
+        <%= link_to t('.images_of_research_collection'), '#TODO' %>
       </li>
       <li class="list-group-item list-group-item-action">
         <%= link_to t('.theses_collection'), '#TODO' %>

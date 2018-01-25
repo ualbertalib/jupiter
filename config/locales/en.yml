@@ -296,7 +296,9 @@ en:
       welcome_header: "Welcome to ERA, the University of Alberta's Digital Repository and Asset Management Services"
       explore_collections: 'Explore some of our collections & communities'
       osrin_collection: 'Oil Sands Research and Information Network'
-      images_collection: 'Images of Research Competition'
+      osrin_attribution: 'Image: “Tar sands in Alberta, 2008” by Howl Arts Collective CC-BY 2.0'
+      images_of_research_collection: 'Images of Research Competition'
+      images_of_research_attribution: 'Image: “Frozen Kaleidoscope” by Vincent McFarlane CC-BY 4.0'
       theses_collection: 'University of Alberta Theses and Dissertations'
       afns_collection: 'Department of Agriculture, Food and Nutritional Science Journal Articles'
       era_av_header: 'Also search ERA Audio+Video'
