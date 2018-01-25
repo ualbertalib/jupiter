@@ -68,4 +68,15 @@ class DeferredSimpleSolrQueryTest < ActiveSupport::TestCase
     end
   end
 
+  test 'visibility constraints' do
+    private_obj = @@klass.new_locked_ldp_object(title: 'zoo', owner: users(:regular_user).id,
+                                                visibility: JupiterCore::VISIBILITY_PRIVATE)
+
+    private_obj.unlock_and_fetch_ldp_object(&:save!)
+    assert @@klass.all.present?
+    assert_equal 3, @@klass.all.total_count
+    assert_equal 2, @@klass.where(visibility: JupiterCore::VISIBILITY_PUBLIC).count
+    assert_equal private_obj.id, @@klass.where(visibility: JupiterCore::VISIBILITY_PRIVATE).first.id
+  end
+
 end
