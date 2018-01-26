@@ -4,8 +4,8 @@
     <div class="col-12 col-md-5 px-3">
       <h4><%= t('.welcome_header') %></h4>
     </div>
-    <div class="align-self-center px-3 col-12 col-md-7">
-      <%= link_to "https://era-av.libary.ualberta.ca", class: 'btn btn-jupiter-primary' do %>
+    <div class="align-self-center pl-3 pr-0 col-md-7">
+      <%= link_to "https://era-av.libary.ualberta.ca", class: 'btn btn-jupiter-primary w-100' do %>
         <p class="mb-0 lead">
           <%= fa_icon 'play-circle' %>
           <%= t('.era_av_header') %>
@@ -66,21 +66,20 @@
   </div>
 
   <%# List of collection links, shown only on smaller screens %>
-  <div class="d-md-none m-3 w-100">
-    <ul class="list-group">
-      <li class="list-group-item list-group-item-action">
-        <%= link_to t('.osrin_collection'), '#TODO' %>
-      </li>
-      <li class="list-group-item list-group-item-action">
-        <%= link_to t('.images_of_research_collection'), '#TODO' %>
-      </li>
-      <li class="list-group-item list-group-item-action">
-        <%= link_to t('.theses_collection'), '#TODO' %>
-      </li>
-      <li class="list-group-item list-group-item-action">
-        <%= link_to t('.afns_collection'), '#TODO' %>
-      </li>
-    </ul>
+  <div class="d-md-none m-3 w-100 collection-links">
+    <div>
+      <%= link_to t('.osrin_collection'), '#TODO', class: 'btn btn-jupiter-primary w-100' %>
+    </div>
+    <div>
+      <%= link_to t('.images_of_research_collection'), '#TODO',
+          class: 'btn btn-jupiter-primary w-100 mt-3' %>
+    </div>
+    <div>
+      <%= link_to t('.theses_collection'), '#TODO', class: 'btn btn-jupiter-primary w-100 mt-3' %>
+    </div>
+    <div>
+      <%= link_to t('.afns_collection'), '#TODO', class: 'btn btn-jupiter-primary w-100 mt-3' %>
+    </div>
   </div>
 
 </div>
