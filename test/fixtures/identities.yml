@@ -5,11 +5,11 @@ admin_saml:
   provider: saml
 
 user_saml:
-  user: regular_user
+  user: regular
   uid: userccid
   provider: saml
 
 user_facebook:
-  user: regular_user
-  uid: 012345678
+  user: regular
+  uid: abc012345
   provider: facebook

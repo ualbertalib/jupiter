@@ -5,19 +5,25 @@ admin:
   admin: true
   suspended: false
 
-admin_user:
+admin_two:
   name: Tyrion Lannister
   email: tyrion_lannister@example.com
   admin: true
   suspended: false
 
-regular_user:
+regular:
   name: John Snow
   email: john_snow@example.com
   admin: false
   suspended: false
 
-suspended_user:
+regular_two:
+  name: Daenerys Targaryen
+  email: daenerys_targaryen@example.com
+  admin: false
+  suspended: false
+
+suspended:
   name: Joffrey Baratheon
   email: joffrey_baratheon@example.com
   admin: false

@@ -12,6 +12,7 @@ class CommunitiesPaginationAndSortTest < ApplicationSystemTestCase
   end
 
   context 'Non-logged in user (or anybody really)' do
+    # TODO: Slow Test, consistently around ~8-9 seconds
     should 'be able to sort and paginate communities' do
       visit communities_path
       assert_selector 'div', text: '1 - 10 of 11'

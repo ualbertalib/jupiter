@@ -5,7 +5,9 @@ class Item < JupiterCore::LockedLdpObject
   ldp_object_includes Hydra::Works::WorkBehavior
 
   # Contributors (faceted in `all_contributors`)
-  has_multival_attribute :creators, ::RDF::Vocab::DC11.creator, solrize_for: [:search]
+  has_attribute :creators, RDF::Vocab::BIBO.authorList, type: :json_array, solrize_for: [:search]
+  # copying the creator values into an un-json'd field for Metadata consumption
+  has_multival_attribute :unordered_creators, ::RDF::Vocab::DC11.creator, solrize_for: [:search]
   has_multival_attribute :contributors, ::RDF::Vocab::DC11.contributor, solrize_for: [:search]
 
   has_attribute :created, ::RDF::Vocab::DC.created, solrize_for: [:search, :sort]
@@ -67,6 +69,9 @@ class Item < JupiterCore::LockedLdpObject
   end
 
   unlocked do
+    before_validation :populate_sort_year
+    before_save :copy_creators_to_unordered_predicate
+
     validates :created, presence: true
     validates :sort_year, presence: true
     validates :languages, presence: true, uri: { in_vocabulary: :language }
@@ -83,14 +88,18 @@ class Item < JupiterCore::LockedLdpObject
     }
     validate :license_xor_rights_must_be_present
 
-    before_validation do
-      begin
-        self.sort_year = Date.parse(created).year.to_s if created.present?
-      rescue ArgumentError
-        # date was unparsable, try to pull out the first 4 digit number as a year
-        capture = created.scan(/\d{4}/)
-        self.sort_year = capture[0] if capture.present?
-      end
+    def populate_sort_year
+      self.sort_year = Date.parse(created).year.to_s if created.present?
+    rescue ArgumentError
+      # date was unparsable, try to pull out the first 4 digit number as a year
+      capture = created.scan(/\d{4}/)
+      self.sort_year = capture[0] if capture.present?
+    end
+
+    def copy_creators_to_unordered_predicate
+      return unless creators_changed?
+      self.unordered_creators = []
+      creators.each { |c| self.unordered_creators += [c] }
     end
 
     def license_xor_rights_must_be_present

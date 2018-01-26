@@ -19,7 +19,7 @@ class ItemPolicyTest < ActiveSupport::TestCase
 
   context 'general user' do
     should 'only be able to create, see and modify, but not delete, your own items' do
-      current_user = users(:regular_user)
+      current_user = users(:regular)
       item = Item.new_locked_ldp_object(owner: current_user.id)
 
       assert ItemPolicy.new(current_user, item).index?
@@ -33,7 +33,7 @@ class ItemPolicyTest < ActiveSupport::TestCase
     end
 
     should 'not have access to other items' do
-      current_user = users(:regular_user)
+      current_user = users(:regular)
       another_user = users(:admin)
 
       item = Item.new_locked_ldp_object(owner: another_user.id, visibility: JupiterCore::VISIBILITY_PUBLIC)

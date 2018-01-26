@@ -10,11 +10,12 @@ gem 'puma', '~> 3.11'
 gem 'rails', '~> 5.1.1'
 
 # Assets (CSS/JS) stuff
-gem 'bootstrap', '~> 4.0.0.beta3'
+gem 'bootstrap', '~> 4.0.0'
+gem 'dropzonejs-rails'
 gem 'font-awesome-rails'
 gem 'jquery-rails'
 gem 'sass-rails', '~> 5'
-gem 'select2-rails'
+gem 'select2-rails', '~> 4'
 gem 'turbolinks', '~> 5'
 gem 'uglifier', '>= 1.3.0'
 
@@ -46,8 +47,9 @@ gem 'sidekiq', '~> 5.0'
 gem 'sinatra' # used by sidekiq/web
 
 # Misc Utilities
-gem 'kaminari'
-gem 'ransack'
+gem 'kaminari' # Pagination
+gem 'ransack' # ActiveRecord search/filter
+gem 'wicked' # Multi-step wizard
 
 # Performance monitoring
 gem 'skylight'

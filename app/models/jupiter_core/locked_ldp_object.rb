@@ -413,30 +413,9 @@ module JupiterCore
       @ldp_object
     end
 
+    # make it easier for instances to call the class method
     def coerce_value(value, to:)
-      return nil if value.nil?
-      case to
-      when :string, :text
-        value.to_s
-      when :bool
-        value
-      when :int
-        value.to_i
-      when :float
-        value.to_f
-      when :path
-        value
-      when :date
-        if value.is_a?(String)
-          Time.zone.parse(value)
-        elsif value.is_a?(DateTime)
-          value
-        elsif value.is_a?(Date) || value.is_a?(Time)
-          Time.zone.parse(value)
-        end
-      else
-        raise TypeError, "Unknown coercion type: #{type}"
-      end
+      self.class.coerce_value(value, to: to)
     end
 
     # private class methods
@@ -446,6 +425,37 @@ module JupiterCore
       define_method Kaminari.config.page_method_name, (proc { |num|
         limit(default_per_page).offset(default_per_page * ([num.to_i, 1].max - 1))
       })
+
+      # convert data back on its way out of solr/fedora. We do this blindly with no error handling, because
+      # things should still be what we expected them to be, and if they're not, we want to be alerted to that error
+      def coerce_value(value, to:)
+        return [] if value.nil? && to == :json_array
+        return nil if value.nil?
+        case to
+        when :string, :text
+          value.to_s
+        when :bool
+          value
+        when :int
+          value.to_i
+        when :float
+          value.to_f
+        when :path
+          value
+        when :json_array
+          JSON.parse(value)
+        when :date
+          if value.is_a?(String)
+            Time.zone.parse(value)
+          elsif value.is_a?(DateTime)
+            value
+          elsif value.is_a?(Date) || value.is_a?(Time)
+            Time.zone.parse(value)
+          end
+        else
+          raise TypeError, "Unknown coercion type: #{type}"
+        end
+      end
 
       private
 
@@ -562,6 +572,9 @@ module JupiterCore
               value
             when :path
               value
+            when :json_array
+              raise TypeError, "#{value} is not an Array" unless value.is_a?(Array)
+              value.to_json
             when :float
               raise TypeError, "#{value} is not a float value" unless value.is_a?(Float)
               value
@@ -630,6 +643,7 @@ module JupiterCore
                   solr_representation[canonical_solr_name]
                 end
           return if val.nil?
+          return val.freeze if type == :json_array # conversion happened in the overriden AF reader
           val = val.first if val.is_a?(Array) && !multiple
           return coerce_value(val, to: type).freeze unless multiple
           coerced_values = val.map do |v|
@@ -758,6 +772,9 @@ module JupiterCore
         raise PropertyInvalidError unless name.is_a? Symbol
         raise PropertyInvalidError if predicate.blank?
         raise PropertyInvalidError if solrize_for.blank?
+        # A "json_array" is a single valued property, because the array gets serialized to a single json string when saved
+        # the main use-case for this is an ordered creator field
+        raise PropertyInvalidError if (type == :json_array) && (multiple == true)
 
         # TODO: keep this conveinience, or push responsibility for [] onto the callsite?
         solrize_for = [solrize_for] unless solrize_for.is_a? Array
@@ -769,21 +786,25 @@ module JupiterCore
         raise PropertyInvalidError if solrize_for.count { |item| !SOLR_DESCRIPTOR_MAP.keys.include?(item) } > 0
 
         raise PropertyInvalidError, "Unknown type #{type}" unless [:string, :text, :path, :bool, :date, :int,
-                                                                   :float].include?(type)
+                                                                   :float, :json_array].include?(type)
 
         self.attribute_names << name
 
+        # json arrays are stored in Solr and Fedora as a single string
+        # otherwise, things are stored as what they're declared as.
+        solr_type = (type == :json_array ? :string : type)
+
         solr_name_cache ||= []
         solrize_for.each do |descriptor|
-          solr_name = Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[descriptor], type: type)
+          solr_name = Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[descriptor], type: solr_type)
           solr_name_cache << solr_name
           self.reverse_solr_name_cache[solr_name] = name
         end
 
         facet_name = if solrize_for.include?(:facet)
-                       Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[:facet], type: type)
+                       Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[:facet], type: solr_type)
                      elsif solrize_for.include?(:pathing)
-                       Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[:pathing], type: type)
+                       Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[:pathing], type: solr_type)
                      end
 
         self.facets << facet_name if facet_name.present?
@@ -806,13 +827,13 @@ module JupiterCore
         define_cached_reader(name, multiple: multiple, type: type, canonical_solr_name: solr_name_cache.first)
 
         define_method "#{name}=" do |*_args|
-          raise LockedInstanceError, 'The Locked LDP object cannot be mutated outside of an unlocked block or without'\
+          raise LockedInstanceError, 'The Locked LDP object cannot be mutated outside of an unlocked block or without '\
                                      'calling unlock_and_fetch_ldp_object to load a writable copy (SLOW).'
         end
 
         derived_af_class.class_eval do
           property name, predicate: predicate, multiple: multiple do |index|
-            index.type type if type.present?
+            index.type solr_type if type.present?
             index.as(*(solrize_for.map { |idx| SOLR_DESCRIPTOR_MAP[idx] }))
           end
         end
@@ -872,13 +893,24 @@ module JupiterCore
           alias_method :"shadowed_assign_#{name}", :"#{name}="
 
           define_method "#{name}=" do |arg|
-            converted_arg = if arg.is_a?(Array)
+            converted_arg = if arg.is_a?(Array) && type != :json_array
                               arg.map { |val| convert_value(val, to: type) }
                             else
                               convert_value(arg, to: type)
                             end
             # call the shadowed AF assignment method
             self.send("shadowed_assign_#{name}", converted_arg)
+          end
+
+          # To work around a lack of ordering in multivalued attributes in Fedora, we need to serialize the :creators
+          # array into a single-valued string, so that we can maintain a fixed order. We corerce it and other
+          # "json_array" properties back into arrays when reading them.
+          if type == :json_array
+            alias_method :"shadowed_#{name}", :"#{name}"
+
+            define_method name.to_s do
+              owning_class.coerce_value(self.send("shadowed_#{name}"), to: :json_array)
+            end
           end
         end
       end

@@ -23,7 +23,7 @@ class Admin::UsersControllerTest < ActionDispatch::IntegrationTest
 
   context '#suspend' do
     should 'be able to suspend a user' do
-      user = users(:regular_user)
+      user = users(:regular)
 
       patch suspend_admin_user_url(user)
 
@@ -37,7 +37,7 @@ class Admin::UsersControllerTest < ActionDispatch::IntegrationTest
 
   context '#unsuspend' do
     should 'be able to unsuspend a user' do
-      user = users(:suspended_user)
+      user = users(:suspended)
 
       patch unsuspend_admin_user_url(user)
 
@@ -51,7 +51,7 @@ class Admin::UsersControllerTest < ActionDispatch::IntegrationTest
 
   context '#grant_admin' do
     should 'be able to grant admin to a user' do
-      user = users(:regular_user)
+      user = users(:regular)
 
       patch grant_admin_admin_user_url(user)
       assert_redirected_to admin_user_url(user)
@@ -64,7 +64,7 @@ class Admin::UsersControllerTest < ActionDispatch::IntegrationTest
 
   context '#revoke_admin' do
     should 'be able to revoke admin to an admin' do
-      user = users(:admin_user)
+      user = users(:admin_two)
 
       patch revoke_admin_admin_user_url(user)
 
@@ -78,7 +78,7 @@ class Admin::UsersControllerTest < ActionDispatch::IntegrationTest
 
   context '#login_as_user' do
     should 'be able to login as user' do
-      user = users(:regular_user)
+      user = users(:regular)
 
       post login_as_user_admin_user_url(user)
       assert_redirected_to root_url

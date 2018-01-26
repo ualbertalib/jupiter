@@ -5,15 +5,15 @@
 # below each fixture, per the syntax in the comments below
 #
 current_announcement:
-    message: This is a test message!
-    user: admin
+  message: This is a test message!
+  user: admin
 
 past_announcement:
-    message: This is an expired message!
-    user: admin
-    removed_at: 2017-04-04T10:10:10Z
+  message: This is an expired message!
+  user: admin
+  removed_at: 2017-04-04T10:10:10Z
 
 another_past_announcement:
-    message: This is another past message!
-    user: admin
-    removed_at: 2017-01-01T01:10:10Z
+  message: This is another past message!
+  user: admin
+  removed_at: 2017-01-01T01:10:10Z
