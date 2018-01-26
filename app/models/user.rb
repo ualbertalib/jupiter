@@ -2,6 +2,7 @@ class User < ApplicationRecord
 
   has_many :identities, dependent: :destroy
   has_many :announcements, dependent: :destroy
+  has_many :draft_items, dependent: :destroy
 
   # We don't need to validate the format of an email address here,
   # as emails are supplied from SAML (so assuming...hopefully they are valid)

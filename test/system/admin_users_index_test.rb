@@ -14,7 +14,7 @@ class AdminUsersIndexTest < ApplicationSystemTestCase
 
     click_link I18n.t('admin.users.index.header')
     assert_selector 'h1', text: I18n.t('admin.users.index.header')
-    assert_selector 'tbody tr', count: 4
+    assert_selector 'tbody tr', count: 5
 
     click_link 'Email' # email ascending
 
@@ -61,7 +61,7 @@ class AdminUsersIndexTest < ApplicationSystemTestCase
 
   should 'be able to filter by status' do
     admin = users(:admin)
-    suspended = users(:suspended_user)
+    suspended = users(:suspended)
 
     login_user(admin)
     click_link admin.name # opens user dropdown which has the admin link
@@ -78,8 +78,8 @@ class AdminUsersIndexTest < ApplicationSystemTestCase
 
   should 'be able to filter by role' do
     admin = users(:admin)
-    regular = users(:regular_user)
-    suspended = users(:suspended_user)
+    regular_user = users(:regular)
+    second_user = users(:regular_two)
 
     login_user(admin)
     click_link admin.name # opens user dropdown which has the admin link
@@ -88,9 +88,9 @@ class AdminUsersIndexTest < ApplicationSystemTestCase
 
     # Filter to show user(s) with role of user
     select(I18n.t('admin.users.user_role'), from: I18n.t('admin.users.role'))
-    assert_selector 'tbody tr', count: 2
-    assert_selector 'tbody tr:first-child th[scope="row"]', text: suspended.email
-    assert_selector 'tbody tr:last-child th[scope="row"]', text: regular.email
+    assert_selector 'tbody tr', count: 3
+    assert_selector 'tbody tr:first-child th[scope="row"]', text: second_user.email
+    assert_selector 'tbody tr:last-child th[scope="row"]', text: regular_user.email
 
     logout_user
   end

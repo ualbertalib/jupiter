@@ -284,6 +284,7 @@ class SearchTest < ApplicationSystemTestCase
   end
 
   context 'Searching as admin user' do
+    # TODO: Slow Test, consistently around ~8-9 seconds
     should 'be able to filter the public and private items' do
       admin = users(:admin)
       login_user(admin)

@@ -12,15 +12,17 @@ if Rails.env.development? || Rails.env.uat?
   require 'faker'
 
   # For the main community/collections
-  THINGS = [ 'cat', 'dog', 'unicorn', 'hamburger', 'librarian'].freeze
+  THINGS = ['cat', 'dog', 'unicorn', 'hamburger', 'librarian'].freeze
   # For padding community/collection lists for pagination (need at least 26, a couple uppercase to confirm sort)
-  EXTRA_THINGS = [ 'Library', 'DONAIR', 'magpie', 'toque', 'sombrero', 'yeti', 'mimosa', 'ukulele', 'tourtière',
+  EXTRA_THINGS = ['Library', 'DONAIR', 'magpie', 'toque', 'sombrero', 'yeti', 'mimosa', 'ukulele', 'tourtière',
                    'falafel', 'calculator', 'papusa'].freeze
 
   puts 'Starting seeding of dev database...'
 
   # start fresh
-  [Announcement, ActiveStorage::Blob, ActiveStorage::Attachment, Identity, User].each(&:destroy_all)
+  [Announcement, ActiveStorage::Blob, ActiveStorage::Attachment,
+   Identity, User, Type, Language].each(&:destroy_all)
+
   ActiveFedora::Cleaner.clean!
 
   # Seed an admin user
@@ -355,5 +357,21 @@ if Rails.env.development? || Rails.env.uat?
       description: Faker::Lorem.sentence(40, false, 0).chop
     ).unlock_and_fetch_ldp_object(&:save!)
   end
+
+  # Types
+  [:book, :book_chapter, :conference_workshop_poster,
+   :conference_workshop_presenation, :dataset,
+   :image, :journal_article_draft, :journal_article_published,
+   :learning_object, :report, :research_material, :review].each do |type_name|
+    Type.create(name: type_name)
+  end
+
+  # Languages
+  [:english, :french, :spanish, :chinese, :german,
+   :italian, :russian, :ukrainian, :japanese,
+   :no_linguistic_content, :other].each do |language_name|
+    Language.create(name: language_name)
+  end
+
   puts 'Database seeded successfully!'
 end
