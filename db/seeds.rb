@@ -358,20 +358,21 @@ if Rails.env.development? || Rails.env.uat?
     ).unlock_and_fetch_ldp_object(&:save!)
   end
 
-  # Types
-  [:book, :book_chapter, :conference_workshop_poster,
-   :conference_workshop_presenation, :dataset,
-   :image, :journal_article_draft, :journal_article_published,
-   :learning_object, :report, :research_material, :review].each do |type_name|
-    Type.create(name: type_name)
-  end
-
-  # Languages
-  [:english, :french, :spanish, :chinese, :german,
-   :italian, :russian, :ukrainian, :japanese,
-   :no_linguistic_content, :other].each do |language_name|
-    Language.create(name: language_name)
-  end
-
-  puts 'Database seeded successfully!'
 end
+
+# Types
+[:book, :book_chapter, :conference_workshop_poster,
+ :conference_workshop_presenation, :dataset,
+ :image, :journal_article_draft, :journal_article_published,
+ :learning_object, :report, :research_material, :review].each do |type_name|
+  Type.create(name: type_name)
+end
+
+# Languages
+[:english, :french, :spanish, :chinese, :german,
+ :italian, :russian, :ukrainian, :japanese,
+ :no_linguistic_content, :other].each do |language_name|
+  Language.create(name: language_name)
+end
+
+puts 'Database seeded successfully!'
