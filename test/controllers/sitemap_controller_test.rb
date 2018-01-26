@@ -106,19 +106,56 @@ class SitemapTest < ActionDispatch::IntegrationTest
     end
 
     should 'not show private items' do
-      # assert_select 'url', count: 2
+      assert_select 'url', count: 2
       assert_select 'loc', { count: 0, text: item_url(@private_item) }, 'private items shant appear in the sitemap'
     end
   end
 
   context 'collections sitemap' do
+    setup do
+      get collections_sitemap_url
+    end
     should 'be valid sitemap xml' do
       get collections_sitemap_url
       schema = Nokogiri::XML::Schema(File.open(File.join(File.dirname(__FILE__), 'sitemap.xsd')))
       document = Nokogiri::XML(@response.body)
       assert_empty schema.validate(document)
     end
-    should 'show url, last modified date, and content attributes' do
+    should 'show url, last modified date, change frequency and priority' do
+      assert_select 'url' do
+        assert_select 'loc'
+        assert_select 'lastmod'
+        assert_select 'changefreq'
+        assert_select 'priority'
+      end
+    end
+    should 'show location and last modified' do
+      assert_select 'loc', community_collection_url(@collection.community, @collection)
+      assert_select 'lastmod', @collection.updated_at.to_s\
+    end
+  end
+
+  context 'communities sitemap' do
+    setup do
+      get communities_sitemap_url
+    end
+    should 'be valid sitemap xml' do
+      get communities_sitemap_url
+      schema = Nokogiri::XML::Schema(File.open(File.join(File.dirname(__FILE__), 'sitemap.xsd')))
+      document = Nokogiri::XML(@response.body)
+      assert_empty schema.validate(document)
+    end
+    should 'show url, last modified date, change frequency and priority' do
+      assert_select 'url' do
+        assert_select 'loc'
+        assert_select 'lastmod'
+        assert_select 'changefreq'
+        assert_select 'priority'
+      end
+    end
+    should 'show location and last modified' do
+      assert_select 'loc', community_url(@community)
+      assert_select 'lastmod', @community.updated_at.to_s\
     end
   end
 
