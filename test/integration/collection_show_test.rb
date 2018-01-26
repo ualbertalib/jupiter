@@ -75,7 +75,7 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
   end
 
   test 'visiting the show page for a collection as a regular user' do
-    user = users(:regular_user)
+    user = users(:regular)
     sign_in_as user
     get community_collection_url(@community, @collection)
 
@@ -115,7 +115,7 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
 
   test 'searching within the collection as a regular user' do
     # TODO: should probably hook this up to a system test that submits the form
-    user = users(:regular_user)
+    user = users(:regular)
     sign_in_as user
     get community_collection_url(@community, @collection, query: 'Fancy')
 

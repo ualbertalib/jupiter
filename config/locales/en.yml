@@ -41,18 +41,22 @@ en:
   delete: 'Delete'
   download: 'Download'
   edit: 'Edit'
+  filter_by: 'Filter by'
   home: 'Home'
   more_information: 'More information ...'
-  remove: 'Remove'
-  show_less: 'Show less ...'
   never_signed_in: 'Never Signed In'
-  time_ago: '%{time} ago'
   page_range: '%{first} - %{last} of %{total}'
-  filter_by: 'Filter by'
-  sort_by: 'Sort by'
-  updated_at: 'Updated At'
+  remove: 'Remove'
+  required_fields_html: 'Required fields marked with <span class="text-danger font-weight-bold">*</span>'
   search_label: 'Search'
   search_items: 'Search Items'
+  select_a_year: Select a year
+  select_a_month: Select a month
+  select_a_day: Select a day
+  show_less: 'Show less ...'
+  sort_by: 'Sort by'
+  time_ago: '%{time} ago'
+  updated_at: 'Updated At'
 
   activemodel:
     errors:
@@ -95,6 +99,43 @@ en:
           attributes:
             member_collections:
               must_be_empty: "must be empty. Could not delete community. Currently contains: %{list_of_collections}"
+  activerecord:
+    attributes:
+      language:
+        names:
+          english: 'English'
+          french: 'French'
+          spanish: 'Spanish'
+          chinese: 'Chinese'
+          german: 'German'
+          italian: 'Italian'
+          russian:  'Russian'
+          ukrainian: 'Ukrainian'
+          japanese: 'Japanese'
+          no_linguistic_content: 'No linguistic content'
+          other: 'Other'
+      type:
+        names:
+          book: 'Book'
+          book_chapter: 'Book Chapter'
+          conference_workshop_poster: 'Conference/workshop Poster'
+          conference_workshop_presenation: 'Conference/workshop Presentation'
+          dataset: 'Dataset'
+          image: 'Image'
+          journal_article_draft: 'Journal Article (Draft-Submitted)'
+          journal_article_published: 'Journal Article (Published)'
+          learning_object: 'Learning Object'
+          report: 'Report'
+          research_material:  'Research Material'
+          review: 'Review'
+    errors:
+      models:
+        draft_item:
+          attributes:
+            member_of_paths:
+              community_not_found: "Community can't be blank"
+              collection_not_found: "Collection can't be blank"
+
   application:
     navbar:
       logo_alt: 'ERA Logo'
@@ -119,7 +160,10 @@ en:
   sessions:
     new:
       header: 'Login to ERA'
-      description_html: 'ERA is now a <a href="https://ist.ualberta.ca/services/ccid-passwords/campus-computing-id">CCID</a> (Campus Computing ID) enabled service. If you have a CCID please use it to log in to ERA.'
+      description_html: 'ERA is now a
+        <a href="https://ist.ualberta.ca/services/ccid-passwords/campus-computing-id" target="_blank">CCID</a>
+        (Campus Computing ID) enabled service.
+        If you have a CCID please use it to log in to ERA.'
       saml_link: 'Sign in with University of Alberta CCID (Campus Computing ID)'
       developer_link: Sign in with Developer Account
     logout_as_user:
@@ -130,7 +174,8 @@ en:
   login:
     error: 'There was an error authenticating from your account. Please try again, or contact a staff member.'
     success: 'Successfully authenticated from %{kind} account.'
-    user_suspended: 'Sorry, your ERA account has been suspended. Please contact the ERA HelpDesk at erahelp@ualberta.ca for more information.'
+    user_suspended: 'Sorry, your ERA account has been suspended. Please contact the ERA HelpDesk at
+      erahelp@ualberta.ca for more information.'
 
   authorization:
     user_not_authorized: 'Sorry, you are not authorized to perform this action.'
@@ -290,7 +335,8 @@ en:
   welcome:
     index:
       header: 'ERA (Education & Research Archive)'
-      cta_lead_text: 'Keep it. Share it. Use it. Welcome to University of Alberta’s Digital Repository and Asset Management Services.'
+      cta_lead_text: 'Keep it. Share it. Use it.
+        Welcome to University of Alberta’s Digital Repository and Asset Management Services.'
       cta_link_text: 'Check Me Out on GitHub'
 
   items:
@@ -346,6 +392,137 @@ en:
         If you need a new collection, email erahelp@ualberta.ca'
     file_label: 'File'
     add_another_file: 'Add another file'
+
+    draft:
+      header: 'Deposit Item'
+      previous: 'Previous step'
+      save_and_continue: 'Save and continue to next step'
+      progress_bar_text: 'Step %{step_index} of %{total_steps}'
+      step_number: 'Step %{step_number}'
+      please_fix_errors: 'Please correct all errors below and try again'
+      please_follow_the_steps: 'Looks like you tried to skip ahead. Please follow the steps accordingly'
+      files_are_required_to_continue: 'You are required at least one file attached before continuing'
+      successful_deposit: 'Item Deposit was successful!'
+
+      describe_item:
+        header: 'Describe Item'
+        header_icon: 'pencil'
+        title: 'Title'
+        title_placeholder: 'Enter title'
+        alternate_title: 'Alternate Title'
+        alternate_title_placeholder: 'Enter alternate title'
+        alternate_title_help: 'Enter a secondary/translated title, if appropriate.'
+        type_id: 'Type of Item'
+        type_id_help_html: 'If you do not see an appropriate item type, please contact
+          <a href="mailto:erahelp@ualberta.ca">erahelp@ualberta.ca</a>'
+        languages: 'Languages'
+        languages_placeholder: 'Enter one or multiple languages'
+        creators: 'Authors/Creators'
+        creators_placeholder: 'Enter one or multiple author/creators'
+        subjects: 'Subjects/Keywords'
+        subjects_placeholder: 'Enter one or multiple subject/keywords'
+        subjects_help: 'Enter subjects or keywords that describe the item.
+          These are the words that will be used when someone searches for your item.'
+        date_created: 'Date created'
+        date_created_help: 'Year is required. Month and Day are optional and can be left as is.'
+        description: 'Description or Abstract'
+        description_placeholder: 'Enter description or abstract'
+        community_and_collection: Community and Collection
+        community_and_collection_help_html: 'Choose the Community and Collection that best match your item(s).
+          If you need a new collection, email <a href="mailto:erahelp@ualberta.ca">erahelp@ualberta.ca</a>'
+        community: 'Community'
+        community_placeholder: 'Select a community'
+        collection: 'Collection'
+        collection_placeholder: 'Select a collection'
+        additional_fields: 'Additional fields'
+        contributors: 'Additional contributors'
+        contributors_placeholder: 'Enter one or multiple contributors'
+        contributors_help: 'A person or group you want to recognize for playing a role in the creation of this item,
+          but not the primary role. If there is a specific role you would like noted, include it in parentheses,
+          e.g. "Jones, Mary (Advisor)."'
+        places: 'Is this item about a place?'
+        places_placeholder: 'Enter one or multiple places'
+        places_help: "A place name related to the item, such as the city,
+          province, or country the item's contents are about."
+        time_periods: 'Is this item about a time?'
+        time_periods_placeholder: 'Enter one or multiple times'
+        time_periods_help_html: 'Examples:
+          <ul>
+            <li>a specific date: 2009/12/31</li>
+            <li>a date range:  2003-2010</li>
+            <li>a time period: the Enlightenment</li>
+          </ul>'
+        citations: 'Citations for previous publication'
+        citations_placeholder: 'Enter one or multiple citations'
+        citations_help: 'If your item has been previously published, provide a citation'
+        source: 'Source'
+        source_help: 'Brief information about an item from which this item was derived.'
+        related_item: Link to related item
+        related_item_help: 'Must be a url. Example: http://www.ualberta.ca'
+
+      choose_license_and_visibility:
+        header: 'Choose License and Visibility'
+        header_icon: 'creative-commons'
+        license:
+          header: 'License'
+          most_commonly_used: 'Most commonly used'
+          attribution_non_commercial_html: 'Attribution-NonCommercial 4.0 International
+            (<a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>)'
+          other_creative_commons_licenses: 'Other Creative Commons licenses'
+          attribution_html: 'Attribution 4.0 International
+            (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC BY 4.0</a>)'
+          attribution_non_commercial_no_derivatives_html: 'Attribution-NonCommercial-NoDerivatives 4.0 International
+            (<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a>)'
+          attribution_non_commercial_share_alike_html: 'Attribution-NonCommercial-ShareAlike 4.0 International
+            (<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a>)'
+          attribution_no_derivatives_html: 'Attribution-NoDerivatives 4.0 International
+            (<a href="https://creativecommons.org/licenses/by-nd/4.0/" target="_blank">CC BY-ND 4.0</a>)'
+          attribution_share_alike_html: 'Attribution-ShareAlike 4.0 International
+            (<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">CC BY-SA 4.0</a>)'
+          cco_universal_html: 'CC0 1.0 Universal
+            (<a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank">CC0 1.0</a>)'
+          public_domain: 'This work is in the public domain'
+          public_domain_mark_html: 'Public Domain Mark 1.0
+            (<a href="https://creativecommons.org/publicdomain/mark/1.0/" target="_blank">Public Domain 1.0</a>)'
+          link_to_another_license: 'I am required to use / link to another license'
+          license_text_html: 'License text / URL'
+          license_text_area_placeholder: 'Copy/paste the URL or license'
+          help_html: 'Your item will be hosted in an open access environment.
+            Please select one of the licenses described below.
+            For additional assistance selecting a license please see
+            <a href="http://creativecommons.org/choose/" target="_blank">http://creativecommons.org/choose/</a>,
+            or contact <a href="mailto:erahelp@ualberta.ca">erahelp@ualberta.ca</a>'
+        visibility:
+          header: 'Visibility'
+          open_access: 'Open access (will be seen by everyone)'
+          embargo: 'Will be open access on'
+          authenticated: 'CCID Protected'
+          private: 'Private'
+
+      upload_files:
+        header: 'Upload Files'
+        header_icon: 'paperclip'
+        attach_files: 'Attach Files'
+        saved_files: 'Item File Attachments'
+        upload_files_instructions: 'Choose a file(s) or drag it here'
+        no_js_fallback: 'Please enable javascript to upload files.'
+
+      files_list:
+        no_saved_files: No files have been attached to this item
+        item_thumbnail: 'Item Thumbnail'
+        thumbnail_of_first_file: 'By default the first file will be displayed as the thumbnail image for this item. To change this, click on set as thumbnail button on the desired file.'
+      thumbnail:
+        thumbnail_alt: Thumbnail Image
+      file:
+        set_as_thumbnail: Set as Thumbnail
+        delete_file_dialog: Are you sure you want to delete this file?
+
+      review_and_deposit_item:
+        header: 'Review and Deposit Item'
+        header_icon: 'check-square-o'
+        please_review_item: 'Please review your item before depositing into ERA'
+        legal_disclaimer_html: 'By depositing this item into ERA you agree to the <a href="/policies">ERA Deposit Policy agreements</a>'
+
 
   search:
     filter: 'Filter'

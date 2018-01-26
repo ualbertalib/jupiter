@@ -4,7 +4,7 @@ class CollectionTest < ActiveSupport::TestCase
 
   test 'a valid collection can be constructed' do
     community = Community.new_locked_ldp_object(title: 'Community', owner: 1).unlock_and_fetch_ldp_object(&:save!)
-    collection = Collection.new_locked_ldp_object(title: 'foo', owner: users(:regular_user).id,
+    collection = Collection.new_locked_ldp_object(title: 'foo', owner: users(:regular).id,
                                                   community_id: community.id)
     assert collection.valid?
   end
@@ -16,13 +16,13 @@ class CollectionTest < ActiveSupport::TestCase
   end
 
   test 'visibility callback' do
-    collection = Collection.new_locked_ldp_object(title: 'foo', owner: users(:regular_user).id)
+    collection = Collection.new_locked_ldp_object(title: 'foo', owner: users(:regular).id)
     collection.valid?
     assert_equal collection.visibility, JupiterCore::VISIBILITY_PUBLIC
   end
 
   test 'a community_id must be present' do
-    collection = Collection.new_locked_ldp_object(title: 'foo', owner: users(:regular_user).id)
+    collection = Collection.new_locked_ldp_object(title: 'foo', owner: users(:regular).id)
 
     assert_not collection.valid?
     assert_includes collection.errors[:community_id], "can't be blank"
@@ -30,7 +30,7 @@ class CollectionTest < ActiveSupport::TestCase
 
   test 'community must exist' do
     community_id = generate_random_string
-    collection = Collection.new_locked_ldp_object(title: 'foo', owner: users(:regular_user).id,
+    collection = Collection.new_locked_ldp_object(title: 'foo', owner: users(:regular).id,
                                                   community_id: community_id)
 
     assert_not collection.valid?
@@ -45,7 +45,7 @@ class CollectionTest < ActiveSupport::TestCase
       uo.save!
       community_uri = uo.uri
     end
-    Collection.new_locked_ldp_object(title: 'foo', owner: users(:regular_user).id,
+    Collection.new_locked_ldp_object(title: 'foo', owner: users(:regular).id,
                                      community_id: community.id).unlock_and_fetch_ldp_object do |uo|
       uo.save!
       uo.reload

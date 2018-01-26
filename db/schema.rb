@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171027161001) do
+ActiveRecord::Schema.define(version: 20171130222838) do
 
   create_table "active_storage_attachments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
@@ -43,6 +43,46 @@ ActiveRecord::Schema.define(version: 20171027161001) do
     t.index ["user_id"], name: "index_announcements_on_user_id"
   end
 
+  create_table "draft_items", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "uuid"
+    t.integer "status", default: 0, null: false
+    t.integer "wizard_step", default: 0, null: false
+    t.integer "thumbnail_id"
+    t.string "title"
+    t.string "alternate_title"
+    t.date "date_created"
+    t.text "description"
+    t.string "source"
+    t.string "related_item"
+    t.integer "license", default: 0, null: false
+    t.text "license_text_area"
+    t.integer "visibility", default: 0, null: false
+    t.datetime "embargo_end_date"
+    t.integer "visibility_after_embargo", default: 0, null: false
+    t.bigint "type_id"
+    t.bigint "user_id", null: false
+    t.json "creators"
+    t.json "subjects"
+    t.json "member_of_paths"
+    t.json "contributors"
+    t.json "places"
+    t.json "time_periods"
+    t.json "citations"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["type_id"], name: "index_draft_items_on_type_id"
+    t.index ["user_id"], name: "index_draft_items_on_user_id"
+  end
+
+  create_table "draft_items_languages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.bigint "draft_item_id"
+    t.bigint "language_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["draft_item_id"], name: "index_draft_items_languages_on_draft_item_id"
+    t.index ["language_id"], name: "index_draft_items_languages_on_language_id"
+  end
+
   create_table "identities", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "user_id", null: false
     t.string "uid", null: false
@@ -51,6 +91,18 @@ ActiveRecord::Schema.define(version: 20171027161001) do
     t.datetime "updated_at", null: false
     t.index ["uid", "provider"], name: "index_identities_on_uid_and_provider", unique: true
     t.index ["user_id"], name: "index_identities_on_user_id"
+  end
+
+  create_table "languages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "types", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -71,4 +123,5 @@ ActiveRecord::Schema.define(version: 20171027161001) do
   end
 
   add_foreign_key "announcements", "users"
+  add_foreign_key "draft_items", "users"
 end
