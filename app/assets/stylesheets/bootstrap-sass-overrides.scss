@@ -1,2 +1,5 @@
 $jupiter-primary: #dbe1ef;
+$theme-colors: (
+  "jupiter-primary": $jupiter-primary
+);
 $primary: darken($jupiter-primary, 30%);
