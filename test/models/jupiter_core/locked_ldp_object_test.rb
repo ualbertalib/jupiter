@@ -311,7 +311,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
       has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
     end
 
-    different_obj = another_klass.new_locked_ldp_object(title: generate_random_string, owner: users(:regular_user).id,
+    different_obj = another_klass.new_locked_ldp_object(title: generate_random_string, owner: users(:regular).id,
                                                         visibility: JupiterCore::VISIBILITY_PRIVATE)
     different_obj.unlock_and_fetch_ldp_object(&:save!)
 
@@ -334,7 +334,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     assert_equal 0, query.count
 
     # shared query criteria works
-    query = (@@klass.all + another_klass.all).where(owner: users(:regular_user).id)
+    query = (@@klass.all + another_klass.all).where(owner: users(:regular).id)
     assert_equal 3, query.count
 
     # everything is what we expect
