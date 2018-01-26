@@ -25,9 +25,10 @@
   <%# Collection images, shown only on larger screens %>
   <div class="d-none d-md-block">
     <div class="d-flex flex-row">
-      <div class="image-with-text mx-3 col-lg-5">
+      <div class="image-with-text mx-3 col-md-3">
         <%= link_to '#TODO' do %>
-          <%= image_tag 'dept-of-agriculture.jpg', alt: t('.afns_collection') %>
+          <%= image_tag 'dept-of-agriculture.jpg', alt: t('.afns_collection'),
+              class: 'agriculture' %>
           <p class="small"><%= t('.afns_collection') %></p>
         <% end %>
       </div>

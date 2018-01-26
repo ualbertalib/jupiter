@@ -61,6 +61,12 @@ body {
     min-height: 100%;
     object-fit: cover;
     width: 100%;
+
+  }
+
+  .agriculture {
+    // Make sure the people are in the picture
+    object-position: 75% 50%;
   }
 
   p {
