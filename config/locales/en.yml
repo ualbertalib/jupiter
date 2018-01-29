@@ -403,6 +403,9 @@ en:
       please_follow_the_steps: 'Looks like you tried to skip ahead. Please follow the steps accordingly'
       files_are_required_to_continue: 'You are required at least one file attached before continuing'
       successful_deposit: 'Item Deposit was successful!'
+      continue_draft: 'Continue Draft'
+      delete_confirm: 'Are you sure you want to delete draft item "%{title}"?'
+      successful_deletion: 'Draft Item was successfully deleted!'
 
       describe_item:
         header: 'Describe Item'

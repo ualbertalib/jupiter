@@ -14,6 +14,12 @@ class ProfileIndexTest < ApplicationSystemTestCase
     assert_selector 'dl dd', text: user.email
     assert_selector 'dl dd', text: user.created_at.to_date.to_s
 
+    # Shows draft items
+    assert_selector 'h2', text: I18n.t('profile.index.draft_items_header')
+    assert_selector '.test-draft-items .list-group-item', count: 2
+    assert_selector '.test-draft-items .list-group-item .media-body h4', text: user.draft_items.first.title
+    assert_selector '.test-draft-items .list-group-item .media-body h4', text: user.draft_items.last.title
+
     logout_user
   end
 

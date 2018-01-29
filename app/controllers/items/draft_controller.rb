@@ -74,4 +74,14 @@ class Items::DraftController < ApplicationController
     redirect_to wizard_path(steps.first, item_id: @draft_item.id)
   end
 
+  def destroy
+    @draft_item = DraftItem.find(params[:item_id])
+    authorize @draft_item
+
+
+    @draft_item.destroy
+
+    redirect_back(fallback_location: root_path, notice: t('.successful_deletion'))
+  end
+
 end

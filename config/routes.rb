@@ -7,6 +7,8 @@ Rails.application.routes.draw do
       post :create_draft, controller: 'items/draft', action: :create
     end
 
+    delete :delete_draft, to: 'items/draft#destroy'
+
     resources :draft, only: [:show, :update], controller: 'items/draft'
     resources :files, only: [:create, :destroy], controller: 'items/files' do
       member do
