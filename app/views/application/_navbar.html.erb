@@ -19,10 +19,10 @@
     </button>
 
     <div class="collapse navbar-collapse" id="jupiter-main-nav" aria-expanded="false">
-      <ul class="navbar-nav mr-auto d-none d-md-block">
+      <ul class="navbar-nav mr-auto d-none d-md-block w-100">
 
         <li role="presentation" class="nav-item mr-3">
-          <form class="form-inline" action="<%= search_path %>">
+          <form class="d-inline" action="<%= search_path %>">
             <div class="input-group" aria-label="navbar-search">
               <%= search_field_tag 'search', nil, placeholder: t('.search.placeholder'),
                   value: params[:search], id: 'navbar-search-lg', 'aria-label': 'search-box', class: "form-control" %>
@@ -57,7 +57,7 @@
             <a href="#"
               role="button"
               id="jupiter-user-nav-downdown"
-              class="dropdown-toggle nav-link"
+              class="dropdown-toggle nav-link text-nowrap"
               data-toggle="dropdown"
               aria-haspopup="true"
               aria-expanded="false">
