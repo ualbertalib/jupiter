@@ -78,7 +78,6 @@ class Items::DraftController < ApplicationController
     @draft_item = DraftItem.find(params[:item_id])
     authorize @draft_item
 
-
     @draft_item.destroy
 
     redirect_back(fallback_location: root_path, notice: t('.successful_deletion'))
