@@ -21,7 +21,7 @@ class DeferredSimpleSolrQueryTest < ActiveSupport::TestCase
                                         visibility: JupiterCore::VISIBILITY_PUBLIC)
     another_obj = @@klass.new_locked_ldp_object(title: 'zoo', owner: users(:regular).id,
                                                 visibility: JupiterCore::VISIBILITY_PUBLIC)
-    private_obj = @@klass.new_locked_ldp_object(title: 'boo', owner: users(:regular_user).id,
+    private_obj = @@klass.new_locked_ldp_object(title: 'boo', owner: users(:regular).id,
                                                 visibility: JupiterCore::VISIBILITY_PRIVATE)
 
     obj.unlock_and_fetch_ldp_object(&:save!)
