@@ -1,10 +1,10 @@
 <div class="pt-md-3">
   <%# Two columns on large screens, wrap on smaller screens %>
   <div class="d-flex flex-row flex-wrap">
-    <div class="col-12 col-md-5 px-3">
+    <div class="col-12 col-md-5 px-0 px-md-3">
       <h4><%= t('.welcome_header') %></h4>
     </div>
-    <div class="align-self-center pl-3 pr-0 col-md-7">
+    <div class="align-self-center px-0 px-md-3 col-md-7">
       <%= link_to "https://era-av.libary.ualberta.ca", class: 'btn btn-jupiter-primary w-100' do %>
         <p class="mb-0 lead">
           <%= fa_icon 'play-circle' %>
@@ -18,7 +18,7 @@
     </div>
   </div>
 
-  <p class="mx-3 mt-3 mb-1 lead font-weight-bold">
+  <p class="mx-md-3 mt-3 mb-1 lead font-weight-bold">
     <%= t('.explore_collections') %>
   </p>
 
@@ -66,7 +66,7 @@
   </div>
 
   <%# List of collection links, shown only on smaller screens %>
-  <div class="d-md-none m-3 w-100 collection-links">
+  <div class="d-md-none w-100 collection-links">
     <div>
       <%= link_to t('.osrin_collection'), '#TODO', class: 'btn btn-jupiter-primary w-100' %>
     </div>
