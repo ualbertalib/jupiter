@@ -67,7 +67,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     creator2 = generate_random_string
     creator3 = generate_random_string
     obj.unlock_and_fetch_ldp_object do |uo|
-      uo.owner = users(:regular_user).id
+      uo.owner = users(:regular).id
       uo.visibility = JupiterCore::VISIBILITY_PUBLIC
       uo.creator = [creator1, creator2, creator3]
       uo.save!
@@ -237,7 +237,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     obj.unlock_and_fetch_ldp_object do |uo|
       uo.title = 'Title'
       uo.visibility = JupiterCore::VISIBILITY_PUBLIC
-      uo.owner = users(:regular_user).id
+      uo.owner = users(:regular).id
     end
 
     assert_predicate obj, :changed?
@@ -250,7 +250,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     creator = [generate_random_string]
     first_title = generate_random_string
 
-    obj = @@klass.new_locked_ldp_object(title: first_title, creator: creator, owner: users(:regular_user).id,
+    obj = @@klass.new_locked_ldp_object(title: first_title, creator: creator, owner: users(:regular).id,
                                         visibility: JupiterCore::VISIBILITY_PUBLIC)
 
     assert obj.record_created_at.nil?
@@ -270,7 +270,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
 
     second_title = generate_random_string
 
-    another_obj = @@klass.new_locked_ldp_object(title: second_title, creator: creator, owner: users(:regular_user).id,
+    another_obj = @@klass.new_locked_ldp_object(title: second_title, creator: creator, owner: users(:regular).id,
                                                 visibility: JupiterCore::VISIBILITY_PUBLIC)
     another_obj.unlock_and_fetch_ldp_object(&:save!)
 
@@ -311,7 +311,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
       has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
     end
 
-    different_obj = another_klass.new_locked_ldp_object(title: generate_random_string, owner: users(:regular_user).id,
+    different_obj = another_klass.new_locked_ldp_object(title: generate_random_string, owner: users(:regular).id,
                                                         visibility: JupiterCore::VISIBILITY_PRIVATE)
     different_obj.unlock_and_fetch_ldp_object(&:save!)
 
@@ -334,7 +334,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     assert_equal 0, query.count
 
     # shared query criteria works
-    query = (@@klass.all + another_klass.all).where(owner: users(:regular_user).id)
+    query = (@@klass.all + another_klass.all).where(owner: users(:regular).id)
     assert_equal 3, query.count
 
     # everything is what we expect
@@ -345,6 +345,10 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
 
     assert_equal obj.id, query.first(2)[1].id
     assert_equal @@klass, query.first(2)[1].class
+
+    obj.unlock_and_fetch_ldp_object(&:destroy)
+    another_obj.unlock_and_fetch_ldp_object(&:destroy)
+    different_obj.unlock_and_fetch_ldp_object(&:destroy)
   end
 
   # TODO: maybe "upstream" deserves its own section in our test suite

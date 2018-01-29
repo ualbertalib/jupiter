@@ -13,7 +13,7 @@ class UserActivityTest < ActionDispatch::IntegrationTest
     now1 = nil
     freeze_time do
       now1 = Time.now.utc.to_s
-      user = users(:regular_user)
+      user = users(:regular)
       perform_enqueued_jobs do
         sign_in_as user
       end
@@ -28,7 +28,7 @@ class UserActivityTest < ActionDispatch::IntegrationTest
     # Second sign-in
     travel 1.hour do
       now2 = Time.now.utc.to_s
-      user = users(:regular_user)
+      user = users(:regular)
       perform_enqueued_jobs do
         sign_in_as user
       end
@@ -41,7 +41,7 @@ class UserActivityTest < ActionDispatch::IntegrationTest
   end
 
   test 'visiting a page after a sufficient time updates user activity' do
-    user = users(:regular_user)
+    user = users(:regular)
     sign_in_as user
 
     # Note, the previous line updated the columns of interest (won't be nil, stash values here)

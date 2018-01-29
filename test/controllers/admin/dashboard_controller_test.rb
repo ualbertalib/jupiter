@@ -9,7 +9,7 @@ class Admin::DashboardControllerTest < ActionDispatch::IntegrationTest
   end
 
   should 'not be able to get to /admin if non admin user' do
-    user = users(:regular_user)
+    user = users(:regular)
     sign_in_as user
 
     assert_raises ActionController::RoutingError do
