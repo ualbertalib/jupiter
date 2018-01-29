@@ -1,6 +1,4 @@
-<div class="mt-3">
-  <h2><%= draft_items_header %></h4>
-</div>
+<h2 class="mt-5"><%= draft_items_header %></h4>
 
 <div class="test-draft-items list-group mb-3">
   <% if @draft_items.present? %>
@@ -52,10 +50,9 @@
   <% end %>
 </div>
 
-<div class="mt-3">
-  <h2><%= items_header %></h2>
-</div>
+<h2 class="mt-5"><%= items_header %></h2>
 
+<%# TODO: this needs to use a rails form_tag, etc here %>
 <form>
   <div class="input-group mt-3">
     <%= search_field_tag :query,
@@ -75,7 +72,5 @@
   <%= render partial: 'search/model_results', locals: { results: @results, model: :item,
                                                         search_term: params[:query] } %>
 <% else %>
-  <div>
-    <p class="mt-3"><%= no_items_found %></p>
-  </div>
+  <p class="mt-3"><%= no_items_found %></p>
 <% end %>
