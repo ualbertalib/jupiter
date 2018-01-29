@@ -67,7 +67,7 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
 
   test 'visiting the show page for a community with two collections and a logo '\
        'as a regular user' do
-    user = users(:regular_user)
+    user = users(:regular)
     sign_in_as user
     get community_url(@community1)
 
@@ -103,7 +103,7 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
   end
 
   test 'visiting a community with no collections or logo' do
-    user = users(:regular_user)
+    user = users(:regular)
     sign_in_as user
     get community_url(@community2)
 

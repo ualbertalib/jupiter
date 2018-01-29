@@ -14,7 +14,7 @@ class AdminUsersShowTest < ApplicationSystemTestCase
 
     click_link I18n.t('admin.users.index.header')
     assert_selector 'h1', text: I18n.t('admin.users.index.header')
-    assert_selector 'tbody tr', count: 4
+    assert_selector 'tbody tr', count: 5
     assert_selector 'tbody tr:first-child th[scope="row"]', text: admin.email
 
     click_link admin.email
@@ -33,7 +33,7 @@ class AdminUsersShowTest < ApplicationSystemTestCase
 
   should 'be able to toggle suspended/admin a regular user' do
     admin = users(:admin)
-    user = users(:regular_user)
+    user = users(:regular)
 
     login_user(admin)
 
@@ -44,7 +44,7 @@ class AdminUsersShowTest < ApplicationSystemTestCase
 
     click_link I18n.t('admin.users.index.header')
     assert_selector 'h1', text: I18n.t('admin.users.index.header')
-    assert_selector 'tbody tr', count: 4
+    assert_selector 'tbody tr', count: 5
     assert_selector 'tbody tr:first-child th[scope="row"]', text: admin.email
 
     click_link user.email
@@ -106,7 +106,7 @@ class AdminUsersShowTest < ApplicationSystemTestCase
 
   should 'be able to login as a regular user' do
     admin = users(:admin)
-    user = users(:regular_user)
+    user = users(:regular)
 
     login_user(admin)
 
@@ -117,7 +117,7 @@ class AdminUsersShowTest < ApplicationSystemTestCase
 
     click_link I18n.t('admin.users.index.header')
     assert_selector 'h1', text: I18n.t('admin.users.index.header')
-    assert_selector 'tbody tr', count: 4
+    assert_selector 'tbody tr', count: 5
     assert_selector 'tbody tr:first-child th[scope="row"]', text: admin.email
 
     click_link user.email

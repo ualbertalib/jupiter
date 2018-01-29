@@ -1,0 +1,21 @@
+<div class="row p-3">
+  <% if @draft_item.files.empty? %>
+    <div class="col-md-12 text-center">
+      <h4><%= t('.no_saved_files') %></h4>
+    </div>
+  <% else %>
+    <div class="col-md-4">
+      <h4><%= t('.item_thumbnail') %></h4>
+
+
+      <%= render partial: 'items/draft/thumbnail', locals: { thumbnail: @draft_item.thumbnail }%>
+
+      <p class="text-muted"><%= t('.thumbnail_of_first_file') %></p>
+    </div>
+    <div class="col-md-8">
+      <% @draft_item.files.each do |file| %>
+        <%= render partial: 'items/draft/file', locals: { file: file } %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

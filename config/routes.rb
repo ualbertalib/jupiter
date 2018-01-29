@@ -3,6 +3,17 @@ require_dependency 'admin_constraint'
 
 Rails.application.routes.draw do
   resources :items do
+    collection do
+      post :create_draft, controller: 'items/draft', action: :create
+    end
+
+    resources :draft, only: [:show, :update], controller: 'items/draft'
+    resources :files, only: [:create, :destroy], controller: 'items/files' do
+      member do
+        patch :set_thumbnail
+      end
+    end
+
     member do
       match 'download/*file_name' => 'file_sets#download', :format => false, via: :get
       match 'view/*file_name' => 'file_sets#show', :format => false, via: :get

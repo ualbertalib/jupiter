@@ -53,7 +53,7 @@ class CommunityEditTest < ActionDispatch::IntegrationTest
   end
 
   test 'visiting the edit page for a community as a regular user' do
-    user = users(:regular_user)
+    user = users(:regular)
     sign_in_as user
 
     # Should return 404

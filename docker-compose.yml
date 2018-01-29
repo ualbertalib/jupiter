@@ -15,6 +15,9 @@ services:
   # Selenium with chrome driver for system tests
   selenium:
     image: selenium/standalone-chrome
+    volumes:
+      # copy fixture files for file uploads
+      - ./test/fixtures/files:/app/test/fixtures/files
 
   mysql:
     image: mysql:5.7

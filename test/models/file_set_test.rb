@@ -29,7 +29,7 @@ class FileSetTest < ActiveSupport::TestCase
     # It seems unfortunate as a side-effect of improved item validations, we need to create these in tests that
     # don't care about them...
     community = Community.new_locked_ldp_object(title: 'Community', owner: 1).unlock_and_fetch_ldp_object(&:save!)
-    collection = Collection.new_locked_ldp_object(title: 'foo', owner: users(:regular_user).id,
+    collection = Collection.new_locked_ldp_object(title: 'foo', owner: users(:regular).id,
                                                   community_id: community.id).unlock_and_fetch_ldp_object(&:save!)
 
     item = Item.new_locked_ldp_object(title: generate_random_string,

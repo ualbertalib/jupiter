@@ -3,6 +3,10 @@
 
 scss_files: 'app/assets/stylesheets/**/*.scss'
 
+exclude:
+  # TODO: Temporary, remove after select2 width issue is fixed, see excluded file for more details
+  - "app/assets/stylesheets/item_draft.scss"
+
 linters:
 
   # `scss-lint:disable` control comments should be preceded by a comment
