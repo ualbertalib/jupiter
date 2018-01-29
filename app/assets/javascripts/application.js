@@ -13,6 +13,7 @@
 //= require rails-ujs
 //= require turbolinks
 //= require jquery3
+//= require jquery-multidownload/jquery-multidownload
 //= require popper
 //= require bootstrap
 //= require select2
