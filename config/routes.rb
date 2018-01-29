@@ -69,7 +69,7 @@ Rails.application.routes.draw do
   get 'sitemap-theses.xml', to: 'sitemap#theses', defaults: { format: :xml }
 
   # Dynamic robots.txt
-  get 'robots.:format' => 'robots#robots'
+  get 'robots.txt' => 'robots#robots'
 
   root to: 'welcome#index'
 end

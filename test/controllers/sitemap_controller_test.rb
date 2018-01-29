@@ -58,7 +58,7 @@ class SitemapTest < ActionDispatch::IntegrationTest
       get sitemapindex_url
     end
     should 'be valid sitemapindex xml' do
-      schema = Nokogiri::XML::Schema(File.open(File.join(File.dirname(__FILE__), 'siteindex.xsd')))
+      schema = Nokogiri::XML::Schema(File.open(file_fixture('siteindex.xsd')))
       document = Nokogiri::XML(@response.body)
       assert_empty schema.validate(document)
     end
@@ -76,7 +76,7 @@ class SitemapTest < ActionDispatch::IntegrationTest
       get items_sitemap_url
     end
     should 'be valid sitemap xml' do
-      schema = Nokogiri::XML::Schema(File.open(File.join(File.dirname(__FILE__), 'sitemap.xsd')))
+      schema = Nokogiri::XML::Schema(File.open(file_fixture('sitemap.xsd')))
       document = Nokogiri::XML(@response.body)
       assert_empty schema.validate(document)
     end
@@ -117,7 +117,7 @@ class SitemapTest < ActionDispatch::IntegrationTest
     end
     should 'be valid sitemap xml' do
       get collections_sitemap_url
-      schema = Nokogiri::XML::Schema(File.open(File.join(File.dirname(__FILE__), 'sitemap.xsd')))
+      schema = Nokogiri::XML::Schema(File.open(file_fixture('sitemap.xsd')))
       document = Nokogiri::XML(@response.body)
       assert_empty schema.validate(document)
     end
@@ -131,7 +131,7 @@ class SitemapTest < ActionDispatch::IntegrationTest
     end
     should 'show location and last modified' do
       assert_select 'loc', community_collection_url(@collection.community, @collection)
-      assert_select 'lastmod', @collection.updated_at.to_s\
+      assert_select 'lastmod', @collection.updated_at.to_s
     end
   end
 
@@ -141,7 +141,7 @@ class SitemapTest < ActionDispatch::IntegrationTest
     end
     should 'be valid sitemap xml' do
       get communities_sitemap_url
-      schema = Nokogiri::XML::Schema(File.open(File.join(File.dirname(__FILE__), 'sitemap.xsd')))
+      schema = Nokogiri::XML::Schema(File.open(file_fixture('sitemap.xsd')))
       document = Nokogiri::XML(@response.body)
       assert_empty schema.validate(document)
     end
@@ -155,7 +155,7 @@ class SitemapTest < ActionDispatch::IntegrationTest
     end
     should 'show location and last modified' do
       assert_select 'loc', community_url(@community)
-      assert_select 'lastmod', @community.updated_at.to_s\
+      assert_select 'lastmod', @community.updated_at.to_s
     end
   end
 
