@@ -1,9 +1,6 @@
-$jupiter-primary: #dbe1ef;
-
 $header-height-large-screen: 76px;
 $header-height-small-screen: 136px;
-$body-bottom: 80px;
-$footer-height: 60px;
+$footer-height: 76px;
 
 $image-with-text-bg: $jupiter-primary;
 $image-with-text-opacity: 0.8;
@@ -16,13 +13,14 @@ html {
 
 body {
   // sticky footer height
-  margin-bottom: $body-bottom;
+  margin-bottom: $header-height-large-screen + $footer-height;
   // padding for fixed header.
   padding-top: $header-height-large-screen;
 }
 
 @include media-breakpoint-between(xs, sm) {
   body {
+    margin-bottom: $header-height-small-screen + $footer-height;
     // header needs more room on small screens for search box
     padding-top: $header-height-small-screen;
   }
@@ -37,16 +35,12 @@ body {
 
 .footer {
   bottom: 0px;
-  height: $footer-height;
-  line-height: $footer-height; // Vertically center the text there
   position: absolute;
   width: 100%;
-}
 
-@include media-breakpoint-between(xs, sm) {
-  // Too much space between stacked content on small screens
-  .footer {
-    line-height: 1.5;
+  .container {
+    max-width: 100%;
+    width: 100%;
   }
 }
 
