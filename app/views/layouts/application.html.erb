@@ -15,7 +15,7 @@
     <%= render partial: 'navbar' %>
     <%= render partial: 'banner' %>
     <%= render partial: 'announcement' %>
-    <main class="container mt-5">
+    <main class="container mt-3">
       <%= render partial: 'flash' %>
       <%= content_for?(:content) ? yield(:content) : yield %>
     </main>
