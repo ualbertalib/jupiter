@@ -21,15 +21,22 @@ class DeferredSimpleSolrQueryTest < ActiveSupport::TestCase
                                         visibility: JupiterCore::VISIBILITY_PUBLIC)
     another_obj = @@klass.new_locked_ldp_object(title: 'zoo', owner: users(:regular).id,
                                                 visibility: JupiterCore::VISIBILITY_PUBLIC)
+    private_obj = @@klass.new_locked_ldp_object(title: 'boo', owner: users(:regular).id,
+                                                visibility: JupiterCore::VISIBILITY_PRIVATE)
 
     obj.unlock_and_fetch_ldp_object(&:save!)
     another_obj.unlock_and_fetch_ldp_object(&:save!)
+    private_obj.unlock_and_fetch_ldp_object(&:save!)
 
     assert @@klass.all.present?
-    assert_equal @@klass.all.total_count, 2
+    assert_equal @@klass.all.total_count, 3
     assert @@klass.where(title: 'foo').first.id == obj.id
 
-    assert_equal @@klass.sort(:title, :desc).map(&:id), [another_obj.id, obj.id]
+    assert_equal @@klass.sort(:title, :desc).map(&:id), [another_obj.id, obj.id, private_obj.id]
+
+    # visibility constraints
+    assert_equal 2, @@klass.where(visibility: JupiterCore::VISIBILITY_PUBLIC).count
+    assert_equal private_obj.id, @@klass.where(visibility: JupiterCore::VISIBILITY_PRIVATE).first.id
   end
 
   # regression test for #138
