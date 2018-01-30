@@ -16,4 +16,9 @@ module ItemsHelper
     text ||= license
     link_to(text, license)
   end
+
+  def authors(object)
+    return [object.dissertant] if object.respond_to? :dissertant
+    return object.creators if object.respond_to? :creators
+  end
 end
