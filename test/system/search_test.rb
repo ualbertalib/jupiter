@@ -220,17 +220,17 @@ class SearchTest < ApplicationSystemTestCase
       assert_selector 'li div a', text: /Extra Community/, count: 6
 
       # Should be a 'Show more' button to see the rest
-      assert_selector 'a', text: 'Show 14 more', count: 1
+      assert_selector 'a[aria-controls="member_of_paths_dpsim_hidden"]', count: 1
 
-      click_link 'Show 14 more'
+      click_link 'Show 4 more', href: '#member_of_paths_dpsim_hidden'
 
       # Now 20 collections/communities should be shown
-      assert_selector 'li div a', text: /Extra Community/, count: 20
+      assert_selector 'li div a', text: /Extra Community/, count: 10
 
       # Should be a 'Hide' button now
-      assert_selector 'a', text: 'Hide last 14', count: 1
+      assert_selector 'a[aria-controls="member_of_paths_dpsim_hidden"]', count: 1
 
-      click_link 'Hide last 14'
+      click_link 'Hide last 4', href: '#member_of_paths_dpsim_hidden'
 
       # Again, only 6 collections/communities should be shown
       assert_selector 'li div a', text: /Extra Community/, count: 6
@@ -284,6 +284,7 @@ class SearchTest < ApplicationSystemTestCase
   end
 
   context 'Searching as admin user' do
+    # TODO: Slow Test, consistently around ~8-9 seconds
     should 'be able to filter the public and private items' do
       admin = users(:admin)
       login_user(admin)

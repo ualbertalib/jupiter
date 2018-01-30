@@ -16,4 +16,5 @@
 //= require popper
 //= require bootstrap
 //= require select2
+//= require dropzone
 //= require_tree ./jupiter

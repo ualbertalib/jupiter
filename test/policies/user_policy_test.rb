@@ -5,7 +5,7 @@ class UserPolicyTest < ActiveSupport::TestCase
   context 'admin user' do
     should 'have proper authorization over other users' do
       current_user = users(:admin)
-      users_profile = users(:regular_user)
+      users_profile = users(:regular)
 
       assert UserPolicy.new(current_user, users_profile).index?
 
@@ -21,7 +21,7 @@ class UserPolicyTest < ActiveSupport::TestCase
 
   context 'regular user' do
     should 'allow access to yourself' do
-      current_user = users(:regular_user)
+      current_user = users(:regular)
       users_profile = current_user
 
       refute UserPolicy.new(current_user, users_profile).index?
@@ -36,7 +36,7 @@ class UserPolicyTest < ActiveSupport::TestCase
     end
 
     should 'deny access to other users' do
-      current_user = users(:regular_user)
+      current_user = users(:regular)
       users_profile = users(:admin)
 
       refute UserPolicy.new(current_user, users_profile).index?

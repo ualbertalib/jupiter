@@ -4,9 +4,9 @@ class Admin::UserPolicyTest < ActiveSupport::TestCase
 
   setup do
     @current_user = users(:admin)
-    @user = users(:regular_user)
-    @suspended_user = users(:suspended_user)
-    @admin_user = users(:admin_user)
+    @user = users(:regular)
+    @suspended_user = users(:suspended)
+    @admin_user = users(:admin_two)
   end
 
   context '#suspend?' do

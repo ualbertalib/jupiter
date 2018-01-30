@@ -1,8 +1,11 @@
+// External Library Stylesheets
 @import 'bootstrap';
 @import 'font-awesome';
 @import 'select2';
 @import 'select2-bootstrap';
+@import 'dropzone/dropzone';
 
+// Custom Stylesheets
 @import 'jupiter';
 @import 'simple_form';
 @import 'communities';
@@ -10,3 +13,4 @@
 @import 'logo';
 @import 'search';
 @import 'users';
+@import 'item_draft';

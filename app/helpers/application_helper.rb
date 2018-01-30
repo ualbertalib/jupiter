@@ -14,7 +14,9 @@ module ApplicationHelper
   end
 
   def humanize_uri(vocab, uri)
-    humanize_uri_code(vocab, CONTROLLED_VOCABULARIES[vocab].from_uri(uri))
+    code = CONTROLLED_VOCABULARIES[vocab].from_uri(uri)
+    return nil if code.nil?
+    humanize_uri_code(vocab, code)
   end
 
   def path_for_result(result)
