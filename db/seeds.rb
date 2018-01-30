@@ -175,7 +175,7 @@ if Rails.env.development? || Rails.env.uat?
           uo.add_to_path(community.id, thesis_collection.id)
           uo.save!
           # Attach a file to the mondo-item
-          file = File.open(Rails.root + 'app/assets/images/mc_360.png', 'r')
+          file = File.open(Rails.root + 'app/assets/images/era-logo.png', 'r')
           uo.add_files([file])
           file.close
         else
@@ -222,7 +222,7 @@ if Rails.env.development? || Rails.env.uat?
           uo.add_to_path(community.id, thesis_collection.id)
           uo.save!
           # Attach a file to the mondo-item
-          file = File.open(Rails.root + 'app/assets/images/mc_360.png', 'r')
+          file = File.open(Rails.root + 'app/assets/images/era-logo.png', 'r')
           uo.add_files([file])
           file.close
         else
