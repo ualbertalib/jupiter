@@ -4,6 +4,9 @@ class JupiterCore::Search
   # https://wiki.apache.org/solr/CommonQueryParameters
   MAX_RESULTS = 10_000_000
 
+  # Maximum number of facet results to retrieve per Facet
+  MAX_FACETS_RETURNED = 10
+
   # Performs a solr search using the given query and filtered query strings.
   # Returns an instance of +DeferredFacetedSolrQuery+ providing result counts, +LockedLDPObject+ representing results,
   # and access to result facets. Results are lazily generated when you attempt to enumerate them, so that you can
@@ -59,38 +62,48 @@ class JupiterCore::Search
     ' OR _query_:"-visibility_ssim:[* TO *] AND *:*" OR _query_:"visibility_ssim:*"'
   end
 
-  def self.perform_solr_query(q:, qf: '', fq: '', facet: false, facet_fields: [],
+  def self.perform_solr_query(q:, qf: '', fq: '', facet: false, facet_fields: [], facet_max: MAX_FACETS_RETURNED,
                               restrict_to_model: nil, rows: MAX_RESULTS, start: nil, sort: nil)
-    query = []
-    restrict_to_model = [restrict_to_model] unless restrict_to_model.is_a?(Array)
-
-    model_scopes = []
-
-    restrict_to_model.each do |model|
-      model_scopes << %Q(_query_:"{!raw f=has_model_ssim}#{model.name}")
-    end
-
-    query << "(#{model_scopes.join(' OR ')})"
-
-    query.append(q) if q.present?
-
-    params = {
-      q: query.join(' AND '),
-      qf: qf,
-      fq: fq,
-      facet: facet,
-      rows: rows,
-      'facet.field': facet_fields
-    }
-
-    params[:start] = start if start.present?
-    params[:sort] = sort if sort.present?
+    params = prepare_solr_query(q: q, qf: qf, fq: fq, facet: facet, facet_fields: facet_fields, facet_max: facet_max,
+                                restrict_to_model: restrict_to_model, rows: rows, start: start, sort: sort)
 
     response = ActiveFedora::SolrService.instance.conn.get('select', params: params)
 
     raise SearchFailed unless response['responseHeader']['status'] == 0
 
     [response['response']['numFound'], response['response']['docs'], response['facet_counts']]
+  end
+
+  def self.prepare_solr_query(q:, qf: '', fq: '', facet: false, facet_fields: [], facet_max: MAX_FACETS_RETURNED,
+                              restrict_to_model: nil, rows: MAX_RESULTS, start: nil, sort: nil)
+    query = []
+    restrict_to_model = [restrict_to_model] unless restrict_to_model.is_a?(Array)
+
+    model_scopes = []
+
+    restrict_to_model.compact.each do |model|
+      model_scopes << %Q(_query_:"{!raw f=has_model_ssim}#{model.name}")
+    end
+    fquery = []
+    fquery << "(#{model_scopes.join(' OR ')})" if model_scopes.present?
+
+    query.append(q) if q.present?
+    fquery.append(fq) if fq.present?
+
+    params = {
+      q: query.join(' AND '),
+      qf: qf,
+      fq: fquery.join(' AND '),
+      facet: facet,
+      rows: rows,
+      'facet.field': facet_fields,
+      'facet.limit': facet_max
+    }
+
+    params[:start] = start if start.present?
+    params[:sort] = sort if sort.present?
+
+    params
   end
 
   class << self

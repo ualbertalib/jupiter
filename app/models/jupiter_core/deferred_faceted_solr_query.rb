@@ -44,6 +44,7 @@ class JupiterCore::DeferredFacetedSolrQuery
   end
 
   def each_facet_with_results
+    reify_result_set
     @facets.each do |facet|
       yield facet if facet.present?
     end
@@ -77,14 +78,10 @@ class JupiterCore::DeferredFacetedSolrQuery
   end
 
   def total_count
-    results_count, _ = JupiterCore::Search.perform_solr_query(q: criteria[:q],
-                                                              qf: criteria[:qf],
-                                                              fq: criteria[:fq],
-                                                              restrict_to_model: criteria[:restrict_to_model],
-                                                              rows: 0,
-                                                              start: criteria[:offset],
-                                                              sort: sort_clause)
-    results_count
+    @total_count_cache ||= begin
+      results_count, _ = JupiterCore::Search.perform_solr_query(search_args_with_limit(0))
+      results_count
+    end
   end
 
   # ActiveSupport#present? and other related protocols depend on this
@@ -93,23 +90,21 @@ class JupiterCore::DeferredFacetedSolrQuery
     total_count == 0
   end
 
+  def inspect_query
+    JupiterCore::Search.prepare_solr_query(search_args_with_limit(criteria[:limit])).inspect
+  end
+
   private
 
   def uncache!
-    @count_cache = nil
+    @count_cache = @total_count_cache = nil
   end
 
   def reify_result_set
     return @results if @results.present?
-    _, @results, facet_data = JupiterCore::Search.perform_solr_query(q: criteria[:q],
-                                                                     qf: criteria[:qf],
-                                                                     fq: criteria[:fq],
-                                                                     facet: true,
-                                                                     facet_fields: criteria[:facet_fields],
-                                                                     restrict_to_model: criteria[:restrict_to_model],
-                                                                     rows: criteria[:limit],
-                                                                     start: criteria[:offset],
-                                                                     sort: sort_clause)
+    @count_cache, @results, facet_data = JupiterCore::Search.perform_solr_query(
+      search_args_with_limit(criteria[:limit])
+    )
 
     @facets = facet_data['facet_fields'].map do |k, v|
       JupiterCore::FacetResult.new(criteria[:facet_map], k, v) if v.present?
@@ -125,6 +120,18 @@ class JupiterCore::DeferredFacetedSolrQuery
       sorts << "#{sort_col} #{criteria[:sort_order][idx]}"
     end
     sorts.join(',')
+  end
+
+  def search_args_with_limit(limit)
+    { q: criteria[:q],
+      qf: criteria[:qf],
+      fq: criteria[:fq],
+      facet: true,
+      facet_fields: criteria[:facet_fields],
+      restrict_to_model: criteria[:restrict_to_model],
+      rows: limit,
+      start: criteria[:offset],
+      sort: sort_clause }
   end
 
 end
