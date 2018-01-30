@@ -22,9 +22,9 @@ class FileSetTest < ActiveSupport::TestCase
   end
 
   test 'attaching files' do
-    file = ActionDispatch::Http::UploadedFile.new(filename: 'logo_test.png',
-                                                  content_type: 'image/png',
-                                                  tempfile: File.open(Rails.root + 'app/assets/images/mc_360.png'))
+    file = ActionDispatch::Http::UploadedFile.new(filename: 'image-sample.jpeg',
+                                                  content_type: 'image/jpeg',
+                                                  tempfile: File.open(file_fixture('image-sample.jpeg')))
 
     # It seems unfortunate as a side-effect of improved item validations, we need to create these in tests that
     # don't care about them...
@@ -51,7 +51,7 @@ class FileSetTest < ActiveSupport::TestCase
 
     file_set = item.file_sets.first
     refute file_set.nil?
-    assert_equal file_set.contained_filename, 'logo_test.png'
+    assert_equal file_set.contained_filename, 'image-sample.jpeg'
     file_set.unlock_and_fetch_ldp_object do |unlocked_fileset|
       assert unlocked_fileset.original_file.uri =~ /http.*fcrepo\/rest\/.*#{file_set.id}\/files\/.*/
     end

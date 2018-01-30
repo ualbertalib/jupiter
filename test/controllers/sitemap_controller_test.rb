@@ -23,7 +23,7 @@ class SitemapTest < ActionDispatch::IntegrationTest
                   uo.add_to_path(@community.id, @collection.id)
                   uo.save!
                   # Attach a file to the item so that it has attributes to check for
-                  file = File.open(Rails.root + 'app/assets/images/mc_360.png', 'r')
+                  file = File.open(file_fixture('image-sample.jpeg'), 'r')
                   uo.add_files([file])
                   file.close
                 end
