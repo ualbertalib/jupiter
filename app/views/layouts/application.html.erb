@@ -13,7 +13,7 @@
 
   <body>
     <%= render partial: 'navbar' %>
-    <%= render partial: 'banner' %>
+    <%= yield(:banner) if content_for?(:banner) %>
     <%= render partial: 'announcement' %>
     <main class="container mt-3">
       <%= render partial: 'flash' %>

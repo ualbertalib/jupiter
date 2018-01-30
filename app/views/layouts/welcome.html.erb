@@ -1,0 +1,8 @@
+<% content_for(:banner) do %>
+  <%= image_tag 'campus-banner.jpg', class: 'img-fluid w-100', alt: 'banner image' %>
+<% end %>
+<% content_for(:content) do %>
+  <%= yield  %>
+<% end %>
+
+<%= render template: 'layouts/application' %>
