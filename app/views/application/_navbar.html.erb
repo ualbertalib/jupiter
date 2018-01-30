@@ -101,7 +101,8 @@
         <%= search_field_tag 'search', nil, placeholder: t('.search.placeholder'),
             value: params[:search], id: 'navbar-search-sm', 'aria-label': 'search-box', class: "form-control" %>
         <div class="input-group-btn">
-          <button type="submit" class="btn btn-secondary" title="<%= t('.search.button_text') %>">
+          <button type="submit" class="btn btn-secondary" title="<%= t('.search.button_text') %>"
+                  aria-label="search">
             <%= fa_icon 'search' %>
           </button>
         </div>
