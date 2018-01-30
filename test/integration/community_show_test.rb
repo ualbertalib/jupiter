@@ -20,8 +20,8 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
                    .new_locked_ldp_object(community_id: @community1.id,
                                           title: 'Another collection', owner: 1)
                    .unlock_and_fetch_ldp_object(&:save!)
-    @community1.logo.attach io: File.open(Rails.root + 'app/assets/images/era-logo.png'),
-                            filename: 'era-logo.png', content_type: 'image/png'
+    @community1.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
+                            filename: 'image-sample.jpeg', content_type: 'image/jpeg'
 
     # A community with no collections
     @community2 = Community

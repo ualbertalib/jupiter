@@ -22,37 +22,37 @@ class CommunityTest < ActiveSupport::TestCase
                  .unlock_and_fetch_ldp_object(&:save!)
     assert c.to_gid.present?
 
-    c.logo.attach io: File.open(Rails.root + 'app/assets/images/era-logo.png'),
-                  filename: 'logo_test.png', content_type: 'image/png'
+    c.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
+                  filename: 'image-sample.jpeg', content_type: 'image/jpeg'
 
     assert c.logo.is_a?(ActiveStorage::Attached::One)
     # 'name' refers to the attribute of the record, not filename
     assert_equal c.logo.name, :logo
     assert_equal c.logo.record_gid, c.to_gid.to_s
-    assert_equal c.logo.blob.filename, 'logo_test.png'
-    assert_equal c.logo.blob.content_type, 'image/png'
-    assert_equal c.logo.blob.byte_size, 5_612
+    assert_equal c.logo.blob.filename, 'image-sample.jpeg'
+    assert_equal c.logo.blob.content_type, 'image/jpeg'
+    assert_equal c.logo.blob.byte_size, 12_401
 
     # Find file on disk
     key = c.logo.blob.key
     assert key.is_a?(String)
     file_path = ActiveStorage::Blob.service.root + "/#{key[0..1]}/#{key[2..3]}/#{key}"
     assert File.exist?(file_path)
-    assert_equal c.logo.blob.checksum, '1Am0HbFs+vnzFawgUy6sBw=='
+    assert_equal c.logo.blob.checksum, 'cRecc//RM88PJeP3s1cu9w=='
   end
 
   test 'an updated logo replaces the old one' do
     c = Community.new_locked_ldp_object(owner: users(:admin).id, title: 'Logo test')
                  .unlock_and_fetch_ldp_object(&:save!)
-    c.logo.attach io: File.open(Rails.root + 'app/assets/images/era-logo.png'),
-                  filename: 'logo1.png', content_type: 'image/png'
+    c.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
+                  filename: 'sample1.jpeg', content_type: 'image/jpeg'
 
     # Assert database records exist
     attachment_id1 = c.logo.id
     blob_id1 = c.logo.blob.id
     assert ActiveStorage::Attachment.where(id: attachment_id1).present?
     assert ActiveStorage::Blob.where(id: blob_id1).present?
-    assert_equal c.logo.blob.filename, 'logo1.png'
+    assert_equal c.logo.blob.filename, 'sample1.jpeg'
 
     # Assert file exists
     key = c.logo.blob.key
@@ -61,8 +61,8 @@ class CommunityTest < ActiveSupport::TestCase
 
     # Attach new logo. Note, purging of logo happens as a background job.
     perform_enqueued_jobs do
-      c.logo.attach io: File.open(Rails.root + 'app/assets/images/era-logo.png'),
-                    filename: 'logo2.png', content_type: 'image/png'
+      c.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
+                    filename: 'sample2.jpeg', content_type: 'image/jpeg'
     end
 
     # Assert new database records exist
@@ -72,7 +72,7 @@ class CommunityTest < ActiveSupport::TestCase
     refute_equal blob_id1, blob_id2
     assert ActiveStorage::Attachment.where(id: attachment_id2).present?
     assert ActiveStorage::Blob.where(id: blob_id2).present?
-    assert_equal c.logo.blob.filename, 'logo2.png'
+    assert_equal c.logo.blob.filename, 'sample2.jpeg'
 
     # Assert old database records are gone
     refute ActiveStorage::Attachment.where(id: attachment_id1).present?
