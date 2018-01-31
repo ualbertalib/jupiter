@@ -1,5 +1,3 @@
-require 'tasks/migration/migration_logger'
-
 # set credentials to access fedora
 FEDORA_BASE = ''.freeze
 FEDORA_USER = ''.freeze
@@ -8,69 +6,31 @@ FEDORA_PASS = ''.freeze
 TARGET_FEDORA_BASE = ''.freeze
 
 namespace :migration do
-  desc 'migrate communities to jupiter'
-  task :communities, [:dir] => :environment do |_t, args|
+  desc 'migrate objects to jupiter'
+  task :objects, [:type, :dir] => :environment do |_t, args|
     begin
-      MigrationLogger.info 'START: Migrate Communities'
+      type = args.type
       dir = args.dir
-      # usage: rake migration:communities['<file directory to community triples, path included>']
+      Rails.logger.info "START: Migrate #{type} from #{dir}"
       if File.exist?(dir) && File.directory?(dir)
-        migrate_communities(dir)
+        case type
+        when 'community'
+          migrate_communities(dir)
+        when 'collection'
+          migrate_collections(dir)
+        when 'item'
+          migrate_items(dir)
+        when 'related'
+          migrate_related_objects(dir)
+        when 'thesis'
+          migrate_theses(dir)
+        else
+          Rails.logger.error "Invalid migration type #{type}"
+        end
       else
-        MigrationLogger.error "Invalid directory #{dir}"
+        Rails.logger.error "Invalid directory #{dir}"
       end
-      MigrationLogger.info 'FINISHED: Migrate Communities'
-    rescue StandardError
-      raise
-    end
-  end
-
-  desc 'migrate collections to jupiter'
-  task :collections, [:dir] => :environment do |_t, args|
-    begin
-      MigrationLogger.info 'START: Migrate Collections'
-      dir = args.dir
-      # usage: rake migration:collections['<file directory to collection triple files, path included>']
-      if File.exist?(dir) && File.directory?(dir)
-        migrate_collections(dir)
-      else
-        MigrationLogger.error "Invalid directory #{dir}"
-      end
-      MigrationLogger.info 'FINISHED: Migrate Collections'
-    rescue StandardError
-      raise
-    end
-  end
-
-  desc 'migrate items to jupiter'
-  task :items, [:dir] => :environment do |_t, args|
-    begin
-      MigrationLogger.info 'START: Migrate generic items'
-      dir = args.dir
-      # usage: rake migration:items['<file directory to item triple files, path included>']
-      if File.exist?(dir) && File.directory?(dir)
-        migrate_items(dir)
-      else
-        MigrationLogger.error "Invalid directory #{dir}"
-      end
-      MigrationLogger.info 'FINISHED: Migrate generic items'
-    rescue StandardError
-      raise
-    end
-  end
-
-  desc 'migrate related objects to jupiter'
-  task :related_objects, [:dir] => :environment do |_t, args|
-    begin
-      MigrationLogger.info 'START: Migrate related objects'
-      dir = args.dir
-      # usage: rake migration:related_objects['<file directory to item triple files, path included>']
-      if File.exist?(dir) && File.directory?(dir)
-        migrate_related_objects(dir)
-      else
-        MigrationLogger.error "Invalid directory #{dir}"
-      end
-      MigrationLogger.info 'FINISHED: Migrate related objects'
+      Rails.logger.info "FINISHED: Migrate #{type} from #{dir}"
     rescue StandardError
       raise
     end
@@ -85,7 +45,7 @@ namespace :migration do
   def find_by_noid(noid)
     result = ActiveFedora::SolrService.instance.conn.get 'select', params: { q: "hydra_noid_ssim:#{noid}", fl: 'id' }
     return result['response']['docs'].first['id'] if result['response']['numFound'] == 1
-    MigrationLogger.error "Duplicates found #{noid}" if result['response']['numFound'] > 1
+    Rails.logger.error "Duplicates found #{noid}" if result['response']['numFound'] > 1
     nil
   end
 
@@ -94,8 +54,8 @@ namespace :migration do
     return collection.community_id if collection.present?
     return
   rescue JupiterCore::ObjectNotFound
-    MigrationLogger.error "Given ID: #{collection_id} is a community." unless Community.find(collection_id).nil?
-    MigrationLogger.error "Can't find collection #{collection_id}"
+    Rails.logger.error "Given ID: #{collection_id} is a community." unless Community.find(collection_id).nil?
+    Rails.logger.error "Can't find collection #{collection_id}"
   end
 
   def user_id(owner)
@@ -161,13 +121,13 @@ namespace :migration do
         file.close
         return true
       elsif response.is_a?(Net::HTTPNotFound)
-        MigrationLogger.error "#{download_url.split('/')[-2]} file not found"
+        Rails.logger.error "#{download_url.split('/')[-2]} file not found"
         return false
       else
-        MigrationLogger.error "Problem occurs when download #{download_url}"
+        Rails.logger.error "Problem occurs when download #{download_url}"
       end
     rescue StandardError => e
-      MigrationLogger.error "Problem occurs when download #{download_url}: #{e}"
+      Rails.logger.error "Problem occurs when download #{download_url}: #{e}"
     end
   end
 
@@ -205,13 +165,13 @@ namespace :migration do
         owner = object_value_from_predicate(graph, ::TERMS[:bibo].owner)
         community = object_value_from_predicate(graph, ::Hydra::PCDM::Vocab::PCDMTerms.memberOf)
         if community.nil?
-          MigrationLogger.error "collection #{hydra_noid} don't have community in HydraNorth"
+          Rails.logger.error "collection #{hydra_noid} don't have community in HydraNorth"
           next
         else
           community_noid = community.split('/')[-1] unless community.nil?
           community_id = find_by(noid: community_noid)
           if community_id.nil?
-            MigrationLogger.error "collection #{hydra_noid}'s community #{community_noid} hasn't been migrated"
+            Rails.logger.error "collection #{hydra_noid}'s community #{community_noid} hasn't been migrated"
             next
           else
             collection = Collection.new_locked_ldp_object(title: title, description: description,
@@ -225,6 +185,30 @@ namespace :migration do
         end
       end
     end
+  end
+
+  def get_collections(graph)
+    collections = object_value_from_predicate(graph, ::Hydra::PCDM::Vocab::PCDMTerms.memberOf,
+                                              true)&.map! { |c| c.value }
+    collection_ids = []
+    if collections.nil?
+      Rails.logger.error "#{hydra_noid} do not have a collection"
+    else
+      collections.each do |c|
+        noid = c.split('/')[-1]
+        collection_id = find_by(noid: noid)
+        collection_ids << collection_id if collection_id.present?
+      end
+    end
+    collection_ids
+  end
+
+  def get_communities(collection_ids)
+    community_ids = []
+    collection_ids.each do |c|
+      community_ids <<  find_community(c)
+    end
+    community_ids
   end
 
   def migrate_items(dir)
@@ -278,25 +262,12 @@ namespace :migration do
         fedora3handle = object_value_from_predicate(graph, ::TERMS[:ual].fedora3handle)
         doi = object_value_from_predicate(graph, ::TERMS[:prism].doi)
 
-        collections = object_value_from_predicate(graph, ::Hydra::PCDM::Vocab::PCDMTerms.memberOf,
-                                                  true)&.map! { |c| c.value }
-        collection_ids = []
-        community_ids = []
-        if collections.nil?
-          MigrationLogger.error "#{hydra_noid} do not have a collection"
-        else
-          collections.each do |c|
-            noid = c.split('/')[-1]
-            collection_id = find_by(noid: noid)
-            community_id = find_community(collection_id) if collection_id.present?
-            collection_ids << collection_id if collection_id.present?
-            community_ids << community_id if community_id.present?
-          end
-        end
+        collection_ids = get_collections(graph)
+        community_ids = get_communities(collection_ids) unless collection_ids.empty?
 
         if collection_ids.empty? && community_ids.empty?
           puts "#{hydra_noid} don't have community/collection"
-          MigrationLogger.error "can't find #{hydra_noid}'s collection or community"
+          Rails.logger.error "can't find #{hydra_noid}'s collection or community"
         else
           owner = user_id(owner)
 
@@ -324,7 +295,7 @@ namespace :migration do
             item.unlock_and_fetch_ldp_object do |unlocked_item|
               unlocked_item.add_communities_and_collections(community_ids, collection_ids)
               if files.empty?
-                MigrationLogger.error "#{hydra_noid}'s file can't be unloaded"
+                Rails.logger.error "#{hydra_noid}'s file can't be unloaded"
               else
                 unlocked_item.add_files(files)
 
@@ -338,10 +309,113 @@ namespace :migration do
             Dir.mkdir(completed) unless File.exist?(completed)
             `mv #{dir}/#{File.basename(file)} #{completed}`
           rescue ActiveFedora::RecordInvalid => e
-            MigrationLogger.error "#{hydra_noid}'s metadata is invalid, #{e}"
+            Rails.logger.error "#{hydra_noid}'s metadata is invalid, #{e}"
             `mv #{dir}/#{File.basename(file)} problem`
           rescue StandardError => e
-            MigrationLogger.error "#{hydra_noid}'s migration failed due to error: #{e}"
+            Rails.logger.error "#{hydra_noid}'s migration failed due to error: #{e}"
+            `mv #{dir}/#{File.basename(file)} problem`
+          end
+        end
+      end
+    end
+  end
+
+  def migrate_theses(dir)
+    File.open('theses.txt', 'w+') do |f|
+      Dir[dir + '/*.nt'].each do |file|
+        graph = RDF::Graph.load file
+        hydra_noid = object_value_from_predicate(graph, ::TERMS[:ual].hydraNoid)
+        next if find_duplicates(hydra_noid)
+
+        title = object_value_from_predicate(graph, ::RDF::Vocab::DC.title)
+        institution = object_value_from_predicate(graph, ::TERMS[:swrc].institution)
+        abstract = object_value_from_predicate(graph, ::RDF::Vocab::DC.abstract)
+        date_accepted = object_value_from_predicate(graph, ::RDF::Vocab::DC.dateAccepted)
+        date_submitted = object_value_from_predicate(graph, ::RDF::Vocab::DC.dateSubmitted)
+        degree = object_value_from_predicate(graph, ::RDF::Vocab::BIBO.degree)
+        dissertant = object_value_from_predicate(graph, ::TERMS[:ual].dissertant)
+        owner = user_id('eraadmi@ualberta.ca')
+
+        depositor = object_value_from_predicate(graph, ::TERMS[:ual].depositor)
+
+        graduation_date = object_value_from_predicate(graph, ::TERMS[:ual].graduationDate)
+        thesis_level = object_value_from_predicate(graph, ::TERMS[:ual].thesisLevel)
+        committee_members = 
+          object_value_from_predicate(graph, ::TERMS[:ual].committeeMember, true)&.map! { |c| c.value }
+        departments = object_value_from_predicate(graph, ::TERMS[:ual].department, true)&.map! { |c| c.value }
+        specializations = object_value_from_predicate(graph, ::TERMS[:ual].specialization, true)&.map! { |c| c.value }
+        supervisors = object_value_from_predicate(graph, ::TERMS[:ual].supervisor, true)&.map! { |c| c.value }
+        language = object_value_from_predicate(graph, ::RDF::Vocab::DC.language)
+
+        embargo_end_date = object_value_from_predicate(graph, ::RDF::Vocab::DC.available)
+        embargo_history = object_value_from_predicate(graph, ::TERMS[:acl].embargoHistory, true)&.map! { |c| c.value }
+        visibility_after_embargo = object_value_from_predicate(graph, ::TERMS[:acl].visibilityAfterEmbargo)
+        visibility = object_value_from_predicate(graph, ::RDF::Vocab::DC.accessRights)
+        visibility = 'http://terms.library.ualberta.ca/public' if visibility.nil?
+        visibility_after_embargo = nil if visibility != 'http://terms.library.ualberta.ca/embargo'
+
+        rights = 'This thesis is made available by the University of Alberta Libraries with permission of the copyright owner solely for non-commercial purposes. This thesis, or any portion thereof, may not otherwise be copied or reproduced without the written consent of the copyright owner, except to the extent permitted by Canadian copyright law.'
+        item_type = object_value_from_predicate(graph, ::RDF::Vocab::DC.type)
+        subject = object_value_from_predicate(graph, ::RDF::Vocab::DC11.subject, true)&.map! { |c| c.value }
+
+        alternative_title = object_value_from_predicate(graph, ::RDF::Vocab::DC.alternative)
+
+        fedora3uuid = object_value_from_predicate(graph, ::TERMS[:ual].fedora3UUID)
+        fedora3handle = object_value_from_predicate(graph, ::TERMS[:ual].fedora3handle)
+        doi = object_value_from_predicate(graph, ::TERMS[:prism].doi)
+        proquest = object_value_from_predicate(graph, ::TERMS[:ual].proquest)
+        unicorn =  object_value_from_predicate(graph, ::TERMS[:ual].unicorn)
+
+        collection_ids = get_collections(graph)
+        community_ids = get_communities(collection_ids) unless collection_ids.empty?
+
+        if collection_ids.empty? && community_ids.empty?
+          puts "#{hydra_noid} don't have community/collection"
+          Rails.logger.error "can't find #{hydra_noid}'s collection or community"
+        else
+          file_dir = "tmp/#{hydra_noid}"
+          download_url = FEDORA_BASE + pairtree(hydra_noid) + '/content'
+          download_file(download_url, file_dir)
+          if File.exist?("#{file_dir}/#{hydra_noid}.zip") || File.exist?("#{file_dir}/#{fedora3uuid}.zip")
+            `unzip #{file_dir}/*.zip -d #{file_dir} && rm #{file_dir}/*.zip`
+          end
+          files = Dir.glob("#{file_dir}/**/*").select { |uf| File.file?(uf) }.sort&.map! { |uf| File.open(uf) }
+          begin
+            item = Item.new_locked_ldp_object(title: title, dissertant: dissertant, degree: degree,
+                                              abstract: abstract, date_accepted: date_accepted,
+                                              date_submitted: date_submitted, institution: institution,
+                                              graduation_date: graduation_date, thesis_level: thesis_level,
+                                              committee_members: committee_members, departments: departments,
+                                              subject: subject, specializations: specializations,
+                                              supervisors: supervisors, language: language,
+                                              rights: rights, item_type: item_type,
+                                              alternative_title: alternative_title,
+                                              embargo_end_date: embargo_end_date, embargo_history: embargo_history,
+                                              visibility_after_embargo: visibility_after_embargo,
+                                              depositor: depositor, owner: owner, visibility: visibility,
+                                              fedora3_uuid: fedora3uuid, fedora3_handle: fedora3handle,
+                                              doi: doi, proquest: proquest, unicorn: unicorn, hydra_noid: hydra_noid)
+            item.unlock_and_fetch_ldp_object do |unlocked_item|
+              unlocked_item.add_communities_and_collections(community_ids, collection_ids)
+              if files.empty?
+                Rails.logger.error "#{hydra_noid}'s file can't be unloaded"
+              else
+                unlocked_item.add_files(files)
+
+                `rm -rf #{file_dir}`
+              end
+              unlocked_item.save!
+            end
+            puts "#{item.id}:#{hydra_noid}"
+            f.write "#{item.id}:#{hydra_noid}\n"
+            completed = dir + '/completed/'
+            Dir.mkdir(completed) unless File.exist?(completed)
+            `mv #{dir}/#{File.basename(file)} #{completed}`
+          rescue ActiveFedora::RecordInvalid => e
+            Rails.logger.error "#{hydra_noid}'s metadata is invalid, #{e}"
+            `mv #{dir}/#{File.basename(file)} problem`
+          rescue StandardError => e
+            Rails.logger.error "#{hydra_noid}'s migration failed due to error: #{e}"
             `mv #{dir}/#{File.basename(file)} problem`
           end
         end
@@ -376,7 +450,7 @@ namespace :migration do
         return r.id
       end
     rescue StandardError => e
-      MigrationLogger.error "#{main_noid}'s foxml can't not be migrated, #{e}"
+      Rails.logger.error "#{main_noid}'s foxml can't not be migrated, #{e}"
     end
   end
 
@@ -388,7 +462,7 @@ namespace :migration do
         main_noid = main_record.split('/')[-1]
         main_id = find_by(noid: main_noid)
         next if main_id.blank?
-        MigrationLogger.error "Issue with #{main_noid}, not returning #{main_id}" if main_id.blank?
+        Rails.logger.error "Issue with #{main_noid}, not returning #{main_id}" if main_id.blank?
 
         related_objects = subject_value_from_predicate(graph, ::Hydra::PCDM::Vocab::PCDMTerms.relatedObjectOf)
 
