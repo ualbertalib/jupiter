@@ -16,8 +16,10 @@ module ItemSearch
     query.append(params[:query]) if params[:query].present?
     options = { q: query, models: [Item, Thesis], as: current_user }
     options[:facets] = params[:facets]
-    # Make sure selected facets and solr-only authors/subjects appear first in facet list
-    @first_facet_categories = (params[:facets]&.keys || []) + ['all_contributors_sim', 'all_subjects_sim']
+    # Make sure selected facets then solr-only authors/subjects appear first in facet list
+    @first_facet_categories = (params[:facets]&.keys || []) +
+                              [Item.solr_name_for(:all_contributors, role: :facet),
+                               Item.solr_name_for(:all_subjects, role: :facet)]
     @results = JupiterCore::Search.faceted_search(options)
     @results.sort(sort_column, sort_direction).page params[:page]
     # Toggle that we want to be able to sort by sort_year
