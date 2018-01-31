@@ -1,17 +1,58 @@
-<div class="d-flex flex-wrap align-items-center justify-content-between mt-3">
-  <h4><%= "(TODO) #{draft_items_header}" %></h4>
+<h2 class="mt-5"><%= draft_items_header %></h4>
+
+<div class="test-draft-items list-group mb-3">
+  <% if @draft_items.present? %>
+    <% @draft_items.each do |draft_item| %>
+      <div class='list-group-item list-group-item-action'>
+        <div class="d-flex justify-content-between align-items-start mb-3">
+          <div class='media'>
+            <%# TODO: Generalize logo/thumbnail view code below to maybe use logo/thumbnail partial? %>
+            <% if draft_item.thumbnail.present? %>
+              <%= image_tag(draft_item.thumbnail.url, class: "mr-3 img-thumbnail logo-small", alt: draft_item.title) %>
+            <% else %>
+              <div class="d-flex justify-content-center align-items-center mr-3 img-thumbnail logo-small">
+                <small class="text-muted">
+                  <i class="fa fa-5x fa-picture-o" aria-hidden="true"></i>
+                </small>
+              </div>
+            <% end %>
+            <div class="media-body">
+              <h4 class="mt-0"><%= draft_item.title %></h4>
+              <p class="text-muted"><%= draft_item.date_created.year %></p>
+              <p class="text-muted"><%= draft_item.creators.join(', ') %></p>
+              <p class="text-muted"><%= jupiter_truncate draft_item.description %></p>
+            </div>
+          </div>
+
+          <div class="btn-group" role="group" aria-label="Draft Item Actions">
+            <% if policy(draft_item).update? %>
+              <%= link_to item_draft_path(item_id: draft_item.id, id: draft_item.last_completed_step), class:'btn btn-outline-primary' do %>
+                <%= fa_icon('pencil-square-o') %>
+                <%= t('items.draft.continue_draft') %>
+              <% end %>
+            <% end %>
+
+            <% if policy(draft_item).destroy? %>
+              <%= link_to item_delete_draft_path(item_id: draft_item.id), class: 'btn btn-outline-secondary', method: :delete,
+                  data: {confirm: t('items.draft.delete_confirm', title: draft_item.title) } do %>
+                <%= fa_icon('trash') %>
+                <%= t('delete') %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  <% else %>
+    <div class='list-group-item'>
+      <%= no_items_found %>
+    </div>
+  <% end %>
 </div>
 
-<div class="list-group mb-3">
-  <div class='list-group-item'>
-    <%= no_items_found %>
-  </div>
-</div>
+<h2 class="mt-5"><%= items_header %></h2>
 
-<div class="d-flex flex-wrap align-items-center justify-content-between mt-3">
-  <h4><%= items_header %></h4>
-</div>
-
+<%# TODO: this needs to use a rails form_tag, etc here %>
 <form>
   <div class="input-group mt-3">
     <%= search_field_tag :query,
@@ -31,7 +72,5 @@
   <%= render partial: 'search/model_results', locals: { results: @results, model: :item,
                                                         search_term: params[:query] } %>
 <% else %>
-  <div>
-    <p class="mt-3"><%= no_items_found %></p>
-  </div>
+  <p class="mt-3"><%= no_items_found %></p>
 <% end %>

@@ -13,3 +13,8 @@ user_facebook:
   user: regular
   uid: abc012345
   provider: facebook
+
+regular_two_saml:
+  user: regular_two
+  uid: regular_two_ccid@ualberta.ca
+  provider: saml
