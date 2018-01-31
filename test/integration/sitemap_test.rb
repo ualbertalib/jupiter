@@ -121,7 +121,7 @@ class SitemapTest < ActionDispatch::IntegrationTest
       end
 
       assert_select 'loc', community_collection_url(@collection.community, @collection)
-      assert_select 'lastmod', @collection.updated_at.to_s
+      assert_select 'lastmod', @collection.updated_at.utc.iso8601
     end
   end
 
@@ -141,7 +141,7 @@ class SitemapTest < ActionDispatch::IntegrationTest
       end
 
       assert_select 'loc', community_url(@community)
-      assert_select 'lastmod', @community.updated_at.to_s
+      assert_select 'lastmod', @community.updated_at.utc.iso8601
     end
   end
 
