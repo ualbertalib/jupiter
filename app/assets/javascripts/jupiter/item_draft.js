@@ -3,6 +3,8 @@ var unsavedChanges = false;
 $(document).on('turbolinks:load', function() {
   unsavedChanges = false;
 
+  toggle_remove_visibility();
+
   $('#js-license-accordion .card').on('hidden.bs.collapse', toggleIcon);
   $('#js-license-accordion .card').on('shown.bs.collapse', toggleIcon);
 
@@ -23,10 +25,18 @@ $(document).on('turbolinks:load', function() {
     e.preventDefault();
   });
 
-  // bring over community/collection select from items (tweaked a bit)
-  // (we only need to handle one pairing for time being)
-  $('form.js-deposit-item .js-community-select').change(function() {
-    var $collectionSelect = $('.js-collection-select');
+  $('form.js-deposit-item .js-add-community-collection').click(function(e) {
+    e.preventDefault();
+    add_community_collection_input();
+  });
+
+  $('form.js-deposit-item').on('click', '.js-remove-community-collection', function() {
+      event.preventDefault();
+      remove_community_collection_input($(this));
+    });
+
+  $('form.js-deposit-item').on('change', '.js-community-select', function() {
+    var $collectionSelect = collection_select($(this));
     var id =  $(this).find('option:selected').val();
     if (!id) {
       $collectionSelect.prop('disabled', true).empty();
@@ -71,6 +81,37 @@ $(window).bind('beforeunload', function(event) {
     return msg;
   }
 });
+
+// Find collection select
+function collection_select($element) {
+  var $root = $element.hasClass('.js-community-collection') ? $element : $element.closest('.js-community-collection');
+  return $root.find('.js-collection-select');
+}
+
+function add_community_collection_input() {
+  var $new_input = $("div.js-community-collection").first().clone();
+  // Clear selections and disable collection select
+  $new_input.find('.js-community-select').val(null);
+  collection_select($new_input).attr('disabled', true).val(null);
+
+  $new_input.appendTo('.js-communities-collections-list');
+  toggle_remove_visibility();
+}
+
+function remove_community_collection_input($link) {
+  if ($('div.js-community-collection').length > 1) {
+    $link.closest('div.js-community-collection').remove();
+    toggle_remove_visibility();
+  }
+}
+
+function toggle_remove_visibility() {
+  if ($('div.js-community-collection').length > 1) {
+    $('.js-remove-community-collection').show();
+  } else {
+    $('.js-remove-community-collection').hide();
+  }
+}
 
 function toggleIcon(e) {
   $(e.target).prev('.card-header')

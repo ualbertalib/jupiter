@@ -61,8 +61,8 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
           subjects: ['Best Seller', 'Adventure'],
           date_created: Date.current,
           description: 'Really random description about this random book',
-          community_id: 'random-uuid-123',
-          collection_id: 'random-uuid-abc'
+          community_id: ['random-uuid-123'],
+          collection_id: ['random-uuid-abc']
         }
       }
 
@@ -155,7 +155,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
 
       draft_item = draft_items(:completed_choose_license_and_visibility_step)
 
-      draft_item.member_of_paths = { 'community_id': community.id, 'collection_id': collection.id }
+      draft_item.member_of_paths = { 'community_id': [community.id], 'collection_id': [collection.id] }
 
       file_fixture = fixture_file_upload('/files/image-sample.jpeg', 'image/jpeg')
       image_file = ActiveStorage::Blob.create_after_upload!(
