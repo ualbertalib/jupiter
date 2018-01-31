@@ -72,7 +72,7 @@ class DraftItem < ApplicationRecord
     # the step saved on the object is actually a step behind. As it is only updated on an update for a new step.
     # Hence we just do current step + one to get the actual step here.
     # For an inactive/archived state we are what is expected as we are starting/ending on the same step as what's saved in the object
-    if active?
+    if active? && errors.empty?
       DraftItem.wizard_steps[wizard_step] + 1 < DraftItem.wizard_steps[step]
     else
       DraftItem.wizard_steps[wizard_step] < DraftItem.wizard_steps[step]
