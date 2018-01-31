@@ -1,7 +1,9 @@
-# set credentials to access fedora
-***REMOVED***.freeze
-***REMOVED***.freeze
-***REMOVED***.freeze
+# Need to set following credentials in Environment variables:
+#FEDORA_BASE -> hydranorth's fedora base url
+#FEDORA_USER -> hydranorth's fedora user
+#FEDORA_PASS -> hydranorth's fedora password
+#TARGET_FEDORA_BASE -> jupiter's fedora base url
+
 THESIS_RIGHTS = <<~HEREDOC.freeze
   This thesis is made available by the University of Alberta Libraries with permission
   of the copyright owner solely for non-commercial purposes.
@@ -9,8 +11,6 @@ THESIS_RIGHTS = <<~HEREDOC.freeze
   the written consent of the copyright owner,
   except to the extent permitted by Canadian copyright law.
                 HEREDOC
-
-TARGET_FEDORA_BASE = ''.freeze
 
 namespace :migration do
   desc 'migrate objects to jupiter'
@@ -110,8 +110,8 @@ namespace :migration do
 
   def download_file(download_url, target_path)
     uri = URI(download_url)
-    user = FEDORA_USER
-    password = FEDORA_PASS
+    user = ENV['FEDORA_USER']
+    password = ENV['FEDORA_PASS']
 
     request = Net::HTTP::Get.new(uri)
     request.basic_auth(user, password)
@@ -279,7 +279,7 @@ namespace :migration do
           owner = user_id(owner)
 
           file_dir = "tmp/#{hydra_noid}"
-          download_url = FEDORA_BASE + pairtree(hydra_noid) + '/content'
+          download_url = ENV['FEDORA_BASE'] + pairtree(hydra_noid) + '/content'
           puts download_url
           download_file(download_url, file_dir)
           if File.exist?("#{file_dir}/#{hydra_noid}.zip") || File.exist?("#{file_dir}/#{fedora3uuid}.zip")
@@ -381,7 +381,7 @@ namespace :migration do
           Rails.logger.error "can't find #{hydra_noid}'s collection or community"
         else
           file_dir = "tmp/#{hydra_noid}"
-          download_url = FEDORA_BASE + pairtree(hydra_noid) + '/content'
+          download_url = ENV['FEDORA_BASE'] + pairtree(hydra_noid) + '/content'
           puts download_url
           download_file(download_url, file_dir)
           if File.exist?("#{file_dir}/#{hydra_noid}.zip") || File.exist?("#{file_dir}/#{fedora3uuid}.zip")
@@ -441,9 +441,9 @@ namespace :migration do
 
   def create_related_object(type, main_noid)
     main_id = find_object_by_noid(main_noid)
-    main_uri = TARGET_FEDORA_BASE + pairtree(main_id)
+    main_uri = ENV['TARGET_FEDORA_BASE'] + pairtree(main_id)
     file_dir = "tmp/#{main_noid}"
-    file_url = FEDORA_BASE + pairtree(main_noid) + '/' + type
+    file_url = ENV['FEDORA_BASE'] + pairtree(main_noid) + '/' + type
     download_file(file_url, file_dir)
     if type == 'fedora3foxml'
       file = Dir.glob("#{file_dir}/uuid_*.xml")
