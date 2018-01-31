@@ -1,7 +1,14 @@
 # set credentials to access fedora
-FEDORA_BASE = ''.freeze
-FEDORA_USER = ''.freeze
-FEDORA_PASS = ''.freeze
+***REMOVED***.freeze
+***REMOVED***.freeze
+***REMOVED***.freeze
+THESIS_RIGHTS = <<~HEREDOC.freeze
+  This thesis is made available by the University of Alberta Libraries with permission
+  of the copyright owner solely for non-commercial purposes.
+  This thesis, or any portion thereof, may not otherwise be copied or reproduced without
+  the written consent of the copyright owner,
+  except to the extent permitted by Canadian copyright law.
+                HEREDOC
 
 TARGET_FEDORA_BASE = ''.freeze
 
@@ -37,12 +44,12 @@ namespace :migration do
   end
 
   def find_duplicates(noid)
-    result = find_by(noid: noid)
+    result = find_object_by_noid(noid)
     return true if result.present?
     false
   end
 
-  def find_by_noid(noid)
+  def find_object_by_noid(noid)
     result = ActiveFedora::SolrService.instance.conn.get 'select', params: { q: "hydra_noid_ssim:#{noid}", fl: 'id' }
     return result['response']['docs'].first['id'] if result['response']['numFound'] == 1
     Rails.logger.error "Duplicates found #{noid}" if result['response']['numFound'] > 1
@@ -141,7 +148,7 @@ namespace :migration do
         description = object_value_from_predicate(graph, ::RDF::Vocab::DC.description)
         fedora3uuid = object_value_from_predicate(graph, ::TERMS[:ual].fedora3UUID)
         creators = object_value_from_predicate(graph, ::RDF::Vocab::DC11.creator, true)&.map! { |c| c.value }
-        owner = object_value_from_predicate(graph, ::TERMS[:bibo].owner)
+        owner = object_value_from_predicate(graph, ::RDF::Vocab::BIBO.owner)
         community = Community.new_locked_ldp_object(title: title, description: description,
                                                     fedora3_uuid: fedora3uuid, owner: user_id(owner),
                                                     creators: creators, hydra_noid: hydra_noid)
@@ -162,14 +169,14 @@ namespace :migration do
         description = object_value_from_predicate(graph, ::RDF::Vocab::DC.description)
         fedora3uuid = object_value_from_predicate(graph, ::TERMS[:ual].fedora3UUID)
         creators = object_value_from_predicate(graph, ::RDF::Vocab::DC11.creator, true)&.map! { |c| c.value }
-        owner = object_value_from_predicate(graph, ::TERMS[:bibo].owner)
+        owner = object_value_from_predicate(graph, ::RDF::Vocab::BIBO.owner)
         community = object_value_from_predicate(graph, ::Hydra::PCDM::Vocab::PCDMTerms.memberOf)
         if community.nil?
           Rails.logger.error "collection #{hydra_noid} don't have community in HydraNorth"
           next
         else
           community_noid = community.split('/')[-1] unless community.nil?
-          community_id = find_by(noid: community_noid)
+          community_id = find_object_by_noid(community_noid)
           if community_id.nil?
             Rails.logger.error "collection #{hydra_noid}'s community #{community_noid} hasn't been migrated"
             next
@@ -196,7 +203,7 @@ namespace :migration do
     else
       collections.each do |c|
         noid = c.split('/')[-1]
-        collection_id = find_by(noid: noid)
+        collection_id = find_object_by_noid(noid)
         collection_ids << collection_id if collection_id.present?
       end
     end
@@ -222,7 +229,7 @@ namespace :migration do
         description = object_value_from_predicate(graph, ::RDF::Vocab::DC.description)
 
         creators = object_value_from_predicate(graph, ::RDF::Vocab::DC11.creator, true)&.map! { |c| c.value }
-        owner = object_value_from_predicate(graph, ::TERMS[:bibo].owner, true)&.map! { |c| c.value }
+        owner = object_value_from_predicate(graph, ::RDF::Vocab::BIBO.owner, true)&.map! { |c| c.value }
         # This is to assume the first owner of any multi-owner items becomes the sole owner of the object. Need review
         owner = owner.sort.first if owner.is_a? Array
         depositor = object_value_from_predicate(graph, ::TERMS[:ual].depositor)
@@ -273,6 +280,7 @@ namespace :migration do
 
           file_dir = "tmp/#{hydra_noid}"
           download_url = FEDORA_BASE + pairtree(hydra_noid) + '/content'
+          puts download_url
           download_file(download_url, file_dir)
           if File.exist?("#{file_dir}/#{hydra_noid}.zip") || File.exist?("#{file_dir}/#{fedora3uuid}.zip")
             `unzip #{file_dir}/*.zip -d #{file_dir} && rm #{file_dir}/*.zip`
@@ -295,7 +303,7 @@ namespace :migration do
             item.unlock_and_fetch_ldp_object do |unlocked_item|
               unlocked_item.add_communities_and_collections(community_ids, collection_ids)
               if files.empty?
-                Rails.logger.error "#{hydra_noid}'s file can't be unloaded"
+                Rails.logger.error "#{hydra_noid}'s file can't be uploaded"
               else
                 unlocked_item.add_files(files)
 
@@ -340,7 +348,7 @@ namespace :migration do
 
         graduation_date = object_value_from_predicate(graph, ::TERMS[:ual].graduationDate)
         thesis_level = object_value_from_predicate(graph, ::TERMS[:ual].thesisLevel)
-        committee_members = 
+        committee_members =
           object_value_from_predicate(graph, ::TERMS[:ual].committeeMember, true)&.map! { |c| c.value }
         departments = object_value_from_predicate(graph, ::TERMS[:ual].department, true)&.map! { |c| c.value }
         specializations = object_value_from_predicate(graph, ::TERMS[:ual].specialization, true)&.map! { |c| c.value }
@@ -353,9 +361,8 @@ namespace :migration do
         visibility = object_value_from_predicate(graph, ::RDF::Vocab::DC.accessRights)
         visibility = 'http://terms.library.ualberta.ca/public' if visibility.nil?
         visibility_after_embargo = nil if visibility != 'http://terms.library.ualberta.ca/embargo'
+        rights = THESIS_RIGHTS
 
-        rights = 'This thesis is made available by the University of Alberta Libraries with permission of the copyright owner solely for non-commercial purposes. This thesis, or any portion thereof, may not otherwise be copied or reproduced without the written consent of the copyright owner, except to the extent permitted by Canadian copyright law.'
-        item_type = object_value_from_predicate(graph, ::RDF::Vocab::DC.type)
         subject = object_value_from_predicate(graph, ::RDF::Vocab::DC11.subject, true)&.map! { |c| c.value }
 
         alternative_title = object_value_from_predicate(graph, ::RDF::Vocab::DC.alternative)
@@ -368,28 +375,29 @@ namespace :migration do
 
         collection_ids = get_collections(graph)
         community_ids = get_communities(collection_ids) unless collection_ids.empty?
-
+        puts collection_ids
         if collection_ids.empty? && community_ids.empty?
           puts "#{hydra_noid} don't have community/collection"
           Rails.logger.error "can't find #{hydra_noid}'s collection or community"
         else
           file_dir = "tmp/#{hydra_noid}"
           download_url = FEDORA_BASE + pairtree(hydra_noid) + '/content'
+          puts download_url
           download_file(download_url, file_dir)
           if File.exist?("#{file_dir}/#{hydra_noid}.zip") || File.exist?("#{file_dir}/#{fedora3uuid}.zip")
             `unzip #{file_dir}/*.zip -d #{file_dir} && rm #{file_dir}/*.zip`
           end
           files = Dir.glob("#{file_dir}/**/*").select { |uf| File.file?(uf) }.sort&.map! { |uf| File.open(uf) }
+          puts files
           begin
-            item = Item.new_locked_ldp_object(title: title, dissertant: dissertant, degree: degree,
+            item = Thesis.new_locked_ldp_object(title: title, dissertant: dissertant, degree: degree,
                                               abstract: abstract, date_accepted: date_accepted,
                                               date_submitted: date_submitted, institution: institution,
                                               graduation_date: graduation_date, thesis_level: thesis_level,
                                               committee_members: committee_members, departments: departments,
                                               subject: subject, specializations: specializations,
                                               supervisors: supervisors, language: language,
-                                              rights: rights, item_type: item_type,
-                                              alternative_title: alternative_title,
+                                              rights: rights, alternative_title: alternative_title,
                                               embargo_end_date: embargo_end_date, embargo_history: embargo_history,
                                               visibility_after_embargo: visibility_after_embargo,
                                               depositor: depositor, owner: owner, visibility: visibility,
@@ -432,7 +440,7 @@ namespace :migration do
   end
 
   def create_related_object(type, main_noid)
-    main_id = find_by(noid: main_noid)
+    main_id = find_object_by_noid(main_noid)
     main_uri = TARGET_FEDORA_BASE + pairtree(main_id)
     file_dir = "tmp/#{main_noid}"
     file_url = FEDORA_BASE + pairtree(main_noid) + '/' + type
@@ -460,7 +468,7 @@ namespace :migration do
         graph = RDF::Graph.load file
         main_record = object_value_from_predicate(graph, ::Hydra::PCDM::Vocab::PCDMTerms.relatedObjectOf)
         main_noid = main_record.split('/')[-1]
-        main_id = find_by(noid: main_noid)
+        main_id = find_by_object_by_noid(main_noid)
         next if main_id.blank?
         Rails.logger.error "Issue with #{main_noid}, not returning #{main_id}" if main_id.blank?
 
