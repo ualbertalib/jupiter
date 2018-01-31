@@ -1,8 +1,8 @@
 # Need to set following credentials in Environment variables:
-#FEDORA_BASE -> hydranorth's fedora base url
-#FEDORA_USER -> hydranorth's fedora user
-#FEDORA_PASS -> hydranorth's fedora password
-#TARGET_FEDORA_BASE -> jupiter's fedora base url
+# FEDORA_BASE -> hydranorth's fedora base url
+# FEDORA_USER -> hydranorth's fedora user
+# FEDORA_PASS -> hydranorth's fedora password
+# TARGET_FEDORA_BASE -> jupiter's fedora base url
 
 THESIS_RIGHTS = <<~HEREDOC.freeze
   This thesis is made available by the University of Alberta Libraries with permission
