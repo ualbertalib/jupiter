@@ -2,6 +2,8 @@ class Items::DraftController < ApplicationController
 
   include Wicked::Wizard
 
+  before_action :initialize_communities
+
   steps(*DraftItem.wizard_steps.keys.map(&:to_sym))
 
   def show
@@ -36,10 +38,15 @@ class Items::DraftController < ApplicationController
     when :describe_item
       params[:draft_item][:status] = DraftItem.statuses[:active]
 
-      # TODO: Need to handle multiple community/collection pairs down the road
-      community_id = params[:draft_item].delete :community_id
-      collection_id = params[:draft_item].delete :collection_id
-      @draft_item.member_of_paths = { 'community_id': community_id, 'collection_id': collection_id }
+      @draft_item.member_of_paths = { community_id: [], collection_id: [] }
+      communities = params[:draft_item].delete :community_id
+      communities.each_with_index do |community_id, idx|
+        next if community_id.blank?
+        @draft_item.member_of_paths['community_id'] << community_id
+        collection_id = params[:draft_item]['collection_id'][idx]
+        @draft_item.member_of_paths['collection_id'] << collection_id
+      end
+      params[:draft_item].delete :collection_id
 
       @draft_item.update_attributes(permitted_attributes(DraftItem))
 
@@ -81,6 +88,10 @@ class Items::DraftController < ApplicationController
     @draft_item.destroy
 
     redirect_back(fallback_location: root_path, notice: t('.successful_deletion'))
+  end
+
+  def initialize_communities
+    @communities = Community.all
   end
 
 end
