@@ -25,12 +25,12 @@ $(document).on('turbolinks:load', function() {
     e.preventDefault();
   });
 
-  $('form.js-deposit-item .add-community-collection').click(function(e) {
+  $('form.js-deposit-item .js-add-community-collection').click(function(e) {
     e.preventDefault();
     add_community_collection_input();
   });
 
-  $('form.js-deposit-item').on('click', '.remove-community-collection', function() {
+  $('form.js-deposit-item').on('click', '.js-remove-community-collection', function() {
       event.preventDefault();
       remove_community_collection_input($(this));
     });
@@ -84,32 +84,32 @@ $(window).bind('beforeunload', function(event) {
 
 // Find collection select
 function collection_select($element) {
-  var $root = $element.hasClass('.community-collection') ? $element : $element.closest('.community-collection');
+  var $root = $element.hasClass('.js-community-collection') ? $element : $element.closest('.js-community-collection');
   return $root.find('.js-collection-select');
 }
 
 function add_community_collection_input() {
-  var $new_input = $("div.community-collection").first().clone();
+  var $new_input = $("div.js-community-collection").first().clone();
   // Clear selections and disable collection select
   $new_input.find('.js-community-select').val(null);
   collection_select($new_input).attr('disabled', true).val(null);
 
-  $new_input.appendTo('.communities-collections-list');
+  $new_input.appendTo('.js-communities-collections-list');
   toggle_remove_visibility();
 }
 
 function remove_community_collection_input($link) {
-  if ($('div.community-collection').length > 1) {
-    $link.closest('div.community-collection').remove();
+  if ($('div.js-community-collection').length > 1) {
+    $link.closest('div.js-community-collection').remove();
     toggle_remove_visibility();
   }
 }
 
 function toggle_remove_visibility() {
-  if ($('div.community-collection').length > 1) {
-    $('.remove-community-collection').show();
+  if ($('div.js-community-collection').length > 1) {
+    $('.js-remove-community-collection').show();
   } else {
-    $('.remove-community-collection').hide();
+    $('.js-remove-community-collection').hide();
   }
 }
 

@@ -123,7 +123,7 @@
       </ul>
     <% end %>
 
-    <div class="communities-collections-list">
+    <div class="js-communities-collections-list">
       <% if @draft_item.communities.present? %>
 
         <% @draft_item.each_community_collection do |community, collection| %>
@@ -138,7 +138,7 @@
     <div class="d-flex flex-row-reverse">
       <div class="p-3">
         <%= link_to "#{fa_icon('plus')} #{t(:add_another_community_collection)}".html_safe,
-            '#', class: 'btn btn-secondary add-community-collection' %>
+            '#', class: 'btn btn-secondary js-add-community-collection' %>
       </div>
     </div>
   </fieldset>

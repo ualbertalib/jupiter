@@ -2,7 +2,7 @@ class Items::DraftController < ApplicationController
 
   include Wicked::Wizard
 
-  before_action :initialize_communities
+  before_action :initialize_communities, only: [:show, :edit]
 
   steps(*DraftItem.wizard_steps.keys.map(&:to_sym))
 
