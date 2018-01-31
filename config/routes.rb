@@ -72,4 +72,11 @@ Rails.application.routes.draw do
   get 'robots.txt' => 'robots#robots'
 
   root to: 'welcome#index'
+
+  # Static pages
+  get '/about', to: 'pages#about'
+  get '/contact', to: 'pages#contact'
+  get '/policies', to: 'pages#policies'
+  get '/help', to: 'pages#help'
+  get '/technology', to: redirect('https://github.com/ualbertalib/jupiter')
 end
