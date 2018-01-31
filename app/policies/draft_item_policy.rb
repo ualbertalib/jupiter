@@ -12,6 +12,10 @@ class DraftItemPolicy < ApplicationPolicy
     create?
   end
 
+  def destroy?
+    create?
+  end
+
   def set_thumbnail?
     create?
   end

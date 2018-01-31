@@ -10,6 +10,7 @@ class DraftItemPolicyTest < ActiveSupport::TestCase
       assert DraftItemPolicy.new(current_user, draft_item).create?
       assert DraftItemPolicy.new(current_user, draft_item).show?
       assert DraftItemPolicy.new(current_user, draft_item).update?
+      assert DraftItemPolicy.new(current_user, draft_item).destroy?
       assert DraftItemPolicy.new(current_user, draft_item).set_thumbnail?
       assert DraftItemPolicy.new(current_user, draft_item).file_create?
       assert DraftItemPolicy.new(current_user, draft_item).file_destroy?
@@ -24,6 +25,7 @@ class DraftItemPolicyTest < ActiveSupport::TestCase
       assert DraftItemPolicy.new(current_user, draft_item).create?
       assert DraftItemPolicy.new(current_user, draft_item).show?
       assert DraftItemPolicy.new(current_user, draft_item).update?
+      assert DraftItemPolicy.new(current_user, draft_item).destroy?
       assert DraftItemPolicy.new(current_user, draft_item).set_thumbnail?
       assert DraftItemPolicy.new(current_user, draft_item).file_create?
       assert DraftItemPolicy.new(current_user, draft_item).file_destroy?
@@ -36,6 +38,7 @@ class DraftItemPolicyTest < ActiveSupport::TestCase
       refute DraftItemPolicy.new(current_user, draft_item).create?
       refute DraftItemPolicy.new(current_user, draft_item).show?
       refute DraftItemPolicy.new(current_user, draft_item).update?
+      refute DraftItemPolicy.new(current_user, draft_item).destroy?
       refute DraftItemPolicy.new(current_user, draft_item).set_thumbnail?
       refute DraftItemPolicy.new(current_user, draft_item).file_create?
       refute DraftItemPolicy.new(current_user, draft_item).file_destroy?
@@ -50,6 +53,7 @@ class DraftItemPolicyTest < ActiveSupport::TestCase
       refute DraftItemPolicy.new(current_user, draft_item).create?
       refute DraftItemPolicy.new(current_user, draft_item).show?
       refute DraftItemPolicy.new(current_user, draft_item).update?
+      refute DraftItemPolicy.new(current_user, draft_item).destroy?
       refute DraftItemPolicy.new(current_user, draft_item).set_thumbnail?
       refute DraftItemPolicy.new(current_user, draft_item).file_create?
       refute DraftItemPolicy.new(current_user, draft_item).file_destroy?
