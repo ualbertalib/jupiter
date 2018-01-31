@@ -15,21 +15,23 @@ class SearchController < ApplicationController
     # TODO: Check performance of this when we have more objects in use
     [:item, :collection, :community].each do |model|
       # Only facet for the current tab or the result count will be wrong on the tab header
-      options = { q: params[:search], models: model.to_s.classify.constantize, as: current_user }
+      models =
+        if model == :item
+          [Item, Thesis]
+        else
+          model.to_s.classify.constantize
+        end
+      options = { q: params[:search], models: models, as: current_user }
       options[:facets] = params[:facets] if model == @active_tab
       @results[model] = JupiterCore::Search.faceted_search(options)
-      @results[model].sort(sort_column, sort_direction).page params[:page]
     end
-  end
-
-  private
-
-  def sort_column
-    ['title', 'record_created_at'].include?(params[:sort]) ? params[:sort] : 'title'
-  end
-
-  def sort_direction
-    ['asc', 'desc'].include?(params[:direction]) ? params[:direction] : 'asc'
+    # Toggle that we want to be able to sort by sort_year
+    if @active_tab == :item
+      @item_sort = true
+      @results[@active_tab].sort(sort_column(columns: ['title', 'sort_year']), sort_direction).page params[:page]
+    else
+      @results[@active_tab].sort(sort_column, sort_direction).page params[:page]
+    end
   end
 
 end

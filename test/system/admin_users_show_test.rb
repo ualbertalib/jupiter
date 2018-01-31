@@ -14,7 +14,7 @@ class AdminUsersShowTest < ApplicationSystemTestCase
 
     click_link I18n.t('admin.users.index.header')
     assert_selector 'h1', text: I18n.t('admin.users.index.header')
-    assert_selector 'tbody tr', count: 4
+    assert_selector 'tbody tr', count: 5
     assert_selector 'tbody tr:first-child th[scope="row"]', text: admin.email
 
     click_link admin.email
@@ -33,7 +33,7 @@ class AdminUsersShowTest < ApplicationSystemTestCase
 
   should 'be able to toggle suspended/admin a regular user' do
     admin = users(:admin)
-    user = users(:regular_user)
+    user = users(:regular)
 
     login_user(admin)
 
@@ -44,7 +44,7 @@ class AdminUsersShowTest < ApplicationSystemTestCase
 
     click_link I18n.t('admin.users.index.header')
     assert_selector 'h1', text: I18n.t('admin.users.index.header')
-    assert_selector 'tbody tr', count: 4
+    assert_selector 'tbody tr', count: 5
     assert_selector 'tbody tr:first-child th[scope="row"]', text: admin.email
 
     click_link user.email
@@ -106,7 +106,7 @@ class AdminUsersShowTest < ApplicationSystemTestCase
 
   should 'be able to login as a regular user' do
     admin = users(:admin)
-    user = users(:regular_user)
+    user = users(:regular)
 
     login_user(admin)
 
@@ -117,7 +117,7 @@ class AdminUsersShowTest < ApplicationSystemTestCase
 
     click_link I18n.t('admin.users.index.header')
     assert_selector 'h1', text: I18n.t('admin.users.index.header')
-    assert_selector 'tbody tr', count: 4
+    assert_selector 'tbody tr', count: 5
     assert_selector 'tbody tr:first-child th[scope="row"]', text: admin.email
 
     click_link user.email
@@ -137,7 +137,7 @@ class AdminUsersShowTest < ApplicationSystemTestCase
     # we signed in as user and have been redirected to homepage
     assert_text I18n.t('admin.users.show.login_as_user_flash', user: user.name)
     assert_text user.name
-    assert_selector 'h1', text: I18n.t('welcome.index.header')
+    assert_equal URI.parse(current_url).request_uri, root_path
 
     # we log out as user and get redirected back to admin user show page
     click_link user.name # opens user dropdown which has the logout as user link
@@ -148,7 +148,7 @@ class AdminUsersShowTest < ApplicationSystemTestCase
     logout_user
   end
 
-  should 'be able to view items owned by user' do
+  should 'be able to view items/theses owned by user' do
     # Note: searching and faceting is covered more extensively in tests elsewhere
     user = User.find_by(email: 'john_snow@example.com')
     admin = users(:admin)
@@ -159,26 +159,35 @@ class AdminUsersShowTest < ApplicationSystemTestCase
                                                   title: 'Fancy Collection', owner: 1)
                            .unlock_and_fetch_ldp_object(&:save!)
 
-    # Two items owned by regular user
-    ['Fancy', 'Nice'].each do |adjective|
-      Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                 owner: user.id, title: "#{adjective} Item",
-                                 creators: ['Joe Blow'],
-                                 languages: [CONTROLLED_VOCABULARIES[:language].eng],
-                                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                                 item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                 publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-                                 subject: [adjective])
-          .unlock_and_fetch_ldp_object do |uo|
-        uo.add_to_path(community.id, collection.id)
-        uo.save!
-      end
+    # Two things owned by regular user
+    Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
+                               owner: user.id, title: 'Fancy Item',
+                               creators: ['Joe Blow'],
+                               created: 'Fall 2017',
+                               languages: [CONTROLLED_VOCABULARIES[:language].english],
+                               license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                               item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                               publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
+                               subject: ['Fancy things'])
+        .unlock_and_fetch_ldp_object do |uo|
+      uo.add_to_path(community.id, collection.id)
+      uo.save!
     end
+    Thesis.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                 owner: user.id, title: 'Nice Item',
+                                 dissertant: 'Joe Blow',
+                                 graduation_date: '2019')
+          .unlock_and_fetch_ldp_object do |uo|
+      uo.add_to_path(community.id, collection.id)
+      uo.save!
+    end
+
     # One item owned by admin
     Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                owner: admin.id, title: 'Admin Item',
                                creators: ['Joe Blow'],
-                               languages: [CONTROLLED_VOCABULARIES[:language].eng],
+                               created: 'Winter 2017',
+                               languages: [CONTROLLED_VOCABULARIES[:language].english],
                                license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
                                item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],

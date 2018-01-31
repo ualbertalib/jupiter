@@ -12,15 +12,17 @@ if Rails.env.development? || Rails.env.uat?
   require 'faker'
 
   # For the main community/collections
-  THINGS = [ 'cat', 'dog', 'unicorn', 'hamburger', 'librarian'].freeze
+  THINGS = ['cat', 'dog', 'unicorn', 'hamburger', 'librarian'].freeze
   # For padding community/collection lists for pagination (need at least 26, a couple uppercase to confirm sort)
-  EXTRA_THINGS = [ 'Library', 'DONAIR', 'magpie', 'toque', 'sombrero', 'yeti', 'mimosa', 'ukulele', 'tourtière',
+  EXTRA_THINGS = ['Library', 'DONAIR', 'magpie', 'toque', 'sombrero', 'yeti', 'mimosa', 'ukulele', 'tourtière',
                    'falafel', 'calculator', 'papusa'].freeze
 
   puts 'Starting seeding of dev database...'
 
   # start fresh
-  [Announcement, ActiveStorage::Blob, ActiveStorage::Attachment, Identity, User].each(&:destroy_all)
+  [Announcement, ActiveStorage::Blob, ActiveStorage::Attachment,
+   Identity, User, Type, Language].each(&:destroy_all)
+
   ActiveFedora::Cleaner.clean!
 
   # Seed an admin user
@@ -49,6 +51,8 @@ if Rails.env.development? || Rails.env.uat?
   creators = 10.times.map { "#{Faker::Cat.unique.name} #{Faker::Cat.unique.breed.gsub(/[ ,]+/, '-')}" }
   contributors = 10.times.map { Faker::FunnyName.unique.name_with_initial }
 
+  institutions = [CONTROLLED_VOCABULARIES[:institution].uofa, CONTROLLED_VOCABULARIES[:institution].st_stephens]
+
   THINGS.each_with_index do |thing, idx|
     if idx % 2 == 0
       title = "The department of #{thing.capitalize}"
@@ -76,179 +80,234 @@ if Rails.env.development? || Rails.env.uat?
       community.logo.attach(io: File.open(filename), filename: "#{thing}.png", content_type: "image/png")
     end
 
-    collection_first = collection_last = nil
-    [ "Theses about #{thing.pluralize}",
-      "The annals of '#{thing.capitalize} International'"].each do |title|
-      collection = Collection.new_locked_ldp_object(
+    item_collection = Collection.new_locked_ldp_object(
+      owner: admin.id,
+      title: "The annals of '#{thing.capitalize} International'",
+      community_id: community.id,
+      description: Faker::Lorem.sentence(40, false, 0).chop
+    ).unlock_and_fetch_ldp_object(&:save!)
+
+    thesis_collection = Collection.new_locked_ldp_object(
+      owner: admin.id,
+      title: "Theses about #{thing.pluralize}",
+      community_id: community.id,
+      description: Faker::Lorem.sentence(40, false, 0).chop
+    ).unlock_and_fetch_ldp_object(&:save!)
+
+    # Items
+    20.times do |i|
+      seed = rand(10)
+      seed2 = rand(10)
+      base_attributes = {
         owner: admin.id,
-        title: title,
-        community_id: community.id,
-        description: Faker::Lorem.sentence(40, false, 0).chop
-      ).unlock_and_fetch_ldp_object(&:save!)
-
-      collection_first ||= collection
-      collection_last = collection
-
-      20.times do |i|
-        seed = rand(10)
-        seed2 = rand(10)
-        # Add an occasional verbose description
-        description = if i % 10 == 5
-                        Faker::Lorem.sentence(100, false, 0).chop
-                      else
-                        Faker::Lorem.sentence(20, false, 0).chop
-                      end
-        # Probabilistically about 70% English, 20% French, 10% Ukrainian
-        languages = if seed % 10 > 2
-                      [CONTROLLED_VOCABULARIES[:language].eng]
-                    elsif seed % 10 > 0
-                      [CONTROLLED_VOCABULARIES[:language].fre]
-                    else
-                      [CONTROLLED_VOCABULARIES[:language].ukr]
-                    end
-        licence_right = {}
-        attributes = {
-          owner: admin.id,
-          creators: [creators[seed]],
-          contributors: [contributors[seed2]],
-          created: (Time.now - rand(20_000).days).to_s,
-          visibility: JupiterCore::VISIBILITY_PUBLIC,
-          title: "The effects of #{Faker::Beer.name} on #{thing.pluralize}",
-          description: description,
-          languages: languages,
-          subject: [thing.capitalize],
-          doi: "doi:bogus-#{Time.current.utc.iso8601(3)}"
-        }
-        # Add the occasional double-author work
-        attributes[:creators] << creators[(seed + 5) % 10] if i % 7 == 3
-        if seed % 10 < 6
-          attributes[:license] = CONTROLLED_VOCABULARIES[:license].attribution_4_0_international
-        elsif seed % 10 < 7
-          attributes[:license] = CONTROLLED_VOCABULARIES[:license].public_domain_mark_1_0
-        elsif seed % 10 < 8
-          attributes[:license] = CONTROLLED_VOCABULARIES[:old_license].attribution_3_0_international
-        else
-          attributes[:rights] = 'Share my stuff with everybody'
-        end
-        if idx % 3 == 0
-          attributes[:item_type] = CONTROLLED_VOCABULARIES[:item_type].article
-          attributes[:publication_status] = [CONTROLLED_VOCABULARIES[:publication_status].published]
-        elsif idx % 3 == 1
-          attributes[:item_type] = CONTROLLED_VOCABULARIES[:item_type].article
-          attributes[:publication_status] = [CONTROLLED_VOCABULARIES[:publication_status].draft,
-                                             CONTROLLED_VOCABULARIES[:publication_status].submitted]
-        else
-          attributes[:item_type] = CONTROLLED_VOCABULARIES[:item_type].report
-        end
-
-        # Every once in a while, create a mondo-item with full, rich metadata to help view-related work
-        if i == 8
-          attributes[:title] = attributes[:title].gsub(/^The/, 'The complete')
-          # Throw in a second language occasionally
-          attributes[:languages] << CONTROLLED_VOCABULARIES[:language].other
-          # Why 3 and 7 below? Neither number shares a divisor with 10, ensuring a unique set
-          attributes[:creators] += 4.times.map { |j| creators[(seed + 3 * j) % 10] }
-          attributes[:contributors] += 3.times.map { |j| contributors[(seed2 + 7 * j) % 10] }
-          attributes[:subject] += ['Mondo']
-          attributes[:spatial_subjects] = ['Vegreville']
-          attributes[:temporal_subjects] = ['1980s']
-          attributes[:alternative_title] = "A full, holistic, #{thing}-tastic approach"
-          attributes[:related_link] = "http://www.example.com/#{thing}"
-          attributes[:is_version_of] = ["The CDROM titled '#{thing.pluralize.capitalize}!'",
-                                        'The original laserdisc series from Orange-on-a-Blue-Background studios']
-          attributes[:derived_from] = "Chapter 5 of '#{thing.pluralize.capitalize} and what they drink'"
-        end
-
-        Item.new_locked_ldp_object(attributes).unlock_and_fetch_ldp_object do |uo|
-          if i == 8
-            uo.add_to_path(community.id, collection_first.id)
-            uo.add_to_path(community.id, collection_last.id)
-            uo.save!
-            # Attach a file to the mondo-item
-            file = File.open(Rails.root + 'app/assets/images/mc_360.png', 'r')
-            uo.add_files([file])
-            file.close
-          else
-            uo.add_to_path(community.id, collection.id)
-            uo.save!
-          end
-        end
-      end
-
-      # Add an private item
-      Item.new_locked_ldp_object(
-        owner: admin.id,
-        creators: [creators[rand(10)]],
-        visibility: JupiterCore::VISIBILITY_PRIVATE,
-        title: "Private #{thing.pluralize}, public lives: a survey of social media trends",
-        description: Faker::Lorem.sentence(20, false, 0).chop,
-        languages: [CONTROLLED_VOCABULARIES[:language].eng],
-        license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-        item_type: CONTROLLED_VOCABULARIES[:item_type].chapter,
-        subject: [thing.capitalize, 'Privacy'],
-        doi: "doi:bogus-#{Time.current.utc.iso8601(3)}"
-      ).unlock_and_fetch_ldp_object do |uo|
-        uo.add_to_path(community.id, collection.id)
-        uo.save!
-      end
-
-      # Add a currently embargoed item
-      Item.new_locked_ldp_object(
-        owner: admin.id,
-        creators: [creators[rand(10)]],
-        visibility: Item::VISIBILITY_EMBARGO,
-        title: "Embargo and #{Faker::Address.country}: were the #{thing.pluralize} left behind?",
-        description: Faker::Lorem.sentence(20, false, 0).chop,
-        languages: [CONTROLLED_VOCABULARIES[:language].eng],
-        license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-        item_type: CONTROLLED_VOCABULARIES[:item_type].conference_paper,
-        subject: [thing.capitalize, 'Embargoes'],
-        doi: "doi:bogus-#{Time.current.utc.iso8601(3)}"
-      ).unlock_and_fetch_ldp_object do |uo|
-        uo.add_to_path(community.id, collection.id)
-        uo.embargo_end_date = (Time.now + 20.years).to_date
-        uo.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].public
-        uo.save!
-      end
-
-      # Add a formerly embargoed item
-      Item.new_locked_ldp_object(
-        owner: admin.id,
-        creators: [creators[rand(10)]],
-        visibility: Item::VISIBILITY_EMBARGO,
-        title: "Former embargo of #{Faker::Address.country}: the day the #{thing.pluralize} were free",
-        description: Faker::Lorem.sentence(20, false, 0).chop,
-        languages: [CONTROLLED_VOCABULARIES[:language].eng],
-        license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-        item_type: CONTROLLED_VOCABULARIES[:item_type].dataset,
-        subject: [thing.capitalize, 'Freedom'],
-        doi: "doi:bogus-#{Time.current.utc.iso8601(3)}"
-      ).unlock_and_fetch_ldp_object do |uo|
-        uo.add_to_path(community.id, collection.id)
-        uo.embargo_end_date = (Time.now - 2.days).to_date
-        uo.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].public
-        uo.save!
-      end
-
-      # Add an item owned by non-admin
-      Item.new_locked_ldp_object(
-        owner: non_admin.id,
-        creators: [creators[rand(10)]],
         visibility: JupiterCore::VISIBILITY_PUBLIC,
-        title: "Impact of non-admin users on #{thing.pluralize}",
-        description: Faker::Lorem.sentence(20, false, 0).chop,
-        languages: [CONTROLLED_VOCABULARIES[:language].eng],
-        license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-        item_type: CONTROLLED_VOCABULARIES[:item_type].learning_object,
-        subject: [thing.capitalize, 'Equality'],
-        # Add a temporal subject
-        temporal_subjects: ['The 1950s'],
+        subject: [thing.capitalize],
         doi: "doi:bogus-#{Time.current.utc.iso8601(3)}"
-      ).unlock_and_fetch_ldp_object do |uo|
-        uo.add_to_path(community.id, collection.id)
-        uo.save!
+      }
+      # Add an occasional verbose description
+      description = if i % 10 == 5
+                      Faker::Lorem.sentence(100, false, 0).chop
+                    else
+                      Faker::Lorem.sentence(20, false, 0).chop
+                    end
+      # Probabilistically about 70% English, 20% French, 10% Ukrainian
+      languages = if seed % 10 > 2
+                    [CONTROLLED_VOCABULARIES[:language].english]
+                  elsif seed % 10 > 0
+                    [CONTROLLED_VOCABULARIES[:language].french]
+                  else
+                    [CONTROLLED_VOCABULARIES[:language].ukrainian]
+                  end
+      licence_right = {}
+
+      item_attributes = base_attributes.merge({
+        title: "The effects of #{Faker::Beer.name} on #{thing.pluralize}",
+        created: (Time.now - rand(20_000).days).to_s,
+        creators: [creators[seed]],
+        contributors: [contributors[seed2]],
+        description: description,
+        languages: languages,
+      })
+
+      # Add the occasional double-author work
+      item_attributes[:creators] << creators[(seed + 5) % 10] if i % 7 == 3
+      if seed % 10 < 6
+        item_attributes[:license] = CONTROLLED_VOCABULARIES[:license].attribution_4_0_international
+      elsif seed % 10 < 7
+        item_attributes[:license] = CONTROLLED_VOCABULARIES[:license].public_domain_mark_1_0
+      elsif seed % 10 < 8
+        item_attributes[:license] = CONTROLLED_VOCABULARIES[:old_license].attribution_3_0_international
+      else
+        item_attributes[:rights] = 'Share my stuff with everybody'
+      end
+      if idx % 3 == 0
+        item_attributes[:item_type] = CONTROLLED_VOCABULARIES[:item_type].article
+        item_attributes[:publication_status] = [CONTROLLED_VOCABULARIES[:publication_status].published]
+      elsif idx % 3 == 1
+        item_attributes[:item_type] = CONTROLLED_VOCABULARIES[:item_type].article
+        item_attributes[:publication_status] = [CONTROLLED_VOCABULARIES[:publication_status].draft,
+                                           CONTROLLED_VOCABULARIES[:publication_status].submitted]
+      else
+        item_attributes[:item_type] = CONTROLLED_VOCABULARIES[:item_type].report
       end
 
+      # Every once in a while, create a mondo-item with full, rich metadata to help view-related work
+      if i == 8
+        item_attributes[:title] = item_attributes[:title].gsub(/^The/, 'The complete')
+        # Throw in a second language occasionally
+        item_attributes[:languages] << CONTROLLED_VOCABULARIES[:language].other
+        # Why 3 and 7 below? Neither number shares a divisor with 10, ensuring a unique set
+        item_attributes[:creators] += 4.times.map { |j| creators[(seed + 3 * j) % 10] }
+        item_attributes[:contributors] += 3.times.map { |j| contributors[(seed2 + 7 * j) % 10] }
+        item_attributes[:subject] += ['Mondo']
+        item_attributes[:spatial_subjects] = ['Vegreville']
+        item_attributes[:temporal_subjects] = ['1980s']
+        item_attributes[:alternative_title] = "A full, holistic, #{thing}-tastic approach"
+        item_attributes[:related_link] = "http://www.example.com/#{thing}"
+        item_attributes[:is_version_of] = ["The CDROM titled '#{thing.pluralize.capitalize}!'",
+                                      'The original laserdisc series from Orange-on-a-Blue-Background studios']
+        item_attributes[:source] = "Chapter 5 of '#{thing.pluralize.capitalize} and what they drink'"
+      end
+
+      Item.new_locked_ldp_object(item_attributes).unlock_and_fetch_ldp_object do |uo|
+        if i == 8
+          uo.add_to_path(community.id, item_collection.id)
+          uo.add_to_path(community.id, thesis_collection.id)
+          uo.save!
+          # Attach a file to the mondo-item
+          file = File.open(Rails.root + 'app/assets/images/era-logo.png', 'r')
+          uo.add_files([file])
+          file.close
+        else
+          uo.add_to_path(community.id, item_collection.id)
+          uo.save!
+        end
+      end
+
+      field = Faker::Job.field
+      level = ["Master's", 'Doctorate'][i % 2]
+      thesis_attributes = base_attributes.merge({
+        title: "Thesis about the effects of #{Faker::Beer.name} on #{thing.pluralize}",
+        graduation_date: "Fall #{(Time.now - rand(20_000).days).to_date.year}",
+        dissertant: creators[seed],
+        abstract: description,
+        language: languages.first,
+        specializations: [field],
+        departments: ["Deparment of #{field}"],
+        supervisors: ["#{contributors[seed]} (#{field})"],
+        committee_members: ["#{contributors[seed2]} (#{field})"],
+        rights: 'Share my stuff with everybody',
+        thesis_level: level,
+        degree: "#{level} of #{field}",
+        institution: institutions[(i / 10) % 2]
+      })
+
+      # Every once in a while, create a mondo-thesis with full, rich metadata to help view-related work
+      if i == 8
+        thesis_attributes[:title] = thesis_attributes[:title].gsub(/^Thesis/, 'An über-thesis')
+        thesis_attributes[:subject] += ['Mondo']
+        thesis_attributes[:alternative_title] = "A full, holistic, #{thing}-tastic approach"
+        thesis_attributes[:is_version_of] = ["The CDROM titled '#{thing.pluralize.capitalize}!'",
+                                      'The original laserdisc series from Orange-on-a-Blue-Background studios']
+        department2 = 'Department of Everything'
+        thesis_attributes[:specializations] += ['Everything']
+        thesis_attributes[:departments] += [department2]
+        thesis_attributes[:supervisors] += ["#{contributors[(seed + 3 * seed2) % 10]} (#{department2})"]
+        thesis_attributes[:committee_members] += ["#{contributors[(seed + 7 * seed2) % 10]} (#{department2})"]
+      end
+
+      Thesis.new_locked_ldp_object(thesis_attributes).unlock_and_fetch_ldp_object do |uo|
+        if i == 8
+          uo.add_to_path(community.id, item_collection.id)
+          uo.add_to_path(community.id, thesis_collection.id)
+          uo.save!
+          # Attach a file to the mondo-item
+          file = File.open(Rails.root + 'app/assets/images/era-logo.png', 'r')
+          uo.add_files([file])
+          file.close
+        else
+          uo.add_to_path(community.id, thesis_collection.id)
+          uo.save!
+        end
+      end
+    end
+
+    # Add a private item
+    Item.new_locked_ldp_object(
+      owner: admin.id,
+      creators: [creators[rand(10)]],
+      visibility: JupiterCore::VISIBILITY_PRIVATE,
+      created: (Time.now - rand(20_000).days).to_s,
+      title: "Private #{thing.pluralize}, public lives: a survey of social media trends",
+      description: Faker::Lorem.sentence(20, false, 0).chop,
+      languages: [CONTROLLED_VOCABULARIES[:language].english],
+      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+      item_type: CONTROLLED_VOCABULARIES[:item_type].chapter,
+      subject: [thing.capitalize, 'Privacy'],
+      doi: "doi:bogus-#{Time.current.utc.iso8601(3)}"
+    ).unlock_and_fetch_ldp_object do |uo|
+      uo.add_to_path(community.id, item_collection.id)
+      uo.save!
+    end
+
+    # Add a currently embargoed item
+    Item.new_locked_ldp_object(
+      owner: admin.id,
+      creators: [creators[rand(10)]],
+      visibility: Item::VISIBILITY_EMBARGO,
+      created: (Time.now - rand(20_000).days).to_s,
+      title: "Embargo and #{Faker::Address.country}: were the #{thing.pluralize} left behind?",
+      description: Faker::Lorem.sentence(20, false, 0).chop,
+      languages: [CONTROLLED_VOCABULARIES[:language].english],
+      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+      item_type: CONTROLLED_VOCABULARIES[:item_type].conference_paper,
+      subject: [thing.capitalize, 'Embargoes'],
+      doi: "doi:bogus-#{Time.current.utc.iso8601(3)}"
+    ).unlock_and_fetch_ldp_object do |uo|
+      uo.add_to_path(community.id, item_collection.id)
+      uo.embargo_end_date = (Time.now + 20.years).to_date
+      uo.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].public
+      uo.save!
+    end
+
+    # Add a formerly embargoed item
+    Item.new_locked_ldp_object(
+      owner: admin.id,
+      creators: [creators[rand(10)]],
+      visibility: Item::VISIBILITY_EMBARGO,
+      created: (Time.now - rand(20_000).days).to_s,
+      title: "Former embargo of #{Faker::Address.country}: the day the #{thing.pluralize} were free",
+      description: Faker::Lorem.sentence(20, false, 0).chop,
+      languages: [CONTROLLED_VOCABULARIES[:language].english],
+      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+      item_type: CONTROLLED_VOCABULARIES[:item_type].dataset,
+      subject: [thing.capitalize, 'Freedom'],
+      doi: "doi:bogus-#{Time.current.utc.iso8601(3)}"
+    ).unlock_and_fetch_ldp_object do |uo|
+      uo.add_to_path(community.id, item_collection.id)
+      uo.embargo_end_date = (Time.now - 2.days).to_date
+      uo.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].public
+      uo.save!
+    end
+
+    # Add an item owned by non-admin
+    Item.new_locked_ldp_object(
+      owner: non_admin.id,
+      creators: [creators[rand(10)]],
+      visibility: JupiterCore::VISIBILITY_PUBLIC,
+      created: (Time.now - rand(20_000).days).to_s,
+      title: "Impact of non-admin users on #{thing.pluralize}",
+      description: Faker::Lorem.sentence(20, false, 0).chop,
+      languages: [CONTROLLED_VOCABULARIES[:language].english],
+      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+      item_type: CONTROLLED_VOCABULARIES[:item_type].learning_object,
+      subject: [thing.capitalize, 'Equality'],
+      # Add a temporal subject
+      temporal_subjects: ['The 1950s'],
+      doi: "doi:bogus-#{Time.current.utc.iso8601(3)}"
+    ).unlock_and_fetch_ldp_object do |uo|
+      uo.add_to_path(community.id, item_collection.id)
+      uo.save!
     end
 
     # Want one multi-collection item per community
@@ -256,10 +315,11 @@ if Rails.env.development? || Rails.env.uat?
       owner: admin.id,
       creators: [creators[rand(10)]],
       visibility: JupiterCore::VISIBILITY_PUBLIC,
+      created: (Time.now - rand(20_000).days).to_s,
       title: "Multi-collection random images of #{thing.pluralize}",
       description: Faker::Lorem.sentence(20, false, 0).chop,
       # No linguistic content
-      languages: [CONTROLLED_VOCABULARIES[:language].zxx],
+      languages: [CONTROLLED_VOCABULARIES[:language].no_linguistic_content],
       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
       item_type: CONTROLLED_VOCABULARIES[:item_type].image,
       subject: [thing.capitalize, 'Randomness', 'Pictures'],
@@ -267,8 +327,8 @@ if Rails.env.development? || Rails.env.uat?
       spatial_subjects: ['Onoway'],
       doi: "doi:bogus-#{Time.current.utc.iso8601(3)}"
     ).unlock_and_fetch_ldp_object do |uo|
-      uo.add_to_path(community.id, collection_first.id)
-      uo.add_to_path(community.id, collection_last.id)
+      uo.add_to_path(community.id, item_collection.id)
+      uo.add_to_path(community.id, thesis_collection.id)
       uo.save!
     end
   end
@@ -297,5 +357,22 @@ if Rails.env.development? || Rails.env.uat?
       description: Faker::Lorem.sentence(40, false, 0).chop
     ).unlock_and_fetch_ldp_object(&:save!)
   end
-  puts 'Database seeded successfully!'
+
 end
+
+# Types
+[:book, :book_chapter, :conference_workshop_poster,
+ :conference_workshop_presenation, :dataset,
+ :image, :journal_article_draft, :journal_article_published,
+ :learning_object, :report, :research_material, :review].each do |type_name|
+  Type.create(name: type_name)
+end
+
+# Languages
+[:english, :french, :spanish, :chinese, :german,
+ :italian, :russian, :ukrainian, :japanese,
+ :no_linguistic_content, :other].each do |language_name|
+  Language.create(name: language_name)
+end
+
+puts 'Database seeded successfully!'

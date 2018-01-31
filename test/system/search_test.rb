@@ -14,32 +14,58 @@ class SearchTest < ApplicationSystemTestCase
 
     # Half items have 'Fancy' in title, others have 'Nice', distributed between the two collections
     @items = 10.times.map do |i|
-      Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                 owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Item #{i}",
-                                 creators: ['Joe Blow'],
-                                 languages: [CONTROLLED_VOCABULARIES[:language].eng],
-                                 item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                 publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-                                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                                 subject: ['Items'])
-          .unlock_and_fetch_ldp_object do |uo|
-        uo.add_to_path(@community.id, @collections[i / 5].id)
-        uo.save!
+      if i < 5
+        Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                   owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Item #{i}",
+                                   creators: ['Joe Blow'],
+                                   created: "19#{50 + i}-11-11",
+                                   languages: [CONTROLLED_VOCABULARIES[:language].english],
+                                   item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                                   publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
+                                   license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                                   subject: ['Items'])
+            .unlock_and_fetch_ldp_object do |uo|
+          uo.add_to_path(@community.id, @collections[0].id)
+          uo.save!
+        end
+      else
+        Thesis.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                     owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Item #{i}",
+                                     dissertant: 'Joe Blow',
+                                     language: CONTROLLED_VOCABULARIES[:language].english,
+                                     graduation_date: "19#{50 + i}-11-11")
+              .unlock_and_fetch_ldp_object do |uo|
+          uo.add_to_path(@community.id, @collections[1].id)
+          uo.save!
+        end
       end
     end
     # 10 more items. these are private (some 'Fancy' some 'Nice')
     @items += 10.times.map do |i|
-      Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PRIVATE,
-                                 owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Private Item #{i + 10}",
-                                 creators: ['Joe Blow'],
-                                 languages: [CONTROLLED_VOCABULARIES[:language].eng],
-                                 item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                 publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-                                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                                 subject: ['Items'])
-          .unlock_and_fetch_ldp_object do |uo|
-        uo.add_to_path(@community.id, @collections[i / 5].id)
-        uo.save!
+      if i < 5
+        Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PRIVATE,
+                                   owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Private Item #{i + 10}",
+                                   creators: ['Joe Blow'],
+                                   created: "19#{70 + i}-11-11",
+                                   languages: [CONTROLLED_VOCABULARIES[:language].english],
+                                   item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                                   publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
+                                   license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                                   subject: ['Items'])
+            .unlock_and_fetch_ldp_object do |uo|
+          uo.add_to_path(@community.id, @collections[0].id)
+          uo.save!
+        end
+      else
+        Thesis.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PRIVATE,
+                                     owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Private Item #{i + 10}",
+                                     dissertant: 'Joe Blow',
+                                     language: CONTROLLED_VOCABULARIES[:language].english,
+                                     graduation_date: "19#{70 + i}-11-11")
+              .unlock_and_fetch_ldp_object do |uo|
+          uo.add_to_path(@community.id, @collections[1].id)
+          uo.save!
+        end
       end
     end
 
@@ -53,7 +79,8 @@ class SearchTest < ApplicationSystemTestCase
       Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                  owner: 1, title: "Extra Item #{i}",
                                  creators: ['Joe Blow'],
-                                 languages: [CONTROLLED_VOCABULARIES[:language].eng],
+                                 created: "19#{90 + i}-11-11",
+                                 languages: [CONTROLLED_VOCABULARIES[:language].english],
                                  item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                  publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
                                  license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
@@ -193,17 +220,17 @@ class SearchTest < ApplicationSystemTestCase
       assert_selector 'li div a', text: /Extra Community/, count: 6
 
       # Should be a 'Show more' button to see the rest
-      assert_selector 'a', text: 'Show 14 more', count: 1
+      assert_selector 'a[aria-controls="member_of_paths_dpsim_hidden"]', count: 1
 
-      click_link 'Show 14 more'
+      click_link 'Show 4 more', href: '#member_of_paths_dpsim_hidden'
 
       # Now 20 collections/communities should be shown
-      assert_selector 'li div a', text: /Extra Community/, count: 20
+      assert_selector 'li div a', text: /Extra Community/, count: 10
 
       # Should be a 'Hide' button now
-      assert_selector 'a', text: 'Hide last 14', count: 1
+      assert_selector 'a[aria-controls="member_of_paths_dpsim_hidden"]', count: 1
 
-      click_link 'Hide last 14'
+      click_link 'Hide last 4', href: '#member_of_paths_dpsim_hidden'
 
       # Again, only 6 collections/communities should be shown
       assert_selector 'li div a', text: /Extra Community/, count: 6
@@ -242,7 +269,7 @@ class SearchTest < ApplicationSystemTestCase
       click_button 'Title (A-Z)'
       click_link 'Date (newest first)'
       assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy',
-                                                                   sort: 'record_created_at', direction: 'desc')
+                                                                   sort: 'sort_year', direction: 'desc')
       assert_selector 'button', text: 'Date (newest first)'
       assert_match(/Fancy Item 8.*Fancy Item 6.*Fancy Item 4.*Fancy Item 2.*Fancy Item 0/, page.text)
 
@@ -250,13 +277,14 @@ class SearchTest < ApplicationSystemTestCase
       click_button 'Date (newest first)'
       click_link 'Date (oldest first)'
       assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy',
-                                                                   sort: 'record_created_at', direction: 'asc')
+                                                                   sort: 'sort_year', direction: 'asc')
       assert_selector 'button', text: 'Date (oldest first)'
       assert_match(/Fancy Item 0.*Fancy Item 2.*Fancy Item 4.*Fancy Item 6.*Fancy Item 8/, page.text)
     end
   end
 
   context 'Searching as admin user' do
+    # TODO: Slow Test, consistently around ~8-9 seconds
     should 'be able to filter the public and private items' do
       admin = users(:admin)
       login_user(admin)

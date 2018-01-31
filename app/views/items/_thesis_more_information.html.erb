@@ -1,0 +1,105 @@
+<ul class="list-group">
+  <% if @item.language.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <dl>
+        <dt><%= t('items.show.language') %></dt>
+        <dd><%= language_search_link(@item, @item.language) %></dd>
+      </dl>
+    </li>
+  <% end %>
+
+
+  <% if @item.is_version_of.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <dl>
+        <dt><%= t('items.show.is_version_of') %></dt>
+        <dd>
+          <ul class="list-unstyled">
+            <% @item.is_version_of.each do |thing| %>
+              <li><%= thing %></li>
+            <% end %>
+          </ul>
+        </dd>
+      </dl>
+    </li>
+  <% end %>
+
+  <% if @item.institution.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <dl>
+        <dt><%= t('.institution') %></dt>
+        <dd><%= humanize_uri(:institution, @item.institution) %></dd>
+      </dl>
+    </li>
+  <% end %>
+
+  <% if @item.thesis_level.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <dl>
+        <dt><%= t('.thesis_level') %></dt>
+        <dd><%= @item.thesis_level %></dd>
+      </dl>
+    </li>
+  <% end %>
+
+  <% if @item.departments.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <dl>
+        <dt><%= t('.departments') %></dt>
+        <dd>
+          <ul class="list-unstyled">
+            <% @item.departments.each do |department| %>
+              <li><%= department %></li>
+            <% end %>
+          </ul>
+        </dd>
+      </dl>
+    </li>
+  <% end %>
+
+  <% if @item.specializations.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <dl>
+        <dt><%= t('.specializations') %></dt>
+        <dd>
+          <ul class="list-unstyled">
+            <% @item.specializations.each do |specialization| %>
+              <li><%= specialization %></li>
+            <% end %>
+          </ul>
+        </dd>
+      </dl>
+    </li>
+  <% end %>
+
+  <% if @item.supervisors.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <dl>
+        <dt><%= t('.supervisors') %></dt>
+        <dd>
+          <ul class="list-unstyled">
+            <% @item.supervisors.each do |supervisor| %>
+              <li><%= supervisor %></li>
+            <% end %>
+          </ul>
+        </dd>
+      </dl>
+    </li>
+  <% end %>
+
+  <% if @item.committee_members.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <dl>
+        <dt><%= t('.committee_members') %></dt>
+        <dd>
+          <ul class="list-unstyled">
+            <% @item.committee_members.each do |committee_member| %>
+              <li><%= committee_member %></li>
+            <% end %>
+          </ul>
+        </dd>
+      </dl>
+    </li>
+  <% end %>
+
+</ul>

@@ -5,7 +5,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
   @@klass = Class.new(JupiterCore::LockedLdpObject) do
     ldp_object_includes Hydra::Works::WorkBehavior
     has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
-    has_multival_attribute :creator, ::RDF::Vocab::DC.creator, solrize_for: [:search, :facet]
+    has_attribute :creator, ::RDF::Vocab::DC.creator, type: :json_array, solrize_for: [:search, :facet]
     has_multival_attribute :member_of_paths, ::TERMS[:ual].path, solrize_for: :pathing
 
     additional_search_index :my_solr_doc_attr, type: :string, solrize_for: :search, as: -> { title&.upcase }
@@ -58,6 +58,31 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
   test 'attribute definitions are working' do
     assert_equal [:creator, :date_ingested, :hydra_noid, :id, :member_of_paths, :owner, :record_created_at, :title,
                   :visibility], @@klass.attribute_names.sort
+  end
+
+  test 'json_array attributes appear to be normal arrays, and maintain order' do
+    obj = @@klass.new_locked_ldp_object
+    assert obj.creator.is_a?(Array)
+    creator1 = generate_random_string
+    creator2 = generate_random_string
+    creator3 = generate_random_string
+    obj.unlock_and_fetch_ldp_object do |uo|
+      uo.owner = users(:regular).id
+      uo.visibility = JupiterCore::VISIBILITY_PUBLIC
+      uo.creator = [creator1, creator2, creator3]
+      uo.save!
+    end
+
+    # The correct ordering is in solr
+    assert_equal [creator1, creator2, creator3], obj.creator
+
+    obj2 = @@klass.find(obj.id)
+    obj2.unlock_and_fetch_ldp_object do |uo|
+      # The correct ordering is in Fedora
+      assert_equal [creator1, creator2, creator3], uo.creator
+    end
+
+    obj.unlock_and_fetch_ldp_object(&:destroy)
   end
 
   test 'attribute metadata is being tracked properly' do
@@ -212,7 +237,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     obj.unlock_and_fetch_ldp_object do |uo|
       uo.title = 'Title'
       uo.visibility = JupiterCore::VISIBILITY_PUBLIC
-      uo.owner = users(:regular_user).id
+      uo.owner = users(:regular).id
     end
 
     assert_predicate obj, :changed?
@@ -225,7 +250,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     creator = [generate_random_string]
     first_title = generate_random_string
 
-    obj = @@klass.new_locked_ldp_object(title: first_title, creator: creator, owner: users(:regular_user).id,
+    obj = @@klass.new_locked_ldp_object(title: first_title, creator: creator, owner: users(:regular).id,
                                         visibility: JupiterCore::VISIBILITY_PUBLIC)
 
     assert obj.record_created_at.nil?
@@ -245,7 +270,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
 
     second_title = generate_random_string
 
-    another_obj = @@klass.new_locked_ldp_object(title: second_title, creator: creator, owner: users(:regular_user).id,
+    another_obj = @@klass.new_locked_ldp_object(title: second_title, creator: creator, owner: users(:regular).id,
                                                 visibility: JupiterCore::VISIBILITY_PUBLIC)
     another_obj.unlock_and_fetch_ldp_object(&:save!)
 
@@ -280,6 +305,50 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     assert result.present?
     assert_equal result.id, obj.id
     assert_equal result.class, @@klass
+
+    another_klass = Class.new(JupiterCore::LockedLdpObject) do
+      ldp_object_includes Hydra::Works::WorkBehavior
+      has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
+    end
+
+    different_obj = another_klass.new_locked_ldp_object(title: generate_random_string, owner: users(:regular).id,
+                                                        visibility: JupiterCore::VISIBILITY_PRIVATE)
+    different_obj.unlock_and_fetch_ldp_object(&:save!)
+
+    # combining queries work
+    query = @@klass.where(title: first_title) + @@klass.where(title: second_title) + another_klass.all
+    assert_equal 3, query.count
+
+    # query components don't leak between subqueries
+    query = @@klass.all + another_klass.where(visibility: JupiterCore::VISIBILITY_PRIVATE)
+    assert_equal 3, query.count
+
+    # results have the types we expect
+    query = @@klass.where(visibility: JupiterCore::VISIBILITY_PRIVATE) +
+            another_klass.where(visibility: JupiterCore::VISIBILITY_PRIVATE)
+    assert_equal 1, query.count
+    assert_equal query.first.class, another_klass
+
+    # we don't find the wrong kind of thing with a query that would match them
+    query = another_klass.where(title: first_title)
+    assert_equal 0, query.count
+
+    # shared query criteria works
+    query = (@@klass.all + another_klass.all).where(owner: users(:regular).id)
+    assert_equal 3, query.count
+
+    # everything is what we expect
+    query = @@klass.where(title: first_title) + another_klass.where(visibility: JupiterCore::VISIBILITY_PRIVATE)
+    assert_equal 2, query.count
+    assert_equal different_obj.id, query.first.id
+    assert_equal another_klass, query.first.class
+
+    assert_equal obj.id, query.first(2)[1].id
+    assert_equal @@klass, query.first(2)[1].class
+
+    obj.unlock_and_fetch_ldp_object(&:destroy)
+    another_obj.unlock_and_fetch_ldp_object(&:destroy)
+    different_obj.unlock_and_fetch_ldp_object(&:destroy)
   end
 
   # TODO: maybe "upstream" deserves its own section in our test suite
@@ -355,6 +424,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     # of the time, causing our embargo date to silently become today when saved.
     # This test will fail if we haven't succesfully corrected for this in JupiterCore::LockedLdpObject
     assert instance.embargo_date.year != Time.current.year
+    instance.unlock_and_fetch_ldp_object(&:destroy)
   end
 
   test 'hoisted activefedora associations' do

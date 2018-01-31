@@ -11,7 +11,8 @@ class ItemTest < ActiveSupport::TestCase
                                                   community_id: community.id)
     collection.unlock_and_fetch_ldp_object(&:save!)
     item = Item.new_locked_ldp_object(title: 'Item', owner: 1, visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                      languages: [CONTROLLED_VOCABULARIES[:language].eng],
+                                      created: '2017-02-02',
+                                      languages: [CONTROLLED_VOCABULARIES[:language].english],
                                       creators: ['Joe Blow'],
                                       subject: ['Things'],
                                       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
@@ -23,12 +24,16 @@ class ItemTest < ActiveSupport::TestCase
       unlocked_item.save!
     end
     assert item.valid?
+    refute_equal 0, Item.public.count
+    assert_equal item.id, Item.public.first.id
+    item.unlock_and_fetch_ldp_object(&:destroy)
   end
 
   test 'there is no default visibility' do
     item = Item.new_locked_ldp_object
 
     assert_nil item.visibility
+    assert_equal 0, Item.public.count
   end
 
   test 'unknown visibilities are not valid' do
@@ -39,6 +44,7 @@ class ItemTest < ActiveSupport::TestCase
     end
 
     assert_not item.valid?
+    assert_equal 0, Item.public.count
     assert item.errors[:visibility].present?
     assert_includes item.errors[:visibility], 'some_fake_visibility is not a known visibility'
   end
@@ -90,6 +96,7 @@ class ItemTest < ActiveSupport::TestCase
     end
 
     assert_not item.valid?
+    assert_equal 0, Item.public.count
     assert item.errors[:visibility_after_embargo].present?
     assert_includes item.errors[:visibility_after_embargo], "can't be blank"
   end
@@ -175,7 +182,7 @@ class ItemTest < ActiveSupport::TestCase
     assert_not item.valid?
     assert_includes item.errors[:languages], 'is not recognized'
 
-    item = Item.new_locked_ldp_object(languages: [CONTROLLED_VOCABULARIES[:language].eng])
+    item = Item.new_locked_ldp_object(languages: [CONTROLLED_VOCABULARIES[:language].english])
     assert_not item.valid?
     refute_includes item.errors.keys, :languages
   end
@@ -267,15 +274,15 @@ class ItemTest < ActiveSupport::TestCase
   test 'item_type_with_status_code gets set correctly' do
     item = Item.new_locked_ldp_object(item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                       publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published])
-    assert_equal item.item_type_with_status_code, 'article_published'
+    assert_equal :article_published, item.item_type_with_status_code
 
     item = Item.new_locked_ldp_object(item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                       publication_status: [CONTROLLED_VOCABULARIES[:publication_status].draft,
                                                            CONTROLLED_VOCABULARIES[:publication_status].submitted])
-    assert_equal item.item_type_with_status_code, 'article_submitted'
+    assert_equal :article_submitted, item.item_type_with_status_code
 
     item = Item.new_locked_ldp_object(item_type: CONTROLLED_VOCABULARIES[:item_type].report)
-    assert_equal item.item_type_with_status_code, 'report'
+    assert_equal :report, item.item_type_with_status_code
   end
 
   test 'a subject is required' do
@@ -288,6 +295,25 @@ class ItemTest < ActiveSupport::TestCase
     item = Item.new_locked_ldp_object
     assert_not item.valid?
     assert_includes item.errors[:creators], "can't be blank"
+  end
+
+  test 'created is required' do
+    item = Item.new_locked_ldp_object
+    assert_not item.valid?
+    assert_includes item.errors[:created], "can't be blank"
+  end
+
+  test 'sort_year is required' do
+    item = Item.new_locked_ldp_object
+    assert_not item.valid?
+    assert_includes item.errors[:sort_year], "can't be blank"
+  end
+
+  test 'sort_year is derived from created' do
+    item = Item.new_locked_ldp_object(created: 'Fall 2015')
+    item.valid?
+    refute item.errors[:sort_year].present?
+    assert_equal item.sort_year, '2015'
   end
 
 end

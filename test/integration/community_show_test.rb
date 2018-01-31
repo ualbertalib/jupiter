@@ -20,8 +20,8 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
                    .new_locked_ldp_object(community_id: @community1.id,
                                           title: 'Another collection', owner: 1)
                    .unlock_and_fetch_ldp_object(&:save!)
-    @community1.logo.attach io: File.open(Rails.root + 'app/assets/images/mc_360.png'),
-                            filename: 'mc_360.png', content_type: 'image/png'
+    @community1.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
+                            filename: 'image-sample.jpeg', content_type: 'image/jpeg'
 
     # A community with no collections
     @community2 = Community
@@ -67,7 +67,7 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
 
   test 'visiting the show page for a community with two collections and a logo '\
        'as a regular user' do
-    user = users(:regular_user)
+    user = users(:regular)
     sign_in_as user
     get community_url(@community1)
 
@@ -103,7 +103,7 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
   end
 
   test 'visiting a community with no collections or logo' do
-    user = users(:regular_user)
+    user = users(:regular)
     sign_in_as user
     get community_url(@community2)
 

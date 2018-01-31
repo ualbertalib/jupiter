@@ -1,12 +1,6 @@
----
 old_license:
-  - code: attribution_3_0_international
-    uri: http://creativecommons.org/licenses/by/3.0/
-  - code: attribution_noncommercial_3_0_international
-    uri: http://creativecommons.org/licenses/by-nc/3.0/
-  - code: attribution_sharealike_3_0_international
-    uri: http://creativecommons.org/licenses/by-sa/3.0/
-  - code: attribution_noncommercial_noderivatives_3_0_international
-    uri: http://creativecommons.org/licenses/by-nc-nd/3.0/
-  - code: attribution_noncommercial_sharealike_2_5_canada
-    uri: http://creativecommons.org/licenses/by-nc-sa/2.5/ca/
+  attribution_3_0_international: http://creativecommons.org/licenses/by/3.0/
+  attribution_noncommercial_3_0_international: http://creativecommons.org/licenses/by-nc/3.0/
+  attribution_sharealike_3_0_international: http://creativecommons.org/licenses/by-sa/3.0/
+  attribution_noncommercial_noderivatives_3_0_international: http://creativecommons.org/licenses/by-nc-nd/3.0/
+  attribution_noncommercial_sharealike_2_5_canada: http://creativecommons.org/licenses/by-nc-sa/2.5/ca/

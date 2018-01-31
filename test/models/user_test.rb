@@ -4,6 +4,8 @@ class UserTest < ActiveSupport::TestCase
 
   context 'associations' do
     should have_many(:identities).dependent(:destroy)
+    should have_many(:announcements).dependent(:destroy)
+    should have_many(:draft_items).dependent(:destroy)
   end
 
   context 'validations' do
@@ -21,7 +23,7 @@ class UserTest < ActiveSupport::TestCase
   context 'methods' do
     context '#update_activity!' do
       should 'update the activity columns when not signing-in' do
-        user = users(:regular_user)
+        user = users(:regular)
         assert user.last_seen_at.blank?
         assert user.last_sign_in_at.blank?
         assert user.previous_sign_in_at.blank?
@@ -58,7 +60,7 @@ class UserTest < ActiveSupport::TestCase
       end
 
       should 'update the activity columns when signing-in' do
-        user = users(:regular_user)
+        user = users(:regular)
         assert user.last_seen_at.blank?
         assert user.last_sign_in_at.blank?
         assert user.previous_sign_in_at.blank?

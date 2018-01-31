@@ -9,12 +9,27 @@ module ApplicationHelper
     @page_title.join(' | ')
   end
 
+  def humanize_uri_code(vocab, code)
+    t("controlled_vocabularies.#{vocab}.#{code}")
+  end
+
+  def humanize_uri(vocab, uri)
+    code = CONTROLLED_VOCABULARIES[vocab].from_uri(uri)
+    return nil if code.nil?
+    humanize_uri_code(vocab, code)
+  end
+
   def path_for_result(result)
     if result.is_a? Collection
       community_collection_path(result.community, result)
     else
       polymorphic_path(result)
     end
+  end
+
+  def thesis_path(result)
+    # Theses are viewed with the item controller, which breaks the `polymorphic_path` above
+    item_path(result)
   end
 
   def help_tooltip(text)

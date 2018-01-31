@@ -3,12 +3,16 @@ class ItemsController < ApplicationController
   before_action :load_item, only: [:show, :edit, :update]
   before_action :initialize_communities_and_collections, only: [:new, :edit]
 
+  def show; end
+
   def new
+    # TODO: Remove for Draft Item Controller
     @item = Item.new_locked_ldp_object
     authorize @item
   end
 
   def create
+    # TODO: Remove for Draft Item Controller
     communities = params[:item].delete :community
     collections = params[:item].delete :collection
 
@@ -31,7 +35,12 @@ class ItemsController < ApplicationController
     end
   end
 
+  def edit
+    # TODO: Remove for Draft Item Controller
+  end
+
   def update
+    # TODO: Remove for Draft Item Controller
     authorize @item
 
     communities = params[:item].delete :community
@@ -54,7 +63,7 @@ class ItemsController < ApplicationController
   private
 
   def load_item
-    @item = Item.find(params[:id])
+    @item = JupiterCore::LockedLdpObject.find(params[:id], types: [Item, Thesis])
     authorize @item
   end
 

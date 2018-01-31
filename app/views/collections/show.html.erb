@@ -36,7 +36,7 @@
     <%= t('.items_list_header') %>
   </h4>
   <% if policy(:item).new? %>
-      <%= link_to new_item_path,
+      <%= link_to create_draft_items_path, method: :post,
           class: 'btn btn-primary' do %>
         <%= fa_icon('plus-circle') %>
         <%= t('items.new.header') %>

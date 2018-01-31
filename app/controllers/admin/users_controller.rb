@@ -83,8 +83,8 @@ class Admin::UsersController < Admin::AdminController
     @user = User.find(params[:id])
   end
 
-  def item_sort_column
-    ['title', 'record_created_at'].include?(params[:sort]) ? params[:sort] : 'record_created_at'
+  def sort_column
+    ['title', 'sort_year'].include?(params[:sort]) ? params[:sort] : 'sort_year'
   end
 
   def sort_direction
