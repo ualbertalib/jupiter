@@ -18,6 +18,7 @@ class Admin::UsersController < Admin::AdminController
 
   def show
     item_search_setup(Item.search_term_for(:owner, @user.id, role: :exact_match))
+    @draft_items = @user.draft_items.where(status: :active)
   end
 
   def suspend

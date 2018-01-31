@@ -1,7 +1,85 @@
-<div class="jumbotron text-center">
-  <h1><%= t('.header') %></h1>
-  <p class="lead">
-    <%= t('.cta_lead_text') %>
+<div class="pt-md-3">
+  <%# Two columns on large screens, wrap on smaller screens %>
+  <div class="d-flex flex-row flex-wrap">
+    <div class="col-12 col-md-5 px-0 px-md-3">
+      <h4><%= t('.welcome_header') %></h4>
+    </div>
+    <div class="align-self-center px-0 px-md-3 col-md-7">
+      <%= link_to "https://era-av.libary.ualberta.ca", class: 'btn btn-jupiter-primary w-100' do %>
+        <p class="mb-0 lead">
+          <%= fa_icon 'play-circle' %>
+          <%= t('.era_av_header') %>
+        </p>
+        <%# ERA-AV additional text not shown on smaller screens %>
+        <p class="d-none d-md-block small">
+          <%= t('.era_av_text') %>
+        </p>
+        <% end %>
+    </div>
+  </div>
+
+  <p class="mx-md-3 mt-3 mb-1 lead font-weight-bold">
+    <%= t('.explore_collections') %>
   </p>
-  <%= link_to t('.cta_link_text'), 'https://github.com/ualbertalib/jupiter', class: 'btn btn-primary btn-large' %>
+
+  <%# Collection images, shown only on larger screens %>
+  <div class="d-none d-md-block">
+    <div class="d-flex flex-row">
+      <div class="image-with-text mx-3 col-md-3">
+        <%= link_to '#TODO' do %>
+          <%= image_tag 'dept-of-agriculture.jpg', alt: t('.afns_collection'),
+              class: 'agriculture' %>
+          <p class="small font-weight-bold"><%= t('.afns_collection') %></p>
+        <% end %>
+      </div>
+
+      <div class="d-flex flex-column align-items-end">
+
+        <div class="d-flex flex-row mb-3">
+          <div class="image-with-text mr-3">
+            <%= link_to '#TODO' do %>
+              <%= image_tag 'images-of-research.jpg', alt: t('.images_of_research_collection'),
+                  title: t('.images_of_research_attribution') %>
+              <p class="small font-weight-bold"><%= t('.images_of_research_collection') %></p>
+            <% end %>
+          </div>
+
+          <div class="image-with-text">
+            <%= link_to '#TODO' do %>
+              <%= image_tag 'theses.jpg', alt: t('.theses_collection') %>
+              <p class="small font-weight-bold"><%= t('.theses_collection') %></p>
+            <% end %>
+          </div>
+
+        </div>
+
+        <div class="image-with-text mt-auto">
+          <%= link_to '#TODO' do %>
+            <%= image_tag 'oil-sands.jpg', alt: t('.osrin_collection'),
+                title: t('.osrin_attribution') %>
+            <p class="small font-weight-bold"><%= t('.osrin_collection') %></p>
+          <% end %>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <%# List of collection links, shown only on smaller screens %>
+  <div class="d-md-none w-100 collection-links">
+    <div>
+      <%= link_to t('.osrin_collection'), '#TODO', class: 'btn btn-jupiter-primary w-100' %>
+    </div>
+    <div>
+      <%= link_to t('.images_of_research_collection'), '#TODO',
+          class: 'btn btn-jupiter-primary w-100 mt-3' %>
+    </div>
+    <div>
+      <%= link_to t('.theses_collection'), '#TODO', class: 'btn btn-jupiter-primary w-100 mt-3' %>
+    </div>
+    <div>
+      <%= link_to t('.afns_collection'), '#TODO', class: 'btn btn-jupiter-primary w-100 mt-3' %>
+    </div>
+  </div>
+
 </div>

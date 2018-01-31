@@ -143,16 +143,19 @@ en:
         placeholder: 'Search ERA...'
         button_text: 'Search'
       links:
+        about: 'About'
         communities: 'Browse'
         new_item: 'Deposit'
-        login: 'Log In'
+        login: 'Log in'
         admin: 'Admin'
         logout: 'Logout'
         profile: 'Your Profile'
         logout_as_user: 'Logout as User'
       user_dropdown:
         heading_html: "Signed in as <strong>%{name}</strong>"
-
+    footer:
+      street_address: 'University of Alberta, Edmonton, AB, Canada, 26G 2R3'
+      privacy_policy: 'Web site privacy policy'
   locked_ldp_object:
     errors:
       invalid_visibility: "%{visibility} is not a known visibility"
@@ -335,9 +338,16 @@ en:
   welcome:
     index:
       header: 'ERA (Education & Research Archive)'
-      cta_lead_text: 'Keep it. Share it. Use it.
-        Welcome to University of Alberta’s Digital Repository and Asset Management Services.'
-      cta_link_text: 'Check Me Out on GitHub'
+      welcome_header: "Welcome to ERA, the University of Alberta's Digital Repository and Asset Management Services"
+      explore_collections: 'Explore some of our collections & communities:'
+      osrin_collection: 'Oil Sands Research and Information Network'
+      osrin_attribution: 'Image: “Tar sands in Alberta, 2008” by Howl Arts Collective CC-BY 2.0'
+      images_of_research_collection: 'Images of Research Competition'
+      images_of_research_attribution: 'Image: “Frozen Kaleidoscope” by Vincent McFarlane CC-BY 4.0'
+      theses_collection: 'University of Alberta Theses and Dissertations'
+      afns_collection: 'Department of Agriculture, Food and Nutritional Science Journal Articles'
+      era_av_header: 'Also search ERA Audio+Video'
+      era_av_text: "The University of Alberta Libraries' media streaming service"
 
   items:
     index:
@@ -403,6 +413,9 @@ en:
       please_follow_the_steps: 'Looks like you tried to skip ahead. Please follow the steps accordingly'
       files_are_required_to_continue: 'You are required at least one file attached before continuing'
       successful_deposit: 'Item Deposit was successful!'
+      continue_draft: 'Continue Draft'
+      delete_confirm: 'Are you sure you want to delete draft item "%{title}"?'
+      successful_deletion: 'Draft Item was successfully deleted!'
 
       describe_item:
         header: 'Describe Item'

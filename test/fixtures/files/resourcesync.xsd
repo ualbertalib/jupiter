@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.openarchives.org/rs/terms/" xmlns="http://www.openarchives.org/rs/terms/" elementFormDefault="qualified">
+
+<xsd:annotation>
+<xsd:documentation>
+XML Schema for ResoureSync extensions to Sitemap files.
+See: http://www.openarchives.org/rs/ .
+2013-01-06 first stab [Simeon Warner],
+2013-08-15 for v0.9.1, v1.0 [Simeon Warner],
+2016-04-26 for v1.1 [Simeon Warner].
+</xsd:documentation>
+</xsd:annotation>
+
+  <xsd:element name="md">
+    <xsd:annotation>
+      <xsd:documentation>
+	Metadata about a resource
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:restriction base="xsd:anyType">
+          <xsd:attribute name="at" type="xsd:dateTime"/>
+          <xsd:attribute name="capability" type="xsd:string"/>
+          <xsd:attribute name="change" type="changeType"/>
+          <xsd:attribute name="completed" type="xsd:dateTime"/>
+          <xsd:attribute name="datetime" type="xsd:dateTime"/>
+          <xsd:attribute name="encoding" type="xsd:string"/>
+          <xsd:attribute name="from" type="xsd:dateTime"/>
+          <xsd:attribute name="hash" type="xsd:string"/>
+          <xsd:attribute name="length" type="xsd:integer"/>
+          <xsd:attribute name="modified" type="xsd:dateTime"/>
+          <xsd:attribute name="path" type="pathType"/>
+          <xsd:attribute name="type" type="contentType"/>
+          <xsd:attribute name="until" type="xsd:dateTime"/>
+	  <xsd:anyAttribute namespace="##other" processContents="lax"/>
+        </xsd:restriction>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="ln">
+    <xsd:annotation>
+      <xsd:documentation>
+	Links to related resources
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:restriction base="xsd:anyType">
+          <xsd:attribute name="encoding" type="xsd:string"/>
+          <xsd:attribute name="hash" type="xsd:string"/>
+          <xsd:attribute name="href" type="xsd:anyURI"/>
+          <xsd:attribute name="length" type="xsd:nonNegativeInteger"/>
+          <xsd:attribute name="modified" type="xsd:dateTime"/>
+          <xsd:attribute name="path" type="pathType"/>
+          <xsd:attribute name="pri" type="priType"/>
+          <xsd:attribute name="rel" type="relType"/>
+          <xsd:attribute name="type" type="contentType"/>
+	  <xsd:anyAttribute namespace="##other" processContents="lax"/>
+        </xsd:restriction>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:simpleType name="changeType">
+    <xsd:annotation>
+      <xsd:documentation>
+        Allowed values of the change attribute are
+	created, updated, deleted
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="created"/>
+      <xsd:enumeration value="updated"/>
+      <xsd:enumeration value="deleted"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="pathType">
+    <xsd:annotation>
+      <xsd:documentation>
+        Path values must start with a slash, must not end with a slash
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="/.*[^/]"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="contentType">
+    <xsd:annotation>
+      <xsd:documentation>
+        MIME Content Types are described in RFCs 2045,2046
+        http://tools.ietf.org/html/rfc2045
+        http://tools.ietf.org/html/rfc2046
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="[\w-]+/[\w-]+"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="priType">
+    <xsd:annotation>
+      <xsd:documentation>
+        The priority attribute may have values 1 through 999999
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:integer">
+      <xsd:minInclusive value="1"/>
+      <xsd:maxInclusive value="999999"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="relType">
+    <xsd:annotation>
+      <xsd:documentation>
+	Syntax for link relation values is specified by
+	http://tools.ietf.org/html/rfc5988 and the relevant
+	portion is:
+
+	# link-param     = ( ( "rel" "=" relation-types )
+	#	           ... 
+	# relation-type  = reg-rel-type | ext-rel-type 
+	# reg-rel-type   = LOALPHA *( LOALPHA | DIGIT | "." | "-" ) 
+	# ext-rel-type   = URI
+	#
+
+	Registered link relations (reg-rel-type) are listed at
+	http://www.iana.org/assignments/link-relations/link-relations.xhtml
+	and URIs are allowed for extension (ext-rel-type)
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:union>
+      <xsd:simpleType>
+	<xsd:restriction base="xsd:string">
+          <xsd:pattern value="[a-z][a-z0-9\.\-]*"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType>
+	<xsd:restriction base="xsd:anyURI"/>
+      </xsd:simpleType>
+    </xsd:union>
+  </xsd:simpleType>
+
+</xsd:schema>
