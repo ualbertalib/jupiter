@@ -391,18 +391,18 @@ namespace :migration do
           puts files
           begin
             item = Thesis.new_locked_ldp_object(title: title, dissertant: dissertant, degree: degree,
-                                              abstract: abstract, date_accepted: date_accepted,
-                                              date_submitted: date_submitted, institution: institution,
-                                              graduation_date: graduation_date, thesis_level: thesis_level,
-                                              committee_members: committee_members, departments: departments,
-                                              subject: subject, specializations: specializations,
-                                              supervisors: supervisors, language: language,
-                                              rights: rights, alternative_title: alternative_title,
-                                              embargo_end_date: embargo_end_date, embargo_history: embargo_history,
-                                              visibility_after_embargo: visibility_after_embargo,
-                                              depositor: depositor, owner: owner, visibility: visibility,
-                                              fedora3_uuid: fedora3uuid, fedora3_handle: fedora3handle,
-                                              doi: doi, proquest: proquest, unicorn: unicorn, hydra_noid: hydra_noid)
+                                                abstract: abstract, date_accepted: date_accepted,
+                                                date_submitted: date_submitted, institution: institution,
+                                                graduation_date: graduation_date, thesis_level: thesis_level,
+                                                committee_members: committee_members, departments: departments,
+                                                subject: subject, specializations: specializations,
+                                                supervisors: supervisors, language: language,
+                                                rights: rights, alternative_title: alternative_title,
+                                                embargo_end_date: embargo_end_date, embargo_history: embargo_history,
+                                                visibility_after_embargo: visibility_after_embargo,
+                                                depositor: depositor, owner: owner, visibility: visibility,
+                                                fedora3_uuid: fedora3uuid, fedora3_handle: fedora3handle,
+                                                doi: doi, proquest: proquest, unicorn: unicorn, hydra_noid: hydra_noid)
             item.unlock_and_fetch_ldp_object do |unlocked_item|
               unlocked_item.add_communities_and_collections(community_ids, collection_ids)
               if files.empty?
@@ -468,7 +468,7 @@ namespace :migration do
         graph = RDF::Graph.load file
         main_record = object_value_from_predicate(graph, ::Hydra::PCDM::Vocab::PCDMTerms.relatedObjectOf)
         main_noid = main_record.split('/')[-1]
-        main_id = find_by_object_by_noid(main_noid)
+        main_id = find_object_by_noid(main_noid)
         next if main_id.blank?
         Rails.logger.error "Issue with #{main_noid}, not returning #{main_id}" if main_id.blank?
 
