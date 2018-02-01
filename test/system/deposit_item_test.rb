@@ -43,8 +43,8 @@ class DepositItemTest < ApplicationSystemTestCase
 
       fill_in I18n.t('items.draft.describe_item.description'), with: 'A Dance with Dragons Description Goes Here!!!'
 
-      select @community.title, from: 'draft_item[community_id]'
-      select @collection.title, from: 'draft_item[collection_id]'
+      select @community.title, from: 'draft_item[community_id][]'
+      select @collection.title, from: 'draft_item[collection_id][]'
 
       click_on I18n.t('items.draft.save_and_continue')
 

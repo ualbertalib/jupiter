@@ -43,7 +43,7 @@ class DraftItemTest < ActiveSupport::TestCase
         subjects: ['Best Seller', 'Adventure'],
         date_created: Date.current,
         description: 'Really random description about this random book',
-        member_of_paths: { community_id: 'random-uuid-123', collection_id: 'random-uuid-abc' }
+        member_of_paths: { community_id: ['random-uuid-123'], collection_id: ['random-uuid-abc'] }
       )
       assert draft_item.valid?
     end
@@ -62,7 +62,7 @@ class DraftItemTest < ActiveSupport::TestCase
         subjects: ['Best Seller', 'Adventure'],
         date_created: Date.current,
         description: 'Really random description about this random book',
-        member_of_paths: { community_id: 'random-uuid-123', collection_id: 'random-uuid-abc' },
+        member_of_paths: { community_id: ['random-uuid-123'], collection_id: ['random-uuid-abc'] },
         # technically a draft_item is valid in this wizard step already, since license/visibility are given defaults
         # but this case let's force the validation to fail
         license: nil,
@@ -96,7 +96,7 @@ class DraftItemTest < ActiveSupport::TestCase
         subjects: ['Best Seller', 'Adventure'],
         date_created: Date.current,
         description: 'Really random description about this random book',
-        member_of_paths: { community_id: 'random-uuid-123', collection_id: 'random-uuid-abc' }
+        member_of_paths: { community_id: ['random-uuid-123'], collection_id: ['random-uuid-abc'] }
       )
       refute draft_item.valid?
 
@@ -125,7 +125,7 @@ class DraftItemTest < ActiveSupport::TestCase
         subjects: ['Best Seller', 'Adventure'],
         date_created: Date.current,
         description: 'Really random description about this random book',
-        member_of_paths: { community_id: 'random-uuid-123', collection_id: 'random-uuid-abc' },
+        member_of_paths: { community_id: ['random-uuid-123'], collection_id: ['random-uuid-abc'] },
         license: DraftItem.licenses[:license_text]
       )
 
@@ -152,7 +152,7 @@ class DraftItemTest < ActiveSupport::TestCase
         subjects: ['Best Seller', 'Adventure'],
         date_created: Date.current,
         description: 'Really random description about this random book',
-        member_of_paths: { community_id: 'random-uuid-123', collection_id: 'random-uuid-abc' },
+        member_of_paths: { community_id: ['random-uuid-123'], collection_id: ['random-uuid-abc'] },
         visibility: DraftItem.visibilities[:embargo]
       )
 
@@ -187,7 +187,7 @@ class DraftItemTest < ActiveSupport::TestCase
       assert_equal "Collection can't be blank", draft_item.errors.messages[:member_of_paths].last
 
       draft_item.assign_attributes(
-        member_of_paths: { community_id: 'random-uuid-123', collection_id: 'random-uuid-abc' }
+        member_of_paths: { community_id: ['random-uuid-123'], collection_id: ['random-uuid-abc'] }
       )
       assert draft_item.valid?
     end
