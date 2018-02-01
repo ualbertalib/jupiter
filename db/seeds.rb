@@ -174,10 +174,18 @@ if Rails.env.development? || Rails.env.uat?
           uo.add_to_path(community.id, item_collection.id)
           uo.add_to_path(community.id, thesis_collection.id)
           uo.save!
-          # Attach a file to the mondo-item
-          file = File.open(Rails.root + 'app/assets/images/era-logo.png', 'r')
-          uo.add_files([file])
-          file.close
+          
+          # Attach two files to the mondo-item
+          File.open(Rails.root + 'app/assets/images/mc_360.png', 'r') do |file1|
+            File.open(Rails.root + 'test/fixtures/files/image-sample.jpeg', 'r') do |file2|
+              # Bit of a hack to fake a long file name ...
+              def file2.original_filename
+                'wefksdkhvkasdkfjhwekkjahsdkjkajvbkejfkwejfjkdvkhdkfhwukefkhoiekldkfhkdfjhiwuegfugksjdcjbsjkdbw.jpeg'
+              end
+              uo.add_files([file1, file2])
+            end
+          end
+          
         else
           uo.add_to_path(community.id, item_collection.id)
           uo.save!
