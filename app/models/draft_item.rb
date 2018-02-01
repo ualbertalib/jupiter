@@ -144,8 +144,9 @@ class DraftItem < ApplicationRecord
       each_community_collection do |community, collection|
         unlocked_obj.add_to_path(community.id, collection.id)
       end
-
-      unlocked_obj.add_files(map_activestorage_files_as_file_objects)
+      map_activestorage_files_as_file_objects do |file|
+        unlocked_obj.add_files([file])
+      end
       unlocked_obj.save!
     end
   end
@@ -186,12 +187,16 @@ class DraftItem < ApplicationRecord
     validate_choose_license_and_visibility? && embargo?
   end
 
+  # HACK: Messing with Rails internals for fun and profit
+  def file_path_for(file)
+    ActiveStorage::Blob.service.send(:path_for, file.key)
+  end
+
   def files_are_virus_free
     return unless defined?(Clamby)
-
     self.files.each do |file|
-      path = ActiveStorage::Blob.service.send(:path_for, file.key)
-      errors.add(:files, :infected) unless Clamby.safe?(path)
+      path = file_path_for(file)
+  #    errors.add(:files, :infected) unless Clamby.safe?(path)
     end
   end
 
@@ -202,23 +207,12 @@ class DraftItem < ApplicationRecord
   # See app/models/concerns/item_prooperties.rb#L154 for ItemProperties#thumbnail method once implemented
   def map_activestorage_files_as_file_objects
     files.map do |file|
-      # Can ActiveStorage make this easier?
-      # Most of this low level file stuff are hidden behind private APIs
-      # Perhaps we can do this via `download_blob_to_tempfile` once on rails 5.2
-      # https://github.com/rails/rails/blob/master/activestorage/lib/active_storage/downloading.rb#L7
-
-      # Tempfile vs File: Tempfile give unique file names which is good for avodiing name collisions in the same directory
-      # however this also means fedora takes this name as the filename and this is what gets displayed to the UI
-      # For example: `random-image.png` from the user becomes `random-image20180123-32229-4784ha.png` in fedora
-      # Another benefit is Tempfiles are deleted when the Tempfile object is garbage collected
-      file_obj = Tempfile.open([file.filename.base, file.filename.extname]) do |temp_file|
-        # TODO: This may be slow if the file is huge? Probably should be chunking the file and streaming this in?
-        temp_file.write(file.download)
-        temp_file
+      path = file_path_for(file)
+      original_filename = file.filename.to_s
+      File.open(path, 'r') do |f|
+        f.send(:define_singleton_method, :original_filename, ->() {original_filename})
+        yield f
       end
-
-      # ActiveFedora is weird, it wants a File.open handle or something not a File object
-      File.open(file_obj.path, 'r')
     end
   end
 
