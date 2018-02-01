@@ -2,7 +2,7 @@ require 'sidekiq/web'
 require_dependency 'admin_constraint'
 
 Rails.application.routes.draw do
-  resources :items do
+  resources :items, only: [:show, :edit] do
     collection do
       post :create_draft, controller: 'items/draft', action: :create
     end

@@ -1,8 +1,6 @@
 <% page_title(@user.name) %>
 
-<div class="mb-3">
-  <h1><%= @user.name %></h1>
-</div>
+<h1 class="mb-3"><%= @user.name %></h1>
 
 <dl class="row">
   <dt class="col-sm-3"><%= t('admin.users.created') %></dt>
@@ -14,7 +12,6 @@
   <dd class="col-sm-9">
     <%= @user.email %>
   </dd>
-
 </dl>
 
 <%= render partial: 'user_items',

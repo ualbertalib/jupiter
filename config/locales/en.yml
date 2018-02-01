@@ -33,7 +33,7 @@ en:
   site_name: 'ERA'
 
   # Generic terms
-  add_another: 'Add another'
+  add_another_community_collection: 'Add another Community/Collection'
   all: 'All'
   browse_all: 'Browse all'
   cancel: 'Cancel'
@@ -417,6 +417,12 @@ en:
       delete_confirm: 'Are you sure you want to delete draft item "%{title}"?'
       successful_deletion: 'Draft Item was successfully deleted!'
 
+      community_collection_input:
+        community: 'Community'
+        community_placeholder: 'Select a community'
+        collection: 'Collection'
+        collection_placeholder: 'Select a collection'
+
       describe_item:
         header: 'Describe Item'
         header_icon: 'pencil'
@@ -443,10 +449,6 @@ en:
         community_and_collection: Community and Collection
         community_and_collection_help_html: 'Choose the Community and Collection that best match your item(s).
           If you need a new collection, email <a href="mailto:erahelp@ualberta.ca">erahelp@ualberta.ca</a>'
-        community: 'Community'
-        community_placeholder: 'Select a community'
-        collection: 'Collection'
-        collection_placeholder: 'Select a collection'
         additional_fields: 'Additional fields'
         contributors: 'Additional contributors'
         contributors_placeholder: 'Enter one or multiple contributors'

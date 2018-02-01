@@ -18,8 +18,8 @@ completed_describe_item_step:
     romance, and adventure fill the pages of this magnificent saga, the first volume in an epic
     series sure to delight fantasy fans everywhere.'
   member_of_paths: {
-    community_id: 'random-uuid-for-book-community-123',
-    collection_id: 'random-uuid-for-fantasy-books-collection-abc'
+    community_id: ['random-uuid-for-book-community-123'],
+    collection_id: ['random-uuid-for-fantasy-books-collection-abc']
   }
 
 completed_choose_license_and_visibility_step:
@@ -38,8 +38,8 @@ completed_choose_license_and_visibility_step:
      A Clash of Kings transports us to a world of revelry and revenge,
      wizardry and warfare unlike any you have ever experienced.'
   member_of_paths: {
-    community_id: 'random-uuid-for-books-community-123',
-    collection_id: 'random-uuid-for-fantasy-books-collection-abc'
+    community_id: ['random-uuid-for-books-community-123'],
+    collection_id: ['random-uuid-for-fantasy-books-collection-abc']
   }
   license: <%= DraftItem.licenses[:license_text] %>
   license_text_area: 'Copyright license goes here'
