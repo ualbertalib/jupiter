@@ -61,8 +61,8 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
           subjects: ['Best Seller', 'Adventure'],
           date_created: Date.current,
           description: 'Really random description about this random book',
-          community_id: 'random-uuid-123',
-          collection_id: 'random-uuid-abc'
+          community_id: ['random-uuid-123'],
+          collection_id: ['random-uuid-abc']
         }
       }
 
@@ -155,7 +155,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
 
       draft_item = draft_items(:completed_choose_license_and_visibility_step)
 
-      draft_item.member_of_paths = { 'community_id': community.id, 'collection_id': collection.id }
+      draft_item.member_of_paths = { 'community_id': [community.id], 'collection_id': [collection.id] }
 
       file_fixture = fixture_file_upload('/files/image-sample.jpeg', 'image/jpeg')
       image_file = ActiveStorage::Blob.create_after_upload!(
@@ -228,6 +228,33 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
       end
 
       assert_redirected_to item_draft_path(id: :describe_item, item_id: DraftItem.last.id)
+    end
+  end
+
+  context '#destroy' do
+    should 'not be able to delete a draft item if you do not own the item' do
+      sign_in_as users(:regular_two)
+
+      draft_item = draft_items(:completed_choose_license_and_visibility_step)
+
+      assert_no_difference('DraftItem.count') do
+        delete item_delete_draft_url(item_id: draft_item.id)
+      end
+
+      assert_redirected_to root_url
+      assert_equal I18n.t('authorization.user_not_authorized'), flash[:alert]
+    end
+
+    should 'be able to create a draft item if logged in and you own the item' do
+      sign_in_as @user
+
+      draft_item = draft_items(:completed_choose_license_and_visibility_step)
+
+      assert_difference('DraftItem.count', -1) do
+        delete item_delete_draft_url(item_id: draft_item.id)
+      end
+
+      assert_redirected_to root_url
     end
   end
 

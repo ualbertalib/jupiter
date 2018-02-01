@@ -32,12 +32,16 @@ class ThesisTest < ActiveSupport::TestCase
       assert_match("<http://pcdm.org/models#memberOf> <#{collection_uri}>", triples)
     end
     assert thesis.valid?
+    refute_equal 0, Thesis.public.count
+    assert_equal thesis.id, Thesis.public.first.id
+    thesis.unlock_and_fetch_ldp_object(&:destroy)
   end
 
   test 'there is no default visibility' do
     thesis = Thesis.new_locked_ldp_object
 
     assert_nil thesis.visibility
+    assert_equal 0, Thesis.public.count
   end
 
   test 'unknown visibilities are not valid' do
@@ -48,6 +52,7 @@ class ThesisTest < ActiveSupport::TestCase
     end
 
     assert_not thesis.valid?
+    assert_equal 0, Thesis.public.count
     assert thesis.errors[:visibility].present?
     assert_includes thesis.errors[:visibility], 'some_fake_visibility is not a known visibility'
   end
@@ -99,6 +104,7 @@ class ThesisTest < ActiveSupport::TestCase
     end
 
     assert_not thesis.valid?
+    assert_equal 0, Thesis.public.count
     assert thesis.errors[:visibility_after_embargo].present?
     assert_includes thesis.errors[:visibility_after_embargo], "can't be blank"
   end

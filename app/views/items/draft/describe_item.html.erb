@@ -122,44 +122,24 @@
         <% end %>
       </ul>
     <% end %>
-    <div class="form-group">
-      <label>
-        <span class="text-danger font-weight-bold">*</span>
-        <%= t('.community') %>
-      </label>
 
-      <% @community = Community.find(@draft_item.member_of_paths['community_id']) if @draft_item.member_of_paths && @draft_item.member_of_paths['community_id'].present? %>
-      <%= select_tag 'draft_item[community_id]',
-                      options_from_collection_for_select(
-                        Community.all,
-                        :id,
-                        :title,
-                        @community&.id ),
-                      prompt: t('.community_placeholder'),
-                      class: 'form-control js-community-select' %>
-    </div>
-    <div class="form-group">
-      <label>
-        <span class="text-danger font-weight-bold">*</span>
-        <%= t('.collection') %>
-      </label>
-      <% if @community.present? %>
-            <%= select_tag 'draft_item[collection_id]',
-                           options_from_collection_for_select(
-                             @community.member_collections,
-                             :id,
-                             :title,
-                             @draft_item.member_of_paths['collection_id']),
-                           prompt: t('.collection_placeholder'),
-                           data: { placeholder: t('.collection_placeholder')},
-                           class: 'form-control js-collection-select' %>
+    <div class="js-communities-collections-list">
+      <% if @draft_item.communities.present? %>
+
+        <% @draft_item.each_community_collection do |community, collection| %>
+          <%= render partial: 'community_collection_input',
+              locals: { community: community, collection: collection } %>
+        <% end %>
       <% else %>
-        <%= select_tag 'draft_item[collection_id]',
-                        nil,
-                        data: { placeholder: t('.collection_placeholder')},
-                        class: 'form-control js-collection-select',
-                        disabled: true %>
+        <%= render partial: 'community_collection_input',
+            locals: { community: nil, collection: nil} %>
       <% end %>
+    </div>
+    <div class="d-flex flex-row-reverse">
+      <div class="p-3">
+        <%= link_to "#{fa_icon('plus')} #{t(:add_another_community_collection)}".html_safe,
+            '#', class: 'btn btn-secondary js-add-community-collection' %>
+      </div>
     </div>
   </fieldset>
 

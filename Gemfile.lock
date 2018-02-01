@@ -215,7 +215,7 @@ GEM
     mustermann (1.0.1)
     mysql2 (0.4.10)
     nio4r (2.1.0)
-    nokogiri (1.8.1)
+    nokogiri (1.8.2)
       mini_portile2 (~> 2.3.0)
     om (3.1.1)
       activemodel
@@ -416,6 +416,7 @@ DEPENDENCIES
   listen (>= 3.0.5, < 3.2)
   minitest-hooks
   mysql2 (>= 0.3.18, < 0.5)
+  nokogiri
   omniauth
   omniauth-saml
   pry
@@ -446,4 +447,4 @@ DEPENDENCIES
   wicked
 
 BUNDLED WITH
-   1.16.0
+   1.16.1

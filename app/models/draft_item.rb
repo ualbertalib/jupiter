@@ -54,6 +54,21 @@ class DraftItem < ApplicationRecord
 
   validates :files, presence: true, if: :validate_upload_files?
 
+  def communities
+    return unless member_of_paths.present? && member_of_paths['community_id']
+    member_of_paths['community_id'].map do |cid|
+      Community.find(cid)
+    end
+  end
+
+  def each_community_collection
+    return unless member_of_paths && member_of_paths['community_id'].present?
+    member_of_paths['community_id'].each_with_index do |community_id, idx|
+      collection_id = member_of_paths['collection_id'][idx]
+      yield Community.find(community_id), collection_id.present? ? Collection.find(collection_id) : nil
+    end
+  end
+
   def thumbnail
     if thumbnail_id.present?
       # TODO: Weird bug with activestorage when walking the assocation to all the attachments
@@ -124,7 +139,11 @@ class DraftItem < ApplicationRecord
       source: source,
       related_link: related_item
     ).unlock_and_fetch_ldp_object do |unlocked_obj|
-      unlocked_obj.add_to_path(member_of_paths['community_id'], member_of_paths['collection_id'])
+
+      each_community_collection do |community, collection|
+        unlocked_obj.add_to_path(community.id, collection.id)
+      end
+
       unlocked_obj.add_files(map_activestorage_files_as_file_objects)
       unlocked_obj.save!
     end
@@ -137,10 +156,13 @@ class DraftItem < ApplicationRecord
   # TODO: validate if community/collection ID's are actually in Fedora?
   def communities_and_collections_validations
     return if member_of_paths.blank? # caught by presence check
-    # member_of_paths.each do |path| # TODO eventually this will be an array of hashes
     errors.add(:member_of_paths, :community_not_found) if member_of_paths['community_id'].blank?
     errors.add(:member_of_paths, :collection_not_found) if member_of_paths['collection_id'].blank?
-    # end
+    return unless member_of_paths['community_id'].present? && member_of_paths['collection_id'].present?
+    member_of_paths['community_id'].each_with_index do |community_id, idx|
+      errors.add(:member_of_paths, :community_not_found) if community_id.blank?
+      errors.add(:member_of_paths, :collection_not_found) if member_of_paths['collection_id'][idx].blank?
+    end
   end
 
   def validate_describe_item?

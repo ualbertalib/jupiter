@@ -137,7 +137,7 @@ class AdminUsersShowTest < ApplicationSystemTestCase
     # we signed in as user and have been redirected to homepage
     assert_text I18n.t('admin.users.show.login_as_user_flash', user: user.name)
     assert_text user.name
-    assert_selector 'h1', text: I18n.t('welcome.index.header')
+    assert_equal URI.parse(current_url).request_uri, root_path
 
     # we log out as user and get redirected back to admin user show page
     click_link user.name # opens user dropdown which has the logout as user link
