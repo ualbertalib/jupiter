@@ -53,6 +53,7 @@ class DraftItem < ApplicationRecord
   validates :embargo_end_date, presence: true, if: :validate_if_visibility_is_embargo?
 
   validates :files, presence: true, if: :validate_upload_files?
+  validate :files_are_virus_free, if: :validate_upload_files?
 
   def communities
     return unless member_of_paths.present? && member_of_paths['community_id']
@@ -183,6 +184,15 @@ class DraftItem < ApplicationRecord
 
   def validate_if_visibility_is_embargo?
     validate_choose_license_and_visibility? && embargo?
+  end
+
+  def files_are_virus_free
+    return unless defined?(Clamby)
+
+    self.files.each do |file|
+      path = ActiveStorage::Blob.service.send(:path_for, file.key)
+      errors.add(:files, :infected) unless Clamby.safe?(path)
+    end
   end
 
   # Fedora file handling

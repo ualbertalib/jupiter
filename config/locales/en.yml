@@ -81,6 +81,8 @@ en:
               must_be_absent_for_non_articles: 'must be absent for non-articles'
             visibility_after_embargo:
               not_recognized: 'is not recognized'
+            files:
+              infected: 'is infected with a virus'
         ir_thesis:
           attributes:
             member_of_paths:
