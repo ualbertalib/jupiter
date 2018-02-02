@@ -541,6 +541,7 @@ en:
 
   search:
     filter: 'Filter'
+    filter_results: 'Filter results'
     hide_last_count: 'Hide last %{count}'
     page_range: '%{first} - %{last} of %{total}'
     results_for: 'Results for "%{search}"'
