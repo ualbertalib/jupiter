@@ -1,3 +1,4 @@
+
 module ItemProperties
   extend ActiveSupport::Concern
 
@@ -131,9 +132,11 @@ length=\"#{unlocked_fileset.original_file.size}\" \
 type=\"#{unlocked_fileset.original_file.mime_type}\"\
 />"
             unlocked_fileset.save!
-            self.members += [unlocked_fileset]
-            # pull in hydra derivatives, set temp file base
-            # Hydra::Works::CharacterizationService.run(fileset.characterization_proxy, filename)
+
+            self.ordered_members += [unlocked_fileset]
+            if Rails.configuration.run_fits_characterization
+              Hydra::Works::CharacterizationService.run(unlocked_fileset.original_file)
+            end
           end
         end
       end
@@ -169,8 +172,22 @@ type=\"#{unlocked_fileset.original_file.mime_type}\"\
     end
   end
 
-  # TODO: implement me
   def thumbnail
-    nil
+    @thumbnail ||= ActiveStorage::Attached::One.new(:thumbnail, self)
+  end
+
+  def thumbnail_fileset(fileset)
+    raise ArgumentError, 'Thumbnail must belong to the item it is set for' unless id == fileset.owning_item.id
+    thumbnail.purge if thumbnail.present?
+    fileset.unlock_and_fetch_ldp_object do |unlocked_fileset|
+      unlocked_fileset.create_derivatives
+      # don't ask. RDF::URIs aren't real Ruby URIs for reasons that presumably made sense to someone, somewhere
+      uri = URI.parse(unlocked_fileset.thumbnail.uri.to_s)
+      uri.open do |uri_data|
+        thumbnail.attach(io: uri_data,
+                         filename: "#{unlocked_fileset.contained_filename}.jpg",
+                         content_type: 'image/jpeg')
+      end
+    end
   end
 end

@@ -89,3 +89,7 @@ group :test do
   gem 'minitest-hooks'
   gem 'shoulda', require: false
 end
+
+group :uat, :staging, :production do
+  gem 'clamby'
+end

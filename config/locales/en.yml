@@ -135,6 +135,8 @@ en:
             member_of_paths:
               community_not_found: "Community can't be blank"
               collection_not_found: "Collection can't be blank"
+            files:
+              infected: '%{filename} is infected with a virus'
 
   application:
     navbar:
