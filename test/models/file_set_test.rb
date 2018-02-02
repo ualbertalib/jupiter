@@ -55,6 +55,9 @@ class FileSetTest < ActiveSupport::TestCase
     file_set.unlock_and_fetch_ldp_object do |unlocked_fileset|
       assert unlocked_fileset.original_file.uri =~ /http.*fcrepo\/rest\/.*#{file_set.id}\/files\/.*/
     end
+
+    item.thumbnail_fileset(file_set)
+    assert item.thumbnail.url.present?
   end
 
 end
