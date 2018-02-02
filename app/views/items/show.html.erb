@@ -19,7 +19,7 @@
 </div>
 
 <div class="container">
-  <div class="row">
+  <div class="row mt-3">
     <%# LEFT SIDE %>
     <div class="col-4">
       <%# FILES SIDEBAR %>
@@ -49,6 +49,16 @@
 
     <%# MAIN CONTENT %>
     <div class="col-8 pl-5">
+      <% if policy(@item).edit? %>
+        <%= link_to edit_item_path(@item),
+                    class:'btn btn-outline-secondary pull-right' do %>
+            <%= fa_icon('pencil-square-o') %>
+            <%= t('edit') %>
+        <% end %>
+      <% end %>
+
+      <h1 title="<%= t('items.show.title') %>"><%= @item.title %></h1>
+
       <%= render @item %>
     </div>
   </div>
