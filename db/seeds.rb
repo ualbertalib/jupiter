@@ -176,7 +176,7 @@ if Rails.env.development? || Rails.env.uat?
           uo.save!
           
           # Attach two files to the mondo-item
-          File.open(Rails.root + 'app/assets/images/mc_360.png', 'r') do |file1|
+          File.open(Rails.root + 'test/fixtures/files/pdf-sample.pdf', 'r') do |file1|
             File.open(Rails.root + 'test/fixtures/files/image-sample.jpeg', 'r') do |file2|
               # Bit of a hack to fake a long file name ...
               def file2.original_filename
