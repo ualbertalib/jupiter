@@ -141,8 +141,7 @@ And everything else is how you would normally develop in a rails project.
 The Clamby repository has [instructions](https://github.com/kobaltz/clamby#dependencies) on setting up clamav on various operating systems
 
 For characterization you need to install [FITS](https://github.com/harvard-lts/fits) and ensure that `fits.sh` is in your Rails' process' PATH
-[Hydra-File_Characterization](https://github.com/samvera/hydra-file_characterization), which Hydra-Works leverages, has more information on configuring the
-characterization setup.
+[Hydra-File_Characterization](https://github.com/samvera/hydra-file_characterization), which Hydra-Works leverages, has more information on configuring the characterization setup.
 
 ## Common gotchas?
 - If your having issues, logs are the best place to first look at what went wrong.
