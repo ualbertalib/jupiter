@@ -57,6 +57,7 @@ en:
   sort_by: 'Sort by'
   time_ago: '%{time} ago'
   updated_at: 'Updated At'
+  view_more: 'View More'
 
   activemodel:
     errors:
@@ -339,7 +340,7 @@ en:
     index:
       header: 'ERA (Education & Research Archive)'
       welcome_header: "Welcome to ERA, the University of Alberta's Digital Repository and Asset Management Services"
-      explore_collections: 'Explore some of our collections & communities:'
+      explore_collections: 'Explore Our Collections and Communities'
       osrin_collection: 'Oil Sands Research and Information Network'
       osrin_attribution: 'Image: “Tar sands in Alberta, 2008” by Howl Arts Collective CC-BY 2.0'
       images_of_research_collection: 'Images of Research Competition'

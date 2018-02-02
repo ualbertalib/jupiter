@@ -1,26 +1,26 @@
-$header-height-large-screen: 76px;
-$header-height-small-screen: 136px;
-$footer-height: 76px;
+$header-height-large-screen: 81px;
+$header-height-small-screen: 139px;
+$footer-height: 72px;
 
 $image-with-text-bg: $jupiter-primary;
 $image-with-text-opacity: 0.8;
 
 html {
-  min-height: 100%;
   // needed for sticky footer
+  min-height: 100%;
   position: relative;
 }
 
 body {
   // sticky footer height
-  margin-bottom: $header-height-large-screen + $footer-height;
+  padding-bottom: $header-height-large-screen + $footer-height;
   // padding for fixed header.
   padding-top: $header-height-large-screen;
 }
 
 @include media-breakpoint-between(xs, sm) {
   body {
-    margin-bottom: $header-height-small-screen + $footer-height;
+    padding-bottom: $header-height-small-screen + $footer-height;
     // header needs more room on small screens for search box
     padding-top: $header-height-small-screen;
   }
@@ -33,15 +33,16 @@ body {
   text-decoration: inherit;
 }
 
-.footer {
+.j-header {
+  border-bottom: 1px solid $jupiter-primary;
+  box-shadow: 0 2px 4px -1px rgba(0,0,0,0.25);
+}
+
+.j-footer {
+  // needed for sticky footer
   bottom: 0px;
   position: absolute;
   width: 100%;
-
-  .container {
-    max-width: 100%;
-    width: 100%;
-  }
 }
 
 // Adapted from https://codepen.io/luisintosh/pen/gPGXOp
