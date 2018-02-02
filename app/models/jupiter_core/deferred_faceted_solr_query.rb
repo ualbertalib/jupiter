@@ -43,9 +43,16 @@ class JupiterCore::DeferredFacetedSolrQuery
     self
   end
 
-  def each_facet_with_results
+  def each_facet_with_results(first_facet_categories = [])
     reify_result_set
-    @facets.each do |facet|
+    # first_categories indicates which facets should be treated first (for example, selected facets in a query)
+    # Order in first_categories matters
+    facets = @facets.sort_by do |facet|
+      idx = first_facet_categories.find_index(facet.solr_index)
+      idx ||= first_facet_categories.length + 1
+      idx
+    end
+    facets.each do |facet|
       yield facet if facet.present?
     end
   end

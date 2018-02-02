@@ -15,7 +15,7 @@
         </div>
       </div>
       <div class="card-body p-2 pr-3 pr-md-0 filter-list">
-        <% results.each_facet_with_results do |facet| %>
+        <% results.each_facet_with_results(@first_facet_categories) do |facet| %>
           <%= render partial: 'search/facet_results', locals: { facet: facet } %>
         <% end %>
       </div>
