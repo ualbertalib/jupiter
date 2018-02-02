@@ -19,9 +19,9 @@
 </div>
 
 <div class="container">
-  <div class="row mt-3">
+  <div class="row">
     <%# LEFT SIDE %>
-    <div class="col-4">
+    <div class="col-md-4 mt-5">
       <%# FILES SIDEBAR %>
       <% if @item.file_sets.present? %>
         <div class="mb-3">
@@ -48,7 +48,7 @@
     </div>
 
     <%# MAIN CONTENT %>
-    <div class="col-8 pl-5">
+    <div class="col-md-8 pl-5 mt-5">
       <% if policy(@item).edit? %>
         <%= link_to edit_item_path(@item),
                     class:'btn btn-outline-secondary pull-right' do %>
