@@ -90,6 +90,6 @@ group :test do
   gem 'shoulda', require: false
 end
 
-#group :uat, :staging, :production do
+group :uat, :staging, :production do
   gem 'clamby'
-#end
+end

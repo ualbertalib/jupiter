@@ -107,7 +107,7 @@ class DraftItem < ApplicationRecord
 
   # Creates a new Fedora Item from the draft_item attributes
   def ingest_into_fedora
-    Item.new_locked_ldp_object(
+    item = Item.new_locked_ldp_object(
       owner: user.id,
 
       title: title,
@@ -149,6 +149,16 @@ class DraftItem < ApplicationRecord
       end
       unlocked_obj.save!
     end
+    # set the item's thumbnail to the chosen fileset
+    # this advice doesn't apply to non-ActiveRecord objects, rubocop
+    # rubocop:disable Rails/FindBy
+    item.thumbnail_fileset(item.file_sets.where(contained_filename: thumbnail.filename.to_s).first)
+
+    # save the uuid of the item to this draft item for future reference
+    # TODO: actually use this for editing
+    self.uuid = item.id
+    save!
+    item
   end
 
   private
@@ -188,15 +198,17 @@ class DraftItem < ApplicationRecord
   end
 
   # HACK: Messing with Rails internals for fun and profit
+  # we're accessing the raw ActiveStorage local drive service internals to avoid the overhead of pulling temp files
+  # out. This WILL break when we move to Rails 5.2 and the internals change.
   def file_path_for(file)
     ActiveStorage::Blob.service.send(:path_for, file.key)
   end
 
   def files_are_virus_free
     return unless defined?(Clamby)
-    self.files.each do |file|
+    files.each do |file|
       path = file_path_for(file)
-  #    errors.add(:files, :infected) unless Clamby.safe?(path)
+      errors.add(:files, :infected, filename: file.filename.to_s) unless Clamby.safe?(path)
     end
   end
 
@@ -209,8 +221,8 @@ class DraftItem < ApplicationRecord
     files.map do |file|
       path = file_path_for(file)
       original_filename = file.filename.to_s
-      File.open(path, 'r') do |f|
-        f.send(:define_singleton_method, :original_filename, ->() {original_filename})
+      File.open(path) do |f|
+        f.send(:define_singleton_method, :original_filename, ->() { original_filename })
         yield f
       end
     end

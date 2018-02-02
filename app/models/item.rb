@@ -2,6 +2,8 @@ class Item < JupiterCore::LockedLdpObject
 
   include ObjectProperties
   include ItemProperties
+  # Needed for ActiveStorage (logo)...
+  include GlobalID::Identification
   ldp_object_includes Hydra::Works::WorkBehavior
 
   # Contributors (faceted in `all_contributors`)

@@ -1,11 +1,10 @@
 class Community < JupiterCore::LockedLdpObject
 
   include ObjectProperties
-
-  ldp_object_includes Hydra::PCDM::ObjectBehavior
-
   # Needed for ActiveStorage (logo)...
   include GlobalID::Identification
+
+  ldp_object_includes Hydra::PCDM::ObjectBehavior
 
   has_attribute :description, ::RDF::Vocab::DC.description, solrize_for: [:search]
   has_multival_attribute :creators, ::RDF::Vocab::DC.creator, solrize_for: :exact_match
