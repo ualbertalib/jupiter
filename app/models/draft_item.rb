@@ -214,9 +214,6 @@ class DraftItem < ApplicationRecord
 
   # Fedora file handling
   # Convert ActiveStorage objects into File objects so we can deposit them into fedora
-  #
-  # TODO: How to handle thumbnail? Should it be the first file uploaded to fedora?
-  # See app/models/concerns/item_prooperties.rb#L154 for ItemProperties#thumbnail method once implemented
   def map_activestorage_files_as_file_objects
     files.map do |file|
       path = file_path_for(file)

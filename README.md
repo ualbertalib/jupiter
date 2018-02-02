@@ -39,11 +39,11 @@ behaviour, please set the enviroment variable `SKIP_DOWNLOAD_COMMUNITY_LOGOS`.
 
 `$ bundle exec rake rerdoc`
 
-# UAT Environment 
+# UAT Environment
 
 The UAT server is accessible on all library staff workstation, and through VPN on any external IP address.  More details regarding access and deployment can be found:
-[Jupiter UAT Setup](https://github.com/ualbertalib/di_internal/blob/master/System-Adminstration/UAT-Environment.md) 
- 
+[Jupiter UAT Setup](https://github.com/ualbertalib/di_internal/blob/master/System-Adminstration/UAT-Environment.md)
+
 # Docker
 This project comes with a docker setup to easily setup your own local development environment for jupiter in just a few steps.
 
@@ -135,6 +135,14 @@ If you want to develop in rails locally on your own machine, there is also a `do
 And everything else is how you would normally develop in a rails project.
 
 (See other sections of this README for more information about developing in a rails project environment)
+
+## Want to setup Virus-Checking and FITS characterization?
+
+The Clamby repository has [instructions](https://github.com/kobaltz/clamby#dependencies) on setting up clamav on various operating systems
+
+For characterization you need to install [FITS](https://github.com/harvard-lts/fits) and ensure that `fits.sh` is in your Rails' process' PATH
+[Hydra-File_Characterization](https://github.com/samvera/hydra-file_characterization), which Hydra-Works leverages, has more information on configuring the
+characterization setup.
 
 ## Common gotchas?
 - If your having issues, logs are the best place to first look at what went wrong.
