@@ -30,17 +30,19 @@
           <% if search_term.present? %>
             <h3><%= t('search.results_for', search: search_term) %></h3>
           <% end %>
-          <div class="d-md-none">
-            <%= link_to '#TODO', class: 'btn btn-jupiter-primary mb-2 js-filters-open' do %>
-              <%= fa_icon 'filter' %>
-              <%= t('search.filter_results') %>
-            <% end %>
-          </div>
         </div>
 
         <div>
           <%= render partial: 'search/sort' %>
         </div>
+
+      </div>
+
+      <div class="d-md-none mt-2">
+        <%= link_to '#TODO', class: 'btn btn-jupiter-primary mb-2 js-filters-open' do %>
+          <%= fa_icon 'filter' %>
+          <%= t('search.filter_results') %>
+        <% end %>
       </div>
 
       <%# Facet Badges %>
