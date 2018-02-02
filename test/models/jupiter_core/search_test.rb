@@ -78,7 +78,8 @@ class SearchTest < ActiveSupport::TestCase
 
     search_results = JupiterCore::Search.faceted_search(models: @@klass, q: creator2)
 
-    assert search_results.count == 1
+    # This assert below periodically fails?
+    assert_equal 1, search_results.count
     assert_equal search_results.first.id, another_obj.id
   end
 
