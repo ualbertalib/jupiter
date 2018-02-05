@@ -43,7 +43,7 @@ gem 'omniauth-saml'
 gem 'pundit'
 
 # Background tasks
-gem 'sidekiq', '~> 5.0'
+gem 'sidekiq', '~> 5.1'
 gem 'sinatra' # used by sidekiq/web
 
 # Misc Utilities
