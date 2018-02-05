@@ -36,6 +36,10 @@ body {
 .j-header {
   border-bottom: 1px solid $jupiter-primary;
   box-shadow: 0 2px 4px -1px rgba(0,0,0,0.25);
+
+  .nav-item {
+    font-weight: bold;
+  }
 }
 
 .j-footer {
@@ -46,7 +50,7 @@ body {
 }
 
 // Adapted from https://codepen.io/luisintosh/pen/gPGXOp
-.image-with-text {
+.j-image-with-text {
   padding: 0px;
   position: relative;
   text-align: center;
@@ -64,7 +68,7 @@ body {
     object-position: 75% 50%;
   }
 
-  p {
+  h3 {
     background-color: $image-with-text-bg;
     bottom: 0px;
     color: $black;
@@ -76,19 +80,12 @@ body {
     text-align: center;
     width: 100%;
   }
-
-  .era-av {
-    background-color: $jupiter-primary;
-  }
 }
 
-.collection-links {
+.j-collection-links {
   a {
     text-align: left;
     white-space: normal;
   }
 }
 
-.nav-item {
-  font-weight: bold;
-}

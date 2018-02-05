@@ -147,7 +147,7 @@ en:
         about: 'About'
         communities: 'Browse'
         new_item: 'Deposit'
-        login: 'Log in'
+        login: 'Log In'
         admin: 'Admin'
         logout: 'Logout'
         profile: 'Your Profile'
@@ -156,20 +156,20 @@ en:
         heading_html: "Signed in as <strong>%{name}</strong>"
     footer:
       street_address: 'University of Alberta, Edmonton, AB, Canada, 26G 2R3'
-      privacy_policy: 'Web site privacy policy'
+      privacy_policy: 'Web Site Privacy Policy'
   locked_ldp_object:
     errors:
       invalid_visibility: "%{visibility} is not a known visibility"
 
   sessions:
     new:
-      header: 'Login to ERA'
+      header: 'Log into ERA'
       description_html: 'ERA is now a
         <a href="https://ist.ualberta.ca/services/ccid-passwords/campus-computing-id" target="_blank">CCID</a>
         (Campus Computing ID) enabled service.
         If you have a CCID please use it to log in to ERA.'
-      saml_link: 'Sign in with University of Alberta CCID (Campus Computing ID)'
-      developer_link: Sign in with Developer Account
+      saml_link: 'Log in with University of Alberta CCID (Campus Computing ID)'
+      developer_link: Log in with Developer Account
     logout_as_user:
       flash: 'You are now logout as user %{original_user}'
     destroy:
@@ -353,8 +353,8 @@ en:
       images_of_research_attribution: 'Image: “Frozen Kaleidoscope” by Vincent McFarlane CC-BY 4.0'
       theses_collection: 'University of Alberta Theses and Dissertations'
       afns_collection: 'Department of Agriculture, Food and Nutritional Science Journal Articles'
-      era_av_header: 'Also search ERA Audio+Video'
-      era_av_text: "The University of Alberta Libraries' media streaming service"
+      era_av_header: 'Expore ERA Audio+Video'
+      era_av_text: "The University of Alberta Libraries' Media Streaming Service"
 
   items:
     index:
