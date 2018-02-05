@@ -53,7 +53,7 @@ class AuthenticationTest < ApplicationSystemTestCase
 
   context 'when visiting a protected page' do
     should 'get redirected to login then back to page, if user is authorized' do
-      visit new_item_url
+      visit profile_url
 
       assert_text I18n.t('authorization.user_not_authorized_try_logging_in')
       assert_selector 'h1', text: I18n.t('sessions.new.header')
@@ -74,7 +74,7 @@ class AuthenticationTest < ApplicationSystemTestCase
       assert_text I18n.t('login.success', kind: 'saml')
 
       # TODO: fix this view and i18n this
-      assert_text I18n.t('items.new.header')
+      assert_text I18n.t('admin.users.created')
     end
 
     # TODO: Nothing currently exist to nicely test this behaviour, Comment this out for time being

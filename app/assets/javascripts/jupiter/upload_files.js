@@ -6,6 +6,8 @@ $(document).on('turbolinks:load', function() {
   if (document.querySelector('form.js-files-dropzone') !== null ) {
     var filesDropzone = new Dropzone('form.js-files-dropzone', {
       paramName: 'file',
+      maxFilesize: 1024, // default is 256 MB, lets bump to 1 GB
+      timeout: 3600000, // default is 30 seconds, lets bump to 5 minutes
 
       // TODO: Need a decision here. Currently turned off image thumbnails as we allow many different file types
       // Probably okay to keep this turned off since these files only show up in this dropzone list for 1 second before getting appended

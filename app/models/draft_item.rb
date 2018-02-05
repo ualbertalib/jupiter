@@ -53,6 +53,22 @@ class DraftItem < ApplicationRecord
   validates :embargo_end_date, presence: true, if: :validate_if_visibility_is_embargo?
 
   validates :files, presence: true, if: :validate_upload_files?
+  validate :files_are_virus_free, if: :validate_upload_files?
+
+  def communities
+    return unless member_of_paths.present? && member_of_paths['community_id']
+    member_of_paths['community_id'].map do |cid|
+      Community.find(cid)
+    end
+  end
+
+  def each_community_collection
+    return unless member_of_paths && member_of_paths['community_id'].present?
+    member_of_paths['community_id'].each_with_index do |community_id, idx|
+      collection_id = member_of_paths['collection_id'][idx]
+      yield Community.find(community_id), collection_id.present? ? Collection.find(collection_id) : nil
+    end
+  end
 
   def thumbnail
     if thumbnail_id.present?
@@ -72,7 +88,7 @@ class DraftItem < ApplicationRecord
     # the step saved on the object is actually a step behind. As it is only updated on an update for a new step.
     # Hence we just do current step + one to get the actual step here.
     # For an inactive/archived state we are what is expected as we are starting/ending on the same step as what's saved in the object
-    if active?
+    if active? && errors.empty?
       DraftItem.wizard_steps[wizard_step] + 1 < DraftItem.wizard_steps[step]
     else
       DraftItem.wizard_steps[wizard_step] < DraftItem.wizard_steps[step]
@@ -91,7 +107,7 @@ class DraftItem < ApplicationRecord
 
   # Creates a new Fedora Item from the draft_item attributes
   def ingest_into_fedora
-    Item.new_locked_ldp_object(
+    item = Item.new_locked_ldp_object(
       owner: user.id,
 
       title: title,
@@ -124,10 +140,25 @@ class DraftItem < ApplicationRecord
       source: source,
       related_link: related_item
     ).unlock_and_fetch_ldp_object do |unlocked_obj|
-      unlocked_obj.add_to_path(member_of_paths['community_id'], member_of_paths['collection_id'])
-      unlocked_obj.add_files(map_activestorage_files_as_file_objects)
+
+      each_community_collection do |community, collection|
+        unlocked_obj.add_to_path(community.id, collection.id)
+      end
+      map_activestorage_files_as_file_objects do |file|
+        unlocked_obj.add_files([file])
+      end
       unlocked_obj.save!
     end
+    # set the item's thumbnail to the chosen fileset
+    # this advice doesn't apply to non-ActiveRecord objects, rubocop
+    # rubocop:disable Rails/FindBy
+    item.thumbnail_fileset(item.file_sets.where(contained_filename: thumbnail.filename.to_s).first)
+
+    # save the uuid of the item to this draft item for future reference
+    # TODO: actually use this for editing
+    self.uuid = item.id
+    save!
+    item
   end
 
   private
@@ -137,10 +168,13 @@ class DraftItem < ApplicationRecord
   # TODO: validate if community/collection ID's are actually in Fedora?
   def communities_and_collections_validations
     return if member_of_paths.blank? # caught by presence check
-    # member_of_paths.each do |path| # TODO eventually this will be an array of hashes
     errors.add(:member_of_paths, :community_not_found) if member_of_paths['community_id'].blank?
     errors.add(:member_of_paths, :collection_not_found) if member_of_paths['collection_id'].blank?
-    # end
+    return unless member_of_paths['community_id'].present? && member_of_paths['collection_id'].present?
+    member_of_paths['community_id'].each_with_index do |community_id, idx|
+      errors.add(:member_of_paths, :community_not_found) if community_id.blank?
+      errors.add(:member_of_paths, :collection_not_found) if member_of_paths['collection_id'][idx].blank?
+    end
   end
 
   def validate_describe_item?
@@ -163,30 +197,35 @@ class DraftItem < ApplicationRecord
     validate_choose_license_and_visibility? && embargo?
   end
 
+  # HACK: Messing with Rails internals for fun and profit
+  # we're accessing the raw ActiveStorage local drive service internals to avoid the overhead of pulling temp files
+  # out. This WILL break when we move to Rails 5.2 and the internals change.
+  def file_path_for(file)
+    ActiveStorage::Blob.service.send(:path_for, file.key)
+  end
+
+  def files_are_virus_free
+    return unless defined?(Clamby)
+    files.each do |file|
+      path = file_path_for(file)
+      errors.add(:files, :infected, filename: file.filename.to_s) unless Clamby.safe?(path)
+    end
+  end
+
   # Fedora file handling
   # Convert ActiveStorage objects into File objects so we can deposit them into fedora
-  #
-  # TODO: How to handle thumbnail? Should it be the first file uploaded to fedora?
-  # See app/models/concerns/item_prooperties.rb#L154 for ItemProperties#thumbnail method once implemented
   def map_activestorage_files_as_file_objects
     files.map do |file|
-      # Can ActiveStorage make this easier?
-      # Most of this low level file stuff are hidden behind private APIs
-      # Perhaps we can do this via `download_blob_to_tempfile` once on rails 5.2
-      # https://github.com/rails/rails/blob/master/activestorage/lib/active_storage/downloading.rb#L7
-
-      # Tempfile vs File: Tempfile give unique file names which is good for avodiing name collisions in the same directory
-      # however this also means fedora takes this name as the filename and this is what gets displayed to the UI
-      # For example: `random-image.png` from the user becomes `random-image20180123-32229-4784ha.png` in fedora
-      # Another benefit is Tempfiles are deleted when the Tempfile object is garbage collected
-      file_obj = Tempfile.open([file.filename.base, file.filename.extname]) do |temp_file|
-        # TODO: This may be slow if the file is huge? Probably should be chunking the file and streaming this in?
-        temp_file.write(file.download)
-        temp_file
+      path = file_path_for(file)
+      original_filename = file.filename.to_s
+      File.open(path) do |f|
+        # We're exploiting the fact that Hydra-Works calls original_filename on objects passed to it, if they
+        # respond to that method, in preference to looking at the final portion of the file path, which,
+        # because we fished this out of ActiveStorage, is just a hash. In this way we present Fedora with the original
+        # file name of the object and not a hashed or otherwise modified version temporarily created during ingest
+        f.send(:define_singleton_method, :original_filename, ->() { original_filename })
+        yield f
       end
-
-      # ActiveFedora is weird, it wants a File.open handle or something not a File object
-      File.open(file_obj.path, 'r')
     end
   end
 
