@@ -90,6 +90,9 @@ class DraftItem < ApplicationRecord
   validates :files, presence: true, if: :validate_upload_files?
   validate :files_are_virus_free, if: :validate_upload_files?
 
+  scope :unpublished, -> { where(status: :active).where('uuid IS NULL') }
+
+
   def communities
     return unless member_of_paths.present? && member_of_paths['community_id']
     member_of_paths['community_id'].map do |cid|
@@ -145,10 +148,8 @@ class DraftItem < ApplicationRecord
       user_id: item.owner,
       title: item.title,
       alternate_title: item.alternative_title,
-      type: item_type_for_uri(item.item_type),
-      # publication status
+      type: item_type_for_uri(item.item_type, status: item.publication_status),
       languages: languages_for_uris(item.languages),
-
       creators: item.creators,
       subjects: item.subject,
       date_created: DateTime.parse(item.created),
@@ -173,12 +174,15 @@ class DraftItem < ApplicationRecord
       self.member_of_paths['collection_id'] << collection.id
     end
 
-    # TODO files
     self.save(validate: false)
   end
 
+  # Pull latest data from Fedora if data is more recent than this draft
+  # This would happen if, eg) someone manually updated the Fedora record in the Rails console
+  # and then someone visited this item's draft URL directly without bouncing through ItemsController#edit
   def sync_with_fedora
-    self.update_from_fedora_item(Item.find(self.uuid))
+    item = Item.find(self.uuid)
+    self.update_from_fedora_item(item) if item.updated_at > self.updated_at
   end
 
   def self.from_item(item)
@@ -256,10 +260,20 @@ class DraftItem < ApplicationRecord
     CONTROLLED_VOCABULARIES[:item_type].send(code)
   end
 
-  def item_type_for_uri(uri)
-    # TODO: publication status
+  def item_type_for_uri(uri, status:)
     code = CONTROLLED_VOCABULARIES[:item_type].from_uri(uri)
-    name = URI_CODE_TO_ITEM_TYPE[code].to_s
+    if status.present?
+      if status.include?(CONTROLLED_VOCABULARIES[:publication_status].draft)
+        name = 'journal_article_draft'
+      elsif status.include?(CONTROLLED_VOCABULARIES[:publication_status].published)
+        name = 'journal_article_published'
+      else
+        raise ArgumentError, "Unmappable DraftItem publication status(es): #{publication_status}"
+      end
+    else
+      name = URI_CODE_TO_ITEM_TYPE[code].to_s
+    end
+
     raise ArgumentError, "Unable to map DraftItem type from URI: #{uri}, code: #{code}" unless name.present?
     type = Type.find_by(name: name)
     raise ArgumentError, "Unable to find DraftItem type: #{name}" unless type.present?

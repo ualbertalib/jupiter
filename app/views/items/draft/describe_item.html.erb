@@ -1,10 +1,10 @@
-<% page_title( t('.header')) %>
+<% page_title(header) %>
 
 <%= render partial: 'progress_bar' %>
 
 <h2 class="mt-3">
   <%= fa_icon t('.header_icon') %>
-  <%= t('.header') %>
+  <%= header %>
 </h2>
 
 <% if @draft_item.errors.any? %>
