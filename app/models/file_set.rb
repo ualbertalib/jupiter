@@ -11,7 +11,7 @@ class FileSet < JupiterCore::LockedLdpObject
   belongs_to :item, using_existing_association: :member_of_collections
 
   def owning_item
-    Item.find(item)
+    JupiterCore::LockedLdpObject.find(item, types: [Item, Thesis])
   end
 
   # TODO: Should move embargo visibility up into LockedLdpObject
