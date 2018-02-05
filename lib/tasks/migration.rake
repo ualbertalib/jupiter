@@ -230,9 +230,17 @@ namespace :migration do
 
         creators = object_value_from_predicate(graph, ::RDF::Vocab::DC11.creator, true)&.map! { |c| c.value }
         owner = object_value_from_predicate(graph, ::RDF::Vocab::BIBO.owner, true)&.map! { |c| c.value }
-        # This is to assume the first owner of any multi-owner items becomes the sole owner of the object. Need review
-        owner = owner.sort.first if owner.is_a? Array
+        # Here are some logic based on Leah's understanding of the actual ownership for multi-owner objects
+
         depositor = object_value_from_predicate(graph, ::TERMS[:ual].depositor)
+        if owner.is_a? Array
+          # This is to assume that if the depositor is not admin, the depositor info will take precedent other than the cases above
+          owner = depositor if owner.is_a?(Array) && depositor != 'eraadmi@ualberta.ca'
+          # If owners are admin + other users for any remaining multi-owner items, other users will be considered as owners
+          owner -= ['eraadmi@ualberta.ca'] if owner.size > 1
+          # This is to assume the first owner of any remaining multi-owner items becomes the sole owner of the object.
+          owner = owner.sort.first if owner.is_a? Array
+        end
         # if there is no owner, use the depositor as the owner
         owner = depositor if owner.nil?
         contributors = object_value_from_predicate(graph, ::RDF::Vocab::DC11.contributor, true)&.map! { |c| c.value }
@@ -310,6 +318,7 @@ namespace :migration do
                 `rm -rf #{file_dir}`
               end
               unlocked_item.save!
+              item.thumbnail_fileset(item.file_sets.first)
             end
             puts "#{item.id}:#{hydra_noid}"
             f.write "#{item.id}:#{hydra_noid}\n"
@@ -413,6 +422,7 @@ namespace :migration do
                 `rm -rf #{file_dir}`
               end
               unlocked_item.save!
+              item.thumbnail_fileset(item.file_sets.first)
             end
             puts "#{item.id}:#{hydra_noid}"
             f.write "#{item.id}:#{hydra_noid}\n"
