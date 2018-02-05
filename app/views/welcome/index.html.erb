@@ -14,15 +14,17 @@
 
 <div class="container">
   <div class="row">
-    <div class="mb-3 col-md-12 text-center">
-      <%= link_to "https://era-av.libary.ualberta.ca", class: 'btn btn-jupiter-primary' do %>
-        <p class="lead mb-0">
-          <%= fa_icon 'play-circle' %>
-          <%= t('.era_av_header') %>
-        </p>
-        <p class="small mb-0">
-          <%= t('.era_av_text') %>
-        </p>
+    <div class="mb-3 col-md-5 offset-md-4 j-era-a-v-link">
+      <%= link_to 'https://era-av.library.ualberta.ca/', class: 'media bg-light p-3 border border-primary rounded' do %>
+        <%= fa_icon 'play-circle-o 5x', class: 'mr-3 align-self-center' %>
+        <div class="media-body text-dark">
+          <h4>
+            <%= t('.era_av_header') %>
+          </h4>
+          <p class="mb-0">
+            <%= t('.era_av_text') %>
+          </p>
+        </div>
       <% end %>
     </div>
   </div>
@@ -79,28 +81,17 @@
   </div>
 
   <%# List of collection links, shown only on smaller screens %>
-  <div class="d-md-none j-collection-links">
-    <div class="media mb-3">
-      <div class="media-body">
-        <%= link_to t('.images_of_research_collection'), '#TODO',
-            class: 'btn btn-jupiter-primary btn-block' %>
-      </div>
-    </div>
-    <div class="media mb-3">
-      <div class="media-body">
-        <%= link_to t('.images_of_research_collection'), '#TODO',
-            class: 'btn btn-jupiter-primary btn-block' %>
-      </div>
-    </div>
-    <div class="media mb-3">
-      <div class="media-body">
-        <%= link_to t('.theses_collection'), '#TODO', class: 'btn btn-jupiter-primary btn-block' %>
-      </div>
-    </div>
-    <div class="media">
-      <div class="media-body">
-        <%= link_to t('.afns_collection'), '#TODO', class: 'd-inline-block btn btn-jupiter-primary btn-block' %>
-      </div>
-    </div>
+  <div class="d-md-none list-group">
+    <%= link_to t('.afns_collection'), '#TODO',
+      class: 'list-group-item list-group-item-action list-group-item-primary mb-3 text-dark' %>
+
+    <%= link_to t('.images_of_research_collection'), '#TODO',
+      class: 'list-group-item list-group-item-action list-group-item-primary mb-3 text-dark' %>
+
+    <%= link_to t('.theses_collection'), '#TODO',
+      class: 'list-group-item list-group-item-action list-group-item-primary mb-3 text-dark' %>
+
+    <%= link_to t('.osrin_collection'), '#TODO',
+      class: 'list-group-item list-group-item-action list-group-item-primary mb-3 text-dark' %>
   </div>
 </div>
