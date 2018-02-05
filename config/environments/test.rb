@@ -42,4 +42,7 @@ Rails.application.configure do
 
   # Which ActiveStorage service to use
   config.active_storage.service = (ENV['ACTIVE_STORAGE_SERVICE'] || :test).to_sym
+
+  # FITS characterization
+  config.run_fits_characterization = false
 end

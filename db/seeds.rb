@@ -169,14 +169,14 @@ if Rails.env.development? || Rails.env.uat?
         item_attributes[:source] = "Chapter 5 of '#{thing.pluralize.capitalize} and what they drink'"
       end
 
-      Item.new_locked_ldp_object(item_attributes).unlock_and_fetch_ldp_object do |uo|
+      item = Item.new_locked_ldp_object(item_attributes).unlock_and_fetch_ldp_object do |uo|
         if i == 8
           uo.add_to_path(community.id, item_collection.id)
           uo.add_to_path(community.id, thesis_collection.id)
           uo.save!
           
           # Attach two files to the mondo-item
-          File.open(Rails.root + 'app/assets/images/mc_360.png', 'r') do |file1|
+          File.open(Rails.root + 'test/fixtures/files/pdf-sample.pdf', 'r') do |file1|
             File.open(Rails.root + 'test/fixtures/files/image-sample.jpeg', 'r') do |file2|
               # Bit of a hack to fake a long file name ...
               def file2.original_filename
@@ -191,6 +191,8 @@ if Rails.env.development? || Rails.env.uat?
           uo.save!
         end
       end
+
+      item.thumbnail_fileset(item.file_sets.first) if item.file_sets.first.present?
 
       field = Faker::Job.field
       level = ["Master's", 'Doctorate'][i % 2]
@@ -224,20 +226,21 @@ if Rails.env.development? || Rails.env.uat?
         thesis_attributes[:committee_members] += ["#{contributors[(seed + 7 * seed2) % 10]} (#{department2})"]
       end
 
-      Thesis.new_locked_ldp_object(thesis_attributes).unlock_and_fetch_ldp_object do |uo|
+      thesis = Thesis.new_locked_ldp_object(thesis_attributes).unlock_and_fetch_ldp_object do |uo|
         if i == 8
           uo.add_to_path(community.id, item_collection.id)
           uo.add_to_path(community.id, thesis_collection.id)
           uo.save!
           # Attach a file to the mondo-item
-          file = File.open(Rails.root + 'app/assets/images/era-logo.png', 'r')
-          uo.add_files([file])
-          file.close
+          File.open(Rails.root + 'app/assets/images/era-logo.png', 'r') do |file|
+            uo.add_files([file])
+          end
         else
           uo.add_to_path(community.id, thesis_collection.id)
           uo.save!
         end
       end
+      thesis.thumbnail_fileset(thesis.file_sets.first) if thesis.file_sets.first.present?
     end
 
     # Add a private item

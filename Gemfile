@@ -43,7 +43,7 @@ gem 'omniauth-saml'
 gem 'pundit'
 
 # Background tasks
-gem 'sidekiq', '~> 5.0'
+gem 'sidekiq', '~> 5.1'
 gem 'sinatra' # used by sidekiq/web
 
 # Misc Utilities
@@ -88,4 +88,8 @@ group :test do
   gem 'haikunator'
   gem 'minitest-hooks'
   gem 'shoulda', require: false
+end
+
+group :uat, :staging, :production do
+  gem 'clamby'
 end
