@@ -1,33 +1,30 @@
-<div class="col">
-  <div class="d-flex justify-content-center">
-    <%= render partial: 'thumbnail', locals: { object: @item, size: :large } %>
-  </div>
-  <% if @item.file_sets.count == 1 %>
-    <div class="d-flex justify-content-center mt-3">
-      <div class="p-1">
-        <%= link_to(t('.view'), fileset_uri(@item.file_sets.first, :show), class: 'btn btn-outline-primary',
-            target: :_blank) %>
-      </div>
-      <div class="p-1">
-        <%= link_to(t('.download'), fileset_uri(@item.file_sets.first, :download), class: 'btn btn-outline-primary') %>
-      </div>
+<%= render partial: 'thumbnail', locals: { object: @item, size: :large } %>
+
+<% if @item.file_sets.count == 1 %>
+  <div class="d-flex justify-content-center mt-3">
+    <div class="p-1">
+      <%= link_to(t('.view'), fileset_uri(@item.file_sets.first, :show), class: 'btn btn-outline-primary',
+          target: :_blank) %>
     </div>
-  <% else %>
-    <h4><%= t('.header') %></h4>
-    <div class="list-group item-files">
-      <% @item.file_sets.each do |file_set| %>
-        <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-          <div><%= file_set.contained_filename %></div>
-          <div class="d-flex justify-content-center">
-            <div class="p-1">
-              <%= link_to(t('.view'), fileset_uri(file_set, :show), class: 'btn btn-outline-primary') %>
-            </div>
-            <div class="p-1">
-              <%= link_to(t('.download'), fileset_uri(file_set, :download), class: 'btn btn-outline-primary') %>
-            </div>
+    <div class="p-1">
+      <%= link_to(t('.download'), fileset_uri(@item.file_sets.first, :download), class: 'btn btn-outline-primary') %>
+    </div>
+  </div>
+<% else %>
+  <h4><%= t('.header') %></h4>
+  <div class="list-group item-files">
+    <% @item.file_sets.each do |file_set| %>
+      <div class="list-group-item list-group-item-action d-flex flex-column">
+        <div class="item-filename text-center pb-3"><%= file_set.contained_filename %></div>
+        <div class="d-flex justify-content-center">
+          <div class="p-1">
+            <%= link_to(t('.view'), fileset_uri(file_set, :show), class: 'btn btn-outline-primary') %>
+          </div>
+          <div class="p-1">
+            <%= link_to(t('.download'), fileset_uri(file_set, :download), class: 'btn btn-outline-primary') %>
           </div>
         </div>
-      <% end %>
-    </div>
-  <% end %>
-</div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

@@ -11,6 +11,13 @@ class SearchController < ApplicationController
     @active_tab = params[:tab]&.to_sym || :item
     @results = {}
 
+    # Make sure selected facets and solr-only authors/subjects appear first in facet list
+    @first_facet_categories = params[:facets]&.keys || []
+    if @active_tab == :item
+      @first_facet_categories += [Item.solr_name_for(:all_contributors, role: :facet),
+                                  Item.solr_name_for(:all_subjects, role: :facet)]
+    end
+
     # TODO: Likely we want to do one search and segregate the results by model
     # TODO: Check performance of this when we have more objects in use
     [:item, :collection, :community].each do |model|
