@@ -4,29 +4,30 @@
   <div class="container">
     <h1 class="jumbotron-heading"><%= t('.welcome_header') %></h1>
     <p class="lead text-muted">
-      ERA (Education and Research Archive) is the name for University of Alberta's
-      Digital Asset Management strategy, being developed and supported by the University of Alberta Libraries.
+      <%= t('.welcome_lead_one')%>
     </p>
     <p class="lead text-muted">
-      ERA's open access content includes the intellectual output of the University and promotes global opportunities
-      for research discovery as well as for archival preservation.
-      ERA also provides an easy and convenient solution for faculty
-      who must deposit their research in an open access repository to meet funding agency requirements.
+      <%= t('.welcome_lead_two')%>
     </p>
-    <%= link_to "https://era-av.libary.ualberta.ca", class: 'btn btn-jupiter-primary' do %>
-      <p class="mb-0 lead">
-        <%= fa_icon 'play-circle' %>
-        <%= t('.era_av_header') %>
-      </p>
-      <%# ERA-AV additional text not shown on smaller screens %>
-      <p class="d-none d-md-block small mb-0">
-        <%= t('.era_av_text') %>
-      </p>
-    <% end %>
   </div>
 </section>
 
 <div class="container">
+  <div class="row">
+    <div class="mb-3 col-md-12 text-center">
+      <%= link_to "https://era-av.libary.ualberta.ca", class: 'btn btn-jupiter-primary' do %>
+        <p class="mb-0 lead">
+          <%= fa_icon 'play-circle' %>
+          <%= t('.era_av_header') %>
+        </p>
+        <%# ERA-AV additional text not shown on smaller screens %>
+        <p class="d-none d-md-block small mb-0">
+          <%= t('.era_av_text') %>
+        </p>
+      <% end %>
+    </div>
+  </div>
+
   <div class='d-flex flex-wrap align-items-center justify-content-between my-3'>
     <h2>
       <%= t('.explore_collections') %>
