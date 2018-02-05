@@ -1,0 +1,42 @@
+$image-with-text-bg: $jupiter-primary;
+$image-with-text-opacity: 0.8;
+
+// Adapted from https://codepen.io/luisintosh/pen/gPGXOp
+.j-image-with-text {
+  padding: 0px;
+  position: relative;
+  text-align: center;
+  width: 100%;
+
+  img {
+    min-height: 100%;
+    object-fit: cover;
+    width: 100%;
+
+  }
+
+  .agriculture {
+    // Make sure the people are in the picture
+    object-position: 75% 50%;
+  }
+
+  h3 {
+    background-color: $image-with-text-bg;
+    bottom: 0px;
+    color: $black;
+    left: 0px;
+    margin-bottom: inherit;
+    opacity: $image-with-text-opacity;
+    padding: 5px;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+  }
+}
+
+.j-collection-links {
+  a {
+    text-align: left;
+    white-space: normal;
+  }
+}

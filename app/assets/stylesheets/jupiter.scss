@@ -2,8 +2,7 @@ $header-height-large-screen: 81px;
 $header-height-small-screen: 139px;
 $footer-height: 72px;
 
-$image-with-text-bg: $jupiter-primary;
-$image-with-text-opacity: 0.8;
+$header-box-shadow-color: rgba(0, 0, 0, 0.25);
 
 html {
   // needed for sticky footer
@@ -34,8 +33,7 @@ body {
 }
 
 .j-header {
-  border-bottom: 1px solid $jupiter-primary;
-  box-shadow: 0 2px 4px -1px rgba(0,0,0,0.25);
+  box-shadow: 0 4px 4px -1px $header-box-shadow-color;
 
   .nav-item {
     font-weight: bold;
@@ -48,44 +46,3 @@ body {
   position: absolute;
   width: 100%;
 }
-
-// Adapted from https://codepen.io/luisintosh/pen/gPGXOp
-.j-image-with-text {
-  padding: 0px;
-  position: relative;
-  text-align: center;
-  width: 100%;
-
-  img {
-    min-height: 100%;
-    object-fit: cover;
-    width: 100%;
-
-  }
-
-  .agriculture {
-    // Make sure the people are in the picture
-    object-position: 75% 50%;
-  }
-
-  h3 {
-    background-color: $image-with-text-bg;
-    bottom: 0px;
-    color: $black;
-    left: 0px;
-    margin-bottom: inherit;
-    opacity: $image-with-text-opacity;
-    padding: 5px;
-    position: absolute;
-    text-align: center;
-    width: 100%;
-  }
-}
-
-.j-collection-links {
-  a {
-    text-align: left;
-    white-space: normal;
-  }
-}
-
