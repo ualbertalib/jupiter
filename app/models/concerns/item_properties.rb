@@ -97,10 +97,8 @@ module ItemProperties
       end
 
       def purge_files
-        FileSet.where(item: id).each do |fs|
-          fs.unlock_and_fetch_ldp_object do |unlocked_fs|
-            unlocked_fs.delete
-          end
+        FileSet.where(item: id).find_each do |fs|
+          fs.unlock_and_fetch_ldp_object(&:delete)
         end
 
         self.ordered_members = []
@@ -192,7 +190,7 @@ type=\"#{unlocked_fileset.original_file.mime_type}\"\
     fileset.unlock_and_fetch_ldp_object do |unlocked_fileset|
       unlocked_fileset.create_derivatives
       # Some kinds of things don't get thumbnailed by HydraWorks, eg) .txt files
-      return unless unlocked_fileset.thumbnail.present?
+      break if unlocked_fileset.thumbnail.blank?
       # don't ask. RDF::URIs aren't real Ruby URIs for reasons that presumably made sense to someone, somewhere
       uri = URI.parse(unlocked_fileset.thumbnail.uri.to_s)
       uri.open do |uri_data|

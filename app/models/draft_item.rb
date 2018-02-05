@@ -17,7 +17,7 @@ class DraftItem < ApplicationRecord
                   public_domain_mark: 7,
                   license_text: 8 }
   LICENSE_TO_URI_CODE =
-  { attribution_non_commercial: :attribution_noncommercial_4_0_international,
+    { attribution_non_commercial: :attribution_noncommercial_4_0_international,
       attribution: :attribution_4_0_international,
       attribution_non_commercial_no_derivatives: :attribution_noncommercial_noderivatives_4_0_international,
       attribution_non_commercial_share_alike: :attribution_noncommercial_sharealike_4_0_international,
@@ -27,15 +27,14 @@ class DraftItem < ApplicationRecord
       public_domain_mark: :public_domain_mark_1_0 }.freeze
   URI_CODE_TO_LICENSE = LICENSE_TO_URI_CODE.invert
 
-
   # Can't use public as this is a ActiveRecord method, using open_access instead
   enum visibility: { open_access: 0,
                      embargo: 1,
                      authenticated: 2 }
 
- VISIBILITY_TO_URI_CODE = { open_access: :public,
-                            embargo: :embargo,
-                            authenticated: :authenticated }.freeze
+  VISIBILITY_TO_URI_CODE = { open_access: :public,
+                             embargo: :embargo,
+                             authenticated: :authenticated }.freeze
   URI_CODE_TO_VISIBILITY = VISIBILITY_TO_URI_CODE.invert
 
   # Can't reuse same keys as visibility enum above, need to differentiate keys a bit
@@ -47,23 +46,22 @@ class DraftItem < ApplicationRecord
   enum visibility_after_embargo: { opened: 0,
                                    ccid_protected: 1 }
 
- VISIBILITY_AFTER_EMBARGO_TO_URI_CODE = { opened: :public,
-                                          ccid_protected: :authenticated }.freeze
- URI_CODE_TO_VISIBILITY_AFTER_EMBARGO = VISIBILITY_AFTER_EMBARGO_TO_URI_CODE.invert
+  VISIBILITY_AFTER_EMBARGO_TO_URI_CODE = { opened: :public,
+                                           ccid_protected: :authenticated }.freeze
+  URI_CODE_TO_VISIBILITY_AFTER_EMBARGO = VISIBILITY_AFTER_EMBARGO_TO_URI_CODE.invert
 
-
- ITEM_TYPE_TO_URI_CODE = {  book: :book,
-                       book_chapter: :chapter,
-                       conference_workshop_poster: :conference_poster,
-                       conference_workshop_presenation: :conference_paper,
-                       dataset: :dataset,
-                       image: :image,
-                       journal_article_draft: :article,
-                       journal_article_published: :article,
-                       learning_object: :learning_object,
-                       report: :report,
-                       research_material: :research_material,
-                       review: :review }.freeze
+  ITEM_TYPE_TO_URI_CODE = { book: :book,
+                            book_chapter: :chapter,
+                            conference_workshop_poster: :conference_poster,
+                            conference_workshop_presenation: :conference_paper,
+                            dataset: :dataset,
+                            image: :image,
+                            journal_article_draft: :article,
+                            journal_article_published: :article,
+                            learning_object: :learning_object,
+                            report: :report,
+                            research_material: :research_material,
+                            review: :review }.freeze
   URI_CODE_TO_ITEM_TYPE = ITEM_TYPE_TO_URI_CODE.invert
 
   has_many_attached :files
@@ -91,7 +89,6 @@ class DraftItem < ApplicationRecord
   validate :files_are_virus_free, if: :validate_upload_files?
 
   scope :unpublished, -> { where(status: :active).where('uuid IS NULL') }
-
 
   def communities
     return unless member_of_paths.present? && member_of_paths['community_id']
@@ -143,6 +140,7 @@ class DraftItem < ApplicationRecord
     end
   end
 
+  # rubocop:disable Style/DateTime
   def update_from_fedora_item(item)
     draft_attributes = {
       user_id: item.owner,
@@ -152,7 +150,8 @@ class DraftItem < ApplicationRecord
       languages: languages_for_uris(item.languages),
       creators: item.creators,
       subjects: item.subject,
-      date_created: DateTime.parse(item.created),
+      # I suspect this will become some kind of string field, but for now, using UTC
+      date_created: DateTime.parse.utc(item.created),
       description: item.description,
       visibility: visibility_for_uri(item.visibility),
       visibility_after_embargo: visibility_after_embargo_for_uri(item.visibility_after_embargo),
@@ -166,23 +165,25 @@ class DraftItem < ApplicationRecord
       source: item.source,
       related_item: item.related_link
     }
-    self.assign_attributes(draft_attributes)
-    self.member_of_paths = {'community_id' => [], 'collection_id' => []}
+    assign_attributes(draft_attributes)
+    self.member_of_paths = { 'community_id' => [], 'collection_id' => [] }
 
     item.each_community_collection do |community, collection|
-      self.member_of_paths['community_id'] << community.id
-      self.member_of_paths['collection_id'] << collection.id
+      member_of_paths['community_id'] << community.id
+      member_of_paths['collection_id'] << collection.id
     end
 
-    self.save(validate: false)
+    # TODO: Copy attachments back for eg) private non-saved files
+
+    save(validate: false)
   end
 
   # Pull latest data from Fedora if data is more recent than this draft
   # This would happen if, eg) someone manually updated the Fedora record in the Rails console
   # and then someone visited this item's draft URL directly without bouncing through ItemsController#edit
   def sync_with_fedora
-    item = Item.find(self.uuid)
-    self.update_from_fedora_item(item) if item.updated_at > self.updated_at
+    item = Item.find(uuid)
+    update_from_fedora_item(item) if item.updated_at > updated_at
   end
 
   def self.from_item(item)
@@ -222,9 +223,9 @@ class DraftItem < ApplicationRecord
   def languages_for_uris(uris)
     uris.map do |uri|
       code = CONTROLLED_VOCABULARIES[:language].from_uri(uri)
-      raise ArgumentError, "No known code for language uri: #{uri}" unless code.present?
+      raise ArgumentError, "No known code for language uri: #{uri}" if code.blank?
       language = Language.find_by(name: code)
-      raise ArgumentError, "No draft language found for code: #{code}" unless language.present?
+      raise ArgumentError, "No draft language found for code: #{code}" if language.blank?
       language
     end
   end
@@ -241,7 +242,7 @@ class DraftItem < ApplicationRecord
   def license_for_uri(uri)
     code = CONTROLLED_VOCABULARIES[:license].from_uri(uri)
     license = URI_CODE_TO_LICENSE[code].to_s
-    raise ArgumentError, "Unable to map DraftItem license from URI: #{uri}, code: #{code}" unless license.present?
+    raise ArgumentError, "Unable to map DraftItem license from URI: #{uri}, code: #{code}" if license.blank?
     license
   end
 
@@ -274,9 +275,9 @@ class DraftItem < ApplicationRecord
       name = URI_CODE_TO_ITEM_TYPE[code].to_s
     end
 
-    raise ArgumentError, "Unable to map DraftItem type from URI: #{uri}, code: #{code}" unless name.present?
+    raise ArgumentError, "Unable to map DraftItem type from URI: #{uri}, code: #{code}" if name.blank?
     type = Type.find_by(name: name)
-    raise ArgumentError, "Unable to find DraftItem type: #{name}" unless type.present?
+    raise ArgumentError, "Unable to find DraftItem type: #{name}" if type.blank?
     type
   end
 
@@ -290,7 +291,7 @@ class DraftItem < ApplicationRecord
   def visibility_for_uri(uri)
     code = CONTROLLED_VOCABULARIES[:visibility].from_uri(uri)
     visibility = URI_CODE_TO_VISIBILITY[code].to_s
-    raise ArgumentError, "Unable to map DraftItem visbility from URI: #{uri}, code: #{code}" unless visibility.present?
+    raise ArgumentError, "Unable to map DraftItem visbility from URI: #{uri}, code: #{code}" if visibility.blank?
     visibility
   end
 
@@ -303,10 +304,10 @@ class DraftItem < ApplicationRecord
   end
 
   def visibility_after_embargo_for_uri(uri)
-    return 0 unless uri.present?
+    return 0 if uri.blank?
     code = CONTROLLED_VOCABULARIES[:visibility].from_uri(uri)
     visibility = URI_CODE_TO_VISIBILITY_AFTER_EMBARGO[code].to_s
-    unless visibility.present?
+    if visibility.blank?
       raise ArgumentError, "Unable to map DraftItem visbility_after_embargo from URI: #{uri}, code: #{code}"
     end
     visibility

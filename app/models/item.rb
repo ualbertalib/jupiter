@@ -75,7 +75,7 @@ class Item < JupiterCore::LockedLdpObject
 
       # Handle license vs rights
       unlocked_obj.license = draft_item.license_as_uri
-      unlocked_obj.rights = draft_item.license == 'license_text' ?  draft_item.license_text_area : nil
+      unlocked_obj.rights = draft_item.license == 'license_text' ? draft_item.license_text_area : nil
 
       # Additional fields
       unlocked_obj.contributors = draft_item.contributors
@@ -98,7 +98,6 @@ class Item < JupiterCore::LockedLdpObject
       draft_item.map_activestorage_files_as_file_objects do |file|
         unlocked_obj.add_files([file])
       end
-
     end
     # set the item's thumbnail to the chosen fileset
     # this advice doesn't apply to non-ActiveRecord objects, rubocop

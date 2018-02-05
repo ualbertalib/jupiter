@@ -13,11 +13,11 @@ class ThesisPolicy < LockedLdpObjectPolicy
   end
 
   def create?
-    false # admin? There's no interface for this, currently
+    false # There's no interface for this, currently
   end
 
   def update?
-    false # admin? There's no interface for this, currently
+    false # There's no interface for this, currently
   end
 
   def destroy?

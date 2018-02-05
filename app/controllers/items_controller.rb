@@ -5,7 +5,6 @@ class ItemsController < ApplicationController
     authorize @item
   end
 
-
   def edit
     # Note that only Items can be editted -- there is no deposit or edit interface for Theses:
     item = Item.find(params[:id])
