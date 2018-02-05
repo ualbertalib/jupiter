@@ -6,6 +6,8 @@ class Items::DraftController < ApplicationController
 
   steps(*DraftItem.wizard_steps.keys.map(&:to_sym))
 
+  FIRST_STEP = DraftItem.wizard_steps.keys.first.to_sym
+
   def show
     @draft_item = DraftItem.find(params[:item_id])
     authorize @draft_item
@@ -57,7 +59,16 @@ class Items::DraftController < ApplicationController
       if @draft_item.update_attributes(permitted_attributes(DraftItem))
 
         # TODO: Improve this? Is there a way to gracefully handle errors coming back from fedora?
-        item = @draft_item.ingest_into_fedora
+
+        # if @draft_item doesn't have uuid then
+        # if @draft_item.uuid.blank?
+        #   item = @draft_item.ingest_into_fedora
+        # else
+        #   raise 'TODO'
+        #   item = Item.find(@draft_item.uuid)
+        # end
+
+        item = Item.from_draft(@draft_item)
 
         # Redirect to the new item show page
         redirect_to item_path(item), notice: t('.successful_deposit')

@@ -51,6 +51,65 @@ class Item < JupiterCore::LockedLdpObject
   # Combine all the subjects for faceting
   additional_search_index :all_subjects, solrize_for: :facet, as: -> { all_subjects }
 
+  def self.from_draft(draft_item)
+    item = Item.find(draft_item.uuid) if draft_item.uuid.present?
+    item ||= Item.new_locked_ldp_object
+    item.unlock_and_fetch_ldp_object do |unlocked_obj|
+      unlocked_obj.owner = draft_item.user_id
+      unlocked_obj.title = draft_item.title
+      unlocked_obj.alternative_title = draft_item.alternate_title
+
+      unlocked_obj.item_type = draft_item.item_type_as_uri
+      unlocked_obj.publication_status = draft_item.publication_status_as_uri
+
+      unlocked_obj.languages = draft_item.languages_as_uri
+      unlocked_obj.creators = draft_item.creators
+      unlocked_obj.subject = draft_item.subjects
+      unlocked_obj.created = draft_item.date_created.to_s
+      unlocked_obj.description = draft_item.description
+
+      # Handle visibility plus embargo logic
+      unlocked_obj.visibility = draft_item.visibility_as_uri
+      unlocked_obj.visibility_after_embargo = draft_item.visibility_after_embargo_as_uri
+      unlocked_obj.embargo_end_date = draft_item.embargo_end_date
+
+      # Handle license vs rights
+      unlocked_obj.license = draft_item.license_as_uri
+      unlocked_obj.rights = draft_item.license == 'license_text' ?  draft_item.license_text_area : nil
+
+      # Additional fields
+      unlocked_obj.contributors = draft_item.contributors
+      unlocked_obj.spatial_subjects = draft_item.places
+      unlocked_obj.temporal_subjects = draft_item.time_periods
+      # citations of previous publication apparently maps to is_version_of
+      unlocked_obj.is_version_of = draft_item.citations
+      unlocked_obj.source = draft_item.source
+      unlocked_obj.related_link = draft_item.related_item
+
+      unlocked_obj.member_of_paths = []
+
+      draft_item.each_community_collection do |community, collection|
+        unlocked_obj.add_to_path(community.id, collection.id)
+      end
+
+      unlocked_obj.save!
+
+      unlocked_obj.purge_files
+      draft_item.map_activestorage_files_as_file_objects do |file|
+        unlocked_obj.add_files([file])
+      end
+
+    end
+    # set the item's thumbnail to the chosen fileset
+    # this advice doesn't apply to non-ActiveRecord objects, rubocop
+    # rubocop:disable Rails/FindBy
+    item.thumbnail_fileset(item.file_sets.where(contained_filename: draft_item.thumbnail.filename.to_s).first)
+
+    draft_item.uuid = item.id
+    draft_item.save!
+    item
+  end
+
   # This is stored in solr: combination of item_type and publication_status
   def item_type_with_status_code
     return nil if item_type.blank?
