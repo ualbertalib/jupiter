@@ -12,7 +12,7 @@ class ItemsController < ApplicationController
 
     draft_item = DraftItem.from_item(item)
 
-    redirect_to item_draft_path(id: Items::DraftController::FIRST_STEP, item_id: draft_item.id)
+    redirect_to item_draft_path(id: Wicked::FIRST_STEP, item_id: draft_item.id)
   end
 
 end

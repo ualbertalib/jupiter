@@ -6,8 +6,6 @@ class Items::DraftController < ApplicationController
 
   steps(*DraftItem.wizard_steps.keys.map(&:to_sym))
 
-  FIRST_STEP = DraftItem.wizard_steps.keys.first.to_sym
-
   def show
     @draft_item = DraftItem.find(params[:item_id])
     authorize @draft_item

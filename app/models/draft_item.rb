@@ -140,7 +140,7 @@ class DraftItem < ApplicationRecord
     end
   end
 
-  # rubocop:disable Style/DateTime
+  # rubocop:disable Style/DateTime,Rails/TimeZone
   def update_from_fedora_item(item)
     draft_attributes = {
       user_id: item.owner,
@@ -151,7 +151,7 @@ class DraftItem < ApplicationRecord
       creators: item.creators,
       subjects: item.subject,
       # I suspect this will become some kind of string field, but for now, using UTC
-      date_created: DateTime.parse.utc(item.created),
+      date_created: DateTime.parse(item.created),
       description: item.description,
       visibility: visibility_for_uri(item.visibility),
       visibility_after_embargo: visibility_after_embargo_for_uri(item.visibility_after_embargo),
