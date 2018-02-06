@@ -81,6 +81,22 @@ class DepositItemTest < ApplicationSystemTestCase
 
       assert_text I18n.t('items.draft.successful_deposit')
       assert_selector 'h1', text: Item.last.title
+
+      #verify editing
+
+      click_on I18n.t('item.show.edit')
+      assert_selector 'h1', text: I18n.t('items.draft.header_edit')
+      fill_in I18n.t('items.draft.describe_item.title'),
+              # Need to narrow down by placeholder since capybara can't differentiate from title and alternate title labels
+              currently_with: 'A Dance with Dragons'
+              with: 'The Winds of Winter'
+      click_on I18n.t('items.draft.save_and_continue')
+      click_on I18n.t('items.draft.save_and_continue')
+      click_on I18n.t('items.draft.save_and_continue')
+      click_on I18n.t('items.draft.header_edit')
+      assert_text I18n.t('items.draft.successful_deposit')
+      assert_selector 'h1', text: 'The Winds of Winter'
+
     end
   end
 
