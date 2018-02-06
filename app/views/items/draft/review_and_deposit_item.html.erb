@@ -4,7 +4,7 @@
 
 <h2 class="mt-3">
   <%= fa_icon t('.header_icon') %>
-  <%= header %>
+  <%= @is_edit ? t('.header_edit') : t('.header') %>
 </h2>
 
 <%= simple_form_for @draft_item, url: wizard_path, method: :put, html: { class:'js-deposit-item' } do |f| %>

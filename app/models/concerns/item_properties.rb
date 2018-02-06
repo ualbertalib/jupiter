@@ -191,12 +191,10 @@ type=\"#{unlocked_fileset.original_file.mime_type}\"\
       unlocked_fileset.create_derivatives
       # Some kinds of things don't get thumbnailed by HydraWorks, eg) .txt files
       break if unlocked_fileset.thumbnail.blank?
-      # don't ask. RDF::URIs aren't real Ruby URIs for reasons that presumably made sense to someone, somewhere
-      uri = URI.parse(unlocked_fileset.thumbnail.uri.to_s)
-      uri.open do |uri_data|
-        thumbnail.attach(io: uri_data,
+      unlocked_fileset.fetch_raw_thumbnail_data do |content_type, io|
+        thumbnail.attach(io: io,
                          filename: "#{unlocked_fileset.contained_filename}.jpg",
-                         content_type: 'image/jpeg')
+                         content_type: content_type)
       end
     end
   end

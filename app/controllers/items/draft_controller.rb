@@ -10,8 +10,8 @@ class Items::DraftController < ApplicationController
     @draft_item = DraftItem.find(params[:item_id])
     authorize @draft_item
 
-    @draft_item.sync_with_fedora if @draft_item.uuid.present?
     @is_edit = @draft_item.uuid.present?
+    @draft_item.sync_with_fedora if @is_edit
 
     # Do not allow users to skip to uncompleted steps
     if @draft_item.uncompleted_step?(step)

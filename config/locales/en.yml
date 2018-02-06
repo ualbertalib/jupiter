@@ -428,7 +428,6 @@ en:
 
       describe_item:
         header: 'Describe Item'
-        header_edit: 'Edit Item'
         header_icon: 'pencil'
         title: 'Title'
         title_placeholder: 'Enter title'

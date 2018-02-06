@@ -166,6 +166,8 @@ class DraftItem < ApplicationRecord
       related_item: item.related_link
     }
     assign_attributes(draft_attributes)
+
+    # reset paths if the file move in Fedora outside the draft process
     self.member_of_paths = { 'community_id' => [], 'collection_id' => [] }
 
     item.each_community_collection do |community, collection|
@@ -173,7 +175,16 @@ class DraftItem < ApplicationRecord
       member_of_paths['collection_id'] << collection.id
     end
 
-    # TODO: Copy attachments back for eg) private non-saved files
+    # reset files if the files have changed in Fedora outside of the draft process
+    files.purge
+
+    item.file_sets.each do |fileset|
+      fileset.unlock_and_fetch_ldp_object do |ufs|
+        ufs.fetch_raw_original_file_data do |content_type, io|
+          files.attach(io: io, filename: ufs.contained_filename, content_type: content_type)
+        end
+      end
+    end
 
     save(validate: false)
   end

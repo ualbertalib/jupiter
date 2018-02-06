@@ -94,7 +94,7 @@ class Item < JupiterCore::LockedLdpObject
 
       unlocked_obj.save!
 
-      unlocked_obj.purge_files
+      unlocked_obj.purge_files if item.file_sets.any?
       draft_item.map_activestorage_files_as_file_objects do |file|
         unlocked_obj.add_files([file])
       end
