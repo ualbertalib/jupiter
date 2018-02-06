@@ -97,7 +97,7 @@ module ItemProperties
       end
 
       def purge_files
-        FileSet.where(item: id).find_each do |fs|
+        FileSet.where(item: id).each do |fs|
           fs.unlock_and_fetch_ldp_object(&:delete)
         end
 

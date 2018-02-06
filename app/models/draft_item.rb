@@ -251,6 +251,7 @@ class DraftItem < ApplicationRecord
   end
 
   def license_for_uri(uri)
+    return 'license_text' if uri.nil?
     code = CONTROLLED_VOCABULARIES[:license].from_uri(uri)
     license = URI_CODE_TO_LICENSE[code].to_s
     raise ArgumentError, "Unable to map DraftItem license from URI: #{uri}, code: #{code}" if license.blank?
