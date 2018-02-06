@@ -13,10 +13,11 @@
 </section>
 
 <div class="container">
+
   <div class="row">
-    <div class="mb-3 col-md-5 offset-md-4 j-era-a-v-link">
+    <div class="mb-3 col-md-6 offset-md-3 j-era-a-v-link">
       <%= link_to 'https://era-av.library.ualberta.ca/', class: 'media bg-light p-3 border border-primary rounded' do %>
-        <%= fa_icon 'play-circle-o 5x', class: 'mr-3 align-self-center' %>
+        <%= fa_icon 'play-circle-o 4x', class: 'mr-3' %>
         <div class="media-body text-dark">
           <h4>
             <%= t('.era_av_header') %>
@@ -37,7 +38,7 @@
     <%= link_to t('view_more'), communities_path, class: "btn btn-secondary", 'aria-label' => " Check out more of ERA's communities and collections" %>
   </div>
 
-    <%# Collection images, shown only on larger screens %>
+  <%# Collection images, shown only on larger screens %>
   <div class="d-none d-md-block">
     <div class="d-flex flex-row">
       <div class="j-image-with-text mx-3 col-md-3">
