@@ -4,20 +4,22 @@ class FileSetsController < ApplicationController
 
   # TODO: expand to handle derivatives
   def show
+    @file_name = params[:file_name]
+    return head :not_found unless @file_name == @file_set.contained_filename
     stream_from_fedora
   end
 
   def download
+    @file_name = @file_set.contained_filename
     stream_from_fedora(disposition: 'attachment', content_type: 'application/octet-stream')
   end
 
   private
 
   def load_and_authorize_fileset
-    @file_name = params[:file_name]
-    @file_set = FileSet.find(params[:id])
-    return render status: :not_found if @file_set.blank?
-    return render status: :not_found unless @file_name == @file_set.contained_filename
+    @file_set = FileSet.find_by(params[:file_set_id])
+    return head :not_found if @file_set.blank?
+    return head :not_found unless @file_set.item == params[:id]
 
     authorize @file_set.owning_item, :download?
   end
@@ -44,7 +46,7 @@ class FileSetsController < ApplicationController
   end
 
   def send_head(file)
-    response.headers['Content-Length'] = file.size
+    response.headers['Content-Length'] = file.size.to_s
     head :ok, content_type: file.mime_type
   end
 
