@@ -84,7 +84,7 @@ class DepositItemTest < ApplicationSystemTestCase
 
       #verify editing
 
-      click_on I18n.t('item.show.edit')
+      click_on I18n.t('edit')
       assert_selector 'h1', text: I18n.t('items.draft.header_edit')
       fill_in I18n.t('items.draft.describe_item.title'),
               # Need to narrow down by placeholder since capybara can't differentiate from title and alternate title labels
