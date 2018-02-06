@@ -16,7 +16,7 @@
 
   <div class="row">
     <div class="mb-3 col-md-6 offset-md-3 j-era-a-v-link">
-      <%= link_to 'https://era-av.library.ualberta.ca/', class: 'media bg-light p-3 border border-primary rounded' do %>
+      <%= link_to 'https://era-av.library.ualberta.ca', class: 'media bg-light p-3 border border-primary rounded' do %>
         <%= fa_icon 'play-circle-o 4x', class: 'mr-3' %>
         <div class="media-body text-dark">
           <h4>
@@ -45,7 +45,7 @@
         <%= link_to '#TODO' do %>
           <%= image_tag 'dept-of-agriculture.jpg', alt: t('.afns_collection'),
               class: 'agriculture' %>
-          <h3 class="small font-weight-bold"><%= t('.afns_collection') %></h3>
+          <h4 class="small font-weight-bold"><%= t('.afns_collection') %></h4>
         <% end %>
       </div>
 
@@ -56,14 +56,14 @@
             <%= link_to '#TODO' do %>
               <%= image_tag 'images-of-research.jpg', alt: t('.images_of_research_collection'),
                   title: t('.images_of_research_attribution') %>
-              <h3 class="small font-weight-bold"><%= t('.images_of_research_collection') %></h3>
+              <h4 class="small font-weight-bold"><%= t('.images_of_research_collection') %></h4>
             <% end %>
           </div>
 
           <div class="j-image-with-text">
             <%= link_to '#TODO' do %>
               <%= image_tag 'theses.jpg', alt: t('.theses_collection') %>
-              <h3 class="small font-weight-bold"><%= t('.theses_collection') %></h3>
+              <h4 class="small font-weight-bold"><%= t('.theses_collection') %></h4>
             <% end %>
           </div>
 
@@ -73,7 +73,7 @@
           <%= link_to '#TODO' do %>
             <%= image_tag 'oil-sands.jpg', alt: t('.osrin_collection'),
                 title: t('.osrin_attribution') %>
-            <h3 class="small font-weight-bold"><%= t('.osrin_collection') %></h3>
+            <h4 class="small font-weight-bold"><%= t('.osrin_collection') %></h4>
           <% end %>
         </div>
 
