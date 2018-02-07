@@ -10,6 +10,9 @@ class Items::DraftController < ApplicationController
     @draft_item = DraftItem.find(params[:item_id])
     authorize @draft_item
 
+    @is_edit = @draft_item.uuid.present?
+    @draft_item.sync_with_fedora if @is_edit
+
     # Do not allow users to skip to uncompleted steps
     if @draft_item.uncompleted_step?(step)
       redirect_to wizard_path(@draft_item.last_completed_step, item_id: @draft_item.id),
@@ -57,7 +60,7 @@ class Items::DraftController < ApplicationController
       if @draft_item.update_attributes(permitted_attributes(DraftItem))
 
         # TODO: Improve this? Is there a way to gracefully handle errors coming back from fedora?
-        item = @draft_item.ingest_into_fedora
+        item = Item.from_draft(@draft_item)
 
         # Redirect to the new item show page
         redirect_to item_path(item), notice: t('.successful_deposit')

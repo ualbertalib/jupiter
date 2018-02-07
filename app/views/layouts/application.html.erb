@@ -1,21 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <meta charset="utf-8">
     <title><%= page_title(t('site_name')) %></title>
     <%= csrf_meta_tags %>
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
     <%= yield(:head) %>
     <%= favicon_link_tag 'era-logo-favicon.png' %>
-    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   </head>
 
   <body>
     <%= render partial: 'navbar' %>
-    <%= yield(:banner) if content_for?(:banner) %>
-    <%= render partial: 'announcement' %>
-    <main class="container mt-3">
+    <main>
+      <%= render partial: 'announcement' %>
       <%= render partial: 'flash' %>
       <%= content_for?(:content) ? yield(:content) : yield %>
     </main>

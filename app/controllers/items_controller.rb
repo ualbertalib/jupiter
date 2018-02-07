@@ -5,7 +5,14 @@ class ItemsController < ApplicationController
     authorize @item
   end
 
-  # TODO: this is just a temp hack to give edit_item_path calls in templates somewhere to point until draft editing lands
-  def edit; end
+  def edit
+    # Note that only Items can be edited -- there is no deposit or edit interface for Theses:
+    item = Item.find(params[:id])
+    authorize item
+
+    draft_item = DraftItem.from_item(item)
+
+    redirect_to item_draft_path(id: Wicked::FIRST_STEP, item_id: draft_item.id)
+  end
 
 end
