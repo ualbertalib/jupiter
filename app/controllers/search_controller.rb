@@ -10,7 +10,7 @@ class SearchController < ApplicationController
 
     # cut this off at a reasonable maximum to avoid DOSing Solr with truly huge queries (I managed to shove upwards
     # of 5000 characters in here locally)
-    query = params[:search].truncate(QUERY_MAX)
+    query = params[:search].truncate(QUERY_MAX) if params[:search].present?
 
     @max_facets = MAX_FACETS
     @active_tab = params[:tab]&.to_sym || :item
