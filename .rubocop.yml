@@ -91,7 +91,6 @@ Style/ClassAndModuleChildren:
   Exclude:
     - config/application.rb
 
-
 Style/Documentation:
   Enabled: false
 
