@@ -53,6 +53,8 @@ gem 'wicked' # Multi-step wizard
 
 # Performance monitoring
 gem 'skylight'
+# resolve production errors in minutes
+gem 'rollbar'
 
 # Seeds
 group :development, :test, :uat do
