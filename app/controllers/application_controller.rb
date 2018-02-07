@@ -1,7 +1,5 @@
 class ApplicationController < ActionController::Base
 
-  # TODO: this require is to locate JupiterCore::ObjectNotFound, needs restructuring
-  require 'jupiter_core/locked_ldp_object'
   include Pundit
 
   after_action :verify_authorized
