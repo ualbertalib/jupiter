@@ -1,131 +1,133 @@
 <% page_title( t('.header')) %>
 
-<%= render partial: 'progress_bar' %>
+<div class="container mt-3">
+  <%= render partial: 'progress_bar' %>
 
-<h2 class="mt-3">
-  <%= fa_icon t('.header_icon') %>
-  <%= t('.header') %>
-</h2>
+  <h2 class="mt-3">
+    <%= fa_icon t('.header_icon') %>
+    <%= t('.header') %>
+  </h2>
 
-<% if @draft_item.errors.any? %>
-  <p class="alert alert-danger">
-    <%= fa_icon 'exclamation-circle' %>
-    <%= t('items.draft.please_fix_errors') %>
-  </p>
-<% end %>
+  <% if @draft_item.errors.any? %>
+    <p class="alert alert-danger">
+      <%= fa_icon 'exclamation-circle' %>
+      <%= t('items.draft.please_fix_errors') %>
+    </p>
+  <% end %>
 
-<%= simple_form_for @draft_item, url: wizard_path, method: :put, html: { class:'js-deposit-item' } do |f| %>
-  <fieldset class="my-3">
-    <legend class="mb-0">
-      <span class="text-danger font-weight-bold">*</span>
-      <%= t('.license.header') %>
-    </legend>
-    <small class="form-text text-muted mt-0 mb-3">
-      <%= t('.license.help_html') %>
-    </small>
+  <%= simple_form_for @draft_item, url: wizard_path, method: :put, html: { class:'js-deposit-item' } do |f| %>
+    <fieldset class="my-3">
+      <legend class="mb-0">
+        <span class="text-danger font-weight-bold">*</span>
+        <%= t('.license.header') %>
+      </legend>
+      <small class="form-text text-muted mt-0 mb-3">
+        <%= t('.license.help_html') %>
+      </small>
 
-    <div id="js-license-accordion" role="tablist">
+      <div id="js-license-accordion" role="tablist">
 
-      <% license_accordions.map do |accordion_name, licenses| %>
-        <div class="card">
-          <div id="js-<%= "#{accordion_name}" %>" class="card-header" role="tab">
-            <h5 class="mb-0">
-              <a data-toggle="collapse"
-                href="#js-collapse-<%= "#{accordion_name}" %>"
-                aria-expanded="<%= license_accordion_open?(accordion_name, @draft_item.license) %>"
-                aria-controls="js-collapse-<%= accordion_name %>">
-                <%= t(".license.#{accordion_name}") %>
-                <%= fa_icon "#{license_accordion_open?(accordion_name, @draft_item.license, 'chevron-up', 'chevron-down')}",
-                            class: "js-more-less pull-right" %>
-              </a>
-            </h5>
-          </div>
+        <% license_accordions.map do |accordion_name, licenses| %>
+          <div class="card">
+            <div id="js-<%= "#{accordion_name}" %>" class="card-header" role="tab">
+              <h5 class="mb-0">
+                <a data-toggle="collapse"
+                  href="#js-collapse-<%= "#{accordion_name}" %>"
+                  aria-expanded="<%= license_accordion_open?(accordion_name, @draft_item.license) %>"
+                  aria-controls="js-collapse-<%= accordion_name %>">
+                  <%= t(".license.#{accordion_name}") %>
+                  <%= fa_icon "#{license_accordion_open?(accordion_name, @draft_item.license, 'chevron-up', 'chevron-down')}",
+                              class: "js-more-less pull-right" %>
+                </a>
+              </h5>
+            </div>
 
-          <div id="js-collapse-<%= "#{accordion_name}" %>"
-            class="collapse <%= license_accordion_open?(accordion_name, @draft_item.license, 'show', '') %>"
-            data-parent="#js-license-accordion"
-            role="tabpanel"
-            aria-labelledby="js-heading-<%= "#{accordion_name}" %>">
-            <div class="card-body">
-              <% licenses.each do |license| %>
-                <div class="form-check">
-                  <label class="form-check-label">
-                    <%= f.radio_button :license,
-                                        license,
-                                        class: 'form-check-input' %>
-                    <%= t(".license.#{license}_html") %>
-                  </label>
-                  <%# Handle one off special case of license text needing a text area %>
-                  <% if license == :license_text %>
-                    <%= f.input :license_text_area,
-                            as: :text,
-                            label: false,
-                            input_html: { rows: '5' },
-                            placeholder: t('.license.license_text_area_placeholder') %>
-                  <% end %>
-                </div>
-              <% end %>
+            <div id="js-collapse-<%= "#{accordion_name}" %>"
+              class="collapse <%= license_accordion_open?(accordion_name, @draft_item.license, 'show', '') %>"
+              data-parent="#js-license-accordion"
+              role="tabpanel"
+              aria-labelledby="js-heading-<%= "#{accordion_name}" %>">
+              <div class="card-body">
+                <% licenses.each do |license| %>
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <%= f.radio_button :license,
+                                          license,
+                                          class: 'form-check-input' %>
+                      <%= t(".license.#{license}_html") %>
+                    </label>
+                    <%# Handle one off special case of license text needing a text area %>
+                    <% if license == :license_text %>
+                      <%= f.input :license_text_area,
+                              as: :text,
+                              label: false,
+                              input_html: { rows: '5' },
+                              placeholder: t('.license.license_text_area_placeholder') %>
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
             </div>
           </div>
-        </div>
-      <% end %>
-    </div>
+        <% end %>
+      </div>
 
-  </fieldset>
-  <fieldset class="my-3">
-    <legend>
-      <span class="text-danger font-weight-bold">*</span>
-      <%= t('.visibility.header') %>
-    </legend>
-    <div class="form-check">
-      <label class="form-check-label">
-        <%= f.radio_button :visibility,
-                           :open_access,
-                           class: 'form-check-input' %>
-        <%= t('.visibility.open_access') %>
-      </label>
-    </div>
-    <div class="form-check">
-      <label class="form-check-label">
-        <%= f.radio_button :visibility,
-                           :embargo,
-                           class: 'form-check-input' %>
-        <%= t('.visibility.embargo') %>
-      </label>
-      <%= f.input :embargo_end_date,
-        as: :date,
-        label: false,
-        order: [:year, :month, :day],
-        prompt: {
-          day: t('select_a_day'),
-          month: t('select_a_month'),
-          year: t('select_a_year')
-        },
-        start_year: Date.today.year,
-        input_html: { class: 'mr-2 mb-2' } %>
-    </div>
-
-    <% if current_user.admin? %>
+    </fieldset>
+    <fieldset class="my-3">
+      <legend>
+        <span class="text-danger font-weight-bold">*</span>
+        <%= t('.visibility.header') %>
+      </legend>
       <div class="form-check">
         <label class="form-check-label">
           <%= f.radio_button :visibility,
-                              :authenticated,
-                              class: 'form-check-input' %>
-          <%= t('.visibility.authenticated') %>
+                            :open_access,
+                            class: 'form-check-input' %>
+          <%= t('.visibility.open_access') %>
         </label>
       </div>
-    <% end %>
+      <div class="form-check">
+        <label class="form-check-label">
+          <%= f.radio_button :visibility,
+                            :embargo,
+                            class: 'form-check-input' %>
+          <%= t('.visibility.embargo') %>
+        </label>
+        <%= f.input :embargo_end_date,
+          as: :date,
+          label: false,
+          order: [:year, :month, :day],
+          prompt: {
+            day: t('select_a_day'),
+            month: t('select_a_month'),
+            year: t('select_a_year')
+          },
+          start_year: Date.today.year,
+          input_html: { class: 'mr-2 mb-2' } %>
+      </div>
 
-  </fieldset>
+      <% if current_user.admin? %>
+        <div class="form-check">
+          <label class="form-check-label">
+            <%= f.radio_button :visibility,
+                                :authenticated,
+                                class: 'form-check-input' %>
+            <%= t('.visibility.authenticated') %>
+          </label>
+        </div>
+      <% end %>
 
-  <div class="mt-3 pull-right">
-    <%= link_to previous_wizard_path, class: 'btn btn-secondary' do %>
-      <%= fa_icon 'chevron-left' %>
-      <%= t('items.draft.previous') %>
-    <% end %>
-    <%= button_tag type: :submit, class: 'btn btn-primary' do %>
-      <%= t('items.draft.save_and_continue') %>
-      <%= fa_icon 'chevron-right' %>
-    <% end %>
-  </div>
-<% end %>
+    </fieldset>
+
+    <div class="mt-3 pull-right">
+      <%= link_to previous_wizard_path, class: 'btn btn-secondary' do %>
+        <%= fa_icon 'chevron-left' %>
+        <%= t('items.draft.previous') %>
+      <% end %>
+      <%= button_tag type: :submit, class: 'btn btn-primary' do %>
+        <%= t('items.draft.save_and_continue') %>
+        <%= fa_icon 'chevron-right' %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

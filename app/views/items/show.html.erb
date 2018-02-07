@@ -4,21 +4,22 @@
 
 <% page_title(@item.title) %>
 
-<%# Breadcrumbs here are for 'Home->Search->Item' %>
-<%# Community/collection based links appear in own section below' %>
-<div class="item-breadcrumb">
-  <ol class="breadcrumb mb-1">
-    <li class="breadcrumb-item">
-      <%= link_to(t(:home), root_path) %>
-    </li>
-    <li class="breadcrumb-item">
-      <%= link_to(t(:search_label), search_path) %>
-    </li>
-    <li class="breadcrumb-item active"><%= @item.title %></li>
-  </ol>
-</div>
+<div class="container mt-3">
 
-<div class="container">
+  <%# Breadcrumbs here are for 'Home->Search->Item' %>
+  <%# Community/collection based links appear in own section below' %>
+  <div class="item-breadcrumb">
+    <ol class="breadcrumb mb-1">
+      <li class="breadcrumb-item">
+        <%= link_to(t(:home), root_path) %>
+      </li>
+      <li class="breadcrumb-item">
+        <%= link_to(t(:search_label), search_path) %>
+      </li>
+      <li class="breadcrumb-item active"><%= @item.title %></li>
+    </ol>
+  </div>
+
   <div class="row">
     <%# LEFT SIDE %>
     <div class="col-md-4 mt-5">
