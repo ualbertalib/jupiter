@@ -3,11 +3,10 @@
     <div class="d-flex flex-wrap align-items-center justify-content-between px-3">
       <%# Reverse order on small screens %>
       <div class="order-last order-md-first p-1">
-        <p class="mb-0"><%= link_to t('application.footer.street_address'),
-                 'https://www.google.ca/maps/place/University+of+Alberta',
-                 class: 'text-dark small' %></p>
-        <p class="mb-0"><%= link_to t('application.footer.privacy_policy'),
-                 '/policies', class: 'text-dark small' %></p>
+        <p class="mb-0"><%= link_to t('application.footer.street_address'), contact_url,
+                            class: 'text-dark small' %></p>
+        <p class="mb-0"><%= link_to t('application.footer.privacy_policy'), policies_url,
+                            class: 'text-dark small' %></p>
       </div>
       <div class="order-first p-1 py-3">
         <%= image_tag 'ualib-logo.png', alt: 'logo' %>
