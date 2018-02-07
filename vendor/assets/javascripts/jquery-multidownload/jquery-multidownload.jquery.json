@@ -1,0 +1,28 @@
+{
+    "name": "jquery-multidownload",
+    "title": "Multiple files simultaneous download",
+    "description": "jQuery plugin multiple files simultaneous download.",
+    "keywords": [
+        "multiple",
+        "simultaneous",
+        "parallel",
+        "download"
+    ],
+    "version": "4.0.2",
+    "author": {
+        "name": "Grzegorz Biesiadecki",
+        "url": "https://github.com/biesiad"
+    },
+    "main": "jquery-multidownload.js",
+    "maintainers": [
+        {
+            "name": "Grzegorz Biesiadecki",
+            "email": "gbiesiadecki@gmail.com"
+        }
+    ],
+    "license": "MIT",
+    "bugs": "https://github.com/biesiad/multiDownload/issues",
+    "homepage": "https://github.com/biesiad/multiDownload",
+    "docs": "https://github.com/biesiad/multiDownload",
+    "download": "https://github.com/biesiad/multiDownload/archive/master.zip"
+}
