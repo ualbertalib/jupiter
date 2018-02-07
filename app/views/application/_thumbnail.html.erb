@@ -1,9 +1,7 @@
-<div class="j-thumbnail">
-  <% if thumbnail.present? && image?(thumbnail) %>
-    <%= image_tag(thumbnail.url, alt: '', size: '100x100', class: 'img-thumbnail') %>
-  <% else %>
-    <div class="text-muted text-center img-thumbnail p-3">
-      <%= fa_icon file_icon(thumbnail&.content_type), class: 'fa-5x' %>
-    </div>
-  <% end %>
-</div>
+<% if thumbnail.present? && image?(thumbnail) %>
+  <%= image_tag(thumbnail.url, class: 'img-thumbnail j-thumbnail', size: '100x100',  alt: '') %>
+<% else %>
+  <div class="text-muted text-center img-thumbnail p-3">
+    <%= fa_icon file_icon(thumbnail&.content_type), class: 'fa-5x' %>
+  </div>
+<% end %>

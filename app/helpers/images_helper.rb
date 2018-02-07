@@ -1,6 +1,5 @@
 module ImagesHelper
-
-# Probably easier way of doing this?
+  # Probably easier way of doing this?
   def file_icon(content_type)
     case content_type
     when /^image/
