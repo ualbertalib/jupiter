@@ -1,8 +1,8 @@
-<li class="media my-3 p-3 border">
+<li class="media mb-3 p-3 border">
 
-  <%= render partial: 'items/draft/thumbnail', locals: { thumbnail: file }%>
+  <%= render partial: 'thumbnail', locals: { thumbnail: file }%>
 
-  <div class="media-body my-3">
+  <div class="media-body ml-3">
     <div class="pull-right">
       <% if @draft_item.thumbnail != file %>
         <%= link_to set_thumbnail_item_file_path(@draft_item, file), method: :patch, remote: true, class: 'btn btn-secondary' do %>

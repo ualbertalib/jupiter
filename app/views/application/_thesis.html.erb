@@ -1,6 +1,6 @@
 <div class="media mb-3">
   <%= link_to path_for_result(thesis) do %>
-    <%= render partial: 'thumbnail', locals: { object: thesis } %>
+    <%= render partial: 'thumbnail', locals: { thumbnail: thesis.thumbnail.attachment } %>
   <% end %>
   <div class="media-body ml-3">
     <div class="d-flex flex-wrap flex-lg-nowrap justify-content-between align-items-start">

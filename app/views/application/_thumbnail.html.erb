@@ -1,17 +1,9 @@
-<%# TODO: might want to add a size parameter (e.g. list view vs item view) %>
-<%# TODO: Need to consolidate this with logo and other thumbnail/logo code in ERA as they are pretty much identical %>
-<% size_class = if local_assigns[:size].present? && size == :large
-                  'logo-large'
-                else
-                  'logo-small'
-                end %>
-<% if object.thumbnail&.attached? %>
-  <%= image_tag(object.thumbnail.url, alt: "#{t('search.thumbnail.thumbnail')} - #{object.title}", class: "d-flex img-thumbnail #{size_class}") %>
-<% else %>
-  <div class="d-flex justify-content-center align-items-center img-thumbnail <%= size_class %>">
-    <small class="text-muted">
-      <i class="fa fa-5x fa-picture-o" aria-hidden="true"></i>
-      <small class="sr-only"><%= "#{t('search.thumbnail.thumbnail')} - #{object.title}" %></small>
-    </small>
-  </div>
-<% end %>
+<div class="j-thumbnail">
+  <% if thumbnail.present? && image?(thumbnail) %>
+    <%= image_tag(thumbnail.url, alt: '', size: '100x100', class: 'img-thumbnail') %>
+  <% else %>
+    <div class="text-muted text-center img-thumbnail p-3">
+      <%= fa_icon file_icon(thumbnail&.content_type), class: 'fa-5x' %>
+    </div>
+  <% end %>
+</div>

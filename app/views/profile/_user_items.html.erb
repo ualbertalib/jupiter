@@ -8,7 +8,7 @@
           <div class='media'>
             <%# TODO: Generalize logo/thumbnail view code below to maybe use logo/thumbnail partial? %>
             <% if draft_item.thumbnail.present? %>
-              <%= image_tag(draft_item.thumbnail.url, class: "mr-3 img-thumbnail logo-small", alt: draft_item.title) %>
+              <%= image_tag(draft_item.thumbnail.url, class: "mr-3 img-thumbnail logo-small", alt: '') %>
             <% else %>
               <div class="d-flex justify-content-center align-items-center mr-3 img-thumbnail logo-small">
                 <small class="text-muted">

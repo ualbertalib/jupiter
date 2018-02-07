@@ -25,7 +25,7 @@
           </div>
 
           <div class="card-body">
-            <%= render partial: 'thumbnail', locals: { thumbnail: @draft_item.thumbnail }%>
+            <%= render partial: 'feature_image', locals: { feature_image: @draft_item.thumbnail }%>
 
             <ul class="list-group">
               <% @draft_item.files.each do |file|%>

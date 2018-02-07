@@ -1,4 +1,4 @@
-<%= render partial: 'thumbnail', locals: { object: @item, size: :large } %>
+<%= render partial: 'feature_image', locals: { feature_image: @item.thumbnail.attachment } %>
 
 <% if @item.file_sets.count == 1 %>
   <div class="d-flex justify-content-center mt-3">

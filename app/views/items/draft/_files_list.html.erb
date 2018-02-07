@@ -7,8 +7,7 @@
     <div class="col-md-4">
       <h4><%= t('.item_thumbnail') %></h4>
 
-
-      <%= render partial: 'items/draft/thumbnail', locals: { thumbnail: @draft_item.thumbnail }%>
+      <%= render partial: 'thumbnail', locals: { thumbnail: @draft_item.thumbnail }%>
 
       <p class="text-muted"><%= t('.thumbnail_of_first_file') %></p>
     </div>

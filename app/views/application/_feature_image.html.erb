@@ -1,0 +1,9 @@
+<div class="w-100 h-100 text-center">
+  <% if feature_image.present? && image?(feature_image) %>
+    <%= image_tag(feature_image.url, alt: '', size: '300x300', class: 'img-thumbnail') %>
+  <% else %>
+    <div class="text-muted text-center img-thumbnail p-3">
+      <%= fa_icon file_icon(feature_image&.content_type), class: 'fa-5x' %>
+    </div>
+  <% end %>
+</div>
