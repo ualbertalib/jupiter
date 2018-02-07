@@ -15,7 +15,8 @@ class DraftItem < ApplicationRecord
                   attribution_share_alike: 5,
                   cco_universal: 6,
                   public_domain_mark: 7,
-                  license_text: 8 }
+                  license_text: 8,
+                  unselected: 9}
   LICENSE_TO_URI_CODE =
     { attribution_non_commercial: :attribution_noncommercial_4_0_international,
       attribution: :attribution_4_0_international,
@@ -87,6 +88,7 @@ class DraftItem < ApplicationRecord
 
   validates :files, presence: true, if: :validate_upload_files?
   validate :files_are_virus_free, if: :validate_upload_files?
+  validate :license_not_unselected, if: :validate_choose_license_and_visibility?
 
   scope :unpublished, -> { where(status: :active).where('uuid IS NULL') }
 
@@ -175,8 +177,10 @@ class DraftItem < ApplicationRecord
       member_of_paths['collection_id'] << collection.id
     end
 
+    save(validate: false)
+
     # reset files if the files have changed in Fedora outside of the draft process
-    files.purge
+    files.purge if item.file_sets.present?
 
     item.file_sets.each do |fileset|
       fileset.unlock_and_fetch_ldp_object do |ufs|
@@ -185,8 +189,6 @@ class DraftItem < ApplicationRecord
         end
       end
     end
-
-    save(validate: false)
   end
 
   # Pull latest data from Fedora if data is more recent than this draft
@@ -254,8 +256,8 @@ class DraftItem < ApplicationRecord
     return 'license_text' if uri.nil?
     code = CONTROLLED_VOCABULARIES[:license].from_uri(uri)
     license = URI_CODE_TO_LICENSE[code].to_s
-    raise ArgumentError, "Unable to map DraftItem license from URI: #{uri}, code: #{code}" if license.blank?
-    license
+
+    license.blank? ? 'unselected' : license
   end
 
   # silly stuff needed for handling multivalued publication status attribute when Item type is `Article`
@@ -359,6 +361,10 @@ class DraftItem < ApplicationRecord
 
   def validate_if_visibility_is_embargo?
     validate_choose_license_and_visibility? && embargo?
+  end
+
+  def license_not_unselected
+    errors.add(:license, :missing) if self.license == 'unselected'
   end
 
   # HACK: Messing with Rails internals for fun and profit
