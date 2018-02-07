@@ -13,75 +13,88 @@ class DepositItemTest < ApplicationSystemTestCase
                             .unlock_and_fetch_ldp_object(&:save!)
   end
 
-  context 'Deposit Item via Wizard' do
-    should 'be able to deposit a new item into jupiter successfully' do
-      user = users(:regular)
+  test 'be able to deposit a new item into jupiter successfully' do
+    user = users(:regular)
 
-      login_user(user)
+    login_user(user)
 
-      click_link I18n.t('application.navbar.links.new_item')
+    click_link I18n.t('application.navbar.links.new_item')
 
-      # 1. Describe Item Form
+    # 1. Describe Item Form
 
-      assert_selector 'h1', text: I18n.t('items.draft.header')
-      assert_selector 'h2', text: I18n.t('items.draft.describe_item.header')
+    assert_selector 'h1', text: I18n.t('items.draft.header')
+    assert_selector 'h2', text: I18n.t('items.draft.describe_item.header')
 
-      fill_in I18n.t('items.draft.describe_item.title'),
-              # Need to narrow down by placeholder since capybara can't differentiate from title and alternate title labels
-              placeholder: I18n.t('items.draft.describe_item.title_placeholder'),
-              with: 'A Dance with Dragons'
+    fill_in I18n.t('items.draft.describe_item.title'),
+            # Need to narrow down by placeholder since capybara can't differentiate from title and alternate title labels
+            placeholder: I18n.t('items.draft.describe_item.title_placeholder'),
+            with: 'A Dance with Dragons'
 
-      select 'Book', from: I18n.t('items.draft.describe_item.type_id')
-      select 'English', from: I18n.t('items.draft.describe_item.languages')
+    select 'Book', from: I18n.t('items.draft.describe_item.type_id')
+    select 'English', from: I18n.t('items.draft.describe_item.languages')
 
-      select2 'George R. R. Martin', container_class: 'draft_item_creators'
+    select2 'George R. R. Martin', container_class: 'draft_item_creators'
 
-      select2 'A Song of Ice and Fire', container_class: 'draft_item_subjects'
-      select2 'Fantasy', container_class: 'draft_item_subjects'
+    select2 'A Song of Ice and Fire', container_class: 'draft_item_subjects'
+    select2 'Fantasy', container_class: 'draft_item_subjects'
 
-      select_date '2011/07/12', field_id: 'draft_item_date_created'
+    select_date '2011/07/12', field_id: 'draft_item_date_created'
 
-      fill_in I18n.t('items.draft.describe_item.description'), with: 'A Dance with Dragons Description Goes Here!!!'
+    fill_in I18n.t('items.draft.describe_item.description'), with: 'A Dance with Dragons Description Goes Here!!!'
 
-      select @community.title, from: 'draft_item[community_id][]'
-      select @collection.title, from: 'draft_item[collection_id][]'
+    select @community.title, from: 'draft_item[community_id][]'
+    select @collection.title, from: 'draft_item[collection_id][]'
 
-      click_on I18n.t('items.draft.save_and_continue')
+    click_on I18n.t('items.draft.save_and_continue')
 
-      # 2. Choose License and Visibility Form
+    # 2. Choose License and Visibility Form
 
-      assert_selector 'h2', text: I18n.t('items.draft.choose_license_and_visibility.header')
+    assert_selector 'h2', text: I18n.t('items.draft.choose_license_and_visibility.header')
 
-      # Open accordion
-      click_on I18n.t('items.draft.choose_license_and_visibility.license.link_to_another_license')
+    # Open accordion
+    click_on I18n.t('items.draft.choose_license_and_visibility.license.link_to_another_license')
 
-      choose I18n.t('items.draft.choose_license_and_visibility.license.license_text_html')
-      fill_in 'draft_item_license_text_area', with: 'License Text Goes Here!!!'
+    choose I18n.t('items.draft.choose_license_and_visibility.license.license_text_html')
+    fill_in 'draft_item_license_text_area', with: 'License Text Goes Here!!!'
 
-      choose I18n.t('items.draft.choose_license_and_visibility.visibility.embargo')
-      select_date '2023/01/01', field_id: 'draft_item_embargo_end_date'
+    choose I18n.t('items.draft.choose_license_and_visibility.visibility.embargo')
+    select_date '2023/01/01', field_id: 'draft_item_embargo_end_date'
 
-      click_on I18n.t('items.draft.save_and_continue')
+    click_on I18n.t('items.draft.save_and_continue')
 
-      # 3. Upload File Form
+    # 3. Upload File Form
 
-      assert_selector 'h2', text: I18n.t('items.draft.upload_files.header')
+    assert_selector 'h2', text: I18n.t('items.draft.upload_files.header')
 
-      attach_file_in_dropzone(file_fixture('image-sample.jpeg'))
+    attach_file_in_dropzone(file_fixture('image-sample.jpeg'))
 
-      click_on I18n.t('items.draft.save_and_continue')
+    click_on I18n.t('items.draft.save_and_continue')
 
-      # 4. Review and Deposit Form
+    # 4. Review and Deposit Form
 
-      assert_selector 'h2', text: I18n.t('items.draft.review_and_deposit_item.header')
+    assert_selector 'h2', text: I18n.t('items.draft.review_and_deposit_item.header')
 
-      click_on I18n.t('items.draft.header')
+    click_on I18n.t('items.draft.header')
 
-      # Success! Deposit Successful
+    # Success! Deposit Successful
 
-      assert_text I18n.t('items.draft.successful_deposit')
-      assert_selector 'h1', text: Item.last.title
-    end
+    assert_text I18n.t('items.draft.successful_deposit')
+    assert_selector 'h1', text: Item.last.title
+
+    # verify editing
+
+    click_on I18n.t('edit')
+    assert_selector 'h1', text: I18n.t('items.draft.header_edit')
+    fill_in I18n.t('items.draft.describe_item.title'),
+            currently_with: 'A Dance with Dragons',
+            with: 'The Winds of Winter'
+    click_on I18n.t('items.draft.save_and_continue')
+
+    click_on I18n.t('items.draft.save_and_continue')
+    click_on I18n.t('items.draft.save_and_continue')
+    click_on I18n.t('items.draft.header_edit')
+    assert_text I18n.t('items.draft.successful_deposit')
+    assert_selector 'h1', text: 'The Winds of Winter'
   end
 
   # Helper methods for javascript fields (select2/dropzone) and date select
