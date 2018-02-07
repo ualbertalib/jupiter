@@ -274,7 +274,10 @@ class JupiterCore::LockedLdpObject
     results_count, results, _ = JupiterCore::Search.perform_solr_query(q: %Q(_query_:"{!raw f=id}#{id}"),
                                                                        restrict_to_model: af_types)
 
-    raise JupiterCore::ObjectNotFound, "Couldn't find #{af_types.map(&:to_s).join(', ')} with id='#{id}'" if results_count == 0
+    if results_count == 0
+      raise JupiterCore::ObjectNotFound,
+            "Couldn't find #{af_types.map(&:to_s).join(', ')} with id='#{id}'"
+    end
     raise JupiterCore::MultipleIdViolationError if results_count > 1
     solr_doc = results.first
 
@@ -381,9 +384,9 @@ class JupiterCore::LockedLdpObject
 
   def method_missing(name, *args, &block)
     return super unless self.class.send(:derived_af_class).instance_methods.include?(name)
-    raise JupiterCore::LockedInstanceError, 'This is a locked cache instance and does not respond to the method you attempted '\
-                               "to call (##{name}). However, the locked instance DOES respond to ##{name}. Use "\
-                               'unlock_and_fetch_ldp_object to load a writable copy (SLOW).'
+    raise JupiterCore::LockedInstanceError, 'This is a locked cache instance and does not respond to the method'\
+                               "you attempted to call (##{name}). However, the locked instance DOES respond to"\
+                               "##{name}. Use unlock_and_fetch_ldp_object to load a writable copy (SLOW)."
   end
 
   # Looks pointless, but keeps rubocop happy because of the error-message refining +method_missing+ above
@@ -814,8 +817,9 @@ class JupiterCore::LockedLdpObject
       define_cached_reader(name, multiple: multiple, type: type, canonical_solr_name: solr_name_cache.first)
 
       define_method "#{name}=" do |*_args|
-        raise JupiterCore::LockedInstanceError, 'The Locked LDP object cannot be mutated outside of an unlocked block or without '\
-                                   'calling unlock_and_fetch_ldp_object to load a writable copy (SLOW).'
+        raise JupiterCore::LockedInstanceError, 'The Locked LDP object cannot be mutated outside of an unlocked block'\
+                                                'or without calling unlock_and_fetch_ldp_object to load a writable'\
+                                                ' copy (SLOW).'
       end
 
       derived_af_class.class_eval do
