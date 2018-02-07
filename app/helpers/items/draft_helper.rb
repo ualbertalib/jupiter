@@ -9,6 +9,10 @@ module Items::DraftHelper
     end
   end
 
+  def header
+    @is_edit ? t('items.draft.header_edit') : t('items.draft.header')
+  end
+
   def progress_bar_percentage
     ((step_index(step).to_f / wizard_steps.size) * 100).to_i
   end

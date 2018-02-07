@@ -1,11 +1,11 @@
-<% page_title( t('.header')) %>
+<% page_title(header) %>
 
 <div class="container mt-3">
   <%= render partial: 'progress_bar' %>
 
   <h2 class="mt-3">
     <%= fa_icon t('.header_icon') %>
-    <%= t('.header') %>
+    <%= @is_edit ? t('.header_edit') : t('.header') %>
   </h2>
 
   <%= simple_form_for @draft_item, url: wizard_path, method: :put, html: { class:'js-deposit-item' } do |f| %>
@@ -223,7 +223,11 @@
           <% end %>
           <%= button_tag type: :submit, class: 'btn btn-primary' do %>
             <%= fa_icon 'save' %>
-            <%= t('items.draft.header') %>
+            <% if @is_edit %>
+              <%= t('items.draft.header_edit') %>
+            <% else %>
+              <%= t('items.draft.header') %>
+            <% end %>
           <% end %>
         </div>
       </div>
