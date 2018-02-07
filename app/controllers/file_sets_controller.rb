@@ -5,7 +5,7 @@ class FileSetsController < ApplicationController
   # TODO: expand to handle derivatives
   def show
     @file_name = params[:file_name]
-    return head :not_found unless @file_name == @file_set.contained_filename
+    raise JupiterCore::ObjectNotFound unless @file_name == @file_set.contained_filename
     stream_from_fedora
   end
 
@@ -17,9 +17,8 @@ class FileSetsController < ApplicationController
   private
 
   def load_and_authorize_fileset
-    @file_set = FileSet.find_by(params[:file_set_id])
-    return head :not_found if @file_set.blank?
-    return head :not_found unless @file_set.item == params[:id]
+    @file_set = FileSet.find(params[:file_set_id])
+    raise JupiterCore::ObjectNotFound unless @file_set.item == params[:id]
 
     authorize @file_set.owning_item, :download?
   end

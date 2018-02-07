@@ -1,5 +1,7 @@
 class ApplicationController < ActionController::Base
 
+  # TODO: this require is to locate JupiterCore::ObjectNotFound, needs restructuring
+  require 'jupiter_core/locked_ldp_object'
   include Pundit
 
   after_action :verify_authorized
@@ -9,6 +11,9 @@ class ApplicationController < ActionController::Base
   helper_method :current_announcements
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+  rescue_from JupiterCore::ObjectNotFound,
+              ActiveRecord::RecordNotFound,
+              ActionController::RoutingError, with: :render_404
 
   protected
 
@@ -62,6 +67,10 @@ class ApplicationController < ActionController::Base
       session[:forwarding_url] = request.original_url if request.get?
       redirect_to login_url, alert: t('authorization.user_not_authorized_try_logging_in')
     end
+  end
+
+  def render_404
+    render file: 'public/404.html', status: :not_found, layout: false
   end
 
   def redirect_back_to
