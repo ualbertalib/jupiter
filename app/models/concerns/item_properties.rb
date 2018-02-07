@@ -129,8 +129,9 @@ module ItemProperties
             # for quick and easy retrieval -- nobody wants to wait 36hrs for this!
             unlocked_fileset.sitemap_link = "<rs:ln \
 href=\"#{Rails.application.routes.url_helpers.url_for(controller: :file_sets,
-                                                      action: :download,
-                                                      id: unlocked_fileset.id,
+                                                      action: :show,
+                                                      id: id,
+                                                      file_set_id: unlocked_fileset.id,
                                                       file_name: unlocked_fileset.contained_filename,
                                                       only_path: true)}\" \
 rel=\"content\" \
