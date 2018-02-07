@@ -16,11 +16,26 @@ class DraftItem < ApplicationRecord
                   cco_universal: 6,
                   public_domain_mark: 7,
                   license_text: 8 }
+  LICENSE_TO_URI_CODE =
+    { attribution_non_commercial: :attribution_noncommercial_4_0_international,
+      attribution: :attribution_4_0_international,
+      attribution_non_commercial_no_derivatives: :attribution_noncommercial_noderivatives_4_0_international,
+      attribution_non_commercial_share_alike: :attribution_noncommercial_sharealike_4_0_international,
+      attribution_no_derivatives: :attribution_noderivatives_4_0_international,
+      attribution_share_alike: :attribution_sharealike_4_0_international,
+      cco_universal: :cc0_1_0_universal,
+      public_domain_mark: :public_domain_mark_1_0 }.freeze
+  URI_CODE_TO_LICENSE = LICENSE_TO_URI_CODE.invert
 
   # Can't use public as this is a ActiveRecord method, using open_access instead
   enum visibility: { open_access: 0,
                      embargo: 1,
                      authenticated: 2 }
+
+  VISIBILITY_TO_URI_CODE = { open_access: :public,
+                             embargo: :embargo,
+                             authenticated: :authenticated }.freeze
+  URI_CODE_TO_VISIBILITY = VISIBILITY_TO_URI_CODE.invert
 
   # Can't reuse same keys as visibility enum above, need to differentiate keys a bit
   #
@@ -30,6 +45,24 @@ class DraftItem < ApplicationRecord
   # to `ccid_authenticated`/`authenticated` from the console
   enum visibility_after_embargo: { opened: 0,
                                    ccid_protected: 1 }
+
+  VISIBILITY_AFTER_EMBARGO_TO_URI_CODE = { opened: :public,
+                                           ccid_protected: :authenticated }.freeze
+  URI_CODE_TO_VISIBILITY_AFTER_EMBARGO = VISIBILITY_AFTER_EMBARGO_TO_URI_CODE.invert
+
+  ITEM_TYPE_TO_URI_CODE = { book: :book,
+                            book_chapter: :chapter,
+                            conference_workshop_poster: :conference_poster,
+                            conference_workshop_presenation: :conference_paper,
+                            dataset: :dataset,
+                            image: :image,
+                            journal_article_draft: :article,
+                            journal_article_published: :article,
+                            learning_object: :learning_object,
+                            report: :report,
+                            research_material: :research_material,
+                            review: :review }.freeze
+  URI_CODE_TO_ITEM_TYPE = ITEM_TYPE_TO_URI_CODE.invert
 
   has_many_attached :files
 
@@ -54,6 +87,8 @@ class DraftItem < ApplicationRecord
 
   validates :files, presence: true, if: :validate_upload_files?
   validate :files_are_virus_free, if: :validate_upload_files?
+
+  scope :unpublished, -> { where(status: :active).where('uuid IS NULL') }
 
   def communities
     return unless member_of_paths.present? && member_of_paths['community_id']
@@ -105,60 +140,189 @@ class DraftItem < ApplicationRecord
     end
   end
 
-  # Creates a new Fedora Item from the draft_item attributes
-  def ingest_into_fedora
-    item = Item.new_locked_ldp_object(
-      owner: user.id,
+  # rubocop:disable Style/DateTime,Rails/TimeZone
+  def update_from_fedora_item(item)
+    draft_attributes = {
+      user_id: item.owner,
+      title: item.title,
+      alternate_title: item.alternative_title,
+      type: item_type_for_uri(item.item_type, status: item.publication_status),
+      languages: languages_for_uris(item.languages),
+      creators: item.creators,
+      subjects: item.subject,
+      # I suspect this will become some kind of string field, but for now, using UTC
+      date_created: DateTime.parse(item.created),
+      description: item.description,
+      visibility: visibility_for_uri(item.visibility),
+      visibility_after_embargo: visibility_after_embargo_for_uri(item.visibility_after_embargo),
+      embargo_end_date: item.embargo_end_date,
+      license: license_for_uri(item.license),
+      license_text_area: item.rights,
+      contributors: item.contributors,
+      places: item.spatial_subjects,
+      time_periods: item.temporal_subjects,
+      citations: item.is_version_of,
+      source: item.source,
+      related_item: item.related_link
+    }
+    assign_attributes(draft_attributes)
 
-      title: title,
-      alternative_title: alternate_title,
+    # reset paths if the file move in Fedora outside the draft process
+    self.member_of_paths = { 'community_id' => [], 'collection_id' => [] }
 
-      item_type: item_type_conversion_to_controlled_vocab_uri,
-      publication_status: handle_publication_status,
-
-      languages: languages_conversion_to_controlled_vocab_uri,
-      creators: creators,
-      subject: subjects,
-      created: date_created.to_s,
-      description: description,
-
-      # Handle visibility plus embargo logic
-      visibility: visibility_conversion_to_controlled_vocab_uri,
-      visibility_after_embargo: visibility_after_embargo_conversion_to_controlled_vocab_uri,
-      embargo_end_date: embargo_end_date,
-
-      # Handle license vs rights
-      license: license_conversion_to_controlled_vocab_uri,
-      rights: license == 'license_text' ?  license_text_area : nil,
-
-      # Additional fields
-      contributors: contributors,
-      spatial_subjects: places,
-      temporal_subjects: time_periods,
-      # citations of previous publication apparently maps to is_version_of
-      is_version_of: citations,
-      source: source,
-      related_link: related_item
-    ).unlock_and_fetch_ldp_object do |unlocked_obj|
-
-      each_community_collection do |community, collection|
-        unlocked_obj.add_to_path(community.id, collection.id)
-      end
-      map_activestorage_files_as_file_objects do |file|
-        unlocked_obj.add_files([file])
-      end
-      unlocked_obj.save!
+    item.each_community_collection do |community, collection|
+      member_of_paths['community_id'] << community.id
+      member_of_paths['collection_id'] << collection.id
     end
-    # set the item's thumbnail to the chosen fileset
-    # this advice doesn't apply to non-ActiveRecord objects, rubocop
-    # rubocop:disable Rails/FindBy
-    item.thumbnail_fileset(item.file_sets.where(contained_filename: thumbnail.filename.to_s).first)
 
-    # save the uuid of the item to this draft item for future reference
-    # TODO: actually use this for editing
-    self.uuid = item.id
-    save!
-    item
+    # reset files if the files have changed in Fedora outside of the draft process
+    files.purge
+
+    item.file_sets.each do |fileset|
+      fileset.unlock_and_fetch_ldp_object do |ufs|
+        ufs.fetch_raw_original_file_data do |content_type, io|
+          files.attach(io: io, filename: ufs.contained_filename, content_type: content_type)
+        end
+      end
+    end
+
+    save(validate: false)
+  end
+
+  # Pull latest data from Fedora if data is more recent than this draft
+  # This would happen if, eg) someone manually updated the Fedora record in the Rails console
+  # and then someone visited this item's draft URL directly without bouncing through ItemsController#edit
+  def sync_with_fedora
+    item = Item.find(uuid)
+    update_from_fedora_item(item) if item.updated_at > updated_at
+  end
+
+  def self.from_item(item)
+    draft = DraftItem.find_by(uuid: item.id)
+    draft ||= DraftItem.new(uuid: item.id)
+
+    draft.update_from_fedora_item(item)
+    draft
+  end
+
+  # Fedora file handling
+  # Convert ActiveStorage objects into File objects so we can deposit them into fedora
+  def map_activestorage_files_as_file_objects
+    files.map do |file|
+      path = file_path_for(file)
+      original_filename = file.filename.to_s
+      File.open(path) do |f|
+        # We're exploiting the fact that Hydra-Works calls original_filename on objects passed to it, if they
+        # respond to that method, in preference to looking at the final portion of the file path, which,
+        # because we fished this out of ActiveStorage, is just a hash. In this way we present Fedora with the original
+        # file name of the object and not a hashed or otherwise modified version temporarily created during ingest
+        f.send(:define_singleton_method, :original_filename, ->() { original_filename })
+        yield f
+      end
+    end
+  end
+
+  # Control Vocab Conversions
+
+  # Maps Language names to CONTROLLED_VOCABULARIES[:language] URIs
+  def languages_as_uri
+    languages.pluck(:name).map do |language|
+      CONTROLLED_VOCABULARIES[:language].send(language)
+    end
+  end
+
+  def languages_for_uris(uris)
+    uris.map do |uri|
+      code = CONTROLLED_VOCABULARIES[:language].from_uri(uri)
+      raise ArgumentError, "No known code for language uri: #{uri}" if code.blank?
+      language = Language.find_by(name: code)
+      raise ArgumentError, "No draft language found for code: #{code}" if language.blank?
+      language
+    end
+  end
+
+  # Maps DraftItem.licenses to CONTROLLED_VOCABULARIES[:license]
+  def license_as_uri
+    # no mapping for `license_text` as this gets checked and ingested as a `rights` field in Fedora Item
+    return nil if license == 'license_text'
+
+    code = LICENSE_TO_URI_CODE.fetch(license.to_sym)
+    CONTROLLED_VOCABULARIES[:license].send(code)
+  end
+
+  def license_for_uri(uri)
+    return 'license_text' if uri.nil?
+    code = CONTROLLED_VOCABULARIES[:license].from_uri(uri)
+    license = URI_CODE_TO_LICENSE[code].to_s
+    raise ArgumentError, "Unable to map DraftItem license from URI: #{uri}, code: #{code}" if license.blank?
+    license
+  end
+
+  # silly stuff needed for handling multivalued publication status attribute when Item type is `Article`
+  def publication_status_as_uri
+    if type.name == 'journal_article_draft'
+      [CONTROLLED_VOCABULARIES[:publication_status].draft, CONTROLLED_VOCABULARIES[:publication_status].submitted]
+    elsif type.name == 'journal_article_published'
+      [CONTROLLED_VOCABULARIES[:publication_status].published]
+    end
+  end
+
+  # Maps Type names to CONTROLLED_VOCABULARIES[:item_type]
+  def item_type_as_uri
+    code = ITEM_TYPE_TO_URI_CODE.fetch(type.name.to_sym)
+    CONTROLLED_VOCABULARIES[:item_type].send(code)
+  end
+
+  def item_type_for_uri(uri, status:)
+    code = CONTROLLED_VOCABULARIES[:item_type].from_uri(uri)
+    if status.present?
+      if status.include?(CONTROLLED_VOCABULARIES[:publication_status].draft)
+        name = 'journal_article_draft'
+      elsif status.include?(CONTROLLED_VOCABULARIES[:publication_status].published)
+        name = 'journal_article_published'
+      else
+        raise ArgumentError, "Unmappable DraftItem publication status(es): #{publication_status}"
+      end
+    else
+      name = URI_CODE_TO_ITEM_TYPE[code].to_s
+    end
+
+    raise ArgumentError, "Unable to map DraftItem type from URI: #{uri}, code: #{code}" if name.blank?
+    type = Type.find_by(name: name)
+    raise ArgumentError, "Unable to find DraftItem type: #{name}" if type.blank?
+    type
+  end
+
+  # Maps DraftItem.visibilities to CONTROLLED_VOCABULARIES[:visibility]
+  def visibility_as_uri
+    # Can't have a private or draft visibilty so no mappings for this
+    code = VISIBILITY_TO_URI_CODE.fetch(visibility.to_sym)
+    CONTROLLED_VOCABULARIES[:visibility].send(code)
+  end
+
+  def visibility_for_uri(uri)
+    code = CONTROLLED_VOCABULARIES[:visibility].from_uri(uri)
+    visibility = URI_CODE_TO_VISIBILITY[code].to_s
+    raise ArgumentError, "Unable to map DraftItem visbility from URI: #{uri}, code: #{code}" if visibility.blank?
+    visibility
+  end
+
+  # Maps DraftItem.visibility_after_embargo to CONTROLLED_VOCABULARIES[:visibility]
+  def visibility_after_embargo_as_uri
+    return nil unless embargo?
+
+    code = VISIBILITY_AFTER_EMBARGO_TO_URI_CODE.fetch(visibility_after_embargo.to_sym)
+    CONTROLLED_VOCABULARIES[:visibility].send(code)
+  end
+
+  def visibility_after_embargo_for_uri(uri)
+    return 0 if uri.blank?
+    code = CONTROLLED_VOCABULARIES[:visibility].from_uri(uri)
+    visibility = URI_CODE_TO_VISIBILITY_AFTER_EMBARGO[code].to_s
+    if visibility.blank?
+      raise ArgumentError, "Unable to map DraftItem visbility_after_embargo from URI: #{uri}, code: #{code}"
+    end
+    visibility
   end
 
   private
@@ -210,101 +374,6 @@ class DraftItem < ApplicationRecord
       path = file_path_for(file)
       errors.add(:files, :infected, filename: file.filename.to_s) unless Clamby.safe?(path)
     end
-  end
-
-  # Fedora file handling
-  # Convert ActiveStorage objects into File objects so we can deposit them into fedora
-  def map_activestorage_files_as_file_objects
-    files.map do |file|
-      path = file_path_for(file)
-      original_filename = file.filename.to_s
-      File.open(path) do |f|
-        # We're exploiting the fact that Hydra-Works calls original_filename on objects passed to it, if they
-        # respond to that method, in preference to looking at the final portion of the file path, which,
-        # because we fished this out of ActiveStorage, is just a hash. In this way we present Fedora with the original
-        # file name of the object and not a hashed or otherwise modified version temporarily created during ingest
-        f.send(:define_singleton_method, :original_filename, ->() { original_filename })
-        yield f
-      end
-    end
-  end
-
-  # Control Vocab Conversions
-
-  # Maps Language names to CONTROLLED_VOCABULARIES[:language] URIs
-  def languages_conversion_to_controlled_vocab_uri
-    languages.pluck(:name).map do |language|
-      CONTROLLED_VOCABULARIES[:language].send(language)
-    end
-  end
-
-  # Maps DraftItem.licenses to CONTROLLED_VOCABULARIES[:license]
-  def license_conversion_to_controlled_vocab_uri
-    # no mapping for `license_text` as this gets checked and ingested as a `rights` field in Fedora Item
-    return nil if license == 'license_text'
-
-    conversions =
-      { attribution_non_commercial: :attribution_noncommercial_4_0_international,
-        attribution: :attribution_4_0_international,
-        attribution_non_commercial_no_derivatives: :attribution_noncommercial_noderivatives_4_0_international,
-        attribution_non_commercial_share_alike: :attribution_noncommercial_sharealike_4_0_international,
-        attribution_no_derivatives: :attribution_noderivatives_4_0_international,
-        attribution_share_alike: :attribution_sharealike_4_0_international,
-        cco_universal: :cc0_1_0_universal,
-        public_domain_mark: :public_domain_mark_1_0 }
-
-    code = conversions.fetch(license.to_sym)
-    CONTROLLED_VOCABULARIES[:license].send(code)
-  end
-
-  # silly stuff needed for handling multivalued publication status attribute when Item type is `Article`
-  def handle_publication_status
-    if type.name == 'journal_article_draft'
-      [CONTROLLED_VOCABULARIES[:publication_status].draft, CONTROLLED_VOCABULARIES[:publication_status].submitted]
-    elsif type.name == 'journal_article_published'
-      [CONTROLLED_VOCABULARIES[:publication_status].published]
-    end
-  end
-
-  # Maps Type names to CONTROLLED_VOCABULARIES[:item_type]
-  def item_type_conversion_to_controlled_vocab_uri
-    conversions = { book: :book,
-                    book_chapter: :chapter,
-                    conference_workshop_poster: :conference_poster,
-                    conference_workshop_presenation: :conference_paper,
-                    dataset: :dataset,
-                    image: :image,
-                    journal_article_draft: :article,
-                    journal_article_published: :article,
-                    learning_object: :learning_object,
-                    report: :report,
-                    research_material: :research_material,
-                    review: :review }
-
-    code = conversions.fetch(type.name.to_sym)
-    CONTROLLED_VOCABULARIES[:item_type].send(code)
-  end
-
-  # Maps DraftItem.visibilities to CONTROLLED_VOCABULARIES[:visibility]
-  def visibility_conversion_to_controlled_vocab_uri
-    # Can't have a private or draft visibilty so no mappings for this
-    conversions = { open_access: :public,
-                    embargo: :embargo,
-                    authenticated: :authenticated }
-
-    code = conversions.fetch(visibility.to_sym)
-    CONTROLLED_VOCABULARIES[:visibility].send(code)
-  end
-
-  # Maps DraftItem.visibility_after_embargo to CONTROLLED_VOCABULARIES[:visibility]
-  def visibility_after_embargo_conversion_to_controlled_vocab_uri
-    return nil unless embargo?
-
-    conversions = { opened: :public,
-                    ccid_protected: :authenticated }
-
-    code = conversions.fetch(visibility_after_embargo.to_sym)
-    CONTROLLED_VOCABULARIES[:visibility].send(code)
   end
 
 end

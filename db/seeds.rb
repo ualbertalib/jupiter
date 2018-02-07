@@ -174,9 +174,9 @@ if Rails.env.development? || Rails.env.uat?
           uo.add_to_path(community.id, item_collection.id)
           uo.add_to_path(community.id, thesis_collection.id)
           uo.save!
-          
+
           # Attach two files to the mondo-item
-          File.open(Rails.root + 'test/fixtures/files/pdf-sample.pdf', 'r') do |file1|
+          File.open(Rails.root + 'app/assets/images/theses.jpg', 'r') do |file1|
             File.open(Rails.root + 'test/fixtures/files/image-sample.jpeg', 'r') do |file2|
               # Bit of a hack to fake a long file name ...
               def file2.original_filename
@@ -185,7 +185,7 @@ if Rails.env.development? || Rails.env.uat?
               uo.add_files([file1, file2])
             end
           end
-          
+
         else
           uo.add_to_path(community.id, item_collection.id)
           uo.save!

@@ -407,6 +407,7 @@ en:
 
     draft:
       header: 'Deposit Item'
+      header_edit: 'Edit Item'
       previous: 'Previous step'
       save_and_continue: 'Save and continue to next step'
       progress_bar_text: 'Step %{step_index} of %{total_steps}'
@@ -536,6 +537,7 @@ en:
 
       review_and_deposit_item:
         header: 'Review and Deposit Item'
+        header_edit: 'Review and Update Item'
         header_icon: 'check-square-o'
         please_review_item: 'Please review your item before depositing into ERA'
         legal_disclaimer_html: 'By depositing this item into ERA you agree to the <a href="/policies">ERA Deposit Policy agreements</a>'

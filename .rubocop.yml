@@ -81,6 +81,10 @@ Rails:
 Rails/UnknownEnv:
   Enabled: false
 
+# Autocorrecting this actively breaks code
+Rails/FindEach:
+  Enabled: false
+
 # indentation is an endangered resource
 Style/ClassAndModuleChildren:
   EnforcedStyle: compact
