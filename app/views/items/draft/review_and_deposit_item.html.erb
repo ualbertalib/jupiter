@@ -27,7 +27,7 @@
           <div class="card-body">
             <%= render partial: 'feature_image', locals: { feature_image: @draft_item.thumbnail }%>
 
-            <ul class="list-group">
+            <ul class="list-group mt-3">
               <% @draft_item.files.each do |file|%>
                 <li class="list-group-item">
                   <%= fa_icon file_icon(file.content_type) %>
