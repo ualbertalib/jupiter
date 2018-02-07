@@ -40,3 +40,8 @@ linters:
   # We want `0px` instead of `0`
   ZeroUnit:
     enabled: false
+
+  # TODO: default alphabetical isn't great, but we may want to explore 'concentic' ordering:
+  # https://github.com/brigade/scss-lint/blob/master/data/property-sort-orders/concentric.txt
+  PropertySortOrder:
+    enabled: false
