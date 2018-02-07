@@ -76,9 +76,9 @@ Rails.application.routes.draw do
   root to: 'welcome#index'
 
   # Static pages
-  get '/about', to: 'pages#about'
-  get '/contact', to: 'pages#contact'
-  get '/policies', to: 'pages#policies'
-  get '/help', to: 'pages#help'
+  get '/about', to: 'static_pages#about'
+  get '/contact', to: 'static_pages#contact'
+  get '/policies', to: 'static_pages#policies'
+  get '/help', to: 'static_pages#help'
   get '/technology', to: redirect('https://github.com/ualbertalib/jupiter')
 end
