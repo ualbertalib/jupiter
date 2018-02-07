@@ -89,8 +89,9 @@ class SitemapTest < ActionDispatch::IntegrationTest
       assert_select 'lastmod', @item.updated_at.to_s
       @item.file_sets.first.unlock_and_fetch_ldp_object do |uo|
         assert_select 'rs|ln[href=?]', url_for(controller: :file_sets,
-                                               action: :download,
-                                               id: uo.id,
+                                               action: :show,
+                                               id: @item.id,
+                                               file_set_id: uo.id,
                                                file_name: uo.contained_filename,
                                                only_path: true)
         assert_select 'rs|ln[hash=?]',
