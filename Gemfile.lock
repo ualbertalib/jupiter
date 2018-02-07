@@ -297,6 +297,8 @@ GEM
       rdf (>= 2.2, < 4.0)
     rdoc (6.0.1)
     redis (4.0.1)
+    rollbar (2.15.5)
+      multi_json
     rsolr (2.1.0)
       builder (>= 2.1.2)
       faraday (>= 0.9.0)
@@ -428,6 +430,7 @@ DEPENDENCIES
   ransack
   rdf-vocab
   redis (~> 4.0)
+  rollbar
   rsolr
   rubocop (~> 0.51.0)
   sass-rails (~> 5)
