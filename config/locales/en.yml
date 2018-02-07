@@ -401,6 +401,7 @@ en:
     files_section_sidebar:
       view: 'View'
       download: 'Download'
+      download_all: 'Download All'
       header: 'Files'
     new:
       header: 'Deposit Item'
