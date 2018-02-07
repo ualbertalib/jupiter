@@ -16,7 +16,7 @@ class DraftItem < ApplicationRecord
                   cco_universal: 6,
                   public_domain_mark: 7,
                   license_text: 8,
-                  unselected: 9}
+                  unselected: 9 }
   LICENSE_TO_URI_CODE =
     { attribution_non_commercial: :attribution_noncommercial_4_0_international,
       attribution: :attribution_4_0_international,
@@ -364,7 +364,7 @@ class DraftItem < ApplicationRecord
   end
 
   def license_not_unselected
-    errors.add(:license, :missing) if self.license == 'unselected'
+    errors.add(:license, :missing) if license == 'unselected'
   end
 
   # HACK: Messing with Rails internals for fun and profit
