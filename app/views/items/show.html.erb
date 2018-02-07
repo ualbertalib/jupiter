@@ -4,24 +4,25 @@
 
 <% page_title(@item.title) %>
 
-<%# Breadcrumbs here are for 'Home->Search->Item' %>
-<%# Community/collection based links appear in own section below' %>
-<div class="item-breadcrumb">
-  <ol class="breadcrumb mb-1">
-    <li class="breadcrumb-item">
-      <%= link_to(t(:home), root_path) %>
-    </li>
-    <li class="breadcrumb-item">
-      <%= link_to(t(:search_label), search_path) %>
-    </li>
-    <li class="breadcrumb-item active"><%= @item.title %></li>
-  </ol>
-</div>
+<div class="container mt-3">
 
-<div class="container">
+  <%# Breadcrumbs here are for 'Home->Search->Item' %>
+  <%# Community/collection based links appear in own section below' %>
+  <div class="item-breadcrumb">
+    <ol class="breadcrumb mb-1">
+      <li class="breadcrumb-item">
+        <%= link_to(t(:home), root_path) %>
+      </li>
+      <li class="breadcrumb-item">
+        <%= link_to(t(:search_label), search_path) %>
+      </li>
+      <li class="breadcrumb-item active"><%= @item.title %></li>
+    </ol>
+  </div>
+
   <div class="row">
     <%# LEFT SIDE %>
-    <div class="col-4">
+    <div class="col-md-4 mt-5">
       <%# FILES SIDEBAR %>
       <% if @item.file_sets.present? %>
         <div class="mb-3">
@@ -48,7 +49,17 @@
     </div>
 
     <%# MAIN CONTENT %>
-    <div class="col-8 pl-5">
+    <div class="col-md-8 pl-5 mt-5">
+      <% if policy(@item).edit? %>
+        <%= link_to edit_item_path(@item),
+                    class:'btn btn-outline-secondary pull-right' do %>
+            <%= fa_icon('pencil-square-o') %>
+            <%= t('edit') %>
+        <% end %>
+      <% end %>
+
+      <h1 title="<%= t('items.show.title') %>"><%= @item.title %></h1>
+
       <%= render @item %>
     </div>
   </div>

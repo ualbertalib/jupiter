@@ -1,44 +1,46 @@
 <% page_title(@title) %>
 
-<div class="d-flex flex-wrap justify-content-between align-items-center mt-3">
-  <h1><%= @title %></h1>
+<div class="container mt-3">
+  <div class="d-flex flex-wrap justify-content-between align-items-center mt-3">
+    <h1><%= @title %></h1>
 
-  <% if policy(Community).create? %>
-    <%= link_to new_admin_community_path, class: 'btn btn-primary' do %>
-      <%= fa_icon('plus-circle') %>
-      <%=  t('communities.index.create_community') %>
+    <% if policy(Community).create? %>
+      <%= link_to new_admin_community_path, class: 'btn btn-primary' do %>
+        <%= fa_icon('plus-circle') %>
+        <%=  t('communities.index.create_community') %>
+      <% end %>
     <% end %>
-  <% end %>
-</div>
-
-<form>
-  <div class="form-group">
-    <label class="mr-sm-2" for="query"><%= t('search_label') %></label>
-    <%= select_tag :query, '',
-        data: { placeholder: t('communities.index.search_placeholder') },
-        class: 'form-control js-communities-collections-searchbox' %>
   </div>
-</form>
 
-<div class="my-4" >
-  <div class="d-flex flex-wrap justify-content-between align-items-start mt-3">
-    <h2><%= t(:browse_all) %></h2>
-
-    <div>
-      <%= render partial: 'communities/sort' %>
+  <form>
+    <div class="form-group">
+      <label class="mr-sm-2" for="query"><%= t('search_label') %></label>
+      <%= select_tag :query, '',
+          data: { placeholder: t('communities.index.search_placeholder') },
+          class: 'form-control js-communities-collections-searchbox' %>
     </div>
-  </div>
+  </form>
 
-  <ul class="list-group">
-    <%= render partial: 'community', collection: @communities %>
-  </ul>
+  <div class="my-4" >
+    <div class="d-flex flex-wrap justify-content-between align-items-start mt-3">
+      <h2><%= t(:browse_all) %></h2>
 
-  <div class="p-2 d-flex justify-content-center">
-    <div>
-      <%= results_range(@communities) %>
+      <div>
+        <%= render partial: 'communities/sort' %>
+      </div>
     </div>
+
+    <ul class="list-group">
+      <%= render partial: 'community', collection: @communities %>
+    </ul>
+
+    <div class="p-2 d-flex justify-content-center">
+      <div>
+        <%= results_range(@communities) %>
+      </div>
+    </div>
+
+    <%= paginate @communities %>
+
   </div>
-
-  <%= paginate @communities %>
-
 </div>

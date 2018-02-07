@@ -4,7 +4,7 @@ test:
 
 local:
   service: Disk
-  root: <%= ENV['ACTIVE_STORAGE_DIRECTORY'] || Rails.root.join("storage") %>
+  root: <%= Rails.application.secrets.active_storage_directory %>
 
 # Use rails secrets:edit to set the AWS secrets (as shared:aws:access_key_id|secret_access_key)
 amazon:

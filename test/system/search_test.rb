@@ -127,7 +127,7 @@ class SearchTest < ApplicationSystemTestCase
       path = "#{@community.id}/#{@collections[1].id}"
       facet_path = search_path(search: 'Fancy', facets: { member_of_paths_dpsim: [path] })
 
-      facets = find('div.jupiter-facets')
+      facets = find('div.jupiter-filters')
 
       facet = facets.find_link('a', text: 'Fancy Collection 1', href: facet_path)
       checkbox = facet.find 'input'
@@ -150,7 +150,7 @@ class SearchTest < ApplicationSystemTestCase
       assert_selector 'li div', text: /Fancy Collection 1.*2/
 
       # A checkbox for the selected facet should be checked, and link should turn off facet
-      facets = find('div.jupiter-facets')
+      facets = find('div.jupiter-filters')
       facet = facets.find_link('a', text: 'Fancy Collection 1', href: search_path(search: 'Fancy'))
       checkbox = facet.find 'input'
       assert checkbox.checked?
@@ -328,7 +328,7 @@ class SearchTest < ApplicationSystemTestCase
       path = "#{@community.id}/#{@collections[1].id}"
       facet_path = search_path(search: 'Fancy', facets: { member_of_paths_dpsim: [path] })
 
-      facets = find('div.jupiter-facets')
+      facets = find('div.jupiter-filters')
       facet = facets.find_link('a', text: 'Fancy Collection 1', href: facet_path)
       checkbox = facet.find 'input'
       refute checkbox.checked?
@@ -350,7 +350,7 @@ class SearchTest < ApplicationSystemTestCase
       assert_selector 'li div', text: /Fancy Collection 1.*4/
 
       # A checkbox for the selected facet should be checked, and link should turn off facet
-      facets = find('div.jupiter-facets')
+      facets = find('div.jupiter-filters')
       facet = facets.find_link('a', text: 'Fancy Collection 1', href: search_path(search: 'Fancy'))
       checkbox = facet.find 'input'
       assert checkbox.checked?
