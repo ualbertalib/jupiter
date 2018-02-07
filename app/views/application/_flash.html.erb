@@ -1,15 +1,8 @@
-<% if flash[:notice] %>
-  <div class="alert alert-success" role="alert">
+<% if flash.any? %>
+  <div class="container mt-3 alert alert-<%= flash[:notice] ? 'success' : 'danger' %>" role="alert">
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
-    <%= flash[:notice] %>
-  </div>
-<% elsif flash[:alert] %>
-  <div class="alert alert-danger" role="alert">
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-    <%= flash[:alert] %>
+    <%= flash[:notice] || flash[:alert] %>
   </div>
 <% end %>

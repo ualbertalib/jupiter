@@ -1,12 +1,20 @@
 <div class="row mt-3 jupiter-model-results">
 
-  <%# Facets panel %>
-  <div class="col-md-3 col-sm-2 jupiter-facets">
+  <%# Facets/filters panel, hide unless opened on mobile %>
+  <div class="col-md-3 col-sm-2 d-none d-md-block jupiter-filters">
     <div class="card">
-      <div class="card-header">
-        <%= t('search.filter') %>
+      <div class="card-header d-flex flex-wrap justify-content-between">
+        <div>
+          <%= t('search.filter') %>
+        </div>
+        <div class="d-md-none js-filters-close">
+          <%= link_to '#' do %>
+            <%= t('close') %>
+            <%= fa_icon 'times-circle' %>
+          <% end %>
+        </div>
       </div>
-      <div class="card-body p-2">
+      <div class="card-body p-2 pr-3 pr-md-0 filter-list">
         <% results.each_facet_with_results(@first_facet_categories) do |facet| %>
           <%= render partial: 'search/facet_results', locals: { facet: facet } %>
         <% end %>
@@ -27,8 +35,15 @@
         <div>
           <%= render partial: 'search/sort' %>
         </div>
+
       </div>
 
+      <div class="d-md-none mt-2">
+        <%= link_to '#TODO', class: 'btn btn-jupiter-primary mb-2 js-filters-open' do %>
+          <%= fa_icon 'filter' %>
+          <%= t('search.filter_results') %>
+        <% end %>
+      </div>
 
       <%# Facet Badges %>
       <div class='jupiter-facet-badges'>
@@ -63,3 +78,6 @@
 
   </div>
 </div>
+
+<%# Overlay for when mobile filter sidebar is open %>
+<div class="filters-overlay"><div>
