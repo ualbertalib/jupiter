@@ -88,8 +88,12 @@
           </li>
         <% else %>
           <li role="presentation" class="nav-item">
-            <%= active_link_to t('.links.login'), login_path, class: 'nav-item nav-link text-nowrap' %>
+            <%= active_link_to t('.links.login'), '/auth/saml', class: 'nav-item nav-link text-nowrap' %>
           </li>
+          <% if Rails.env.development? || Rails.env.uat? %>
+            <%# TODO: Temporary login form for local development until IST shibboleth issues gets resolved %>
+            <%= link_to t('.links.login_as_dev'), '/auth/developer', class: 'nav-item nav-link text-nowrap' %>
+          <% end %>
         <% end %>
       </ul>
     </div>
