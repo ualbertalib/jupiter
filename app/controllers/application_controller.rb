@@ -63,7 +63,7 @@ class ApplicationController < ActionController::Base
       end
     else
       session[:forwarding_url] = request.original_url if request.get?
-      redirect_to login_url, alert: t('authorization.user_not_authorized_try_logging_in')
+      redirect_to root_url, alert: t('authorization.user_not_authorized_try_logging_in')
     end
   end
 
