@@ -29,7 +29,7 @@ class ItemPolicy < LockedLdpObjectPolicy
   end
 
   def thumbnail?
-    false
+    download?
   end
 
 end
