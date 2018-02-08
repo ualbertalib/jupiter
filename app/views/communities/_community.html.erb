@@ -2,7 +2,7 @@
 
   <div class="d-flex justify-content-between align-items-start mb-3">
     <%= link_to community_path(community), class: 'media jupiter-community-media' do %>
-      <%= render partial: 'thumbnail', locals: { thumbnail: community.logo.attachment } %>
+      <%= render partial: 'thumbnail', locals: { thumbnail: community.logo.attachment, object: community } %>
       <div class="media-body ml-3">
         <h4 class="mt-0"><%= community.title %></h4>
         <p class="text-muted"><%= community.description %></p>

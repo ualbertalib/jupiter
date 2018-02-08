@@ -1,7 +1,11 @@
-<% if feature_image.present? && image?(feature_image) %>
-  <%= image_tag(feature_image.url, class: 'j-feature-image img-thumbnail', alt: '', size: '350x350') %>
+<% if policy(object).thumbnail? %>
+  <% if feature_image.present? && image?(feature_image) %>
+    <%= image_tag(feature_image.url, class: 'j-feature-image img-thumbnail', alt: '', size: '350x350') %>
+  <% else %>
+    <div class="d-flex justify-content-center align-items-center img-thumbnail p-5">
+      <%= fa_icon file_icon(feature_image&.content_type), class: 'fa-5x text-muted' %>
+    </div>
+  <% end %>
 <% else %>
-  <div class="d-flex justify-content-center align-items-center img-thumbnail p-5">
-    <%= fa_icon file_icon(feature_image&.content_type), class: 'fa-5x text-muted' %>
-  </div>
+  <%= image_tag('uofa-logo.jpg', class: 'j-feature-image img-thumbnail',  alt: '', size: '350x350') %>
 <% end %>

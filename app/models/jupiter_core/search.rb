@@ -22,14 +22,18 @@ class JupiterCore::Search
     facets = [] if facets.blank?
 
     base_query = []
+    fq = []
     ownership_query = calculate_ownership_query(as)
 
     # Our query permissions are white-list based. You only get public results unless the results of +calculate_ownership_query+
     # assign you additional permissions based on the user passed to it.
-    base_query << %Q((_query_:"{!raw f=visibility_ssim}#{JupiterCore::VISIBILITY_PUBLIC}"#{ownership_query}))
-    base_query << q if q.present?
 
-    fq = []
+    # Why can't I split %Q() strings over multiple lines? Seems incorrect
+    # rubocop:disable Metrics/LineLength
+    fq << %Q((visibility_ssim:"#{JupiterCore::VISIBILITY_PUBLIC}" OR visibility_ssim:"#{JupiterCore::VISIBILITY_AUTHENTICATED}"#{ownership_query}))
+    # rubocop:enable Metrics/LineLength
+
+    base_query << q if q.present?
     facets.each do |key, values|
       values.each do |value|
         fq << %Q(#{key}: "#{value}")
@@ -38,7 +42,8 @@ class JupiterCore::Search
 
     # queried fields, by default, are all of the fields marked as :search (see calculate_queried_fields).
     # We can revist if we need to customize this more granularly
-    JupiterCore::DeferredFacetedSolrQuery.new(q: base_query, fq: fq.join(' AND '),
+    JupiterCore::DeferredFacetedSolrQuery.new(q: base_query,
+                                              fq: fq.join(' AND '),
                                               qf: calculate_queried_fields(models),
                                               facet_map: construct_facet_map(models),
                                               facet_fields: models.map(&:facets).flatten.uniq,

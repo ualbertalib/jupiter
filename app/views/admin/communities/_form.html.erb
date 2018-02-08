@@ -1,6 +1,6 @@
 <%= simple_form_for [:admin, @community] do |f| %>
   <div class="form-group">
-    <%= render partial: 'thumbnail', locals: { thumbnail: @community.logo.attachment } %>
+    <%= render partial: 'thumbnail', locals: { thumbnail: @community.logo.attachment, object: @community } %>
 
     <%= f.input :logo, as: :file, label: false, wrapper_html: { class: 'mt-3' } %>
 
