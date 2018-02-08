@@ -34,15 +34,15 @@ class ItemShowTest < ApplicationSystemTestCase
     end
 
     @item2 = Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_AUTHENTICATED,
-                                       owner: @user.id, title: 'CCID Item',
-                                       creators: ['Joe Blow'],
-                                       created: '2011-11-11',
-                                       languages: [CONTROLLED_VOCABULARIES[:language].english],
-                                       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                                       item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                       publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-                                       subject: ['Fancy things'])
-                .unlock_and_fetch_ldp_object do |uo|
+                                        owner: @user.id, title: 'CCID Item',
+                                        creators: ['Joe Blow'],
+                                        created: '2011-11-11',
+                                        languages: [CONTROLLED_VOCABULARIES[:language].english],
+                                        license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                                        item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                                        publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
+                                        subject: ['Fancy things'])
+                 .unlock_and_fetch_ldp_object do |uo|
       uo.add_to_path(@community.id, @collection.id)
       uo.add_to_path(@community.id, @collection.id)
       uo.save!
