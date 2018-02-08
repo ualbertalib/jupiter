@@ -150,6 +150,7 @@ en:
         communities: 'Browse'
         new_item: 'Deposit'
         login: 'Log In'
+        login_as_dev: 'Developer Log In'
         admin: 'Admin'
         logout: 'Logout'
         profile: 'Your Profile'
@@ -165,14 +166,6 @@ en:
       invalid_visibility: "%{visibility} is not a known visibility"
 
   sessions:
-    new:
-      header: 'Log into ERA'
-      description_html: 'ERA is now a
-        <a href="https://ist.ualberta.ca/services/ccid-passwords/campus-computing-id" target="_blank">CCID</a>
-        (Campus Computing ID) enabled service.
-        If you have a CCID please use it to log in to ERA.'
-      saml_link: 'Log in with University of Alberta CCID (Campus Computing ID)'
-      developer_link: Log in with Developer Account
     logout_as_user:
       flash: 'You are now logout as user %{original_user}'
     destroy:
@@ -180,7 +173,7 @@ en:
 
   login:
     error: 'There was an error authenticating from your account. Please try again, or contact a staff member.'
-    success: 'Successfully authenticated from %{kind} account.'
+    success: 'Successfully authenticated!'
     user_suspended: 'Sorry, your ERA account has been suspended. Please contact the ERA HelpDesk at
       erahelp@ualberta.ca for more information.'
 

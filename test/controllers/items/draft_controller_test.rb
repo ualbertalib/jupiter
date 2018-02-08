@@ -217,7 +217,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
       assert_no_difference('DraftItem.count') do
         post create_draft_items_url
       end
-      assert_redirected_to login_url
+      assert_redirected_to root_url
     end
 
     should 'be able to create a draft item if logged in' do
