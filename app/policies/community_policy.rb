@@ -7,4 +7,5 @@ class CommunityPolicy < LockedLdpObjectPolicy
   def thumbnail?
     true
   end
+
 end
