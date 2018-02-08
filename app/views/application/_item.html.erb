@@ -15,7 +15,7 @@
         <% end %>
         <% if policy(item).update? %>
           <%= link_to edit_item_path(item), class:'btn btn-outline-secondary'  do %>
-            <%= fa_icon('trash') %>
+            <%= fa_icon('pencil-square-o') %>
             <%= t('edit') %>
           <% end %>
         <% end %>

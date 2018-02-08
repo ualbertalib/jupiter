@@ -3,15 +3,21 @@
       <%= link_to collection.title, community_collection_path(@community, collection) %>
 
       <% if policy(:admin).access? %>
-        <div class="btn-group">
+        <div class="btn-group" role="group" aria-label="Collection Actions">
           <% if policy(collection).edit? %>
-            <%= link_to t('edit'), edit_admin_community_collection_path(community, collection),
-                class:'btn btn-outline-primary' %>
+            <%= link_to edit_admin_community_collection_path(community, collection),
+                        class:'btn btn-outline-secondary' do %>
+                <%= fa_icon('pencil-square-o') %>
+                <%= t('edit') %>
+            <% end %>
           <% end %>
           <% if policy(collection).destroy? %>
-            <%= link_to t('delete'), admin_community_collection_path(community, collection),
-                class: 'btn btn-danger', method: :delete,
-                data: { confirm: t('collections.show.delete_confirm', title: collection.title) } %>
+            <%= link_to admin_community_collection_path(community, collection),
+                        class: 'btn btn-outline-secondary', method: :delete,
+                        data: { confirm: t('collections.show.delete_confirm', title: collection.title) } do %>
+              <%= fa_icon('trash') %>
+              <%= t('delete') %>
+            <% end %>
           <% end %>
         </div>
       <% end %>
