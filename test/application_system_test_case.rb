@@ -29,9 +29,6 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     visit root_url
 
     click_on I18n.t('application.navbar.links.login')
-    assert_selector 'h1', text: I18n.t('sessions.new.header')
-
-    click_link I18n.t('sessions.new.saml_link')
   end
 
   def logout_user

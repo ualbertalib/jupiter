@@ -6,9 +6,6 @@ class AuthenticationTest < ApplicationSystemTestCase
     should 'work with correct credentials' do
       visit root_url
 
-      click_on I18n.t('application.navbar.links.login')
-      assert_selector 'h1', text: I18n.t('sessions.new.header')
-
       Rails.application.env_config['omniauth.auth'] =
         OmniAuth.config.mock_auth[:saml] =
           OmniAuth::AuthHash.new(
@@ -20,7 +17,7 @@ class AuthenticationTest < ApplicationSystemTestCase
             }
           )
 
-      click_link I18n.t('sessions.new.saml_link')
+      click_on I18n.t('application.navbar.links.login')
 
       assert_text I18n.t('login.success', kind: 'saml')
 
@@ -37,13 +34,10 @@ class AuthenticationTest < ApplicationSystemTestCase
     should 'not work with bad credentials' do
       visit root_url
 
-      click_on I18n.t('application.navbar.links.login')
-      assert_selector 'h1', text: I18n.t('sessions.new.header')
-
       Rails.application.env_config['omniauth.auth'] =
         OmniAuth.config.mock_auth[:saml] = :invalid_credentials
 
-      click_link I18n.t('sessions.new.saml_link')
+      click_on I18n.t('application.navbar.links.login')
 
       assert_text I18n.t('login.error')
 
@@ -56,7 +50,6 @@ class AuthenticationTest < ApplicationSystemTestCase
       visit profile_url
 
       assert_text I18n.t('authorization.user_not_authorized_try_logging_in')
-      assert_selector 'h1', text: I18n.t('sessions.new.header')
 
       Rails.application.env_config['omniauth.auth'] =
         OmniAuth.config.mock_auth[:saml] =
@@ -69,7 +62,7 @@ class AuthenticationTest < ApplicationSystemTestCase
             }
           )
 
-      click_link I18n.t('sessions.new.saml_link')
+      click_link I18n.t('application.navbar.links.login')
 
       assert_text I18n.t('login.success', kind: 'saml')
 

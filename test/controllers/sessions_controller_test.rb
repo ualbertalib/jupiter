@@ -6,11 +6,6 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     Rails.application.env_config['omniauth.auth'] = nil
   end
 
-  test 'new session page' do
-    get login_url
-    assert_response :success
-  end
-
   context '#create' do
     context 'with valid new user' do
       should 'create a new user and new identity' do
@@ -86,7 +81,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
           post '/auth/saml/callback'
         end
 
-        assert_redirected_to login_url
+        assert_redirected_to root_url
         assert_equal I18n.t('login.error'), flash[:alert]
         assert_not logged_in?
       end
@@ -110,7 +105,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
         assert_equal 'twitter', identity.provider
         assert_equal 'twitter-012345', identity.uid
 
-        assert_redirected_to login_path
+        assert_redirected_to root_path
         assert_equal I18n.t('login.user_suspended'), flash[:alert]
         refute logged_in?
       end
@@ -133,7 +128,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
   should 'return properly flash message on a omniauth failure' do
     get auth_failure_url
-    assert_redirected_to login_url
+    assert_redirected_to root_url
     assert_equal I18n.t('login.error'), flash[:alert]
   end
 
