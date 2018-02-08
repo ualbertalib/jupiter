@@ -5,7 +5,7 @@ class ItemPolicy < LockedLdpObjectPolicy
   end
 
   def show?
-    owned? || admin? || public?
+    owned? || admin? || public? || record_requires_authentication?
   end
 
   def new?
@@ -26,6 +26,10 @@ class ItemPolicy < LockedLdpObjectPolicy
 
   def download?
     admin? || owned? || public? || user_is_authenticated_for_record?
+  end
+
+  def thumbnail?
+    download?
   end
 
 end
