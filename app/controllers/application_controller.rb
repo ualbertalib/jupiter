@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
 
-  helper_method :current_announcements
+  helper_method :current_announcements, :path_for_result
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   rescue_from JupiterCore::ObjectNotFound,
@@ -71,6 +71,10 @@ class ApplicationController < ActionController::Base
     render file: 'public/404.html', status: :not_found, layout: false
   end
 
+  def render_410
+    render file: 'public/404.html', status: :gone, layout: false
+  end
+
   def redirect_back_to
     redirect_to session[:forwarding_url] || root_path
     session.delete(:forwarding_url)
@@ -78,6 +82,16 @@ class ApplicationController < ActionController::Base
 
   def current_announcements
     Announcement.current
+  end
+
+  def path_for_result(result)
+    if result.is_a? Collection
+      community_collection_path(result.community, result)
+    elsif result.is_a? Thesis
+      item_path(result)
+    else
+      polymorphic_path(result)
+    end
   end
 
   def sort_column(columns: ['title', 'record_created_at'], default: 'title')
