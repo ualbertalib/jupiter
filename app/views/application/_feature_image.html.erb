@@ -1,9 +1,7 @@
-<div class="w-100 h-100 text-center">
-  <% if feature_image.present? && image?(feature_image) %>
-    <%= image_tag(feature_image.url, alt: '', size: '300x300', class: 'img-thumbnail') %>
-  <% else %>
-    <div class="text-muted text-center img-thumbnail p-3">
-      <%= fa_icon file_icon(feature_image&.content_type), class: 'fa-5x' %>
-    </div>
-  <% end %>
-</div>
+<% if feature_image.present? && image?(feature_image) %>
+  <%= image_tag(feature_image.url, class: 'j-feature-image img-thumbnail', alt: '', size: '350x350') %>
+<% else %>
+  <div class="d-flex justify-content-center align-items-center img-thumbnail p-5">
+    <%= fa_icon file_icon(feature_image&.content_type), class: 'fa-5x text-muted' %>
+  </div>
+<% end %>
