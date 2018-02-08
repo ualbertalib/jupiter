@@ -22,14 +22,15 @@ class JupiterCore::Search
     facets = [] if facets.blank?
 
     base_query = []
+    fq = []
     ownership_query = calculate_ownership_query(as)
 
     # Our query permissions are white-list based. You only get public results unless the results of +calculate_ownership_query+
     # assign you additional permissions based on the user passed to it.
-    base_query << %Q((_query_:"{!raw f=visibility_ssim}#{JupiterCore::VISIBILITY_PUBLIC}"#{ownership_query}))
-    base_query << q if q.present?
+    # rubocop:disable Metrics/LineLength
+    fq << %Q((visibility_ssim:"#{JupiterCore::VISIBILITY_PUBLIC}" OR visibility_ssim:"#{JupiterCore::VISIBILITY_AUTHENTICATED}"#{ownership_query}))
 
-    fq = []
+    base_query << q if q.present?
     facets.each do |key, values|
       values.each do |value|
         fq << %Q(#{key}: "#{value}")
