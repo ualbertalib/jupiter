@@ -47,7 +47,7 @@ class ItemShowTest < ApplicationSystemTestCase
     end
   end
 
-  test 'be able to download files' do
+  test 'Users should be able to download public files en-masse' do
     visit item_path @item1
     assert_selector '.js-download', count: 2
     assert_selector '.js-download-all'
