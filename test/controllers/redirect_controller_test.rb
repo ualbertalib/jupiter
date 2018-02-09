@@ -4,6 +4,8 @@ class RedirectControllerTest < ActionDispatch::IntegrationTest
 
   def before_all
     super
+
+    # The fedora3_uuid and hydra_noid properties are the primary identifiers for locating these older objects
     @community = Community.new_locked_ldp_object(title: 'Fancy Community', owner: 1,
                                                  fedora3_uuid: 'uuid:community', hydra_noid: 'community-noid')
                           .unlock_and_fetch_ldp_object(&:save!)
@@ -32,6 +34,55 @@ class RedirectControllerTest < ActionDispatch::IntegrationTest
       uo.save!
     end
     @file_set_id = @item.file_sets.first.id
+  end
+
+  test 'should redirect old HydraNorth items' do
+    get '/files/item-noid'
+    assert_response :moved_permanently
+    assert_redirected_to item_url(@item)
+  end
+
+  test 'should 404 on old missing HydraNorth items' do
+    get '/files/not-a-item-noid'
+    assert_response :not_found
+  end
+
+  test 'should redirect old HydraNorth file downloads' do
+    get '/files/item-noid/pdf-sample.pdf'
+    assert_response :moved_permanently
+    assert_redirected_to url_for(controller: :file_sets,
+                                 action: :show,
+                                 id: @item.id,
+                                 file_set_id: @file_set_id,
+                                 file_name: @filename)
+  end
+
+  test 'should redirect missing old HydraNorth file downloads to the item' do
+    get '/files/item-noid/not-a-pdf-sample.pdf'
+    assert_response :found
+    assert_redirected_to item_url(@item)
+  end
+
+  test 'should 404 an old HydraNorth file download for a missing item' do
+    get '/files/not-a-item-noid/pdf-sample.pdf'
+    assert_response :not_found
+  end
+
+  test 'should redirect old HydraNorth community' do
+    get '/collections/community-noid'
+    assert_response :moved_permanently
+    assert_redirected_to community_path(@community)
+  end
+
+  test 'should redirect old HydraNorth collection' do
+    get '/collections/collection-noid'
+    assert_response :moved_permanently
+    assert_redirected_to community_collection_path(@community, @collection)
+  end
+
+  test 'should 404 for missing old HydraNorth communities/collections' do
+    get '/collections/no-community-or-collection-noid'
+    assert_response :not_found
   end
 
   test 'should redirect ancient Fedora3 items' do
@@ -67,25 +118,21 @@ class RedirectControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
-  test 'should redirect ancient Fedora3 datastream' do
-    get '/public/view/item/uuid:item'
-    assert_response :moved_permanently
+  test 'should redirect ancient Fedora3 datastream (pattern 1), no filename' do
+    get '/public/view/item/uuid:item/DS1'
+    # No filename, can't find file
+    assert_response :found
     assert_redirected_to item_url(@item)
   end
 
-  test 'should redirect old HydraNorth items' do
-    get '/files/item-noid'
-    assert_response :moved_permanently
+  test 'should redirect to item for ancient Fedora3 datastream (pattern 1), mangled datastream' do
+    get '/public/view/item/uuid:item/something1'
+    assert_response :found
     assert_redirected_to item_url(@item)
   end
 
-  test 'should 404 on old missing HydraNorth items' do
-    get '/files/not-a-item-noid'
-    assert_response :not_found
-  end
-
-  test 'should redirect old HydraNorth file downloads' do
-    get '/files/item-noid/pdf-sample.pdf'
+  test 'should redirect ancient Fedora3 datastream (pattern 1), with filename' do
+    get '/public/view/item/uuid:item/DS2/pdf-sample.pdf'
     assert_response :moved_permanently
     assert_redirected_to url_for(controller: :file_sets,
                                  action: :show,
@@ -94,32 +141,39 @@ class RedirectControllerTest < ActionDispatch::IntegrationTest
                                  file_name: @filename)
   end
 
-  test 'should redirect missing old HydraNorth file downloads to the item' do
-    get '/files/item-noid/not-a-pdf-sample.pdf'
+  test 'should redirect to item for ancient Fedora3 datastream (pattern 1), mangled filename' do
+    get '/public/view/item/uuid:item/DS3/not-a-pdf-sample.pdf'
     assert_response :found
     assert_redirected_to item_url(@item)
   end
 
-  test 'should 404 a file download for a missing item' do
-    get '/files/not-a-item-noid/pdf-sample.pdf'
-    assert_response :not_found
+  test 'should redirect ancient Fedora3 datastream (pattern 2), no filename' do
+    get '/public/datastream/get/uuid:item/DS1'
+    # No filename, can't find file
+    assert_response :found
+    assert_redirected_to item_url(@item)
   end
 
-  test 'should redirect old HydraNorth community' do
-    get '/collections/community-noid'
+  test 'should redirect to item for ancient Fedora3 datastream (pattern 2), mangled datastream' do
+    get '/public/datastream/get/uuid:item/something1'
+    assert_response :found
+    assert_redirected_to item_url(@item)
+  end
+
+  test 'should redirect ancient Fedora3 datastream (pattern 2), with filename' do
+    get '/public/datastream/get/uuid:item/DS2/pdf-sample.pdf'
     assert_response :moved_permanently
-    assert_redirected_to community_path(@community)
+    assert_redirected_to url_for(controller: :file_sets,
+                                 action: :show,
+                                 id: @item.id,
+                                 file_set_id: @file_set_id,
+                                 file_name: @filename)
   end
 
-  test 'should redirect old HydraNorth collection' do
-    get '/collections/collection-noid'
-    assert_response :moved_permanently
-    assert_redirected_to community_collection_path(@community, @collection)
-  end
-
-  test 'should 404 for missing old HydraNorth communities/collections' do
-    get '/collections/no-community-or-collection-noid'
-    assert_response :not_found
+  test 'should redirect to item for ancient Fedora3 datastream (pattern 2), mangled filename' do
+    get '/public/datastream/get/uuid:item/DS3/not-a-pdf-sample.pdf'
+    assert_response :found
+    assert_redirected_to item_url(@item)
   end
 
   test 'should 410 on ancient thesis deposit URL' do

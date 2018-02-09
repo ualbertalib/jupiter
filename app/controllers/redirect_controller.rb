@@ -17,6 +17,31 @@ class RedirectController < ApplicationController
     redirect_to community_collection_url(collection.community, collection), status: :moved_permanently
   end
 
+  def fedora3_datastream
+    item = find_item_by_uuid(uuid)
+    if /^DS\d+/ !~ params[:ds]
+      # If data stream not found, redirect to item level
+      return redirect_to item_url(item), status: :found
+    end
+
+    unless params[:filename]
+      # No filename provided? Redirect to item
+      return redirect_to item_url(item), status: :found
+    end
+
+    file_set = find_item_file_set(item)
+    if file_set
+      redirect_to url_for(controller: :file_sets,
+                          action: :show,
+                          id: item.id,
+                          file_set_id: file_set.id,
+                          file_name: CGI.escape(file_set.contained_filename)), status: :moved_permanently
+    else
+      # If file not found, redirect to item level
+      redirect_to item_url(item), status: :found
+    end
+  end
+
   def hydra_north_item
     item = find_item_by_noid(noid)
     redirect_to item_url(item), status: :moved_permanently

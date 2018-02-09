@@ -74,20 +74,21 @@ Rails.application.routes.draw do
 
   root to: 'welcome#index'
 
+  ## HydraNorth URL redirects
+  get '/files/:noid', to: 'redirect#hydra_north_item'
+  get '/files/:noid/:filename', to: 'redirect#hydra_north_file', constraints: { filename: /[^\/]+/ }
+  get '/collections/:noid', to: 'redirect#hydra_north_community_collection'
+
   ## Pre-HydraNorth URL redirects
   get '/public/view/item/:uuid', to: 'redirect#fedora3_item'
-  get '/public/view/item/:uuid/:ds', to: 'redirect#datastream'
-  get '/public/view/item/:uuid/:ds/*file', to: 'redirect#datastream', format: false
-  get '/public/datastream/get/:uuid/:ds', to: 'redirect#datastream'
-  get '/public/datastream/get/:uuid/:ds/*file', to: 'redirect#datastream', format: false
+  get '/public/view/item/:uuid/:ds', to: 'redirect#fedora3_datastream'
+  get '/public/view/item/:uuid/:ds/:filename', to: 'redirect#fedora3_datastream', constraints: { filename: /[^\/]+/ }
+  get '/public/datastream/get/:uuid/:ds', to: 'redirect#fedora3_datastream'
+  get '/public/datastream/get/:uuid/:ds/:filename', to: 'redirect#fedora3_datastream',
+                                                    constraints: { filename: /[^\/]+/ }
   get '/public/view/collection/:uuid', to: 'redirect#fedora3_collection'
   get '/public/view/community/:uuid', to: 'redirect#fedora3_community'
   get '/public/view/author/:username', to: 'redirect#no_longer_supported'
   get '/action/submit/init/thesis/:uuid', to: 'redirect#no_longer_supported'
   get '/downloads/:id', to: 'redirect#sufiadownload'
-
-  ## HydraNorth URL redirects
-  get '/files/:noid', to: 'redirect#hydra_north_item'
-  get '/files/:noid/:filename', to: 'redirect#hydra_north_file', constraints: { filename: /[^\/]+/ }
-  get '/collections/:noid', to: 'redirect#hydra_north_community_collection'
 end
