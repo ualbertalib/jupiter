@@ -75,7 +75,8 @@ Rails.application.routes.draw do
   root to: 'welcome#index'
 
   ## HydraNorth URL redirects
-  get '/files/:noid', to: 'redirect#hydra_north_item'
+  get '/files/:noid', to: 'redirect#hydra_north_item' # may have query string `?file=filename`
+  get '/downloads/:noid', to: 'redirect#hydra_north_item' # may have query string `?file=filename`
   get '/files/:noid/:filename', to: 'redirect#hydra_north_file', constraints: { filename: /[^\/]+/ }
   get '/collections/:noid', to: 'redirect#hydra_north_community_collection'
 
@@ -90,5 +91,4 @@ Rails.application.routes.draw do
   get '/public/view/community/:uuid', to: 'redirect#fedora3_community'
   get '/public/view/author/:username', to: 'redirect#no_longer_supported'
   get '/action/submit/init/thesis/:uuid', to: 'redirect#no_longer_supported'
-  get '/downloads/:id', to: 'redirect#sufiadownload'
 end
