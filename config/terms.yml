@@ -22,8 +22,8 @@
     - Community # rdf:type for community objects, Zach has advised uppercase for class
     - depositor
     - dissertant
-    - fedora3handle
-    - fedora3uuid
+    - fedora3Handle
+    - fedora3UUID
     - graduationDate
     - hydraNoid
     - ingestbatch
