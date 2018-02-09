@@ -41,7 +41,15 @@ class ApplicationController < ActionController::Base
   def sign_in(user)
     @current_user = user
     session[:user_id] = user.try(:id)
-    UpdateUserActivityJob.perform_now(@current_user.id, Time.now.utc.to_s, request.remote_ip, sign_in: true)
+
+    # rubocop:disable Style/GuardClause
+    if @current_user.present?
+      UpdateUserActivityJob.perform_now(@current_user.id,
+                                        Time.now.utc.to_s,
+                                        request.remote_ip,
+                                        sign_in: true)
+    end
+    # rubocop:enable Style/GuardClause
   end
 
   # Logs out the current user.
