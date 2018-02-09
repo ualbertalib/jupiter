@@ -28,6 +28,10 @@ class DraftItemPolicy < ApplicationPolicy
     create?
   end
 
+  def thumbnail?
+    true
+  end
+
   def owned?
     record && user && record.user.id == user.id
   end

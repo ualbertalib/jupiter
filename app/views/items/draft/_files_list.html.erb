@@ -5,12 +5,13 @@
     </div>
   <% else %>
     <div class="col-md-4">
-      <h4><%= t('.item_thumbnail') %></h4>
-
-
-      <%= render partial: 'items/draft/thumbnail', locals: { thumbnail: @draft_item.thumbnail }%>
-
-      <p class="text-muted"><%= t('.thumbnail_of_first_file') %></p>
+      <div class="card mb-3">
+        <h5 class="card-header"><%= t('.item_thumbnail') %></h5>
+        <div class="card-body">
+          <%= render partial: 'feature_image', locals: { feature_image: @draft_item.thumbnail, object: @draft_item } %>
+          <p class="text-muted mt-3"><%= t('.thumbnail_of_first_file') %></p>
+        </div>
+      </div>
     </div>
     <div class="col-md-8">
       <% @draft_item.files.each do |file| %>
