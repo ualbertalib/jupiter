@@ -21,7 +21,7 @@
             <%= link_to(t('.view'), fileset_uri(file_set, :show), class: 'btn btn-outline-primary') %>
           </div>
           <div class="p-1">
-            <%= link_to(t('.download'), fileset_uri(file_set, :download), class: 'js-download btn btn-outline-primary') %>
+            <%= link_to(t('.download'), fileset_uri(file_set, :download), class: 'js-download btn btn-outline-primary', rel: 'nofollow') %>
           </div>
         </div>
       </div>
