@@ -1,9 +1,0 @@
-<% if object.logo.attached? %>
-  <%= image_tag(object.logo.url, class: "d-flex mr-3 img-thumbnail logo-small", alt: object.title) %>
-<% else %>
-  <div class="d-flex justify-content-center align-items-center mr-3 img-thumbnail logo-small">
-    <small class="text-muted">
-      <i class="fa fa-5x fa-picture-o" aria-hidden="true"></i>
-    </small>
-  </div>
-<% end %>
