@@ -331,15 +331,23 @@ class DraftItem < ApplicationRecord
 
   # Validations
 
-  # TODO: validate if community/collection ID's are actually in Fedora?
   def communities_and_collections_validations
     return if member_of_paths.blank? # caught by presence check
-    errors.add(:member_of_paths, :community_not_found) if member_of_paths['community_id'].blank?
-    errors.add(:member_of_paths, :collection_not_found) if member_of_paths['collection_id'].blank?
-    return unless member_of_paths['community_id'].present? && member_of_paths['collection_id'].present?
+    if member_of_paths['community_id'].blank? || member_of_paths['collection_id'].blank?
+      errors.add(:member_of_paths, :community_not_found) if member_of_paths['community_id'].blank?
+      errors.add(:member_of_paths, :collection_not_found) if member_of_paths['collection_id'].blank?
+      return
+    end
     member_of_paths['community_id'].each_with_index do |community_id, idx|
-      errors.add(:member_of_paths, :community_not_found) if community_id.blank?
-      errors.add(:member_of_paths, :collection_not_found) if member_of_paths['collection_id'][idx].blank?
+      collection_id = member_of_paths['collection_id'][idx]
+      community = Community.find_by(community_id)
+      errors.add(:member_of_paths, :community_not_found) if community.blank?
+      collection = Collection.find_by(collection_id)
+      if collection.blank?
+        errors.add(:member_of_paths, :collection_not_found)
+      elsif collection&.restricted && !user.admin?
+        errors.add(:member_of_paths, :collection_restricted)
+      end
     end
   end
 

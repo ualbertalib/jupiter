@@ -36,6 +36,7 @@
     - supervisor
     - thesisLevel
     - unicorn
+    - restrictedCollection
 
 - vocabulary: prism
   schema: http://prismstandard.org/namespaces/basic/3.0/
