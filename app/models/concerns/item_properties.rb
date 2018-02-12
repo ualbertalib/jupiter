@@ -18,7 +18,7 @@ module ItemProperties
     has_multival_attribute :is_version_of, ::RDF::Vocab::DC.isVersionOf, solrize_for: :exact_match
 
     # UAL attributes
-    has_attribute :fedora3_handle, ::TERMS[:ual].fedora3handle, solrize_for: :exact_match
+    has_attribute :fedora3_handle, ::TERMS[:ual].fedora3Handle, solrize_for: :exact_match
     has_attribute :ingest_batch, ::TERMS[:ual].ingestbatch, solrize_for: :exact_match
     has_multival_attribute :member_of_paths, ::TERMS[:ual].path,
                            type: :path,
