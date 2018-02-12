@@ -1,4 +1,10 @@
 <% page_title( t('.header')) %>
+<% content_for :head do %>
+  <meta name="robots" content="noindex" />
+  <% if @active_tab == :community %>
+    <link rel="canonical" href='<%= communities_path %>' />
+  <% end %>
+<% end %>
 <div class="container mt-3">
   <ul class="nav nav-tabs">
     <% [:item, :collection, :community].each do |model| %>
