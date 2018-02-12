@@ -1,7 +1,0 @@
-<% if thumbnail.present? && image?(thumbnail) %>
-  <%= image_tag thumbnail.url, alt: t('.thumbnail_alt'), size: "200x200", class: 'img-thumbnail m-3' %>
-<% else %>
-  <div class="text-muted text-center img-thumbnail p-3 m-3">
-    <%= fa_icon file_icon(thumbnail.content_type), class: 'fa-5x' %>
-  </div>
-<% end %>

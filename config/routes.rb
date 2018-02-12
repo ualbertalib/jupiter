@@ -52,7 +52,6 @@ Rails.application.routes.draw do
   end
 
   post '/logout_as_user', to: 'sessions#logout_as_user'
-  get 'login', to: 'sessions#new'
   match '/auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
   match '/auth/failure', to: 'sessions#failure', via: [:get, :post]
   match '/logout', to: 'sessions#destroy', via: [:get, :post]

@@ -8,10 +8,6 @@ class SessionsController < ApplicationController
 
   skip_after_action :verify_authorized
 
-  def new
-    # renders login page (views/sessions/new.html.erb)
-  end
-
   def create
     auth_hash = request.env['omniauth.auth']
 
@@ -34,7 +30,7 @@ class SessionsController < ApplicationController
     end
 
     if user&.suspended?
-      return redirect_to login_path, alert: t('login.user_suspended')
+      return redirect_to root_path, alert: t('login.user_suspended')
     end
 
     # Sign the user in, if they exist
@@ -46,7 +42,7 @@ class SessionsController < ApplicationController
       redirect_back_to
     else
       # Else something went wrong along the way with omniauth
-      redirect_to login_path, alert: t('login.error')
+      redirect_to root_path, alert: t('login.error')
     end
   end
 
@@ -56,7 +52,7 @@ class SessionsController < ApplicationController
   end
 
   def failure
-    redirect_to login_path, alert: t('login.error')
+    redirect_to root_path, alert: t('login.error')
   end
 
   def logout_as_user

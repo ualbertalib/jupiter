@@ -141,7 +141,7 @@ en:
 
   application:
     navbar:
-      logo_alt: 'ERA Logo'
+      era_logo_alt: 'ERA - Education and Research Archive'
       search:
         placeholder: 'Search ERA...'
         button_text: 'Search'
@@ -150,6 +150,7 @@ en:
         communities: 'Browse'
         new_item: 'Deposit'
         login: 'Log In'
+        login_as_dev: 'Developer Log In'
         admin: 'Admin'
         logout: 'Logout'
         profile: 'Your Profile'
@@ -157,6 +158,7 @@ en:
       user_dropdown:
         heading_html: "Signed in as <strong>%{name}</strong>"
     footer:
+      uofa_library_logo_alt: 'University of Alberta Libraries'
       street_address: 'University of Alberta, Edmonton, AB, Canada, 26G 2R3'
       privacy_policy: 'Web Site Privacy Policy'
   locked_ldp_object:
@@ -164,14 +166,6 @@ en:
       invalid_visibility: "%{visibility} is not a known visibility"
 
   sessions:
-    new:
-      header: 'Log into ERA'
-      description_html: 'ERA is now a
-        <a href="https://ist.ualberta.ca/services/ccid-passwords/campus-computing-id" target="_blank">CCID</a>
-        (Campus Computing ID) enabled service.
-        If you have a CCID please use it to log in to ERA.'
-      saml_link: 'Log in with University of Alberta CCID (Campus Computing ID)'
-      developer_link: Log in with Developer Account
     logout_as_user:
       flash: 'You are now logout as user %{original_user}'
     destroy:
@@ -179,7 +173,7 @@ en:
 
   login:
     error: 'There was an error authenticating from your account. Please try again, or contact a staff member.'
-    success: 'Successfully authenticated from %{kind} account.'
+    success: 'Successfully authenticated!'
     user_suspended: 'Sorry, your ERA account has been suspended. Please contact the ERA HelpDesk at
       erahelp@ualberta.ca for more information.'
 
@@ -537,8 +531,6 @@ en:
         no_saved_files: No files have been attached to this item
         item_thumbnail: 'Item Thumbnail'
         thumbnail_of_first_file: 'By default the first file will be displayed as the thumbnail image for this item. To change this, click on set as thumbnail button on the desired file.'
-      thumbnail:
-        thumbnail_alt: Thumbnail Image
       file:
         set_as_thumbnail: Set as Thumbnail
         delete_file_dialog: Are you sure you want to delete this file?

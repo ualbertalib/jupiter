@@ -1,11 +1,11 @@
-<header class=" j-header navbar navbar-light fixed-top navbar-expand-md bg-jupiter-primary">
+<header class="j-header navbar navbar-light fixed-top navbar-expand-md bg-jupiter-primary">
   <nav class="container">
 
     <%= link_to root_path, class: 'navbar-brand' do %>
       <%= image_tag 'era-logo.png', width: '100', class: 'align-top d-none d-md-block',
-          alt: t('.logo_alt') %>
+          alt: t('.era_logo_alt') %>
       <%= image_tag 'era-logo-without-text.png', width: '100',
-          class: 'd-inline-block align-top d-md-none', alt: t('.logo_alt') %>
+          class: 'd-inline-block align-top d-md-none', alt: t('.era_logo_alt') %>
     <% end %>
 
     <button type="button"
@@ -88,8 +88,12 @@
           </li>
         <% else %>
           <li role="presentation" class="nav-item">
-            <%= active_link_to t('.links.login'), login_path, class: 'nav-item nav-link text-nowrap' %>
+            <%= active_link_to t('.links.login'), '/auth/saml', class: 'nav-item nav-link text-nowrap' %>
           </li>
+          <% if Rails.env.development? || Rails.env.uat? %>
+            <%# TODO: Temporary login form for local development until IST shibboleth issues gets resolved %>
+            <%= link_to t('.links.login_as_dev'), '/auth/developer', class: 'nav-item nav-link text-nowrap' %>
+          <% end %>
         <% end %>
       </ul>
     </div>
