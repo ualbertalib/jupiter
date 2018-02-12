@@ -6,17 +6,8 @@
       <div class='list-group-item list-group-item-action'>
         <div class="d-flex justify-content-between align-items-start mb-3">
           <div class='media'>
-            <%# TODO: Generalize logo/thumbnail view code below to maybe use logo/thumbnail partial? %>
-            <% if draft_item.thumbnail.present? %>
-              <%= image_tag(draft_item.thumbnail.url, class: "mr-3 img-thumbnail logo-small", alt: draft_item.title) %>
-            <% else %>
-              <div class="d-flex justify-content-center align-items-center mr-3 img-thumbnail logo-small">
-                <small class="text-muted">
-                  <i class="fa fa-5x fa-picture-o" aria-hidden="true"></i>
-                </small>
-              </div>
-            <% end %>
-            <div class="media-body">
+            <%= render partial: 'thumbnail', locals: { thumbnail: draft_item.thumbnail, object: draft_item } %>
+            <div class="media-body ml-3">
               <h4 class="mt-0"><%= draft_item.title %></h4>
               <p class="text-muted"><%= draft_item.date_created.year %></p>
               <p class="text-muted"><%= draft_item.creators.join(', ') %></p>
