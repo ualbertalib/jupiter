@@ -16,7 +16,7 @@ before_script:
   - docker version
   - docker-compose version
 
-  - docker-compose -f docker-compose-lightweight.yml up -d
+  - docker-compose -f docker-compose.lightweight.yml up -d
 
   - docker ps
 
