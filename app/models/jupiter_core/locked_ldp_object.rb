@@ -469,11 +469,11 @@ class JupiterCore::LockedLdpObject
           has_attribute :owner, ::RDF::Vocab::BIBO.owner, type: :int, solrize_for: [:exact_match]
         end
         unless attribute_names.include?(:record_created_at)
-          has_attribute :record_created_at, ::TERMS[:ual].recordCreatedInJupiter, type: :date,
+          has_attribute :record_created_at, ::TERMS[:ual].recordcreatedinjupiter, type: :date,
                                                                                   solrize_for: [:sort]
         end
         unless attribute_names.include?(:hydra_noid)
-          has_attribute :hydra_noid, ::TERMS[:ual].hydraNoid, solrize_for: [:exact_match]
+          has_attribute :hydra_noid, ::TERMS[:ual].hydranoid, solrize_for: [:exact_match]
         end
         unless attribute_names.include?(:date_ingested)
           has_attribute :date_ingested, RDF::Vocab::EBUCore.dateIngested, type: :date, solrize_for: [:sort]

@@ -7,7 +7,7 @@ config = YAML.safe_load(File.open(Rails.root.join('config', 'terms.yml')))
 
 config.each do |vocab|
   name = vocab['vocabulary'].to_sym
-  terms[name] = Class.new(RDF::Vocabulary(vocab['schema'])) do
+  terms[name] = Class.new(RDF::StrictVocabulary(vocab['schema'])) do
     vocab['terms'].each do |t|
       term t.to_sym
     end
