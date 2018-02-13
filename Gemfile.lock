@@ -421,7 +421,7 @@ DEPENDENCIES
   nokogiri
   omniauth
   omniauth-saml
-  pg
+  pg (~> 0.21.0)
   pry
   pry-rails
   puma (~> 3.11)
