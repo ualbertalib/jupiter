@@ -1,13 +1,24 @@
+# Declaration for terms not available from the RDF gem, mostly local. See config/initializers/terms.rb
+# for details of how this manifests in the code.
+#
+# NOTE: the University of Alberta's local terminology violates standard RDF naming conventions, as normally
+# described at (http://www-sop.inria.fr/acacia/personnel/phmartin/RDF/conventions.html#lexicalConventions).
+# The primary violations are that we require the terms to appear in the URI in all-lowercase, with no underscores
+# or other lexical seperators between word boundaries.
+# This was done because <RATIONALE GOES HERE WHEN SOMEONE PROVIDES ONE>
+#
+# This file is thus structured to map semantically meaningful, idiomatic Ruby method names to the local requirements.
+#
 # Expected file format:
 #    - vocabulary: ual
 #      schema: http://terms.library.ualberta.ca/identifiers/
 #      terms:
-#        - doi
-#        - path
+#        doi: doi
+#        record_created_in_jupiter: recordcreatedinjupiter
 #    - vocabulary: acl
 #      schema: http://www.w3.org/ns/auth/acl
 #      terms:
-#        - mode
+#        mode: mode
 #
 # Usage in the application:
 #
@@ -18,37 +29,39 @@
 - vocabulary: ual
   schema: http://terms.library.ualberta.ca/
   terms:
-    - committeeMember
-    - Community # rdf:type for community objects, Zach has advised uppercase for class
-    - depositor
-    - dissertant
-    - fedora3handle
-    - fedora3uuid
-    - graduationDate
-    - hydraNoid
-    - ingestbatch
-    - path
-    - proquest
+    committee_member: committeemember
+    community: Community # rdf:type for community objects, Zach has advised uppercase for class
+    department: department
+    depositor: depositor
+    dissertant: dissertant
+    fedora3_handle: fedora3handle
+    fedora3_uuid: fedora3uuid
+    graduation_date: graduationdate
+    hydra_noid: hydranoid
+    ingest_batch: ingestbatch
+    path: path
+    proquest: proquest
     # separate from date_created, we need to track a precise time the metadata record was created
-    - recordCreatedInJupiter
-    - sortyear
-    - specialization
-    - supervisor
-    - thesisLevel
-    - unicorn
+    record_created_in_jupiter: recordcreatedinjupiter
+    sitemap_link: sitemaplink
+    sort_year: sortyear
+    specialization: specialization
+    supervisor: supervisor
+    thesis_level: thesislevel
+    unicorn: unicorn
 
 - vocabulary: prism
   schema: http://prismstandard.org/namespaces/basic/3.0/
   terms:
-    - doi
+    doi: doi
 
 - vocabulary: acl
   schema: 'http://projecthydra.org/ns/auth/acl#'
   terms:
-    - embargoHistory
-    - visibilityAfterEmbargo
+    embargo_history: embargoHistory
+    visibility_after_embargo: visibilityAfterEmbargo
 
 - vocabulary: swrc
   schema: 'http://ontoware.org/swrc/ontology#'
   terms:
-    - institution
+    institution: institution
