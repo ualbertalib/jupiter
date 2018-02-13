@@ -4,6 +4,9 @@ services:
   - postgresql
   - docker
 
+addons:
+  chrome: stable
+
 rvm:
   - 2.4.3
   - 2.5.0
