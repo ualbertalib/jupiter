@@ -15,7 +15,7 @@ rvm:
 
 cache: bundler
 
-install: # Install ChromeDriver
+before_install: # Install ChromeDriver
   - wget -N http://chromedriver.storage.googleapis.com/2.34/chromedriver_linux64.zip -P ~/
   - unzip ~/chromedriver_linux64.zip -d ~/
   - rm ~/chromedriver_linux64.zip
