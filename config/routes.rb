@@ -89,6 +89,5 @@ Rails.application.routes.draw do
                                                     constraints: { filename: /[^\/]+/ }
   get '/public/view/collection/:uuid', to: 'redirect#fedora3_collection'
   get '/public/view/community/:uuid', to: 'redirect#fedora3_community'
-  get '/public/view/author/:username', to: 'redirect#no_longer_supported'
-  get '/action/submit/init/thesis/:uuid', to: 'redirect#no_longer_supported'
+  # Note: redirect for ancient authors and thesis deposit routes no longer supported
 end

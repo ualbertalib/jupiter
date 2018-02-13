@@ -70,11 +70,6 @@ class RedirectController < ApplicationController
     end
   end
 
-  def no_longer_supported
-    # Ancient thesis deposit URL and authors no longer supported
-    render_410
-  end
-
   private
 
   def noid

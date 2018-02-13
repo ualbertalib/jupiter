@@ -71,10 +71,6 @@ class ApplicationController < ActionController::Base
     render file: 'public/404.html', status: :not_found, layout: false
   end
 
-  def render_410
-    render file: 'public/404.html', status: :gone, layout: false
-  end
-
   def redirect_back_to
     redirect_to session[:forwarding_url] || root_path
     session.delete(:forwarding_url)

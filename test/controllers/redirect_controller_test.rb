@@ -255,18 +255,4 @@ class RedirectControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to item_url(@item)
   end
 
-  # Obsolete redirects
-
-  test 'should 410 on ancient thesis deposit URL' do
-    # Action: redirect#no_longer_supported
-    get '/action/submit/init/thesis/uuid:7af76c0f-61d6-4ebc-a2aa-79c125480269'
-    assert_response :gone
-  end
-
-  test 'should 410 on ancient author URL' do
-    # Action: redirect#no_longer_supported
-    get '/public/view/author/someguy'
-    assert_response :gone
-  end
-
 end
