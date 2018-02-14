@@ -10,10 +10,11 @@ addons:
   chrome: stable
 
 rvm:
-  - 2.4.3
-  - 2.5.0
+  - 2.4
+  - 2.5
 
 cache: bundler
+bundler_args: --without development production --jobs=3 --retry=3
 
 before_install: # Install ChromeDriver
   - wget -N http://chromedriver.storage.googleapis.com/2.34/chromedriver_linux64.zip -P ~/
@@ -22,8 +23,6 @@ before_install: # Install ChromeDriver
   - sudo mv -f ~/chromedriver /usr/local/share/
   - sudo chmod +x /usr/local/share/chromedriver
   - sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver
-
-bundler_args: --without development production --jobs=3 --retry=3
 
 before_script:
   - docker version
