@@ -64,7 +64,7 @@ end
 group :development, :test do
   gem 'sdoc', require: false
 
-  gem 'capybara', '~> 2.17'
+  gem 'capybara', '~> 2.18'
   gem 'nokogiri'
   gem 'selenium-webdriver', require: false
 
