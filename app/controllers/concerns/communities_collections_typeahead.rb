@@ -11,12 +11,10 @@ module CommunitiesCollectionsTypeahead
       if communities.any?
         results.append(text: 'Communities', children: communities)
       end
-      # Note: Non-admin users should not see restricted collections
       collections = JupiterCore::Search.faceted_search(q: "title_tesim:#{term}*",
                                                        models: [Collection], as: current_user)
                                        .sort(:community_title, :asc)
                                        .sort(:title, :asc)
-                                       .select { |c| c.restricted.blank? || current_user.admin? }
                                        .map do |c|
         { id: c.id, text: "#{c.community.title} -- #{c.title}", path: path_to_collection(c) }
       end

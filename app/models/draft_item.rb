@@ -342,11 +342,7 @@ class DraftItem < ApplicationRecord
       community = Community.find_by(community_id)
       errors.add(:member_of_paths, :community_not_found) if community.blank?
       collection = Collection.find_by(collection_id)
-      if collection.blank?
-        errors.add(:member_of_paths, :collection_not_found)
-      elsif collection&.restricted && !user.admin?
-        errors.add(:member_of_paths, :collection_restricted)
-      end
+      errors.add(:member_of_paths, :collection_not_found) if collection.blank?
     end
   end
 
