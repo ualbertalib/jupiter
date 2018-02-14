@@ -12,7 +12,10 @@
 
 ActiveRecord::Schema.define(version: 20171130222838) do
 
-  create_table "active_storage_attachments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name"
     t.string "record_gid"
     t.integer "blob_id"
@@ -23,7 +26,7 @@ ActiveRecord::Schema.define(version: 20171130222838) do
     t.index ["record_gid"], name: "index_active_storage_attachments_on_record_gid"
   end
 
-  create_table "active_storage_blobs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "active_storage_blobs", force: :cascade do |t|
     t.string "key"
     t.string "filename"
     t.string "content_type"
@@ -34,7 +37,7 @@ ActiveRecord::Schema.define(version: 20171130222838) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
-  create_table "announcements", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "announcements", force: :cascade do |t|
     t.text "message", null: false
     t.bigint "user_id", null: false
     t.datetime "removed_at"
@@ -43,7 +46,7 @@ ActiveRecord::Schema.define(version: 20171130222838) do
     t.index ["user_id"], name: "index_announcements_on_user_id"
   end
 
-  create_table "draft_items", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "draft_items", force: :cascade do |t|
     t.string "uuid"
     t.integer "status", default: 0, null: false
     t.integer "wizard_step", default: 0, null: false
@@ -61,20 +64,20 @@ ActiveRecord::Schema.define(version: 20171130222838) do
     t.integer "visibility_after_embargo", default: 0, null: false
     t.bigint "type_id"
     t.bigint "user_id", null: false
-    t.json "creators"
-    t.json "subjects"
+    t.json "creators", array: true
+    t.json "subjects", array: true
     t.json "member_of_paths"
-    t.json "contributors"
-    t.json "places"
-    t.json "time_periods"
-    t.json "citations"
+    t.json "contributors", array: true
+    t.json "places", array: true
+    t.json "time_periods", array: true
+    t.json "citations", array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["type_id"], name: "index_draft_items_on_type_id"
     t.index ["user_id"], name: "index_draft_items_on_user_id"
   end
 
-  create_table "draft_items_languages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "draft_items_languages", force: :cascade do |t|
     t.bigint "draft_item_id"
     t.bigint "language_id"
     t.datetime "created_at", null: false
@@ -83,7 +86,7 @@ ActiveRecord::Schema.define(version: 20171130222838) do
     t.index ["language_id"], name: "index_draft_items_languages_on_language_id"
   end
 
-  create_table "identities", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "identities", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "uid", null: false
     t.string "provider", null: false
@@ -93,19 +96,19 @@ ActiveRecord::Schema.define(version: 20171130222838) do
     t.index ["user_id"], name: "index_identities_on_user_id"
   end
 
-  create_table "languages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "languages", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "types", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "types", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "users", force: :cascade do |t|
     t.string "email", null: false
     t.string "name", null: false
     t.boolean "admin", default: false, null: false

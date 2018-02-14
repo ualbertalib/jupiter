@@ -1,39 +1,28 @@
-FROM ruby:2.3.4
-MAINTAINER Murny
+FROM ruby:2.5.0-alpine
+LABEL maintainer="Murny"
 
-# Need to add jessie-backports repo so we can get FFMPEG, doesn't come with jessie debian by default
-# RUN echo 'deb http://ftp.debian.org/debian jessie-backports main'  >> /etc/apt/sources.list
+# install dependencies
+RUN apk add --update \
+  build-base \
+  netcat-openbsd \
+  nodejs \
+  git \
+  imagemagick \
+  postgresql-dev \
+  tzdata \
+  && rm -rf /var/cache/apk/*
 
-RUN apt-get update -qq \
-    && apt-get install -y build-essential \
-                          mysql-client \
-                          nodejs \
-                          # libreoffice \
-                          # imagemagick \
-                          # ghostscript \
-                          # unzip \
-                          # ffmpeg \
-    && rm -rf /var/lib/apt/lists/*
+# throw errors if Gemfile has been modified since Gemfile.lock
+RUN bundle config --global frozen 1
 
+ENV APP_ROOT /app
+RUN mkdir -p $APP_ROOT
+WORKDIR $APP_ROOT
 
-# install fits
-# RUN mkdir -p /usr/local/fits \
-#     && cd /usr/local/fits \
-#     && wget http://projects.iq.harvard.edu/files/fits/files/fits-1.0.6.zip \
-#     && unzip fits-1.0.6.zip \
-#     && rm  fits-1.0.6.zip \
-#     && chmod a+x /usr/local/fits/fits-1.0.6/fits.sh \
-#     && ln -s /usr/local/fits/fits-1.0.6/fits.sh /usr/bin/fits
-
-RUN mkdir -p /app
-WORKDIR /app
-
-# Preinstall gems in an earlier layer so we don't reinstall every time any file changes.
-COPY Gemfile /app
-COPY Gemfile.lock /app
-RUN bundle install --jobs=3 --retry=3
+COPY Gemfile Gemfile.lock $APP_ROOT/
+RUN bundle install --without uat staging production --jobs=3 --retry=3
 
 # *NOW* we copy the codebase in
-ADD . /app
+COPY . $APP_ROOT
 
 EXPOSE 3000
