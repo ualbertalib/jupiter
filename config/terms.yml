@@ -20,6 +20,7 @@
   terms:
     - committeeMember
     - Community # rdf:type for community objects, Zach has advised uppercase for class
+    - department
     - depositor
     - dissertant
     - fedora3handle
