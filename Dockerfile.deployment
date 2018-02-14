@@ -6,7 +6,7 @@ LABEL maintainer="University of Alberta Libraries"
 
 RUN apt-get update -qq \
     && apt-get install -y build-essential \
-                          postgresql-dev \
+                          libpq-dev \
                           nodejs \
                           tzdata \
                           # libreoffice \
