@@ -76,6 +76,10 @@ cd jupiter
 ### For development environment
 To build, create, start and setup your docker containers simply run:
 ```shell
+docker-compose build
+```
+
+```shell
 docker-compose up -d
 ```
 
