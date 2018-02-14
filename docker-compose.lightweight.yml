@@ -5,7 +5,7 @@
 version: '3'
 
 volumes:
-  # mysql:
+  # postgres:
   #   driver: local
   solr:
     driver: local
@@ -15,15 +15,17 @@ volumes:
   #   driver: local
 
 services:
-  # Need mysql? Uncomment this and respective volume above
-  # mysql:
-  #   image: mysql:5.7
+  # Need postgres? Uncomment this and respective volume above
+  # postgres:
+  #   image: postgres:9.6-alpine
   #   environment:
-  #     MYSQL_ROOT_PASSWORD: mysecretpassword
+  #     PGDATA: /var/lib/postgresql/data/pgdata
+  #     POSTGRES_PASSWORD: mysecretpassword
+  #     POSTGRES_USER: jupiter
   #   volumes:
-  #     - mysql:/var/lib/mysql
+  #     - postgres:/var/lib/postgresql/data
   #   ports:
-  #     - "3306:3306"
+  #     - "5432:5432"
 
   solr:
     image: solr:6.6

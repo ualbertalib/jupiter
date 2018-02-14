@@ -55,7 +55,7 @@ class Item < JupiterCore::LockedLdpObject
     item = Item.find(draft_item.uuid) if draft_item.uuid.present?
     item ||= Item.new_locked_ldp_object
     item.unlock_and_fetch_ldp_object do |unlocked_obj|
-      unlocked_obj.owner = draft_item.user_id
+      unlocked_obj.owner = draft_item.user_id if unlocked_obj.owner.blank?
       unlocked_obj.title = draft_item.title
       unlocked_obj.alternative_title = draft_item.alternate_title
 
