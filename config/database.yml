@@ -1,5 +1,8 @@
-# Rails will assume you have a psql user matching your system user
-# configure with `sudo -u postgres createuser ${USER}`
+# Rails will assume you have a psql superuser matching your system user
+# This may be an issue when using a local postgres instance.
+# configure with:
+# `sudo -u postgres createuser ${USER}`
+# `sudo -u postgres alter user ${USER} superuser
 default: &default
   adapter: postgresql
   encoding: utf8
