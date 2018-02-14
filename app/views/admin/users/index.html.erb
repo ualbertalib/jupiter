@@ -18,7 +18,7 @@
     <%= f.select :admin_eq, options_for_select([
           [t('admin.users.admin_role'), true],
           [t('admin.users.user_role'), false]
-        ], @q), { include_blank: t('all') }, { class: 'form-control' } %>
+        ], @search), { include_blank: t('all') }, { class: 'form-control' } %>
   </div>
 
   <div class="form-group p-2">
@@ -26,7 +26,7 @@
     <%= f.select :suspended_eq, options_for_select([
           [t('admin.users.suspended_status'), true],
           [t('admin.users.active_status'), false]
-        ], @q), { include_blank: t('all') }, { class: 'form-control' } %>
+        ], @search), { include_blank: t('all') }, { class: 'form-control' } %>
   </div>
 <% end %>
 

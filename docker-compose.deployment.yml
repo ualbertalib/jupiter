@@ -1,7 +1,7 @@
 version: '3'
 
 volumes:
-  mysql:
+  postgres:
     driver: local
   solr:
     driver: local
@@ -10,15 +10,15 @@ volumes:
   redis:
     driver: local
   assets:
+    driver: local
   file-storage:
+    driver: local
 
 services:
-  mysql:
+  postgres:
     restart: always
-    image: mysql:5.7
+    image: postgres:9.6-alpine
     env_file: .env_deployment
-    volumes:
-      - mysql:/var/lib/mysql
 
   solr:
     restart: always
@@ -55,7 +55,7 @@ services:
     command: bundle exec sidekiq
     env_file: .env_deployment
     depends_on:
-      - mysql
+      - postgres
       - fcrepo
       - redis
       - solr
