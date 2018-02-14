@@ -143,9 +143,9 @@ class DraftItem < ApplicationRecord
   end
 
   # rubocop:disable Style/DateTime,Rails/TimeZone
-  def update_from_fedora_item(item)
+  def update_from_fedora_item(item, for_user)
     draft_attributes = {
-      user_id: item.owner,
+      user_id: for_user.id,
       title: item.title,
       alternate_title: item.alternative_title,
       type: item_type_for_uri(item.item_type, status: item.publication_status),
@@ -181,7 +181,6 @@ class DraftItem < ApplicationRecord
 
     # reset files if the files have changed in Fedora outside of the draft process
     files.purge if item.file_sets.present?
-
     item.file_sets.each do |fileset|
       fileset.unlock_and_fetch_ldp_object do |ufs|
         ufs.fetch_raw_original_file_data do |content_type, io|
@@ -194,16 +193,16 @@ class DraftItem < ApplicationRecord
   # Pull latest data from Fedora if data is more recent than this draft
   # This would happen if, eg) someone manually updated the Fedora record in the Rails console
   # and then someone visited this item's draft URL directly without bouncing through ItemsController#edit
-  def sync_with_fedora
+  def sync_with_fedora(for_user:)
     item = Item.find(uuid)
-    update_from_fedora_item(item) if item.updated_at > updated_at
+    update_from_fedora_item(item, for_user) if item.updated_at > updated_at
   end
 
-  def self.from_item(item)
+  def self.from_item(item, for_user:)
     draft = DraftItem.find_by(uuid: item.id)
     draft ||= DraftItem.new(uuid: item.id)
 
-    draft.update_from_fedora_item(item)
+    draft.update_from_fedora_item(item, for_user)
     draft
   end
 

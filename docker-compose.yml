@@ -1,7 +1,7 @@
 version: '3'
 
 volumes:
-  mysql:
+  postgres:
     driver: local
   solr:
     driver: local
@@ -19,12 +19,14 @@ services:
       # copy fixture files for file uploads
       - ./test/fixtures/files:/app/test/fixtures/files
 
-  mysql:
-    image: mysql:5.7
+  postgres:
+    image: postgres:9.6-alpine
     environment:
-      MYSQL_ROOT_PASSWORD: mysecretpassword
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_USER: jupiter
     volumes:
-      - mysql:/var/lib/mysql
+      - postgres:/var/lib/postgresql/data
 
   solr:
     image: solr:6.6
@@ -56,7 +58,7 @@ services:
     command: bundle exec sidekiq
     environment:
       RAILS_ENV: development
-      DATABASE_URL: 'mysql2://root:mysecretpassword@mysql:3306'
+      DATABASE_URL: 'postgresql://jupiter:mysecretpassword@postgres:5432/'
       FCREPO_URL: http://fcrepo:8080/fcrepo/rest
       SOLR_URL: http://solr:8983/solr/development
       SOLR_TEST_URL: http://solr:8983/solr/test
@@ -66,7 +68,7 @@ services:
     volumes:
       - .:/app
     depends_on:
-      - mysql
+      - postgres
       - fcrepo
       - redis
       - solr
@@ -75,6 +77,6 @@ services:
   # Rails server
   web:
     <<: *rails
-    command: bash -c 'rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b "0.0.0.0"'
+    command: bin/docker-start
     ports:
       - "3000:3000"
