@@ -80,4 +80,21 @@ Rails.application.routes.draw do
   get '/policies', to: 'static_pages#policies'
   get '/help', to: 'static_pages#help'
   get '/technology', to: redirect('https://github.com/ualbertalib/jupiter')
+  
+  ## HydraNorth URL redirects
+  get '/files/:noid', to: 'redirect#hydra_north_item' # may have query string `?file=filename`
+  get '/downloads/:noid', to: 'redirect#hydra_north_item' # may have query string `?file=filename`
+  get '/files/:noid/:filename', to: 'redirect#hydra_north_file', constraints: { filename: /[^\/]+/ }
+  get '/collections/:noid', to: 'redirect#hydra_north_community_collection'
+
+  ## Pre-HydraNorth URL redirects
+  get '/public/view/item/:uuid', to: 'redirect#fedora3_item'
+  get '/public/view/item/:uuid/:ds', to: 'redirect#fedora3_datastream'
+  get '/public/view/item/:uuid/:ds/:filename', to: 'redirect#fedora3_datastream', constraints: { filename: /[^\/]+/ }
+  get '/public/datastream/get/:uuid/:ds', to: 'redirect#fedora3_datastream'
+  get '/public/datastream/get/:uuid/:ds/:filename', to: 'redirect#fedora3_datastream',
+                                                    constraints: { filename: /[^\/]+/ }
+  get '/public/view/collection/:uuid', to: 'redirect#fedora3_collection'
+  get '/public/view/community/:uuid', to: 'redirect#fedora3_community'
+  # Note: redirect for ancient authors and thesis deposit routes no longer supported
 end
