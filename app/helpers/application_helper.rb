@@ -19,19 +19,6 @@ module ApplicationHelper
     humanize_uri_code(vocab, code)
   end
 
-  def path_for_result(result)
-    if result.is_a? Collection
-      community_collection_path(result.community, result)
-    else
-      polymorphic_path(result)
-    end
-  end
-
-  def thesis_path(result)
-    # Theses are viewed with the item controller, which breaks the `polymorphic_path` above
-    item_path(result)
-  end
-
   def help_tooltip(text)
     content_tag(:span, fa_icon('question-circle'), title: text)
   end
