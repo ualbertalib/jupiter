@@ -74,6 +74,13 @@ Rails.application.routes.draw do
 
   root to: 'welcome#index'
 
+  # Static pages
+  get '/about', to: 'static_pages#about'
+  get '/contact', to: 'static_pages#contact'
+  get '/policies', to: 'static_pages#policies'
+  get '/help', to: 'static_pages#help'
+  get '/technology', to: redirect('https://github.com/ualbertalib/jupiter')
+
   ## HydraNorth URL redirects
   get '/files/:noid', to: 'redirect#hydra_north_item' # may have query string `?file=filename`
   get '/downloads/:noid', to: 'redirect#hydra_north_item' # may have query string `?file=filename`
