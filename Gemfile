@@ -26,7 +26,7 @@ gem 'simple_form'
 
 # Hydra stuff
 gem 'active-fedora', github: 'mbarnett/active_fedora', branch: 'fix_types_literally_do_nothing'
-gem 'hydra-derivatives', '3.3.2' # pinned this as 3.4.X has deprecation spam because of hydra-works
+gem 'hydra-derivatives', '3.4.1' # pinned this as 3.4.X has deprecation spam because of hydra-works
 gem 'hydra-works'
 gem 'rdf-vocab'
 gem 'solrizer', github: 'mbarnett/solrizer', branch: 'literally_types'
