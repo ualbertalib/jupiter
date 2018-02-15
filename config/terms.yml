@@ -21,6 +21,7 @@
     - committeeMember
     - Community # rdf:type for community objects, Zach has advised uppercase for class
     - department
+    - department_list # application-specific JSON list to preserve order
     - depositor
     - dissertant
     - fedora3handle
