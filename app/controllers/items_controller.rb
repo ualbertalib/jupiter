@@ -10,7 +10,7 @@ class ItemsController < ApplicationController
     item = Item.find(params[:id])
     authorize item
 
-    draft_item = DraftItem.from_item(item)
+    draft_item = DraftItem.from_item(item, for_user: current_user)
 
     redirect_to item_draft_path(id: Wicked::FIRST_STEP, item_id: draft_item.id)
   end
