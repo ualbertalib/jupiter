@@ -142,8 +142,8 @@ GEM
       concurrent-ruby (~> 1.0)
     hashie (3.5.7)
     http_logger (0.5.1)
-    hydra-derivatives (3.3.2)
-      active-fedora (>= 11.3.1, < 12)
+    hydra-derivatives (3.4.1)
+      active-fedora (>= 11.3.1, < 13)
       active_encode (~> 0.1)
       activesupport (>= 4.0, < 6)
       addressable (~> 2.5)
@@ -413,7 +413,7 @@ DEPENDENCIES
   faker
   font-awesome-rails
   haikunator
-  hydra-derivatives (= 3.3.2)
+  hydra-derivatives (= 3.4.1)
   hydra-works
   jquery-rails
   kaminari
