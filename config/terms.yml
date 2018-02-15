@@ -32,6 +32,8 @@
     graduation_date: graduationDate
     hydra_noid: hydraNoid
     ingest_batch: ingestBatch
+    northern_north_america_filename: nnaFile
+    northern_north_america_item_id: nnaItem
     path: path
     proquest: proquest
     # separate from date_created, we need to track a precise time the metadata record was created
