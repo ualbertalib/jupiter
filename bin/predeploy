@@ -7,7 +7,7 @@
 set -o errexit
 set -o pipefail
 set -o nounset
-[[ "${TRACE}" ]] && set -o xtrace
+[[ -n "${TRACE:-}" ]] && set -o xtrace
 
 
 readonly branch_name="master"
