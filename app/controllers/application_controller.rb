@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
 
-  helper_method :current_announcements
+  helper_method :current_announcements, :path_for_result
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   rescue_from JupiterCore::ObjectNotFound,
@@ -86,6 +86,16 @@ class ApplicationController < ActionController::Base
 
   def current_announcements
     Announcement.current
+  end
+
+  def path_for_result(result)
+    if result.is_a? Collection
+      community_collection_path(result.community, result)
+    elsif result.is_a? Thesis
+      item_path(result)
+    else
+      polymorphic_path(result)
+    end
   end
 
   def sort_column(columns: ['title', 'record_created_at'], default: 'title')
