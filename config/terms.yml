@@ -1,12 +1,5 @@
 # Declaration for terms not available from the RDF gem, mostly local. See config/initializers/terms.rb
 # for details of how this manifests in the code.
-#
-# NOTE: the University of Alberta's local terminology violates standard RDF naming conventions, as normally
-# described at (http://www-sop.inria.fr/acacia/personnel/phmartin/RDF/conventions.html#lexicalConventions).
-# The primary violations are that we require the terms to appear in the URI in all-lowercase, with no underscores
-# or other lexical seperators between word boundaries.
-# This was done because <RATIONALE GOES HERE WHEN SOMEONE PROVIDES ONE>
-#
 # This file is thus structured to map semantically meaningful, idiomatic Ruby method names to the local requirements.
 #
 # Expected file format:
@@ -14,7 +7,7 @@
 #      schema: http://terms.library.ualberta.ca/identifiers/
 #      terms:
 #        doi: doi
-#        record_created_in_jupiter: recordcreatedinjupiter
+#        record_created_in_jupiter: recordCreatedInJupiter
 #    - vocabulary: acl
 #      schema: http://www.w3.org/ns/auth/acl
 #      terms:
