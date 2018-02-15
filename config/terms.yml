@@ -18,24 +18,28 @@
 - vocabulary: ual
   schema: http://terms.library.ualberta.ca/
   terms:
-    - committeeMember
+    # To meet the requirement of uris are all lowercased in UAL vocab, following predicates are modified to 
+    # lowercase term labels:
+    # committeemember, fedora3uuid, fedora3handle, hydranoid, graduationdate, thesislevel 
+    - committeemember
     - Community # rdf:type for community objects, Zach has advised uppercase for class
     - depositor
     - dissertant
     - fedora3handle
     - fedora3uuid
-    - graduationDate
-    - hydraNoid
+    - graduationdate
+    - hydranoid
     - ingestbatch
     - path
     - proquest
     # separate from date_created, we need to track a precise time the metadata record was created
-    - recordCreatedInJupiter
+    - recordcreatedinjupiter #record_created_in_jupiter
     - sortyear
     - specialization
     - supervisor
-    - thesisLevel
+    - thesislevel
     - unicorn
+    - sitemaplink #sitemap_link
 
 - vocabulary: prism
   schema: http://prismstandard.org/namespaces/basic/3.0/
