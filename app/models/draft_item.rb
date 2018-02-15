@@ -333,8 +333,8 @@ class DraftItem < ApplicationRecord
   def communities_and_collections_validations
     return if member_of_paths.blank? # caught by presence check
     if member_of_paths['community_id'].blank? || member_of_paths['collection_id'].blank?
-      errors.add(:member_of_paths, :community_not_found) if member_of_paths['community_id'].blank?
-      errors.add(:member_of_paths, :collection_not_found) if member_of_paths['collection_id'].blank?
+      errors.add(:member_of_paths, :community_blank) if member_of_paths['community_id'].blank?
+      errors.add(:member_of_paths, :collection_blank) if member_of_paths['collection_id'].blank?
       return
     end
     member_of_paths['community_id'].each_with_index do |community_id, idx|
@@ -342,7 +342,11 @@ class DraftItem < ApplicationRecord
       community = Community.find_by(community_id)
       errors.add(:member_of_paths, :community_not_found) if community.blank?
       collection = Collection.find_by(collection_id)
-      errors.add(:member_of_paths, :collection_not_found) if collection.blank?
+      if collection.blank?
+        errors.add(:member_of_paths, :collection_not_found)
+      elsif collection.restricted && !user.admin?
+        errors.add(:member_of_paths, :collection_restricted)
+      end
     end
   end
 

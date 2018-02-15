@@ -195,8 +195,34 @@ class DraftItemTest < ActiveSupport::TestCase
       assert_equal "Collection can't be blank", draft_item.errors.messages[:member_of_paths].last
 
       draft_item.assign_attributes(
+        member_of_paths: { community_id: ['random-uuid-123'], collection_id: ['random-uuid-abc'] }
+      )
+      refute draft_item.valid?
+      assert_equal 2, draft_item.errors.full_messages.count
+      assert_equal "Community can't be found", draft_item.errors.messages[:member_of_paths].first
+      assert_equal "Collection can't be found", draft_item.errors.messages[:member_of_paths].last
+
+      draft_item.assign_attributes(
         member_of_paths: { community_id: [@community.id], collection_id: [@collection.id] }
       )
+      assert draft_item.valid?
+
+      # Regular user can't deposit to a restricted collection
+      restricted_collection = Collection.new_locked_ldp_object(title: 'Risque fantasy Books',
+                                                               owner: 1,
+                                                               restricted: true,
+                                                               community_id: @community.id)
+                                        .unlock_and_fetch_ldp_object(&:save!)
+
+      draft_item.assign_attributes(
+        member_of_paths: { community_id: [@community.id], collection_id: [restricted_collection.id] }
+      )
+      refute draft_item.valid?
+      assert_equal ['Deposit is restricted for this collection'], draft_item.errors.messages[:member_of_paths]
+
+      # Admin user can deposit to a restricted collection
+      admin = users(:admin)
+      draft_item.user = admin
       assert draft_item.valid?
     end
   end
