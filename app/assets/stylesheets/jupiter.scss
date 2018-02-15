@@ -34,10 +34,6 @@ body {
 
 .j-header {
   box-shadow: 0 4px 4px -1px $header-box-shadow-color;
-
-  .nav-item {
-    font-weight: bold;
-  }
 }
 
 .j-footer {
@@ -45,4 +41,14 @@ body {
   bottom: 0px;
   position: absolute;
   width: 100%;
+}
+
+.j-jumbotron-overlay {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.j-jumbotron-banner {
+  background-image: image-url('campus-banner.jpg');
+  background-position: center 10%;
+  background-size: cover;
 }
