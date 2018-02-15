@@ -1,16 +1,31 @@
-<footer class="j-footer bg-jupiter-primary">
-  <div class="container">
-    <div class="d-flex flex-wrap align-items-center justify-content-between px-3">
-      <%# Reverse order on small screens %>
-      <div class="order-last order-md-first p-1">
-        <p class="mb-0"><%= link_to t('application.footer.street_address'), contact_url,
-                            class: 'text-dark small' %></p>
-        <p class="mb-0"><%= link_to t('application.footer.privacy_policy'), policies_url,
-                            class: 'text-dark small' %></p>
-      </div>
-      <div class="order-first p-1 py-3">
-        <%= image_tag 'ualib-logo.png', alt: t('.uofa_library_logo_alt')%>
-      </div>
+<footer class="j-footer bg-jupiter-primary ">
+  <div class="container p-4">
+    <div class="d-flex flex-wrap align-items-center justify-content-md-between justify-content-around">
+      <ul class="list-inline text-dark mb-md-0">
+        <li class="list-inline-item">
+          <%= link_to t('application.footer.links.about'),
+                      about_path,
+                      class: 'text-dark' %>
+        </li>
+        <li class="list-inline-item">
+          <span role="presentation" aria-hidden="true"> · </span>
+        </li>
+        <li class="list-inline-item">
+          <%= link_to t('application.footer.links.contact'),
+                      contact_path,
+                      class: 'text-dark' %>
+        </li>
+        <li class="list-inline-item">
+          <span role="presentation" aria-hidden="true"> · </span>
+        </li>
+        <li class="list-inline-item">
+          <%= link_to t('application.footer.links.policies'),
+                      policies_path,
+                      class: 'text-dark' %>
+        </li>
+      </ul>
+
+      <%= image_tag 'ualib-logo.png', alt: t('.uofa_library_logo_alt')%>
     </div>
   </div>
 </footer>

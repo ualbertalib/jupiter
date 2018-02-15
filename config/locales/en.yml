@@ -158,9 +158,12 @@ en:
       user_dropdown:
         heading_html: "Signed in as <strong>%{name}</strong>"
     footer:
+      links:
+        about: About ERA
+        policies: Policies
+        contact: Contact Us
       uofa_library_logo_alt: 'University of Alberta Libraries'
-      street_address: 'University of Alberta, Edmonton, AB, Canada, 26G 2R3'
-      privacy_policy: 'Web Site Privacy Policy'
+
   locked_ldp_object:
     errors:
       invalid_visibility: "%{visibility} is not a known visibility"
