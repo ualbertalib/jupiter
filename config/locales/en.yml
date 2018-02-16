@@ -164,6 +164,14 @@ en:
       uofa_library_logo_alt: 'University of Alberta Libraries'
       street_address: 'University of Alberta, Edmonton, AB, Canada, 26G 2R3'
       privacy_policy: 'Web Site Privacy Policy'
+    4xx:
+      title: "The page you were looking for doesn't exist (%{status})"
+      heading: "The page you were looking for doesn't exist."
+      clarification: "You may have mistyped the address or the page may have moved."
+    5xx:
+      title: "We're sorry, but something went wrong (%{status})"
+      heading: "We're sorry, but something went wrong."
+      clarification: "Please contact the site administrator via the contact link if the problem persists."
   locked_ldp_object:
     errors:
       invalid_visibility: "%{visibility} is not a known visibility"
