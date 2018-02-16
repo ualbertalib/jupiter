@@ -1,0 +1,4 @@
+<%= @item.sort_year %>
+<%= authors(@item)&.map { |creator| creator }
+                 &.join(', ')&.html_safe %>
+<%= jupiter_truncate description(@item) %>

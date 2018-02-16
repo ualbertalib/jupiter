@@ -1,4 +1,7 @@
 <% page_title(@collection.title) %>
+<% content_for :head do %>
+  <meta name="description" content="<%= jupiter_truncate @collection.description %>">
+<% end %>
 
 <div class="container mt-3">
   <%= render partial: 'show_breadcrumbs' %>

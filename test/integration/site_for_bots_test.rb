@@ -52,18 +52,19 @@ class SiteForBotsTest < ActionDispatch::IntegrationTest
       uo.add_files([file])
       file.close
     end
-    @public_paths = [root_path, item_path(@item), search_path, communities_path,
-                     community_path(@community1), community_collection_path(@community1, @collection1)]
+    @public_paths = [root_path, item_path(@item), communities_path, community_path(@community1),
+                     community_collection_path(@community1, @collection1), search_path]
   end
 
   test 'unique title and description for each page' do
     collect_titles = [], collect_descriptions = []
     @public_paths.each do |route|
       get route
-      puts route
       assert_select 'title', count: 1 do |title|
         collect_titles << title
       end
+      # search_path is noindex so description shouldn't matter
+      next if search_path == route
       assert_select "meta[name='description']", count: 1 do |description|
         collect_descriptions << description
       end

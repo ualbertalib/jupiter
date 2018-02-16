@@ -21,4 +21,9 @@ module ItemsHelper
     return [object.dissertant] if object.respond_to? :dissertant
     return object.creators if object.respond_to? :creators
   end
+
+  def description(object)
+    return object.abstract if object.respond_to? :abstract
+    return object.description if object.respond_to? :description
+  end
 end
