@@ -1,11 +1,11 @@
 class DraftItemPolicy < ApplicationPolicy
 
   def show?
-    create?
+    owned? || admin?
   end
 
   def create?
-    (owned? && unrestricted_collections?) || admin?
+    owned? || admin?
   end
 
   def update?
@@ -34,13 +34,6 @@ class DraftItemPolicy < ApplicationPolicy
 
   def owned?
     record && user && record.user.id == user.id
-  end
-
-  def unrestricted_collections?
-    record.each_community_collection do |_community, collection|
-      return false if collection.restricted
-    end
-    true
   end
 
   def permitted_attributes
