@@ -43,25 +43,6 @@
 
 <h2 class="mt-5"><%= items_header %></h2>
 
-<%# TODO: this needs to use a rails form_tag, etc here %>
-<form>
-  <div class="input-group mt-3">
-    <%= search_field_tag :query,
-        params[:query],
-        placeholder: search_placeholder,
-        class: 'form-control' %>
-    <span class="input-group-btn">
-      <button type="submit" class="btn btn-secondary">
-        <%= fa_icon 'search' %>
-        <%= t('search_items') %>
-      </button>
-    </span>
-  </div>
-</form>
-
-<% if @results.count > 0 %>
-  <%= render partial: 'search/model_results', locals: { results: @results, model: :item,
-                                                        search_term: params[:query] } %>
-<% else %>
-  <p class="mt-3"><%= no_items_found %></p>
-<% end %>
+<%= render partial: 'search/item_search_and_results',
+          locals: { search_placeholder: search_placeholder,
+                    no_items_found: no_items_found } %>
