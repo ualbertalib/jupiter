@@ -155,7 +155,7 @@ GEM
     hydra-pcdm (0.11.0)
       active-fedora (>= 10, < 13)
       mime-types (>= 1)
-    hydra-works (0.16.0)
+    hydra-works (0.17.0)
       hydra-derivatives (~> 3.0)
       hydra-file_characterization (~> 0.3, >= 0.3.3)
       hydra-pcdm (>= 0.9)
