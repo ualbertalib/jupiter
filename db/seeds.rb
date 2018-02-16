@@ -202,7 +202,7 @@ if Rails.env.development? || Rails.env.uat?
         dissertant: creators[seed],
         abstract: description,
         language: languages.first,
-        specializations: [field],
+        specialization: field,
         departments: ["Deparment of #{field}"],
         supervisors: ["#{contributors[seed]} (#{field})"],
         committee_members: ["#{contributors[seed2]} (#{field})"],
@@ -220,7 +220,6 @@ if Rails.env.development? || Rails.env.uat?
         thesis_attributes[:is_version_of] = ["The CDROM titled '#{thing.pluralize.capitalize}!'",
                                       'The original laserdisc series from Orange-on-a-Blue-Background studios']
         department2 = 'Department of Everything'
-        thesis_attributes[:specializations] += ['Everything']
         thesis_attributes[:departments] += [department2]
         thesis_attributes[:supervisors] += ["#{contributors[(seed + 3 * seed2) % 10]} (#{department2})"]
         thesis_attributes[:committee_members] += ["#{contributors[(seed + 7 * seed2) % 10]} (#{department2})"]
