@@ -25,6 +25,7 @@
     committee_member: commiteeMember
     community: Community # rdf:type for community objects, Zach has advised uppercase for class
     department: department
+    department_list: departmentList
     depositor: depositor
     dissertant: dissertant
     fedora3_handle: fedora3Handle
@@ -42,6 +43,7 @@
     sort_year: sortYear
     specialization: specialization
     supervisor: supervisor
+    supervisor_list: supervisorList
     thesis_level: thesisLevel
     unicorn: unicorn
 

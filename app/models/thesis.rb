@@ -27,10 +27,13 @@ class Thesis < JupiterCore::LockedLdpObject
   has_attribute :thesis_level, TERMS[:ual].thesis_level, solrize_for: :exact_match
   has_attribute :proquest, TERMS[:ual].proquest, solrize_for: :exact_match
   has_attribute :unicorn, TERMS[:ual].unicorn, solrize_for: :exact_match
+
+  has_attribute :specialization, TERMS[:ual].specialization, solrize_for: :search
+  has_attribute :departments, TERMS[:ual].department_list, type: :json_array, solrize_for: [:search]
+  has_attribute :supervisors, TERMS[:ual].supervisor_list, type: :json_array, solrize_for: [:search]
   has_multival_attribute :committee_members, TERMS[:ual].committee_member, solrize_for: :exact_match
-  has_multival_attribute :departments, TERMS[:ual].department, solrize_for: :search
-  has_multival_attribute :specializations, TERMS[:ual].specialization, solrize_for: :search
-  has_multival_attribute :supervisors, TERMS[:ual].supervisor, solrize_for: :exact_match
+  has_multival_attribute :unordered_departments, TERMS[:ual].department, solrize_for: :search
+  has_multival_attribute :unordered_supervisors, TERMS[:ual].supervisor, solrize_for: :exact_match
 
   # This gets mixed with the item types for `Item`
   additional_search_index :item_type_with_status,
@@ -53,6 +56,9 @@ class Thesis < JupiterCore::LockedLdpObject
   end
 
   unlocked do
+    before_save :copy_departments_to_unordered_predicate
+    before_save :copy_supervisors_to_unordered_predicate
+
     validates :dissertant, presence: true
     validates :graduation_date, presence: true
     validates :sort_year, presence: true
@@ -69,6 +75,18 @@ class Thesis < JupiterCore::LockedLdpObject
         # date was unparsable, try to pull out the first 4 digit number as a year
         capture = graduation_date.scan(/\d{4}/)
         self.sort_year = capture[0] if capture.present?
+      end
+
+      def copy_departments_to_unordered_predicate
+        return unless departments_changed?
+        self.unordered_departments = []
+        departments.each { |d| self.unordered_departments += [d] }
+      end
+
+      def copy_supervisors_to_unordered_predicate
+        return unless supervisors_changed?
+        self.unordered_supervisors = []
+        supervisors.each { |s| self.unordered_supervisors += [s] }
       end
     end
   end

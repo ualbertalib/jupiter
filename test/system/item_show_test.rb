@@ -47,6 +47,28 @@ class ItemShowTest < ApplicationSystemTestCase
       uo.add_to_path(@community.id, @collection.id)
       uo.save!
     end
+
+    @thesis = Thesis.new_locked_ldp_object(
+      title: 'Thesis about the effects of missing regression tests',
+      graduation_date: 'Fall 1990',
+      dissertant: 'Joe Blow',
+      abstract: generate_random_string,
+      language: CONTROLLED_VOCABULARIES[:language].english,
+      specialization: 'Failure Analysis',
+      departments: ["Deparment of Makin' Computers Compute"],
+      supervisors: ['Alan Turing (Department of Mathematics)'],
+      committee_members: ['Alonzo Church (Department of Mathematics)'],
+      rights: 'Share my stuff with everybody',
+      thesis_level: 'Doctorate',
+      degree: "Doctorate of Failin' Hard or Hardly Failin'",
+      institution: CONTROLLED_VOCABULARIES[:institution].uofa,
+      visibility: JupiterCore::VISIBILITY_PUBLIC,
+      owner: @user.id
+    ).unlock_and_fetch_ldp_object do |uo|
+      uo.add_to_path(@community.id, @collection.id)
+      uo.add_to_path(@community.id, @collection.id)
+      uo.save!
+    end
   end
 
   test 'unauthed users should be able to download all files from a public item' do
@@ -65,6 +87,14 @@ class ItemShowTest < ApplicationSystemTestCase
   test 'Visiting authenticated items as an unauthenticated user works' do
     visit item_path @item2
     assert_selector 'h1', text: 'CCID Item', count: 1
+  end
+
+  test 'Theses are working correctly' do
+    visit item_path @thesis
+
+    assert_selector 'h1', text: 'Thesis about the effects of missing regression tests', count: 1
+    assert_selector 'dt', text: 'Type of Item', count: 1
+    assert_selector 'dd a', text: 'Thesis', count: 1
   end
 
 end
