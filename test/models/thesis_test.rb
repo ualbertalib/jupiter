@@ -16,6 +16,8 @@ class ThesisTest < ActiveSupport::TestCase
     end
     thesis = Thesis.new_locked_ldp_object(title: 'Thesis', owner: 1, visibility: JupiterCore::VISIBILITY_PUBLIC,
                                           dissertant: 'Joe Blow',
+                                          departments: ['Physics', 'Non-physics'],
+                                          supervisors: ['Billy (Physics)', 'Sally (Non-physics)'],
                                           graduation_date: 'Fall 2013')
     thesis.unlock_and_fetch_ldp_object do |unlocked_thesis|
       unlocked_thesis.add_to_path(community.id, collection.id)
@@ -34,6 +36,18 @@ class ThesisTest < ActiveSupport::TestCase
     assert thesis.valid?
     refute_equal 0, Thesis.public.count
     assert_equal thesis.id, Thesis.public.first.id
+
+    # Preserves order and writes to unordered triples on save
+    assert_equal thesis.departments, ['Physics', 'Non-physics']
+    assert_equal thesis.unordered_departments.length, 2
+    assert_includes thesis.unordered_departments, 'Physics'
+    assert_includes thesis.unordered_departments, 'Non-physics'
+
+    assert_equal thesis.supervisors, ['Billy (Physics)', 'Sally (Non-physics)']
+    assert_equal thesis.unordered_supervisors.length, 2
+    assert_includes thesis.unordered_supervisors, 'Billy (Physics)'
+    assert_includes thesis.unordered_supervisors, 'Sally (Non-physics)'
+
     thesis.unlock_and_fetch_ldp_object(&:destroy)
   end
 
