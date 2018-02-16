@@ -30,9 +30,10 @@ class Thesis < JupiterCore::LockedLdpObject
 
   has_attribute :specialization, TERMS[:ual].specialization, solrize_for: :search
   has_attribute :departments, TERMS[:ual].department_list, type: :json_array, solrize_for: [:search]
+  has_attribute :supervisors, TERMS[:ual].supervisor_list, type: :json_array, solrize_for: [:search]
   has_multival_attribute :committee_members, TERMS[:ual].committee_member, solrize_for: :exact_match
   has_multival_attribute :unordered_departments, TERMS[:ual].department, solrize_for: :search
-  has_multival_attribute :supervisors, TERMS[:ual].supervisor, solrize_for: :exact_match
+  has_multival_attribute :unordered_supervisors, TERMS[:ual].supervisor, solrize_for: :exact_match
 
   # This gets mixed with the item types for `Item`
   additional_search_index :item_type_with_status,
@@ -56,6 +57,7 @@ class Thesis < JupiterCore::LockedLdpObject
 
   unlocked do
     before_save :copy_departments_to_unordered_predicate
+    before_save :copy_supervisors_to_unordered_predicate
 
     validates :dissertant, presence: true
     validates :graduation_date, presence: true
@@ -79,6 +81,12 @@ class Thesis < JupiterCore::LockedLdpObject
         return unless departments_changed?
         self.unordered_departments = []
         departments.each { |d| self.unordered_departments += [d] }
+      end
+
+      def copy_supervisors_to_unordered_predicate
+        return unless supervisors_changed?
+        self.unordered_supervisors = []
+        supervisors.each { |s| self.unordered_supervisors += [s] }
       end
     end
   end

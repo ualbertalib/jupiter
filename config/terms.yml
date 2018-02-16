@@ -43,6 +43,7 @@
     sort_year: sortYear
     specialization: specialization
     supervisor: supervisor
+    supervisor_list: supervisorList
     thesis_level: thesisLevel
     unicorn: unicorn
 
