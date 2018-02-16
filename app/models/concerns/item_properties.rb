@@ -9,36 +9,30 @@ module ItemProperties
                                 CONTROLLED_VOCABULARIES[:visibility].public].freeze
 
   included do
-    # Dublin Core attributes
     has_attribute :alternative_title, ::RDF::Vocab::DC.alternative, solrize_for: :search
-    # `sort_year` is faceted differently for `Item` and `Thesis`
-    has_attribute :sort_year, ::TERMS[:ual].sortyear, solrize_for: [:search, :sort, :facet]
-    # `subject` is validated differently for `Item` and `Thesis`
-    has_multival_attribute :subject, ::RDF::Vocab::DC11.subject, solrize_for: [:search, :facet]
-    has_multival_attribute :is_version_of, ::RDF::Vocab::DC.isVersionOf, solrize_for: :exact_match
-
-    # UAL attributes
-    has_attribute :fedora3_handle, ::TERMS[:ual].fedora3handle, solrize_for: :exact_match
-    has_attribute :ingest_batch, ::TERMS[:ual].ingestbatch, solrize_for: :exact_match
-    has_multival_attribute :member_of_paths, ::TERMS[:ual].path,
-                           type: :path,
-                           solrize_for: :pathing
-
-    # Prism attributes
     has_attribute :doi, ::TERMS[:prism].doi, solrize_for: :exact_match
-    # `rights` is validated differently for `Item` and `Thesis`
-    has_attribute :rights, ::RDF::Vocab::DC11.rights, solrize_for: :exact_match
-
     has_attribute :embargo_end_date, ::RDF::Vocab::DC.available, type: :date, solrize_for: [:sort]
+    has_attribute :fedora3_handle, ::TERMS[:ual].fedora3_handle, solrize_for: :exact_match
+    has_attribute :ingest_batch, ::TERMS[:ual].ingest_batch, solrize_for: :exact_match
+    has_attribute :northern_north_america_filename,
+                  ::TERMS[:ual].northern_north_america_filename, solrize_for: :exact_match
+    has_attribute :northern_north_america_item_id,
+                  ::TERMS[:ual].northern_north_america_item_id, solrize_for: :exact_match
+    has_attribute :rights, ::RDF::Vocab::DC11.rights, solrize_for: :exact_match
+    has_attribute :sort_year, ::TERMS[:ual].sort_year, solrize_for: [:search, :sort, :facet]
+    has_attribute :visibility_after_embargo, ::TERMS[:acl].visibility_after_embargo, solrize_for: :exact_match
 
-    has_multival_attribute :embargo_history, ::TERMS[:acl].embargoHistory, solrize_for: :exact_match
-    has_attribute :visibility_after_embargo, ::TERMS[:acl].visibilityAfterEmbargo, solrize_for: :exact_match
+    has_multival_attribute :embargo_history, ::TERMS[:acl].embargo_history, solrize_for: :exact_match
+    has_multival_attribute :is_version_of, ::RDF::Vocab::DC.isVersionOf, solrize_for: :exact_match
+    has_multival_attribute :member_of_paths, ::TERMS[:ual].path, type: :path, solrize_for: :pathing
+    has_multival_attribute :subject, ::RDF::Vocab::DC11.subject, solrize_for: [:search, :facet]
 
-    # Solr only
     additional_search_index :doi_without_label, solrize_for: :exact_match,
                                                 as: -> { doi.gsub('doi:', '') if doi.present? }
 
     unlocked do
+      # If you're looking for rights and subject validations, note that they have separate implementations
+      # on the Thesis and Item classes.
       validates :embargo_end_date, presence: true, if: ->(item) { item.visibility == VISIBILITY_EMBARGO }
       validates :embargo_end_date, absence: true, if: ->(item) { item.visibility != VISIBILITY_EMBARGO }
       validates :visibility_after_embargo, presence: true, if: ->(item) { item.visibility == VISIBILITY_EMBARGO }
