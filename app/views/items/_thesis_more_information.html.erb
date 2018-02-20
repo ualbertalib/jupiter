@@ -57,15 +57,13 @@
     </li>
   <% end %>
 
-  <% if @item.specializations.present? %>
+  <% if @item.specialization.present? %>
     <li class="list-unstyled list-group-item-action">
       <dl>
-        <dt><%= t('.specializations') %></dt>
+        <dt><%= t('.specialization') %></dt>
         <dd>
           <ul class="list-unstyled">
-            <% @item.specializations.each do |specialization| %>
-              <li><%= specialization %></li>
-            <% end %>
+            <li><%= @item.specialization %></li>
           </ul>
         </dd>
       </dl>
