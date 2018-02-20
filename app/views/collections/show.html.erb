@@ -37,11 +37,18 @@
       <%= t('.items_list_header') %>
     </h4>
     <% if policy(:item).new? %>
-        <%= link_to create_draft_items_path, method: :post,
+      <div>
+        <%= link_to create_draft_items_path(collection: @collection.id), method: :post,
             class: 'btn btn-primary' do %>
           <%= fa_icon('plus-circle') %>
-          <%= t('items.new.header') %>
+          <%= t('.deposit_item') %>
         <% end %>
+
+        <%= link_to '#TODO', class: 'btn btn-primary' do %>
+          <%= fa_icon('plus-circle') %>
+          (TODO) <%= t('.deposit_thesis') %>
+        <% end %>
+      </div>
     <% end %>
   </div>
 
