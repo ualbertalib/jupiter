@@ -7,7 +7,7 @@
       <h4 class="card-title"><%= t('items.index.header') %></h4>
       <div class="data">
         <%= link_to admin_items_path, class: 'btn btn-outline-primary' do %>
-            <%= number_with_delimiter(Item.count) %>
+            <%= number_with_delimiter(Item.count + Thesis.count) %>
         <% end %>
       </div>
       </div>
