@@ -265,6 +265,9 @@ en:
     items:
       index:
         header: 'Items'
+        deposit_thesis: 'Deposit Thesis'
+        search_placeholder: 'Search items ...'
+        no_items_found: 'No items found'
       new:
         header: 'Deposit Item'
     users:
