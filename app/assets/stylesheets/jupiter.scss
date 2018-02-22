@@ -43,12 +43,15 @@ body {
   width: 100%;
 }
 
-.j-jumbotron-overlay {
-  background: rgba(0, 0, 0, 0.5);
-}
-
 .j-jumbotron-banner {
-  background-image: image-url('campus-banner.jpg');
+  background-image: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0.8),
+      rgba(255, 255, 255, 0.4),
+      rgba(255, 255, 255, 0)
+    ),
+    image-url('campus-banner.jpg');
+  background-repeat: no-repeat;
   background-position: center 10%;
   background-size: cover;
 }

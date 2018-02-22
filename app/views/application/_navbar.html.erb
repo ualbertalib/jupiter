@@ -91,8 +91,10 @@
             <%= active_link_to t('.links.login'), '/auth/saml', class: 'nav-item nav-link text-nowrap' %>
           </li>
           <% if Rails.env.development? || Rails.env.uat? %>
-            <%# TODO: Temporary login form for local development until IST shibboleth issues gets resolved %>
-            <%= link_to t('.links.login_as_dev'), '/auth/developer', class: 'nav-item nav-link text-nowrap' %>
+            <%# TODO: Temporary login form for local development or UAT %>
+            <li role="presentation" class="nav-item">
+              <%= link_to t('.links.login_as_dev'), '/auth/developer', class: 'nav-item nav-link text-nowrap' %>
+            </li>
           <% end %>
         <% end %>
       </ul>

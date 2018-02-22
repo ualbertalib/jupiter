@@ -23,9 +23,18 @@
                       policies_path,
                       class: 'text-dark' %>
         </li>
+        <li class="list-inline-item">
+          <span role="presentation" aria-hidden="true"> · </span>
+        </li>
+        <li class="list-inline-item">
+          <%= link_to t('application.footer.links.powered_by_jupiter'),
+                      'https://github.com/ualbertalib/jupiter', target: :_blank,
+                      class: 'text-dark' %>
+        </li>
       </ul>
-
-      <%= image_tag 'ualib-logo.png', alt: t('.uofa_library_logo_alt')%>
+      <%= link_to 'https://www.library.ualberta.ca/', target: :_blank do %>
+        <%= image_tag 'ualib-logo.png', alt: t('.uofa_library_logo_alt')%>
+      <% end %>
     </div>
   </div>
 </footer>
