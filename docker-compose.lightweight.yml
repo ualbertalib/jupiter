@@ -15,7 +15,10 @@ volumes:
   #   driver: local
 
 services:
-  # Need postgres? Uncomment this and respective volume above
+  # Need postgres? Uncomment postgres settings below and respective volume above
+  # To configure the app for the settings below, use environment varable setting:
+  #   JUPITER_DATABASE_URL=postgresql://jupiter:mysecretpassword@127.0.0.1?pool=5
+  #
   # postgres:
   #   image: postgres:9.6-alpine
   #   environment:
