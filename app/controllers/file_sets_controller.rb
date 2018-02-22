@@ -1,6 +1,7 @@
 class FileSetsController < ApplicationController
 
   before_action :load_and_authorize_fileset
+  after_action :update_download_count, only: [:show, :download], unless: -> { request.bot? }
 
   # TODO: expand to handle derivatives
   def show
@@ -21,6 +22,13 @@ class FileSetsController < ApplicationController
     raise JupiterCore::ObjectNotFound unless @file_set.item == params[:id]
 
     authorize @file_set.owning_item, :download?
+  end
+
+  def update_download_count
+    Statistics.increment_download_count_for(item_id: params[:id], ip: request.ip)
+  rescue StandardError => e
+    # Trap errors so that if Redis goes down or similar, downloads don't start crashing
+    Rollbar.error("Error incrementing download count for #{params[:id]}", e)
   end
 
   # Streaming code adapted from:
