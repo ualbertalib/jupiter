@@ -25,6 +25,7 @@ class Statistics
   end
 
   class << self
+
     private
 
     def increment_action_counter(action:, id:, ip:)
@@ -50,5 +51,7 @@ class Statistics
     def counter_key_for(action, id)
       "counter.#{action}.#{id}"
     end
+
   end
+
 end

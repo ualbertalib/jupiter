@@ -34,7 +34,7 @@ class ItemsController < ApplicationController
     Rollbar.error("Error retriving statistics for #{@item.id}", e)
 
     # we'll display unavailable counts
-    return [0,0]
+    return [0, 0]
   end
 
 end
