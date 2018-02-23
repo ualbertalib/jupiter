@@ -36,7 +36,7 @@ services:
 
   fcrepo:
     restart: always
-    image: murny/docker-fcrepo4
+    image: ualbertalib/docker-fcrepo4
     volumes:
       - fcrepo:/fcrepo4-data
     ports:
