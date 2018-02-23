@@ -2,8 +2,6 @@ $header-height-large-screen: 81px;
 $header-height-small-screen: 139px;
 $footer-height: 72px;
 
-$header-box-shadow-color: rgba(0, 0, 0, 0.25);
-
 html {
   // needed for sticky footer
   min-height: 100%;
@@ -33,11 +31,7 @@ body {
 }
 
 .j-header {
-  box-shadow: 0 4px 4px -1px $header-box-shadow-color;
-
-  .nav-item {
-    font-weight: bold;
-  }
+  box-shadow: 0 4px 4px -1px rgba($black, 0.25);
 }
 
 .j-footer {
@@ -45,4 +39,17 @@ body {
   bottom: 0px;
   position: absolute;
   width: 100%;
+}
+
+.j-jumbotron-banner {
+  background-image: linear-gradient(
+      to right,
+      rgba($white, 0.8),
+      rgba($white, 0.4),
+      rgba($white, 0)
+    ),
+    image-url('campus-banner.jpg');
+  background-repeat: no-repeat;
+  background-position: center 10%;
+  background-size: cover;
 }

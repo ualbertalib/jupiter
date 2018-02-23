@@ -8,7 +8,6 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_announcements, :path_for_result
 
-  rescue_from StandardError, with: :render_500
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   rescue_from JupiterCore::ObjectNotFound,
               ActiveRecord::RecordNotFound,
