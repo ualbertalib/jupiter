@@ -45,11 +45,11 @@ class Statistics
     end
 
     def uniques_key_for(action, id)
-      "uniquehll.#{action}.#{id}"
+      "#{Rails.configuration.redis_key_prefix}uniquehll.#{action}.#{id}"
     end
 
     def counter_key_for(action, id)
-      "counter.#{action}.#{id}"
+      "#{Rails.configuration.redis_key_prefix}counter.#{action}.#{id}"
     end
 
   end
