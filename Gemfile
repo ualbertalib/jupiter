@@ -7,7 +7,7 @@ end
 
 # Core Rails stuff
 gem 'puma', '~> 3.11'
-gem 'rails', '~> 5.1.1'
+gem 'rails', '~> 5.1.5'
 
 # Assets (CSS/JS) stuff
 gem 'bootstrap', '~> 4.0.0'
@@ -27,12 +27,12 @@ gem 'simple_form'
 # Hydra stuff
 gem 'active-fedora', github: 'mbarnett/active_fedora', branch: 'fix_types_literally_do_nothing'
 gem 'hydra-derivatives', '3.3.2' # pinned this as 3.4.X has deprecation spam because of hydra-works
-gem 'hydra-works'
+gem 'hydra-works', '0.17.0'
 gem 'rdf-vocab'
 gem 'solrizer', github: 'mbarnett/solrizer', branch: 'literally_types'
 
 # Database stuff
-gem 'pg', '~> 0.21.0'
+gem 'pg', '~> 1.0.0'
 gem 'redis', '~> 4.0'
 gem 'rsolr'
 
