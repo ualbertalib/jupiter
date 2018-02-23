@@ -160,9 +160,12 @@ en:
       user_dropdown:
         heading_html: "Signed in as <strong>%{name}</strong>"
     footer:
+      links:
+        about: About ERA
+        policies: Policies
+        contact: Contact Us
+        powered_by_jupiter: Powered by Jupiter
       uofa_library_logo_alt: 'University of Alberta Libraries'
-      street_address: 'University of Alberta, Edmonton, AB, Canada, 26G 2R3'
-      privacy_policy: 'Web Site Privacy Policy'
     4xx:
       title: "The page you were looking for doesn't exist (%{status})"
       heading: "The page you were looking for doesn't exist."
@@ -348,13 +351,8 @@ en:
   welcome:
     index:
       header: 'ERA (Education & Research Archive)'
-      welcome_header: "Welcome to ERA, the University of Alberta's Digital Repository and Asset Management Services"
-      welcome_lead_one: ERA (Education and Research Archive) is the name for University of Alberta's
-        Digital Asset Management strategy, being developed and supported by the University of Alberta Libraries.
-      welcome_lead_two: ERA's open access content includes the intellectual output of the University
-        and promotes global opportunities for research discovery as well as for archival preservation.
-        ERA also provides an easy and convenient solution for faculty
-        who must deposit their research in an open access repository to meet funding agency requirements.
+      welcome_header_html: "ERA:<br> Education and Research Archive"
+      welcome_lead: "University of Alberta research openly shared with the world"
       explore_collections: 'Explore Our Collections and Communities'
       osrin_collection: 'Oil Sands Research and Information Network'
       osrin_attribution: 'Image: “Tar sands in Alberta, 2008” by Howl Arts Collective CC-BY 2.0'
