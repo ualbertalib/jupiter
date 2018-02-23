@@ -381,6 +381,15 @@ en:
       doi_url: 'DOI'
       license: 'License'
       language: 'Language'
+      usage: 'Usage'
+      views:
+        zero: 'No view information available'
+        one: '%{count} view'
+        other: '%{count} views'
+      downloads:
+        zero: 'No download information available'
+        one: '%{count} download'
+        other: '%{count} downloads'
     item:
       creators: 'Author(s) / Creator(s)'
       description: 'Description / Abstract'

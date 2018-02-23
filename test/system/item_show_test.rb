@@ -97,4 +97,10 @@ class ItemShowTest < ApplicationSystemTestCase
     assert_selector 'dd a', text: 'Thesis', count: 1
   end
 
+  test 'Item statistics are present' do
+    visit item_path @thesis
+    assert_selector "div[class='card-header']", text: 'Usage', count: 1
+    assert_selector 'div ul li', text: 'No download information available'
+  end
+
 end

@@ -46,6 +46,18 @@
           </ul>
         </div>
       </div>
+
+      <div class="card mt-2">
+        <div class="card-header">
+          <%= t('.usage') %>
+        </div>
+        <div class="card-body p-2">
+          <ul class="list-group">
+            <li class="list-group-item"><%=t('.views', count: @views_count)%></li>
+            <li class="list-group-item"><%=t('.downloads', count: @downloads_count)%></li>
+          </ul>
+        </div>
+      </div>
     </div>
 
     <%# MAIN CONTENT %>
