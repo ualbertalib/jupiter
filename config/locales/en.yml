@@ -89,6 +89,8 @@ en:
               collection_not_found: 'is missing collection with ID "%{id}"'
             visibility_after_embargo:
               not_recognized: 'is not recognized'
+            institution:
+              not_recognized: 'is not recognized'
         ir_collection:
           attributes:
             # TODO: Just show the count of items? If collection has lots of items, this looks poorly
@@ -164,7 +166,14 @@ en:
         contact: Contact Us
         powered_by_jupiter: Powered by Jupiter
       uofa_library_logo_alt: 'University of Alberta Libraries'
-
+    4xx:
+      title: "The page you were looking for doesn't exist (%{status})"
+      heading: "The page you were looking for doesn't exist."
+      clarification: "You may have mistyped the address or the page may have moved."
+    5xx:
+      title: "We're sorry, but something went wrong (%{status})"
+      heading: "We're sorry, but something went wrong."
+      clarification: "Please contact the site administrator via the contact link if the problem persists."
   locked_ldp_object:
     errors:
       invalid_visibility: "%{visibility} is not a known visibility"
@@ -259,6 +268,9 @@ en:
     items:
       index:
         header: 'Items'
+        deposit_thesis: 'Deposit Thesis'
+        search_placeholder: 'Search items ...'
+        no_items_found: 'No items found'
       new:
         header: 'Deposit Item'
     users:
@@ -365,7 +377,7 @@ en:
       alternative_title: 'Alternate Title'
       is_version_of: 'Citation for previous publication'
       subject: 'Subjects / Keywords'
-      item_type_with_status: 'Type of item'
+      item_type_with_status: 'Type of Item'
       doi_url: 'DOI'
       license: 'License'
       language: 'Language'
@@ -386,7 +398,7 @@ en:
       institution: 'Institution'
       departments: 'Department'
       supervisors: 'Supervisor / co-supervisor and their department(s)'
-      specializations: 'Specialization'
+      specialization: 'Specialization'
       committee_members: 'Examining committee members and their departments'
     thumbnail:
       thumbnail: 'thumbnail'

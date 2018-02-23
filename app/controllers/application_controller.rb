@@ -75,8 +75,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def render_404
-    render file: 'public/404.html', status: :not_found, layout: false
+  def render_404(exception = nil)
+    raise exception if exception && Rails.env.development?
+    render '4xx.html.erb', status: :not_found
+  end
+
+  def render_500(exception = nil)
+    raise exception if exception && Rails.env.development?
+    render '5xx.html.erb', status: :internal_server_error
   end
 
   def redirect_back_to
