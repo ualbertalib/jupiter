@@ -78,7 +78,15 @@ class Items::DraftController < ApplicationController
 
   # Deposit link
   def create
-    @draft_item = DraftItem.create(user: current_user)
+    create_params = { user: current_user }
+    if params[:collection].present?
+      collection = Collection.find(params[:collection])
+      create_params['member_of_paths'] = {
+        'community_id' => [collection.community_id],
+        'collection_id' => [collection.id]
+      }
+    end
+    @draft_item = DraftItem.create(create_params)
     authorize @draft_item
 
     redirect_to wizard_path(steps.first, item_id: @draft_item.id)

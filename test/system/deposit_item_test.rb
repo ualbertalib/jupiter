@@ -97,6 +97,23 @@ class DepositItemTest < ApplicationSystemTestCase
     assert_selector 'h1', text: 'The Winds of Winter'
   end
 
+  test 'should populate community and collection when coming from collection page' do
+    user = users(:regular)
+
+    login_user(user)
+
+    # Navigate to collection page
+    click_link I18n.t('application.navbar.links.communities')
+    click_link 'Books'
+    click_link 'Fantasy Books'
+
+    # Click deposit button
+    click_link I18n.t('collections.show.deposit_item')
+
+    assert has_select?('draft_item[community_id][]', selected: 'Books')
+    assert has_select?('draft_item[collection_id][]', selected: 'Fantasy Books')
+  end
+
   # Helper methods for javascript fields (select2/dropzone) and date select
   # (could be moved and made as generic helpers if these are needed elsewhere)
   private
