@@ -88,7 +88,7 @@
           </li>
         <% else %>
           <li role="presentation" class="nav-item">
-            <%= active_link_to t('.links.login'), '/auth/saml', class: 'nav-item nav-link text-nowrap' %>
+            <%= link_to t('.links.login'), '/auth/saml', class: 'nav-item nav-link text-nowrap' %>
           </li>
           <% if Rails.env.development? || Rails.env.uat? %>
             <%# TODO: Temporary login form for local development or UAT %>
