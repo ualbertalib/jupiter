@@ -5,6 +5,7 @@ dist: trusty
 services:
   - postgresql
   - docker
+  - redis-server
 
 addons:
   chrome: stable

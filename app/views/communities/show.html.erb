@@ -49,9 +49,19 @@
 
   <div class="row mt-3">
     <div class="col-md-12">
+      <div class="d-flex justify-content-end mb-3">
+        <%# TODO: search box goes here %>
+        <%= render partial: 'communities/sort' %>
+      </div>
       <ul class="list-group">
-        <%= render partial: 'communities/collections_list_sort_paginate' %>
+        <%= render partial: 'communities/collections_list' %>
       </ul>
+      <div class="text-center m-3">
+        <%= results_range(@collections) %>
+      </div>
+      <div class="text-center">
+        <%= paginate @collections %>
+      </div>
     </div>
   </div>
 </div>

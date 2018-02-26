@@ -15,7 +15,10 @@ volumes:
   #   driver: local
 
 services:
-  # Need postgres? Uncomment this and respective volume above
+  # Need postgres? Uncomment postgres settings below and respective volume above
+  # To configure the app for the settings below, use environment varable setting:
+  #   JUPITER_DATABASE_URL=postgresql://jupiter:mysecretpassword@127.0.0.1?pool=5
+  #
   # postgres:
   #   image: postgres:9.6-alpine
   #   environment:
@@ -37,7 +40,7 @@ services:
       - ./solr/scripts/solr-precreate-jupiter.sh:/docker-entrypoint-initdb.d/solr-precreate-jupiter.sh
 
   fcrepo:
-    image: murny/docker-fcrepo4
+    image: ualbertalib/docker-fcrepo4
     volumes:
       - fcrepo:/fcrepo4-data
     ports:
@@ -50,4 +53,3 @@ services:
   #     - redis:/data
   #   ports:
   #     - "6379:6379"
-
