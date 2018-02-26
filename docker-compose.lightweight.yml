@@ -40,7 +40,7 @@ services:
       - ./solr/scripts/solr-precreate-jupiter.sh:/docker-entrypoint-initdb.d/solr-precreate-jupiter.sh
 
   fcrepo:
-    image: murny/docker-fcrepo4
+    image: ualbertalib/docker-fcrepo4
     volumes:
       - fcrepo:/fcrepo4-data
     ports:
@@ -53,4 +53,3 @@ services:
   #     - redis:/data
   #   ports:
   #     - "6379:6379"
-

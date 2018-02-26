@@ -25,7 +25,9 @@ module ItemProperties
     has_multival_attribute :embargo_history, ::TERMS[:acl].embargo_history, solrize_for: :exact_match
     has_multival_attribute :is_version_of, ::RDF::Vocab::DC.isVersionOf, solrize_for: :exact_match
     has_multival_attribute :member_of_paths, ::TERMS[:ual].path, type: :path, solrize_for: :pathing
-    has_multival_attribute :subject, ::RDF::Vocab::DC11.subject, solrize_for: [:search, :facet]
+
+    # See `all_subjects` in including class for faceting
+    has_multival_attribute :subject, ::RDF::Vocab::DC11.subject, solrize_for: :search
 
     additional_search_index :doi_without_label, solrize_for: :exact_match,
                                                 as: -> { doi.gsub('doi:', '') if doi.present? }

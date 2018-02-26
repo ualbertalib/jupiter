@@ -52,6 +52,8 @@ gem 'kaminari' # Pagination
 gem 'ransack' # ActiveRecord search/filter
 gem 'wicked' # Multi-step wizard
 
+gem 'voight_kampff' # bot detection
+
 # Performance monitoring
 gem 'skylight'
 # resolve production errors in minutes

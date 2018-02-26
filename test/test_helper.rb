@@ -27,6 +27,8 @@ class ActiveSupport::TestCase
   def after_all
     super
     ActiveFedora::Cleaner.clean!
+    keys = Redis.current.keys("#{Rails.configuration.redis_key_prefix}*")
+    Redis.current.del(keys) if keys.present?
   end
 
   # Add more helper methods to be used by all tests here...

@@ -22,12 +22,16 @@ $image-with-text-opacity: 0.8;
 
   }
 
+  &:hover img {
+    opacity: 0.5;
+  }
+
   .agriculture {
     // Make sure the people are in the picture
     object-position: 75% 50%;
   }
 
-  h4 {
+  h5 {
     background-color: $image-with-text-bg;
     bottom: 0px;
     color: $black;
