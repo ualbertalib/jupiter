@@ -107,9 +107,9 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
     sign_in_as user
     get community_url(@community2)
 
-    # Logo should not be shown
-    assert_select 'img.img-thumbnail', count: 0
-    assert_select 'div.img-thumbnail i.fa', count: 1
+    # Should have fallback image
+    assert_select 'img.img-thumbnail:match("src", ?)', /era-logo-without-text/
+    assert_select 'div.img-thumbnail i.fa', count: 0
 
     # No collections should no be shown
     assert_select 'h4', text: I18n.t('communities.show.collections_list_header')

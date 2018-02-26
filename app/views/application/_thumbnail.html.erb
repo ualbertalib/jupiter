@@ -1,9 +1,9 @@
 <% if policy(object).thumbnail? %>
   <% if thumbnail.present? && image?(thumbnail) %>
-    <%= image_tag(thumbnail.url, class: ' j-thumbnail img-thumbnail', alt: '', size: '100x100') %>
+    <%= image_tag(thumbnail.url, class: 'j-thumbnail img-thumbnail', alt: '', size: '100x100') %>
   <% else %>
     <% if object.is_a? Community %>
-      <%= image_tag('era-logo-without-text.png', class: ' j-thumbnail img-thumbnail', alt: '', size: '100x100') %>
+      <%= image_tag('era-logo-without-text.png', class: 'j-thumbnail img-thumbnail', alt: '', size: '100x100') %>
     <% else %>
       <div class="text-muted text-center img-thumbnail p-3">
         <%= fa_icon file_icon(thumbnail&.content_type), class: 'fa-5x' %>
@@ -11,5 +11,5 @@
     <% end %>
   <% end %>
 <% else %>
-  <%= image_tag('uofa-logo.jpg', class: ' j-thumbnail img-thumbnail', alt: '', size: '100x100') %>
+  <%= image_tag('uofa-logo.jpg', class: 'j-thumbnail img-thumbnail', alt: '', size: '100x100') %>
 <% end %>
