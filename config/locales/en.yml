@@ -140,6 +140,7 @@ en:
               collection_blank: "Collection can't be blank"
               community_not_found: "Community can't be found"
               collection_not_found: "Collection can't be found"
+              collection_not_in_community: "Collection not in community"
               collection_restricted: "Deposit is restricted for this collection"
             files:
               infected: '%{filename} is infected with a virus'
