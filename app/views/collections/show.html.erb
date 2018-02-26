@@ -33,15 +33,20 @@
   <% end %>
 
   <div class="d-flex flex-wrap align-items-center justify-content-between mt-3">
-    <h4>
+    <h4 class="mr-auto">
       <%= t('.items_list_header') %>
     </h4>
     <% if policy(:item).new? %>
-        <%= link_to create_draft_items_path, method: :post,
-            class: 'btn btn-primary' do %>
-          <%= fa_icon('plus-circle') %>
-          <%= t('items.new.header') %>
-        <% end %>
+      <%= link_to create_draft_items_path(collection: @collection.id), method: :post,
+          class: 'btn btn-primary mr-2' do %>
+        <%= fa_icon('plus-circle') %>
+        <%= t('.deposit_item') %>
+      <% end %>
+
+      <%= link_to '#TODO', class: 'btn btn-primary' do %>
+        <%= fa_icon('plus-circle') %>
+        (TODO) <%= t('.deposit_thesis') %>
+      <% end %>
     <% end %>
   </div>
 
