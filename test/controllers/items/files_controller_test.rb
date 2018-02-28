@@ -2,11 +2,21 @@ require 'test_helper'
 
 class Items::FilesControllerTest < ActionDispatch::IntegrationTest
 
+  def before_all
+    @community = Community.new_locked_ldp_object(title: 'Books', owner: 1).unlock_and_fetch_ldp_object(&:save!)
+    @collection = Collection.new_locked_ldp_object(title: 'Fantasy Books',
+                                                   owner: 1,
+                                                   community_id: @community.id)
+                            .unlock_and_fetch_ldp_object(&:save!)
+  end
+
   setup do
     @user = users(:regular)
     sign_in_as @user
 
     @draft_item = draft_items(:completed_choose_license_and_visibility_step)
+    @draft_item.member_of_paths = { 'community_id': [@community.id], 'collection_id': [@collection.id] }
+    @draft_item.save!
 
     pdf_file = ActiveStorage::Blob.create_after_upload!(
       io: file_fixture('pdf-sample.pdf').open,
