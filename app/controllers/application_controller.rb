@@ -9,6 +9,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_announcements, :path_for_result
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+
   rescue_from JupiterCore::ObjectNotFound,
               ActiveRecord::RecordNotFound,
               ActionController::RoutingError, with: :render_404
@@ -76,13 +77,15 @@ class ApplicationController < ActionController::Base
   end
 
   def render_404(exception = nil)
-    raise exception if exception && Rails.env.development?
-    render '4xx.html.erb', status: :not_found
-  end
+    # raise exception if exception && Rails.env.development?
 
-  def render_500(exception = nil)
-    raise exception if exception && Rails.env.development?
-    render '5xx.html.erb', status: :internal_server_error
+    respond_to do |format|
+      format.html do
+        render file: Rails.root.join('public', '404'), layout: false, status: :not_found
+      end
+      format.js { render json: '', status: :not_found, content_type: 'application/json' }
+      format.any { head :not_found }
+    end
   end
 
   def redirect_back_to
