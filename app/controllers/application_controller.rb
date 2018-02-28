@@ -77,7 +77,7 @@ class ApplicationController < ActionController::Base
   end
 
   def render_404(exception = nil)
-    # raise exception if exception && Rails.env.development?
+    raise exception if exception && Rails.env.development?
 
     respond_to do |format|
       format.html do
