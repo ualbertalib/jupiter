@@ -46,6 +46,7 @@
     supervisor_list: supervisorList
     thesis_level: thesisLevel
     unicorn: unicorn
+    restricted_collection: restrictedCollection
 
 - vocabulary: prism
   schema: http://prismstandard.org/namespaces/basic/3.0/

@@ -79,7 +79,9 @@ class DraftItem < ApplicationRecord
             :description, :member_of_paths,
             presence: true, if: :validate_describe_item?
 
-  validate :communities_and_collections_validations, if: :validate_describe_item?
+  validate :communities_and_collections_presence,
+           :communities_and_collections_existence,
+           :depositor_can_deposit, if: :validate_describe_item?
 
   validates :license, :visibility, presence: true, if: :validate_choose_license_and_visibility?
 
@@ -330,15 +332,39 @@ class DraftItem < ApplicationRecord
 
   # Validations
 
-  # TODO: validate if community/collection ID's are actually in Fedora?
-  def communities_and_collections_validations
+  def communities_and_collections_presence
     return if member_of_paths.blank? # caught by presence check
-    errors.add(:member_of_paths, :community_not_found) if member_of_paths['community_id'].blank?
-    errors.add(:member_of_paths, :collection_not_found) if member_of_paths['collection_id'].blank?
-    return unless member_of_paths['community_id'].present? && member_of_paths['collection_id'].present?
+    errors.add(:member_of_paths, :community_blank) if member_of_paths['community_id'].blank?
+    errors.add(:member_of_paths, :collection_blank) if member_of_paths['collection_id'].blank?
+  end
+
+  def communities_and_collections_existence
+    return if member_of_paths.blank?
+    return if member_of_paths['community_id'].blank? || member_of_paths['collection_id'].blank?
     member_of_paths['community_id'].each_with_index do |community_id, idx|
-      errors.add(:member_of_paths, :community_not_found) if community_id.blank?
-      errors.add(:member_of_paths, :collection_not_found) if member_of_paths['collection_id'][idx].blank?
+      collection_id = member_of_paths['collection_id'][idx]
+      community = Community.find_by(community_id)
+      errors.add(:member_of_paths, :community_not_found) if community.blank?
+
+      collection = Collection.find_by(collection_id)
+      if collection.blank?
+        errors.add(:member_of_paths, :collection_not_found)
+      elsif collection.community_id != community.id
+        errors.add(:member_of_paths, :collection_not_in_community)
+      end
+    end
+  end
+
+  def depositor_can_deposit
+    return if member_of_paths.blank?
+    return if member_of_paths['community_id'].blank? || member_of_paths['collection_id'].blank?
+    member_of_paths['community_id'].each_with_index do |_community_id, idx|
+      collection_id = member_of_paths['collection_id'][idx]
+      collection = Collection.find_by(collection_id)
+      next if collection.blank?
+      if collection.restricted && !user.admin?
+        errors.add(:member_of_paths, :collection_restricted)
+      end
     end
   end
 

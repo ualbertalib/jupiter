@@ -2,6 +2,14 @@ require 'test_helper'
 
 class DraftItemTest < ActiveSupport::TestCase
 
+  def before_all
+    @community = Community.new_locked_ldp_object(title: 'Books', owner: 1).unlock_and_fetch_ldp_object(&:save!)
+    @collection = Collection.new_locked_ldp_object(title: 'Fantasy Books',
+                                                   owner: 1,
+                                                   community_id: @community.id)
+                            .unlock_and_fetch_ldp_object(&:save!)
+  end
+
   context 'enums' do
     should define_enum_for(:status)
     should define_enum_for(:wizard_step)
@@ -43,7 +51,7 @@ class DraftItemTest < ActiveSupport::TestCase
         subjects: ['Best Seller', 'Adventure'],
         date_created: Date.current,
         description: 'Really random description about this random book',
-        member_of_paths: { community_id: ['random-uuid-123'], collection_id: ['random-uuid-abc'] }
+        member_of_paths: { community_id: [@community.id], collection_id: [@collection.id] }
       )
       assert draft_item.valid?
     end
@@ -62,7 +70,7 @@ class DraftItemTest < ActiveSupport::TestCase
         subjects: ['Best Seller', 'Adventure'],
         date_created: Date.current,
         description: 'Really random description about this random book',
-        member_of_paths: { community_id: ['random-uuid-123'], collection_id: ['random-uuid-abc'] },
+        member_of_paths: { community_id: [@community.id], collection_id: [@collection.id] },
         # technically a draft_item is valid in this wizard step already, since license/visibility are given defaults
         # but this case let's force the validation to fail
         license: nil,
@@ -96,7 +104,7 @@ class DraftItemTest < ActiveSupport::TestCase
         subjects: ['Best Seller', 'Adventure'],
         date_created: Date.current,
         description: 'Really random description about this random book',
-        member_of_paths: { community_id: ['random-uuid-123'], collection_id: ['random-uuid-abc'] }
+        member_of_paths: { community_id: [@community.id], collection_id: [@collection.id] }
       )
       refute draft_item.valid?
 
@@ -125,7 +133,7 @@ class DraftItemTest < ActiveSupport::TestCase
         subjects: ['Best Seller', 'Adventure'],
         date_created: Date.current,
         description: 'Really random description about this random book',
-        member_of_paths: { community_id: ['random-uuid-123'], collection_id: ['random-uuid-abc'] },
+        member_of_paths: { community_id: [@community.id], collection_id: [@collection.id] },
         license: DraftItem.licenses[:license_text]
       )
 
@@ -152,7 +160,7 @@ class DraftItemTest < ActiveSupport::TestCase
         subjects: ['Best Seller', 'Adventure'],
         date_created: Date.current,
         description: 'Really random description about this random book',
-        member_of_paths: { community_id: ['random-uuid-123'], collection_id: ['random-uuid-abc'] },
+        member_of_paths: { community_id: [@community.id], collection_id: [@collection.id] },
         visibility: DraftItem.visibilities[:embargo]
       )
 
@@ -189,6 +197,32 @@ class DraftItemTest < ActiveSupport::TestCase
       draft_item.assign_attributes(
         member_of_paths: { community_id: ['random-uuid-123'], collection_id: ['random-uuid-abc'] }
       )
+      refute draft_item.valid?
+      assert_equal 2, draft_item.errors.full_messages.count
+      assert_equal "Community can't be found", draft_item.errors.messages[:member_of_paths].first
+      assert_equal "Collection can't be found", draft_item.errors.messages[:member_of_paths].last
+
+      draft_item.assign_attributes(
+        member_of_paths: { community_id: [@community.id], collection_id: [@collection.id] }
+      )
+      assert draft_item.valid?
+
+      # Regular user can't deposit to a restricted collection
+      restricted_collection = Collection.new_locked_ldp_object(title: 'Risque fantasy Books',
+                                                               owner: 1,
+                                                               restricted: true,
+                                                               community_id: @community.id)
+                                        .unlock_and_fetch_ldp_object(&:save!)
+
+      draft_item.assign_attributes(
+        member_of_paths: { community_id: [@community.id], collection_id: [restricted_collection.id] }
+      )
+      refute draft_item.valid?
+      assert_equal ['Deposit is restricted for this collection'], draft_item.errors.messages[:member_of_paths]
+
+      # Admin user can deposit to a restricted collection
+      admin = users(:admin)
+      draft_item.user = admin
       assert draft_item.valid?
     end
   end
