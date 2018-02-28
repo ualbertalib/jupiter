@@ -29,8 +29,10 @@ class CommunitiesController < ApplicationController
       end
 
       format.json do
-        # Used in items.js
-        render json: @community.attributes.merge(collections: @community.member_collections)
+        # Used in item_draft.js
+        collections = @community.member_collections
+        collections = collections.select { |c| c.restricted.blank? } unless current_user.admin?
+        render json: @community.attributes.merge(collections: collections)
       end
     end
   end

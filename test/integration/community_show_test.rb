@@ -16,8 +16,10 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
                    .new_locked_ldp_object(community_id: @community1.id,
                                           title: 'Nice collection', owner: 1)
                    .unlock_and_fetch_ldp_object(&:save!)
+    # A restricted (to deposit, not to view) collection
     @collection2 = Collection
                    .new_locked_ldp_object(community_id: @community1.id,
+                                          restricted: true,
                                           title: 'Another collection', owner: 1)
                    .unlock_and_fetch_ldp_object(&:save!)
     @community1.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
@@ -115,6 +117,25 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
     assert_select 'h4', text: I18n.t('communities.show.collections_list_header')
     assert_select 'ul.list-group li', count: 1
     assert_select 'ul.list-group li.list-group-item', text: I18n.t('communities.show.no_collections')
+  end
+
+  test "JSON for collections (deposit form AJAX) as regular user doesn't include restricted collection" do
+    user = users(:regular)
+    sign_in_as user
+    get community_url(@community1, format: :json)
+    body = JSON.parse(response.body)
+    assert_equal body['collections'].count, 1
+    assert_includes body['collections'].map { |c| c['id'] }, @collection1.id
+  end
+
+  test 'JSON for collections (deposit form AJAX) as admin includes all collections' do
+    user = users(:admin)
+    sign_in_as user
+    get community_url(@community1, format: :json)
+    body = JSON.parse(response.body)
+    assert_equal body['collections'].count, 2
+    assert_includes body['collections'].map { |c| c['id'] }, @collection1.id
+    assert_includes body['collections'].map { |c| c['id'] }, @collection2.id
   end
 
 end
