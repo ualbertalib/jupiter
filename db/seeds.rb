@@ -352,7 +352,7 @@ if Rails.env.development? || Rails.env.uat?
     ).unlock_and_fetch_ldp_object(&:save!)
   end
 
-  # One community with a lot of empty collections
+  # One community with a lot of empty restricted collections
   community = Community.new_locked_ldp_object(
     owner: admin.id,
     title: "The Everything Department",
@@ -364,7 +364,8 @@ if Rails.env.development? || Rails.env.uat?
       owner: admin.id,
       title: "Articles about the relationship between #{thing.pluralize} and non-#{thing.pluralize}",
       community_id: community.id,
-      description: Faker::Lorem.sentence(40, false, 0).chop
+      restricted: true,
+      description: "A restricted collection"
     ).unlock_and_fetch_ldp_object(&:save!)
   end
 
