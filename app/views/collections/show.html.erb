@@ -1,6 +1,6 @@
 <% page_title(@collection.title) %>
 <% content_for :head do %>
-  <meta name="description" content="<%= jupiter_truncate @collection.description %>">
+  <meta name="description" content="<%= jupiter_truncate @collection.description, length: 150 %>">
 <% end %>
 
 <div class="container mt-3">

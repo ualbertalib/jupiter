@@ -116,19 +116,19 @@ class SiteForBotsTest < ActionDispatch::IntegrationTest
     assert_select "a[rel='nofollow']", text: @item.subject.first
   end
 
-  # rubocop:disable Layout/SpaceInsideStringInterpolation
   test 'structured data for google scholar' do
     # TODO: can be a lot more complicated see https://scholar.google.com/intl/en/scholar/inclusion.html#indexing
     get item_path @thesis
     assert_select "meta[name='citation_title'][content='#{@thesis.title}']"
     assert_select "meta[name='citation_author'][content='#{@thesis.dissertant}']"
     assert_select "meta[name='citation_publication_date'][content='#{@thesis.sort_year}']"
-    assert_select "meta[name='citation_pdf_url'][content='#{
-      Rails.application.routes.url_helpers.url_for(controller: :file_sets, action: :show,
-                                                   id: @thesis.id,
-                                                   file_set_id: @thesis.file_sets.first.id,
-                                                   file_name: @thesis.file_sets.first.contained_filename,
-                                                   only_path: true)}']"
+    assert_select format("meta[name='citation_pdf_url'][content='%s']",
+                         Rails.application.routes.url_helpers.url_for(
+                           controller: :file_sets, action: :show, id: @thesis.id,
+                           file_set_id: @thesis.file_sets.first.id,
+                           file_name: @thesis.file_sets.first.contained_filename,
+                           only_path: true
+                         ))
     assert_select "meta[name='dc.identifier'][content='#{@item.doi}']"
     assert_select "meta[name='citation_doi'][content='#{@item.doi}']"
 
@@ -138,12 +138,13 @@ class SiteForBotsTest < ActionDispatch::IntegrationTest
       assert_select "meta[name='citation_author'][content='#{author}']"
     end
     assert_select "meta[name='citation_publication_date'][content='#{@item.sort_year}']"
-    assert_select "meta[name='citation_pdf_url'][content='#{
-      Rails.application.routes.url_helpers.url_for(controller: :file_sets, action: :show,
-                                                   id: @item.id,
-                                                   file_set_id: @item.file_sets.first.id,
-                                                   file_name: @item.file_sets.first.contained_filename,
-                                                   only_path: true)}']"
+    assert_select format("meta[name='citation_pdf_url'][content='%s']",
+                         Rails.application.routes.url_helpers.url_for(
+                           controller: :file_sets, action: :show, id: @item.id,
+                           file_set_id: @item.file_sets.first.id,
+                           file_name: @item.file_sets.first.contained_filename,
+                           only_path: true
+                         ))
     assert_select "meta[name='dc.identifier'][content='#{@item.doi}']"
     assert_select "meta[name='citation_doi'][content='#{@item.doi}']"
   end

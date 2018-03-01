@@ -34,8 +34,7 @@
     </div>
     <div>
       <%# TODO: the search path may need to be revisited %>
-      <%= item.creators&.map { |creator| search_link_for(item, :all_contributors, value: creator) }
-                         &.join(', ')&.html_safe %>
+      <%= safe_join(item.creators&.map { |creator| search_link_for(item, :all_contributors, value: creator) }, ', ') %>
     </div>
     <div>
       <%= jupiter_truncate item.description %>
