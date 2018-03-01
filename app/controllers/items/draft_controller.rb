@@ -11,7 +11,7 @@ class Items::DraftController < ApplicationController
     authorize @draft_item
 
     @is_edit = @draft_item.uuid.present?
-    @draft_item.sync_with_fedora if @is_edit
+    @draft_item.sync_with_fedora(for_user: current_user) if @is_edit
 
     # Do not allow users to skip to uncompleted steps
     if @draft_item.uncompleted_step?(step)
@@ -78,7 +78,15 @@ class Items::DraftController < ApplicationController
 
   # Deposit link
   def create
-    @draft_item = DraftItem.create(user: current_user)
+    create_params = { user: current_user }
+    if params[:collection].present?
+      collection = Collection.find(params[:collection])
+      create_params['member_of_paths'] = {
+        'community_id' => [collection.community_id],
+        'collection_id' => [collection.id]
+      }
+    end
+    @draft_item = DraftItem.create(create_params)
     authorize @draft_item
 
     redirect_to wizard_path(steps.first, item_id: @draft_item.id)

@@ -181,7 +181,7 @@ class SearchTest < ApplicationSystemTestCase
       assert_selector 'a.nav-link', text: 'Communities (1)'
 
       # No community/collection results initially shown
-      assert_selector 'div.jupiter-results-list a', text: 'Item', count: 10
+      assert_selector 'div.jupiter-results-list a', text: 'Item', count: 5
       assert_selector 'div.jupiter-results-list a', text: 'Community', count: 0
       assert_selector 'div.jupiter-results-list a', text: 'Collection', count: 0
 

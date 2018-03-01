@@ -26,8 +26,8 @@ class CommunityEditTest < ActionDispatch::IntegrationTest
     get edit_admin_community_url(@community1)
 
     # Logo should be shown
-    assert_select 'img.logo-small', count: 1
-    assert_select 'div.logo-small small i.fa', count: 0
+    assert_select 'img.img-thumbnail', count: 1
+    assert_select 'div.img-thumbnail i.fa', count: 0
 
     # Upload button should be shown
     assert_select 'input[type="file"][name="community[logo]"]', count: 1
@@ -41,9 +41,9 @@ class CommunityEditTest < ActionDispatch::IntegrationTest
     sign_in_as user
     get edit_admin_community_url(@community2)
 
-    # Logo should not be shown
-    assert_select 'img.logo-small', count: 0
-    assert_select 'div.logo-small small i.fa', count: 1
+    # Should have fallback image
+    assert_select 'img.img-thumbnail:match("src", ?)', /era-logo-without-text/
+    assert_select 'div.img-thumbnail i.fa', count: 0
 
     # Upload button should be shown
     assert_select 'input[type="file"][name="community[logo]"]', count: 1

@@ -1,13 +1,17 @@
+# Declaration for terms not available from the RDF gem, mostly local. See config/initializers/terms.rb
+# for details of how this manifests in the code.
+# This file is thus structured to map semantically meaningful, idiomatic Ruby method names to the local requirements.
+#
 # Expected file format:
 #    - vocabulary: ual
 #      schema: http://terms.library.ualberta.ca/identifiers/
 #      terms:
-#        - doi
-#        - path
+#        doi: doi
+#        record_created_in_jupiter: recordCreatedInJupiter
 #    - vocabulary: acl
 #      schema: http://www.w3.org/ns/auth/acl
 #      terms:
-#        - mode
+#        mode: mode
 #
 # Usage in the application:
 #
@@ -18,37 +22,44 @@
 - vocabulary: ual
   schema: http://terms.library.ualberta.ca/
   terms:
-    - committeeMember
-    - Community # rdf:type for community objects, Zach has advised uppercase for class
-    - depositor
-    - dissertant
-    - fedora3handle
-    - fedora3uuid
-    - graduationDate
-    - hydraNoid
-    - ingestbatch
-    - path
-    - proquest
+    committee_member: commiteeMember
+    community: Community # rdf:type for community objects, Zach has advised uppercase for class
+    department: department
+    department_list: departmentList
+    depositor: depositor
+    dissertant: dissertant
+    fedora3_handle: fedora3Handle
+    fedora3_uuid: fedora3UUID
+    graduation_date: graduationDate
+    hydra_noid: hydraNoid
+    ingest_batch: ingestBatch
+    northern_north_america_filename: nnaFile
+    northern_north_america_item_id: nnaItem
+    path: path
+    proquest: proquest
     # separate from date_created, we need to track a precise time the metadata record was created
-    - recordCreatedInJupiter
-    - sortyear
-    - specialization
-    - supervisor
-    - thesisLevel
-    - unicorn
+    record_created_in_jupiter: recordCreatedInJupiter
+    sitemap_link: sitemapLink
+    sort_year: sortYear
+    specialization: specialization
+    supervisor: supervisor
+    supervisor_list: supervisorList
+    thesis_level: thesisLevel
+    unicorn: unicorn
+    restricted_collection: restrictedCollection
 
 - vocabulary: prism
   schema: http://prismstandard.org/namespaces/basic/3.0/
   terms:
-    - doi
+    doi: doi
 
 - vocabulary: acl
   schema: 'http://projecthydra.org/ns/auth/acl#'
   terms:
-    - embargoHistory
-    - visibilityAfterEmbargo
+    embargo_history: embargoHistory
+    visibility_after_embargo: visibilityAfterEmbargo
 
 - vocabulary: swrc
   schema: 'http://ontoware.org/swrc/ontology#'
   terms:
-    - institution
+    institution: institution

@@ -1,6 +1,6 @@
 <div class="media mb-3">
   <%= link_to path_for_result(thesis) do %>
-    <%= render partial: 'thumbnail', locals: { object: thesis } %>
+    <%= render partial: 'thumbnail', locals: { thumbnail: thesis.thumbnail.attachment, object: thesis } %>
   <% end %>
   <div class="media-body ml-3">
     <div class="d-flex flex-wrap flex-lg-nowrap justify-content-between align-items-start">
@@ -15,7 +15,7 @@
         <% end %>
         <% if policy(thesis).update? %>
           <%= link_to edit_item_path(thesis), class:'btn btn-outline-secondary'  do %>
-            <%= fa_icon('trash') %>
+            <%= fa_icon('pencil-square-o') %>
             <%= t('edit') %>
           <% end %>
         <% end %>

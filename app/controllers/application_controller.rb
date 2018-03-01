@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
 
-  helper_method :current_announcements
+  helper_method :current_announcements, :path_for_result
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   rescue_from JupiterCore::ObjectNotFound,
@@ -41,7 +41,15 @@ class ApplicationController < ActionController::Base
   def sign_in(user)
     @current_user = user
     session[:user_id] = user.try(:id)
-    UpdateUserActivityJob.perform_now(@current_user.id, Time.now.utc.to_s, request.remote_ip, sign_in: true)
+
+    # rubocop:disable Style/GuardClause
+    if @current_user.present?
+      UpdateUserActivityJob.perform_now(@current_user.id,
+                                        Time.now.utc.to_s,
+                                        request.remote_ip,
+                                        sign_in: true)
+    end
+    # rubocop:enable Style/GuardClause
   end
 
   # Logs out the current user.
@@ -63,12 +71,18 @@ class ApplicationController < ActionController::Base
       end
     else
       session[:forwarding_url] = request.original_url if request.get?
-      redirect_to login_url, alert: t('authorization.user_not_authorized_try_logging_in')
+      redirect_to root_url, alert: t('authorization.user_not_authorized_try_logging_in')
     end
   end
 
-  def render_404
-    render file: 'public/404.html', status: :not_found, layout: false
+  def render_404(exception = nil)
+    raise exception if exception && Rails.env.development?
+    render '4xx.html.erb', status: :not_found
+  end
+
+  def render_500(exception = nil)
+    raise exception if exception && Rails.env.development?
+    render '5xx.html.erb', status: :internal_server_error
   end
 
   def redirect_back_to
@@ -78,6 +92,16 @@ class ApplicationController < ActionController::Base
 
   def current_announcements
     Announcement.current
+  end
+
+  def path_for_result(result)
+    if result.is_a? Collection
+      community_collection_path(result.community, result)
+    elsif result.is_a? Thesis
+      item_path(result)
+    else
+      polymorphic_path(result)
+    end
   end
 
   def sort_column(columns: ['title', 'record_created_at'], default: 'title')

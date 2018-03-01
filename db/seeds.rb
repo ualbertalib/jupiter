@@ -202,7 +202,7 @@ if Rails.env.development? || Rails.env.uat?
         dissertant: creators[seed],
         abstract: description,
         language: languages.first,
-        specializations: [field],
+        specialization: field,
         departments: ["Deparment of #{field}"],
         supervisors: ["#{contributors[seed]} (#{field})"],
         committee_members: ["#{contributors[seed2]} (#{field})"],
@@ -220,7 +220,6 @@ if Rails.env.development? || Rails.env.uat?
         thesis_attributes[:is_version_of] = ["The CDROM titled '#{thing.pluralize.capitalize}!'",
                                       'The original laserdisc series from Orange-on-a-Blue-Background studios']
         department2 = 'Department of Everything'
-        thesis_attributes[:specializations] += ['Everything']
         thesis_attributes[:departments] += [department2]
         thesis_attributes[:supervisors] += ["#{contributors[(seed + 3 * seed2) % 10]} (#{department2})"]
         thesis_attributes[:committee_members] += ["#{contributors[(seed + 7 * seed2) % 10]} (#{department2})"]
@@ -255,6 +254,24 @@ if Rails.env.development? || Rails.env.uat?
       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
       item_type: CONTROLLED_VOCABULARIES[:item_type].chapter,
       subject: [thing.capitalize, 'Privacy'],
+      doi: "doi:bogus-#{Time.current.utc.iso8601(3)}"
+    ).unlock_and_fetch_ldp_object do |uo|
+      uo.add_to_path(community.id, item_collection.id)
+      uo.save!
+    end
+
+    # Add a CCID protected item
+    Item.new_locked_ldp_object(
+      owner: admin.id,
+      creators: [creators[rand(10)]],
+      visibility: JupiterCore::VISIBILITY_AUTHENTICATED,
+      created: (Time.now - rand(20_000).days).to_s,
+      title: "Everything You Need To Know About: University of Alberta and #{thing.pluralize}!",
+      description: Faker::Lorem.sentence(20, false, 0).chop,
+      languages: [CONTROLLED_VOCABULARIES[:language].english],
+      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+      item_type: CONTROLLED_VOCABULARIES[:item_type].report,
+      subject: [thing.capitalize, 'CCID'],
       doi: "doi:bogus-#{Time.current.utc.iso8601(3)}"
     ).unlock_and_fetch_ldp_object do |uo|
       uo.add_to_path(community.id, item_collection.id)
@@ -353,7 +370,7 @@ if Rails.env.development? || Rails.env.uat?
     ).unlock_and_fetch_ldp_object(&:save!)
   end
 
-  # One community with a lot of empty collections
+  # One community with a lot of empty restricted collections
   community = Community.new_locked_ldp_object(
     owner: admin.id,
     title: "The Everything Department",
@@ -365,7 +382,8 @@ if Rails.env.development? || Rails.env.uat?
       owner: admin.id,
       title: "Articles about the relationship between #{thing.pluralize} and non-#{thing.pluralize}",
       community_id: community.id,
-      description: Faker::Lorem.sentence(40, false, 0).chop
+      restricted: true,
+      description: "A restricted collection"
     ).unlock_and_fetch_ldp_object(&:save!)
   end
 

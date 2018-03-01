@@ -13,7 +13,14 @@ class Admin::UsersController < Admin::AdminController
     @search = User.ransack(params[:q])
     @search.sorts = 'last_seen_at desc' if @search.sorts.empty?
 
-    @users = @search.result.page(params[:page])
+    # Postgres treats nulls first in an ordered list, lets reverse this behaviour.
+    result = @search.result
+    orders = result.orders.map do |order|
+      order.direction == :asc ? "#{order.to_sql} NULLS FIRST" : "#{order.to_sql} NULLS LAST"
+    end
+    result = result.except(:order).order(orders.join(', ')) if orders.count > 0
+
+    @users = result.page(params[:page])
   end
 
   def show

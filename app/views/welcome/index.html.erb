@@ -1,41 +1,19 @@
-<%= image_tag 'campus-banner.jpg', class: 'img-fluid w-100', alt: 'banner image' %>
-
-<section class="jumbotron text-center">
+<section class="jumbotron j-jumbotron-banner">
   <div class="container">
-    <h1 class="jumbotron-heading"><%= t('.welcome_header') %></h1>
-    <p class="lead">
-      <%= t('.welcome_lead_one')%>
-    </p>
-    <p class="lead">
-      <%= t('.welcome_lead_two')%>
-    </p>
+    <div class="col-md-6">
+      <h1 class="jumbotron-heading display-4"><%= t('.welcome_header_html') %></h1>
+      <h2 class="mt-3"><%= t('.welcome_lead')%></h2>
+    </div>
   </div>
 </section>
 
 <div class="container">
-
-  <div class="row">
-    <div class="mb-3 col-md-6 offset-md-3 j-era-a-v-link">
-      <%= link_to 'https://era-av.library.ualberta.ca', class: 'media bg-light p-3 border border-primary rounded' do %>
-        <%= fa_icon 'play-circle-o 4x', class: 'mr-3' %>
-        <div class="media-body text-dark">
-          <h4>
-            <%= t('.era_av_header') %>
-          </h4>
-          <p class="mb-0">
-            <%= t('.era_av_text') %>
-          </p>
-        </div>
-      <% end %>
-    </div>
-  </div>
-
   <div class='d-flex flex-wrap align-items-center justify-content-between my-3'>
     <h2>
       <%= t('.explore_collections') %>
     </h2>
 
-    <%= link_to t('view_more'), communities_path, class: "btn btn-secondary", 'aria-label' => " Check out more of ERA's communities and collections" %>
+    <%= link_to t('view_more'), communities_path, class: "btn btn-secondary", 'aria-label' => "Check out more of ERA's communities and collections" %>
   </div>
 
   <%# Collection images, shown only on larger screens %>
@@ -43,9 +21,9 @@
     <div class="d-flex flex-row">
       <div class="j-image-with-text mx-3 col-md-3">
         <%= link_to '#TODO' do %>
-          <%= image_tag 'dept-of-agriculture.jpg', alt: t('.afns_collection'),
+          <%= image_tag 'dept-of-agriculture.jpg', alt: '',
               class: 'agriculture' %>
-          <h4 class="small font-weight-bold"><%= t('.afns_collection') %></h4>
+          <h5><%= t('.afns_collection') %></h5>
         <% end %>
       </div>
 
@@ -54,16 +32,16 @@
         <div class="d-flex flex-row mb-3">
           <div class="j-image-with-text mr-3">
             <%= link_to '#TODO' do %>
-              <%= image_tag 'images-of-research.jpg', alt: t('.images_of_research_collection'),
+              <%= image_tag 'images-of-research.jpg', alt: '',
                   title: t('.images_of_research_attribution') %>
-              <h4 class="small font-weight-bold"><%= t('.images_of_research_collection') %></h4>
+              <h5><%= t('.images_of_research_collection') %></h5>
             <% end %>
           </div>
 
           <div class="j-image-with-text">
             <%= link_to '#TODO' do %>
-              <%= image_tag 'theses.jpg', alt: t('.theses_collection') %>
-              <h4 class="small font-weight-bold"><%= t('.theses_collection') %></h4>
+              <%= image_tag 'theses.jpg', alt: '' %>
+              <h5><%= t('.theses_collection') %></h5>
             <% end %>
           </div>
 
@@ -71,9 +49,9 @@
 
         <div class="j-image-with-text mt-auto">
           <%= link_to '#TODO' do %>
-            <%= image_tag 'oil-sands.jpg', alt: t('.osrin_collection'),
+            <%= image_tag 'oil-sands.jpg', alt: '',
                 title: t('.osrin_attribution') %>
-            <h4 class="small font-weight-bold"><%= t('.osrin_collection') %></h4>
+            <h5><%= t('.osrin_collection') %></h5>
           <% end %>
         </div>
 
@@ -95,4 +73,21 @@
     <%= link_to t('.osrin_collection'), '#TODO',
       class: 'list-group-item list-group-item-action list-group-item-primary mb-3 text-dark' %>
   </div>
+
+  <div class="row mt-5">
+    <div class="col-md-6 offset-md-3 j-era-a-v-link">
+      <%= link_to 'https://era-av.library.ualberta.ca', target: :_blank, class: 'media bg-light p-3 border border-primary rounded' do %>
+        <%= fa_icon 'play-circle-o 4x', class: 'mr-3' %>
+        <div class="media-body text-dark">
+          <h4>
+            <%= t('.era_av_header') %>
+          </h4>
+          <p class="mb-0">
+            <%= t('.era_av_text') %>
+          </p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
 </div>

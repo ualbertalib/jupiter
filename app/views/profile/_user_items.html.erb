@@ -6,17 +6,8 @@
       <div class='list-group-item list-group-item-action'>
         <div class="d-flex justify-content-between align-items-start mb-3">
           <div class='media'>
-            <%# TODO: Generalize logo/thumbnail view code below to maybe use logo/thumbnail partial? %>
-            <% if draft_item.thumbnail.present? %>
-              <%= image_tag(draft_item.thumbnail.url, class: "mr-3 img-thumbnail logo-small", alt: draft_item.title) %>
-            <% else %>
-              <div class="d-flex justify-content-center align-items-center mr-3 img-thumbnail logo-small">
-                <small class="text-muted">
-                  <i class="fa fa-5x fa-picture-o" aria-hidden="true"></i>
-                </small>
-              </div>
-            <% end %>
-            <div class="media-body">
+            <%= render partial: 'thumbnail', locals: { thumbnail: draft_item.thumbnail, object: draft_item } %>
+            <div class="media-body ml-3">
               <h4 class="mt-0"><%= draft_item.title %></h4>
               <p class="text-muted"><%= draft_item.date_created.year %></p>
               <p class="text-muted"><%= draft_item.creators.join(', ') %></p>
@@ -52,25 +43,6 @@
 
 <h2 class="mt-5"><%= items_header %></h2>
 
-<%# TODO: this needs to use a rails form_tag, etc here %>
-<form>
-  <div class="input-group mt-3">
-    <%= search_field_tag :query,
-        params[:query],
-        placeholder: search_placeholder,
-        class: 'form-control' %>
-    <span class="input-group-btn">
-      <button type="submit" class="btn btn-secondary">
-        <%= fa_icon 'search' %>
-        <%= t('search_items') %>
-      </button>
-    </span>
-  </div>
-</form>
-
-<% if @results.count > 0 %>
-  <%= render partial: 'search/model_results', locals: { results: @results, model: :item,
-                                                        search_term: params[:query] } %>
-<% else %>
-  <p class="mt-3"><%= no_items_found %></p>
-<% end %>
+<%= render partial: 'search/item_search_and_results',
+          locals: { search_placeholder: search_placeholder,
+                    no_items_found: no_items_found } %>

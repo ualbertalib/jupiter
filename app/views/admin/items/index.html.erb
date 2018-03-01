@@ -2,22 +2,22 @@
 
 <div class="d-flex flex-wrap align-items-center justify-content-between my-3">
   <h1>
-    (TODO: Not implemented) <%= t('.header') %>
+    <%= t('.header') %>
   </h1>
-  <%= link_to create_draft_items_path, method: :post,
-      class: 'btn btn-primary' do %>
-    <%= fa_icon('plus-circle') %>
-    <%= t('items.new.header') %>
-  <% end %>
+  <div>
+    <%= link_to create_draft_items_path, method: :post,
+        class: 'btn btn-primary' do %>
+      <%= fa_icon('plus-circle') %>
+      <%= t('collections.show.deposit_item') %>
+    <% end %>
+
+    <%= link_to '#TODO', class: 'btn btn-primary' do %>
+      <%= fa_icon('plus-circle') %>
+      (TODO) <%= t('collections.show.deposit_thesis') %>
+    <% end %>
+  </div>
 </div>
 
-<div class="list-group">
-  <% @items.each do |item| %>
-    <%= link_to item, class: "list-group-item list-group-item-action d-flex justify-content-between align-items-start" do %>
-      <%= item.title %>
-      <span class="badge badge-secondary">
-        <%= jupiter_time_ago_in_words(item.record_created_at) %>
-      </span>
-    <% end %>
-  <% end %>
-</div>
+<%= render partial: 'search/item_search_and_results',
+          locals: { search_placeholder: t('.search_placeholder'),
+                    no_items_found: t('.no_items_found') }%>

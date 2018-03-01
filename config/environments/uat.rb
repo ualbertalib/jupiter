@@ -88,5 +88,5 @@ Rails.application.configure do
   config.active_storage.service = (ENV['ACTIVE_STORAGE_SERVICE'] || :local).to_sym
 
   # FITS characterization
-  config.run_fits_characterization = true
+  config.run_fits_characterization = false
 end

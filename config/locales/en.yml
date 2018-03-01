@@ -89,6 +89,8 @@ en:
               collection_not_found: 'is missing collection with ID "%{id}"'
             visibility_after_embargo:
               not_recognized: 'is not recognized'
+            institution:
+              not_recognized: 'is not recognized'
         ir_collection:
           attributes:
             # TODO: Just show the count of items? If collection has lots of items, this looks poorly
@@ -134,14 +136,18 @@ en:
         draft_item:
           attributes:
             member_of_paths:
-              community_not_found: "Community can't be blank"
-              collection_not_found: "Collection can't be blank"
+              community_blank: "Community can't be blank"
+              collection_blank: "Collection can't be blank"
+              community_not_found: "Community can't be found"
+              collection_not_found: "Collection can't be found"
+              collection_not_in_community: "Collection not in community"
+              collection_restricted: "Deposit is restricted for this collection"
             files:
               infected: '%{filename} is infected with a virus'
 
   application:
     navbar:
-      logo_alt: 'ERA Logo'
+      era_logo_alt: 'ERA - Education and Research Archive'
       search:
         placeholder: 'Search ERA...'
         button_text: 'Search'
@@ -150,6 +156,7 @@ en:
         communities: 'Browse'
         new_item: 'Deposit'
         login: 'Log In'
+        login_as_dev: 'Developer Log In'
         admin: 'Admin'
         logout: 'Logout'
         profile: 'Your Profile'
@@ -157,21 +164,25 @@ en:
       user_dropdown:
         heading_html: "Signed in as <strong>%{name}</strong>"
     footer:
-      street_address: 'University of Alberta, Edmonton, AB, Canada, 26G 2R3'
-      privacy_policy: 'Web Site Privacy Policy'
+      links:
+        about: About ERA
+        policies: Policies
+        contact: Contact Us
+        powered_by_jupiter: Powered by Jupiter
+      uofa_library_logo_alt: 'University of Alberta Libraries'
+    4xx:
+      title: "The page you were looking for doesn't exist (%{status})"
+      heading: "The page you were looking for doesn't exist."
+      clarification: "You may have mistyped the address or the page may have moved."
+    5xx:
+      title: "We're sorry, but something went wrong (%{status})"
+      heading: "We're sorry, but something went wrong."
+      clarification: "Please contact the site administrator via the contact link if the problem persists."
   locked_ldp_object:
     errors:
       invalid_visibility: "%{visibility} is not a known visibility"
 
   sessions:
-    new:
-      header: 'Log into ERA'
-      description_html: 'ERA is now a
-        <a href="https://ist.ualberta.ca/services/ccid-passwords/campus-computing-id" target="_blank">CCID</a>
-        (Campus Computing ID) enabled service.
-        If you have a CCID please use it to log in to ERA.'
-      saml_link: 'Log in with University of Alberta CCID (Campus Computing ID)'
-      developer_link: Log in with Developer Account
     logout_as_user:
       flash: 'You are now logout as user %{original_user}'
     destroy:
@@ -179,7 +190,7 @@ en:
 
   login:
     error: 'There was an error authenticating from your account. Please try again, or contact a staff member.'
-    success: 'Successfully authenticated from %{kind} account.'
+    success: 'Successfully authenticated!'
     user_suspended: 'Sorry, your ERA account has been suspended. Please contact the ERA HelpDesk at
       erahelp@ualberta.ca for more information.'
 
@@ -261,6 +272,9 @@ en:
     items:
       index:
         header: 'Items'
+        deposit_thesis: 'Deposit Thesis'
+        search_placeholder: 'Search items ...'
+        no_items_found: 'No items found'
       new:
         header: 'Deposit Item'
     users:
@@ -320,6 +334,7 @@ en:
       no_items_in_collection: 'There are no items in this Collection'
       item_delete_confirm: 'Are you sure you want to delete item "%{title}"?'
       deposit_item: 'Deposit Item'
+      deposit_thesis: 'Deposit Thesis'
       search_items_placeholder: 'Search this collection ...'
   communities:
     sort_record_created_at_asc: 'Date (oldest first)'
@@ -341,13 +356,8 @@ en:
   welcome:
     index:
       header: 'ERA (Education & Research Archive)'
-      welcome_header: "Welcome to ERA, the University of Alberta's Digital Repository and Asset Management Services"
-      welcome_lead_one: ERA (Education and Research Archive) is the name for University of Alberta's
-        Digital Asset Management strategy, being developed and supported by the University of Alberta Libraries.
-      welcome_lead_two: ERA's open access content includes the intellectual output of the University
-        and promotes global opportunities for research discovery as well as for archival preservation.
-        ERA also provides an easy and convenient solution for faculty
-        who must deposit their research in an open access repository to meet funding agency requirements.
+      welcome_header_html: "ERA:<br> Education and Research Archive"
+      welcome_lead: "University of Alberta research openly shared with the world"
       explore_collections: 'Explore Our Collections and Communities'
       osrin_collection: 'Oil Sands Research and Information Network'
       osrin_attribution: 'Image: “Tar sands in Alberta, 2008” by Howl Arts Collective CC-BY 2.0'
@@ -372,10 +382,19 @@ en:
       alternative_title: 'Alternate Title'
       is_version_of: 'Citation for previous publication'
       subject: 'Subjects / Keywords'
-      item_type_with_status: 'Type of item'
+      item_type_with_status: 'Type of Item'
       doi_url: 'DOI'
       license: 'License'
       language: 'Language'
+      usage: 'Usage'
+      views:
+        zero: 'No view information available'
+        one: '%{count} view'
+        other: '%{count} views'
+      downloads:
+        zero: 'No download information available'
+        one: '%{count} download'
+        other: '%{count} downloads'
     item:
       creators: 'Author(s) / Creator(s)'
       description: 'Description / Abstract'
@@ -393,7 +412,7 @@ en:
       institution: 'Institution'
       departments: 'Department'
       supervisors: 'Supervisor / co-supervisor and their department(s)'
-      specializations: 'Specialization'
+      specialization: 'Specialization'
       committee_members: 'Examining committee members and their departments'
     thumbnail:
       thumbnail: 'thumbnail'
@@ -402,6 +421,8 @@ en:
       download: 'Download'
       download_all: 'Download All'
       header: 'Files'
+      ccid_restricted_item: Item restricted to University of Alberta users
+      login_with_ccid_to_view: Log In with CCID to View Item
     new:
       header: 'Deposit Item'
     create:
@@ -537,8 +558,6 @@ en:
         no_saved_files: No files have been attached to this item
         item_thumbnail: 'Item Thumbnail'
         thumbnail_of_first_file: 'By default the first file will be displayed as the thumbnail image for this item. To change this, click on set as thumbnail button on the desired file.'
-      thumbnail:
-        thumbnail_alt: Thumbnail Image
       file:
         set_as_thumbnail: Set as Thumbnail
         delete_file_dialog: Are you sure you want to delete this file?

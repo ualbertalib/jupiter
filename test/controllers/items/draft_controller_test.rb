@@ -2,6 +2,14 @@ require 'test_helper'
 
 class Items::DraftControllerTest < ActionDispatch::IntegrationTest
 
+  def before_all
+    @community = Community.new_locked_ldp_object(title: 'Books', owner: 1).unlock_and_fetch_ldp_object(&:save!)
+    @collection = Collection.new_locked_ldp_object(title: 'Fantasy Books',
+                                                   owner: 1,
+                                                   community_id: @community.id)
+                            .unlock_and_fetch_ldp_object(&:save!)
+  end
+
   setup do
     @user = users(:regular)
   end
@@ -61,8 +69,8 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
           subjects: ['Best Seller', 'Adventure'],
           date_created: Date.current,
           description: 'Really random description about this random book',
-          community_id: ['random-uuid-123'],
-          collection_id: ['random-uuid-abc']
+          community_id: [@community.id],
+          collection_id: [@collection.id]
         }
       }
 
@@ -79,6 +87,8 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
       sign_in_as @user
 
       draft_item = draft_items(:completed_describe_item_step)
+      draft_item.member_of_paths = { 'community_id': [@community.id], 'collection_id': [@collection.id] }
+      draft_item.save!
 
       patch item_draft_url(id: :choose_license_and_visibility, item_id: draft_item.id), params: {
         draft_item: {
@@ -103,6 +113,8 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
       sign_in_as @user
 
       draft_item = draft_items(:completed_choose_license_and_visibility_step)
+      draft_item.member_of_paths = { 'community_id': [@community.id], 'collection_id': [@collection.id] }
+      draft_item.save!
 
       file_fixture = fixture_file_upload('/files/image-sample.jpeg', 'image/jpeg')
       image_file = ActiveStorage::Blob.create_after_upload!(
@@ -146,16 +158,8 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
     should 'be able to review and deposit a draft item properly when saving review_and_deposit_item form' do
       sign_in_as @user
 
-      # Setup a real community/collection pair as Item validates this
-      community = Community.new_locked_ldp_object(title: 'Books', owner: 1).unlock_and_fetch_ldp_object(&:save!)
-      collection = Collection.new_locked_ldp_object(title: 'Fantasy Books',
-                                                    owner: 1,
-                                                    community_id: community.id)
-                             .unlock_and_fetch_ldp_object(&:save!)
-
       draft_item = draft_items(:completed_choose_license_and_visibility_step)
-
-      draft_item.member_of_paths = { 'community_id': [community.id], 'collection_id': [collection.id] }
+      draft_item.member_of_paths = { 'community_id': [@community.id], 'collection_id': [@collection.id] }
 
       file_fixture = fixture_file_upload('/files/image-sample.jpeg', 'image/jpeg')
       image_file = ActiveStorage::Blob.create_after_upload!(
@@ -185,6 +189,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
       sign_in_as @user
 
       draft_item = draft_items(:completed_choose_license_and_visibility_step)
+      draft_item.member_of_paths = { 'community_id': [@community.id], 'collection_id': [@collection.id] }
 
       file_fixture = fixture_file_upload('/files/image-sample.jpeg', 'image/jpeg')
       image_file = ActiveStorage::Blob.create_after_upload!(
@@ -217,7 +222,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
       assert_no_difference('DraftItem.count') do
         post create_draft_items_url
       end
-      assert_redirected_to login_url
+      assert_redirected_to root_url
     end
 
     should 'be able to create a draft item if logged in' do
