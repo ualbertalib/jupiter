@@ -2,6 +2,8 @@ require 'sidekiq/web'
 require_dependency 'admin_constraint'
 
 Rails.application.routes.draw do
+  root to: 'welcome#index'
+
   resources :items, only: [:show, :edit] do
     collection do
       post :create_draft, controller: 'items/draft', action: :create
@@ -71,8 +73,6 @@ Rails.application.routes.draw do
 
   # Dynamic robots.txt
   get 'robots.txt' => 'robots#robots'
-
-  root to: 'welcome#index'
 
   # Static pages
   get '/about', to: 'static_pages#about'

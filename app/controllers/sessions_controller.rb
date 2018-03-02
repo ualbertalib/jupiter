@@ -38,7 +38,7 @@ class SessionsController < ApplicationController
 
     if current_user.present?
       # Was signed in successfully, redirect them back to where they came from or to the homepage
-      flash[:notice] = t('login.success', kind: auth_hash.provider)
+      flash[:notice] = t('login.success')
       redirect_back_to
     else
       # Else something went wrong along the way with omniauth
