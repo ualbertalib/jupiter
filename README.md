@@ -169,3 +169,7 @@ For characterization you need to install [FITS](https://github.com/harvard-lts/f
 * Once this is complete, login via SAML should be working successfully. Try it out!
 
 (TODO: Provide an alternatives to IST IdP for non production environments?)
+
+# Data Migration
+
+Data migration documentation is available here: https://github.com/ualbertalib/di_internal/blob/data-migration/Internal-Processes/HN-To-Jupiter-Migration.md
