@@ -100,8 +100,7 @@ class ApplicationController < ActionController::Base
   end
 
   def redirect_back_to
-    redirect_to session[:forwarding_url] || session[:previous_user_location] || root_path
-    session.delete(:forwarding_url)
+    redirect_to session.delete(:forwarding_url) || session.delete(:previous_user_location) || root_path
   end
 
   def current_announcements
