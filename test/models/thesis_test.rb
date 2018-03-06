@@ -83,7 +83,7 @@ class ThesisTest < ActiveSupport::TestCase
       end
     end
     assert_not thesis.valid?
-    assert_equal '1997', thesis.sort_year
+    assert_equal 1997, thesis.sort_year
   end
 
   test 'embargo_end_date must be present if visibility is embargo' do
@@ -225,7 +225,7 @@ class ThesisTest < ActiveSupport::TestCase
     thesis = Thesis.new_locked_ldp_object(graduation_date: 'Fall 2015')
     thesis.valid?
     refute thesis.errors[:sort_year].present?
-    assert_equal thesis.sort_year, '2015'
+    assert_equal thesis.sort_year, 2015
   end
 
 end

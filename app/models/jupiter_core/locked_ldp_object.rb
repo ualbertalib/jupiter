@@ -140,9 +140,9 @@ class JupiterCore::LockedLdpObject
   end
 
   def read_solr_index(name)
-    raise PropertyInvalidError unless name.is_a? Symbol
+    raise JupiterCore::PropertyInvalidError unless name.is_a? Symbol
     type_info = self.solr_calc_attributes[name]
-    raise PropertyInvalidError if type_info.blank?
+    raise JupiterCore::PropertyInvalidError if type_info.blank?
     solr_representation[type_info[:solr_names].first]
   end
 
@@ -426,7 +426,7 @@ class JupiterCore::LockedLdpObject
         value.to_s
       when :bool
         value
-      when :int
+      when :integer
         value.to_i
       when :float
         value.to_f
@@ -466,7 +466,7 @@ class JupiterCore::LockedLdpObject
           has_attribute :visibility, ::RDF::Vocab::DC.accessRights, solrize_for: [:exact_match, :facet]
         end
         unless attribute_names.include?(:owner)
-          has_attribute :owner, ::RDF::Vocab::BIBO.owner, type: :int, solrize_for: [:exact_match]
+          has_attribute :owner, ::RDF::Vocab::BIBO.owner, type: :integer, solrize_for: [:exact_match]
         end
         unless attribute_names.include?(:record_created_at)
           has_attribute :record_created_at, ::TERMS[:ual].record_created_in_jupiter, type: :date,
@@ -557,7 +557,7 @@ class JupiterCore::LockedLdpObject
           when :bool
             raise TyperError, "#{value} is not a boolean" unless [true, false].include?(value)
             value
-          when :int
+          when :integer
             raise TypeError, "#{value} is not a integer value" unless value.is_a?(Integer)
             value
           when :path
@@ -650,9 +650,9 @@ class JupiterCore::LockedLdpObject
     #    additional_search_index :downcased_title, solrize_for: :exact_match, as: -> { title.downcase }
     #
     def additional_search_index(name, solrize_for:, type: :symbol, as:)
-      raise PropertyInvalidError unless as.respond_to?(:call)
-      raise PropertyInvalidError if name.blank?
-      raise PropertyInvalidError unless type.present? && type.is_a?(Symbol)
+      raise JupiterCore::PropertyInvalidError unless as.respond_to?(:call)
+      raise JupiterCore::PropertyInvalidError if name.blank?
+      raise JupiterCore::PropertyInvalidError unless type.present? && type.is_a?(Symbol)
       solrize_for = [solrize_for] unless solrize_for.is_a?(Array)
 
       solr_descriptors = []
@@ -759,12 +759,12 @@ class JupiterCore::LockedLdpObject
 
     # a utility DSL for declaring attributes which allows us to store knowledge of them.
     def has_attribute(name, predicate, multiple: false, solrize_for: [], type: :string)
-      raise PropertyInvalidError unless name.is_a? Symbol
-      raise PropertyInvalidError if predicate.blank?
-      raise PropertyInvalidError if solrize_for.blank?
+      raise JupiterCore::PropertyInvalidError unless name.is_a? Symbol
+      raise JupiterCore::PropertyInvalidError if predicate.blank?
+      raise JupiterCore::PropertyInvalidError if solrize_for.blank?
       # A "json_array" is a single valued property, because the array gets serialized to a single json string when saved
       # the main use-case for this is an ordered creator field
-      raise PropertyInvalidError if (type == :json_array) && (multiple == true)
+      raise JupiterCore::PropertyInvalidError if (type == :json_array) && (multiple == true)
 
       # TODO: keep this conveinience, or push responsibility for [] onto the callsite?
       solrize_for = [solrize_for] unless solrize_for.is_a? Array
@@ -773,10 +773,13 @@ class JupiterCore::LockedLdpObject
       # this isn't an exhaustive layering over this mess
       # https://github.com/mbarnett/solrizer/blob/e5dd2bd571b9ebdb8a8ab214574075c28951e53e/lib/solrizer/default_descriptors.rb
       # but it helps
-      raise PropertyInvalidError if solrize_for.count { |item| !SOLR_DESCRIPTOR_MAP.keys.include?(item) } > 0
+      if solrize_for.count { |item| !SOLR_DESCRIPTOR_MAP.keys.include?(item) } > 0
+        raise JupiterCore::PropertyInvalidError
+      end
 
-      raise PropertyInvalidError, "Unknown type #{type}" unless [:string, :text, :path, :bool, :date, :int,
-                                                                 :float, :json_array].include?(type)
+      unless [:string, :text, :path, :bool, :date, :integer, :float, :json_array].include?(type)
+        raise JupiterCore::PropertyInvalidError, "Unknown type #{type}"
+      end
 
       self.attribute_names << name
 
