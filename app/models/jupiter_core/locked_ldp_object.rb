@@ -424,7 +424,7 @@ class JupiterCore::LockedLdpObject
       case to
       when :string, :text
         value.to_s
-      when :bool
+      when :boolean
         value
       when :integer
         value.to_i
@@ -554,7 +554,7 @@ class JupiterCore::LockedLdpObject
             else
               raise TypeError, "#{value} is not a Date type"
             end
-          when :bool
+          when :boolean
             raise TyperError, "#{value} is not a boolean" unless [true, false].include?(value)
             value
           when :integer
@@ -777,7 +777,7 @@ class JupiterCore::LockedLdpObject
         raise JupiterCore::PropertyInvalidError
       end
 
-      unless [:string, :text, :path, :bool, :date, :integer, :float, :json_array].include?(type)
+      unless [:string, :text, :path, :boolean, :date, :integer, :float, :json_array].include?(type)
         raise JupiterCore::PropertyInvalidError, "Unknown type #{type}"
       end
 
