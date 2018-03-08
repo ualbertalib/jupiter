@@ -141,6 +141,7 @@ type=\"#{unlocked_fileset.original_file.mime_type}\"\
             self.ordered_members += [unlocked_fileset]
             if Rails.configuration.run_fits_characterization
               Hydra::Works::CharacterizationService.run(unlocked_fileset.original_file)
+              unlocked_fileset.original_file.save
             end
           end
         end
