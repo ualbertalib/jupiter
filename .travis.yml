@@ -17,14 +17,6 @@ rvm:
 cache: bundler
 bundler_args: --without development production --jobs=3 --retry=3
 
-before_install: # Install ChromeDriver
-  - wget -N http://chromedriver.storage.googleapis.com/2.34/chromedriver_linux64.zip -P ~/
-  - unzip ~/chromedriver_linux64.zip -d ~/
-  - rm ~/chromedriver_linux64.zip
-  - sudo mv -f ~/chromedriver /usr/local/share/
-  - sudo chmod +x /usr/local/share/chromedriver
-  - sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver
-
 before_script:
   - docker version
   - docker-compose version
