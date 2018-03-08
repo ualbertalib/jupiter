@@ -166,7 +166,8 @@ The Clamby repository has [instructions](https://github.com/kobaltz/clamby#depen
 For characterization you need to install [FITS](https://github.com/harvard-lts/fits) and ensure that `fits.sh` is in your Rails' process' PATH
 [Hydra-File_Characterization](https://github.com/samvera/hydra-file_characterization), which Hydra-Works leverages, has more information on configuring the characterization setup.
 
-
+Characterization is turned off by default for the development environment. If you would like to turn it on without
+modifying the config files, set the environment variable `RUN_FITS_CHARACTERIZATION`.
 
 # Configuring SAML
 
