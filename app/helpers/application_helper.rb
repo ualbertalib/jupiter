@@ -47,9 +47,9 @@ module ApplicationHelper
     value ||= object.send(attribute)
     display ||= value
     if facet
-      link_to(display, search_path(facets: object.class.facet_term_for(attribute, value)))
+      link_to(display, search_path(facets: object.class.facet_term_for(attribute, value)), rel: 'nofollow')
     else
-      link_to(display, search_path(search: object.class.search_term_for(attribute, value)))
+      link_to(display, search_path(search: object.class.search_term_for(attribute, value)), rel: 'nofollow')
     end
   end
 

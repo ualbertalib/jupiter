@@ -335,6 +335,9 @@ en:
     sort_title_desc: 'Name (Z-A)'
     title: 'Communities'
     index:
+      page_description: ERA's collections are contributed by people at the University of Alberta
+        who together form communities of research or teaching. Browse all of ERA's communities and
+        their associated collections.
       header: 'Communities'
       delete_confirm: 'Are you sure you want to delete community "%{title}"?'
       create_community: 'Create Community'

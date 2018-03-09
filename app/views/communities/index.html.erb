@@ -1,4 +1,7 @@
 <% page_title(@title) %>
+<% content_for :head do %>
+  <meta name="description" content="<%= t('.page_description') %>">
+<% end %>
 
 <div class="container mt-3">
   <div class="d-flex flex-wrap justify-content-between align-items-center mt-3">
