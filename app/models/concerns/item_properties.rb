@@ -106,6 +106,9 @@ module ItemProperties
         # TODO should this be a side effect? should we throw an exception if there's no id? Food for thought
         save! if id.nil?
 
+        current_filesets = ordered_members || []
+
+        added_filesets = []
         files.each do |file|
           FileSet.new_locked_ldp_object.unlock_and_fetch_ldp_object do |unlocked_fileset|
             unlocked_fileset.owner = owner
@@ -138,13 +141,15 @@ type=\"#{unlocked_fileset.original_file.mime_type}\"\
 />"
             unlocked_fileset.save!
 
-            self.ordered_members += [unlocked_fileset]
+            added_filesets << unlocked_fileset
             if Rails.configuration.run_fits_characterization
               Hydra::Works::CharacterizationService.run(unlocked_fileset.original_file)
               unlocked_fileset.original_file.save
             end
           end
         end
+        self.ordered_members = current_filesets + added_filesets
+        save!
       end
     end
   end
