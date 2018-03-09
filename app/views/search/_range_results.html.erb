@@ -1,0 +1,30 @@
+<div class="card mt-3">
+  <div class="card-header"><%= facet.category_name %></div>
+
+  <div class="limit_content range_limit">
+
+    <form class="range_limit subsection range_pub_date form-inline" action="/search" accept-charset="UTF-8" method="get">
+      <input name="utf8" value="✓" type="hidden">
+      <input name="q" value="#TODO" type="hidden">
+
+      <!-- we need to include a dummy search_field parameter if none exists,
+           to trick blacklight into displaying actual search results instead
+           of home page. Not a great solution, but easiest for now. -->
+      <input name="search_field" id="search_field" value="dummy_range" type="hidden">
+
+      <label class="sr-only" for="range_<%= facet.solr_index %>_begin"><%= facet.category_name %> range begin</label><input name="range[<%= facet.solr_index %>][begin]" id="range_begin" placeholder="<%= facet.min %>" maxlength="4" class="form-control range_begin" type="text"> to <label class="sr-only" for="range_end"><%= facet.category_name %> range end</label><input name="range[<%= facet.solr_index %>][end]" id="range_<%= facet.solr_index %>_end" placeholder="<%= facet.max %>" maxlength="4" class="form-control range_end" type="text">
+      <input name="commit" value="Limit" class="submit btn btn-default" type="submit">
+
+    </form>
+    <ul class="missing list-unstyled facet-values subsection">
+      <li>
+        <span class="facet-label">
+          <a href="/#TODO">Unknown</a>
+        </span>
+        <span class="facet-count">
+          649
+        </span>
+      </li>
+    </ul>
+  </div>
+</div>

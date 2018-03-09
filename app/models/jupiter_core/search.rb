@@ -68,6 +68,7 @@ class JupiterCore::Search
     ' OR _query_:"-visibility_ssim:[* TO *] AND *:*" OR _query_:"visibility_ssim:*"'
   end
 
+  # returns results_count, results, facet_data, stats_data
   def self.perform_solr_query(q:, qf: '', fq: '', facet: false, facet_fields: [], facet_max: MAX_FACETS_RETURNED,
                               stats: false, stats_fields: [], restrict_to_model: nil,
                               rows: MAX_RESULTS, start: nil, sort: nil)
@@ -79,7 +80,7 @@ class JupiterCore::Search
 
     raise SearchFailed unless response['responseHeader']['status'] == 0
 
-    [response['response']['numFound'], response['response']['docs'], response['facet_counts']]
+    [response['response']['numFound'], response['response']['docs'], response['facet_counts'], response['stats']]
   end
 
   def self.prepare_solr_query(q:, qf: '', fq: '', facet: false, facet_fields: [], facet_max: MAX_FACETS_RETURNED,

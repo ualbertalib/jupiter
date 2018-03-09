@@ -77,9 +77,9 @@ class SearchTest < ActiveSupport::TestCase
         assert facet.values.key?(JupiterCore::VISIBILITY_PUBLIC)
         assert facet.values[JupiterCore::VISIBILITY_PUBLIC] == 2
       elsif facet.category_name == 'Sort Year'
-        assert facet.range.min == 1999
-        assert facet.range.max == 2018
-        assert facet.range.missing = 0
+        assert facet.min == 1999
+        assert facet.max == 2018
+        assert facet.missing = 0
       end
     end
 

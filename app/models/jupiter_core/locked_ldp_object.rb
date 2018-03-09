@@ -804,7 +804,9 @@ class JupiterCore::LockedLdpObject
                    end
 
       self.facets << facet_name if facet_name.present?
-      self.ranges << Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[:range_facet], type: solr_type) if solrize_for.include?(:range_facet)
+      if solrize_for.include?(:range_facet)
+        self.ranges << Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[:range_facet], type: solr_type)
+      end
 
       self.attribute_cache[name] = {
         predicate: predicate,

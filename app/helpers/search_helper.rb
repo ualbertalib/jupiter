@@ -23,6 +23,9 @@ module SearchHelper
     query_params
   end
 
+  # TODO: think through what this should do
+  def query_params_without_range_value(facet_name) end
+
   def query_params_with_tab(tab)
     # Link for clicking a tab to switch models. Facets are stripped out
     query_params = search_params_hash.except(:facets)

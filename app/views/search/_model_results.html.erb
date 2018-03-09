@@ -16,7 +16,11 @@
       </div>
       <div class="card-body p-2 pr-3 pr-md-0 filter-list">
         <% results.each_facet_with_results(@first_facet_categories) do |facet| %>
-          <%= render partial: 'search/facet_results', locals: { facet: facet } %>
+          <% if facet.instance_of? JupiterCore::RangeResult %>
+            <%= render partial: 'search/range_results', locals: { facet: facet } %>
+          <% else %>
+            <%= render partial: 'search/facet_results', locals: { facet: facet } %>
+          <% end %>
         <% end %>
       </div>
     </div>
@@ -48,13 +52,17 @@
       <%# Facet Badges %>
       <div class='jupiter-facet-badges'>
         <% results.each_facet_with_results do |facet| %>
-          <% facet.each_facet_value do |facet_value| %>
-            <% if params[:facets]&.fetch(facet_value.solr_index, [])&.include?(facet_value.value) %>
-              <%= render partial: 'search/facet_badge', locals: { value: present(facet_value).display,
-                         raw_value: facet_value.value,
-                         solr_index: facet_value.solr_index } %>
-            <% end %>
-          <% end %>
+        <% if facet.instance_of? JupiterCore::RangeResult %>
+        <%= link_to query_params_without_range_value(facet.solr_index) do %>
+          <span class="badge badge-secondary p-2 mt-2">
+            <%= facet.min %> TO <%= facet.max %>
+            <%= fa_icon 'times-circle' %>
+          </span>
+        <% end %>
+
+        <% else %>
+          <%= render partial: 'search/default_facet_badge', locals: { facet: facet } %>
+        <% end %>
         <% end %>
       </div>
     </div>

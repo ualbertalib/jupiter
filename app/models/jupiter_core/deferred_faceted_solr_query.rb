@@ -48,7 +48,7 @@ class JupiterCore::DeferredFacetedSolrQuery
     reify_result_set
     # first_categories indicates which facets should be treated first (for example, selected facets in a query)
     # Order in first_categories matters
-    facets = @facets.sort_by do |facet|
+    facets = (@facets + @ranges).sort_by do |facet|
       idx = first_facet_categories.find_index(facet.solr_index)
       idx ||= first_facet_categories.length + 1
       idx
@@ -110,12 +110,15 @@ class JupiterCore::DeferredFacetedSolrQuery
 
   def reify_result_set
     return @results if @results.present?
-    @count_cache, @results, facet_data = JupiterCore::Search.perform_solr_query(
+    @count_cache, @results, facet_data, stats_data = JupiterCore::Search.perform_solr_query(
       search_args_with_limit(criteria[:limit])
     )
 
     @facets = facet_data['facet_fields'].map do |k, v|
       JupiterCore::FacetResult.new(criteria[:facet_map], k, v) if v.present?
+    end.compact
+    @ranges = stats_data['stats_fields'].map do |k, v|
+      JupiterCore::RangeResult.new(criteria[:facet_map], k, v) if v.present?
     end.compact
 
     @results
