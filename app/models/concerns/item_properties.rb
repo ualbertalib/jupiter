@@ -19,7 +19,7 @@ module ItemProperties
     has_attribute :northern_north_america_item_id,
                   ::TERMS[:ual].northern_north_america_item_id, solrize_for: :exact_match
     has_attribute :rights, ::RDF::Vocab::DC11.rights, solrize_for: :exact_match
-    has_attribute :sort_year, ::TERMS[:ual].sort_year, type: :integer, solrize_for: [:search, :sort, :facet]
+    has_attribute :sort_year, ::TERMS[:ual].sort_year, type: :integer, solrize_for: [:search, :sort, :range_facet]
     has_attribute :visibility_after_embargo, ::TERMS[:acl].visibility_after_embargo, solrize_for: :exact_match
 
     has_multival_attribute :embargo_history, ::TERMS[:acl].embargo_history, solrize_for: :exact_match

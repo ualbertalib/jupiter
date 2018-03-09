@@ -47,6 +47,7 @@ class JupiterCore::Search
                                               qf: calculate_queried_fields(models),
                                               facet_map: construct_facet_map(models),
                                               facet_fields: models.map(&:facets).flatten.uniq,
+                                              stats_fields: models.map(&:ranges).flatten.uniq,
                                               restrict_to_model: models.map { |m| m.send(:derived_af_class) })
   end
 
@@ -68,9 +69,11 @@ class JupiterCore::Search
   end
 
   def self.perform_solr_query(q:, qf: '', fq: '', facet: false, facet_fields: [], facet_max: MAX_FACETS_RETURNED,
-                              restrict_to_model: nil, rows: MAX_RESULTS, start: nil, sort: nil)
+                              stats: false, stats_fields: [], restrict_to_model: nil,
+                              rows: MAX_RESULTS, start: nil, sort: nil)
     params = prepare_solr_query(q: q, qf: qf, fq: fq, facet: facet, facet_fields: facet_fields, facet_max: facet_max,
-                                restrict_to_model: restrict_to_model, rows: rows, start: start, sort: sort)
+                                stats: stats, stats_fields: stats_fields, restrict_to_model: restrict_to_model,
+                                rows: rows, start: start, sort: sort)
 
     response = ActiveFedora::SolrService.instance.conn.get('select', params: params)
 
@@ -80,7 +83,8 @@ class JupiterCore::Search
   end
 
   def self.prepare_solr_query(q:, qf: '', fq: '', facet: false, facet_fields: [], facet_max: MAX_FACETS_RETURNED,
-                              restrict_to_model: nil, rows: MAX_RESULTS, start: nil, sort: nil)
+                              stats: false, stats_fields: [], restrict_to_model: nil, rows: MAX_RESULTS,
+                              start: nil, sort: nil)
     query = []
     restrict_to_model = [restrict_to_model] unless restrict_to_model.is_a?(Array)
 
@@ -100,9 +104,11 @@ class JupiterCore::Search
       qf: qf,
       fq: fquery.join(' AND '),
       facet: facet,
+      stats: stats,
       rows: rows,
       'facet.field': facet_fields,
-      'facet.limit': facet_max
+      'facet.limit': facet_max,
+      'stats.field': stats_fields
     }
 
     params[:start] = start if start.present?

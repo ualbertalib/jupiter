@@ -5,6 +5,7 @@ class SearchTest < ActiveSupport::TestCase
     has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
     has_attribute :creator, ::RDF::Vocab::DC.creator, solrize_for: [:search, :facet]
     has_multival_attribute :member_of_paths, ::TERMS[:ual].path, type: :path, solrize_for: :pathing
+    has_attribute :sort_year, ::TERMS[:ual].sort_year, type: :integer, solrize_for: :range_facet
 
     additional_search_index :my_solr_doc_attr, solrize_for: :search, as: -> { 'a_test_value' }
 
@@ -35,9 +36,11 @@ class SearchTest < ActiveSupport::TestCase
 
     obj = @@klass.new_locked_ldp_object(title: first_title, creator: creator,
                                         visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                        sort_year: 1999,
                                         owner: users(:regular).id)
     another_obj = @@klass.new_locked_ldp_object(title: second_title, creator: creator2,
                                                 visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                                sort_year: 2018,
                                                 owner: users(:regular).id)
     a_private_object = @@klass.new_locked_ldp_object(title: generate_random_string, creator: generate_random_string,
                                                      visibility: JupiterCore::VISIBILITY_PRIVATE,
@@ -57,7 +60,7 @@ class SearchTest < ActiveSupport::TestCase
     end
 
     search_results.each_facet_with_results do |facet|
-      assert_includes ['Title', 'Creator', 'Visibility'], facet.category_name
+      assert_includes ['Title', 'Creator', 'Visibility', 'Sort Year'], facet.category_name
       if facet.category_name == 'Title'
         assert facet.values.keys.count == 2
         assert facet.values.key?(first_title)
@@ -73,6 +76,10 @@ class SearchTest < ActiveSupport::TestCase
         assert facet.values.keys.count == 1
         assert facet.values.key?(JupiterCore::VISIBILITY_PUBLIC)
         assert facet.values[JupiterCore::VISIBILITY_PUBLIC] == 2
+      elsif facet.category_name == 'Sort Year'
+        assert facet.range.min == 1999
+        assert facet.range.max == 2018
+        assert facet.range.missing = 0
       end
     end
 

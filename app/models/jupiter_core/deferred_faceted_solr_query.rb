@@ -9,12 +9,13 @@ class JupiterCore::DeferredFacetedSolrQuery
   include Kaminari::PageScopeMethods
   include Kaminari::ConfigurationMethods::ClassMethods
 
-  def initialize(q:, qf:, fq:, facet_map:, facet_fields:, restrict_to_model:)
+  def initialize(q:, qf:, fq:, facet_map:, facet_fields:, stats_fields:, restrict_to_model:)
     criteria[:q] = q
     criteria[:qf] = qf # Query Fields
     criteria[:fq] = fq # Facet Query
     criteria[:facet_map] = facet_map
     criteria[:facet_fields] = facet_fields
+    criteria[:stats_fields] = stats_fields
     criteria[:restrict_to_model] = restrict_to_model
     criteria[:sort] = []
     criteria[:sort_order] = []
@@ -134,7 +135,9 @@ class JupiterCore::DeferredFacetedSolrQuery
       qf: criteria[:qf],
       fq: criteria[:fq],
       facet: true,
+      stats: true,
       facet_fields: criteria[:facet_fields],
+      stats_fields: criteria[:stats_fields],
       restrict_to_model: criteria[:restrict_to_model],
       rows: limit,
       start: criteria[:offset],

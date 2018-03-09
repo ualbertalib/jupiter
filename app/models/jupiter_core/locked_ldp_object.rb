@@ -18,7 +18,8 @@ class JupiterCore::LockedLdpObject
     sort: :stored_sortable,
     facet: :facetable,
     exact_match: :symbol,
-    pathing: :descendent_path
+    pathing: :descendent_path,
+    range_facet: :stored_searchable
   }.freeze
 
   # we reserve .new for internal use in constructing LockedLDPObjects. Use the public interface
@@ -27,7 +28,7 @@ class JupiterCore::LockedLdpObject
 
   # inheritable class attributes (not all class-level attributes in this class should be inherited,
   # these are the inheritance-safe attributes)
-  class_attribute :af_parent_class, :attribute_cache, :attribute_names, :facets,
+  class_attribute :af_parent_class, :attribute_cache, :attribute_names, :facets, :ranges,
                   :association_indexes, :reverse_solr_name_cache, :solr_calc_attributes
 
   # Returns the id of the object in LDP as a String
@@ -457,6 +458,7 @@ class JupiterCore::LockedLdpObject
       child.reverse_solr_name_cache = self.reverse_solr_name_cache ? self.reverse_solr_name_cache.dup : {}
       child.attribute_cache = self.attribute_cache ? self.attribute_cache.dup : {}
       child.facets = self.facets ? self.facets.dup : []
+      child.ranges = self.ranges ? self.ranges.dup : []
       child.solr_calc_attributes = self.solr_calc_attributes.present? ? self.solr_calc_attributes.dup : {}
       child.association_indexes = self.association_indexes.present? ? self.association_indexes.dup : []
       # If there's no class between +LockedLdpObject+ and this child that's
@@ -663,6 +665,7 @@ class JupiterCore::LockedLdpObject
         solr_names << solr_name
         self.reverse_solr_name_cache[solr_name] = name
         self.facets << solr_name if solr_role == :facet
+        self.ranges << solr_name if solr_role == :range_facet
         solr_descriptors << descriptor
       end
 
@@ -801,6 +804,7 @@ class JupiterCore::LockedLdpObject
                    end
 
       self.facets << facet_name if facet_name.present?
+      self.ranges << Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[:range_facet], type: solr_type) if solrize_for.include?(:range_facet)
 
       self.attribute_cache[name] = {
         predicate: predicate,
