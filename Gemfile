@@ -93,6 +93,9 @@ group :test do
   gem 'haikunator'
   gem 'minitest-hooks'
   gem 'shoulda', require: false
+
+  # Easy installation and use of chromedriver to run system tests with Chrome
+  gem 'chromedriver-helper'
 end
 
 group :staging, :production do
