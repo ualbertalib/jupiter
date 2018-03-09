@@ -123,13 +123,16 @@ module ItemProperties
                                                   end
             # Store file properties in the format required by the sitemap
             # for quick and easy retrieval -- nobody wants to wait 36hrs for this!
+            escaped_path = CGI.escape_html(
+              Rails.application.routes.url_helpers.url_for(controller: :file_sets,
+                                                           action: :show,
+                                                           id: id,
+                                                           file_set_id: unlocked_fileset.id,
+                                                           file_name: unlocked_fileset.contained_filename,
+                                                           only_path: true)
+            )
             unlocked_fileset.sitemap_link = "<rs:ln \
-href=\"#{Rails.application.routes.url_helpers.url_for(controller: :file_sets,
-                                                      action: :show,
-                                                      id: id,
-                                                      file_set_id: unlocked_fileset.id,
-                                                      file_name: unlocked_fileset.contained_filename,
-                                                      only_path: true)}\" \
+href=\"#{escaped_path}\" \
 rel=\"content\" \
 hash=\"#{unlocked_fileset.original_file.checksum.algorithm.downcase}:"\
 "#{unlocked_fileset.original_file.checksum.value}\" \
