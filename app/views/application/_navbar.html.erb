@@ -18,7 +18,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="jupiter-main-nav" aria-expanded="false">
+    <div class="collapse navbar-collapse" id="jupiter-main-nav">
       <ul class="navbar-nav mr-auto d-none d-md-block w-100">
 
         <li role="presentation" class="nav-item mr-3">
@@ -64,7 +64,7 @@
               <%= current_user.name %>
             </a>
 
-            <div role="menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="#jupiter-user-nav-downdown">
+            <div role="menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="jupiter-user-nav-downdown">
               <div class="dropdown-header">
                 <%= t('.user_dropdown.heading_html', name: current_user.name) %>
               </div>
