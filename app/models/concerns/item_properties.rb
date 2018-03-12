@@ -106,9 +106,10 @@ module ItemProperties
         # TODO should this be a side effect? should we throw an exception if there's no id? Food for thought
         save! if id.nil?
 
+        # The current and added filesets approach (rather than direct array append) works around bugs in ActiveFedora
         current_filesets = ordered_members || []
-
         added_filesets = []
+
         files.each do |file|
           FileSet.new_locked_ldp_object.unlock_and_fetch_ldp_object do |unlocked_fileset|
             unlocked_fileset.owner = owner
