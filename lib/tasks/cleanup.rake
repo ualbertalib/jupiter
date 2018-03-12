@@ -15,4 +15,11 @@ namespace :cleanup do
 
     puts 'Cleanup of Inactive Draft Items now completed!'
   end
+
+  desc 'fetch and unlock every object then save'
+  task reindex: :environment do
+    puts 'Reindexing all Items and Theses...'
+    (Item.all + Thesis.all).each { |item| item.unlock_and_fetch_ldp_object(&:save!) }
+    puts 'Reindex completed!'
+  end
 end
