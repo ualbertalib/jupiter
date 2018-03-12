@@ -8,7 +8,7 @@
             target: :_blank) %>
       </div>
       <div class="p-1">
-        <%= link_to(t('.download'), fileset_uri(@item.file_sets.first, :download), class: 'btn btn-outline-primary') %>
+        <%= link_to(t('.download'), fileset_uri(@item.file_sets.first, :download), class: 'btn btn-outline-primary', rel: 'nofollow') %>
       </div>
     </div>
   <% else %>

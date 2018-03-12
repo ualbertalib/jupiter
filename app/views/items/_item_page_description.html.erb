@@ -1,0 +1,3 @@
+Publication Date: <%= @item.sort_year %>
+Author(s): <%= safe_join(authors(@item), ', ') %>
+Description: <%= jupiter_truncate description(@item) %>

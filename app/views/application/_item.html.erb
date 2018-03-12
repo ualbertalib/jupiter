@@ -8,7 +8,7 @@
       <div class="btn-group">
         <% primary_file = item.file_sets.first %>
         <% if primary_file.present? %>
-          <%= link_to fileset_uri(primary_file, :download), class: 'btn btn-secondary' do %>
+          <%= link_to fileset_uri(primary_file, :download), class: 'btn btn-secondary', rel: 'nofollow' do %>
             <%= fa_icon 'cloud-download' %>
             <%= t('download') %>
           <% end %>
@@ -34,8 +34,7 @@
     </div>
     <div>
       <%# TODO: the search path may need to be revisited %>
-      <%= item.creators&.map { |creator| search_link_for(item, :all_contributors, value: creator) }
-                         &.join(', ')&.html_safe %>
+      <%= safe_join(item.creators&.map { |creator| search_link_for(item, :all_contributors, value: creator) }, ', ') %>
     </div>
     <div>
       <%= jupiter_truncate item.description %>

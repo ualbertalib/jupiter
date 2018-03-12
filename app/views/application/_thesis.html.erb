@@ -8,7 +8,7 @@
       <div class="btn-group">
         <% primary_file = thesis.file_sets.first %>
         <% if primary_file.present? %>
-          <%= link_to fileset_uri(primary_file, :download), class: 'btn btn-secondary' do %>
+          <%= link_to fileset_uri(primary_file, :download), class: 'btn btn-secondary', rel: 'nofollow' do %>
             <%= fa_icon 'cloud-download' %>
             <%= t('download') %>
           <% end %>
