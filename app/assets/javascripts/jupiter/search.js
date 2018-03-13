@@ -3,7 +3,7 @@ $(document).on('turbolinks:load', function() {
   $('.js-hideshow-control')
     .on('click', function() {
       var $hideshow = $(this).closest('.js-hideshow');
-      $hideshow.find('.js-hideshow-control').toggle();
+      $hideshow.find('.js-hideshow-control').toggleClass('d-none');;
     });
 
   // Filter/facet sidebar open (on small screens)
