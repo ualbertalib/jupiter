@@ -21,6 +21,7 @@
                       url: item_files_path,
                       method: :post,
                       html: {
+                        id: :upload_files_form,
                         multipart: true,
                         class:'js-files-dropzone'
                       } do |f| %>
@@ -50,9 +51,9 @@
   <% end %>
 
   <%# Code below is used as the dropzone previewTemplate, will not be displayed to user %>
-  <div id="js-dropzone-preview-template" class="d-none">
+  <ul id="js-dropzone-preview-template" class="d-none">
     <li class="media my-3 p-3 border">
-      <img data-dz-thumbnail alt='' class='mr-3'>
+      <img data-dz-thumbnail src='#' alt='' class='mr-3'>
       <div class="media-body">
         <h5 data-dz-name></h5>
         <strong class="text-danger" data-dz-errormessage></strong>
@@ -68,7 +69,7 @@
         </div>
       </div>
     </li>
-  </div>
+  </ul>
 
 
   <%= simple_form_for @draft_item,
@@ -77,9 +78,9 @@
                       html: { class:'js-deposit-item' } do |f| %>
 
     <h4><%= t('.saved_files') %></h4>
-    <ul id="js-files-list" class="list-unstyled">
+    <div id="js-files-list">
       <%= render partial: 'files_list' %>
-    </ul>
+    </div>
 
     <div class="mt-3 pull-right">
       <%= link_to previous_wizard_path, class: 'btn btn-secondary' do %>
