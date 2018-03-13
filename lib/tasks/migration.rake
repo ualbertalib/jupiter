@@ -59,20 +59,30 @@ namespace :migration do
     Rails.logger.error "Can't find collection #{collection_id}"
   end
 
-  def user_id(owner)
+  def load_users(user_file)
     # this requires a user file from current hydranorth, in this format: email|display_name|ccid
     # file name: users.txt
+    users = {}
+    File.open(user_file).each_line do |l|
+      data = l.strip.split("|")
+      users[data[0]] = [data[1], data[2]]
+    end
+    return users
+  end
+
+  def user_id(users,owner)
+    owner = owner.first if (owner.is_a? Array) && owner.size == 1
     l = if owner.include? 'hydranorth.ca'
-          File.foreach('users.txt').grep(/\|#{owner[/[^@]+/]}\|/)
+          users[owner.split("@")[0]+"@ualberta.ca"]
         else
-          File.foreach('users.txt').grep(/^#{owner}/)
+          users[owner]
         end
     if l.present?
-      ccid = l.first.split('|')[2].strip
-      name = l.first.split('|')[1].strip
+      ccid = l[1]
+      name = l[0]
     end
-    ccid = owner[/[^@]+/] if ccid.blank?
-    owner = ccid + '@ualberta.ca'
+    ccid = owner[/[^@]+/] if ccid.blank? && owner.include?("ualberta.ca")
+    owner = ccid + '@ualberta.ca' if ccid.present?
     user = User.find_or_create_by(email: owner) do |u|
       u.name = if name.present?
                  name
@@ -133,6 +143,7 @@ namespace :migration do
   end
 
   def migrate_communities(dir)
+    users = load_users('users.txt')
     File.open('communities.txt', 'w+') do |f|
       Dir[dir + '/*.nt'].each do |file|
         graph = RDF::Graph.load file
@@ -144,7 +155,7 @@ namespace :migration do
         creators = object_value_from_predicate(graph, ::RDF::Vocab::DC11.creator, true)&.map! { |c| c.value }
         owner = object_value_from_predicate(graph, ::RDF::Vocab::BIBO.owner)
         community = Community.new_locked_ldp_object(title: title, description: description,
-                                                    fedora3_uuid: fedora3uuid, owner: user_id(owner),
+                                                    fedora3_uuid: fedora3uuid, owner: user_id(users, owner),
                                                     creators: creators, hydra_noid: hydra_noid)
         community.unlock_and_fetch_ldp_object(&:save!)
         puts "#{community.id}:#{hydra_noid}"
@@ -154,6 +165,7 @@ namespace :migration do
   end
 
   def migrate_collections(dir)
+    users = load_users('users.txt')
     File.open('collections.txt', 'w+') do |f|
       Dir[dir + '/*.nt'].each do |file|
         graph = RDF::Graph.load file
@@ -176,7 +188,7 @@ namespace :migration do
             next
           else
             collection = Collection.new_locked_ldp_object(title: title, description: description,
-                                                          fedora3_uuid: fedora3uuid, owner: user_id(owner),
+                                                          fedora3_uuid: fedora3uuid, owner: user_id(users,owner),
                                                           creators: creators, community_id: community_id,
                                                           hydra_noid: hydra_noid)
             collection.unlock_and_fetch_ldp_object(&:save!)
@@ -214,8 +226,10 @@ namespace :migration do
   end
 
   def migrate_items(dir)
+    users = load_users('users.txt')
     File.open('generic.txt', 'w+') do |f|
       Dir[dir + '/*.nt'].each do |file|
+        #sleep(10)
         graph = RDF::Graph.load file
         hydra_noid = object_value_from_predicate(graph, ::TERMS[:ual].hydra_noid)
         next if find_duplicates(hydra_noid)
@@ -228,9 +242,8 @@ namespace :migration do
         # Here are some logic based on Leah's understanding of the actual ownership for multi-owner objects
      
         depositor = object_value_from_predicate(graph, ::TERMS[:ual].depositor)
-	# insert the snippet in the documentation to handle multiowner rules
-        NEED TO ADD THE SNIPPET AND REMOVE THIS LINE
-         
+	# insert here for multiowner rules
+
         # if there is no owner, use the depositor as the owner
         owner = depositor if owner.nil?
         contributors = object_value_from_predicate(graph, ::RDF::Vocab::DC11.contributor, true)&.map! { |c| c.value }
@@ -268,27 +281,28 @@ namespace :migration do
         doi = object_value_from_predicate(graph, ::TERMS[:prism].doi)
         ingest_batch = object_value_from_predicate(graph, ::TERMS[:ual].ingest_batch)
         nna_file = object_value_from_predicate(graph, ::TERMS[:ual].northern_north_america_filename)
-        nna_item = object_value_from_predicate(graph, ::TERMS[:ual].northern_north_american_item_id)
+        nna_item = object_value_from_predicate(graph, ::TERMS[:ual].northern_north_america_item_id)
 
 
         collection_ids = get_collections(graph)
         community_ids = get_communities(collection_ids) unless collection_ids.empty?
 
+
         if collection_ids.nil? && community_ids.nil?
           puts "#{hydra_noid} don't have community/collection"
           Rails.logger.error "can't find #{hydra_noid}'s collection or community"
         else
-          owner = user_id(owner)
 
-          file_dir = "tmp/#{hydra_noid}"
-          download_url = FEDORA_BASE + pairtree(hydra_noid) + '/content'
-          puts download_url
-          download_file(download_url, file_dir)
-          if File.exist?("#{file_dir}/#{hydra_noid}.zip") || File.exist?("#{file_dir}/#{fedora3uuid}.zip")
-            `unzip #{file_dir}/*.zip -d #{file_dir} && rm #{file_dir}/*.zip`
-          end
-          files = Dir.glob("#{file_dir}/**/*").select { |uf| File.file?(uf) }.sort&.map! { |uf| File.open(uf) }
-          begin
+          begin 
+            owner = user_id(users, owner)
+
+            file_dir = "tmp/#{hydra_noid}"
+            download_url = FEDORA_BASE + pairtree(hydra_noid) + '/content'
+            download_file(download_url, file_dir)
+            if File.exist?("#{file_dir}/#{hydra_noid}.zip") || File.exist?("#{file_dir}/#{fedora3uuid}.zip")
+              `unzip -o #{file_dir}/*.zip -d #{file_dir} && rm #{file_dir}/*.zip`
+            end
+            files = Dir.glob("#{file_dir}/**/*").select { |uf| File.file?(uf) }.sort&.map! { |uf| File.open(uf) }
             item = Item.new_locked_ldp_object(title: title, creators: creators, unordered_creators: creators, 
                                               contributors: contributors,
                                               description: description, created: created, sort_year: sort_year,
@@ -315,7 +329,7 @@ namespace :migration do
                 `rm -rf #{file_dir}`
               end
               unlocked_item.save!
-              item.thumbnail_fileset(item.file_sets.first)
+              item.thumbnail_fileset(item.file_sets.first) unless item.file_sets.first.contained_filename.end_with? 'xlsx'
             end
             puts "#{item.id}:#{hydra_noid}"
             f.write "#{item.id}:#{hydra_noid}\n"
@@ -335,6 +349,7 @@ namespace :migration do
   end
 
   def migrate_theses(dir)
+    users = load_users('users.txt')
     File.open('theses.txt', 'w+') do |f|
       Dir[dir + '/*.nt'].each do |file|
         graph = RDF::Graph.load file
@@ -348,7 +363,7 @@ namespace :migration do
         date_submitted = object_value_from_predicate(graph, ::RDF::Vocab::DC.dateSubmitted)
         degree = object_value_from_predicate(graph, ::RDF::Vocab::BIBO.degree)
         dissertant = object_value_from_predicate(graph, ::TERMS[:ual].dissertant)
-        owner = user_id('eraadmi@ualberta.ca')
+        owner = user_id(users, 'eraadmi@ualberta.ca')
 
         depositor = object_value_from_predicate(graph, ::TERMS[:ual].depositor)
 
