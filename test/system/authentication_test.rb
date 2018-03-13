@@ -46,9 +46,10 @@ class AuthenticationTest < ApplicationSystemTestCase
   end
 
   context 'when visiting a protected page' do
-    should 'get redirected to login then back to page, if user is authorized' do
+    should 'get redirected to homepage then back to page, if user is authorized' do
       visit profile_url
 
+      assert_current_path(root_path)
       assert_text I18n.t('authorization.user_not_authorized_try_logging_in')
 
       Rails.application.env_config['omniauth.auth'] =
@@ -66,15 +67,17 @@ class AuthenticationTest < ApplicationSystemTestCase
 
       assert_text I18n.t('login.success')
 
-      # TODO: fix this view and i18n this
+      assert_current_path(profile_path)
       assert_text I18n.t('admin.users.created')
     end
 
-    should 'get redirected to login then back to login page with error, if user is unauthorized' do
+    should 'get redirected to homepage then back to homepage again with error, if user is unauthorized' do
       draft_item = draft_items(:completed_describe_item_step)
       visit item_draft_path(item_id: draft_item.id, id: :describe_item)
 
       assert_text I18n.t('authorization.user_not_authorized_try_logging_in')
+
+      assert_current_path(root_path)
       assert_selector 'h2', text: I18n.t('welcome.index.welcome_lead')
 
       Rails.application.env_config['omniauth.auth'] =
@@ -91,6 +94,8 @@ class AuthenticationTest < ApplicationSystemTestCase
       click_link I18n.t('application.navbar.links.login')
 
       assert_text I18n.t('authorization.user_not_authorized')
+
+      assert_current_path(root_path)
       assert_selector 'h2', text: I18n.t('welcome.index.welcome_lead')
     end
   end
@@ -116,6 +121,7 @@ class AuthenticationTest < ApplicationSystemTestCase
     assert_text I18n.t('login.success')
 
     # Still on browse page
+    assert_current_path(communities_path)
     assert_selector 'h1', text: I18n.t('communities.index.header')
   end
 
