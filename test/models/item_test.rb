@@ -61,7 +61,7 @@ class ItemTest < ActiveSupport::TestCase
       end
     end
     assert_not item.valid?
-    assert_equal '1997', item.sort_year
+    assert_equal 1997, item.sort_year
   end
 
   test 'embargo_end_date must be present if visibility is embargo' do
@@ -313,7 +313,7 @@ class ItemTest < ActiveSupport::TestCase
     item = Item.new_locked_ldp_object(created: 'Fall 2015')
     item.valid?
     refute item.errors[:sort_year].present?
-    assert_equal item.sort_year, '2015'
+    assert_equal item.sort_year, 2015
   end
 
 end
