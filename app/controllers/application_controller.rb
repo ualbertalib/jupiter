@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
 
   include Pundit
 
+  before_action :store_user_location!, if: :storable_location?
   after_action :verify_authorized
 
   protect_from_forgery with: :exception
@@ -15,6 +16,23 @@ class ApplicationController < ActionController::Base
               ActionController::RoutingError, with: :render_404
 
   protected
+
+  def storable_location?
+    request.get? && !request.xhr? && request.fullpath !~ /auth/
+  end
+
+  def store_user_location!
+    uri = URI.parse(request.fullpath)
+    return unless uri
+
+    # We want to rebuild the url and preserve the full uri including query params and anchors
+    # remove domain from path and add query params
+    path = [uri.path.sub(/\A\/+/, '/'), uri.query].compact.join('?')
+    # add fragment back to path
+    path = [path, uri.fragment].compact.join('#')
+
+    session[:previous_user_location] = path
+  end
 
   # Returns the current logged-in user (if any).
   def current_user
@@ -89,8 +107,7 @@ class ApplicationController < ActionController::Base
   end
 
   def redirect_back_to
-    redirect_to session[:forwarding_url] || root_path
-    session.delete(:forwarding_url)
+    redirect_to session.delete(:forwarding_url) || session.delete(:previous_user_location) || root_path
   end
 
   def current_announcements

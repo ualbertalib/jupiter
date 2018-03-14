@@ -97,6 +97,7 @@ group :test do
   gem 'minitest-hooks'
   gem 'shoulda', require: false
 
+  gem 'launchy'
   # Easy installation and use of chromedriver to run system tests with Chrome
   gem 'chromedriver-helper'
 end
