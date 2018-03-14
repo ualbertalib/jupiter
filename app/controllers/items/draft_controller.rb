@@ -53,12 +53,14 @@ class Items::DraftController < ApplicationController
 
       # TODO: Handle required year but optional day/month better? Keep as string?
       # Set month/day to Jan 1st if left blank
-      if params[:draft_item]['date_created(3i)'].blank?
-        params[:draft_item]['date_created(3i)'] = '1'
-      end
+      if params[:draft_item][:date_created].blank?
+        if params[:draft_item]['date_created(3i)'].blank?
+          params[:draft_item]['date_created(3i)'] = '1'
+        end
 
-      if params[:draft_item]['date_created(2i)'].blank?
-        params[:draft_item]['date_created(2i)'] = '1'
+        if params[:draft_item]['date_created(2i)'].blank?
+          params[:draft_item]['date_created(2i)'] = '1'
+        end
       end
 
       @draft_item.update_attributes(permitted_attributes(DraftItem))
