@@ -25,7 +25,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
         assert_equal 'saml', identity.provider
         assert_equal 'johndoe', identity.uid
         assert_redirected_to root_url
-        assert_equal I18n.t('login.success', kind: 'saml'), flash[:notice]
+        assert_equal I18n.t('login.success'), flash[:notice]
         assert logged_in?
       end
     end
@@ -46,7 +46,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
         end
 
         assert_redirected_to root_url
-        assert_equal I18n.t('login.success', kind: 'saml'), flash[:notice]
+        assert_equal I18n.t('login.success'), flash[:notice]
         assert logged_in?
       end
 
@@ -68,7 +68,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
         assert_equal 'twitter-012345', identity.uid
 
         assert_redirected_to root_url
-        assert_equal I18n.t('login.success', kind: 'twitter'), flash[:notice]
+        assert_equal I18n.t('login.success'), flash[:notice]
         assert logged_in?
       end
     end
