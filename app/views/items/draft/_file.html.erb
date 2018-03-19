@@ -5,7 +5,7 @@
   <div class="media-body ml-3">
     <div class="pull-right">
       <% if @draft_item.thumbnail != file %>
-        <%= link_to set_thumbnail_item_file_path(@draft_item, file), method: :patch, remote: true, class: 'btn btn-secondary' do %>
+        <%= link_to set_thumbnail_item_file_path(@draft_item, file), method: :patch, remote: true, class: 'btn btn-secondary mb-2 mb-md-0' do %>
           <%= fa_icon 'file-image-o' %>
           <%= t('.set_as_thumbnail') %>
         <% end %>
