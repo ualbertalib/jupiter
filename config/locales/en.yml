@@ -659,8 +659,8 @@ en:
 
   views:
     pagination:
-      first: "&laquo; <span class='d-none d-md-block'>First</span>"
-      last: "<span class='d-none d-md-block'>Last</span> &raquo;"
-      previous: "&lsaquo; <span class='d-none d-md-block'>Prev</span>"
-      next: "<span class='d-none d-md-block'>Next</span> &rsaquo;"
+      first: "&laquo; <span class='d-none d-md-inline'>First</span>"
+      last: "<span class='d-none d-md-inline'>Last</span> &raquo;"
+      previous: "&lsaquo; <span class='d-none d-md-inline'>Prev</span>"
+      next: "<span class='d-none d-md-inline'>Next</span> &rsaquo;"
       truncate: "..."
