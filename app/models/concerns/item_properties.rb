@@ -162,6 +162,10 @@ type=\"#{unlocked_fileset.original_file.mime_type}\"\
     end
   end
 
+  def doi_state
+    ItemDoiState.find_by(item_id: id)
+  end
+
   def doi_url
     "https://doi.org/#{read_solr_index(:doi_without_label).first}"
   end
@@ -189,9 +193,7 @@ type=\"#{unlocked_fileset.original_file.mime_type}\"\
       # Some kinds of things don't get thumbnailed by HydraWorks, eg) .txt files
       break if unlocked_fileset.thumbnail.blank?
       unlocked_fileset.fetch_raw_thumbnail_data do |content_type, io|
-        thumbnail.attach(io: io,
-                         filename: "#{unlocked_fileset.contained_filename}.jpg",
-                         content_type: content_type)
+        thumbnail.attach(io: io, filename: "#{unlocked_fileset.contained_filename}.jpg", content_type: content_type)
       end
     end
   end
