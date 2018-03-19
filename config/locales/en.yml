@@ -656,3 +656,11 @@ en:
     item_type_with_status: 'Item type'
     all_contributors: 'Author / Creator / Contributor'
     all_subjects: 'Subject / Keyword'
+
+  views:
+    pagination:
+      first: "&laquo; <span class='d-none d-md-block'>First</span>"
+      last: "<span class='d-none d-md-block'>Last</span> &raquo;"
+      previous: "&lsaquo; <span class='d-none d-md-block'>Prev</span>"
+      next: "<span class='d-none d-md-block'>Next</span> &rsaquo;"
+      truncate: "..."
