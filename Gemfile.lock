@@ -129,7 +129,7 @@ GEM
     ebnf (1.1.2)
       rdf (>= 2.2, < 4.0)
       sxp (~> 1.0)
-    erubi (1.7.0)
+    erubi (1.7.1)
     execjs (2.7.0)
     faker (1.8.7)
       i18n (>= 0.7)
@@ -256,7 +256,7 @@ GEM
     rack (2.0.4)
     rack-protection (2.0.1)
       rack
-    rack-test (0.8.2)
+    rack-test (0.8.3)
       rack (>= 1.0, < 3)
     rails (5.1.5)
       actioncable (= 5.1.5)
@@ -284,7 +284,7 @@ GEM
     rainbow (2.2.2)
       rake
     rake (12.3.0)
-    ransack (1.8.7)
+    ransack (1.8.8)
       actionpack (>= 3.0)
       activerecord (>= 3.0)
       activesupport (>= 3.0)
