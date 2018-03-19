@@ -149,11 +149,11 @@ class Item < JupiterCore::LockedLdpObject
     validate :license_xor_rights_must_be_present
 
     def populate_sort_year
-      self.sort_year = Date.parse(created).year.to_s if created.present?
+      self.sort_year = Date.parse(created).year.to_i if created.present?
     rescue ArgumentError
       # date was unparsable, try to pull out the first 4 digit number as a year
       capture = created.scan(/\d{4}/)
-      self.sort_year = capture[0] if capture.present?
+      self.sort_year = capture[0].to_i if capture.present?
     end
 
     def copy_creators_to_unordered_predicate

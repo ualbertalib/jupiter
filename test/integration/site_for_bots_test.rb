@@ -110,7 +110,7 @@ class SiteForBotsTest < ActionDispatch::IntegrationTest
   test 'nofollow for item metadata links to search' do
     get item_path @item
     assert_select "a[rel='nofollow']", text: @item.creators.first
-    assert_select "a[rel='nofollow']", text: @item.sort_year
+    assert_select "a[rel='nofollow']", text: @item.sort_year.to_s
     assert_select "a[rel='nofollow']", text: 'English'
     assert_select "a[rel='nofollow']", text: 'Article (Draft / Submitted)'
     assert_select "a[rel='nofollow']", text: @item.subject.first
