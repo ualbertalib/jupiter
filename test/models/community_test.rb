@@ -31,14 +31,14 @@ class CommunityTest < ActiveSupport::TestCase
     assert_equal c.logo.record_gid, c.to_gid.to_s
     assert_equal c.logo.blob.filename, 'image-sample.jpeg'
     assert_equal c.logo.blob.content_type, 'image/jpeg'
-    assert_equal c.logo.blob.byte_size, 12_401
+    assert_equal c.logo.blob.byte_size, 12_086
 
     # Find file on disk
     key = c.logo.blob.key
     assert key.is_a?(String)
     file_path = ActiveStorage::Blob.service.root + "/#{key[0..1]}/#{key[2..3]}/#{key}"
     assert File.exist?(file_path)
-    assert_equal c.logo.blob.checksum, 'cRecc//RM88PJeP3s1cu9w=='
+    assert_equal c.logo.blob.checksum, 'GxpIjJsC4KnRoBKNjWnkJA=='
   end
 
   test 'an updated logo replaces the old one' do
