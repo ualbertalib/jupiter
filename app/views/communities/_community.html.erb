@@ -1,6 +1,8 @@
+<%# TODO: Refactor this like collections_list/collection_path,
+    only difference between this and admin partial is the community_path %>
 <li class="list-group-item list-group-item-action">
 
-  <div class="d-flex justify-content-between align-items-start mb-3">
+  <div class="d-flex flex-wrap justify-content-between align-items-start mb-3">
     <%= link_to community_path(community), class: 'media jupiter-community-media' do %>
       <%= render partial: 'thumbnail', locals: { thumbnail: community.logo.attachment, object: community } %>
       <div class="media-body ml-3">

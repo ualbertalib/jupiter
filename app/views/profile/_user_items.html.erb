@@ -4,7 +4,7 @@
   <% if @draft_items.present? %>
     <% @draft_items.each do |draft_item| %>
       <div class='list-group-item list-group-item-action'>
-        <div class="d-flex justify-content-between align-items-start mb-3">
+        <div class="d-flex flex-wrap justify-content-between align-items-start mb-3">
           <div class='media'>
             <%= render partial: 'thumbnail', locals: { thumbnail: draft_item.thumbnail, object: draft_item } %>
             <div class="media-body ml-3">
