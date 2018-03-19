@@ -55,7 +55,8 @@ module SearchHelper
   end
 
   def search_sort_link(sort, direction)
-    link_to search_sort_label(sort, direction), query_params_with_sort(sort, direction), class: 'dropdown-item'
+    link_to search_sort_label(sort, direction), query_params_with_sort(sort, direction),
+            class: 'dropdown-item', rel: 'nofollow'
   end
 
   def search_sort_label(sort, direction)

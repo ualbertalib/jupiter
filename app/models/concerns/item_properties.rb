@@ -19,7 +19,7 @@ module ItemProperties
     has_attribute :northern_north_america_item_id,
                   ::TERMS[:ual].northern_north_america_item_id, solrize_for: :exact_match
     has_attribute :rights, ::RDF::Vocab::DC11.rights, solrize_for: :exact_match
-    has_attribute :sort_year, ::TERMS[:ual].sort_year, solrize_for: [:search, :sort, :facet]
+    has_attribute :sort_year, ::TERMS[:ual].sort_year, type: :integer, solrize_for: [:search, :sort, :facet]
     has_attribute :visibility_after_embargo, ::TERMS[:acl].visibility_after_embargo, solrize_for: :exact_match
 
     has_multival_attribute :embargo_history, ::TERMS[:acl].embargo_history, solrize_for: :exact_match
@@ -141,6 +141,7 @@ type=\"#{unlocked_fileset.original_file.mime_type}\"\
             self.ordered_members += [unlocked_fileset]
             if Rails.configuration.run_fits_characterization
               Hydra::Works::CharacterizationService.run(unlocked_fileset.original_file)
+              unlocked_fileset.original_file.save
             end
           end
         end

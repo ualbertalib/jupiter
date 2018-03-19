@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
 
   include Pundit
 
+  before_action :store_user_location!, if: :storable_location?
   after_action :verify_authorized
 
   protect_from_forgery with: :exception
@@ -9,11 +10,29 @@ class ApplicationController < ActionController::Base
   helper_method :current_announcements, :path_for_result
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+
   rescue_from JupiterCore::ObjectNotFound,
               ActiveRecord::RecordNotFound,
               ActionController::RoutingError, with: :render_404
 
   protected
+
+  def storable_location?
+    request.get? && !request.xhr? && request.fullpath !~ /auth/
+  end
+
+  def store_user_location!
+    uri = URI.parse(request.fullpath)
+    return unless uri
+
+    # We want to rebuild the url and preserve the full uri including query params and anchors
+    # remove domain from path and add query params
+    path = [uri.path.sub(/\A\/+/, '/'), uri.query].compact.join('?')
+    # add fragment back to path
+    path = [path, uri.fragment].compact.join('#')
+
+    session[:previous_user_location] = path
+  end
 
   # Returns the current logged-in user (if any).
   def current_user
@@ -77,17 +96,18 @@ class ApplicationController < ActionController::Base
 
   def render_404(exception = nil)
     raise exception if exception && Rails.env.development?
-    render '4xx.html.erb', status: :not_found
-  end
 
-  def render_500(exception = nil)
-    raise exception if exception && Rails.env.development?
-    render '5xx.html.erb', status: :internal_server_error
+    respond_to do |format|
+      format.html do
+        render file: Rails.root.join('public', '404'), layout: false, status: :not_found
+      end
+      format.js { render json: '', status: :not_found, content_type: 'application/json' }
+      format.any { head :not_found }
+    end
   end
 
   def redirect_back_to
-    redirect_to session[:forwarding_url] || root_path
-    session.delete(:forwarding_url)
+    redirect_to session.delete(:forwarding_url) || session.delete(:previous_user_location) || root_path
   end
 
   def current_announcements
