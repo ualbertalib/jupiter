@@ -180,7 +180,7 @@ if Rails.env.development? || Rails.env.uat?
             File.open(Rails.root + 'test/fixtures/files/image-sample.jpeg', 'r') do |file2|
               # Bit of a hack to fake a long file name ...
               def file2.original_filename
-                'wefksdkhvkasdkfjhwekkjahsdkjkajvbkejfkwejfjkdvkhdkfhwukefkhoiekldkfhkdfjhiwuegfugksjdcjbsjkdbw.jpeg'
+                'wefksdkhvkasdkfjhwekkjahsdkjkajvbkejfkwejfjkdvkhdkfhw&ükefkhoiekldkfhkdfjhiwuegfugksjdcjbsjkdbw.jpeg'
               end
               uo.add_files([file1, file2])
             end
