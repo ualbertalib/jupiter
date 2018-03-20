@@ -301,7 +301,10 @@ class JupiterCore::LockedLdpObject
 
   # Integer, the number of records in Solr/Fedora
   def self.count
-    all.count
+    # Note: call +total_count+ to do a query retrieving 0 results and get the numFound from Solr
+    # calling JupiterCore::DeferredSimpleSolrQuery#count would call the ActiveModel method, force the reification
+    # of all records, and then count the objects, which is very slow
+    all.total_count
   end
 
   # Accepts a hash of name-value pairs to query for, and returns an Array of matching +LockedLDPObject+
