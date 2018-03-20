@@ -58,6 +58,7 @@
       <%= search_field_tag :query,
           params[:query],
           placeholder: t('collections.show.search_items_placeholder'),
+          'aria-label': t('collections.show.search_items_placeholder'),
           class: 'form-control' %>
       <span class="input-group-btn">
         <button type="submit" class="btn btn-secondary">

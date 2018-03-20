@@ -4,7 +4,7 @@ $black: #000;
 $theme-colors: (
   "jupiter-primary": $jupiter-primary
 );
-$primary: darken($jupiter-primary, 30%);
+$primary: darken($jupiter-primary, 40%);
 
 // Make navbar colors darker to pass color contrast ratio
 $navbar-light-color: rgba($black, .7);
