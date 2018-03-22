@@ -38,7 +38,7 @@ class Thesis < JupiterCore::LockedLdpObject
   # This gets mixed with the item types for `Item`
   additional_search_index :item_type_with_status,
                           solrize_for: :facet,
-                          as: -> { 'thesis' }
+                          as: -> { item_type_with_status_code }
 
   # Dissertants are indexed with the Item creators/contributors
   additional_search_index :all_contributors, solrize_for: :facet, as: -> { [dissertant] }
@@ -50,6 +50,11 @@ class Thesis < JupiterCore::LockedLdpObject
   additional_search_index :languages,
                           solrize_for: :facet,
                           as: -> { [language] }
+
+  # Present a consistent interface with Item#item_type_with_status_code
+  def item_type_with_status_code
+    :thesis
+  end
 
   unlocked do
     before_save :copy_departments_to_unordered_predicate

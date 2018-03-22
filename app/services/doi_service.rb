@@ -80,12 +80,11 @@ class DOIService
 
   # Parse GenericFile and return hash of relevant DOI information
   def doi_metadata
-    type = @item.is_a?(Thesis) ? :thesis : @item.item_type_with_status_code
     {
       datacite_creator:  @item.authors.join('; '),
       datacite_publisher: PUBLISHER,
       datacite_publicationyear: @item.sort_year.present? ? @item.sort_year : '(:unav)',
-      datacite_resourcetype: DATACITE_METADATA_SCHEME[type],
+      datacite_resourcetype: DATACITE_METADATA_SCHEME[@item.item_type_with_status_code],
       datacite_title:  @item.title,
       target: Rails.application.routes.url_helpers.item_url(id: @item.id),
       # Can only set status if been minted previously, else its public
