@@ -1,4 +1,5 @@
-$admin: $blue; // TODO: looks too much like a link...needs tweaking or just remove these colors?
+// Darken blue as it fails WCAG Color Contrast ratio
+$admin: darken($blue, 5%); // TODO: looks too much like a link...needs tweaking or just remove these colors?
 $suspended: $red;
 
 .user-admin {
