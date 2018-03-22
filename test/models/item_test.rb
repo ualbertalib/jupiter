@@ -26,8 +26,16 @@ class ItemTest < ActiveSupport::TestCase
       end
     end
     assert item.valid?
-    assert_equal item.id, Item.public.first.id
-    item.unlock_and_fetch_ldp_object(&:destroy)
+    assert Item.public.map(&:id).include?(item.id)
+
+    assert_difference -> { Item.public.count }, -1 do
+      item.unlock_and_fetch_ldp_object do |unlocked_item|
+        unlocked_item.visibility = JupiterCore::VISIBILITY_PRIVATE
+        unlocked_item.save!
+      end
+    end
+    assert item.valid?
+    refute Item.public.map(&:id).include?(item.id)
   end
 
   test 'there is no default visibility' do
