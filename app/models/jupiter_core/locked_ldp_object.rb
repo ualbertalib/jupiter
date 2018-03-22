@@ -529,6 +529,19 @@ class JupiterCore::LockedLdpObject
           errors.add(:visibility, I18n.t('locked_ldp_object.errors.invalid_visibility', visibility: visibility))
         end
 
+        # utility methods for checking for certain visibility transitions
+        def transitioned_to_private?
+          return true if changes['visibility'].present? &&
+                         (changes['visibility'][0] != JupiterCore::VISIBILITY_PRIVATE) &&
+                         (changes['visibility'][1] == JupiterCore::VISIBILITY_PRIVATE)
+        end
+
+        def transitioned_from_private?
+          return true if changes['visibility'].present? &&
+                         (changes['visibility'][0] == JupiterCore::VISIBILITY_PRIVATE) &&
+                         (changes['visibility'][1] != JupiterCore::VISIBILITY_PRIVATE)
+        end
+
         # this is the nice version of coerce_value. This is used for data going _in_ to Fedora/Solr, so it
         # sanity checks the conversion. coerce_value blindly does the conversion, for assumed-good data being
         # read back from Fedora/Solr

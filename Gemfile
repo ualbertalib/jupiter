@@ -49,10 +49,11 @@ gem 'sinatra' # used by sidekiq/web
 
 # Misc Utilities
 gem 'aasm' # state-machine management
+gem 'ezid-client'
 gem 'kaminari' # Pagination
 gem 'ransack' # ActiveRecord search/filter
-gem 'wicked' # Multi-step wizard
 gem 'voight_kampff' # bot detection
+gem 'wicked' # Multi-step wizard
 
 # Performance monitoring
 gem 'skylight'
@@ -93,6 +94,8 @@ group :test do
   gem 'haikunator'
   gem 'minitest-hooks'
   gem 'shoulda', require: false
+  gem 'vcr', require: false
+  gem 'webmock', require: false
 end
 
 group :staging, :production do

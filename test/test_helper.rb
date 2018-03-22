@@ -7,6 +7,16 @@ require 'minitest/hooks/test'
 require 'minitest/mock'
 require 'active_fedora/cleaner'
 require 'shoulda'
+require 'webmock/minitest'
+require 'vcr'
+
+VCR.configure do |config|
+  config.cassette_library_dir = 'fixtures/vcr'
+  config.hook_into :webmock
+
+  # Only want VCR to intercept requests to external URLs.
+  config.ignore_localhost = true
+end
 
 class ActiveSupport::TestCase
 
