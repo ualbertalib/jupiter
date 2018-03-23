@@ -32,6 +32,8 @@ module ItemProperties
     additional_search_index :doi_without_label, solrize_for: :exact_match,
                                                 as: -> { doi.gsub('doi:', '') if doi.present? }
 
+    attr_accessor :skip_handle_doi_states
+
     # allow for a uniform way of accessing this information across regular items and theses
     def authors
       respond_to?(:creators) ? creators : [dissertant]
@@ -45,8 +47,7 @@ module ItemProperties
     end
 
     unlocked do
-      attr_accessor :skip_handle_doi_states
-      before_save :handle_doi_states
+      after_save :handle_doi_states
       before_destroy :remove_doi
 
       # If you're looking for rights and subject validations, note that they have separate implementations
@@ -91,6 +92,33 @@ module ItemProperties
             end
           end
         end
+      end
+
+      def handle_doi_states
+        # this should be disabled during migration runs and enabled for production
+
+        return unless Rails.application.secrets.doi_minting_enabled
+
+        # ActiveFedora doesn't have skip_callbacks built in? So handle this ourselves.
+        # Allow this logic to be skipped if skip_handle_doi_states is set.
+        # This is mainly used so we can rollback the state when a job fails and
+        # we do not wish to rerun all this logic again which would queue up the same job again
+        return (self.skip_handle_doi_states = false) if skip_handle_doi_states.present?
+
+        if doi.blank? # Never been minted before
+          doi_state.created!(id) if !self.private? && doi_state.not_available?
+        elsif (doi_state.not_available? &&
+              self.transitioned_from_private?) ||
+              (doi_state.available? && (doi_state.doi_fields_changed?(self) ||
+              self.transitioned_to_private?))
+          # If private, we only care if visibility has been made public
+          # If public, we care if visibility changed to private or doi fields have been changed
+          doi_state.altered!(id)
+        end
+      end
+
+      def remove_doi
+        doi_state.unpublish! if doi.present? && doi_state.available?
       end
 
       def add_to_path(community_id, collection_id)
@@ -176,32 +204,6 @@ type=\"#{unlocked_fileset.original_file.mime_type}\"\
     def public
       where(visibility: JupiterCore::VISIBILITY_PUBLIC)
     end
-  end
-
-  def handle_doi_states
-    # this should be disabled during migration runs and enabled for production
-    return unless Rails.application.secrets.doi_minting_enabled
-
-    # ActiveFedora doesn't have skip_callbacks built in? So handle this ourselves.
-    # Allow this logic to be skipped if skip_handle_doi_states is set.
-    # This is mainly used so we can rollback the state when a job fails and
-    # we do not wish to rerun all this logic again which would queue up the same job again
-    return (self.skip_handle_doi_states = false) if skip_handle_doi_states.present?
-
-    if doi.blank? # Never been minted before
-      doi_state.created!(id) if !doi_state.private? && doi_state.not_available?
-    elsif (doi_state.not_available? &&
-          doi_state.transitioned_from_private?) ||
-          (doi_state.available? && (doi_state.doi_fields_changed?(self) ||
-          doi_state.transitioned_to_private?))
-      # If private, we only care if visibility has been made public
-      # If public, we care if visibility changed to private or doi fields have been changed
-      doi_state.altered!(id)
-    end
-  end
-
-  def remove_doi
-    doi_state.unpublish!
   end
 
   def doi_url

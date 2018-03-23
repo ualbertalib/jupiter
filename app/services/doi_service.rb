@@ -30,7 +30,7 @@ class DOIService
     return unless @item.doi_state.unminted? && !@item.private?
     ezid_identifer = Ezid::Identifier.mint(Ezid::Client.config.default_shoulder, doi_metadata)
     if ezid_identifer.present?
-      @item.doi = ezid_identifer.id
+      @item.unlock_and_fetch_ldp_object {|uo| uo.doi = ezid_identifer.id; uo.save!}
       @item.doi_state.synced!
       ezid_identifer
     end
@@ -40,7 +40,7 @@ class DOIService
     # the state to it's previous value. By skipping the callback we can prevent
     # it temporarily from queueing another job. As this could make it end up
     # right back here again resulting in an infinite loop.
-    @item.doi_state.skip_handle_doi_states = true
+    @item.skip_handle_doi_states = true
     @item.doi_state.unpublish!
 
     raise e
@@ -63,7 +63,7 @@ class DOIService
     # the state to it's previous value. By skipping the callback we can prevent
     # it temporarily from queueing another job. As this could make it end up
     # right back here again resulting in an infinite loop.
-    @item.doi_state.skip_handle_doi_states = true
+    @item.skip_handle_doi_states = true
     if @item.private?
       @item.doi_state.synced!
     else

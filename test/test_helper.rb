@@ -11,12 +11,15 @@ require 'webmock/minitest'
 require 'vcr'
 
 VCR.configure do |config|
-  config.cassette_library_dir = 'fixtures/vcr'
+  config.cassette_library_dir = 'test/vcr'
   config.hook_into :webmock
 
   # Only want VCR to intercept requests to external URLs.
   config.ignore_localhost = true
 end
+
+# Required when using Rails.application.routes.url_helpers from outside the request/response life cycle (models, jobs, lib)
+Rails.application.routes.default_url_options = { host: 'localhost', port: 3000 }
 
 class ActiveSupport::TestCase
 

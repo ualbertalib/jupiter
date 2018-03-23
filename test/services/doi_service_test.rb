@@ -5,20 +5,32 @@ class DoiServiceTest < ActiveSupport::TestCase
   EXAMPLE_DOI = 'doi:10.5072/FK2JQ1003W'.freeze
 
   test 'creation' do
+    Rails.application.secrets.doi_minting_enabled = true
 
-    VCR.use_cassette('ezid_minting') do
-      ezid_identifer = DOIService.new(item).create
-      assert_nil ezid_identifer
+    community = Community.new_locked_ldp_object(title: 'Community', owner: 1,
+                                                    visibility: JupiterCore::VISIBILITY_PUBLIC)
+
+    community.unlock_and_fetch_ldp_object(&:save!)
+    collection = Collection.new_locked_ldp_object(title: 'Collection', owner: 1,
+                                                  visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                                  community_id: community.id)
+    collection.unlock_and_fetch_ldp_object(&:save!)
+
+    item = Item.new_locked_ldp_object(title: 'Test Title', owner: 1, visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                      created: '2017-02-02',
+                                      languages: [CONTROLLED_VOCABULARIES[:language].english],
+                                      creators: ['Joe Blow'],
+                                      subject: ['Things'],
+                                      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                                      item_type: CONTROLLED_VOCABULARIES[:item_type].book)
+    item.unlock_and_fetch_ldp_object do |unlocked_item|
+      unlocked_item.add_to_path(community.id, collection.id)
+      unlocked_item.save!
     end
 
     assert_nil item.doi
-
     VCR.use_cassette('ezid_minting') do
       assert_equal 'unminted', item.doi_state.aasm_state
-      item.unlock_and_fetch_ldp_object do |uo|
-        uo.visibility = JupiterCore::VISIBILITY_PUBLIC
-        uo.save
-      end
 
       ezid_identifer = DOIService.new(item).create
       refute_nil ezid_identifer
@@ -30,7 +42,6 @@ class DoiServiceTest < ActiveSupport::TestCase
       assert_equal 'yes', ezid_identifer.export
 
       refute_nil item.doi
-      binding.pry
       assert_equal 'available', item.doi_state.aasm_state
     end
   end
