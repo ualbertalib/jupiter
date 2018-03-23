@@ -71,11 +71,11 @@ class Thesis < JupiterCore::LockedLdpObject
     before_validation do
       # Note: for Item, the sort_year attribute is derived from dcterms:created
       begin
-        self.sort_year = Date.parse(graduation_date).year.to_s if graduation_date.present?
+        self.sort_year = Date.parse(graduation_date).year.to_i if graduation_date.present?
       rescue ArgumentError
         # date was unparsable, try to pull out the first 4 digit number as a year
         capture = graduation_date.scan(/\d{4}/)
-        self.sort_year = capture[0] if capture.present?
+        self.sort_year = capture[0].to_i if capture.present?
       end
 
       def copy_departments_to_unordered_predicate

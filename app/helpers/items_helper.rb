@@ -16,4 +16,9 @@ module ItemsHelper
     text ||= license
     link_to(text, license)
   end
+
+  def description(object)
+    return object.abstract if object.respond_to? :abstract
+    return object.description if object.respond_to? :description
+  end
 end

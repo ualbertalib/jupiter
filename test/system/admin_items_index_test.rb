@@ -1,10 +1,10 @@
 require 'application_system_test_case'
 
-class AdminItemsShowTest < ApplicationSystemTestCase
+class AdminItemsIndexTest < ApplicationSystemTestCase
 
   should 'be able to view all items/theses owned by anybody' do
     # Note: searching and faceting is covered more extensively in tests elsewhere
-    user = User.find_by(email: 'john_snow@example.com')
+    user = users(:regular)
     admin = users(:admin)
 
     community = Community.new_locked_ldp_object(title: 'Fancy Community', owner: 1)

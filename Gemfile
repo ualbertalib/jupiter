@@ -52,8 +52,8 @@ gem 'aasm' # state-machine management
 gem 'ezid-client'
 gem 'kaminari' # Pagination
 gem 'ransack' # ActiveRecord search/filter
-gem 'voight_kampff' # bot detection
 gem 'wicked' # Multi-step wizard
+gem 'voight_kampff' # bot detection
 
 # Performance monitoring
 gem 'skylight'
@@ -94,7 +94,11 @@ group :test do
   gem 'haikunator'
   gem 'minitest-hooks'
   gem 'shoulda', require: false
+
+  gem 'launchy'
   gem 'vcr', require: false
+  # Easy installation and use of chromedriver to run system tests with Chrome
+  gem 'chromedriver-helper'
   gem 'webmock', require: false
 end
 
