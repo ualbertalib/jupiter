@@ -106,11 +106,11 @@ module ItemProperties
         return (self.skip_handle_doi_states = false) if skip_handle_doi_states.present?
 
         if doi.blank? # Never been minted before
-          doi_state.created!(id) if !self.private? && doi_state.not_available?
+          doi_state.created!(id) if !private? && doi_state.not_available?
         elsif (doi_state.not_available? &&
-              self.transitioned_from_private?) ||
+              transitioned_from_private?) ||
               (doi_state.available? && (doi_state.doi_fields_changed?(self) ||
-              self.transitioned_to_private?))
+              transitioned_to_private?))
           # If private, we only care if visibility has been made public
           # If public, we care if visibility changed to private or doi fields have been changed
           doi_state.altered!(id)

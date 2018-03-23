@@ -52,8 +52,8 @@ gem 'aasm' # state-machine management
 gem 'ezid-client'
 gem 'kaminari' # Pagination
 gem 'ransack' # ActiveRecord search/filter
-gem 'wicked' # Multi-step wizard
 gem 'voight_kampff' # bot detection
+gem 'wicked' # Multi-step wizard
 
 # Performance monitoring
 gem 'skylight'

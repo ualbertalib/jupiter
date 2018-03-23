@@ -30,7 +30,10 @@ class DOIService
     return unless @item.doi_state.unminted? && !@item.private?
     ezid_identifer = Ezid::Identifier.mint(Ezid::Client.config.default_shoulder, doi_metadata)
     if ezid_identifer.present?
-      @item.unlock_and_fetch_ldp_object {|uo| uo.doi = ezid_identifer.id; uo.save!}
+      @item.unlock_and_fetch_ldp_object do |uo|
+        uo.doi = ezid_identifer.id
+        uo.save!
+      end
       @item.doi_state.synced!
       ezid_identifer
     end

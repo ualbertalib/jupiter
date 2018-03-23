@@ -8,7 +8,7 @@ class DoiServiceTest < ActiveSupport::TestCase
     Rails.application.secrets.doi_minting_enabled = true
 
     community = Community.new_locked_ldp_object(title: 'Community', owner: 1,
-                                                    visibility: JupiterCore::VISIBILITY_PUBLIC)
+                                                visibility: JupiterCore::VISIBILITY_PUBLIC)
 
     community.unlock_and_fetch_ldp_object(&:save!)
     collection = Collection.new_locked_ldp_object(title: 'Collection', owner: 1,
@@ -45,4 +45,5 @@ class DoiServiceTest < ActiveSupport::TestCase
       assert_equal 'available', item.doi_state.aasm_state
     end
   end
+
 end
