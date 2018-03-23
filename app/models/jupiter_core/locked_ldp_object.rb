@@ -13,12 +13,14 @@ class JupiterCore::LockedLdpObject
   # Maps semantically meaningful, easily understandable names for solr index behaviours
   # into the sometimes inscrutable and opaque descriptors used by Solrizer. See:
   # https://github.com/mbarnett/solrizer/blob/e5dd2bd571b9ebdb8a8ab214574075c28951e53e/lib/solrizer/default_descriptors.rb
+  # use of range_facet assumes that facet is not used for that attribute
   SOLR_DESCRIPTOR_MAP = {
     search: :stored_searchable,
     sort: :stored_sortable,
     facet: :facetable,
     exact_match: :symbol,
-    pathing: :descendent_path
+    pathing: :descendent_path,
+    range_facet: :stored_sortable
   }.freeze
 
   # we reserve .new for internal use in constructing LockedLDPObjects. Use the public interface
@@ -250,13 +252,19 @@ class JupiterCore::LockedLdpObject
   #
   # Given a subclass +Item+ with an attribute declaration:
   #   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
+  # or
+  #   has_attribute :sort_year, ::TERMS[:ual].sort_year, type: :integer, solrize_for: [:search, :range_facet]
   #
   # then:
   #   Item.facet_term_for(:title, 'science')
   #   => { 'title_tesim': ['science'] }
+  # or
+  #   Item.facet_term_for(:sort_year, '1999')
+  #   => {"sort_year_isi"=>{:begin=>"1999", :end=>"1999"}
   def self.facet_term_for(attr_name, value, role: :facet)
     raise ArgumentError, "search value can't be nil" if value.nil?
     solr_attr_name = solr_name_for(attr_name, role: role)
+    return { solr_attr_name => { begin: value, end: value } } if role == :range_facet
     { solr_attr_name => [value].flatten }
   end
 
@@ -812,6 +820,8 @@ class JupiterCore::LockedLdpObject
 
       facet_name = if solrize_for.include?(:facet)
                      Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[:facet], type: solr_type)
+                   elsif solrize_for.include?(:range_facet)
+                     Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[:range_facet], type: solr_type)
                    elsif solrize_for.include?(:pathing)
                      Solrizer.solr_name(name, SOLR_DESCRIPTOR_MAP[:pathing], type: solr_type)
                    end

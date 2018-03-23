@@ -7,6 +7,9 @@ class SearchController < ApplicationController
 
   def index
     params[:facets].permit! if params[:facets].present?
+    params[:ranges].permit! if params[:ranges].present?
+
+    validate_ranges
 
     # cut this off at a reasonable maximum to avoid DOSing Solr with truly huge queries (I managed to shove upwards
     # of 5000 characters in here locally)
@@ -35,6 +38,7 @@ class SearchController < ApplicationController
 
       options = { q: query, models: models, as: current_user }
       options[:facets] = params[:facets] if model == @active_tab
+      options[:ranges] = params[:ranges] if model == @active_tab
       @results[model] = JupiterCore::Search.faceted_search(options)
     end
     # Toggle that we want to be able to sort by sort_year
@@ -43,6 +47,22 @@ class SearchController < ApplicationController
       @results[@active_tab].sort(sort_column(columns: ['title', 'sort_year']), sort_direction).page params[:page]
     else
       @results[@active_tab].sort(sort_column, sort_direction).page params[:page]
+    end
+  end
+
+  def validate_ranges
+    params[:ranges]&.each do |facet|
+      start = params.dig(:ranges, facet, :begin)
+      finish = params.dig(:ranges, facet, :end)
+      message = ''
+      unless start.match?(/\d{4}/) && finish.match?(/\d{4}/) && (start.to_i <= finish.to_i)
+        message = "#{start} to #{finish} is not a valid range"
+      end
+      unless message.empty?
+        flash[:alert] = message
+        params[:ranges].delete(facet)
+        params.delete(:ranges) if params[:ranges].empty?
+      end
     end
   end
 

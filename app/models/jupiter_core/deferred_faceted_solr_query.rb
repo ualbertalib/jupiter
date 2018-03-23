@@ -9,12 +9,13 @@ class JupiterCore::DeferredFacetedSolrQuery
   include Kaminari::PageScopeMethods
   include Kaminari::ConfigurationMethods::ClassMethods
 
-  def initialize(q:, qf:, fq:, facet_map:, facet_fields:, restrict_to_model:)
+  def initialize(q:, qf:, fq:, facet_map:, facet_fields:, ranges:, restrict_to_model:)
     criteria[:q] = q
     criteria[:qf] = qf # Query Fields
     criteria[:fq] = fq # Facet Query
     criteria[:facet_map] = facet_map
     criteria[:facet_fields] = facet_fields
+    criteria[:ranges] = ranges
     criteria[:restrict_to_model] = restrict_to_model
     criteria[:sort] = []
     criteria[:sort_order] = []
@@ -114,7 +115,14 @@ class JupiterCore::DeferredFacetedSolrQuery
     )
 
     @facets = facet_data['facet_fields'].map do |k, v|
-      JupiterCore::FacetResult.new(criteria[:facet_map], k, v) if v.present?
+      if k == 'sort_year_isi'
+        JupiterCore::RangeFacetResult.new(
+          criteria[:facet_map], k,
+          criteria[:ranges].fetch(k, begin: 1880, end: Time.current.year).to_h
+        )
+      elsif v.present?
+        JupiterCore::FieldValueFacetResult.new(criteria[:facet_map], k, v)
+      end
     end.compact
 
     @results
