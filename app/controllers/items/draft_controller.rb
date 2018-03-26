@@ -2,7 +2,7 @@ class Items::DraftController < ApplicationController
 
   include Wicked::Wizard
 
-  before_action :initialize_communities, only: [:show, :edit]
+  before_action :initialize_communities, only: [:show]
 
   steps(*DraftItem.wizard_steps.keys.map(&:to_sym))
 
@@ -51,13 +51,13 @@ class Items::DraftController < ApplicationController
       end
       params[:draft_item].delete :collection_id
 
-      @draft_item.update_attributes(permitted_attributes(DraftItem))
+      @draft_item.update(permitted_attributes(DraftItem))
 
       render_wizard @draft_item
     when :review_and_deposit_item
       params[:draft_item][:status] = DraftItem.statuses[:archived]
 
-      if @draft_item.update_attributes(permitted_attributes(DraftItem))
+      if @draft_item.update(permitted_attributes(DraftItem))
 
         # TODO: Improve this? Is there a way to gracefully handle errors coming back from fedora?
         item = Item.from_draft(@draft_item)
@@ -71,7 +71,7 @@ class Items::DraftController < ApplicationController
     else
       params[:draft_item][:status] = DraftItem.statuses[:active]
 
-      @draft_item.update_attributes(permitted_attributes(DraftItem))
+      @draft_item.update(permitted_attributes(DraftItem))
       render_wizard @draft_item
     end
   end

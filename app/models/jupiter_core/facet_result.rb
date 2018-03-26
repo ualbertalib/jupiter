@@ -36,9 +36,7 @@ class JupiterCore::FacetResult
     keys = @values.keys.slice(range)
     keys.each do |raw_value|
       count = @values[raw_value]
-      if raw_value.present?
-        yield FacetValue.new(attribute_name, solr_index, raw_value, count)
-      end
+      yield FacetValue.new(attribute_name, solr_index, raw_value, count) if raw_value.present?
     end
   end
 

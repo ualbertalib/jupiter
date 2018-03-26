@@ -93,7 +93,7 @@ class DraftItemTest < ActiveSupport::TestCase
       # Need to create an object for ActiveStorage because of global ID
       draft_item = draft_items(:inactive)
 
-      draft_item.update_attributes(
+      draft_item.update(
         user: user,
         status: DraftItem.statuses[:active],
         wizard_step: DraftItem.wizard_steps[:upload_files],

@@ -11,9 +11,9 @@ class Items::FilesController < ApplicationController
         formats: [:html]
       )
 
-      render json: { files_list_html: file_partial }, status: 200
+      render json: { files_list_html: file_partial }, status: :ok
     else
-      render json: @draft_item.errors, status: 400
+      render json: @draft_item.errors, status: :bad_request
     end
   end
 
@@ -35,7 +35,7 @@ class Items::FilesController < ApplicationController
     if @draft_item.save
       render :update_files_list
     else
-      render json: @draft_item.errors, status: 400
+      render json: @draft_item.errors, status: :bad_request
     end
   end
 
