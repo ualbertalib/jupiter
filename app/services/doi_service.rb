@@ -68,7 +68,7 @@ class DOIService
     if @item.private?
       @item.doi_state.synced!
     else
-      @item.unpublish!
+      @item.doi_state.unpublish!
     end
     raise e
   end

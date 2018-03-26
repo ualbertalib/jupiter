@@ -16,8 +16,8 @@ class ItemDoiState < ApplicationRecord
       transitions from: :not_available, to: :unminted
     end
 
-    event :removed do
-      transitions from: :not_available, to: :excluded
+    event :removed, after: :withdraw_doi do
+      transitions from: [:available, :not_available], to: :excluded
     end
 
     event :unpublish do
@@ -42,8 +42,8 @@ class ItemDoiState < ApplicationRecord
   end
 
   def doi_fields_changed?(unlocked_item)
-    unlocked_item.changed.keys.any? do |changed_field|
-      [:title, :creator, :dissertant, :item_type, :publication_status].include? changed_field
+    unlocked_item.changed.any? do |changed_field|
+      ['title', 'creator', 'dissertant', 'item_type', 'publication_status'].include? changed_field
     end
   end
 

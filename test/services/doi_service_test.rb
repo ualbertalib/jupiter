@@ -2,9 +2,11 @@ require 'test_helper'
 
 class DoiServiceTest < ActiveSupport::TestCase
 
-  EXAMPLE_DOI = 'doi:10.5072/FK2JQ1003W'.freeze
+  EXAMPLE_DOI = 'doi:10.5072/FK2JQ1005X'.freeze
 
-  test 'creation' do
+  test 'DOI state transitions' do
+    assert_equal 0, Sidekiq::Worker.jobs.size
+
     Rails.application.secrets.doi_minting_enabled = true
 
     community = Community.new_locked_ldp_object(title: 'Community', owner: 1,
@@ -29,11 +31,16 @@ class DoiServiceTest < ActiveSupport::TestCase
     end
 
     assert_nil item.doi
-    VCR.use_cassette('ezid_minting') do
+    assert_equal 1, Sidekiq::Worker.jobs.size
+
+    Sidekiq::Worker.clear_all
+
+    VCR.use_cassette('ezid_minting', erb: { id: item.id }, record: :none) do
       assert_equal 'unminted', item.doi_state.aasm_state
 
       ezid_identifer = DOIService.new(item).create
       refute_nil ezid_identifer
+      assert_equal EXAMPLE_DOI, ezid_identifer.id
       assert_equal 'University of Alberta Libraries', ezid_identifer.datacite_publisher
       assert_equal 'Test Title', ezid_identifer.datacite_title
       assert_equal 'Text/Book', ezid_identifer.datacite_resourcetype
@@ -43,6 +50,55 @@ class DoiServiceTest < ActiveSupport::TestCase
 
       refute_nil item.doi
       assert_equal 'available', item.doi_state.aasm_state
+    end
+
+    VCR.use_cassette('ezid_updating', erb: { id: item.id }, record: :none) do
+      assert_equal 0, Sidekiq::Worker.jobs.size
+
+      item.unlock_and_fetch_ldp_object do |uo|
+        uo.title = 'Different Title'
+        uo.save!
+      end
+      assert_equal 1, Sidekiq::Worker.jobs.size
+      Sidekiq::Worker.clear_all
+      ezid_identifer = DOIService.new(item).update
+      refute_nil ezid_identifer
+      assert_equal EXAMPLE_DOI, ezid_identifer.id
+      assert_equal Ezid::Status::PUBLIC, ezid_identifer.status
+      assert_equal 'Different Title', ezid_identifer.datacite_title
+      assert_equal 'yes', ezid_identifer.export
+      assert_equal 'available', item.doi_state.aasm_state
+    end
+
+    VCR.use_cassette('ezid_updating_unavailable', erb: { id: item.id }, record: :none) do
+      assert_equal 0, Sidekiq::Worker.jobs.size
+
+      item.unlock_and_fetch_ldp_object do |uo|
+        uo.visibility = JupiterCore::VISIBILITY_PRIVATE
+        uo.save!
+      end
+      assert_equal 1, Sidekiq::Worker.jobs.size
+      Sidekiq::Worker.clear_all
+
+      ezid_identifer = DOIService.new(item).update
+      refute_nil ezid_identifer
+      assert_equal EXAMPLE_DOI, ezid_identifer.id
+      assert_equal 'unavailable | not publicly released', ezid_identifer.status
+      assert_equal 'no', ezid_identifer.export
+      assert_equal 'not_available', item.doi_state.aasm_state
+    end
+
+    VCR.use_cassette('ezid_removal', erb: { id: item.id }, record: :none, allow_unused_http_interactions: false) do
+      assert_equal 0, Sidekiq::Worker.jobs.size
+      item.unlock_and_fetch_ldp_object(&:destroy)
+      assert_equal 1, Sidekiq::Worker.jobs.size
+      Sidekiq::Worker.clear_all
+
+      ezid_identifer = DOIService.remove(item.doi)
+      refute_nil ezid_identifer
+      assert_equal EXAMPLE_DOI, ezid_identifer.id
+      assert_equal 'unavailable | withdrawn', ezid_identifer.status
+      assert_equal 'no', ezid_identifer.export
     end
   end
 

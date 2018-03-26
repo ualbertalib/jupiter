@@ -47,7 +47,8 @@ module ItemProperties
     end
 
     unlocked do
-      after_save :handle_doi_states
+      before_save :handle_doi_states
+      after_create :handle_doi_states
       before_destroy :remove_doi
 
       # If you're looking for rights and subject validations, note that they have separate implementations
@@ -96,8 +97,9 @@ module ItemProperties
 
       def handle_doi_states
         # this should be disabled during migration runs and enabled for production
-
         return unless Rails.application.secrets.doi_minting_enabled
+
+        return if id.blank?
 
         # ActiveFedora doesn't have skip_callbacks built in? So handle this ourselves.
         # Allow this logic to be skipped if skip_handle_doi_states is set.
@@ -118,7 +120,7 @@ module ItemProperties
       end
 
       def remove_doi
-        doi_state.unpublish! if doi.present? && doi_state.available?
+        doi_state.removed! if doi.present? && (doi_state.available? || doi_state.not_available?)
       end
 
       def add_to_path(community_id, collection_id)
