@@ -23,7 +23,7 @@ end
 Sidekiq::Testing.fake!
 
 # Required when using Rails.application.routes.url_helpers from outside the request/response life cycle (models, jobs, lib)
-Rails.application.routes.default_url_options = { host: 'localhost', port: 3000 }
+Rails.application.routes.default_url_options = { host: 'localhost' }
 
 class ActiveSupport::TestCase
 
