@@ -106,6 +106,10 @@ module ItemProperties
         # TODO should this be a side effect? should we throw an exception if there's no id? Food for thought
         save! if id.nil?
 
+        # The current and added filesets approach (rather than direct array append) works around bugs in ActiveFedora
+        current_filesets = ordered_members || []
+        added_filesets = []
+
         files.each do |file|
           FileSet.new_locked_ldp_object.unlock_and_fetch_ldp_object do |unlocked_fileset|
             unlocked_fileset.owner = owner
@@ -123,13 +127,16 @@ module ItemProperties
                                                   end
             # Store file properties in the format required by the sitemap
             # for quick and easy retrieval -- nobody wants to wait 36hrs for this!
+            escaped_path = CGI.escape_html(
+              Rails.application.routes.url_helpers.url_for(controller: :file_sets,
+                                                           action: :show,
+                                                           id: id,
+                                                           file_set_id: unlocked_fileset.id,
+                                                           file_name: unlocked_fileset.contained_filename,
+                                                           only_path: true)
+            )
             unlocked_fileset.sitemap_link = "<rs:ln \
-href=\"#{Rails.application.routes.url_helpers.url_for(controller: :file_sets,
-                                                      action: :show,
-                                                      id: id,
-                                                      file_set_id: unlocked_fileset.id,
-                                                      file_name: unlocked_fileset.contained_filename,
-                                                      only_path: true)}\" \
+href=\"#{escaped_path}\" \
 rel=\"content\" \
 hash=\"#{unlocked_fileset.original_file.checksum.algorithm.downcase}:"\
 "#{unlocked_fileset.original_file.checksum.value}\" \
@@ -138,13 +145,15 @@ type=\"#{unlocked_fileset.original_file.mime_type}\"\
 />"
             unlocked_fileset.save!
 
-            self.ordered_members += [unlocked_fileset]
+            added_filesets << unlocked_fileset
             if Rails.configuration.run_fits_characterization
               Hydra::Works::CharacterizationService.run(unlocked_fileset.original_file)
               unlocked_fileset.original_file.save
             end
           end
         end
+        self.ordered_members = current_filesets + added_filesets
+        save!
       end
     end
   end
