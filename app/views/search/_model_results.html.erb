@@ -14,7 +14,7 @@
           <% end %>
         </div>
       </div>
-      <div class="card-body p-2 pr-3 pr-md-0 filter-list">
+      <div class="card-body p-2 filter-list">
         <% results.each_facet_with_results(@first_facet_categories) do |facet| %>
           <%= render partial: 'search/facet_results', locals: { facet: facet } %>
         <% end %>
@@ -80,4 +80,5 @@
 </div>
 
 <%# Overlay for when mobile filter sidebar is open %>
-<div class="filters-overlay"><div>
+<div class="filters-overlay">
+</div>

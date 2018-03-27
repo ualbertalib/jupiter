@@ -165,23 +165,22 @@ class SiteForBotsTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test 'only communities search page should link to canonical' do
-    # canonical shouldn't appear for the default
+  test 'search page with query params should link to canonical version of search' do
+    # canonical should appear for the default
     get search_path
-    assert_select "link[rel='canonical']", count: 0
+    assert_select 'link[rel="canonical"]:match("href", ?)', search_url
 
-    # canonical shouldn't appear for the item tab
-    get search_path(tab: 'item')
-    assert_select "link[rel='canonical']", count: 0
+    # canonical should appear for the item tab
+    get search_path(search: 'random', tab: 'item')
+    assert_select 'link[rel="canonical"]:match("href", ?)', search_url
 
-    # canonical shouldn't appear for the collection tab
+    # canonical should appear for the collection tab
     get search_path(tab: 'collection')
-    assert_select "link[rel='canonical']", count: 0
+    assert_select 'link[rel="canonical"]:match("href", ?)', search_url
 
     # canonical should appear for the community tab
     get search_path(tab: 'community')
-    assert_select "link[rel='canonical']", count: 1
-    assert_select "link[href='#{communities_path}']"
+    assert_select 'link[rel="canonical"]:match("href", ?)', search_url
   end
 
 end
