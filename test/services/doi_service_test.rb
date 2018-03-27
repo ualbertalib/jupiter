@@ -1,6 +1,7 @@
 require 'test_helper'
 
 class DoiServiceTest < ActiveSupport::TestCase
+
   include ActiveJob::TestHelper
 
   EXAMPLE_DOI = 'doi:10.5072/FK2JQ1005X'.freeze
