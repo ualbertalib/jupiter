@@ -24,8 +24,8 @@
   <div class="d-none d-md-block">
     <div class="d-flex flex-row">
       <div class="j-image-with-text mx-3 col-md-3">
-        <%= link_to community_collection_path(WelcomeController::AFNS_COMMUNITY,
-          WelcomeController::AFNS_JOURNALS_COLLECTION) do %>
+        <%= link_to community_collection_path(FeaturedCollection.afns_community,
+          FeaturedCollection.afns_journals_collection) do %>
           <%= image_tag 'dept-of-agriculture.jpg', alt: '',
               class: 'agriculture' %>
           <h5><%= t('.afns_collection') %></h5>
@@ -36,7 +36,7 @@
 
         <div class="d-flex flex-row mb-3">
           <div class="j-image-with-text mr-3">
-            <%= link_to community_path(WelcomeController::IMAGES_OF_RESEARCH_COMMUNITY) do %>
+            <%= link_to community_path(FeaturedCollection.research_images_community) do %>
               <%= image_tag 'images-of-research.jpg', alt: '',
                   title: t('.images_of_research_attribution') %>
               <h5><%= t('.images_of_research_collection') %></h5>
@@ -44,8 +44,8 @@
           </div>
 
           <div class="j-image-with-text">
-            <%= link_to community_collection_path(WelcomeController::GRAD_STUDIES_COMMUNITY,
-              WelcomeController::THESIS_COLLECTION) do %>
+            <%= link_to community_collection_path(FeaturedCollection.grad_studies_community,
+              FeaturedCollection.thesis_collection) do %>
               <%= image_tag 'theses.jpg', alt: '' %>
               <h5><%= t('.theses_collection') %></h5>
             <% end %>
@@ -54,7 +54,7 @@
         </div>
 
         <div class="j-image-with-text mt-auto">
-          <%= link_to community_path(WelcomeController::OSRIN_COMMUNITY) do %>
+          <%= link_to community_path(FeaturedCollection.osrin_community) do %>
             <%= image_tag 'oil-sands.jpg', alt: '',
                 title: t('.osrin_attribution') %>
             <h5><%= t('.osrin_collection') %></h5>
@@ -67,18 +67,18 @@
 
   <%# List of collection links, shown only on smaller screens %>
   <div class="d-md-none list-group">
-    <%= link_to t('.afns_collection'), community_collection_path(WelcomeController::AFNS_COMMUNITY,
-      WelcomeController::AFNS_JOURNALS_COLLECTION),
+    <%= link_to t('.afns_collection'), community_collection_path(FeaturedCollection.afns_community,
+      FeaturedCollection.afns_journals_collection),
       class: 'list-group-item list-group-item-action list-group-item-primary mb-3 text-dark' %>
 
-    <%= link_to t('.images_of_research_collection'), community_path(WelcomeController::IMAGES_OF_RESEARCH_COMMUNITY),
+    <%= link_to t('.images_of_research_collection'), community_path(FeaturedCollection.research_images_community),
       class: 'list-group-item list-group-item-action list-group-item-primary mb-3 text-dark' %>
 
-    <%= link_to t('.theses_collection'), community_collection_path(WelcomeController::GRAD_STUDIES_COMMUNITY,
-      WelcomeController::THESIS_COLLECTION),
+    <%= link_to t('.theses_collection'), community_collection_path(FeaturedCollection.grad_studies_community,
+      FeaturedCollection.thesis_collection),
       class: 'list-group-item list-group-item-action list-group-item-primary mb-3 text-dark' %>
 
-    <%= link_to t('.osrin_collection'), community_path(WelcomeController::OSRIN_COMMUNITY),
+    <%= link_to t('.osrin_collection'), community_path(FeaturedCollection.osrin_community),
       class: 'list-group-item list-group-item-action list-group-item-primary mb-3 text-dark' %>
   </div>
 
