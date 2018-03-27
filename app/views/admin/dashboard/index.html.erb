@@ -103,7 +103,7 @@
   </div>
   <div class="col-md-3">
     <p>
-      <%= link_to sidekiq_web_path, target: :_blank do %>
+      <%= link_to sidekiq_web_path, target: :_blank, rel: 'noopener' do %>
         <%= t('.sidekiq') %>
         <span class="badge badge-primary">
           <%= "#{Sidekiq::VERSION}" %>

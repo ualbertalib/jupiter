@@ -459,6 +459,7 @@ en:
         alternate_title_placeholder: 'Enter alternate title'
         alternate_title_help: 'Enter a secondary/translated title, if appropriate.'
         type_id: 'Type of Item'
+        type_id_placeholder: "Select your item's type"
         type_id_help_html: 'If you do not see an appropriate item type, please contact
           <a href="mailto:erahelp@ualberta.ca">erahelp@ualberta.ca</a>'
         languages: 'Languages'
@@ -488,12 +489,10 @@ en:
           province, or country the item's contents are about."
         time_periods: 'Is this item about a time?'
         time_periods_placeholder: 'Enter one or multiple times'
-        time_periods_help_html: 'Examples:
-          <ul>
-            <li>a specific date: 2009/12/31</li>
-            <li>a date range:  2003-2010</li>
-            <li>a time period: the Enlightenment</li>
-          </ul>'
+        time_periods_help_html: 'Examples:<br>
+          - A specific date: 2009/12/31<br>
+          - A date range:  2003-2010<br>
+          - A time period: the Enlightenment<br>'
         citations: 'Citations for previous publication'
         citations_placeholder: 'Enter one or multiple citations'
         citations_help: 'If your item has been previously published, provide a citation'

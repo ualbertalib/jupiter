@@ -14,9 +14,11 @@
       </div>
     </div>
     <div class="col-md-8">
-      <% @draft_item.files.each do |file| %>
-        <%= render partial: 'items/draft/file', locals: { file: file } %>
-      <% end %>
+      <ul class="list-unstyled">
+        <% @draft_item.files.each do |file| %>
+          <%= render partial: 'items/draft/file', locals: { file: file } %>
+        <% end %>
+      </ul>
     </div>
   <% end %>
 </div>

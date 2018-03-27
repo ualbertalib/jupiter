@@ -1,0 +1,14 @@
+{
+  "name": "Education & Research Archive",
+  "short_name": "ERA",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#dbe1ef",
+  "background_color": "#dbe1ef",
+  "display": "standalone"
+}
