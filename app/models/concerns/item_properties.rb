@@ -40,9 +40,8 @@ module ItemProperties
     end
 
     def doi_state
-      @state ||= begin
-        ItemDoiState.find_by(item_id: id) ||
-          ItemDoiState.create(item_id: id, aasm_state: (doi.present? ? :available : :not_available))
+      @state ||= ItemDoiState.find_or_create_by!(item_id: id) do |state|
+        state.aasm_state = (doi.present? ? :available : :not_available)
       end
     end
 
