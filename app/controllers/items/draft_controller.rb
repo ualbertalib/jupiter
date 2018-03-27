@@ -51,6 +51,18 @@ class Items::DraftController < ApplicationController
       end
       params[:draft_item].delete :collection_id
 
+      # TODO: Handle required year but optional day/month better? Keep as string?
+      # Set month/day to Jan 1st if left blank
+      if params[:draft_item][:date_created].blank?
+        if params[:draft_item]['date_created(3i)'].blank?
+          params[:draft_item]['date_created(3i)'] = '1'
+        end
+
+        if params[:draft_item]['date_created(2i)'].blank?
+          params[:draft_item]['date_created(2i)'] = '1'
+        end
+      end
+
       @draft_item.update_attributes(permitted_attributes(DraftItem))
 
       render_wizard @draft_item
@@ -102,7 +114,7 @@ class Items::DraftController < ApplicationController
   end
 
   def initialize_communities
-    @communities = Community.all
+    @communities = Community.all.sort(:title, :desc)
   end
 
 end

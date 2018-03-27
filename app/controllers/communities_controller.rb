@@ -30,7 +30,7 @@ class CommunitiesController < ApplicationController
 
       format.json do
         # Used in item_draft.js
-        collections = @community.member_collections
+        collections = @community.member_collections.sort(:title, :asc)
         collections = collections.select { |c| c.restricted.blank? } unless current_user.admin?
         render json: @community.attributes.merge(collections: collections)
       end

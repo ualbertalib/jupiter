@@ -4,6 +4,10 @@ module ApplicationHelper
   TRUNCATE_CHARS_DEFAULT = 300
 
   def page_title(title)
+    # title tags should be around 55 characters, so lets truncate them if they quite long
+    # With '... | ERA' being appended, we want to aim for a bit smaller like 45 characters
+    title = jupiter_truncate(title, length: 45) if title.length > 45
+
     @page_title ||= []
     @page_title.push(title) if title.present?
     @page_title.join(' | ')

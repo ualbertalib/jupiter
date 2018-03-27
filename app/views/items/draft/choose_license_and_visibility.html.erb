@@ -29,7 +29,7 @@
 
         <% license_accordions.map do |accordion_name, licenses| %>
           <div class="card">
-            <div id="js-<%= "#{accordion_name}" %>" class="card-header" role="tab">
+            <div id="js-heading-<%= "#{accordion_name}" %>" class="card-header" role="tab">
               <h5 class="mb-0">
                 <a data-toggle="collapse"
                   href="#js-collapse-<%= "#{accordion_name}" %>"
