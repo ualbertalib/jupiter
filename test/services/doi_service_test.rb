@@ -1,11 +1,12 @@
 require 'test_helper'
 
 class DoiServiceTest < ActiveSupport::TestCase
+  include ActiveJob::TestHelper
 
   EXAMPLE_DOI = 'doi:10.5072/FK2JQ1005X'.freeze
 
   test 'DOI state transitions' do
-    assert_equal 0, Sidekiq::Worker.jobs.size
+    assert_no_enqueued_jobs
 
     Rails.application.secrets.doi_minting_enabled = true
 
@@ -31,9 +32,9 @@ class DoiServiceTest < ActiveSupport::TestCase
     end
 
     assert_nil item.doi
-    assert_equal 1, Sidekiq::Worker.jobs.size
+    assert_enqueued_jobs 1, only: DOICreateJob
 
-    Sidekiq::Worker.clear_all
+    clear_enqueued_jobs
 
     VCR.use_cassette('ezid_minting', erb: { id: item.id }, record: :none) do
       assert_equal 'unminted', item.doi_state.aasm_state
@@ -53,14 +54,15 @@ class DoiServiceTest < ActiveSupport::TestCase
     end
 
     VCR.use_cassette('ezid_updating', erb: { id: item.id }, record: :none) do
-      assert_equal 0, Sidekiq::Worker.jobs.size
+      assert_no_enqueued_jobs
 
       item.unlock_and_fetch_ldp_object do |uo|
         uo.title = 'Different Title'
         uo.save!
       end
-      assert_equal 1, Sidekiq::Worker.jobs.size
-      Sidekiq::Worker.clear_all
+      assert_enqueued_jobs 1, only: DOIUpdateJob
+      clear_enqueued_jobs
+
       ezid_identifer = DOIService.new(item).update
       refute_nil ezid_identifer
       assert_equal EXAMPLE_DOI, ezid_identifer.id
@@ -71,14 +73,15 @@ class DoiServiceTest < ActiveSupport::TestCase
     end
 
     VCR.use_cassette('ezid_updating_unavailable', erb: { id: item.id }, record: :none) do
-      assert_equal 0, Sidekiq::Worker.jobs.size
+      assert_no_enqueued_jobs
 
       item.unlock_and_fetch_ldp_object do |uo|
         uo.visibility = JupiterCore::VISIBILITY_PRIVATE
         uo.save!
       end
-      assert_equal 1, Sidekiq::Worker.jobs.size
-      Sidekiq::Worker.clear_all
+
+      assert_enqueued_jobs 1, only: DOIUpdateJob
+      clear_enqueued_jobs
 
       ezid_identifer = DOIService.new(item).update
       refute_nil ezid_identifer
@@ -91,8 +94,9 @@ class DoiServiceTest < ActiveSupport::TestCase
     VCR.use_cassette('ezid_removal', erb: { id: item.id }, record: :none, allow_unused_http_interactions: false) do
       assert_equal 0, Sidekiq::Worker.jobs.size
       item.unlock_and_fetch_ldp_object(&:destroy)
-      assert_equal 1, Sidekiq::Worker.jobs.size
-      Sidekiq::Worker.clear_all
+
+      assert_enqueued_jobs 1, only: DOIRemoveJob
+      clear_enqueued_jobs
 
       ezid_identifer = DOIService.remove(item.doi)
       refute_nil ezid_identifer
