@@ -110,7 +110,7 @@ class Items::DraftController < ApplicationController
   end
 
   def initialize_communities
-    @communities = Community.all
+    @communities = Community.all.sort(:title, :desc)
   end
 
 end

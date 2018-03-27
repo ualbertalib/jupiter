@@ -466,6 +466,7 @@ en:
         languages_placeholder: 'Enter one or multiple languages'
         creators: 'Authors/Creators'
         creators_placeholder: 'Enter one or multiple author/creators'
+        creators_help: 'Example: Doe, Jane B.'
         subjects: 'Subjects/Keywords'
         subjects_placeholder: 'Enter one or multiple subject/keywords'
         subjects_help: 'Enter subjects or keywords that describe the item.
