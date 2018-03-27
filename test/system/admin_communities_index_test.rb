@@ -30,7 +30,7 @@ class AdminCommunitiesIndexTest < ApplicationSystemTestCase
     assert_selector 'a.btn', text: 'Collections'
 
     # After clicking 'Collections', collections and close button are shown
-    click_link 'Collections'
+    find("a[data-community-id='#{@community.id}']", text: 'Collections').click
     assert_link 'Fancy Collection 0'
     assert_link 'Fancy Collection 1'
     assert_button 'Close'
