@@ -17,7 +17,7 @@
 
         <div class="card mb-3">
           <div class="card-header">
-            <%= link_to wizard_path(:upload_files), class: 'pull-right' do %>
+            <%= link_to wizard_path(:upload_files), class: 'float-right' do %>
               <%= fa_icon 'pencil-square-o' %>
               <%= t('edit') %>
             <% end %>
@@ -32,7 +32,7 @@
                 <li class="list-group-item">
                   <%= fa_icon file_icon(file.content_type) %>
                   <%=file.filename %>
-                  <span class="badge badge-primary badge-pill pull-right">
+                  <span class="badge badge-primary badge-pill float-right">
                   <%= number_to_human_size(file.byte_size) %>
                   </span>
                 </li>
@@ -42,7 +42,7 @@
         </div>
         <div class="card mb-3">
           <div class="card-header">
-            <%= link_to wizard_path(:choose_license_and_visibility), class: 'pull-right' do %>
+            <%= link_to wizard_path(:choose_license_and_visibility), class: 'float-right' do %>
               <%= fa_icon 'pencil-square-o' %>
               <%= t('edit') %>
             <% end %>
@@ -71,7 +71,7 @@
       <div class="col-md-8">
         <div class="card mb-3">
           <div class="card-header">
-            <%= link_to wizard_path(:describe_item), class: 'pull-right' do %>
+            <%= link_to wizard_path(:describe_item), class: 'float-right' do %>
               <%= fa_icon 'pencil-square-o' %>
               <%= t('edit') %>
             <% end %>

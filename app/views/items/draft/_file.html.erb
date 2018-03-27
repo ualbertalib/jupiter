@@ -3,7 +3,7 @@
   <%= render partial: 'thumbnail', locals: { thumbnail: file, object: @draft_item } %>
 
   <div class="media-body ml-3">
-    <div class="pull-right">
+    <div class="float-right">
       <% if @draft_item.thumbnail != file %>
         <%= link_to set_thumbnail_item_file_path(@draft_item, file), method: :patch, remote: true, class: 'btn btn-secondary mb-2 mb-md-0' do %>
           <%= fa_icon 'file-image-o' %>
