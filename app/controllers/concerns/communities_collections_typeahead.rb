@@ -8,9 +8,9 @@ module CommunitiesCollectionsTypeahead
                                        .map do |c|
         { id: c.id, text: c.title, path: path_to_community(c) }
       end
-      if communities.any?
-        results.append(text: 'Communities', children: communities)
-      end
+
+      results.append(text: 'Communities', children: communities) if communities.any?
+
       collections = JupiterCore::Search.faceted_search(q: "title_tesim:#{term}*",
                                                        models: [Collection], as: current_user)
                                        .sort(:community_title, :asc)
@@ -18,9 +18,9 @@ module CommunitiesCollectionsTypeahead
                                        .map do |c|
         { id: c.id, text: "#{c.community.title} -- #{c.title}", path: path_to_collection(c) }
       end
-      if collections.any?
-        results.append(text: 'Collections', children: collections)
-      end
+
+      results.append(text: 'Collections', children: collections) if collections.any?
+
     end
     results
   end

@@ -48,6 +48,7 @@ class JupiterCore::LockedLdpObject
     return ldp_object.modified_date if ldp_object.present?
     DateTime.parse(solr_representation['system_modified_dtsi']) if solr_representation
   end
+  # rubocop:enable Style/DateTime, Rails/TimeZone
 
   # Provides structured, mediated interaction for mutating the underlying LDP object
   #
@@ -291,7 +292,7 @@ class JupiterCore::LockedLdpObject
   def self.find_by(id)
     self.find(id)
   rescue JupiterCore::ObjectNotFound
-    return nil
+    nil
   end
 
   # Returns an array of all +LockedLDPObject+ in the LDP

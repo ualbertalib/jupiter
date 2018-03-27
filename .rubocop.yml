@@ -11,7 +11,7 @@ AllCops:
     - 'tmp/**/*'
     - 'vendor/**/*'
   ExtraDetails: true
-  TargetRubyVersion: 2.3
+  TargetRubyVersion: 2.5
 
 # readability is Actually Good
 Layout/EmptyLinesAroundClassBody:
@@ -74,6 +74,19 @@ Naming/FileName:
     - Rakefile
     - Gemfile
 
+# TODO: Review and fix these
+Naming/MemoizedInstanceVariableName:
+  Exclude:
+    - app/models/jupiter_core/deferred_faceted_solr_query.rb
+
+# TODO: Review and fix these
+Naming/UncommunicativeMethodParamName:
+  Exclude:
+    - app/models/jupiter_core/locked_ldp_object.rb
+    - app/models/jupiter_core/deferred_faceted_solr_query.rb
+    - app/models/jupiter_core/search.rb
+    - app/services/statistics.rb
+
 Rails:
   Enabled: true
 
@@ -85,55 +98,60 @@ Rails/UnknownEnv:
 Rails/FindEach:
   Enabled: false
 
+Style/AsciiComments:
+  Enabled: false
+
+Style/BarePercentLiterals:
+  Enabled: false
+
 # indentation is an endangered resource
 Style/ClassAndModuleChildren:
   EnforcedStyle: compact
   Exclude:
     - config/application.rb
 
+Style/ClassVars:
+  Exclude:
+    - !ruby/regexp /_test\.rb$/
+
 Style/Documentation:
   Enabled: false
-
-Style/AsciiComments:
-  Enabled: false
-
-Style/RedundantSelf:
-  Exclude:
-    - app/models/jupiter_core/locked_ldp_object.rb
 
 # Checks if there is a magic comment to enforce string literals
 Style/FrozenStringLiteralComment:
   Enabled: false
 
+Style/NumericPredicate:
+  EnforcedStyle: comparison
+
+Style/MixinUsage:
+  Exclude:
+    - bin/setup
+    - bin/update
+
+Style/RedundantSelf:
+  Exclude:
+    - app/models/jupiter_core/locked_ldp_object.rb
+
 # Perfer to use // but %r can be better in certain scenarios
 Style/RegexpLiteral:
+  Enabled: false
+
+Style/SingleLineMethods:
   Enabled: false
 
 Style/SymbolArray:
   Enabled: false
 
-# Use %w or %W for arrays of words.
-Style/WordArray:
-  Enabled: false
-
-Style/BarePercentLiterals:
-  Enabled: false
-
-Style/NumericPredicate:
-  EnforcedStyle: comparison
-
-Style/ClassVars:
-  Exclude:
-    - !ruby/regexp /_test\.rb$/
-
-Style/SingleLineMethods:
+Style/TrailingUnderscoreVariable:
   Enabled: false
 
 Style/TrivialAccessors:
   Exclude:
     - app/models/jupiter_core/locked_ldp_object.rb
 
-Style/TrailingUnderscoreVariable:
+# Use %w or %W for arrays of words.
+Style/WordArray:
   Enabled: false
 
 Performance/TimesMap:

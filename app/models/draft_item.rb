@@ -144,7 +144,6 @@ class DraftItem < ApplicationRecord
     end
   end
 
-  # rubocop:disable Style/DateTime,Rails/TimeZone
   def update_from_fedora_item(item, for_user)
     draft_attributes = {
       user_id: for_user.id,
@@ -155,7 +154,9 @@ class DraftItem < ApplicationRecord
       creators: item.creators,
       subjects: item.subject,
       # I suspect this will become some kind of string field, but for now, using UTC
+      # rubocop:disable Style/DateTime,Rails/TimeZone
       date_created: DateTime.parse(item.created),
+      # rubocop:enable Style/DateTime,Rails/TimeZone
       description: item.description,
       visibility: visibility_for_uri(item.visibility),
       visibility_after_embargo: visibility_after_embargo_for_uri(item.visibility_after_embargo),
@@ -219,7 +220,7 @@ class DraftItem < ApplicationRecord
         # respond to that method, in preference to looking at the final portion of the file path, which,
         # because we fished this out of ActiveStorage, is just a hash. In this way we present Fedora with the original
         # file name of the object and not a hashed or otherwise modified version temporarily created during ingest
-        f.send(:define_singleton_method, :original_filename, ->() { original_filename })
+        f.send(:define_singleton_method, :original_filename, -> { original_filename })
         yield f
       end
     end
@@ -258,7 +259,7 @@ class DraftItem < ApplicationRecord
     code = CONTROLLED_VOCABULARIES[:license].from_uri(uri)
     license = URI_CODE_TO_LICENSE[code].to_s
 
-    license.blank? ? 'unselected' : license
+    license.presence || 'unselected'
   end
 
   # silly stuff needed for handling multivalued publication status attribute when Item type is `Article`
@@ -362,9 +363,7 @@ class DraftItem < ApplicationRecord
       collection_id = member_of_paths['collection_id'][idx]
       collection = Collection.find_by(collection_id)
       next if collection.blank?
-      if collection.restricted && !user.admin?
-        errors.add(:member_of_paths, :collection_restricted)
-      end
+      errors.add(:member_of_paths, :collection_restricted) if collection.restricted && !user.admin?
     end
   end
 
