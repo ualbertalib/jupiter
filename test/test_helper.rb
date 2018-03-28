@@ -2,11 +2,28 @@ require 'simplecov'
 SimpleCov.start 'rails' unless ENV['NO_COVERAGE']
 
 require File.expand_path('../../config/environment', __FILE__)
-require 'rails/test_help'
+require 'active_fedora/cleaner'
 require 'minitest/hooks/test'
 require 'minitest/mock'
-require 'active_fedora/cleaner'
+require 'rails/test_help'
 require 'shoulda'
+require 'sidekiq/testing'
+require 'vcr'
+require 'webmock/minitest'
+
+VCR.configure do |config|
+  config.cassette_library_dir = 'test/vcr'
+  config.hook_into :webmock
+
+  # Only want VCR to intercept requests to external URLs.
+  config.ignore_localhost = true
+end
+
+# just push all jobs to an array for verification
+Sidekiq::Testing.fake!
+
+# Required when using Rails.application.routes.url_helpers from outside the request/response life cycle (models, jobs, lib)
+Rails.application.routes.default_url_options = { host: 'localhost' }
 
 class ActiveSupport::TestCase
 
@@ -29,6 +46,7 @@ class ActiveSupport::TestCase
     ActiveFedora::Cleaner.clean!
     keys = Redis.current.keys("#{Rails.configuration.redis_key_prefix}*")
     Redis.current.del(keys) if keys.present?
+    Sidekiq::Worker.clear_all
   end
 
   # Add more helper methods to be used by all tests here...

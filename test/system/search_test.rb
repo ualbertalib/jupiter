@@ -104,10 +104,10 @@ class SearchTest < ApplicationSystemTestCase
       assert_selector 'a.nav-link', text: 'Communities (1)'
 
       # Facets and counts
-      assert_selector 'div.card-header', text: 'Visibility'
-      assert_selector 'li a', text: '5 Public'
+      refute_selector 'div.card-header', text: 'Visibility'
+      refute_selector 'li a', text: '5 Public'
       # Should not be a facet for 'private'
-      assert_selector 'li a', text: /Private/, count: 0
+      refute_selector 'li a', text: /Private/
       # TODO: The 'Member of paths' text will likely change
       assert_selector 'div.card-header', text: 'Collections'
       assert_selector 'li a', text: '5 Fancy Community'
@@ -140,8 +140,8 @@ class SearchTest < ApplicationSystemTestCase
       assert_selector 'a.nav-link', text: 'Communities (1)'
 
       # Some facets are now gone, some with changed counts
-      assert_selector 'div.card-header', text: 'Visibility'
-      assert_selector 'li a', text: '2 Public'
+      refute_selector 'div.card-header', text: 'Visibility'
+      refute_selector 'li a', text: '2 Public'
       assert_selector 'div.card-header', text: 'Collections'
       assert_selector 'li a', text: '2 Fancy Community'
       assert_selector 'li a', text: 'Fancy Community/Fancy Collection 0', count: 0

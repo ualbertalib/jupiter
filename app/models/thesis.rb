@@ -50,9 +50,10 @@ class Thesis < JupiterCore::LockedLdpObject
   additional_search_index :languages,
                           solrize_for: :facet,
                           as: -> { [language] }
+
+  # Present a consistent interface with Item#item_type_with_status_code
   def item_type_with_status_code
-    # Keeping a consistent interface as Item
-    'thesis'
+    :thesis
   end
 
   unlocked do
