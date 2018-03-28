@@ -16,6 +16,8 @@ class JupiterCore::FacetResult
   end
 
   # When many facets are iterated, we need to segregate into ranges based on what is shown or not
-  def each_facet_value(_range = 0..-1) end
+  def each_facet_value(_range = 0..-1)
+    [] # child class should implent, this is here so UI doesn't break
+  end
 
 end

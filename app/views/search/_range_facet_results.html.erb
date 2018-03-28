@@ -1,33 +1,11 @@
 <div class="card mt-3">
   <div class="card-header"><%= facet.category_name %></div>
-  <%= form_tag("/search", method: "get", class: 'form-inline') do %>
-    <% search_params_hash.each do |type, h| %>
-      <% if h.is_a? String %>
-        <%= hidden_field_tag(type, h) %>
-      <% else %>
-        <% h.each do |k, v| %>
-          <% next if k == facet.solr_index %>
-          <% v.each do |i| %>
-            <%= hidden_field_tag("#{type}[#{k}][]", i) %>
-          <% end %>
-        <% end %>
-      <% end %>
-    <% end %>
-    <div class='d-flex flex-wrap'>
-      <div class='p-2'>
-        <%= text_field_tag("ranges[#{facet.solr_index}][begin]", facet.range.first, class: 'form-control', size: 4, maxlength: 4, 'aria-label' => 'range_begin') %>
-      </div>
-      <div class='p-2 align-self-center'>
-        to
-      </div>
-      <div class='p-2'>
-        <%= text_field_tag("ranges[#{facet.solr_index}][end]", facet.range.last, class: 'form-control', size: 4, maxlength: 4, 'aria-label' => 'range_end') %>
-      </div>
-    </div>
-    <div class='d-flex justify-content-begin'>
-      <div class='p-2'>
-        <%= submit_tag("Limit", class: 'btn btn-secondary', 'aria-label' => 'limit_range') %>
-      </div>
-    </div>
+  <%= form_tag search_path(search_params_hash), method: "get", class: 'form-group' do %>
+  <div class='row m-2'>
+    <%= number_field_tag "ranges[#{facet.solr_index}][begin]", facet.range.first, placeholder: 1880, class: 'form-control col-xl-5 col-lg-6 col-md-8', size: 4, maxlength: 4, 'aria-label' => t('search.range_begin') %>
+    <div class='p-2'>to</div>
+    <%= number_field_tag "ranges[#{facet.solr_index}][end]", facet.range.last, placeholder: Time.current.year, class: 'form-control col-xl-5 col-lg-6 col-md-8', size: 4, maxlength: 4, 'aria-label' => t('search.range_end') %>
+  </div>
+    <%= submit_tag t('search.range_limit'), class: 'btn btn-secondary ml-2' %>
   <% end %>
 </div>
