@@ -510,30 +510,30 @@ en:
           header: 'License'
           most_commonly_used: 'Most commonly used'
           attribution_non_commercial_html: 'Attribution-NonCommercial 4.0 International
-            (<a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>)'
+            (<a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a>)'
           other_creative_commons_licenses: 'Other Creative Commons licenses'
           attribution_html: 'Attribution 4.0 International
-            (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC BY 4.0</a>)'
+            (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>)'
           attribution_non_commercial_no_derivatives_html: 'Attribution-NonCommercial-NoDerivatives 4.0 International
-            (<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a>)'
+            (<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" rel="noopener">CC BY-NC-ND 4.0</a>)'
           attribution_non_commercial_share_alike_html: 'Attribution-NonCommercial-ShareAlike 4.0 International
-            (<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a>)'
+            (<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a>)'
           attribution_no_derivatives_html: 'Attribution-NoDerivatives 4.0 International
-            (<a href="https://creativecommons.org/licenses/by-nd/4.0/" target="_blank">CC BY-ND 4.0</a>)'
+            (<a href="https://creativecommons.org/licenses/by-nd/4.0/" target="_blank" rel="noopener">CC BY-ND 4.0</a>)'
           attribution_share_alike_html: 'Attribution-ShareAlike 4.0 International
-            (<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">CC BY-SA 4.0</a>)'
+            (<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>)'
           cco_universal_html: 'CC0 1.0 Universal
-            (<a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank">CC0 1.0</a>)'
+            (<a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noopener">CC0 1.0</a>)'
           public_domain: 'This work is in the public domain'
           public_domain_mark_html: 'Public Domain Mark 1.0
-            (<a href="https://creativecommons.org/publicdomain/mark/1.0/" target="_blank">Public Domain 1.0</a>)'
+            (<a href="https://creativecommons.org/publicdomain/mark/1.0/" target="_blank" rel="noopener">Public Domain 1.0</a>)'
           link_to_another_license: 'I am required to use / link to another license'
           license_text_html: 'License text / URL'
           license_text_area_placeholder: 'Copy/paste the URL or license'
           help_html: 'Your item will be hosted in an open access environment.
             Please select one of the licenses described below.
             For additional assistance selecting a license please see
-            <a href="http://creativecommons.org/choose/" target="_blank">http://creativecommons.org/choose/</a>,
+            <a href="https://creativecommons.org/choose/" target="_blank" rel="noopener">https://creativecommons.org/choose/</a>,
             or contact <a href="mailto:erahelp@ualberta.ca">erahelp@ualberta.ca</a>'
         visibility:
           header: 'Visibility'
@@ -658,3 +658,11 @@ en:
     item_type_with_status: 'Item type'
     all_contributors: 'Author / Creator / Contributor'
     all_subjects: 'Subject / Keyword'
+
+  views:
+    pagination:
+      first: "&laquo; <span class='d-none d-md-inline'>First</span>"
+      last: "<span class='d-none d-md-inline'>Last</span> &raquo;"
+      previous: "&lsaquo; <span class='d-none d-md-inline'>Prev</span>"
+      next: "<span class='d-none d-md-inline'>Next</span> &rsaquo;"
+      truncate: "..."

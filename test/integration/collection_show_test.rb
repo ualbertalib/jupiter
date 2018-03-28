@@ -121,8 +121,8 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
 
     # Only 'Fancy' items are shown
     assert_select '.jupiter-results ul.list-group .list-group-item', count: 1
-    assert_select '.jupiter-results ul.list-group .list-group-item a', text: 'Fancy Item', count: 1
-    assert_select '.jupiter-results ul.list-group .list-group-item a', text: 'Nice Item', count: 0
+    assert_select '.jupiter-results ul.list-group .list-group-item h5 a', text: 'Fancy Item', count: 1
+    assert_select '.jupiter-results ul.list-group .list-group-item h5 a', text: 'Nice Item', count: 0
   end
 
 end

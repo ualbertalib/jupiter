@@ -1,3 +1,4 @@
+<%# TODO: Reduce duplication between this partial and thesis, pretty much exactly the same %>
 <ul class="list-group">
   <% if @item.alternative_title.present? %>
     <li class="list-unstyled list-group-item-action">
@@ -84,28 +85,23 @@
 </ul>
 
 <%# ADDITIONAL INFORMATION %>
-<div class='js-hideshow'>
-  <a data-toggle="collapse"
-      data-parent=".js-hideshow"
-      href="#more-information-hidden"
-      aria-expanded="false"
-      aria-controls="more-information-hidden">
-    <span class='js-hideshow-control font-weight-bold font-italic'>
+<button type="button"
+        data-toggle="collapse"
+        data-target="#more-information-hidden"
+        aria-expanded="false"
+        aria-controls="more-information-hidden"
+        class="btn btn-outline-secondary mb-3 js-more-information-btn font-italic">
+    <span class="js-hidden-text">
       <%= t(:more_information) %>
+      <%= fa_icon('chevron-down')%>
     </span>
-  </a>
 
-  <div class="collapse" id='more-information-hidden'>
-    <%= render partial: 'item_more_information' %>
-  </div>
-
-  <a data-toggle="collapse"
-      data-parent=".js-hideshow"
-      href="#more-information-hidden"
-      aria-expanded="false"
-      aria-controls="more-information-hidden">
-    <span class='js-hideshow-control font-weight-bold font-italic d-none'>
+    <span class="d-none js-shown-text">
       <%= t(:show_less) %>
+      <%= fa_icon('chevron-up')%>
     </span>
-  </a>
+</button>
+
+<div class="collapse" id='more-information-hidden'>
+  <%= render partial: 'item_more_information' %>
 </div>

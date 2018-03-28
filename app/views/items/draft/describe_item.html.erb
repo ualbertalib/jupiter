@@ -86,7 +86,7 @@
                 },
                 start_year: Date.today.year + 1,
                 end_year: Date.today.year - 100,
-                input_html: { class: 'mr-2 mb-2' },
+                input_html: { class: 'mr-2 mb-2', 'aria-labelledby': 'draft_item_date_created_1i' },
                 required: true,
                 hint: t('.date_created_help') %>
 
@@ -142,7 +142,7 @@
                 aria-expanded="false"
                 aria-controls="js-collapse-additional-fields">
               <%= t('.additional_fields') %>
-              <%= fa_icon "chevron-down", class: "js-more-less pull-right" %>
+              <%= fa_icon "chevron-down", class: "js-more-less float-right" %>
             </a>
           </h5>
         </div>
@@ -213,12 +213,12 @@
       </div>
     </div>
 
-    <div class="mt-3 pull-right">
-      <%= link_to root_path, class: 'btn btn-secondary' do %>
+    <div class="mt-3 d-flex flex-wrap justify-content-end">
+      <%= link_to root_path, class: 'btn btn-secondary mr-2' do %>
         <%= fa_icon 'ban' %>
         <%= t('cancel') %>
       <% end %>
-      <%= f.button :button, type: :submit do %>
+      <%= f.button :button, type: :submit, class: 'btn btn-primary' do %>
         <%= t('items.draft.save_and_continue') %>
         <%= fa_icon 'chevron-right' %>
       <% end %>
