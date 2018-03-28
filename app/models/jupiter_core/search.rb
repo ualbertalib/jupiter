@@ -46,7 +46,7 @@ class JupiterCore::Search
                                               fq: fq.join(' AND '),
                                               qf: calculate_queried_fields(models),
                                               facet_map: construct_facet_map(models),
-                                              facet_fields: models.map(&:facets).flatten.uniq,
+                                              facet_fields: construct_facet_fields(models, user: as),
                                               restrict_to_model: models.map { |m| m.send(:derived_af_class) })
   end
 
@@ -135,6 +135,14 @@ class JupiterCore::Search
     # combine the facet maps (solr_name => attribute_name) of all of the models being searched
     def construct_facet_map(models)
       models.map(&:reverse_solr_name_cache).reduce(&:merge)
+    end
+
+    # Disallow use of the visibility facet by non-admins
+    def construct_facet_fields(models, user:)
+      # the visibility facet is defined identically in all models
+      visibility_facet = models.first.solr_name_for(:visibility, role: :facet)
+      facets = models.map(&:facets).flatten.uniq
+      user&.admin? ? facets : facets.reject { |f| f == visibility_facet }
     end
 
   end

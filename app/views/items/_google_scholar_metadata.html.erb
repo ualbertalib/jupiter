@@ -1,6 +1,6 @@
 <!-- Google Scholar metadata -->
 <meta name="citation_title" content="<%= @item.title%>"/>
-<% authors(@item).each do |author| %>
+<% @item.authors.each do |author| %>
   <meta name="citation_author" content="<%= author %>"/>
 <% end %>
 <% if @item.sort_year.present? %>

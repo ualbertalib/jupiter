@@ -51,11 +51,12 @@ gem 'sidekiq', '~> 5.1'
 gem 'sinatra' # used by sidekiq/web
 
 # Misc Utilities
+gem 'aasm' # state-machine management
+gem 'ezid-client'
 gem 'kaminari' # Pagination
 gem 'ransack' # ActiveRecord search/filter
-gem 'wicked' # Multi-step wizard
-
 gem 'voight_kampff' # bot detection
+gem 'wicked' # Multi-step wizard
 
 # Performance monitoring
 gem 'skylight'
@@ -98,8 +99,10 @@ group :test do
   gem 'shoulda', require: false
 
   gem 'launchy'
+  gem 'vcr', require: false
   # Easy installation and use of chromedriver to run system tests with Chrome
   gem 'chromedriver-helper'
+  gem 'webmock', require: false
 end
 
 group :staging, :production do
