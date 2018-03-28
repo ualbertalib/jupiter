@@ -38,6 +38,7 @@ en:
   browse_all: 'Browse all'
   cancel: 'Cancel'
   close: 'Close'
+  date_unknown: 'Unknown'
   delete: 'Delete'
   download: 'Download'
   edit: 'Edit'
@@ -393,7 +394,7 @@ en:
     item:
       creators: 'Author(s) / Creator(s)'
       description: 'Description / Abstract'
-      sort_year: 'Date created'
+      created: 'Date created'
       contributors: 'Additional contributors'
       related_link: 'Link to related item'
       source: 'Source'
