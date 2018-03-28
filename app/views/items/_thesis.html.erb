@@ -37,7 +37,7 @@
     <li class="list-unstyled list-group-item-action">
       <dl>
         <dt><%= t('.graduation_date') %></dt>
-        <dd><%= @item.graduation_date %></dd>
+        <dd><%= humanize_date(@item.graduation_date) %></dd>
       </dl>
     </li>
   <% end %>
