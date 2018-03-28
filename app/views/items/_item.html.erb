@@ -27,11 +27,16 @@
     </li>
   <% end %>
 
-  <% if @item.sort_year.present? %>
+  <% if @item.creation_date.present? %>
     <li class="list-unstyled list-group-item-action">
       <dl>
-        <dt><%= t('.sort_year') %></dt>
-        <dd><%= search_link_for(@item, :sort_year) %></dd>
+        <dt><%= t('.created') %></dt>
+        <% if @item.sort_year.present? %>
+          <%# Display the recorded date created, but link to searching on the facetable sort year if it is present %>
+          <dd><%= search_link_for(@item, :sort_year, display: humanize_date(@item.creation_date)) %></dd>
+        <% else %>
+          <dd><%= humanize_date(@item.creation_date) %></dd>
+        <% end %>
       </dl>
     </li>
   <% end %>

@@ -33,7 +33,7 @@
     </div>
 
     <div class="mt-0">
-      <%= item.sort_year %>
+      <%= humanize_date(item.creation_date) %>
     </div>
     <div>
       <%# TODO: the search path may need to be revisited %>

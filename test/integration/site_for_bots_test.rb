@@ -110,7 +110,7 @@ class SiteForBotsTest < ActionDispatch::IntegrationTest
   test 'nofollow for item metadata links to search' do
     get item_path @item
     assert_select "a[rel='nofollow']", text: @item.creators.first
-    assert_select "a[rel='nofollow']", text: @item.sort_year.to_s
+    assert_select "a[rel='nofollow']", text: @item.creation_date
     assert_select "a[rel='nofollow']", text: 'English'
     assert_select "a[rel='nofollow']", text: 'Article (Draft / Submitted)'
     assert_select "a[rel='nofollow']", text: @item.subject.first
@@ -121,7 +121,7 @@ class SiteForBotsTest < ActionDispatch::IntegrationTest
     get item_path @thesis
     assert_select "meta[name='citation_title'][content='#{@thesis.title}']"
     assert_select "meta[name='citation_author'][content='#{@thesis.dissertant}']"
-    assert_select "meta[name='citation_publication_date'][content='#{@thesis.sort_year}']"
+    assert_select "meta[name='citation_publication_date'][content='#{@thesis.creation_date}']"
     assert_select format("meta[name='citation_pdf_url'][content='%s']",
                          Rails.application.routes.url_helpers.url_for(
                            controller: :file_sets, action: :show, id: @thesis.id,
@@ -137,7 +137,7 @@ class SiteForBotsTest < ActionDispatch::IntegrationTest
     @item.creators.each do |author|
       assert_select "meta[name='citation_author'][content='#{author}']"
     end
-    assert_select "meta[name='citation_publication_date'][content='#{@item.sort_year}']"
+    assert_select "meta[name='citation_publication_date'][content='#{@item.creation_date}']"
     assert_select format("meta[name='citation_pdf_url'][content='%s']",
                          Rails.application.routes.url_helpers.url_for(
                            controller: :file_sets, action: :show, id: @item.id,
