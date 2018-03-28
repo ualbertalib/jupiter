@@ -41,14 +41,9 @@
     </h4>
     <% if policy(:item).new? %>
       <%= link_to create_draft_items_path(collection: @collection.id), method: :post,
-          class: 'btn btn-primary mr-2' do %>
+          class: 'btn btn-primary' do %>
         <%= fa_icon('plus-circle') %>
         <%= t('.deposit_item') %>
-      <% end %>
-
-      <%= link_to '#TODO', class: 'btn btn-primary  mt-2 mt-md-0' do %>
-        <%= fa_icon('plus-circle') %>
-        (TODO) <%= t('.deposit_thesis') %>
       <% end %>
     <% end %>
   </div>
