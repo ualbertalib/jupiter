@@ -39,6 +39,10 @@ module ItemProperties
       respond_to?(:creators) ? creators : [dissertant]
     end
 
+    def creation_date
+      respond_to?(:created) ? created : graduation_date
+    end
+
     def doi_state
       @state ||= ItemDoiState.find_or_create_by!(item_id: id) do |state|
         state.aasm_state = (doi.present? ? :available : :not_available)
