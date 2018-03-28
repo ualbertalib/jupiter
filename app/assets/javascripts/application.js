@@ -17,5 +17,6 @@
 //= require popper
 //= require bootstrap
 //= require select2
+//= require jquery.easy-autocomplete
 //= require dropzone
 //= require_tree ./jupiter

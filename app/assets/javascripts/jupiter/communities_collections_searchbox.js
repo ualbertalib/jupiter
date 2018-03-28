@@ -1,27 +1,30 @@
-$(document).on("turbolinks:before-cache", function() {
-    $('.js-communities-collections-searchbox').select2('destroy');
-});
-
 $(document).on('turbolinks:load', function() {
-  $('.js-communities-collections-searchbox').select2({
-    theme: 'bootstrap',
-    ajax: {
-      url: 'communities',
-      cache: false,
-      dataType: 'json',
-      data: function(params) {
-        var query = {
-          query: params.term
-        };
-        return query;
+  $input = $(".js-communities-collections-searchbox")
+
+  var options = {
+    getValue: "name",
+    url: function(phrase) {
+      // we use a relative url "communities.json" here as this will be used for both /admin and non admin (/) paths
+      return "communities.json?query=" + phrase;
+    },
+    categories: [
+      {
+        listLocation: "communities",
+        header: "<strong>Communities</strong>",
+      },
+      {
+        listLocation: "collections",
+        header: "<strong>Collections</strong>",
+      }
+    ],
+    list: {
+      onChooseEvent: function() {
+        var url = $input.getSelectedItemData().url
+        $input.val("")
+        Turbolinks.visit(url)
       }
     }
-  }).on('select2:select', function(e) {
-    var data = e.params.data;
-    if (data.path) {
-      // To ensure we get the placeholder text when user clicks selection then back button (firefox)
-      $(this).val(null).trigger("change");
-      window.location.href = data.path;
-    }
-  });
+  }
+
+  $input.easyAutocomplete(options)
 });

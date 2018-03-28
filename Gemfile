@@ -48,11 +48,11 @@ gem 'sidekiq', '~> 5.1'
 gem 'sinatra' # used by sidekiq/web
 
 # Misc Utilities
+gem 'jbuilder' # generate JSON objects
 gem 'kaminari' # Pagination
 gem 'ransack' # ActiveRecord search/filter
-gem 'wicked' # Multi-step wizard
-
 gem 'voight_kampff' # bot detection
+gem 'wicked' # Multi-step wizard
 
 # Performance monitoring
 gem 'skylight'
