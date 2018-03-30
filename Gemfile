@@ -7,7 +7,7 @@ end
 
 # Core Rails stuff
 gem 'puma', '~> 3.11'
-gem 'rails', '~> 5.1.5'
+gem 'rails', '~> 5.1.6'
 
 # Assets (CSS/JS) stuff
 gem 'bootstrap', '~> 4.0.0'
