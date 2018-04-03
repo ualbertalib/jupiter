@@ -221,7 +221,7 @@
             <%= fa_icon 'chevron-left' %>
             <%= t('items.draft.previous') %>
           <% end %>
-          <%= button_tag type: :submit, class: 'btn btn-primary' do %>
+          <%= button_tag type: :submit, class: 'btn btn-primary', data: { disable_with: t('items.draft.submit_draft_btn_loading_html') } do %>
             <%= fa_icon 'save' %>
             <% if @is_edit %>
               <%= t('items.draft.save_and_deposit_edits') %>
