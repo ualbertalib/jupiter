@@ -1,5 +1,5 @@
 $(document).on('turbolinks:load', function() {
-  $input = $(".js-communities-collections-searchbox")
+  $input = $(".js-communities-collections-searchbox");
 
   var options = {
     getValue: "name",
@@ -19,12 +19,12 @@ $(document).on('turbolinks:load', function() {
     ],
     list: {
       onChooseEvent: function() {
-        var url = $input.getSelectedItemData().url
-        $input.val("")
-        Turbolinks.visit(url)
+        var url = $input.getSelectedItemData().url;
+        $input.val("");
+        Turbolinks.visit(url);
       }
     }
-  }
+  };
 
-  $input.easyAutocomplete(options)
+  $input.easyAutocomplete(options);
 });
