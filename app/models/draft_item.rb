@@ -146,6 +146,19 @@ class DraftItem < ApplicationRecord
 
   # rubocop:disable Style/DateTime,Rails/TimeZone
   def update_from_fedora_item(item, for_user)
+    # I suspect this will become some kind of string field, but for now, using UTC
+    # HACK: temporarily falling back to a parsable date when editing unparsable data to fix a crasher in Prod,
+    # but this needs a longer term fix to accomodate all the messy Date-ish production data
+    created_at = begin
+      DateTime.parse(item.created)
+    rescue ArgumentError
+      capture = item.created.scan(/\d{4}/)
+      if capture.present?
+        Date.parse("1/1/#{capture[0]}")
+      else
+        Date.parse("1/1/#{Date.current.year}")
+      end
+    end
     draft_attributes = {
       user_id: for_user.id,
       title: item.title,
@@ -154,8 +167,7 @@ class DraftItem < ApplicationRecord
       languages: languages_for_uris(item.languages),
       creators: item.creators,
       subjects: item.subject,
-      # I suspect this will become some kind of string field, but for now, using UTC
-      date_created: DateTime.parse(item.created),
+      date_created: created_at,
       description: item.description,
       visibility: visibility_for_uri(item.visibility),
       visibility_after_embargo: visibility_after_embargo_for_uri(item.visibility_after_embargo),
