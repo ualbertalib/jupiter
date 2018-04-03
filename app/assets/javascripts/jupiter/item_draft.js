@@ -54,6 +54,8 @@ $(document).on('turbolinks:load', function() {
 
   // global selectize initailization could be moved elsewhere
   $('.js-selectize').selectize({
+    selectOnTab: true,
+    closeAfterSelect: true
   });
 
   // This one is for tagging/ability to create items on input
