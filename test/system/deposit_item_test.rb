@@ -92,7 +92,7 @@ class DepositItemTest < ApplicationSystemTestCase
 
     click_on I18n.t('items.draft.save_and_continue')
     click_on I18n.t('items.draft.save_and_continue')
-    click_on I18n.t('items.draft.header_edit')
+    click_on I18n.t('items.draft.save_and_deposit_edits')
     assert_text I18n.t('items.draft.successful_deposit')
     assert_selector 'h1', text: 'The Winds of Winter'
   end
