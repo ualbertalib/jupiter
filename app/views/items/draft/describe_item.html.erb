@@ -32,11 +32,8 @@
         label: t('.type_id'),
         label_method: :translated_name,
         value_method: :id,
-        # TODO: Bug in simple form: https://github.com/plataformatec/simple_form/issues/1427
-        # include_blank is not allowed with required true, so hack is to set empty prompt?
-        # include_blank: false,
         required: true,
-        prompt: '',
+        prompt: t('.type_id_placeholder'),
         hint: t('.type_id_help_html') %>
 
 
@@ -49,11 +46,8 @@
           data: { placeholder: t('.languages_placeholder') },
           class: 'js-select2'
         },
-        # TODO: Bug in simple form: https://github.com/plataformatec/simple_form/issues/1427
-        # include_blank is not allowed with required true, so hack is to set empty prompt?
-        # include_blank: false,
         required: true,
-        prompt: '' %>
+        prompt: t('.languages_placeholder') %>
 
     <%= f.input :creators,
         label: t('.creators'),
@@ -64,11 +58,9 @@
           data: { tags: true, placeholder: t('.creators_placeholder') },
           class: 'js-select2'
         },
-        # TODO: Bug in simple form: https://github.com/plataformatec/simple_form/issues/1427
-        # include_blank is not allowed with required true, so hack is to set empty prompt?
-        # include_blank: false,
         required: true,
-        prompt: '' %>
+        prompt: t('.creators_placeholder'),
+        hint: t('.creators_help') %>
 
     <%= f.input :subjects,
         label: t('.subjects'),
@@ -79,11 +71,8 @@
           data: { tags: true, placeholder: t('.subjects_placeholder') },
           class: 'js-select2'
         },
-        # TODO: Bug in simple form: https://github.com/plataformatec/simple_form/issues/1427
-        # include_blank is not allowed with required true, so hack is to set empty prompt?
-        # include_blank: false,
         required: true,
-        prompt: '',
+        prompt: t('.subjects_placeholder'),
         hint: t('.subjects_help') %>
 
     <%= f.input :date_created,
@@ -91,13 +80,13 @@
                 label: t('.date_created'),
                 order: [:year, :month, :day],
                 prompt: {
-                  day: false,
-                  month: false,
+                  day: t('select_a_day'),
+                  month: t('select_a_month'),
                   year: t('select_a_year')
                 },
                 start_year: Date.today.year + 1,
                 end_year: Date.today.year - 100,
-                input_html: { class: 'mr-2 mb-2' },
+                input_html: { class: 'mr-2 mb-2', 'aria-labelledby': 'draft_item_date_created_1i' },
                 required: true,
                 hint: t('.date_created_help') %>
 
@@ -153,7 +142,7 @@
                 aria-expanded="false"
                 aria-controls="js-collapse-additional-fields">
               <%= t('.additional_fields') %>
-              <%= fa_icon "chevron-down", class: "js-more-less pull-right" %>
+              <%= fa_icon "chevron-down", class: "js-more-less float-right" %>
             </a>
           </h5>
         </div>
@@ -224,12 +213,12 @@
       </div>
     </div>
 
-    <div class="mt-3 pull-right">
-      <%= link_to root_path, class: 'btn btn-secondary' do %>
+    <div class="mt-3 d-flex flex-wrap justify-content-end">
+      <%= link_to root_path, class: 'btn btn-secondary mr-2' do %>
         <%= fa_icon 'ban' %>
         <%= t('cancel') %>
       <% end %>
-      <%= f.button :button, type: :submit do %>
+      <%= f.button :button, type: :submit, class: 'btn btn-primary' do %>
         <%= t('items.draft.save_and_continue') %>
         <%= fa_icon 'chevron-right' %>
       <% end %>

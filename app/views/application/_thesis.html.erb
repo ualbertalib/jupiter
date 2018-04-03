@@ -5,14 +5,16 @@
   <div class="media-body ml-3">
     <div class="d-flex flex-wrap flex-lg-nowrap justify-content-between align-items-start">
       <h5 class="mt-0"><%= link_to thesis.title, path_for_result(thesis) %></h5>
-      <div class="btn-group">
-        <% primary_file = thesis.file_sets.first %>
-        <% if primary_file.present? %>
-          <%= link_to fileset_uri(primary_file, :download), class: 'btn btn-secondary', rel: 'nofollow' do %>
-            <%= fa_icon 'cloud-download' %>
-            <%= t('download') %>
-          <% end %>
+
+      <% primary_file = thesis.file_sets.first %>
+      <% if primary_file.present? %>
+        <%= link_to fileset_uri(primary_file, :download), class: 'btn btn-secondary mr-2 mb-2 mb-md-0', rel: 'nofollow' do %>
+          <%= fa_icon 'cloud-download' %>
+          <%= t('download') %>
         <% end %>
+      <% end %>
+
+      <div class="btn-group">
         <% if policy(thesis).update? %>
           <%= link_to edit_item_path(thesis), class:'btn btn-outline-secondary'  do %>
             <%= fa_icon('pencil-square-o') %>
@@ -30,7 +32,7 @@
     </div>
 
     <div class="mt-0">
-      <%= thesis.sort_year %>
+      <%= humanize_date(thesis.creation_date) %>
     </div>
     <div>
       <%# TODO: the search path may need to be revisited %>

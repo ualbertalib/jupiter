@@ -1,30 +1,30 @@
+<%# TODO: Refactor this like collections_list/collection_path,
+    only difference between this and admin partial is the community_path %>
 <li class="list-group-item list-group-item-action">
 
-  <div class="d-flex justify-content-between align-items-start mb-3">
-    <%= link_to community_path(community), class: 'media jupiter-community-media' do %>
-      <%= render partial: 'thumbnail', locals: { thumbnail: community.logo.attachment, object: community } %>
-      <div class="media-body ml-3">
-        <h4 class="mt-0"><%= community.title %></h4>
-        <p class="text-muted"><%= community.description %></p>
-      </div>
+  <%= link_to community_path(community), class: 'media jupiter-community-media mb-3' do %>
+    <%= render partial: 'thumbnail', locals: { thumbnail: community.logo.attachment, object: community } %>
+    <div class="media-body ml-3">
+      <h4 class="mt-0"><%= community.title %></h4>
+      <p class="text-muted"><%= community.description %></p>
+    </div>
+  <% end %>
+
+  <div class="btn-group mb-3" role="group" aria-label="Community Actions">
+    <% if policy(community).update? %>
+      <%= link_to edit_admin_community_path(community), class:'btn btn-outline-secondary' do %>
+        <%= fa_icon('pencil-square-o') %>
+        <%= t('edit') %>
+      <% end %>
     <% end %>
 
-    <div class="btn-group" role="group" aria-label="Community Actions">
-      <% if policy(community).update? %>
-        <%= link_to edit_admin_community_path(community), class:'btn btn-outline-secondary' do %>
-          <%= fa_icon('pencil-square-o') %>
-          <%= t('edit') %>
-        <% end %>
+    <% if policy(community).destroy? %>
+      <%= link_to admin_community_path(community), class: 'btn btn-outline-secondary', method: :delete,
+          data: {confirm: t('communities.index.delete_confirm', title: community.title) } do %>
+        <%= fa_icon('trash') %>
+        <%= t('delete') %>
       <% end %>
-
-      <% if policy(community).destroy? %>
-        <%= link_to admin_community_path(community), class: 'btn btn-outline-secondary', method: :delete,
-            data: {confirm: t('communities.index.delete_confirm', title: community.title) } do %>
-          <%= fa_icon('trash') %>
-          <%= t('delete') %>
-        <% end %>
-      <% end %>
-    </div>
+    <% end %>
   </div>
 
   <div class="d-flex justify-content-between align-items-start mb-3">

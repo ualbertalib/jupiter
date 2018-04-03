@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171130222838) do
+ActiveRecord::Schema.define(version: 20180302212652) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,7 +47,7 @@ ActiveRecord::Schema.define(version: 20171130222838) do
   end
 
   create_table "draft_items", force: :cascade do |t|
-    t.string "uuid"
+    t.uuid "uuid"
     t.integer "status", default: 0, null: false
     t.integer "wizard_step", default: 0, null: false
     t.integer "thumbnail_id"
@@ -94,6 +94,13 @@ ActiveRecord::Schema.define(version: 20171130222838) do
     t.datetime "updated_at", null: false
     t.index ["uid", "provider"], name: "index_identities_on_uid_and_provider", unique: true
     t.index ["user_id"], name: "index_identities_on_user_id"
+  end
+
+  create_table "item_doi_states", force: :cascade do |t|
+    t.uuid "item_id"
+    t.string "aasm_state"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "languages", force: :cascade do |t|

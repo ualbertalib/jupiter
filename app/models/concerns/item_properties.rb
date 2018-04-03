@@ -32,7 +32,28 @@ module ItemProperties
     additional_search_index :doi_without_label, solrize_for: :exact_match,
                                                 as: -> { doi.gsub('doi:', '') if doi.present? }
 
+    attr_accessor :skip_handle_doi_states
+
+    # allow for a uniform way of accessing this information across regular items and theses
+    def authors
+      respond_to?(:creators) ? creators : [dissertant]
+    end
+
+    def creation_date
+      respond_to?(:created) ? created : graduation_date
+    end
+
+    def doi_state
+      @state ||= ItemDoiState.find_or_create_by!(item_id: id) do |state|
+        state.aasm_state = (doi.present? ? :available : :not_available)
+      end
+    end
+
     unlocked do
+      before_save :handle_doi_states
+      after_create :handle_doi_states
+      before_destroy :remove_doi
+
       # If you're looking for rights and subject validations, note that they have separate implementations
       # on the Thesis and Item classes.
       validates :embargo_end_date, presence: true, if: ->(item) { item.visibility == VISIBILITY_EMBARGO }
@@ -75,6 +96,34 @@ module ItemProperties
             end
           end
         end
+      end
+
+      def handle_doi_states
+        # this should be disabled during migration runs and enabled for production
+        return unless Rails.application.secrets.doi_minting_enabled
+
+        return if id.blank?
+
+        # ActiveFedora doesn't have skip_callbacks built in? So handle this ourselves.
+        # Allow this logic to be skipped if skip_handle_doi_states is set.
+        # This is mainly used so we can rollback the state when a job fails and
+        # we do not wish to rerun all this logic again which would queue up the same job again
+        return (self.skip_handle_doi_states = false) if skip_handle_doi_states.present?
+
+        if doi.blank? # Never been minted before
+          doi_state.created!(id) if !private? && doi_state.not_available?
+        elsif (doi_state.not_available? &&
+              transitioned_from_private?) ||
+              (doi_state.available? && (doi_state.doi_fields_changed?(self) ||
+              transitioned_to_private?))
+          # If private, we only care if visibility has been made public
+          # If public, we care if visibility changed to private or doi fields have been changed
+          doi_state.altered!(id)
+        end
+      end
+
+      def remove_doi
+        doi_state.removed! if doi.present? && (doi_state.available? || doi_state.not_available?)
       end
 
       def add_to_path(community_id, collection_id)
@@ -199,9 +248,7 @@ type=\"#{unlocked_fileset.original_file.mime_type}\"\
       # Some kinds of things don't get thumbnailed by HydraWorks, eg) .txt files
       break if unlocked_fileset.thumbnail.blank?
       unlocked_fileset.fetch_raw_thumbnail_data do |content_type, io|
-        thumbnail.attach(io: io,
-                         filename: "#{unlocked_fileset.contained_filename}.jpg",
-                         content_type: content_type)
+        thumbnail.attach(io: io, filename: "#{unlocked_fileset.contained_filename}.jpg", content_type: content_type)
       end
     end
   end

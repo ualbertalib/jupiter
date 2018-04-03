@@ -4,18 +4,11 @@
   <h1>
     <%= t('.header') %>
   </h1>
-  <div>
-    <%= link_to create_draft_items_path, method: :post,
-        class: 'btn btn-primary' do %>
-      <%= fa_icon('plus-circle') %>
-      <%= t('collections.show.deposit_item') %>
-    <% end %>
-
-    <%= link_to '#TODO', class: 'btn btn-primary' do %>
-      <%= fa_icon('plus-circle') %>
-      (TODO) <%= t('collections.show.deposit_thesis') %>
-    <% end %>
-  </div>
+  <%= link_to create_draft_items_path, method: :post,
+      class: 'btn btn-primary' do %>
+    <%= fa_icon('plus-circle') %>
+    <%= t('collections.show.deposit_item') %>
+  <% end %>
 </div>
 
 <%= render partial: 'search/item_search_and_results',

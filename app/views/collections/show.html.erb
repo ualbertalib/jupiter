@@ -41,14 +41,9 @@
     </h4>
     <% if policy(:item).new? %>
       <%= link_to create_draft_items_path(collection: @collection.id), method: :post,
-          class: 'btn btn-primary mr-2' do %>
+          class: 'btn btn-primary' do %>
         <%= fa_icon('plus-circle') %>
         <%= t('.deposit_item') %>
-      <% end %>
-
-      <%= link_to '#TODO', class: 'btn btn-primary' do %>
-        <%= fa_icon('plus-circle') %>
-        (TODO) <%= t('.deposit_thesis') %>
       <% end %>
     <% end %>
   </div>
@@ -58,6 +53,7 @@
       <%= search_field_tag :query,
           params[:query],
           placeholder: t('collections.show.search_items_placeholder'),
+          'aria-label': t('collections.show.search_items_placeholder'),
           class: 'form-control' %>
       <span class="input-group-btn">
         <button type="submit" class="btn btn-secondary">

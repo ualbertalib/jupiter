@@ -1,13 +1,13 @@
 <div class="js-community-collection">
   <div class="form-group">
-    <label>
+    <%= label_tag 'draft_item[community_id][]' do %>
       <span class="text-danger font-weight-bold">*</span>
       <%= t('.community') %>
-    </label>
+    <% end %>
 
     <%= select_tag 'draft_item[community_id][]',
                     options_from_collection_for_select(
-                      Community.all,
+                      Community.all.sort(:title, :asc),
                       :id,
                       :title,
                       community.present? ? community.id : nil ),
@@ -15,10 +15,11 @@
                     class: 'form-control js-community-select' %>
   </div>
   <div class="form-group">
-    <label>
+    <%= label_tag 'draft_item[collection_id][]' do %>
       <span class="text-danger font-weight-bold">*</span>
       <%= t('.collection') %>
-    </label>
+    <% end %>
+
     <% if community.present? %>
           <%= select_tag 'draft_item[collection_id][]',
                          options_from_collection_for_select(

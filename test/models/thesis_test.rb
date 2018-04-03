@@ -194,7 +194,7 @@ class ThesisTest < ActiveSupport::TestCase
 
   test 'item_type_with_status_code gets set correctly' do
     thesis = Thesis.new_locked_ldp_object
-    assert_equal thesis.item_type_with_status_code, 'thesis'
+    assert_equal thesis.item_type_with_status_code, :thesis
   end
 
   test 'a title is required' do

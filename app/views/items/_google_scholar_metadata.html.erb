@@ -1,14 +1,15 @@
 <!-- Google Scholar metadata -->
 <meta name="citation_title" content="<%= @item.title%>"/>
-<% authors(@item).each do |author| %>
+<% @item.authors.each do |author| %>
   <meta name="citation_author" content="<%= author %>"/>
 <% end %>
-<% if @item.sort_year.present? %>
-  <meta name="citation_publication_date" content="<%= @item.sort_year %>"/>
+<% if @item.creation_date.present? %>
+  <meta name="citation_publication_date" content="<%= humanize_date(@item.creation_date) %>"/>
 <% end %>
-<% if @item.file_sets.count > 0 %>
+<% citation_file = @item.file_sets.first %>
+<% if citation_file.present? %>
   <%# TODO: limit to pdf mime-type if/when that gets stored %>
-  <meta name="citation_pdf_url" content="<%= fileset_uri(@item.file_sets.first, :show) %>"/>
+  <meta name="citation_pdf_url" content="<%= fileset_uri(citation_file, :show) %>"/>
 <% end %>
 <meta name="dc.identifier" content="<%= @item.doi %>"/>
 <meta name="citation_doi" content="<%= @item.doi %>"/>

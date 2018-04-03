@@ -7,7 +7,7 @@ end
 
 # Core Rails stuff
 gem 'puma', '~> 3.11'
-gem 'rails', '~> 5.1.5'
+gem 'rails', '~> 5.1.6'
 
 # Assets (CSS/JS) stuff
 gem 'bootstrap', '~> 4.0.0'
@@ -23,6 +23,9 @@ gem 'uglifier', '>= 1.3.0'
 gem 'active_link_to'
 gem 'activestorage'
 gem 'simple_form'
+
+# SEO
+gem 'canonical-rails'
 
 # Hydra stuff
 gem 'active-fedora', github: 'mbarnett/active_fedora', branch: 'fix_types_literally_do_nothing'
@@ -48,6 +51,8 @@ gem 'sidekiq', '~> 5.1'
 gem 'sinatra' # used by sidekiq/web
 
 # Misc Utilities
+gem 'aasm' # state-machine management
+gem 'ezid-client'
 gem 'jbuilder' # generate JSON objects
 gem 'kaminari' # Pagination
 gem 'ransack' # ActiveRecord search/filter
@@ -95,8 +100,10 @@ group :test do
   gem 'shoulda', require: false
 
   gem 'launchy'
+  gem 'vcr', require: false
   # Easy installation and use of chromedriver to run system tests with Chrome
   gem 'chromedriver-helper'
+  gem 'webmock', require: false
 end
 
 group :staging, :production do

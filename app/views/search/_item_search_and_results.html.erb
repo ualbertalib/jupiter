@@ -3,6 +3,7 @@
     <%= search_field_tag :query,
         params[:query],
         placeholder: search_placeholder,
+        'aria-label': search_placeholder,
         class: 'form-control' %>
     <span class="input-group-btn">
       <button type="submit" class="btn btn-secondary">
