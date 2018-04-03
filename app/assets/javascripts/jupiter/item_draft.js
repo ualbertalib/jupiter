@@ -64,7 +64,7 @@ $(document).on('turbolinks:load', function() {
         return {
             value: input,
             text: input
-        }
+        };
     }
   });
 
