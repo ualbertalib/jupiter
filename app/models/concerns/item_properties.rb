@@ -242,11 +242,11 @@ type=\"#{unlocked_fileset.original_file.mime_type}\"\
 
   # Thumbnailing errors can manifest themselves in a few different ways, so we're trapping this without a specific
   # class.
-  # rubocop:disable Lint/RescueWithoutErrorClass
   def thumbnail_fileset(fileset)
     raise ArgumentError, 'Thumbnail must belong to the item it is set for' unless id == fileset.owning_item.id
     thumbnail.purge if thumbnail.present?
     fileset.unlock_and_fetch_ldp_object do |unlocked_fileset|
+      # rubocop:disable Lint/RescueWithoutErrorClass
       begin
         unlocked_fileset.create_derivatives
       rescue => e
@@ -256,6 +256,7 @@ type=\"#{unlocked_fileset.original_file.mime_type}\"\
         thumbnail.purge if thumbnail.present?
         break
       end
+      # rubocop:enable Lint/RescueWithoutErrorClass
       # Some kinds of things don't get thumbnailed by HydraWorks, eg) .txt files
       break if unlocked_fileset.thumbnail.blank?
       unlocked_fileset.fetch_raw_thumbnail_data do |content_type, io|
