@@ -4,8 +4,9 @@
 // External Library Stylesheets
 @import 'bootstrap';
 @import 'font-awesome';
-@import 'select2';
-@import 'select2-bootstrap';
+@import 'selectize';
+// Not bootstrap 4 but thats okay?
+@import 'selectize.bootstrap3';
 @import 'easy-autocomplete';
 @import 'dropzone/dropzone';
 
@@ -17,5 +18,4 @@
 @import 'image';
 @import 'search';
 @import 'users';
-@import 'item_draft';
 @import 'welcome';

@@ -52,18 +52,20 @@ $(document).on('turbolinks:load', function() {
     }
   });
 
-  // global select2 initailization (could be moved elsewhere)
-  // We going to make heavy use of data-attrs to customize this
-  // instead of intializing a many select2 methods with different options
-  $('.js-select2').select2({
-    theme: 'bootstrap',
-    allowClear: true,
+  // global selectize initailization could be moved elsewhere
+  $('.js-selectize').selectize({
+  });
 
-    // TODO: Hack on width which fixes mobile responsiveness width and select2 inputs being
-    // a larger width then normal bootstrap inputs
-    // See deposit_item.scss for similar comments.
-    // Potential fix here: https://github.com/select2/select2/pull/4898/
-    width: '100%'
+  // This one is for tagging/ability to create items on input
+  $('.js-selectize-create').selectize({
+    delimiter: '', // We don't want commas to seperate items (Authors names for example, `Doe, Jane B.` )
+    persist: false,
+    create: function(input) {
+        return {
+            value: input,
+            text: input
+        }
+    }
   });
 
 });

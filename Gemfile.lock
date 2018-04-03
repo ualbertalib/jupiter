@@ -351,8 +351,7 @@ GEM
       sass (~> 3.5.5)
     sdoc (1.0.0)
       rdoc (>= 5.0)
-    select2-rails (4.0.3)
-      thor (~> 0.14)
+    selectize-rails (0.12.4.1)
     selenium-webdriver (3.11.0)
       childprocess (~> 0.5)
       rubyzip (~> 1.2)
@@ -471,7 +470,7 @@ DEPENDENCIES
   sass-rails (~> 5)
   scss_lint (>= 0.56.0)
   sdoc
-  select2-rails (~> 4)
+  selectize-rails
   selenium-webdriver
   shoulda
   sidekiq (~> 5.1)
