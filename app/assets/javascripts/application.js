@@ -16,6 +16,7 @@
 //= require jquery-multidownload/jquery-multidownload
 //= require popper
 //= require bootstrap
-//= require select2
+//= require selectize
+//= require jquery.easy-autocomplete
 //= require dropzone
 //= require_tree ./jupiter

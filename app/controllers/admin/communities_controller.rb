@@ -1,7 +1,5 @@
 class Admin::CommunitiesController < Admin::AdminController
 
-  include CommunitiesCollectionsTypeahead
-
   before_action :fetch_community, only: [:show, :edit, :update, :destroy]
 
   def index
@@ -12,8 +10,15 @@ class Admin::CommunitiesController < Admin::AdminController
         render template: 'communities/index'
       end
       format.json do
-        results = typeahead_results(params[:query])
-        render json: { results: results }
+        @communities = JupiterCore::Search.faceted_search(q: "title_tesim:#{params[:query]}*",
+                                                          models: [Community],
+                                                          as: current_user)
+                                          .sort(:title, :asc).limit(5)
+        @collections = JupiterCore::Search.faceted_search(q: "title_tesim:#{params[:query]}*",
+                                                          models: [Collection],
+                                                          as: current_user)
+                                          .sort(:community_title, :asc)
+                                          .sort(:title, :asc).limit(5)
       end
     end
   end
@@ -87,15 +92,6 @@ class Admin::CommunitiesController < Admin::AdminController
 
   def fetch_community
     @community = Community.find(params[:id])
-  end
-
-  # Override the regular non-admin paths set in CommunitiesCollectionsTypeahead
-  def path_to_community(community)
-    admin_community_path(community)
-  end
-
-  def path_to_collection(collection)
-    admin_community_collection_path(collection.community, collection)
   end
 
 end

@@ -15,7 +15,7 @@ gem 'dropzonejs-rails'
 gem 'font-awesome-rails'
 gem 'jquery-rails'
 gem 'sass-rails', '~> 5'
-gem 'select2-rails', '~> 4'
+gem 'selectize-rails'
 gem 'turbolinks', '~> 5'
 gem 'uglifier', '>= 1.3.0'
 
@@ -53,6 +53,7 @@ gem 'sinatra' # used by sidekiq/web
 # Misc Utilities
 gem 'aasm' # state-machine management
 gem 'ezid-client'
+gem 'jbuilder' # generate JSON objects
 gem 'kaminari' # Pagination
 gem 'ransack' # ActiveRecord search/filter
 gem 'voight_kampff' # bot detection

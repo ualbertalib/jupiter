@@ -1,7 +1,5 @@
 class CommunitiesController < ApplicationController
 
-  include CommunitiesCollectionsTypeahead
-
   def index
     authorize Community
     respond_to do |format|
@@ -10,8 +8,15 @@ class CommunitiesController < ApplicationController
         @title = t('.header')
       end
       format.json do
-        results = typeahead_results(params[:query])
-        render json: { results: results }
+        @communities = JupiterCore::Search.faceted_search(q: "title_tesim:#{params[:query]}*",
+                                                          models: [Community],
+                                                          as: current_user)
+                                          .sort(:title, :asc).limit(5)
+        @collections = JupiterCore::Search.faceted_search(q: "title_tesim:#{params[:query]}*",
+                                                          models: [Collection],
+                                                          as: current_user)
+                                          .sort(:community_title, :asc)
+                                          .sort(:title, :asc).limit(5)
       end
     end
   end
