@@ -7,7 +7,7 @@ end
 
 json.collections do
   json.array!(@collections) do |collection|
-    json.name collection.title
+    json.name "#{collection.community.title} -- #{collection.title}"
     json.url community_collection_path(collection.community, collection)
   end
 end
