@@ -14,21 +14,23 @@
         <% end %>
       <% end %>
 
-      <div class="btn-group">
-        <% if policy(thesis).update? %>
-          <%= link_to edit_item_path(thesis), class:'btn btn-outline-secondary'  do %>
-            <%= fa_icon('pencil-square-o') %>
-            <%= t('edit') %>
+      <% if policy(thesis).update? || policy(thesis).destroy? %>
+        <div class="btn-group">
+          <% if policy(thesis).update? %>
+            <%= link_to edit_item_path(thesis), class:'btn btn-outline-secondary'  do %>
+              <%= fa_icon('pencil-square-o') %>
+              <%= t('edit') %>
+            <% end %>
           <% end %>
-        <% end %>
-        <% if policy(thesis).destroy? %>
-          <%= link_to item_path(thesis), method: :delete, class:'btn btn-outline-secondary',
-              data: { confirm: t('collections.show.item_delete_confirm', title: thesis.title) } do %>
-            <%= fa_icon('trash') %>
-            <%= t('delete') %>
+          <% if policy(thesis).destroy? %>
+            <%= link_to item_path(thesis), method: :delete, class:'btn btn-outline-secondary',
+                data: { confirm: t('collections.show.item_delete_confirm', title: thesis.title) } do %>
+              <%= fa_icon('trash') %>
+              <%= t('delete') %>
+            <% end %>
           <% end %>
-        <% end %>
-      </div>
+        </div>
+      <% end %>
     </div>
 
     <div class="mt-0">
