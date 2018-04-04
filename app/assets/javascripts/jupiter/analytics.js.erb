@@ -1,0 +1,7 @@
+$(document).on('turbolinks:load', function() {
+  if (typeof gtag === 'function') {
+    return gtag('config', '<%= Rails.application.secrets.google_analytics_token %>', {
+      'page_path': window.location.pathname
+    });
+  }
+});
