@@ -33,9 +33,6 @@ module Jupiter
     # Run skylight in UAT for performance metric monitoring pre-launch
     config.skylight.environments += ['uat']
 
-    # we can tell crawlers to go away during the beta launch phase
-    config.allow_crawlers = ENV['RAILS_ALLOW_CRAWLERS'].present?
-
     # Finding jupiter_core code before the ApplicationController loads
     config.eager_load_paths.prepend("#{config.root}/app/models/jupiter_core")
 

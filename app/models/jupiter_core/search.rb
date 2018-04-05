@@ -15,11 +15,12 @@ class JupiterCore::Search
   # TODO: probably someone will request not showing some of the default facets in some context,
   # so one potential path forward would be to add a facet exclusions param and subtract it out of the facet_fields
   # when creating the DeferredFacetedSolrQuery
-  def self.faceted_search(q: '', facets: [], models: [], as: nil)
+  def self.faceted_search(q: '', facets: [], ranges: [], models: [], as: nil)
     raise ArgumentError, 'as: must specify a user!' if as.present? && !as.is_a?(User)
     raise ArgumentError, 'must provide at least one model to search for!' if models.blank?
     models = [models] unless models.is_a?(Array)
     facets = [] if facets.blank?
+    ranges = {} if ranges.blank?
 
     base_query = []
     fq = []
@@ -39,6 +40,9 @@ class JupiterCore::Search
         fq << %Q(#{key}: "#{value}")
       end
     end
+    ranges.each do |key, value|
+      fq << "#{key}:[#{value[:begin]} TO #{value[:end]}]"
+    end
 
     # queried fields, by default, are all of the fields marked as :search (see calculate_queried_fields).
     # We can revist if we need to customize this more granularly
@@ -47,6 +51,7 @@ class JupiterCore::Search
                                               qf: calculate_queried_fields(models),
                                               facet_map: construct_facet_map(models),
                                               facet_fields: construct_facet_fields(models, user: as),
+                                              ranges: ranges,
                                               restrict_to_model: models.map { |m| m.send(:derived_af_class) })
   end
 

@@ -1,7 +1,7 @@
 module SearchHelper
   def search_params_hash
     # Search controller uses param[:search], all others use params[:query]
-    params.permit(:search, :query, { facets: {} }, :tab, :sort, :direction).to_h
+    params.permit(:search, :query, { facets: {} }, { ranges: {} }, :tab, :sort, :direction).to_h
   end
 
   def query_params_with_facet(facet_name, value)
@@ -23,9 +23,19 @@ module SearchHelper
     query_params
   end
 
+  def query_params_without_range_value(facet_name)
+    query_params = search_params_hash
+    raise ArgumentError, 'No ranges are present' unless query_params.key?(:ranges)
+    raise ArgumentError, 'No query param is present for this range' unless query_params[:ranges].key?(facet_name)
+    query_params[:ranges].delete(facet_name)
+    query_params.delete(:ranges) if query_params[:ranges].empty?
+
+    query_params
+  end
+
   def query_params_with_tab(tab)
     # Link for clicking a tab to switch models. Facets are stripped out
-    query_params = search_params_hash.except(:facets)
+    query_params = search_params_hash.except(:facets, :ranges)
     query_params[:tab] = tab
 
     query_params
