@@ -39,6 +39,8 @@ Rollbar.configure do |config|
   #  Thread.new { Rollbar.process_from_async_handler(payload) }
   # }
 
+  config.exception_level_filters['ActionController::RoutingError'] = 'ignore'
+
   # Enable asynchronous reporting (using sucker_punch)
   # config.use_sucker_punch
 
