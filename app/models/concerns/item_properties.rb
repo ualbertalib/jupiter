@@ -240,11 +240,23 @@ type=\"#{unlocked_fileset.original_file.mime_type}\"\
     @thumbnail ||= ActiveStorage::Attached::One.new(:thumbnail, self)
   end
 
+  # Thumbnailing errors can manifest themselves in a few different ways, so we're trapping this without a specific
+  # class.
   def thumbnail_fileset(fileset)
     raise ArgumentError, 'Thumbnail must belong to the item it is set for' unless id == fileset.owning_item.id
     thumbnail.purge if thumbnail.present?
     fileset.unlock_and_fetch_ldp_object do |unlocked_fileset|
-      unlocked_fileset.create_derivatives
+      # rubocop:disable Lint/RescueWithoutErrorClass
+      begin
+        unlocked_fileset.create_derivatives
+      rescue => e
+        # sometimes soffice crashes when trying to derive certain kinds of files. So we clear out any garbage
+        # and leave it unthumbnailed and push the error to Rollbar for further inspection
+        Rollbar.error(e)
+        thumbnail.purge if thumbnail.present?
+        break
+      end
+      # rubocop:enable Lint/RescueWithoutErrorClass
       # Some kinds of things don't get thumbnailed by HydraWorks, eg) .txt files
       break if unlocked_fileset.thumbnail.blank?
       unlocked_fileset.fetch_raw_thumbnail_data do |content_type, io|

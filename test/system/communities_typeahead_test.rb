@@ -19,27 +19,25 @@ class CommunitiesTypeaheadTest < ApplicationSystemTestCase
   context 'Non-logged in user (or anybody really)' do
     should 'be able to typeahead communities and collections' do
       visit communities_path
-      # Click to expose input
-      find('.select2-container').click
-
       # Start typing ...
-      find('.select2-search input').set('thin')
+      fill_in('query', with: 'thin')
 
-      # Community search results
-      communities = find('.select2-results li:first-child', text: 'Communities')
-      communities.assert_selector('li', count: 1)
-      communities.assert_selector('li', text: 'Department of thing')
-      communities.refute_selector('li', text: 'Other community')
+      # Typeahead results
+      assert_selector('.easy-autocomplete-container li', count: 3) # total results
 
-      # Collection search results
-      collections = find('.select2-results li:last-child', text: 'Collections')
-      collections.assert_selector('li', count: 2)
-      collections.assert_selector('li', text: 'Department of thing -- Articles about thing')
-      collections.assert_selector('li', text: 'Other community -- Other stuff things')
+      # Has sub headings
+      assert_selector('.easy-autocomplete-container .eac-category', text: 'Communities')
+      assert_selector('.easy-autocomplete-container .eac-category', text: 'Collections')
+
+      assert_selector('.easy-autocomplete-container li', text: 'Department of thing')
+      refute_selector('.easy-autocomplete-container li', text: 'Other community')
+
+      assert_selector('.easy-autocomplete-container li', text: 'Department of thing -- Articles about thing')
+      assert_selector('.easy-autocomplete-container li', text: 'Other community -- Other stuff things')
 
       # Select a result to visit the page
-      collections.find('li', text: 'Other community -- Other stuff things').click
-      assert_equal URI.parse(current_url).request_uri, community_collection_path(@community2, @collection)
+      find('.easy-autocomplete-container li', text: 'Other community -- Other stuff things').click
+      assert_current_path(community_collection_path(@community2, @collection))
     end
   end
 

@@ -31,12 +31,12 @@ class DepositItemTest < ApplicationSystemTestCase
             with: 'A Dance with Dragons'
 
     select 'Book', from: I18n.t('items.draft.describe_item.type_id')
-    select 'English', from: I18n.t('items.draft.describe_item.languages')
+    selectize_option '.draft_item_languages', with: 'English'
 
-    select2 'George R. R. Martin', container_class: 'draft_item_creators'
+    selectize_set_text '.draft_item_creators', with: 'George R. R. Martin'
 
-    select2 'A Song of Ice and Fire', container_class: 'draft_item_subjects'
-    select2 'Fantasy', container_class: 'draft_item_subjects'
+    selectize_set_text '.draft_item_subjects', with: 'A Song of Ice and Fire'
+    selectize_set_text '.draft_item_subjects', with: 'Fantasy'
 
     select_date '2011/07/12', field_id: 'draft_item_date_created'
 
@@ -92,7 +92,7 @@ class DepositItemTest < ApplicationSystemTestCase
 
     click_on I18n.t('items.draft.save_and_continue')
     click_on I18n.t('items.draft.save_and_continue')
-    click_on I18n.t('items.draft.header_edit')
+    click_on I18n.t('items.draft.save_and_deposit_edits')
     assert_text I18n.t('items.draft.successful_deposit')
     assert_selector 'h1', text: 'The Winds of Winter'
   end
@@ -114,20 +114,22 @@ class DepositItemTest < ApplicationSystemTestCase
     assert has_select?('draft_item[collection_id][]', selected: 'Fantasy Books')
   end
 
-  # Helper methods for javascript fields (select2/dropzone) and date select
+  # Helper methods for javascript fields (selectize/dropzone) and date select
   # (could be moved and made as generic helpers if these are needed elsewhere)
   private
 
-  def select2(value, container_class:)
-    # Click on the select2 input field, and type in a value (all scoped by the container_class)
-    within "div.#{container_class}" do
-      find('span.select2-container').click
-      find('input.select2-search__field').set(value)
+  def selectize_set_text(key, with:)
+    within key do
+      first('.selectize-input input').set(with)
+      first('.selectize-dropdown-content .create').click
     end
+  end
 
-    # dropdown is actually outside of the above markup, kinda like a modal
-    # We then click the value in the dropdown, which becomes our selection
-    find('li.select2-results__option', text: /#{value}/).click
+  def selectize_option(key, with:)
+    within key do
+      first('.selectize-input input').click
+      find('.option', text: with).click
+    end
   end
 
   def select_date(date, field_id:)

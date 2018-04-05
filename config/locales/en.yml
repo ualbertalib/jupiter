@@ -435,6 +435,7 @@ en:
       header_edit: 'Edit Item'
       previous: 'Previous step'
       save_and_continue: 'Save and continue to next step'
+      save_and_deposit_edits: 'Save'
       progress_bar_text: 'Step %{step_index} of %{total_steps}'
       step_number: 'Step %{step_number}'
       please_fix_errors: 'Please correct all errors below and try again'

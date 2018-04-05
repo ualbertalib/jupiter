@@ -44,7 +44,7 @@
         multiple: true,
         input_html: {
           data: { placeholder: t('.languages_placeholder') },
-          class: 'js-select2'
+          class: 'js-selectize'
         },
         required: true,
         prompt: t('.languages_placeholder') %>
@@ -55,8 +55,8 @@
         include_hidden: false, # TODO: figure out this, need to parse empty strings out in model
         input_html: {
           multiple: true,
-          data: { tags: true, placeholder: t('.creators_placeholder') },
-          class: 'js-select2'
+          data: { placeholder: t('.creators_placeholder') },
+          class: 'js-selectize-create'
         },
         required: true,
         prompt: t('.creators_placeholder'),
@@ -68,8 +68,8 @@
         include_hidden: false,
         input_html: {
           multiple: true,
-          data: { tags: true, placeholder: t('.subjects_placeholder') },
-          class: 'js-select2'
+          data: { placeholder: t('.subjects_placeholder') },
+          class: 'js-selectize-create'
         },
         required: true,
         prompt: t('.subjects_placeholder'),
@@ -159,8 +159,8 @@
                 include_hidden: false,
                 input_html: {
                   multiple: true,
-                  data: { tags: true, placeholder: t('.contributors_placeholder') },
-                  class: 'js-select2'
+                  data: { placeholder: t('.contributors_placeholder') },
+                  class: 'js-selectize-create'
                 },
                 include_blank: false,
                 hint: t('.contributors_help') %>
@@ -171,8 +171,8 @@
                 include_hidden: false,
                 input_html: {
                   multiple: true,
-                  data: { tags: true, placeholder: t('.places_placeholder') },
-                  class: 'js-select2'
+                  data: { placeholder: t('.places_placeholder') },
+                  class: 'js-selectize-create'
                 },
                 include_blank: false,
                 hint: t('.places_help') %>
@@ -183,8 +183,8 @@
                 include_hidden: false,
                 input_html: {
                   multiple: true,
-                  data: { tags: true, placeholder: t('.time_periods_placeholder') },
-                  class: 'js-select2'
+                  data: { placeholder: t('.time_periods_placeholder') },
+                  class: 'js-selectize-create'
                 },
                 include_blank: false,
                 hint: t('.time_periods_help_html') %>
@@ -195,8 +195,8 @@
                 include_hidden: false,
                 input_html: {
                   multiple: true,
-                  data: { tags: true, placeholder: t('.citations_placeholder') },
-                  class: 'js-select2'
+                  data: { placeholder: t('.citations_placeholder') },
+                  class: 'js-selectize-create'
                 },
                 include_blank: false,
                 hint: t('.citations_help') %>
