@@ -16,7 +16,7 @@
       </div>
       <div class="card-body p-2 filter-list">
         <% results.each_facet_with_results(@first_facet_categories) do |facet| %>
-          <%= render partial: 'search/facet_results', locals: { facet: facet } %>
+          <%= render partial: search_partial_path(facet), locals: { facet: facet } %>
         <% end %>
       </div>
     </div>
@@ -51,8 +51,11 @@
           <% facet.each_facet_value do |facet_value| %>
             <% if params[:facets]&.fetch(facet_value.solr_index, [])&.include?(facet_value.value) %>
               <%= render partial: 'search/facet_badge', locals: { value: present(facet_value).display,
-                         raw_value: facet_value.value,
-                         solr_index: facet_value.solr_index } %>
+                         url: query_params_without_facet_value(facet_value.solr_index, facet_value.value) } %>
+            <% end %>
+            <% if params[:ranges]&.fetch(facet_value.solr_index, false) %>
+              <%= render partial: 'search/facet_badge', locals: { value: facet_value.range.to_s.gsub('..', ' to '),
+                         url: query_params_without_range_value(facet_value.solr_index) } %>
             <% end %>
           <% end %>
         <% end %>
