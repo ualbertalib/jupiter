@@ -6,7 +6,7 @@ module PresentersHelper
     # string to class conversion dozens of times during facet rendering
     @presenter_cache ||= {}
     # FacetValues are special insofar as they dynamically specify their own presenter per-attribute-name involved
-    if obj.is_a?(JupiterCore::FacetResult::FacetValue)
+    if obj.is_a?(JupiterCore::FieldValueFacetResult::FacetValue) || obj.is_a?(JupiterCore::RangeFacetResult)
       present_facet(obj)
     else
       presenter_for(obj).new(self, obj)
@@ -33,5 +33,9 @@ module PresentersHelper
     rescue NameError
       raise NoSuchPresenter, "Presenter #{klass_name} is not defined for #{obj}"
     end
+  end
+
+  def search_partial_path(obj)
+    "search/#{obj.class.name.demodulize.pluralize.underscore}"
   end
 end

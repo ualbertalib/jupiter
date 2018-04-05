@@ -33,7 +33,7 @@
         <dt><%= t('.created') %></dt>
         <% if @item.sort_year.present? %>
           <%# Display the recorded date created, but link to searching on the facetable sort year if it is present %>
-          <dd><%= search_link_for(@item, :sort_year, display: humanize_date(@item.creation_date)) %></dd>
+          <dd><%= search_link_for(@item, :sort_year, display: humanize_date(@item.creation_date), facet: :range_facet) %></dd>
         <% else %>
           <dd><%= humanize_date(@item.creation_date) %></dd>
         <% end %>

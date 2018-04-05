@@ -47,10 +47,13 @@ module ApplicationHelper
     t(:page_range, first: first, last: last, total: results.total_count)
   end
 
-  def search_link_for(object, attribute, value: nil, facet: true, display: nil)
+  def search_link_for(object, attribute, value: nil, facet: :facet, display: nil)
     value ||= object.send(attribute)
     display ||= value
-    if facet
+    if facet == :range_facet
+      link_to(display, search_path(ranges: object.class.facet_term_for(attribute, value, role: :range_facet)),
+              rel: 'nofollow')
+    elsif facet == :facet
       link_to(display, search_path(facets: object.class.facet_term_for(attribute, value)), rel: 'nofollow')
     else
       link_to(display, search_path(search: object.class.search_term_for(attribute, value)), rel: 'nofollow')
