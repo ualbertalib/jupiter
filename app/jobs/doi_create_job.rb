@@ -4,7 +4,7 @@ class DOICreateJob < ApplicationJob
 
   def perform(id)
     item = JupiterCore::LockedLdpObject.find(id, types: [Item, Thesis])
-    DOIService.create(item) if item
+    DOIService.new(item).create if item
   end
 
 end
