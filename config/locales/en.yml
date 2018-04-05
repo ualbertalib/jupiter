@@ -584,6 +584,9 @@ en:
     tab_header_items_with_count: 'Items (%{count})'
     tab_header_collections_with_count: 'Collections (%{count})'
     tab_header_communities_with_count: 'Communities (%{count})'
+    range_begin: 'Range Begin'
+    range_end: 'Range End'
+    range_limit: 'Limit'
 
     index:
       header: 'Search Items'
