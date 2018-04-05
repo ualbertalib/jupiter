@@ -55,13 +55,14 @@ $(document).on('turbolinks:load', function() {
   // global selectize initailization could be moved elsewhere
   $('.js-selectize').selectize({
     selectOnTab: true,
-    closeAfterSelect: true
+    closeAfterSelect: true,
   });
 
   // This one is for tagging/ability to create items on input
   $('.js-selectize-create').selectize({
     delimiter: '', // We don't want commas to seperate items (Authors names for example, `Doe, Jane B.` )
     persist: false,
+    createOnBlur: true,
     create: function(input) {
         return {
             value: input,
