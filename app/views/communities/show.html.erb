@@ -1,7 +1,5 @@
 <% page_title(@community.title) %>
-<% content_for :head do %>
-  <meta name="description" content="<%= jupiter_truncate @community.description %>">
-<% end %>
+<% page_description(@community.description) %>
 
 <div class="container mt-3">
   <%= render partial: 'show_breadcrumbs' %>

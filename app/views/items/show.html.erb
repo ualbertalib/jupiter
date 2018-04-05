@@ -1,9 +1,9 @@
 <% content_for :head do %>
   <%= render partial: 'google_scholar_metadata' %>
-  <meta name="description" content="<%= render partial: 'item_page_description' %>">
 <% end %>
 
 <% page_title(@item.title) %>
+<% page_description(description(@item)) %>
 
 <div class="container mt-3">
 
