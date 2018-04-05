@@ -177,6 +177,13 @@ namespace :migration do
         creators = object_value_from_predicate(graph, ::RDF::Vocab::DC11.creator, true)&.map! { |c| c.value }
         owner = object_value_from_predicate(graph, ::RDF::Vocab::BIBO.owner)
         community = object_value_from_predicate(graph, ::Hydra::PCDM::Vocab::PCDMTerms.memberOf)
+
+        # 2018-04-04 if no community, use temporary community
+        if community.nil?
+          Rails.logger.info "collection #{hydra_noid} to temp comm; was comm: #{community}"
+          community = 'dummycomm'
+        end
+
         if community.nil?
           Rails.logger.error "collection #{hydra_noid} don't have community in HydraNorth"
           next
@@ -232,7 +239,13 @@ namespace :migration do
         #sleep(10)
         graph = RDF::Graph.load file
         hydra_noid = object_value_from_predicate(graph, ::TERMS[:ual].hydra_noid)
-        next if find_duplicates(hydra_noid)
+        dupe = find_duplicates(hydra_noid)
+        if dupe
+	    dupes = dir + '/dupes/'
+            Dir.mkdir(dupes) unless File.exist?(dupes)
+            `mv #{dir}/#{File.basename(file)} #{dupes}`
+        end 
+	next if dupe
 
         title = object_value_from_predicate(graph, ::RDF::Vocab::DC.title)
         description = object_value_from_predicate(graph, ::RDF::Vocab::DC.description)
@@ -249,7 +262,8 @@ namespace :migration do
         contributors = object_value_from_predicate(graph, ::RDF::Vocab::DC11.contributor, true)&.map! { |c| c.value }
 
         created = object_value_from_predicate(graph, ::RDF::Vocab::DC.created)
-        sort_year = object_value_from_predicate(graph, ::TERMS[:ual].sort_year)
+        #sort_year = object_value_from_predicate(graph, ::TERMS[:ual].sort_year)
+        sort_year = 1500
 
         subject = object_value_from_predicate(graph, ::RDF::Vocab::DC11.subject, true)&.map! { |c| c.value }
         temporal_subjects = object_value_from_predicate(graph, ::RDF::Vocab::DC.temporal, true)&.map! { |c| c.value }
@@ -286,6 +300,13 @@ namespace :migration do
 
         collection_ids = get_collections(graph)
         community_ids = get_communities(collection_ids) unless collection_ids.empty?
+
+        # 2018-04-04 if no community, use temporary community
+        if collection_ids.nil? || community_ids.nil?
+          Rails.logger.info "item #{hydra_noid} to temp comm/coll; was comm: #{community_ids}, coll: #{collection_ids}"
+          community_ids = ['b50523c6-5037-40a0-b511-10aa6b17fe12']
+          collection_ids = ['aa85eae2-cfdb-4eff-9be9-816f0dd358f0']
+        end
 
 
         if collection_ids.nil? && community_ids.nil?
@@ -428,11 +449,10 @@ namespace :migration do
                 Rails.logger.error "#{hydra_noid}'s file can't be unloaded"
               else
                 unlocked_item.add_files(files)
-
-                `rm -rf #{file_dir}`
               end
               unlocked_item.save!
               item.thumbnail_fileset(item.file_sets.first)
+              `rm -rf #{file_dir}`
             end
             puts "#{item.id}:#{hydra_noid}"
             f.write "#{item.id}:#{hydra_noid}\n"
@@ -472,7 +492,7 @@ namespace :migration do
     end
     begin
       RelatedObject.new(related_to: main_uri) do |r|
-        r.add_file(File.open(file))
+        r.add_file(File.open(file[0]))
         r.save!
         `rm -rf #{file_dir}`
         return r.id
