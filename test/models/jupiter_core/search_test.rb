@@ -76,7 +76,20 @@ class SearchTest < ActiveSupport::TestCase
       end
     end
 
-    search_results = JupiterCore::Search.faceted_search(models: @@klass, q: creator2)
+    # ensure searches are sending notifications
+    events = []
+    ActiveSupport::Notifications.subscribe(JUPITER_SOLR_NOTIFIFCATION) do |*args|
+      events << ActiveSupport::Notifications::Event.new(*args)
+    end
+
+    search_results = JupiterCore::Search.faceted_search(models: @@klass, q: creator2).to_a
+
+    assert_equal 1, events.count
+
+    assert_equal 'solr select', events.first.payload[:name]
+    assert_equal creator2, events.first.payload[:query][:q]
+    assert_equal 'title_tesim creator_tesim', events.first.payload[:query][:qf]
+    assert events.first.payload[:query][:facet]
 
     # TODO: This assert below periodically fails? Sometimes comes back as 2 instead of 1
     # assert_equal 1, search_results.count
