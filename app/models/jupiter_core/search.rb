@@ -72,7 +72,7 @@ class JupiterCore::Search
     params = prepare_solr_query(q: q, qf: qf, fq: fq, facet: facet, facet_fields: facet_fields, facet_max: facet_max,
                                 restrict_to_model: restrict_to_model, rows: rows, start: start, sort: sort)
 
-    response = ActiveSupport::Notifications.instrument(JUPITER_SOLR_NOTIFIFCATION,
+    response = ActiveSupport::Notifications.instrument(JUPITER_SOLR_NOTIFICATION,
                                                        name: 'solr select',
                                                        query: params) do
       ActiveFedora::SolrService.instance.conn.get('select', params: params)

@@ -78,7 +78,7 @@ class SearchTest < ActiveSupport::TestCase
 
     # ensure searches are sending notifications
     events = []
-    ActiveSupport::Notifications.subscribe(JUPITER_SOLR_NOTIFIFCATION) do |*args|
+    ActiveSupport::Notifications.subscribe(JUPITER_SOLR_NOTIFICATION) do |*args|
       events << ActiveSupport::Notifications::Event.new(*args)
     end
 
