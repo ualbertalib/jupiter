@@ -114,8 +114,9 @@ class SearchTest < ApplicationSystemTestCase
       assert_selector 'li a', text: '3 Fancy Community/Fancy Collection 0'
       assert_selector 'li a', text: '2 Fancy Community/Fancy Collection 1'
       assert_selector 'div.card-header', text: 'Sort Year'
-      assert_selector '#ranges_sort_year_isi_begin'
-      assert_selector '#ranges_sort_year_isi_end'
+      sort_year_facet = Item.solr_name_for(:sort_year, role: :range_facet)
+      assert_selector "#ranges_#{sort_year_facet}_begin"
+      assert_selector "#ranges_#{sort_year_facet}_end"
       assert_selector 'input.btn'
 
       # Exactly 5 items shown
