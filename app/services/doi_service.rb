@@ -80,13 +80,17 @@ class DOIService
   private
 
   def ezid_metadata
+    # deal with the fact that there's no request object when running under resque
+    url_opts = { id: @item.id,
+                 host: Rails.env.production? ? 'era.library.ualberta.ca' : 'localhost',
+                 protocol: 'https' }
     {
       datacite_creator:  @item.authors.join('; '),
       datacite_publisher: PUBLISHER,
       datacite_publicationyear: @item.sort_year.present? ? @item.sort_year : '(:unav)',
       datacite_resourcetype: DATACITE_METADATA_SCHEME[@item.item_type_with_status_code],
       datacite_title:  @item.title,
-      target: Rails.application.routes.url_helpers.item_url(id: @item.id),
+      target: Rails.application.routes.url_helpers.item_url(url_opts),
       # Can only set status if been minted previously, else its public
       status: @item.private? && @item.doi.present? ? UNAVAILABLE_MESSAGE : Ezid::Status::PUBLIC,
       export: @item.private? ? 'no' : 'yes'
