@@ -30,8 +30,6 @@ class CommunitiesTypeaheadTest < ApplicationSystemTestCase
       assert_selector('.easy-autocomplete-container .eac-category', text: 'Collections')
 
       assert_selector('.easy-autocomplete-container li', text: 'Department of thing')
-      refute_selector('.easy-autocomplete-container li', text: 'Other community')
-
       assert_selector('.easy-autocomplete-container li', text: 'Department of thing -- Articles about thing')
       assert_selector('.easy-autocomplete-container li', text: 'Other community -- Other stuff things')
 
