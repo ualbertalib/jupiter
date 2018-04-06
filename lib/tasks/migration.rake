@@ -699,7 +699,7 @@ namespace :migration do
         related_objects.each do |t|
           type = t.value.split('/')[-1]
           id = create_related_object(type, main_noid)
-          f.write("#{main_noid}:#{main_id}:#{id}:#{type}")
+          f.puts("#{main_noid}:#{main_id}:#{id}:#{type}")
           puts "#{main_noid}:#{main_id}:#{id}:#{type}"
         end
       end
