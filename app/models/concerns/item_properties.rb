@@ -53,6 +53,7 @@ module ItemProperties
       before_save :handle_doi_states
       after_create :handle_doi_states
       before_destroy :remove_doi
+      after_destroy :purge_thumbnail, :delete_doi_state
 
       # If you're looking for rights and subject validations, note that they have separate implementations
       # on the Thesis and Item classes.
@@ -124,6 +125,14 @@ module ItemProperties
 
       def remove_doi
         doi_state.removed! if doi.present? && (doi_state.available? || doi_state.not_available?)
+      end
+
+      def purge_thumbnail
+        thumbnail.purge
+      end
+
+      def delete_doi_state
+        doi_state.destroy!
       end
 
       def add_to_path(community_id, collection_id)

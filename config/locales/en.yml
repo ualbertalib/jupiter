@@ -270,6 +270,9 @@ en:
         no_items_found: 'No items found'
       new:
         header: 'Deposit Item'
+      destroy:
+        deleted: 'Item was successfully deleted!'
+        failed: 'Something went wrong... Item may not have been deleted!'
     users:
       active_status: 'Active'
       admin_role: 'Admin'

@@ -23,7 +23,7 @@
             <% end %>
           <% end %>
           <% if policy(thesis).destroy? %>
-            <%= link_to item_path(thesis), method: :delete, class:'btn btn-outline-secondary',
+            <%= link_to admin_item_path(thesis), method: :delete, class:'btn btn-outline-secondary',
                 data: { confirm: t('collections.show.item_delete_confirm', title: thesis.title) } do %>
               <%= fa_icon('trash') %>
               <%= t('delete') %>

@@ -24,7 +24,7 @@
             <% end %>
           <% end %>
           <% if policy(item).destroy? %>
-            <%= link_to item_path(item), method: :delete, class:'btn btn-outline-secondary',
+            <%= link_to admin_item_path(item), method: :delete, class:'btn btn-outline-secondary',
                 data: { confirm: t('collections.show.item_delete_confirm', title: item.title) } do %>
               <%= fa_icon('trash') %>
               <%= t('delete') %>
