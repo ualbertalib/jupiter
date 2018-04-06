@@ -2,7 +2,7 @@ module PageLayoutHelper
   def page_title(title = nil)
     # title tags should be around 55 characters, so lets truncate them if they quite long
     # With '... | ERA' being appended, we want to aim for a bit smaller like 45 characters
-    title = jupiter_truncate(title, length: 45)
+    title = truncate(title, length: 45, separator: ' ', omission: '...')
 
     @page_title ||= []
     @page_title.push(title) if title.present?
@@ -31,7 +31,7 @@ module PageLayoutHelper
     if description.present?
       @page_description = description.squish
     elsif @page_description.present?
-      jupiter_truncate(sanitize(@page_description), length: 140)
+      truncate(sanitize(@page_description, tags:[]), length: 140, separator: ' ', omission: '...')
     else
       @page_description = t('welcome.index.welcome_lead')
     end
@@ -40,7 +40,7 @@ module PageLayoutHelper
   def page_image
     default_url = image_url('era-logo.png')
     # We only have images on community and item/thesis show pages
-    image = @community&.logo || @item&.thumbnail
+    image = @community&.logo&.attachment || @item&.thumbnail&.attachment
 
     # TODO: ActiveStorage 5.2 upgrade, fix this hack
     # needs to be a full url so can use rails_blob_url or url_for in 5.2 instead
