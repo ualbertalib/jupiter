@@ -4,8 +4,8 @@
     <%= render partial: 'thumbnail', locals: { thumbnail: item.thumbnail.attachment, object: item } %>
   <% end %>
   <div class="media-body ml-3">
-    <div class="d-flex flex-wrap flex-lg-nowrap justify-content-between align-items-start">
-      <h5 class="mt-0"><%= link_to item.title, path_for_result(item) %></h5>
+    <div class="d-flex flex-wrap flex-lg-nowrap align-items-start">
+      <h5 class="mt-0 mr-auto"><%= link_to item.title, path_for_result(item) %></h5>
 
       <% primary_file = item.file_sets.first %>
       <% if primary_file.present? %>
