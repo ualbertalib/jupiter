@@ -21,6 +21,8 @@ namespace :migration do
           migrate_collections(dir)
         when 'item'
           migrate_items(dir)
+        when 'draft'
+          migrate_draft_items(dir)
         when 'related'
           migrate_related_objects(dir)
         when 'thesis'
@@ -317,7 +319,7 @@ namespace :migration do
           begin 
             owner = user_id(users, owner)
 
-            file_dir = "tmp/#{hydra_noid}"
+            file_dir = "tmp/migration/#{hydra_noid}"
             download_url = FEDORA_BASE + pairtree(hydra_noid) + '/content'
             download_file(download_url, file_dir)
             if File.exist?("#{file_dir}/#{hydra_noid}.zip") || File.exist?("#{file_dir}/#{fedora3uuid}.zip")
@@ -358,6 +360,186 @@ namespace :migration do
             Dir.mkdir(completed) unless File.exist?(completed)
             `mv #{dir}/#{File.basename(file)} #{completed}`
           rescue ActiveFedora::RecordInvalid => e
+            Rails.logger.error "#{hydra_noid}'s metadata is invalid, #{e}"
+            `mv #{dir}/#{File.basename(file)} problem`
+          rescue StandardError => e
+            Rails.logger.error "#{hydra_noid}'s migration failed due to error: #{e}"
+            `mv #{dir}/#{File.basename(file)} problem`
+          end
+        end
+      end
+    end
+  end
+
+# You can reuse this entirely
+
+# https://github.com/ualbertalib/jupiter/blob/a8a90b2133d259e1b0f690daa965c387ffd380d8/lib/tasks/migration.rake#L228-L349
+
+# Instead of using a draft visibility from # https://github.com/ualbertalib/jupiter/blob/a8a90b2133d259e1b0f690daa965c387ffd380d8/lib/tasks/migration.rake#L264, set the # visibility to public here
+# (it won't _be_ public, this will just be the value selected when the user edits the draft)
+
+# but then instead of calling save here: 
+
+# https://github.com/ualbertalib/jupiter/blob/a8a90b2133d259e1b0f690daa965c387ffd380d8/lib/tasks/migration.rake#L331
+
+# call 
+
+# DraftItem.create(user: owner).update_from_fedora_item(item, owner)
+
+# Net result would be:
+
+  def migrate_draft_items(dir)
+    users = load_users('users.txt')
+    File.open('drafts.txt', 'w+') do |f|
+      Dir[dir + '/*.nt'].each do |file|
+        #sleep(10)
+        graph = RDF::Graph.load file
+        hydra_noid = object_value_from_predicate(graph, ::TERMS[:ual].hydra_noid)
+        next if find_duplicates(hydra_noid)
+
+        title = object_value_from_predicate(graph, ::RDF::Vocab::DC.title)
+        description = object_value_from_predicate(graph, ::RDF::Vocab::DC.description)
+
+        creators = object_value_from_predicate(graph, ::RDF::Vocab::DC11.creator, true)&.map! { |c| c.value }
+        owner = object_value_from_predicate(graph, ::RDF::Vocab::BIBO.owner, true)&.map! { |c| c.value }
+        # Here are some logic based on Leah's understanding of the actual ownership for multi-owner objects
+
+        depositor = object_value_from_predicate(graph, ::TERMS[:ual].depositor)
+  # insert here for multiowner rules
+
+        admins = ["erahelp@ualberta.ca", "piyapong.charoenwattana@ualberta.ca", "dit.application.test@ualberta.ca", 
+          "riedlber@ualberta.ca", "era@ualberta.ca", "abombak@ualberta.ca"]
+ 
+         if owner.present? && owner.size > 1
+           owner.map { |x| (admins.include? x)  ? 'eraadmi@ualberta.ca' : x } 
+           owner = 'gapsshrc@ualberta.ca' if owner.include? 'gapsshrc@ualberta.ca'
+           owner = 'sandy.campbell@ualberta.ca' if owner.include? 'sandy.campbell@ualberta.ca'
+           owner = 'csweb@ualberta.ca' if owner.include? 'csweb@ualberta.ca'
+           owner = 'eraadmi@ualberta.ca' if owner.include? 'fip@ualberta.ca'
+           owner = 'joanne.simala-grant@ualberta.ca' if owner.include? 'cihrgrants@ualberta.ca'
+           owner = 'joanne.simala-grant@ualberta.ca' if owner.include? 'helencoe@med.ualberta.ca'
+           owner = 'noriko.hessmann@ualberta.ca' if owner.include? 'noriko.hessmann@ualberta.ca'
+           # This is to assume that if the depositor is not admin, the depositor info will take precedent other than the cases above
+           owner = depositor if owner.is_a?(Array) && depositor != 'eraadmi@ualberta.ca'
+           # If owners are admin + other users for any remaining multi-owner items, other users will be considered as owners
+           if owner.is_a? Array
+             owner = owner - ['eraadmi@ualberta.ca'] if owner.is_a?(Array)
+             # This is to assume the first owner of any remaining multi-owner items becomes the sole owner of the object.
+             owner = owner.sort.first 
+           end
+         else
+           owner = "eraadmi@ualberta.ca" if admins.include? owner
+         end
+
+
+        # if there is no owner, use the depositor as the owner
+        owner = depositor if owner.nil?
+        contributors = object_value_from_predicate(graph, ::RDF::Vocab::DC11.contributor, true)&.map! { |c| c.value }
+
+        created = object_value_from_predicate(graph, ::RDF::Vocab::DC.created)
+        #sort_year = object_value_from_predicate(graph, ::TERMS[:ual].sort_year)
+        sort_year = 1500
+
+        subject = object_value_from_predicate(graph, ::RDF::Vocab::DC11.subject, true)&.map! { |c| c.value }
+        temporal_subjects = object_value_from_predicate(graph, ::RDF::Vocab::DC.temporal, true)&.map! { |c| c.value }
+        spatial_subjects = object_value_from_predicate(graph, ::RDF::Vocab::DC.spatial, true)&.map! { |c| c.value }
+
+        publisher = object_value_from_predicate(graph, ::RDF::Vocab::DC.publisher)
+        language = object_value_from_predicate(graph, ::RDF::Vocab::DC.language)
+
+        embargo_end_date = object_value_from_predicate(graph, ::RDF::Vocab::DC.available)
+        embargo_history = object_value_from_predicate(graph, ::TERMS[:acl].embargo_history, true)&.map! { |c| c.value }
+        visibility_after_embargo = object_value_from_predicate(graph, ::TERMS[:acl].visibility_after_embargo)
+        visibility = 'http://terms.library.ualberta.ca/public'
+        visibility_after_embargo = nil if visibility != 'http://terms.library.ualberta.ca/embargo'
+
+        license = object_value_from_predicate(graph, ::RDF::Vocab::DC.license)
+        rights = object_value_from_predicate(graph, ::RDF::Vocab::DC11.rights)
+        rights = remove_incomplete_rights(rights) if rights.is_a?(Array)
+
+        item_type = object_value_from_predicate(graph, ::RDF::Vocab::DC.type)
+        publication_status = object_value_from_predicate(graph, ::RDF::Vocab::BIBO.status, true)&.map! { |c| c.value }
+        source = object_value_from_predicate(graph, ::RDF::Vocab::DC.source)
+        is_version_of = object_value_from_predicate(graph, ::RDF::Vocab::DC.isVersionOf, true)&.map! { |c| c.value }
+        alternative_title = object_value_from_predicate(graph, ::RDF::Vocab::DC.alternative)
+        related_link = object_value_from_predicate(graph, ::RDF::Vocab::DC.relation)
+
+        fedora3uuid = object_value_from_predicate(graph, ::TERMS[:ual].fedora3_uuid)
+        fedora3handle = object_value_from_predicate(graph, ::TERMS[:ual].fedora3_handle)
+        doi = object_value_from_predicate(graph, ::TERMS[:prism].doi)
+        ingest_batch = object_value_from_predicate(graph, ::TERMS[:ual].ingest_batch)
+        nna_file = object_value_from_predicate(graph, ::TERMS[:ual].northern_north_america_filename)
+        nna_item = object_value_from_predicate(graph, ::TERMS[:ual].northern_north_america_item_id)
+
+
+        collection_ids = get_collections(graph)
+        community_ids = get_communities(collection_ids) unless collection_ids.empty?
+
+        # 2018-04-04 if no community, use temporary community
+        if collection_ids.nil? || community_ids.nil?
+          Rails.logger.info "item #{hydra_noid} to temp comm/coll; was comm: #{community_ids}, coll: #{collection_ids}"
+          community_ids = ['b50523c6-5037-40a0-b511-10aa6b17fe12']
+          collection_ids = ['aa85eae2-cfdb-4eff-9be9-816f0dd358f0']
+        end
+
+
+       if collection_ids.nil? && community_ids.nil?
+          puts "#{hydra_noid} don't have community/collection"
+          Rails.logger.error "can't find #{hydra_noid}'s collection or community"
+        else
+
+          begin
+            owner = user_id(users, owner)
+
+            file_dir = "tmp/migration/#{hydra_noid}"
+            download_url = FEDORA_BASE + pairtree(hydra_noid) + '/content'
+            download_file(download_url, file_dir)
+            if File.exist?("#{file_dir}/#{hydra_noid}.zip") || File.exist?("#{file_dir}/#{fedora3uuid}.zip")
+              `unzip -o #{file_dir}/*.zip -d #{file_dir} && rm #{file_dir}/*.zip`
+            end
+            files = Dir.glob("#{file_dir}/**/*").select { |uf| File.file?(uf) }.sort&.map! { |uf| File.open(uf) }
+            item = Item.new_locked_ldp_object(title: title, creators: creators, unordered_creators: creators,
+                                              contributors: contributors,
+                                              description: description, created: created, sort_year: sort_year,
+                                              temporal_subjects: temporal_subjects, spatial_subjects: spatial_subjects,
+                                              subject: subject, publisher: publisher, languages: [language],
+                                              license: license, rights: rights,
+                                              item_type: item_type, publication_status: publication_status,
+                                              source: source, is_version_of: is_version_of,
+                                              alternative_title: alternative_title, related_link: related_link,
+                                              embargo_end_date: embargo_end_date, embargo_history: embargo_history,
+                                              visibility_after_embargo: visibility_after_embargo,
+                                              depositor: depositor, owner: owner, visibility: visibility,
+                                              fedora3_uuid: fedora3uuid, fedora3_handle: fedora3handle,
+                                              doi: doi, hydra_noid: hydra_noid, ingest_batch: ingest_batch, northern_north_america_filename: nna_file,
+                                              northern_north_america_item_id: nna_item)
+
+            item.unlock_and_fetch_ldp_object do |unlocked_item|
+              unlocked_item.add_communities_and_collections(community_ids, collection_ids)
+            end
+            owning_user = User.find(owner)
+            draft_item = DraftItem.create(user: owning_user).update_from_fedora_item(item, owning_user)
+
+            files.each do |file|
+              draft_item.files.attach(io: file, filename: File.basename(file),
+                                      content_type: MIME::Types.type_for(file.path).first.content_type)
+            end
+
+            if draft_item.files.empty?
+              Rails.logger.error "#{hydra_noid}'s file can't be uploaded"
+            else
+              `rm -rf #{file_dir}`
+            end
+
+            puts "#{draft_item.id}:#{hydra_noid}"
+            f.write "#{draft_item.id}:#{hydra_noid}\n"
+            completed = dir + '/completed/'
+            Dir.mkdir(completed) unless File.exist?(completed)
+            `mv #{dir}/#{File.basename(file)} #{completed}`
+          rescue ActiveFedora::RecordInvalid => e
+            Rails.logger.error "#{hydra_noid}'s metadata is invalid, #{e}"
+            `mv #{dir}/#{File.basename(file)} problem`
+          rescue ActiveRecord::RecordInvalid => e
             Rails.logger.error "#{hydra_noid}'s metadata is invalid, #{e}"
             `mv #{dir}/#{File.basename(file)} problem`
           rescue StandardError => e
