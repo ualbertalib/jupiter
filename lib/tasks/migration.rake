@@ -604,7 +604,7 @@ namespace :migration do
             puts "#{hydra_noid} don't have community/collection"
             Rails.logger.error "can't find #{hydra_noid}'s collection or community"
           else
-            file_dir = "tmp/#{hydra_noid}"
+            file_dir = "tmp/migration/#{hydra_noid}"
             download_url = FEDORA_BASE + pairtree(hydra_noid) + '/content'
             download_file(download_url, file_dir)
             if File.exist?("#{file_dir}/#{hydra_noid}.zip") || File.exist?("#{file_dir}/#{fedora3uuid}.zip")
@@ -664,7 +664,7 @@ namespace :migration do
   def create_related_object(type, main_noid)
     main_id = find_object_by_noid(main_noid)
     main_uri = TARGET_FEDORA_BASE + pairtree(main_id)
-    file_dir = "tmp/#{main_noid}"
+    file_dir = "tmp/migration/#{main_noid}"
     file_url = FEDORA_BASE+ pairtree(main_noid) + '/' + type
     download_file(file_url, file_dir)
     if type == 'fedora3foxml'
