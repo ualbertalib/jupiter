@@ -115,7 +115,7 @@ class JupiterCore::DeferredFacetedSolrQuery
       search_args_with_limit(criteria[:limit])
     )
     @facets = facet_data['facet_fields'].map do |k, v|
-      if model.respond_to?(:sort_year) && (k == model.solr_name_for(:sort_year, role: :range_facet))
+      if model.attribute_names.include?(:sort_year) && (k == model.solr_name_for(:sort_year, role: :range_facet))
         JupiterCore::RangeFacetResult.new(
           criteria[:facet_map], k,
           criteria[:ranges].fetch(k, begin: 1880, end: Time.current.year).to_h
