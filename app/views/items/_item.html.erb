@@ -1,4 +1,12 @@
 <%# TODO: Reduce duplication between this partial and thesis, pretty much exactly the same %>
+
+<% content_for :extra_social_meta do %>
+  <meta name="twitter:label1" content="Keywords"/>
+  <meta name="twitter:data1" content="<%= @item.all_subjects.join(', ') %>"/>
+  <meta name="twitter:label2" content="Rights"/>
+  <meta name="twitter:data2" content="<%= @item.license %>"/>
+<% end %>
+
 <ul class="list-group">
   <% if @item.alternative_title.present? %>
     <li class="list-unstyled list-group-item-action">
