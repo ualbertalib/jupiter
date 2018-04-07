@@ -22,9 +22,6 @@ end
 # just push all jobs to an array for verification
 Sidekiq::Testing.fake!
 
-# Required when using Rails.application.routes.url_helpers from outside the request/response life cycle (models, jobs, lib)
-Rails.application.routes.default_url_options = { host: 'localhost' }
-
 class ActiveSupport::TestCase
 
   def freeze_time(&block)
