@@ -3,8 +3,8 @@
     <%= render partial: 'thumbnail', locals: { thumbnail: thesis.thumbnail.attachment, object: thesis } %>
   <% end %>
   <div class="media-body ml-3">
-    <div class="d-flex flex-wrap flex-lg-nowrap justify-content-between align-items-start">
-      <h5 class="mt-0"><%= link_to thesis.title, path_for_result(thesis) %></h5>
+    <div class="d-flex flex-wrap flex-lg-nowrap align-items-start">
+      <h5 class="mt-0 mr-auto"><%= link_to thesis.title, path_for_result(thesis) %></h5>
 
       <% primary_file = thesis.file_sets.first %>
       <% if primary_file.present? %>
