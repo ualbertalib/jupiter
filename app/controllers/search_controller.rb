@@ -15,6 +15,8 @@ class SearchController < ApplicationController
 
     @max_facets = MAX_FACETS
     @active_tab = params[:tab]&.to_sym || :item
+    # handle people playing with the tab params instead of just 500ing
+    @active_tab = :item unless [:item, :collection, :community].include?(@active_tab)
     @results = {}
 
     # Make sure selected facets/ranges and solr-only authors/subjects appear first in facet list
