@@ -35,7 +35,6 @@ class PageLayoutHelperTest < ActionView::TestCase
   end
 
   test 'page_description truncates long text' do
-
     text = 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo
     ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis
     dis parturient montes, nascetur ridiculus mus. Donec quam felis,
@@ -45,8 +44,7 @@ class PageLayoutHelperTest < ActionView::TestCase
 
     page_description(text)
 
-
-    assert_match /natoque penatibus et...\z/, page_description
+    assert_match(/natoque penatibus et...\z/, page_description)
   end
 
   test 'page_description sanitizes all html' do
@@ -55,10 +53,8 @@ class PageLayoutHelperTest < ActionView::TestCase
     assert_equal 'Bold Header', page_description
   end
   # page_image
+
 end
-
-
-
 
 # describe 'page_image' do
 #   it 'defaults to the GitLab logo' do

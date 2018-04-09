@@ -31,7 +31,7 @@ module PageLayoutHelper
     if description.present?
       @page_description = description.squish
     elsif @page_description.present?
-      truncate(sanitize(@page_description, tags:[]), length: 140, separator: ' ', omission: '...')
+      truncate(sanitize(@page_description, tags: []), length: 140, separator: ' ', omission: '...')
     else
       @page_description = t('welcome.index.welcome_lead')
     end
