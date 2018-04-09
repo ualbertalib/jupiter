@@ -44,7 +44,7 @@ module PageLayoutHelper
 
     # TODO: ActiveStorage 5.2 upgrade, fix this hack
     # needs to be a full url so can use rails_blob_url or url_for in 5.2 instead
-    image_url = request.base_url + image.url if image.present?
+    image_url = root_url + image.url if image.present?
     image_url || default_url
   end
 

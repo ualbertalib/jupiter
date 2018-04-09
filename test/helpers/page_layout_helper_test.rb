@@ -16,6 +16,7 @@ class PageLayoutHelperTest < ActionView::TestCase
   end
 
   # page_description
+
   test 'page_description defaults to welcome lead' do
     assert_equal I18n.t('welcome.index.welcome_lead'), page_description
   end
@@ -52,36 +53,28 @@ class PageLayoutHelperTest < ActionView::TestCase
 
     assert_equal 'Bold Header', page_description
   end
+
   # page_image
 
+  test 'page_image defaults to the jupiter logo' do
+    assert_equal image_url('era-logo.png'), page_image
+  end
+
+  test 'page_image should return default image on community/item with no logo' do
+    @community = Community.new_locked_ldp_object(title: 'Random community', owner: 1)
+                          .unlock_and_fetch_ldp_object(&:save!)
+
+    assert_equal image_url('era-logo.png'), page_image
+  end
+
+  test 'page_image should return community/item logo' do
+    @community = Community.new_locked_ldp_object(title: 'Random community', owner: 1)
+                          .unlock_and_fetch_ldp_object(&:save!)
+
+    @community.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
+                           filename: 'image-sample.jpeg', content_type: 'image/jpeg'
+
+    assert_equal root_url + @community.logo.attachment.url, page_image
+  end
+
 end
-
-# describe 'page_image' do
-#   it 'defaults to the GitLab logo' do
-#     expect(helper.page_image).to match_asset_path 'assets/gitlab_logo.png'
-#   end
-
-#   %w(project user group).each do |type|
-#     context "with @#{type} assigned" do
-#       it "uses #{type.titlecase} avatar if available" do
-#         object = double(avatar_url: 'http://example.com/uploads/-/system/avatar.png')
-#         assign(type, object)
-
-#         expect(helper.page_image).to eq object.avatar_url
-#       end
-
-#       it 'falls back to the default when avatar_url is nil' do
-#         object = double(avatar_url: nil)
-#         assign(type, object)
-
-#         expect(helper.page_image).to match_asset_path 'assets/gitlab_logo.png'
-#       end
-#     end
-
-#     context "with no assignments" do
-#       it 'falls back to the default' do
-#         expect(helper.page_image).to match_asset_path 'assets/gitlab_logo.png'
-#       end
-#     end
-#   end
-# end
