@@ -16,10 +16,10 @@ class SearchController < ApplicationController
     @max_facets = MAX_FACETS
 
     @active_tab = if ['item', 'collection', 'community'].include?(params[:tab])
-      params[:tab]&.to_sym
-    else
-      :item
-    end
+                    params[:tab]&.to_sym
+                  else
+                    :item
+                  end
 
     @results = {}
 
