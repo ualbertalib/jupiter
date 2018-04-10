@@ -4,7 +4,7 @@
   <% end %>
   <div class="media-body ml-3">
     <div class="d-flex flex-wrap flex-lg-nowrap align-items-start">
-      <h5 class="mt-0 mr-auto"><%= link_to thesis.title, path_for_result(thesis) %></h5>
+      <h3 class="mt-0 h5 mr-auto"><%= link_to thesis.title, path_for_result(thesis) %></h3>
 
       <% primary_file = thesis.file_sets.first %>
       <% if primary_file.present? %>

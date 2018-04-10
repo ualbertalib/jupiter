@@ -183,7 +183,7 @@ class SearchTest < ApplicationSystemTestCase
       assert_selector 'a.nav-link', text: 'Communities (1)'
 
       # No community/collection results initially shown
-      assert_selector 'div.jupiter-results-list h5 a', text: 'Item', count: 5
+      assert_selector 'div.jupiter-results-list h3 a', text: 'Item', count: 5
       assert_selector 'div.jupiter-results-list a', text: 'Community', count: 0
       assert_selector 'div.jupiter-results-list a', text: 'Collection', count: 0
 
@@ -194,7 +194,7 @@ class SearchTest < ApplicationSystemTestCase
       assert_selector 'a.nav-link', text: 'Collections (2)'
       assert_selector 'a.nav-link.active', text: 'Communities (1)'
       # Only community hits shown
-      assert_selector 'div.jupiter-results-list h5 a', text: 'Item', count: 0
+      assert_selector 'div.jupiter-results-list h3 a', text: 'Item', count: 0
       assert_selector 'div.jupiter-results-list a', text: 'Community', count: 1
       assert_selector 'div.jupiter-results-list a', text: 'Collection', count: 0
 
@@ -205,7 +205,7 @@ class SearchTest < ApplicationSystemTestCase
       assert_selector 'a.nav-link.active', text: 'Collections (2)'
       assert_selector 'a.nav-link', text: 'Communities (1)'
       # Only collection hits shown
-      assert_selector 'div.jupiter-results-list h5 a', text: 'Item', count: 0
+      assert_selector 'div.jupiter-results-list h3 a', text: 'Item', count: 0
       assert_selector 'div.jupiter-results-list a', text: 'Community', count: 0
       assert_selector 'div.jupiter-results-list a', text: 'Collection', count: 2
     end

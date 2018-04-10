@@ -53,7 +53,7 @@ module SearchHelper
     # Create bootstrap nav-item, make it a link if there are results for the model
     classes = 'nav-link'
     count = @results[model].total_count
-    text = t("search.tab_header_#{model.to_s.pluralize}_with_count", count: count)
+    text = content_tag(:h2, t("search.tab_header_#{model.to_s.pluralize}_with_count", count: count), class: 'h5')
     if count == 0
       classes += ' disabled'
       inner_tag = content_tag(:span, text, class: classes)

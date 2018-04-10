@@ -34,9 +34,9 @@
   <% end %>
 
   <div class="d-flex flex-wrap align-items-center justify-content-between mt-3">
-    <h4 class="mr-auto">
+    <h2 class="mr-auto">
       <%= t('.items_list_header') %>
-    </h4>
+    </h2>
     <% if policy(:item).new? %>
       <%= link_to create_draft_items_path(collection: @collection.id), method: :post,
           class: 'btn btn-primary' do %>
