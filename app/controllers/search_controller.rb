@@ -6,6 +6,8 @@ class SearchController < ApplicationController
   skip_after_action :verify_authorized
 
   def index
+    # TODO: Mass Assignment: Parameters should be whitelisted for mass assignment (Brakeman scan)
+    # `permit!` allows everything, need to refactor this
     params[:facets].permit! if params[:facets].present?
     params[:ranges].permit! if params[:ranges].present?
 
