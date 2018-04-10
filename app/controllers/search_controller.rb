@@ -16,7 +16,13 @@ class SearchController < ApplicationController
     query = params[:search].truncate(QUERY_MAX) if params[:search].present?
 
     @max_facets = MAX_FACETS
-    @active_tab = params[:tab]&.to_sym || :item
+
+    @active_tab = if ['item', 'collection', 'community'].include?(params[:tab])
+                    params[:tab]&.to_sym
+                  else
+                    :item
+                  end
+
     @results = {}
 
     # Make sure selected facets/ranges and solr-only authors/subjects appear first in facet list
