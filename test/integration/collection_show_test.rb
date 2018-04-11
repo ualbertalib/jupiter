@@ -18,8 +18,13 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
     @items = ['Fancy', 'Nice'].map do |adjective|
       Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                  owner: 1,
-                                 language: ['http://id.loc.gov/vocabulary/iso639-2/eng'],
-                                 license: 'http://creativecommons.org/licenses/by/4.0/',
+                                 creators: ['Joe Blow'],
+                                 created: '1953-04-01',
+                                 languages: [CONTROLLED_VOCABULARIES[:language].english],
+                                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                                 item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                                 publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
+                                 subject: ['Niceness', 'Fanciness'],
                                  title: "#{adjective} Item").unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(@community.id, @collection.id)
         uo.save!
@@ -70,7 +75,7 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
   end
 
   test 'visiting the show page for a collection as a regular user' do
-    user = users(:regular_user)
+    user = users(:regular)
     sign_in_as user
     get community_collection_url(@community, @collection)
 
@@ -110,14 +115,14 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
 
   test 'searching within the collection as a regular user' do
     # TODO: should probably hook this up to a system test that submits the form
-    user = users(:regular_user)
+    user = users(:regular)
     sign_in_as user
     get community_collection_url(@community, @collection, query: 'Fancy')
 
     # Only 'Fancy' items are shown
     assert_select '.jupiter-results ul.list-group .list-group-item', count: 1
-    assert_select '.jupiter-results ul.list-group .list-group-item a', text: 'Fancy Item', count: 1
-    assert_select '.jupiter-results ul.list-group .list-group-item a', text: 'Nice Item', count: 0
+    assert_select '.jupiter-results ul.list-group .list-group-item h5 a', text: 'Fancy Item', count: 1
+    assert_select '.jupiter-results ul.list-group .list-group-item h5 a', text: 'Nice Item', count: 0
   end
 
 end

@@ -1,6 +1,26 @@
-// padding for fixed header.
+$header-height-large-screen: 81px;
+$header-height-small-screen: 139px;
+$footer-height: 72px;
+
+html {
+  // needed for sticky footer
+  min-height: 100%;
+  position: relative;
+}
+
 body {
-  padding-top: 56px;
+  // sticky footer height
+  padding-bottom: $header-height-large-screen + $footer-height;
+  // padding for fixed header.
+  padding-top: $header-height-large-screen;
+}
+
+@include media-breakpoint-between(xs, sm) {
+  body {
+    padding-bottom: $header-height-small-screen + $footer-height;
+    // header needs more room on small screens for search box
+    padding-top: $header-height-small-screen;
+  }
 }
 
 .required abbr {
@@ -10,16 +30,40 @@ body {
   text-decoration: inherit;
 }
 
-.skip {
+.j-skip {
   background-color: $red;
   color: $white;
   display: block;
   outline: 0;
   padding: 1em;
 
-  .skiplink-text {
+  .j-skiplink-text {
     outline: 1px dotted;
     padding: .5em;
 
   }
+}
+
+.j-header {
+  box-shadow: 0 4px 4px -1px rgba($black, 0.25);
+}
+
+.j-footer {
+  // needed for sticky footer
+  bottom: 0px;
+  position: absolute;
+  width: 100%;
+}
+
+.j-jumbotron-banner {
+  background-image: linear-gradient(
+      to right,
+      rgba($white, 0.8),
+      rgba($white, 0.4),
+      rgba($white, 0)
+    ),
+    image-url('campus-banner.jpg');
+  background-repeat: no-repeat;
+  background-position: center 10%;
+  background-size: cover;
 }

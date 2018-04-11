@@ -1,0 +1,4 @@
+$("#js-files-list").hide();
+$("#js-files-list")
+  .html("<%= escape_javascript(render("items/draft/files_list")) %>")
+  .fadeIn(500);

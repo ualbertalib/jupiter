@@ -19,7 +19,7 @@ class CollectionPolicyTest < ActiveSupport::TestCase
 
   context 'general user' do
     should 'only be able to see index and show of collections' do
-      current_user = users(:regular_user)
+      current_user = users(:regular)
       collection = Collection.new_locked_ldp_object
 
       assert CollectionPolicy.new(current_user, collection).index?

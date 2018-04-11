@@ -1,17 +1,18 @@
-<header class="navbar navbar-dark fixed-top navbar-expand-md bg-primary">
+<header class="j-header navbar navbar-light fixed-top navbar-expand-md bg-jupiter-primary">
   <nav class="container">
 
 
-    <a class="skip sr-only sr-only-focusable" href="#content">
+    <a class="j-skip sr-only sr-only-focusable" href="#content">
       <div class="container">
-        <span class="skiplink-text"><%= t('.skip_to_main_content')%></span>
+        <span class="j-skiplink-text"><%= t('.skip_to_main_content')%></span>
       </div>
     </a>
 
     <%= link_to root_path, class: 'navbar-brand' do %>
-      <%# TODO: temporary logo for now...replace me! %>
-      <%= image_tag 'mc_360.png', width: '30', height: '30', class: 'd-inline-block align-top', alt: t('.logo_alt') %>
-      <%= t('site_name') %>
+      <%= image_tag 'era-logo.png', width: '100', class: 'align-top d-none d-md-block',
+          alt: t('.era_logo_alt') %>
+      <%= image_tag 'era-logo-without-text.png', width: '100',
+          class: 'd-inline-block align-top d-md-none', alt: t('.era_logo_alt') %>
     <% end %>
 
     <button type="button"
@@ -24,23 +25,14 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="jupiter-main-nav" aria-expanded="false">
-      <ul class="navbar-nav mr-auto">
-        <li role="presentation" class="nav-item">
-          <%= link_to t('.links.communities'), communities_path, class: "nav-link" %>
-        </li>
+    <div class="collapse navbar-collapse" id="jupiter-main-nav">
+      <ul class="navbar-nav mr-auto d-none d-md-block w-100">
 
-        <li role="presentation" class="nav-item">
-          <%= link_to t('.links.new_item'), new_item_path, class: "nav-link" %>
-        </li>
-      </ul>
-
-      <ul class="navbar-nav pull-xs-right mr-2">
         <li role="presentation" class="nav-item mr-3">
-          <form class="form-inline" action="<%= search_path %>">
-            <div class="input-group" aria-label="navbar-search">
+          <form class="d-inline" action="<%= search_path %>">
+            <div class="input-group">
               <%= search_field_tag 'search', nil, placeholder: t('.search.placeholder'),
-                  value: params[:search], id: 'navbar-search', 'aria-label': 'search-box', class: "form-control" %>
+                  value: params[:search], id: 'navbar-search-lg', 'aria-label': t('.search.placeholder'), class: "form-control" %>
               <div class="input-group-btn">
                 <button type="submit" class="btn btn-secondary">
                   <%= fa_icon 'search' %>
@@ -51,45 +43,82 @@
           </form>
         </li>
 
+      </ul>
+
+      <ul class="navbar-nav pull-xs-right mr-2 float-right text-right">
+
+        <li role="presentation" class="nav-item">
+          <%= active_link_to t('.links.communities'), communities_path, class: "nav-link" %>
+        </li>
+
+        <li role="presentation" class="nav-item">
+          <%= active_link_to t('.links.new_item'), create_draft_items_path, method: :post, class: "nav-link" %>
+        </li>
+
+        <li role="presentation" class="nav-item">
+          <%= active_link_to t('.links.about'), about_path, class: "nav-link" %>
+        </li>
+
         <% if current_user.present? %>
           <li class="dropdown nav-item">
             <a href="#"
               role="button"
               id="jupiter-user-nav-downdown"
-              class="dropdown-toggle nav-link"
+              class="dropdown-toggle nav-link text-nowrap"
               data-toggle="dropdown"
               aria-haspopup="true"
               aria-expanded="false">
               <%= current_user.name %>
             </a>
 
-            <div role="menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="#jupiter-user-nav-downdown">
+            <div role="menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="jupiter-user-nav-downdown">
               <div class="dropdown-header">
                 <%= t('.user_dropdown.heading_html', name: current_user.name) %>
               </div>
               <div class="dropdown-divider"></div>
-              <%= link_to t('.links.profile'), "#TODO", class: 'dropdown-item' %>
+              <%= active_link_to t('.links.profile'), profile_path, class: 'dropdown-item' %>
               <div class="dropdown-divider"></div>
               <%= link_to t('.links.logout'), logout_path, class: 'dropdown-item' %>
 
               <% if session[:admin_id] %>
                 <div class="dropdown-divider"></div>
-                <%= link_to t('.links.logout_as_user'), logout_as_user_path, method: :post, class: 'dropdown-item' %>
+                <%= link_to t('.links.logout_as_user'), logout_as_user_path, method: :post,
+                    class: 'dropdown-item' %>
               <% end %>
 
               <% if current_user.admin? %>
                 <div class="dropdown-divider"></div>
-                <%= link_to t('.links.admin'), admin_root_path, class: 'dropdown-item' %>
+                <%= active_link_to t('.links.admin'), admin_root_path, class: 'dropdown-item' %>
               <% end %>
             </div>
 
           </li>
         <% else %>
           <li role="presentation" class="nav-item">
-            <%= link_to t('.links.login'), login_path, class: 'nav-item nav-link' %>
+            <%= link_to t('.links.login'), '/auth/saml', class: 'nav-item nav-link text-nowrap' %>
           </li>
+          <% if Rails.env.development? || Rails.env.uat? %>
+            <%# TODO: Temporary login form for local development or UAT %>
+            <li role="presentation" class="nav-item">
+              <%= link_to t('.links.login_as_dev'), '/auth/developer', class: 'nav-item nav-link text-nowrap' %>
+            </li>
+          <% end %>
         <% end %>
       </ul>
     </div>
   </nav>
+
+  <div class="d-md-none my-3 w-100">
+    <form action="<%= search_path %>">
+      <div class="input-group container px-0">
+        <%= search_field_tag 'search', nil, placeholder: t('.search.placeholder'),
+            value: params[:search], id: 'navbar-search-sm', 'aria-label': t('.search.placeholder'), class: "form-control" %>
+        <div class="input-group-btn">
+          <button type="submit" class="btn btn-secondary" title="<%= t('.search.button_text') %>">
+            <%= fa_icon 'search' %>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
 </header>

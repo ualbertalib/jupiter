@@ -6,9 +6,6 @@ class AuthenticationTest < ApplicationSystemTestCase
     should 'work with correct credentials' do
       visit root_url
 
-      click_on I18n.t('application.navbar.links.login')
-      assert_selector 'h1', text: I18n.t('sessions.new.header')
-
       Rails.application.env_config['omniauth.auth'] =
         OmniAuth.config.mock_auth[:saml] =
           OmniAuth::AuthHash.new(
@@ -20,9 +17,9 @@ class AuthenticationTest < ApplicationSystemTestCase
             }
           )
 
-      click_link I18n.t('sessions.new.saml_link')
+      click_on I18n.t('application.navbar.links.login')
 
-      assert_text I18n.t('login.success', kind: 'saml')
+      assert_text I18n.t('login.success')
 
       assert_text 'John Doe'
 
@@ -37,13 +34,10 @@ class AuthenticationTest < ApplicationSystemTestCase
     should 'not work with bad credentials' do
       visit root_url
 
-      click_on I18n.t('application.navbar.links.login')
-      assert_selector 'h1', text: I18n.t('sessions.new.header')
-
       Rails.application.env_config['omniauth.auth'] =
         OmniAuth.config.mock_auth[:saml] = :invalid_credentials
 
-      click_link I18n.t('sessions.new.saml_link')
+      click_on I18n.t('application.navbar.links.login')
 
       assert_text I18n.t('login.error')
 
@@ -52,11 +46,11 @@ class AuthenticationTest < ApplicationSystemTestCase
   end
 
   context 'when visiting a protected page' do
-    should 'get redirected to login then back to page, if user is authorized' do
-      visit new_item_url
+    should 'get redirected to homepage then back to page, if user is authorized' do
+      visit profile_url
 
+      assert_current_path(root_path)
       assert_text I18n.t('authorization.user_not_authorized_try_logging_in')
-      assert_selector 'h1', text: I18n.t('sessions.new.header')
 
       Rails.application.env_config['omniauth.auth'] =
         OmniAuth.config.mock_auth[:saml] =
@@ -69,40 +63,66 @@ class AuthenticationTest < ApplicationSystemTestCase
             }
           )
 
-      click_link I18n.t('sessions.new.saml_link')
+      click_link I18n.t('application.navbar.links.login')
 
-      assert_text I18n.t('login.success', kind: 'saml')
+      assert_text I18n.t('login.success')
 
-      # TODO: fix this view and i18n this
-      assert_text I18n.t('items.new.header')
+      assert_current_path(profile_path)
+      assert_text I18n.t('admin.users.created')
     end
 
-    # TODO: Nothing currently exist to nicely test this behaviour, Comment this out for time being
-    # Once user dashboards or something is implemented we can renable this test
-    #
-    # should 'get redirected to login then back to login page with error, if user is unauthorized' do
-    #   visit 'TODO visit url that you need special permission' # only admins can do this
+    should 'get redirected to homepage then back to homepage again with error, if user is unauthorized' do
+      draft_item = draft_items(:completed_describe_item_step)
+      visit item_draft_path(item_id: draft_item.id, id: :describe_item)
 
-    #   assert_text I18n.t('authorization.user_not_authorized_try_logging_in')
-    #   assert_selector 'h1', text: I18n.t('sessions.new.header')
+      assert_text I18n.t('authorization.user_not_authorized_try_logging_in')
 
-    #   Rails.application.env_config['omniauth.auth'] =
-    #     OmniAuth.config.mock_auth[:saml] =
-    #       OmniAuth::AuthHash.new(
-    #         provider: 'saml',
-    #         uid: 'johndoe',
-    #         info: {
-    #           email: 'johndoe@ualberta.ca',
-    #           name: 'John Doe'
-    #         }
-    #       )
+      assert_current_path(root_path)
+      assert_selector 'h2', text: I18n.t('welcome.index.welcome_lead')
 
-    #   click_link I18n.t('sessions.new.saml_link')
+      Rails.application.env_config['omniauth.auth'] =
+        OmniAuth.config.mock_auth[:saml] =
+          OmniAuth::AuthHash.new(
+            provider: 'saml',
+            uid: 'johndoe',
+            info: {
+              email: 'johndoe@ualberta.ca',
+              name: 'John Doe'
+            }
+          )
 
-    #   assert_text I18n.t('authorization.user_not_authorized')
+      click_link I18n.t('application.navbar.links.login')
 
-    #   assert_selector 'h1', text: I18n.t('sessions.new.header')
-    # end
+      assert_text I18n.t('authorization.user_not_authorized')
+
+      assert_current_path(root_path)
+      assert_selector 'h2', text: I18n.t('welcome.index.welcome_lead')
+    end
+  end
+
+  should 'after login should be redirected back to previous page user was on' do
+    # Go to browse page before logging in
+    visit communities_path
+    assert_selector 'h1', text: I18n.t('communities.index.header')
+
+    Rails.application.env_config['omniauth.auth'] =
+      OmniAuth.config.mock_auth[:saml] =
+        OmniAuth::AuthHash.new(
+          provider: 'saml',
+          uid: 'johndoe',
+          info: {
+            email: 'johndoe@ualberta.ca',
+            name: 'John Doe'
+          }
+        )
+
+    click_link I18n.t('application.navbar.links.login')
+
+    assert_text I18n.t('login.success')
+
+    # Still on browse page
+    assert_current_path(communities_path)
+    assert_selector 'h1', text: I18n.t('communities.index.header')
   end
 
 end

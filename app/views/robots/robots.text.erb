@@ -1,0 +1,7 @@
+# See http://www.robotstxt.org/robotstxt.html for documentation on how to use the robots.txt file
+Sitemap: https://era.library.ualberta.ca/sitemap.xml
+
+<% unless Rails.application.secrets.allow_crawlers %>
+User-agent: *
+Disallow: /
+<% end %>

@@ -1,0 +1,48 @@
+<h2 class="mt-5"><%= draft_items_header %></h2>
+
+<div class="test-draft-items list-group mb-3">
+  <% if @draft_items.present? %>
+    <% @draft_items.each do |draft_item| %>
+      <div class='list-group-item list-group-item-action'>
+        <div class="d-flex flex-wrap justify-content-between align-items-start mb-3">
+          <div class='media'>
+            <%= render partial: 'thumbnail', locals: { thumbnail: draft_item.thumbnail, object: draft_item } %>
+            <div class="media-body ml-3">
+              <h4 class="mt-0"><%= draft_item.title %></h4>
+              <p class="text-muted"><%= draft_item.date_created.year %></p>
+              <p class="text-muted"><%= draft_item.creators.join(', ') %></p>
+              <p class="text-muted"><%= jupiter_truncate draft_item.description %></p>
+            </div>
+          </div>
+
+          <div class="btn-group" role="group" aria-label="Draft Item Actions">
+            <% if policy(draft_item).update? %>
+              <%= link_to item_draft_path(item_id: draft_item.id, id: draft_item.last_completed_step), class:'btn btn-outline-primary' do %>
+                <%= fa_icon('pencil-square-o') %>
+                <%= t('items.draft.continue_draft') %>
+              <% end %>
+            <% end %>
+
+            <% if policy(draft_item).destroy? %>
+              <%= link_to item_delete_draft_path(item_id: draft_item.id), class: 'btn btn-outline-secondary', method: :delete,
+                  data: {confirm: t('items.draft.delete_confirm', title: draft_item.title) } do %>
+                <%= fa_icon('trash') %>
+                <%= t('delete') %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  <% else %>
+    <div class='list-group-item'>
+      <%= no_items_found %>
+    </div>
+  <% end %>
+</div>
+
+<h2 class="mt-5"><%= items_header %></h2>
+
+<%= render partial: 'search/item_search_and_results',
+          locals: { search_placeholder: search_placeholder,
+                    no_items_found: no_items_found } %>

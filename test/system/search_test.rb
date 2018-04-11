@@ -14,24 +14,58 @@ class SearchTest < ApplicationSystemTestCase
 
     # Half items have 'Fancy' in title, others have 'Nice', distributed between the two collections
     @items = 10.times.map do |i|
-      Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                 owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Item #{i}",
-                                 language: ['http://id.loc.gov/vocabulary/iso639-2/eng'],
-                                 license: 'http://creativecommons.org/licenses/by/4.0/')
-          .unlock_and_fetch_ldp_object do |uo|
-        uo.add_to_path(@community.id, @collections[i / 5].id)
-        uo.save!
+      if i < 5
+        Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                   owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Item #{i}",
+                                   creators: ['Joe Blow'],
+                                   created: "19#{50 + i}-11-11",
+                                   languages: [CONTROLLED_VOCABULARIES[:language].english],
+                                   item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                                   publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
+                                   license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                                   subject: ['Items'])
+            .unlock_and_fetch_ldp_object do |uo|
+          uo.add_to_path(@community.id, @collections[0].id)
+          uo.save!
+        end
+      else
+        Thesis.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                     owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Item #{i}",
+                                     dissertant: 'Joe Blow',
+                                     language: CONTROLLED_VOCABULARIES[:language].english,
+                                     graduation_date: "19#{50 + i}-11-11")
+              .unlock_and_fetch_ldp_object do |uo|
+          uo.add_to_path(@community.id, @collections[1].id)
+          uo.save!
+        end
       end
     end
     # 10 more items. these are private (some 'Fancy' some 'Nice')
     @items += 10.times.map do |i|
-      Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PRIVATE,
-                                 owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Private Item #{i + 10}",
-                                 language: ['http://id.loc.gov/vocabulary/iso639-2/eng'],
-                                 license: 'http://creativecommons.org/licenses/by/4.0/')
-          .unlock_and_fetch_ldp_object do |uo|
-        uo.add_to_path(@community.id, @collections[i / 5].id)
-        uo.save!
+      if i < 5
+        Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PRIVATE,
+                                   owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Private Item #{i + 10}",
+                                   creators: ['Joe Blow'],
+                                   created: "19#{70 + i}-11-11",
+                                   languages: [CONTROLLED_VOCABULARIES[:language].english],
+                                   item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                                   publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
+                                   license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                                   subject: ['Items'])
+            .unlock_and_fetch_ldp_object do |uo|
+          uo.add_to_path(@community.id, @collections[0].id)
+          uo.save!
+        end
+      else
+        Thesis.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PRIVATE,
+                                     owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Private Item #{i + 10}",
+                                     dissertant: 'Joe Blow',
+                                     language: CONTROLLED_VOCABULARIES[:language].english,
+                                     graduation_date: "19#{70 + i}-11-11")
+              .unlock_and_fetch_ldp_object do |uo|
+          uo.add_to_path(@community.id, @collections[1].id)
+          uo.save!
+        end
       end
     end
 
@@ -44,8 +78,13 @@ class SearchTest < ApplicationSystemTestCase
                              .unlock_and_fetch_ldp_object(&:save!)
       Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                  owner: 1, title: "Extra Item #{i}",
-                                 language: ['http://id.loc.gov/vocabulary/iso639-2/eng'],
-                                 license: 'http://creativecommons.org/licenses/by/4.0/')
+                                 creators: ['Joe Blow'],
+                                 created: "19#{90 + i}-11-11",
+                                 languages: [CONTROLLED_VOCABULARIES[:language].english],
+                                 item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                                 publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
+                                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                                 subject: ['Items'])
           .unlock_and_fetch_ldp_object do |uo|
         uo.add_to_path(community.id, collection.id)
         uo.save!
@@ -65,15 +104,20 @@ class SearchTest < ApplicationSystemTestCase
       assert_selector 'a.nav-link', text: 'Communities (1)'
 
       # Facets and counts
-      assert_selector 'div.card-header', text: 'Visibility'
-      assert_selector 'li div', text: /public.*5/
+      refute_selector 'div.card-header', text: 'Visibility'
+      refute_selector 'li a', text: '5 Public'
       # Should not be a facet for 'private'
-      assert_selector 'li div', text: /private/, count: 0
+      refute_selector 'li a', text: /Private/
       # TODO: The 'Member of paths' text will likely change
       assert_selector 'div.card-header', text: 'Collections'
-      assert_selector 'li div', text: /Fancy Community.*5/
-      assert_selector 'li div', text: /Fancy Collection 0.*3/
-      assert_selector 'li div', text: /Fancy Collection 1.*2/
+      assert_selector 'li a', text: '5 Fancy Community'
+      assert_selector 'li a', text: '3 Fancy Community/Fancy Collection 0'
+      assert_selector 'li a', text: '2 Fancy Community/Fancy Collection 1'
+      assert_selector 'div.card-header', text: 'Sort Year'
+      sort_year_facet = Item.solr_name_for(:sort_year, role: :range_facet)
+      assert_selector "#ranges_#{sort_year_facet}_begin"
+      assert_selector "#ranges_#{sort_year_facet}_end"
+      assert_selector 'input.btn'
 
       # Exactly 5 items shown
       assert_selector 'div.jupiter-results-list li.list-group-item', count: 5
@@ -83,17 +127,16 @@ class SearchTest < ApplicationSystemTestCase
       assert_selector 'a', text: 'Fancy Item 6'
       assert_selector 'a', text: 'Fancy Item 8'
 
+      # A checkbox for the facet should be unchecked, and link should turn on facet
+      within 'div.jupiter-filters a', text: 'Fancy Collection 1' do
+        assert_selector 'i.fa-square-o', count: 1
+      end
+
       # Click on facet
-      # A checkbox for the facet should be unchecked, and link should turn on face
-      path = "#{@community.id}/#{@collections[1].id}"
-      facet_path = search_path(search: 'Fancy', facets: { member_of_paths_dpsim: path })
-
-      facets = find('div.jupiter-facets')
-      facet = facets.find_link('a', text: 'Fancy Collection 1', href: facet_path)
-      checkbox = facet.find 'input'
-      refute checkbox.checked?
-
       click_link 'Fancy Collection 1'
+
+      path = "#{@community.id}/#{@collections[1].id}"
+      facet_path = search_path(search: 'Fancy', facets: { member_of_paths_dpsim: [path] })
       assert_equal URI.parse(current_url).request_uri, facet_path
 
       # Tab counts should only change for this tab
@@ -102,18 +145,17 @@ class SearchTest < ApplicationSystemTestCase
       assert_selector 'a.nav-link', text: 'Communities (1)'
 
       # Some facets are now gone, some with changed counts
-      assert_selector 'div.card-header', text: 'Visibility'
-      assert_selector 'li div', text: /public.*2/
+      refute_selector 'div.card-header', text: 'Visibility'
+      refute_selector 'li a', text: '2 Public'
       assert_selector 'div.card-header', text: 'Collections'
-      assert_selector 'li div', text: /Fancy Community.*2/
-      assert_selector 'li div', text: /Fancy Collection 0/, count: 0
-      assert_selector 'li div', text: /Fancy Collection 1.*2/
+      assert_selector 'li a', text: '2 Fancy Community'
+      assert_selector 'li a', text: 'Fancy Community/Fancy Collection 0', count: 0
+      assert_selector 'li a', text: '2 Fancy Community/Fancy Collection 1'
 
       # A checkbox for the selected facet should be checked, and link should turn off facet
-      facets = find('div.jupiter-facets')
-      facet = facets.find_link('a', text: 'Fancy Collection 1', href: search_path(search: 'Fancy'))
-      checkbox = facet.find 'input'
-      assert checkbox.checked?
+      within 'div.jupiter-filters a', text: 'Fancy Collection 1' do
+        assert_selector 'i.fa-check-square-o', count: 1
+      end
 
       # 2 items shown, 3 not shown
       assert_selector 'div.jupiter-results-list li.list-group-item', count: 2
@@ -141,7 +183,7 @@ class SearchTest < ApplicationSystemTestCase
       assert_selector 'a.nav-link', text: 'Communities (1)'
 
       # No community/collection results initially shown
-      assert_selector 'div.jupiter-results-list a', text: 'Item', count: 10
+      assert_selector 'div.jupiter-results-list h5 a', text: 'Item', count: 5
       assert_selector 'div.jupiter-results-list a', text: 'Community', count: 0
       assert_selector 'div.jupiter-results-list a', text: 'Collection', count: 0
 
@@ -152,7 +194,7 @@ class SearchTest < ApplicationSystemTestCase
       assert_selector 'a.nav-link', text: 'Collections (2)'
       assert_selector 'a.nav-link.active', text: 'Communities (1)'
       # Only community hits shown
-      assert_selector 'div.jupiter-results-list a', text: 'Item', count: 0
+      assert_selector 'div.jupiter-results-list h5 a', text: 'Item', count: 0
       assert_selector 'div.jupiter-results-list a', text: 'Community', count: 1
       assert_selector 'div.jupiter-results-list a', text: 'Collection', count: 0
 
@@ -163,7 +205,7 @@ class SearchTest < ApplicationSystemTestCase
       assert_selector 'a.nav-link.active', text: 'Collections (2)'
       assert_selector 'a.nav-link', text: 'Communities (1)'
       # Only collection hits shown
-      assert_selector 'div.jupiter-results-list a', text: 'Item', count: 0
+      assert_selector 'div.jupiter-results-list h5 a', text: 'Item', count: 0
       assert_selector 'div.jupiter-results-list a', text: 'Community', count: 0
       assert_selector 'div.jupiter-results-list a', text: 'Collection', count: 2
     end
@@ -177,23 +219,23 @@ class SearchTest < ApplicationSystemTestCase
       # Facets and counts. 20 should match, expect only 6 to be shown
       assert_selector 'div.card-header', text: 'Collections'
       # Note: collection facets also include community name
-      assert_selector 'li div a', text: /Extra Community/, count: 6
+      assert_selector 'li a', text: /Extra Community/, count: 6
 
       # Should be a 'Show more' button to see the rest
-      assert_selector 'a', text: 'Show 14 more', count: 1
+      assert_selector 'a[aria-controls="member_of_paths_dpsim_hidden"]', count: 1
 
-      click_link 'Show 14 more'
+      click_link 'Show 4 more', href: '#member_of_paths_dpsim_hidden'
 
       # Now 20 collections/communities should be shown
-      assert_selector 'li div a', text: /Extra Community/, count: 20
+      assert_selector 'li a', text: /Extra Community/, count: 10
 
       # Should be a 'Hide' button now
-      assert_selector 'a', text: 'Hide last 14', count: 1
+      assert_selector 'a[aria-controls="member_of_paths_dpsim_hidden"]', count: 1
 
-      click_link 'Hide last 14'
+      click_link 'Hide last 4', href: '#member_of_paths_dpsim_hidden'
 
       # Again, only 6 collections/communities should be shown
-      assert_selector 'li div a', text: /Extra Community/, count: 6
+      assert_selector 'li a', text: /Extra Community/, count: 6
     end
 
     should 'be able to sort results' do
@@ -229,7 +271,7 @@ class SearchTest < ApplicationSystemTestCase
       click_button 'Title (A-Z)'
       click_link 'Date (newest first)'
       assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy',
-                                                                   sort: 'record_created_at', direction: 'desc')
+                                                                   sort: 'sort_year', direction: 'desc')
       assert_selector 'button', text: 'Date (newest first)'
       assert_match(/Fancy Item 8.*Fancy Item 6.*Fancy Item 4.*Fancy Item 2.*Fancy Item 0/, page.text)
 
@@ -237,13 +279,14 @@ class SearchTest < ApplicationSystemTestCase
       click_button 'Date (newest first)'
       click_link 'Date (oldest first)'
       assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy',
-                                                                   sort: 'record_created_at', direction: 'asc')
+                                                                   sort: 'sort_year', direction: 'asc')
       assert_selector 'button', text: 'Date (oldest first)'
       assert_match(/Fancy Item 0.*Fancy Item 2.*Fancy Item 4.*Fancy Item 6.*Fancy Item 8/, page.text)
     end
   end
 
   context 'Searching as admin user' do
+    # TODO: Slow Test, consistently around ~8-9 seconds
     should 'be able to filter the public and private items' do
       admin = users(:admin)
       login_user(admin)
@@ -260,14 +303,16 @@ class SearchTest < ApplicationSystemTestCase
 
       # Facets and counts
       assert_selector 'div.card-header', text: 'Visibility'
-      assert_selector 'li div', text: /public.*5/
+      assert_selector 'li a', text: '5 Public'
+
       # Should be a facet for 'private'
-      assert_selector 'li div', text: /private.*5/
+      assert_selector 'li a', text: '5 Private'
+
       # TODO: The 'Member of paths' text will likely change
       assert_selector 'div.card-header', text: 'Collections'
-      assert_selector 'li div', text: /Fancy Community.*10/
-      assert_selector 'li div', text: /Fancy Collection 0.*6/
-      assert_selector 'li div', text: /Fancy Collection 1.*4/
+      assert_selector 'li a', text: '10 Fancy Community'
+      assert_selector 'li a', text: '6 Fancy Community/Fancy Collection 0'
+      assert_selector 'li a', text: '4 Fancy Community/Fancy Collection 1'
 
       # Exactly 10 items shown
       assert_selector 'div.jupiter-results-list li.list-group-item', count: 10
@@ -282,17 +327,16 @@ class SearchTest < ApplicationSystemTestCase
       assert_selector 'a', text: 'Fancy Private Item 16'
       assert_selector 'a', text: 'Fancy Private Item 18'
 
+      # A checkbox for the facet should be unchecked, and link should turn on facet
+      within 'div.jupiter-filters a', text: 'Fancy Collection 1' do
+        assert_selector 'i.fa-square-o', count: 1
+      end
+
       # Click on facet
-      # A checkbox for the facet should be unchecked, and link should turn on face
-      path = "#{@community.id}/#{@collections[1].id}"
-      facet_path = search_path(search: 'Fancy', facets: { member_of_paths_dpsim: path })
-
-      facets = find('div.jupiter-facets')
-      facet = facets.find_link('a', text: 'Fancy Collection 1', href: facet_path)
-      checkbox = facet.find 'input'
-      refute checkbox.checked?
-
       click_link 'Fancy Collection 1'
+
+      path = "#{@community.id}/#{@collections[1].id}"
+      facet_path = search_path(search: 'Fancy', facets: { member_of_paths_dpsim: [path] })
       assert_equal URI.parse(current_url).request_uri, facet_path
 
       # Tab counts should only change for this tab
@@ -302,17 +346,16 @@ class SearchTest < ApplicationSystemTestCase
 
       # Some facets are now gone, some with changed counts
       assert_selector 'div.card-header', text: 'Visibility'
-      assert_selector 'li div', text: /public.*2/
+      assert_selector 'li a', text: '2 Public'
       assert_selector 'div.card-header', text: 'Collections'
-      assert_selector 'li div', text: /Fancy Community.*4/
-      assert_selector 'li div', text: /Fancy Collection 0/, count: 0
-      assert_selector 'li div', text: /Fancy Collection 1.*4/
+      assert_selector 'li a', text: '4 Fancy Community'
+      assert_selector 'li a', text: 'Fancy Community/Fancy Collection 0', count: 0
+      assert_selector 'li a', text: '4 Fancy Community/Fancy Collection 1'
 
       # A checkbox for the selected facet should be checked, and link should turn off facet
-      facets = find('div.jupiter-facets')
-      facet = facets.find_link('a', text: 'Fancy Collection 1', href: search_path(search: 'Fancy'))
-      checkbox = facet.find 'input'
-      assert checkbox.checked?
+      within 'div.jupiter-filters a', text: 'Fancy Collection 1' do
+        assert_selector 'i.fa-check-square-o', count: 1
+      end
 
       # 2 items shown, 3 not shown
       assert_selector 'a', text: 'Fancy Item 6'

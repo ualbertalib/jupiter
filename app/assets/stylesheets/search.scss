@@ -2,3 +2,43 @@
   // Bootstrap 4 override
   -webkit-appearance: searchfield-cancel-button;
 }
+
+// Filter sidebar for small screens
+@include media-breakpoint-between(xs, sm) {
+  .jupiter-filters {
+    min-width: 70%;
+    max-width: 70%;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    // Always on top
+    z-index: 9999;
+
+    > .card {
+      // Scrolling the facet list won't go all the way to the bottom without this
+      height: 100vh;
+    }
+  }
+
+  .filters-overlay {
+    // full screen
+    height: 100vh;
+    width: 100vw;
+
+    background: rgba($black, 0.6);
+    display: none;
+    left: 0;
+    position: fixed;
+    top: 0;
+
+    // appears below the sidebar
+    z-index: 9998;
+  }
+
+  .filter-list {
+    overflow-y: auto;
+    max-height: 100vh;
+  }
+}

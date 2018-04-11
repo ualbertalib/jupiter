@@ -16,12 +16,14 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
                    .new_locked_ldp_object(community_id: @community1.id,
                                           title: 'Nice collection', owner: 1)
                    .unlock_and_fetch_ldp_object(&:save!)
+    # A restricted (to deposit, not to view) collection
     @collection2 = Collection
                    .new_locked_ldp_object(community_id: @community1.id,
+                                          restricted: true,
                                           title: 'Another collection', owner: 1)
                    .unlock_and_fetch_ldp_object(&:save!)
-    @community1.logo.attach io: File.open(Rails.root + 'app/assets/images/mc_360.png'),
-                            filename: 'mc_360.png', content_type: 'image/png'
+    @community1.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
+                            filename: 'image-sample.jpeg', content_type: 'image/jpeg'
 
     # A community with no collections
     @community2 = Community
@@ -35,8 +37,8 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
     get community_url(@community1)
 
     # Logo should be shown
-    assert_select 'img.logo-small', count: 1
-    assert_select 'div.logo-small small i.fa', count: 0
+    assert_select 'img.img-thumbnail', count: 1
+    assert_select 'div.img-thumbnail i.fa', count: 0
 
     # Community delete, edit and create new collection buttons should be shown
     assert_select 'a[href=?]',
@@ -67,13 +69,13 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
 
   test 'visiting the show page for a community with two collections and a logo '\
        'as a regular user' do
-    user = users(:regular_user)
+    user = users(:regular)
     sign_in_as user
     get community_url(@community1)
 
     # Logo should be shown
-    assert_select 'img.logo-small', count: 1
-    assert_select 'div.logo-small small i.fa', count: 0
+    assert_select 'img.img-thumbnail', count: 1
+    assert_select 'div.img-thumbnail i.fa', count: 0
 
     # Community delete, edit and create new collection buttons should not be shown
     assert_select 'a[href=?]',
@@ -103,18 +105,37 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
   end
 
   test 'visiting a community with no collections or logo' do
-    user = users(:regular_user)
+    user = users(:regular)
     sign_in_as user
     get community_url(@community2)
 
-    # Logo should not be shown
-    assert_select 'img.logo-small', count: 0
-    assert_select 'div.logo-small small i.fa', count: 1
+    # Should have fallback image
+    assert_select 'img.img-thumbnail:match("src", ?)', /era-logo-without-text/
+    assert_select 'div.img-thumbnail i.fa', count: 0
 
     # No collections should no be shown
     assert_select 'h4', text: I18n.t('communities.show.collections_list_header')
     assert_select 'ul.list-group li', count: 1
     assert_select 'ul.list-group li.list-group-item', text: I18n.t('communities.show.no_collections')
+  end
+
+  test "JSON for collections (deposit form AJAX) as regular user doesn't include restricted collection" do
+    user = users(:regular)
+    sign_in_as user
+    get community_url(@community1, format: :json)
+    body = JSON.parse(response.body)
+    assert_equal body['collections'].count, 1
+    assert_includes body['collections'].map { |c| c['id'] }, @collection1.id
+  end
+
+  test 'JSON for collections (deposit form AJAX) as admin includes all collections' do
+    user = users(:admin)
+    sign_in_as user
+    get community_url(@community1, format: :json)
+    body = JSON.parse(response.body)
+    assert_equal body['collections'].count, 2
+    assert_includes body['collections'].map { |c| c['id'] }, @collection1.id
+    assert_includes body['collections'].map { |c| c['id'] }, @collection2.id
   end
 
 end

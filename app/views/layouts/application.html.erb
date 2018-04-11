@@ -1,25 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title><%= page_title(t('site_name')) %></title>
-    <%= csrf_meta_tags %>
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-    <%= yield(:head) %>
-    <% if Rails.env.development? %>
-      <%= favicon_link_tag 'mc_360.png' %>
-    <% end %>
     <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#dbe1ef">
+    <meta name="msapplication-TileColor" content="#dbe1ef">
+    <meta name="theme-color" content="#dbe1ef">
+
+    <title><%= page_title(t('site_name')) %></title>
+
+    <%= canonical_tag -%>
+
+
+    <%= csrf_meta_tags %>
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+    <%= render partial: 'analytics' %>
+
+    <%= yield(:head) %>
   </head>
 
   <body>
     <%= render partial: 'navbar' %>
-    <%= render partial: 'announcement' %>
-
-    <main class="container mt-5" id="content">
+    <main id="content">
+      <%= render partial: 'announcement' %>
       <%= render partial: 'flash' %>
       <%= content_for?(:content) ? yield(:content) : yield %>
     </main>
+    <%= render partial: 'footer' %>
   </body>
 </html>

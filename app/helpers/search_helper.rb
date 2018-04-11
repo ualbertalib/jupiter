@@ -1,27 +1,41 @@
 module SearchHelper
   def search_params_hash
     # Search controller uses param[:search], all others use params[:query]
-    params.permit(:search, :query, { facets: {} }, :tab, :sort, :direction).to_h
+    params.permit(:search, :query, { facets: {} }, { ranges: {} }, :tab, :sort, :direction).to_h
   end
 
   def query_params_with_facet(facet_name, value)
     query_params = search_params_hash
     query_params[:facets] ||= {}
-    query_params[:facets][facet_name] = value
+    query_params[:facets][facet_name] ||= []
+    query_params[:facets][facet_name] << value
     query_params
   end
 
-  def query_params_without_facet(facet_name)
+  def query_params_without_facet_value(facet_name, value)
     query_params = search_params_hash
-    query_params[:facets]&.delete(facet_name)
-    query_params.delete(:facets) if query_params[:facets]&.empty?
+    raise ArgumentError, 'No facets are present' unless query_params.key?(:facets)
+    raise ArgumentError, 'No query param is present for this facet' unless query_params[:facets].key?(facet_name)
+    query_params[:facets][facet_name].delete(value)
+    query_params[:facets].delete(facet_name) if query_params[:facets][facet_name].empty?
+    query_params.delete(:facets) if query_params[:facets].empty?
+
+    query_params
+  end
+
+  def query_params_without_range_value(facet_name)
+    query_params = search_params_hash
+    raise ArgumentError, 'No ranges are present' unless query_params.key?(:ranges)
+    raise ArgumentError, 'No query param is present for this range' unless query_params[:ranges].key?(facet_name)
+    query_params[:ranges].delete(facet_name)
+    query_params.delete(:ranges) if query_params[:ranges].empty?
 
     query_params
   end
 
   def query_params_with_tab(tab)
     # Link for clicking a tab to switch models. Facets are stripped out
-    query_params = search_params_hash.except(:facets)
+    query_params = search_params_hash.except(:facets, :ranges)
     query_params[:tab] = tab
 
     query_params
@@ -51,7 +65,8 @@ module SearchHelper
   end
 
   def search_sort_link(sort, direction)
-    link_to search_sort_label(sort, direction), query_params_with_sort(sort, direction), class: 'dropdown-item'
+    link_to search_sort_label(sort, direction), query_params_with_sort(sort, direction),
+            class: 'dropdown-item', rel: 'nofollow'
   end
 
   def search_sort_label(sort, direction)

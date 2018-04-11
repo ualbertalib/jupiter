@@ -1,0 +1,228 @@
+<% page_title(header) %>
+
+<div class="container mt-3">
+  <%= render partial: 'progress_bar' %>
+
+  <h2 class="mt-3">
+    <%= fa_icon t('.header_icon') %>
+    <%= t('.header') %>
+  </h2>
+
+  <% if @draft_item.errors.any? %>
+    <p class="alert alert-danger">
+      <%= fa_icon 'exclamation-circle' %>
+      <%= t('items.draft.please_fix_errors') %>
+    </p>
+  <% end %>
+
+  <%= simple_form_for @draft_item, url: wizard_path, method: :put, html: { class:'js-deposit-item' } do |f| %>
+    <p class="text-muted"><%= t('required_fields_html') %></p>
+
+    <%= f.input :title,
+                label: t('.title'),
+                required: true,
+                placeholder: t('.title_placeholder') %>
+
+    <%= f.input :alternate_title,
+                label: t('.alternate_title'),
+                placeholder: t('.alternate_title_placeholder'),
+                hint: t('.alternate_title_help') %>
+
+    <%= f.association :type,
+        label: t('.type_id'),
+        label_method: :translated_name,
+        value_method: :id,
+        required: true,
+        prompt: t('.type_id_placeholder'),
+        hint: t('.type_id_help_html') %>
+
+
+    <%= f.association :languages,
+        label: t('.languages'),
+        label_method: :translated_name,
+        value_method: :id,
+        multiple: true,
+        input_html: {
+          data: { placeholder: t('.languages_placeholder') },
+          class: 'js-selectize'
+        },
+        required: true,
+        prompt: t('.languages_placeholder') %>
+
+    <%= f.input :creators,
+        label: t('.creators'),
+        collection: @draft_item.creators || [],
+        include_hidden: false, # TODO: figure out this, need to parse empty strings out in model
+        input_html: {
+          multiple: true,
+          data: { placeholder: t('.creators_placeholder') },
+          class: 'js-selectize-create'
+        },
+        required: true,
+        prompt: t('.creators_placeholder'),
+        hint: t('.creators_help') %>
+
+    <%= f.input :subjects,
+        label: t('.subjects'),
+        collection: @draft_item.subjects || [],
+        include_hidden: false,
+        input_html: {
+          multiple: true,
+          data: { placeholder: t('.subjects_placeholder') },
+          class: 'js-selectize-create'
+        },
+        required: true,
+        prompt: t('.subjects_placeholder'),
+        hint: t('.subjects_help') %>
+
+    <%= f.input :date_created,
+                as: :date,
+                label: t('.date_created'),
+                order: [:year, :month, :day],
+                prompt: {
+                  day: t('select_a_day'),
+                  month: t('select_a_month'),
+                  year: t('select_a_year')
+                },
+                start_year: Date.today.year + 1,
+                end_year: Date.today.year - 100,
+                input_html: { class: 'mr-2 mb-2', 'aria-labelledby': 'draft_item_date_created_1i' },
+                required: true,
+                hint: t('.date_created_help') %>
+
+    <%= f.input :description,
+                as: :text,
+                label: t('.description'),
+                input_html: { rows: '5' },
+                placeholder: t('.description_placeholder'),
+                required: true %>
+
+    <fieldset>
+      <%# TODO: Handle displaying of error here when no community/collection is provided %>
+      <legend class="mb-0">
+        <%= t('.community_and_collection') %>
+      </legend>
+      <small class="mb-3 form-text text-muted">
+        <%= t('.community_and_collection_help_html') %>
+      </small>
+      <% if @draft_item.errors.messages[:member_of_paths].any? %>
+        <ul class="list-unstyled alert alert-danger">
+          <% @draft_item.errors.messages[:member_of_paths].each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      <% end %>
+
+      <div class="js-communities-collections-list">
+        <% if @draft_item.communities.present? %>
+
+          <% @draft_item.each_community_collection do |community, collection| %>
+            <%= render partial: 'community_collection_input',
+                locals: { community: community, collection: collection } %>
+          <% end %>
+        <% else %>
+          <%= render partial: 'community_collection_input',
+              locals: { community: nil, collection: nil} %>
+        <% end %>
+      </div>
+      <div class="d-flex flex-row-reverse">
+        <div class="p-3">
+          <%= link_to "#{fa_icon('plus')} #{t(:add_another_community_collection)}".html_safe,
+              '#', class: 'btn btn-secondary js-add-community-collection' %>
+        </div>
+      </div>
+    </fieldset>
+
+    <div id="js-additional-fields-accordion" role="tablist">
+      <div class="card">
+        <div id="js-heading-additional-fields" class="card-header" role="tab">
+          <h5 class="mb-0">
+            <a data-toggle="collapse"
+                href="#js-collapse-additional-fields"
+                aria-expanded="false"
+                aria-controls="js-collapse-additional-fields">
+              <%= t('.additional_fields') %>
+              <%= fa_icon "chevron-down", class: "js-more-less float-right" %>
+            </a>
+          </h5>
+        </div>
+
+        <div id="js-collapse-additional-fields"
+              class="collapse"
+              data-parent="#js-additional-fields-accordion"
+              role="tabpanel"
+              aria-labelledby="js-heading-additional-fields">
+          <div class="card-body">
+            <%= f.input :contributors,
+                label: t('.contributors'),
+                collection: @draft_item.contributors || [],
+                include_hidden: false,
+                input_html: {
+                  multiple: true,
+                  data: { placeholder: t('.contributors_placeholder') },
+                  class: 'js-selectize-create'
+                },
+                include_blank: false,
+                hint: t('.contributors_help') %>
+
+            <%= f.input :places,
+                label: t('.places'),
+                collection: @draft_item.places || [],
+                include_hidden: false,
+                input_html: {
+                  multiple: true,
+                  data: { placeholder: t('.places_placeholder') },
+                  class: 'js-selectize-create'
+                },
+                include_blank: false,
+                hint: t('.places_help') %>
+
+            <%= f.input :time_periods,
+                label: t('.time_periods'),
+                collection: @draft_item.time_periods || [],
+                include_hidden: false,
+                input_html: {
+                  multiple: true,
+                  data: { placeholder: t('.time_periods_placeholder') },
+                  class: 'js-selectize-create'
+                },
+                include_blank: false,
+                hint: t('.time_periods_help_html') %>
+
+            <%= f.input :citations,
+                label: t('.citations'),
+                collection: @draft_item.citations || [],
+                include_hidden: false,
+                input_html: {
+                  multiple: true,
+                  data: { placeholder: t('.citations_placeholder') },
+                  class: 'js-selectize-create'
+                },
+                include_blank: false,
+                hint: t('.citations_help') %>
+
+            <%= f.input :source,
+                label: t('.source'),
+                hint: t('.source_help') %>
+
+            <%= f.input :related_item,
+                label: t('.related_item'),
+                hint: t('.related_item_help') %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-3 d-flex flex-wrap justify-content-end">
+      <%= link_to root_path, class: 'btn btn-secondary mr-2' do %>
+        <%= fa_icon 'ban' %>
+        <%= t('cancel') %>
+      <% end %>
+      <%= f.button :button, type: :submit, class: 'btn btn-primary' do %>
+        <%= t('items.draft.save_and_continue') %>
+        <%= fa_icon 'chevron-right' %>
+      <% end %>
+    </div>
+
+  <% end %>
+</div>

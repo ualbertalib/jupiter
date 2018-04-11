@@ -1,0 +1,12 @@
+item_type:
+  article: http://purl.org/ontology/bibo/Article
+  book: http://purl.org/ontology/bibo/Book
+  chapter: http://purl.org/ontology/bibo/Chapter
+  image: http://purl.org/ontology/bibo/Image
+  report: http://purl.org/ontology/bibo/Report
+  research_material: http://terms.library.ualberta.ca/researchMaterial
+  conference_paper: http://vivoweb.org/ontology/core#ConferencePaper
+  conference_poster: http://vivoweb.org/ontology/core#ConferencePoster
+  dataset: http://vivoweb.org/ontology/core#Dataset
+  review: http://vivoweb.org/ontology/core#Review
+  learning_object: http://terms.library.ualberta.ca/learningObject

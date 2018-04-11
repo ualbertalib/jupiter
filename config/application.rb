@@ -30,5 +30,13 @@ module Jupiter
     # Set ActiveJob adapter
     config.active_job.queue_adapter = :sidekiq
 
+    # Run skylight in UAT for performance metric monitoring pre-launch
+    config.skylight.environments += ['uat']
+
+    # Finding jupiter_core code before the ApplicationController loads
+    config.eager_load_paths.prepend("#{config.root}/app/models/jupiter_core")
+
+    config.redis_key_prefix = "jupiter.#{Rails.env}."
+
   end
 end

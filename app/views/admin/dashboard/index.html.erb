@@ -7,7 +7,7 @@
       <h4 class="card-title"><%= t('items.index.header') %></h4>
       <div class="data">
         <%= link_to admin_items_path, class: 'btn btn-outline-primary' do %>
-            <%= number_with_delimiter(Item.count) %>
+            <%= number_with_delimiter(Item.count + Thesis.count) %>
         <% end %>
       </div>
       </div>
@@ -79,9 +79,7 @@
     <p>
       <%= t('.jupiter') %>
       <span class="badge badge-primary">
-        0.0.1
-        <%# TODO: Add version file in jupiter %>
-        <%#= Jupiter::VERSION %>
+        <%= JupiterCore::VERSION %>
       </span>
     </p>
   </div>
@@ -103,7 +101,7 @@
   </div>
   <div class="col-md-3">
     <p>
-      <%= link_to sidekiq_web_path, target: :_blank do %>
+      <%= link_to sidekiq_web_path, target: :_blank, rel: 'noopener' do %>
         <%= t('.sidekiq') %>
         <span class="badge badge-primary">
           <%= "#{Sidekiq::VERSION}" %>

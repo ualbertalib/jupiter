@@ -1,0 +1,46 @@
+$image-with-text-bg: $jupiter-primary;
+$image-with-text-opacity: 0.8;
+
+.j-era-a-v-link {
+  a:hover {
+    // TODO: similar css in communities.scss - create a utility instead?
+    text-decoration: none;
+  }
+}
+
+// Adapted from https://codepen.io/luisintosh/pen/gPGXOp
+.j-image-with-text {
+  padding: 0px;
+  position: relative;
+  text-align: center;
+  width: 100%;
+
+  img {
+    min-height: 100%;
+    object-fit: cover;
+    width: 100%;
+
+  }
+
+  &:hover img {
+    opacity: 0.5;
+  }
+
+  .agriculture {
+    // Make sure the people are in the picture
+    object-position: 75% 50%;
+  }
+
+  h5 {
+    background-color: $image-with-text-bg;
+    bottom: 0px;
+    color: $black;
+    left: 0px;
+    margin-bottom: inherit;
+    opacity: $image-with-text-opacity;
+    padding: 5px;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+  }
+}

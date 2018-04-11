@@ -1,0 +1,25 @@
+<li class="media mb-3 p-3 border">
+
+  <%= render partial: 'thumbnail', locals: { thumbnail: file, object: @draft_item } %>
+
+  <div class="media-body ml-3">
+    <div class="float-right">
+      <% if @draft_item.thumbnail != file %>
+        <%= link_to set_thumbnail_item_file_path(@draft_item, file), method: :patch, remote: true, class: 'btn btn-secondary mb-2 mb-md-0' do %>
+          <%= fa_icon 'file-image-o' %>
+          <%= t('.set_as_thumbnail') %>
+        <% end %>
+      <% end %>
+      <%= link_to item_file_path(@draft_item, file),
+                  method: :delete,
+                  remote: true,
+                  data: { confirm: t('.delete_file_dialog') },
+                  class: 'btn btn-secondary' do %>
+        <%= fa_icon 'times' %>
+        <%= t('remove') %>
+      <% end %>
+    </div>
+    <h5><%=file.filename %></h5>
+    <p><%= number_to_human_size(file.byte_size) %></p>
+  </div>
+</li>

@@ -6,15 +6,23 @@
 
 <div class="row mt-3 jupiter-model-results">
 
-  <%# Facets panel %>
-  <div class="col-md-3 col-sm-2 jupiter-facets">
+  <%# Facets/filters panel, hide unless opened on mobile %>
+  <div class="col-md-3 col-sm-2 d-none d-md-block jupiter-filters">
     <div class="card">
-      <div class="card-header">
-        <%= t('search.filter') %>
+      <div class="card-header d-flex flex-wrap justify-content-between">
+        <div>
+          <%= t('search.filter') %>
+        </div>
+        <div class="d-md-none js-filters-close">
+          <%= link_to '#' do %>
+            <%= t('close') %>
+            <%= fa_icon 'times-circle' %>
+          <% end %>
+        </div>
       </div>
-      <div class="card-body p-2">
-        <% results.each_facet_with_results do |facet| %>
-          <%= render partial: 'search/facet_results', locals: { facet: facet } %>
+      <div class="card-body p-2 filter-list">
+        <% results.each_facet_with_results(@first_facet_categories) do |facet| %>
+          <%= render partial: search_partial_path(facet), locals: { facet: facet } %>
         <% end %>
       </div>
     </div>
@@ -32,16 +40,27 @@
         <div>
           <%= render partial: 'search/sort' %>
         </div>
+
       </div>
 
+      <div class="d-md-none mt-2">
+        <%= button_tag type: :button, class: 'btn btn-jupiter-primary mb-2 js-filters-open' do %>
+          <%= fa_icon 'filter' %>
+          <%= t('search.filter_results') %>
+        <% end %>
+      </div>
 
       <%# Facet Badges %>
       <div class='jupiter-facet-badges'>
         <% results.each_facet_with_results do |facet| %>
           <% facet.each_facet_value do |facet_value| %>
-            <% if params[:facets]&.fetch(facet_value.solr_index, nil) == facet_value.value %>
+            <% if params[:facets]&.fetch(facet_value.solr_index, [])&.include?(facet_value.value) %>
               <%= render partial: 'search/facet_badge', locals: { value: present(facet_value).display,
-                         solr_index: facet_value.solr_index } %>
+                         url: query_params_without_facet_value(facet_value.solr_index, facet_value.value) } %>
+            <% end %>
+            <% if params[:ranges]&.fetch(facet_value.solr_index, false) %>
+              <%= render partial: 'search/facet_badge', locals: { value: facet_value.range.to_s.gsub('..', ' to '),
+                         url: query_params_without_range_value(facet_value.solr_index) } %>
             <% end %>
           <% end %>
         <% end %>
@@ -53,11 +72,7 @@
       <ul class="list-group">
         <% results.each do |result| %>
           <li class="list-group-item list-group-item-action">
-            <% if model == :item %>
-              <%= render partial: 'search/item_hit', locals: { result: result } %>
-            <% else %>
-              <%= link_to result.title, path_for_result(result) %>
-            <% end %>
+            <%= render result %>
           </li>
         <% end %>
       </ul>
@@ -69,4 +84,8 @@
     </div>
     <%= paginate results %>
   </div>
+</div>
+
+<%# Overlay for when mobile filter sidebar is open %>
+<div class="filters-overlay">
 </div>

@@ -1,147 +1,189 @@
-
 class Item < JupiterCore::LockedLdpObject
 
+  include ObjectProperties
+  include ItemProperties
+  # Needed for ActiveStorage (logo)...
+  include GlobalID::Identification
   ldp_object_includes Hydra::Works::WorkBehavior
 
-  VISIBILITY_EMBARGO = 'embargo'.freeze
-  VISIBILITIES = (JupiterCore::VISIBILITIES + [VISIBILITY_EMBARGO]).freeze
+  # Contributors (faceted in `all_contributors`)
+  has_attribute :creators, RDF::Vocab::BIBO.authorList, type: :json_array, solrize_for: [:search]
+  # copying the creator values into an un-json'd field for Metadata consumption
+  has_multival_attribute :unordered_creators, ::RDF::Vocab::DC11.creator, solrize_for: [:search]
+  has_multival_attribute :contributors, ::RDF::Vocab::DC11.contributor, solrize_for: [:search]
 
-  # Dublin Core attributes
-  has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :sort]
-  has_multival_attribute :creator, ::RDF::Vocab::DC.creator, solrize_for: [:search, :facet]
-  has_multival_attribute :contributor, ::RDF::Vocab::DC.contributor, solrize_for: [:search, :facet]
   has_attribute :created, ::RDF::Vocab::DC.created, solrize_for: [:search, :sort]
-  has_attribute :sort_year, ::VOCABULARY[:ual].sortyear, solrize_for: [:search, :sort, :facet]
-  has_multival_attribute :subject, ::RDF::Vocab::DC.subject, solrize_for: [:search, :facet]
+
+  # Subject types (see `all_subjects` for faceting)
+  has_multival_attribute :temporal_subjects, ::RDF::Vocab::DC.temporal, solrize_for: [:search]
+  has_multival_attribute :spatial_subjects, ::RDF::Vocab::DC.spatial, solrize_for: [:search]
+
   has_attribute :description, ::RDF::Vocab::DC.description, type: :text, solrize_for: :search
   has_attribute :publisher, ::RDF::Vocab::DC.publisher, solrize_for: [:search, :facet]
   # has_attribute :date_modified, ::RDF::Vocab::DC.modified, type: :date, solrize_for: :sort
-  has_multival_attribute :language, ::RDF::Vocab::DC.language,
-                         solrize_for: [:search, :facet]
-  has_attribute :embargo_end_date, ::RDF::Vocab::DC.modified, type: :date, solrize_for: [:sort]
+  has_multival_attribute :languages, ::RDF::Vocab::DC.language, solrize_for: [:search, :facet]
   has_attribute :license, ::RDF::Vocab::DC.license, solrize_for: [:search]
 
-  # UAL attributes
-  has_attribute :depositor, ::VOCABULARY[:ual].depositor, solrize_for: [:search]
-  has_attribute :fedora3_handle, ::VOCABULARY[:ual].fedora3handle, solrize_for: :exact_match
-  has_attribute :fedora3_uuid, ::VOCABULARY[:ual].fedora3uuid, solrize_for: :exact_match
-  has_attribute :ingest_batch, ::VOCABULARY[:ual].ingestbatch, solrize_for: :exact_match
-  has_multival_attribute :member_of_paths, ::VOCABULARY[:ual].path,
-                         type: :path,
-                         solrize_for: :pathing
+  # `type` is an ActiveFedora keyword, so we call it `item_type`
+  # Note also the `item_type_with_status` below for searching, faceting and forms
+  has_attribute :item_type, ::RDF::Vocab::DC.type, solrize_for: :exact_match
+  has_attribute :source, ::RDF::Vocab::DC.source, solrize_for: :exact_match
+  has_attribute :related_link, ::RDF::Vocab::DC.relation, solrize_for: :exact_match
 
-  # Prism attributes
-  has_attribute :doi, ::VOCABULARY[:prism].doi, solrize_for: :exact_match
+  # Bibo attributes
+  # This status is only for articles: either 'published' (alone) or two triples for 'draft'/'submitted'
+  has_multival_attribute :publication_status, ::RDF::Vocab::BIBO.status, solrize_for: :exact_match
 
   # Solr only
   additional_search_index :doi_without_label, solrize_for: :exact_match,
                                               as: -> { doi.gsub('doi:', '') if doi.present? }
 
-  def self.display_attribute_names
-    super - [:member_of_paths]
-  end
+  # This combines both the controlled vocabulary codes from item_type and published_status above
+  # (but only for items that are articles)
+  additional_search_index :item_type_with_status,
+                          solrize_for: :facet,
+                          as: -> { item_type_with_status_code }
 
-  def self.valid_visibilities
-    super + [VISIBILITY_EMBARGO]
-  end
+  # Combine creators and contributors for faceting (Thesis also uses this index)
+  # Note that contributors is converted to an array because it can be nil
+  additional_search_index :all_contributors, solrize_for: :facet, as: -> { creators + contributors.to_a }
 
-  def file_sets
-    FileSet.where(item: id)
-  end
+  # Combine all the subjects for faceting
+  additional_search_index :all_subjects, solrize_for: :facet, as: -> { all_subjects }
 
-  def each_community_collection
-    member_of_paths.each do |path|
-      community_id, collection_id = path.split('/')
-      yield Community.find(community_id), Collection.find(collection_id)
+  def self.from_draft(draft_item)
+    item = Item.find(draft_item.uuid) if draft_item.uuid.present?
+    item ||= Item.new_locked_ldp_object
+    item.unlock_and_fetch_ldp_object do |unlocked_obj|
+      unlocked_obj.owner = draft_item.user_id if unlocked_obj.owner.blank?
+      unlocked_obj.title = draft_item.title
+      unlocked_obj.alternative_title = draft_item.alternate_title
+
+      unlocked_obj.item_type = draft_item.item_type_as_uri
+      unlocked_obj.publication_status = draft_item.publication_status_as_uri
+
+      unlocked_obj.languages = draft_item.languages_as_uri
+      unlocked_obj.creators = draft_item.creators
+      unlocked_obj.subject = draft_item.subjects
+      unlocked_obj.created = draft_item.date_created.to_s
+      unlocked_obj.description = draft_item.description
+
+      # Handle visibility plus embargo logic
+      unlocked_obj.visibility = draft_item.visibility_as_uri
+      unlocked_obj.visibility_after_embargo = draft_item.visibility_after_embargo_as_uri
+      unlocked_obj.embargo_end_date = draft_item.embargo_end_date
+
+      # Handle license vs rights
+      unlocked_obj.license = draft_item.license_as_uri
+      unlocked_obj.rights = draft_item.license == 'license_text' ? draft_item.license_text_area : nil
+
+      # Additional fields
+      unlocked_obj.contributors = draft_item.contributors
+      unlocked_obj.spatial_subjects = draft_item.places
+      unlocked_obj.temporal_subjects = draft_item.time_periods
+      # citations of previous publication apparently maps to is_version_of
+      unlocked_obj.is_version_of = draft_item.citations
+      unlocked_obj.source = draft_item.source
+      unlocked_obj.related_link = draft_item.related_item
+
+      unlocked_obj.member_of_paths = []
+
+      draft_item.each_community_collection do |community, collection|
+        unlocked_obj.add_to_path(community.id, collection.id)
+      end
+
+      unlocked_obj.save!
+
+      unlocked_obj.purge_files if item.file_sets.any?
+      draft_item.map_activestorage_files_as_file_objects do |file|
+        unlocked_obj.add_files([file])
+      end
     end
+    # set the item's thumbnail to the chosen fileset
+    # this advice doesn't apply to non-ActiveRecord objects, rubocop
+    # rubocop:disable Rails/FindBy
+    item.thumbnail_fileset(item.file_sets.where(contained_filename: draft_item.thumbnail.filename.to_s).first)
+
+    draft_item.uuid = item.id
+    draft_item.save!
+    item
   end
 
-  # TODO: implement me
-  def thumbnail
-    nil
+  # This is stored in solr: combination of item_type and publication_status
+  def item_type_with_status_code
+    return nil if item_type.blank?
+    # Return the item type code unless it's an article, then append publication status code
+    item_type_code = CONTROLLED_VOCABULARIES[:item_type].from_uri(item_type)
+    return item_type_code unless item_type_code == :article
+    return nil if publication_status.blank?
+    publication_status_code = CONTROLLED_VOCABULARIES[:publication_status].from_uri(publication_status.first)
+    # Next line of code means that 'article_submitted' exists, but 'article_draft' doesn't ("There can be only one!")
+    publication_status_code = :submitted if publication_status_code == :draft
+    "#{item_type_code}_#{publication_status_code}".to_sym
+  rescue ArgumentError
+    return nil
+  end
+
+  def all_subjects
+    subject + temporal_subjects.to_a + spatial_subjects.to_a
   end
 
   unlocked do
-    validates :embargo_end_date, presence: true, if: ->(item) { item.visibility == VISIBILITY_EMBARGO }
-    validates :embargo_end_date, absence: true, if: ->(item) { item.visibility != VISIBILITY_EMBARGO }
-    validates :member_of_paths, presence: true
-    validates :title, presence: true
-    validates :language, presence: true
-    validates :license, presence: true
-    validate :communities_and_collections_validations
-    validate :language_validations
-    validate :license_validations
+    before_validation :populate_sort_year
+    before_save :copy_creators_to_unordered_predicate
 
-    before_validation do
-      # TODO: for theses, the sort_year attribute should be derived from ual:graduationDate
-      self.sort_year = Date.parse(created).year.to_s if created.present?
+    validates :created, presence: true
+    validates :sort_year, presence: true
+    validates :languages, presence: true, uri: { in_vocabulary: :language }
+    validates :item_type, presence: true, uri: { in_vocabulary: :item_type }
+    validates :subject, presence: true
+    validates :creators, presence: true
+    validates :license, uri: { in_vocabularies: [:license, :old_license] }
+    validates :publication_status, uri: { in_vocabulary: :publication_status }
+    validate :publication_status_presence,
+             if: ->(item) { item.item_type == CONTROLLED_VOCABULARIES[:item_type].article }
+    validate :publication_status_absence, if: ->(item) { item.item_type != CONTROLLED_VOCABULARIES[:item_type].article }
+    validate :publication_status_compound_uri, if: lambda { |item|
+      item.item_type == CONTROLLED_VOCABULARIES[:item_type].article && item.publication_status.present?
+    }
+    validate :license_xor_rights_must_be_present
+
+    def populate_sort_year
+      self.sort_year = Date.parse(created).year.to_i if created.present?
+    rescue ArgumentError
+      # date was unparsable, try to pull out the first 4 digit number as a year
+      capture = created.scan(/\d{4}/)
+      self.sort_year = capture[0].to_i if capture.present?
     end
 
-    def communities_and_collections_validations
-      return if member_of_paths.blank?
-      member_of_paths.each do |path|
-        community_id, collection_id = path.split('/')
-        community = Community.find_by(community_id)
-        errors.add(:member_of_paths, :community_not_found, id: community_id) if community.blank?
-        collection = Collection.find_by(collection_id)
-        errors.add(:member_of_paths, :collection_not_found, id: collection_id) if collection.blank?
+    def copy_creators_to_unordered_predicate
+      return unless creators_changed?
+      self.unordered_creators = []
+      creators.each { |c| self.unordered_creators += [c] }
+    end
+
+    def license_xor_rights_must_be_present
+      # Must have one of license or rights, not both
+      if license.blank?
+        errors.add(:base, :need_either_license_or_rights) if rights.blank?
+      elsif rights.present?
+        errors.add(:base, :not_both_license_and_rights)
       end
     end
 
-    def add_to_path(community_id, collection_id)
-      self.member_of_paths += ["#{community_id}/#{collection_id}"]
-      # TODO: also add the collection (not the community) to the Item's memberOf relation, as metadata
-      # wants to continue to model this relationship in pure PCDM terms, and member_of_path is really for our needs
-      # so that we can facet by community and/or collection properly
-      # TODO: add collection_id to member_of_collections
+    def publication_status_presence
+      errors.add(:publication_status, :required_for_article) if publication_status.blank?
     end
 
-    def add_communities_and_collections(communities, collections)
-      return unless communities.present? && collections.present?
-      communities.each_with_index do |community, idx|
-        add_to_path(community, collections[idx])
-      end
+    def publication_status_absence
+      errors.add(:publication_status, :must_be_absent_for_non_articles) if publication_status.present?
     end
 
-    def add_files(files)
-      return if files.blank?
-      # Need a item id for file sets to point to
-      # TODO should this be a side effect? should we throw an exception if there's no id? Food for thought
-      save! if id.nil?
-
-      files.each do |file|
-        FileSet.new_locked_ldp_object.unlock_and_fetch_ldp_object do |unlocked_fileset|
-          unlocked_fileset.owner = owner
-          unlocked_fileset.visibility = visibility
-          Hydra::Works::AddFileToFileSet.call(unlocked_fileset, file, :original_file,
-                                              update_existing: false, versioning: false)
-          unlocked_fileset.member_of_collections += [self]
-          # Temporarily cache the file name for storing in Solr
-          # if the file was uploaded, it responds to +original_filename+
-          # if it's a Ruby File object, it has a +basename+. This distinction seems arbitrary.
-          unlocked_fileset.contained_filename = if file.respond_to?(:original_filename)
-                                                  file.original_filename
-                                                else
-                                                  File.basename(file)
-                                                end
-          unlocked_fileset.save!
-          self.members += [unlocked_fileset]
-          # pull in hydra derivatives, set temp file base
-          # Hydra::Works::CharacterizationService.run(fileset.characterization_proxy, filename)
-        end
-      end
-    end
-
-    def language_validations
-      uris = ::CONTROLLED_VOCABULARIES[:language].map { |lang| lang[:uri] }
-      language.each do |lang|
-        errors.add(:language, :not_recognized) unless uris.include?(lang)
-      end
-    end
-
-    def license_validations
-      return if ::CONTROLLED_VOCABULARIES[:license].any? { |lic| lic[:uri] == license }
-      errors.add(:license, :not_recognized)
+    def publication_status_compound_uri
+      ps_vocab = CONTROLLED_VOCABULARIES[:publication_status]
+      statuses = publication_status.sort
+      return unless statuses != [ps_vocab.published] && statuses != [ps_vocab.draft, ps_vocab.submitted]
+      errors.add(:publication_status, :not_recognized)
     end
   end
 

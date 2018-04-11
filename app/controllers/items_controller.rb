@@ -1,76 +1,40 @@
 class ItemsController < ApplicationController
 
-  before_action :load_item, only: [:show, :edit, :update]
-  before_action :initialize_communities_and_collections, only: [:new, :edit]
+  after_action :update_item_statistics, only: :show, unless: -> { request.bot? }
 
-  def new
-    @item = Item.new_locked_ldp_object
+  def show
+    @item = JupiterCore::LockedLdpObject.find(params[:id], types: [Item, Thesis])
     authorize @item
+    @views_count, @downloads_count = fetch_item_statistics
   end
 
-  def create
-    communities = params[:item].delete :community
-    collections = params[:item].delete :collection
+  def edit
+    # Note that only Items can be edited -- there is no deposit or edit interface for Theses:
+    item = Item.find(params[:id])
+    authorize item
 
-    @item = Item.new_locked_ldp_object(permitted_attributes(Item))
-    authorize @item
+    draft_item = DraftItem.from_item(item, for_user: current_user)
 
-    # TODO: add validations?
-    @item.unlock_and_fetch_ldp_object do |unlocked_item|
-      unlocked_item.owner = current_user.id
-      unlocked_item.add_communities_and_collections(communities, collections)
-      unlocked_item.add_files(params[:item][:file])
-      unlocked_item.save!
-
-      if unlocked_item.save
-        redirect_to @item, notice: t('.created')
-      else
-        initialize_communities_and_collections
-        render :new, status: :bad_request
-      end
-    end
-  end
-
-  def update
-    authorize @item
-
-    communities = params[:item].delete :community
-    collections = params[:item].delete :collection
-
-    @item.unlock_and_fetch_ldp_object do |unlocked_item|
-      unlocked_item.update_attributes(permitted_attributes(@item))
-      unlocked_item.add_communities_and_collections(communities, collections)
-      unlocked_item.add_files(params[:item][:file])
-
-      if unlocked_item.save
-        redirect_to @item, notice: t('.updated')
-      else
-        initialize_communities_and_collections
-        render :edit, status: :bad_request
-      end
-    end
+    redirect_to item_draft_path(id: Wicked::FIRST_STEP, item_id: draft_item.id)
   end
 
   private
 
-  def load_item
-    @item = Item.find(params[:id])
-    authorize @item
+  def update_item_statistics
+    Statistics.increment_view_count_for(item_id: params[:id], ip: request.ip)
+  rescue StandardError => e
+    # Trap errors so that if Redis goes down or similar, show pages don't start crashing
+    Rollbar.error("Error incrementing view count for #{params[:id]}", e)
   end
 
-  def initialize_communities_and_collections
-    @communities = Community.all
+  def fetch_item_statistics
+    return Statistics.for(item_id: @item.id)
+  rescue StandardError => e
+    # Trap errors so that if Redis goes down or similar, show pages don't start crashing
+    Rollbar.error("Error retriving statistics for #{@item.id}", e)
 
-    @item_communities = []
-    @item_collections = []
-    @collection_choices = []
-
-    return if @item.nil?
-    @item.each_community_collection do |community, collection|
-      @item_communities << community
-      @item_collections << collection
-      @collection_choices << community.member_collections
-    end
+    # we'll display unavailable counts
+    return [0, 0]
   end
 
 end

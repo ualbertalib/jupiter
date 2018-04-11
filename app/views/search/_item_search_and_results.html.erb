@@ -1,0 +1,22 @@
+<%= form_tag({}, { method: :get }) do %>
+  <div class="input-group mt-3">
+    <%= search_field_tag :query,
+        params[:query],
+        placeholder: search_placeholder,
+        'aria-label': search_placeholder,
+        class: 'form-control' %>
+    <span class="input-group-btn">
+      <button type="submit" class="btn btn-secondary">
+        <%= fa_icon 'search' %>
+        <%= t('search_items') %>
+      </button>
+    </span>
+  </div>
+<% end %>
+
+<% if @results.count > 0 %>
+  <%= render partial: 'search/model_results', locals: { results: @results, model: :item,
+                                                        search_term: params[:query] } %>
+<% else %>
+  <p class="mt-3"><%= no_items_found %></p>
+<% end %>

@@ -6,3 +6,7 @@ $cc-background: $gray-100;
     background-color: $cc-background;
   }
 }
+
+.item-filename {
+  word-break: break-word;
+}

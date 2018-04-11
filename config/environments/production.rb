@@ -1,3 +1,5 @@
+Rails.application.routes.default_url_options = { host: 'era.library.ualberta.ca', port: 443, protocol: 'https' }
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -86,4 +88,7 @@ Rails.application.configure do
 
   # Which ActiveStorage service to use
   config.active_storage.service = (ENV['ACTIVE_STORAGE_SERVICE'] || :local).to_sym
+
+  # FITS characterization
+  config.run_fits_characterization = true
 end

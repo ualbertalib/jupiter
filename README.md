@@ -8,7 +8,9 @@
 
 # View Documentation
 
-`$ open docs/rdoc/index.html`
+`$ open doc/index.html` is the location for docs created by rdoc
+
+`$ open docs/rdoc/index.html` is the location for docs created by rerdoc
 
 # Check your style
 
@@ -37,11 +39,11 @@ behaviour, please set the enviroment variable `SKIP_DOWNLOAD_COMMUNITY_LOGOS`.
 
 `$ bundle exec rake rerdoc`
 
-# UAT Environment 
+# UAT Environment
 
 The UAT server is accessible on all library staff workstation, and through VPN on any external IP address.  More details regarding access and deployment can be found:
-[Jupiter UAT Setup](https://github.com/ualbertalib/di_internal/blob/master/System-Adminstration/UAT-Environment.md) 
- 
+[Jupiter UAT Setup](https://github.com/ualbertalib/di_internal/blob/master/System-Adminstration/UAT-Environment.md)
+
 # Docker
 This project comes with a docker setup to easily setup your own local development environment for jupiter in just a few steps.
 
@@ -74,15 +76,56 @@ cd jupiter
 ### For development environment
 To build, create, start and setup your docker containers simply run:
 ```shell
+docker-compose build
+```
+
+```shell
 docker-compose up -d
 ```
 
-Now that everything is up and running, you can setup the rails database (only need to be done once, this will setup both dev and test databases):
+Now everything should be up and running. If you need seed data for your database, then run the following command:
 ```shell
-docker-compose run web rails db:setup
+docker-compose run web rails db:seed
 ```
 
-### For deployment (on UAT environment)
+## Step 4: Open and view Jupiter!
+Now everything is ready, you can go and view Jupiter! Just open your favorite browser and go to the following url:
+
+  - Development environment: [localhost:3000](http://localhost:3000)
+
+(Note: ip address may be different if you are using `docker-machine`)
+
+## Want to run the test suite in docker?
+
+1. Start up all the docker containers, like you did above (if its not already running):
+
+  ```shell
+  docker-compose up -d
+  ```
+3. Then you can run the test suite:
+  ```shell
+  docker-compose run web rails test
+  ```
+4. Run system tests or rubocop? Just change the command:
+  ```shell
+  docker-compose run web rails test:system
+  ```
+
+  ```shell
+  docker-compose run web rubocop
+  ```
+
+## Docker compose lightweight edition
+
+If you want to develop in rails locally on your own machine, there is also a `docker-compose.lightweight.yml` provided. This will give you the datastores you require (solr/fedora) and potentially others if you need them (postgres/redis (commented out by default)). Just run:
+  ```shell
+  docker-compose -f docker-compose.lightweight.yml up -d
+  ```
+And everything else is how you would normally develop in a rails project.
+
+(See other sections of this README for more information about developing in a rails project environment)
+
+## For deployment (on UAT environment)
 To setup the environment variables needed for deployment, modify the sample .env_deployment file with variable values needed for the deployment:
 ```shell
 cp .env_deployment_sample .env_deployment
@@ -98,43 +141,7 @@ For the first time of the deployment, set up the database:
 docker-compose run web rails db:setup
 ```
 
-## Step 4: Open and view Jupiter!
-Now everything is ready, you can go and view Jupiter! Just open your favorite browser and go to the following url:
-
-
-  - Development environment: [localhost:3000](http://localhost:3000)
-  - Deployment environment: servername
-
-(Note: ip address may be different if you are using `docker-machine`)
-
-## Want to run the test suite?
-
-1. Start up all the docker containers, like you did above (if its not already running):
-
-  ```shell
-  docker-compose up -d
-  ```
-
-2. Setup the test database (if you haven't already from above):
-  ```shell
-  docker-compose run web rails db:setup
-  ```
-
-3. Then you can run the test suite via rspec:
-  ```shell
-  docker-compose run web rails test
-  ```
-## Docker compose lightweight edition
-
-If you want to develop in rails locally on your own machine, there is also a `docker-compose.lightweight.yml` provided. This will give you the datastores you require (solr/fedora) and potentially others if you need them (mysql/redis (commented out by default)). Just run:
-  ```shell
-  docker-compose -f docker-compose.lightweight.yml up -d
-  ```
-And everything else is how you would normally develop in a rails project.
-
-(See other sections of this README for more information about developing in a rails project environment)
-
-## Common gotchas?
+## Common gotchas for docker?
 - If your having issues, logs are the best place to first look at what went wrong.
 
   To check all container logs:
@@ -148,11 +155,21 @@ And everything else is how you would normally develop in a rails project.
   ```shell
   docker-compose logs web
   ```
-- If your switching between docker-compose and local development on your machine, you may encounter in weird permissions on files that docker has created (logs/tmp/etc.). Simply just `sudo rm` them.
+- If your switching between docker-compose and local development on your machine, you may encounter in weird permissions on files that docker has created (/tmp/pids/, etc.). Simply just `sudo rm` them.
 
-- If you would like to run MySQL in a container, but docker-compose reports that port 3306 is already in use, you likely have a MySQL instance already running on the host. You will need to shutdown MySQL before you can start the container. On Ubuntu, `sudo service mysql stop` on the host will do the trick. Another option is to configure docker and the rails app to look for MySQL using a different port.
+- If you would like to run Postgres in a container, but docker-compose reports that port 3306 is already in use, you likely have a Postgres instance already running on the host. You will need to shutdown Postgres before you can start the container. On Ubuntu, `sudo service postgresql stop` on the host will do the trick. Another option is to configure docker and the rails app to look for Postgres using a different port.
 
-## Configuring SAML
+# Want to setup Virus-Checking and FITS characterization?
+
+The Clamby repository has [instructions](https://github.com/kobaltz/clamby#dependencies) on setting up clamav on various operating systems
+
+For characterization you need to install [FITS](https://github.com/harvard-lts/fits) and ensure that `fits.sh` is in your Rails' process' PATH
+[Hydra-File_Characterization](https://github.com/samvera/hydra-file_characterization), which Hydra-Works leverages, has more information on configuring the characterization setup.
+
+Characterization is turned off by default for the development environment. If you would like to turn it on without
+modifying the config files, set the environment variable `RUN_FITS_CHARACTERIZATION`.
+
+# Configuring SAML
 
 * Update `secrets.yml` (and maybe `omniauth.rb`) for the SAML implementation (you may need to generate a certificate/key for certain environments)
 * Give IST's Identity Provider (uat-login or login) the metadata for our service provider

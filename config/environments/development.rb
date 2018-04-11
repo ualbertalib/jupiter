@@ -1,3 +1,5 @@
+Rails.application.routes.default_url_options = { host: 'localhost' }
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -6,8 +8,8 @@ Rails.application.configure do
   # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
 
-  # Do not eager load code on boot.
-  config.eager_load = false
+  # Eager load code on boot.
+  config.eager_load = true
 
   # Show full error reports.
   config.consider_all_requests_local = true
@@ -54,4 +56,7 @@ Rails.application.configure do
 
   # Which ActiveStorage service to use
   config.active_storage.service = (ENV['ACTIVE_STORAGE_SERVICE'] || :local).to_sym
+
+  # FITS characterization
+  config.run_fits_characterization = ENV['RUN_FITS_CHARACTERIZATION'].present? || false
 end

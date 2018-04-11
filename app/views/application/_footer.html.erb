@@ -1,0 +1,42 @@
+<footer class="j-footer bg-jupiter-primary py-4">
+  <div class="container">
+    <div class="d-flex flex-wrap align-items-center justify-content-md-between justify-content-around">
+      <ul class="list-inline text-dark text-center mb-md-0">
+        <li class="list-inline-item">
+          <%= link_to t('application.footer.links.about'),
+                      about_path,
+                      class: 'text-dark' %>
+        </li>
+        <li class="list-inline-item">
+          <span role="presentation" aria-hidden="true"> · </span>
+        </li>
+        <li class="list-inline-item">
+          <%= link_to t('application.footer.links.contact'),
+                      contact_path,
+                      class: 'text-dark' %>
+        </li>
+        <li class="list-inline-item">
+          <span role="presentation" aria-hidden="true"> · </span>
+        </li>
+        <li class="list-inline-item">
+          <%= link_to t('application.footer.links.policies'),
+                      policies_path,
+                      class: 'text-dark' %>
+        </li>
+        <li class="list-inline-item">
+          <span role="presentation" aria-hidden="true"> · </span>
+        </li>
+        <li class="list-inline-item">
+          <%= link_to t('application.footer.links.powered_by_jupiter'),
+                      'https://github.com/ualbertalib/jupiter',
+                      target: :_blank,
+                      rel: 'noopener',
+                      class: 'text-dark' %>
+        </li>
+      </ul>
+      <%= link_to 'https://www.library.ualberta.ca/', target: :_blank, rel: 'noopener' do %>
+        <%= image_tag 'ualib-logo.png', alt: t('.uofa_library_logo_alt')%>
+      <% end %>
+    </div>
+  </div>
+</footer>

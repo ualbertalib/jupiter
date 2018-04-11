@@ -1,0 +1,6 @@
+visibility:
+  authenticated: http://terms.library.ualberta.ca/authenticated
+  draft: http://terms.library.ualberta.ca/draft
+  embargo: http://terms.library.ualberta.ca/embargo
+  private: http://terms.library.ualberta.ca/private
+  public: http://terms.library.ualberta.ca/public

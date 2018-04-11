@@ -1,28 +1,34 @@
+language: ruby
 sudo: required
+dist: trusty
 
-language: bash
-services: docker
+services:
+  - postgresql
+  - docker
+  - redis-server
+
+addons:
+  chrome: stable
+
+rvm:
+  - 2.4.1
+
+cache: bundler
+bundler_args: --without development production --jobs=3 --retry=3
 
 before_script:
   - docker version
   - docker-compose version
 
-  - docker-compose build web
-  - docker-compose up -d web
+  - docker-compose -f docker-compose.lightweight.yml up -d
 
   - docker ps
 
-  - docker-compose run --rm -e RAILS_ENV=test web ./wait-for-it mysql:3306 --timeout=300 --strict -- rails db:create
-  - docker-compose run --rm -e RAILS_ENV=test web rails db:migrate
+  - RAILS_ENV=test bundle exec rails db:create
+  - RAILS_ENV=test bundle exec rails db:migrate
 
 script:
-  - docker-compose run --rm -e RAILS_ENV=test web rails test
-  - docker-compose run --rm -e RAILS_ENV=test web rails test:system
-  - docker-compose run --rm web rubocop
-  - docker-compose run --rm web scss-lint
-
-# after_success:
- # Do autodeploy magic here to UAT
-  # - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-  # - docker push $REPO
-  # - bash deploy.sh
+  - bundle exec rails test
+  - bundle exec rails test:system
+  - bundle exec rubocop
+  - bundle exec scss-lint

@@ -5,7 +5,7 @@
 version: '3'
 
 volumes:
-  # mysql:
+  # postgres:
   #   driver: local
   solr:
     driver: local
@@ -15,15 +15,20 @@ volumes:
   #   driver: local
 
 services:
-  # Need mysql? Uncomment this and respective volume above
-  # mysql:
-  #   image: mysql:5.7
+  # Need postgres? Uncomment postgres settings below and respective volume above
+  # To configure the app for the settings below, use environment varable setting:
+  #   JUPITER_DATABASE_URL=postgresql://jupiter:mysecretpassword@127.0.0.1?pool=5
+  #
+  # postgres:
+  #   image: postgres:9.6-alpine
   #   environment:
-  #     MYSQL_ROOT_PASSWORD: mysecretpassword
+  #     PGDATA: /var/lib/postgresql/data/pgdata
+  #     POSTGRES_PASSWORD: mysecretpassword
+  #     POSTGRES_USER: jupiter
   #   volumes:
-  #     - mysql:/var/lib/mysql
+  #     - postgres:/var/lib/postgresql/data
   #   ports:
-  #     - "3306:3306"
+  #     - "5432:5432"
 
   solr:
     image: solr:6.6
@@ -35,7 +40,7 @@ services:
       - ./solr/scripts/solr-precreate-jupiter.sh:/docker-entrypoint-initdb.d/solr-precreate-jupiter.sh
 
   fcrepo:
-    image: murny/docker-fcrepo4
+    image: ualbertalib/docker-fcrepo4
     volumes:
       - fcrepo:/fcrepo4-data
     ports:
@@ -48,4 +53,3 @@ services:
   #     - redis:/data
   #   ports:
   #     - "6379:6379"
-

@@ -1,18 +1,26 @@
 module ApplicationHelper
   include PresentersHelper
 
+  TRUNCATE_CHARS_DEFAULT = 300
+
   def page_title(title)
+    # title tags should be around 55 characters, so lets truncate them if they quite long
+    # With '... | ERA' being appended, we want to aim for a bit smaller like 45 characters
+    title = jupiter_truncate(title, length: 45) if title.length > 45
+
     @page_title ||= []
     @page_title.push(title) if title.present?
     @page_title.join(' | ')
   end
 
-  def path_for_result(result)
-    if result.is_a? Collection
-      community_collection_path(result.community, result)
-    else
-      polymorphic_path(result)
-    end
+  def humanize_uri_code(vocab, code)
+    t("controlled_vocabularies.#{vocab}.#{code}")
+  end
+
+  def humanize_uri(vocab, uri)
+    code = CONTROLLED_VOCABULARIES[vocab].from_uri(uri)
+    return nil if code.nil?
+    humanize_uri_code(vocab, code)
   end
 
   def help_tooltip(text)
@@ -37,5 +45,22 @@ module ApplicationHelper
     first = results.offset_value + 1
     last = results.offset_value + results.count
     t(:page_range, first: first, last: last, total: results.total_count)
+  end
+
+  def search_link_for(object, attribute, value: nil, facet: :facet, display: nil)
+    value ||= object.send(attribute)
+    display ||= value
+    if facet == :range_facet
+      link_to(display, search_path(ranges: object.class.facet_term_for(attribute, value, role: :range_facet)),
+              rel: 'nofollow')
+    elsif facet == :facet
+      link_to(display, search_path(facets: object.class.facet_term_for(attribute, value)), rel: 'nofollow')
+    else
+      link_to(display, search_path(search: object.class.search_term_for(attribute, value)), rel: 'nofollow')
+    end
+  end
+
+  def jupiter_truncate(text, length: TRUNCATE_CHARS_DEFAULT, separator: ' ', omission: '...')
+    truncate text, length: length, separator: separator, omission: omission
   end
 end

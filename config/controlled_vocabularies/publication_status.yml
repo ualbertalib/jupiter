@@ -1,0 +1,4 @@
+publication_status:
+  published: http://purl.org/ontology/bibo/status#published
+  draft: http://purl.org/ontology/bibo/status#draft
+  submitted: http://vivoweb.org/ontology/core#submitted

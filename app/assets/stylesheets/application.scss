@@ -1,12 +1,21 @@
+// Set bootstrap sass variables
+@import 'bootstrap-sass-overrides';
+
+// External Library Stylesheets
 @import 'bootstrap';
 @import 'font-awesome';
-@import 'select2';
-@import 'select2-bootstrap';
+@import 'selectize';
+// Not bootstrap 4 but thats okay?
+@import 'selectize.bootstrap3';
+@import 'easy-autocomplete';
+@import 'dropzone/dropzone';
 
+// Custom Stylesheets
 @import 'jupiter';
 @import 'simple_form';
 @import 'communities';
 @import 'items';
-@import 'logo';
+@import 'image';
 @import 'search';
 @import 'users';
+@import 'welcome';

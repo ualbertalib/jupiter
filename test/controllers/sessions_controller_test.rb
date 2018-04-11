@@ -6,11 +6,6 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     Rails.application.env_config['omniauth.auth'] = nil
   end
 
-  test 'new session page' do
-    get login_url
-    assert_response :success
-  end
-
   context '#create' do
     context 'with valid new user' do
       should 'create a new user and new identity' do
@@ -30,14 +25,14 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
         assert_equal 'saml', identity.provider
         assert_equal 'johndoe', identity.uid
         assert_redirected_to root_url
-        assert_equal I18n.t('login.success', kind: 'saml'), flash[:notice]
+        assert_equal I18n.t('login.success'), flash[:notice]
         assert logged_in?
       end
     end
 
     context 'with valid existing user' do
       should 'use existing identity if present' do
-        user = users(:regular_user)
+        user = users(:regular)
         identity = identities(:user_saml)
 
         OmniAuth.config.mock_auth[:saml] = OmniAuth::AuthHash.new(
@@ -51,12 +46,12 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
         end
 
         assert_redirected_to root_url
-        assert_equal I18n.t('login.success', kind: 'saml'), flash[:notice]
+        assert_equal I18n.t('login.success'), flash[:notice]
         assert logged_in?
       end
 
       should 'create a new identity if not present' do
-        user = users(:regular_user)
+        user = users(:regular)
 
         Rails.application.env_config['omniauth.auth'] = OmniAuth::AuthHash.new(
           provider: 'twitter',
@@ -64,7 +59,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
           info: { email: user.email, name: user.name }
         )
 
-        assert_difference ['Identity.count'], 1 do
+        assert_difference('Identity.count', 1) do
           post '/auth/twitter/callback'
         end
 
@@ -73,7 +68,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
         assert_equal 'twitter-012345', identity.uid
 
         assert_redirected_to root_url
-        assert_equal I18n.t('login.success', kind: 'twitter'), flash[:notice]
+        assert_equal I18n.t('login.success'), flash[:notice]
         assert logged_in?
       end
     end
@@ -86,7 +81,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
           post '/auth/saml/callback'
         end
 
-        assert_redirected_to login_url
+        assert_redirected_to root_url
         assert_equal I18n.t('login.error'), flash[:alert]
         assert_not logged_in?
       end
@@ -94,7 +89,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
     context 'with a suspended user' do
       should 'give an error message and user is not logged in' do
-        user = users(:suspended_user)
+        user = users(:suspended)
 
         Rails.application.env_config['omniauth.auth'] = OmniAuth::AuthHash.new(
           provider: 'twitter',
@@ -102,7 +97,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
           info: { email: user.email, name: user.name }
         )
 
-        assert_difference ['Identity.count'] do
+        assert_difference('Identity.count', 1) do
           post '/auth/twitter/callback'
         end
 
@@ -110,7 +105,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
         assert_equal 'twitter', identity.provider
         assert_equal 'twitter-012345', identity.uid
 
-        assert_redirected_to login_path
+        assert_redirected_to root_path
         assert_equal I18n.t('login.user_suspended'), flash[:alert]
         refute logged_in?
       end
@@ -118,7 +113,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   should 'handle session destroying aka logout properly' do
-    user = users(:regular_user)
+    user = users(:regular)
 
     sign_in_as user
 
@@ -133,13 +128,13 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
   should 'return properly flash message on a omniauth failure' do
     get auth_failure_url
-    assert_redirected_to login_url
+    assert_redirected_to root_url
     assert_equal I18n.t('login.error'), flash[:alert]
   end
 
   context '#logout_as_user' do
     should 'logout as user, login as admin and redirect to user show page' do
-      user = users(:regular_user)
+      user = users(:regular)
       admin = users(:admin)
 
       # login as user as admin

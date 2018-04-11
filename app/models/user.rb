@@ -2,6 +2,7 @@ class User < ApplicationRecord
 
   has_many :identities, dependent: :destroy
   has_many :announcements, dependent: :destroy
+  has_many :draft_items, dependent: :destroy
 
   # We don't need to validate the format of an email address here,
   # as emails are supplied from SAML (so assuming...hopefully they are valid)
@@ -27,6 +28,11 @@ class User < ApplicationRecord
     self.last_seen_at = now
     self.last_seen_ip = remote_ip
     save!
+  end
+
+  # For masking the ID that we send to rollbar
+  def id_as_hash
+    Digest::SHA2.hexdigest("#{Rails.application.secrets.secret_key_base}_#{id}")
   end
 
 end

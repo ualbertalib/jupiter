@@ -1,0 +1,19 @@
+$jupiter-primary: #dbe1ef;
+$black: #000;
+$gray-100: #f8f9fa;
+$gray-800: #495057;
+
+$theme-colors: (
+  "jupiter-primary": $jupiter-primary
+);
+$primary: darken($jupiter-primary, 40%);
+
+// Improve navbar color contrast ratio so it passes WCAG accessibility
+$navbar-light-color: rgba($black, .7);
+$navbar-light-hover-color: rgba($black, .9);
+$navbar-light-active-color: $black;
+$navbar-light-disabled-color: rgba($black, .5);
+
+// Improve breadcrumbs color contrast ratio so it passes WCAG accessibility
+$breadcrumb-bg: $gray-100;
+$breadcrumb-active-color: $gray-800;
