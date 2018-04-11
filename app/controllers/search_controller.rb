@@ -7,7 +7,6 @@ class SearchController < ApplicationController
   def index
     # note that search_params depends on @models being an array, so we need to establish this first, before dealing w/
     # any params
-    # raise 'asdf'
     tab = params[:tab]
     tab ||= 'item'
     @models = case tab
