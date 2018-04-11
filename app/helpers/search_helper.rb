@@ -56,12 +56,11 @@ module SearchHelper
       count = @results.total_count
       text = t("search.tab_header_#{model.to_s.pluralize}_with_count", count: count)
       classes += ' active' if @active_tab == model
-      inner_tag = content_tag(:a, text, class: classes, href: search_path(query_params_with_tab(model)))
     else
       text = t("search.tab_header_#{model.to_s.pluralize}", count: count)
-      inner_tag = content_tag(:a, text, class: classes, href: search_path(query_params_with_tab(model)))
     end
-    content_tag(:li, inner_tag, class: 'nav-item')
+    content_tag(:li, content_tag(:a, text, class: classes, href: search_path(query_params_with_tab(model))),
+                class: 'nav-item')
   end
 
   def search_sort_link(sort, direction)

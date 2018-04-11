@@ -1,4 +1,5 @@
 class SearchController < ApplicationController
+
   QUERY_MAX = 500
 
   skip_after_action :verify_authorized
@@ -6,19 +7,19 @@ class SearchController < ApplicationController
   def index
     # note that search_params depends on @models being an array, so we need to establish this first, before dealing w/
     # any params
-    #raise 'asdf'
+    # raise 'asdf'
     tab = params[:tab]
     tab ||= 'item'
     @models = case tab
-    when 'item'
-      [Item, Thesis]
-    when 'collection'
-      [Collection]
-    when 'community'
-      [Community]
-    else
-      return redirect_to search_path(tab: :item)
-    end
+              when 'item'
+                [Item, Thesis]
+              when 'collection'
+                [Collection]
+              when 'community'
+                [Community]
+              else
+                return redirect_to search_path(tab: :item)
+              end
 
     @active_tab = tab.to_sym
 
@@ -48,26 +49,26 @@ class SearchController < ApplicationController
     end
   end
 
-private
+  private
+
   def search_params
     r = {}
     f = {}
-   @models.each do |model|
-     model.ranges.each do |range|
-       next unless params[:ranges].present? && params[:ranges][range].present?
-       if validate_range(params[:ranges][range])
-         r[range] = [:begin, :end]
-       else
-         params[:ranges].delete(range)
-       end
-     end
-     model.facets.each do |facet|
-       f[facet] = []
-     end
-
-   end
-   params.permit(:tab, :page, :search, :direction, {facets: f}, {ranges: r})
- end
+    @models.each do |model|
+      model.ranges.each do |range|
+        next unless params[:ranges].present? && params[:ranges][range].present?
+        if validate_range(params[:ranges][range])
+          r[range] = [:begin, :end]
+        else
+          params[:ranges].delete(range)
+        end
+      end
+      model.facets.each do |facet|
+        f[facet] = []
+      end
+    end
+    params.permit(:tab, :page, :search, :direction, { facets: f }, ranges: r)
+  end
 
   def validate_range(range)
     start = range[:begin]
