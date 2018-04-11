@@ -1,4 +1,4 @@
-<a href="#results" class="j-skip d-block p-3 sr-only sr-only-focusable">
+<a href="#results" class="j-skip js-skip-to-results d-block p-3 sr-only sr-only-focusable">
   <%= t('search.skip_to_results') %>
 </a>
 
@@ -67,7 +67,7 @@
     </div>
 
     <%# Results list %>
-    <div class='jupiter-results-list' id="results" tabindex="-1">
+    <div class='jupiter-results-list' id="results">
       <ul class="list-group">
         <% results.each do |result| %>
           <li class="list-group-item list-group-item-action">
