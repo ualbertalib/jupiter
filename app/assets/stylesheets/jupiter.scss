@@ -31,17 +31,7 @@ body {
 }
 
 .j-skip {
-  background-color: $red;
-  color: $white;
-  display: block;
-  outline: 0;
-  padding: 1em;
-
-  .j-skiplink-text {
-    outline: 1px dotted;
-    padding: .5em;
-
-  }
+  outline: 1px dotted;
 }
 
 .j-header {

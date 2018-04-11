@@ -29,7 +29,7 @@
 
   <body>
     <%= render partial: 'navbar' %>
-    <main id="content">
+    <main id="content" tabindex="-1">
       <%= render partial: 'announcement' %>
       <%= render partial: 'flash' %>
       <%= content_for?(:content) ? yield(:content) : yield %>

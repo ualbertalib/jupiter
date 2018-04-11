@@ -1,13 +1,8 @@
 <header class="j-header navbar navbar-light fixed-top navbar-expand-md bg-jupiter-primary">
+  <a href="#content" class="j-skip d-block p-3 sr-only sr-only-focusable">
+    <%= t('.skip_to_main_content')%>
+  </a>
   <nav class="container">
-
-
-    <a class="j-skip sr-only sr-only-focusable" href="#content">
-      <div class="container">
-        <span class="j-skiplink-text"><%= t('.skip_to_main_content')%></span>
-      </div>
-    </a>
-
     <%= link_to root_path, class: 'navbar-brand' do %>
       <%= image_tag 'era-logo.png', width: '100', class: 'align-top d-none d-md-block',
           alt: t('.era_logo_alt') %>

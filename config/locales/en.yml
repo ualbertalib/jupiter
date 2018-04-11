@@ -149,7 +149,7 @@ en:
   application:
     navbar:
       era_logo_alt: 'ERA - Education and Research Archive'
-      skip_to_main_content: "Skip to Main Content"
+      skip_to_main_content: 'Skip to Main Content'
       search:
         placeholder: 'Search ERA...'
         button_text: 'Search'
