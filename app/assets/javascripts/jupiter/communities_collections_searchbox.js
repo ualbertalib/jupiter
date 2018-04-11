@@ -2,6 +2,8 @@ $(document).on('turbolinks:load', function() {
   $input = $(".js-communities-collections-searchbox");
 
   if($input.length > 0) {
+    var maxItems = $input.data('max-items') || 5;
+
     var options = {
       adjustWidth: false,
       getValue: "name",
@@ -11,12 +13,12 @@ $(document).on('turbolinks:load', function() {
       },
       categories: [
         {
-          maxNumberOfElements:5,
+          maxNumberOfElements: maxItems,
           listLocation: "communities",
           header: "<strong>Communities</strong>",
         },
         {
-          maxNumberOfElements:5,
+          maxNumberOfElements: maxItems,
           listLocation: "collections",
           header: "<strong>Collections</strong>",
         }
