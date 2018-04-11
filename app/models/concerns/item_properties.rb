@@ -128,7 +128,7 @@ module ItemProperties
       end
 
       def purge_thumbnail
-        thumbnail.purge
+        thumbnail.purge if thumbnail.present?
       end
 
       def delete_doi_state
