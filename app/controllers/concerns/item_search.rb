@@ -7,7 +7,6 @@ module ItemSearch
   private
 
   def item_search_setup(base_query = nil)
-    @max_facets = MAX_FACETS
     query = if base_query.present?
               [base_query]
             else

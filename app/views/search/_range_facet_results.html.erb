@@ -1,11 +1,21 @@
 <div class="card mt-3">
   <div class="card-header"><%= facet.category_name %></div>
-  <%= form_tag search_path(search_params_hash), method: "get", class: 'form-group' do %>
+  <%= form_tag search_path, method: "get", class: 'form-group' do %>
   <div class='row m-2'>
     <%= number_field_tag "ranges[#{facet.solr_index}][begin]", facet.range.first, placeholder: 1880, class: 'form-control col-xl-5 col-lg-6 col-md-8', size: 4, maxlength: 4, 'aria-label' => t('search.range_begin') %>
     <div class='p-2'>to</div>
     <%= number_field_tag "ranges[#{facet.solr_index}][end]", facet.range.last, placeholder: Time.current.year, class: 'form-control col-xl-5 col-lg-6 col-md-8', size: 4, maxlength: 4, 'aria-label' => t('search.range_end') %>
   </div>
-    <%= submit_tag t('search.range_limit'), class: 'btn btn-secondary ml-2' %>
+    <%= hidden_field_tag 'search', params[:search] %>
+    <%= hidden_field_tag 'direction', params[:direction] %>
+    <% if params[:facets].present? %>
+      <% params[:facets].each do |facet_name, facet_values| %>
+        <% facet_values.each do |val| %>
+          <%= hidden_field_tag "facets[#{facet_name}][]", val %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <%= submit_tag t('search.range_limit'), name: '', class: 'btn btn-secondary ml-2' %>
   <% end %>
 </div>
