@@ -16,7 +16,7 @@
       </div>
       <div class="card-body p-2 filter-list">
         <% results.each_facet_with_results(@first_facet_categories) do |facet| %>
-          <%= render facet, locals: { facet: facet } %>
+          <%= render facet %>
         <% end %>
       </div>
     </div>
