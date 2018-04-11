@@ -124,7 +124,7 @@ class JupiterCore::DeferredFacetedSolrQuery
                                                                                            begin: 1880,
                                                                                            end: Time.current.year).to_h)
       elsif v.present?
-        JupiterCore::FieldValueFacetResult.new(criteria[:facet_map], k, v)
+        JupiterCore::FacetResult.new(criteria[:facet_map], k, v)
       end
     end.compact
 
