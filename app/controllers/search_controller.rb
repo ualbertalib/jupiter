@@ -20,12 +20,16 @@ class SearchController < ApplicationController
                 return redirect_to search_path(tab: :item)
               end
 
-    @active_tab = tab.to_sym
-
     # cut this off at a reasonable maximum to avoid DOSing Solr with truly huge queries (I managed to shove upwards
     # of 5000 characters in here locally)
     query = search_params[:search].truncate(QUERY_MAX) if search_params[:search].present?
 
+    search_opts = { q: query, models: @models, as: current_user,
+                    facets: search_params[:facets], ranges: search_params[:ranges] }
+
+    @results = JupiterCore::Search.faceted_search(search_opts)
+
+    @active_tab = tab.to_sym
     # Make sure selected facets/ranges and solr-only authors/subjects appear first in facet list
     @first_facet_categories = (search_params.fetch(:facets, {}).keys + search_params.fetch(:ranges, {}).keys).uniq
     @first_facet_categories ||= []
@@ -33,11 +37,6 @@ class SearchController < ApplicationController
       @first_facet_categories += [Item.solr_name_for(:all_contributors, role: :facet),
                                   Item.solr_name_for(:all_subjects, role: :facet)]
     end
-
-    search_opts = { q: query, models: @models, as: current_user,
-                    facets: search_params[:facets], ranges: search_params[:ranges] }
-
-    @results = JupiterCore::Search.faceted_search(search_opts)
 
     # Toggle that we want to be able to sort by sort_year
     if @active_tab == :item
