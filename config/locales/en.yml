@@ -165,7 +165,6 @@ en:
         logout_as_user: 'Logout as User'
       user_dropdown:
         heading_html: "Signed in as <strong>%{name}</strong>"
-
     footer:
       links:
         about: About ERA

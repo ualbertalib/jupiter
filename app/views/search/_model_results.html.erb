@@ -1,8 +1,8 @@
-    <a class="skip sr-only sr-only-focusable" href="#results">
-      <div class="container">
-        <span class="skiplink-text"><%= t('search.skip_to_results') %></span>
-      </div>
-    </a>
+<a class="j-skip sr-only sr-only-focusable" href="#results">
+  <div class="container">
+    <span class="j-skiplink-text"><%= t('search.skip_to_results') %></span>
+  </div>
+</a>
 
 <div class="row mt-3 jupiter-model-results">
 
@@ -27,6 +27,7 @@
       </div>
     </div>
   </div>
+
   <%# Results panel %>
   <div class="col-md-9 col-sm-10 card jupiter-results">
     <div class='p-3'>
@@ -83,6 +84,7 @@
       </div>
     </div>
     <%= paginate results %>
+
   </div>
 </div>
 
