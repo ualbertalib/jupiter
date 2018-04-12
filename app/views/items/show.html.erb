@@ -2,6 +2,18 @@
   <%= render partial: 'google_scholar_metadata' %>
 <% end %>
 
+<% content_for :extra_social_meta do %>
+  <% if @item.subject.present? %>
+    <meta name="twitter:label1" content="Keywords"/>
+    <meta name="twitter:data1" content="<%= @item.subject.join(', ') %>"/>
+  <% end %>
+
+  <% if @item.copyright.present? %>
+    <meta name="twitter:label2" content="Rights"/>
+    <meta name="twitter:data2" content="<%= @item.copyright %>"/>
+  <% end %>
+<% end %>
+
 <% page_title(@item.title) %>
 <% page_description(description(@item)) %>
 

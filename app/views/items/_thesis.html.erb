@@ -1,15 +1,3 @@
-<% content_for :extra_social_meta do %>
-  <% if @item.subject.present? %>
-    <meta name="twitter:label1" content="Keywords"/>
-    <meta name="twitter:data1" content="<%= @item.subject.join(', ') %>"/>
-  <% end %>
-
-  <% if @item.rights.present? %>
-    <meta name="twitter:label2" content="Rights"/>
-    <meta name="twitter:data2" content="<%= @item.rights %>"/>
-  <% end %>
-<% end %>
-
 <ul class="list-group">
   <% if @item.alternative_title.present? %>
     <li class="list-unstyled list-group-item-action">

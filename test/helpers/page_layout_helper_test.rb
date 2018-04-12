@@ -12,7 +12,7 @@ class PageLayoutHelperTest < ActionView::TestCase
     page_title(t('admin.users.index.header'))
     page_title(t('admin.header'))
     assert_equal "#{t('admin.users.index.header')} | #{t('admin.header')} | #{t('site_name')}",
-                  page_title(t('site_name'))
+                 page_title(t('site_name'))
   end
 
   # TODO: Shouldn't escape amperstand, current bug here https://github.com/rails/rails-html-sanitizer/issues/56
