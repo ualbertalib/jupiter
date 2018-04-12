@@ -22,16 +22,7 @@ class ApplicationController < ActionController::Base
   end
 
   def store_user_location!
-    uri = URI.parse(request.fullpath)
-    return unless uri
-
-    # We want to rebuild the url and preserve the full uri including query params and anchors
-    # remove domain from path and add query params
-    path = [uri.path.sub(/\A\/+/, '/'), uri.query].compact.join('?')
-    # add fragment back to path
-    path = [path, uri.fragment].compact.join('#')
-
-    session[:previous_user_location] = path
+    session[:previous_user_location] = request.fullpath
   end
 
   # Returns the current logged-in user (if any).
