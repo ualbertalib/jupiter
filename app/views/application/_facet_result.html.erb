@@ -3,15 +3,20 @@
 
   <ul class="list-group list-group-flush">
     <% facet_result.each_facet_value(0..ItemSearch::MAX_FACETS - 1) do |facet_value| %>
-      <%= render partial: 'search/facet_value', locals: { value: present(facet_value)} %>
+      <li class="list-group-item">
+        <%= present(facet_value).facet_search_link %>
+      </li>
 
-      <% if params[:facets]&.fetch(facet_value.solr_index, [])&.include?(facet_value.value) %>
+      <% if active_facet? facet_value %>
         <% content_for :facet_badges do %>
-          <%= render partial: 'search/facet_badge', locals: { value: present(facet_value).display,
-                     url: query_params_without_facet_value(facet_value.solr_index, facet_value.value) } %>
+          <%= link_to query_params_without_facet_value(facet_value.solr_index, facet_value.value) do %>
+            <span class="badge badge-secondary p-2 mt-2">
+              <%= present(facet_value).display %>
+              <%= fa_icon 'times-circle' %>
+            </span>
+          <% end %>
         <% end %>
       <% end %>
-
     <% end %>
   </ul>
   <% if facet_result.count > ItemSearch::MAX_FACETS %>
@@ -20,7 +25,9 @@
       <div class="collapse" id='<%= "#{facet_result.solr_index}_hidden" %>'>
         <ul class="list-group list-group-flush">
           <% facet_result.each_facet_value(ItemSearch::MAX_FACETS..-1) do |facet_value| %>
-            <%= render partial: 'search/facet_value', locals: { value: present(facet_value)} %>
+            <li class="list-group-item">
+              <%= present(facet_value).facet_search_link %>
+            </li>
           <% end %>
         </ul>
       </div>

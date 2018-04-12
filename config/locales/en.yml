@@ -171,6 +171,9 @@ en:
         contact: Contact Us
         powered_by_jupiter: Powered by Jupiter
       uofa_library_logo_alt: 'University of Alberta Libraries'
+    results:
+      no_items_found: 'No items found'
+
   locked_ldp_object:
     errors:
       invalid_visibility: "%{visibility} is not a known visibility"
@@ -267,7 +270,6 @@ en:
         header: 'Items'
         deposit_thesis: 'Deposit Thesis'
         search_placeholder: 'Search items ...'
-        no_items_found: 'No items found'
       new:
         header: 'Deposit Item'
     users:
@@ -298,8 +300,7 @@ en:
         login_as_user_dialog: "Are you sure you want to login as %{user}?"
         login_as_user_flash: "You are now logged in as %{user}"
         draft_items_header: "Draft User's Items"
-        no_items_found: 'There are no items for this user'
-        search_items_placeholder: "Search this user's items ..."
+        search_placeholder: "Search this user's items ..."
         items_header: "User's Items"
       index:
         search_placeholder: 'email or name...'
@@ -314,9 +315,10 @@ en:
     index:
       my_profile: 'My profile'
       draft_items_header: "My Draft Items"
-      no_items_found: 'No items found'
-      search_items_placeholder: "Search my items ..."
       items_header: "My Items"
+    user_items:
+      search_placeholder: 'Search my items ...'
+      no_items_found: 'No items found'
 
   collections:
     title: 'Collections'
@@ -328,7 +330,7 @@ en:
       item_delete_confirm: 'Are you sure you want to delete item "%{title}"?'
       deposit_item: 'Deposit Item'
       deposit_thesis: 'Deposit Thesis'
-      search_items_placeholder: 'Search this collection ...'
+      search_placeholder: 'Search this collection ...'
   communities:
     sort_record_created_at_asc: 'Date (oldest first)'
     sort_record_created_at_desc: 'Date (newest first)'

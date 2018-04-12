@@ -8,11 +8,13 @@ class CommunitiesController < ApplicationController
         @title = t('.header')
       end
       format.json do
-        @communities = JupiterCore::Search.faceted_search(q: "title_tesim:#{params[:query]}*",
+        community_title_index = Community.solr_name_for(:title, role: :search)
+        collection_title_index = Collection.solr_name_for(:title, role: :search)
+        @communities = JupiterCore::Search.faceted_search(q: "#{community_title_index}:#{params[:search]}*",
                                                           models: [Community],
                                                           as: current_user)
                                           .sort(:title, :asc).limit(5)
-        @collections = JupiterCore::Search.faceted_search(q: "title_tesim:#{params[:query]}*",
+        @collections = JupiterCore::Search.faceted_search(q: "#{collection_title_index}:#{params[:search]}*",
                                                           models: [Collection],
                                                           as: current_user)
                                           .sort(:community_title, :asc)

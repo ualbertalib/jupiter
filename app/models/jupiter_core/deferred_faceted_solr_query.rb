@@ -44,6 +44,11 @@ class JupiterCore::DeferredFacetedSolrQuery
     self
   end
 
+  def facet_results_present?
+    reify_result_set
+    @facets.present?
+  end
+
   def each_facet_with_results(first_facet_categories = [])
     reify_result_set
     # first_categories indicates which facets should be treated first (for example, selected facets in a query)
