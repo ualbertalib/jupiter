@@ -20,7 +20,7 @@ class CommunitiesTypeaheadTest < ApplicationSystemTestCase
     should 'be able to typeahead communities and collections' do
       visit communities_path
       # Start typing ...
-      fill_in('query', with: 'thin')
+      fill_in(id: 'search_bar', with: 'thin')
 
       # Typeahead results
       assert_selector('.easy-autocomplete-container li', count: 3) # total results

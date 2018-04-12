@@ -1,7 +1,14 @@
 module SearchHelper
   def search_params_hash
-    # Search controller uses param[:search], all others use params[:query]
-    params.permit(:search, :query, { facets: {} }, { ranges: {} }, :tab, :sort, :direction).to_h
+    params.permit(:search, { facets: {} }, { ranges: {} }, :tab, :sort, :direction).to_h
+  end
+
+  def active_facet?(facet_value)
+    params[:facets]&.fetch(facet_value.solr_index, [])&.include?(facet_value.value)
+  end
+
+  def active_range?(range_facet_result)
+    params[:ranges]&.fetch(range_facet_result.solr_index, false)
   end
 
   def query_params_with_facet(facet_name, value)

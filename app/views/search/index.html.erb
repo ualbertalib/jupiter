@@ -9,10 +9,5 @@
     <% end %>
   </ul>
 
-  <% if @results.count > 0 %>
-    <%= render partial: 'model_results', locals: { results: @results, model: @active_tab,
-                                        search_term: params[:search] } %>
-  <% else %>
-    <h1 class="mt-3"><%= t('.no_results_found') %></h1>
-  <% end %>
+    <%= render partial: 'results', locals: { results: @results } %>
 </div>
