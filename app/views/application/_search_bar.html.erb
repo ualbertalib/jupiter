@@ -1,0 +1,16 @@
+<%= form_tag({}, { method: :get }) do %>
+  <div class="input-group mt-3">
+    <%= search_field_tag :search,
+        params[:search],
+        id: 'search_bar',
+        placeholder: placeholder,
+        'aria-label': placeholder,
+        class: 'form-control' %>
+    <span class="input-group-btn">
+      <button type="submit" class="btn btn-secondary">
+        <%= fa_icon 'search' %>
+        <%= t('search_items') %>
+      </button>
+    </span>
+  </div>
+<% end %>

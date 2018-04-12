@@ -13,7 +13,7 @@ module ItemSearch
             else
               []
             end
-    query.append(params[:query]) if params[:query].present?
+    query.append(params[:search]) if params[:search].present?
     options = { q: query, models: [Item, Thesis], as: current_user }
     options[:facets] = params[:facets]
     # Make sure selected facets then solr-only authors/subjects appear first in facet list

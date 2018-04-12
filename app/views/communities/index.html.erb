@@ -18,7 +18,7 @@
   <form>
     <div class="form-group">
       <label class="mr-sm-2" for="query"><%= t('search_label') %></label>
-      <%= text_field_tag :query, '', placeholder: t('communities.index.search_placeholder'),
+      <%= text_field_tag :search, '', id: :search_bar, placeholder: t('communities.index.search_placeholder'),
           class: 'form-control js-communities-collections-searchbox' %>
     </div>
   </form>
