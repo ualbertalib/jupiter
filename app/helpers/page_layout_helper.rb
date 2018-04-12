@@ -2,7 +2,7 @@ module PageLayoutHelper
   def page_title(title = nil)
     # title tags should be around 55 characters, so lets truncate them if they quite long
     # With '... | ERA' being appended, we want to aim for a bit smaller like 45 characters
-    title = truncate(title, length: 45, separator: ' ', omission: '...')
+    title = truncate(strip_tags(title), length: 45, separator: ' ', omission: '...', escape: false)
 
     @page_title ||= []
     @page_title.push(title) if title.present?
@@ -31,7 +31,7 @@ module PageLayoutHelper
     if description.present?
       @page_description = description.squish
     elsif @page_description.present?
-      truncate(sanitize(@page_description, tags: []), length: 140, separator: ' ', omission: '...')
+      truncate(strip_tags(@page_description), length: 140, separator: ' ', omission: '...', escape: false)
     else
       @page_description = t('welcome.index.welcome_lead')
     end

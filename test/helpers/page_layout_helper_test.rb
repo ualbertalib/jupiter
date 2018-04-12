@@ -2,17 +2,24 @@ require 'test_helper'
 
 class PageLayoutHelperTest < ActionView::TestCase
 
-  context '#page_title' do
-    should 'should return the page title when given one' do
-      assert_equal t('site_name'), page_title(t('site_name'))
-    end
+  # page_title
 
-    should 'should concat multiple page titles together when called multiple times' do
-      page_title(t('admin.users.index.header'))
-      page_title(t('admin.header'))
-      assert_equal "#{t('admin.users.index.header')} | #{t('admin.header')} | #{t('site_name')}",
-                   page_title(t('site_name'))
-    end
+  test 'should return the page title when given one' do
+    assert_equal t('site_name'), page_title(t('site_name'))
+  end
+
+  test 'should concat multiple page titles together when called multiple times' do
+    page_title(t('admin.users.index.header'))
+    page_title(t('admin.header'))
+    assert_equal "#{t('admin.users.index.header')} | #{t('admin.header')} | #{t('site_name')}",
+                  page_title(t('site_name'))
+  end
+
+  # TODO: Shouldn't escape amperstand, current bug here https://github.com/rails/rails-html-sanitizer/issues/56
+  test 'page_title handles html entities and html tags correctly' do
+    page_title('<b>Bold Text:</b> &amp; <h1>"Header"</h1>')
+
+    assert_equal 'Bold Text: &amp; "Header"', page_title
   end
 
   # page_description
@@ -48,10 +55,11 @@ class PageLayoutHelperTest < ActionView::TestCase
     assert_match(/natoque penatibus et...\z/, page_description)
   end
 
-  test 'page_description sanitizes all html' do
-    page_description('<b>Bold</b> <h1>Header</h1>')
+  # TODO: Shouldn't escape amperstand, current bug here https://github.com/rails/rails-html-sanitizer/issues/56
+  test 'page_description sanitizes all html and html entities correctly' do
+    page_description('<b>Bold Text:</b> & <h1>"Header"</h1>')
 
-    assert_equal 'Bold Header', page_description
+    assert_equal 'Bold Text: &amp; "Header"', page_description
   end
 
   # page_image
