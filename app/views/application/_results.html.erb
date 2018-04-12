@@ -17,7 +17,7 @@
               </div>
             </div>
             <div class="card-body p-2 filter-list">
-              <% results.each_facet_with_results(@first_facet_categories) do |facet| %>
+              <% results.each_facet_with_results(facet_display_order) do |facet| %>
                 <%= render facet %>
               <% end %>
             </div>
@@ -48,7 +48,7 @@
               <div class="dropdown-menu" aria-labelledby="search-sort-button">
                 <%= search_sort_link('title', 'asc') %>
                 <%= search_sort_link('title', 'desc') %>
-                <% if @item_sort.present? %>
+                <% if enable_item_sort? %>
                   <%= search_sort_link('sort_year', 'desc') %>
                   <%= search_sort_link('sort_year', 'asc') %>
                 <% else %>

@@ -6,23 +6,17 @@ module ItemSearch
 
   private
 
-  def item_search_setup(base_query = nil)
-    query = if base_query.present?
-              [base_query]
-            else
-              []
-            end
-    query.append(params[:search]) if params[:search].present?
-    options = { q: query, models: [Item, Thesis], as: current_user }
-    options[:facets] = params[:facets]
-    # Make sure selected facets then solr-only authors/subjects appear first in facet list
-    @first_facet_categories = (params[:facets]&.keys || []) +
-                              [Item.solr_name_for(:all_contributors, role: :facet),
-                               Item.solr_name_for(:all_subjects, role: :facet)]
+  def restrict_items_to(base_restriction_key = nil, val = nil)
+    raise ArgumentError, 'Must supply both a key and value' if base_restriction_key.present? && !val.present?
+    @search_models = [Item, Thesis]
+
+    facets = params[:facets] || {}
+    facets.merge(base_restriction_key => [val]) if base_restriction_key.present?
+
+    options = { q: params[:search], models: @search_models, as: current_user, facets: facets }
+
     @results = JupiterCore::Search.faceted_search(options)
     @results.sort(sort_column, sort_direction).page params[:page]
-    # Toggle that we want to be able to sort by sort_year
-    @item_sort = true
   end
 
   def sort_column

@@ -24,7 +24,7 @@ class Admin::UsersController < Admin::AdminController
   end
 
   def show
-    item_search_setup(Item.search_term_for(:owner, @user.id, role: :exact_match))
+    restrict_items_to(Item.solr_name_for(:owner, role: :exact_match), @user.id)
     @draft_items = @user.draft_items.unpublished
   end
 

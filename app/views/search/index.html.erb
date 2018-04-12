@@ -4,7 +4,7 @@
 <% end %>
 <div class="container mt-3">
   <ul class="nav nav-tabs">
-    <% [:item, :collection, :community].each do |model| %>
+    <% [Item, Collection, Community].each do |model| %>
       <%= results_model_tab_link(model) %>
     <% end %>
   </ul>

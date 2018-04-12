@@ -6,7 +6,7 @@ class CollectionsController < ApplicationController
   before_action :fetch_and_authorize_collection
 
   def show
-    item_search_setup(Item.search_term_for(:member_of_paths, @collection.path, role: :pathing))
+    restrict_items_to(Item.solr_name_for(:member_of_paths, role: :pathing), @collection.path)
   end
 
   private
