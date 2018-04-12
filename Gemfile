@@ -72,7 +72,7 @@ end
 group :development, :test do
   gem 'sdoc', require: false
 
-  gem 'capybara', '~> 3.0'
+  gem 'capybara', '~> 3.0.1'
   gem 'nokogiri'
   gem 'selenium-webdriver', require: false
 
