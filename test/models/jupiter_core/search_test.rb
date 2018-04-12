@@ -97,18 +97,19 @@ class SearchTest < ActiveSupport::TestCase
     assert_equal search_results.first.id, another_obj.id
 
     # test for range
+    sort_year_facet = @@klass.solr_name_for(:sort_year, role: :range_facet)
     search_results = JupiterCore::Search.faceted_search(
-      models: @@klass, q: '', ranges: { 'sort_year_isi' => { begin: 1880, end: 2018 } }
+      models: @@klass, q: '', ranges: { sort_year_facet => { begin: 1880, end: 2018 } }
     )
     assert search_results.count == 2
 
     search_results = JupiterCore::Search.faceted_search(
-      models: @@klass, q: '', ranges: { 'sort_year_isi' => { begin: 1989, end: 1989 } }
+      models: @@klass, q: '', ranges: { sort_year_facet => { begin: 1989, end: 1989 } }
     )
     assert search_results.count == 1
 
     search_results = JupiterCore::Search.faceted_search(
-      models: @@klass, q: '', ranges: { 'sort_year_isi' => { begin: 1880, end: 1980 } }
+      models: @@klass, q: '', ranges: { sort_year_facet => { begin: 1880, end: 1980 } }
     )
     assert search_results.count == 0
   end

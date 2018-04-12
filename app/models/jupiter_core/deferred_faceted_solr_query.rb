@@ -110,18 +110,21 @@ class JupiterCore::DeferredFacetedSolrQuery
 
   def reify_result_set
     return @results if @results.present?
+
+    model = criteria[:restrict_to_model].first.owning_class
+    model_has_sort_year = model.attribute_names.include?(:sort_year)
+    sort_year_facet = model.solr_name_for(:sort_year, role: :range_facet) if model_has_sort_year
+
     @count_cache, @results, facet_data = JupiterCore::Search.perform_solr_query(
       search_args_with_limit(criteria[:limit])
     )
-
     @facets = facet_data['facet_fields'].map do |k, v|
-      if k == 'sort_year_isi'
-        JupiterCore::RangeFacetResult.new(
-          criteria[:facet_map], k,
-          criteria[:ranges].fetch(k, begin: 1880, end: Time.current.year).to_h
-        )
+      if model_has_sort_year && (k == sort_year_facet)
+        JupiterCore::RangeFacetResult.new(criteria[:facet_map], k, criteria[:ranges].fetch(k,
+                                                                                           begin: 1880,
+                                                                                           end: Time.current.year).to_h)
       elsif v.present?
-        JupiterCore::FieldValueFacetResult.new(criteria[:facet_map], k, v)
+        JupiterCore::FacetResult.new(criteria[:facet_map], k, v)
       end
     end.compact
 
