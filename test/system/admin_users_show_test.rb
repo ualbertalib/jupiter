@@ -214,7 +214,7 @@ class AdminUsersShowTest < ApplicationSystemTestCase
     refute_selector 'div.jupiter-results-list li.list-group-item .media-body a', text: 'Admin Item'
 
     # Search items
-    fill_in name: 'query', with: 'Fancy'
+    fill_in id: 'search_bar', with: 'Fancy'
     click_button 'Search Items'
     assert_selector 'div.jupiter-results-list li.list-group-item', count: 1
     assert_selector 'div.jupiter-results-list li.list-group-item .media-body a', text: 'Fancy Item', count: 1

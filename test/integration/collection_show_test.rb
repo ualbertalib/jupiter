@@ -119,7 +119,7 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
     # TODO: should probably hook this up to a system test that submits the form
     user = users(:regular)
     sign_in_as user
-    get community_collection_url(@community, @collection, query: 'Fancy')
+    get community_collection_url(@community, @collection, search: 'Fancy')
 
     # Only 'Fancy' items are shown
     assert_select '.jupiter-results ul.list-group .list-group-item', count: 1

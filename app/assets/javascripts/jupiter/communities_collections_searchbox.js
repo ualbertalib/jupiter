@@ -9,7 +9,7 @@ $(document).on('turbolinks:load', function() {
       getValue: "name",
       url: function(phrase) {
         // we use a relative url "communities.json" here as this will be used for both /admin and non admin (/) paths
-        return "communities.json?query=" + phrase;
+        return "communities.json?search=" + phrase;
       },
       categories: [
         {
