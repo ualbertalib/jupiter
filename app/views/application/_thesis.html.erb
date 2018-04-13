@@ -8,7 +8,10 @@
 
       <% primary_file = thesis.file_sets.first %>
       <% if primary_file.present? %>
-        <%= link_to fileset_uri(primary_file, :download), class: 'btn btn-secondary mr-2 mb-2 mb-md-0', rel: 'nofollow' do %>
+        <%= link_to fileset_uri(primary_file, :download),
+                    class: 'btn btn-secondary mr-2 mb-2 mb-md-0',
+                    rel: 'nofollow',
+                    download: primary_file.contained_filename do %>
           <%= fa_icon 'cloud-download' %>
           <%= t('download') %>
         <% end %>
@@ -23,7 +26,7 @@
             <% end %>
           <% end %>
           <% if policy(thesis).destroy? %>
-            <%= link_to item_path(thesis), method: :delete, class:'btn btn-outline-secondary',
+            <%= link_to admin_item_path(thesis), method: :delete, class:'btn btn-outline-secondary',
                 data: { confirm: t('collections.show.item_delete_confirm', title: thesis.title) } do %>
               <%= fa_icon('trash') %>
               <%= t('delete') %>
