@@ -15,7 +15,7 @@ module ItemSearch
     @search_models = [Item, Thesis]
 
     facets = params[:facets] || {}
-    facets.merge(base_restriction_key => [val]) if base_restriction_key.present?
+    facets[base_restriction_key] = [val] if base_restriction_key.present?
 
     options = { q: params[:search], models: @search_models, as: current_user, facets: facets }
 

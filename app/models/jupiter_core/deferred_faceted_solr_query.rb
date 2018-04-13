@@ -44,12 +44,9 @@ class JupiterCore::DeferredFacetedSolrQuery
                   rescue ArgumentError
                     nil
                   end
-      criteria[:sort] = if solr_name.present?
-                          [solr_name]
-                        else
-                          criteria[:restrict_to_model].first.owning_class.default_sort_indexes
-                        end
+      criteria[:sort] = [solr_name] if solr_name.present?
     end
+    criteria[:sort] = criteria[:restrict_to_model].first.owning_class.default_sort_indexes if criteria[:sort].blank?
     criteria[:sort_order] = if order.present? && [:asc, :desc].include?(order.to_sym)
                               [order]
                             else

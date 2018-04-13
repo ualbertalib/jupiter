@@ -2,7 +2,7 @@
   <button class="btn btn-secondary dropdown-toggle" type="button" id="sort-button"
           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     <% if params[:sort].present? %>
-      <%= search_sort_label(@communities.used_sort_index, @communities.used_sort_order) %>
+      <%= search_sort_label(collection.used_sort_index, collection.used_sort_order) %>
     <% else %>
       <%= t(:sort_by) %>
     <% end %>

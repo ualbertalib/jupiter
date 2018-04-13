@@ -38,12 +38,9 @@ class JupiterCore::DeferredSimpleSolrQuery
                   rescue ArgumentError
                     nil
                   end
-      criteria[:sort] = if solr_name.present?
-                          [solr_name]
-                        else
-                          criteria[:model].default_sort_indexes
-                        end
+      criteria[:sort] = [solr_name] if solr_name.present?
     end
+    criteria[:sort] = criteria[:model].default_sort_indexes if criteria[:sort].blank?
     criteria[:sort_order] = if order.present? && [:asc, :desc].include?(order.to_sym)
                               [order]
                             else

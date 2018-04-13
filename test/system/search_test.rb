@@ -188,7 +188,7 @@ class SearchTest < ApplicationSystemTestCase
       assert_selector 'div.jupiter-results-list a', text: 'Collection', count: 0
 
       # Visit community tab
-      click_link 'Communities (1)'
+      click_link 'Communities'
       assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy', tab: 'community')
       assert_selector 'a.nav-link', text: 'Items'
       assert_selector 'a.nav-link', text: 'Collections'
@@ -199,7 +199,9 @@ class SearchTest < ApplicationSystemTestCase
       assert_selector 'div.jupiter-results-list a', text: 'Collection', count: 0
 
       # Visit collection tab
-      click_link 'Collections (2)'
+      within('.nav-tabs') do
+        click_link 'Collections'
+      end
       assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy', tab: 'collection')
       assert_selector 'a.nav-link', text: 'Items'
       assert_selector 'a.nav-link.active', text: 'Collections (2)'
