@@ -2,8 +2,7 @@ require 'test_helper'
 
 class CollectionsControllerTest < ActionDispatch::IntegrationTest
 
-  def before_all
-    super
+  def setup
     @community = Community.new_locked_ldp_object(title: 'Nice community',
                                                  owner: 1)
     @community.unlock_and_fetch_ldp_object(&:save!)
