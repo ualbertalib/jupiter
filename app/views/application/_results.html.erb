@@ -1,4 +1,4 @@
-<% if @results.count > 0 %>
+<% if results.count > 0 %>
   <div class="row mt-3 jupiter-model-results">
 
     <%# Facets/filters panel, hide unless opened on mobile %>
@@ -40,7 +40,7 @@
               <button class="btn btn-secondary dropdown-toggle" type="button" id="search-sort-button"
                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <% if params[:sort].present? %>
-                  <%= search_sort_label(params[:sort], params[:direction]) %>
+                  <%= search_sort_label(results.used_sort_index, results.used_sort_order) %>
                 <% else %>
                   <%= t('search.sort_by') %>
                 <% end %>

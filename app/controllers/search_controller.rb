@@ -1,15 +1,14 @@
 class SearchController < ApplicationController
 
   QUERY_MAX = 500
+  DEFAULT_TAB = 'item'.freeze
 
   skip_after_action :verify_authorized
+  helper_method :results
 
   def index
-    # note that search_params depends on @search_models being an array, so we need to establish this first, before dealing w/
-    # any params
-    tab = params[:tab]
-    tab ||= 'item'
-    @search_models = case tab
+    # note that search_params depends on @search_models being an array, so we need to establish this first
+    @search_models = case (params[:tab] || DEFAULT_TAB)
                      when 'item'
                        [Item, Thesis]
                      when 'collection'
@@ -28,14 +27,11 @@ class SearchController < ApplicationController
                     facets: search_params[:facets], ranges: search_params[:ranges] }
 
     @results = JupiterCore::Search.faceted_search(search_opts)
-
-    # Toggle that we want to be able to sort by sort_year
-    if tab == 'item'
-      @results.sort(sort_column(columns: ['title', 'sort_year']), sort_direction).page search_params[:page]
-    else
-      @results.sort(sort_column, sort_direction).page search_params[:page]
-    end
+                                  .sort(search_params[:sort], search_params[:direction])
+                                  .page(search_params[:page])
   end
+
+  attr_reader :results
 
   private
 
@@ -55,7 +51,7 @@ class SearchController < ApplicationController
         f[facet] = []
       end
     end
-    params.permit(:tab, :page, :search, :direction, { facets: f }, ranges: r)
+    params.permit(:tab, :page, :search, :sort, :direction, { facets: f }, ranges: r)
   end
 
   def validate_range(range)

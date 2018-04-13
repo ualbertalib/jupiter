@@ -2,15 +2,15 @@
   <button class="btn btn-secondary dropdown-toggle" type="button" id="sort-button"
           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     <% if params[:sort].present? %>
-      <%= communities_collections_sort_label(params[:sort], params[:direction]) %>
+      <%= search_sort_label(@communities.used_sort_index, @communities.used_sort_order) %>
     <% else %>
       <%= t(:sort_by) %>
     <% end %>
   </button>
   <div class="dropdown-menu dropdown-menu-right" aria-labelledby="sort-button">
-    <%= communities_collections_sort_link('title', 'asc') %>
-    <%= communities_collections_sort_link('title', 'desc') %>
-    <%= communities_collections_sort_link('record_created_at', 'desc') %>
-    <%= communities_collections_sort_link('record_created_at', 'asc') %>
+    <%= search_sort_link('title', 'asc') %>
+    <%= search_sort_link('title', 'desc') %>
+    <%= search_sort_link('record_created_at', 'desc') %>
+    <%= search_sort_link('record_created_at', 'asc') %>
   </div>
 </div>

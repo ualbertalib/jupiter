@@ -9,6 +9,8 @@ module ObjectProperties
     has_attribute :fedora3_uuid, ::TERMS[:ual].fedora3_uuid, solrize_for: :exact_match
     has_attribute :depositor, ::TERMS[:ual].depositor, solrize_for: [:search]
 
+    default_sort index: :title, direction: :asc
+
     unlocked do
       validates :title, presence: true
     end

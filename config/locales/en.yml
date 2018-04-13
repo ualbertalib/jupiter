@@ -332,10 +332,6 @@ en:
       deposit_thesis: 'Deposit Thesis'
       search_placeholder: 'Search this collection ...'
   communities:
-    sort_record_created_at_asc: 'Date (oldest first)'
-    sort_record_created_at_desc: 'Date (newest first)'
-    sort_title_asc: 'Name (A-Z)'
-    sort_title_desc: 'Name (Z-A)'
     title: 'Communities'
     index:
       page_description: ERA's collections are contributed by people at the University of Alberta

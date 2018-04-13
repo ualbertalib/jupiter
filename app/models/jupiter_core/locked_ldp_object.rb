@@ -30,7 +30,8 @@ class JupiterCore::LockedLdpObject
   # inheritable class attributes (not all class-level attributes in this class should be inherited,
   # these are the inheritance-safe attributes)
   class_attribute :af_parent_class, :attribute_cache, :attribute_names, :facets, :ranges,
-                  :association_indexes, :reverse_solr_name_cache, :solr_calc_attributes
+                  :association_indexes, :reverse_solr_name_cache, :solr_calc_attributes,
+                  :default_sort_indexes, :default_sort_direction
 
   # Returns the id of the object in LDP as a String
   def id
@@ -471,6 +472,8 @@ class JupiterCore::LockedLdpObject
       child.ranges = self.ranges ? self.ranges.dup : []
       child.solr_calc_attributes = self.solr_calc_attributes.present? ? self.solr_calc_attributes.dup : {}
       child.association_indexes = self.association_indexes.present? ? self.association_indexes.dup : []
+      child.default_sort_indexes = self.default_sort_indexes.present? ? self.default_sort_indexes.dup : []
+      child.default_sort_direction = self.default_sort_direction.present? ? self.default_sort_direction.dup : []
       # If there's no class between +LockedLdpObject+ and this child that's
       # already had +visibility+ and +owner+ defined, define them.
       child.class_eval do
@@ -495,6 +498,13 @@ class JupiterCore::LockedLdpObject
 
     def ldp_object_includes(module_name)
       derived_af_class.send(:include, module_name)
+    end
+
+    def default_sort(index:, direction:)
+      index = [index] unless index.is_a?(Array)
+      direction = [direction] unless direction.is_a?(Array)
+      self.default_sort_indexes = index.map { |idx| self.solr_name_for(idx, role: :sort) }
+      self.default_sort_direction = direction
     end
 
     def derived_af_class_name

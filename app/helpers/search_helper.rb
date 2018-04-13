@@ -70,14 +70,15 @@ module SearchHelper
   def results_model_tab_link(model)
     # Create bootstrap nav-item, make it a link if there are results for the model
     classes = 'nav-link'
+    name = model.name.downcase.to_sym
     if @search_models.include? model
-      count = @results.total_count
-      text = t("search.tab_header_#{model.name.downcase.to_sym}_with_count", count: count)
+      count = results.total_count
+      text = t("search.tab_header_#{name}_with_count", count: count)
       classes += ' active'
     else
-      text = t("search.tab_header_#{model.name.downcase.to_sym}")
+      text = t("search.tab_header_#{name}")
     end
-    content_tag(:li, content_tag(:a, text, class: classes, href: search_path(query_params_with_tab(model))),
+    content_tag(:li, content_tag(:a, text, class: classes, href: search_path(query_params_with_tab(name))),
                 class: 'nav-item')
   end
 

@@ -9,6 +9,10 @@ class Admin::UsersController < Admin::AdminController
                                     :revoke_admin,
                                     :login_as_user]
 
+  def results
+    super.sort(params[:sort] || :sort_year, params[:direction] || :desc)
+  end
+
   def index
     @search = User.ransack(params[:q])
     @search.sorts = 'last_seen_at desc' if @search.sorts.empty?
@@ -89,14 +93,6 @@ class Admin::UsersController < Admin::AdminController
 
   def fetch_user
     @user = User.find(params[:id])
-  end
-
-  def sort_column
-    ['title', 'sort_year'].include?(params[:sort]) ? params[:sort] : 'sort_year'
-  end
-
-  def sort_direction
-    ['asc', 'desc'].include?(params[:direction]) ? params[:direction] : 'desc'
   end
 
 end

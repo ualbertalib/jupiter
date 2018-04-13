@@ -1,10 +1,10 @@
 <div class="media mb-3">
-  <%= link_to path_for_result(thesis) do %>
+  <%= link_to item_path(thesis) do %>
     <%= render partial: 'thumbnail', locals: { thumbnail: thesis.thumbnail.attachment, object: thesis } %>
   <% end %>
   <div class="media-body ml-3">
     <div class="d-flex flex-wrap flex-lg-nowrap align-items-start">
-      <h5 class="mt-0 mr-auto"><%= link_to thesis.title, path_for_result(thesis) %></h5>
+      <h5 class="mt-0 mr-auto"><%= link_to thesis.title, item_path(thesis) %></h5>
 
       <% primary_file = thesis.file_sets.first %>
       <% if primary_file.present? %>
