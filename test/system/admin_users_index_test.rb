@@ -2,7 +2,7 @@ require 'application_system_test_case'
 
 class AdminUsersIndexTest < ApplicationSystemTestCase
 
-  should 'be able to sort columns' do
+  test 'should be able to sort columns' do
     admin = users(:admin)
 
     login_user(admin)
@@ -27,7 +27,7 @@ class AdminUsersIndexTest < ApplicationSystemTestCase
     logout_user
   end
 
-  should 'be able to autocomplete by email' do
+  test 'should be able to autocomplete by email' do
     admin = users(:admin)
 
     login_user(admin)
@@ -43,7 +43,7 @@ class AdminUsersIndexTest < ApplicationSystemTestCase
     logout_user
   end
 
-  should 'be able to autocomplete by name' do
+  test 'should be able to autocomplete by name' do
     admin = users(:admin)
 
     login_user(admin)
@@ -59,7 +59,7 @@ class AdminUsersIndexTest < ApplicationSystemTestCase
     logout_user
   end
 
-  should 'be able to filter by status' do
+  test 'should be able to filter by status' do
     admin = users(:admin)
     suspended = users(:suspended)
 
@@ -76,7 +76,7 @@ class AdminUsersIndexTest < ApplicationSystemTestCase
     logout_user
   end
 
-  should 'be able to filter by role' do
+  test 'should be able to filter by role' do
     admin = users(:admin)
     regular_user = users(:regular)
     second_user = users(:regular_two)
