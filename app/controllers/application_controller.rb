@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   include Pundit
 
   before_action :store_user_location!, if: :storable_location?
-  after_action :verify_authorized
+  after_action :verify_authorized, except: [:service_unavailable]
 
   protect_from_forgery with: :exception
 
@@ -14,6 +14,10 @@ class ApplicationController < ActionController::Base
   rescue_from JupiterCore::ObjectNotFound,
               ActiveRecord::RecordNotFound,
               ActionController::RoutingError, with: :render_404
+
+  def service_unavailable
+    head :service_unavailable, 'Retry-After' => 24.hours
+  end
 
   protected
 
