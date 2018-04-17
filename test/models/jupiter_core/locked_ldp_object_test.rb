@@ -340,11 +340,12 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     # everything is what we expect
     query = @@klass.where(title: first_title) + another_klass.where(visibility: JupiterCore::VISIBILITY_PRIVATE)
     assert_equal 2, query.count
-    assert_equal different_obj.id, query.first.id
-    assert_equal another_klass, query.first.class
 
-    assert_equal obj.id, query.first(2)[1].id
-    assert_equal @@klass, query.first(2)[1].class
+    assert_equal obj.id, query.first.id
+    assert_equal @@klass, query.first.class
+
+    assert_equal different_obj.id, query.first(2)[1].id
+    assert_equal another_klass, query.first(2)[1].class
 
     obj.unlock_and_fetch_ldp_object(&:destroy)
     another_obj.unlock_and_fetch_ldp_object(&:destroy)

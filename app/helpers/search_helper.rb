@@ -1,6 +1,6 @@
 module SearchHelper
   def search_params_hash
-    params.permit(:search, { facets: {} }, { ranges: {} }, :tab, :sort, :direction).to_h
+    params.permit(:search, { facets: {} }, { ranges: {} }, :tab, :sort, :direction, :community_id, :id).to_h
   end
 
   def active_facet?(facet_value)
@@ -9,6 +9,17 @@ module SearchHelper
 
   def active_range?(range_facet_result)
     params[:ranges]&.fetch(range_facet_result.solr_index, false)
+  end
+
+  def facet_display_order
+    priority_facets = (params[:facets]&.keys || []) + (params[:ranges]&.keys || [])
+    return priority_facets unless @search_models.include? Item
+    priority_facets + [Item.solr_name_for(:all_contributors, role: :facet),
+                       Item.solr_name_for(:all_subjects, role: :facet)]
+  end
+
+  def enable_item_sort?
+    @search_models.include? Item
   end
 
   def query_params_with_facet(facet_name, value)
@@ -59,16 +70,16 @@ module SearchHelper
   def results_model_tab_link(model)
     # Create bootstrap nav-item, make it a link if there are results for the model
     classes = 'nav-link'
-    count = @results[model].total_count
-    text = t("search.tab_header_#{model.to_s.pluralize}_with_count", count: count)
-    if count == 0
-      classes += ' disabled'
-      inner_tag = content_tag(:span, text, class: classes)
+    name = model.name.downcase.to_sym
+    if @search_models.include? model
+      count = results.total_count
+      text = t("search.tab_header_#{name}_with_count", count: count)
+      classes += ' active'
     else
-      classes += ' active' if @active_tab == model
-      inner_tag = content_tag(:a, text, class: classes, href: search_path(query_params_with_tab(model)))
+      text = t("search.tab_header_#{name}")
     end
-    content_tag(:li, inner_tag, class: 'nav-item')
+    content_tag(:li, content_tag(:a, text, class: classes, href: search_path(query_params_with_tab(name))),
+                class: 'nav-item')
   end
 
   def search_sort_link(sort, direction)

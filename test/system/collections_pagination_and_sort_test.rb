@@ -33,16 +33,16 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
 
       # Sort links
       click_button 'Sort by'
-      assert_selector 'a', text: 'Name (A-Z)'
-      assert_selector 'a', text: 'Name (Z-A)'
+      assert_selector 'a', text: 'Title (A-Z)'
+      assert_selector 'a', text: 'Title (Z-A)'
       assert_selector 'a', text: 'Date (newest first)'
       assert_selector 'a', text: 'Date (oldest first)'
 
       # Reverse sort
-      click_link 'Name (Z-A)'
+      click_link 'Title (Z-A)'
       assert_equal URI.parse(current_url).request_uri, community_path(@community, sort: 'title', direction: 'desc')
       assert_selector 'div', text: '1 - 10 of 11'
-      assert_selector 'button', text: 'Name (Z-A)'
+      assert_selector 'button', text: 'Title (Z-A)'
       assert_selector 'li:first-child a', text: 'Nice Collection 09'
       assert_selector 'li:nth-child(2) a', text: 'Nice Collection 07'
       assert_selector 'li:nth-child(9) a', text: 'Fancy Collection 04'
@@ -57,10 +57,10 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
       assert_selector 'li:first-child a', text: 'Fancy Collection 00'
 
       # Sort the other way again
-      click_button 'Name (Z-A)'
-      click_link 'Name (A-Z)'
+      click_button 'Title (Z-A)'
+      click_link 'Title (A-Z)'
       assert_equal URI.parse(current_url).request_uri, community_path(@community, sort: 'title', direction: 'asc')
-      assert_selector 'button', text: 'Name (A-Z)'
+      assert_selector 'button', text: 'Title (A-Z)'
       assert_selector 'div', text: '1 - 10 of 11'
       # First 6 say 'Fancy', last 4 say 'Nice'
       assert_selector 'li:first-child a', text: 'Fancy Collection 00'
@@ -69,7 +69,7 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
       assert_selector 'li:nth-child(10) a', text: 'Nice Collection 07'
 
       # Sort with newest first
-      click_button 'Name (A-Z)'
+      click_button 'Title (A-Z)'
       click_link 'Date (newest first)'
       assert_equal URI.parse(current_url).request_uri, community_path(@community, sort: 'record_created_at',
                                                                                   direction: 'desc')

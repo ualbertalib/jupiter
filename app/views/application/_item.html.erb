@@ -1,11 +1,11 @@
 <%# TODO: Reduce duplication between this partial and thesis, pretty much exactly the same %>
 <div class="media mb-3">
-  <%= link_to path_for_result(item) do %>
+  <%= link_to item_path(item) do %>
     <%= render partial: 'thumbnail', locals: { thumbnail: item.thumbnail.attachment, object: item } %>
   <% end %>
   <div class="media-body ml-3">
     <div class="d-flex flex-wrap flex-lg-nowrap align-items-start">
-      <h5 class="mt-0 mr-auto"><%= link_to item.title, path_for_result(item) %></h5>
+      <h5 class="mt-0 mr-auto"><%= link_to item.title, item_path(item) %></h5>
 
       <% primary_file = item.file_sets.first %>
       <% if primary_file.present? %>
