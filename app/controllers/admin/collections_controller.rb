@@ -7,7 +7,7 @@ class Admin::CollectionsController < Admin::AdminController
 
   def show
     respond_to do |format|
-      item_search_setup(Item.search_term_for(:member_of_paths, @collection.path, role: :pathing))
+      restrict_items_to(Item.solr_name_for(:member_of_paths, role: :pathing), @collection.path)
       format.html { render template: 'collections/show' }
     end
   end

@@ -6,6 +6,8 @@ class DeferredSimpleSolrQueryTest < ActiveSupport::TestCase
     ldp_object_includes Hydra::Works::WorkBehavior
     has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet, :sort]
     has_attribute :creator, ::RDF::Vocab::DC.title, solrize_for: [:facet, :sort]
+
+    default_sort index: :creator, direction: :desc
   end
 
   test 'basic relations' do
@@ -53,26 +55,10 @@ class DeferredSimpleSolrQueryTest < ActiveSupport::TestCase
     assert_equal items.send(:criteria)[:limit], JupiterCore::Search::MAX_RESULTS
   end
 
-  test 'multisort' do
-    deferred_query = @@klass.sort(:title).sort(:creator, :desc)
-
-    assert_equal deferred_query.send(:criteria)[:sort].count, 2
-    assert_includes deferred_query.send(:criteria)[:sort], 'title_ssi'
-    assert_includes deferred_query.send(:criteria)[:sort], 'creator_ssi'
-
-    assert_equal deferred_query.send(:criteria)[:sort_order].count, 2
-    assert_includes deferred_query.send(:criteria)[:sort_order], :desc
-    assert_includes deferred_query.send(:criteria)[:sort_order], :asc
-  end
-
-  test 'sort constraints' do
-    assert_raises ArgumentError do
-      @@klass.sort(:title, :blah)
-    end
-
-    assert_raises ArgumentError do
-      @@klass.sort(:asadfg)
-    end
+  test 'sorting by unknown attributes falls back to defaults' do
+    items = @@klass.sort(:blergh, :foobar)
+    assert_equal :creator, items.used_sort_index
+    assert_equal :desc, items.used_sort_order
   end
 
 end

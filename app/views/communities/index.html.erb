@@ -32,7 +32,7 @@
       <h2><%= t(:browse_all) %></h2>
 
       <div>
-        <%= render partial: 'communities/sort' %>
+        <%= render partial: 'communities/sort', locals: {collection: @communities} %>
       </div>
     </div>
 

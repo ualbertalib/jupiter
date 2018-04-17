@@ -4,7 +4,7 @@ class CommunitiesController < ApplicationController
     authorize Community
     respond_to do |format|
       format.html do
-        @communities = Community.sort(sort_column, sort_direction).page params[:page]
+        @communities = Community.sort(params[:sort], params[:direction]).page params[:page]
         @title = t('.header')
       end
       format.json do
@@ -28,17 +28,17 @@ class CommunitiesController < ApplicationController
     authorize @community
     respond_to do |format|
       format.html do
-        @collections = @community.member_collections.sort(sort_column, sort_direction).page params[:page]
+        @collections = @community.member_collections.sort(params[:sort], params[:direction]).page params[:page]
       end
       format.js do
         # Used for the collapsable dropdown to show member collections
-        @collections = @community.member_collections.sort(sort_column, sort_direction)
+        @collections = @community.member_collections.sort(params[:sort], params[:direction])
       end
 
       format.json do
         # Used in item_draft.js
         collections = @community.member_collections.sort(:title, :asc)
-        collections = collections.select { |c| c.restricted.blank? } unless current_user.admin?
+        collections = collections.select { |c| c.restricted.blank? } unless current_user&.admin?
         render json: @community.attributes.merge(collections: collections)
       end
     end
