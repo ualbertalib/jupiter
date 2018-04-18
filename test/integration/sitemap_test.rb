@@ -85,24 +85,11 @@ class SitemapTest < ActionDispatch::IntegrationTest
         assert_select 'lastmod'
         assert_select 'changefreq'
         assert_select 'priority'
-        assert_select 'rs|md[type=?]', 'text/html'
       end
 
       # show public item attributes
       assert_select 'loc', item_url(@item)
       assert_select 'lastmod', @item.updated_at.to_s
-      @item.file_sets.first.unlock_and_fetch_ldp_object do |uo|
-        assert_select 'rs|ln[href=?]', url_for(controller: :file_sets,
-                                               action: :show,
-                                               id: @item.id,
-                                               file_set_id: uo.id,
-                                               file_name: uo.contained_filename,
-                                               only_path: true)
-        assert_select 'rs|ln[hash=?]',
-                      "#{uo.original_file.checksum.algorithm.downcase}:#{uo.original_file.checksum.value}"
-        assert_select 'rs|ln[length=?]', uo.original_file.size.to_s
-        assert_select 'rs|ln[type=?]', uo.original_file.mime_type.to_s
-      end
 
       # not show private items
       assert_select 'url', count: 2
