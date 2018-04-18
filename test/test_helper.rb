@@ -11,7 +11,6 @@ require 'vcr'
 require 'webmock/minitest'
 require 'shoulda/matchers'
 
-
 VCR.configure do |config|
   config.cassette_library_dir = 'test/vcr'
   config.hook_into :webmock

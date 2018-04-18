@@ -13,7 +13,7 @@ class AdminCommunitiesIndexTest < ApplicationSystemTestCase
   end
 
   # TODO: add more tests
-  should 'be able to expand the collection for a community in the list' do
+  test 'should be able to expand the collection for a community in the list' do
     admin = users(:admin)
 
     login_user(admin)

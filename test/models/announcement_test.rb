@@ -7,9 +7,9 @@ class AnnouncementTest < ActiveSupport::TestCase
   end
 
   test 'validations' do
-     assert validate_presence_of(:message)
-     assert validate_length_of(:message).is_at_most(500)
-     assert validate_presence_of(:user)
+    assert validate_presence_of(:message)
+    assert validate_length_of(:message).is_at_most(500)
+    assert validate_presence_of(:user)
   end
 
   test 'current announcements scope' do

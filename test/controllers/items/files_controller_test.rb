@@ -9,7 +9,7 @@ class Items::FilesControllerTest < ActionDispatch::IntegrationTest
     @collection = Collection.new_locked_ldp_object(title: 'Fantasy Books',
                                                    owner: 1,
                                                    community_id: @community.id)
-                              .unlock_and_fetch_ldp_object(&:save!)
+                            .unlock_and_fetch_ldp_object(&:save!)
   end
 
   setup do

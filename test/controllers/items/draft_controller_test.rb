@@ -133,7 +133,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'active', draft_item.status
   end
 
-  test 'should not be able to update a draft item properly when saving upload_files form that has no file attachments' do
+  test 'should not be able to update a draft item when saving upload_files form that has no file attachments' do
     sign_in_as @user
 
     draft_item = draft_items(:completed_choose_license_and_visibility_step)

@@ -28,7 +28,7 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
   test 'should create collection when given valid information' do
     assert_difference('Collection.count', +1) do
       post admin_community_collections_url(@community),
-        params: { collection: { title: 'New collection' } }
+           params: { collection: { title: 'New collection' } }
     end
 
     assert_redirected_to admin_community_collection_url(@community, Collection.last)
@@ -38,7 +38,7 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
   test 'should not create collection when given invalid information' do
     assert_no_difference('Collection.count') do
       post admin_community_collections_url(@community),
-        params: { collection: { title: '' } }
+           params: { collection: { title: '' } }
     end
 
     assert_response :bad_request
@@ -51,7 +51,7 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
 
   test 'update collection when given valid information' do
     patch admin_community_collection_url(@community, @collection),
-      params: { collection: { title: 'Updated collection' } }
+          params: { collection: { title: 'Updated collection' } }
 
     assert_redirected_to admin_community_collection_url(@community, @collection)
     assert_equal I18n.t('admin.collections.update.updated'), flash[:notice]
@@ -59,7 +59,7 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should not update collection when given invalid information' do
     patch admin_community_collection_url(@community, @collection),
-      params: { collection: { title: '' } }
+          params: { collection: { title: '' } }
 
     assert_response :bad_request
   end
@@ -110,7 +110,7 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to admin_community_url(@community)
 
     assert_match I18n.t('activemodel.errors.models.ir_collection.attributes.member_objects.must_be_empty',
-                          list_of_objects: collection.member_objects.map(&:title).join(', ')), flash[:alert]
+                        list_of_objects: collection.member_objects.map(&:title).join(', ')), flash[:alert]
   end
 
   test 'should not destroy collection if has theses' do
