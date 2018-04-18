@@ -113,10 +113,8 @@ module ItemProperties
 
         if doi.blank? # Never been minted before
           doi_state.created!(id) if !private? && doi_state.not_available?
-        elsif (doi_state.not_available? &&
-              transitioned_from_private?) ||
-              (doi_state.available? && (doi_state.doi_fields_changed?(self) ||
-              transitioned_to_private?))
+        elsif (doi_state.not_available? && transitioned_from_private?) ||
+              (doi_state.available? && (doi_state.doi_fields_changed?(self) || transitioned_to_private?))
           # If private, we only care if visibility has been made public
           # If public, we care if visibility changed to private or doi fields have been changed
           doi_state.altered!(id)
@@ -133,6 +131,13 @@ module ItemProperties
 
       def delete_doi_state
         doi_state.destroy!
+      end
+
+      # for use when deleting items for later re-migration, to avoid tombstoning
+      # manually updates the underlying aasm_state to preclude running the Withdrawl job
+      def doi_safe_destroy!
+        doi_state.update_attribute(:aasm_state, 'excluded')
+        destroy!
       end
 
       def add_to_path(community_id, collection_id)
