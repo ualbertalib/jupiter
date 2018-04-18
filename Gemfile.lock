@@ -317,7 +317,7 @@ GEM
       rdf (>= 2.2, < 4.0)
     rdoc (6.0.2)
     redis (4.0.1)
-    rollbar (2.15.5)
+    rollbar (2.15.6)
       multi_json
     rsolr (2.1.0)
       builder (>= 2.1.2)
