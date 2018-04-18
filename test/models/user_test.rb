@@ -2,24 +2,21 @@ require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
 
-# TODO: tests with shoulda-matchers
-  # context 'associations' do
-  #   should have_many(:identities).dependent(:destroy)
-  #   should have_many(:announcements).dependent(:destroy)
-  #   should have_many(:draft_items).dependent(:destroy)
-  # end
-  #
-  # context 'validations' do
-  #   context '#email' do
-  #     should validate_presence_of(:email)
-  #     should validate_uniqueness_of(:email).case_insensitive
-  #     should allow_value('random@example.com').for(:email)
-  #   end
-  #
-  #   context '#name' do
-  #     should validate_presence_of(:name)
-  #   end
-  # end
+  test 'associations' do
+    assert have_many(:identities).dependent(:destroy)
+    assert have_many(:announcements).dependent(:destroy)
+    assert have_many(:draft_items).dependent(:destroy)
+  end
+
+  test '#email' do
+    assert validate_presence_of(:email)
+    assert validate_uniqueness_of(:email).case_insensitive
+    assert allow_value('random@example.com').for(:email)
+  end
+
+  test '#name' do
+    assert validate_presence_of(:name)
+  end
 
   test 'should update the activity columns when not signing-in' do
     user = users(:regular)

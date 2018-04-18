@@ -10,21 +10,20 @@ class DraftItemTest < ActiveSupport::TestCase
                             .unlock_and_fetch_ldp_object(&:save!)
   end
 
-  # TODO: tests with shoulda-matchers
-  # context 'enums' do
-  #   should define_enum_for(:status)
-  #   should define_enum_for(:wizard_step)
-  #   should define_enum_for(:license)
-  #   should define_enum_for(:visibility)
-  #   should define_enum_for(:visibility_after_embargo)
-  # end
-  #
-  # context 'associations' do
-  #   should have_many(:draft_items_languages).dependent(:destroy)
-  #   should have_many(:languages).through(:draft_items_languages)
-  #   should belong_to(:type)
-  #   should belong_to(:user)
-  # end
+  test 'enums' do
+    assert define_enum_for(:status)
+    assert define_enum_for(:wizard_step)
+    assert define_enum_for(:license)
+    assert define_enum_for(:visibility)
+    assert define_enum_for(:visibility_after_embargo)
+  end
+
+  test 'associations' do
+    assert have_many(:draft_items_languages).dependent(:destroy)
+    assert have_many(:languages).through(:draft_items_languages)
+    assert belong_to(:type)
+    assert belong_to(:user)
+  end
 
   test 'should not be able to create a draft item without user' do
     draft_item = DraftItem.new

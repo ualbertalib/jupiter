@@ -2,16 +2,15 @@ require 'test_helper'
 
 class AnnouncementTest < ActiveSupport::TestCase
 
-  # TODO: tests with shoulda-matchers
-  # context 'associations' do
-  #   should belong_to(:user)
-  # end
-  #
-  # context 'validations' do
-  #   should validate_presence_of(:message)
-  #   should validate_length_of(:message).is_at_most(500)
-  #   should validate_presence_of(:user)
-  # end
+  test 'associations' do
+    assert belong_to(:user)
+  end
+
+  test 'validations' do
+     assert validate_presence_of(:message)
+     assert validate_length_of(:message).is_at_most(500)
+     assert validate_presence_of(:user)
+  end
 
   test 'current announcements scope' do
     assert Announcement.current.count == 1
