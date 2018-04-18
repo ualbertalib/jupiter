@@ -135,6 +135,7 @@ module ItemProperties
 
       # for use when deleting items for later re-migration, to avoid tombstoning
       # manually updates the underlying aasm_state to preclude running the Withdrawl job
+      # rubocop:disable Rails/SkipsModelValidations
       def doi_safe_destroy!
         doi_state.update_attribute(:aasm_state, 'excluded')
         destroy!
