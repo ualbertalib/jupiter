@@ -140,6 +140,7 @@ module ItemProperties
         doi_state.update_attribute(:aasm_state, 'excluded')
         destroy!
       end
+      # rubocop:enable Rails/SkipsModelValidations
 
       def add_to_path(community_id, collection_id)
         self.member_of_paths += ["#{community_id}/#{collection_id}"]
