@@ -31,22 +31,12 @@ end
 Sidekiq::Testing.fake!
 
 class ActiveSupport::TestCase
-
-  def freeze_time(&block)
-    travel_to Time.current, &block
-  end
-
-  include Minitest::Hooks
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
 
-  # give this gibberish method a more semantically meaningful name for test-readers
-  def generate_random_string
-    Haikunator.haikunate
-  end
-
+  include Minitest::Hooks
   # clean ActiveFedora at the end of all tests in a given test class
-  def after_all
+  def after_all # this is minitest-hooks
     super
     ActiveFedora::Cleaner.clean!
     keys = Redis.current.keys("#{Rails.configuration.redis_key_prefix}*")
@@ -55,6 +45,15 @@ class ActiveSupport::TestCase
   end
 
   # Add more helper methods to be used by all tests here...
+
+  # give this gibberish method a more semantically meaningful name for test-readers
+  def generate_random_string
+    Haikunator.haikunate
+  end
+
+  def freeze_time(&block)
+    travel_to Time.current, &block
+  end
 
   # Logs in a test user. Used for integration tests.
   def sign_in_as(user)

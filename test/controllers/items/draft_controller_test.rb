@@ -2,7 +2,7 @@ require 'test_helper'
 
 class Items::DraftControllerTest < ActionDispatch::IntegrationTest
 
-  def setup
+  def before_all
     @community = Community.new_locked_ldp_object(title: 'Books', owner: 1).unlock_and_fetch_ldp_object(&:save!)
     @collection = Collection.new_locked_ldp_object(title: 'Fantasy Books',
                                                    owner: 1,

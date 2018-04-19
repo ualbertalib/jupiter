@@ -3,7 +3,7 @@ require 'test_helper'
 class Items::FilesControllerTest < ActionDispatch::IntegrationTest
 
   # TODO: candidate for fixture
-  def before_all
+  def before_all # minitest-hooks
     super
     @community = Community.new_locked_ldp_object(title: 'Books', owner: 1).unlock_and_fetch_ldp_object(&:save!)
     @collection = Collection.new_locked_ldp_object(title: 'Fantasy Books',

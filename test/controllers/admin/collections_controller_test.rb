@@ -2,7 +2,8 @@ require 'test_helper'
 
 class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
 
-  def setup
+  def before_all
+    super
     @community = Community.new_locked_ldp_object(title: 'Nice community',
                                                  owner: 1)
     @community.unlock_and_fetch_ldp_object(&:save!)
@@ -10,7 +11,9 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
                                                    title: 'Nice collection',
                                                    owner: 1)
     @collection.unlock_and_fetch_ldp_object(&:save!)
+  end
 
+  def setup
     @admin = users(:admin)
     sign_in_as @admin
   end
