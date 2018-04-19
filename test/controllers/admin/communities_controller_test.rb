@@ -3,10 +3,9 @@ require 'test_helper'
 class Admin::CommunitiesControllerTest < ActionDispatch::IntegrationTest
 
   def before_all
-    super
     @community = Community.new_locked_ldp_object(title: 'Nice community',
                                                  owner: 1)
-    @community.unlock_and_fetch_ldp_object(&:save!)
+                          .unlock_and_fetch_ldp_object(&:save!)
   end
 
   def setup
@@ -28,25 +27,23 @@ class Admin::CommunitiesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  context '#create' do
-    should 'create community when given valid information' do
-      assert_difference('Community.count', +1) do
-        post admin_communities_url,
-             params: { community: { title: 'New community' } }
-      end
-
-      assert_redirected_to admin_community_url(Community.last)
-      assert_equal I18n.t('admin.communities.create.created'), flash[:notice]
+  test 'should create community when given valid information' do
+    assert_difference('Community.count', +1) do
+      post admin_communities_url,
+           params: { community: { title: 'New community' } }
     end
 
-    should 'not create community when given invalid information' do
-      assert_no_difference('Community.count') do
-        post admin_communities_url,
-             params: { community: { title: '' } }
-      end
+    assert_redirected_to admin_community_url(Community.last)
+    assert_equal I18n.t('admin.communities.create.created'), flash[:notice]
+  end
 
-      assert_response :bad_request
+  test 'should not create community when given invalid information' do
+    assert_no_difference('Community.count') do
+      post admin_communities_url,
+           params: { community: { title: '' } }
     end
+
+    assert_response :bad_request
   end
 
   test 'should get edit' do
@@ -54,55 +51,51 @@ class Admin::CommunitiesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  context '#update' do
-    should 'update community when given valid information' do
-      patch admin_community_url(@community),
-            params: { community: { title: 'Updated community' } }
+  test 'should update community when given valid information' do
+    patch admin_community_url(@community),
+          params: { community: { title: 'Updated community' } }
 
-      assert_redirected_to admin_community_url(@community)
-      assert_equal I18n.t('admin.communities.update.updated'), flash[:notice]
-    end
-
-    should 'not update community when given invalid information' do
-      patch admin_community_url(@community),
-            params: { community: { title: '' } }
-
-      assert_response :bad_request
-    end
+    assert_redirected_to admin_community_url(@community)
+    assert_equal I18n.t('admin.communities.update.updated'), flash[:notice]
   end
 
-  context '#destroy' do
-    should 'destroy collection if has no items' do
-      community = Community.new_locked_ldp_object(
-        title: 'Nice community',
-        owner: 1
-      ).unlock_and_fetch_ldp_object(&:save!)
+  test 'should not update community when given invalid information' do
+    patch admin_community_url(@community),
+          params: { community: { title: '' } }
 
-      assert_difference('Community.count', -1) do
-        delete admin_community_url(community)
-      end
+    assert_response :bad_request
+  end
 
-      assert_redirected_to admin_communities_url
-      assert_equal I18n.t('admin.communities.destroy.deleted'), flash[:notice]
+  test 'should destroy collection if has no items' do
+    community = Community.new_locked_ldp_object(
+      title: 'Nice community',
+      owner: 1
+    ).unlock_and_fetch_ldp_object(&:save!)
+
+    assert_difference('Community.count', -1) do
+      delete admin_community_url(community)
     end
 
-    should 'not destroy collection if has items' do
-      # Give the community a collection
-      Collection.new_locked_ldp_object(
-        community_id: @community.id,
-        title: 'Nice collection',
-        owner: 1
-      ).unlock_and_fetch_ldp_object(&:save!)
+    assert_redirected_to admin_communities_url
+    assert_equal I18n.t('admin.communities.destroy.deleted'), flash[:notice]
+  end
 
-      assert_no_difference('Collection.count') do
-        delete admin_community_url(@community)
-      end
+  test 'should not destroy collection if has items' do
+    # Give the community a collection
+    Collection.new_locked_ldp_object(
+      community_id: @community.id,
+      title: 'Nice collection',
+      owner: 1
+    ).unlock_and_fetch_ldp_object(&:save!)
 
-      assert_redirected_to admin_communities_url
-
-      assert_match I18n.t('activemodel.errors.models.ir_community.attributes.member_collections.must_be_empty',
-                          list_of_collections: @community.member_collections.map(&:title).join(', ')), flash[:alert]
+    assert_no_difference('Collection.count') do
+      delete admin_community_url(@community)
     end
+
+    assert_redirected_to admin_communities_url
+
+    assert_match I18n.t('activemodel.errors.models.ir_community.attributes.member_collections.must_be_empty',
+                        list_of_collections: @community.member_collections.map(&:title).join(', ')), flash[:alert]
   end
 
 end

@@ -2,7 +2,7 @@ require 'test_helper'
 
 class CommunitiesControllerTest < ActionDispatch::IntegrationTest
 
-  def before_all
+  def before_all # minitest-hooks
     super
     @community = Community.new_locked_ldp_object(title: 'Nice community',
                                                  owner: 1)
