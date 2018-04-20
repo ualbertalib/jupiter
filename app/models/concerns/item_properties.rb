@@ -53,7 +53,7 @@ module ItemProperties
       before_save :handle_doi_states
       after_create :handle_doi_states
       before_destroy :remove_doi
-      after_destroy :purge_thumbnail, :delete_doi_state
+      after_destroy :purge_thumbnail, :delete_doi_state, :purge_files
 
       # If you're looking for rights and subject validations, note that they have separate implementations
       # on the Thesis and Item classes.
@@ -159,10 +159,11 @@ module ItemProperties
 
       def purge_files
         FileSet.where(item: id).each do |fs|
-          fs.unlock_and_fetch_ldp_object(&:delete)
+          success = fs.unlock_and_fetch_ldp_object(&:delete)
+          Rollbar.warn("Couldn't purge fileset #{fs.id} with item id #{id}") unless success
         end
 
-        self.ordered_members = []
+        self.ordered_members = [] unless self.destroyed?
       end
 
       def add_files(files)
