@@ -34,10 +34,6 @@ class Item < JupiterCore::LockedLdpObject
   # This status is only for articles: either 'published' (alone) or two triples for 'draft'/'submitted'
   has_multival_attribute :publication_status, ::RDF::Vocab::BIBO.status, solrize_for: :exact_match
 
-  # Solr only
-  additional_search_index :doi_without_label, solrize_for: :exact_match,
-                                              as: -> { doi.gsub('doi:', '') if doi.present? }
-
   # This combines both the controlled vocabulary codes from item_type and published_status above
   # (but only for items that are articles)
   additional_search_index :item_type_with_status,
@@ -131,6 +127,7 @@ class Item < JupiterCore::LockedLdpObject
   unlocked do
     before_validation :populate_sort_year
     before_save :copy_creators_to_unordered_predicate
+    after_destroy :purge_drafts
 
     validates :created, presence: true
     validates :sort_year, presence: true
@@ -184,6 +181,13 @@ class Item < JupiterCore::LockedLdpObject
       statuses = publication_status.sort
       return unless statuses != [ps_vocab.published] && statuses != [ps_vocab.draft, ps_vocab.submitted]
       errors.add(:publication_status, :not_recognized)
+    end
+
+    def purge_drafts
+      DraftItem.where(uuid: id).each do |draft|
+        success = draft.delete
+        Rollbar.warn("Couldn't purge draft #{draft.id} for item id #{id}") unless success
+      end
     end
   end
 

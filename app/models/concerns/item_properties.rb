@@ -163,7 +163,7 @@ module ItemProperties
           Rollbar.warn("Couldn't purge fileset #{fs.id} with item id #{id}") unless success
         end
 
-        self.ordered_members = [] unless self.destroyed?
+        self.ordered_members = [] unless destroyed?
       end
 
       def add_files(files)
