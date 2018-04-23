@@ -10,7 +10,5 @@
     <%= t('collections.show.deposit_item') %>
   <% end %>
 </div>
-
-<%= render partial: 'search/item_search_and_results',
-          locals: { search_placeholder: t('.search_placeholder'),
-                    no_items_found: t('.no_items_found') }%>
+<%= render partial: 'search_bar', locals: { placeholder: t('.search_placeholder') } %>
+<%= render partial: 'results' %>

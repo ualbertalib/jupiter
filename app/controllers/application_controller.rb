@@ -3,17 +3,21 @@ class ApplicationController < ActionController::Base
   include Pundit
 
   before_action :store_user_location!, if: :storable_location?
-  after_action :verify_authorized
+  after_action :verify_authorized, except: [:service_unavailable]
 
   protect_from_forgery with: :exception
 
-  helper_method :current_announcements, :path_for_result
+  helper_method :current_announcements, :current_user
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   rescue_from JupiterCore::ObjectNotFound,
               ActiveRecord::RecordNotFound,
               ActionController::RoutingError, with: :render_404
+
+  def service_unavailable
+    head :service_unavailable, 'Retry-After' => 24.hours
+  end
 
   protected
 
@@ -43,9 +47,6 @@ class ApplicationController < ActionController::Base
 
     @current_user
   end
-
-  # Let views be able to access current_user
-  helper_method :current_user
 
   # Signs in the given user.
   def sign_in(user)
@@ -103,24 +104,6 @@ class ApplicationController < ActionController::Base
 
   def current_announcements
     Announcement.current
-  end
-
-  def path_for_result(result)
-    if result.is_a? Collection
-      community_collection_path(result.community, result)
-    elsif result.is_a? Thesis
-      item_path(result)
-    else
-      polymorphic_path(result)
-    end
-  end
-
-  def sort_column(columns: ['title', 'record_created_at'], default: 'title')
-    columns.include?(params[:sort]) ? params[:sort] : default
-  end
-
-  def sort_direction(default: 'asc')
-    ['asc', 'desc'].include?(params[:direction]) ? params[:direction] : default
   end
 
 end

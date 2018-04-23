@@ -31,10 +31,21 @@ class JupiterCore::DeferredSimpleSolrQuery
     self
   end
 
-  def sort(attr, order = :desc)
-    raise ArgumentError, 'order must be :asc or :desc' unless [:asc, :desc].include?(order.to_sym)
-    criteria[:sort] << model.solr_name_for(attr.to_sym, role: :sort)
-    criteria[:sort_order] << order
+  def sort(attr, order = nil)
+    if attr.present?
+      solr_name = begin
+                    criteria[:model].solr_name_for(attr.to_sym, role: :sort)
+                  rescue ArgumentError
+                    nil
+                  end
+      criteria[:sort] = [solr_name] if solr_name.present?
+    end
+    criteria[:sort] = criteria[:model].default_sort_indexes if criteria[:sort].blank?
+    criteria[:sort_order] = if order.present? && [:asc, :desc].include?(order.to_sym)
+                              [order]
+                            else
+                              criteria[:model].default_sort_direction
+                            end
     self
   end
 
@@ -130,6 +141,14 @@ class JupiterCore::DeferredSimpleSolrQuery
     JupiterCore::Search.prepare_solr_query(search_args_with_limit(criteria[:limit])).inspect
   end
 
+  def used_sort_index
+    criteria[:model].reverse_solr_name_cache[criteria[:sort].first]
+  end
+
+  def used_sort_order
+    criteria[:sort_order].first
+  end
+
   private
 
   # Defer to Kaminari configuration in the +LockedLdpObject+ model
@@ -151,10 +170,14 @@ class JupiterCore::DeferredSimpleSolrQuery
   end
 
   def sort_clause
-    sort(:record_created_at, :desc) if criteria[:sort].blank?
+    indexes = criteria[:sort] || model.default_sort_indexes
+    indexes ||= [model.solr_name_for(:record_created_at, role: :sort)]
+    direction = criteria[:sort_order] || model.default_sort_direction
+    direction ||= [:desc]
+
     sorts = []
-    criteria[:sort].each_with_index do |sort_col, idx|
-      sorts << "#{sort_col} #{criteria[:sort_order][idx]}"
+    indexes.each_with_index do |sort_col, idx|
+      sorts << "#{sort_col} #{direction[idx]}"
     end
     sorts.join(',')
   end

@@ -1,0 +1,104 @@
+<% if results.count > 0 %>
+  <a href="#results" class="j-skip js-skip-to-content d-block mt-3 p-3 sr-only sr-only-focusable">
+    <%= t('.skip_to_results') %>
+  </a>
+
+  <div class="row mt-3 jupiter-model-results">
+    <%# Facets/filters panel, hide unless opened on mobile %>
+      <div class="col-md-3 col-sm-2 d-none d-md-block jupiter-filters">
+        <% if results.facet_results_present? %>
+          <div class="card">
+            <div class="card-header d-flex flex-wrap justify-content-between">
+              <div>
+                <%= t('search.filter') %>
+              </div>
+              <div class="d-md-none js-filters-close">
+                <%= link_to '#' do %>
+                  <%= t('close') %>
+                  <%= fa_icon 'times-circle' %>
+                <% end %>
+              </div>
+            </div>
+            <div class="card-body p-2 filter-list">
+              <% results.each_facet_with_results(facet_display_order) do |facet| %>
+                <%= render facet %>
+              <% end %>
+            </div>
+          </div>
+        <%end%>
+      </div>
+
+
+    <div class="col-md-9 col-sm-10 card jupiter-results">
+      <div class='p-3'>
+        <div class="d-flex flex-wrap justify-content-between">
+          <div>
+            <% if params[:search].present? %>
+              <h3><%= t('search.results_for', search: params[:search]) %></h3>
+            <% end %>
+          </div>
+
+          <div>
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="search-sort-button"
+                      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <% if params[:sort].present? %>
+                  <%= search_sort_label(results.used_sort_index, results.used_sort_order) %>
+                <% else %>
+                  <%= t('search.sort_by') %>
+                <% end %>
+              </button>
+              <div class="dropdown-menu" aria-labelledby="search-sort-button">
+                <%= search_sort_link('title', 'asc') %>
+                <%= search_sort_link('title', 'desc') %>
+                <% if enable_item_sort? %>
+                  <%= search_sort_link('sort_year', 'desc') %>
+                  <%= search_sort_link('sort_year', 'asc') %>
+                <% else %>
+                  <%= search_sort_link('record_created_at', 'desc') %>
+                  <%= search_sort_link('record_created_at', 'asc') %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="d-md-none mt-2">
+          <%= button_tag type: :button, class: 'btn btn-jupiter-primary mb-2 js-filters-open' do %>
+            <%= fa_icon 'filter' %>
+            <%= t('search.filter_results') %>
+          <% end %>
+        </div>
+
+        <div class='jupiter-facet-badges'>
+          <%= yield(:facet_badges) %>
+        </div>
+      </div>
+
+
+      <div class='jupiter-results-list' id="results">
+        <ul class="list-group">
+          <% results.each do |result| %>
+            <li class="list-group-item list-group-item-action">
+              <%= render result %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+      <div class="p-2 d-flex justify-content-center">
+        <div>
+          <%= results_range(results) %>
+        </div>
+      </div>
+      <%= paginate results %>
+
+    </div>
+  </div>
+
+  <%# Overlay for when mobile filter sidebar is open %>
+  <div class="filters-overlay">
+  </div>
+<% else %>
+  <p class="mt-3"><%= t('.no_items_found') %></p>
+<% end %>

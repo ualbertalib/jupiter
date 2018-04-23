@@ -100,8 +100,8 @@ class SearchTest < ApplicationSystemTestCase
       assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy')
       # Tabs
       assert_selector 'a.nav-link.active', text: 'Items (5)'
-      assert_selector 'a.nav-link', text: 'Collections (2)'
-      assert_selector 'a.nav-link', text: 'Communities (1)'
+      assert_selector 'a.nav-link', text: 'Collections'
+      assert_selector 'a.nav-link', text: 'Communities'
 
       # Facets and counts
       refute_selector 'div.card-header', text: 'Visibility'
@@ -141,8 +141,8 @@ class SearchTest < ApplicationSystemTestCase
 
       # Tab counts should only change for this tab
       assert_selector 'a.nav-link.active', text: 'Items (2)'
-      assert_selector 'a.nav-link', text: 'Collections (2)'
-      assert_selector 'a.nav-link', text: 'Communities (1)'
+      assert_selector 'a.nav-link', text: 'Collections'
+      assert_selector 'a.nav-link', text: 'Communities'
 
       # Some facets are now gone, some with changed counts
       refute_selector 'div.card-header', text: 'Visibility'
@@ -179,33 +179,35 @@ class SearchTest < ApplicationSystemTestCase
 
       # Tabs
       assert_selector 'a.nav-link.active', text: 'Items (5)'
-      assert_selector 'a.nav-link', text: 'Collections (2)'
-      assert_selector 'a.nav-link', text: 'Communities (1)'
+      assert_selector 'a.nav-link', text: 'Collections'
+      assert_selector 'a.nav-link', text: 'Communities'
 
       # No community/collection results initially shown
-      assert_selector 'div.jupiter-results-list h5 a', text: 'Item', count: 5
+      assert_selector 'div.jupiter-results-list h3 a', text: 'Item', count: 5
       assert_selector 'div.jupiter-results-list a', text: 'Community', count: 0
       assert_selector 'div.jupiter-results-list a', text: 'Collection', count: 0
 
       # Visit community tab
-      click_link 'Communities (1)'
+      click_link 'Communities'
       assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy', tab: 'community')
-      assert_selector 'a.nav-link', text: 'Items (5)'
-      assert_selector 'a.nav-link', text: 'Collections (2)'
+      assert_selector 'a.nav-link', text: 'Items'
+      assert_selector 'a.nav-link', text: 'Collections'
       assert_selector 'a.nav-link.active', text: 'Communities (1)'
       # Only community hits shown
-      assert_selector 'div.jupiter-results-list h5 a', text: 'Item', count: 0
+      assert_selector 'div.jupiter-results-list h3 a', text: 'Item', count: 0
       assert_selector 'div.jupiter-results-list a', text: 'Community', count: 1
       assert_selector 'div.jupiter-results-list a', text: 'Collection', count: 0
 
       # Visit collection tab
-      click_link 'Collections (2)'
+      within('.nav-tabs') do
+        click_link 'Collections'
+      end
       assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy', tab: 'collection')
-      assert_selector 'a.nav-link', text: 'Items (5)'
+      assert_selector 'a.nav-link', text: 'Items'
       assert_selector 'a.nav-link.active', text: 'Collections (2)'
-      assert_selector 'a.nav-link', text: 'Communities (1)'
+      assert_selector 'a.nav-link', text: 'Communities'
       # Only collection hits shown
-      assert_selector 'div.jupiter-results-list h5 a', text: 'Item', count: 0
+      assert_selector 'div.jupiter-results-list h3 a', text: 'Item', count: 0
       assert_selector 'div.jupiter-results-list a', text: 'Community', count: 0
       assert_selector 'div.jupiter-results-list a', text: 'Collection', count: 2
     end
@@ -298,8 +300,8 @@ class SearchTest < ApplicationSystemTestCase
 
       # Tabs
       assert_selector 'a.nav-link.active', text: 'Items (10)'
-      assert_selector 'a.nav-link', text: 'Collections (2)'
-      assert_selector 'a.nav-link', text: 'Communities (1)'
+      assert_selector 'a.nav-link', text: 'Collections'
+      assert_selector 'a.nav-link', text: 'Communities'
 
       # Facets and counts
       assert_selector 'div.card-header', text: 'Visibility'
@@ -341,8 +343,8 @@ class SearchTest < ApplicationSystemTestCase
 
       # Tab counts should only change for this tab
       assert_selector 'a.nav-link.active', text: 'Items (4)'
-      assert_selector 'a.nav-link', text: 'Collections (2)'
-      assert_selector 'a.nav-link', text: 'Communities (1)'
+      assert_selector 'a.nav-link', text: 'Collections'
+      assert_selector 'a.nav-link', text: 'Communities'
 
       # Some facets are now gone, some with changed counts
       assert_selector 'div.card-header', text: 'Visibility'
