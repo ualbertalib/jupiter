@@ -1,7 +1,3 @@
-<% content_for :head do %>
-  <meta name="description" content="<%= t('.welcome_lead') %>">
-<% end %>
-
 <section class="jumbotron j-jumbotron-banner">
   <div class="container">
     <div class="col-md-6">
@@ -28,7 +24,7 @@
           FeaturedCollection.afns_journals_collection) do %>
           <%= image_tag 'dept-of-agriculture.jpg', alt: '',
               class: 'agriculture' %>
-          <h5><%= t('.afns_collection') %></h5>
+          <h3 class="h5"><%= t('.afns_collection') %></h3>
         <% end %>
       </div>
 
@@ -39,7 +35,7 @@
             <%= link_to community_path(FeaturedCollection.research_images_community) do %>
               <%= image_tag 'images-of-research.jpg', alt: '',
                   title: t('.images_of_research_attribution') %>
-              <h5><%= t('.images_of_research_collection') %></h5>
+              <h3 class="h5"><%= t('.images_of_research_collection') %></h3>
             <% end %>
           </div>
 
@@ -47,7 +43,7 @@
             <%= link_to community_collection_path(FeaturedCollection.grad_studies_community,
               FeaturedCollection.thesis_collection) do %>
               <%= image_tag 'theses.jpg', alt: '' %>
-              <h5><%= t('.theses_collection') %></h5>
+              <h3 class="h5"><%= t('.theses_collection') %></h3>
             <% end %>
           </div>
 
@@ -57,7 +53,7 @@
           <%= link_to community_path(FeaturedCollection.osrin_community) do %>
             <%= image_tag 'oil-sands.jpg', alt: '',
                 title: t('.osrin_attribution') %>
-            <h5><%= t('.osrin_collection') %></h5>
+            <h3 class="h5"><%= t('.osrin_collection') %></h3>
           <% end %>
         </div>
 

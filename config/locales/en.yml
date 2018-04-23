@@ -594,7 +594,7 @@ en:
     range_limit: 'Limit'
 
     index:
-      header: 'Search Items'
+      header: 'Search'
       no_results_found: No results found
     file_label: 'File'
     add_another_file: 'Add another file'

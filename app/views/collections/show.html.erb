@@ -1,7 +1,5 @@
 <% page_title(@collection.title) %>
-<% content_for :head do %>
-  <meta name="description" content="<%= jupiter_truncate @collection.description, length: 150 %>">
-<% end %>
+<% page_description(@collection.description) %>
 
 <div class="container mt-3">
   <%= render partial: 'show_breadcrumbs' %>
@@ -36,9 +34,9 @@
   <% end %>
 
   <div class="d-flex flex-wrap align-items-center justify-content-between mt-3">
-    <h4 class="mr-auto">
+    <h2 class="mr-auto">
       <%= t('.items_list_header') %>
-    </h4>
+    </h2>
     <% if policy(:item).new? %>
       <%= link_to create_draft_items_path(collection: @collection.id), method: :post,
           class: 'btn btn-primary' do %>
