@@ -1,5 +1,4 @@
 namespace :jupiter do
-
   desc 'recover complete Solr index from data stored in Fedora, in the event of catastrophic loss of Solr data'
   task recover: :environment do
     puts 'Starting Recovery'
