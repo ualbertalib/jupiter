@@ -1,14 +1,9 @@
 require 'test_helper'
 
 class SitemapTest < ActionDispatch::IntegrationTest
-
-  def before_all
-    super
-    @community = Community.new_locked_ldp_object(title: 'Fancy Community', owner: 1)
-                          .unlock_and_fetch_ldp_object(&:save!)
-    @collection = Collection.new_locked_ldp_object(community_id: @community.id,
-                                                   title: 'Fancy Collection', owner: 1)
-                            .unlock_and_fetch_ldp_object(&:save!)
+  setup do
+    @community = locked_ldp_fixture(Community, title: "Fancy Community", owner: 1, &:save!)
+    @collection = locked_ldp_fixture(Collection, community_id: @community.id, title: 'Fancy Collection', owner: 1, &:save!)
     @item = Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                        owner: 1, title: 'Fancy Item',
                                        creators: ['Joe Blow'],
@@ -57,6 +52,8 @@ class SitemapTest < ActionDispatch::IntegrationTest
   end
 
   test 'sitemap index should be valid sitemapindex xml' do
+    puts Community.count
+    puts Collection.count
     get sitemapindex_url
 
     schema = Nokogiri::XML::Schema(File.open(file_fixture('siteindex.xsd')))
@@ -71,6 +68,8 @@ class SitemapTest < ActionDispatch::IntegrationTest
   end
 
   test 'items sitemap should be valid sitemap xml' do
+    puts Community.count
+    puts Collection.count
     get items_sitemap_url
 
     schema = Nokogiri::XML::Schema(File.open(file_fixture('sitemap.xsd')))
@@ -94,6 +93,8 @@ class SitemapTest < ActionDispatch::IntegrationTest
   end
 
   test 'collections sitemap should be valid sitemap xml' do
+    puts Community.count
+    puts Collection.count
     get collections_sitemap_url
 
     schema = Nokogiri::XML::Schema(File.open(file_fixture('sitemap.xsd')))
@@ -114,6 +115,8 @@ class SitemapTest < ActionDispatch::IntegrationTest
   end
 
   test 'communities sitemap should be valid sitemap xml' do
+    puts Community.count
+    puts Collection.count
     get communities_sitemap_url
 
     schema = Nokogiri::XML::Schema(File.open(file_fixture('sitemap.xsd')))

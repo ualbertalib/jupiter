@@ -30,6 +30,26 @@ end
 # just push all jobs to an array for verification
 Sidekiq::Testing.fake!
 
+# class ActiveRecord::FixtureSet
+#   class << self
+#     alias :orig_create_fixtures :create_fixtures
+#   end
+#   def self.create_fixtures f_dir, fs_names, *args
+#     # Delete all fixtures that have foreign keys, in an order that
+#     # doesn't break referential integrity.
+#     Membership.delete_all
+#
+#     reset_cache
+#
+#     # If we're adding any {user, group} fixtures, add them [a] in that
+#     # order, [b] before adding any other fixtures which might have
+#     # references to them.
+#     fs_names = %w(users groups) & fs_names | fs_names
+#
+#     orig_create_fixtures f_dir, fs_names, *args
+#   end
+# end
+
 class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
@@ -71,6 +91,11 @@ class ActiveSupport::TestCase
   # Returns true if a test user is logged in.
   def logged_in?
     session[:user_id].present?
+  end
+
+  # uses :title as a lookup so must be unique
+  def locked_ldp_fixture(class_name, options)
+    class_name.where(title: options[:title]).first || class_name.new_locked_ldp_object(options).unlock_and_fetch_ldp_object(&:save!)
   end
 
   # turn on test mode for omniauth

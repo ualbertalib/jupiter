@@ -2,19 +2,19 @@ require 'application_system_test_case'
 
 class AuthenticationTest < ApplicationSystemTestCase
 
+  @@johndoe_auth_hash = OmniAuth::AuthHash.new(
+    provider: 'saml',
+    uid: 'johndoe',
+    info: {
+      email: 'johndoe@ualberta.ca',
+      name: 'John Doe'
+    }
+  )
   test 'should log in and log out work with correct credentials' do
     visit root_url
 
     Rails.application.env_config['omniauth.auth'] =
-      OmniAuth.config.mock_auth[:saml] =
-        OmniAuth::AuthHash.new(
-          provider: 'saml',
-          uid: 'johndoe',
-          info: {
-            email: 'johndoe@ualberta.ca',
-            name: 'John Doe'
-          }
-        )
+      OmniAuth.config.mock_auth[:saml] = @@johndoe_auth_hash
 
     click_on I18n.t('application.navbar.links.login')
 
@@ -49,16 +49,7 @@ class AuthenticationTest < ApplicationSystemTestCase
     assert_current_path(root_path)
     assert_text I18n.t('authorization.user_not_authorized_try_logging_in')
 
-    Rails.application.env_config['omniauth.auth'] =
-      OmniAuth.config.mock_auth[:saml] =
-        OmniAuth::AuthHash.new(
-          provider: 'saml',
-          uid: 'johndoe',
-          info: {
-            email: 'johndoe@ualberta.ca',
-            name: 'John Doe'
-          }
-        )
+    Rails.application.env_config['omniauth.auth'] = @@johndoe_auth_hash
 
     click_link I18n.t('application.navbar.links.login')
 
@@ -77,16 +68,7 @@ class AuthenticationTest < ApplicationSystemTestCase
     assert_current_path(root_path)
     assert_selector 'h2', text: I18n.t('welcome.index.welcome_lead')
 
-    Rails.application.env_config['omniauth.auth'] =
-      OmniAuth.config.mock_auth[:saml] =
-        OmniAuth::AuthHash.new(
-          provider: 'saml',
-          uid: 'johndoe',
-          info: {
-            email: 'johndoe@ualberta.ca',
-            name: 'John Doe'
-          }
-        )
+    Rails.application.env_config['omniauth.auth'] = @@johndoe_auth_hash
 
     click_link I18n.t('application.navbar.links.login')
 
@@ -103,14 +85,7 @@ class AuthenticationTest < ApplicationSystemTestCase
 
     Rails.application.env_config['omniauth.auth'] =
       OmniAuth.config.mock_auth[:saml] =
-        OmniAuth::AuthHash.new(
-          provider: 'saml',
-          uid: 'johndoe',
-          info: {
-            email: 'johndoe@ualberta.ca',
-            name: 'John Doe'
-          }
-        )
+
 
     click_link I18n.t('application.navbar.links.login')
 
