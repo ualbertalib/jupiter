@@ -149,6 +149,7 @@ en:
   application:
     navbar:
       era_logo_alt: 'ERA - Education and Research Archive'
+      skip_to_main_content: 'Skip to Main Content'
       search:
         placeholder: 'Search ERA...'
         button_text: 'Search'
@@ -173,6 +174,7 @@ en:
       uofa_library_logo_alt: 'University of Alberta Libraries'
     results:
       no_items_found: 'No items found'
+      skip_to_results: 'Skip to Search Results'
 
   locked_ldp_object:
     errors:
