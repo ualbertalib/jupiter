@@ -7,15 +7,10 @@
   <h1><%= t('.header') %></h1>
 
   <ul class="nav nav-tabs">
-    <% [:item, :collection, :community].each do |model| %>
+    <% [Item, Collection, Community].each do |model| %>
       <%= results_model_tab_link(model) %>
     <% end %>
   </ul>
 
-  <% if @results[@active_tab].count > 0 %>
-    <%= render partial: 'model_results', locals: { results: @results[@active_tab], model: @active_tab,
-                                        search_term: params[:search] } %>
-  <% else %>
-    <h2 class="mt-3"><%= t('.no_results_found') %></h2>
-  <% end %>
+    <%= render partial: 'results' %>
 </div>

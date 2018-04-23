@@ -171,6 +171,9 @@ en:
         contact: Contact Us
         powered_by_jupiter: Powered by Jupiter
       uofa_library_logo_alt: 'University of Alberta Libraries'
+    results:
+      no_items_found: 'No items found'
+
   locked_ldp_object:
     errors:
       invalid_visibility: "%{visibility} is not a known visibility"
@@ -267,9 +270,11 @@ en:
         header: 'Items'
         deposit_thesis: 'Deposit Thesis'
         search_placeholder: 'Search items ...'
-        no_items_found: 'No items found'
       new:
         header: 'Deposit Item'
+      destroy:
+        deleted: 'Item was successfully deleted!'
+        failed: 'Something went wrong... Item may not have been deleted!'
     users:
       active_status: 'Active'
       admin_role: 'Admin'
@@ -298,8 +303,7 @@ en:
         login_as_user_dialog: "Are you sure you want to login as %{user}?"
         login_as_user_flash: "You are now logged in as %{user}"
         draft_items_header: "Draft User's Items"
-        no_items_found: 'There are no items for this user'
-        search_items_placeholder: "Search this user's items ..."
+        search_placeholder: "Search this user's items ..."
         items_header: "User's Items"
       index:
         search_placeholder: 'email or name...'
@@ -314,9 +318,10 @@ en:
     index:
       my_profile: 'My profile'
       draft_items_header: "My Draft Items"
-      no_items_found: 'No items found'
-      search_items_placeholder: "Search my items ..."
       items_header: "My Items"
+    user_items:
+      search_placeholder: 'Search my items ...'
+      no_items_found: 'No items found'
 
   collections:
     title: 'Collections'
@@ -328,12 +333,8 @@ en:
       item_delete_confirm: 'Are you sure you want to delete item "%{title}"?'
       deposit_item: 'Deposit Item'
       deposit_thesis: 'Deposit Thesis'
-      search_items_placeholder: 'Search this collection ...'
+      search_placeholder: 'Search this collection ...'
   communities:
-    sort_record_created_at_asc: 'Date (oldest first)'
-    sort_record_created_at_desc: 'Date (newest first)'
-    sort_title_asc: 'Name (A-Z)'
-    sort_title_desc: 'Name (Z-A)'
     title: 'Communities'
     index:
       page_description: ERA's collections are contributed by people at the University of Alberta
@@ -582,9 +583,12 @@ en:
     sort_sort_year_desc: 'Date (newest first)'
     sort_title_asc: 'Title (A-Z)'
     sort_title_desc: 'Title (Z-A)'
-    tab_header_items_with_count: 'Items (%{count})'
-    tab_header_collections_with_count: 'Collections (%{count})'
-    tab_header_communities_with_count: 'Communities (%{count})'
+    tab_header_item_with_count: 'Items (%{count})'
+    tab_header_collection_with_count: 'Collections (%{count})'
+    tab_header_community_with_count: 'Communities (%{count})'
+    tab_header_item: 'Items'
+    tab_header_collection: 'Collections'
+    tab_header_community: 'Communities'
     range_begin: 'Range Begin'
     range_end: 'Range End'
     range_limit: 'Limit'

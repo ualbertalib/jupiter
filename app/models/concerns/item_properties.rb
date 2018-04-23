@@ -57,6 +57,7 @@ module ItemProperties
       before_save :handle_doi_states
       after_create :handle_doi_states
       before_destroy :remove_doi
+      after_destroy :purge_thumbnail, :delete_doi_state
 
       # If you're looking for rights and subject validations, note that they have separate implementations
       # on the Thesis and Item classes.
@@ -116,10 +117,8 @@ module ItemProperties
 
         if doi.blank? # Never been minted before
           doi_state.created!(id) if !private? && doi_state.not_available?
-        elsif (doi_state.not_available? &&
-              transitioned_from_private?) ||
-              (doi_state.available? && (doi_state.doi_fields_changed?(self) ||
-              transitioned_to_private?))
+        elsif (doi_state.not_available? && transitioned_from_private?) ||
+              (doi_state.available? && (doi_state.doi_fields_changed?(self) || transitioned_to_private?))
           # If private, we only care if visibility has been made public
           # If public, we care if visibility changed to private or doi fields have been changed
           doi_state.altered!(id)
@@ -129,6 +128,23 @@ module ItemProperties
       def remove_doi
         doi_state.removed! if doi.present? && (doi_state.available? || doi_state.not_available?)
       end
+
+      def purge_thumbnail
+        thumbnail.purge if thumbnail.present?
+      end
+
+      def delete_doi_state
+        doi_state.destroy!
+      end
+
+      # for use when deleting items for later re-migration, to avoid tombstoning
+      # manually updates the underlying aasm_state to preclude running the Withdrawl job
+      # rubocop:disable Rails/SkipsModelValidations
+      def doi_safe_destroy!
+        doi_state.update_attribute(:aasm_state, 'excluded')
+        destroy!
+      end
+      # rubocop:enable Rails/SkipsModelValidations
 
       def add_to_path(community_id, collection_id)
         self.member_of_paths += ["#{community_id}/#{collection_id}"]

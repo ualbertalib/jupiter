@@ -51,8 +51,7 @@
   <div class="row mt-3">
     <div class="col-md-12">
       <div class="d-flex justify-content-end mb-3">
-        <%# TODO: search box goes here %>
-        <%= render partial: 'communities/sort' %>
+        <%= render partial: 'communities/sort', locals: {collection: @collections} %>
       </div>
       <ul class="list-group">
         <%= render partial: 'communities/collections_list' %>

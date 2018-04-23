@@ -60,14 +60,16 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
       item_links = css_select ".jupiter-results ul.list-group .list-group-item a[href='#{item_path(item)}']"
 
       # Thumbnail, text link, and delete link
-      assert_equal item_links.count, 3
+      assert_equal item_links.count, 2
       # Thumbnail link to item
       assert_includes item_links.first.inner_html, 'img-thumbnail'
       # Text link to item
       assert_equal item_links[1].text, item.title
+
       # Link to delete item
-      assert_match 'Delete', item_links.last.text
-      assert_equal item_links.last.attributes['data-method'].to_s, 'delete'
+      delete_link = css_select ".jupiter-results ul.list-group .list-group-item a[href='#{admin_item_path(item)}']"
+      assert_match 'Delete', delete_link.last.text
+      assert_equal delete_link.last.attributes['data-method'].to_s, 'delete'
 
       # Link to edit item
       assert_select "ul.list-group .list-group-item a[href='#{edit_item_path(item)}']", text: 'Edit'
@@ -117,7 +119,7 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
     # TODO: should probably hook this up to a system test that submits the form
     user = users(:regular)
     sign_in_as user
-    get community_collection_url(@community, @collection, query: 'Fancy')
+    get community_collection_url(@community, @collection, search: 'Fancy')
 
     # Only 'Fancy' items are shown
     assert_select '.jupiter-results ul.list-group .list-group-item', count: 1

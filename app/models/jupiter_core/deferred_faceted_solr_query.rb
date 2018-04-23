@@ -37,11 +37,27 @@ class JupiterCore::DeferredFacetedSolrQuery
     self
   end
 
-  def sort(attr, order = :desc)
-    raise ArgumentError, 'order must be :asc or :desc' unless [:asc, :desc].include?(order.to_sym)
-    criteria[:sort] << criteria[:restrict_to_model].first.owning_class.solr_name_for(attr.to_sym, role: :sort)
-    criteria[:sort_order] << order
+  def sort(attr, order = nil)
+    if attr.present?
+      solr_name = begin
+                    criteria[:restrict_to_model].first.owning_class.solr_name_for(attr.to_sym, role: :sort)
+                  rescue ArgumentError
+                    nil
+                  end
+      criteria[:sort] = [solr_name] if solr_name.present?
+    end
+    criteria[:sort] = criteria[:restrict_to_model].first.owning_class.default_sort_indexes if criteria[:sort].blank?
+    criteria[:sort_order] = if order.present? && [:asc, :desc].include?(order.to_sym)
+                              [order]
+                            else
+                              criteria[:restrict_to_model].first.owning_class.default_sort_direction
+                            end
     self
+  end
+
+  def facet_results_present?
+    reify_result_set
+    @facets.present?
   end
 
   def each_facet_with_results(first_facet_categories = [])
@@ -102,6 +118,15 @@ class JupiterCore::DeferredFacetedSolrQuery
     JupiterCore::Search.prepare_solr_query(search_args_with_limit(criteria[:limit])).inspect
   end
 
+  def used_sort_index
+    model = criteria[:restrict_to_model].first.owning_class
+    model.reverse_solr_name_cache[criteria[:sort].first]
+  end
+
+  def used_sort_order
+    criteria[:sort_order].first
+  end
+
   private
 
   def uncache!
@@ -118,6 +143,7 @@ class JupiterCore::DeferredFacetedSolrQuery
     @count_cache, @results, facet_data = JupiterCore::Search.perform_solr_query(
       search_args_with_limit(criteria[:limit])
     )
+
     @facets = facet_data['facet_fields'].map do |k, v|
       if model_has_sort_year && (k == sort_year_facet)
         JupiterCore::RangeFacetResult.new(criteria[:facet_map], k, criteria[:ranges].fetch(k,
@@ -132,10 +158,15 @@ class JupiterCore::DeferredFacetedSolrQuery
   end
 
   def sort_clause
-    sort(:record_created_at, :desc) if criteria[:sort].blank?
+    model = criteria[:restrict_to_model].first.owning_class
+    indexes = criteria[:sort].present? ? criteria[:sort] : model.default_sort_indexes
+    indexes ||= [model.solr_name_for(:record_created_at, role: :sort)]
+    direction = criteria[:sort_order].present? ? criteria[:sort_order] : model.default_sort_direction
+    direction ||= [:desc]
+
     sorts = []
-    criteria[:sort].each_with_index do |sort_col, idx|
-      sorts << "#{sort_col} #{criteria[:sort_order][idx]}"
+    indexes.each_with_index do |sort_col, idx|
+      sorts << "#{sort_col} #{direction[idx]}"
     end
     sorts.join(',')
   end

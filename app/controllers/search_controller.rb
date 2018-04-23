@@ -1,74 +1,65 @@
 class SearchController < ApplicationController
 
   QUERY_MAX = 500
-  MAX_FACETS = 6
+  DEFAULT_TAB = 'item'.freeze
 
   skip_after_action :verify_authorized
+  helper_method :results
 
   def index
-    # TODO: Mass Assignment: Parameters should be whitelisted for mass assignment (Brakeman scan)
-    # `permit!` allows everything, need to refactor this
-    params[:facets].permit! if params[:facets].present?
-    params[:ranges].permit! if params[:ranges].present?
+    # note that search_params depends on @search_models being an array, so we need to establish this first
+    @search_models = case (params[:tab] || DEFAULT_TAB)
+                     when 'item'
+                       [Item, Thesis]
+                     when 'collection'
+                       [Collection]
+                     when 'community'
+                       [Community]
+                     else
+                       return redirect_to search_path(tab: :item)
+                     end
 
     # cut this off at a reasonable maximum to avoid DOSing Solr with truly huge queries (I managed to shove upwards
     # of 5000 characters in here locally)
-    query = params[:search].truncate(QUERY_MAX) if params[:search].present?
+    query = search_params[:search].truncate(QUERY_MAX) if search_params[:search].present?
 
-    @max_facets = MAX_FACETS
+    search_opts = { q: query, models: @search_models, as: current_user,
+                    facets: search_params[:facets], ranges: search_params[:ranges] }
 
-    @active_tab = if ['item', 'collection', 'community'].include?(params[:tab])
-                    params[:tab]&.to_sym
-                  else
-                    :item
-                  end
-
-    @results = {}
-
-    # Make sure selected facets/ranges and solr-only authors/subjects appear first in facet list
-    @first_facet_categories = (params.fetch(:facets, {}).keys + params.fetch(:ranges, {}).keys).uniq || []
-    if @active_tab == :item
-      @first_facet_categories += [Item.solr_name_for(:all_contributors, role: :facet),
-                                  Item.solr_name_for(:all_subjects, role: :facet)]
-    end
-
-    validate_ranges # if validation is here the facet will still appear near the top so user can correct
-
-    # TODO: Likely we want to do one search and segregate the results by model
-    # TODO: Check performance of this when we have more objects in use
-    [:item, :collection, :community].each do |model|
-      # Only facet for the current tab or the result count will be wrong on the tab header
-      models = if model == :item
-                 [Item, Thesis]
-               else
-                 model.to_s.classify.constantize
-               end
-
-      options = { q: query, models: models, as: current_user }
-      options[:facets] = params[:facets] if model == @active_tab
-      options[:ranges] = params[:ranges] if model == @active_tab
-      @results[model] = JupiterCore::Search.faceted_search(options)
-    end
-    # Toggle that we want to be able to sort by sort_year
-    if @active_tab == :item
-      @item_sort = true
-      @results[@active_tab].sort(sort_column(columns: ['title', 'sort_year']), sort_direction).page params[:page]
-    else
-      @results[@active_tab].sort(sort_column, sort_direction).page params[:page]
-    end
+    @results = JupiterCore::Search.faceted_search(search_opts)
+                                  .sort(search_params[:sort], search_params[:direction])
+                                  .page(search_params[:page])
   end
 
-  def validate_ranges
-    params[:ranges]&.each do |facet|
-      start = params.dig(:ranges, facet, :begin)
-      finish = params.dig(:ranges, facet, :end)
+  attr_reader :results
 
-      next if start.match?(/\d{4}/) && finish.match?(/\d{4}/) && (start.to_i <= finish.to_i)
+  private
 
-      flash[:alert] = "#{start} to #{finish} is not a valid range"
-      params[:ranges].delete(facet)
-      params.delete(:ranges) if params[:ranges].empty?
+  def search_params
+    r = {}
+    f = {}
+    @search_models.each do |model|
+      model.ranges.each do |range|
+        next unless params[:ranges].present? && params[:ranges][range].present?
+        if validate_range(params[:ranges][range])
+          r[range] = [:begin, :end]
+        else
+          params[:ranges].delete(range)
+        end
+      end
+      model.facets.each do |facet|
+        f[facet] = []
+      end
     end
+    params.permit(:tab, :page, :search, :sort, :direction, { facets: f }, ranges: r)
+  end
+
+  def validate_range(range)
+    start = range[:begin]
+    finish = range[:end]
+    return true if start.match?(/\A\d{1,4}\z/) && finish.match?(/\A\d{1,4}\z/) && (start.to_i <= finish.to_i)
+    flash[:alert] = "#{start} to #{finish} is not a valid range"
+    false
   end
 
 end
