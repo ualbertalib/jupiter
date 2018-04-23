@@ -16,7 +16,7 @@ class Collection < JupiterCore::LockedLdpObject
   has_multival_attribute :creators, ::RDF::Vocab::DC.creator, solrize_for: :exact_match
 
   additional_search_index :community_title, solrize_for: :sort,
-                                            as: -> { Community.find_by(id: community_id)&.title }
+                                            as: -> { Community.find_by(community_id).title }
 
   def community
     Community.find(community_id)
