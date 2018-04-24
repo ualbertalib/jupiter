@@ -2,7 +2,7 @@ require 'application_system_test_case'
 
 class ProfileIndexTest < ApplicationSystemTestCase
 
-  should 'show basic information about the logged in user' do
+  test 'should show basic information about the logged in user' do
     user = users(:regular)
 
     login_user(user)
@@ -23,7 +23,7 @@ class ProfileIndexTest < ApplicationSystemTestCase
     logout_user
   end
 
-  should 'view items owned by logged in user' do
+  test 'should view items owned by logged in user' do
     # Note: searching and faceting is covered more extensively in tests elsewhere
     user = User.find_by(email: 'john_snow@example.com')
     admin = users(:admin)

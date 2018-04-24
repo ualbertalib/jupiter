@@ -6,7 +6,6 @@ require 'active_fedora/cleaner'
 require 'minitest/hooks/test'
 require 'minitest/mock'
 require 'rails/test_help'
-require 'shoulda'
 require 'sidekiq/testing'
 require 'vcr'
 require 'webmock/minitest'
@@ -17,6 +16,14 @@ VCR.configure do |config|
 
   # Only want VCR to intercept requests to external URLs.
   config.ignore_localhost = true
+end
+
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :minitest
+    with.library :active_record
+    with.library :active_model
+  end
 end
 
 # just push all jobs to an array for verification
