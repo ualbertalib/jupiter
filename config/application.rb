@@ -41,13 +41,25 @@ module Jupiter
     # TODO: Remove after updating to Rails 5.2, as these are all rails 5.2 defaults
     # Rails 5.2 adds the last 3 headers by default, and specificly we want the referrer policy header
     # http://guides.rubyonrails.org/security.html#default-headers
+    # TODO: Move to Rails 5.2 new DSL for Content Security Policy:
+    # http://guides.rubyonrails.org/security.html#content-security-policy
+    # TODO: Also, I am allowing unsafe-inline for script-src which kinda defats the purpose of CSP,
+    # but we need a way to calculate nounces/hashes/etc
+    # another improvement is for a better way to inject matomo_url into here instead of hardcoding
     config.action_dispatch.default_headers = {
       'X-Frame-Options' => 'SAMEORIGIN',
       'X-XSS-Protection' => '1; mode=block',
       'X-Content-Type-Options' => 'nosniff',
       'X-Download-Options' => 'noopen',
       'X-Permitted-Cross-Domain-Policies' => 'none',
-      'Referrer-Policy' => 'strict-origin-when-cross-origin'
+      'Referrer-Policy' => 'strict-origin-when-cross-origin',
+      'Content-Security-Policy' =>
+        "default-src 'self'; " \
+        "font-src 'self'; " \
+        "img-src 'self' data: analytics.library.ualberta.ca www.google-analytics.com; " \
+        "object-src 'none'; " \
+        "script-src 'self' 'unsafe-inline' analytics.library.ualberta.ca www.google-analytics.com www.googletagmanager.com; " \
+        "style-src 'self'; "
     }
 
   end
