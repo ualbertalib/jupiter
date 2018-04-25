@@ -11,7 +11,9 @@
               <h4 class="mt-0"><%= draft_item.title %></h4>
               <p class="text-muted"><%= draft_item.date_created.year %></p>
               <p class="text-muted"><%= draft_item.creators.join(', ') %></p>
-              <p class="text-muted"><%= jupiter_truncate draft_item.description %></p>
+              <% if draft_item.description.present? %>
+                <p class="text-muted"><%= jupiter_truncate draft_item.description %></p>
+              <% end %>
             </div>
           </div>
 
