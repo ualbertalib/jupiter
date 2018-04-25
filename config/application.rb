@@ -59,7 +59,8 @@ module Jupiter
         "font-src 'self'; " \
         "img-src 'self' data: analytics.library.ualberta.ca www.google-analytics.com; " \
         "object-src 'none'; " \
-        "script-src 'self' 'unsafe-inline' analytics.library.ualberta.ca www.google-analytics.com www.googletagmanager.com; " \
+        "script-src 'self' 'unsafe-inline' analytics.library.ualberta.ca " \
+                    'www.google-analytics.com www.googletagmanager.com; ' \
         "style-src 'self'; "
     }
 
