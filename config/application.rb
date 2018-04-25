@@ -38,5 +38,17 @@ module Jupiter
 
     config.redis_key_prefix = "jupiter.#{Rails.env}."
 
+    # TODO: Remove after updating to Rails 5.2, as these are all rails 5.2 defaults
+    # Rails 5.2 adds the last 3 headers by default, and specificly we want the referrer policy header
+    # http://guides.rubyonrails.org/security.html#default-headers
+    config.action_dispatch.default_headers = {
+      'X-Frame-Options' => 'SAMEORIGIN',
+      'X-XSS-Protection' => '1; mode=block',
+      'X-Content-Type-Options' => 'nosniff',
+      'X-Download-Options' => 'noopen',
+      'X-Permitted-Cross-Domain-Policies' => 'none',
+      'Referrer-Policy' => 'strict-origin-when-cross-origin'
+    }
+
   end
 end
