@@ -36,17 +36,17 @@
       <% end %>
     </div>
 
-    <div class="mt-0">
+    <p>
       <%= humanize_date(thesis.creation_date) %>
-    </div>
-    <div>
+    </p>
+    <p>
       <%# TODO: the search path may need to be revisited %>
       <%= search_link_for(thesis, :all_contributors, value: thesis.dissertant) %>
-    </div>
+    </p>
     <% if thesis.abstract.present? %>
-      <div>
+      <p>
         <%= jupiter_truncate thesis.abstract %>
-      </div>
+      </p>
     <% end %>
   </div>
 </div>
