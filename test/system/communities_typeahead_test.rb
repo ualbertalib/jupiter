@@ -16,27 +16,25 @@ class CommunitiesTypeaheadTest < ApplicationSystemTestCase
                             .unlock_and_fetch_ldp_object(&:save!)
   end
 
-  context 'Non-logged in user (or anybody really)' do
-    should 'be able to typeahead communities and collections' do
-      visit communities_path
-      # Start typing ...
-      fill_in(id: 'search_bar', with: 'thin')
+  test 'anybody should be able to typeahead communities and collections' do
+    visit communities_path
+    # Start typing ...
+    fill_in(id: 'search_bar', with: 'thin')
 
-      # Typeahead results
-      assert_selector('.easy-autocomplete-container li', count: 3) # total results
+    # Typeahead results
+    assert_selector('.easy-autocomplete-container li', count: 3) # total results
 
-      # Has sub headings
-      assert_selector('.easy-autocomplete-container .eac-category', text: 'Communities')
-      assert_selector('.easy-autocomplete-container .eac-category', text: 'Collections')
+    # Has sub headings
+    assert_selector('.easy-autocomplete-container .eac-category', text: 'Communities')
+    assert_selector('.easy-autocomplete-container .eac-category', text: 'Collections')
 
-      assert_selector('.easy-autocomplete-container li', text: 'Department of thing')
-      assert_selector('.easy-autocomplete-container li', text: 'Department of thing -- Articles about thing')
-      assert_selector('.easy-autocomplete-container li', text: 'Other community -- Other stuff things')
+    assert_selector('.easy-autocomplete-container li', text: 'Department of thing')
+    assert_selector('.easy-autocomplete-container li', text: 'Department of thing -- Articles about thing')
+    assert_selector('.easy-autocomplete-container li', text: 'Other community -- Other stuff things')
 
-      # Select a result to visit the page
-      find('.easy-autocomplete-container li', text: 'Other community -- Other stuff things').click
-      assert_current_path(community_collection_path(@community2, @collection))
-    end
+    # Select a result to visit the page
+    find('.easy-autocomplete-container li', text: 'Other community -- Other stuff things').click
+    assert_current_path(community_collection_path(@community2, @collection))
   end
 
 end

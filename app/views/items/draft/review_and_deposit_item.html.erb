@@ -131,12 +131,14 @@
               <%= @draft_item.date_created %>
             </p>
 
-            <h6 class="card-subtitle mb-1 text-muted">
-              <%=  t('items.draft.describe_item.description') %>
-            </h6>
-            <p class="card-text">
-              <%= @draft_item.description %>
-            </p>
+            <% if @draft_item.description.present? %>
+              <h6 class="card-subtitle mb-1 text-muted">
+                <%=  t('items.draft.describe_item.description') %>
+              </h6>
+              <p class="card-text">
+                <%= @draft_item.description %>
+              </p>
+            <% end %>
 
             <h6 class="card-subtitle mb-1 text-muted">
               <%=  t('items.draft.describe_item.community_and_collection') %>
