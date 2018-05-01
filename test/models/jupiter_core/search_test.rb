@@ -58,7 +58,7 @@ class SearchTest < ActiveSupport::TestCase
     end
 
     search_results.each_facet_with_results do |facet|
-      assert_includes ['Title', 'Creator', 'Visibility', 'Sort Year'], facet.category_name
+      assert_includes ['Title', 'Creator', 'Visibility', 'Year'], facet.category_name
       if facet.category_name == 'Title'
         assert facet.values.keys.count == 2
         assert facet.values.key?(first_title)
