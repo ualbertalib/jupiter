@@ -324,20 +324,11 @@ class ItemTest < ActiveSupport::TestCase
 
   test 'add_files maintains correct order and correctly creates list_source proxies' do
     # Doing a lot of I/O with Fedora, so I don't want to break this long test into pieces
-    community = Community.new_locked_ldp_object(title: 'Community', owner: 1).unlock_and_fetch_ldp_object(&:save!)
+    community = locked_ldp_fixture(Community, :foo).unlock_and_fetch_ldp_object(&:save!)
     collection = Collection.new_locked_ldp_object(title: 'foo', owner: users(:regular).id,
                                                   community_id: community.id).unlock_and_fetch_ldp_object(&:save!)
 
-    item = Item.new_locked_ldp_object(title: generate_random_string,
-                                      creators: [generate_random_string],
-                                      visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                      created: '1978-01-01',
-                                      owner: 1,
-                                      item_type: CONTROLLED_VOCABULARIES[:item_type].report,
-                                      languages: [CONTROLLED_VOCABULARIES[:language].english],
-                                      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                                      subject: ['Randomness'])
-
+    item = locked_ldp_fixture(Item, :random)
     fedora_item_url = nil
     item.unlock_and_fetch_ldp_object do |unlocked_item|
       unlocked_item.add_to_path(community.id, collection.id)

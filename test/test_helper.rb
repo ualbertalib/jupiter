@@ -73,6 +73,31 @@ class ActiveSupport::TestCase
     session[:user_id].present?
   end
 
+  def locked_ldp_fixture(class_name, fixture_name)
+    find_or_create_locked_ldp_fixture(class_name, fixture_name)
+  end
+
+  # uses :title as a lookup so must be unique
+  # TODO: it would be groovy if this could do
+  # @item, @community, @collection = find_or_create_locked_ldp_fixture(Item, :item_with_collection_and_community_dependencies)
+  def find_or_create_locked_ldp_fixture(class_name, fixture_name)
+    fixtures = YAML.safe_load(ERB.new(
+      File.read(Rails.root.join('test', 'ldp_fixtures', "#{class_name.to_s.underscore}.yml"))
+    ).result).symbolize_keys!
+    options = fixtures[fixture_name]
+    options = resolve_fixture_dependencies(options)
+    class_name.where(title: options[:title]).first || class_name.new_locked_ldp_object(options)
+  end
+
+  def resolve_fixture_dependencies(options)
+    options.slice('Collection', 'Community', 'Item').each do |class_name, fixture_name|
+      object = find_or_create_locked_ldp_fixture(class_name.constantize, fixture_name.to_sym)
+      options[class_name.underscore + '_id'] = object.id
+      options.delete(class_name)
+    end
+    options
+  end
+
   # turn on test mode for omniauth
   OmniAuth.config.test_mode = true
 
