@@ -17,6 +17,7 @@ class MigrateAttachmentGids < ActiveRecord::Migration[5.2]
         raise ArgumentError, "Couldn't migrate old GID for item attachment: #{attachment.id}"
       end
     end
-    def down; end
   end
+  def down; end
+
 end

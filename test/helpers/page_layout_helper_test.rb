@@ -82,7 +82,7 @@ class PageLayoutHelperTest < ActionView::TestCase
     @community.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
                            filename: 'image-sample.jpeg', content_type: 'image/jpeg'
 
-    assert_equal root_url + url_for(@community.logo_attachment), page_image
+    assert_equal rails_blob_url(@community.logo_attachment), page_image
   end
 
 end

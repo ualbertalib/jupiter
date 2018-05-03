@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 2018_05_03_185839) do
     t.bigint "record_id"
     t.string "record_type"
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "unique_active_storage_attachment", unique: true
   end
 
   create_table "active_storage_blobs", force: :cascade do |t|
