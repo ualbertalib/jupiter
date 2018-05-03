@@ -11,7 +11,6 @@ require 'active_storage/engine'
 require 'action_view/railtie'
 require 'sprockets/railtie'
 require 'rails/test_unit/railtie'
-require 'active_storage'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, :staging, or :production.

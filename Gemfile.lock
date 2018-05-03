@@ -1,17 +1,7 @@
 GIT
-  remote: https://github.com/mbarnett/solrizer.git
-  revision: 4c9712f9309b99e1552a0c2a092a2b4a91eaf52c
-  branch: literally_types
-  specs:
-    solrizer (3.4.0)
-      activesupport
-      daemons
-      nokogiri
-      stomp
-      xml-simple
-
-PATH
-  remote: /Users/matt/source/ualib/active_fedora
+  remote: https://github.com/mbarnett/active_fedora.git
+  revision: 8e94346e6ed98df46c994726749542075e11ecd0
+  branch: backport_rails52_fixes
   specs:
     active-fedora (11.4.0)
       active-triples (~> 0.11.0)
@@ -24,6 +14,18 @@ PATH
       rsolr (>= 1.1.2, < 3)
       ruby-progressbar (~> 1.0)
       solrizer (>= 3.4, < 5)
+
+GIT
+  remote: https://github.com/mbarnett/solrizer.git
+  revision: 4c9712f9309b99e1552a0c2a092a2b4a91eaf52c
+  branch: literally_types
+  specs:
+    solrizer (3.4.0)
+      activesupport
+      daemons
+      nokogiri
+      stomp
+      xml-simple
 
 GEM
   remote: https://rubygems.org/
