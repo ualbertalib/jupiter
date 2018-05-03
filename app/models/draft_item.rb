@@ -111,11 +111,7 @@ class DraftItem < ApplicationRecord
 
   def thumbnail
     if thumbnail_id.present?
-      # TODO: Weird bug with activestorage when walking the assocation to all the attachments
-      # Should be able to just do `files.where` or `files.find_by` but what returns
-      # is either an Attachment class (expected) or an Enumerator (?).
-      # Easier just to get it directly from active storages table instead
-      file = ActiveStorage::Attachment.find_by(id: thumbnail_id)
+      file = files.find_by(id: thumbnail_id)
       return file if file.present? # If not present, then fall below and just return first file
     end
 

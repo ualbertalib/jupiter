@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180302212652) do
+ActiveRecord::Schema.define(version: 2018_04_30_213954) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,8 +18,10 @@ ActiveRecord::Schema.define(version: 20180302212652) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name"
     t.string "record_gid"
-    t.integer "blob_id"
+    t.bigint "blob_id", null: false
     t.datetime "created_at"
+    t.bigint "record_id"
+    t.string "record_type"
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_gid", "blob_id"], name: "index_active_storage_attachments_on_record_gid_and_blob_id", unique: true
     t.index ["record_gid", "name"], name: "index_active_storage_attachments_on_record_gid_and_name"
@@ -44,6 +46,13 @@ ActiveRecord::Schema.define(version: 20180302212652) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_announcements_on_user_id"
+  end
+
+  create_table "attachment_shims", force: :cascade do |t|
+    t.string "owner_global_id", null: false
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "draft_items", force: :cascade do |t|

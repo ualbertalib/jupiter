@@ -57,7 +57,7 @@ class FileSetTest < ActiveSupport::TestCase
     end
 
     item.thumbnail_fileset(file_set)
-    assert item.thumbnail.url.present?
+    assert item.thumbnail.present?
   end
 
 end
