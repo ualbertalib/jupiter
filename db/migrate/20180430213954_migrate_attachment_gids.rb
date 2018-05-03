@@ -7,7 +7,7 @@ class MigrateAttachmentGids < ActiveRecord::Migration[5.2]
 
       if record.is_a?(DraftItem)
         attachment.update_attribute(:record_id, record.id)
-        attachment.update_attribute(:record_type, record.polymorphic_name)
+        attachment.update_attribute(:record_type, DraftItem.polymorphic_name)
       elsif [Community, Item, Thesis].include?(record.class)
         shim = JupiterCore::AttachmentShim.create(owner_global_id: attachment.record_gid, name: attachment.name)
         attachment.update_attribute(:record_id, shim.id)
