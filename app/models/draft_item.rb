@@ -76,7 +76,7 @@ class DraftItem < ApplicationRecord
 
   validates :title, :type, :languages,
             :creators, :subjects, :date_created,
-            :description, :member_of_paths,
+            :member_of_paths,
             presence: true, if: :validate_describe_item?
 
   validate :communities_and_collections_presence,

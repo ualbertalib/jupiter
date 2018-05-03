@@ -10,7 +10,7 @@ gem 'puma', '~> 3.11'
 gem 'rails', '~> 5.2.0'
 
 # Assets (CSS/JS) stuff
-gem 'bootstrap', '~> 4.1.0'
+gem 'bootstrap', '~> 4.1.1'
 gem 'dropzonejs-rails'
 gem 'font-awesome-rails'
 gem 'jquery-rails'
@@ -100,7 +100,7 @@ group :test do
   # Faker added 0.5 seconds to the test suite per call. Haikunator seems much faster for faking strings
   gem 'haikunator'
   gem 'minitest-hooks'
-  gem 'shoulda', require: false
+  gem 'shoulda-matchers', '~> 3.0'
 
   gem 'launchy'
   gem 'vcr', require: false

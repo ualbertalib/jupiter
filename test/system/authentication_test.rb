@@ -2,119 +2,92 @@ require 'application_system_test_case'
 
 class AuthenticationTest < ApplicationSystemTestCase
 
-  context 'User logs in and logs out' do
-    should 'work with correct credentials' do
-      visit root_url
+  JOHNDOE_AUTH_HASH = OmniAuth::AuthHash.new(
+    provider: 'saml',
+    uid: 'johndoe',
+    info: {
+      email: 'johndoe@ualberta.ca',
+      name: 'John Doe'
+    }
+  )
 
-      Rails.application.env_config['omniauth.auth'] =
-        OmniAuth.config.mock_auth[:saml] =
-          OmniAuth::AuthHash.new(
-            provider: 'saml',
-            uid: 'johndoe',
-            info: {
-              email: 'johndoe@ualberta.ca',
-              name: 'John Doe'
-            }
-          )
+  test 'should log in and log out work with correct credentials' do
+    visit root_url
 
-      click_on I18n.t('application.navbar.links.login')
+    Rails.application.env_config['omniauth.auth'] =
+      OmniAuth.config.mock_auth[:saml] = JOHNDOE_AUTH_HASH
 
-      assert_text I18n.t('login.success')
+    click_on I18n.t('application.navbar.links.login')
 
-      assert_text 'John Doe'
+    assert_text I18n.t('login.success')
 
-      click_link 'John Doe' # opens user dropdown which has the logout link
+    assert_text 'John Doe'
 
-      click_link I18n.t('application.navbar.links.logout')
+    click_link 'John Doe' # opens user dropdown which has the logout link
 
-      assert_text I18n.t('sessions.destroy.signed_out')
-      assert_selector 'a', text: I18n.t('application.navbar.links.login')
-    end
+    click_link I18n.t('application.navbar.links.logout')
 
-    should 'not work with bad credentials' do
-      visit root_url
-
-      Rails.application.env_config['omniauth.auth'] =
-        OmniAuth.config.mock_auth[:saml] = :invalid_credentials
-
-      click_on I18n.t('application.navbar.links.login')
-
-      assert_text I18n.t('login.error')
-
-      assert_selector 'a', text: I18n.t('application.navbar.links.login')
-    end
+    assert_text I18n.t('sessions.destroy.signed_out')
+    assert_selector 'a', text: I18n.t('application.navbar.links.login')
   end
 
-  context 'when visiting a protected page' do
-    should 'get redirected to homepage then back to page, if user is authorized' do
-      visit profile_url
+  test 'should not log in and log out with bad credentials' do
+    visit root_url
 
-      assert_current_path(root_path)
-      assert_text I18n.t('authorization.user_not_authorized_try_logging_in')
+    Rails.application.env_config['omniauth.auth'] =
+      OmniAuth.config.mock_auth[:saml] = :invalid_credentials
 
-      Rails.application.env_config['omniauth.auth'] =
-        OmniAuth.config.mock_auth[:saml] =
-          OmniAuth::AuthHash.new(
-            provider: 'saml',
-            uid: 'johndoe',
-            info: {
-              email: 'johndoe@ualberta.ca',
-              name: 'John Doe'
-            }
-          )
+    click_on I18n.t('application.navbar.links.login')
 
-      click_link I18n.t('application.navbar.links.login')
+    assert_text I18n.t('login.error')
 
-      assert_text I18n.t('login.success')
-
-      assert_current_path(profile_path)
-      assert_text I18n.t('admin.users.created')
-    end
-
-    should 'get redirected to homepage then back to homepage again with error, if user is unauthorized' do
-      draft_item = draft_items(:completed_describe_item_step)
-      visit item_draft_path(item_id: draft_item.id, id: :describe_item)
-
-      assert_text I18n.t('authorization.user_not_authorized_try_logging_in')
-
-      assert_current_path(root_path)
-      assert_selector 'h2', text: I18n.t('welcome.index.welcome_lead')
-
-      Rails.application.env_config['omniauth.auth'] =
-        OmniAuth.config.mock_auth[:saml] =
-          OmniAuth::AuthHash.new(
-            provider: 'saml',
-            uid: 'johndoe',
-            info: {
-              email: 'johndoe@ualberta.ca',
-              name: 'John Doe'
-            }
-          )
-
-      click_link I18n.t('application.navbar.links.login')
-
-      assert_text I18n.t('authorization.user_not_authorized')
-
-      assert_current_path(root_path)
-      assert_selector 'h2', text: I18n.t('welcome.index.welcome_lead')
-    end
+    assert_selector 'a', text: I18n.t('application.navbar.links.login')
   end
 
-  should 'after login should be redirected back to previous page user was on' do
+  test 'should get redirected to homepage then back to a protected page, if user is authorized' do
+    visit profile_url
+
+    assert_current_path(root_path)
+    assert_text I18n.t('authorization.user_not_authorized_try_logging_in')
+
+    Rails.application.env_config['omniauth.auth'] =
+      OmniAuth.config.mock_auth[:saml] = JOHNDOE_AUTH_HASH
+
+    click_link I18n.t('application.navbar.links.login')
+
+    assert_text I18n.t('login.success')
+
+    assert_current_path(profile_path)
+    assert_text I18n.t('admin.users.created')
+  end
+
+  test 'should get redirected to homepage then back to homepage again with error, if user is unauthorized' do
+    draft_item = draft_items(:completed_describe_item_step)
+    visit item_draft_path(item_id: draft_item.id, id: :describe_item)
+
+    assert_text I18n.t('authorization.user_not_authorized_try_logging_in')
+
+    assert_current_path(root_path)
+    assert_selector 'h2', text: I18n.t('welcome.index.welcome_lead')
+
+    Rails.application.env_config['omniauth.auth'] =
+      OmniAuth.config.mock_auth[:saml] = JOHNDOE_AUTH_HASH
+
+    click_link I18n.t('application.navbar.links.login')
+
+    assert_text I18n.t('authorization.user_not_authorized')
+
+    assert_current_path(root_path)
+    assert_selector 'h2', text: I18n.t('welcome.index.welcome_lead')
+  end
+
+  test 'should after login should be redirected back to previous page user was on' do
     # Go to browse page before logging in
     visit communities_path
     assert_selector 'h1', text: I18n.t('communities.index.header')
 
     Rails.application.env_config['omniauth.auth'] =
-      OmniAuth.config.mock_auth[:saml] =
-        OmniAuth::AuthHash.new(
-          provider: 'saml',
-          uid: 'johndoe',
-          info: {
-            email: 'johndoe@ualberta.ca',
-            name: 'John Doe'
-          }
-        )
+      OmniAuth.config.mock_auth[:saml] = JOHNDOE_AUTH_HASH
 
     click_link I18n.t('application.navbar.links.login')
 

@@ -2,7 +2,7 @@ require 'application_system_test_case'
 
 class AdminItemsIndexTest < ApplicationSystemTestCase
 
-  should 'be able to view all items/theses owned by anybody' do
+  test 'should be able to view all items/theses owned by anybody' do
     # Note: searching and faceting is covered more extensively in tests elsewhere
     user = users(:regular)
     admin = users(:admin)

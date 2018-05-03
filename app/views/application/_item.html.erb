@@ -37,15 +37,17 @@
       <% end %>
     </div>
 
-    <div class="mt-0">
+    <p>
       <%= humanize_date(item.creation_date) %>
-    </div>
-    <div>
+    </p>
+    <p>
       <%# TODO: the search path may need to be revisited %>
       <%= safe_join(item.creators&.map { |creator| search_link_for(item, :all_contributors, value: creator) }, ', ') %>
-    </div>
-    <div>
-      <%= jupiter_truncate item.description %>
-    </div>
+    </p>
+    <% if item.description.present? %>
+      <p>
+        <%= jupiter_truncate item.description %>
+      </p>
+    <% end %>
   </div>
 </div>
