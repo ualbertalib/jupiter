@@ -14,7 +14,7 @@ class MigrateAttachmentGids < ActiveRecord::Migration[5.2]
         attachment.update_attribute(:record_type, shim.class.name)
         attachment.update_attribute(:name, :shimmed_file)
       else
-        raise ArgumentError, "FUCK"
+        raise ArgumentError, "Couldn't migrate old GID for item attachment: #{attachment.id}"
       end
     end
     def down; end
