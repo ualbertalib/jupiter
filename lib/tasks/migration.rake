@@ -243,12 +243,13 @@ namespace :migration do
         hydra_noid = object_value_from_predicate(graph, ::TERMS[:ual].hydra_noid)
         dupe = find_duplicates(hydra_noid)
         if dupe
+            puts "#{hydra_noid} is dupe"
 	    dupes = dir + '/dupes/'
             Dir.mkdir(dupes) unless File.exist?(dupes)
             `mv #{dir}/#{File.basename(file)} #{dupes}`
         end 
 	next if dupe
-
+        puts "Starting " + hydra_noid
         title = object_value_from_predicate(graph, ::RDF::Vocab::DC.title)
         description = object_value_from_predicate(graph, ::RDF::Vocab::DC.description)
 
@@ -597,8 +598,14 @@ namespace :migration do
         unicorn =  object_value_from_predicate(graph, ::TERMS[:ual].unicorn)
         ingest_batch = object_value_from_predicate(graph, ::TERMS[:ual].ingest_batch)
 
-        collection_ids = get_collections(graph)
-        community_ids = get_communities(collection_ids) unless collection_ids.nil? || collection_ids.empty?
+        #collection_ids = get_collections(graph)
+        #community_ids = get_communities(collection_ids) unless collection_ids.nil? || collection_ids.empty?
+        # use known community/collection for theses
+        collection_ids = [] unless collection_ids
+        community_ids = [] unless community_ids
+        collection_ids |= ['f42f3da6-00c3-4581-b785-63725c33c7ce']
+        community_ids |= ['db9a4e71-f809-4385-a274-048f28eb6814']
+
         begin 
           if collection_ids.nil? && community_ids.nil?
             puts "#{hydra_noid} don't have community/collection"
