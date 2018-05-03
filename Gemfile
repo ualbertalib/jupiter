@@ -24,7 +24,6 @@ gem 'bootsnap', '>= 1.1.0', require: false
 
 # View stuff
 gem 'active_link_to'
-# gem 'activestorage'
 gem 'simple_form'
 
 # SEO
