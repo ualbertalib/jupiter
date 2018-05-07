@@ -175,11 +175,11 @@ module ItemProperties
 
         Rails.logger.warn("Could not preserve #{id}") if result != true
         # TODO: <removed temporarily> log to external service iff result != true
-        return true
+        true
       rescue StandardError
         # we trap errors in writing to the Redis queue in order to avoid crashing the save process for the user.
         Rollbar.error("Error occured in push_item_id_for_preservation, Could not preserve #{id}", e)
-        return true
+        true
       end
 
       # rubocop:disable Style/GlobalVars

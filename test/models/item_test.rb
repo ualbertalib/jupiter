@@ -455,7 +455,7 @@ class ItemTest < ActiveSupport::TestCase
     Redis.current.del Rails.application.secrets.preservation_queue_name
   end
 
-  test 'should end up with the queue only having a noid once after multiple saves of the same item' do
+  test 'should end up with the queue only having an item id once after multiple saves of the same item' do
     Redis.current.del Rails.application.secrets.preservation_queue_name
 
     # Setup an item...
@@ -472,12 +472,6 @@ class ItemTest < ActiveSupport::TestCase
                                       languages: [CONTROLLED_VOCABULARIES[:language].english],
                                       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
                                       subject: ['Randomness'])
-    freeze_time do
-      item.unlock_and_fetch_ldp_object do |unlocked_item|
-        unlocked_item.add_to_path(community.id, collection.id)
-        unlocked_item.save
-      end
-    end
 
     travel 1.minute do
       item.unlock_and_fetch_ldp_object(&:save)
@@ -488,6 +482,11 @@ class ItemTest < ActiveSupport::TestCase
     end
 
     freeze_time do
+      item.unlock_and_fetch_ldp_object do |unlocked_item|
+        unlocked_item.add_to_path(community.id, collection.id)
+        unlocked_item.save
+      end
+
       assert_equal 1, Redis.current.zcard(Rails.application.secrets.preservation_queue_name)
 
       item_id, score = Redis.current.zrange(Rails.application.secrets.preservation_queue_name,
@@ -502,7 +501,7 @@ class ItemTest < ActiveSupport::TestCase
     Redis.current.del Rails.application.secrets.preservation_queue_name
   end
 
-  test 'should end up with noids in the queue in the correct temporal order' do
+  test 'should end up with item ids in the queue in the correct temporal order' do
     Redis.current.del Rails.application.secrets.preservation_queue_name
 
     # Setup some items...
@@ -522,7 +521,7 @@ class ItemTest < ActiveSupport::TestCase
                                           subject: ['Randomness'])
     end
 
-    # this is all maybe a bit too "there's nothing up my sleeve" about noid orders, but c'est la vie
+    # this is all maybe a bit too "there's nothing up my sleeve" about item id orders, but c'est la vie
     items = items.shuffle
 
     freeze_time do
