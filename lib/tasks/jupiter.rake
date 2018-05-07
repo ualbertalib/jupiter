@@ -23,10 +23,10 @@ namespace :jupiter do
     puts 'Reindex completed!'
   end
 
-  desc 'queus all items and theses in the system for preservation'
+  desc 'queue all items and theses in the system for preservation'
   task preserve_all_items_and_theses: :environment do
-    puts 'Preserving all Items and Theses...'
+    puts 'Adding all Items and Theses to preservation queue...'
     (Item.all + Thesis.all).each { |item| item.unlock_and_fetch_ldp_object(&:preserve) }
-    puts 'Preservation completed!'
+    puts 'All Items and Theses have been added to preservation queue!'
   end
 end
