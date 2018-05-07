@@ -35,6 +35,7 @@ gem 'rdf-vocab'
 gem 'solrizer', github: 'mbarnett/solrizer', branch: 'literally_types'
 
 # Database stuff
+gem 'connection_pool'
 gem 'pg', '~> 1.0.0'
 gem 'redis', '~> 4.0'
 gem 'rsolr'

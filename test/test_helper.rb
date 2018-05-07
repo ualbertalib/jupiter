@@ -31,6 +31,7 @@ Sidekiq::Testing.fake!
 
 class ActiveSupport::TestCase
 
+  # TODO: Remove after 5.2 PR gets merged
   def freeze_time(&block)
     travel_to Time.current, &block
   end

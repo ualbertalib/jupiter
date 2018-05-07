@@ -435,6 +435,7 @@ DEPENDENCIES
   capybara (~> 2.18)
   chromedriver-helper
   clamby
+  connection_pool
   dropzonejs-rails
   ezid-client
   faker

@@ -1,10 +1,10 @@
-namespace :cleanup do
+namespace :jupiter do
   # Wizard has potential of leaving stale inactive draft items around,
   # For example if someone goes to the deposit screen and then leaves
   # a draft item gets created and left in an inactive state.
   # This rake task is to cleanup these inactive draft items
   desc 'removes stale inactive draft items from the database'
-  task inactive_draft_items: :environment do
+  task remove_inactive_draft_items: :environment do
     # Find all the inactive draft items older than yesterday
     inactive_draft_items = DraftItem.where('DATE(created_at) < DATE(?)', Date.yesterday).where(status: :inactive)
 
@@ -21,5 +21,12 @@ namespace :cleanup do
     puts 'Reindexing all Items and Theses...'
     (Item.all + Thesis.all).each { |item| item.unlock_and_fetch_ldp_object(&:save!) }
     puts 'Reindex completed!'
+  end
+
+  desc 'queus all items and theses in the system for preservation'
+  task preserve_all_items_and_theses: :environment do
+    puts 'Preserving all Items and Theses...'
+    (Item.all + Thesis.all).each { |item| item.unlock_and_fetch_ldp_object(&:preserve) }
+    puts 'Preservation completed!'
   end
 end
