@@ -8,13 +8,8 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
   def before_all
     super
 
-    # TODO: setup proper fixtures for LockedLdpObjects
-
-    # A community with a collection
-    @community = Community.new_locked_ldp_object(title: 'Two collection community', owner: 1)
-                          .unlock_and_fetch_ldp_object(&:save!)
-    @collection = Collection.new_locked_ldp_object(community_id: @community.id, title: 'Nice collection', owner: 1)
-                            .unlock_and_fetch_ldp_object(&:save!)
+    @community = locked_ldp_fixture(Community, :nice).unlock_and_fetch_ldp_object(&:save!)
+    @collection = locked_ldp_fixture(Collection, :nice).unlock_and_fetch_ldp_object(&:save!)
     @items = ['Fancy', 'Nice'].map do |adjective|
       Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                  owner: 1,
