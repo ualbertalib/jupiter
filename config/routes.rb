@@ -1,6 +1,8 @@
 require 'sidekiq/web'
 require_dependency 'admin_constraint'
 
+# rubocop is bad and recommends insane things
+# rubocop:disable Style/FormatStringToken
 Rails.application.routes.draw do
   root to: 'welcome#index'
 
@@ -95,5 +97,8 @@ Rails.application.routes.draw do
   get '/public/view/collection/:uuid', to: 'redirect#fedora3_collection'
   get '/public/view/community/:uuid', to: 'redirect#fedora3_community'
 
+  get '/rails/blobs/:key', to: redirect('/rails/active_storage/blobs/%{key}/thumbnail.jpg')
+
   match '/oai/(*all)', to: 'application#service_unavailable', via: [:get, :post]
 end
+# rubocop:enable Style/FormatStringToken

@@ -40,11 +40,8 @@ module PageLayoutHelper
   def page_image
     default_url = image_url('era-logo.png')
     # We only have images on community and item/thesis show pages
-    image = @community&.logo&.attachment || @item&.thumbnail&.attachment
-
-    # TODO: ActiveStorage 5.2 upgrade, fix this hack
-    # needs to be a full url so can use rails_blob_url or url_for in 5.2 instead
-    image_url = root_url + image.url if image.present?
+    image = @community&.logo_attachment || @item&.thumbnail_attachment
+    image_url = rails_blob_url(image) if image.present?
     image_url || default_url
   end
 

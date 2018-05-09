@@ -51,6 +51,8 @@ class Item < JupiterCore::LockedLdpObject
   # Combine all the subjects for faceting
   additional_search_index :all_subjects, solrize_for: :facet, as: -> { all_subjects }
 
+  has_one_attached :thumbnail
+
   def self.from_draft(draft_item)
     item = Item.find(draft_item.uuid) if draft_item.uuid.present?
     item ||= Item.new_locked_ldp_object
