@@ -20,7 +20,7 @@ if Rails.env.development? || Rails.env.uat?
   puts 'Starting seeding of dev database...'
 
   # start fresh
-  [Announcement, ActiveStorage::Blob, ActiveStorage::Attachment,
+  [Announcement, ActiveStorage::Blob, ActiveStorage::Attachment, JupiterCore::AttachmentShim,
    Identity, User, Type, Language].each(&:destroy_all)
 
   ActiveFedora::Cleaner.clean!

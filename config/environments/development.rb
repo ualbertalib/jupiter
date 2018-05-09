@@ -9,7 +9,7 @@ Rails.application.configure do
   config.cache_classes = false
 
   # Eager load code on boot.
-  config.eager_load = true
+  config.eager_load = false
 
   # Show full error reports.
   config.consider_all_requests_local = true
@@ -20,7 +20,7 @@ Rails.application.configure do
 
     config.cache_store = :memory_store
     config.public_file_server.headers = {
-      'Cache-Control' => "public, max-age=#{2.days.seconds.to_i}"
+      'Cache-Control' => "public, max-age=#{2.days.to_i}"
     }
   else
     config.action_controller.perform_caching = false
@@ -56,6 +56,9 @@ Rails.application.configure do
 
   # Which ActiveStorage service to use
   config.active_storage.service = (ENV['ACTIVE_STORAGE_SERVICE'] || :local).to_sym
+
+  # Highlight code that triggered database queries in logs.
+  config.active_record.verbose_query_logs = true
 
   # FITS characterization
   config.run_fits_characterization = ENV['RUN_FITS_CHARACTERIZATION'].present? || false
