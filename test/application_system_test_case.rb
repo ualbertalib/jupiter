@@ -12,11 +12,6 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     driven_by :selenium_chrome_headless
   end
 
-  def setup
-    # host! "http://#{IPSocket.getaddress(Socket.gethostname)}"
-    super
-  end
-
   # Logs in a test user. Used for system tests.
   def login_user(user)
     identity = user.identities.first
