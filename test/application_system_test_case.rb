@@ -13,7 +13,7 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   end
 
   def setup
-    host! "http://#{IPSocket.getaddress(Socket.gethostname)}"
+    # host! "http://#{IPSocket.getaddress(Socket.gethostname)}"
     super
   end
 
