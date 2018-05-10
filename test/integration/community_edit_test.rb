@@ -9,7 +9,7 @@ class CommunityEditTest < ActionDispatch::IntegrationTest
 
     # A community with a logo
     @community1 = Community
-                  .new_locked_ldp_object(title: 'Two collection community', owner: 1)
+                  .new_locked_ldp_object(title: 'Logo Community', owner: 1)
                   .unlock_and_fetch_ldp_object(&:save!)
     @community1.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
                             filename: 'image-sample.jpeg', content_type: 'image/jpeg'

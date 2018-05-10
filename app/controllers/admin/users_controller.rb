@@ -19,10 +19,10 @@ class Admin::UsersController < Admin::AdminController
 
     # Postgres treats nulls first in an ordered list, lets reverse this behaviour.
     result = @search.result
-    orders = result.orders.map do |order|
+    orders = result.arel.orders.map do |order|
       order.direction == :asc ? "#{order.to_sql} NULLS FIRST" : "#{order.to_sql} NULLS LAST"
     end
-    result = result.except(:order).order(orders.join(', ')) if orders.count > 0
+    result = result.except(:order).order(Arel.sql(orders.join(', '))) if orders.count > 0
 
     @users = result.page(params[:page])
   end

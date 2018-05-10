@@ -2,6 +2,7 @@ module ObjectProperties
   extend ActiveSupport::Concern
 
   included do
+    extend JupiterCore::ActiveStorageMacros
     # Dublin Core attributes
     has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :sort]
 
