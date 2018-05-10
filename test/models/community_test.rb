@@ -26,9 +26,6 @@ class CommunityTest < ActiveSupport::TestCase
                   filename: 'image-sample.jpeg', content_type: 'image/jpeg'
 
     assert c.logo.is_a?(ActiveStorage::Attached::One)
-    # 'name' refers to the attribute of the record, not filename
-    assert_equal c.logo.name, :logo
-    assert_equal c.logo.record_gid, c.to_gid.to_s
     assert_equal c.logo.blob.filename, 'image-sample.jpeg'
     assert_equal c.logo.blob.content_type, 'image/jpeg'
     assert_equal c.logo.blob.byte_size, 12_086

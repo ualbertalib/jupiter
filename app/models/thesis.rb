@@ -51,6 +51,8 @@ class Thesis < JupiterCore::LockedLdpObject
                           solrize_for: :facet,
                           as: -> { [language] }
 
+  has_one_attached :thumbnail
+
   # Present a consistent interface with Item#item_type_with_status_code
   def item_type_with_status_code
     :thesis

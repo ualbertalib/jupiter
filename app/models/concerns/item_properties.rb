@@ -256,10 +256,6 @@ type=\"#{unlocked_fileset.original_file.mime_type}\"\
     end
   end
 
-  def thumbnail
-    @thumbnail ||= ActiveStorage::Attached::One.new(:thumbnail, self)
-  end
-
   # Thumbnailing errors can manifest themselves in a few different ways, so we're trapping this without a specific
   # class.
   def thumbnail_fileset(fileset)

@@ -9,13 +9,11 @@ class Community < JupiterCore::LockedLdpObject
   has_attribute :description, ::RDF::Vocab::DC.description, solrize_for: [:search]
   has_multival_attribute :creators, ::RDF::Vocab::DC.creator, solrize_for: :exact_match
 
+  has_one_attached :logo
+
   # this method can be used on the SolrCached object OR the ActiveFedora object
   def member_collections
     Collection.where(community_id: id)
-  end
-
-  def logo
-    @active_storage_attached_logo ||= ActiveStorage::Attached::One.new(:logo, self)
   end
 
   # A virtual attribute to handle removing logos on forms ...
@@ -27,7 +25,7 @@ class Community < JupiterCore::LockedLdpObject
   def remove_logo=(val)
     return unless logo.attached? && (val == 'true')
     # This should probably be 'purge_later', but then we have problems on page reload
-    logo.attachment.purge
+    logo_attachment.purge
   end
 
   def self.safe_attributes
