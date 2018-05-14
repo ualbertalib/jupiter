@@ -173,8 +173,11 @@ module ItemProperties
       def push_item_id_for_preservation
         result = preserve
 
-        Rails.logger.warn("Could not preserve #{id}") if result != true
-        # TODO: <removed temporarily> log to external service iff result != true
+        if result == false
+          Rails.logger.warn("Could not preserve #{id}")
+          Rollbar.error("Could not preserve #{id}", e)
+        end
+
         true
       rescue StandardError
         # we trap errors in writing to the Redis queue in order to avoid crashing the save process for the user.
