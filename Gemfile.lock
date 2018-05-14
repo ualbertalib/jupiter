@@ -104,7 +104,7 @@ GEM
       autoprefixer-rails (>= 6.0.3)
       popper_js (>= 1.12.9, < 2)
       sass (>= 3.5.2)
-    brakeman (4.2.1)
+    brakeman (4.3.0)
     builder (3.2.3)
     canonical-rails (0.2.3)
       rails (>= 4.1, < 5.3)
@@ -443,6 +443,7 @@ DEPENDENCIES
   capybara (>= 2.15, < 4.0)
   chromedriver-helper
   clamby
+  connection_pool
   dropzonejs-rails
   ezid-client
   faker
