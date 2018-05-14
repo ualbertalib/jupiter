@@ -175,11 +175,11 @@ module ItemProperties
 
         if result == false
           Rails.logger.warn("Could not preserve #{id}")
-          Rollbar.error("Could not preserve #{id}", e)
+          Rollbar.error("Could not preserve #{id}")
         end
 
         true
-      rescue StandardError
+      rescue StandardError => e
         # we trap errors in writing to the Redis queue in order to avoid crashing the save process for the user.
         Rollbar.error("Error occured in push_item_id_for_preservation, Could not preserve #{id}", e)
         true
