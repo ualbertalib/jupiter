@@ -1,7 +1,7 @@
 <% if Rails.application.secrets.google_analytics_token.present? %>
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=<%= Rails.application.secrets.google_analytics_token %>"></script>
-  <script>
+  <%= javascript_tag nonce: true do %>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
@@ -11,13 +11,13 @@
         'page_path': window.location.pathname
       });
     });
-  </script>
+  <% end %>
   <!-- End Google Analytics -->
 <% end %>
 
 <% if Rails.application.secrets.matomo_url.present? && Rails.application.secrets.matomo_site_id.present? %>
   <!-- Matomo -->
-  <script type="text/javascript">
+  <%= javascript_tag nonce: true do %>
     var _paq = _paq || [];
 
     // tracker methods like "setCustomDimension" should be called before "trackPageView"
@@ -33,7 +33,7 @@
       var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
       g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
     })();
-  </script>
+  <% end %>
   <!-- End Matomo Code -->
 
   <!-- Matomo Image Tracker -->
