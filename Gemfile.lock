@@ -326,7 +326,7 @@ GEM
     redis (4.0.1)
     rollbar (2.15.6)
       multi_json
-    rsolr (2.2.0)
+    rsolr (2.2.1)
       builder (>= 2.1.2)
       faraday (>= 0.9.0)
     rubocop (0.51.0)
