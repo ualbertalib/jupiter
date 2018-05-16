@@ -19,7 +19,13 @@ Rails.application.config.content_security_policy do |policy|
                      'analytics.library.ualberta.ca',
                      'www.google-analytics.com',
                      'www.googletagmanager.com'
-  policy.style_src   :self, :https, :unsafe_inline
+  policy.style_src   :self, :https,
+                     # hash for whitelisting turbolinks progress bar
+                     "'sha256-voXja0NHK+kj/CO6kVFGewEz+qyDFbxR+WW6e9vfN3o='",
+                     # hash for sidekiq dashboard
+                     "'sha256-Y/9Ml03MSwcSrqR+veSpLzwCRJlw4Sk1S/X68fa51ec='",
+                     # hash for jquery multidownload (shows a tiny download icon)
+                     "'sha256-biLFinpqYMtWHmXfkA1BPeCY0/fNt46SAZ+BBk5YUog='"
 
   # Specify URI for violation reports
   # policy.report_uri "/csp-violation-report-endpoint"
