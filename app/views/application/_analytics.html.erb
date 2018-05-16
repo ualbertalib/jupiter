@@ -1,7 +1,8 @@
 <% if Rails.application.secrets.google_analytics_token.present? %>
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=<%= Rails.application.secrets.google_analytics_token %>"></script>
-  <%= javascript_tag nonce: true do %>
+  <%# TODO: javascript_tag, nonce: true do %>
+  <%= javascript_tag do %>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
@@ -17,7 +18,8 @@
 
 <% if Rails.application.secrets.matomo_url.present? && Rails.application.secrets.matomo_site_id.present? %>
   <!-- Matomo -->
-  <%= javascript_tag nonce: true do %>
+  <%# TODO: javascript_tag, nonce: true do %>
+  <%= javascript_tag do %>
     var _paq = _paq || [];
 
     // tracker methods like "setCustomDimension" should be called before "trackPageView"
