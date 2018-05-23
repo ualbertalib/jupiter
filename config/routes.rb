@@ -1,4 +1,5 @@
 require 'sidekiq/web'
+require 'sidekiq/cron/web'
 require_dependency 'admin_constraint'
 
 # rubocop is bad and recommends insane things
