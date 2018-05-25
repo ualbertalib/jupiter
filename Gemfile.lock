@@ -123,7 +123,7 @@ GEM
     clamby (1.4.0)
     coderay (1.1.2)
     concurrent-ruby (1.0.5)
-    connection_pool (2.2.1)
+    connection_pool (2.2.2)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
     crass (1.0.4)
