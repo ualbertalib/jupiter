@@ -17,6 +17,10 @@ class JupiterCore::RangeFacetResult
     @range = Range.new(range[:begin], range[:end])
   end
 
+  def humanized_range
+    @range.to_s.gsub('..', ' to ')
+  end
+
   def to_partial_path
     'range_facet_result'
   end

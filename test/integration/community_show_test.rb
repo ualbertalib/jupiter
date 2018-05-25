@@ -54,7 +54,7 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
                   text: I18n.t('communities.show.create_collection')
 
     # Should show 2 collections with a heading
-    assert_select 'h4', text: I18n.t('communities.show.collections_list_header')
+    assert_select 'h2', text: I18n.t('communities.show.collections_list_header')
     assert_select 'ul.list-group li', count: 2
 
     # Collections should have a linkable title and edit/delete buttons
@@ -91,7 +91,7 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
                   false
 
     # Should show 2 collections with a heading
-    assert_select 'h4', text: I18n.t('communities.show.collections_list_header')
+    assert_select 'h2', text: I18n.t('communities.show.collections_list_header')
     assert_select 'ul.list-group li.list-group-item', count: 2
 
     # Collections should have be linkable but no edit/delete buttons should be displayed
@@ -114,7 +114,7 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
     assert_select 'div.img-thumbnail i.fa', count: 0
 
     # No collections should no be shown
-    assert_select 'h4', text: I18n.t('communities.show.collections_list_header')
+    assert_select 'h2', text: I18n.t('communities.show.collections_list_header')
     assert_select 'ul.list-group li', count: 1
     assert_select 'ul.list-group li.list-group-item', text: I18n.t('communities.show.no_collections')
   end

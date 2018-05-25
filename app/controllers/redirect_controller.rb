@@ -27,7 +27,7 @@ class RedirectController < ApplicationController
 
   def hydra_north_community_collection
     object = find_community_or_collection_by_noid(noid)
-    redirect_to(path_for_result(object), status: :moved_permanently)
+    redirect_to(polymorphic_path([object.try(:community), object]), status: :moved_permanently)
   end
 
   def fedora3_item

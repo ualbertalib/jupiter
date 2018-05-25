@@ -11,7 +11,9 @@
               <h4 class="mt-0"><%= draft_item.title %></h4>
               <p class="text-muted"><%= draft_item.date_created.year %></p>
               <p class="text-muted"><%= draft_item.creators.join(', ') %></p>
-              <p class="text-muted"><%= jupiter_truncate draft_item.description %></p>
+              <% if draft_item.description.present? %>
+                <p class="text-muted"><%= jupiter_truncate draft_item.description %></p>
+              <% end %>
             </div>
           </div>
 
@@ -36,13 +38,12 @@
     <% end %>
   <% else %>
     <div class='list-group-item'>
-      <%= no_items_found %>
+      <%= t('.no_items_found') %>
     </div>
   <% end %>
 </div>
 
 <h2 class="mt-5"><%= items_header %></h2>
 
-<%= render partial: 'search/item_search_and_results',
-          locals: { search_placeholder: search_placeholder,
-                    no_items_found: no_items_found } %>
+<%= render partial: 'search_bar', locals: {placeholder: t('.search_placeholder')} %>
+<%= render partial: 'results' %>

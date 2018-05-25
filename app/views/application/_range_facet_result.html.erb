@@ -20,9 +20,13 @@
   <% end %>
 </div>
 
-<% if params[:ranges]&.fetch(range_facet_result.solr_index, false) %>
+<% if active_range? range_facet_result %>
   <% content_for :facet_badges do %>
-    <%= render partial: 'search/facet_badge', locals: { value: range_facet_result.range.to_s.gsub('..', ' to '),
-               url: query_params_without_range_value(range_facet_result.solr_index) } %>
+    <%= link_to query_params_without_range_value(range_facet_result.solr_index) do %>
+      <span class="badge badge-secondary p-2 mt-2">
+        <%= range_facet_result.humanized_range %>
+        <%= fa_icon 'times-circle' %>
+      </span>
+    <% end %>
   <% end %>
 <% end %>

@@ -1,7 +1,5 @@
 <% page_title(@collection.title) %>
-<% content_for :head do %>
-  <meta name="description" content="<%= jupiter_truncate @collection.description, length: 150 %>">
-<% end %>
+<% page_description(@collection.description) %>
 
 <div class="container mt-3">
   <%= render partial: 'show_breadcrumbs' %>
@@ -36,9 +34,9 @@
   <% end %>
 
   <div class="d-flex flex-wrap align-items-center justify-content-between mt-3">
-    <h4 class="mr-auto">
+    <h2 class="mr-auto">
       <%= t('.items_list_header') %>
-    </h4>
+    </h2>
     <% if policy(:item).new? %>
       <%= link_to create_draft_items_path(collection: @collection.id), method: :post,
           class: 'btn btn-primary' do %>
@@ -48,28 +46,7 @@
     <% end %>
   </div>
 
-  <form>
-    <div class="input-group mt-3">
-      <%= search_field_tag :query,
-          params[:query],
-          placeholder: t('collections.show.search_items_placeholder'),
-          'aria-label': t('collections.show.search_items_placeholder'),
-          class: 'form-control' %>
-      <span class="input-group-btn">
-        <button type="submit" class="btn btn-secondary">
-          <%= fa_icon 'search' %>
-          <%= t('search_items') %>
-        </button>
-      </span>
-    </div>
-  </form>
+  <%= render partial: 'search_bar', locals: {placeholder: t('.search_placeholder')} %>
+  <%= render partial: 'results' %>
 
-  <% if @results.count > 0 %>
-    <%= render partial: 'search/model_results', locals: { results: @results, model: :item,
-                                                          search_term: params[:query] } %>
-  <% else %>
-    <div>
-      <p class="mt-3"><%= t('.no_items_in_collection') %></p>
-    </div>
-  <% end %>
 </div>

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+  <head prefix="og: http://ogp.me/ns#">
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -14,11 +14,35 @@
     <meta name="theme-color" content="#dbe1ef">
 
     <title><%= page_title(t('site_name')) %></title>
+    <meta name="description" content="<%= page_description %>">
+
+    <%# Open Graph - http://ogp.me/ %>
+    <meta property="og:type"         content="<%= page_type %>">
+    <meta property="og:site_name"    content="<%= t('site_name') %>">
+    <meta property="og:url"          content="<%= request.base_url + request.fullpath %>">
+    <meta property="og:locale"       content="en_US">
+    <meta property="og:title"        content="<%= page_title %>">
+    <meta property="og:description"  content="<%= page_description %>">
+    <meta property="og:image"        content="<%= page_image %>">
+
+    <%#  Twitter Card - https://dev.twitter.com/cards/types/summary %>
+    <meta name="twitter:card"        content="summary">
+    <meta name="twitter:site"        content="@uofalibraries">
+    <meta name="twitter:url"         content="<%= request.base_url + request.fullpath %>">
+    <meta name="twitter:title"       content="<%= page_title %>">
+    <meta name="twitter:description" content="<%= page_description %>">
+    <meta name="twitter:image"       content="<%= page_image %>">
+
+    <%= yield(:extra_social_meta) %>
 
     <%= canonical_tag -%>
 
 
     <%= csrf_meta_tags %>
+
+    <%# TODO: Investigate CSP when more documentation with doing js.erb/turbolinks etc. %>
+    <%#= csp_meta_tag %>
+
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
 
@@ -29,7 +53,7 @@
 
   <body>
     <%= render partial: 'navbar' %>
-    <main>
+    <main id="content">
       <%= render partial: 'announcement' %>
       <%= render partial: 'flash' %>
       <%= content_for?(:content) ? yield(:content) : yield %>

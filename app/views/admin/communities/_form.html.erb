@@ -1,10 +1,10 @@
 <%= simple_form_for [:admin, @community] do |f| %>
   <div class="form-group">
-    <%= render partial: 'thumbnail', locals: { thumbnail: @community.logo.attachment, object: @community } %>
+    <%= render partial: 'thumbnail', locals: { thumbnail: @community.logo&.attachment, object: @community } %>
 
     <%= f.input :logo, as: :file, label: false, wrapper_html: { class: 'mt-3' } %>
 
-    <% if @community.logo.attached? %>
+    <% if @community.logo&.attached? %>
       <%= f.input :remove_logo, as: :boolean, checked_value: true, unchecked_value: false %>
     <% end %>
 

@@ -1,21 +1,33 @@
- <% if Rails.application.secrets.google_analytics_token.present? %>
+<% if Rails.application.secrets.google_analytics_token.present? %>
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=<%= Rails.application.secrets.google_analytics_token %>"></script>
-  <script>
+  <%# TODO: javascript_tag, nonce: true do %>
+  <%= javascript_tag do %>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-  </script>
+
+    document.addEventListener('turbolinks:load', function() {
+      return gtag('config', '<%= Rails.application.secrets.google_analytics_token %>', {
+        'page_path': window.location.pathname
+      });
+    });
+  <% end %>
   <!-- End Google Analytics -->
 <% end %>
 
 <% if Rails.application.secrets.matomo_url.present? && Rails.application.secrets.matomo_site_id.present? %>
   <!-- Matomo -->
-  <script type="text/javascript">
+  <%# TODO: javascript_tag, nonce: true do %>
+  <%= javascript_tag do %>
     var _paq = _paq || [];
+
     // tracker methods like "setCustomDimension" should be called before "trackPageView"
-    _paq.push(['trackPageView']);
-    _paq.push(['enableLinkTracking']);
+    document.addEventListener('turbolinks:load', function() {
+      _paq.push(['trackPageView']);
+      _paq.push(['enableLinkTracking']);
+    });
+
     (function() {
       var u="//<%= Rails.application.secrets.matomo_url %>/";
       _paq.push(['setTrackerUrl', u+'piwik.php']);
@@ -23,7 +35,7 @@
       var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
       g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
     })();
-  </script>
+  <% end %>
   <!-- End Matomo Code -->
 
   <!-- Matomo Image Tracker -->

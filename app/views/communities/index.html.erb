@@ -1,7 +1,5 @@
 <% page_title(@title) %>
-<% content_for :head do %>
-  <meta name="description" content="<%= t('.page_description') %>">
-<% end %>
+<% page_description(t('.page_description')) %>
 
 <div class="container mt-3">
   <div class="d-flex flex-wrap justify-content-between align-items-center mt-3">
@@ -18,8 +16,9 @@
   <form>
     <div class="form-group">
       <label class="mr-sm-2" for="query"><%= t('search_label') %></label>
-      <%= text_field_tag :query,
+      <%= text_field_tag :search,
                          '',
+                         id: :search_bar,
                          placeholder: t('communities.index.search_placeholder'),
                          data: { 'max-items': 5 },
                          class: 'form-control js-communities-collections-searchbox' %>
@@ -31,7 +30,7 @@
       <h2><%= t(:browse_all) %></h2>
 
       <div>
-        <%= render partial: 'communities/sort' %>
+        <%= render partial: 'communities/sort', locals: {collection: @communities} %>
       </div>
     </div>
 

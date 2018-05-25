@@ -8,13 +8,8 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
   def before_all
     super
 
-    # TODO: setup proper fixtures for LockedLdpObjects
-
-    # A community with a collection
-    @community = Community.new_locked_ldp_object(title: 'Two collection community', owner: 1)
-                          .unlock_and_fetch_ldp_object(&:save!)
-    @collection = Collection.new_locked_ldp_object(community_id: @community.id, title: 'Nice collection', owner: 1)
-                            .unlock_and_fetch_ldp_object(&:save!)
+    @community = locked_ldp_fixture(Community, :nice).unlock_and_fetch_ldp_object(&:save!)
+    @collection = locked_ldp_fixture(Collection, :nice).unlock_and_fetch_ldp_object(&:save!)
     @items = ['Fancy', 'Nice'].map do |adjective|
       Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                  owner: 1,
@@ -60,14 +55,16 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
       item_links = css_select ".jupiter-results ul.list-group .list-group-item a[href='#{item_path(item)}']"
 
       # Thumbnail, text link, and delete link
-      assert_equal item_links.count, 3
+      assert_equal item_links.count, 2
       # Thumbnail link to item
       assert_includes item_links.first.inner_html, 'img-thumbnail'
       # Text link to item
       assert_equal item_links[1].text, item.title
+
       # Link to delete item
-      assert_match 'Delete', item_links.last.text
-      assert_equal item_links.last.attributes['data-method'].to_s, 'delete'
+      delete_link = css_select ".jupiter-results ul.list-group .list-group-item a[href='#{admin_item_path(item)}']"
+      assert_match 'Delete', delete_link.last.text
+      assert_equal delete_link.last.attributes['data-method'].to_s, 'delete'
 
       # Link to edit item
       assert_select "ul.list-group .list-group-item a[href='#{edit_item_path(item)}']", text: 'Edit'
@@ -117,12 +114,12 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
     # TODO: should probably hook this up to a system test that submits the form
     user = users(:regular)
     sign_in_as user
-    get community_collection_url(@community, @collection, query: 'Fancy')
+    get community_collection_url(@community, @collection, search: 'Fancy')
 
     # Only 'Fancy' items are shown
     assert_select '.jupiter-results ul.list-group .list-group-item', count: 1
-    assert_select '.jupiter-results ul.list-group .list-group-item h5 a', text: 'Fancy Item', count: 1
-    assert_select '.jupiter-results ul.list-group .list-group-item h5 a', text: 'Nice Item', count: 0
+    assert_select '.jupiter-results ul.list-group .list-group-item h3 a', text: 'Fancy Item', count: 1
+    assert_select '.jupiter-results ul.list-group .list-group-item h3 a', text: 'Nice Item', count: 0
   end
 
 end

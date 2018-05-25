@@ -2,7 +2,7 @@ require 'application_system_test_case'
 
 class ProfileIndexTest < ApplicationSystemTestCase
 
-  should 'show basic information about the logged in user' do
+  test 'should show basic information about the logged in user' do
     user = users(:regular)
 
     login_user(user)
@@ -23,7 +23,7 @@ class ProfileIndexTest < ApplicationSystemTestCase
     logout_user
   end
 
-  should 'view items owned by logged in user' do
+  test 'should view items owned by logged in user' do
     # Note: searching and faceting is covered more extensively in tests elsewhere
     user = User.find_by(email: 'john_snow@example.com')
     admin = users(:admin)
@@ -86,7 +86,7 @@ class ProfileIndexTest < ApplicationSystemTestCase
     refute_selector 'div.jupiter-results-list li.list-group-item .media-body a', text: 'Admin Item'
 
     # Search items
-    fill_in name: 'query', with: 'Fancy'
+    fill_in id: 'search_bar', with: 'Fancy'
     click_button 'Search Items'
     assert_selector 'div.jupiter-results-list li.list-group-item', count: 1
     assert_selector 'div.jupiter-results-list li.list-group-item .media-body a', text: 'Fancy Item', count: 1

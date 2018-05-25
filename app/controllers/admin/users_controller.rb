@@ -9,22 +9,26 @@ class Admin::UsersController < Admin::AdminController
                                     :revoke_admin,
                                     :login_as_user]
 
+  def results
+    super.sort(params[:sort] || :sort_year, params[:direction] || :desc)
+  end
+
   def index
     @search = User.ransack(params[:q])
     @search.sorts = 'last_seen_at desc' if @search.sorts.empty?
 
     # Postgres treats nulls first in an ordered list, lets reverse this behaviour.
     result = @search.result
-    orders = result.orders.map do |order|
+    orders = result.arel.orders.map do |order|
       order.direction == :asc ? "#{order.to_sql} NULLS FIRST" : "#{order.to_sql} NULLS LAST"
     end
-    result = result.except(:order).order(orders.join(', ')) if orders.count > 0
+    result = result.except(:order).order(Arel.sql(orders.join(', '))) if orders.count > 0
 
     @users = result.page(params[:page])
   end
 
   def show
-    item_search_setup(Item.search_term_for(:owner, @user.id, role: :exact_match))
+    restrict_items_to(Item.solr_name_for(:owner, role: :exact_match), @user.id)
     @draft_items = @user.draft_items.unpublished
   end
 
@@ -89,14 +93,6 @@ class Admin::UsersController < Admin::AdminController
 
   def fetch_user
     @user = User.find(params[:id])
-  end
-
-  def sort_column
-    ['title', 'sort_year'].include?(params[:sort]) ? params[:sort] : 'sort_year'
-  end
-
-  def sort_direction
-    ['asc', 'desc'].include?(params[:direction]) ? params[:direction] : 'desc'
   end
 
 end

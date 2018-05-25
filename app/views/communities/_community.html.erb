@@ -5,7 +5,7 @@
   <%= link_to community_path(community), class: 'media jupiter-community-media mb-3' do %>
     <%= render partial: 'thumbnail', locals: { thumbnail: community.logo.attachment, object: community } %>
     <div class="media-body ml-3">
-      <h4 class="mt-0"><%= community.title %></h4>
+      <h3 class="mt-0"><%= community.title %></h3>
       <p class="text-muted"><%= community.description %></p>
     </div>
   <% end %>

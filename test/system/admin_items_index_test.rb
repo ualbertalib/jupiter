@@ -2,7 +2,7 @@ require 'application_system_test_case'
 
 class AdminItemsIndexTest < ApplicationSystemTestCase
 
-  should 'be able to view all items/theses owned by anybody' do
+  test 'should be able to view all items/theses owned by anybody' do
     # Note: searching and faceting is covered more extensively in tests elsewhere
     user = users(:regular)
     admin = users(:admin)
@@ -64,7 +64,7 @@ class AdminItemsIndexTest < ApplicationSystemTestCase
     assert_selector 'div.jupiter-results-list li.list-group-item .media-body a', text: 'Admin Item', count: 1
 
     # Search items
-    fill_in name: 'query', with: 'Fancy'
+    fill_in id: 'search_bar', with: 'Fancy'
     click_button 'Search Items'
     assert_selector 'div.jupiter-results-list li.list-group-item', count: 1
     assert_selector 'div.jupiter-results-list li.list-group-item .media-body a', text: 'Fancy Item', count: 1

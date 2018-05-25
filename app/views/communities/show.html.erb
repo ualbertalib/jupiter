@@ -1,7 +1,5 @@
 <% page_title(@community.title) %>
-<% content_for :head do %>
-  <meta name="description" content="<%= jupiter_truncate @community.description %>">
-<% end %>
+<% page_description(@community.description) %>
 
 <div class="container mt-3">
   <%= render partial: 'show_breadcrumbs' %>
@@ -38,9 +36,9 @@
   </div>
 
   <div class="d-flex flex-wrap align-items-center justify-content-between mt-3">
-    <h4>
+    <h2>
       <%= t('.collections_list_header') %>
-    </h4>
+    </h2>
     <% if policy(:collection).create? %>
         <%= link_to new_admin_community_collection_path(@community),
             class: 'btn btn-primary' do %>
@@ -53,8 +51,7 @@
   <div class="row mt-3">
     <div class="col-md-12">
       <div class="d-flex justify-content-end mb-3">
-        <%# TODO: search box goes here %>
-        <%= render partial: 'communities/sort' %>
+        <%= render partial: 'communities/sort', locals: {collection: @collections} %>
       </div>
       <ul class="list-group">
         <%= render partial: 'communities/collections_list' %>
