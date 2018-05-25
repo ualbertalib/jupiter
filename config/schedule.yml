@@ -1,0 +1,3 @@
+check_embargo_expiry:
+  cron: "0 22 * * *"
+  class: "EmbargoExpiryJob"
