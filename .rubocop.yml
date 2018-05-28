@@ -100,7 +100,7 @@ Rails:
 Rails/FindEach:
   Enabled: false
 
-# False postivies on headers, remove this once on rubocop > 0.56.0 as fixed in next release
+# TODO: False postivies on headers, remove this once on rubocop > 0.56.0 as fixed in next release
 Rails/HttpPositionalArguments:
   Exclude:
     - test/controllers/file_sets_controller_test.rb
