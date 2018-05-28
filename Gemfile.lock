@@ -138,6 +138,8 @@ GEM
       rdf (>= 2.2, < 4.0)
       sxp (~> 1.0)
     erubi (1.7.1)
+    et-orbi (1.1.1)
+      tzinfo
     execjs (2.7.0)
     ezid-client (1.7.1)
       hashie (~> 3.4, >= 3.4.3)
@@ -342,6 +344,8 @@ GEM
       nokogiri (>= 1.5.10)
     ruby_dep (1.5.0)
     rubyzip (1.2.1)
+    rufus-scheduler (3.4.2)
+      et-orbi (~> 1.0)
     safe_yaml (1.0.4)
     sass (3.5.6)
       sass-listen (~> 4.0.0)
@@ -370,6 +374,9 @@ GEM
       connection_pool (~> 2.2, >= 2.2.0)
       rack-protection (>= 1.5.0)
       redis (>= 3.3.5, < 5)
+    sidekiq-cron (0.6.3)
+      rufus-scheduler (>= 3.3.0)
+      sidekiq (>= 4.2.1)
     simple_form (4.0.1)
       actionpack (>= 5.0)
       activemodel (>= 5.0)
@@ -473,6 +480,7 @@ DEPENDENCIES
   rollbar
   rsolr
   rubocop (~> 0.51.0)
+  rufus-scheduler (= 3.4.2)
   sass-rails (~> 5)
   scss_lint (>= 0.56.0)
   sdoc
@@ -480,6 +488,7 @@ DEPENDENCIES
   selenium-webdriver
   shoulda-matchers (~> 3.0)
   sidekiq (~> 5.1)
+  sidekiq-cron
   simple_form
   simplecov
   sinatra
