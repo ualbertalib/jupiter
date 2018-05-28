@@ -199,6 +199,7 @@ class DraftItem < ApplicationRecord
       end
     end
   end
+  # rubocop:enable Style/DateTime, Rails/TimeZone
 
   # Pull latest data from Fedora if data is more recent than this draft
   # This would happen if, eg) someone manually updated the Fedora record in the Rails console
@@ -227,7 +228,7 @@ class DraftItem < ApplicationRecord
         # respond to that method, in preference to looking at the final portion of the file path, which,
         # because we fished this out of ActiveStorage, is just a hash. In this way we present Fedora with the original
         # file name of the object and not a hashed or otherwise modified version temporarily created during ingest
-        f.send(:define_singleton_method, :original_filename, ->() { original_filename })
+        f.send(:define_singleton_method, :original_filename, -> { original_filename })
         yield f
       end
     end
@@ -266,7 +267,7 @@ class DraftItem < ApplicationRecord
     code = CONTROLLED_VOCABULARIES[:license].from_uri(uri)
     license = URI_CODE_TO_LICENSE[code].to_s
 
-    license.blank? ? 'unselected' : license
+    license.presence || 'unselected'
   end
 
   # silly stuff needed for handling multivalued publication status attribute when Item type is `Article`
@@ -370,9 +371,7 @@ class DraftItem < ApplicationRecord
       collection_id = member_of_paths['collection_id'][idx]
       collection = Collection.find_by(collection_id)
       next if collection.blank?
-      if collection.restricted && !user.admin?
-        errors.add(:member_of_paths, :collection_restricted)
-      end
+      errors.add(:member_of_paths, :collection_restricted) if collection.restricted && !user.admin?
     end
   end
 

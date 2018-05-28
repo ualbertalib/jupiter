@@ -48,9 +48,7 @@ class Admin::CommunitiesController < Admin::AdminController
       Community.new_locked_ldp_object(permitted_attributes(Community)
                                        .merge(owner: current_user&.id))
 
-    if params[:community][:logo].present?
-      @community.logo.attach(params[:community][:logo])
-    end
+    @community.logo.attach(params[:community][:logo]) if params[:community][:logo].present?
 
     @community.unlock_and_fetch_ldp_object do |unlocked_community|
       if unlocked_community.save

@@ -34,7 +34,7 @@ class ThesisTest < ActiveSupport::TestCase
       assert_match("<http://pcdm.org/models#memberOf> <#{collection_uri}>", triples)
     end
     assert thesis.valid?
-    refute_equal 0, Thesis.public.count
+    assert_not_equal 0, Thesis.public.count
     assert_equal thesis.id, Thesis.public.first.id
 
     # Preserves order and writes to unordered triples on save
@@ -108,7 +108,7 @@ class ThesisTest < ActiveSupport::TestCase
     assert thesis.errors[:embargo_end_date].present?
     assert_includes thesis.errors[:embargo_end_date], 'must be blank'
 
-    refute thesis.errors[:visibility].present?
+    assert_not thesis.errors[:visibility].present?
   end
 
   test 'visibility_after_embargo must be present if visibility is embargo' do
@@ -134,9 +134,9 @@ class ThesisTest < ActiveSupport::TestCase
     assert thesis.errors[:visibility_after_embargo].present?
     assert_includes thesis.errors[:visibility_after_embargo], 'must be blank'
     # Make sure no controlled vocabulary error
-    refute_includes thesis.errors[:visibility_after_embargo], 'is not recognized'
+    assert_not_includes thesis.errors[:visibility_after_embargo], 'is not recognized'
 
-    refute thesis.errors[:visibility].present?
+    assert_not thesis.errors[:visibility].present?
   end
 
   test 'visibility_after_embargo must be from the controlled vocabulary' do
@@ -149,7 +149,7 @@ class ThesisTest < ActiveSupport::TestCase
     assert_not thesis.valid?
     assert thesis.errors[:visibility_after_embargo].present?
     assert_includes thesis.errors[:visibility_after_embargo], 'is not recognized'
-    refute thesis.errors[:visibility].present?
+    assert_not thesis.errors[:visibility].present?
   end
 
   test '#add_to_path assigns paths properly' do
@@ -224,7 +224,7 @@ class ThesisTest < ActiveSupport::TestCase
   test 'a sort year is derived from graduation date' do
     thesis = Thesis.new_locked_ldp_object(graduation_date: 'Fall 2015')
     thesis.valid?
-    refute thesis.errors[:sort_year].present?
+    assert_not thesis.errors[:sort_year].present?
     assert_equal thesis.sort_year, 2015
   end
 

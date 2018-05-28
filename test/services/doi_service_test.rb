@@ -41,7 +41,7 @@ class DoiServiceTest < ActiveSupport::TestCase
       assert_equal 'unminted', item.doi_state.aasm_state
 
       ezid_identifer = DOIService.new(item).create
-      refute_nil ezid_identifer
+      assert_not_nil ezid_identifer
       assert_equal EXAMPLE_DOI, ezid_identifer.id
       assert_equal 'University of Alberta Libraries', ezid_identifer.datacite_publisher
       assert_equal 'Test Title', ezid_identifer.datacite_title
@@ -50,7 +50,7 @@ class DoiServiceTest < ActiveSupport::TestCase
       assert_equal Ezid::Status::PUBLIC, ezid_identifer.status
       assert_equal 'yes', ezid_identifer.export
 
-      refute_nil item.doi
+      assert_not_nil item.doi
       assert_equal 'available', item.doi_state.aasm_state
     end
 
@@ -65,7 +65,7 @@ class DoiServiceTest < ActiveSupport::TestCase
       clear_enqueued_jobs
 
       ezid_identifer = DOIService.new(item).update
-      refute_nil ezid_identifer
+      assert_not_nil ezid_identifer
       assert_equal EXAMPLE_DOI, ezid_identifer.id
       assert_equal Ezid::Status::PUBLIC, ezid_identifer.status
       assert_equal 'Different Title', ezid_identifer.datacite_title
@@ -85,7 +85,7 @@ class DoiServiceTest < ActiveSupport::TestCase
       clear_enqueued_jobs
 
       ezid_identifer = DOIService.new(item).update
-      refute_nil ezid_identifer
+      assert_not_nil ezid_identifer
       assert_equal EXAMPLE_DOI, ezid_identifer.id
       assert_equal 'unavailable | not publicly released', ezid_identifer.status
       assert_equal 'no', ezid_identifer.export
@@ -100,7 +100,7 @@ class DoiServiceTest < ActiveSupport::TestCase
       clear_enqueued_jobs
 
       ezid_identifer = DOIService.remove(item.doi)
-      refute_nil ezid_identifer
+      assert_not_nil ezid_identifer
       assert_equal EXAMPLE_DOI, ezid_identifer.id
       assert_equal 'unavailable | withdrawn', ezid_identifer.status
       assert_equal 'no', ezid_identifer.export

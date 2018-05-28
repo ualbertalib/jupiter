@@ -28,13 +28,13 @@ class ItemsController < ApplicationController
   end
 
   def fetch_item_statistics
-    return Statistics.for(item_id: @item.id)
+    Statistics.for(item_id: @item.id)
   rescue StandardError => e
     # Trap errors so that if Redis goes down or similar, show pages don't start crashing
     Rollbar.error("Error retriving statistics for #{@item.id}", e)
 
     # we'll display unavailable counts
-    return [0, 0]
+    [0, 0]
   end
 
 end

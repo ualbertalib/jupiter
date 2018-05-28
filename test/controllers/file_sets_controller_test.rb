@@ -59,7 +59,7 @@ class FileSetsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'gets a range for download' do
-    get "/items/#{@item.id}/download/#{@file_set_id}", headers: { 'HTTP_RANGE' => 'bytes=3-15' }
+    get "/items/#{@item.id}/download/#{@file_set_id}", params: { headers: { 'HTTP_RANGE' => 'bytes=3-15' } }
     assert_equal response.headers['Content-Range'], 'bytes 3-15/42'
     assert_equal response.headers['Content-Length'], '13'
     assert_equal response.body, 'ice, brief fi'
