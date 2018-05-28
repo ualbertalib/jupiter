@@ -342,12 +342,12 @@ class JupiterCore::LockedLdpObject
 
   # the least recently created record in Solr, as determined by the record_created_at timestamp
   def self.first
-    all.limit(1).min(:record_created_at, :asc)
+    all.limit(1).sort(:record_created_at, :asc).first
   end
 
   # the most recently created record in Solr, as determined by the record_created_at timestamp
   def self.last
-    all.limit(1).min(:record_created_at, :desc)
+    all.limit(1).sort(:record_created_at, :desc).first
   end
 
   def self.valid_visibilities
