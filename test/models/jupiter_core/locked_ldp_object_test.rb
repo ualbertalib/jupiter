@@ -394,14 +394,14 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     instance.foo = Time.current
 
     assert instance.to_solr.key? 'foo_dtsi'
-    refute instance.to_solr.key? 'foo_ssi'
+    assert_not instance.to_solr.key? 'foo_ssi'
 
     # This will be broken on vanilla AF/Solrizer. Assigning a string will reveal that the index.type is non-functional
     # and ignored. foo will be solrized as a stored sortable string, foo_ssi, and not a date.
     instance.foo = Time.current
 
     assert instance.to_solr.key? 'foo_dtsi'
-    refute instance.to_solr.key? 'foo_ssi'
+    assert_not instance.to_solr.key? 'foo_ssi'
   end
 
   # This is definitely up there in terms of the craziest things I've ever had to write a test for.

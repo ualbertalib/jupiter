@@ -32,26 +32,26 @@ class DraftItemPolicyTest < ActiveSupport::TestCase
     current_user = users(:regular_two)
     draft_item = draft_items(:inactive) # belongs to other user
 
-    refute DraftItemPolicy.new(current_user, draft_item).create?
-    refute DraftItemPolicy.new(current_user, draft_item).show?
-    refute DraftItemPolicy.new(current_user, draft_item).update?
-    refute DraftItemPolicy.new(current_user, draft_item).destroy?
-    refute DraftItemPolicy.new(current_user, draft_item).set_thumbnail?
-    refute DraftItemPolicy.new(current_user, draft_item).file_create?
-    refute DraftItemPolicy.new(current_user, draft_item).file_destroy?
+    assert_not DraftItemPolicy.new(current_user, draft_item).create?
+    assert_not DraftItemPolicy.new(current_user, draft_item).show?
+    assert_not DraftItemPolicy.new(current_user, draft_item).update?
+    assert_not DraftItemPolicy.new(current_user, draft_item).destroy?
+    assert_not DraftItemPolicy.new(current_user, draft_item).set_thumbnail?
+    assert_not DraftItemPolicy.new(current_user, draft_item).file_create?
+    assert_not DraftItemPolicy.new(current_user, draft_item).file_destroy?
   end
 
   test 'anon user should not be able to do anything with item drafts' do
     current_user = nil
     draft_item = draft_items(:inactive)
 
-    refute DraftItemPolicy.new(current_user, draft_item).create?
-    refute DraftItemPolicy.new(current_user, draft_item).show?
-    refute DraftItemPolicy.new(current_user, draft_item).update?
-    refute DraftItemPolicy.new(current_user, draft_item).destroy?
-    refute DraftItemPolicy.new(current_user, draft_item).set_thumbnail?
-    refute DraftItemPolicy.new(current_user, draft_item).file_create?
-    refute DraftItemPolicy.new(current_user, draft_item).file_destroy?
+    assert_not DraftItemPolicy.new(current_user, draft_item).create?
+    assert_not DraftItemPolicy.new(current_user, draft_item).show?
+    assert_not DraftItemPolicy.new(current_user, draft_item).update?
+    assert_not DraftItemPolicy.new(current_user, draft_item).destroy?
+    assert_not DraftItemPolicy.new(current_user, draft_item).set_thumbnail?
+    assert_not DraftItemPolicy.new(current_user, draft_item).file_create?
+    assert_not DraftItemPolicy.new(current_user, draft_item).file_destroy?
   end
 
 end

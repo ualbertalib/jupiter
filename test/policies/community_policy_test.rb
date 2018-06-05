@@ -22,11 +22,11 @@ class CommunityPolicyTest < ActiveSupport::TestCase
     assert CommunityPolicy.new(current_user, community).index?
     assert CommunityPolicy.new(current_user, community).show?
 
-    refute CommunityPolicy.new(current_user, community).create?
-    refute CommunityPolicy.new(current_user, community).new?
-    refute CommunityPolicy.new(current_user, community).edit?
-    refute CommunityPolicy.new(current_user, community).update?
-    refute CommunityPolicy.new(current_user, community).destroy?
+    assert_not CommunityPolicy.new(current_user, community).create?
+    assert_not CommunityPolicy.new(current_user, community).new?
+    assert_not CommunityPolicy.new(current_user, community).edit?
+    assert_not CommunityPolicy.new(current_user, community).update?
+    assert_not CommunityPolicy.new(current_user, community).destroy?
   end
 
   test 'anon user should only be able to see index and show of communities' do
@@ -36,11 +36,11 @@ class CommunityPolicyTest < ActiveSupport::TestCase
     assert CommunityPolicy.new(current_user, community).index?
     assert CommunityPolicy.new(current_user, community).show?
 
-    refute CommunityPolicy.new(current_user, community).create?
-    refute CommunityPolicy.new(current_user, community).new?
-    refute CommunityPolicy.new(current_user, community).edit?
-    refute CommunityPolicy.new(current_user, community).update?
-    refute CommunityPolicy.new(current_user, community).destroy?
+    assert_not CommunityPolicy.new(current_user, community).create?
+    assert_not CommunityPolicy.new(current_user, community).new?
+    assert_not CommunityPolicy.new(current_user, community).edit?
+    assert_not CommunityPolicy.new(current_user, community).update?
+    assert_not CommunityPolicy.new(current_user, community).destroy?
   end
 
 end

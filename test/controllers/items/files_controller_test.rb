@@ -58,7 +58,7 @@ class Items::FilesControllerTest < ActionDispatch::IntegrationTest
     # So lets just refetch it from the database... to reload it
     @draft_item = DraftItem.find(@draft_item.id)
 
-    refute @draft_item.files.attached?
+    assert_not @draft_item.files.attached?
     assert_equal 0, @draft_item.files.count
   end
 

@@ -35,7 +35,7 @@ class ItemTest < ActiveSupport::TestCase
       end
     end
     assert item.valid?
-    refute Item.public.map(&:id).include?(item.id)
+    assert_not Item.public.map(&:id).include?(item.id)
   end
 
   test 'there is no default visibility' do
@@ -93,7 +93,7 @@ class ItemTest < ActiveSupport::TestCase
     assert item.errors[:embargo_end_date].present?
     assert_includes item.errors[:embargo_end_date], 'must be blank'
 
-    refute item.errors[:visibility].present?
+    assert_not item.errors[:visibility].present?
   end
 
   test 'visibility_after_embargo must be present if visibility is embargo' do
@@ -118,9 +118,9 @@ class ItemTest < ActiveSupport::TestCase
     assert item.errors[:visibility_after_embargo].present?
     assert_includes item.errors[:visibility_after_embargo], 'must be blank'
     # Make sure no controlled vocabulary error
-    refute_includes item.errors[:visibility_after_embargo], 'is not recognized'
+    assert_not_includes item.errors[:visibility_after_embargo], 'is not recognized'
 
-    refute item.errors[:visibility].present?
+    assert_not item.errors[:visibility].present?
   end
 
   test 'visibility_after_embargo must be from the controlled vocabulary' do
@@ -133,7 +133,7 @@ class ItemTest < ActiveSupport::TestCase
     assert_not item.valid?
     assert item.errors[:visibility_after_embargo].present?
     assert_includes item.errors[:visibility_after_embargo], 'is not recognized'
-    refute item.errors[:visibility].present?
+    assert_not item.errors[:visibility].present?
   end
 
   test '#add_to_path assigns paths properly' do
@@ -190,7 +190,7 @@ class ItemTest < ActiveSupport::TestCase
 
     item = Item.new_locked_ldp_object(languages: [CONTROLLED_VOCABULARIES[:language].english])
     assert_not item.valid?
-    refute_includes item.errors.keys, :languages
+    assert_not_includes item.errors.keys, :languages
   end
 
   test 'a license or rights statement must be present' do
@@ -215,11 +215,11 @@ class ItemTest < ActiveSupport::TestCase
 
     item = Item.new_locked_ldp_object(license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international)
     item.valid?
-    refute_includes item.errors.keys, :license
+    assert_not_includes item.errors.keys, :license
 
     item = Item.new_locked_ldp_object(license: CONTROLLED_VOCABULARIES[:old_license].attribution_3_0_international)
     item.valid?
-    refute_includes item.errors.keys, :license
+    assert_not_includes item.errors.keys, :license
   end
 
   test 'an item type is required' do
@@ -251,13 +251,13 @@ class ItemTest < ActiveSupport::TestCase
     item = Item.new_locked_ldp_object(item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                       publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published])
     item.valid?
-    refute item.errors[:publication_status].present?
+    assert_not item.errors[:publication_status].present?
 
     item = Item.new_locked_ldp_object(item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                       publication_status: [CONTROLLED_VOCABULARIES[:publication_status].draft,
                                                            CONTROLLED_VOCABULARIES[:publication_status].submitted])
     item.valid?
-    refute item.errors[:publication_status].present?
+    assert_not item.errors[:publication_status].present?
 
     item = Item.new_locked_ldp_object(item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                       publication_status: [CONTROLLED_VOCABULARIES[:publication_status].draft])
@@ -318,7 +318,7 @@ class ItemTest < ActiveSupport::TestCase
   test 'sort_year is derived from created' do
     item = Item.new_locked_ldp_object(created: 'Fall 2015')
     item.valid?
-    refute item.errors[:sort_year].present?
+    assert_not item.errors[:sort_year].present?
     assert_equal item.sort_year, 2015
   end
 
