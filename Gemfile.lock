@@ -275,7 +275,7 @@ GEM
     pundit (1.1.0)
       activesupport (>= 3.0.0)
     rack (2.0.5)
-    rack-protection (2.0.2)
+    rack-protection (2.0.3)
       rack
     rack-test (1.0.0)
       rack (>= 1.0, < 3)
@@ -384,10 +384,10 @@ GEM
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
-    sinatra (2.0.2)
+    sinatra (2.0.3)
       mustermann (~> 1.0)
       rack (~> 2.0)
-      rack-protection (= 2.0.2)
+      rack-protection (= 2.0.3)
       tilt (~> 2.0)
     skylight (1.7.0)
       activesupport (>= 3.0.0)
@@ -490,7 +490,7 @@ DEPENDENCIES
   sidekiq-cron
   simple_form
   simplecov
-  sinatra (~> 2.0.2)
+  sinatra (~> 2.0.3)
   skylight
   solrizer!
   turbolinks (~> 5)
