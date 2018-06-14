@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_03_185839) do
+ActiveRecord::Schema.define(version: 2018_05_30_193707) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -92,6 +92,40 @@ ActiveRecord::Schema.define(version: 2018_05_03_185839) do
     t.index ["language_id"], name: "index_draft_items_languages_on_language_id"
   end
 
+  create_table "draft_theses", force: :cascade do |t|
+    t.string "uuid"
+    t.integer "status", default: 0, null: false
+    t.integer "wizard_step", default: 0, null: false
+    t.bigint "user_id", null: false
+    t.integer "thumbnail_id"
+    t.string "title"
+    t.string "alternate_title"
+    t.string "creator"
+    t.text "description"
+    t.string "degree"
+    t.string "degree_level"
+    t.string "institution"
+    t.string "specialization"
+    t.string "graduation_term"
+    t.integer "graduation_year"
+    t.bigint "language_id"
+    t.datetime "date_accepted"
+    t.datetime "date_submitted"
+    t.text "rights"
+    t.integer "visibility", default: 0, null: false
+    t.datetime "embargo_end_date"
+    t.integer "visibility_after_embargo", default: 0, null: false
+    t.json "member_of_paths"
+    t.json "subjects", array: true
+    t.json "supervisors", array: true
+    t.json "departments", array: true
+    t.json "committee_members", array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["language_id"], name: "index_draft_theses_on_language_id"
+    t.index ["user_id"], name: "index_draft_theses_on_user_id"
+  end
+
   create_table "identities", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "uid", null: false
@@ -140,4 +174,5 @@ ActiveRecord::Schema.define(version: 2018_05_03_185839) do
 
   add_foreign_key "announcements", "users"
   add_foreign_key "draft_items", "users"
+  add_foreign_key "draft_theses", "users"
 end
