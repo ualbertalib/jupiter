@@ -14,7 +14,7 @@ class Items::DraftController < ApplicationController
     @draft_item.sync_with_fedora(for_user: current_user) if @is_edit
 
     # Do not allow users to skip to uncompleted steps
-    if @draft_item.uncompleted_step?(step)
+    if @draft_item.uncompleted_step?(DraftItem.wizard_steps, step)
       redirect_to wizard_path(@draft_item.last_completed_step, item_id: @draft_item.id),
                   alert: t('.please_follow_the_steps')
     # Handles edge case of removing all files via ajax then attempting to directly view the review step

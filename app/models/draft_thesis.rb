@@ -10,6 +10,11 @@ class DraftThesis < ApplicationRecord
 
   TERMS = ['Spring', 'Fall'].freeze
 
+  enum wizard_step: { describe_thesis: 0,
+                      choose_license_and_visibility: 1,
+                      upload_files: 2,
+                      review_and_deposit_thesis: 3 }
+
   # Can't use public as this is a ActiveRecord method, using open_access instead
   enum visibility: { open_access: 0,
                      embargo: 1 }
@@ -19,14 +24,15 @@ class DraftThesis < ApplicationRecord
   URI_CODE_TO_VISIBILITY = VISIBILITY_TO_URI_CODE.invert
 
   belongs_to :language, optional: true
+  belongs_to :institution, optional: true
 
   validates :title, :description, :creator,
             :member_of_paths, :graduation_term, :graduation_year,
-            presence: true, if: :validate_describe_item?
+            presence: true, if: :validate_describe_thesis?
 
   validate :communities_and_collections_presence,
            :communities_and_collections_existence,
-           :depositor_can_deposit, if: :validate_describe_item?
+           :depositor_can_deposit, if: :validate_describe_thesis?
 
   validates :rights, :visibility, presence: true, if: :validate_choose_license_and_visibility?
 
@@ -36,19 +42,19 @@ class DraftThesis < ApplicationRecord
       title: thesis.title,
       alternate_title: thesis.alternative_title,
       language: language_for_uri(thesis.language),
-      dissertant: thesis.creator,
+      creator: thesis.dissertant,
       subjects: thesis.subject,
-      graduation_date: "#{graduation_term} #{graduation_year}",
-      abstract: thesis.description,
+      graduation_term: thesis.graduation_date.match(/(Spring|Fall)/)[0],
+      graduation_year: thesis.sort_year,
+      description: thesis.abstract,
       visibility: visibility_for_uri(thesis.visibility),
       embargo_end_date: thesis.embargo_end_date,
-      visibility_after_embargo: CONTROLLED_VOCABULARIES[:visibility].public,
-      rights: DEFAULT_RIGHTS,
+      rights: thesis.rights,
       date_accepted: thesis.date_accepted,
       date_submitted: thesis.date_submitted,
       degree: thesis.degree,
-      degree_level: thesis.degree_level,
-      institution: thesis.institution,
+      degree_level: thesis.thesis_level,
+      institution: institution_for_uri(thesis.institution),
       specialization: thesis.specialization,
       departments: thesis.departments,
       supervisors: thesis.supervisors,
@@ -97,6 +103,7 @@ class DraftThesis < ApplicationRecord
 
   # Maps Language name to CONTROLLED_VOCABULARIES[:language] URI
   def language_as_uri
+    return nil if language&.name.blank?
     CONTROLLED_VOCABULARIES[:language].send(language.name)
   end
 
@@ -122,7 +129,25 @@ class DraftThesis < ApplicationRecord
     visibility
   end
 
+  # Maps institution names to CONTROLLED_VOCABULARIES[:institution]
+  def institution_as_uri
+    return nil if institution&.name.blank?
+    CONTROLLED_VOCABULARIES[:institution].send(institution.name)
+  end
+
+  def institution_for_uri(uri)
+    code = CONTROLLED_VOCABULARIES[:institution].from_uri(uri)
+    raise ArgumentError, "No known code for institution uri: #{uri}" if code.blank?
+    institution = Institution.find_by(name: code)
+    raise ArgumentError, "No draft institution found for code: #{code}" if institution.blank?
+    institution
+  end
+
   private
+
+  def validate_describe_thesis?
+    (active? && describe_thesis?) || validate_choose_license_and_visibility?
+  end
 
   # Only an admin user can deposit and only into a restricted collection
   def depositor_can_deposit

@@ -53,6 +53,21 @@ Rails.application.routes.draw do
 
     resources :items, only: [:index, :destroy]
 
+    resources :theses, only: [] do
+      collection do
+        post :create_draft, controller: 'theses/draft', action: :create
+      end
+
+      delete :delete_draft, to: 'theses/draft#destroy'
+
+      resources :draft, only: [:show, :update], controller: 'theses/draft'
+      resources :files, only: [:create, :destroy], controller: 'theses/files' do
+        member do
+          patch :set_thumbnail
+        end
+      end
+    end
+
     resources :announcements, only: [:index, :destroy, :create]
   end
 

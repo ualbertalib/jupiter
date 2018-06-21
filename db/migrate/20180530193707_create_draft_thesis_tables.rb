@@ -1,12 +1,18 @@
-class CreateDraftTheses < ActiveRecord::Migration[5.2]
+class CreateDraftThesisTables < ActiveRecord::Migration[5.2]
   def change
+    create_table :institutions do |t|
+      t.string :name, null: false
+
+      t.timestamps
+    end
+
     create_table :draft_theses do |t|
       t.string :uuid
 
       t.integer :status, default: 0, null: false
       t.integer :wizard_step, default: 0, null: false
 
-      t.references :user, null: false, index: true, foreign_key: true
+      t.references :user, null: false, foreign_key: true
 
       t.integer :thumbnail_id
 
@@ -17,13 +23,13 @@ class CreateDraftTheses < ActiveRecord::Migration[5.2]
 
       t.string :degree
       t.string :degree_level
-      t.string :institution
       t.string :specialization
 
       t.string :graduation_term
       t.integer :graduation_year
 
-      t.references :language, index: true
+      t.references :language, foreign_key: true
+      t.references :institution, foreign_key: true
 
       t.datetime :date_accepted
       t.datetime :date_submitted

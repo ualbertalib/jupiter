@@ -1,13 +1,18 @@
 <% page_title(t('.header')) %>
 
-<div class="d-flex flex-wrap align-items-center justify-content-between my-3">
-  <h1>
+<div class="d-flex flex-wrap align-items-center my-3">
+  <h1 class="mr-auto">
     <%= t('.header') %>
   </h1>
   <%= link_to create_draft_items_path, method: :post,
-      class: 'btn btn-primary' do %>
+      class: 'btn btn-primary mr-3' do %>
     <%= fa_icon('plus-circle') %>
     <%= t('collections.show.deposit_item') %>
+  <% end %>
+  <%= link_to create_draft_admin_theses_path, method: :post,
+    class: 'btn btn-primary' do %>
+  <%= fa_icon('plus-circle') %>
+  <%= t('.deposit_thesis') %>
   <% end %>
 </div>
 <%= render partial: 'search_bar', locals: { placeholder: t('.search_placeholder') } %>

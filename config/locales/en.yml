@@ -132,6 +132,10 @@ en:
           report: 'Report'
           research_material:  'Research Material'
           review: 'Review'
+      institution:
+        names:
+          uofa: 'University of Alberta'
+          st_stephens: "St. Stephen's College"
     errors:
       models:
         draft_item:
@@ -326,6 +330,108 @@ en:
           "Displaying %{shown_users_count} of %{matching_users_count} matching users
           (%{total_users_count} total users)"
         no_users_found: 'We could not find any users matching your search.'
+    theses:
+      draft:
+        header: 'Deposit Thesis'
+        header_edit: 'Edit Thesis'
+        previous: 'Previous step'
+        save_and_continue: 'Save and continue to next step'
+        save_and_deposit_edits: 'Save'
+        progress_bar_text: 'Step %{step_index} of %{total_steps}'
+        step_number: 'Step %{step_number}'
+        please_fix_errors: 'Please correct all errors below and try again'
+        please_follow_the_steps: 'Looks like you tried to skip ahead. Please follow the steps accordingly'
+        files_are_required_to_continue: 'You are required at least one file attached before continuing'
+        submit_draft_btn_loading_html: "<i class='fa fa-spinner fa-pulse fa-lg fa-fw'></i>Saving..."
+        successful_deposit: 'Thesis Deposit was successful!'
+        continue_draft: 'Continue Draft'
+        delete_confirm: 'Are you sure you want to delete draft thesis "%{title}"?'
+        successful_deletion: 'Draft Thesis was successfully deleted!'
+
+        community_collection_input:
+          community: 'Community'
+          community_placeholder: 'Select a community'
+          collection: 'Collection'
+          collection_placeholder: 'Select a collection'
+
+        describe_thesis:
+          header: 'Describe Thesis'
+          header_icon: 'pencil'
+          title: 'Title'
+          title_placeholder: 'Enter title'
+          alternate_title: 'Alternate Title'
+          alternate_title_placeholder: 'Enter alternate title'
+          alternate_title_help: 'Enter a secondary/translated title, if appropriate.'
+          language: 'Language'
+          language_placeholder: 'Enter language'
+          creator: 'Author / Creator'
+          creator_placeholder: 'Enter author/creator'
+          creator_help: 'Example: Doe, Jane B.'
+          description: 'Description or Abstract'
+          description_placeholder: 'Enter description or abstract'
+          graduation_term: 'Graduation Term'
+          graduation_term_placeholder: 'Select a term'
+          graduation_year: 'Graduation Year'
+          community_and_collection: Community and Collection
+          community_and_collection_help_html: 'Choose the Community and Collection that best match your thesis(s).
+            If you need a new collection, email <a href="mailto:erahelp@ualberta.ca">erahelp@ualberta.ca</a>'
+          additional_fields: 'Additional fields'
+          subjects: 'Subjects / Keywords'
+          subjects_placeholder: 'Enter one or multiple subject/keywords'
+          subjects_help: 'Enter subjects or keywords that describe the thesis.
+          These are the words that will be used when someone searches for your thesis.'
+          date_submitted: 'Date submitted'
+          date_accepted: 'Date accepted'
+          degree: 'Degree'
+          degree_level: 'Degree level'
+          specialization: 'Specialization'
+          institution_id: 'Institution'
+          institution_id_placeholder: "Select your thesis's institution"
+          departments: 'Departments'
+          departments_placeholder: 'Enter one or multiple departments'
+          supervisors: 'Supervisor / Co-supervisor and their department(s)'
+          supervisors_placeholder: 'Enter one or multiple supervisors'
+          supervisors_help: 'Example: Smith, Jones (Computing Science)'
+          committee_members: 'Examining committee members and their department(s)'
+          committee_members_placeholder: 'Enter one or multiple committee members'
+          committee_members_help: 'Example: Jones, Mary (English)'
+        choose_license_and_visibility:
+          header: 'Choose License and Visibility'
+          header_icon: 'creative-commons'
+          license:
+            header: 'License'
+            rights: 'Rights'
+            rights_placeholder: ''
+            help_html: ''
+
+          visibility:
+            header: 'Visibility'
+            open_access: 'Open access (will be seen by everyone)'
+            embargo: 'Will be open access on'
+
+        upload_files:
+          header: 'Upload Files'
+          header_icon: 'paperclip'
+          attach_files: 'Attach Files'
+          saved_files: 'Thesis File Attachments'
+          upload_files_instructions: 'Choose a file(s) or drag it here'
+          no_js_fallback: 'Please enable javascript to upload files.'
+
+        files_list:
+          no_saved_files: No files have been attached to this thesis
+          thesis_thumbnail: 'Thesis Thumbnail'
+          thumbnail_of_first_file: 'By default the first file will be displayed as the thumbnail image for this thesis. To change this, click on set as thumbnail button on the desired file.'
+        file:
+          set_as_thumbnail: Set as Thumbnail
+          delete_file_dialog: Are you sure you want to delete this file?
+
+        review_and_deposit_thesis:
+          header: 'Review and Deposit Thesis'
+          header_edit: 'Review and Update Thesis'
+          header_icon: 'check-square-o'
+          please_review_thesis: 'Please review your thesis before depositing into ERA'
+          legal_disclaimer_html: 'By depositing this thesis into ERA you agree to the <a href="/policies">ERA Deposit Policy agreements</a>'
+
 
   profile:
     index:

@@ -2,6 +2,11 @@ class DraftItem < ApplicationRecord
 
   include DraftProperties
 
+  enum wizard_step: { describe_item: 0,
+                      choose_license_and_visibility: 1,
+                      upload_files: 2,
+                      review_and_deposit_item: 3 }
+
   enum license: { attribution_non_commercial: 0,
                   attribution: 1,
                   attribution_non_commercial_no_derivatives: 2,
@@ -273,6 +278,10 @@ class DraftItem < ApplicationRecord
         errors.add(:member_of_paths, :collection_restricted)
       end
     end
+  end
+
+  def validate_describe_item?
+    (active? && describe_item?) || validate_choose_license_and_visibility?
   end
 
   def validate_if_license_is_text?

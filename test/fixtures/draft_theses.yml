@@ -1,10 +1,10 @@
 inactive:
   user: regular
 
-completed_describe_item_step:
+completed_describe_thesis_step:
   user: regular
   status: <%= DraftThesis.statuses[:active] %>
-  wizard_step: <%= DraftThesis.wizard_steps[:describe_item] %>
+  wizard_step: <%= DraftThesis.wizard_steps[:describe_thesis] %>
   title: 'Thesis on Dogs'
   creator: 'Andrew Smith'
   graduation_term: 'Spring'

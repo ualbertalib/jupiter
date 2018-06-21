@@ -4,11 +4,6 @@ module DraftProperties
   included do
     enum status: { inactive: 0, active: 1, archived: 2 }
 
-    enum wizard_step: { describe_item: 0,
-                        choose_license_and_visibility: 1,
-                        upload_files: 2,
-                        review_and_deposit_item: 3 }
-
     has_many_attached :files
 
     belongs_to :user
@@ -44,15 +39,15 @@ module DraftProperties
       files.first
     end
 
-    def uncompleted_step?(step)
+    def uncompleted_step?(steps, step)
       # Bit confusing here, but when were in an active state, aka draft item has data,
       # the step saved on the object is actually a step behind. As it is only updated on an update for a new step.
       # Hence we just do current step + one to get the actual step here.
       # For an inactive/archived state we are what is expected as we are starting/ending on the same step as what's saved in the object
       if active? && errors.empty?
-        DraftItem.wizard_steps[wizard_step] + 1 < DraftItem.wizard_steps[step]
+        steps[wizard_step] + 1 < steps[step]
       else
-        DraftItem.wizard_steps[wizard_step] < DraftItem.wizard_steps[step]
+        steps[wizard_step] < steps[step]
       end
     end
 
@@ -106,10 +101,6 @@ module DraftProperties
           errors.add(:member_of_paths, :collection_not_in_community)
         end
       end
-    end
-
-    def validate_describe_item?
-      (active? && describe_item?) || validate_choose_license_and_visibility?
     end
 
     def validate_choose_license_and_visibility?
