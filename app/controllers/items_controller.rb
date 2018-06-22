@@ -9,13 +9,18 @@ class ItemsController < ApplicationController
   end
 
   def edit
-    # Note that only Items can be edited -- there is no deposit or edit interface for Theses:
-    item = Item.find(params[:id])
+    item = JupiterCore::LockedLdpObject.find(params[:id], types: [Item, Thesis])
     authorize item
 
-    draft_item = DraftItem.from_item(item, for_user: current_user)
+    if item.is_a? Thesis
+      draft_thesis = DraftThesis.from_thesis(item, for_user: current_user)
 
-    redirect_to item_draft_path(id: Wicked::FIRST_STEP, item_id: draft_item.id)
+      redirect_to admin_thesis_draft_path(id: Wicked::FIRST_STEP, thesis_id: draft_thesis.id)
+    else
+      draft_item = DraftItem.from_item(item, for_user: current_user)
+
+      redirect_to item_draft_path(id: Wicked::FIRST_STEP, item_id: draft_item.id)
+    end
   end
 
   private
