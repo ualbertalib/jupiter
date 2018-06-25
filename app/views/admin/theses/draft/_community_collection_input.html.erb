@@ -6,10 +6,10 @@
     <% end %>
 
     <%= select_tag 'draft_thesis[community_id][]',
-                    options_from_collection_for_select(
-                      Community.all.sort(:title, :asc),
-                      :id,
-                      :title,
+                    options_for_select(
+                      Collection.where(restricted: true).sort(:title, :asc)
+                                .map { |collection| [collection.community.title, collection.community.id] }
+                                .uniq,
                       community.present? ? community.id : nil ),
                     prompt: t('.community_placeholder'),
                     class: 'form-control js-community-select' %>
