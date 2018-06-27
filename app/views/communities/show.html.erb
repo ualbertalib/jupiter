@@ -29,7 +29,7 @@
   </div>
 
   <div class="media p-3">
-    <%= render partial: 'thumbnail', locals: { thumbnail: @community.logo.attachment, object: @community } %>
+    <%= render partial: 'thumbnail', locals: { object: @community } %>
     <div class="media-body ml-3">
       <p><%= @community.description %></p>
     </div>

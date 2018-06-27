@@ -1,18 +1,18 @@
 <%# TODO: Reduce duplication between this partial and thesis, pretty much exactly the same %>
 <div class="media mb-3">
   <%= link_to item_path(item) do %>
-    <%= render partial: 'thumbnail', locals: { thumbnail: item.thumbnail.attachment, object: item } %>
+    <%= render partial: 'thumbnail', locals: { object: item } %>
   <% end %>
   <div class="media-body ml-3">
     <div class="d-flex flex-wrap flex-lg-nowrap align-items-start">
       <h3 class="mt-0 h5 mr-auto"><%= link_to item.title, item_path(item) %></h3>
 
-      <% primary_file = item.file_sets.first %>
+      <% primary_file = item.files.first %>
       <% if primary_file.present? %>
-        <%= link_to fileset_uri(primary_file, :download),
+        <%= link_to url_for(primary_file),
                     class: 'btn btn-secondary mr-2 mb-2 mb-md-0',
                     rel: 'nofollow',
-                    download: primary_file.contained_filename do %>
+                    download: primary_file.blob.filename.to_s do %>
           <%= fa_icon 'cloud-download' %>
           <%= t('download') %>
         <% end %>

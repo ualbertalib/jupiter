@@ -65,7 +65,9 @@ class DraftItem < ApplicationRecord
                             review: :review }.freeze
   URI_CODE_TO_ITEM_TYPE = ITEM_TYPE_TO_URI_CODE.invert
 
-  has_many_attached :files
+  # Note that dependent: false is necessary here as Items and DraftItems can both have ActiveStorage::Attachment records
+  # that point at the same underlying blob record. See Item#from_draft.
+  has_many_attached :files, dependent: false
 
   has_many :draft_items_languages, dependent: :destroy
   has_many :languages, through: :draft_items_languages
@@ -116,6 +118,22 @@ class DraftItem < ApplicationRecord
     end
 
     files.first
+  end
+
+  # compatibility with the thumbnail API used in Items/Theses and Communities
+  def thumbnail_url(args = {resize: '100x100'})
+    return nil unless thumbnail.present? && thumbnail.blob.present?
+    Rails.application.routes.url_helpers.rails_representation_path(thumbnail.variant(args).processed)
+  rescue ActiveStorage::InvariableError
+    begin
+      Rails.application.routes.url_helpers.rails_representation_path(thumbnail.preview(args).processed)
+    rescue ActiveStorage::UnpreviewableError
+      return nil
+    end
+  end
+
+  def thumbnail_file
+    thumbnail if thumbnail.present? && thumbnail.blob.present?
   end
 
   def uncompleted_step?(step)
@@ -190,13 +208,13 @@ class DraftItem < ApplicationRecord
     save(validate: false)
 
     # reset files if the files have changed in Fedora outside of the draft process
-    files.purge if item.file_sets.present?
-    item.file_sets.each do |fileset|
-      fileset.unlock_and_fetch_ldp_object do |ufs|
-        ufs.fetch_raw_original_file_data do |content_type, io|
-          files.attach(io: io, filename: ufs.contained_filename, content_type: content_type)
-        end
-      end
+    # NOTE: destroy the attachment record, DON'T use #purge, which will wipe the underlying blob shared with the
+    # published item's shim
+    files.each(&:destroy) if item.files.present?
+
+    # add an association between the same underlying blobs the Item uses and the Draft
+    item.files_attachments.each do |attachment|
+      ActiveStorage::Attachment.create(record: self, blob: attachment.blob, name: :files)
     end
   end
 
@@ -214,23 +232,6 @@ class DraftItem < ApplicationRecord
 
     draft.update_from_fedora_item(item, for_user)
     draft
-  end
-
-  # Fedora file handling
-  # Convert ActiveStorage objects into File objects so we can deposit them into fedora
-  def map_activestorage_files_as_file_objects
-    files.map do |file|
-      path = file_path_for(file)
-      original_filename = file.filename.to_s
-      File.open(path) do |f|
-        # We're exploiting the fact that Hydra-Works calls original_filename on objects passed to it, if they
-        # respond to that method, in preference to looking at the final portion of the file path, which,
-        # because we fished this out of ActiveStorage, is just a hash. In this way we present Fedora with the original
-        # file name of the object and not a hashed or otherwise modified version temporarily created during ingest
-        f.send(:define_singleton_method, :original_filename, ->() { original_filename })
-        yield f
-      end
-    end
   end
 
   # Control Vocab Conversions
@@ -400,9 +401,6 @@ class DraftItem < ApplicationRecord
     errors.add(:license, :missing) if license == 'unselected'
   end
 
-  # HACK: Messing with Rails internals for fun and profit
-  # we're accessing the raw ActiveStorage local drive service internals to avoid the overhead of pulling temp files
-  # out. This WILL break when we move to Rails 5.2 and the internals change.
   def file_path_for(file)
     ActiveStorage::Blob.service.send(:path_for, file.key)
   end

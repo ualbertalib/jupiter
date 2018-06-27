@@ -322,99 +322,103 @@ class ItemTest < ActiveSupport::TestCase
     assert_equal item.sort_year, 2015
   end
 
-  test 'add_files maintains correct order and correctly creates list_source proxies' do
-    # Doing a lot of I/O with Fedora, so I don't want to break this long test into pieces
-    community = locked_ldp_fixture(Community, :foo).unlock_and_fetch_ldp_object(&:save!)
-    collection = Collection.new_locked_ldp_object(title: 'foo', owner: users(:regular).id,
-                                                  community_id: community.id).unlock_and_fetch_ldp_object(&:save!)
+  test 'add_and_ingest_files maintains correct order and correctly creates list_source proxies' do
+    Sidekiq::Testing.inline! do
+      # Doing a lot of I/O with Fedora, so I don't want to break this long test into pieces
+      community = locked_ldp_fixture(Community, :foo).unlock_and_fetch_ldp_object(&:save!)
+      collection = Collection.new_locked_ldp_object(title: 'foo', owner: users(:regular).id,
+                                                    community_id: community.id).unlock_and_fetch_ldp_object(&:save!)
 
-    item = locked_ldp_fixture(Item, :random)
-    fedora_item_url = nil
-    item.unlock_and_fetch_ldp_object do |unlocked_item|
-      unlocked_item.add_to_path(community.id, collection.id)
-      unlocked_item.save!
-      fedora_item_url = unlocked_item.uri
+      item = locked_ldp_fixture(Item, :random)
+      fedora_item_url = nil
+      item.unlock_and_fetch_ldp_object do |unlocked_item|
+        unlocked_item.add_to_path(community.id, collection.id)
+        unlocked_item.save!
+        fedora_item_url = unlocked_item.uri
 
-      File.open(file_fixture('image-sample.jpeg'), 'r') do |file1|
-        File.open(file_fixture('pdf-sample.pdf'), 'r') do |file2|
-          File.open(file_fixture('text-sample.txt'), 'r') do |file3|
-            unlocked_item.add_files([file1, file2, file3])
+        File.open(file_fixture('image-sample.jpeg'), 'r') do |file1|
+          File.open(file_fixture('pdf-sample.pdf'), 'r') do |file2|
+            File.open(file_fixture('text-sample.txt'), 'r') do |file3|
+              item.add_and_ingest_files([file1, file2, file3])
+            end
           end
         end
+        unlocked_item.reload
+        assert_equal ['image-sample.jpeg', 'pdf-sample.pdf', 'text-sample.txt'],
+                     unlocked_item.ordered_members.to_a.map(&:contained_filename)
+        end
+
+      # Make sure the list source proxies have been created, and work as expected
+      list_source_uri = RDF::URI(fedora_item_url + '/list_source')
+      graph = RDF::Graph.load(list_source_uri)
+      # `next` is ruby keyword, hence the `iana_*` names
+      iana = 'http://www.iana.org/assignments/relation/'
+      iana_first = RDF::URI(iana + 'first')
+      iana_last = RDF::URI(iana + 'last')
+      iana_next = RDF::URI(iana + 'next')
+      iana_prev = RDF::URI(iana + 'prev')
+      proxy_for = RDF::URI('http://www.openarchives.org/ore/terms/proxyFor')
+
+      list_source_filesets = []
+      # Fetch first FileSet in list source
+      first_uri = nil
+      graph.query(subject: list_source_uri, predicate: iana_first) do |statement|
+        # e.g., this uri sort of looks like object_url + '/list_source#g47328166227360'
+        first_uri = statement.object
       end
-      unlocked_item.save!
-      assert_equal unlocked_item.ordered_members.to_a.map(&:contained_filename),
-                   ['image-sample.jpeg', 'pdf-sample.pdf', 'text-sample.txt']
-    end
-
-    # Make sure the list source proxies have been created, and work as expected
-    list_source_uri = RDF::URI(fedora_item_url + '/list_source')
-    graph = RDF::Graph.load(list_source_uri)
-    # `next` is ruby keyword, hence the `iana_*` names
-    iana = 'http://www.iana.org/assignments/relation/'
-    iana_first = RDF::URI(iana + 'first')
-    iana_last = RDF::URI(iana + 'last')
-    iana_next = RDF::URI(iana + 'next')
-    iana_prev = RDF::URI(iana + 'prev')
-    proxy_for = RDF::URI('http://www.openarchives.org/ore/terms/proxyFor')
-
-    list_source_filesets = []
-    # Fetch first FileSet in list source
-    first_uri = nil
-    graph.query(subject: list_source_uri, predicate: iana_first) do |statement|
-      # e.g., this uri sort of looks like object_url + '/list_source#g47328166227360'
-      first_uri = statement.object
-    end
-    graph.query(subject: first_uri, predicate: proxy_for) do |statement|
-      id = statement.object.to_s.split('/').last
-      list_source_filesets.append(FileSet.find(id))
-    end
-    graph.query(subject: first_uri, predicate: iana_prev) do
-      raise 'A previous item should not exist for first fileset'
-    end
-
-    # Fetch second FileSet in list source
-    second_uri = nil
-    graph.query(subject: first_uri, predicate: iana_next) do |statement|
-      second_uri = statement.object
-    end
-    graph.query(subject: second_uri, predicate: proxy_for) do |statement|
-      id = statement.object.to_s.split('/').last
-      list_source_filesets.append(FileSet.find(id))
-    end
-    graph.query(subject: second_uri, predicate: iana_prev) do |statement|
-      assert_equal statement.object, first_uri
-    end
-
-    # Fetch third FileSet in list source
-    third_uri = nil
-    graph.query(subject: second_uri, predicate: iana_next) do |statement|
-      third_uri = statement.object
-    end
-    graph.query(subject: third_uri, predicate: proxy_for) do |statement|
-      id = statement.object.to_s.split('/').last
-      list_source_filesets.append(FileSet.find(id))
-    end
-    graph.query(subject: third_uri, predicate: iana_prev) do |statement|
-      assert_equal statement.object, second_uri
-    end
-    graph.query(subject: third_uri, predicate: iana_next) do
-      raise 'A next item should not exist for third fileset'
-    end
-    graph.query(subject: list_source_uri, predicate: iana_last) do |statement|
-      assert_equal statement.object, third_uri
-    end
-    # Finally, confirm the fetched file sets match the order we expect
-    assert_equal list_source_filesets.map(&:contained_filename),
-                 ['image-sample.jpeg', 'pdf-sample.pdf', 'text-sample.txt']
-
-    # Adding another file should put it at the end of the ordered list
-    item.unlock_and_fetch_ldp_object do |unlocked_item|
-      File.open(file_fixture('sitemap.xsd'), 'r') do |file4|
-        unlocked_item.add_files([file4])
+      graph.query(subject: first_uri, predicate: proxy_for) do |statement|
+        id = statement.object.to_s.split('/').last
+        list_source_filesets.append(FileSet.find(id))
       end
-      assert_equal unlocked_item.ordered_members.to_a.map(&:contained_filename),
-                   ['image-sample.jpeg', 'pdf-sample.pdf', 'text-sample.txt', 'sitemap.xsd']
+      graph.query(subject: first_uri, predicate: iana_prev) do
+        raise 'A previous item should not exist for first fileset'
+      end
+
+      # Fetch second FileSet in list source
+      second_uri = nil
+      graph.query(subject: first_uri, predicate: iana_next) do |statement|
+        second_uri = statement.object
+      end
+      graph.query(subject: second_uri, predicate: proxy_for) do |statement|
+        id = statement.object.to_s.split('/').last
+        list_source_filesets.append(FileSet.find(id))
+      end
+      graph.query(subject: second_uri, predicate: iana_prev) do |statement|
+        assert_equal statement.object, first_uri
+      end
+
+      # Fetch third FileSet in list source
+      third_uri = nil
+      graph.query(subject: second_uri, predicate: iana_next) do |statement|
+        third_uri = statement.object
+      end
+      graph.query(subject: third_uri, predicate: proxy_for) do |statement|
+        id = statement.object.to_s.split('/').last
+        list_source_filesets.append(FileSet.find(id))
+      end
+      graph.query(subject: third_uri, predicate: iana_prev) do |statement|
+        assert_equal statement.object, second_uri
+      end
+      graph.query(subject: third_uri, predicate: iana_next) do
+        raise 'A next item should not exist for third fileset'
+      end
+      graph.query(subject: list_source_uri, predicate: iana_last) do |statement|
+        assert_equal statement.object, third_uri
+      end
+      # Finally, confirm the fetched file sets match the order we expect
+      assert_equal ['image-sample.jpeg', 'pdf-sample.pdf', 'text-sample.txt'],
+                   list_source_filesets.map(&:contained_filename)
+
+
+      # Adding another file should put it at the end of the ordered list
+      item.unlock_and_fetch_ldp_object do |unlocked_item|
+        File.open(file_fixture('sitemap.xsd'), 'r') do |file4|
+          item.add_and_ingest_files([file4])
+        end
+        unlocked_item.reload
+        assert_equal ['image-sample.jpeg', 'pdf-sample.pdf', 'text-sample.txt', 'sitemap.xsd'],
+                     unlocked_item.ordered_members.to_a.map(&:contained_filename)
+      end
     end
   end
 

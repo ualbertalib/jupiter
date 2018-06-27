@@ -36,8 +36,9 @@ class FileSetTest < ActiveSupport::TestCase
     item.unlock_and_fetch_ldp_object do |unlocked_item|
       unlocked_item.add_to_path(community.id, collection.id)
       unlocked_item.save!
-      unlocked_item.add_files([file])
-      unlocked_item.save!
+      Sidekiq::Testing.inline! do
+        item.add_and_ingest_files([file])
+      end
     end
 
     file_set = item.file_sets.first
@@ -47,8 +48,8 @@ class FileSetTest < ActiveSupport::TestCase
       assert unlocked_fileset.original_file.uri =~ /http.*fcrepo\/rest\/.*#{file_set.id}\/files\/.*/
     end
 
-    item.thumbnail_fileset(file_set)
-    assert item.thumbnail.present?
+    item.set_thumbnail(item.files.first)
+    assert item.thumbnail_url.present?
   end
 
 end

@@ -28,6 +28,16 @@ class Community < JupiterCore::LockedLdpObject
     logo_attachment.purge
   end
 
+  # compatibility with item thumbnail API
+  def thumbnail_url(args = {resize: '100x100'})
+    return nil unless logo_attachment.present?
+    Rails.application.routes.url_helpers.rails_representation_path(logo_attachment.variant(args).processed)
+  end
+
+  def thumbnail_file
+    logo.attachment
+  end
+
   def self.safe_attributes
     super + [:remove_logo]
   end

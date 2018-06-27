@@ -1,4 +1,12 @@
 module ItemsHelper
+  def file_view_url(file)
+    file_url(file, :view)
+  end
+
+  def file_download_url(file)
+    file_url(file, :download)
+  end
+
   def item_type_search_link(item)
     search_link_for(item, :item_type_with_status,
                     value: item.item_type_with_status_code,
@@ -37,5 +45,14 @@ module ItemsHelper
     Date.parse(dateish).iso8601
   rescue ArgumentError
     dateish
+  end
+
+  private
+
+  def file_url(file, action)
+    # The slash in the controller name below allows this to work in admin namespace
+    route = { controller: 'downloads', action: action, id: file.record.owner.id, file_set_id: file.fileset_uuid }
+    route[:file_name] = file.blob.filename unless action == :download
+    url_for(route)
   end
 end

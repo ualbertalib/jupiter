@@ -2,7 +2,6 @@ class Item < JupiterCore::LockedLdpObject
 
   include ObjectProperties
   include ItemProperties
-  # Needed for ActiveStorage (logo)...
   include GlobalID::Identification
   ldp_object_includes Hydra::Works::WorkBehavior
 
@@ -51,8 +50,6 @@ class Item < JupiterCore::LockedLdpObject
   # Combine all the subjects for faceting
   additional_search_index :all_subjects, solrize_for: :facet, as: -> { all_subjects }
 
-  has_one_attached :thumbnail
-
   def self.from_draft(draft_item)
     item = Item.find(draft_item.uuid) if draft_item.uuid.present?
     item ||= Item.new_locked_ldp_object
@@ -95,19 +92,26 @@ class Item < JupiterCore::LockedLdpObject
       end
 
       unlocked_obj.save!
+      # remove old filesets and attachments and recreate
+      unlocked_obj.purge_filesets
+      # NOTE: destroy the attachment record, DON'T use #purge, which will wipe the underlying blob shared with the
+      # draft item
+      item.files.each(&:destroy) if item.files.present?
 
-      unlocked_obj.purge_files if item.file_sets.any?
-      draft_item.map_activestorage_files_as_file_objects do |file|
-        unlocked_obj.add_files([file])
+      # add an association between the same underlying blobs the Draft uses and the Item
+      draft_item.files_attachments.each do |attachment|
+        new_attachment = ActiveStorage::Attachment.create(record: item.files_attachment_shim, blob: attachment.blob, name: :shimmed_files)
+        if attachment.id == draft_item.thumbnail_id
+          item.files_attachment_shim.logo_id = new_attachment.id
+          item.files_attachment_shim.save!
+        end
+        FileAttachmentIngestionJob.perform_later(new_attachment.id)
       end
     end
-    # set the item's thumbnail to the chosen fileset
-    # this advice doesn't apply to non-ActiveRecord objects, rubocop
-    # rubocop:disable Rails/FindBy
-    item.thumbnail_fileset(item.file_sets.where(contained_filename: draft_item.thumbnail.filename.to_s).first)
 
     draft_item.uuid = item.id
     draft_item.save!
+
     item
   end
 
@@ -153,7 +157,7 @@ class Item < JupiterCore::LockedLdpObject
     def populate_sort_year
       self.sort_year = Date.parse(created).year.to_i if created.present?
     rescue ArgumentError
-      # date was unparsable, try to pull out the first 4 digit number as a year
+      # date was un-parsable, try to pull out the first 4 digit number as a year
       capture = created.scan(/\d{4}/)
       self.sort_year = capture[0].to_i if capture.present?
     end

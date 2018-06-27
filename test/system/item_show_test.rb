@@ -14,10 +14,12 @@ class ItemShowTest < ApplicationSystemTestCase
       uo.add_to_path(@community.id, @collection.id)
       uo.add_to_path(@community.id, @collection.id)
       uo.save!
+    end
+    Sidekiq::Testing.inline! do
       # Attach multiple files to the mondo-item
       File.open(Rails.root + 'app/assets/images/era-logo.png', 'r') do |file1|
         File.open(Rails.root + 'app/assets/images/ualib-logo.png', 'r') do |file2|
-          uo.add_files([file1, file2])
+          @item.add_and_ingest_files([file1, file2])
         end
       end
     end

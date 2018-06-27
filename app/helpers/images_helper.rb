@@ -24,11 +24,4 @@ module ImagesHelper
       'file-o'
     end
   end
-
-  # TODO: Remove this after upgrading activestorage to rails 5.2
-  # Returns true if the content_type of this blob is in the image range, like image/png.
-  # https://github.com/rails/rails/blob/7b1dfac29146ddda82d1ee226cdb8ef281013502/activestorage/app/models/active_storage/blob.rb#L95
-  def image?(file_attachment)
-    file_attachment.content_type.start_with?('image')
-  end
 end
