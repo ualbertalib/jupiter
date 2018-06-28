@@ -148,7 +148,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'active', draft_item.status
   end
 
-  # TODO: # wizard_step: :review_and_deposit_item
+  # wizard_step: :review_and_deposit_item
   test 'should be able to review and deposit a draft item properly when saving review_and_deposit_item form' do
     sign_in_as @user
 
@@ -178,7 +178,6 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'archived', draft_item.status
   end
 
-  # TODO: # updating old step shouldnt update wizard_step
   test 'should be able to update an old step without changing the current wizard_step of the draft item' do
     sign_in_as @user
 
@@ -240,7 +239,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
     assert_equal I18n.t('authorization.user_not_authorized'), flash[:alert]
   end
 
-  test 'should be able to create a draft item if logged in and you own the item' do
+  test 'should be able to delete a draft item if logged in and you own the item' do
     sign_in_as @user
 
     draft_item = draft_items(:completed_choose_license_and_visibility_step)

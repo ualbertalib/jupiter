@@ -108,6 +108,7 @@ class DraftThesis < ApplicationRecord
   end
 
   def language_for_uri(uri)
+    return nil if uri.blank?
     code = CONTROLLED_VOCABULARIES[:language].from_uri(uri)
     raise ArgumentError, "No known code for language uri: #{uri}" if code.blank?
     language = Language.find_by(name: code)
@@ -136,6 +137,7 @@ class DraftThesis < ApplicationRecord
   end
 
   def institution_for_uri(uri)
+    return nil if uri.blank?
     code = CONTROLLED_VOCABULARIES[:institution].from_uri(uri)
     raise ArgumentError, "No known code for institution uri: #{uri}" if code.blank?
     institution = Institution.find_by(name: code)
