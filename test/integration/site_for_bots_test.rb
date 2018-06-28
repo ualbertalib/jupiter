@@ -58,7 +58,6 @@ class SiteForBotsTest < ActionDispatch::IntegrationTest
     end
     @public_paths = [root_path, item_path(@item), communities_path, community_path(@community1),
                      community_collection_path(@community1, @collection1), search_path]
-
   end
 
   test 'unique title and description for each page' do

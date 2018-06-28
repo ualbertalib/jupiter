@@ -346,7 +346,7 @@ class ItemTest < ActiveSupport::TestCase
         unlocked_item.reload
         assert_equal ['image-sample.jpeg', 'pdf-sample.pdf', 'text-sample.txt'],
                      unlocked_item.ordered_members.to_a.map(&:contained_filename)
-        end
+      end
 
       # Make sure the list source proxies have been created, and work as expected
       list_source_uri = RDF::URI(fedora_item_url + '/list_source')
@@ -408,7 +408,6 @@ class ItemTest < ActiveSupport::TestCase
       # Finally, confirm the fetched file sets match the order we expect
       assert_equal ['image-sample.jpeg', 'pdf-sample.pdf', 'text-sample.txt'],
                    list_source_filesets.map(&:contained_filename)
-
 
       # Adding another file should put it at the end of the ordered list
       item.unlock_and_fetch_ldp_object do |unlocked_item|

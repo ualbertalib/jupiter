@@ -6,9 +6,9 @@ git_source(:github) do |repo_name|
 end
 
 # Core Rails stuff
+gem 'image_processing'
 gem 'puma', '~> 3.11'
 gem 'rails', '~> 5.2.0'
-gem 'image_processing'
 
 # Assets (CSS/JS) stuff
 gem 'bootstrap', '~> 4.1.1'

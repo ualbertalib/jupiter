@@ -1,4 +1,5 @@
 class DownloadsController < ApplicationController
+
   include ActiveStorage::SetBlob
 
   # Needed for Activestorage compatibility, normally happens in ActiveStorage::BaseController for controlelrs that subclass is
@@ -32,7 +33,7 @@ class DownloadsController < ApplicationController
 
     authorize @file_set.owning_item, :download?
     @file = @file_set.owning_item.files_attachments.where(fileset_uuid: @file_set.id).first
-    raise ActiveRecord::RecordNotFound, "no attachment for file_set with UUID: #{@file_set.id} " unless @file.present?
+    raise ActiveRecord::RecordNotFound, "no attachment for file_set with UUID: #{@file_set.id} " if @file.blank?
   end
 
   def update_download_count

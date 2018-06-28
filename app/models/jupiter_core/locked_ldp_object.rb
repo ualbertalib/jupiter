@@ -365,6 +365,15 @@ class JupiterCore::LockedLdpObject
     visibility == JupiterCore::VISIBILITY_AUTHENTICATED
   end
 
+  # Given a raw ActiveFedora object, instantiates a new instance of the equivalent owning LockedLdpObject class
+  # and connects this instance to the ActiveFedora object as its owner. Typically this needs to be done in cases
+  # where ActiveFedora is retrieving raw AF objects and attempting to save them, which involves generating a new
+  # solr document, which requires the owning_object to be non-nil so that solr indexing information can be accessed
+  # by the indexer. See +FileAttachmentIngestionJob+ for a use-case.
+  def self.reconnect_owning_jupiter_object!(raw_ldp_object)
+    raw_ldp_object.owning_class.send(:new, ldp_obj: raw_ldp_object)
+  end
+
   # Used to dynamically turn an arbitrary Solr document into an instance of its originating class
   #
   # eg)

@@ -22,5 +22,4 @@ namespace :cleanup do
     (Item.all + Thesis.all).each { |item| item.unlock_and_fetch_ldp_object(&:save!) }
     puts 'Reindex completed!'
   end
-
 end

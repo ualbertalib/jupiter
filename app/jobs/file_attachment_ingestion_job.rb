@@ -8,8 +8,6 @@ class FileAttachmentIngestionJob < ApplicationJob
     # occasionally these things get picked up again if the previous job errored out
     return if attachment.fileset_uuid.present?
 
-
-
     item = attachment.record.owner
 
     path = ActiveStorage::Blob.service.send(:path_for, attachment.blob.key)
@@ -22,16 +20,12 @@ class FileAttachmentIngestionJob < ApplicationJob
       file.send(:define_singleton_method, :original_filename, ->() { original_filename })
 
       item.unlock_and_fetch_ldp_object do |unlocked_obj|
-        current_filesets = unlocked_obj.ordered_members || []
-
         fs = FileSet.new_locked_ldp_object.unlock_and_fetch_ldp_object do |unlocked_fileset|
-
           unlocked_fileset.owner = unlocked_obj.owner
           unlocked_fileset.visibility = unlocked_obj.visibility
 
-
           Hydra::Works::AddFileToFileSet.call(unlocked_fileset, file, :original_file,
-                                          update_existing: false, versioning: false)
+                                              update_existing: false, versioning: false)
           unlocked_fileset.member_of_collections += [unlocked_obj]
           # Temporarily cache the file name for storing in Solr
           # if the file was uploaded, it responds to +original_filename+
@@ -44,12 +38,13 @@ class FileAttachmentIngestionJob < ApplicationJob
           # Store file properties in the format required by the sitemap
           # for quick and easy retrieval -- nobody wants to wait 36hrs for this!
           escaped_path = CGI.escape_html(Rails.application.routes.url_helpers.url_for(
-                                                         controller: :downloads,
-                                                         action: :view,
-                                                         id: unlocked_obj.id,
-                                                         file_set_id: unlocked_fileset.id,
-                                                         file_name: unlocked_fileset.contained_filename,
-                                                         only_path: true))
+                                           controller: :downloads,
+                                           action: :view,
+                                           id: unlocked_obj.id,
+                                           file_set_id: unlocked_fileset.id,
+                                           file_name: unlocked_fileset.contained_filename,
+                                           only_path: true
+          ))
           unlocked_fileset.sitemap_link = "<rs:ln \
   href=\"#{escaped_path}\" \
   rel=\"content\" \
@@ -66,15 +61,23 @@ class FileAttachmentIngestionJob < ApplicationJob
             Hydra::Works::CharacterizationService.run(unlocked_fileset.original_file)
             unlocked_fileset.original_file.save
           end
-          # TODO this is crashing jobs at this point due to the "current filesets" being re-saved (pointlessly)
-          # by AF without connecting them to LockedLDP instances (which they need to solrize properly)
-          # and we can't just append unlocked_fileset to the ordered_members without that triggering other AF bugs
-          # Wonderful gem.
-          unlocked_obj.ordered_members = current_filesets + [unlocked_fileset]
+
+          # Appending to +ordered_members+ results in a scrambled set of proxy relations for reasons probably having
+          # to do with ActiveFedora bugginess. We therefore append the new fileset to the existing ones in a new array
+          # and overrite the entire ordered_members value.
+          #
+          # HOWEVER this causes the "original filesets" be retrieved and re-saved (pointlessly) by AF,
+          # and without connecting them to owning LockedLDP instances (which they need to solrize properly)
+          # this causes the save to crash. So we must first iterate through each original fileset and instantiate
+          # a new LockedLdpObject wrapper to connect them with via +LockedLdpObject#reconnect_owning_jupiter_object!+
+          original_filesets = unlocked_obj.ordered_members.to_a || []
+          original_filesets.each {|fs| JupiterCore::LockedLdpObject.reconnect_owning_jupiter_object!(fs)}
+          unlocked_obj.ordered_members = (original_filesets + [unlocked_fileset])
 
           unlocked_obj.save!
         end
       end
     end
   end
+
 end

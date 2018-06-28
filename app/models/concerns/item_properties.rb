@@ -56,12 +56,12 @@ module ItemProperties
     end
 
     def set_thumbnail(attachment)
-      self.files_attachment_shim.logo_id = attachment.id
-      self.files_attachment_shim.save!
+      files_attachment_shim.logo_id = attachment.id
+      files_attachment_shim.save!
     end
 
-    def thumbnail_url(args = {resize: '100x100'})
-      return nil unless files_attachment_shim.logo_file.present?
+    def thumbnail_url(args = { resize: '100x100' })
+      return nil if files_attachment_shim.logo_file.blank?
       Rails.application.routes.url_helpers.rails_representation_path(files_attachment_shim.logo_file.variant(args).processed)
     rescue ActiveStorage::InvariableError
       begin
@@ -80,8 +80,8 @@ module ItemProperties
       raise 'Item not yet saved!' if id.nil?
 
       file_handles.each do |fileio|
-        attachment = self.files.attach(io: fileio, filename: File.basename(fileio.path)).first
-        #binding.pry
+        attachment = files.attach(io: fileio, filename: File.basename(fileio.path)).first
+        # binding.pry
         FileAttachmentIngestionJob.perform_later(attachment.id)
       end
     end
