@@ -95,23 +95,22 @@ class DepositThesisTest < ApplicationSystemTestCase
     assert_selector 'h1', text: 'The Winds of Winter'
   end
 
-  # TODO: Add button on restricted collection
-  # test 'should populate community and collection when coming from collection page' do
-  #   admin = users(:admin)
+  test 'should populate community and collection when coming from a restricted collection page' do
+    admin = users(:admin)
 
-  #   login_user(admin)
+    login_user(admin)
 
-  #   # Navigate to collection page
-  #   click_link I18n.t('application.navbar.links.communities')
-  #   click_link @community.title
-  #   click_link @collection.title
+    # Navigate to restricted collection page
+    click_link I18n.t('application.navbar.links.communities')
+    click_link @community.title
+    click_link @collection.title
 
-  #   # Click deposit button
-  #   click_link I18n.t('collections.show.deposit_thesis')
+    # Click deposit button
+    click_link I18n.t('collections.show.deposit_thesis')
 
-  #   assert has_select?('draft_thesis[community_id][]', selected: @community.title)
-  #   assert has_select?('draft_thesis[collection_id][]', selected: @collection.title)
-  # end
+    assert has_select?('draft_thesis[community_id][]', selected: @community.title)
+    assert has_select?('draft_thesis[collection_id][]', selected: @collection.title)
+  end
 
   # Helper methods for javascript fields (dropzone)
   # (could be moved and made as generic helpers if these are needed elsewhere)
