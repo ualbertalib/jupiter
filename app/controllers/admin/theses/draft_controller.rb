@@ -2,7 +2,7 @@ class Admin::Theses::DraftController < Admin::AdminController
 
   include Wicked::Wizard
 
-  before_action :initialize_communities, only: [:show, :edit]
+  before_action :initialize_communities, only: [:show]
 
   steps(*DraftThesis.wizard_steps.keys.map(&:to_sym))
 
@@ -49,13 +49,13 @@ class Admin::Theses::DraftController < Admin::AdminController
       end
       params[:draft_thesis].delete :collection_id
 
-      @draft_thesis.update_attributes(permitted_attributes(DraftThesis))
+      @draft_thesis.update(permitted_attributes(DraftThesis))
 
       render_wizard @draft_thesis
     when :review_and_deposit_thesis
       params[:draft_thesis][:status] = DraftThesis.statuses[:archived]
 
-      if @draft_thesis.update_attributes(permitted_attributes(DraftThesis))
+      if @draft_thesis.update(permitted_attributes(DraftThesis))
 
         # TODO: Improve this? Is there a way to gracefully handle errors coming back from fedora?
         thesis = Thesis.from_draft(@draft_thesis)
@@ -69,7 +69,7 @@ class Admin::Theses::DraftController < Admin::AdminController
     else
       params[:draft_thesis][:status] = DraftThesis.statuses[:active]
 
-      @draft_thesis.update_attributes(permitted_attributes(DraftThesis))
+      @draft_thesis.update(permitted_attributes(DraftThesis))
       render_wizard @draft_thesis
     end
   end

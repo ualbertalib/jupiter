@@ -113,8 +113,10 @@ class Thesis < JupiterCore::LockedLdpObject
     end
     # set the item's thumbnail to the chosen fileset
     # this advice doesn't apply to non-ActiveRecord objects, rubocop
+
     # rubocop:disable Rails/FindBy
     thesis.thumbnail_fileset(thesis.file_sets.where(contained_filename: draft_thesis.thumbnail.filename.to_s).first)
+    # rubocop:enable Rails/FindBy
 
     draft_thesis.uuid = thesis.id
     draft_thesis.save!

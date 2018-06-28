@@ -43,7 +43,7 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
 
     draft_thesis = draft_theses(:completed_choose_license_and_visibility_step)
     # Make draft_thesis to be in the review step (although it has no files and skipped the upload files step)
-    draft_thesis.update_attributes(wizard_step: :review_and_deposit_thesis)
+    draft_thesis.update(wizard_step: :review_and_deposit_thesis)
 
     # try to navigate to review and deposit thesis step now
     get admin_thesis_draft_url(id: :review_and_deposit_thesis, thesis_id: draft_thesis.id)
@@ -165,7 +165,7 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
 
     draft_thesis.files.attach image_file
 
-    draft_thesis.update_attributes(wizard_step: :upload_files)
+    draft_thesis.update(wizard_step: :upload_files)
 
     assert_difference('Thesis.count', 1) do
       patch admin_thesis_draft_url(id: :review_and_deposit_thesis, thesis_id: draft_thesis.id)
@@ -194,7 +194,7 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
 
     draft_thesis.files.attach image_file
 
-    draft_thesis.update_attributes(wizard_step: :upload_files)
+    draft_thesis.update(wizard_step: :upload_files)
 
     patch admin_thesis_draft_url(id: :choose_license_and_visibility, thesis_id: draft_thesis.id), params: {
       draft_thesis: {

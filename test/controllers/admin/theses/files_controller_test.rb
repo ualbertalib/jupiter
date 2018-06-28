@@ -54,7 +54,7 @@ class Admin::Theses::FilesControllerTest < ActionDispatch::IntegrationTest
 
     @draft_thesis.reload
 
-    refute @draft_thesis.files.attached?
+    assert_not @draft_thesis.files.attached?
     assert_equal 0, @draft_thesis.files.count
   end
 

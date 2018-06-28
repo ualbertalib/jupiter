@@ -10,9 +10,9 @@ class Admin::Theses::FilesController < Admin::AdminController
         formats: [:html]
       )
 
-      render json: { files_list_html: file_partial }, status: 200
+      render json: { files_list_html: file_partial }, status: :ok
     else
-      render json: @draft_thesis.errors, status: 400
+      render json: @draft_thesis.errors, status: :bad_request
     end
   end
 
@@ -32,7 +32,7 @@ class Admin::Theses::FilesController < Admin::AdminController
     if @draft_thesis.save
       render :update_files_list
     else
-      render json: @draft_thesis.errors, status: 400
+      render json: @draft_thesis.errors, status: :bad_request
     end
   end
 

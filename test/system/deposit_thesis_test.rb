@@ -52,7 +52,6 @@ class DepositThesisTest < ApplicationSystemTestCase
 
     assert_selector 'h2', text: I18n.t('admin.theses.draft.choose_license_and_visibility.header')
 
-
     fill_in 'draft_thesis_rights',
             with: 'Open for everyone!'
 
@@ -117,7 +116,6 @@ class DepositThesisTest < ApplicationSystemTestCase
   # Helper methods for javascript fields (dropzone)
   # (could be moved and made as generic helpers if these are needed elsewhere)
   private
-
 
   def attach_file_in_dropzone(file_path)
     # Attach the file to the hidden input selector
