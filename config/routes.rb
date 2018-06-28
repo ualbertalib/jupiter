@@ -3,7 +3,6 @@ require 'sidekiq/cron/web'
 require_dependency 'admin_constraint'
 
 # rubocop is bad and recommends insane things
-# rubocop:disable Style/FormatStringToken
 Rails.application.routes.draw do
   root to: 'welcome#index'
 
@@ -117,4 +116,3 @@ Rails.application.routes.draw do
 
   match '/oai/(*all)', to: 'application#service_unavailable', via: [:get, :post]
 end
-# rubocop:enable Style/FormatStringToken

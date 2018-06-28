@@ -39,7 +39,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
 
     draft_item = draft_items(:completed_choose_license_and_visibility_step)
     # Make draft_item to be in the review step (although it has no files and skipped the upload files step)
-    draft_item.update_attributes(wizard_step: :review_and_deposit_item)
+    draft_item.update(wizard_step: :review_and_deposit_item)
 
     # try to navigate to review and deposit item step now
     get item_draft_url(id: :review_and_deposit_item, item_id: draft_item.id)
@@ -163,7 +163,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
 
     draft_item.files.attach image_file
 
-    draft_item.update_attributes(wizard_step: :upload_files)
+    draft_item.update(wizard_step: :upload_files)
 
     assert_difference('Item.count', 1) do
       patch item_draft_url(id: :review_and_deposit_item, item_id: draft_item.id)
@@ -192,7 +192,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
 
     draft_item.files.attach image_file
 
-    draft_item.update_attributes(wizard_step: :upload_files)
+    draft_item.update(wizard_step: :upload_files)
 
     patch item_draft_url(id: :choose_license_and_visibility, item_id: draft_item.id), params: {
       draft_item: {

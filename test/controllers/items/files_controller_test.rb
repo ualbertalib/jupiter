@@ -50,7 +50,7 @@ class Items::FilesControllerTest < ActionDispatch::IntegrationTest
 
     @draft_item.reload
 
-    refute @draft_item.files.attached?
+    assert_not @draft_item.files.attached?
     assert_equal 0, @draft_item.files.count
   end
 

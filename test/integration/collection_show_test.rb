@@ -103,8 +103,8 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
       # Link to item
       assert_equal item_links.last.text, item.title
       # No link to delete item
-      refute_equal item_links.first.attributes['data-method'].to_s, 'delete'
-      refute_equal item_links.last.attributes['data-method'].to_s, 'delete'
+      assert_not_equal item_links.first.attributes['data-method'].to_s, 'delete'
+      assert_not_equal item_links.last.attributes['data-method'].to_s, 'delete'
       # No link to edit item
       assert_select "ul.list-group .list-group-item a[href='#{edit_item_path(item)}']", count: 0
     end

@@ -29,9 +29,7 @@ class SessionsController < ApplicationController
       user.identities.create(provider: auth_hash.provider, uid: auth_hash.uid)
     end
 
-    if user&.suspended?
-      return redirect_to root_path, alert: t('login.user_suspended')
-    end
+    return redirect_to root_path, alert: t('login.user_suspended') if user&.suspended?
 
     # Sign the user in, if they exist
     sign_in(user)
