@@ -2,7 +2,7 @@ class DownloadsController < ApplicationController
 
   include ActiveStorage::SetBlob
 
-  # Needed for Activestorage compatibility, normally happens in ActiveStorage::BaseController for controlelrs that subclass is
+  # Needed for Activestorage compatibility, normally happens in ActiveStorage::BaseController for controllers that subclass is
   # see https://github.com/rails/rails/blob/master/activestorage/app/controllers/active_storage/base_controller.rb
   before_action do
     ActiveStorage::Current.host = request.base_url

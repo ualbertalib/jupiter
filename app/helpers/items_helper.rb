@@ -52,7 +52,7 @@ module ItemsHelper
   def file_url(file, action)
     # The slash in the controller name below allows this to work in admin namespace
     route = { controller: 'downloads', action: action, id: file.record.owner.id, file_set_id: file.fileset_uuid }
-    route[:file_name] = file.blob.filename unless action == :download
+    route[:file_name] = file.blob.filename.to_s unless action == :download
     url_for(route)
   end
 end
