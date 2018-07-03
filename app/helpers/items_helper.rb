@@ -14,8 +14,7 @@ module ItemsHelper
   end
 
   def language_search_link(item, language_uri)
-    search_link_for(item, :languages, value: language_uri,
-                                      display: humanize_uri(:language, language_uri))
+    search_link_for(item, :languages, value: language_uri, display: humanize_uri(:language, language_uri))
   end
 
   def license_link(license)

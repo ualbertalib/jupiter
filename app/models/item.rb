@@ -101,12 +101,10 @@ class Item < JupiterCore::LockedLdpObject
       # add an association between the same underlying blobs the Draft uses and the Item
       draft_item.files_attachments.each do |attachment|
         new_attachment = ActiveStorage::Attachment.create(record: item.files_attachment_shim, blob: attachment.blob, name: :shimmed_files)
-        if attachment.id == draft_item.thumbnail_id
-          item.files_attachment_shim.logo_id = new_attachment.id
-          item.files_attachment_shim.save!
-        end
         FileAttachmentIngestionJob.perform_later(new_attachment.id)
       end
+
+      item.set_thumbnail(item.files.find_by(blob_id: draft_item.thumbnail.blob.id))
     end
 
     draft_item.uuid = item.id

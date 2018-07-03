@@ -1,3 +1,4 @@
+<%# raise 'asdf' %>
 <% if policy(object).thumbnail? %>
   <% if object.thumbnail_url.present? %>
     <%= image_tag(object.thumbnail_url(resize:'350x350'), class: 'j-feature-image img-thumbnail', alt: '', size: '350x350') %>
