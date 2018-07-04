@@ -1,6 +1,8 @@
-class GarbageCollectBlobsJob < ApplicationJob
+class GarbageCollectBlobsJob
+  # Sidekiq Unique Jobs doesn't work with ActiveJob
+  include Sidekiq::Worker
 
-  queue_as :default
+  sidekiq_options unique: :until_executing, queue: 'default'
 
   # Since there is a many-many relationship between Items/DraftItems and blobs, we can't use a purge callback on deletion of an attachment.
   # Therefore we need a process for removing blobs that become orphaned over time as all of their associated attachments cease to exist.
@@ -9,6 +11,9 @@ class GarbageCollectBlobsJob < ApplicationJob
   def perform
     orphan_blobs = ActiveStorage::Blob.find_by_sql('SELECT * FROM active_storage_blobs asb WHERE asb.id NOT IN (SELECT distinct blob_id FROM active_storage_attachments)')
     orphan_blobs.each(&:purge)
+
+    # reschedule another run for 12 hours from now
+    GarbageCollectBlobsJob.perform_in(12.hours)
   end
 
 end

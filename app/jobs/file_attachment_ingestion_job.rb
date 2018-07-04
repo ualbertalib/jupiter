@@ -71,7 +71,7 @@ class FileAttachmentIngestionJob < ApplicationJob
           # this causes the save to crash. So we must first iterate through each original fileset and instantiate
           # a new LockedLdpObject wrapper to connect them with via +LockedLdpObject#reconnect_owning_jupiter_object!+
           original_filesets = unlocked_obj.ordered_members.to_a || []
-          original_filesets.each {|fs| JupiterCore::LockedLdpObject.reconnect_owning_jupiter_object!(fs)}
+          original_filesets.each { |fs| JupiterCore::LockedLdpObject.reconnect_owning_jupiter_object!(fs) }
           unlocked_obj.ordered_members = (original_filesets + [unlocked_fileset])
 
           unlocked_obj.save!

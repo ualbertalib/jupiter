@@ -51,6 +51,7 @@ gem 'pundit'
 
 # Background tasks
 gem 'sidekiq', '~> 5.1'
+gem 'sidekiq-unique-jobs'
 gem 'sinatra' # used by sidekiq/web
 
 # Misc Utilities
