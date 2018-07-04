@@ -1,39 +1,20 @@
 class Admin::Theses::FilesController < Admin::AdminController
 
-  def create
-    @draft_thesis = DraftThesis.find(params[:thesis_id])
+  include DraftFilesActions
 
-    if @draft_thesis.files.attach(params[:file])
-      file_partial = render_to_string(
-        'admin/theses/draft/_files_list',
-        layout: false,
-        formats: [:html]
-      )
+  private
 
-      render json: { files_list_html: file_partial }, status: :ok
-    else
-      render json: @draft_thesis.errors, status: :bad_request
-    end
+  def authorize?
+    false
   end
 
-  def destroy
-    @draft_thesis = DraftThesis.find(params[:thesis_id])
-
-    @draft_thesis.files.find(params[:id]).purge
-
-    render :update_files_list
+  def set_draft
+    # TODO: reason why we assign to @draft_thesis is because we haven't switched views over yet
+    @draft = @draft_thesis = DraftThesis.find(params[:thesis_id])
   end
 
-  def set_thumbnail
-    @draft_thesis = DraftThesis.find(params[:thesis_id])
-
-    @draft_thesis.thumbnail_id = params[:id]
-
-    if @draft_thesis.save
-      render :update_files_list
-    else
-      render json: @draft_thesis.errors, status: :bad_request
-    end
+  def file_partial_location
+    'admin/theses/draft/_files_list'
   end
 
 end
