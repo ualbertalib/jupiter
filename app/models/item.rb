@@ -107,7 +107,7 @@ class Item < JupiterCore::LockedLdpObject
 
       item.set_thumbnail(item.files.find_by(blob_id: draft_item.thumbnail.blob.id))
     end
-
+    # rubocop:enable Rails/FindBy
     draft_item.uuid = item.id
     draft_item.save!
 
@@ -126,7 +126,7 @@ class Item < JupiterCore::LockedLdpObject
     publication_status_code = :submitted if publication_status_code == :draft
     "#{item_type_code}_#{publication_status_code}".to_sym
   rescue ArgumentError
-    return nil
+    nil
   end
 
   def all_subjects

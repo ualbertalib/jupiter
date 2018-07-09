@@ -42,7 +42,7 @@ class UserTest < ActiveSupport::TestCase
     travel 1.hour do
       ip2 = '4.73.73.73'
       now2 = Time.now.utc.to_s
-      refute_equal now2, now1
+      assert_not_equal now2, now1
       UpdateUserActivityJob.perform_now(user.id, now2, ip2)
       user.reload
       assert_equal user.last_seen_at.to_s, now2
@@ -77,7 +77,7 @@ class UserTest < ActiveSupport::TestCase
     travel 1.hour do
       ip2 = '4.73.73.73'
       now2 = Time.now.utc.to_s
-      refute_equal now2, now1
+      assert_not_equal now2, now1
 
       user.update_activity!(now2, ip2, sign_in: true)
       user.reload

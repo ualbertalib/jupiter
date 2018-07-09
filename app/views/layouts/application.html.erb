@@ -39,6 +39,10 @@
 
 
     <%= csrf_meta_tags %>
+
+    <%# TODO: Investigate CSP when more documentation with doing js.erb/turbolinks etc. %>
+    <%#= csp_meta_tag %>
+
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
 

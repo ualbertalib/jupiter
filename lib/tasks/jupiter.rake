@@ -1,31 +1,32 @@
 namespace :jupiter do
-  desc 'force garbage collection any orphan attachment blobs on the filesystem. A periodic job handles this normally'
-  task gc_blobs: :environment do
-    orphan_query = 'SELECT * FROM active_storage_blobs asb WHERE asb.id NOT IN '\
-                   '(SELECT distinct blob_id FROM active_storage_attachments)'
-    orphan_blobs = ActiveStorage::Blob.find_by_sql(orphan_query)
+  # Wizard has potential of leaving stale inactive draft items around,
+  # For example if someone goes to the deposit screen and then leaves
+  # a draft item gets created and left in an inactive state.
+  # This rake task is to cleanup these inactive draft items
+  desc 'removes stale inactive draft items from the database'
+  task remove_inactive_draft_items: :environment do
+    # Find all the inactive draft items older than yesterday
+    inactive_draft_items = DraftItem.where('DATE(created_at) < DATE(?)', Date.yesterday).where(status: :inactive)
 
-    puts "Found #{orphan_blobs.count} orphans. Purging..."
-    orphan_blobs.each do |blob|
-      blob.purge
-      print '.'
-    end
-    puts
-    puts 'done!'
+    puts "Deleting #{inactive_draft_items.count} Inactive Draft Items..."
+
+    # delete them all
+    inactive_draft_items.destroy_all
+
+    puts 'Cleanup of Inactive Draft Items now completed!'
   end
 
-  desc 'turn existing filesets into attachments'
-  task migrate_filesets: :environment do
-    (Item.all + Thesis.all).each do |item|
-      item.file_sets.each do |fs|
-        fs.unlock_and_fetch_ldp_object do |ufs|
-          ufs.fetch_raw_original_file_data do |content_type, io|
-            attachment = item.files.attach(io: io, filename: ufs.contained_filename, content_type: content_type).first
-            attachment.fileset_uuid = fs.id
-            attachment.save
-          end
-        end
-      end
-    end
+  desc 'fetch and unlock every object then save'
+  task reindex: :environment do
+    puts 'Reindexing all Items and Theses...'
+    (Item.all + Thesis.all).each { |item| item.unlock_and_fetch_ldp_object(&:save!) }
+    puts 'Reindex completed!'
+  end
+
+  desc 'queue all items and theses in the system for preservation'
+  task preserve_all_items_and_theses: :environment do
+    puts 'Adding all Items and Theses to preservation queue...'
+    (Item.all + Thesis.all).each { |item| item.unlock_and_fetch_ldp_object(&:preserve) }
+    puts 'All Items and Theses have been added to preservation queue!'
   end
 end

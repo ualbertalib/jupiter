@@ -22,11 +22,11 @@ class CollectionPolicyTest < ActiveSupport::TestCase
     assert CollectionPolicy.new(current_user, collection).index?
     assert CollectionPolicy.new(current_user, collection).show?
 
-    refute CollectionPolicy.new(current_user, collection).create?
-    refute CollectionPolicy.new(current_user, collection).new?
-    refute CollectionPolicy.new(current_user, collection).edit?
-    refute CollectionPolicy.new(current_user, collection).update?
-    refute CollectionPolicy.new(current_user, collection).destroy?
+    assert_not CollectionPolicy.new(current_user, collection).create?
+    assert_not CollectionPolicy.new(current_user, collection).new?
+    assert_not CollectionPolicy.new(current_user, collection).edit?
+    assert_not CollectionPolicy.new(current_user, collection).update?
+    assert_not CollectionPolicy.new(current_user, collection).destroy?
   end
 
   test 'anon user should only be able to see index and show of collections' do
@@ -36,11 +36,11 @@ class CollectionPolicyTest < ActiveSupport::TestCase
     assert CollectionPolicy.new(current_user, collection).index?
     assert CollectionPolicy.new(current_user, collection).show?
 
-    refute CollectionPolicy.new(current_user, collection).create?
-    refute CollectionPolicy.new(current_user, collection).new?
-    refute CollectionPolicy.new(current_user, collection).edit?
-    refute CollectionPolicy.new(current_user, collection).update?
-    refute CollectionPolicy.new(current_user, collection).destroy?
+    assert_not CollectionPolicy.new(current_user, collection).create?
+    assert_not CollectionPolicy.new(current_user, collection).new?
+    assert_not CollectionPolicy.new(current_user, collection).edit?
+    assert_not CollectionPolicy.new(current_user, collection).update?
+    assert_not CollectionPolicy.new(current_user, collection).destroy?
   end
 
 end

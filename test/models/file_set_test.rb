@@ -45,7 +45,7 @@ class FileSetTest < ActiveSupport::TestCase
     ActiveSupport::Deprecation.silence do
       file_set = item.file_sets.first
     end
-    refute file_set.nil?
+    assert_not file_set.nil?
     assert_equal file_set.contained_filename, 'image-sample.jpeg'
     file_set.unlock_and_fetch_ldp_object do |unlocked_fileset|
       assert unlocked_fileset.original_file.uri =~ /http.*fcrepo\/rest\/.*#{file_set.id}\/files\/.*/

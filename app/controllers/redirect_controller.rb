@@ -43,7 +43,7 @@ class RedirectController < ApplicationController
 
   def fedora3_datastream
     item = find_item_by_uuid(uuid)
-    if /^DS\d+/ !~ params[:ds]
+    unless /^DS\d+/.match?(params[:ds])
       # If data stream not found, redirect to item level
       return redirect_to item_url(item), status: :found
     end

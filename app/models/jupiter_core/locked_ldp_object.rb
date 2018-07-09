@@ -51,6 +51,7 @@ class JupiterCore::LockedLdpObject
     return ldp_object.modified_date if ldp_object.present?
     DateTime.parse(solr_representation['system_modified_dtsi']) if solr_representation
   end
+  # rubocop:enable Style/DateTime, Rails/TimeZone
 
   # Provides structured, mediated interaction for mutating the underlying LDP object
   #
@@ -300,7 +301,7 @@ class JupiterCore::LockedLdpObject
   def self.find_by(id)
     self.find(id)
   rescue JupiterCore::ObjectNotFound
-    return nil
+    nil
   end
 
   # Returns an array of all +LockedLDPObject+ in the LDP
@@ -817,9 +818,7 @@ class JupiterCore::LockedLdpObject
       # this isn't an exhaustive layering over this mess
       # https://github.com/mbarnett/solrizer/blob/e5dd2bd571b9ebdb8a8ab214574075c28951e53e/lib/solrizer/default_descriptors.rb
       # but it helps
-      if solrize_for.count { |item| !SOLR_DESCRIPTOR_MAP.keys.include?(item) } > 0
-        raise JupiterCore::PropertyInvalidError
-      end
+      raise JupiterCore::PropertyInvalidError if solrize_for.count { |item| !SOLR_DESCRIPTOR_MAP.key?(item) } > 0
 
       unless [:string, :text, :path, :boolean, :date, :integer, :float, :json_array].include?(type)
         raise JupiterCore::PropertyInvalidError, "Unknown type #{type}"

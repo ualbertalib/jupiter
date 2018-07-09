@@ -91,6 +91,7 @@ module ItemProperties
       after_create :handle_doi_states
       before_destroy :remove_doi
       after_destroy :delete_doi_state
+      after_save :push_item_id_for_preservation
 
       # If you're looking for rights and subject validations, note that they have separate implementations
       # on the Thesis and Item classes.
@@ -196,6 +197,93 @@ module ItemProperties
         end
 
         self.ordered_members = []
+      end
+
+      def push_item_id_for_preservation
+        result = preserve
+
+        if result == false
+          Rails.logger.warn("Could not preserve #{id}")
+          Rollbar.error("Could not preserve #{id}")
+        end
+
+        true
+      rescue StandardError => e
+        # we trap errors in writing to the Redis queue in order to avoid crashing the save process for the user.
+        Rollbar.error("Error occured in push_item_id_for_preservation, Could not preserve #{id}", e)
+        true
+      end
+
+      # rubocop:disable Style/GlobalVars
+      def preserve
+        queue_name = Rails.application.secrets.preservation_queue_name
+
+        $queue ||= ConnectionPool.new(size: 1, timeout: 5) { Redis.current }
+
+        $queue.with do |connection|
+          connection.zadd queue_name, Time.now.to_f, id
+        end
+
+      # rescue all preservation errors so that the user can continue to use the application normally
+      rescue StandardError => e
+        Rollbar.error("Could not preserve #{id}", e)
+      end
+      # rubocop:enable Style/GlobalVars
+
+      def add_files(files)
+        return if files.blank?
+        # Need a item id for file sets to point to
+        # TODO should this be a side effect? should we throw an exception if there's no id? Food for thought
+        save! if id.nil?
+
+        # The current and added filesets approach (rather than direct array append) works around bugs in ActiveFedora
+        current_filesets = ordered_members || []
+        added_filesets = []
+
+        files.each do |file|
+          FileSet.new_locked_ldp_object.unlock_and_fetch_ldp_object do |unlocked_fileset|
+            unlocked_fileset.owner = owner
+            unlocked_fileset.visibility = visibility
+            Hydra::Works::AddFileToFileSet.call(unlocked_fileset, file, :original_file,
+                                                update_existing: false, versioning: false)
+            unlocked_fileset.member_of_collections += [self]
+            # Temporarily cache the file name for storing in Solr
+            # if the file was uploaded, it responds to +original_filename+
+            # if it's a Ruby File object, it has a +basename+. This distinction seems arbitrary.
+            unlocked_fileset.contained_filename = if file.respond_to?(:original_filename)
+                                                    file.original_filename
+                                                  else
+                                                    File.basename(file)
+                                                  end
+            # Store file properties in the format required by the sitemap
+            # for quick and easy retrieval -- nobody wants to wait 36hrs for this!
+            escaped_path = CGI.escape_html(
+              Rails.application.routes.url_helpers.url_for(controller: :file_sets,
+                                                           action: :show,
+                                                           id: id,
+                                                           file_set_id: unlocked_fileset.id,
+                                                           file_name: unlocked_fileset.contained_filename,
+                                                           only_path: true)
+            )
+            unlocked_fileset.sitemap_link = "<rs:ln \
+href=\"#{escaped_path}\" \
+rel=\"content\" \
+hash=\"#{unlocked_fileset.original_file.checksum.algorithm.downcase}:"\
+"#{unlocked_fileset.original_file.checksum.value}\" \
+length=\"#{unlocked_fileset.original_file.size}\" \
+type=\"#{unlocked_fileset.original_file.mime_type}\"\
+/>"
+            unlocked_fileset.save!
+
+            added_filesets << unlocked_fileset
+            if Rails.configuration.run_fits_characterization
+              Hydra::Works::CharacterizationService.run(unlocked_fileset.original_file)
+              unlocked_fileset.original_file.save
+            end
+          end
+        end
+        self.ordered_members = current_filesets + added_filesets
+        save!
       end
     end
   end

@@ -11,7 +11,7 @@ class CollectionTest < ActiveSupport::TestCase
 
   test 'needs title' do
     collection = Collection.new_locked_ldp_object(owner: users(:admin).id)
-    refute collection.valid?
+    assert_not collection.valid?
     assert_equal "Title can't be blank", collection.errors.full_messages.first
   end
 

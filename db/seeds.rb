@@ -122,7 +122,7 @@ if Rails.env.development? || Rails.env.uat?
 
       item_attributes = base_attributes.merge({
         title: "The effects of #{Faker::Beer.name} on #{thing.pluralize}",
-        created: (Time.now - rand(20_000).days).to_s,
+        created: rand(20_000).days.ago.to_s,
         creators: [creators[seed]],
         contributors: [contributors[seed2]],
         description: description,
@@ -198,7 +198,7 @@ if Rails.env.development? || Rails.env.uat?
       level = ["Master's", 'Doctorate'][i % 2]
       thesis_attributes = base_attributes.merge({
         title: "Thesis about the effects of #{Faker::Beer.name} on #{thing.pluralize}",
-        graduation_date: "Fall #{(Time.now - rand(20_000).days).to_date.year}",
+        graduation_date: "Fall #{rand(20_000).days.ago.year}",
         dissertant: creators[seed],
         abstract: description,
         language: languages.first,
@@ -253,7 +253,7 @@ if Rails.env.development? || Rails.env.uat?
       owner: admin.id,
       creators: [creators[rand(10)]],
       visibility: JupiterCore::VISIBILITY_PRIVATE,
-      created: (Time.now - rand(20_000).days).to_s,
+      created: rand(20_000).days.ago.to_s,
       title: "Private #{thing.pluralize}, public lives: a survey of social media trends",
       description: Faker::Lorem.sentence(20, false, 0).chop,
       languages: [CONTROLLED_VOCABULARIES[:language].english],
@@ -271,7 +271,7 @@ if Rails.env.development? || Rails.env.uat?
       owner: admin.id,
       creators: [creators[rand(10)]],
       visibility: JupiterCore::VISIBILITY_AUTHENTICATED,
-      created: (Time.now - rand(20_000).days).to_s,
+      created: rand(20_000).days.ago.to_s,
       title: "Everything You Need To Know About: University of Alberta and #{thing.pluralize}!",
       description: Faker::Lorem.sentence(20, false, 0).chop,
       languages: [CONTROLLED_VOCABULARIES[:language].english],
@@ -289,7 +289,7 @@ if Rails.env.development? || Rails.env.uat?
       owner: admin.id,
       creators: [creators[rand(10)]],
       visibility: Item::VISIBILITY_EMBARGO,
-      created: (Time.now - rand(20_000).days).to_s,
+      created: rand(20_000).days.ago.to_s,
       title: "Embargo and #{Faker::Address.country}: were the #{thing.pluralize} left behind?",
       description: Faker::Lorem.sentence(20, false, 0).chop,
       languages: [CONTROLLED_VOCABULARIES[:language].english],
@@ -299,7 +299,7 @@ if Rails.env.development? || Rails.env.uat?
       doi: "doi:bogus-#{Time.current.utc.iso8601(3)}"
     ).unlock_and_fetch_ldp_object do |uo|
       uo.add_to_path(community.id, item_collection.id)
-      uo.embargo_end_date = (Time.now + 20.years).to_date
+      uo.embargo_end_date = 20.years.from_now.to_date
       uo.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].public
       uo.save!
     end
@@ -309,7 +309,7 @@ if Rails.env.development? || Rails.env.uat?
       owner: admin.id,
       creators: [creators[rand(10)]],
       visibility: Item::VISIBILITY_EMBARGO,
-      created: (Time.now - rand(20_000).days).to_s,
+      created: rand(20_000).days.ago.to_s,
       title: "Former embargo of #{Faker::Address.country}: the day the #{thing.pluralize} were free",
       description: Faker::Lorem.sentence(20, false, 0).chop,
       languages: [CONTROLLED_VOCABULARIES[:language].english],
@@ -319,7 +319,7 @@ if Rails.env.development? || Rails.env.uat?
       doi: "doi:bogus-#{Time.current.utc.iso8601(3)}"
     ).unlock_and_fetch_ldp_object do |uo|
       uo.add_to_path(community.id, item_collection.id)
-      uo.embargo_end_date = (Time.now - 2.days).to_date
+      uo.embargo_end_date = 2.days.ago.to_date
       uo.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].public
       uo.save!
     end
@@ -329,7 +329,7 @@ if Rails.env.development? || Rails.env.uat?
       owner: non_admin.id,
       creators: [creators[rand(10)]],
       visibility: JupiterCore::VISIBILITY_PUBLIC,
-      created: (Time.now - rand(20_000).days).to_s,
+      created: rand(20_000).days.ago.to_s,
       title: "Impact of non-admin users on #{thing.pluralize}",
       description: Faker::Lorem.sentence(20, false, 0).chop,
       languages: [CONTROLLED_VOCABULARIES[:language].english],
@@ -349,7 +349,7 @@ if Rails.env.development? || Rails.env.uat?
       owner: admin.id,
       creators: [creators[rand(10)]],
       visibility: JupiterCore::VISIBILITY_PUBLIC,
-      created: (Time.now - rand(20_000).days).to_s,
+      created: rand(20_000).days.ago.to_s,
       title: "Multi-collection random images of #{thing.pluralize}",
       description: Faker::Lorem.sentence(20, false, 0).chop,
       # No linguistic content
