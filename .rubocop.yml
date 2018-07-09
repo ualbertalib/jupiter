@@ -131,6 +131,9 @@ Style/ClassVars:
 Style/Documentation:
   Enabled: false
 
+Style/FormatStringToken:
+  Enabled: false
+
 # Checks if there is a magic comment to enforce string literals
 Style/FrozenStringLiteralComment:
   Enabled: false

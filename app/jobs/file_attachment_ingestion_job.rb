@@ -17,7 +17,7 @@ class FileAttachmentIngestionJob < ApplicationJob
       # respond to that method, in preference to looking at the final portion of the file path, which,
       # because we fished this out of ActiveStorage, is just a hash. In this way we present Fedora with the original
       # file name of the object and not a hashed or otherwise modified version temporarily created during ingest
-      file.send(:define_singleton_method, :original_filename, ->() { original_filename })
+      file.send(:define_singleton_method, :original_filename, -> { original_filename })
 
       item.unlock_and_fetch_ldp_object do |unlocked_obj|
         FileSet.new_locked_ldp_object.unlock_and_fetch_ldp_object do |unlocked_fileset|
@@ -44,7 +44,7 @@ class FileAttachmentIngestionJob < ApplicationJob
                                            file_set_id: unlocked_fileset.id,
                                            file_name: unlocked_fileset.contained_filename,
                                            only_path: true
-          ))
+                                         ))
           unlocked_fileset.sitemap_link = "<rs:ln \
   href=\"#{escaped_path}\" \
   rel=\"content\" \

@@ -107,7 +107,7 @@ class Item < JupiterCore::LockedLdpObject
 
       item.set_thumbnail(item.files.find_by(blob_id: draft_item.thumbnail.blob.id))
     end
-    # rubocop:enable Rails/FindBy
+
     draft_item.uuid = item.id
     draft_item.save!
 
