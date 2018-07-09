@@ -82,7 +82,7 @@ module JupiterCore::ActiveStorageMacros
         # respond to that method, in preference to looking at the final portion of the file path, which,
         # because we fished this out of ActiveStorage, is just a hash. In this way we present Fedora with the original
         # file name of the object and not a hashed or otherwise modified version temporarily created during ingest
-        f.send(:define_singleton_method, :original_filename, ->() { original_filename })
+        f.send(:define_singleton_method, :original_filename, -> { original_filename })
         yield f
       end
     end
