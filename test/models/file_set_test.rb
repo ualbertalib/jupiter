@@ -40,8 +40,11 @@ class FileSetTest < ActiveSupport::TestCase
         item.add_and_ingest_files([file])
       end
     end
-
-    file_set = item.file_sets.first
+    file_set = nil
+    # we need to call this deprecated method to verify the model is working
+    ActiveSupport::Deprecation.silence do
+      file_set = item.file_sets.first
+    end
     refute file_set.nil?
     assert_equal file_set.contained_filename, 'image-sample.jpeg'
     file_set.unlock_and_fetch_ldp_object do |unlocked_fileset|

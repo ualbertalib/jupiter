@@ -1,4 +1,3 @@
-
 module ItemProperties
   extend ActiveSupport::Concern
 
@@ -62,10 +61,11 @@ module ItemProperties
 
     def thumbnail_url(args = { resize: '100x100' })
       return nil if files_attachment_shim.logo_file.blank?
-      Rails.application.routes.url_helpers.rails_representation_path(files_attachment_shim.logo_file.variant(args).processed)
+      logo = files_attachment_shim.logo_file
+      Rails.application.routes.url_helpers.rails_representation_path(logo.variant(args).processed)
     rescue ActiveStorage::InvariableError
       begin
-        Rails.application.routes.url_helpers.rails_representation_path(files_attachment_shim.logo_file.preview(args).processed)
+        Rails.application.routes.url_helpers.rails_representation_path(logo.preview(args).processed)
       rescue ActiveStorage::UnpreviewableError
         return nil
       end
@@ -221,7 +221,8 @@ module ItemProperties
   # Deprecated. Directly interacting with FileSets should be unnecessary during web-requests, as we're offloading
   # file handling to ActiveStorage
   def file_sets
-    ActiveSupport::Deprecation.warn('Prefer #files to #file_sets! Dealing directly with PCDM FileSets in the web application is (eventually) going away! Calls to this method should be carefully audited for necessity!')
+    ActiveSupport::Deprecation.warn('Prefer #files to #file_sets! Dealing directly with PCDM FileSets in the web'\
+      ' application is (eventually) going away! Calls to this method should be carefully audited for necessity!')
     FileSet.where(item: id)
   end
 

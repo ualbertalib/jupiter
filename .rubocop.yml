@@ -67,6 +67,9 @@ Metrics/ParameterLists:
 Naming/PredicateName:
   Exclude:
     - app/models/jupiter_core/locked_ldp_object.rb
+Naming/AccessorMethodName:
+  Exclude:
+    - app/models/concerns/item_properties.rb
 
 Naming/FileName:
   Exclude:

@@ -1,4 +1,5 @@
 class GarbageCollectBlobsJob
+
   # Sidekiq Unique Jobs doesn't work with ActiveJob
   include Sidekiq::Worker
 
@@ -9,7 +10,9 @@ class GarbageCollectBlobsJob
   # See the note on: https://github.com/rails/rails/blob/master/activestorage/app/models/active_storage/attachment.rb#L5-L8
 
   def perform
-    orphan_blobs = ActiveStorage::Blob.find_by_sql('SELECT * FROM active_storage_blobs asb WHERE asb.id NOT IN (SELECT distinct blob_id FROM active_storage_attachments)')
+    orphan_query = 'SELECT * FROM active_storage_blobs asb WHERE asb.id NOT IN '\
+                   '(SELECT distinct blob_id FROM active_storage_attachments)'
+    orphan_blobs = ActiveStorage::Blob.find_by_sql(orphan_query)
     orphan_blobs.each(&:purge)
 
     # reschedule another run for 12 hours from now

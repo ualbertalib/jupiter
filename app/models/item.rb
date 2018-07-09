@@ -100,7 +100,8 @@ class Item < JupiterCore::LockedLdpObject
 
       # add an association between the same underlying blobs the Draft uses and the Item
       draft_item.files_attachments.each do |attachment|
-        new_attachment = ActiveStorage::Attachment.create(record: item.files_attachment_shim, blob: attachment.blob, name: :shimmed_files)
+        new_attachment = ActiveStorage::Attachment.create(record: item.files_attachment_shim,
+                                                          blob: attachment.blob, name: :shimmed_files)
         FileAttachmentIngestionJob.perform_later(new_attachment.id)
       end
 

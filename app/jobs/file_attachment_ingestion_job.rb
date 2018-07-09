@@ -20,7 +20,7 @@ class FileAttachmentIngestionJob < ApplicationJob
       file.send(:define_singleton_method, :original_filename, ->() { original_filename })
 
       item.unlock_and_fetch_ldp_object do |unlocked_obj|
-        fs = FileSet.new_locked_ldp_object.unlock_and_fetch_ldp_object do |unlocked_fileset|
+        FileSet.new_locked_ldp_object.unlock_and_fetch_ldp_object do |unlocked_fileset|
           unlocked_fileset.owner = unlocked_obj.owner
           unlocked_fileset.visibility = unlocked_obj.visibility
 
@@ -71,7 +71,7 @@ class FileAttachmentIngestionJob < ApplicationJob
           # this causes the save to crash. So we must first iterate through each original fileset and instantiate
           # a new LockedLdpObject wrapper to connect them with via +LockedLdpObject#reconnect_owning_jupiter_object!+
           original_filesets = unlocked_obj.ordered_members.to_a || []
-          original_filesets.each { |fs| JupiterCore::LockedLdpObject.reconnect_owning_jupiter_object!(fs) }
+          original_filesets.each { |ofs| JupiterCore::LockedLdpObject.reconnect_owning_jupiter_object!(ofs) }
           unlocked_obj.ordered_members = (original_filesets + [unlocked_fileset])
 
           unlocked_obj.save!
