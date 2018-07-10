@@ -3,11 +3,9 @@ require 'test_helper'
 class Items::DraftControllerTest < ActionDispatch::IntegrationTest
 
   def before_all
-    @community = Community.new_locked_ldp_object(title: 'Books', owner: 1).unlock_and_fetch_ldp_object(&:save!)
-    @collection = Collection.new_locked_ldp_object(title: 'Fantasy Books',
-                                                   owner: 1,
-                                                   community_id: @community.id)
-                            .unlock_and_fetch_ldp_object(&:save!)
+    super
+    @community = locked_ldp_fixture(Community, :books).unlock_and_fetch_ldp_object(&:save!)
+    @collection = locked_ldp_fixture(Collection, :books).unlock_and_fetch_ldp_object(&:save!)
   end
 
   setup do
@@ -41,7 +39,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
 
     draft_item = draft_items(:completed_choose_license_and_visibility_step)
     # Make draft_item to be in the review step (although it has no files and skipped the upload files step)
-    draft_item.update_attributes(wizard_step: :review_and_deposit_item)
+    draft_item.update(wizard_step: :review_and_deposit_item)
 
     # try to navigate to review and deposit item step now
     get item_draft_url(id: :review_and_deposit_item, item_id: draft_item.id)
@@ -165,7 +163,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
 
     draft_item.files.attach image_file
 
-    draft_item.update_attributes(wizard_step: :upload_files)
+    draft_item.update(wizard_step: :upload_files)
 
     assert_difference('Item.count', 1) do
       patch item_draft_url(id: :review_and_deposit_item, item_id: draft_item.id)
@@ -195,7 +193,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
 
     draft_item.files.attach image_file
 
-    draft_item.update_attributes(wizard_step: :upload_files)
+    draft_item.update(wizard_step: :upload_files)
 
     patch item_draft_url(id: :choose_license_and_visibility, item_id: draft_item.id), params: {
       draft_item: {

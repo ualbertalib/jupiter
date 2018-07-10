@@ -99,7 +99,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to root_path
     assert_equal I18n.t('login.user_suspended'), flash[:alert]
-    refute logged_in?
+    assert_not logged_in?
   end
 
   test 'should handle session destroying aka logout properly' do

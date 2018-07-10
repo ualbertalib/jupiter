@@ -35,7 +35,7 @@ class ItemTest < ActiveSupport::TestCase
       end
     end
     assert item.valid?
-    refute Item.public.map(&:id).include?(item.id)
+    assert_not Item.public.map(&:id).include?(item.id)
   end
 
   test 'there is no default visibility' do
@@ -93,7 +93,7 @@ class ItemTest < ActiveSupport::TestCase
     assert item.errors[:embargo_end_date].present?
     assert_includes item.errors[:embargo_end_date], 'must be blank'
 
-    refute item.errors[:visibility].present?
+    assert_not item.errors[:visibility].present?
   end
 
   test 'visibility_after_embargo must be present if visibility is embargo' do
@@ -118,9 +118,9 @@ class ItemTest < ActiveSupport::TestCase
     assert item.errors[:visibility_after_embargo].present?
     assert_includes item.errors[:visibility_after_embargo], 'must be blank'
     # Make sure no controlled vocabulary error
-    refute_includes item.errors[:visibility_after_embargo], 'is not recognized'
+    assert_not_includes item.errors[:visibility_after_embargo], 'is not recognized'
 
-    refute item.errors[:visibility].present?
+    assert_not item.errors[:visibility].present?
   end
 
   test 'visibility_after_embargo must be from the controlled vocabulary' do
@@ -133,7 +133,7 @@ class ItemTest < ActiveSupport::TestCase
     assert_not item.valid?
     assert item.errors[:visibility_after_embargo].present?
     assert_includes item.errors[:visibility_after_embargo], 'is not recognized'
-    refute item.errors[:visibility].present?
+    assert_not item.errors[:visibility].present?
   end
 
   test '#add_to_path assigns paths properly' do
@@ -190,7 +190,7 @@ class ItemTest < ActiveSupport::TestCase
 
     item = Item.new_locked_ldp_object(languages: [CONTROLLED_VOCABULARIES[:language].english])
     assert_not item.valid?
-    refute_includes item.errors.keys, :languages
+    assert_not_includes item.errors.keys, :languages
   end
 
   test 'a license or rights statement must be present' do
@@ -215,11 +215,11 @@ class ItemTest < ActiveSupport::TestCase
 
     item = Item.new_locked_ldp_object(license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international)
     item.valid?
-    refute_includes item.errors.keys, :license
+    assert_not_includes item.errors.keys, :license
 
     item = Item.new_locked_ldp_object(license: CONTROLLED_VOCABULARIES[:old_license].attribution_3_0_international)
     item.valid?
-    refute_includes item.errors.keys, :license
+    assert_not_includes item.errors.keys, :license
   end
 
   test 'an item type is required' do
@@ -251,13 +251,13 @@ class ItemTest < ActiveSupport::TestCase
     item = Item.new_locked_ldp_object(item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                       publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published])
     item.valid?
-    refute item.errors[:publication_status].present?
+    assert_not item.errors[:publication_status].present?
 
     item = Item.new_locked_ldp_object(item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                       publication_status: [CONTROLLED_VOCABULARIES[:publication_status].draft,
                                                            CONTROLLED_VOCABULARIES[:publication_status].submitted])
     item.valid?
-    refute item.errors[:publication_status].present?
+    assert_not item.errors[:publication_status].present?
 
     item = Item.new_locked_ldp_object(item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                       publication_status: [CONTROLLED_VOCABULARIES[:publication_status].draft])
@@ -318,26 +318,17 @@ class ItemTest < ActiveSupport::TestCase
   test 'sort_year is derived from created' do
     item = Item.new_locked_ldp_object(created: 'Fall 2015')
     item.valid?
-    refute item.errors[:sort_year].present?
+    assert_not item.errors[:sort_year].present?
     assert_equal item.sort_year, 2015
   end
 
   test 'add_files maintains correct order and correctly creates list_source proxies' do
     # Doing a lot of I/O with Fedora, so I don't want to break this long test into pieces
-    community = Community.new_locked_ldp_object(title: 'Community', owner: 1).unlock_and_fetch_ldp_object(&:save!)
+    community = locked_ldp_fixture(Community, :foo).unlock_and_fetch_ldp_object(&:save!)
     collection = Collection.new_locked_ldp_object(title: 'foo', owner: users(:regular).id,
                                                   community_id: community.id).unlock_and_fetch_ldp_object(&:save!)
 
-    item = Item.new_locked_ldp_object(title: generate_random_string,
-                                      creators: [generate_random_string],
-                                      visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                      created: '1978-01-01',
-                                      owner: 1,
-                                      item_type: CONTROLLED_VOCABULARIES[:item_type].report,
-                                      languages: [CONTROLLED_VOCABULARIES[:language].english],
-                                      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                                      subject: ['Randomness'])
-
+    item = locked_ldp_fixture(Item, :random)
     fedora_item_url = nil
     item.unlock_and_fetch_ldp_object do |unlocked_item|
       unlocked_item.add_to_path(community.id, collection.id)
@@ -425,6 +416,141 @@ class ItemTest < ActiveSupport::TestCase
       assert_equal unlocked_item.ordered_members.to_a.map(&:contained_filename),
                    ['image-sample.jpeg', 'pdf-sample.pdf', 'text-sample.txt', 'sitemap.xsd']
     end
+  end
+
+  # Preservation queue handling
+  test 'should add id with the correct score for a new item to preservation queue' do
+    Redis.current.del Rails.application.secrets.preservation_queue_name
+
+    # Setup an item...
+    community = Community.new_locked_ldp_object(title: 'Community', owner: 1).unlock_and_fetch_ldp_object(&:save!)
+    collection = Collection.new_locked_ldp_object(title: 'foo', owner: users(:regular).id,
+                                                  community_id: community.id).unlock_and_fetch_ldp_object(&:save!)
+
+    item = Item.new_locked_ldp_object(title: generate_random_string,
+                                      creators: [generate_random_string],
+                                      visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                      created: '1978-01-01',
+                                      owner: 1,
+                                      item_type: CONTROLLED_VOCABULARIES[:item_type].report,
+                                      languages: [CONTROLLED_VOCABULARIES[:language].english],
+                                      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                                      subject: ['Randomness'])
+
+    freeze_time do
+      item.unlock_and_fetch_ldp_object do |unlocked_item|
+        unlocked_item.add_to_path(community.id, collection.id)
+        unlocked_item.save
+      end
+
+      item_id, score = Redis.current.zrange(Rails.application.secrets.preservation_queue_name,
+                                            0,
+                                            -1,
+                                            with_scores: true)[0]
+
+      assert_equal item.id, item_id
+      assert_in_delta 0.5, score, Time.now.to_f
+    end
+
+    Redis.current.del Rails.application.secrets.preservation_queue_name
+  end
+
+  test 'should end up with the queue only having an item id once after multiple saves of the same item' do
+    Redis.current.del Rails.application.secrets.preservation_queue_name
+
+    # Setup an item...
+    community = Community.new_locked_ldp_object(title: 'Community', owner: 1).unlock_and_fetch_ldp_object(&:save!)
+    collection = Collection.new_locked_ldp_object(title: 'foo', owner: users(:regular).id,
+                                                  community_id: community.id).unlock_and_fetch_ldp_object(&:save!)
+
+    item = Item.new_locked_ldp_object(title: generate_random_string,
+                                      creators: [generate_random_string],
+                                      visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                      created: '1978-01-01',
+                                      owner: 1,
+                                      item_type: CONTROLLED_VOCABULARIES[:item_type].report,
+                                      languages: [CONTROLLED_VOCABULARIES[:language].english],
+                                      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                                      subject: ['Randomness'])
+
+    travel 1.minute do
+      item.unlock_and_fetch_ldp_object(&:save)
+    end
+
+    travel 3.minutes do
+      item.unlock_and_fetch_ldp_object(&:save)
+    end
+
+    freeze_time do
+      item.unlock_and_fetch_ldp_object do |unlocked_item|
+        unlocked_item.add_to_path(community.id, collection.id)
+        unlocked_item.save
+      end
+
+      assert_equal 1, Redis.current.zcard(Rails.application.secrets.preservation_queue_name)
+
+      item_id, score = Redis.current.zrange(Rails.application.secrets.preservation_queue_name,
+                                            0,
+                                            -1,
+                                            with_scores: true)[0]
+
+      assert_equal item.id, item_id
+      assert_in_delta 0.5, score, 3.minutes.from_now.to_f
+    end
+
+    Redis.current.del Rails.application.secrets.preservation_queue_name
+  end
+
+  test 'should end up with item ids in the queue in the correct temporal order' do
+    Redis.current.del Rails.application.secrets.preservation_queue_name
+
+    # Setup some items...
+    community = Community.new_locked_ldp_object(title: 'Community', owner: 1).unlock_and_fetch_ldp_object(&:save!)
+    collection = Collection.new_locked_ldp_object(title: 'foo', owner: users(:regular).id,
+                                                  community_id: community.id).unlock_and_fetch_ldp_object(&:save!)
+    items = []
+    3.times do
+      items << Item.new_locked_ldp_object(title: generate_random_string,
+                                          creators: [generate_random_string],
+                                          visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                          created: '1978-01-01',
+                                          owner: 1,
+                                          item_type: CONTROLLED_VOCABULARIES[:item_type].report,
+                                          languages: [CONTROLLED_VOCABULARIES[:language].english],
+                                          license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                                          subject: ['Randomness'])
+    end
+
+    # this is all maybe a bit too "there's nothing up my sleeve" about item id orders, but c'est la vie
+    items = items.shuffle
+
+    freeze_time do
+      items[0].unlock_and_fetch_ldp_object do |unlocked_item|
+        unlocked_item.add_to_path(community.id, collection.id)
+        unlocked_item.save
+      end
+    end
+
+    travel_to 6.minutes.ago do
+      items[1].unlock_and_fetch_ldp_object do |unlocked_item|
+        unlocked_item.add_to_path(community.id, collection.id)
+        unlocked_item.save
+      end
+    end
+
+    travel_to 2.hours.from_now do
+      items[2].unlock_and_fetch_ldp_object do |unlocked_item|
+        unlocked_item.add_to_path(community.id, collection.id)
+        unlocked_item.save
+      end
+    end
+
+    save_order = [items[1], items[0], items[2]]
+
+    queue = Redis.current.zrange(Rails.application.secrets.preservation_queue_name, 0, -1, with_scores: false)
+    assert_equal save_order.map(&:id), queue
+
+    Redis.current.del Rails.application.secrets.preservation_queue_name
   end
 
 end

@@ -51,6 +51,8 @@ class Item < JupiterCore::LockedLdpObject
   # Combine all the subjects for faceting
   additional_search_index :all_subjects, solrize_for: :facet, as: -> { all_subjects }
 
+  has_one_attached :thumbnail
+
   def self.from_draft(draft_item)
     item = Item.find(draft_item.uuid) if draft_item.uuid.present?
     item ||= Item.new_locked_ldp_object
@@ -103,7 +105,7 @@ class Item < JupiterCore::LockedLdpObject
     # this advice doesn't apply to non-ActiveRecord objects, rubocop
     # rubocop:disable Rails/FindBy
     item.thumbnail_fileset(item.file_sets.where(contained_filename: draft_item.thumbnail.filename.to_s).first)
-
+    # rubocop:enable Rails/FindBy
     draft_item.uuid = item.id
     draft_item.save!
     item
@@ -121,7 +123,7 @@ class Item < JupiterCore::LockedLdpObject
     publication_status_code = :submitted if publication_status_code == :draft
     "#{item_type_code}_#{publication_status_code}".to_sym
   rescue ArgumentError
-    return nil
+    nil
   end
 
   def all_subjects

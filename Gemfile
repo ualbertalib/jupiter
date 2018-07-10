@@ -7,10 +7,10 @@ end
 
 # Core Rails stuff
 gem 'puma', '~> 3.11'
-gem 'rails', '~> 5.1.6'
+gem 'rails', '~> 5.2.0'
 
 # Assets (CSS/JS) stuff
-gem 'bootstrap', '~> 4.1.0'
+gem 'bootstrap', '~> 4.1.1'
 gem 'dropzonejs-rails'
 gem 'font-awesome-rails'
 gem 'jquery-rails'
@@ -19,22 +19,25 @@ gem 'selectize-rails'
 gem 'turbolinks', '~> 5'
 gem 'uglifier', '>= 1.3.0'
 
+# Reduces boot times through caching; required in config/boot.rb
+gem 'bootsnap', '>= 1.1.0', require: false
+
 # View stuff
 gem 'active_link_to'
-gem 'activestorage'
 gem 'simple_form'
 
 # SEO
 gem 'canonical-rails'
 
 # Hydra stuff
-gem 'active-fedora', github: 'mbarnett/active_fedora', branch: 'fix_types_literally_do_nothing'
+gem 'active-fedora', github: 'mbarnett/active_fedora', branch: 'backport_rails52_fixes'
 gem 'hydra-derivatives', '3.3.2' # pinned this as 3.4.X has deprecation spam because of hydra-works
 gem 'hydra-works', '0.17.0'
 gem 'rdf-vocab'
 gem 'solrizer', github: 'mbarnett/solrizer', branch: 'literally_types'
 
 # Database stuff
+gem 'connection_pool'
 gem 'pg', '~> 1.0.0'
 gem 'redis', '~> 4.0'
 gem 'rsolr'
@@ -48,7 +51,10 @@ gem 'pundit'
 
 # Background tasks
 gem 'sidekiq', '~> 5.1'
-gem 'sinatra' # used by sidekiq/web
+gem 'sinatra', '~> 2.0.3' # used by sidekiq/web
+# Sidekiq cron jobs
+gem 'rufus-scheduler', '3.4.2' # https://github.com/ondrejbartas/sidekiq-cron/issues/199
+gem 'sidekiq-cron'
 
 # Misc Utilities
 gem 'aasm' # state-machine management
@@ -72,14 +78,14 @@ end
 group :development, :test do
   gem 'sdoc', require: false
 
-  gem 'capybara', '~> 2.18'
+  gem 'capybara', '>= 2.15', '< 4.0'
   gem 'nokogiri'
   gem 'selenium-webdriver', require: false
 
   gem 'pry'
   gem 'pry-rails'
 
-  gem 'rubocop', '~> 0.51.0', require: false
+  gem 'rubocop', '~> 0.56.0', require: false
 
   gem 'scss_lint', '>= 0.56.0', require: false
 end
@@ -88,6 +94,7 @@ group :development do
   gem 'better_errors', '>= 2.3.0'
   gem 'binding_of_caller'
 
+  gem 'brakeman'
   gem 'listen', '>= 3.0.5', '< 3.2'
   gem 'web-console', '>= 3.3.0'
 end

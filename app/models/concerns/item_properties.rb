@@ -58,6 +58,7 @@ module ItemProperties
       after_create :handle_doi_states
       before_destroy :remove_doi
       after_destroy :purge_thumbnail, :delete_doi_state
+      after_save :push_item_id_for_preservation
 
       # If you're looking for rights and subject validations, note that they have separate implementations
       # on the Thesis and Item classes.
@@ -169,6 +170,37 @@ module ItemProperties
         self.ordered_members = []
       end
 
+      def push_item_id_for_preservation
+        result = preserve
+
+        if result == false
+          Rails.logger.warn("Could not preserve #{id}")
+          Rollbar.error("Could not preserve #{id}")
+        end
+
+        true
+      rescue StandardError => e
+        # we trap errors in writing to the Redis queue in order to avoid crashing the save process for the user.
+        Rollbar.error("Error occured in push_item_id_for_preservation, Could not preserve #{id}", e)
+        true
+      end
+
+      # rubocop:disable Style/GlobalVars
+      def preserve
+        queue_name = Rails.application.secrets.preservation_queue_name
+
+        $queue ||= ConnectionPool.new(size: 1, timeout: 5) { Redis.current }
+
+        $queue.with do |connection|
+          connection.zadd queue_name, Time.now.to_f, id
+        end
+
+      # rescue all preservation errors so that the user can continue to use the application normally
+      rescue StandardError => e
+        Rollbar.error("Could not preserve #{id}", e)
+      end
+      # rubocop:enable Style/GlobalVars
+
       def add_files(files)
         return if files.blank?
         # Need a item id for file sets to point to
@@ -256,27 +288,22 @@ type=\"#{unlocked_fileset.original_file.mime_type}\"\
     end
   end
 
-  def thumbnail
-    @thumbnail ||= ActiveStorage::Attached::One.new(:thumbnail, self)
-  end
-
   # Thumbnailing errors can manifest themselves in a few different ways, so we're trapping this without a specific
   # class.
   def thumbnail_fileset(fileset)
     raise ArgumentError, 'Thumbnail must belong to the item it is set for' unless id == fileset.owning_item.id
     thumbnail.purge if thumbnail.present?
     fileset.unlock_and_fetch_ldp_object do |unlocked_fileset|
-      # rubocop:disable Lint/RescueWithoutErrorClass
       begin
         unlocked_fileset.create_derivatives
-      rescue => e
+      rescue StandardError => e
         # sometimes soffice crashes when trying to derive certain kinds of files. So we clear out any garbage
         # and leave it unthumbnailed and push the error to Rollbar for further inspection
         Rollbar.error(e)
         thumbnail.purge if thumbnail.present?
         break
       end
-      # rubocop:enable Lint/RescueWithoutErrorClass
+
       # Some kinds of things don't get thumbnailed by HydraWorks, eg) .txt files
       break if unlocked_fileset.thumbnail.blank?
       unlocked_fileset.fetch_raw_thumbnail_data do |content_type, io|

@@ -28,7 +28,7 @@ class ItemPolicyTest < ActiveSupport::TestCase
 
     assert ItemPolicy.new(current_user, item).create?
     assert ItemPolicy.new(current_user, item).new?
-    refute ItemPolicy.new(current_user, item).destroy?
+    assert_not ItemPolicy.new(current_user, item).destroy?
   end
 
   test 'authenticated user should not have edit access to public items' do
@@ -42,9 +42,9 @@ class ItemPolicyTest < ActiveSupport::TestCase
     assert ItemPolicy.new(current_user, item).download?
     assert ItemPolicy.new(current_user, item).thumbnail?
 
-    refute ItemPolicy.new(current_user, item).edit?
-    refute ItemPolicy.new(current_user, item).update?
-    refute ItemPolicy.new(current_user, item).destroy?
+    assert_not ItemPolicy.new(current_user, item).edit?
+    assert_not ItemPolicy.new(current_user, item).update?
+    assert_not ItemPolicy.new(current_user, item).destroy?
   end
 
   test 'authenticated user should not have edit access to authenticated items' do
@@ -58,9 +58,9 @@ class ItemPolicyTest < ActiveSupport::TestCase
     assert ItemPolicy.new(current_user, item).download?
     assert ItemPolicy.new(current_user, item).thumbnail?
 
-    refute ItemPolicy.new(current_user, item).edit?
-    refute ItemPolicy.new(current_user, item).update?
-    refute ItemPolicy.new(current_user, item).destroy?
+    assert_not ItemPolicy.new(current_user, item).edit?
+    assert_not ItemPolicy.new(current_user, item).update?
+    assert_not ItemPolicy.new(current_user, item).destroy?
   end
 
   test 'anon user should only be able to index, show, download, and view thumbnails of public items' do
@@ -72,11 +72,11 @@ class ItemPolicyTest < ActiveSupport::TestCase
     assert ItemPolicy.new(current_user, item).download?
     assert ItemPolicy.new(current_user, item).thumbnail?
 
-    refute ItemPolicy.new(current_user, item).create?
-    refute ItemPolicy.new(current_user, item).new?
-    refute ItemPolicy.new(current_user, item).edit?
-    refute ItemPolicy.new(current_user, item).update?
-    refute ItemPolicy.new(current_user, item).destroy?
+    assert_not ItemPolicy.new(current_user, item).create?
+    assert_not ItemPolicy.new(current_user, item).new?
+    assert_not ItemPolicy.new(current_user, item).edit?
+    assert_not ItemPolicy.new(current_user, item).update?
+    assert_not ItemPolicy.new(current_user, item).destroy?
   end
 
   test 'anon user should only be able to index and show authenticated items' do
@@ -86,13 +86,13 @@ class ItemPolicyTest < ActiveSupport::TestCase
     assert ItemPolicy.new(current_user, item).index?
     assert ItemPolicy.new(current_user, item).show?
 
-    refute ItemPolicy.new(current_user, item).create?
-    refute ItemPolicy.new(current_user, item).new?
-    refute ItemPolicy.new(current_user, item).edit?
-    refute ItemPolicy.new(current_user, item).update?
-    refute ItemPolicy.new(current_user, item).destroy?
-    refute ItemPolicy.new(current_user, item).download?
-    refute ItemPolicy.new(current_user, item).thumbnail?
+    assert_not ItemPolicy.new(current_user, item).create?
+    assert_not ItemPolicy.new(current_user, item).new?
+    assert_not ItemPolicy.new(current_user, item).edit?
+    assert_not ItemPolicy.new(current_user, item).update?
+    assert_not ItemPolicy.new(current_user, item).destroy?
+    assert_not ItemPolicy.new(current_user, item).download?
+    assert_not ItemPolicy.new(current_user, item).thumbnail?
   end
 
 end

@@ -159,9 +159,9 @@ class JupiterCore::DeferredFacetedSolrQuery
 
   def sort_clause
     model = criteria[:restrict_to_model].first.owning_class
-    indexes = criteria[:sort].present? ? criteria[:sort] : model.default_sort_indexes
+    indexes = criteria[:sort].presence || model.default_sort_indexes
     indexes ||= [model.solr_name_for(:record_created_at, role: :sort)]
-    direction = criteria[:sort_order].present? ? criteria[:sort_order] : model.default_sort_direction
+    direction = criteria[:sort_order].presence || model.default_sort_direction
     direction ||= [:desc]
 
     sorts = []

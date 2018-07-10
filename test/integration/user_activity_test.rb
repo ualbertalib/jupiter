@@ -72,7 +72,7 @@ class UserActivityTest < ActionDispatch::IntegrationTest
       assert_performed_jobs 1
       user.reload
       # `last_seen_at` changed
-      refute_equal user.last_seen_at, last_seen_at1
+      assert_not_equal user.last_seen_at, last_seen_at1
       assert_equal user.last_seen_at.to_s, now
       # `last_seen_ip` and `last_sign_in_at` stay the same
       assert_equal user.last_seen_ip, last_seen_ip1

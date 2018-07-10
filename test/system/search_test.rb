@@ -104,15 +104,15 @@ class SearchTest < ApplicationSystemTestCase
 
     # Facets and counts
     refute_selector 'div.card-header', text: 'Visibility'
-    refute_selector 'li a', text: '5 Public'
+    refute_selector 'li a', text: /5\nPublic/
     # Should not be a facet for 'private'
     refute_selector 'li a', text: /Private/
     # TODO: The 'Member of paths' text will likely change
     assert_selector 'div.card-header', text: 'Collections'
-    assert_selector 'li a', text: '5 Fancy Community'
-    assert_selector 'li a', text: '3 Fancy Community/Fancy Collection 0'
-    assert_selector 'li a', text: '2 Fancy Community/Fancy Collection 1'
-    assert_selector 'div.card-header', text: 'Sort Year'
+    assert_selector 'li a', text: /5\nFancy Community/
+    assert_selector 'li a', text: /3\nFancy Community\/Fancy Collection 0/
+    assert_selector 'li a', text: /2\nFancy Community\/Fancy Collection 1/
+    assert_selector 'div.card-header', text: I18n.t('facets.sort_year')
     sort_year_facet = Item.solr_name_for(:sort_year, role: :range_facet)
     assert_selector "#ranges_#{sort_year_facet}_begin"
     assert_selector "#ranges_#{sort_year_facet}_end"
@@ -147,9 +147,9 @@ class SearchTest < ApplicationSystemTestCase
     refute_selector 'div.card-header', text: 'Visibility'
     refute_selector 'li a', text: '2 Public'
     assert_selector 'div.card-header', text: 'Collections'
-    assert_selector 'li a', text: '2 Fancy Community'
+    assert_selector 'li a', text: /2\nFancy Community/
     assert_selector 'li a', text: 'Fancy Community/Fancy Collection 0', count: 0
-    assert_selector 'li a', text: '2 Fancy Community/Fancy Collection 1'
+    assert_selector 'li a', text: /2\nFancy Community\/Fancy Collection 1/
 
     # A checkbox for the selected facet should be checked, and link should turn off facet
     within 'div.jupiter-filters a', text: 'Fancy Collection 1' do
@@ -246,7 +246,7 @@ class SearchTest < ApplicationSystemTestCase
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy')
 
     # Default sort is by title
-    assert_match(/Fancy Item 0.*Fancy Item 2.*Fancy Item 4.*Fancy Item 6.*Fancy Item 8/, page.text)
+    assert_match(/Fancy Item 0.*Fancy Item 2.*Fancy Item 4.*Fancy Item 6.*Fancy Item 8/m, page.text)
 
     # Sort sort links
     click_button 'Sort by'
@@ -259,14 +259,14 @@ class SearchTest < ApplicationSystemTestCase
     click_link 'Title (Z-A)'
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy', sort: 'title', direction: 'desc')
     assert_selector 'button', text: 'Title (Z-A)'
-    assert_match(/Fancy Item 8.*Fancy Item 6.*Fancy Item 4.*Fancy Item 2.*Fancy Item 0/, page.text)
+    assert_match(/Fancy Item 8.*Fancy Item 6.*Fancy Item 4.*Fancy Item 2.*Fancy Item 0/m, page.text)
 
     # Sort the other way again
     click_button 'Title (Z-A)'
     click_link 'Title (A-Z)'
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy', sort: 'title', direction: 'asc')
     assert_selector 'button', text: 'Title (A-Z)'
-    assert_match(/Fancy Item 0.*Fancy Item 2.*Fancy Item 4.*Fancy Item 6.*Fancy Item 8/, page.text)
+    assert_match(/Fancy Item 0.*Fancy Item 2.*Fancy Item 4.*Fancy Item 6.*Fancy Item 8/m, page.text)
 
     # Sort with newest first
     click_button 'Title (A-Z)'
@@ -274,7 +274,7 @@ class SearchTest < ApplicationSystemTestCase
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy',
                                                                  sort: 'sort_year', direction: 'desc')
     assert_selector 'button', text: 'Date (newest first)'
-    assert_match(/Fancy Item 8.*Fancy Item 6.*Fancy Item 4.*Fancy Item 2.*Fancy Item 0/, page.text)
+    assert_match(/Fancy Item 8.*Fancy Item 6.*Fancy Item 4.*Fancy Item 2.*Fancy Item 0/m, page.text)
 
     # Sort with oldest first
     click_button 'Date (newest first)'
@@ -282,7 +282,7 @@ class SearchTest < ApplicationSystemTestCase
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy',
                                                                  sort: 'sort_year', direction: 'asc')
     assert_selector 'button', text: 'Date (oldest first)'
-    assert_match(/Fancy Item 0.*Fancy Item 2.*Fancy Item 4.*Fancy Item 6.*Fancy Item 8/, page.text)
+    assert_match(/Fancy Item 0.*Fancy Item 2.*Fancy Item 4.*Fancy Item 6.*Fancy Item 8/m, page.text)
   end
 
   # TODO: Slow Test, consistently around ~8-9 seconds
@@ -302,16 +302,16 @@ class SearchTest < ApplicationSystemTestCase
 
     # Facets and counts
     assert_selector 'div.card-header', text: 'Visibility'
-    assert_selector 'li a', text: '5 Public'
+    assert_selector 'li a', text: /5\nPublic/
 
     # Should be a facet for 'private'
-    assert_selector 'li a', text: '5 Private'
+    assert_selector 'li a', text: /5\nPrivate/
 
     # TODO: The 'Member of paths' text will likely change
     assert_selector 'div.card-header', text: 'Collections'
-    assert_selector 'li a', text: '10 Fancy Community'
-    assert_selector 'li a', text: '6 Fancy Community/Fancy Collection 0'
-    assert_selector 'li a', text: '4 Fancy Community/Fancy Collection 1'
+    assert_selector 'li a', text: /10\nFancy Community/
+    assert_selector 'li a', text: /6\nFancy Community\/Fancy Collection 0/
+    assert_selector 'li a', text: /4\nFancy Community\/Fancy Collection 1/
 
     # Exactly 10 items shown
     assert_selector 'div.jupiter-results-list li.list-group-item', count: 10
@@ -345,11 +345,11 @@ class SearchTest < ApplicationSystemTestCase
 
     # Some facets are now gone, some with changed counts
     assert_selector 'div.card-header', text: 'Visibility'
-    assert_selector 'li a', text: '2 Public'
+    assert_selector 'li a', text: /2\nPublic/
     assert_selector 'div.card-header', text: 'Collections'
-    assert_selector 'li a', text: '4 Fancy Community'
+    assert_selector 'li a', text: /4\nFancy Community/
     assert_selector 'li a', text: 'Fancy Community/Fancy Collection 0', count: 0
-    assert_selector 'li a', text: '4 Fancy Community/Fancy Collection 1'
+    assert_selector 'li a', text: /4\nFancy Community\/Fancy Collection 1/
 
     # A checkbox for the selected facet should be checked, and link should turn off facet
     within 'div.jupiter-filters a', text: 'Fancy Collection 1' do

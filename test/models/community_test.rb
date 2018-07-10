@@ -12,7 +12,7 @@ class CommunityTest < ActiveSupport::TestCase
 
   test 'needs title' do
     c = Community.new_locked_ldp_object(owner: users(:admin).id)
-    refute c.valid?
+    assert_not c.valid?
     assert_equal "Title can't be blank", c.errors.full_messages.first
   end
 
@@ -26,9 +26,6 @@ class CommunityTest < ActiveSupport::TestCase
                   filename: 'image-sample.jpeg', content_type: 'image/jpeg'
 
     assert c.logo.is_a?(ActiveStorage::Attached::One)
-    # 'name' refers to the attribute of the record, not filename
-    assert_equal c.logo.name, :logo
-    assert_equal c.logo.record_gid, c.to_gid.to_s
     assert_equal c.logo.blob.filename, 'image-sample.jpeg'
     assert_equal c.logo.blob.content_type, 'image/jpeg'
     assert_equal c.logo.blob.byte_size, 12_086
@@ -68,24 +65,24 @@ class CommunityTest < ActiveSupport::TestCase
     # Assert new database records exist
     attachment_id2 = c.logo.id
     blob_id2 = c.logo.blob.id
-    refute_equal attachment_id1, attachment_id2
-    refute_equal blob_id1, blob_id2
+    assert_not_equal attachment_id1, attachment_id2
+    assert_not_equal blob_id1, blob_id2
     assert ActiveStorage::Attachment.where(id: attachment_id2).present?
     assert ActiveStorage::Blob.where(id: blob_id2).present?
     assert_equal c.logo.blob.filename, 'sample2.jpeg'
 
     # Assert old database records are gone
-    refute ActiveStorage::Attachment.where(id: attachment_id1).present?
-    refute ActiveStorage::Blob.where(id: blob_id1).present?
+    assert_not ActiveStorage::Attachment.where(id: attachment_id1).present?
+    assert_not ActiveStorage::Blob.where(id: blob_id1).present?
 
     # Assert new file exists and isn't the same as old file
     key = c.logo.blob.key
     file_path2 = ActiveStorage::Blob.service.root + "/#{key[0..1]}/#{key[2..3]}/#{key}"
     assert File.exist?(file_path2)
-    refute_equal file_path1, file_path2
+    assert_not_equal file_path1, file_path2
 
     # Assert old file is gone
-    refute File.exist?(file_path1)
+    assert_not File.exist?(file_path1)
   end
 
 end

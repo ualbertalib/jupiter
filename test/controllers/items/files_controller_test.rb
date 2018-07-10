@@ -2,14 +2,10 @@ require 'test_helper'
 
 class Items::FilesControllerTest < ActionDispatch::IntegrationTest
 
-  # TODO: candidate for fixture
   def before_all
     super
-    @community = Community.new_locked_ldp_object(title: 'Books', owner: 1).unlock_and_fetch_ldp_object(&:save!)
-    @collection = Collection.new_locked_ldp_object(title: 'Fantasy Books',
-                                                   owner: 1,
-                                                   community_id: @community.id)
-                            .unlock_and_fetch_ldp_object(&:save!)
+    @community = locked_ldp_fixture(Community, :books).unlock_and_fetch_ldp_object(&:save!)
+    @collection = locked_ldp_fixture(Collection, :books).unlock_and_fetch_ldp_object(&:save!)
   end
 
   setup do
@@ -62,7 +58,7 @@ class Items::FilesControllerTest < ActionDispatch::IntegrationTest
     # So lets just refetch it from the database... to reload it
     @draft_item = DraftItem.find(@draft_item.id)
 
-    refute @draft_item.files.attached?
+    assert_not @draft_item.files.attached?
     assert_equal 0, @draft_item.files.count
   end
 
