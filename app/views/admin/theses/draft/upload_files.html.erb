@@ -9,15 +9,15 @@
   </h2>
 
 
-  <% if @draft_thesis.errors.any? %>
+  <% if @draft.errors.any? %>
     <ul class="list-unstyled alert alert-danger">
-      <% @draft_thesis.errors.full_messages.each do |message| %>
+      <% @draft.errors.full_messages.each do |message| %>
         <li><%= message %></li>
       <% end %>
     </ul>
   <% end %>
 
-  <%= simple_form_for @draft_thesis,
+  <%= simple_form_for @draft,
                       url: admin_thesis_files_path,
                       method: :post,
                       html: {
@@ -70,7 +70,7 @@
   </ul>
 
 
-  <%= simple_form_for @draft_thesis,
+  <%= simple_form_for @draft,
                       url: wizard_path,
                       method: :put,
                       html: { class:'js-deposit-item' } do |f| %>

@@ -8,14 +8,14 @@
     <%= t('.header') %>
   </h2>
 
-  <% if @draft_item.errors.any? %>
+  <% if @draft.errors.any? %>
     <p class="alert alert-danger">
       <%= fa_icon 'exclamation-circle' %>
       <%= t('items.draft.please_fix_errors') %>
     </p>
   <% end %>
 
-  <%= simple_form_for @draft_item, url: wizard_path, method: :put, html: { class:'js-deposit-item' } do |f| %>
+  <%= simple_form_for @draft, url: wizard_path, method: :put, html: { class:'js-deposit-item' } do |f| %>
     <fieldset class="my-3">
       <legend class="mb-0">
         <span class="text-danger font-weight-bold">*</span>
@@ -33,17 +33,17 @@
               <h5 class="mb-0">
                 <a data-toggle="collapse"
                   href="#js-collapse-<%= "#{accordion_name}" %>"
-                  aria-expanded="<%= license_accordion_open?(accordion_name, @draft_item.license) %>"
+                  aria-expanded="<%= license_accordion_open?(accordion_name, @draft.license) %>"
                   aria-controls="js-collapse-<%= accordion_name %>">
                   <%= t(".license.#{accordion_name}") %>
-                  <%= fa_icon "#{license_accordion_open?(accordion_name, @draft_item.license, 'chevron-up', 'chevron-down')}",
+                  <%= fa_icon "#{license_accordion_open?(accordion_name, @draft.license, 'chevron-up', 'chevron-down')}",
                               class: "js-more-less float-right" %>
                 </a>
               </h5>
             </div>
 
             <div id="js-collapse-<%= "#{accordion_name}" %>"
-              class="collapse <%= license_accordion_open?(accordion_name, @draft_item.license, 'show', '') %>"
+              class="collapse <%= license_accordion_open?(accordion_name, @draft.license, 'show', '') %>"
               data-parent="#js-license-accordion"
               role="tabpanel"
               aria-labelledby="js-heading-<%= "#{accordion_name}" %>">

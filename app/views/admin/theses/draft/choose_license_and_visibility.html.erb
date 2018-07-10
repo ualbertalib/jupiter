@@ -8,14 +8,14 @@
     <%= t('.header') %>
   </h2>
 
-  <% if @draft_thesis.errors.any? %>
+  <% if @draft.errors.any? %>
     <p class="alert alert-danger">
       <%= fa_icon 'exclamation-circle' %>
       <%= t('admin.theses.draft.please_fix_errors') %>
     </p>
   <% end %>
 
-  <%= simple_form_for @draft_thesis, url: wizard_path, method: :put, html: { class:'js-deposit-item' } do |f| %>
+  <%= simple_form_for @draft, url: wizard_path, method: :put, html: { class:'js-deposit-item' } do |f| %>
     <fieldset class="my-3">
       <legend class="mb-0">
         <span class="text-danger font-weight-bold">*</span>
@@ -31,7 +31,7 @@
                   label: false,
                   input_html: {
                     rows: '5',
-                    value: @draft_thesis.rights || DraftThesis::DEFAULT_RIGHTS
+                    value: @draft.rights || DraftThesis::DEFAULT_RIGHTS
                   } %>
     </fieldset>
 

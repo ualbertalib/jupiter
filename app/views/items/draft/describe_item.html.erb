@@ -8,14 +8,14 @@
     <%= t('.header') %>
   </h2>
 
-  <% if @draft_item.errors.any? %>
+  <% if @draft.errors.any? %>
     <p class="alert alert-danger">
       <%= fa_icon 'exclamation-circle' %>
       <%= t('items.draft.please_fix_errors') %>
     </p>
   <% end %>
 
-  <%= simple_form_for @draft_item, url: wizard_path, method: :put, html: { class:'js-deposit-item' } do |f| %>
+  <%= simple_form_for @draft, url: wizard_path, method: :put, html: { class:'js-deposit-item' } do |f| %>
     <p class="text-muted"><%= t('required_fields_html') %></p>
 
     <%= f.input :title,
@@ -51,7 +51,7 @@
 
     <%= f.input :creators,
         label: t('.creators'),
-        collection: @draft_item.creators || [],
+        collection: @draft.creators || [],
         include_hidden: false, # TODO: figure out this, need to parse empty strings out in model
         input_html: {
           multiple: true,
@@ -64,7 +64,7 @@
 
     <%= f.input :subjects,
         label: t('.subjects'),
-        collection: @draft_item.subjects || [],
+        collection: @draft.subjects || [],
         include_hidden: false,
         input_html: {
           multiple: true,
@@ -104,18 +104,18 @@
       <small class="mb-3 form-text text-muted">
         <%= t('.community_and_collection_help_html') %>
       </small>
-      <% if @draft_item.errors.messages[:member_of_paths].any? %>
+      <% if @draft.errors.messages[:member_of_paths].any? %>
         <ul class="list-unstyled alert alert-danger">
-          <% @draft_item.errors.messages[:member_of_paths].each do |message| %>
+          <% @draft.errors.messages[:member_of_paths].each do |message| %>
             <li><%= message %></li>
           <% end %>
         </ul>
       <% end %>
 
       <div class="js-communities-collections-list">
-        <% if @draft_item.communities.present? %>
+        <% if @draft.communities.present? %>
 
-          <% @draft_item.each_community_collection do |community, collection| %>
+          <% @draft.each_community_collection do |community, collection| %>
             <%= render partial: 'community_collection_input',
                 locals: { community: community, collection: collection } %>
           <% end %>
@@ -154,7 +154,7 @@
           <div class="card-body">
             <%= f.input :contributors,
                 label: t('.contributors'),
-                collection: @draft_item.contributors || [],
+                collection: @draft.contributors || [],
                 include_hidden: false,
                 input_html: {
                   multiple: true,
@@ -166,7 +166,7 @@
 
             <%= f.input :places,
                 label: t('.places'),
-                collection: @draft_item.places || [],
+                collection: @draft.places || [],
                 include_hidden: false,
                 input_html: {
                   multiple: true,
@@ -178,7 +178,7 @@
 
             <%= f.input :time_periods,
                 label: t('.time_periods'),
-                collection: @draft_item.time_periods || [],
+                collection: @draft.time_periods || [],
                 include_hidden: false,
                 input_html: {
                   multiple: true,
@@ -190,7 +190,7 @@
 
             <%= f.input :citations,
                 label: t('.citations'),
-                collection: @draft_item.citations || [],
+                collection: @draft.citations || [],
                 include_hidden: false,
                 input_html: {
                   multiple: true,

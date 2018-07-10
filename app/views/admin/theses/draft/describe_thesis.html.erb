@@ -8,14 +8,14 @@
     <%= t('.header') %>
   </h2>
 
-  <% if @draft_thesis.errors.any? %>
+  <% if @draft.errors.any? %>
     <p class="alert alert-danger">
       <%= fa_icon 'exclamation-circle' %>
       <%= t('admin.theses.draft.please_fix_errors') %>
     </p>
   <% end %>
 
-  <%= simple_form_for @draft_thesis, url: wizard_path, method: :put, html: { class:'js-deposit-item' } do |f| %>
+  <%= simple_form_for @draft, url: wizard_path, method: :put, html: { class:'js-deposit-item' } do |f| %>
     <p class="text-muted"><%= t('required_fields_html') %></p>
 
     <%= f.input :title,
@@ -42,7 +42,7 @@
 
     <%= f.input :subjects,
         label: t('.subjects'),
-        collection: @draft_thesis.subjects || [],
+        collection: @draft.subjects || [],
         include_hidden: false,
         input_html: {
           multiple: true,
@@ -78,17 +78,17 @@
       <small class="mb-3 form-text text-muted">
         <%= t('.community_and_collection_help_html') %>
       </small>
-      <% if @draft_thesis.errors.messages[:member_of_paths].any? %>
+      <% if @draft.errors.messages[:member_of_paths].any? %>
         <ul class="list-unstyled alert alert-danger">
-          <% @draft_thesis.errors.messages[:member_of_paths].each do |message| %>
+          <% @draft.errors.messages[:member_of_paths].each do |message| %>
             <li><%= message %></li>
           <% end %>
         </ul>
       <% end %>
 
       <div class="js-communities-collections-list">
-        <% if @draft_thesis.communities.present? %>
-          <% @draft_thesis.each_community_collection do |community, collection| %>
+        <% if @draft.communities.present? %>
+          <% @draft.each_community_collection do |community, collection| %>
             <%= render partial: 'community_collection_input',
                 locals: { community: community, collection: collection } %>
           <% end %>
@@ -131,7 +131,7 @@
                 },
                 start_year: Date.today.year + 1,
                 end_year: Date.today.year - 100,
-                input_html: { class: 'mr-2 mb-2', 'aria-labelledby': 'draft_thesis_date_submitted_1i' } %>
+                input_html: { class: 'mr-2 mb-2', 'aria-labelledby': 'draft_date_submitted_1i' } %>
 
             <%= f.input :date_accepted,
                 as: :date,
@@ -144,7 +144,7 @@
                 },
                 start_year: Date.today.year + 1,
                 end_year: Date.today.year - 100,
-                input_html: { class: 'mr-2 mb-2', 'aria-labelledby': 'draft_thesis_date_accepted_1i' } %>
+                input_html: { class: 'mr-2 mb-2', 'aria-labelledby': 'draft_date_accepted_1i' } %>
 
             <%= f.input :degree_level,
                 label: t('.degree_level') %>
@@ -163,7 +163,7 @@
 
             <%= f.input :departments,
                 label: t('.departments'),
-                collection: @draft_thesis.departments || [],
+                collection: @draft.departments || [],
                 include_hidden: false,
                 input_html: {
                   multiple: true,
@@ -174,7 +174,7 @@
 
             <%= f.input :supervisors,
                 label: t('.supervisors'),
-                collection: @draft_thesis.supervisors || [],
+                collection: @draft.supervisors || [],
                 include_hidden: false,
                 input_html: {
                   multiple: true,
@@ -186,7 +186,7 @@
 
             <%= f.input :committee_members,
                 label: t('.committee_members'),
-                collection: @draft_thesis.committee_members || [],
+                collection: @draft.committee_members || [],
                 include_hidden: false,
                 input_html: {
                   multiple: true,

@@ -10,7 +10,7 @@ module Items::DraftHelper
   end
 
   def header
-    if @draft_item.present?
+    if @draft.is_a? DraftItem
       @is_edit ? t('items.draft.header_edit') : t('items.draft.header')
     else
       @is_edit ? t('admin.theses.draft.header_edit') : t('admin.theses.draft.header')

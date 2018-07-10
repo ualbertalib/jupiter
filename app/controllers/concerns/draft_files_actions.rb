@@ -48,8 +48,7 @@ module DraftFilesActions
   end
 
   def set_draft
-    # TODO: reason why we assign to @draft_item is because we haven't switched views over yet
-    @draft = @draft_item = DraftItem.find(params[:item_id])
+    @draft = DraftItem.find(params[:item_id])
   end
 
   def file_partial_location

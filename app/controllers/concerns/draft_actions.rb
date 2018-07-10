@@ -137,8 +137,7 @@ module DraftActions
   end
 
   def set_draft
-    # TODO: reason why we assign to @draft_item is because we haven't switched views over yet
-    @draft = @draft_item = draft_class.find(params[draft_id_param])
+    @draft = draft_class.find(params[draft_id_param])
   end
 
   def initialize_communities

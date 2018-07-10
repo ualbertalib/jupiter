@@ -8,7 +8,7 @@
     <%= @is_edit ? t('.header_edit') : t('.header') %>
   </h2>
 
-  <%= simple_form_for @draft_item, url: wizard_path, method: :put, html: { class:'js-deposit-item' } do |f| %>
+  <%= simple_form_for @draft, url: wizard_path, method: :put, html: { class:'js-deposit-item' } do |f| %>
     <p><%= t('.please_review_item') %></p>
 
     <div class="row">
@@ -25,10 +25,10 @@
           </div>
 
           <div class="card-body">
-            <%= render partial: 'feature_image', locals: { feature_image: @draft_item.thumbnail, object: @draft_item } %>
+            <%= render partial: 'feature_image', locals: { feature_image: @draft.thumbnail, object: @draft } %>
 
             <ul class="list-group mt-3">
-              <% @draft_item.files.each do |file|%>
+              <% @draft.files.each do |file|%>
                 <li class="list-group-item">
                   <%= fa_icon file_icon(file.content_type) %>
                   <%=file.filename %>
@@ -51,17 +51,17 @@
           <div class="card-body">
             <h4 class="card-title">License</h4>
             <p class="card-text">
-              <% if @draft_item.license_text? %>
-                <%= @draft_item.license_text_area %>
+              <% if @draft.license_text? %>
+                <%= @draft.license_text_area %>
               <% else %>
-                <%= t("items.draft.choose_license_and_visibility.license.#{@draft_item.license}_html") %>
+                <%= t("items.draft.choose_license_and_visibility.license.#{@draft.license}_html") %>
               <% end %>
             </p>
             <h4 class="card-title">Visibility</h4>
               <p class="card-text">
-                <%= t("items.draft.choose_license_and_visibility.visibility.#{@draft_item.visibility}") %>
-                <% if @draft_item.embargo? %>
-                  <%= jupiter_time_tag(@draft_item.embargo_end_date) %>
+                <%= t("items.draft.choose_license_and_visibility.visibility.#{@draft.visibility}") %>
+                <% if @draft.embargo? %>
+                  <%= jupiter_time_tag(@draft.embargo_end_date) %>
                 <% end %>
               </p>
           </div>
@@ -81,27 +81,27 @@
             <h6 class="card-subtitle mb-1 text-muted">
               <%=  t('items.draft.describe_item.title') %>
             </h6>
-            <p class="card-text"><%= @draft_item.title %></p>
+            <p class="card-text"><%= @draft.title %></p>
 
-            <% if @draft_item.alternate_title.present? %>
+            <% if @draft.alternate_title.present? %>
               <h6 class="card-subtitle mb-1 text-muted">
                 <%=  t('items.draft.describe_item.alternate_title') %>
               </h6>
-              <p class="card-text"><%= @draft_item.alternate_title %></p>
+              <p class="card-text"><%= @draft.alternate_title %></p>
             <% end %>
 
             <h6 class="card-subtitle mb-1 text-muted">
               <%=  t('items.draft.describe_item.type_id') %>
             </h6>
             <p class="card-text">
-              <%= @draft_item.type.translated_name %>
+              <%= @draft.type.translated_name %>
             </p>
 
             <h6 class="card-subtitle mb-1 text-muted">
               <%=  t('items.draft.describe_item.languages') %>
             </h6>
             <ul>
-              <% @draft_item.languages.each do |language| %>
+              <% @draft.languages.each do |language| %>
               <li><%= language.translated_name %></li>
               <% end %>
             </ul>
@@ -110,7 +110,7 @@
               <%=  t('items.draft.describe_item.creators') %>
             </h6>
             <ul>
-              <% @draft_item.creators.each do |creator| %>
+              <% @draft.creators.each do |creator| %>
               <li><%= creator %></li>
               <% end %>
             </ul>
@@ -119,7 +119,7 @@
               <%=  t('items.draft.describe_item.subjects') %>
             </h6>
             <ul>
-              <% @draft_item.subjects.each do |subject| %>
+              <% @draft.subjects.each do |subject| %>
               <li><%= subject %></li>
               <% end %>
             </ul>
@@ -128,15 +128,15 @@
               <%=  t('items.draft.describe_item.date_created') %>
             </h6>
             <p class="card-text">
-              <%= @draft_item.date_created %>
+              <%= @draft.date_created %>
             </p>
 
-            <% if @draft_item.description.present? %>
+            <% if @draft.description.present? %>
               <h6 class="card-subtitle mb-1 text-muted">
                 <%=  t('items.draft.describe_item.description') %>
               </h6>
               <p class="card-text">
-                <%= @draft_item.description %>
+                <%= @draft.description %>
               </p>
             <% end %>
 
@@ -144,7 +144,7 @@
               <%=  t('items.draft.describe_item.community_and_collection') %>
             </h6>
             <ul>
-              <% @draft_item.each_community_collection do |community, collection| %>
+              <% @draft.each_community_collection do |community, collection| %>
                 <li>
                   <%= community.title %>
                   /
@@ -153,65 +153,65 @@
               <% end %>
             </ul>
 
-            <% if @draft_item.contributors.present? %>
+            <% if @draft.contributors.present? %>
               <h6 class="card-subtitle mb-1 text-muted">
                 <%=  t('items.draft.describe_item.contributors') %>
               </h6>
               <ul>
-                <% @draft_item.contributors.each do |contributor| %>
+                <% @draft.contributors.each do |contributor| %>
                   <li><%= contributor %></li>
                 <% end %>
               </ul>
             <% end %>
 
-            <% if @draft_item.places.present? %>
+            <% if @draft.places.present? %>
               <h6 class="card-subtitle mb-1 text-muted">
                 <%=  t('items.draft.describe_item.places') %>
               </h6>
               <ul>
-                <% @draft_item.places.each do |place| %>
+                <% @draft.places.each do |place| %>
                   <li><%= place %></li>
                 <% end %>
               </ul>
             <% end %>
 
-            <% if @draft_item.time_periods.present? %>
+            <% if @draft.time_periods.present? %>
               <h6 class="card-subtitle mb-1 text-muted">
                 <%=  t('items.draft.describe_item.time_periods') %>
               </h6>
               <ul>
-                <% @draft_item.time_periods.each do |time_period| %>
+                <% @draft.time_periods.each do |time_period| %>
                   <li><%= time_period %></li>
                 <% end %>
               </ul>
             <% end %>
 
-            <% if @draft_item.citations.present? %>
+            <% if @draft.citations.present? %>
               <h6 class="card-subtitle mb-1 text-muted">
                 <%=  t('items.draft.describe_item.citations') %>
               </h6>
               <ul>
-                <% @draft_item.citations.each do |citation| %>
+                <% @draft.citations.each do |citation| %>
                   <li><%= citation %></li>
                 <% end %>
               </ul>
             <% end %>
 
-            <% if @draft_item.source.present? %>
+            <% if @draft.source.present? %>
               <h6 class="card-subtitle mb-1 text-muted">
                 <%=  t('items.draft.describe_item.source') %>
               </h6>
               <p class="card-text">
-                <%= @draft_item.source %>
+                <%= @draft.source %>
               </p>
             <% end %>
 
-            <% if @draft_item.related_item.present? %>
+            <% if @draft.related_item.present? %>
               <h6 class="card-subtitle mb-1 text-muted">
                 <%=  t('items.draft.describe_item.related_item') %>
               </h6>
               <p class="card-text">
-                <%= @draft_item.related_item %>
+                <%= @draft.related_item %>
               </p>
             <% end %>
           </div>

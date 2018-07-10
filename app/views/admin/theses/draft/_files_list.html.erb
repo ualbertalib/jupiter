@@ -1,5 +1,5 @@
 <div class="row p-3">
-  <% if @draft_thesis.files.empty? %>
+  <% if @draft.files.empty? %>
     <div class="col-md-12 text-center">
       <h4><%= t('.no_saved_files') %></h4>
     </div>
@@ -8,14 +8,14 @@
       <div class="card mb-3">
         <h5 class="card-header"><%= t('.thesis_thumbnail') %></h5>
         <div class="card-body">
-          <%= render partial: 'feature_image', locals: { feature_image: @draft_thesis.thumbnail, object: @draft_thesis } %>
+          <%= render partial: 'feature_image', locals: { feature_image: @draft.thumbnail, object: @draft } %>
           <p class="text-muted mt-3"><%= t('.thumbnail_of_first_file') %></p>
         </div>
       </div>
     </div>
     <div class="col-md-8">
       <ul class="list-unstyled">
-        <% @draft_thesis.files.each do |file| %>
+        <% @draft.files.each do |file| %>
           <%= render partial: 'admin/theses/draft/file', locals: { file: file } %>
         <% end %>
       </ul>
