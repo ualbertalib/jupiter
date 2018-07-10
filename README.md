@@ -2,6 +2,10 @@
 
 [![Build Status](https://travis-ci.org/ualbertalib/jupiter.svg?branch=master)](https://travis-ci.org/ualbertalib/jupiter)
 
+# Architecture
+
+![Jupiter Architecture Diagram](docs/jupiter_architecture.png)
+
 # Generate Documentation
 
 `$ bundle exec rake rdoc`

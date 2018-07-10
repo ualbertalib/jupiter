@@ -68,7 +68,7 @@ class DepositItemTest < ApplicationSystemTestCase
 
     attach_file_in_dropzone(file_fixture('image-sample.jpeg'))
 
-    click_on I18n.t('items.draft.save_and_continue')
+    click_on I18n.t('items.draft.save_and_continue'), wait: 5
 
     # 4. Review and Deposit Form
 

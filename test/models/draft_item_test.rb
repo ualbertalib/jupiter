@@ -25,7 +25,7 @@ class DraftItemTest < ActiveSupport::TestCase
 
   test 'should not be able to create a draft item without user' do
     draft_item = DraftItem.new
-    refute draft_item.valid?
+    assert_not draft_item.valid?
     assert_equal 'User must exist', draft_item.errors.full_messages.first
   end
 
@@ -38,7 +38,7 @@ class DraftItemTest < ActiveSupport::TestCase
   test 'should run validations when on describe_item step' do
     user = users(:regular)
     draft_item = DraftItem.new(user: user, status: DraftItem.statuses[:active])
-    refute draft_item.valid?
+    assert_not draft_item.valid?
 
     draft_item.assign_attributes(
       title: 'Book of Random',
@@ -74,7 +74,7 @@ class DraftItemTest < ActiveSupport::TestCase
       visibility: nil
     )
 
-    refute draft_item.valid?
+    assert_not draft_item.valid?
 
     draft_item.assign_attributes(
       license: DraftItem.licenses[:attribution_non_commercial],
@@ -90,7 +90,7 @@ class DraftItemTest < ActiveSupport::TestCase
     # Need to create an object for ActiveStorage because of global ID
     draft_item = draft_items(:inactive)
 
-    draft_item.update_attributes(
+    draft_item.update(
       user: user,
       status: DraftItem.statuses[:active],
       wizard_step: DraftItem.wizard_steps[:upload_files],
@@ -103,7 +103,7 @@ class DraftItemTest < ActiveSupport::TestCase
       description: 'Really random description about this random book',
       member_of_paths: { community_id: [@community.id], collection_id: [@collection.id] }
     )
-    refute draft_item.valid?
+    assert_not draft_item.valid?
 
     fake_file = ActiveStorage::Blob.create_after_upload!(
       io: StringIO.new('RandomData'),
@@ -134,7 +134,7 @@ class DraftItemTest < ActiveSupport::TestCase
       license: DraftItem.licenses[:license_text]
     )
 
-    refute draft_item.valid?
+    assert_not draft_item.valid?
 
     draft_item.assign_attributes(
       license_text_area: 'Random license text or url to a license goes here'
@@ -160,7 +160,7 @@ class DraftItemTest < ActiveSupport::TestCase
       visibility: DraftItem.visibilities[:embargo]
     )
 
-    refute draft_item.valid?
+    assert_not draft_item.valid?
 
     draft_item.assign_attributes(
       embargo_end_date: Date.current + 1.year
@@ -185,7 +185,7 @@ class DraftItemTest < ActiveSupport::TestCase
       member_of_paths: { community_id: nil, collection_id: nil }
     )
 
-    refute draft_item.valid?
+    assert_not draft_item.valid?
     assert_equal 2, draft_item.errors.full_messages.count
     assert_equal "Community can't be blank", draft_item.errors.messages[:member_of_paths].first
     assert_equal "Collection can't be blank", draft_item.errors.messages[:member_of_paths].last
@@ -193,7 +193,7 @@ class DraftItemTest < ActiveSupport::TestCase
     draft_item.assign_attributes(
       member_of_paths: { community_id: ['random-uuid-123'], collection_id: ['random-uuid-abc'] }
     )
-    refute draft_item.valid?
+    assert_not draft_item.valid?
     assert_equal 2, draft_item.errors.full_messages.count
     assert_equal "Community can't be found", draft_item.errors.messages[:member_of_paths].first
     assert_equal "Collection can't be found", draft_item.errors.messages[:member_of_paths].last
@@ -212,7 +212,7 @@ class DraftItemTest < ActiveSupport::TestCase
     draft_item.assign_attributes(
       member_of_paths: { community_id: [@community.id], collection_id: [restricted_collection.id] }
     )
-    refute draft_item.valid?
+    assert_not draft_item.valid?
     assert_equal ['Deposit is restricted for this collection'], draft_item.errors.messages[:member_of_paths]
 
     # Admin user can deposit to a restricted collection
