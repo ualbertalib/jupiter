@@ -60,8 +60,9 @@ module ItemProperties
     end
 
     def thumbnail_url(args = { resize: '100x100' })
-      return nil if files_attachment_shim.logo_file.blank?
       logo = files_attachment_shim.logo_file
+      return nil if logo.blank?
+
       Rails.application.routes.url_helpers.rails_representation_path(logo.variant(args).processed)
     rescue ActiveStorage::InvariableError
       begin

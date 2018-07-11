@@ -1,5 +1,5 @@
 if defined?(Clamby)
   Clamby.configure(check: true,
-                   daemonize: false,
+                   daemonize: true,
                    silence_output: false)
 end

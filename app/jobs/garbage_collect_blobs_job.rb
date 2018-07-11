@@ -14,9 +14,6 @@ class GarbageCollectBlobsJob
                    '(SELECT distinct blob_id FROM active_storage_attachments)'
     orphan_blobs = ActiveStorage::Blob.find_by_sql(orphan_query)
     orphan_blobs.each(&:purge)
-
-    # reschedule another run for 12 hours from now
-    GarbageCollectBlobsJob.perform_in(12.hours)
   end
 
 end
