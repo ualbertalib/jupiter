@@ -71,20 +71,4 @@ module JupiterCore::ActiveStorageMacros
     ActiveStorage::Blob.service.send(:path_for, file.key)
   end
 
-  # Fedora file handling
-  # Convert ActiveStorage objects into File objects so we can deposit them into fedora
-  def map_activestorage_files_as_file_objects
-    files.map do |file|
-      path = file_path_for(file)
-      original_filename = file.filename.to_s
-      File.open(path) do |f|
-        # We're exploiting the fact that Hydra-Works calls original_filename on objects passed to it, if they
-        # respond to that method, in preference to looking at the final portion of the file path, which,
-        # because we fished this out of ActiveStorage, is just a hash. In this way we present Fedora with the original
-        # file name of the object and not a hashed or otherwise modified version temporarily created during ingest
-        f.send(:define_singleton_method, :original_filename, -> { original_filename })
-        yield f
-      end
-    end
-  end
 end
