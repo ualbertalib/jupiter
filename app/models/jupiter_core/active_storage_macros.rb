@@ -70,5 +70,4 @@ module JupiterCore::ActiveStorageMacros
   def file_path_for(file)
     ActiveStorage::Blob.service.send(:path_for, file.key)
   end
-
 end
