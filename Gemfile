@@ -6,6 +6,7 @@ git_source(:github) do |repo_name|
 end
 
 # Core Rails stuff
+gem 'image_processing'
 gem 'puma', '~> 3.11'
 gem 'rails', '~> 5.2.0'
 
@@ -51,6 +52,7 @@ gem 'pundit'
 
 # Background tasks
 gem 'sidekiq', '~> 5.1'
+gem 'sidekiq-unique-jobs'
 gem 'sinatra', '~> 2.0.3' # used by sidekiq/web
 # Sidekiq cron jobs
 gem 'rufus-scheduler', '3.4.2' # https://github.com/ondrejbartas/sidekiq-cron/issues/199

@@ -1,3 +1,7 @@
 check_embargo_expiry:
   cron: "0 22 * * *"
   class: "EmbargoExpiryJob"
+
+garbage_collect_orphan_blobs:
+  cron: "0 */12 * * *"
+  class: "GarbageCollectBlobsJob"

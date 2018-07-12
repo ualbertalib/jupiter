@@ -24,13 +24,15 @@ class Admin::ItemsControllerTest < ActionDispatch::IntegrationTest
       subject: ['Deletion']
     ).unlock_and_fetch_ldp_object do |unlocked_item|
       unlocked_item.add_to_path(@community.id, @collection.id)
-      File.open(file_fixture('pdf-sample.pdf'), 'r') do |file|
-        unlocked_item.add_files([file])
-      end
       unlocked_item.save!
     end
+    Sidekiq::Testing.inline! do
+      File.open(file_fixture('pdf-sample.pdf'), 'r') do |file|
+        @item.add_and_ingest_files([file])
+      end
+    end
     @item.doi_state # ensure there is a doi to test deletion of
-    @item.thumbnail_fileset(@item.file_sets.first) # ensure there is a thumbnail to test deletion of
+    @item.set_thumbnail(@item.files.first) # ensure there is a thumbnail to test deletion of
 
     @admin = users(:admin)
     sign_in_as @admin
