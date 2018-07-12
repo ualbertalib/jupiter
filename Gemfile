@@ -85,7 +85,7 @@ group :development, :test do
   gem 'pry'
   gem 'pry-rails'
 
-  gem 'rubocop', '~> 0.56.0', require: false
+  gem 'rubocop', '~> 0.58.1', require: false
 
   gem 'scss_lint', '>= 0.56.0', require: false
 end
