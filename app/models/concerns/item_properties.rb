@@ -82,7 +82,6 @@ module ItemProperties
 
       file_handles.each do |fileio|
         attachment = files.attach(io: fileio, filename: File.basename(fileio.path)).first
-        # binding.pry
         FileAttachmentIngestionJob.perform_later(attachment.id)
       end
     end
