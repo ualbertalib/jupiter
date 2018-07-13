@@ -4,7 +4,9 @@ module DraftProperties
   included do
     enum status: { inactive: 0, active: 1, archived: 2 }
 
-    has_many_attached :files
+    # Note that dependent: false is necessary here as Items and DraftItems can both have ActiveStorage::Attachment records
+    # that point at the same underlying blob record. See Item#from_draft.
+    has_many_attached :files, dependent: false
 
     belongs_to :user
 
@@ -37,6 +39,22 @@ module DraftProperties
       end
 
       files.first
+    end
+
+    # compatibility with the thumbnail API used in Items/Theses and Communities
+    def thumbnail_url(args = { resize: '100x100' })
+      return nil unless thumbnail.present? && thumbnail.blob.present?
+      Rails.application.routes.url_helpers.rails_representation_path(thumbnail.variant(args).processed)
+    rescue ActiveStorage::InvariableError
+      begin
+        Rails.application.routes.url_helpers.rails_representation_path(thumbnail.preview(args).processed)
+      rescue ActiveStorage::UnpreviewableError
+        return nil
+      end
+    end
+
+    def thumbnail_file
+      thumbnail if thumbnail.present? && thumbnail.blob.present?
     end
 
     def uncompleted_step?(steps, step)
@@ -115,9 +133,6 @@ module DraftProperties
       validate_choose_license_and_visibility? && embargo?
     end
 
-    # HACK: Messing with Rails internals for fun and profit
-    # we're accessing the raw ActiveStorage local drive service internals to avoid the overhead of pulling temp files
-    # out. This WILL break when we move to Rails 5.2 and the internals change.
     def file_path_for(file)
       ActiveStorage::Blob.service.send(:path_for, file.key)
     end

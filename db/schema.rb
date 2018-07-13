@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_30_193707) do
+ActiveRecord::Schema.define(version: 2018_06_20_203953) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 2018_05_30_193707) do
     t.datetime "created_at"
     t.bigint "record_id"
     t.string "record_type"
+    t.uuid "fileset_uuid"
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "unique_active_storage_attachment", unique: true
   end
@@ -50,6 +51,7 @@ ActiveRecord::Schema.define(version: 2018_05_30_193707) do
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "logo_id"
   end
 
   create_table "draft_items", force: :cascade do |t|

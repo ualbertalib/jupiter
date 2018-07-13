@@ -44,45 +44,11 @@ class CommunityTest < ActiveSupport::TestCase
     c.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
                   filename: 'sample1.jpeg', content_type: 'image/jpeg'
 
-    # Assert database records exist
-    attachment_id1 = c.logo.id
-    blob_id1 = c.logo.blob.id
-    assert ActiveStorage::Attachment.where(id: attachment_id1).present?
-    assert ActiveStorage::Blob.where(id: blob_id1).present?
     assert_equal c.logo.blob.filename, 'sample1.jpeg'
 
-    # Assert file exists
-    key = c.logo.blob.key
-    file_path1 = ActiveStorage::Blob.service.root + "/#{key[0..1]}/#{key[2..3]}/#{key}"
-    assert File.exist?(file_path1)
-
-    # Attach new logo. Note, purging of logo happens as a background job.
-    perform_enqueued_jobs do
-      c.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
-                    filename: 'sample2.jpeg', content_type: 'image/jpeg'
-    end
-
-    # Assert new database records exist
-    attachment_id2 = c.logo.id
-    blob_id2 = c.logo.blob.id
-    assert_not_equal attachment_id1, attachment_id2
-    assert_not_equal blob_id1, blob_id2
-    assert ActiveStorage::Attachment.where(id: attachment_id2).present?
-    assert ActiveStorage::Blob.where(id: blob_id2).present?
+    c.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
+                  filename: 'sample2.jpeg', content_type: 'image/jpeg'
     assert_equal c.logo.blob.filename, 'sample2.jpeg'
-
-    # Assert old database records are gone
-    assert_not ActiveStorage::Attachment.where(id: attachment_id1).present?
-    assert_not ActiveStorage::Blob.where(id: blob_id1).present?
-
-    # Assert new file exists and isn't the same as old file
-    key = c.logo.blob.key
-    file_path2 = ActiveStorage::Blob.service.root + "/#{key[0..1]}/#{key[2..3]}/#{key}"
-    assert File.exist?(file_path2)
-    assert_not_equal file_path1, file_path2
-
-    # Assert old file is gone
-    assert_not File.exist?(file_path1)
   end
 
 end

@@ -73,13 +73,13 @@ class DraftThesis < ApplicationRecord
     save(validate: false)
 
     # reset files if the files have changed in Fedora outside of the draft process
-    files.purge if thesis.file_sets.present?
-    thesis.file_sets.each do |fileset|
-      fileset.unlock_and_fetch_ldp_object do |ufs|
-        ufs.fetch_raw_original_file_data do |content_type, io|
-          files.attach(io: io, filename: ufs.contained_filename, content_type: content_type)
-        end
-      end
+    # NOTE: destroy the attachment record, DON'T use #purge, which will wipe the underlying blob shared with the
+    # published item's shim
+    files.each(&:destroy) if thesis.files.present?
+
+    # add an association between the same underlying blobs the Item uses and the Draft
+    thesis.files_attachments.each do |attachment|
+      ActiveStorage::Attachment.create(record: self, blob: attachment.blob, name: :files)
     end
   end
 

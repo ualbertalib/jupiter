@@ -2,7 +2,6 @@ class Thesis < JupiterCore::LockedLdpObject
 
   include ObjectProperties
   include ItemProperties
-  # Needed for ActiveStorage (logo)...
   include GlobalID::Identification
   ldp_object_includes Hydra::Works::WorkBehavior
 
@@ -50,8 +49,6 @@ class Thesis < JupiterCore::LockedLdpObject
   additional_search_index :languages,
                           solrize_for: :facet,
                           as: -> { [language] }
-
-  has_one_attached :thumbnail
 
   # Present a consistent interface with Item#item_type_with_status_code
   def item_type_with_status_code
@@ -106,17 +103,22 @@ class Thesis < JupiterCore::LockedLdpObject
 
       unlocked_obj.save!
 
-      unlocked_obj.purge_files if thesis.file_sets.any?
-      draft_thesis.map_activestorage_files_as_file_objects do |file|
-        unlocked_obj.add_files([file])
-      end
-    end
-    # set the item's thumbnail to the chosen fileset
-    # this advice doesn't apply to non-ActiveRecord objects, rubocop
+      # remove old filesets and attachments and recreate
+      unlocked_obj.purge_filesets
 
-    # rubocop:disable Rails/FindBy
-    thesis.thumbnail_fileset(thesis.file_sets.where(contained_filename: draft_thesis.thumbnail.filename.to_s).first)
-    # rubocop:enable Rails/FindBy
+      # NOTE: destroy the attachment record, DON'T use #purge, which will wipe the underlying blob shared with the
+      # draft item
+      thesis.files.each(&:destroy) if thesis.files.present?
+
+      # add an association between the same underlying blobs the Draft uses and the Item
+      draft_thesis.files_attachments.each do |attachment|
+        new_attachment = ActiveStorage::Attachment.create(record: thesis.files_attachment_shim,
+                                                          blob: attachment.blob, name: :shimmed_files)
+        FileAttachmentIngestionJob.perform_later(new_attachment.id)
+      end
+
+      thesis.set_thumbnail(thesis.files.find_by(blob_id: draft_thesis.thumbnail.blob.id))
+    end
 
     draft_thesis.uuid = thesis.id
     draft_thesis.save!

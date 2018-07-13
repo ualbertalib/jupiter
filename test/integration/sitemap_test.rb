@@ -12,14 +12,14 @@ class SitemapTest < ActionDispatch::IntegrationTest
     @item = locked_ldp_fixture(Item, :fancy).unlock_and_fetch_ldp_object do |uo|
       uo.add_to_path(@community.id, @collection.id)
       uo.save!
-      # Attach a file to the item so that it has attributes to check for
-      File.open(file_fixture('image-sample.jpeg'), 'r') do |file|
-        # Bit of a hack to fake a file name with characters that require escaping ...
-        def file.original_filename
-          "ü&<>'\".jpeg"
-        end
-        uo.add_files([file])
+    end
+    # Attach a file to the item so that it has attributes to check for
+    File.open(file_fixture('image-sample.jpeg'), 'r') do |file|
+      # Bit of a hack to fake a file name with characters that require escaping ...
+      def file.original_filename
+        "ü&<>'\".jpeg"
       end
+      @item.add_and_ingest_files([file])
     end
     @thesis = Thesis.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                            owner: 1, title: 'Fancy Item',
