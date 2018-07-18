@@ -105,6 +105,8 @@ class DoiServiceTest < ActiveSupport::TestCase
       assert_equal 'unavailable | withdrawn', ezid_identifer.status
       assert_equal 'no', ezid_identifer.export
     end
+
+    Rails.application.secrets.doi_minting_enabled = false
   end
 
 end
