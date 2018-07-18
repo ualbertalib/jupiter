@@ -8,7 +8,7 @@
       <div class="card mb-3">
         <h5 class="card-header"><%= t('.item_thumbnail') %></h5>
         <div class="card-body">
-          <%= render partial: 'feature_image', locals: { feature_image: @draft_item.thumbnail, object: @draft_item } %>
+          <%= render partial: 'feature_image', locals: { object: @draft_item } %>
           <p class="text-muted mt-3"><%= t('.thumbnail_of_first_file') %></p>
         </div>
       </div>

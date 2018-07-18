@@ -1,9 +1,9 @@
 <% if policy(object).thumbnail? %>
-  <% if feature_image.present? && image?(feature_image) %>
-    <%= image_tag(url_for(feature_image), class: 'j-feature-image img-thumbnail', alt: '', size: '350x350') %>
+  <% if object.thumbnail_url.present? %>
+    <%= image_tag(object.thumbnail_url(resize:'350x350'), class: 'j-feature-image img-thumbnail', alt: '', size: '350x350') %>
   <% else %>
     <div class="d-flex justify-content-center align-items-center img-thumbnail p-5">
-      <%= fa_icon file_icon(feature_image&.content_type), class: 'fa-5x text-muted' %>
+      <%= fa_icon file_icon(object.thumbnail_file&.content_type), class: 'fa-5x text-muted' %>
     </div>
   <% end %>
 <% else %>
