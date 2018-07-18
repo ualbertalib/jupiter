@@ -6,7 +6,8 @@ git_source(:github) do |repo_name|
 end
 
 # Core Rails stuff
-gem 'puma', '~> 3.11'
+gem 'image_processing'
+gem 'puma', '~> 3.12'
 gem 'rails', '~> 5.2.0'
 
 # Assets (CSS/JS) stuff
@@ -51,6 +52,7 @@ gem 'pundit'
 
 # Background tasks
 gem 'sidekiq', '~> 5.1'
+gem 'sidekiq-unique-jobs'
 gem 'sinatra', '~> 2.0.3' # used by sidekiq/web
 # Sidekiq cron jobs
 gem 'rufus-scheduler', '3.4.2' # https://github.com/ondrejbartas/sidekiq-cron/issues/199
@@ -85,7 +87,7 @@ group :development, :test do
   gem 'pry'
   gem 'pry-rails'
 
-  gem 'rubocop', '~> 0.56.0', require: false
+  gem 'rubocop', '~> 0.58.1', require: false
 
   gem 'scss_lint', '>= 0.56.0', require: false
 end

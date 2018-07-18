@@ -40,8 +40,8 @@ module PageLayoutHelper
   def page_image
     default_url = image_url('era-logo.png')
     # We only have images on community and item/thesis show pages
-    image = @community&.logo_attachment || @item&.thumbnail_attachment
-    image_url = rails_blob_url(image) if image.present?
+    image_url = @community&.thumbnail_url || @item&.thumbnail_url
+
     image_url || default_url
   end
 

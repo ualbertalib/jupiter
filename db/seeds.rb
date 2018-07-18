@@ -174,25 +174,25 @@ if Rails.env.development? || Rails.env.uat?
           uo.add_to_path(community.id, item_collection.id)
           uo.add_to_path(community.id, thesis_collection.id)
           uo.save!
-
-          # Attach two files to the mondo-item
-          File.open(Rails.root + 'app/assets/images/theses.jpg', 'r') do |file1|
-            File.open(Rails.root + 'test/fixtures/files/image-sample.jpeg', 'r') do |file2|
-              # Bit of a hack to fake a long file name ...
-              def file2.original_filename
-                'wefksdkhvkasdkfjhwekkjahsdkjkajvbkejfkwejfjkdvkhdkfhw&ükefkhoiekldkfhkdfjhiwuegfugksjdcjbsjkdbw.jpeg'
-              end
-              uo.add_files([file1, file2])
-            end
-          end
-
         else
           uo.add_to_path(community.id, item_collection.id)
           uo.save!
         end
       end
 
-      item.thumbnail_fileset(item.file_sets.first) if item.file_sets.first.present?
+      if i == 8
+        # Attach two files to the mondo-item
+        File.open(Rails.root + 'app/assets/images/theses.jpg', 'r') do |file1|
+          File.open(Rails.root + 'test/fixtures/files/image-sample.jpeg', 'r') do |file2|
+            # Bit of a hack to fake a long file name ...
+            def file2.original_filename
+              'wefksdkhvkasdkfjhwekkjahsdkjkajvbkejfkwejfjkdvkhdkfhw&ükefkhoiekldkfhkdfjhiwuegfugksjdcjbsjkdbw.jpeg'
+            end
+            item.add_and_ingest_files([file1, file2])
+          end
+        end
+      end
+      item.set_thumbnail(item.files.first) if item.files.first.present?
 
       field = Faker::Job.field
       level = ["Master's", 'Doctorate'][i % 2]
@@ -230,20 +230,22 @@ if Rails.env.development? || Rails.env.uat?
           uo.add_to_path(community.id, item_collection.id)
           uo.add_to_path(community.id, thesis_collection.id)
           uo.save!
-          # To test PCDM/list_source ordering, attach three files to the mondo-thesis!
-          File.open(Rails.root + 'app/assets/images/theses.jpg', 'r') do |file1|
-            File.open(Rails.root + 'test/fixtures/files/image-sample.jpeg', 'r') do |file2|
-              File.open(Rails.root + 'app/assets/images/era-logo.png', 'r') do |file3|
-                uo.add_files([file1, file2, file3])
-              end
-            end
-          end
         else
           uo.add_to_path(community.id, thesis_collection.id)
           uo.save!
         end
       end
-      thesis.thumbnail_fileset(thesis.file_sets.first) if thesis.file_sets.first.present?
+      if i == 8
+        # To test PCDM/list_source ordering, attach three files to the mondo-thesis!
+        File.open(Rails.root + 'app/assets/images/theses.jpg', 'r') do |file1|
+          File.open(Rails.root + 'test/fixtures/files/image-sample.jpeg', 'r') do |file2|
+            File.open(Rails.root + 'app/assets/images/era-logo.png', 'r') do |file3|
+              thesis.add_and_ingest_files([file1, file2, file3])
+            end
+          end
+        end
+      end
+      thesis.set_thumbnail(thesis.files.first) if thesis.files.first.present?
     end
 
     # Add a private item
