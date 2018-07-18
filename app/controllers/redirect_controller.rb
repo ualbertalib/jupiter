@@ -12,13 +12,9 @@ class RedirectController < ApplicationController
 
   def hydra_north_file
     item = find_item_by_noid(noid)
-    file_set = find_item_file_set(item)
-    if file_set
-      redirect_to url_for(controller: :file_sets,
-                          action: :show,
-                          id: item.id,
-                          file_set_id: file_set.id,
-                          file_name: CGI.escape(file_set.contained_filename)), status: :moved_permanently
+    file = find_item_file(item, params[:filename] || params[:file])
+    if file
+      redirect_to helpers.file_view_url(file), status: :moved_permanently
     else
       # If file not found, redirect to item level
       redirect_to item_url(item), status: :found
@@ -57,13 +53,9 @@ class RedirectController < ApplicationController
       return redirect_to item_url(item), status: :found
     end
 
-    file_set = find_item_file_set(item)
-    if file_set
-      redirect_to url_for(controller: :file_sets,
-                          action: :show,
-                          id: item.id,
-                          file_set_id: file_set.id,
-                          file_name: CGI.escape(file_set.contained_filename)), status: :moved_permanently
+    file = find_item_file(item, params[:filename])
+    if file
+      redirect_to helpers.file_view_url(file), status: :moved_permanently
     else
       # If file not found, redirect to item level
       redirect_to item_url(item), status: :found
@@ -84,14 +76,9 @@ class RedirectController < ApplicationController
     raise JupiterCore::ObjectNotFound
   end
 
-  def find_item_file_set(item)
-    # Note: sometimes '?file=filename' can happen in query string
-    filename = params[:filename] || params[:file]
+  def find_item_file(item, filename)
     return nil if filename.blank?
-    item.file_sets.each do |file_set|
-      return file_set if file_set.contained_filename == CGI.unescape(filename)
-    end
-    nil
+    item.files.detect { |file| file.blob.filename == CGI.unescape(filename) }
   end
 
   def find_community_or_collection_by_noid(noid)

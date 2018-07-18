@@ -1,4 +1,3 @@
-
 module ItemProperties
   extend ActiveSupport::Concern
 
@@ -34,6 +33,8 @@ module ItemProperties
 
     attr_accessor :skip_handle_doi_states
 
+    has_many_attached :files
+
     # allow for a uniform way of accessing this information across regular items and theses
     def authors
       respond_to?(:creators) ? creators : [dissertant]
@@ -53,11 +54,43 @@ module ItemProperties
       end
     end
 
+    def set_thumbnail(attachment)
+      files_attachment_shim.logo_id = attachment.id
+      files_attachment_shim.save!
+    end
+
+    def thumbnail_url(args = { resize: '100x100' })
+      logo = files_attachment_shim.logo_file
+      return nil if logo.blank?
+
+      Rails.application.routes.url_helpers.rails_representation_path(logo.variant(args).processed)
+    rescue ActiveStorage::InvariableError
+      begin
+        Rails.application.routes.url_helpers.rails_representation_path(logo.preview(args).processed)
+      rescue ActiveStorage::UnpreviewableError
+        return nil
+      end
+    end
+
+    def thumbnail_file
+      files_attachment_shim.logo_file
+    end
+
+    def add_and_ingest_files(file_handles = [])
+      return if file_handles.blank?
+      raise 'Item not yet saved!' if id.nil?
+
+      file_handles.each do |fileio|
+        attachment = files.attach(io: fileio, filename: File.basename(fileio.path)).first
+        FileAttachmentIngestionJob.perform_later(attachment.id)
+      end
+    end
+
     unlocked do
       before_save :handle_doi_states
       after_create :handle_doi_states
       before_destroy :remove_doi
-      after_destroy :purge_thumbnail, :delete_doi_state
+      after_destroy :delete_doi_state
       after_save :push_item_id_for_preservation
 
       # If you're looking for rights and subject validations, note that they have separate implementations
@@ -130,10 +163,6 @@ module ItemProperties
         doi_state.removed! if doi.present? && (doi_state.available? || doi_state.not_available?)
       end
 
-      def purge_thumbnail
-        thumbnail.purge if thumbnail.present?
-      end
-
       def delete_doi_state
         doi_state.destroy!
       end
@@ -162,7 +191,7 @@ module ItemProperties
         end
       end
 
-      def purge_files
+      def purge_filesets
         FileSet.where(item: id).each do |fs|
           fs.unlock_and_fetch_ldp_object(&:delete)
         end
@@ -200,62 +229,6 @@ module ItemProperties
         Rollbar.error("Could not preserve #{id}", e)
       end
       # rubocop:enable Style/GlobalVars
-
-      def add_files(files)
-        return if files.blank?
-        # Need a item id for file sets to point to
-        # TODO should this be a side effect? should we throw an exception if there's no id? Food for thought
-        save! if id.nil?
-
-        # The current and added filesets approach (rather than direct array append) works around bugs in ActiveFedora
-        current_filesets = ordered_members || []
-        added_filesets = []
-
-        files.each do |file|
-          FileSet.new_locked_ldp_object.unlock_and_fetch_ldp_object do |unlocked_fileset|
-            unlocked_fileset.owner = owner
-            unlocked_fileset.visibility = visibility
-            Hydra::Works::AddFileToFileSet.call(unlocked_fileset, file, :original_file,
-                                                update_existing: false, versioning: false)
-            unlocked_fileset.member_of_collections += [self]
-            # Temporarily cache the file name for storing in Solr
-            # if the file was uploaded, it responds to +original_filename+
-            # if it's a Ruby File object, it has a +basename+. This distinction seems arbitrary.
-            unlocked_fileset.contained_filename = if file.respond_to?(:original_filename)
-                                                    file.original_filename
-                                                  else
-                                                    File.basename(file)
-                                                  end
-            # Store file properties in the format required by the sitemap
-            # for quick and easy retrieval -- nobody wants to wait 36hrs for this!
-            escaped_path = CGI.escape_html(
-              Rails.application.routes.url_helpers.url_for(controller: :file_sets,
-                                                           action: :show,
-                                                           id: id,
-                                                           file_set_id: unlocked_fileset.id,
-                                                           file_name: unlocked_fileset.contained_filename,
-                                                           only_path: true)
-            )
-            unlocked_fileset.sitemap_link = "<rs:ln \
-href=\"#{escaped_path}\" \
-rel=\"content\" \
-hash=\"#{unlocked_fileset.original_file.checksum.algorithm.downcase}:"\
-"#{unlocked_fileset.original_file.checksum.value}\" \
-length=\"#{unlocked_fileset.original_file.size}\" \
-type=\"#{unlocked_fileset.original_file.mime_type}\"\
-/>"
-            unlocked_fileset.save!
-
-            added_filesets << unlocked_fileset
-            if Rails.configuration.run_fits_characterization
-              Hydra::Works::CharacterizationService.run(unlocked_fileset.original_file)
-              unlocked_fileset.original_file.save
-            end
-          end
-        end
-        self.ordered_members = current_filesets + added_filesets
-        save!
-      end
     end
   end
 
@@ -277,7 +250,11 @@ type=\"#{unlocked_fileset.original_file.mime_type}\"\
     "https://doi.org/#{read_solr_index(:doi_without_label).first}"
   end
 
+  # Deprecated. Directly interacting with FileSets should be unnecessary during web-requests, as we're offloading
+  # file handling to ActiveStorage
   def file_sets
+    ActiveSupport::Deprecation.warn('Prefer #files to #file_sets! Dealing directly with PCDM FileSets in the web'\
+      ' application is (eventually) going away! Calls to this method should be carefully audited for necessity!')
     FileSet.where(item: id)
   end
 
@@ -285,30 +262,6 @@ type=\"#{unlocked_fileset.original_file.mime_type}\"\
     member_of_paths.each do |path|
       community_id, collection_id = path.split('/')
       yield Community.find(community_id), Collection.find(collection_id)
-    end
-  end
-
-  # Thumbnailing errors can manifest themselves in a few different ways, so we're trapping this without a specific
-  # class.
-  def thumbnail_fileset(fileset)
-    raise ArgumentError, 'Thumbnail must belong to the item it is set for' unless id == fileset.owning_item.id
-    thumbnail.purge if thumbnail.present?
-    fileset.unlock_and_fetch_ldp_object do |unlocked_fileset|
-      begin
-        unlocked_fileset.create_derivatives
-      rescue StandardError => e
-        # sometimes soffice crashes when trying to derive certain kinds of files. So we clear out any garbage
-        # and leave it unthumbnailed and push the error to Rollbar for further inspection
-        Rollbar.error(e)
-        thumbnail.purge if thumbnail.present?
-        break
-      end
-
-      # Some kinds of things don't get thumbnailed by HydraWorks, eg) .txt files
-      break if unlocked_fileset.thumbnail.blank?
-      unlocked_fileset.fetch_raw_thumbnail_data do |content_type, io|
-        thumbnail.attach(io: io, filename: "#{unlocked_fileset.contained_filename}.jpg", content_type: content_type)
-      end
     end
   end
 end

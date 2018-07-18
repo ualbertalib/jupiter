@@ -27,13 +27,14 @@ class RedirectControllerTest < ActionDispatch::IntegrationTest
                                        hydra_noid: 'item-noid')
                 .unlock_and_fetch_ldp_object do |uo|
       uo.add_to_path(@community.id, @collection.id)
-
-      File.open(file_fixture(@filename), 'r') do |file|
-        uo.add_files([file])
-      end
       uo.save!
     end
-    @file_set_id = @item.file_sets.first.id
+    Sidekiq::Testing.inline! do
+      File.open(file_fixture(@filename), 'r') do |file|
+        @item.add_and_ingest_files([file])
+      end
+    end
+    @file_set_id = @item.files.first.fileset_uuid
   end
 
   # HydraNorth paths containing the string "files"
@@ -55,8 +56,8 @@ class RedirectControllerTest < ActionDispatch::IntegrationTest
     # Action: redirect#hydra_north_file
     get '/files/item-noid/pdf-sample.pdf'
     assert_response :moved_permanently
-    assert_redirected_to url_for(controller: :file_sets,
-                                 action: :show,
+    assert_redirected_to url_for(controller: :downloads,
+                                 action: :view,
                                  id: @item.id,
                                  file_set_id: @file_set_id,
                                  file_name: @filename)
@@ -73,8 +74,8 @@ class RedirectControllerTest < ActionDispatch::IntegrationTest
     # Action: redirect#hydra_north_item
     get '/files/item-noid?file=pdf-sample.pdf'
     assert_response :moved_permanently
-    assert_redirected_to url_for(controller: :file_sets,
-                                 action: :show,
+    assert_redirected_to url_for(controller: :downloads,
+                                 action: :view,
                                  id: @item.id,
                                  file_set_id: @file_set_id,
                                  file_name: @filename)
@@ -112,8 +113,8 @@ class RedirectControllerTest < ActionDispatch::IntegrationTest
     # Action: redirect#hydra_north_item
     get '/downloads/item-noid?file=pdf-sample.pdf'
     assert_response :moved_permanently
-    assert_redirected_to url_for(controller: :file_sets,
-                                 action: :show,
+    assert_redirected_to url_for(controller: :downloads,
+                                 action: :view,
                                  id: @item.id,
                                  file_set_id: @file_set_id,
                                  file_name: @filename)
@@ -208,8 +209,8 @@ class RedirectControllerTest < ActionDispatch::IntegrationTest
     # Action: redirect#fedora3_datastream
     get '/public/view/item/uuid:item/DS2/pdf-sample.pdf'
     assert_response :moved_permanently
-    assert_redirected_to url_for(controller: :file_sets,
-                                 action: :show,
+    assert_redirected_to url_for(controller: :downloads,
+                                 action: :view,
                                  id: @item.id,
                                  file_set_id: @file_set_id,
                                  file_name: @filename)
@@ -241,8 +242,8 @@ class RedirectControllerTest < ActionDispatch::IntegrationTest
     # Action: redirect#fedora3_datastream
     get '/public/datastream/get/uuid:item/DS2/pdf-sample.pdf'
     assert_response :moved_permanently
-    assert_redirected_to url_for(controller: :file_sets,
-                                 action: :show,
+    assert_redirected_to url_for(controller: :downloads,
+                                 action: :view,
                                  id: @item.id,
                                  file_set_id: @file_set_id,
                                  file_name: @filename)

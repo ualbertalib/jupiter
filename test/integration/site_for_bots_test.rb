@@ -34,10 +34,12 @@ class SiteForBotsTest < ActionDispatch::IntegrationTest
       uo.add_to_path(@community1.id, @collection1.id)
       uo.add_to_path(@community1.id, @collection2.id)
       uo.save!
+    end
+    Sidekiq::Testing.inline! do
       # Attach a file to the item so that it has download to check for
-      file = File.open(file_fixture('pdf-sample.pdf'), 'r')
-      uo.add_files([file])
-      file.close
+      File.open(file_fixture('pdf-sample.pdf'), 'r') do |file|
+        @item.add_and_ingest_files([file])
+      end
     end
     @thesis = Thesis.new_locked_ldp_object.unlock_and_fetch_ldp_object do |uo|
       uo.title = 'Fantasitc thesis'
@@ -47,10 +49,12 @@ class SiteForBotsTest < ActionDispatch::IntegrationTest
       uo.graduation_date = '2017-03-31'
       uo.add_to_path(@community1.id, @collection1.id)
       uo.save!
+    end
+    Sidekiq::Testing.inline! do
       # Attach a file to the item so that it has download check for
-      file = File.open(file_fixture('pdf-sample.pdf'), 'r')
-      uo.add_files([file])
-      file.close
+      File.open(file_fixture('pdf-sample.pdf'), 'r') do |file|
+        @thesis.add_and_ingest_files([file])
+      end
     end
     @public_paths = [root_path, item_path(@item), communities_path, community_path(@community1),
                      community_collection_path(@community1, @collection1), search_path]
@@ -122,11 +126,11 @@ class SiteForBotsTest < ActionDispatch::IntegrationTest
     assert_select "meta[name='citation_title'][content='#{@thesis.title}']"
     assert_select "meta[name='citation_author'][content='#{@thesis.dissertant}']"
     assert_select "meta[name='citation_publication_date'][content='#{@thesis.creation_date}']"
-    assert_select format("meta[name='citation_pdf_url'][content='%<citation_url>s']",
-                         citation_url: Rails.application.routes.url_helpers.url_for(
-                           controller: :file_sets, action: :show, id: @thesis.id,
-                           file_set_id: @thesis.file_sets.first.id,
-                           file_name: @thesis.file_sets.first.contained_filename,
+    assert_select format("meta[name='citation_pdf_url'][content='%s']",
+                         Rails.application.routes.url_helpers.url_for(
+                           controller: :downloads, action: :view, id: @thesis.id,
+                           file_set_id: @thesis.files.first.fileset_uuid,
+                           file_name: @thesis.files.first.filename,
                            only_path: true
                          ))
     assert_select "meta[name='dc.identifier'][content='#{@item.doi}']"
@@ -138,11 +142,11 @@ class SiteForBotsTest < ActionDispatch::IntegrationTest
       assert_select "meta[name='citation_author'][content='#{author}']"
     end
     assert_select "meta[name='citation_publication_date'][content='#{@item.creation_date}']"
-    assert_select format("meta[name='citation_pdf_url'][content='%<citation_url>s']",
-                         citation_url: Rails.application.routes.url_helpers.url_for(
-                           controller: :file_sets, action: :show, id: @item.id,
-                           file_set_id: @item.file_sets.first.id,
-                           file_name: @item.file_sets.first.contained_filename,
+    assert_select format("meta[name='citation_pdf_url'][content='%s']",
+                         Rails.application.routes.url_helpers.url_for(
+                           controller: :downloads, action: :view, id: @item.id,
+                           file_set_id: @item.files.first.fileset_uuid,
+                           file_name: @item.files.first.filename,
                            only_path: true
                          ))
     assert_select "meta[name='dc.identifier'][content='#{@item.doi}']"

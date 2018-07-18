@@ -1,12 +1,12 @@
 <% if policy(object).thumbnail? %>
-  <% if thumbnail.present? && image?(thumbnail) %>
-    <%= image_tag(url_for(thumbnail), class: 'j-thumbnail img-thumbnail', alt: '', title: object.title, size: '100x100') %>
+  <% if object.thumbnail_url.present? %>
+    <%= image_tag(object.thumbnail_url, class: 'j-thumbnail img-thumbnail', alt: '', title: object.title, size: '100x100') %>
   <% else %>
     <% if object.is_a? Community %>
       <%= image_tag('era-logo-without-text.png', class: 'j-thumbnail img-thumbnail', alt: '', title: object.title, size: '100x100') %>
     <% else %>
       <div class="text-muted text-center img-thumbnail p-3">
-        <%= fa_icon file_icon(thumbnail&.content_type), class: 'fa-5x' %>
+        <%= fa_icon file_icon(object.thumbnail_file&.content_type), class: 'fa-5x' %>
         <span class="sr-only"><%= object.title %></span>
       </div>
     <% end %>
