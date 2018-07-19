@@ -420,7 +420,7 @@ en:
       download: 'Download'
       download_all: 'Download All'
       header: 'Files'
-      ccid_restricted_item: Item restricted to University of Alberta users
+      ccid_restricted_item: Item Restricted to University of Alberta Users
       login_with_ccid_to_view: Log In with CCID to View Item
       processing: 'This file is processing and will be available shortly'
     new:
