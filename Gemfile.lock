@@ -339,7 +339,7 @@ GEM
     rsolr (2.2.1)
       builder (>= 2.1.2)
       faraday (>= 0.9.0)
-    rubocop (0.58.1)
+    rubocop (0.58.2)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
       parser (>= 2.5, != 2.5.1.1)
@@ -374,7 +374,7 @@ GEM
     sdoc (1.0.0)
       rdoc (>= 5.0)
     selectize-rails (0.12.5)
-    selenium-webdriver (3.13.0)
+    selenium-webdriver (3.13.1)
       childprocess (~> 0.5)
       rubyzip (~> 1.2)
     shoulda-matchers (3.1.2)
@@ -493,7 +493,7 @@ DEPENDENCIES
   redis (~> 4.0)
   rollbar
   rsolr
-  rubocop (~> 0.58.1)
+  rubocop (~> 0.58.2)
   rufus-scheduler (= 3.4.2)
   sass-rails (~> 5)
   scss_lint (>= 0.56.0)
