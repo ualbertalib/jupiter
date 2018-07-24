@@ -11,7 +11,7 @@ gem 'puma', '~> 3.12'
 gem 'rails', '~> 5.2.0'
 
 # Assets (CSS/JS) stuff
-gem 'bootstrap', '~> 4.1.1'
+gem 'bootstrap', '~> 4.1.2'
 gem 'dropzonejs-rails'
 gem 'font-awesome-rails'
 gem 'jquery-rails'
