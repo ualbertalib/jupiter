@@ -3,6 +3,7 @@
 *.md
 
 tmp
+!tmp/pids/.keep
 log
 coverage/
 .bundle
