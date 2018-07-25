@@ -39,7 +39,9 @@ class DraftThesisTest < ActiveSupport::TestCase
   test 'should run validations when on describe_item step' do
     user = users(:admin)
     draft_thesis = DraftThesis.new(user: user, status: DraftThesis.statuses[:active])
+
     assert_not draft_thesis.valid?
+    assert_equal 6, draft_thesis.errors.full_messages.count
 
     draft_thesis.assign_attributes(
       title: 'Thesis of Random',
@@ -71,6 +73,7 @@ class DraftThesisTest < ActiveSupport::TestCase
     )
 
     assert_not draft_thesis.valid?
+    assert_equal 2, draft_thesis.errors.full_messages.count
 
     draft_thesis.assign_attributes(
       visibility: DraftThesis.visibilities[:open_access],
@@ -100,6 +103,7 @@ class DraftThesisTest < ActiveSupport::TestCase
       member_of_paths: { community_id: [@community.id], collection_id: [@collection.id] }
     )
     assert_not draft_thesis.valid?
+    assert_equal "Files can't be blank", draft_thesis.errors.full_messages.first
 
     fake_file = ActiveStorage::Blob.create_after_upload!(
       io: StringIO.new('RandomData'),
@@ -130,6 +134,7 @@ class DraftThesisTest < ActiveSupport::TestCase
     )
 
     assert_not draft_thesis.valid?
+    assert_equal "Embargo end date can't be blank", draft_thesis.errors.full_messages.first
 
     draft_thesis.assign_attributes(
       embargo_end_date: Date.current + 1.year

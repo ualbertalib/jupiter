@@ -2,13 +2,7 @@ class DraftThesis < ApplicationRecord
 
   include DraftProperties
 
-  DEFAULT_RIGHTS = 'This thesis is made available by the University of Alberta Libraries'\
-  ' with permission of the copyright owner solely for non-commercial purposes.'\
-  ' This thesis, or any portion thereof, may not otherwise be copied or reproduced'\
-  ' without the written consent of the copyright owner, except to the extent'\
-  ' permitted by Canadian copyright law.'.freeze
-
-  TERMS = ['Spring', 'Fall'].freeze
+  TERMS = [I18n.t('admin.theses.graduation_terms.spring'), I18n.t('admin.theses.graduation_terms.fall')].freeze
 
   enum wizard_step: { describe_thesis: 0,
                       choose_license_and_visibility: 1,

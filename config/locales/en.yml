@@ -331,6 +331,9 @@ en:
           (%{total_users_count} total users)"
         no_users_found: 'We could not find any users matching your search.'
     theses:
+      graduation_terms:
+        spring: 'Spring'
+        fall: 'Fall'
       draft:
         header: 'Deposit Thesis'
         header_edit: 'Edit Thesis'
@@ -399,6 +402,11 @@ en:
           header: 'Choose License and Visibility'
           header_icon: 'creative-commons'
           license:
+            default_rights: 'This thesis is made available by the University of Alberta Libraries
+              with permission of the copyright owner solely for non-commercial purposes.
+              This thesis, or any portion thereof, may not otherwise be copied or reproduced
+              without the written consent of the copyright owner, except to the extent
+              permitted by Canadian copyright law.'
             header: 'License'
             rights: 'Rights'
             rights_placeholder: ''
