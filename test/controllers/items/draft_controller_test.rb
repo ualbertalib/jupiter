@@ -21,7 +21,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test 'should prevent prevent user from skipping ahead with uncompleted steps' do
+  test 'should prevent user from skipping ahead with uncompleted steps' do
     sign_in_as @user
 
     draft_item = draft_items(:inactive)

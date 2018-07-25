@@ -4,12 +4,16 @@ class Admin::Theses::FilesController < Admin::AdminController
 
   private
 
-  def authorize?
+  def needs_authorization?
     false
   end
 
-  def set_draft
-    @draft = DraftThesis.find(params[:thesis_id])
+  def draft_class
+    DraftThesis
+  end
+
+  def item_class
+    Thesis
   end
 
   def file_partial_location

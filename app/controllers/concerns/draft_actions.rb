@@ -7,7 +7,7 @@ module DraftActions
   end
 
   def show
-    authorize @draft if authorize?
+    authorize @draft if needs_authorization?
 
     @is_edit = @draft.uuid.present?
     @draft.sync_with_fedora(for_user: current_user) if @is_edit
@@ -26,7 +26,7 @@ module DraftActions
   end
 
   def update
-    authorize @draft if authorize?
+    authorize @draft if needs_authorization?
 
     params[draft_param] ||= {}
 
@@ -93,13 +93,13 @@ module DraftActions
     end
     @draft = draft_class.create(create_params)
 
-    authorize @draft if authorize?
+    authorize @draft if needs_authorization?
 
     redirect_to wizard_path(steps.first, draft_id_param => @draft.id)
   end
 
   def destroy
-    authorize @draft if authorize?
+    authorize @draft if needs_authorization?
 
     @draft.destroy
 
@@ -108,7 +108,10 @@ module DraftActions
 
   private
 
-  def authorize?
+  # Draft items will need authorization checks in place. But since draft theses are inherited
+  # from the admin controller, they already have authorization checks in place so we need a way
+  # to opt out of authorization checks for all the controller actions above
+  def needs_authorization?
     true
   end
 
@@ -121,19 +124,19 @@ module DraftActions
   end
 
   def describe_step_name
-    :describe_item
+    "describe_#{item_class.model_name.singular}".to_sym
   end
 
   def review_step_name
-    :review_and_deposit_item
+    "review_and_deposit_#{item_class.model_name.singular}".to_sym
   end
 
   def draft_param
-    :draft_item
+    draft_class.model_name.singular.to_sym
   end
 
   def draft_id_param
-    :item_id
+    "#{item_class.model_name.singular}_id".to_sym
   end
 
   def set_draft

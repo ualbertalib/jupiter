@@ -25,7 +25,7 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test 'should prevent prevent user from skipping ahead with uncompleted steps' do
+  test 'should prevent user from skipping ahead with uncompleted steps' do
     sign_in_as @admin
 
     draft_thesis = draft_theses(:inactive)
