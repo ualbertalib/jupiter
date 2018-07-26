@@ -52,6 +52,8 @@ services:
   worker: &rails
     restart: always
     image: ualbertalib/jupiter:deployment
+    volumes:
+      - file-storage:/app/storage/
     command: bundle exec sidekiq
     env_file: .env_deployment
     depends_on:
