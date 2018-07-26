@@ -21,7 +21,7 @@ if Rails.env.development? || Rails.env.uat?
 
   # start fresh
   [Announcement, ActiveStorage::Blob, ActiveStorage::Attachment, JupiterCore::AttachmentShim,
-   Identity, User, Type, Language].each(&:destroy_all)
+   Identity, User, Type, Language, Institution].each(&:destroy_all)
 
   ActiveFedora::Cleaner.clean!
 
@@ -409,5 +409,11 @@ end
  :no_linguistic_content, :other].each do |language_name|
   Language.create(name: language_name)
 end
+
+# Institutions
+[:uofa, :st_stephens].each do |institution_name|
+  Institution.create(name: institution_name)
+end
+
 
 puts 'Database seeded successfully!'

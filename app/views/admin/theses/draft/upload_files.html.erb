@@ -18,7 +18,7 @@
   <% end %>
 
   <%= simple_form_for @draft,
-                      url: item_files_path,
+                      url: admin_thesis_files_path,
                       method: :post,
                       html: {
                         id: :upload_files_form,
@@ -83,10 +83,10 @@
     <div class="mt-3 d-flex flex-wrap justify-content-end">
       <%= link_to previous_wizard_path, class: 'btn btn-secondary mr-2 mb-2 mb-md-0' do %>
         <%= fa_icon 'chevron-left' %>
-        <%= t('items.draft.previous') %>
+        <%= t('admin.theses.draft.previous') %>
       <% end %>
       <%= button_tag type: :submit, class: 'btn btn-primary' do %>
-        <%= t('items.draft.save_and_continue') %>
+        <%= t('admin.theses.draft.save_and_continue') %>
         <%= fa_icon 'chevron-right' %>
       <% end %>
     </div>

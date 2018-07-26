@@ -4,6 +4,11 @@ admin_saml:
   uid: adminccid
   provider: saml
 
+admin_two_saml:
+  user: admin_two
+  uid: admintwoccid
+  provider: saml
+
 user_saml:
   user: regular
   uid: userccid

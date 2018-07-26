@@ -11,7 +11,7 @@
   <% if @draft.errors.any? %>
     <p class="alert alert-danger">
       <%= fa_icon 'exclamation-circle' %>
-      <%= t('items.draft.please_fix_errors') %>
+      <%= t('admin.theses.draft.please_fix_errors') %>
     </p>
   <% end %>
 
@@ -28,39 +28,17 @@
                 placeholder: t('.alternate_title_placeholder'),
                 hint: t('.alternate_title_help') %>
 
-    <%= f.association :type,
-        label: t('.type_id'),
+    <%= f.association :language,
+        label: t('.language'),
         label_method: :translated_name,
         value_method: :id,
-        required: true,
-        prompt: t('.type_id_placeholder'),
-        hint: t('.type_id_help_html') %>
+        prompt: t('.language_placeholder') %>
 
-
-    <%= f.association :languages,
-        label: t('.languages'),
-        label_method: :translated_name,
-        value_method: :id,
-        multiple: true,
-        input_html: {
-          data: { placeholder: t('.languages_placeholder') },
-          class: 'js-selectize'
-        },
+    <%= f.input :creator,
+        label: t('.creator'),
         required: true,
-        prompt: t('.languages_placeholder') %>
-
-    <%= f.input :creators,
-        label: t('.creators'),
-        collection: @draft.creators || [],
-        include_hidden: false, # TODO: figure out this, need to parse empty strings out in model
-        input_html: {
-          multiple: true,
-          data: { placeholder: t('.creators_placeholder') },
-          class: 'js-selectize-create'
-        },
-        required: true,
-        prompt: t('.creators_placeholder'),
-        hint: t('.creators_help') %>
+        placeholder: t('.creator_placeholder'),
+        hint: t('.creator_help') %>
 
     <%= f.input :subjects,
         label: t('.subjects'),
@@ -71,33 +49,29 @@
           data: { placeholder: t('.subjects_placeholder') },
           class: 'js-selectize-create'
         },
-        required: true,
         prompt: t('.subjects_placeholder'),
         hint: t('.subjects_help') %>
 
-    <%= f.input :date_created,
-                as: :date,
-                label: t('.date_created'),
-                order: [:year, :month, :day],
-                prompt: {
-                  day: t('select_a_day'),
-                  month: t('select_a_month'),
-                  year: t('select_a_year')
-                },
-                start_year: Date.today.year + 1,
-                end_year: Date.today.year - 100,
-                input_html: { class: 'mr-2 mb-2', 'aria-labelledby': 'draft_item_date_created_1i' },
-                required: true,
-                hint: t('.date_created_help') %>
-
     <%= f.input :description,
                 as: :text,
+                required: true,
                 label: t('.description'),
                 input_html: { rows: '5' },
                 placeholder: t('.description_placeholder') %>
 
+    <%= f.input :graduation_term,
+                label: t('.graduation_term'),
+                required: true,
+                collection: DraftThesis::TERMS,
+                include_blank: t('.graduation_term_placeholder') %>
+
+    <%= f.input :graduation_year,
+                label: t('.graduation_year'),
+                required: true,
+                collection: (Date.today.year + 1).downto(Date.today.year - 100),
+                include_blank: t('select_a_year') %>
+
     <fieldset>
-      <%# TODO: Handle displaying of error here when no community/collection is provided %>
       <legend class="mb-0">
         <%= t('.community_and_collection') %>
       </legend>
@@ -114,7 +88,6 @@
 
       <div class="js-communities-collections-list">
         <% if @draft.communities.present? %>
-
           <% @draft.each_community_collection do |community, collection| %>
             <%= render partial: 'community_collection_input',
                 locals: { community: community, collection: collection } %>
@@ -123,12 +96,6 @@
           <%= render partial: 'community_collection_input',
               locals: { community: nil, collection: nil} %>
         <% end %>
-      </div>
-      <div class="d-flex flex-row-reverse">
-        <div class="p-3">
-          <%= link_to "#{fa_icon('plus')} #{t(:add_another_community_collection)}".html_safe,
-              '#', class: 'btn btn-secondary js-add-community-collection' %>
-        </div>
       </div>
     </fieldset>
 
@@ -152,76 +119,96 @@
               role="tabpanel"
               aria-labelledby="js-heading-additional-fields">
           <div class="card-body">
-            <%= f.input :contributors,
-                label: t('.contributors'),
-                collection: @draft.contributors || [],
+
+            <%= f.input :date_submitted,
+                as: :date,
+                label: t('.date_submitted'),
+                order: [:year, :month, :day],
+                prompt: {
+                  day: t('select_a_day'),
+                  month: t('select_a_month'),
+                  year: t('select_a_year')
+                },
+                start_year: Date.today.year + 1,
+                end_year: Date.today.year - 100,
+                input_html: { class: 'mr-2 mb-2', 'aria-labelledby': 'draft_date_submitted_1i' } %>
+
+            <%= f.input :date_accepted,
+                as: :date,
+                label: t('.date_accepted'),
+                order: [:year, :month, :day],
+                prompt: {
+                  day: t('select_a_day'),
+                  month: t('select_a_month'),
+                  year: t('select_a_year')
+                },
+                start_year: Date.today.year + 1,
+                end_year: Date.today.year - 100,
+                input_html: { class: 'mr-2 mb-2', 'aria-labelledby': 'draft_date_accepted_1i' } %>
+
+            <%= f.input :degree_level,
+                label: t('.degree_level') %>
+
+            <%= f.input :degree,
+                label: t('.degree') %>
+
+            <%= f.input :specialization,
+                label: t('.specialization') %>
+
+            <%= f.association :institution,
+                label: t('.institution_id'),
+                label_method: :translated_name,
+                value_method: :id,
+                prompt: t('.institution_id_placeholder') %>
+
+            <%= f.input :departments,
+                label: t('.departments'),
+                collection: @draft.departments || [],
                 include_hidden: false,
                 input_html: {
                   multiple: true,
-                  data: { placeholder: t('.contributors_placeholder') },
+                  data: { placeholder: t('.departments_placeholder') },
                   class: 'js-selectize-create'
                 },
-                include_blank: false,
-                hint: t('.contributors_help') %>
+                include_blank: false %>
 
-            <%= f.input :places,
-                label: t('.places'),
-                collection: @draft.places || [],
+            <%= f.input :supervisors,
+                label: t('.supervisors'),
+                collection: @draft.supervisors || [],
                 include_hidden: false,
                 input_html: {
                   multiple: true,
-                  data: { placeholder: t('.places_placeholder') },
+                  data: { placeholder: t('.supervisors_placeholder') },
                   class: 'js-selectize-create'
                 },
                 include_blank: false,
-                hint: t('.places_help') %>
+                hint: t('.supervisors_help') %>
 
-            <%= f.input :time_periods,
-                label: t('.time_periods'),
-                collection: @draft.time_periods || [],
+            <%= f.input :committee_members,
+                label: t('.committee_members'),
+                collection: @draft.committee_members || [],
                 include_hidden: false,
                 input_html: {
                   multiple: true,
-                  data: { placeholder: t('.time_periods_placeholder') },
+                  data: { placeholder: t('.committee_members_placeholder') },
                   class: 'js-selectize-create'
                 },
                 include_blank: false,
-                hint: t('.time_periods_help_html') %>
-
-            <%= f.input :citations,
-                label: t('.citations'),
-                collection: @draft.citations || [],
-                include_hidden: false,
-                input_html: {
-                  multiple: true,
-                  data: { placeholder: t('.citations_placeholder') },
-                  class: 'js-selectize-create'
-                },
-                include_blank: false,
-                hint: t('.citations_help') %>
-
-            <%= f.input :source,
-                label: t('.source'),
-                hint: t('.source_help') %>
-
-            <%= f.input :related_item,
-                label: t('.related_item'),
-                hint: t('.related_item_help') %>
+                hint: t('.committee_members_help') %>
           </div>
         </div>
       </div>
     </div>
 
     <div class="mt-3 d-flex flex-wrap justify-content-end">
-      <%= link_to root_path, class: 'btn btn-secondary mr-2' do %>
+      <%= link_to admin_items_path, class: 'btn btn-secondary mr-2' do %>
         <%= fa_icon 'ban' %>
         <%= t('cancel') %>
       <% end %>
       <%= f.button :button, type: :submit, class: 'btn btn-primary' do %>
-        <%= t('items.draft.save_and_continue') %>
+        <%= t('admin.theses.draft.save_and_continue') %>
         <%= fa_icon 'chevron-right' %>
       <% end %>
     </div>
-
   <% end %>
 </div>

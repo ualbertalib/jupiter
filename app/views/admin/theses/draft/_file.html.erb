@@ -1,16 +1,16 @@
 <li class="media mb-3 p-3 border">
 
-  <%= render partial: 'items/draft/thumbnail', locals: { file: file } %>
+  <%= render partial: 'admin/theses/draft/thumbnail', locals: { file: file } %>
 
   <div class="media-body ml-3">
     <div class="float-right">
       <% if @draft.thumbnail != file %>
-        <%= link_to set_thumbnail_item_file_path(@draft, file), method: :patch, remote: true, class: 'btn btn-secondary mb-2 mb-md-0' do %>
+        <%= link_to set_thumbnail_admin_thesis_file_path(@draft, file), method: :patch, remote: true, class: 'btn btn-secondary mb-2 mb-md-0' do %>
           <%= fa_icon 'file-image-o' %>
           <%= t('.set_as_thumbnail') %>
         <% end %>
       <% end %>
-      <%= link_to item_file_path(@draft, file),
+      <%= link_to admin_thesis_file_path(@draft, file),
                   method: :delete,
                   remote: true,
                   data: { confirm: t('.delete_file_dialog') },

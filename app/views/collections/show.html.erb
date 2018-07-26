@@ -37,11 +37,22 @@
     <h2 class="mr-auto">
       <%= t('.items_list_header') %>
     </h2>
-    <% if policy(:item).new? %>
-      <%= link_to create_draft_items_path(collection: @collection.id), method: :post,
-          class: 'btn btn-primary' do %>
-        <%= fa_icon('plus-circle') %>
-        <%= t('.deposit_item') %>
+
+    <% if @collection.restricted.blank? %>
+      <% if policy(:item).new? %>
+        <%= link_to create_draft_items_path(collection: @collection.id), method: :post,
+            class: 'btn btn-primary' do %>
+          <%= fa_icon('plus-circle') %>
+          <%= t('.deposit_item') %>
+        <% end %>
+      <% end %>
+    <% else %>
+      <% if policy(:thesis).new? %>
+        <%= link_to create_draft_admin_theses_path(collection: @collection.id), method: :post,
+            class: 'btn btn-primary' do %>
+          <%= fa_icon('plus-circle') %>
+          <%= t('.deposit_thesis') %>
+        <% end %>
       <% end %>
     <% end %>
   </div>

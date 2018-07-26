@@ -1,6 +1,6 @@
 module Items::DraftHelper
-  def progress_bar_step_class(wizard_step)
-    if @draft_item.uncompleted_step?(wizard_step)
+  def progress_bar_step_class(wizard_step, draft)
+    if draft.uncompleted_step?(draft.class.wizard_steps, wizard_step)
       'disabled'
     elsif wizard_step == step
       'active'
@@ -10,7 +10,11 @@ module Items::DraftHelper
   end
 
   def header
-    @is_edit ? t('items.draft.header_edit') : t('items.draft.header')
+    if @draft.is_a? DraftItem
+      @is_edit ? t('items.draft.header_edit') : t('items.draft.header')
+    else
+      @is_edit ? t('admin.theses.draft.header_edit') : t('admin.theses.draft.header')
+    end
   end
 
   def progress_bar_percentage

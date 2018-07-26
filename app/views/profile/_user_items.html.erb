@@ -27,7 +27,7 @@
 
             <% if policy(draft_item).destroy? %>
               <%= link_to item_delete_draft_path(item_id: draft_item.id), class: 'btn btn-outline-secondary', method: :delete,
-                  data: {confirm: t('items.draft.delete_confirm', title: draft_item.title) } do %>
+                  data: { confirm: t('items.draft.delete_confirm', title: draft_item.title) } do %>
                 <%= fa_icon('trash') %>
                 <%= t('delete') %>
               <% end %>
@@ -42,6 +42,47 @@
     </div>
   <% end %>
 </div>
+
+<% if @draft_theses.present? %>
+  <h2 class="mt-5"><%= draft_theses_header %></h2>
+  <div class="test-draft-theses list-group mb-3">
+    <% @draft_theses.each do |draft_thesis| %>
+      <div class='list-group-item list-group-item-action'>
+        <div class="d-flex flex-wrap justify-content-between align-items-start mb-3">
+          <div class='media'>
+            <%= render partial: 'thumbnail', locals: { object: draft_thesis } %>
+            <div class="media-body ml-3">
+              <h4 class="mt-0"><%= draft_thesis.title %></h4>
+              <p class="text-muted"><%= draft_thesis.graduation_term %> <%= draft_thesis.graduation_year %></p>
+              <p class="text-muted"><%= draft_thesis.creator %></p>
+              <p class="text-muted"><%= jupiter_truncate draft_thesis.description %></p>
+            </div>
+          </div>
+
+          <div class="btn-group" role="group" aria-label="Draft Item Actions">
+            <% if policy(draft_thesis).update? %>
+              <%= link_to admin_thesis_draft_path(thesis_id: draft_thesis.id, id: draft_thesis.last_completed_step),
+                          class:'btn btn-outline-primary' do %>
+                <%= fa_icon('pencil-square-o') %>
+                <%= t('admin.theses.draft.continue_draft') %>
+              <% end %>
+            <% end %>
+
+            <% if policy(draft_thesis).destroy? %>
+              <%= link_to admin_thesis_delete_draft_path(thesis_id: draft_thesis.id),
+                          class: 'btn btn-outline-secondary',
+                          method: :delete,
+                          data: { confirm: t('admin.theses.draft.delete_confirm', title: draft_thesis.title) } do %>
+                <%= fa_icon('trash') %>
+                <%= t('delete') %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>
 
 <h2 class="mt-5"><%= items_header %></h2>
 

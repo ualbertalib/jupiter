@@ -94,6 +94,40 @@ ActiveRecord::Schema.define(version: 2018_06_20_203953) do
     t.index ["language_id"], name: "index_draft_items_languages_on_language_id"
   end
 
+  create_table "draft_theses", force: :cascade do |t|
+    t.string "uuid"
+    t.integer "status", default: 0, null: false
+    t.integer "wizard_step", default: 0, null: false
+    t.bigint "user_id", null: false
+    t.integer "thumbnail_id"
+    t.string "title"
+    t.string "alternate_title"
+    t.string "creator"
+    t.text "description"
+    t.string "degree"
+    t.string "degree_level"
+    t.string "specialization"
+    t.string "graduation_term"
+    t.integer "graduation_year"
+    t.bigint "language_id"
+    t.bigint "institution_id"
+    t.datetime "date_accepted"
+    t.datetime "date_submitted"
+    t.text "rights"
+    t.integer "visibility", default: 0, null: false
+    t.datetime "embargo_end_date"
+    t.json "member_of_paths"
+    t.json "subjects", array: true
+    t.json "supervisors", array: true
+    t.json "departments", array: true
+    t.json "committee_members", array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["institution_id"], name: "index_draft_theses_on_institution_id"
+    t.index ["language_id"], name: "index_draft_theses_on_language_id"
+    t.index ["user_id"], name: "index_draft_theses_on_user_id"
+  end
+
   create_table "identities", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "uid", null: false
@@ -102,6 +136,12 @@ ActiveRecord::Schema.define(version: 2018_06_20_203953) do
     t.datetime "updated_at", null: false
     t.index ["uid", "provider"], name: "index_identities_on_uid_and_provider", unique: true
     t.index ["user_id"], name: "index_identities_on_user_id"
+  end
+
+  create_table "institutions", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "item_doi_states", force: :cascade do |t|
@@ -142,4 +182,7 @@ ActiveRecord::Schema.define(version: 2018_06_20_203953) do
 
   add_foreign_key "announcements", "users"
   add_foreign_key "draft_items", "users"
+  add_foreign_key "draft_theses", "institutions"
+  add_foreign_key "draft_theses", "languages"
+  add_foreign_key "draft_theses", "users"
 end

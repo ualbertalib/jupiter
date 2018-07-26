@@ -20,6 +20,36 @@ class ProfileIndexTest < ApplicationSystemTestCase
     assert_selector '.test-draft-items .list-group-item .media-body h4', text: user.draft_items.first.title
     assert_selector '.test-draft-items .list-group-item .media-body h4', text: user.draft_items.last.title
 
+    # # Should not show draft theses
+    refute_selector 'h2', text: I18n.t('profile.index.draft_theses_header')
+    assert_selector '.test-draft-theses .list-group-item', count: 0
+
+    logout_user
+  end
+
+  test 'should show draft theses if available' do
+    admin = users(:admin)
+
+    login_user(admin)
+
+    click_link admin.name # opens user dropdown which has the profile link
+    click_link I18n.t('application.navbar.links.profile')
+
+    assert_selector 'h1', text: admin.name
+    assert_selector 'dl dd', text: admin.email
+    assert_selector 'dl dd', text: admin.created_at.to_date.to_s
+
+    # Shows draft items - admin has none so show no items found
+    assert_selector 'h2', text: I18n.t('profile.index.draft_items_header')
+    assert_selector '.test-draft-items .list-group-item', count: 1
+    assert_selector '.test-draft-items .list-group-item', text: 'No items found'
+
+    # # Should show draft theses
+    assert_selector 'h2', text: I18n.t('profile.index.draft_theses_header')
+    assert_selector '.test-draft-theses .list-group-item', count: 2
+    assert_selector '.test-draft-theses .list-group-item .media-body h4', text: admin.draft_theses.first.title
+    assert_selector '.test-draft-theses .list-group-item .media-body h4', text: admin.draft_theses.last.title
+
     logout_user
   end
 

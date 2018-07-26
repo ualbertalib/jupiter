@@ -1,0 +1,33 @@
+inactive:
+  user: admin
+
+completed_describe_thesis_step:
+  user: admin
+  status: <%= DraftThesis.statuses[:active] %>
+  wizard_step: <%= DraftThesis.wizard_steps[:describe_thesis] %>
+  title: 'Thesis on Dogs'
+  creator: 'Andrew Smith'
+  graduation_term: 'Spring'
+  graduation_year: 2017
+  description: >
+    'Doggo ipsum long woofer much ruin diet waggy wags borkdrive, pupper doggo long doggo,
+    such treat doggorino. Most angery pupper I have ever seen thicc long woofer much ruin
+    diet borkf heckin corgo, fat boi heckin good boys and girls super chub heck.'
+
+completed_choose_license_and_visibility_step:
+  user: admin
+  status: <%= DraftThesis.statuses[:active] %>
+  wizard_step: <%= DraftThesis.wizard_steps[:choose_license_and_visibility] %>
+  title: 'Thesis on Cats'
+  creator: 'Andrew Smith'
+  graduation_term: 'Fall'
+  graduation_year: 2018
+  description: >
+    'Jump off balcony, onto stranger's head meow for food, then when human fills food
+    dish, take a few bites of food and continue meowing kitten is playing with dead mouse,
+    gnaw the corn cob yet i show my fluffy belly but it's a trap! Scoot butt on the rug.
+    Meow for food, then when human fills food dish, Eat from dog's food run in circles,
+    and ears back wide eyed and plan steps for world domination.'
+  visibility: <%= DraftThesis.visibilities[:embargo] %>
+  embargo_end_date: <%= Date.current + 5.year %>
+  rights: 'License text goes here'

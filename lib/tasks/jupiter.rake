@@ -3,17 +3,23 @@ namespace :jupiter do
   # For example if someone goes to the deposit screen and then leaves
   # a draft item gets created and left in an inactive state.
   # This rake task is to cleanup these inactive draft items
-  desc 'removes stale inactive draft items from the database'
-  task remove_inactive_draft_items: :environment do
+  desc 'removes stale inactive drafts from the database'
+  task remove_inactive_drafts: :environment do
     # Find all the inactive draft items older than yesterday
     inactive_draft_items = DraftItem.where('DATE(created_at) < DATE(?)', Date.yesterday).where(status: :inactive)
-
     puts "Deleting #{inactive_draft_items.count} Inactive Draft Items..."
 
     # delete them all
     inactive_draft_items.destroy_all
 
-    puts 'Cleanup of Inactive Draft Items now completed!'
+    # Find all the inactive draft theses older than yesterday
+    inactive_draft_theses = DraftThesis.where('DATE(created_at) < DATE(?)', Date.yesterday).where(status: :inactive)
+    puts "Deleting #{inactive_draft_theses.count} Inactive Draft Theses..."
+
+    # delete them all
+    inactive_draft_theses.destroy_all
+
+    puts 'Cleanup of Inactive Draft Items and Draft Theses now completed!'
   end
 
   desc 'fetch and unlock every object then save'
