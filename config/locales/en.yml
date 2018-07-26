@@ -320,6 +320,7 @@ en:
         login_as_user_dialog: "Are you sure you want to login as %{user}?"
         login_as_user_flash: "You are now logged in as %{user}"
         draft_items_header: "Draft User's Items"
+        draft_theses_header: "Draft User's Theses"
         search_placeholder: "Search this user's items ..."
         items_header: "User's Items"
       index:
@@ -445,6 +446,7 @@ en:
     index:
       my_profile: 'My profile'
       draft_items_header: "My Draft Items"
+      draft_theses_header: "My Draft Theses"
       items_header: "My Items"
     user_items:
       search_placeholder: 'Search my items ...'

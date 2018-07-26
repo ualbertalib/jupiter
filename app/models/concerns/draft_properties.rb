@@ -73,7 +73,7 @@ module DraftProperties
       # Comment above in `#uncompleted_step?` applies here with regards to the extra logic around active state
       # and getting the next step instead of the current step
       if active?
-        DraftItem.wizard_steps.key(DraftItem.wizard_steps.fetch(wizard_step) + 1).to_sym
+        self.class.wizard_steps.key(self.class.wizard_steps.fetch(wizard_step) + 1).to_sym
       else
         wizard_step
       end
