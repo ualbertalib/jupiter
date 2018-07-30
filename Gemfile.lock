@@ -141,8 +141,9 @@ GEM
     et-orbi (1.1.2)
       tzinfo
     execjs (2.7.0)
-    ezid-client (1.7.1)
+    ezid-client (1.8.0)
       hashie (~> 3.4, >= 3.4.3)
+      nokogiri
     faker (1.9.1)
       i18n (>= 0.7)
     faraday (0.12.2)
