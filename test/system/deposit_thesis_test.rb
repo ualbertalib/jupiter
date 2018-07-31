@@ -38,7 +38,7 @@ class DepositThesisTest < ApplicationSystemTestCase
             with: 'Jane Doe'
 
     select 2018, from: I18n.t('admin.theses.draft.describe_thesis.graduation_year')
-    select 'Spring', from: I18n.t('admin.theses.draft.describe_thesis.graduation_term')
+    select '06 (Spring)', from: I18n.t('admin.theses.draft.describe_thesis.graduation_term')
 
     fill_in I18n.t('admin.theses.draft.describe_thesis.description'),
             with: 'A Dance with Dragons Description Goes Here!!!'

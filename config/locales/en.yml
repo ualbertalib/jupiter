@@ -333,8 +333,8 @@ en:
         no_users_found: 'We could not find any users matching your search.'
     theses:
       graduation_terms:
-        spring: 'Spring'
-        fall: 'Fall'
+        spring: '06 (Spring)'
+        fall: '11 (Fall)'
       draft:
         header: 'Deposit Thesis'
         header_edit: 'Edit Thesis'

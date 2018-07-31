@@ -64,7 +64,7 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
         title: 'Random Thesis',
         creator: 'Jane Doe',
         graduation_year: 2018,
-        graduation_term: 'Spring',
+        graduation_term: '06',
         description: 'Really random description about this random thesis',
         community_id: [@community.id],
         collection_id: [@collection.id]

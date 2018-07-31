@@ -50,4 +50,8 @@ module Items::DraftHelper
       falsey_value
     end
   end
+
+  def university_inception_year
+    1908
+  end
 end
