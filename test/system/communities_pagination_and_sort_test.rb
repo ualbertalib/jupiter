@@ -93,6 +93,9 @@ class CommunitiesPaginationAndSortTest < ApplicationSystemTestCase
     assert_selector 'li:last-child a', text: 'Nice Community 09'
     # The Last 'Fancy' community should be on next page
     refute_selector 'a', text: 'Fancy Community 10'
+
+    skip 'The rest of this test continues to flap on CI for unknown reasons that should be investigated ASAP'
+
     click_link 'Next'
     assert_equal URI.parse(current_url).request_uri, communities_path(sort: 'record_created_at',
                                                                       direction: 'asc', page: '2')
