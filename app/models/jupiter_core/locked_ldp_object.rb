@@ -694,6 +694,11 @@ class JupiterCore::LockedLdpObject
     #
     #    additional_search_index :downcased_title, solrize_for: :exact_match, as: -> { title.downcase }
     #
+    # Note! Although Ruby makes this difficult to detect an enforce at declaration time, ANY data being used to create
+    # the index SHOULD be recreatable solely by inspecting the Fedora record for the object, and SHOULD NOT require that
+    # other objects already be indexed! This isn't a solution to any desire to avoid adding data to Fedora!
+    # See recover.rake and collection.rb's note on +additional_search_index :community_title` for an example of the
+    # ordering dependency issues that are created if the Solr index depends on the existence of other records.
     def additional_search_index(name, solrize_for:, type: :symbol, as:)
       raise JupiterCore::PropertyInvalidError unless as.respond_to?(:call)
       raise JupiterCore::PropertyInvalidError if name.blank?
