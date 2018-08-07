@@ -15,8 +15,15 @@ class Collection < JupiterCore::LockedLdpObject
   has_attribute :restricted, ::TERMS[:ual].restricted_collection, type: :boolean, solrize_for: :exact_match
   has_multival_attribute :creators, ::RDF::Vocab::DC.creator, solrize_for: :exact_match
 
+  # TODO: refactor this next line and move the title into Fedora, if we're still on Fedora at that point.
+  #
+  # We got lucky in that there are not expected to be a large number of Collections in this phase of Jupiter
+  # but using +additional_search_index+ to store data that isn't recreatable solely by inspecting this object's
+  # Fedora record creates data-ordering issues that are complicated to work around during Solr-index recovery
+  # scenarios. See recover.rake for information on the particular problems this is causing and why we want to
+  # eliminate it.
   additional_search_index :community_title, solrize_for: :sort,
-                                            as: -> { Community.find_by(id: community_id)&.title }
+                                            as: -> { Community.find(community_id).title if community_id.present? }
 
   def community
     Community.find(community_id)
