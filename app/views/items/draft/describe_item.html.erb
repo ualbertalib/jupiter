@@ -85,7 +85,7 @@
                   year: t('select_a_year')
                 },
                 start_year: Date.today.year + 1,
-                end_year: university_inception_year,
+                end_year: DraftProperties::UNIVERSITY_INCEPTION_YEAR,
                 input_html: { class: 'mr-2 mb-2', 'aria-labelledby': 'draft_item_date_created_1i' },
                 required: true,
                 hint: t('.date_created_help') %>

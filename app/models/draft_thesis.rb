@@ -2,6 +2,10 @@ class DraftThesis < ApplicationRecord
 
   include DraftProperties
 
+  # Metadata team prefers we store and use a number (e.g. '06' or '11')
+  # to represent the graduation term (e.g. Spring or Fall)
+  # This TERMS constant is used by the graduation term dropdown on the deposit form,
+  # mapping the string label to the number value that we wish to use.
   TERMS = [
     [I18n.t('admin.theses.graduation_terms.spring'), '06'],
     [I18n.t('admin.theses.graduation_terms.fall'), '11']
