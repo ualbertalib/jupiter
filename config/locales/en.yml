@@ -713,6 +713,8 @@ en:
     sort_sort_year_desc: 'Date (newest first)'
     sort_title_asc: 'Title (A-Z)'
     sort_title_desc: 'Title (Z-A)'
+    sort_relevance_desc: 'Relevance'
+    sort_relevance_asc: 'Least Relevant First'
     tab_header_item_with_count: 'Items (%{count})'
     tab_header_collection_with_count: 'Collections (%{count})'
     tab_header_community_with_count: 'Communities (%{count})'

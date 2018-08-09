@@ -254,6 +254,7 @@ class SearchTest < ApplicationSystemTestCase
     assert_selector 'a', text: 'Title (Z-A)'
     assert_selector 'a', text: 'Date (newest first)'
     assert_selector 'a', text: 'Date (oldest first)'
+    assert_selector 'a', text: 'Relevance'
 
     # Reverse sort
     click_link 'Title (Z-A)'
