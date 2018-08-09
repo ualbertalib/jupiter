@@ -77,15 +77,27 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should get results in alphabetical order when no query present' do
-    get search_url
+    get search_url, as: :json
     assert_response :success
-    assert_equal [@item1.id, @item4.id, @item2.id, @item5.id, @item3.id], assigns[:results].to_a.map(&:id)
+    data = JSON.parse(response.body)
+    assert_equal [@item1.id, @item4.id, @item2.id, @item5.id, @item3.id], data.map { |result| result['id'] }
   end
 
   test 'should get results in relevance order when a query is present' do
+
+    get search_url, as: :json, params: { search: 'Moose' }
+    assert_response :success
+    data = JSON.parse(response.body)
+    assert_equal [@item2.id, @item5.id, @item4.id], data.map { |result| result['id'] }
+  end
+
+  test 'should work when asking for HTML results too' do
     get search_url, params: { search: 'Moose' }
     assert_response :success
-    assert_equal [@item2.id, @item5.id, @item4.id], assigns[:results].to_a.map(&:id)
+
+    [@item2, @item5, @item4].each do |expected_result|
+      assert_match /<a href="\/items\/#{expected_result.id}">/, response.body
+    end
   end
 
 end

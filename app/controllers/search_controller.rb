@@ -33,6 +33,11 @@ class SearchController < ApplicationController
     @results = JupiterCore::Search.faceted_search(search_opts)
                                   .sort(sort_field, search_params[:direction])
                                   .page(search_params[:page])
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @results }
+    end
   end
 
   attr_reader :results

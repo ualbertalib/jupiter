@@ -86,6 +86,10 @@ module ItemProperties
       end
     end
 
+    def as_json(_options)
+      super(only: [:id, :title, :doi, :creators, :dissertant, :abstract, :description, :created, :graduation_date])
+    end
+
     unlocked do
       before_save :handle_doi_states
       after_create :handle_doi_states
