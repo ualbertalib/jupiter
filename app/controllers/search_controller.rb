@@ -26,9 +26,18 @@ class SearchController < ApplicationController
     search_opts = { q: query, models: @search_models, as: current_user,
                     facets: search_params[:facets], ranges: search_params[:ranges] }
 
+    # sort by relelvance if a search term is present and no explicit sort field has been chosen
+    sort_field = search_params[:sort]
+    sort_field ||= :relevance if query.present?
+
     @results = JupiterCore::Search.faceted_search(search_opts)
-                                  .sort(search_params[:sort], search_params[:direction])
+                                  .sort(sort_field, search_params[:direction])
                                   .page(search_params[:page])
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @results }
+    end
   end
 
   attr_reader :results

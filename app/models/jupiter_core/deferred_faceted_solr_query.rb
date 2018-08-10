@@ -39,16 +39,26 @@ class JupiterCore::DeferredFacetedSolrQuery
 
   def sort(attr, order = nil)
     if attr.present?
+      attr = attr.to_sym
       solr_name = begin
-                    criteria[:restrict_to_model].first.owning_class.solr_name_for(attr.to_sym, role: :sort)
+                    if attr == :relevance
+                      :score
+                    else
+                      criteria[:restrict_to_model].first.owning_class.solr_name_for(attr, role: :sort)
+                    end
                   rescue ArgumentError
                     nil
                   end
       criteria[:sort] = [solr_name] if solr_name.present?
     end
     criteria[:sort] = criteria[:restrict_to_model].first.owning_class.default_sort_indexes if criteria[:sort].blank?
+
+    # Note the elsif: if no explicit order was passed from the user, and we're ordering by score, we default
+    # to sorting scores descending rather than ascending, as is otherwise used when eg) title is the default sort field
     criteria[:sort_order] = if order.present? && [:asc, :desc].include?(order.to_sym)
                               [order]
+                            elsif criteria[:sort] == [:score]
+                              [:desc]
                             else
                               criteria[:restrict_to_model].first.owning_class.default_sort_direction
                             end
@@ -119,6 +129,8 @@ class JupiterCore::DeferredFacetedSolrQuery
   end
 
   def used_sort_index
+    return :relevance if criteria[:sort].first == :score
+
     model = criteria[:restrict_to_model].first.owning_class
     model.reverse_solr_name_cache[criteria[:sort].first]
   end
