@@ -51,7 +51,7 @@ gem 'omniauth-saml'
 gem 'pundit'
 
 # Background tasks
-gem 'sidekiq', '~> 5.1'
+gem 'sidekiq', '~> 5.2'
 gem 'sidekiq-unique-jobs'
 gem 'sinatra', '~> 2.0.3' # used by sidekiq/web
 # Sidekiq cron jobs
