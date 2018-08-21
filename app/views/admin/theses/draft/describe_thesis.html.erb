@@ -61,14 +61,13 @@
 
     <%= f.input :graduation_term,
                 label: t('.graduation_term'),
-                required: true,
                 collection: DraftThesis::TERMS,
                 include_blank: t('.graduation_term_placeholder') %>
 
     <%= f.input :graduation_year,
                 label: t('.graduation_year'),
                 required: true,
-                collection: (Date.today.year + 1).downto(Date.today.year - 100),
+                collection: (Date.today.year + 1).downto(DraftProperties::UNIVERSITY_INCEPTION_YEAR),
                 include_blank: t('select_a_year') %>
 
     <fieldset>
@@ -130,7 +129,7 @@
                   year: t('select_a_year')
                 },
                 start_year: Date.today.year + 1,
-                end_year: Date.today.year - 100,
+                end_year: DraftProperties::UNIVERSITY_INCEPTION_YEAR,
                 input_html: { class: 'mr-2 mb-2', 'aria-labelledby': 'draft_date_submitted_1i' } %>
 
             <%= f.input :date_accepted,
@@ -143,7 +142,7 @@
                   year: t('select_a_year')
                 },
                 start_year: Date.today.year + 1,
-                end_year: Date.today.year - 100,
+                end_year: DraftProperties::UNIVERSITY_INCEPTION_YEAR,
                 input_html: { class: 'mr-2 mb-2', 'aria-labelledby': 'draft_date_accepted_1i' } %>
 
             <%= f.input :degree_level,

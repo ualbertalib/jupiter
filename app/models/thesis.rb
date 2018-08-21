@@ -67,7 +67,11 @@ class Thesis < JupiterCore::LockedLdpObject
       unlocked_obj.dissertant = draft_thesis.creator
       unlocked_obj.abstract = draft_thesis.description
 
-      unlocked_obj.graduation_date = "#{draft_thesis.graduation_term} #{draft_thesis.graduation_year}"
+      unlocked_obj.graduation_date = if draft_thesis.graduation_term.present?
+                                       "#{draft_thesis.graduation_year}-#{draft_thesis.graduation_term}"
+                                     else
+                                       draft_thesis.graduation_year.to_s
+                                     end
 
       # Handle visibility plus embargo logic
       unlocked_obj.visibility = draft_thesis.visibility_as_uri

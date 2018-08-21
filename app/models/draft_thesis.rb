@@ -2,7 +2,14 @@ class DraftThesis < ApplicationRecord
 
   include DraftProperties
 
-  TERMS = [I18n.t('admin.theses.graduation_terms.spring'), I18n.t('admin.theses.graduation_terms.fall')].freeze
+  # Metadata team prefers we store and use a number (e.g. '06' or '11')
+  # to represent the graduation term (e.g. Spring or Fall)
+  # This TERMS constant is used by the graduation term dropdown on the deposit form,
+  # mapping the string label to the number value that we wish to use.
+  TERMS = [
+    [I18n.t('admin.theses.graduation_terms.spring'), '06'],
+    [I18n.t('admin.theses.graduation_terms.fall'), '11']
+  ].freeze
 
   enum wizard_step: { describe_thesis: 0,
                       choose_license_and_visibility: 1,
@@ -21,7 +28,7 @@ class DraftThesis < ApplicationRecord
   belongs_to :institution, optional: true
 
   validates :title, :description, :creator,
-            :member_of_paths, :graduation_term, :graduation_year,
+            :member_of_paths, :graduation_year,
             presence: true, if: :validate_describe_thesis?
 
   validate :communities_and_collections_presence,
@@ -38,7 +45,7 @@ class DraftThesis < ApplicationRecord
       language: language_for_uri(thesis.language),
       creator: thesis.dissertant,
       subjects: thesis.subject,
-      graduation_term: thesis.graduation_date.match(/(Spring|Fall)/)[0],
+      graduation_term: parse_graduation_term_from_fedora(thesis.graduation_date),
       graduation_year: thesis.sort_year,
       description: thesis.abstract,
       visibility: visibility_for_uri(thesis.visibility),
@@ -140,6 +147,12 @@ class DraftThesis < ApplicationRecord
   end
 
   private
+
+  def parse_graduation_term_from_fedora(graduation_date)
+    result = graduation_date&.match(/-(06|11)/)
+    result = result[0]&.gsub!('-', '') if result.present?
+    result
+  end
 
   def validate_describe_thesis?
     (active? && describe_thesis?) || validate_choose_license_and_visibility?
