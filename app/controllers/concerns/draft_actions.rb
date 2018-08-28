@@ -37,7 +37,7 @@ module DraftActions
 
     case wizard_value(step)
     when describe_step_name
-      params[draft_param][:status] = draft_class.statuses[:active]
+      params[draft_param][:status] = draft_class.statuses[:active] unless @draft.archived?
 
       @draft.member_of_paths = { community_id: [], collection_id: [] }
       communities = params[draft_param].delete :community_id

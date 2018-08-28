@@ -8,7 +8,7 @@ end
 # Core Rails stuff
 gem 'image_processing'
 gem 'puma', '~> 3.12'
-gem 'rails', '~> 5.2.0'
+gem 'rails', '~> 5.2.1'
 
 # Assets (CSS/JS) stuff
 gem 'bootstrap', '~> 4.1.3'
@@ -39,7 +39,7 @@ gem 'solrizer', github: 'mbarnett/solrizer', branch: 'literally_types'
 
 # Database stuff
 gem 'connection_pool'
-gem 'pg', '~> 1.0.0'
+gem 'pg', '~> 1.1.1'
 gem 'redis', '~> 4.0'
 gem 'rsolr'
 
@@ -51,7 +51,7 @@ gem 'omniauth-saml'
 gem 'pundit'
 
 # Background tasks
-gem 'sidekiq', '~> 5.1'
+gem 'sidekiq', '~> 5.2'
 gem 'sidekiq-unique-jobs'
 gem 'sinatra', '~> 2.0.3' # used by sidekiq/web
 # Sidekiq cron jobs

@@ -41,13 +41,13 @@ class DraftThesisTest < ActiveSupport::TestCase
     draft_thesis = DraftThesis.new(user: user, status: DraftThesis.statuses[:active])
 
     assert_not draft_thesis.valid?
-    assert_equal 6, draft_thesis.errors.full_messages.count
+    assert_equal 5, draft_thesis.errors.full_messages.count
 
     draft_thesis.assign_attributes(
       title: 'Thesis of Random',
       creator: 'Jane Doe',
       description: 'Really random description about this random thesis',
-      graduation_term: 'Spring',
+      graduation_term: '06',
       graduation_year: 2018,
       member_of_paths: { community_id: [@community.id], collection_id: [@collection.id] }
     )
@@ -65,7 +65,7 @@ class DraftThesisTest < ActiveSupport::TestCase
       title: 'Thesis of Random',
       creator: 'Jane Doe',
       description: 'Really random description about this random thesis',
-      graduation_term: 'Spring',
+      graduation_term: '06',
       graduation_year: 2018,
       member_of_paths: { community_id: [@community.id], collection_id: [@collection.id] },
       visibility: nil,
@@ -96,7 +96,7 @@ class DraftThesisTest < ActiveSupport::TestCase
       title: 'Thesis of Random',
       creator: 'Jane Doe',
       description: 'Really random description about this random thesis',
-      graduation_term: 'Spring',
+      graduation_term: '06',
       graduation_year: 2018,
       visibility: DraftThesis.visibilities[:open_access],
       rights: 'License text goes here',
@@ -126,7 +126,7 @@ class DraftThesisTest < ActiveSupport::TestCase
       title: 'Thesis of Random',
       creator: 'Jane Doe',
       description: 'Really random description about this random thesis',
-      graduation_term: 'Spring',
+      graduation_term: '06',
       graduation_year: 2018,
       member_of_paths: { community_id: [@community.id], collection_id: [@collection.id] },
       visibility: DraftThesis.visibilities[:embargo],
@@ -152,7 +152,7 @@ class DraftThesisTest < ActiveSupport::TestCase
       title: 'Thesis of Random',
       creator: 'Jane Doe',
       description: 'Really random description about this random thesis',
-      graduation_term: 'Spring',
+      graduation_term: '06',
       graduation_year: 2018,
       member_of_paths: { community_id: nil, collection_id: nil }
     )
@@ -185,7 +185,7 @@ class DraftThesisTest < ActiveSupport::TestCase
       title: 'Thesis of Random',
       creator: 'Jane Doe',
       description: 'Really random description about this random thesis',
-      graduation_term: 'Spring',
+      graduation_term: '06',
       graduation_year: 2018,
       member_of_paths: { community_id: [@community.id], collection_id: [@collection.id] }
     )
@@ -207,13 +207,24 @@ class DraftThesisTest < ActiveSupport::TestCase
       title: 'Thesis of Random',
       creator: 'Jane Doe',
       description: 'Really random description about this random thesis',
-      graduation_term: 'Spring',
+      graduation_term: '06',
       graduation_year: 2018,
       member_of_paths: { community_id: [@community.id], collection_id: [non_restricted_collection.id] }
     )
 
     assert_not draft_thesis.valid?
     assert_equal ['Deposit is restricted for this collection'], draft_thesis.errors.messages[:member_of_paths]
+  end
+
+  test 'parse_graduation_term_from_fedora works correctly' do
+    user = users(:admin)
+    draft_thesis = DraftThesis.new(user: user)
+
+    assert_equal '11', draft_thesis.send(:parse_graduation_term_from_fedora, '2018-11')
+    assert_equal '06', draft_thesis.send(:parse_graduation_term_from_fedora, '2018-06')
+    assert_nil draft_thesis.send(:parse_graduation_term_from_fedora, '2018-03')
+    assert_nil draft_thesis.send(:parse_graduation_term_from_fedora, '2018')
+    assert_nil draft_thesis.send(:parse_graduation_term_from_fedora, nil)
   end
 
 end

@@ -7,7 +7,7 @@ completed_describe_thesis_step:
   wizard_step: <%= DraftThesis.wizard_steps[:describe_thesis] %>
   title: 'Thesis on Dogs'
   creator: 'Andrew Smith'
-  graduation_term: 'Spring'
+  graduation_term: '06'
   graduation_year: 2017
   description: >
     'Doggo ipsum long woofer much ruin diet waggy wags borkdrive, pupper doggo long doggo,
@@ -20,7 +20,7 @@ completed_choose_license_and_visibility_step:
   wizard_step: <%= DraftThesis.wizard_steps[:choose_license_and_visibility] %>
   title: 'Thesis on Cats'
   creator: 'Andrew Smith'
-  graduation_term: 'Fall'
+  graduation_term: '11'
   graduation_year: 2018
   description: >
     'Jump off balcony, onto stranger's head meow for food, then when human fills food
