@@ -1,12 +1,14 @@
 INGEST_REPORTS_LOCATION = Rails.root.join('tmp', 'ingest_reports')
-CSV_INDEX_OFFSET = 1
+INDEX_OFFSET = 1
 
 namespace :jupiter do
   desc 'batch ingest for multiple items from a csv file - used by ERA Admin and ERA Assistants'
   task :batch_ingest_items, [:csv_path] => :environment do |_t, args|
     require 'csv'
+    require 'fileutils'
 
     log 'START: Batch ingest started...'
+
     csv_path = args.csv_path
 
     if csv_path.blank?
@@ -23,12 +25,12 @@ namespace :jupiter do
       CSV.foreach(full_csv_path,
                   headers: true,
                   header_converters: :symbol,
-                  converters: :all).with_index(CSV_INDEX_OFFSET) do |item_data, index|
+                  converters: :all).with_index(INDEX_OFFSET) do |item_data, index|
         item = item_ingest(item_data, index, csv_directory)
+
         successful_ingested_items << item
       end
 
-      # spit items into report file
       generate_ingest_report(successful_ingested_items)
 
       log 'FINISH: Batch ingest completed!'
@@ -52,7 +54,8 @@ def generate_ingest_report(successful_ingested_items)
   full_file_name = "#{INGEST_REPORTS_LOCATION}/#{file_name}.csv"
 
   CSV.open(full_file_name, 'wb', headers: true) do |csv|
-    csv << ['id', 'url', 'title']
+    csv << ['id', 'url', 'title'] # Add headers
+
     successful_ingested_items.each do |item|
       csv << [item.id, Rails.application.routes.url_helpers.item_url(item), item.title]
     end
@@ -100,7 +103,7 @@ def item_ingest(item_data, index, csv_directory)
     unlocked_obj.created = item_data[:date_created].to_s
     unlocked_obj.description = item_data[:description]
 
-    # Handle visibility plus embargo logic
+    # Handle visibility and embargo logic
     if item_data[:visibility].present?
       unlocked_obj.visibility = CONTROLLED_VOCABULARIES[:visibility].send(item_data[:visibility].to_sym)
     end
@@ -122,13 +125,12 @@ def item_ingest(item_data, index, csv_directory)
     unlocked_obj.contributors = item_data[:contributors].split('|') if item_data[:contributors].present?
     unlocked_obj.spatial_subjects = item_data[:places].split('|') if item_data[:places].present?
     unlocked_obj.temporal_subjects = item_data[:time_periods].split('|') if item_data[:time_periods].present?
-    # citations of previous publication apparently maps to is_version_of
     unlocked_obj.is_version_of = item_data[:citations].split('|') if item_data[:citations].present?
     unlocked_obj.source = item_data[:source]
     unlocked_obj.related_link = item_data[:related_item]
 
     # We only support single communities/collections pairs for time being,
-    # could accomodate multiple without much work here
+    # could accomodate multiple pairs without much work here
     unlocked_obj.add_to_path(item_data[:community_id], item_data[:collection_id])
 
     unlocked_obj.save!
@@ -142,6 +144,7 @@ def item_ingest(item_data, index, csv_directory)
   end
 
   log "ITEM #{index}: Setting thumbnail for item..."
+
   item.set_thumbnail(item.files.first) if item.files.first.present?
 
   log "ITEM #{index}: Successfully ingested an item! Item ID: `#{item.id}`"
