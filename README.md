@@ -181,3 +181,26 @@ modifying the config files, set the environment variable `RUN_FITS_CHARACTERIZAT
 * Once this is complete, login via SAML should be working successfully. Try it out!
 
 (TODO: Provide an alternatives to IST IdP for non production environments?)
+
+
+# Batch Ingest
+
+Jupiter comes with a handy rake task for batch ingesting items.
+
+- First you need to provide a csv file which outlines all the items metadata you wish to ingest. An example template for what an expected csv file might look like can can be found [here](https://docs.google.com/spreadsheets/d/178o_-ZEV3Ii-IzJ0AcJQTQqFsH3Ew2WCgyj2aZw99iY/). You can make a copy of this template, fill it out with your items metadata, and then download the first sheet as a CSV file (File > Download as > Comma-seperated values (.csv, current sheet)).
+
+- All associated files for the items outlined in the csv file above must live in the same directory. So as an example if we have downloaded the csv file to `~/Downloads/example-batch-ingest-file.csv`, then any file that was referenced in the csv file, should also live in the `~/Downloads` directory.
+
+- Now we can run the batch ingest on the command line using the following rake task:
+
+  ```shell
+  rails jupiter:batch_ingest_items[csv_path]
+  ```
+
+  The argument `csv_path` is the location of the csv file. So in the above example, this might look like:
+
+  ```shell
+  rails jupiter:batch_ingest_items["~/Downloads/example-batch-ingest-file.csv"]
+  ```
+
+  After running the above command, you should have just successfully batch ingested your items into jupiter!
