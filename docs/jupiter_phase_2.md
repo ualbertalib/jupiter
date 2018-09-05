@@ -62,17 +62,21 @@ with json columns to represent arrays of values. This seems flexible enough to c
 - create a separate mechanism for tracking predicate information IN postgresql. My proposal is a Predicates table
 consisting simply of:
 
+```
 id | predicate URI
 ===================
 1  | http://purl.org/dc/terms/title
 2  | ....
+```
 
 etc (with each URI appearing only once) and a separate Predicate-Class join table
 
+```
 id | table_name | column_name | predicate_id
 =============================================
 1  | items      | title       | 1
 2  | ... etc
+```
 
 This provides enough information to construct triples for export to a suitable format, stores predicate information
 in the same place as the data itself, while retaining compatibility with normal ActiveRecord.
