@@ -139,3 +139,10 @@ causes the following to happen:
         the array into a string. otherwise it runs `shadowed_assign_title(convert_value(title), to: :string)` to manually deal with type conversion, as mentioned above.
     - If the attribute was declared of type :json_array, in IRItem it also:
         - renames `title` to `shadowed_title` and defines a new `title` method that essentially does `Json.parse(shadowed_title)` to deserialize the serialized array stored in activefedora
+
+Statistics
+-----------
+
+A brief note on how visitor and download statistics work:
+
+When someone visits a given item page they are
