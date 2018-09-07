@@ -51,7 +51,7 @@ a suitable RDF or other linked-data representation from the web application's da
 Avoid creating swiss-army knife projects, like datastores that are also
 webservers that also handle OAI that also etc. This is very fragile and will not adapt well to changes over time.
 
-How I think Data Should Be stored in Postgresql
+How I think Data Should Be Stored in Postgresql
 ===============================================
 
 Create more-or-less completely standard Rails models for all of the existing things: Items, Theses, Collections, Communities.
@@ -217,13 +217,9 @@ querying the predicate table to build up the @context specifer then is as simple
 
 (although serializing every single column probably isn't desired, you probably just want to customize as_json to only
 serialize some columns into the JSON-LD, like we do here https://github.com/ualbertalib/jupiter/blob/master/app/models/collection.rb#L49, and then only include those same
-columns in the context statment)
+columns in the context statement)
 
-
-Once you've done that, you should be able to either import the generated JSON-LD into
-external applications like a triplestore directly, or use the RDF gem to convert the JSON-LD into RDF etc as described
-in that repository. This should be easy to wrap up in an instance method in application_record.rb or some other
-common super-class of all "Predicatable" classes.
+Once you've done that, you should be able to leverage the generated JSON-LD in external PMPY-style projects that either ingest the json-ld into a triplestore directly, or have those external projects use the RDF gem to convert the JSON-LD into RDF as described in the json-ld gem repository. This should be easy to wrap up in an instance method in application_record.rb or some other common super-class of all "Predicatable" classes.
 
 Solrization
 ============
@@ -232,7 +228,7 @@ When removing Fedora we will still presumably want to leverage solr for search (
 going to be on the table, now would be the time to switch). The major functionality that will need to be replaced
 in a hand-rolled solution is getting information about documents into the Solr indexes.
 
-In general I'd suggest abandoning the "name-mangling"/dynamic schema concept from Hydra and just spelling out index
+I'd suggest abandoning the "name-mangling"/dynamic schema concept from Hydra and just spelling out index
 types by-hand in schema.xml, at least initially. I'm not convinced that all of the added complexity of Solrizer really
 saved any effort vs doing it by hand, and it certainly seemed to be more confusing/opaque for most people in practice.
 
@@ -245,10 +241,10 @@ the solr indexes they should be placed in. Given a schema.xml containing somethi
 <field name="subject_facet" type="string" stored="false" indexed="true" multiValued="true"/>
 ```
 
-a model might declare solr attributes:
+a model might declare solr indexes:
 
 ```ruby
-   def solr_attrs
+   def solr_indexes
      {
        title: [:title_search, :title_sort],
        subject: [:subject_facet],
@@ -265,7 +261,7 @@ after_save :update_solr
 
 def update_solr
   solr_doc = {}
-  self.solr_attrs.each do |attribute_name, indexes|
+  self.solr_indexes.each do |attribute_name, indexes|
     value = self.send(attribute_name)
     indexes.each do |index_name|
       solr_doc[index_name] = value
