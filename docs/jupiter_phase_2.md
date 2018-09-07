@@ -7,7 +7,7 @@ The writing is on the wall: Fedora is dead, and transitioning sooner rather than
 gets thrown in Fedora, the more painful the inevitable switch is going to be down the road. In its current state
 I would anticipate being forced off of Fedora in less than 5 years (I think Geoff once said something about all of these
 systems having a very short lifespan, but respectfully, I completely disagree -- there's no reason the libraries shouldn't
-be aiming to get 10-20 years out of a single well-maintained DAMs project. The failure of all systems this far to
+be aiming to get 10-20 years out of a single well-maintained DAMs project. The failure of all systems thus far to
 survive even half that long is the direct and inevitable consequence of the technical immaturity of most of the library-specific open-source ecosystem, and a lack of experience with the underlying language/frameworks/datastores
 factoring into some of the decision making)
 
@@ -15,49 +15,51 @@ I think the temptation, especially with me gone, will be to look heavily towards
 to Postgresql. My advice is to resist this temptation at all costs. It will not make the transition any easier
 (everything that needs to be rewritten in this plan would need to be rewritten for Valkyrie anyways), and Valkyrie
 has almost all of the same downsides as ActiveFedora -- you cannot hire anyone who knows it, it will seem completely
-alien to anyone you do hire, it locks you out of a huge chunk of the Rails and Ruby ecosystem. In short it simply solves
-no problems you actually have. It is another example of the community overengineering something bespoke and specific
-to libraries when they should be looking to get out of that trap.
+alien to anyone you do hire, and it locks you out of a huge chunk of the Rails and Ruby ecosystem.
 
-Everything in jupiter_core is intended to work such that there are only a few places in the application
+In short, it simply solves no problems that you actually _have_. It is another example of the community over-engineering something bespoke and specific to libraries when they should be looking to get out of that trap.
+
+In its current state, everything in `jupiter_core` is intended to work such that there are only a few places in the application
 that interact directly with ActiveFedora:
 
-  - Inside LockedLdpObject itself.
+  - Inside `LockedLdpObject` itself.
   - Inside `unlocked do ... end` blocks in models
   - Inside `unlock_and_fetch_ldp_object` blocks generally
 
 We need not worry about the first case as all, as it only exists to paper over deficiencies in ActiveFedora.
-If we're moving to ActiveRecord, we should remove it entirely in favour of ActiveRecord::Base
+If we're moving to ActiveRecord, we should remove LockedLdpObject entirely.
 
 Prior to transitioning, the later two should be audited for anything particular dependent on ActiveFedora semantics.
-A lot of what's in them should be completely compatible with ActiveRecord eg) validations and other supporting logic.
+A lot of what's in them should be completely compatible with ActiveRecord eg) validations and other supporting logic. Most
+of the rest, eg) manipulating ordered_members to get the PCDM to generate the "right" RDF representation, can be
+removed entirely, as this is something that should be solved in a serialization project, not in Jupiter (see below).
 
 The main thrust of work will actually be in creating new ways of representing attribute-predicate relationships,
 in altering the models to fit these new patterns, and in migrating the data itself into a new RDBMS.
 
 The key to moving forward is to get away from the idea that the way data is stored for the web application needs to
 look anything like the way it is represented for metadata purposes, or for distribution to other institutions, or for
-distribution over the world wide web.
-
-if I have seen one common theme across a lot of places over time it is that, while tempting, STORING DATA IN EXPORT FORMATS IS ALWAYS, _ALWAYS_ A MISTAKE.
+distribution over the world wide web. If I have seen one common theme mistake being made both in the Samvera community and elsewhere it is that, while tempting, STORING DATA IN EXPORT FORMATS IS ALWAYS, _ALWAYS_ A MISTAKE. Storing metadata at rest as RDF for the webapp was never going to work out.
 
 My suggestion is that data for Jupiter in a way that makes sense for web applications. Follow the Pushmi-Pullyu model and create
 different, single-purpose projects to move and transform this data to other systems. PMPY should continue to
 transform the data and move it into preservation; a separate new project should be created to transform and move
 data to a triplestore for metadata consumption, and yet another separate new project should be created to
-transform and distribute the data for OAI.
+transform and distribute the data for OAI. These serialization projects can worry about the specifics of how to generate
+a suitable RDF or other linked-data representation from the web application's data.
 
 Avoid creating swiss-army knife projects, like datastores that are also
 webservers that also handle OAI that also etc. This is very fragile and will not adapt well to changes over time.
 
-Here's my thoughts on how you should do that:
+How I think Data Should Be stored in Postgresql
+===============================================
 
-- Create more-or-less completely standard Rails models for all of the existing things: Items, Theses, Collections, Communities.
+Create more-or-less completely standard Rails models for all of the existing things: Items, Theses, Collections, Communities.
 Good news! We've secretly already been doing this with DraftItem and DraftThesis -- you should be able to rename these to Item and Thesis and simply add a column to indicate Draft state.
 
 The one thing that databases aren't necessarily great at is representing arrays of values for a given column, but we've solved that in DraftItems with json columns to represent arrays of values. This seems flexible enough to cover most cases.
 
-- create a separate mechanism for tracking predicate information IN postgresql. My proposal is a Predicates table
+create a separate mechanism for tracking predicate information IN Postgresql. My proposal is a Predicates table
 consisting simply of:
 
 ```
@@ -82,7 +84,7 @@ in the same place as the data itself, while retaining compatibility with normal 
 To integrate this with Rails, I envision the following:
 
 Create a DSL for declaring predicates _in migrations_ rather than in models (this has always been an odd and unrails-y
-place to put them, as it implies they're dynamically redeclarable, which they're not). Picturing something like:
+place to put them, as it implies they're dynamically redeclarable, which they're not). I'm picturing something like:
 
 ```ruby
 class CreateItemsTable < ActiveRecord::Migration[5.1]
@@ -159,6 +161,70 @@ individually updating each object, potentially taking hours (currently) or even 
 Mistakes can easily become to expensive to fix in the Fedora model, and we have _already_ made several URI mistakes &
 changes over time.
 
+Representing membership
+========================
+
+We currently do this in a hybrid way. Fedora has supported for nesting arbitrary documents, but in practice we
+use this only indirectly through Hydra's PCDM implementation. Fedora's way of nesting items mostly creates
+problems for us, as retrieving a parent object _requires_ Fedora to load every child of said object, ie. all
+items in the collection, with terrible performance implications (https://groups.google.com/d/msg/samvera-tech/47pFj9lzkkQ/S1oUQs1CAwAJ)
+
+In practice we treat this nesting as write-only, otherwise ignoring Fedora's capabilities and currently use paths stored on solr documents in order to express membership of items in collections and communities. This model can equally be used to arbitrarily represent anything with an id by a child of some other thing with an id, recursively, and be efficiently queried.
+
+Leveraging Solr for this could theoretically continue indefinitely, although I think there are downsides in terms of
+critical membership information not being stored in the primary RDBMS and therefor running the risk of getting out of
+sync due to a lack of shared transations between Postgres and Solr updates.
+
+Fortunately there are options available for implementing the same basic idea in Postgresql
+(represent membership trees as paths on objects). Either of https://github.com/ClosureTree/closure_tree
+(which I think is database agnostic) or https://github.com/sjke/pg_ltree (which relies on Postgres's ltree extension)
+should work for this purpose. Note that the ltree implementation is more general than closure tree, and can
+directly represent a node having more than one path (ie, an item being in more than one collection), whereas
+some workarounds would be necessary in the closure_tree implementation (you could create an intermediate "proxy" model such that every instance of the proxy had a single parent but an item can be pointed at by more than one proxy. There are inefficiencies implied in loading or modifying this, though. My off-the-cough suggestion is that pg_ltree is probably
+all you'll need).
+
+
+Exporting linked data formats
+==============================
+
+Once the predicate and nesting information is stored in the database, exporting triples should be fairly straightforward. I'd
+suggest leveraging the JSON-LD gem (https://github.com/ruby-rdf/json-ld) -- essentially just use rails built-in
+support for json serialization to turn the activerecord object in json, and then use the predicate table to add
+the @context specifier. The predicate table queries should be quite straightforward. Using DraftItem as an example
+ActiveRecord class:
+
+```ruby
+> DraftItem.table_name
+ => "draft_items"
+
+ > DraftItem.column_names
+ => ["id", "uuid", "status", "wizard_step", "thumbnail_id", "title", "alternate_title", "date_created", "description", "source", "related_item", "license", "license_text_area", "visibility", "embargo_end_date", "visibility_after_embargo", "type_id", "user_id", "creators", "subjects", "member_of_paths", "contributors", "places", "time_periods", "citations", "created_at", "updated_at"]
+```
+
+querying the predicate table to build up the @context specifer then is as simple as a method in application_record:
+
+```ruby
+   def generate_context_statements
+     context = {}
+     table_name = self.class.table_name
+     self.class.column_names.each do |column|
+       predicate = PredicateClass.find_by(table_name: table_name, column_name: column).predicate.uri
+       context[column] = predicate
+     end
+     return context
+   end
+```
+
+(although serializing every single column probably isn't desired, you probably just want to customize as_json to only
+serialize some columns into the JSON-LD, like we do here https://github.com/ualbertalib/jupiter/blob/master/app/models/collection.rb#L49, and then only include those same
+columns in the context statment)
+
+
+Once you've done that, you should be able to either import the generated JSON-LD into
+external applications like a triplestore directly, or use the RDF gem to convert the JSON-LD into RDF etc as described
+in that repository. This should be easy to wrap up in an instance method in application_record.rb or some other
+common super-class of all "Predicatable" classes.
+
 Solrization
 ============
 
@@ -212,41 +278,6 @@ end
 
 (assuming you've set up a method some where to return the current RSolr::Client connection. https://github.com/rsolr/rsolr explains how. Error handling and empty/nil values will need to be taken into account, too, but this should generally
 work for most things)
-
-
-Representing membership
-========================
-
-We currently do this in a hybrid way. Fedora has supported for nesting arbitrary documents, but in practice we
-use this only indirectly through Hydra's PCDM implementation. Fedora's way of nesting items mostly just creates
-problems for us, as retrieving a parent object _requires_ Fedora to load every child of said object, ie. all
-items in the collection, with terrible performance implications (https://groups.google.com/d/msg/samvera-tech/47pFj9lzkkQ/S1oUQs1CAwAJ)
-
-In practice we treat this nesting as write-only, otherwise ignoring Fedora's capabilities and currently use paths stored on solr documents in order to express membership of items in collections and communities. This model can equally be used to arbitrarily represent anything with an id by a child of some other thing with an id, recursively, and be efficiently queried.
-
-Leveraging Solr for this could theoretically continue indefinitely, although I think there are downsides in terms of
-critical membership information not being stored in the primary RDBMS and therefor running the risk of getting out of
-sync due to a lack of shared transations between Postgres and Solr updates.
-
-Fortunately there are options available for implementing the same basic idea
-(represent membership trees as paths on objects). Either of https://github.com/ClosureTree/closure_tree
-(which I think is database agnostic) or https://github.com/sjke/pg_ltree (which relies on Postgres's ltree extension)
-should work for this purpose. Note that the ltree implementation is more general than closure tree, and can
-directly represent a node having more than one path (ie, an item being in more than one collection), whereas
-some workarounds would be necessary in the closure_tree implementation (you could create an intermediate proxymembership model such that every instance of the proxy had a single parent but an item can be pointed at by more than one proxy. There
-  are inefficiencies implied in loading or modifying this, though).
-
-
-Exporting linked data formats
-==============================
-
-Once the predicate and nesting information is stored in the database, exporting triples should be fairly straightforward. I'd
-suggest leveraging the JSON-LD gem (https://github.com/ruby-rdf/json-ld) -- essentially just use rails built-in
-support for json serialization to turn the activerecord object in json, and then use the predicate table to add
-the @context specifier. Once you've done that, you should be able to either import the generated JSON-LD into
-external applications like a triplestore directly, or use the RDF gem to convert the JSON-LD into RDF etc as described
-in that repository. This should be easy to wrap up in an instance method in application_record.rb or some other
-common super-class of all "Predicatable" classes.
 
 The Rest of the DAMS
 ====================
