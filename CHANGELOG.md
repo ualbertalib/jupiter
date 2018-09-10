@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and releases in Jupiter project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- `Conference Paper` Item Type should be mapped to `Conference/Workshop Presentation` instead [#789](https://github.com/ualbertalib/jupiter/issues/789)
 
 ## [1.2.0] - 2018-08-22
 ### Added
@@ -12,7 +14,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ### Changed
 - Main search results will sort by relevance by default [#693](https://github.com/ualbertalib/jupiter/issues/693)
-- Deposit into Fedora is pushed into the background.  
+- Deposit into Fedora is pushed into the background.
 
 
 ## [1.1.0] - 2018-06-25
