@@ -30,7 +30,7 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    aasm (5.0.0)
+    aasm (5.0.1)
       concurrent-ruby (~> 1.0)
     actioncable (5.2.1)
       actionpack (= 5.2.1)
@@ -91,14 +91,14 @@ GEM
     ast (2.4.0)
     autoprefixer-rails (9.0.0)
       execjs
-    better_errors (2.4.0)
+    better_errors (2.5.0)
       coderay (>= 1.0.0)
       erubi (>= 1.0.0)
       rack (>= 0.9.0)
     bindex (0.5.0)
     binding_of_caller (0.8.0)
       debug_inspector (>= 0.0.1)
-    bootsnap (1.3.1)
+    bootsnap (1.3.2)
       msgpack (~> 1.0)
     bootstrap (4.1.3)
       autoprefixer-rails (>= 6.0.3)
@@ -108,7 +108,7 @@ GEM
     builder (3.2.3)
     canonical-rails (0.2.4)
       rails (>= 4.1, < 5.3)
-    capybara (3.6.0)
+    capybara (3.7.1)
       addressable
       mini_mime (>= 0.1.3)
       nokogiri (~> 1.8)
@@ -267,7 +267,7 @@ GEM
     parallel (1.12.1)
     parser (2.5.1.2)
       ast (~> 2.4.0)
-    pg (1.1.0)
+    pg (1.1.3)
     popper_js (1.14.3)
     powerpack (0.1.2)
     pry (0.11.3)
@@ -275,7 +275,7 @@ GEM
       method_source (~> 0.9.0)
     pry-rails (0.3.6)
       pry (>= 0.10.4)
-    public_suffix (3.0.2)
+    public_suffix (3.0.3)
     puma (3.12.0)
     pundit (1.1.0)
       activesupport (>= 3.0.0)
@@ -331,7 +331,7 @@ GEM
       rdf (>= 2.2, < 4.0)
     rdoc (6.0.2)
     redis (4.0.2)
-    rollbar (2.16.4)
+    rollbar (2.17.0)
       multi_json
     rsolr (2.2.1)
       builder (>= 2.1.2)
@@ -350,7 +350,7 @@ GEM
     ruby-vips (2.0.12)
       ffi (~> 1.9)
     ruby_dep (1.5.0)
-    rubyzip (1.2.1)
+    rubyzip (1.2.2)
     rufus-scheduler (3.5.2)
       fugit (~> 1.1, >= 1.1.5)
     safe_yaml (1.0.4)
@@ -427,7 +427,7 @@ GEM
     vcr (4.0.0)
     voight_kampff (1.1.2)
       rack (>= 1.4, < 3.0)
-    web-console (3.6.2)
+    web-console (3.7.0)
       actionview (>= 5.0)
       activemodel (>= 5.0)
       bindex (>= 0.4.0)
@@ -479,7 +479,7 @@ DEPENDENCIES
   nokogiri
   omniauth
   omniauth-saml
-  pg (~> 1.1.0)
+  pg (~> 1.1.3)
   pry
   pry-rails
   puma (~> 3.12)
