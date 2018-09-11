@@ -51,13 +51,14 @@ a suitable RDF or other linked-data representation from the web application's da
 Avoid creating swiss-army knife projects, like datastores that are also
 webservers that also handle OAI that also etc. This is very fragile and will not adapt well to changes over time.
 
-How I think Data Should Be Stored in Postgresql
+Representing Metadata Schemas in Postgresql
 ===============================================
 
-Create more-or-less completely standard Rails models for all of the existing things: Items, Theses, Collections, Communities.
+My suggestion for the metadata itself is that you create more-or-less completely standard Rails models for all of the existing things: Items, Theses, Collections, Communities.
+
 Good news! We've secretly already been doing this with DraftItem and DraftThesis -- you should be able to rename these to Item and Thesis and simply add a column to indicate Draft state.
 
-The one thing that databases aren't necessarily great at is representing arrays of values for a given column, but we've solved that in DraftItems with json columns to represent arrays of values. This seems flexible enough to cover most cases.
+The one thing that databases aren't necessarily great at is representing arrays of values for a given column, but we've solved that in DraftItems & DraftTheses with json columns to represent arrays of values. This seems flexible enough to cover most cases.
 
 create a separate mechanism for tracking predicate information IN Postgresql. My proposal is a Predicates table
 consisting simply of:
