@@ -10,6 +10,30 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 ### Added
 - Thesis deposit and edit for ERA administrators [#709](https://github.com/ualbertalib/jupiter/issues/709)
 
+- This release contains a significant data migration of data currently stored into Fedora onto the gluster storage. Serving files
+to end users is now provided by Rails/ActiveStorage rather than through interacting with PCDM filesets.
+
+  - For deployment, we will need to put both app servers into maintenance mode, and run the rake task `rake jupiter:migrate_filesets`, which will
+    copy all existing files out of Jupiter and onto the Gluster. This is likely to take a SIGNIFICANT amount of time, and the app will not
+    run properly until this is complete. We should thoroughly test this process on Staging, by doing a complete clone of Production
+    Fedora and Solr back to the Staging environment, to get a feel for how long this will take in Production and catch any errors that
+    may arise during this process before going live. It is possible, maybe even likely, that we may see Fedora lock up during this process,
+    as it has never reacted particularly well to large numbers of downloads.
+
+  - We will need to know the size of datastreams in Fedora to verify we have enough space provisioned on Gluster storage, plus headroom, as all deposits from now on
+    will be stored in both Fedora (for preservation) and on the Gluster (for long term preservation)
+
+  - Starting with this release, new deposits will be uploaded to the gluster immediately, and then be ingested into Fedora in the background.
+    This means we expect CPU usage and jobs processed on the sidekiq server to increase permanently to handle this new process.
+
+  - Newly deposited items will initially show a 'This file is processing and will be available shortly' message in place of download link(s),
+      until the background job has finished ingesting the file into Fedora. While we can revist this in the future, for the moment this is necessary
+      as we require Fedora to finish ingesting the datastream and assign it an ID before we can provide a permanent URL for the file.
+
+  - A new periodic task has been added to Jupiter to periodically delete unused, orphaned files from the gluster filesystem to prevent
+    them from piling up endlessly. This is run automatically via schedule.yml queuing up a GarbageCollectBlobsJob every 12 hours.
+    When necessary this can also be run manually by running the rake tast `rake jupiter:gc_blobs`
+
 ### Changed
 - Main search results will sort by relevance by default [#693](https://github.com/ualbertalib/jupiter/issues/693)
 - Deposit into Fedora is pushed into the background.  
