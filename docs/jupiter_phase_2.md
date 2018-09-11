@@ -276,6 +276,8 @@ end
 (assuming you've set up a method some where to return the current RSolr::Client connection. https://github.com/rsolr/rsolr explains how. Error handling and empty/nil values will need to be taken into account, too, but this should generally
 work for most things)
 
+Alternatively, Rochkind mentions a plan to use Traject for indexing (presumably in the background?) in his proposed IR plan. It seems less _simple_ to do it that way, to me, but since he's both the core Traject developer and aware of what he needs for indexing, I can't say there's anything wrong with it, and I'm sure it's an approach with which he's intimately familiar. It seems like more moving parts for what's currently needed here for the IR, though.
+
 Asset Management
 =================
 
@@ -293,6 +295,13 @@ It's worth really looking at what happened with The Samvera Permissioning and An
 2) As a consequence of this, some subset of users doesn't have permissions to things that they should. This is an annoyance.
 
 3) ALSO as a consequence of this, some subset of users have permissions to things they shouldn't. This is a security issue.
+
+Blacklight
+==========
+
+A lot of the design decisions Blacklight makes are fairly non-Railsy and tend to force the rest of the application to know about Blacklight-specific design patterns. I don't feel like we really suffered from using RSolr directly, in Jupiter, and it made things a lot more transparent -- figuring out how to do things only required referencing the Solr documentation rather than Blacklight's (lack of) documentation and digging through its source-code. I can't see any reason to consider moving back towards Blacklight for the repository -- as I mention next, I'd look at dropping it entirely from all of the library's code-bases.
+
+Bypassing Blacklight was, I think, a big win for Jupiter.
 
 The Rest of the DAMS
 ====================
