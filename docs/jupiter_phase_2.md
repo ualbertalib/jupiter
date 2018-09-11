@@ -276,6 +276,24 @@ end
 (assuming you've set up a method some where to return the current RSolr::Client connection. https://github.com/rsolr/rsolr explains how. Error handling and empty/nil values will need to be taken into account, too, but this should generally
 work for most things)
 
+Asset Management
+=================
+
+Rochkind is pitching Shrine as a more flexible solution than ActiveStorage. In the short term, he's probably correct, but I think history has shown that the existence of an "official" Rails solution generally leads to the slow death of most competitors. I can't see many reasons to invest effort into switching away from something that's currently working, and most of that flexibility has to do with using 3rd party CDNs, which we don't use (although they really are worth considering, see below).
+
+ACLs
+=====
+
+To the extent you can stretch an ownership/group model (think traditional Unix permissions) to meet your needs, I suggest you fight tooth-and-nail to avoid buying into an ACL framework. Yes, they are flexible. Yes, they are a web "standard". But a flexible, standard 90-barreled foot-gun is still mostly just a tool for shooting your toes off.
+
+It's worth really looking at what happened with The Samvera Permissioning and Analysis Working Group here. Users, even power-users and admins, think in terms of resource ownership because that's how most things work in real life. In the presence of an ACL system "ownership" ceases to exist, as any number of (possibly unknown to you) people can have any combination of permissions to an object. This inevitably leads to users presenting simple use-cases like "I would like to be able to transfer ownership of an object" that degenerate into the very question the Samvera Working Group wrapped up by asking "There is still a need to determine whether this ownership transfer is intended to also transfer permissions, or if it has some other focus. What is being transferred and why?". When your users think in terms of owning something, and your developers are forced to ask _what ownership even means_, your system's semantics and your users' expectations are so utterly divorced that you're guaranteed both that:
+
+1) Likely nobody who uses the system understands how the permissions system works.
+
+2) As a consequence of this, some subset of users doesn't have permissions to things that they should. This is an annoyance.
+
+3) ALSO as a consequence of this, some subset of users have permissions to things they shouldn't. This is a security issue.
+
 The Rest of the DAMS
 ====================
 
