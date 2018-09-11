@@ -39,7 +39,9 @@ in altering the models to fit these new patterns, and in migrating the data itse
 
 The key to moving forward is to get away from the idea that the way data is stored for the web application needs to
 look anything like the way it is represented for metadata purposes, or for distribution to other institutions, or for
-distribution over the world wide web. If I have seen one common theme mistake being made both in the Samvera community and elsewhere it is that, while tempting, STORING DATA IN EXPORT FORMATS IS ALWAYS, _ALWAYS_ A MISTAKE. Storing metadata at rest as RDF for the webapp was never going to work out.
+distribution over the world wide web.
+
+The desire to "be PCDM compliant" shouldn't mean some kind of mandate that data _only_ be stored in a way recognizable as standard PCDM even for use-cases where such a data layout is profoundly sub-optimal. It should merely mean that, however the data does happen to be stored for the web application, we know how to _transform_ it into nice, clean PCDM on demand. If I have seen one common mistake being made both in the Samvera community and elsewhere it is that, while tempting, STORING DATA IN EXPORT FORMATS IS ALWAYS, _ALWAYS_ A MISTAKE.
 
 My suggestion is that data for Jupiter in a way that makes sense for web applications. Follow the Pushmi-Pullyu model and create
 different, single-purpose projects to move and transform this data to other systems. PMPY should continue to
@@ -48,19 +50,19 @@ data to a triplestore for metadata consumption, and yet another separate new pro
 transform and distribute the data for OAI. These serialization projects can worry about the specifics of how to generate
 a suitable RDF or other linked-data representation from the web application's data.
 
-Avoid creating swiss-army knife projects, like datastores that are also
-webservers that also handle OAI that also etc. This is very fragile and will not adapt well to changes over time.
+Avoid creating swiss-army knife projects, like datastores that are also webservers that also handle OAI that also etc. This is very fragile and will not adapt well to changes over time. Done as separate projects, you unlock a lot of scalability that the linked data community seems to totally lack -- if the OAI server is separate from the web application, it can benefit from having something transforming the web-app's data directly into a stored, read-only OAI format in a separate data store. This means both that the OAI server can be extremely fast (it need not query Modeshape for data and then transform the RDF into an OAI format) _and_ that crawlers hitting the OAI server have _zero_ impact on the performance of the web application or its database (and vice-versa!). In the current setup, everything is intertwined, and an aggressive OAI crawler can cripple deposits by keeping Fedora too busy, or an aggressive downloader can prevent OAI queries from completing for the same reason. This simply is not scalable to any reasonable level.
+
 
 Representing Metadata Schemas in Postgresql
 ===============================================
 
-My suggestion for the metadata itself is that you create more-or-less completely standard Rails models for all of the existing things: Items, Theses, Collections, Communities.
+My suggestion for the metadata itself is that you create more-or-less completely standard Rails models for all of the existing things: Items, Theses, Collections, Communities. This runs counter to: the way Samvera did it traditionally, with Fedora/ActiveFedora, the way Valkyrie is doing it currently (by acting as an abstraction layer over either Fedora or using Postgresql as a schemaless JSON store), and the way Rochkind seems to plan to do it in his proposal (using Postgresql as a schemaless JSON store directly -- his proposal does have the advantage that he already wrote a gem that claims to make this transparent. No offense to him, but I still think this will turn out the same way ActiveFedora did in the sense that it's by definition a much less battle-tested approach, with a much smaller development team, and it's likely that adopters will hit sharp edges).
 
-Good news! We've secretly already been doing this with DraftItem and DraftThesis -- you should be able to rename these to Item and Thesis and simply add a column to indicate Draft state.
+Call me iconoclastic, but I still do not understand the resistance to using regular ActiveRecord and regular RDBMs features here, as I've never seen a compelling argument that the following idea would not work. The one thing that databases aren't necessarily great at is representing arrays of values for a given column (normally prefering somewhat awkward join tables), but we've solved that in DraftItems & DraftTheses with json columns to represent arrays of values. This seems flexible enough to cover most any case one might encounter.
 
-The one thing that databases aren't necessarily great at is representing arrays of values for a given column, but we've solved that in DraftItems & DraftTheses with json columns to represent arrays of values. This seems flexible enough to cover most cases.
+The Good news is, we've secretly already essentially battle-tested this approach with DraftItem and DraftThesis -- you should be able to rename these to Item and Thesis and simply add a column to indicate Draft state and call the modelling done for those two kinds of objects.
 
-create a separate mechanism for tracking predicate information IN Postgresql. My proposal is a Predicates table
+What will remain to be done is creating a mechanism for tracking predicate information IN Postgresql. My proposal is a Predicates table
 consisting simply of:
 
 ```
@@ -162,6 +164,20 @@ individually updating each object, potentially taking hours (currently) or even 
 Mistakes can easily become to expensive to fix in the Fedora model, and we have _already_ made several URI mistakes &
 changes over time.
 
+You could, alternatively, simply store the schema as one json blob document directly in the Predicates-Class table. eg) for any given class, there would be
+one entry in the table containing a json blob like
+
+```json
+{
+  "title": "http://purl.org/dc/terms/title",
+  "alternate_title": "http://purl.org/dc/terms/alternative",
+}
+```
+
+with everything working more-or-less the same. This isn't necessarily a terrible idea, but it could mean that things that similar objects that should share a predicate for, say, title become out of sync, as each class's schema will need to have the predicates updated individually.
+
+The extreme version of this approach would be to put the schema column directly onto the Items, Theses, etc tables, such that each individual object's row contains a full copy of its schema. Don't do this. We benefit a lot from objects having very well-defined metadata schemas, so the waste of space of doing things this way is QUITE significant, and it puts you back into Fedora territory when it comes to fixing or changing a predicate URI -- every single object must be individually updated.
+
 Representing membership
 ========================
 
@@ -183,6 +199,14 @@ should work for this purpose. Note that the ltree implementation is more general
 directly represent a node having more than one path (ie, an item being in more than one collection), whereas
 some workarounds would be necessary in the closure_tree implementation (you could create an intermediate "proxy" model such that every instance of the proxy had a single parent but an item can be pointed at by more than one proxy. There are inefficiencies implied in loading or modifying this, though. My off-the-cough suggestion is that pg_ltree is probably
 all you'll need).
+
+Rochkind, on this same subject, wrote:
+
+> We will plan from the start to prioritize efficient rdbms querying over ontological purity. Dealing with avoiding n+1 (or worse) when doing expected things like displaying a list of objects/works with thumbnails, or displaying all a work’s members with thumbnails. In some cases we may resort to recursive CTEs; some solution will be built into the tool, this isn’t something to make developer-users figure out for themselves each implementation.
+
+I heartily co-sign the idea of abandoning any and all thoughts of "ontological purity" when it comes to designing the DAMS web applications' database models. Remember, the idea here is to let the web apps handle things in a webapp-y way and _transform_ this data via separate translator projects for things like triplestore ingestion, serving OAI feeds, etc. The transformations can output data as pure and normalized as metadata or OAI consumers want -- don't cripple the web application's performance to "pre-design" that purity before you need to. Again, this is very much the approach taken in industry -- store data in a way that makes sense to keep the user-facing web applications fast and functional and _transform_ that data on the way in to completely separate data stores for other teams (a triplestore for Metadata team here is no different in overall purpose than a hadoop cluster for a machine learning team at an internet company).
+
+All that said, stay away from recursive CTEs to resolve membership queries. We know the path approach works -- if no sufficient tree representation is working in postgresql, I'd keep doing it the way we're doing it right now via solr rather than resort to expensive recursive SQL query approaches.
 
 
 Exporting linked data formats
