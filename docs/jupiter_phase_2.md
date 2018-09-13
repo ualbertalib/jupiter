@@ -194,7 +194,7 @@ Again, I heartily co-sign the idea of abandoning any and all thoughts of "ontolo
 
 Again, this is very much the approach taken in industry -- store data in a way that makes sense to keep the user-facing web applications fast and functional and _transform_ that data via pipeline tools on the way into completely separate data stores for other teams (a triplestore for Metadata team here is no different in overall purpose than a hadoop cluster for a machine-learning team at an internet company).
 
-All that said, recursive CTEs may or may not be a less (or more!) performant solution than the tree approaches to resolve membership queries. We know the path approach works -- if no sufficient tree representation is workable in postgresql, and the CTE approach looks particular slow I'd look at the viability of doing it the way we're doing it right now via solr, rather than resort to expensive recursive SQL query approaches. But if you can avoid this entirely by modelling this relationally, I'd prefer that over anything else.
+All that said, recursive CTEs may or may not be a less (or more!) performant solution than the tree approaches to resolve membership queries. We know the path approach works -- if no sufficient tree representation is workable in postgresql, and the CTE approach looks particularly slow I'd look at the viability of doing it the way we're doing it right now via solr, rather than resort to expensive recursive SQL query approaches. But if you can avoid this entirely by modelling this relationally, I'd prefer that over anything else.
 
 
 Exporting linked data formats
@@ -288,14 +288,14 @@ end
 (assuming you've set up a method some where to return the current RSolr::Client connection. https://github.com/rsolr/rsolr explains how. Error handling and empty/nil values will need to be taken into account, too, but this should generally
 work for most things)
 
-You could use Sunspot for the above, and in fact that's probably the route I would look at taking in the long term as it will let you get rid of deferered_faceted_solr_query and our home-grown Solr API in favor of something more standard. In the short term though it might be easier to start with the above (particularly if you decide to transition models piecemeal, as you'll have to live with the mangled solr names during the interim and the mangled solr names were the reason we couldn't use Sunspot in the first place)
+You could use Sunspot for the above, and in fact that's probably the route I would look at taking in the long term as it will let you get rid of deferered_faceted_solr_query and our home-grown Solr API in favor of something more standard. In the short term though it might be easier to start with the above (particularly if you decide to transition models piecemeal, as you'll have to live with the mangled solr names during the interim and the mangled solr names were the reason we couldn't use Sunspot in the first place). Sunspot's long-term health is in question, though, and it _is_ a large gem. The homegrown API might be all you need.
 
 Alternatively, Rochkind mentions a plan to use Traject for indexing (presumably in the background?) in his proposed IR plan. It seems less _simple_ to do it that way, to me, but since he's both the core Traject developer and aware of what he needs for indexing, I can't say there's anything wrong with it, and I'm sure it's an approach with which he's intimately familiar. It seems like more moving parts for what's currently needed here for the IR, though.
 
 Asset Management
 =================
 
-Rochkind is pitching Shrine as a more flexible solution than ActiveStorage. In the short term, he's probably correct, but I think history has shown that the existence of an "official" Rails solution generally leads to the slow death of most competitors. I can't see many reasons to invest effort into switching away from something that's currently working, and most of that flexibility has to do with different derivative desires using 3rd party CDNs, which we don't use (although they really are worth considering, see below).
+Rochkind is pitching Shrine as a more flexible solution than ActiveStorage. In the short term, he's probably correct, but I think history has shown that the existence of an "official" Rails solution generally leads to the slow death of most competitors. I can't see many reasons to invest effort into switching away from something that's currently working, and most of that flexibility has to do with different derivative desires and maybe better support for using 3rd party CDNs, which we don't use (although they really are worth considering, see below).
 
 ACLs
 =====
@@ -310,7 +310,7 @@ When your users think in terms of owning something, and your designers and devel
 
 2) As a consequence of this, some subset of users don't have permissions to things that they should. This is an annoyance.
 
-3) ALSO as a consequence of this, some subset of users have permissions to things that they shouldn't. This is a security issue. We saw exactly this in Sufia 6 based ERA's objects.
+3) ALSO as a consequence of this, some subset of users have permissions to things that they shouldn't. This is a security issue. We saw exactly this issue when auditing Sufia 6-based ERA's objects during the transition.
 
 Group permissioning & owner modeling can get you really, really far. I'd suggest being willing to go to suffer a LOT of pain to live with it, rather than moving to ACLs. What seems like a simple solution will inevitably entail endless frustration.
 
@@ -332,7 +332,7 @@ Discovery and Avalon are currently totally unrelated to Jupiter, and the decisio
 
 To be blunt, short of hiring nine developers and splitting them into 3 separate teams, maintaining 3 entirely separate and unrelated high-importance applications is going to be impossible over the long-haul. At any given time, 2 of the 3 are going to fall into a state of significant neglect, and developers are going to be stuck "in the middle" of competing stakeholders all arguing that their requirements are the most important. Unrealistic deadlines being imposed from above in order to "free up developers" to make progress on some other application are a symptom of this reality.
 
-My experience has shown that efficiently sharing developer resources across applications  _requires_ efficiently sharing their work between applications, and that implies _trusting developers to use their knowledge and experience to make technical decisions themselves based on a comprehensive set of requirements_, as they are the only ones in a position to effectively judge what can and can't be shared to meet the needs of the stakeholders. Everyone else is merely blindly guessing.
+My experience has shown that efficiently sharing developer resources across applications  _requires_ efficiently sharing their work between applications, and that implies _trusting developers to use their knowledge and experience to make technical decisions themselves based on a comprehensive set of requirements_, as they are the only ones in a position to effectively judge what can and can't be shared to meet the needs of the stakeholders. Everyone else is merely blindly guessing. There's an ongoing need to improve the requirements gathering and analysis phase _prior to_ picking out a solution. Solution-first thinking has been a problem in the past.
 
 With that said, here's what I'd do with Discovery & Avalon over the medium term to consolidate work and make this situation more maintainable:
 
