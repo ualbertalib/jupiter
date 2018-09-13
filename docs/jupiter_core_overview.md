@@ -113,7 +113,7 @@ causes the following to happen:
 3) The rest of has_attribute runs, which:
     - ensures that the arguments are correct, types are known, etc.
     - stores type tracking and name mangling information in the hashes created in `inherited`
-    - uses `defined_cached_reader` to define a method named `title` on the Item object that essentially works like:
+    - uses `define_cached_reader` to define a method named `title` on the Item object that essentially works like:
         ```ruby
         def title
           return ldp_object.title if ldp_object.present?
@@ -121,11 +121,10 @@ causes the following to happen:
         end
         ```
         Remember that ldp_object is only present if an `unlock_and_fetch_ldp_object` block has been run, meaning that the object's title may have changed
-        but not yet been saved (so the data in the solr_document may be out of date). Thus if it is present we should return the ldp_object.title, and not the possibly stale solr data.
-        saving the ldp_object will bring the solr data back into sync.
+        but not yet been saved (so the data in the solr_document may be out of date). Thus if it is present we should return the ldp_object.title, and not the possibly stale solr data. Saving the ldp_object will bring the solr data back into sync.
 
-        Because solr docs are always multivalued but not all of our attributes are `defined_cached_reader` deals with returning single values instead of arrays
-    - defines a method `title=` on Item, which simply raises an error message asking the programmer to use `unlock_and_fetch_ldp_object`. This is done to help people figure out the right way to do things
+        Also, because solr docs are always multivalued but not all of our attributes are `define_cached_reader` deals with returning single values instead of arrays.
+    - defines a method `title=` on Item, which simply raises an error message asking the programmer to use `unlock_and_fetch_ldp_object` instead. This is done to help people figure out the right way to do things
     - runs the "normal" ActiveFedora property declaration code in IRItem, eg:
         ```ruby
           property :title, predicate: ::RDF::Vocab::DC.title, multiple: false do |index|
@@ -133,7 +132,7 @@ causes the following to happen:
             index.as [:stored_searchable, :stored_sortable, :symbol]
           end
         ```
-      Internally to ActiveFedora, running this in an IRItem causes `title` and `title=` methods to be defined on IRItem
+      Internal to ActiveFedora, running this in an IRItem causes `title` and `title=` methods to be defined on IRItem
     - In IRItem, renames `title=` to `shadowed_assign_title` and then defines a new `title=` that does the following
         - if the value being assigned is an array, and the attribute was declared to be of type :json_array, it serializes
         the array into a string. otherwise it runs `shadowed_assign_title(convert_value(title), to: :string)` to manually deal with type conversion, as mentioned above.

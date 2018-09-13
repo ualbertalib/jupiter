@@ -48,8 +48,7 @@ Call me iconoclastic, but I still do not understand the resistance to using regu
 
 The good news is, we've secretly already essentially battle-tested this approach with DraftItem and DraftThesis -- you should be able to rename these to Item and Thesis and simply add a column to indicate Draft state and call the modeling done for those two kinds of objects.
 
-What will remain to be done is creating a mechanism for tracking predicate information IN Postgresql. My proposal is a Predicates table
-consisting simply of:
+What will remain to be done is creating a mechanism for tracking predicate information IN Postgresql. My proposal is a Predicates table consisting simply of:
 
 ```
 id | predicate URI
@@ -180,19 +179,22 @@ In practice we treat this nesting as write-only, otherwise ignoring Fedora's cap
 Leveraging Solr for this could theoretically continue indefinitely, although I think there are downsides in terms of
 critical membership information not being stored in the primary RDBMS and therefore running the risk of getting out of sync due to a lack of shared transactions between Postgres and Solr updates.
 
-Fortunately there are options available for implementing the same basic idea in Postgresql (represent membership trees as paths on objects). Either of https://github.com/ClosureTree/closure_tree (which I think is database agnostic) or https://github.com/sjke/pg_ltree (which relies on Postgres's ltree extension) should work for this purpose.
+That said, there's no particular reason to confine yourselves to PCDM style nesting representations -- rather than fight with creating data models that allow for arbitrary nesting anything in anything (Items with nested Items with nested Items...) you could simply model, say, digitized books in the database as Items with "Pages" in two tables with a perfectly normal ordered join table, and worry about serializing this out to a more generic PCDM-y representation at export time.
+
+Fortunately, if you do want to keep going with the path approach, there are options available for implementing the same basic idea in Postgresql (represent membership trees as paths on objects). Either of https://github.com/ClosureTree/closure_tree (which I think is database agnostic) or https://github.com/sjke/pg_ltree (which relies on Postgres's ltree extension) should work for this purpose.
 
 Note that the ltree implementation is more general than closure tree, and can directly represent a node having more than one path (ie, an item being in more than one collection), whereas some workarounds would be necessary in the closure_tree implementation (you could create an intermediate "proxy" model such that every instance of the proxy had a single parent but an item can be pointed at by more than one proxy. There are inefficiencies implied in loading or modifying this, though. My off-the-cuff suggestion is that pg_ltree is probably all you'll need).
+
 
 Rochkind, on this same subject, wrote:
 
 > We will plan from the start to prioritize efficient rdbms querying over ontological purity. Dealing with avoiding n+1 (or worse) when doing expected things like displaying a list of objects/works with thumbnails, or displaying all a work’s members with thumbnails. In some cases we may resort to recursive CTEs; some solution will be built into the tool, this isn’t something to make developer-users figure out for themselves each implementation.
 
-I heartily co-sign the idea of abandoning any and all thoughts of "ontological purity" when it comes to designing the DAMS web applications' database models. Remember, the idea here is to let the web apps handle things in a webapp-y way and _transform_ this data via separate translator projects for things like triplestore ingestion, serving OAI feeds, etc. The transformations can output data as pure and normalized as metadata or OAI consumers want -- don't cripple the web application's performance to "pre-design" that purity before you need to.
+Again, I heartily co-sign the idea of abandoning any and all thoughts of "ontological purity" when it comes to designing the DAMS web applications' database models. Remember, the idea here is to let the web apps handle things in a webapp-y way and _transform_ this data via separate translator projects for things like triplestore ingestion, serving OAI feeds, etc. The transformations can output data as pure and normalized as metadata or OAI consumers want -- don't cripple the web application's performance to "pre-bake" that purity before you need to.
 
 Again, this is very much the approach taken in industry -- store data in a way that makes sense to keep the user-facing web applications fast and functional and _transform_ that data via pipeline tools on the way into completely separate data stores for other teams (a triplestore for Metadata team here is no different in overall purpose than a hadoop cluster for a machine-learning team at an internet company).
 
-All that said, stay away from recursive CTEs to resolve membership queries. We know the path approach works -- if no sufficient tree representation is workable in postgresql, I'd look at the viability of doing it the way we're doing it right now via solr, rather than resort to expensive recursive SQL query approaches.
+All that said, recursive CTEs may or may not be a less (or more!) performant solution than the tree approaches to resolve membership queries. We know the path approach works -- if no sufficient tree representation is workable in postgresql, and the CTE approach looks particular slow I'd look at the viability of doing it the way we're doing it right now via solr, rather than resort to expensive recursive SQL query approaches. But if you can avoid this entirely by modelling this relationally, I'd prefer that over anything else.
 
 
 Exporting linked data formats
@@ -286,12 +288,14 @@ end
 (assuming you've set up a method some where to return the current RSolr::Client connection. https://github.com/rsolr/rsolr explains how. Error handling and empty/nil values will need to be taken into account, too, but this should generally
 work for most things)
 
+You could use Sunspot for the above, and in fact that's probably the route I would look at taking in the long term as it will let you get rid of deferered_faceted_solr_query and our home-grown Solr API in favor of something more standard. In the short term though it might be easier to start with the above (particularly if you decide to transition models piecemeal, as you'll have to live with the mangled solr names during the interim and the mangled solr names were the reason we couldn't use Sunspot in the first place)
+
 Alternatively, Rochkind mentions a plan to use Traject for indexing (presumably in the background?) in his proposed IR plan. It seems less _simple_ to do it that way, to me, but since he's both the core Traject developer and aware of what he needs for indexing, I can't say there's anything wrong with it, and I'm sure it's an approach with which he's intimately familiar. It seems like more moving parts for what's currently needed here for the IR, though.
 
 Asset Management
 =================
 
-Rochkind is pitching Shrine as a more flexible solution than ActiveStorage. In the short term, he's probably correct, but I think history has shown that the existence of an "official" Rails solution generally leads to the slow death of most competitors. I can't see many reasons to invest effort into switching away from something that's currently working, and most of that flexibility has to do with using 3rd party CDNs, which we don't use (although they really are worth considering, see below).
+Rochkind is pitching Shrine as a more flexible solution than ActiveStorage. In the short term, he's probably correct, but I think history has shown that the existence of an "official" Rails solution generally leads to the slow death of most competitors. I can't see many reasons to invest effort into switching away from something that's currently working, and most of that flexibility has to do with different derivative desires using 3rd party CDNs, which we don't use (although they really are worth considering, see below).
 
 ACLs
 =====
@@ -306,7 +310,7 @@ When your users think in terms of owning something, and your designers and devel
 
 2) As a consequence of this, some subset of users don't have permissions to things that they should. This is an annoyance.
 
-3) ALSO as a consequence of this, some subset of users have permissions to things that they shouldn't. This is a security issue. We saw exactly this in Sufia-6 based ERA's objects.
+3) ALSO as a consequence of this, some subset of users have permissions to things that they shouldn't. This is a security issue. We saw exactly this in Sufia 6 based ERA's objects.
 
 Group permissioning & owner modeling can get you really, really far. I'd suggest being willing to go to suffer a LOT of pain to live with it, rather than moving to ACLs. What seems like a simple solution will inevitably entail endless frustration.
 
