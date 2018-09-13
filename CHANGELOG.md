@@ -5,12 +5,25 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and releases in Jupiter project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.2.1] - 2018-09-13
+### Added
+- Batch ingest with spreadsheet [#762](https://github.com/ualbertalib/jupiter/issues/762)
+
 ### Fixed
 - `Conference Paper` Item Type should be mapped to `Conference/Workshop Presentation` instead [#789](https://github.com/ualbertalib/jupiter/issues/789)
+
 
 ## [1.2.0] - 2018-08-22
 ### Added
 - Thesis deposit and edit for ERA administrators [#709](https://github.com/ualbertalib/jupiter/issues/709)
+- Batch ingest with spreadsheet [#762](https://github.com/ualbertalib/jupiter/issues/762)
+
+### Changed
+- Main search results will sort by relevance by default [#693](https://github.com/ualbertalib/jupiter/issues/693)
+- Deposit into Fedora is pushed into the background.
+
+### Deployment notes:
 
 - This release contains a significant data migration of data currently stored into Fedora onto the gluster storage. Serving files
 to end users is now provided by Rails/ActiveStorage rather than through interacting with PCDM filesets.
@@ -35,10 +48,7 @@ to end users is now provided by Rails/ActiveStorage rather than through interact
   - A new periodic task has been added to Jupiter to periodically delete unused, orphaned files from the gluster filesystem to prevent
     them from piling up endlessly. This is run automatically via schedule.yml queuing up a GarbageCollectBlobsJob every 12 hours.
     When necessary this can also be run manually by running the rake tast `rake jupiter:gc_blobs`
-
-### Changed
-- Main search results will sort by relevance by default [#693](https://github.com/ualbertalib/jupiter/issues/693)
-- Deposit into Fedora is pushed into the background.
+    
 
 
 ## [1.1.0] - 2018-06-25
