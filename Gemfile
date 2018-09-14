@@ -60,7 +60,7 @@ gem 'sidekiq-cron'
 
 # Misc Utilities
 gem 'aasm' # state-machine management
-gem 'ezid-client'
+gem 'ezid-client', '>= 1.8.0'
 gem 'jbuilder' # generate JSON objects
 gem 'kaminari' # Pagination
 gem 'ransack' # ActiveRecord search/filter

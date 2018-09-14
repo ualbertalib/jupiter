@@ -50,7 +50,7 @@ class JupiterCore::DeferredSimpleSolrQuery
   end
 
   # Composes a query object out of other, possibly heterogenous, query objects.
-  # Only where clauses are preserved in the combined query. Sort orders, limits, and offsets must be re-specified
+  # Only "where" clauses are preserved in the combined query. Sort orders, limits, and offsets must be re-specified
   # For sorts and where clauses on the combined query to be meaningful, the properties involved must share a name
   # and +solrize_for+ definition across all involved models. No attempt is made to enforce this, however.
   #

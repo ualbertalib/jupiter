@@ -7,6 +7,7 @@ class DoiServiceTest < ActiveSupport::TestCase
   EXAMPLE_DOI = 'doi:10.5072/FK2JQ1005X'.freeze
 
   test 'DOI state transitions' do
+    skip 'needs sandbox accounts and new test should on datacite'
     assert_no_enqueued_jobs
 
     Rails.application.secrets.doi_minting_enabled = true
