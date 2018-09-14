@@ -1,0 +1,14 @@
+How Stats Work (Since Leah was curious one time, and may need to explain some of this to people)
+=================================================================================================
+
+Any time someone views an item/thesis page, or downloads a file attached to an item, _after the page has been successfully rendered (to avoid counting "visits" that end up erroring out and leaving the user looking at a 500 page)_, the incoming request is first evaluated to determine whether or not it is being made by a bot. We believe that doing bot filtering at request time is more effective and allows us to base our decisions on a broader range of information than would normally be available via analyzing log files after the fact. We use the Voight-Kampff gem (https://github.com/biola/Voight-Kampff) to assist with bot recognition, which itself is based on a curated list of fingerprints of bots, robots, spiders, crawlers, and scrappers maintained here: https://github.com/monperrus/crawler-user-agents.
+
+If a request matches a bot, no statistics related to the visit are recorded. Otherwise, views and downloads are recorded separately in the following manner:
+
+* Using a data structure in Redis known as an HyperLogLog (http://antirez.com/news/75), if the IP address of the visitor is not already recorded for a view or download, the IP address of the visitor performing the request is recorded. Every item & thesis has two associated HLLs -- one tracking viewing IP addresses, the other tracking downloading IP addresses. These data structures allow us to quickly determine whether or now we have already seen the visiting address.
+
+* If the IP address was not in the HLL prior to this request, an atomic increment is performed on the associated counter in Redis. Again, each Item & Thesis has two associated counters -- one counting the number of views, the other counting the number of downloads.
+
+The IP addresses in the HLLs are reset at the top of every hour. The counters are never reset. In this way, a visit or download can be recorded from each non-bot visitor once per hour. Since visits and downloads are tracked separately, a single visitor can have a visit AND a download counted within the same hour.
+
+The statistics displayed on the Item and Thesis view page are fetched directly from Redis. Because statistics are recorded only AFTER a page has rendered successfully, when you view a page for the first time in a given hour, you are seeing the count *prior to* your visit being counted. Refreshing the page will cause the count to be updated to show you the count _including_ your visit before refreshing -- the system is not counting you a second time in that hour.
