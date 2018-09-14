@@ -1,3 +1,5 @@
+The following is a brain dump, as of early September 2018, of all of the plans that I had conceived of in terms of the mid-term future of Jupiter, intended to hopefully help the project going forward as I (@mbarnett) transition out of the University of Alberta Libraries. This is all based on my current understanding of the local needs of this institution and what I had set up in terms of support for anticipated next steps in the project. I'm an opinionated person and all of the opinions herein are my own, and haven't really been endorsed by my lovely colleagues (so don't yell at them about it).
+
 The Path Forward
 ================
 
