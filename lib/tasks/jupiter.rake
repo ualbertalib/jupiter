@@ -95,8 +95,7 @@ namespace :jupiter do
   rescue StandardError => e
     puts
     puts "error migrating #{item.class}: #{item.id} -- reported error was '#{e.message}'"
-    puts "moving on to next item"
+    puts 'moving on to next item'
     puts
   end
-
 end
