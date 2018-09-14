@@ -29,6 +29,6 @@ before_script:
 
 script:
   - bundle exec rails test
-  - bundle exec rails test:system
+  - TESTOPTS="-v" bundle exec rails test:system
   - bundle exec rubocop
   - bundle exec scss-lint
