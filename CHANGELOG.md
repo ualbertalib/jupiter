@@ -8,7 +8,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [1.2.2] - 2018-09-17
 ### Fixed
-- Error handling and additional logging in data migration from Fedora to ActiveStorage
+- Error handling and additional logging in data migration from Fedora to ActiveStorage [PR#860](https://github.com/ualbertalib/jupiter/pull/860)
 
 ## [1.2.1] - 2018-09-13
 ### Added
