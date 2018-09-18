@@ -15,14 +15,14 @@ class DownloadsController < ApplicationController
   # /items/item_id/download/file_set_id/
   def view
     file_name = params[:file_name]
-    raise JupiterCore::ObjectNotFound unless file_name == @file_set.contained_filename
-    send_data(ActiveStorage::Blob.service.download(@file.blob.key), disposition: params[:disposition],
-                                                                    content_type: params[:content_type])
+    raise JupiterCore::ObjectNotFound unless file_name == @file.blob.filename.to_s
+    send_data(ActiveStorage::Blob.service.download(@file.blob.key), disposition: 'inline',
+                                                                    type: @file.blob.content_type)
   end
 
   def download
-    send_data(ActiveStorage::Blob.service.download(@file.blob.key), disposition: 'attachment',
-                                                                    content_type: params[:content_type])
+    send_data(ActiveStorage::Blob.service.download(@file.blob.key), disposition: 'attachment'
+                                                                    type: @file.blob.content_type)
   end
 
   private
