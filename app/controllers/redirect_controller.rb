@@ -78,7 +78,7 @@ class RedirectController < ApplicationController
 
   def find_item_file(item, filename)
     return nil if filename.blank?
-    item.files.detect { |file| file.blob.filename == CGI.unescape(filename) }
+    item.files.detect { |file| file.filename == CGI.unescape(filename) }
   end
 
   def find_community_or_collection_by_noid(noid)
