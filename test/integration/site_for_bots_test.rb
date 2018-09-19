@@ -127,11 +127,10 @@ class SiteForBotsTest < ActionDispatch::IntegrationTest
     assert_select "meta[name='citation_author'][content='#{@thesis.dissertant}']"
     assert_select "meta[name='citation_publication_date'][content='#{@thesis.creation_date}']"
     assert_select format("meta[name='citation_pdf_url'][content='%s']",
-                         Rails.application.routes.url_helpers.url_for(
-                           controller: :downloads, action: :view, id: @thesis.id,
+                         file_view_item_url(
+                           id: @thesis.id,
                            file_set_id: @thesis.files.first.fileset_uuid,
-                           file_name: @thesis.files.first.filename,
-                           only_path: true
+                           file_name: @thesis.files.first.filename.to_s
                          ))
     assert_select "meta[name='dc.identifier'][content='#{@item.doi}']"
     assert_select "meta[name='citation_doi'][content='#{@item.doi}']"
@@ -143,11 +142,10 @@ class SiteForBotsTest < ActionDispatch::IntegrationTest
     end
     assert_select "meta[name='citation_publication_date'][content='#{@item.creation_date}']"
     assert_select format("meta[name='citation_pdf_url'][content='%s']",
-                         Rails.application.routes.url_helpers.url_for(
-                           controller: :downloads, action: :view, id: @item.id,
+                         file_view_item_url(
+                           id: @item.id,
                            file_set_id: @item.files.first.fileset_uuid,
-                           file_name: @item.files.first.filename,
-                           only_path: true
+                           file_name: @item.files.first.filename
                          ))
     assert_select "meta[name='dc.identifier'][content='#{@item.doi}']"
     assert_select "meta[name='citation_doi'][content='#{@item.doi}']"

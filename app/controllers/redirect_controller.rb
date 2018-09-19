@@ -14,7 +14,9 @@ class RedirectController < ApplicationController
     item = find_item_by_noid(noid)
     file = find_item_file(item, params[:filename] || params[:file])
     if file
-      redirect_to helpers.file_view_url(file), status: :moved_permanently
+      redirect_to file_view_item_url(id: file.record.owner.id,
+                                     file_set_id: file.fileset_uuid,
+                                     file_name: file.filename.to_s), status: :moved_permanently
     else
       # If file not found, redirect to item level
       redirect_to item_url(item), status: :found
@@ -55,7 +57,9 @@ class RedirectController < ApplicationController
 
     file = find_item_file(item, params[:filename])
     if file
-      redirect_to helpers.file_view_url(file), status: :moved_permanently
+      redirect_to file_view_item_url(id: file.record.owner.id,
+                                     file_set_id: file.fileset_uuid,
+                                     file_name: file.filename.to_s), status: :moved_permanently
     else
       # If file not found, redirect to item level
       redirect_to item_url(item), status: :found
