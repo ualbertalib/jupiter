@@ -21,8 +21,8 @@ Rails.application.routes.draw do
     end
 
     member do
-      match 'download/:file_set_id' => 'downloads#download', :format => false, via: :get
-      match 'view/:file_set_id/*file_name' => 'downloads#view', :format => false, via: :get
+      get 'download/:file_set_id', to: 'downloads#download', format: false, as: 'file_download'
+      get 'view/:file_set_id/*file_name', to: 'downloads#view', format: false, as: 'file_view'
     end
   end
 
