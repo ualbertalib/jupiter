@@ -6,6 +6,11 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+## [1.2.3] - 2018-09-19
+### Fixed
+- View object in the browser [PR#866](https://github.com/ualbertalib/jupiter/pull/866)
+- Dependency for deployment of 1.2.0 in the release note. 
+
 ## [1.2.2] - 2018-09-17
 ### Fixed
 - Error handling and additional logging in data migration from Fedora to ActiveStorage [PR#860](https://github.com/ualbertalib/jupiter/pull/860)
@@ -41,6 +46,8 @@ to end users is now provided by Rails/ActiveStorage rather than through interact
 
   - We will need to know the size of datastreams in Fedora to verify we have enough space provisioned on Gluster storage, plus headroom, as all deposits from now on
     will be stored in both Fedora (for preservation) and on the Gluster (for long term preservation)
+
+  - One additional package needs to be added for ActiveStorage to server the PDF thumbnail is Poppler (Details [here](https://api.rubyonrails.org/v5.2/classes/ActiveStorage/Preview.html)). The package needs to be installed separately on application servers. 
 
   - Starting with this release, new deposits will be uploaded to the gluster immediately, and then be ingested into Fedora in the background.
     This means we expect CPU usage and jobs processed on the sidekiq server to increase permanently to handle this new process.
