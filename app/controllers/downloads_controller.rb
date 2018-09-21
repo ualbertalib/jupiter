@@ -15,14 +15,14 @@ class DownloadsController < ApplicationController
   # /items/item_id/download/file_set_id/
   def view
     file_name = params[:file_name]
-    raise JupiterCore::ObjectNotFound unless file_name == @file_set.contained_filename
-    send_data(ActiveStorage::Blob.service.download(@file.blob.key), disposition: params[:disposition],
-                                                                    content_type: params[:content_type])
+    raise JupiterCore::ObjectNotFound unless file_name == @file.filename.to_s
+    send_data(ActiveStorage::Blob.service.download(@file.blob.key), disposition: 'inline',
+                                                                    type: @file.blob.content_type)
   end
 
   def download
     send_data(ActiveStorage::Blob.service.download(@file.blob.key), disposition: 'attachment',
-                                                                    content_type: params[:content_type])
+                                                                    type: @file.blob.content_type)
   end
 
   private
@@ -32,7 +32,7 @@ class DownloadsController < ApplicationController
     raise JupiterCore::ObjectNotFound unless @file_set.item == params[:id]
 
     authorize @file_set.owning_item, :download?
-    @file = @file_set.owning_item.files_attachments.where(fileset_uuid: @file_set.id).first
+    @file = @file_set.owning_item.files_attachments.find_by(fileset_uuid: @file_set.id)
     raise ActiveRecord::RecordNotFound, "no attachment for file_set with UUID: #{@file_set.id} " if @file.blank?
   end
 
