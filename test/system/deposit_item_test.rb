@@ -20,7 +20,7 @@ class DepositItemTest < ApplicationSystemTestCase
 
     click_link I18n.t('application.navbar.links.new_item')
 
-    skip 'The rest of this test continues to flap on CI for unknown reasons that should be investigated ASAP'
+    skip 'This test continues to flap on CI for unknown reasons that should be investigated ASAP' if ENV['TRAVIS']
 
     # 1. Describe Item Form
 
