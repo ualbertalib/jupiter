@@ -39,7 +39,7 @@ gem 'solrizer', github: 'mbarnett/solrizer', branch: 'literally_types'
 
 # Database stuff
 gem 'connection_pool'
-gem 'pg', '~> 1.1.2'
+gem 'pg', '~> 1.1.3'
 gem 'redis', '~> 4.0'
 gem 'rsolr'
 
@@ -53,7 +53,7 @@ gem 'pundit'
 # Background tasks
 gem 'sidekiq', '~> 5.2'
 gem 'sidekiq-unique-jobs'
-gem 'sinatra', '~> 2.0.3' # used by sidekiq/web
+gem 'sinatra', '~> 2.0.4' # used by sidekiq/web
 # Sidekiq cron jobs
 gem 'rufus-scheduler', '3.5.2' # https://github.com/ondrejbartas/sidekiq-cron/issues/199
 gem 'sidekiq-cron'

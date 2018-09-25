@@ -56,11 +56,11 @@ class RedirectControllerTest < ActionDispatch::IntegrationTest
     # Action: redirect#hydra_north_file
     get '/files/item-noid/pdf-sample.pdf'
     assert_response :moved_permanently
-    assert_redirected_to url_for(controller: :downloads,
-                                 action: :view,
-                                 id: @item.id,
-                                 file_set_id: @file_set_id,
-                                 file_name: @filename)
+    assert_redirected_to file_view_item_url(
+      id: @item.id,
+      file_set_id: @file_set_id,
+      file_name: @filename
+    )
   end
 
   test 'should redirect missing old HydraNorth "files" file downloads to the item' do
@@ -74,11 +74,9 @@ class RedirectControllerTest < ActionDispatch::IntegrationTest
     # Action: redirect#hydra_north_item
     get '/files/item-noid?file=pdf-sample.pdf'
     assert_response :moved_permanently
-    assert_redirected_to url_for(controller: :downloads,
-                                 action: :view,
-                                 id: @item.id,
-                                 file_set_id: @file_set_id,
-                                 file_name: @filename)
+    assert_redirected_to file_view_item_url(id: @item.id,
+                                            file_set_id: @file_set_id,
+                                            file_name: @filename)
   end
 
   test 'should redirect old HydraNorth "files" with bad file query string to item' do
@@ -113,11 +111,11 @@ class RedirectControllerTest < ActionDispatch::IntegrationTest
     # Action: redirect#hydra_north_item
     get '/downloads/item-noid?file=pdf-sample.pdf'
     assert_response :moved_permanently
-    assert_redirected_to url_for(controller: :downloads,
-                                 action: :view,
-                                 id: @item.id,
-                                 file_set_id: @file_set_id,
-                                 file_name: @filename)
+    assert_redirected_to file_view_item_url(
+      id: @item.id,
+      file_set_id: @file_set_id,
+      file_name: @filename
+    )
   end
 
   test 'should redirect old HydraNorth "downloads" with bad file query string to item' do
@@ -209,11 +207,11 @@ class RedirectControllerTest < ActionDispatch::IntegrationTest
     # Action: redirect#fedora3_datastream
     get '/public/view/item/uuid:item/DS2/pdf-sample.pdf'
     assert_response :moved_permanently
-    assert_redirected_to url_for(controller: :downloads,
-                                 action: :view,
-                                 id: @item.id,
-                                 file_set_id: @file_set_id,
-                                 file_name: @filename)
+    assert_redirected_to file_view_item_url(
+      id: @item.id,
+      file_set_id: @file_set_id,
+      file_name: @filename
+    )
   end
 
   test 'should redirect to item for ancient Fedora3 datastream (pattern 1), mangled filename' do
@@ -242,11 +240,11 @@ class RedirectControllerTest < ActionDispatch::IntegrationTest
     # Action: redirect#fedora3_datastream
     get '/public/datastream/get/uuid:item/DS2/pdf-sample.pdf'
     assert_response :moved_permanently
-    assert_redirected_to url_for(controller: :downloads,
-                                 action: :view,
-                                 id: @item.id,
-                                 file_set_id: @file_set_id,
-                                 file_name: @filename)
+    assert_redirected_to file_view_item_url(
+      id: @item.id,
+      file_set_id: @file_set_id,
+      file_name: @filename
+    )
   end
 
   test 'should redirect to item for ancient Fedora3 datastream (pattern 2), mangled filename' do

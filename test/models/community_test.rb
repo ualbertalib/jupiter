@@ -26,7 +26,7 @@ class CommunityTest < ActiveSupport::TestCase
                   filename: 'image-sample.jpeg', content_type: 'image/jpeg'
 
     assert c.logo.is_a?(ActiveStorage::Attached::One)
-    assert_equal c.logo.blob.filename, 'image-sample.jpeg'
+    assert_equal c.logo.filename, 'image-sample.jpeg'
     assert_equal c.logo.blob.content_type, 'image/jpeg'
     assert_equal c.logo.blob.byte_size, 12_086
 
@@ -44,11 +44,11 @@ class CommunityTest < ActiveSupport::TestCase
     c.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
                   filename: 'sample1.jpeg', content_type: 'image/jpeg'
 
-    assert_equal c.logo.blob.filename, 'sample1.jpeg'
+    assert_equal c.logo.filename, 'sample1.jpeg'
 
     c.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
                   filename: 'sample2.jpeg', content_type: 'image/jpeg'
-    assert_equal c.logo.blob.filename, 'sample2.jpeg'
+    assert_equal c.logo.filename, 'sample2.jpeg'
   end
 
 end

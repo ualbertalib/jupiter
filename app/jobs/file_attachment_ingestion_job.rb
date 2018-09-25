@@ -11,7 +11,7 @@ class FileAttachmentIngestionJob < ApplicationJob
     item = attachment.record.owner
 
     path = ActiveStorage::Blob.service.send(:path_for, attachment.blob.key)
-    original_filename = attachment.blob.filename.to_s
+    original_filename = attachment.filename.to_s
     File.open(path) do |file|
       # We're exploiting the fact that Hydra-Works calls original_filename on objects passed to it, if they
       # respond to that method, in preference to looking at the final portion of the file path, which,
