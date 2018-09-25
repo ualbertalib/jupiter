@@ -50,7 +50,7 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
     end
 
     @item4 = Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                        owner: 1, title: 'Ant Moose',
+                                        owner: 1, title: 'Ant Moose Mouse',
                                         creators: ['Joe Blow'],
                                         created: '1000000 BC',
                                         languages: [CONTROLLED_VOCABULARIES[:language].english],

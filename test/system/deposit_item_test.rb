@@ -69,6 +69,7 @@ class DepositItemTest < ApplicationSystemTestCase
     assert_selector 'h2', text: I18n.t('items.draft.upload_files.header')
 
     attach_file_in_dropzone(file_fixture('image-sample.jpeg'))
+    has_css? '.j-thumbnail'
 
     click_on I18n.t('items.draft.save_and_continue'), wait: 5
 
