@@ -20,7 +20,7 @@ class DepositItemTest < ApplicationSystemTestCase
 
     click_link I18n.t('application.navbar.links.new_item')
 
-    skip 'The rest of this test continues to flap on CI for unknown reasons that should be investigated ASAP'
+    skip 'This test continues to flap on CI for unknown reasons that should be investigated ASAP' if ENV['TRAVIS']
 
     # 1. Describe Item Form
 
@@ -69,6 +69,7 @@ class DepositItemTest < ApplicationSystemTestCase
     assert_selector 'h2', text: I18n.t('items.draft.upload_files.header')
 
     attach_file_in_dropzone(file_fixture('image-sample.jpeg'))
+    has_css? '.j-thumbnail'
 
     click_on I18n.t('items.draft.save_and_continue'), wait: 5
 

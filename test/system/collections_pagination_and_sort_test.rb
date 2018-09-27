@@ -14,7 +14,7 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
   end
 
   test 'anybody should be able to sort and paginate collections' do
-    skip 'The rest of this test continues to flap on CI for unknown reasons that should be investigated ASAP'
+    skip 'This test continues to flap on CI for unknown reasons that should be investigated ASAP' if ENV['TRAVIS']
     visit community_path(@community)
     assert_selector 'div', text: '1 - 10 of 11'
     # Default sort is by title. First 6 say 'Fancy', last 4 say 'Nice'
