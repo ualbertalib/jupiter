@@ -108,7 +108,7 @@ GEM
     builder (3.2.3)
     canonical-rails (0.2.4)
       rails (>= 4.1, < 5.3)
-    capybara (3.8.1)
+    capybara (3.8.2)
       addressable
       mini_mime (>= 0.1.3)
       nokogiri (~> 1.8)
@@ -331,7 +331,7 @@ GEM
       rdf (>= 2.2, < 4.0)
     rdoc (6.0.2)
     redis (4.0.2)
-    rollbar (2.17.0)
+    rollbar (2.18.0)
       multi_json
     rsolr (2.2.1)
       builder (>= 2.1.2)
