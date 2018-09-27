@@ -1,5 +1,5 @@
 GIT
-  remote: https://github.com/mbarnett/active_fedora.git
+  remote: https://github.com/ualbertalib/active_fedora.git
   revision: 8e94346e6ed98df46c994726749542075e11ecd0
   branch: backport_rails52_fixes
   specs:
@@ -16,7 +16,7 @@ GIT
       solrizer (>= 3.4, < 5)
 
 GIT
-  remote: https://github.com/mbarnett/solrizer.git
+  remote: https://github.com/ualbertalib/solrizer.git
   revision: 4c9712f9309b99e1552a0c2a092a2b4a91eaf52c
   branch: literally_types
   specs:
@@ -196,7 +196,7 @@ GEM
       railties (>= 4.2.0)
       thor (>= 0.14, < 2.0)
     json (2.1.0)
-    json-ld (2.2.1)
+    json-ld (3.0.2)
       multi_json (~> 1.12)
       rdf (>= 2.2.8, < 4.0)
     kaminari (1.1.1)
