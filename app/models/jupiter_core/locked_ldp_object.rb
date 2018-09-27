@@ -12,7 +12,7 @@ class JupiterCore::LockedLdpObject
 
   # Maps semantically meaningful, easily understandable names for solr index behaviours
   # into the sometimes inscrutable and opaque descriptors used by Solrizer. See:
-  # https://github.com/mbarnett/solrizer/blob/e5dd2bd571b9ebdb8a8ab214574075c28951e53e/lib/solrizer/default_descriptors.rb
+  # https://github.com/ualbertalib/solrizer/blob/e5dd2bd571b9ebdb8a8ab214574075c28951e53e/lib/solrizer/default_descriptors.rb
   # use of range_facet assumes that facet is not used for that attribute
   SOLR_DESCRIPTOR_MAP = {
     search: :stored_searchable,
@@ -821,7 +821,7 @@ class JupiterCore::LockedLdpObject
 
       # index should contain only some combination of :search, :sort, :facet, :symbol, and :pathing
       # this isn't an exhaustive layering over this mess
-      # https://github.com/mbarnett/solrizer/blob/e5dd2bd571b9ebdb8a8ab214574075c28951e53e/lib/solrizer/default_descriptors.rb
+      # https://github.com/ualbertalib/solrizer/blob/e5dd2bd571b9ebdb8a8ab214574075c28951e53e/lib/solrizer/default_descriptors.rb
       # but it helps
       raise JupiterCore::PropertyInvalidError if solrize_for.count { |item| !SOLR_DESCRIPTOR_MAP.key?(item) } > 0
 
