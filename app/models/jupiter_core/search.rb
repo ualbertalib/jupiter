@@ -18,6 +18,7 @@ class JupiterCore::Search
   def self.faceted_search(q: '', facets: [], ranges: [], models: [], as: nil)
     raise ArgumentError, 'as: must specify a user!' if as.present? && !as.is_a?(User)
     raise ArgumentError, 'must provide at least one model to search for!' if models.blank?
+
     models = [models] unless models.is_a?(Array)
     facets = [] if facets.blank?
     ranges = {} if ranges.blank?

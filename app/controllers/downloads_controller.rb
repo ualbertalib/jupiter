@@ -16,6 +16,7 @@ class DownloadsController < ApplicationController
   def view
     file_name = params[:file_name]
     raise JupiterCore::ObjectNotFound unless file_name == @file.filename.to_s
+
     send_data(ActiveStorage::Blob.service.download(@file.blob.key), disposition: 'inline',
                                                                     type: @file.blob.content_type)
   end

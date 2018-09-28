@@ -21,6 +21,7 @@ module DraftProperties
 
     def communities
       return unless member_of_paths.present? && member_of_paths['community_id']
+
       member_of_paths['community_id'].map do |cid|
         Community.find(cid)
       end
@@ -28,6 +29,7 @@ module DraftProperties
 
     def each_community_collection
       return unless member_of_paths && member_of_paths['community_id'].present?
+
       member_of_paths['community_id'].each_with_index do |community_id, idx|
         collection_id = member_of_paths['collection_id'][idx]
         yield Community.find(community_id), collection_id.present? ? Collection.find(collection_id) : nil
@@ -46,6 +48,7 @@ module DraftProperties
     # compatibility with the thumbnail API used in Items/Theses and Communities
     def thumbnail_url(args = { resize: '100x100' })
       return nil unless thumbnail.present? && thumbnail.blob.present?
+
       Rails.application.routes.url_helpers.rails_representation_path(thumbnail.variant(args).processed)
     rescue ActiveStorage::InvariableError
       begin
@@ -102,6 +105,7 @@ module DraftProperties
 
     def communities_and_collections_presence
       return if member_of_paths.blank? # caught by presence check
+
       errors.add(:member_of_paths, :community_blank) if member_of_paths['community_id'].blank?
       errors.add(:member_of_paths, :collection_blank) if member_of_paths['collection_id'].blank?
     end
@@ -109,6 +113,7 @@ module DraftProperties
     def communities_and_collections_existence
       return if member_of_paths.blank?
       return if member_of_paths['community_id'].blank? || member_of_paths['collection_id'].blank?
+
       member_of_paths['community_id'].each_with_index do |community_id, idx|
         collection_id = member_of_paths['collection_id'][idx]
         community = Community.find_by(community_id)
@@ -141,6 +146,7 @@ module DraftProperties
 
     def files_are_virus_free
       return unless defined?(Clamby)
+
       files.each do |file|
         path = file_path_for(file)
         errors.add(:files, :infected, filename: file.filename.to_s) unless Clamby.safe?(path)

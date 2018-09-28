@@ -109,6 +109,7 @@ module ItemProperties
 
       def communities_and_collections_must_exist
         return if member_of_paths.blank?
+
         member_of_paths.each do |path|
           community_id, collection_id = path.split('/')
           community = Community.find_by(community_id)
@@ -121,6 +122,7 @@ module ItemProperties
       def visibility_after_embargo_must_be_valid
         return if visibility_after_embargo.nil?
         return if VISIBILITIES_AFTER_EMBARGO.include?(visibility_after_embargo)
+
         errors.add(:visibility_after_embargo, :not_recognized)
       end
 
@@ -190,6 +192,7 @@ module ItemProperties
 
       def add_communities_and_collections(communities, collections)
         return unless communities.present? && collections.present?
+
         communities.each_with_index do |community, idx|
           add_to_path(community, collections[idx])
         end

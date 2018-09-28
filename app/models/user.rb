@@ -19,6 +19,7 @@ class User < ApplicationRecord
   def update_activity!(now, remote_ip, sign_in: false)
     raise ArgumentError, :remote_ip if remote_ip.blank?
     raise ArgumentError, :now if now.blank?
+
     # Is the user signing in now?
     if sign_in
       self.previous_sign_in_at = last_sign_in_at
