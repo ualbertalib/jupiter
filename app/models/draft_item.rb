@@ -84,7 +84,7 @@ class DraftItem < ApplicationRecord
   validates :license_text_area, presence: true, if: :validate_if_license_is_text?
   validate :license_not_unselected, if: :validate_choose_license_and_visibility?
 
-  # rubocop:disable Rails/TimeZone
+  # rubocop:disable Rails/TimeZone,Layout/RescueEnsureAlignment
   def update_from_fedora_item(item, for_user)
     # I suspect this will become some kind of string field, but for now, using UTC
     # HACK: temporarily falling back to a parsable date when editing unparsable data to fix a crasher in Prod,
@@ -143,7 +143,7 @@ class DraftItem < ApplicationRecord
       ActiveStorage::Attachment.create(record: self, blob: attachment.blob, name: :files)
     end
   end
-  # rubocop:enable Rails/TimeZone
+  # rubocop:enable Rails/TimeZone,Layout/RescueEnsureAlignment
 
   # Pull latest data from Fedora if data is more recent than this draft
   # This would happen if, eg) someone manually updated the Fedora record in the Rails console
