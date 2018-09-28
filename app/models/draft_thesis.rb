@@ -105,15 +105,19 @@ class DraftThesis < ApplicationRecord
   # Maps Language name to CONTROLLED_VOCABULARIES[:language] URI
   def language_as_uri
     return nil if language&.name.blank?
+
     CONTROLLED_VOCABULARIES[:language].send(language.name)
   end
 
   def language_for_uri(uri)
     return nil if uri.blank?
+
     code = CONTROLLED_VOCABULARIES[:language].from_uri(uri)
     raise ArgumentError, "No known code for language uri: #{uri}" if code.blank?
+
     language = Language.find_by(name: code)
     raise ArgumentError, "No draft language found for code: #{code}" if language.blank?
+
     language
   end
 
@@ -128,21 +132,26 @@ class DraftThesis < ApplicationRecord
     code = CONTROLLED_VOCABULARIES[:visibility].from_uri(uri)
     visibility = URI_CODE_TO_VISIBILITY[code].to_s
     raise ArgumentError, "Unable to map DraftItem visbility from URI: #{uri}, code: #{code}" if visibility.blank?
+
     visibility
   end
 
   # Maps institution names to CONTROLLED_VOCABULARIES[:institution]
   def institution_as_uri
     return nil if institution&.name.blank?
+
     CONTROLLED_VOCABULARIES[:institution].send(institution.name)
   end
 
   def institution_for_uri(uri)
     return nil if uri.blank?
+
     code = CONTROLLED_VOCABULARIES[:institution].from_uri(uri)
     raise ArgumentError, "No known code for institution uri: #{uri}" if code.blank?
+
     institution = Institution.find_by(name: code)
     raise ArgumentError, "No draft institution found for code: #{code}" if institution.blank?
+
     institution
   end
 
@@ -162,11 +171,13 @@ class DraftThesis < ApplicationRecord
   def depositor_can_deposit
     return if member_of_paths.blank?
     return if member_of_paths['community_id'].blank? || member_of_paths['collection_id'].blank?
+
     member_of_paths['community_id'].each_with_index do |_community_id, idx|
       collection_id = member_of_paths['collection_id'][idx]
       collection = Collection.find_by(collection_id)
       next if collection.blank?
       next if collection.restricted && user.admin?
+
       errors.add(:member_of_paths, :collection_restricted)
     end
   end

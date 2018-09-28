@@ -15,6 +15,7 @@ module PresentersHelper
 
   private
 
+  # rubocop:disable Layout/RescueEnsureAlignment
   def present_facet(facet_value)
     @presenter_cache[facet_value] ||= begin
       klass_name = "Presenters::FacetValues::#{facet_value.attribute_name.to_s.camelize}"
@@ -34,4 +35,5 @@ module PresentersHelper
       raise NoSuchPresenter, "Presenter #{klass_name} is not defined for #{obj}"
     end
   end
+  # rubocop:enable Layout/RescueEnsureAlignment
 end

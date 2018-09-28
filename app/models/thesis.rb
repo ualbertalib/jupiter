@@ -153,12 +153,14 @@ class Thesis < JupiterCore::LockedLdpObject
 
       def copy_departments_to_unordered_predicate
         return unless departments_changed?
+
         self.unordered_departments = []
         departments.each { |d| self.unordered_departments += [d] }
       end
 
       def copy_supervisors_to_unordered_predicate
         return unless supervisors_changed?
+
         self.unordered_supervisors = []
         supervisors.each { |s| self.unordered_supervisors += [s] }
       end

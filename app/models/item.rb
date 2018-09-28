@@ -117,10 +117,12 @@ class Item < JupiterCore::LockedLdpObject
   # This is stored in solr: combination of item_type and publication_status
   def item_type_with_status_code
     return nil if item_type.blank?
+
     # Return the item type code unless it's an article, then append publication status code
     item_type_code = CONTROLLED_VOCABULARIES[:item_type].from_uri(item_type)
     return item_type_code unless item_type_code == :article
     return nil if publication_status.blank?
+
     publication_status_code = CONTROLLED_VOCABULARIES[:publication_status].from_uri(publication_status.first)
     # Next line of code means that 'article_submitted' exists, but 'article_draft' doesn't ("There can be only one!")
     publication_status_code = :submitted if publication_status_code == :draft
@@ -163,6 +165,7 @@ class Item < JupiterCore::LockedLdpObject
 
     def copy_creators_to_unordered_predicate
       return unless creators_changed?
+
       self.unordered_creators = []
       creators.each { |c| self.unordered_creators += [c] }
     end
@@ -188,6 +191,7 @@ class Item < JupiterCore::LockedLdpObject
       ps_vocab = CONTROLLED_VOCABULARIES[:publication_status]
       statuses = publication_status.sort
       return unless statuses != [ps_vocab.published] && statuses != [ps_vocab.draft, ps_vocab.submitted]
+
       errors.add(:publication_status, :not_recognized)
     end
   end

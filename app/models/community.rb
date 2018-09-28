@@ -24,6 +24,7 @@ class Community < JupiterCore::LockedLdpObject
 
   def remove_logo=(val)
     return unless logo.attached? && (val == 'true')
+
     # This should probably be 'purge_later', but then we have problems on page reload
     logo_attachment.purge
   end
@@ -31,6 +32,7 @@ class Community < JupiterCore::LockedLdpObject
   # compatibility with item thumbnail API
   def thumbnail_url(args = { resize: '100x100' })
     return nil if logo_attachment.blank?
+
     Rails.application.routes.url_helpers.rails_representation_path(logo_attachment.variant(args).processed)
   end
 
@@ -56,6 +58,7 @@ class Community < JupiterCore::LockedLdpObject
 
     def can_be_destroyed?
       return true if member_collections.count == 0
+
       errors.add(:member_collections, :must_be_empty,
                  list_of_collections: member_collections.map(&:title).join(', '))
       throw(:abort)
