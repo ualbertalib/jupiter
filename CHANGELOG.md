@@ -5,8 +5,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and releases in Jupiter project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+
+## [1.2.4] - 2018-10-09
 ### Changed
 - remove references to mbarnett properties [#868](https://github.com/ualbertalib/jupiter/issues/868)
+- improvement on flagging tests [#875](https://github.com/ualbertalib/jupiter/pull/875)
+- Security update: bump nokogiri from 1.8.4 to 1.8.5  
+- Multiple dependency updates
+
 
 ## [1.2.3] - 2018-09-19
 ### Fixed
