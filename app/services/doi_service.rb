@@ -6,7 +6,7 @@ class DOIService
     article_submitted: 'Text/Submitted Journal Article',
     book: 'Text/Book',
     chapter: 'Text/Chapter',
-    conference_workshop_presenation: 'Other/Presentation',
+    conference_workshop_presentation: 'Other/Presentation',
     conference_workshop_poster: 'Image/Conference Poster',
     dataset: 'Dataset',
     image: 'Image',
@@ -26,6 +26,7 @@ class DOIService
 
   def create
     return unless @item.doi_state.unminted? && !@item.private?
+
     ezid_identifer = Ezid::Identifier.mint(Ezid::Client.config.default_shoulder, ezid_metadata)
     if ezid_identifer.present?
       @item.unlock_and_fetch_ldp_object do |uo|
@@ -49,6 +50,7 @@ class DOIService
 
   def update
     return unless @item.doi_state.awaiting_update?
+
     ezid_identifer = Ezid::Identifier.modify(@item.doi, ezid_metadata)
     return if ezid_identifer.blank?
 
