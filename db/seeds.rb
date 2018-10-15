@@ -397,7 +397,7 @@ end
 
 # Types
 [:book, :book_chapter, :conference_workshop_poster,
- :conference_workshop_presenation, :dataset,
+ :conference_workshop_presentation, :dataset,
  :image, :journal_article_draft, :journal_article_published,
  :learning_object, :report, :research_material, :review].each do |type_name|
   Type.create(name: type_name)
