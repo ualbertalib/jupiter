@@ -294,7 +294,7 @@ if Rails.env.development? || Rails.env.uat?
       description: Faker::Lorem.sentence(20, false, 0).chop,
       languages: [CONTROLLED_VOCABULARIES[:language].english],
       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-      item_type: CONTROLLED_VOCABULARIES[:item_type].conference_workshop_presenation,
+      item_type: CONTROLLED_VOCABULARIES[:item_type].conference_workshop_presentation,
       subject: [thing.capitalize, 'Embargoes'],
       doi: "doi:bogus-#{Time.current.utc.iso8601(3)}"
     ).unlock_and_fetch_ldp_object do |uo|
@@ -397,7 +397,7 @@ end
 
 # Types
 [:book, :book_chapter, :conference_workshop_poster,
- :conference_workshop_presenation, :dataset,
+ :conference_workshop_presentation, :dataset,
  :image, :journal_article_draft, :journal_article_published,
  :learning_object, :report, :research_material, :review].each do |type_name|
   Type.create(name: type_name)

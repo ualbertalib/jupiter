@@ -54,7 +54,7 @@ class DraftItem < ApplicationRecord
   ITEM_TYPE_TO_URI_CODE = { book: :book,
                             book_chapter: :chapter,
                             conference_workshop_poster: :conference_workshop_poster,
-                            conference_workshop_presenation: :conference_workshop_presenation,
+                            conference_workshop_presentation: :conference_workshop_presentation,
                             dataset: :dataset,
                             image: :image,
                             journal_article_draft: :article,

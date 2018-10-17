@@ -123,7 +123,7 @@ en:
           book: 'Book'
           book_chapter: 'Book Chapter'
           conference_workshop_poster: 'Conference/Workshop Poster'
-          conference_workshop_presenation: 'Conference/Workshop Presentation'
+          conference_workshop_presentation: 'Conference/Workshop Presentation'
           dataset: 'Dataset'
           image: 'Image'
           journal_article_draft: 'Journal Article (Draft-Submitted)'
@@ -746,7 +746,7 @@ en:
       image: Image
       report: Report
       research_material: 'Research Material'
-      conference_workshop_presenation: 'Conference/Workshop Presentation'
+      conference_workshop_presentation: 'Conference/Workshop Presentation'
       conference_workshop_poster: 'Conference/Workshop Poster'
       dataset: Dataset
       review: Review
