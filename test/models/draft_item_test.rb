@@ -244,7 +244,6 @@ class DraftItemTest < ActiveSupport::TestCase
     draft_item.assign_attributes(
       contributors: [''], places: [''], time_periods: ['']
     )
-    draft_item.save
 
     assert draft_item.valid?
     assert_nil draft_item.contributors

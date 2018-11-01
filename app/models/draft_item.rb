@@ -71,7 +71,7 @@ class DraftItem < ApplicationRecord
   has_many :draft_items_languages, dependent: :destroy
   has_many :languages, through: :draft_items_languages
 
-  before_validation :strip_input_fields, on: :update
+  before_validation :strip_input_fields
 
   validates :title, :type, :languages,
             :creators, :subjects, :date_created,
