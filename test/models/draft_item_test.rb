@@ -221,8 +221,8 @@ class DraftItemTest < ActiveSupport::TestCase
     assert draft_item.valid?
   end
 
-  # https://github.com/ualbertalib/jupiter/issues/830
-  test 'should be able to delete additional contributors' do
+  # should be able to delete additional contributors https://github.com/ualbertalib/jupiter/issues/830
+  test '#strip_input_fields should strip empty strings from array fields' do
     user = users(:regular)
 
     draft_item = DraftItem.new(
@@ -236,16 +236,20 @@ class DraftItemTest < ActiveSupport::TestCase
       date_created: Date.current,
       description: 'Really random description about this random book',
       member_of_paths: { community_id: [@community.id], collection_id: [@collection.id] },
-      contributors: ['Carly Brown']
+      contributors: ['Carly Brown'],
+      places: ['Edmonton'],
+      time_periods: ['21st Century']
     )
 
     draft_item.assign_attributes(
-      contributors: ['']
+      contributors: [''], places: [''], time_periods: ['']
     )
     draft_item.save
 
     assert draft_item.valid?
     assert_nil draft_item.contributors
+    assert_nil draft_item.places
+    assert_nil draft_item.time_periods
   end
 
 end
