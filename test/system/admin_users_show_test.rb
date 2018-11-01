@@ -150,7 +150,7 @@ class AdminUsersShowTest < ApplicationSystemTestCase
 
   test 'should be able to view items/theses owned by user' do
     # Note: searching and faceting is covered more extensively in tests elsewhere
-    user = User.find_by(email: 'john_snow@example.com')
+    user = users(:regular)
     admin = users(:admin)
 
     community = Community.new_locked_ldp_object(title: 'Fancy Community', owner: 1)

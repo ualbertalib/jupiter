@@ -71,6 +71,8 @@ class DraftItem < ApplicationRecord
   has_many :draft_items_languages, dependent: :destroy
   has_many :languages, through: :draft_items_languages
 
+  before_validation :strip_input_fields
+
   validates :title, :type, :languages,
             :creators, :subjects, :date_created,
             :member_of_paths,
@@ -289,6 +291,13 @@ class DraftItem < ApplicationRecord
 
   def license_not_unselected
     errors.add(:license, :missing) if license == 'unselected'
+  end
+
+  def strip_input_fields
+    attributes.each do |key, value|
+      self[key] = value.reject(&:blank?) if value.is_a?(Array)
+      self[key] = nil if self[key].blank?
+    end
   end
 
 end
