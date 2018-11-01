@@ -3,7 +3,7 @@ require 'application_system_test_case'
 class ItemEditTest < ApplicationSystemTestCase
 
   test 'can edit item' do
-    user = User.find_by(email: 'john_snow@example.com')
+    user = users(:regular)
 
     community = locked_ldp_fixture(Community, :fancy).unlock_and_fetch_ldp_object(&:save!)
     collection = locked_ldp_fixture(Collection, :fancy).unlock_and_fetch_ldp_object(&:save!)
