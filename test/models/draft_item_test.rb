@@ -221,4 +221,31 @@ class DraftItemTest < ActiveSupport::TestCase
     assert draft_item.valid?
   end
 
+  # https://github.com/ualbertalib/jupiter/issues/830
+  test 'should be able to delete additional contributors' do
+    user = users(:regular)
+
+    draft_item = DraftItem.new(
+      user: user,
+      status: DraftItem.statuses[:active],
+      title: 'Book of Random',
+      type: types(:book),
+      languages: [languages(:english)],
+      creators: ['Jane Doe', 'Bob Smith'],
+      subjects: ['Best Seller', 'Adventure'],
+      date_created: Date.current,
+      description: 'Really random description about this random book',
+      member_of_paths: { community_id: [@community.id], collection_id: [@collection.id] },
+      contributors: ['Carly Brown']
+    )
+
+    draft_item.assign_attributes(
+      contributors: ['']
+    )
+    draft_item.save
+
+    assert draft_item.valid?
+    assert_nil draft_item.contributors
+  end
+
 end

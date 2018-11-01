@@ -11,6 +11,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Tuned SQL query for the gargage collection job to remove orphaned files [#888](https://github.com/ualbertalib/jupiter/issues/888)
 - Fix time in sidekiq cron schedule, convert time to use UTC timezone (https://github.com/ualbertalib/jupiter/pull/892)
 - fixes typo for conference paper item type [#879](https://github.com/ualbertalib/jupiter/issues/879)
+- can delete additional contributors [#830](https://github.com/ualbertalib/jupiter/issues/830)
 
 ## [1.2.4] - 2018-10-09
 ### Changed
