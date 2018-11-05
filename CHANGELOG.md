@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and releases in Jupiter project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+
+## [1.2.6] - 2018-11-05
 ### Fixed
 - can delete additional contributors [#830](https://github.com/ualbertalib/jupiter/issues/830)
 
