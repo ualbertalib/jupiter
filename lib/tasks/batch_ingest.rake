@@ -41,6 +41,45 @@ namespace :jupiter do
   end
 end
 
+  desc 'batch ingest for theses from a csv file - used to batch ingest theses from Thesis Deposit'
+  task :batch_ingest_theses, [:csv_path] => :environment do |_t, args|
+    require 'csv'
+    require 'fileutils'
+
+    log 'START: Batch ingest started...'
+
+    csv_path = args.csv_path
+
+    if csv_path.blank?
+      log 'ERROR: CSV path must be present. Please specify a valid csv_path as an argument'
+      exit 1
+    end
+
+    full_csv_path = File.expand_path(csv_path)
+    csv_directory = File.dirname(full_csv_path)
+
+    if File.exist?(full_csv_path)
+      successful_ingested_items = []
+
+      CSV.foreach(full_csv_path,
+                  headers: true,
+                  header_converters: :symbol,
+                  converters: :all).with_index(INDEX_OFFSET) do |thesis_data, index|
+        thesis = thesis_ingest(thesis_data, index, csv_directory)
+
+        successful_ingested_theses << thesis
+      end
+
+      generate_ingest_report(successful_ingested_theses)
+
+      log 'FINISH: Batch ingest completed!'
+    else
+      log "ERROR: Could not open file at `#{full_csv_path}`. Does the csv file exist at this location?"
+      exit 1
+    end
+  end
+end
+
 def log(message)
   puts "[#{Time.current.strftime('%F %T')}] #{message}"
 end
@@ -157,3 +196,94 @@ rescue StandardError => ex
       'if previous items were successfully deposited.'
   exit 1
 end
+
+
+def thesis_ingest(thesis_data, index, csv_directory)
+  log "THESIS #{index}: Starting ingest of a thesis..."
+  puts thesis_data[:title]
+  puts thesis_data[:other_titles]
+
+  thesis = Thesis.new_locked_ldp_object
+  thesis.unlock_and_fetch_ldp_object do |unlocked_obj|
+    unlocked_obj.owner = 1
+    unlocked_obj.title = thesis_data[:title]
+    unlocked_obj.alternative_title = thesis_data[:other_titles]
+
+    if thesis_data[:languages].present?
+      unlocked_obj.languages = thesis_data[:languages].split('|').map do |language|
+        CONTROLLED_VOCABULARIES[:language].send(language.to_sym) if language.present?
+      end
+    end
+
+    unlocked_obj.dissertant = thesis_data[:creator] if item_data[:creators].present?
+
+    #Assumes the data received always have the graduation date follow the pattern of 
+    # "Fall yyyy" or "Spring yyyy"
+
+    if thesis_data[:graduation_date].present?
+      graduation_year = thesis_data[:graduation_date]&.match(/\d\d\d\d/)[0]
+      graduation_term_string = thesis_data[:graduation_date]&.match(/Fall|Spring/)[0]
+      graduation_term = "11" if graduation_term_string == "Fall"
+      graduation_term = "06" if graduation_term_string == "Spring"
+      unlocked_obj.graduation_date = graduation_year+"-"+graduation_term
+    end
+    unlocked_obj.abstract = thesis_data[:abstract]
+
+    # Handle visibility and embargo logic
+    unlocked_obj.visibility = CONTROLLED_VOCABULARIES[:visibility].send("embargo".to_sym)
+
+    if thesis_data[:date_of_embargo].present?
+      unlocked_obj.visibility_after_embargo =
+        CONTROLLED_VOCABULARIES[:visibility].send("public".to_sym)
+    end
+
+    unlocked_obj.embargo_end_date = Date.strptime(thesis_data[:date_of_embargo],"%m/%d/%Y") if thesis_data[:date_of_embargo].present?
+
+
+    # Handle rights
+    unlocked_obj.rights = thesis_data[:license]
+
+    # Additional fields
+    unlocked_obj.date_accepted = thesis_data[:approved_date].to_date if thesis_date[:approved_date].present?
+    unlocked_obj.date_submitted = thesis_data[:submitted_date].to_date if thesis_date[:submitted_date].present?
+
+    unlocked_obj.degree = thesis_data[:degree] if thesis_data[:degree].present?
+    unlocked_obj.thesis_level = thesis_data[:degree_level] if thesis_data[:degree_level].present?
+    unlocked_obj.institution = CONTROLLED_VOCABULARIES[:institution].send("uofa".to_sym)
+    unlocked_obj.specialization = thesis_data[:specialization] if thesis_data[:specialization].present?
+
+    unlocked_obj.subject = thesis_data[:keywords].split('|') if thesis_data[:keywords].present?
+    unlocked_obj.supervisors = thesis_data[:supervisor_info].split('|') if thesis_data[:supervisor_info].present?
+    unlocked_obj.departments = [thesis_data[:department]] + thesis_data[:conjoint_departments].split('|')
+    unlocked_obj.is_version_of = thesis_data[:is_version_of] if thesis_data[:citation].present?
+    unlocked_obj.depositor = thesis_data[:email] if thesis_data[:email]
+
+    # We only support single communities/collections pairs for time being,
+    # could accomodate multiple pairs without much work here
+    unlocked_obj.add_to_path(THESIS_COMMUNITY_ID, THESIS_COLLECTION_ID)
+
+    unlocked_obj.save!
+  end
+
+  log "THESIS #{index}: Starting ingest of file for thesis..."
+
+  # We only support for single file ingest, but this could easily be refactored for multiple files
+  File.open("#{csv_directory}/#{file_name}", 'r') do |file|
+    thesis.add_and_ingest_files([file])
+  end
+
+  log "THESIS #{index}: Setting thumbnail for thesis..."
+
+  thesis.set_thumbnail(thesis.files.first) if thesis.files.first.present?
+
+  log "THESIS #{index}: Successfully ingested an thesis! Thesis ID: `#{thesis.id}`"
+
+  item
+rescue StandardError => ex
+  log 'ERROR: Ingest of thesis failed! The following error occured:'
+  log "EXCEPTION: #{ex.message}"
+  log 'WARNING: Please be careful with rerunning batch ingest! Duplication of theses may happen '\
+      'if previous theses were successfully deposited.'
+  exit 1
+end
+
