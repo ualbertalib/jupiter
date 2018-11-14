@@ -1,5 +1,7 @@
 INGEST_REPORTS_LOCATION = Rails.root.join('tmp', 'ingest_reports')
 INDEX_OFFSET = 1
+THESIS_COMMUNITY_ID = "db9a4e71-f809-4385-a274-048f28eb6814"
+THESIS_COLLECTION_ID = "f42f3da6-00c3-4581-b785-63725c33c7ce"
 
 namespace :jupiter do
   desc 'batch ingest for multiple items from a csv file - used by ERA Admin and ERA Assistants'
@@ -39,7 +41,6 @@ namespace :jupiter do
       exit 1
     end
   end
-end
 
   desc 'batch ingest for theses from a csv file - used to batch ingest theses from Thesis Deposit'
   task :batch_ingest_theses, [:csv_path] => :environment do |_t, args|
@@ -59,13 +60,13 @@ end
     csv_directory = File.dirname(full_csv_path)
 
     if File.exist?(full_csv_path)
-      successful_ingested_items = []
-
+      successful_ingested_theses = []
+      checksums = generate_checksums(csv_directory)
       CSV.foreach(full_csv_path,
                   headers: true,
                   header_converters: :symbol,
                   converters: :all).with_index(INDEX_OFFSET) do |thesis_data, index|
-        thesis = thesis_ingest(thesis_data, index, csv_directory)
+        thesis = thesis_ingest(thesis_data, index, csv_directory, checksums)
 
         successful_ingested_theses << thesis
       end
@@ -91,7 +92,6 @@ def generate_ingest_report(successful_ingested_items)
 
   file_name = Time.current.strftime('%Y_%m_%d_%H_%M_%S')
   full_file_name = "#{INGEST_REPORTS_LOCATION}/#{file_name}.csv"
-
   CSV.open(full_file_name, 'wb', headers: true) do |csv|
     csv << ['id', 'url', 'title'] # Add headers
 
@@ -198,24 +198,20 @@ rescue StandardError => ex
 end
 
 
-def thesis_ingest(thesis_data, index, csv_directory)
+def thesis_ingest(thesis_data, index, csv_directory, checksums)
   log "THESIS #{index}: Starting ingest of a thesis..."
-  puts thesis_data[:title]
-  puts thesis_data[:other_titles]
-
   thesis = Thesis.new_locked_ldp_object
   thesis.unlock_and_fetch_ldp_object do |unlocked_obj|
     unlocked_obj.owner = 1
     unlocked_obj.title = thesis_data[:title]
     unlocked_obj.alternative_title = thesis_data[:other_titles]
 
-    if thesis_data[:languages].present?
-      unlocked_obj.languages = thesis_data[:languages].split('|').map do |language|
-        CONTROLLED_VOCABULARIES[:language].send(language.to_sym) if language.present?
-      end
+    if thesis_data[:language].present?
+      unlocked_obj.language = 
+        CONTROLLED_VOCABULARIES[:language].send(thesis_data[:language].to_sym)
     end
 
-    unlocked_obj.dissertant = thesis_data[:creator] if item_data[:creators].present?
+    unlocked_obj.dissertant = thesis_data[:author] if thesis_data[:author].present?
 
     #Assumes the data received always have the graduation date follow the pattern of 
     # "Fall yyyy" or "Spring yyyy"
@@ -244,8 +240,8 @@ def thesis_ingest(thesis_data, index, csv_directory)
     unlocked_obj.rights = thesis_data[:license]
 
     # Additional fields
-    unlocked_obj.date_accepted = thesis_data[:approved_date].to_date if thesis_date[:approved_date].present?
-    unlocked_obj.date_submitted = thesis_data[:submitted_date].to_date if thesis_date[:submitted_date].present?
+    unlocked_obj.date_accepted = thesis_data[:approved_date].to_date if thesis_data[:approved_date].present?
+    unlocked_obj.date_submitted = thesis_data[:submitted_date].to_date if thesis_data[:submitted_date].present?
 
     unlocked_obj.degree = thesis_data[:degree] if thesis_data[:degree].present?
     unlocked_obj.thesis_level = thesis_data[:degree_level] if thesis_data[:degree_level].present?
@@ -254,8 +250,12 @@ def thesis_ingest(thesis_data, index, csv_directory)
 
     unlocked_obj.subject = thesis_data[:keywords].split('|') if thesis_data[:keywords].present?
     unlocked_obj.supervisors = thesis_data[:supervisor_info].split('|') if thesis_data[:supervisor_info].present?
-    unlocked_obj.departments = [thesis_data[:department]] + thesis_data[:conjoint_departments].split('|')
-    unlocked_obj.is_version_of = thesis_data[:is_version_of] if thesis_data[:citation].present?
+    if thesis_data[:conjoint_departments].present?
+      unlocked_obj.departments = [thesis_data[:department]] + thesis_data[:conjoint_departments].split('|')
+    else
+      unlocked_obj.departments = [thesis_data[:department]]
+    end
+    unlocked_obj.is_version_of = thesis_data[:citation] if thesis_data[:citation].present?
     unlocked_obj.depositor = thesis_data[:email] if thesis_data[:email]
 
     # We only support single communities/collections pairs for time being,
@@ -265,6 +265,11 @@ def thesis_ingest(thesis_data, index, csv_directory)
     unlocked_obj.save!
   end
 
+  log "THESIS #{index}: Identifying file by checksum ..."
+ 
+  file_name = checksums[thesis_data[:md5sum]]
+  puts file_name
+ 
   log "THESIS #{index}: Starting ingest of file for thesis..."
 
   # We only support for single file ingest, but this could easily be refactored for multiple files
@@ -278,12 +283,21 @@ def thesis_ingest(thesis_data, index, csv_directory)
 
   log "THESIS #{index}: Successfully ingested an thesis! Thesis ID: `#{thesis.id}`"
 
-  item
+  thesis
 rescue StandardError => ex
-  log 'ERROR: Ingest of thesis failed! The following error occured:'
+  log 'ERROR: Ingest of thesis by #{thesis_data[:author]} failed! The following error occured:'
   log "EXCEPTION: #{ex.message}"
   log 'WARNING: Please be careful with rerunning batch ingest! Duplication of theses may happen '\
       'if previous theses were successfully deposited.'
-  exit 1
+  exit 
 end
 
+def generate_checksums(csv_directory)
+  require 'digest/md5'
+  checksums = {}
+  Dir.glob(csv_directory+"/*.pdf").each do |f|
+    checksum = Digest::MD5.hexdigest(File.read(f))
+    checksums[checksum] = File.basename(f)
+  end
+  return checksums
+end
