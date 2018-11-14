@@ -42,6 +42,8 @@ namespace :jupiter do
     end
   end
 
+  #To-Do: adding ways to authenticate and download the files. Right now this is a manual step
+
   desc 'batch ingest for theses from a csv file - used to batch ingest theses from Thesis Deposit'
   task :batch_ingest_theses, [:csv_path] => :environment do |_t, args|
     require 'csv'
