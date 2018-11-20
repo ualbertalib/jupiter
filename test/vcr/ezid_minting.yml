@@ -2,19 +2,15 @@
 http_interactions:
 - request:
     method: post
-    uri: https://ezid.cdlib.org/shoulder/doi:10.5072/FK2
+    uri: https://ez.test.datacite.org/shoulder/doi:10.21967/FK2
     body:
       encoding: UTF-8
       string: |-
         _status: public
         _profile: datacite
-        datacite.creator: John Doe
-        datacite.publisher: University of Alberta Libraries
-        datacite.publicationyear: (:unav)
-        datacite.resourcetype: Text/Book
-        datacite.title: Test Title
-        _target: http://localhost:3000/items/<%= id %>
+        _target: http://localhost/items/aab8cadd-3366-496a-bab5-2ebac3428c54
         _export: yes
+        datacite: <?xml version="1.0" encoding="UTF-8"?><resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://datacite.org/schema/kernel-4" xsi:schemaLocation="http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4/metadata.xsd"><identifier identifierType="DOI"></identifier><creators><creator><creatorName>Joe Blow</creatorName></creator></creators><titles><title>Test Title</title></titles><publisher>University of Alberta Libraries</publisher><publicationYear>2017</publicationYear><resourceType resourceTypeGeneral="Text">Text/Book</resourceType><descriptions><description descriptionType="Abstract"></description></descriptions></resource>%0A
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
@@ -23,34 +19,37 @@ http_interactions:
       User-Agent:
       - Ruby
       Host:
-      - ezid.cdlib.org
+      - ez.test.datacite.org
       Content-Type:
       - text/plain; charset=UTF-8
   response:
     status:
-      code: 201
-      message: CREATED
+      code: 200
+      message: OK
     headers:
       Date:
-      - Fri, 04 Nov 2016 19:07:29 GMT
-      Server:
-      - Apache/2.2.17 (Unix) mod_ssl/2.2.17 OpenSSL/1.0.1k-fips mod_wsgi/4.4.9 Python/2.7.6
-      Content-Length:
-      - '55'
-      Vary:
-      - Accept-Language,Cookie
-      Content-Language:
-      - en
+      - Tue, 13 Nov 2018 19:52:03 GMT
       Content-Type:
-      - text/plain; charset=UTF-8
+      - text/plain; charset=utf-8
+      Server:
+      - nginx/1.14.0 + Phusion Passenger 5.3.6
     body:
-      encoding: UTF-8
-      string: 'success: doi:10.5072/FK2JQ1005X | ark:/b5072/fk2jq1005x'
+      encoding: ASCII-8BIT
+      string: |-
+        success: doi:10.21967/fk2-7jm3-d229
+        _target: http://localhost/items/aab8cadd-3366-496a-bab5-2ebac3428c54
+        datacite: <?xml version="1.0" encoding="UTF-8"?>%0A<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://datacite.org/schema/kernel-4" xsi:schemaLocation="http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4/metadata.xsd">%0A  <identifier identifierType="DOI">10.21967/FK2-7JM3-D229</identifier>%0A  <creators>%0A    <creator>%0A      <creatorName>Joe Blow</creatorName>%0A    </creator>%0A  </creators>%0A  <titles>%0A    <title>Test Title</title>%0A  </titles>%0A  <publisher>University of Alberta Libraries</publisher>%0A  <publicationYear>2017</publicationYear>%0A  <resourceType resourceTypeGeneral="Text">Text/Book</resourceType>%0A  <descriptions>%0A    <description descriptionType="Abstract"/>%0A  </descriptions>%0A</resource>
+        _profile: datacite
+        _datacenter: CISTI.UAL
+        _export: yes
+        _created: 1542138723
+        _updated: 1542138723
+        _status: public
     http_version:
-  recorded_at: Fri, 04 Nov 2016 19:07:30 GMT
+  recorded_at: Tue, 13 Nov 2018 19:52:03 GMT
 - request:
     method: get
-    uri: https://ezid.cdlib.org/id/doi:10.5072/FK2JQ1005X
+    uri: https://ez.test.datacite.org/id/doi:10.21967/fk2-7jm3-d229
     body:
       encoding: US-ASCII
       string: ''
@@ -62,7 +61,7 @@ http_interactions:
       User-Agent:
       - Ruby
       Host:
-      - ezid.cdlib.org
+      - ez.test.datacite.org
       Content-Type:
       - text/plain; charset=UTF-8
   response:
@@ -71,36 +70,25 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Fri, 04 Nov 2016 19:07:32 GMT
-      Server:
-      - Apache/2.2.17 (Unix) mod_ssl/2.2.17 OpenSSL/1.0.1k-fips mod_wsgi/4.4.9 Python/2.7.6
-      Content-Length:
-      - '435'
-      Vary:
-      - Accept-Language,Cookie
-      Content-Language:
-      - en
+      - Tue, 13 Nov 2018 19:52:03 GMT
       Content-Type:
-      - text/plain; charset=UTF-8
+      - text/plain; charset=utf-8
+      Vary:
+      - Accept-Encoding
+      Server:
+      - nginx/1.14.0 + Phusion Passenger 5.3.6
     body:
-      encoding: UTF-8
-      string: |
-        success: doi:10.5072/FK2JQ1005X
-        datacite.publisher: University of Alberta Libraries
+      encoding: ASCII-8BIT
+      string: |-
+        success: doi:10.21967/fk2-7jm3-d229
+        _target: http://localhost/items/aab8cadd-3366-496a-bab5-2ebac3428c54
+        datacite: <?xml version="1.0" encoding="UTF-8"?>%0A<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://datacite.org/schema/kernel-4" xsi:schemaLocation="http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4/metadata.xsd">%0A  <identifier identifierType="DOI">10.21967/FK2-7JM3-D229</identifier>%0A  <creators>%0A    <creator>%0A      <creatorName>Joe Blow</creatorName>%0A    </creator>%0A  </creators>%0A  <titles>%0A    <title>Test Title</title>%0A  </titles>%0A  <publisher>University of Alberta Libraries</publisher>%0A  <publicationYear>2017</publicationYear>%0A  <resourceType resourceTypeGeneral="Text">Text/Book</resourceType>%0A  <descriptions>%0A    <description descriptionType="Abstract"/>%0A  </descriptions>%0A</resource>
         _profile: datacite
+        _datacenter: CISTI.UAL
         _export: yes
-        datacite.creator: John Doe
-        datacite.publicationyear: (:unav)
-        datacite.resourcetype: Text/Book
-        _datacenter: CDL.CDL
-        _updated: 1478286450
-        _target: http://localhost:3000/items/<%= id %>
-        datacite.title: Test Title
-        _ownergroup: apitest
-        _owner: apitest
-        _shadowedby: ark:/b5072/fk2jq1005x
-        _created: 1478286450
+        _created: 1542138723
+        _updated: 1542138723
         _status: public
     http_version:
-  recorded_at: Fri, 04 Nov 2016 19:07:32 GMT
-recorded_with: VCR 3.0.3
+  recorded_at: Tue, 13 Nov 2018 19:52:03 GMT
+recorded_with: VCR 4.0.0

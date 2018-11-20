@@ -60,7 +60,7 @@ gem 'sidekiq-cron'
 
 # Misc Utilities
 gem 'aasm' # state-machine management
-gem 'ezid-client'
+gem 'ezid-client', '~> 1.8.0'
 gem 'jbuilder' # generate JSON objects
 gem 'kaminari' # Pagination
 gem 'ransack' # ActiveRecord search/filter
@@ -85,6 +85,7 @@ group :development, :test do
   gem 'selenium-webdriver', require: false
 
   gem 'pry'
+  gem 'pry-byebug'
   gem 'pry-rails'
 
   gem 'rubocop', '~> 0.58.2', require: false
