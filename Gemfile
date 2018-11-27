@@ -8,7 +8,7 @@ end
 # Core Rails stuff
 gem 'image_processing'
 gem 'puma', '~> 3.12'
-gem 'rails', '~> 5.2.0'
+gem 'rails', '~> 5.2.1'
 
 # Assets (CSS/JS) stuff
 gem 'bootstrap', '~> 4.1.3'
@@ -31,15 +31,15 @@ gem 'simple_form'
 gem 'canonical-rails'
 
 # Hydra stuff
-gem 'active-fedora', github: 'mbarnett/active_fedora', branch: 'backport_rails52_fixes'
+gem 'active-fedora', github: 'ualbertalib/active_fedora', branch: 'backport_rails52_fixes'
 gem 'hydra-derivatives', '3.3.2' # pinned this as 3.4.X has deprecation spam because of hydra-works
 gem 'hydra-works', '0.17.0'
 gem 'rdf-vocab'
-gem 'solrizer', github: 'mbarnett/solrizer', branch: 'literally_types'
+gem 'solrizer', github: 'ualbertalib/solrizer', branch: 'literally_types'
 
 # Database stuff
 gem 'connection_pool'
-gem 'pg', '~> 1.0.0'
+gem 'pg', '~> 1.1.3'
 gem 'redis', '~> 4.0'
 gem 'rsolr'
 
@@ -51,16 +51,16 @@ gem 'omniauth-saml'
 gem 'pundit'
 
 # Background tasks
-gem 'sidekiq', '~> 5.1'
+gem 'sidekiq', '~> 5.2'
 gem 'sidekiq-unique-jobs'
-gem 'sinatra', '~> 2.0.3' # used by sidekiq/web
+gem 'sinatra', '~> 2.0.4' # used by sidekiq/web
 # Sidekiq cron jobs
 gem 'rufus-scheduler', '3.5.2' # https://github.com/ondrejbartas/sidekiq-cron/issues/199
 gem 'sidekiq-cron'
 
 # Misc Utilities
 gem 'aasm' # state-machine management
-gem 'ezid-client'
+gem 'ezid-client', '~> 1.8.0'
 gem 'jbuilder' # generate JSON objects
 gem 'kaminari' # Pagination
 gem 'ransack' # ActiveRecord search/filter
@@ -85,6 +85,7 @@ group :development, :test do
   gem 'selenium-webdriver', require: false
 
   gem 'pry'
+  gem 'pry-byebug'
   gem 'pry-rails'
 
   gem 'rubocop', '~> 0.58.2', require: false

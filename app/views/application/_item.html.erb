@@ -12,7 +12,7 @@
         <%= link_to url_for(primary_file),
                     class: 'btn btn-secondary mr-2 mb-2 mb-md-0',
                     rel: 'nofollow',
-                    download: primary_file.blob.filename.to_s do %>
+                    download: primary_file.filename.to_s do %>
           <%= fa_icon 'cloud-download' %>
           <%= t('download') %>
         <% end %>

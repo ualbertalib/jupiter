@@ -53,8 +53,8 @@ class DraftItem < ApplicationRecord
 
   ITEM_TYPE_TO_URI_CODE = { book: :book,
                             book_chapter: :chapter,
-                            conference_workshop_poster: :conference_poster,
-                            conference_workshop_presenation: :conference_paper,
+                            conference_workshop_poster: :conference_workshop_poster,
+                            conference_workshop_presentation: :conference_workshop_presentation,
                             dataset: :dataset,
                             image: :image,
                             journal_article_draft: :article,
@@ -70,6 +70,8 @@ class DraftItem < ApplicationRecord
 
   has_many :draft_items_languages, dependent: :destroy
   has_many :languages, through: :draft_items_languages
+
+  before_validation :strip_input_fields
 
   validates :title, :type, :languages,
             :creators, :subjects, :date_created,
@@ -289,6 +291,13 @@ class DraftItem < ApplicationRecord
 
   def license_not_unselected
     errors.add(:license, :missing) if license == 'unselected'
+  end
+
+  def strip_input_fields
+    attributes.each do |key, value|
+      self[key] = value.reject(&:blank?) if value.is_a?(Array)
+      self[key] = nil if self[key].blank?
+    end
   end
 
 end

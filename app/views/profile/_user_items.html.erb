@@ -53,7 +53,13 @@
             <%= render partial: 'thumbnail', locals: { object: draft_thesis } %>
             <div class="media-body ml-3">
               <h4 class="mt-0"><%= draft_thesis.title %></h4>
-              <p class="text-muted"><%= draft_thesis.graduation_term %> <%= draft_thesis.graduation_year %></p>
+              <p class="text-muted">
+                <% if draft_thesis.graduation_term.present? %>
+                  <%= draft_thesis.graduation_year %>-<%= draft_thesis.graduation_term %>
+                <% else %>
+                  <%= draft_thesis.graduation_year %>
+                <% end %>
+              </p>
               <p class="text-muted"><%= draft_thesis.creator %></p>
               <p class="text-muted"><%= jupiter_truncate draft_thesis.description %></p>
             </div>

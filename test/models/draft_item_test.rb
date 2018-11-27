@@ -221,4 +221,34 @@ class DraftItemTest < ActiveSupport::TestCase
     assert draft_item.valid?
   end
 
+  # should be able to delete additional contributors https://github.com/ualbertalib/jupiter/issues/830
+  test '#strip_input_fields should strip empty strings from array fields' do
+    user = users(:regular)
+
+    draft_item = DraftItem.new(
+      user: user,
+      status: DraftItem.statuses[:active],
+      title: 'Book of Random',
+      type: types(:book),
+      languages: [languages(:english)],
+      creators: ['Jane Doe', 'Bob Smith'],
+      subjects: ['Best Seller', 'Adventure'],
+      date_created: Date.current,
+      description: 'Really random description about this random book',
+      member_of_paths: { community_id: [@community.id], collection_id: [@collection.id] },
+      contributors: ['Carly Brown'],
+      places: ['Edmonton'],
+      time_periods: ['21st Century']
+    )
+
+    draft_item.assign_attributes(
+      contributors: [''], places: [''], time_periods: ['']
+    )
+
+    assert draft_item.valid?
+    assert_nil draft_item.contributors
+    assert_nil draft_item.places
+    assert_nil draft_item.time_periods
+  end
+
 end

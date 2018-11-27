@@ -24,7 +24,7 @@ class DepositThesisTest < ApplicationSystemTestCase
     click_link I18n.t('admin.items.index.header')
     click_link I18n.t('admin.items.index.deposit_thesis')
 
-    skip 'The rest of this test continues to flap on CI for unknown reasons that should be investigated ASAP'
+    skip 'This test continues to flap on CI for unknown reasons that should be investigated ASAP' if ENV['TRAVIS']
 
     # 1. Describe Thesis Form
 
@@ -40,7 +40,7 @@ class DepositThesisTest < ApplicationSystemTestCase
             with: 'Jane Doe'
 
     select 2018, from: I18n.t('admin.theses.draft.describe_thesis.graduation_year')
-    select 'Spring', from: I18n.t('admin.theses.draft.describe_thesis.graduation_term')
+    select '06 (Spring)', from: I18n.t('admin.theses.draft.describe_thesis.graduation_term')
 
     fill_in I18n.t('admin.theses.draft.describe_thesis.description'),
             with: 'A Dance with Dragons Description Goes Here!!!'
@@ -67,6 +67,7 @@ class DepositThesisTest < ApplicationSystemTestCase
     assert_selector 'h2', text: I18n.t('admin.theses.draft.upload_files.header')
 
     attach_file_in_dropzone(file_fixture('image-sample.jpeg'))
+    has_css? '.j-thumbnail'
 
     click_on I18n.t('admin.theses.draft.save_and_continue'), wait: 5
 

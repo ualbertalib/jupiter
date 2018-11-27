@@ -120,12 +120,14 @@
               <%= @draft.description %>
             </p>
 
-            <h6 class="card-subtitle mb-1 text-muted">
-              <%= t('admin.theses.draft.describe_thesis.graduation_term') %>
-            </h6>
-            <p class="card-text">
-              <%= @draft.graduation_term %>
-            </p>
+            <% if @draft.graduation_term.present? %>
+              <h6 class="card-subtitle mb-1 text-muted">
+                <%= t('admin.theses.draft.describe_thesis.graduation_term') %>
+              </h6>
+              <p class="card-text">
+                <%= @draft.graduation_term %>
+              </p>
+            <% end %>
 
             <h6 class="card-subtitle mb-1 text-muted">
               <%= t('admin.theses.draft.describe_thesis.graduation_year') %>

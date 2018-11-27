@@ -1,6 +1,8 @@
 module DraftProperties
   extend ActiveSupport::Concern
 
+  UNIVERSITY_INCEPTION_YEAR = 1908
+
   included do
     enum status: { inactive: 0, active: 1, archived: 2 }
 

@@ -52,7 +52,6 @@
     <%= f.input :creators,
         label: t('.creators'),
         collection: @draft.creators || [],
-        include_hidden: false, # TODO: figure out this, need to parse empty strings out in model
         input_html: {
           multiple: true,
           data: { placeholder: t('.creators_placeholder') },
@@ -65,7 +64,6 @@
     <%= f.input :subjects,
         label: t('.subjects'),
         collection: @draft.subjects || [],
-        include_hidden: false,
         input_html: {
           multiple: true,
           data: { placeholder: t('.subjects_placeholder') },
@@ -85,7 +83,7 @@
                   year: t('select_a_year')
                 },
                 start_year: Date.today.year + 1,
-                end_year: Date.today.year - 100,
+                end_year: DraftProperties::UNIVERSITY_INCEPTION_YEAR,
                 input_html: { class: 'mr-2 mb-2', 'aria-labelledby': 'draft_item_date_created_1i' },
                 required: true,
                 hint: t('.date_created_help') %>
@@ -155,7 +153,6 @@
             <%= f.input :contributors,
                 label: t('.contributors'),
                 collection: @draft.contributors || [],
-                include_hidden: false,
                 input_html: {
                   multiple: true,
                   data: { placeholder: t('.contributors_placeholder') },
@@ -167,7 +164,6 @@
             <%= f.input :places,
                 label: t('.places'),
                 collection: @draft.places || [],
-                include_hidden: false,
                 input_html: {
                   multiple: true,
                   data: { placeholder: t('.places_placeholder') },
@@ -179,7 +175,6 @@
             <%= f.input :time_periods,
                 label: t('.time_periods'),
                 collection: @draft.time_periods || [],
-                include_hidden: false,
                 input_html: {
                   multiple: true,
                   data: { placeholder: t('.time_periods_placeholder') },
@@ -191,7 +186,6 @@
             <%= f.input :citations,
                 label: t('.citations'),
                 collection: @draft.citations || [],
-                include_hidden: false,
                 input_html: {
                   multiple: true,
                   data: { placeholder: t('.citations_placeholder') },

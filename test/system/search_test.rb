@@ -245,7 +245,8 @@ class SearchTest < ApplicationSystemTestCase
     click_button 'Search'
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy')
 
-    # Default sort is by title
+    # Default sort is by relevance
+    # TODO this test has flapped in the past because the score of each document is equal
     assert_match(/Fancy Item 0.*Fancy Item 2.*Fancy Item 4.*Fancy Item 6.*Fancy Item 8/m, page.text)
 
     # Sort sort links
@@ -254,6 +255,7 @@ class SearchTest < ApplicationSystemTestCase
     assert_selector 'a', text: 'Title (Z-A)'
     assert_selector 'a', text: 'Date (newest first)'
     assert_selector 'a', text: 'Date (oldest first)'
+    assert_selector 'a', text: 'Relevance'
 
     # Reverse sort
     click_link 'Title (Z-A)'
