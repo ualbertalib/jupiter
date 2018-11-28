@@ -90,12 +90,12 @@ class DOIService
 
   def ezid_metadata
     {
-      datacite_creator:  @item.authors.join('; '),
+      datacite_creator: @item.authors.join('; '),
       datacite_publisher: PUBLISHER,
       datacite_publicationyear: @item.sort_year.presence || '(:unav)',
       datacite_resourcetype: DATACITE_METADATA_SCHEME[@item.item_type_with_status_code],
       datacite_resourcetypegeneral: DATACITE_METADATA_SCHEME[@item.item_type_with_status_code].split('/').first,
-      datacite_title:  @item.title,
+      datacite_title: @item.title,
       target: Rails.application.routes.url_helpers.item_url(id: @item.id),
       # Can only set status if been minted previously, else its public
       status: @item.private? && @item.doi.present? ? UNAVAILABLE_MESSAGE : Ezid::Status::PUBLIC

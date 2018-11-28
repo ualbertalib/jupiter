@@ -21,6 +21,10 @@ Layout/IndentationConsistency:
   Enabled: true
   EnforcedStyle: normal
 
+# readability is Actually Good
+Layout/RescueEnsureAlignment:
+  Enabled: false
+
 Lint/Void:
   Exclude:
     - app/models/jupiter_core/locked_ldp_object.rb
