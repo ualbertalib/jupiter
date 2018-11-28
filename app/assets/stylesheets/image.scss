@@ -1,6 +1,7 @@
 .j-thumbnail {
-  max-height: 100px;
-  max-width: 100px;
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
 }
 
 .j-feature-image {
