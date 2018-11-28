@@ -33,6 +33,7 @@ module ItemsHelper
   # displaying raw data otherwise.
   def humanize_date(dateish)
     return I18n.t('date_unknown') if dateish.blank?
+
     Date.parse(dateish).iso8601
   rescue ArgumentError
     dateish

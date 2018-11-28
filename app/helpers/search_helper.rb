@@ -14,6 +14,7 @@ module SearchHelper
   def facet_display_order
     priority_facets = (params[:facets]&.keys || []) + (params[:ranges]&.keys || [])
     return priority_facets unless @search_models.include? Item
+
     priority_facets + [Item.solr_name_for(:all_contributors, role: :facet),
                        Item.solr_name_for(:all_subjects, role: :facet)]
   end
@@ -34,6 +35,7 @@ module SearchHelper
     query_params = search_params_hash
     raise ArgumentError, 'No facets are present' unless query_params.key?(:facets)
     raise ArgumentError, 'No query param is present for this facet' unless query_params[:facets].key?(facet_name)
+
     query_params[:facets][facet_name].delete(value)
     query_params[:facets].delete(facet_name) if query_params[:facets][facet_name].empty?
     query_params.delete(:facets) if query_params[:facets].empty?
@@ -45,6 +47,7 @@ module SearchHelper
     query_params = search_params_hash
     raise ArgumentError, 'No ranges are present' unless query_params.key?(:ranges)
     raise ArgumentError, 'No query param is present for this range' unless query_params[:ranges].key?(facet_name)
+
     query_params[:ranges].delete(facet_name)
     query_params.delete(:ranges) if query_params[:ranges].empty?
 
