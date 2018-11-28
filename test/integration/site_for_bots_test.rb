@@ -69,6 +69,7 @@ class SiteForBotsTest < ActionDispatch::IntegrationTest
       end
       # search_path is noindex so description shouldn't matter
       next if search_path == route
+
       assert_select "meta[name='description']", count: 1 do |description|
         collect_descriptions << description
       end

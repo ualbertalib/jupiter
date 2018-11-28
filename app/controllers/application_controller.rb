@@ -32,6 +32,7 @@ class ApplicationController < ActionController::Base
   # Returns the current logged-in user (if any).
   def current_user
     return @current_user if @current_user.present?
+
     @current_user = User.find_by(id: session[:user_id])
 
     return nil if @current_user.blank?

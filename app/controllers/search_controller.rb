@@ -50,6 +50,7 @@ class SearchController < ApplicationController
     @search_models.each do |model|
       model.ranges.each do |range|
         next unless params[:ranges].present? && params[:ranges][range].present?
+
         if validate_range(params[:ranges][range])
           r[range] = [:begin, :end]
         else
@@ -67,6 +68,7 @@ class SearchController < ApplicationController
     start = range[:begin]
     finish = range[:end]
     return true if start.match?(/\A\d{1,4}\z/) && finish.match?(/\A\d{1,4}\z/) && (start.to_i <= finish.to_i)
+
     flash[:alert] = "#{start} to #{finish} is not a valid range"
     false
   end

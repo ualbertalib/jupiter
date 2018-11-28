@@ -5,6 +5,7 @@ class UriValidator < ActiveModel::EachValidator
     vocabs ||= [options[:in_vocabulary]]
     raise ArgumentError, "#{attr} must specify a vocabulary to validate against!" if vocabs.empty?
     return if value.blank?
+
     value = [value] unless value.is_a?(Array) || value.is_a?(ActiveTriples::Relation)
 
     value.each do |v|
