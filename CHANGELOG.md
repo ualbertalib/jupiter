@@ -8,6 +8,9 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 ### Changed
 - use Datacite EZ API for tests [#911](https://github.com/ualbertalib/jupiter/issues/911)
 
+### Security
+- Bumps rails from 5.2.1 to 5.2.1.1. This update includes security fixes for ActiveStorage and ActiveJob. [PR#933](https://github.com/ualbertalib/jupiter/pull/933)
+
 ## [1.2.6] - 2018-11-05
 ### Fixed
 - can delete additional contributors [#830](https://github.com/ualbertalib/jupiter/issues/830)
