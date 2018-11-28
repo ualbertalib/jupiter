@@ -8,6 +8,7 @@ module ApplicationHelper
   def humanize_uri(vocab, uri)
     code = CONTROLLED_VOCABULARIES[vocab].from_uri(uri)
     return nil if code.nil?
+
     humanize_uri_code(vocab, code)
   end
 
@@ -20,11 +21,13 @@ module ApplicationHelper
   # Issue here: https://github.com/ualbertalib/jupiter/issues/159
   def jupiter_time_tag(date, format: '%F', blank_message: '')
     return blank_message if date.blank?
+
     time_tag(date, format: format)
   end
 
   def jupiter_time_ago_in_words(date, blank_message: '')
     return blank_message if date.blank?
+
     t('time_ago', time: time_ago_in_words(date))
   end
 

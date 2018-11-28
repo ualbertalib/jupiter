@@ -36,6 +36,7 @@ class JupiterCore::LockedLdpObject
   # Returns the id of the object in LDP as a String
   def id
     return ldp_object.send(:id) if ldp_object.present?
+
     solr_representation['id'] if solr_representation
   end
 
@@ -49,6 +50,7 @@ class JupiterCore::LockedLdpObject
   # rubocop:disable Style/DateTime, Rails/TimeZone
   def updated_at
     return ldp_object.modified_date if ldp_object.present?
+
     DateTime.parse(solr_representation['system_modified_dtsi']) if solr_representation
   end
   # rubocop:enable Style/DateTime, Rails/TimeZone
@@ -106,24 +108,28 @@ class JupiterCore::LockedLdpObject
   def persisted?
     # if we haven't had to load the internal ldp_object, by definition we must by synced to disk
     return true if ldp_object.blank?
+
     ldp_object.persisted?
   end
 
   # Has this object been changed since being loaded? (Defined for ActiveModel compatibility)
   def changed?
     return false if ldp_object.blank?
+
     ldp_object.changed?
   end
 
   # Do this object's validations pass? (Defined for ActiveModel compatibility)
   def valid?(*args)
     return super(*args) if ldp_object.blank?
+
     ldp_object.valid?(*args)
   end
 
   # Do this object's validations pass? (Defined for ActiveModel compatibility)
   def errors
     return super if ldp_object.blank?
+
     ldp_object.errors
   end
 
@@ -145,8 +151,10 @@ class JupiterCore::LockedLdpObject
 
   def read_solr_index(name)
     raise JupiterCore::PropertyInvalidError unless name.is_a? Symbol
+
     type_info = self.solr_calc_attributes[name]
     raise JupiterCore::PropertyInvalidError if type_info.blank?
+
     solr_representation[type_info[:solr_names].first]
   end
 
@@ -223,13 +231,16 @@ class JupiterCore::LockedLdpObject
     if attribute_metadata.present?
       sort_attr_index = attribute_metadata[:solrize_for].index(role)
       raise ArgumentError, "No #{role} solr role is defined for #{attribute_name}" if sort_attr_index.blank?
+
       return attribute_metadata[:solr_names][sort_attr_index]
     else
       solr_metadata = self.solr_calc_attributes[attribute_name]
       raise ArgumentError, "No such attribute is defined, #{attribute_name}" if solr_metadata.blank?
+
       solrize_for = solr_metadata[:solrize_for]
       idx = solrize_for.find_index(role)
       raise ArgumentError, "#{attribute_name} not indexed for #{role}" if idx.blank?
+
       return solr_metadata[:solr_names][idx]
     end
   end
@@ -245,6 +256,7 @@ class JupiterCore::LockedLdpObject
   #   => "title_tesim:science"
   def self.search_term_for(attr_name, value, role: :search)
     raise ArgumentError, "search value can't be nil" if value.nil?
+
     solr_attr_name = solr_name_for(attr_name, role: role)
     %Q(#{solr_attr_name}:"#{value}")
   end
@@ -265,8 +277,10 @@ class JupiterCore::LockedLdpObject
   #   => {"sort_year_isi"=>{:begin=>"1999", :end=>"1999"}
   def self.facet_term_for(attr_name, value, role: :facet)
     raise ArgumentError, "search value can't be nil" if value.nil?
+
     solr_attr_name = solr_name_for(attr_name, role: role)
     return { solr_attr_name => { begin: value, end: value } } if role == :range_facet
+
     { solr_attr_name => [value].flatten }
   end
 
@@ -275,10 +289,12 @@ class JupiterCore::LockedLdpObject
   def self.find(id, types: [])
     if self == JupiterCore::LockedLdpObject
       raise ArgumentError, 'Must specify types: to find' if types.blank?
+
       types = [types] unless types.is_a? Array
       af_types = types.map { |m| m.send(:derived_af_class) }
     else
       raise ArgumentError, 'Use LockedLDPObject#find to do a polymorphic find' if types.present?
+
       af_types = [derived_af_class]
     end
     results_count, results, _ = JupiterCore::Search.perform_solr_query(q: %Q(_query_:"{!raw f=id}#{id}"),
@@ -289,9 +305,11 @@ class JupiterCore::LockedLdpObject
             "Couldn't find #{af_types.map(&:to_s).join(', ')} with id='#{id}'"
     end
     raise JupiterCore::MultipleIdViolationError if results_count > 1
+
     solr_doc = results.first
 
     return new(solr_doc: solr_doc) unless self == JupiterCore::LockedLdpObject
+
     reify_solr_doc(solr_doc)
   end
 
@@ -384,6 +402,7 @@ class JupiterCore::LockedLdpObject
   #    => #<Item id: "88489b6e-12dd-4eea-b833-af08782c419e", <other properties>>  #
   def self.reify_solr_doc(solr_doc)
     raise ArgumentError, 'Not a valid LockedLDPObject representation' if solr_doc['has_model_ssim'].blank?
+
     model_name = solr_doc['has_model_ssim'].first
     model_name.constantize.owning_class.send(:new, solr_doc: solr_doc)
   end
@@ -400,12 +419,14 @@ class JupiterCore::LockedLdpObject
 
   def initialize(solr_doc: nil, ldp_obj: nil)
     raise ArgumentError if solr_doc.present? && ldp_obj.present?
+
     self.solr_representation = solr_doc if solr_doc.present?
     self.ldp_object = ldp_obj if ldp_obj.present?
   end
 
   def method_missing(name, *args, &block)
     return super unless self.class.send(:derived_af_class).instance_methods.include?(name)
+
     raise JupiterCore::LockedInstanceError, 'This is a locked cache instance and does not respond to the method'\
                                "you attempted to call (##{name}). However, the locked instance DOES respond to"\
                                "##{name}. Use unlock_and_fetch_ldp_object to load a writable copy (SLOW)."
@@ -443,6 +464,7 @@ class JupiterCore::LockedLdpObject
     def coerce_value(value, to:)
       return [] if value.nil? && to == :json_array
       return nil if value.nil?
+
       case to
       when :string, :text
         value.to_s
@@ -519,6 +541,7 @@ class JupiterCore::LockedLdpObject
 
     def derived_af_class_name
       return AF_CLASS_PREFIX + self.to_s if self.name.present?
+
       "AnonymousDerivedClass#{self.object_id}"
     end
 
@@ -553,11 +576,13 @@ class JupiterCore::LockedLdpObject
 
         def set_date_ingested
           return if date_ingested.present?
+
           self.date_ingested = record_created_at
         end
 
         def visibility_must_be_known
           return true if visibility.present? && owning_object.class.valid_visibilities.include?(visibility)
+
           errors.add(:visibility, I18n.t('locked_ldp_object.errors.invalid_visibility', visibility: visibility))
         end
 
@@ -579,6 +604,7 @@ class JupiterCore::LockedLdpObject
         # read back from Fedora/Solr
         def convert_value(value, to:)
           return value if value.nil?
+
           case to
           when :string, :text
             unless value.is_a?(String)
@@ -586,6 +612,7 @@ class JupiterCore::LockedLdpObject
                                "that's what you want"
             end
             value
+          # rubocop:disable Style/DateTime
           when :date
             # ActiveFedora/RDF does the wrong thing with Time (see below) AND
             # it serializes every other Date type to a string internally at a very low precision (second granularity)
@@ -599,19 +626,24 @@ class JupiterCore::LockedLdpObject
             else
               raise TypeError, "#{value} is not a Date type"
             end
+          # rubocop:enable Style/DateTime
           when :boolean
             raise TyperError, "#{value} is not a boolean" unless [true, false].include?(value)
+
             value
           when :integer
             raise TypeError, "#{value} is not a integer value" unless value.is_a?(Integer)
+
             value
           when :path
             value
           when :json_array
             raise TypeError, "#{value} is not an Array" unless value.is_a?(Array)
+
             value.to_json
           when :float
             raise TypeError, "#{value} is not a float value" unless value.is_a?(Float)
+
             value
           else
             raise 'NOT IMPLEMENTED'
@@ -645,6 +677,7 @@ class JupiterCore::LockedLdpObject
         # object
         def method_missing(name, *args, &block)
           return owning_object.send(name, *args, &block) if owning_object.respond_to?(name, true)
+
           super
         end
 
@@ -679,8 +712,10 @@ class JupiterCore::LockedLdpObject
               end
         return if val.nil?
         return val.freeze if type == :json_array # conversion happened in the overriden AF reader
+
         val = val.first if val.is_a?(Array) && !multiple
         return coerce_value(val, to: type).freeze unless multiple
+
         coerced_values = val.map do |v|
           coerce_value(v, to: type).freeze
         end
@@ -703,6 +738,7 @@ class JupiterCore::LockedLdpObject
       raise JupiterCore::PropertyInvalidError unless as.respond_to?(:call)
       raise JupiterCore::PropertyInvalidError if name.blank?
       raise JupiterCore::PropertyInvalidError unless type.present? && type.is_a?(Symbol)
+
       solrize_for = [solrize_for] unless solrize_for.is_a?(Array)
 
       solr_descriptors = []

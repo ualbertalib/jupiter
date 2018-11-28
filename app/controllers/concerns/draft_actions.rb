@@ -43,6 +43,7 @@ module DraftActions
       communities = params[draft_param].delete :community_id
       communities.each_with_index do |community_id, idx|
         next if community_id.blank?
+
         @draft.member_of_paths['community_id'] << community_id
         collection_id = params[draft_param]['collection_id'][idx]
         @draft.member_of_paths['collection_id'] << collection_id

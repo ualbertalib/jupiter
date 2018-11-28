@@ -176,8 +176,10 @@ class DraftItem < ApplicationRecord
     uris.map do |uri|
       code = CONTROLLED_VOCABULARIES[:language].from_uri(uri)
       raise ArgumentError, "No known code for language uri: #{uri}" if code.blank?
+
       language = Language.find_by(name: code)
       raise ArgumentError, "No draft language found for code: #{code}" if language.blank?
+
       language
     end
   end
@@ -193,6 +195,7 @@ class DraftItem < ApplicationRecord
 
   def license_for_uri(uri)
     return 'license_text' if uri.nil?
+
     code = CONTROLLED_VOCABULARIES[:license].from_uri(uri)
     license = URI_CODE_TO_LICENSE[code].to_s
 
@@ -229,8 +232,10 @@ class DraftItem < ApplicationRecord
     end
 
     raise ArgumentError, "Unable to map DraftItem type from URI: #{uri}, code: #{code}" if name.blank?
+
     type = Type.find_by(name: name)
     raise ArgumentError, "Unable to find DraftItem type: #{name}" if type.blank?
+
     type
   end
 
@@ -245,6 +250,7 @@ class DraftItem < ApplicationRecord
     code = CONTROLLED_VOCABULARIES[:visibility].from_uri(uri)
     visibility = URI_CODE_TO_VISIBILITY[code].to_s
     raise ArgumentError, "Unable to map DraftItem visbility from URI: #{uri}, code: #{code}" if visibility.blank?
+
     visibility
   end
 
@@ -258,11 +264,13 @@ class DraftItem < ApplicationRecord
 
   def visibility_after_embargo_for_uri(uri)
     return 0 if uri.blank?
+
     code = CONTROLLED_VOCABULARIES[:visibility].from_uri(uri)
     visibility = URI_CODE_TO_VISIBILITY_AFTER_EMBARGO[code].to_s
     if visibility.blank?
       raise ArgumentError, "Unable to map DraftItem visbility_after_embargo from URI: #{uri}, code: #{code}"
     end
+
     visibility
   end
 
@@ -273,10 +281,12 @@ class DraftItem < ApplicationRecord
   def depositor_can_deposit
     return if member_of_paths.blank?
     return if member_of_paths['community_id'].blank? || member_of_paths['collection_id'].blank?
+
     member_of_paths['community_id'].each_with_index do |_community_id, idx|
       collection_id = member_of_paths['collection_id'][idx]
       collection = Collection.find_by(collection_id)
       next if collection.blank?
+
       errors.add(:member_of_paths, :collection_restricted) if collection.restricted && !user.admin?
     end
   end
