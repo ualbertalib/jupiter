@@ -8,6 +8,11 @@
   </div>
     <%= hidden_field_tag 'search', params[:search] %>
     <%= hidden_field_tag 'direction', params[:direction] %>
+
+    <% if @collection.present? %>
+      <%= hidden_field_tag "facets[#{Item.solr_name_for(:member_of_paths, role: :pathing)}][]", @collection.path %>
+    <% end %>
+
     <% if params[:facets].present? %>
       <% params[:facets].each do |facet_name, facet_values| %>
         <% facet_values.each do |val| %>
