@@ -14,5 +14,5 @@ module JupiterCore
   VISIBILITIES = [VISIBILITY_PUBLIC, VISIBILITY_PRIVATE, VISIBILITY_AUTHENTICATED].freeze
 
   # This'll do for the time being I suppose ¯\_(ツ)_/¯
-  VERSION = '1.2.3'.freeze
+  VERSION = '1.2.7'.freeze
 end
