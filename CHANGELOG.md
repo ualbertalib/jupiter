@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and releases in Jupiter project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.2.7] - 2018-12-03
 ### Changed
 - use Datacite EZ API for tests [#911](https://github.com/ualbertalib/jupiter/issues/911)
 - proportions for portrait thumbnails [#661](https://github.com/ualbertalib/jupiter/issues/661)
