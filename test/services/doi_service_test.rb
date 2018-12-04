@@ -4,7 +4,7 @@ class DoiServiceTest < ActiveSupport::TestCase
 
   include ActiveJob::TestHelper
 
-  EXAMPLE_DOI = 'doi:10.21967/fk2-7jm3-d229'.freeze
+  EXAMPLE_DOI = 'doi:10.21967/fk2-jaje-4d53'.freeze
 
   test 'DOI state transitions' do
     assert_no_enqueued_jobs
@@ -106,7 +106,7 @@ class DoiServiceTest < ActiveSupport::TestCase
       # TODO: will be fixed by cheetoh release 0.10.2 bug on concatenating reason
       # see https://github.com/datacite/cheetoh/commit/103699867478d5086a76bfe602efe21be02f2994#diff-4a07abe40929a2b2d94ac79e73c5a0a1
       assert_equal 'unavailable | unavailable | withdrawn', ezid_identifer.status
-      assert_equal 'yes', ezid_identifer.export
+      assert_equal 'no', ezid_identifer.export
     end
 
     Rails.application.secrets.doi_minting_enabled = false
