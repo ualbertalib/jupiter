@@ -6,6 +6,16 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+## [1.2.7] - 2018-12-03
+### Changed
+- use Datacite EZ API for tests [#911](https://github.com/ualbertalib/jupiter/issues/911)
+- proportions for portrait thumbnails [#661](https://github.com/ualbertalib/jupiter/issues/661)
+
+### Security
+- Bumps rails from 5.2.1 to 5.2.1.1. This update includes security fixes for ActiveStorage and ActiveJob. [PR#933](https://github.com/ualbertalib/jupiter/pull/933)
+
+### Fixed
+- Fix year limiter on collection item results [#931](https://github.com/ualbertalib/jupiter/pull/931)
 
 ## [1.2.6] - 2018-11-05
 ### Fixed
@@ -21,14 +31,14 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 ### Changed
 - remove references to mbarnett properties [#868](https://github.com/ualbertalib/jupiter/issues/868)
 - improvement on flagging tests [#875](https://github.com/ualbertalib/jupiter/pull/875)
-- Security update: bump nokogiri from 1.8.4 to 1.8.5  
+- Security update: bump nokogiri from 1.8.4 to 1.8.5
 - Multiple dependency updates
 
 
 ## [1.2.3] - 2018-09-19
 ### Fixed
 - View object in the browser [PR#866](https://github.com/ualbertalib/jupiter/pull/866)
-- Dependency for deployment of 1.2.0 in the release note. 
+- Dependency for deployment of 1.2.0 in the release note.
 
 ## [1.2.2] - 2018-09-17
 ### Fixed
@@ -66,7 +76,7 @@ to end users is now provided by Rails/ActiveStorage rather than through interact
   - We will need to know the size of datastreams in Fedora to verify we have enough space provisioned on Gluster storage, plus headroom, as all deposits from now on
     will be stored in both Fedora (for preservation) and on the Gluster (for long term preservation)
 
-  - One additional package needs to be added for ActiveStorage to server the PDF thumbnail is Poppler (Details [here](https://api.rubyonrails.org/v5.2/classes/ActiveStorage/Preview.html)). The package needs to be installed separately on application servers. 
+  - One additional package needs to be added for ActiveStorage to server the PDF thumbnail is Poppler (Details [here](https://api.rubyonrails.org/v5.2/classes/ActiveStorage/Preview.html)). The package needs to be installed separately on application servers.
 
   - Starting with this release, new deposits will be uploaded to the gluster immediately, and then be ingested into Fedora in the background.
     This means we expect CPU usage and jobs processed on the sidekiq server to increase permanently to handle this new process.
@@ -78,8 +88,6 @@ to end users is now provided by Rails/ActiveStorage rather than through interact
   - A new periodic task has been added to Jupiter to periodically delete unused, orphaned files from the gluster filesystem to prevent
     them from piling up endlessly. This is run automatically via schedule.yml queuing up a GarbageCollectBlobsJob every 12 hours.
     When necessary this can also be run manually by running the rake tast `rake jupiter:gc_blobs`
-    
-
 
 ## [1.1.0] - 2018-06-25
 ### Added

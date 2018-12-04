@@ -71,46 +71,54 @@ class RedirectController < ApplicationController
   def noid
     # TODO: is it worth doing any pattern matching for format?
     return params[:noid] if params[:noid].present?
+
     raise JupiterCore::ObjectNotFound
   end
 
   def find_item_by_noid(noid)
     object = (Item.where(hydra_noid: noid) + Thesis.where(hydra_noid: noid)).first
     return object if object.present?
+
     raise JupiterCore::ObjectNotFound
   end
 
   def find_item_file(item, filename)
     return nil if filename.blank?
+
     item.files.detect { |file| file.filename == CGI.unescape(filename) }
   end
 
   def find_community_or_collection_by_noid(noid)
     object = (Community.where(hydra_noid: noid) + Collection.where(hydra_noid: noid)).first
     return object if object.present?
+
     raise JupiterCore::ObjectNotFound
   end
 
   def uuid
     return params[:uuid] if /^uuid:.+/ =~ params[:uuid]
+
     raise JupiterCore::ObjectNotFound
   end
 
   def find_item_by_uuid(uuid)
     object = (Item.where(fedora3_uuid: uuid) + Thesis.where(fedora3_uuid: uuid)).first
     return object if object.present?
+
     raise JupiterCore::ObjectNotFound
   end
 
   def find_community_by_uuid(uuid)
     object = Community.where(fedora3_uuid: uuid).first
     return object if object.present?
+
     raise JupiterCore::ObjectNotFound
   end
 
   def find_collection_by_uuid(uuid)
     object = Collection.where(fedora3_uuid: uuid).first
     return object if object.present?
+
     raise JupiterCore::ObjectNotFound
   end
 

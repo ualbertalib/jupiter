@@ -51,7 +51,12 @@ class DOIService
   def update
     return unless @item.doi_state.awaiting_update?
 
-    ezid_identifer = Ezid::Identifier.modify(@item.doi, ezid_metadata)
+    ezid_identifer = Ezid::Identifier.modify(
+      @item.doi,
+      # TODO: issue with datacite.resourcetype addressed by https://github.com/datacite/cheetoh/pull/21
+      # don't include resource type in metadata sent will work in 'most cases' ;)
+      ezid_metadata.except(:datacite_resourcetypegeneral, :datacite_resourcetype)
+    )
     return if ezid_identifer.blank?
 
     if @item.private?
@@ -76,22 +81,24 @@ class DOIService
   end
 
   def self.remove(doi)
-    Ezid::Identifier.modify(doi, status: "#{Ezid::Status::UNAVAILABLE} | withdrawn", export: 'no')
+    # TODO: issue with _export addressed by https://github.com/datacite/cheetoh/pull/21
+    # don't include _export in metadata
+    Ezid::Identifier.modify(doi, status: "#{Ezid::Status::UNAVAILABLE} | withdrawn")
   end
 
   private
 
   def ezid_metadata
     {
-      datacite_creator:  @item.authors.join('; '),
+      datacite_creator: @item.authors.join('; '),
       datacite_publisher: PUBLISHER,
       datacite_publicationyear: @item.sort_year.presence || '(:unav)',
       datacite_resourcetype: DATACITE_METADATA_SCHEME[@item.item_type_with_status_code],
-      datacite_title:  @item.title,
+      datacite_resourcetypegeneral: DATACITE_METADATA_SCHEME[@item.item_type_with_status_code].split('/').first,
+      datacite_title: @item.title,
       target: Rails.application.routes.url_helpers.item_url(id: @item.id),
       # Can only set status if been minted previously, else its public
-      status: @item.private? && @item.doi.present? ? UNAVAILABLE_MESSAGE : Ezid::Status::PUBLIC,
-      export: @item.private? ? 'no' : 'yes'
+      status: @item.private? && @item.doi.present? ? UNAVAILABLE_MESSAGE : Ezid::Status::PUBLIC
     }
   end
 

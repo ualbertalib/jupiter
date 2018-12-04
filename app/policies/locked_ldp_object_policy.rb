@@ -13,6 +13,7 @@ class LockedLdpObjectPolicy < ApplicationPolicy
 
   def owned?
     return false unless user_is_authenticated?
+
     record.owner == user.id
   end
 

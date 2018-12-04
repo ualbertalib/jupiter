@@ -12,6 +12,7 @@ module ItemSearch
 
   def restrict_items_to(base_restriction_key = nil, val = nil)
     raise ArgumentError, 'Must supply both a key and value' if base_restriction_key.present? && val.blank?
+
     @search_models = [Item, Thesis]
 
     facets = params[:facets] || {}
