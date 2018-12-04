@@ -15,7 +15,7 @@ namespace :jupiter do
   end
 end
 
-def batch_ingest_csv(csv_path, ingest_type="item")
+def batch_ingest_csv(csv_path, ingest_type = 'item')
   require 'csv'
   require 'fileutils'
   log 'START: Batch ingest started...'
@@ -40,7 +40,7 @@ def batch_ingest_csv(csv_path, ingest_type="item")
 
         successful_ingested << thesis
       end
-    elsif
+    else
       CSV.foreach(full_csv_path,
                   headers: true,
                   header_converters: :symbol,
