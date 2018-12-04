@@ -59,18 +59,12 @@ def batch_ingest_csv(csv_path, ingest_type = 'item')
 end
 
 def thesis_community_id
-  solr_service = ActiveFedora::SolrService.instance
-  result = solr_service.conn.get 'select', params: { q: ['title_ssi:"Graduate Studies and Research, Faculty of"'] }
-  response = result['response']['docs'][0]
-  thesis_comm_id = response['id']
+  thesis_comm_id = Community.where(title: 'Graduate Studies and Research, Faculty of').first.id
   thesis_comm_id
 end
 
 def thesis_collection_id
-  result = ActiveFedora::SolrService.instance.conn.get 'select',
-                                                       params: { q: ['title_ssi:"Theses and Dissertations"'] }
-  response = result['response']['docs'][0]
-  thesis_coll_id = response['id']
+  thesis_coll_id = Collection.where(title: 'Theses and Dissertations').first.id
   thesis_coll_id
 end
 
