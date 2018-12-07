@@ -47,13 +47,13 @@ class JupiterCore::LockedLdpObject
   # Listen, rubocop, I get it, but I need to be bug-for-bug compatible with
   # https://github.com/samvera/active_fedora/blob/7e9c365c00ced6ce4175096a3ff7b423cc72bf64/lib/active_fedora/indexing_service.rb#L55
   # or half the time this method will return one thing, and half another
-  # rubocop:disable Style/DateTime, Rails/TimeZone
+  # rubocop:disable Rails/TimeZone
   def updated_at
     return ldp_object.modified_date if ldp_object.present?
 
     DateTime.parse(solr_representation['system_modified_dtsi']) if solr_representation
   end
-  # rubocop:enable Style/DateTime, Rails/TimeZone
+  # rubocop:enable Rails/TimeZone
 
   # Provides structured, mediated interaction for mutating the underlying LDP object
   #
@@ -612,7 +612,6 @@ class JupiterCore::LockedLdpObject
                                "that's what you want"
             end
             value
-          # rubocop:disable Style/DateTime
           when :date
             # ActiveFedora/RDF does the wrong thing with Time (see below) AND
             # it serializes every other Date type to a string internally at a very low precision (second granularity)
@@ -626,7 +625,6 @@ class JupiterCore::LockedLdpObject
             else
               raise TypeError, "#{value} is not a Date type"
             end
-          # rubocop:enable Style/DateTime
           when :boolean
             raise TyperError, "#{value} is not a boolean" unless [true, false].include?(value)
 
