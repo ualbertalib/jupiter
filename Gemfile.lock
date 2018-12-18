@@ -245,7 +245,7 @@ GEM
     mimemagic (0.3.2)
     mini_magick (4.9.2)
     mini_mime (1.0.1)
-    mini_portile2 (2.3.0)
+    mini_portile2 (2.4.0)
     minitest (5.11.3)
     minitest-hooks (1.5.0)
       minitest (> 5.3)
@@ -254,8 +254,8 @@ GEM
     multipart-post (2.0.0)
     mustermann (1.0.3)
     nio4r (2.3.1)
-    nokogiri (1.8.5)
-      mini_portile2 (~> 2.3.0)
+    nokogiri (1.9.1)
+      mini_portile2 (~> 2.4.0)
     om (3.1.1)
       activemodel
       activesupport
