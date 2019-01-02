@@ -163,7 +163,7 @@ GEM
     haikunator (1.1.0)
     hamster (3.0.0)
       concurrent-ruby (~> 1.0)
-    hashdiff (0.3.7)
+    hashdiff (0.3.8)
     hashie (3.6.0)
     http_logger (0.5.1)
     hydra-derivatives (3.3.2)
@@ -441,7 +441,7 @@ GEM
       activemodel (>= 5.0)
       bindex (>= 0.4.0)
       railties (>= 5.0)
-    webmock (3.4.2)
+    webmock (3.5.1)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff
