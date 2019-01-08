@@ -48,7 +48,7 @@ gem 'omniauth'
 gem 'omniauth-saml'
 
 # Authorization
-gem 'pundit'
+gem 'pundit', '1.1.0'
 
 # Background tasks
 gem 'sidekiq', '~> 5.2'
