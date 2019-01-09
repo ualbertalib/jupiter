@@ -7,6 +7,8 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 ## [Unreleased]
 ### Fixed
 - workarounds for Datacite EZ API for tests [PR#945](https://github.com/ualbertalib/jupiter/pull/945)
+
+### Changed
 - Update to Bootstrap 4.2.1 [PR#683](https://github.com/ualbertalib/jupiter/pull/964)
 
 ## [1.2.7] - 2018-12-03
