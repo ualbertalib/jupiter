@@ -1,7 +1,7 @@
 <li class="list-group-item list-group-item-action">
 
   <div class="d-flex justify-content-between align-items-start mb-3">
-    <%= link_to admin_community_path(community), class: 'media jupiter-community-media' do %>
+    <%= link_to admin_community_path(community), class: 'media text-decoration-none' do %>
       <%= render partial: 'thumbnail', locals: { object: community } %>
       <div class="media-body ml-3">
         <h4 class="mt-0"><%= community.title %></h4>
