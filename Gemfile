@@ -39,7 +39,7 @@ gem 'solrizer', github: 'ualbertalib/solrizer', branch: 'literally_types'
 
 # Database stuff
 gem 'connection_pool'
-gem 'pg', '~> 1.1.3'
+gem 'pg', '~> 1.1.4'
 gem 'redis', '~> 4.1'
 gem 'rsolr'
 
