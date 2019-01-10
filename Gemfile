@@ -39,7 +39,7 @@ gem 'solrizer', github: 'ualbertalib/solrizer', branch: 'literally_types'
 
 # Database stuff
 gem 'connection_pool'
-gem 'pg', '~> 1.1.3'
+gem 'pg', '~> 1.1.4'
 gem 'redis', '~> 4.1'
 gem 'rsolr'
 
@@ -88,7 +88,7 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
 
-  gem 'rubocop', '~> 0.61.1', require: false
+  gem 'rubocop', '~> 0.62.0', require: false
 
   gem 'scss_lint', '>= 0.56.0', require: false
 end
