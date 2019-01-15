@@ -59,7 +59,7 @@ module ItemProperties
       files_attachment_shim.save!
     end
 
-    def thumbnail_url(args = { resize: '100x100' })
+    def thumbnail_url(args = { resize: '100x100', auto_orient: true })
       logo = files_attachment_shim.logo_file
       return nil if logo.blank?
 
