@@ -10,6 +10,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ### Fixed
 - workarounds for Datacite EZ API for tests [PR#945](https://github.com/ualbertalib/jupiter/pull/945)
+- Fixed a firefox text overflow bug where filenames would overflow the file section sidebar [PR#980](https://github.com/ualbertalib/jupiter/pull/980)
 
 ### Changed
 - Update to Bootstrap 4.2.1 [#683](https://github.com/ualbertalib/jupiter/issues/683)
