@@ -254,7 +254,7 @@ GEM
     multipart-post (2.0.0)
     mustermann (1.0.3)
     nio4r (2.3.1)
-    nokogiri (1.10.0)
+    nokogiri (1.10.1)
       mini_portile2 (~> 2.4.0)
     om (3.1.1)
       activemodel
