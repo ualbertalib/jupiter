@@ -185,7 +185,7 @@ GEM
       hydra-file_characterization (~> 0.3, >= 0.3.3)
       hydra-pcdm (>= 0.9)
       om (~> 3.1)
-    i18n (1.5.1)
+    i18n (1.5.3)
       concurrent-ruby (~> 1.0)
     image_processing (1.7.1)
       mini_magick (~> 4.0)
@@ -284,7 +284,7 @@ GEM
       pry (>= 0.10.4)
     public_suffix (3.0.3)
     puma (3.12.0)
-    pundit (1.1.0)
+    pundit (2.0.1)
       activesupport (>= 3.0.0)
     raabro (1.1.6)
     rack (2.0.6)
@@ -505,7 +505,7 @@ DEPENDENCIES
   pry-byebug
   pry-rails
   puma (~> 3.12)
-  pundit (= 1.1.0)
+  pundit (= 2.0.1)
   rails (~> 5.2.2)
   ransack
   rdf-vocab
