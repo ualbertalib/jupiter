@@ -344,7 +344,7 @@ GEM
     rsolr (2.2.1)
       builder (>= 2.1.2)
       faraday (>= 0.9.0)
-    rubocop (0.63.0)
+    rubocop (0.63.1)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
       parser (>= 2.5, != 2.5.1.1)
@@ -512,7 +512,7 @@ DEPENDENCIES
   redis (~> 4.1)
   rollbar
   rsolr
-  rubocop (~> 0.63.0)
+  rubocop (~> 0.63.1)
   rufus-scheduler (= 3.5.2)
   sass-rails (~> 5)
   scss_lint (>= 0.56.0)
