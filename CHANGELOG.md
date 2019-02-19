@@ -6,6 +6,9 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+### Fixed
+- [Faker Deprecations](https://github.com/stympy/faker/blob/master/CHANGELOG.md#deprecation-1) [PR#1019](https://github.com/ualbertalib/jupiter/pull/1019)
+
 ## [1.2.8] - 2018-01-27
 ### Added
 - Add proper version file, meta generator tag and tool for managing releases [#55](https://github.com/ualbertalib/jupiter/issues/55)
