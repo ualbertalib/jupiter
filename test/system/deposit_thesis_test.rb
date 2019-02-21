@@ -39,7 +39,7 @@ class DepositThesisTest < ApplicationSystemTestCase
     fill_in I18n.t('admin.theses.draft.describe_thesis.creator'),
             with: 'Jane Doe'
 
-    select 2018, from: I18n.t('admin.theses.draft.describe_thesis.graduation_year')
+    select '2018', from: I18n.t('admin.theses.draft.describe_thesis.graduation_year')
     select '06 (Spring)', from: I18n.t('admin.theses.draft.describe_thesis.graduation_term')
 
     fill_in I18n.t('admin.theses.draft.describe_thesis.description'),
