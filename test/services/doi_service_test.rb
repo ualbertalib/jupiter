@@ -4,7 +4,7 @@ class DoiServiceTest < ActiveSupport::TestCase
 
   include ActiveJob::TestHelper
 
-  EXAMPLE_DOI = 'doi:10.21967/fk2-pysm-2p64'.freeze
+  EXAMPLE_DOI = 'doi:10.21967/fk2-ycs2-dd92'.freeze
 
   test 'DOI state transitions' do
     assert_no_enqueued_jobs
