@@ -4,10 +4,18 @@ LABEL maintainer="University of Alberta Libraries"
 # Need to add jessie-backports repo so we can get FFMPEG, doesn't come with jessie debian by default
 # RUN echo 'deb http://ftp.debian.org/debian jessie-backports main'  >> /etc/apt/sources.list
 
+# Autoprefixer doesn’t support Node v4.8.2. Update it.
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
+
+## To install the Yarn package manager (rails assets:precompile complains if not installed), run:
+RUN curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
+    && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+
 RUN apt-get update -qq \
     && apt-get install -y build-essential \
                           libpq-dev \
                           nodejs \
+                          yarn \
                           tzdata \
                           # libreoffice \
                           # imagemagick \
