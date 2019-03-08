@@ -6,6 +6,9 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+### Added
+-  Search supervisor and department from link [#1002](https://github.com/ualbertalib/jupiter/issues/1002)
+
 ### Fixed
 - [Faker Deprecations](https://github.com/stympy/faker/blob/master/CHANGELOG.md#deprecation-1) [PR#1019](https://github.com/ualbertalib/jupiter/pull/1019)
 
