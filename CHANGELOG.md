@@ -6,13 +6,21 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+## [1.2.9] - 2019-03-08
+
 ### Added
 -  Search supervisor and department from link [#1002](https://github.com/ualbertalib/jupiter/issues/1002)
+
+### Changed
+- Changed from Ruby Sass to sassc-railsis as Ruby Sass is deprecated and will be unmaintained as of 26 March 2019[#PR1032](https://github.com/ualbertalib/jupiter/pull/1032)
 
 ### Fixed
 - [Faker Deprecations](https://github.com/stympy/faker/blob/master/CHANGELOG.md#deprecation-1) [PR#1019](https://github.com/ualbertalib/jupiter/pull/1019)
 
-## [1.2.8] - 2018-01-27
+### Removed
+- Removed workarounds for Datacite EZ API [PR#1030](https://github.com/ualbertalib/jupiter/pull/1030)
+
+## [1.2.8] - 2019-01-27
 ### Added
 - Add proper version file, meta generator tag and tool for managing releases [#55](https://github.com/ualbertalib/jupiter/issues/55)
 
