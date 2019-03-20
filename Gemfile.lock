@@ -60,7 +60,7 @@ GEM
       activesupport (>= 3.0.0)
       rdf (~> 2.0, >= 2.0.2)
       rdf-vocab
-    active_encode (0.4.1)
+    active_encode (0.5.0)
       rails
     active_link_to (1.0.5)
       actionpack
@@ -177,14 +177,14 @@ GEM
       mini_magick (>= 3.2, < 5)
     hydra-file_characterization (0.3.3)
       activesupport (>= 3.0.0)
-    hydra-pcdm (0.11.0)
+    hydra-pcdm (1.0.1)
       active-fedora (>= 10, < 13)
       mime-types (>= 1)
-    hydra-works (0.17.0)
+    hydra-works (1.1.0)
+      activesupport (>= 4.2.10, < 6.0)
       hydra-derivatives (~> 3.0)
       hydra-file_characterization (~> 0.3, >= 0.3.3)
       hydra-pcdm (>= 0.9)
-      om (~> 3.1)
     i18n (1.6.0)
       concurrent-ruby (~> 1.0)
     image_processing (1.8.0)
@@ -257,11 +257,6 @@ GEM
     nio4r (2.3.1)
     nokogiri (1.10.1)
       mini_portile2 (~> 2.4.0)
-    om (3.1.1)
-      activemodel
-      activesupport
-      nokogiri (>= 1.4.2)
-      solrizer (~> 3.3)
     omniauth (1.9.0)
       hashie (>= 3.4.6, < 3.7.0)
       rack (>= 1.6.2, < 3)
@@ -483,7 +478,7 @@ DEPENDENCIES
   font-awesome-rails
   haikunator
   hydra-derivatives (= 3.3.2)
-  hydra-works (= 0.17.0)
+  hydra-works (= 1.1.0)
   image_processing
   jbuilder
   jquery-rails
