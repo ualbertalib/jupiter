@@ -15,6 +15,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Improvement on rack-attack configuration [#1247](https://github.com/ualbertalib/jupiter/issues/1247)
 - Lifting of embargo now stores item in embargo_history [#1219](https://github.com/ualbertalib/jupiter/issues/1219)
 - bump ruby from 2.4 to 2.6 in travis jobs [#1214](https://github.com/ualbertalib/jupiter/issues/1214)
+- Make supervisor and department facets to use existing functionality (requires reindex) [#1002](https://github.com/ualbertalib/jupiter/issues/1002)
 
 ### Fixed
 - bump faker from 1.9.6 to 2.1.0 and fix breaking changes to dev seed data [PR#1231](https://github.com/ualbertalib/jupiter/pull/1231)
