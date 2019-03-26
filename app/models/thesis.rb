@@ -28,8 +28,8 @@ class Thesis < JupiterCore::LockedLdpObject
   has_attribute :unicorn, TERMS[:ual].unicorn, solrize_for: :exact_match
 
   has_attribute :specialization, TERMS[:ual].specialization, solrize_for: :search
-  has_attribute :departments, TERMS[:ual].department_list, type: :json_array, solrize_for: [:search]
-  has_attribute :supervisors, TERMS[:ual].supervisor_list, type: :json_array, solrize_for: [:search]
+  has_attribute :departments, TERMS[:ual].department_list, type: :json_array, solrize_for: [:search, :facet]
+  has_attribute :supervisors, TERMS[:ual].supervisor_list, type: :json_array, solrize_for: [:search, :facet]
   has_multival_attribute :committee_members, TERMS[:ual].committee_member, solrize_for: :exact_match
   has_multival_attribute :unordered_departments, TERMS[:ual].department, solrize_for: :search
   has_multival_attribute :unordered_supervisors, TERMS[:ual].supervisor, solrize_for: :exact_match
