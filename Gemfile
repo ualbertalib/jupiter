@@ -8,7 +8,7 @@ end
 # Core Rails stuff
 gem 'image_processing'
 gem 'puma', '~> 3.12'
-gem 'rails', '~> 5.2.2'
+gem 'rails', '~> 5.2.3'
 
 # Assets (CSS/JS) stuff
 gem 'bootstrap', '~> 4.3.1'
