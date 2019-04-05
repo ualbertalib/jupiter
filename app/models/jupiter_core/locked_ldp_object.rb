@@ -358,6 +358,7 @@ class JupiterCore::LockedLdpObject
     all.sort(attr, order)
   end
 
+  # rubocop:disable Style/UnneededSort
   # the least recently created record in Solr, as determined by the record_created_at timestamp
   def self.first
     all.limit(1).sort(:record_created_at, :asc).first
@@ -367,6 +368,7 @@ class JupiterCore::LockedLdpObject
   def self.last
     all.limit(1).sort(:record_created_at, :desc).first
   end
+  # rubocop:enable Style/UnneededSort
 
   def self.valid_visibilities
     [JupiterCore::VISIBILITY_PUBLIC, JupiterCore::VISIBILITY_PRIVATE, JupiterCore::VISIBILITY_AUTHENTICATED]
