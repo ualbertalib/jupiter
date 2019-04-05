@@ -8,7 +8,7 @@
       <h3 class="mt-0 h5 mr-auto"><%= link_to item.title, item_path(item) %></h3>
 
       <% primary_file = item.files.first %>
-      <% if primary_file.present? %>
+      <% if policy(item).download? && primary_file.present?%>
         <%= link_to url_for(primary_file),
                     class: 'btn btn-secondary mr-2 mb-2 mb-md-0',
                     rel: 'nofollow',
