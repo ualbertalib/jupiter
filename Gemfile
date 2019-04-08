@@ -60,6 +60,7 @@ gem 'sidekiq-cron'
 
 # Misc Utilities
 gem 'aasm' # state-machine management
+gem 'danger', '~> 6.0' # Pull Request etiquette enforcement
 gem 'ezid-client', '~> 1.8.0'
 gem 'jbuilder' # generate JSON objects
 gem 'kaminari' # Pagination
