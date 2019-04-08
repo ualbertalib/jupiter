@@ -12,6 +12,7 @@ AllCops:
     - 'db/**/*'
     - 'tmp/**/*'
     - 'vendor/**/*'
+    - 'Dangerfile'
   ExtraDetails: true
   TargetRubyVersion: 2.5
 
