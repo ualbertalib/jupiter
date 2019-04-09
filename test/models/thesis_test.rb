@@ -104,8 +104,8 @@ class ThesisTest < ActiveSupport::TestCase
       unlocked_thesis.embargo_end_date = '1992-02-01'
     end
 
-    assert thesis.valid?
-
+    assert_not thesis.valid?
+    assert_not thesis.errors[:embargo_end_date].present?
     assert_not thesis.errors[:visibility].present?
   end
 

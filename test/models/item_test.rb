@@ -82,15 +82,15 @@ class ItemTest < ActiveSupport::TestCase
     assert_includes item.errors[:embargo_end_date], "can't be blank"
   end
 
-  test 'embargo_end_date must be blank for non-embargo visibilities' do
+  test 'embargo_end_date may be blank for non-embargo visibilities' do
     item = Item.new_locked_ldp_object
     item.unlock_and_fetch_ldp_object do |unlocked_item|
       unlocked_item.visibility = JupiterCore::VISIBILITY_PUBLIC
       unlocked_item.embargo_end_date = '1992-02-01'
     end
 
-    assert item.valid?
-
+    assert_not item.valid?
+    assert_not item.errors[:embargo_end_date].present?
     assert_not item.errors[:visibility].present?
   end
 
