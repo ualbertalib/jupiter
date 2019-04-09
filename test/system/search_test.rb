@@ -40,6 +40,27 @@ class SearchTest < ApplicationSystemTestCase
         end
       end
     end
+    # one more item that is CCID protected
+    item = Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_AUTHENTICATED,
+                                      owner: 1, title: 'Fancy CCID Item',
+                                      creators: ['Joe Blow'],
+                                      created: '1950-11-11',
+                                      languages: [CONTROLLED_VOCABULARIES[:language].english],
+                                      item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                                      publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
+                                      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                                      subject: ['Items'])
+               .unlock_and_fetch_ldp_object do |uo|
+      uo.add_to_path(@community.id, @collections[0].id)
+      uo.save!
+    end
+    # needs a file for the download link
+    Sidekiq::Testing.inline! do
+      File.open(Rails.root + 'app/assets/images/era-logo.png', 'r') do |file|
+        item.add_and_ingest_files([file])
+      end
+    end
+    @items << item
     # 10 more items. these are private (some 'Fancy' some 'Nice')
     @items += 10.times.map do |i|
       if i < 5
@@ -98,19 +119,20 @@ class SearchTest < ApplicationSystemTestCase
     click_button 'Search'
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy')
     # Tabs
-    assert_selector 'a.nav-link.active', text: 'Items (5)'
+    assert_selector 'a.nav-link.active', text: 'Items (6)'
     assert_selector 'a.nav-link', text: 'Collections'
     assert_selector 'a.nav-link', text: 'Communities'
 
     # Facets and counts
     refute_selector 'div.card-header', text: 'Visibility'
     refute_selector 'li a', text: /5\nPublic/
+    refute_selector 'li a', text: /1\nAuthenticated/
     # Should not be a facet for 'private'
     refute_selector 'li a', text: /Private/
     # TODO: The 'Member of paths' text will likely change
     assert_selector 'div.card-header', text: 'Collections'
-    assert_selector 'li a', text: /5\nFancy Community/
-    assert_selector 'li a', text: /3\nFancy Community\/Fancy Collection 0/
+    assert_selector 'li a', text: /6\nFancy Community/
+    assert_selector 'li a', text: /4\nFancy Community\/Fancy Collection 0/
     assert_selector 'li a', text: /2\nFancy Community\/Fancy Collection 1/
     assert_selector 'div.card-header', text: I18n.t('facets.sort_year')
     sort_year_facet = Item.solr_name_for(:sort_year, role: :range_facet)
@@ -118,13 +140,19 @@ class SearchTest < ApplicationSystemTestCase
     assert_selector "#ranges_#{sort_year_facet}_end"
     assert_selector 'input.btn'
 
-    # Exactly 5 items shown
-    assert_selector 'div.jupiter-results-list li.list-group-item', count: 5
+    # Exactly 6 items shown
+    assert_selector 'div.jupiter-results-list li.list-group-item', count: 6
     assert_selector 'a', text: 'Fancy Item 0'
     assert_selector 'a', text: 'Fancy Item 2'
     assert_selector 'a', text: 'Fancy Item 4'
     assert_selector 'a', text: 'Fancy Item 6'
     assert_selector 'a', text: 'Fancy Item 8'
+    assert_selector 'a', text: 'Fancy CCID Item'
+
+    # Should not show CCID download
+    within '.list-group-item', text: 'Fancy CCID Item' do
+      refute_selector 'a', text: 'Download'
+    end
 
     # A checkbox for the facet should be unchecked, and link should turn on facet
     within 'div.jupiter-filters a', text: 'Fancy Collection 1' do
@@ -177,12 +205,12 @@ class SearchTest < ApplicationSystemTestCase
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy')
 
     # Tabs
-    assert_selector 'a.nav-link.active', text: 'Items (5)'
+    assert_selector 'a.nav-link.active', text: 'Items (6)'
     assert_selector 'a.nav-link', text: 'Collections'
     assert_selector 'a.nav-link', text: 'Communities'
 
     # No community/collection results initially shown
-    assert_selector 'div.jupiter-results-list h3 a', text: 'Item', count: 5
+    assert_selector 'div.jupiter-results-list h3 a', text: 'Item', count: 6
     assert_selector 'div.jupiter-results-list a', text: 'Community', count: 0
     assert_selector 'div.jupiter-results-list a', text: 'Collection', count: 0
 
@@ -247,6 +275,7 @@ class SearchTest < ApplicationSystemTestCase
 
     # Default sort is by relevance
     # TODO this test has flapped in the past because the score of each document is equal
+    # TODO could go through this section and add the Fancy CCID Item, regex allows tests to pass without this change
     assert_match(/Fancy Item 0.*Fancy Item 2.*Fancy Item 4.*Fancy Item 6.*Fancy Item 8/m, page.text)
 
     # Sort sort links
@@ -298,21 +327,22 @@ class SearchTest < ApplicationSystemTestCase
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy')
 
     # Tabs
-    assert_selector 'a.nav-link.active', text: 'Items (10)'
+    assert_selector 'a.nav-link.active', text: 'Items (11)'
     assert_selector 'a.nav-link', text: 'Collections'
     assert_selector 'a.nav-link', text: 'Communities'
 
     # Facets and counts
     assert_selector 'div.card-header', text: 'Visibility'
     assert_selector 'li a', text: /5\nPublic/
+    assert_selector 'li a', text: /1\nAuthenticated/
 
     # Should be a facet for 'private'
     assert_selector 'li a', text: /5\nPrivate/
 
     # TODO: The 'Member of paths' text will likely change
     assert_selector 'div.card-header', text: 'Collections'
-    assert_selector 'li a', text: /10\nFancy Community/
-    assert_selector 'li a', text: /6\nFancy Community\/Fancy Collection 0/
+    assert_selector 'li a', text: /11\nFancy Community/
+    assert_selector 'li a', text: /7\nFancy Community\/Fancy Collection 0/
     assert_selector 'li a', text: /4\nFancy Community\/Fancy Collection 1/
 
     # Exactly 10 items shown
@@ -322,11 +352,16 @@ class SearchTest < ApplicationSystemTestCase
     assert_selector 'a', text: 'Fancy Item 4'
     assert_selector 'a', text: 'Fancy Item 6'
     assert_selector 'a', text: 'Fancy Item 8'
+    assert_selector 'a', text: 'Fancy CCID Item'
     assert_selector 'a', text: 'Fancy Private Item 10'
     assert_selector 'a', text: 'Fancy Private Item 12'
     assert_selector 'a', text: 'Fancy Private Item 14'
     assert_selector 'a', text: 'Fancy Private Item 16'
-    assert_selector 'a', text: 'Fancy Private Item 18'
+
+    # Should see the download link for CCID item
+    within '.list-group-item', text: 'Fancy CCID Item' do
+      assert_selector 'a', text: 'Download'
+    end
 
     # A checkbox for the facet should be unchecked, and link should turn on facet
     within 'div.jupiter-filters a', text: 'Fancy Collection 1' do

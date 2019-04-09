@@ -3,6 +3,8 @@
 # https://github.com/bbatsov/rubocop/blob/master/config/disabled.yml
 # https://github.com/bbatsov/rubocop/blob/master/config/enabled.yml
 
+require: rubocop-performance
+
 AllCops:
   DisplayCopNames: true
   DisplayStyleGuide: true
@@ -10,6 +12,7 @@ AllCops:
     - 'db/**/*'
     - 'tmp/**/*'
     - 'vendor/**/*'
+    - 'Dangerfile'
   ExtraDetails: true
   TargetRubyVersion: 2.5
 
@@ -96,7 +99,7 @@ Naming/UncommunicativeMethodParamName:
     - app/services/statistics.rb
 
 # We using activefedora here... not activerecord
-Performance/UnneededSort:
+Style/UnneededSort:
   Exclude:
     - app/models/jupiter_core/locked_ldp_object.rb
 

@@ -6,6 +6,23 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+### Added
+
+- regression tests for downloading restricted items from search results [PR#1070](https://github.com/ualbertalib/jupiter/pull/1069)
+
+## [1.2.11] - 2019-04-05
+
+### Fixed
+- anonymous users should not be able to download ccid protected items from search results [#1069](https://github.com/ualbertalib/jupiter/issues/1069)
+
+### Added
+- Added danger gem to project
+
+## [1.2.10] - 2019-03-14
+
+### Security
+- Bumps rails from 5.2.2 to 5.2.2.1. This update addresses [Two Vulnerabilities in Action View](https://weblog.rubyonrails.org/2019/3/13/Rails-4-2-5-1-5-1-6-2-have-been-released/). [PR#1042](https://github.com/ualbertalib/jupiter/pull/1042)
+
 ## [1.2.9] - 2019-03-08
 
 ### Added
