@@ -15,6 +15,9 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 ### Fixed
 - anonymous users should not be able to download ccid protected items from search results [#1069](https://github.com/ualbertalib/jupiter/issues/1069)
 
+### Added
+- Added danger gem to project
+
 ## [1.2.10] - 2019-03-14
 
 ### Security
