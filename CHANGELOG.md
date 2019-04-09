@@ -9,6 +9,15 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 ### Changed
 - Make supervisor and department facets to use existing functionality (requires reindex) [#1002](https://github.com/ualbertalib/jupiter/issues/1002)
 
+### Added
+- Added danger gem to project [#988](https://github.com/ualbertalib/jupiter/issues/998)
+- regression tests for downloading restricted items from search results [PR#1070](https://github.com/ualbertalib/jupiter/pull/1069)
+
+## [1.2.11] - 2019-04-05
+
+### Fixed
+- anonymous users should not be able to download ccid protected items from search results [#1069](https://github.com/ualbertalib/jupiter/issues/1069)
+
 ## [1.2.10] - 2019-03-14
 
 ### Security
