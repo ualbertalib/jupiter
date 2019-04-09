@@ -89,9 +89,7 @@ class ItemTest < ActiveSupport::TestCase
       unlocked_item.embargo_end_date = '1992-02-01'
     end
 
-    assert_not item.valid?
-    assert item.errors[:embargo_end_date].present?
-    assert_includes item.errors[:embargo_end_date], 'must be blank'
+    assert item.valid?
 
     assert_not item.errors[:visibility].present?
   end
