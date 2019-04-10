@@ -6,6 +6,9 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+### Fixed
+- Remove validation for embargo date when embargo option is not selected [PR #1041](https://github.com/ualbertalib/jupiter/issues/1041) [Issue #996](https://github.com/ualbertalib/jupiter/issues/996)
+
 ## [1.2.9] - 2019-03-08
 
 ### Added
