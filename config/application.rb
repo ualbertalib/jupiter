@@ -41,5 +41,6 @@ module Jupiter
 
     # Use rack-attack as middleware
     config.middleware.use Rack::Attack
+
   end
 end
