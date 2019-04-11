@@ -7,7 +7,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 ## [Unreleased]
 
 ### Changed
-- i18n fallback to english (configuration change) [PR#1058](https://github.com/ualbertalib/discovery/issues/1558)
+- i18n fallback to english (configuration change) [PR#1058](https://github.com/ualbertalib/jupiter/pull/1058)
 
 ## [1.2.10] - 2019-03-14
 
