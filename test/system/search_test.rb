@@ -326,7 +326,13 @@ class SearchTest < ApplicationSystemTestCase
     assert_selector 'a', text: 'Fancy Private Item 12'
     assert_selector 'a', text: 'Fancy Private Item 14'
     assert_selector 'a', text: 'Fancy Private Item 16'
-    assert_selector 'a', text: 'Fancy Private Item 18'
+
+    # Should see the download link for CCID item
+    within '.list-group-item', text: 'Fancy CCID Item' do
+      assert_selector 'a', text: 'Download'
+      assert_link href: /download/
+      assert_no_link href: /active_storage/
+    end
 
     # A checkbox for the facet should be unchecked, and link should turn on facet
     within 'div.jupiter-filters a', text: 'Fancy Collection 1' do
