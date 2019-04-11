@@ -39,7 +39,6 @@ module Jupiter
 
     config.redis_key_prefix = "jupiter.#{Rails.env}."
 
-    # Use rack-attack as middleware
     config.middleware.use Rack::Attack
 
   end
