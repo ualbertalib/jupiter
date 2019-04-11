@@ -8,7 +8,7 @@ end
 # Core Rails stuff
 gem 'image_processing'
 gem 'puma', '~> 3.12'
-gem 'rails', '~> 5.2.2'
+gem 'rails', '~> 5.2.3'
 
 # Assets (CSS/JS) stuff
 gem 'bootstrap', '~> 4.3.1'
@@ -60,6 +60,8 @@ gem 'sidekiq-cron'
 
 # Misc Utilities
 gem 'aasm' # state-machine management
+gem 'addressable', '~> 2.5.0' # Replacement for the standard URI implementation
+gem 'danger', '~> 6.0' # Pull Request etiquette enforcement
 gem 'ezid-client', '~> 1.8.0'
 gem 'jbuilder' # generate JSON objects
 gem 'kaminari' # Pagination
@@ -88,7 +90,8 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
 
-  gem 'rubocop', '~> 0.66.0', require: false
+  gem 'rubocop', '~> 0.67.2', require: false
+  gem 'rubocop-performance'
 
   gem 'scss_lint', '>= 0.56.0', require: false
 end
