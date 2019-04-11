@@ -12,6 +12,7 @@ AllCops:
     - 'db/**/*'
     - 'tmp/**/*'
     - 'vendor/**/*'
+    - 'Dangerfile'
   ExtraDetails: true
   TargetRubyVersion: 2.5
 
@@ -98,7 +99,7 @@ Naming/UncommunicativeMethodParamName:
     - app/services/statistics.rb
 
 # We using activefedora here... not activerecord
-Performance/UnneededSort:
+Style/UnneededSort:
   Exclude:
     - app/models/jupiter_core/locked_ldp_object.rb
 

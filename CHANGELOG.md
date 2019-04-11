@@ -6,8 +6,17 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+### Added
+
+- regression tests for downloading restricted items from search results [PR#1070](https://github.com/ualbertalib/jupiter/pull/1069)
+
+## [1.2.11] - 2019-04-05
+
 ### Fixed
-- anonymous users should not be able to download ccid protected items from search results [#1068](https://github.com/ualbertalib/jupiter/issues/1068)
+- anonymous users should not be able to download ccid protected items from search results [#1069](https://github.com/ualbertalib/jupiter/issues/1069)
+
+### Added
+- Added danger gem to project
 
 ### Added
 -  Added rack-attack for rate limiting [#954](https://github.com/ualbertalib/jupiter/issues/954)

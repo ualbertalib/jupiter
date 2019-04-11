@@ -83,7 +83,7 @@ GEM
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
-    addressable (2.6.0)
+    addressable (2.5.2)
       public_suffix (>= 2.0.2, < 4.0)
     archive-zip (0.12.0)
       io-like (~> 0.3.0)
@@ -98,7 +98,7 @@ GEM
     bindex (0.5.0)
     binding_of_caller (0.8.0)
       debug_inspector (>= 0.0.1)
-    bootsnap (1.4.2)
+    bootsnap (1.4.3)
       msgpack (~> 1.0)
     bootstrap (4.3.1)
       autoprefixer-rails (>= 9.1.0)
@@ -110,7 +110,7 @@ GEM
     byebug (11.0.0)
     canonical-rails (0.2.5)
       rails (>= 4.1, < 6.1)
-    capybara (3.16.1)
+    capybara (3.16.2)
       addressable
       mini_mime (>= 0.1.3)
       nokogiri (~> 1.8)
@@ -123,14 +123,35 @@ GEM
     chromedriver-helper (2.1.1)
       archive-zip (~> 0.10)
       nokogiri (~> 1.8)
+    claide (1.0.2)
+    claide-plugins (0.9.2)
+      cork
+      nap
+      open4 (~> 1.3)
     clamby (1.6.2)
     coderay (1.1.2)
+    colored2 (3.1.2)
     concurrent-ruby (1.1.5)
     connection_pool (2.2.2)
+    cork (0.3.0)
+      colored2 (~> 3.1)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
     crass (1.0.4)
     daemons (1.3.1)
+    danger (6.0.3)
+      claide (~> 1.0)
+      claide-plugins (>= 0.9.2)
+      colored2 (~> 3.1)
+      cork (~> 0.1)
+      faraday (~> 0.9)
+      faraday-http-cache (~> 1.0)
+      git (~> 1.5)
+      kramdown (~> 2.0)
+      kramdown-parser-gfm (~> 1.0)
+      no_proxy_fix
+      octokit (~> 4.7)
+      terminal-table (~> 1)
     debug_inspector (0.0.3)
     deprecation (1.0.0)
       activesupport
@@ -153,12 +174,15 @@ GEM
       multipart-post (>= 1.2, < 3)
     faraday-encoding (0.0.4)
       faraday
+    faraday-http-cache (1.3.1)
+      faraday (~> 0.8)
     ffi (1.9.25)
     font-awesome-rails (4.7.0.4)
       railties (>= 3.2, < 6.0)
     fugit (1.1.8)
       et-orbi (~> 1.1, >= 1.1.7)
       raabro (~> 1.1)
+    git (1.5.0)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
     haikunator (1.1.0)
@@ -215,6 +239,9 @@ GEM
       activerecord
       kaminari-core (= 1.1.1)
     kaminari-core (1.1.1)
+    kramdown (2.1.0)
+    kramdown-parser-gfm (1.0.1)
+      kramdown (~> 2.0)
     launchy (2.4.3)
       addressable (~> 2.3)
     ldp (0.7.2)
@@ -254,9 +281,13 @@ GEM
     multi_json (1.13.1)
     multipart-post (2.0.0)
     mustermann (1.0.3)
+    nap (1.1.0)
     nio4r (2.3.1)
+    no_proxy_fix (0.1.2)
     nokogiri (1.10.2)
       mini_portile2 (~> 2.4.0)
+    octokit (4.14.0)
+      sawyer (~> 0.8.0, >= 0.5.3)
     om (3.1.1)
       activemodel
       activesupport
@@ -268,8 +299,9 @@ GEM
     omniauth-saml (1.10.1)
       omniauth (~> 1.3, >= 1.3.2)
       ruby-saml (~> 1.7)
+    open4 (1.3.4)
     parallel (1.17.0)
-    parser (2.6.2.0)
+    parser (2.6.2.1)
       ast (~> 2.4.0)
     pg (1.1.4)
     popper_js (1.14.5)
@@ -287,7 +319,7 @@ GEM
     pundit (1.1.0)
       activesupport (>= 3.0.0)
     raabro (1.1.6)
-    rack (2.0.6)
+    rack (2.0.7)
     rack-attack (5.4.2)
       rack (>= 1.0, < 3)
     rack-protection (2.0.5)
@@ -354,8 +386,8 @@ GEM
       rainbow (>= 2.2.2, < 4.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 1.6)
-    rubocop-performance (1.0.0)
-      rubocop (>= 0.58.0)
+    rubocop-performance (1.1.0)
+      rubocop (>= 0.67.0)
     ruby-progressbar (1.10.0)
     ruby-saml (1.9.0)
       nokogiri (>= 1.5.10)
@@ -380,6 +412,9 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
+    sawyer (0.8.1)
+      addressable (>= 2.3.5, < 2.6)
+      faraday (~> 0.8, < 1.0)
     scss_lint (0.57.1)
       rake (>= 0.9, < 13)
       sass (~> 3.5, >= 3.5.5)
@@ -431,6 +466,8 @@ GEM
     stomp (1.4.8)
     sxp (1.0.1)
       rdf (>= 2.2, < 4.0)
+    terminal-table (1.8.0)
+      unicode-display_width (~> 1.1, >= 1.1.1)
     thor (0.20.3)
     thread_safe (0.3.6)
     tilt (2.0.9)
@@ -470,6 +507,7 @@ DEPENDENCIES
   aasm
   active-fedora!
   active_link_to
+  addressable (~> 2.5.0)
   better_errors (>= 2.3.0)
   binding_of_caller
   bootsnap (>= 1.1.0)
@@ -481,6 +519,7 @@ DEPENDENCIES
   chromedriver-helper
   clamby
   connection_pool
+  danger (~> 6.0)
   dropzonejs-rails
   ezid-client (~> 1.8.0)
   faker
