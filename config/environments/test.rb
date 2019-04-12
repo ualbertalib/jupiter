@@ -48,4 +48,7 @@ Rails.application.configure do
 
   # FITS characterization
   config.run_fits_characterization = false
+
+  # Remove rack-attack so tests aren't rate limited
+  config.middleware.delete Rack::Attack
 end
