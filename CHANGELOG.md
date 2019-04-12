@@ -20,6 +20,9 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 ### Added
 - Added danger gem to project
 
+### Added
+-  Added rack-attack for rate limiting [#954](https://github.com/ualbertalib/jupiter/issues/954)
+
 ## [1.2.10] - 2019-03-14
 
 ### Security
