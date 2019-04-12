@@ -6,7 +6,7 @@ git_source(:github) do |repo_name|
 end
 
 # Core Rails stuff
-gem 'image_processing'
+gem 'image_processing' # for ActiveStorage Variants
 gem 'puma', '~> 3.12'
 gem 'rails', '~> 5.2.3'
 
