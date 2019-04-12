@@ -361,6 +361,8 @@ class SearchTest < ApplicationSystemTestCase
     # Should see the download link for CCID item
     within '.list-group-item', text: 'Fancy CCID Item' do
       assert_selector 'a', text: 'Download'
+      assert_link href: /download/
+      assert_no_link href: /active_storage/
     end
 
     # A checkbox for the facet should be unchecked, and link should turn on facet
