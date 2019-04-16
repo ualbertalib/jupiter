@@ -6,6 +6,8 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+## [1.2.14] - 2019-04-15
+
 ### Added
 - regression tests for downloading restricted items from search results [PR#1070](https://github.com/ualbertalib/jupiter/pull/1070)
 
@@ -14,6 +16,12 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ### Fixed
 - use the download url helper on the search results page [PR#1079](https://github.com/ualbertalib/jupiter/pull/1079)
+
+## [1.2.12] - 2019-04-05
+
+### Fixed
+- Addresses #1069 but without gem updates.
+
 
 ## [1.2.11] - 2019-04-05
 
