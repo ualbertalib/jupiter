@@ -5,17 +5,22 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and releases in Jupiter project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+- pin rubocop version for hound [PR#1080](https://github.com/ualbertalib/jupiter/pull/1080)
+
+## [1.2.14] - 2019-04-15
 
 ### Added
 - regression tests for downloading restricted items from search results [PR#1070](https://github.com/ualbertalib/jupiter/pull/1070)
-- Added danger gem to project [#988](https://github.com/ualbertalib/jupiter/issues/998)
-- Added rack-attack for rate limiting [#954](https://github.com/ualbertalib/jupiter/issues/954)
-- pin rubocop version for hound [PR#1080](https://github.com/ualbertalib/jupiter/pull/1080)
 
 ### Fixed
 - use the download url helper on the search results page [PR#1079](https://github.com/ualbertalib/jupiter/pull/1079)
 
-## [1.2.11 & 1.2.12] - 2019-04-05
+## [1.2.12] - 2019-04-05
+
+### Fixed
+- Addresses #1069 but without gem updates.
+
+## [1.2.11] - 2019-04-05
 
 ### Fixed
 - anonymous users should not be able to download ccid protected items from search results [#1069](https://github.com/ualbertalib/jupiter/issues/1069)
