@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and releases in Jupiter project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+### Changed
 - pin rubocop version for hound [PR#1080](https://github.com/ualbertalib/jupiter/pull/1080)
 
 ## [1.2.14] - 2019-04-15
@@ -23,10 +25,17 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 ### Fixed
 - Addresses #1069 but without gem updates.
 
+
 ## [1.2.11] - 2019-04-05
 
 ### Fixed
 - anonymous users should not be able to download ccid protected items from search results [#1069](https://github.com/ualbertalib/jupiter/issues/1069)
+
+### Added
+- Added danger gem to project
+
+### Added
+-  Added rack-attack for rate limiting [#954](https://github.com/ualbertalib/jupiter/issues/954)
 
 ## [1.2.10] - 2019-03-14
 
