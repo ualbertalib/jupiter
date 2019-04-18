@@ -11,6 +11,9 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 ### Added
 - regression tests for downloading restricted items from search results [PR#1070](https://github.com/ualbertalib/jupiter/pull/1070)
 
+### Changed
+- nginx configuration for docker-compose deployment (UAT, etc) so that active_storage/blobs are not served (configuration change) [PR#1081](https://github.com/ualbertalib/jupiter/pull/1081)
+
 ### Fixed
 - use the download url helper on the search results page [PR#1079](https://github.com/ualbertalib/jupiter/pull/1079)
 
