@@ -8,6 +8,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ### Changed
 - i18n fallback to english (configuration change) [PR#1058](https://github.com/ualbertalib/jupiter/pull/1058)
+- pin rubocop version for hound [PR#1080](https://github.com/ualbertalib/jupiter/pull/1080)
 
 ## [1.2.14] - 2019-04-15
 
