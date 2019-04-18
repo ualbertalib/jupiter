@@ -8,6 +8,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ### Changed
 - Make supervisor and department facets to use existing functionality (requires reindex) [#1002](https://github.com/ualbertalib/jupiter/issues/1002)
+- pin rubocop version for hound [PR#1080](https://github.com/ualbertalib/jupiter/pull/1080)
 
 ## [1.2.14] - 2019-04-15
 
