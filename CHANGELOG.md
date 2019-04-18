@@ -16,6 +16,9 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Added danger gem to project [#988](https://github.com/ualbertalib/jupiter/issues/998)
 - Added rack-attack for rate limiting [#954](https://github.com/ualbertalib/jupiter/issues/954)
 
+### Changed
+- nginx configuration for docker-compose deployment (UAT, etc) so that active_storage/blobs are not served (configuration change) [PR#1081](https://github.com/ualbertalib/jupiter/pull/1081)
+
 ### Fixed
 - use the download url helper on the search results page [PR#1079](https://github.com/ualbertalib/jupiter/pull/1079)
 
