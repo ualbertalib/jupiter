@@ -10,12 +10,15 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - bump nokogiri from 1.10.2 to 1.10.3 [PR#1098](https://github.com/ualbertalib/jupiter/pull/1098)
 
 ### Changed
+- i18n fallback to english (configuration change) [PR#1058](https://github.com/ualbertalib/jupiter/pull/1058)
 - pin rubocop version for hound [PR#1080](https://github.com/ualbertalib/jupiter/pull/1080)
 
 ## [1.2.14] - 2019-04-15
 
 ### Added
 - regression tests for downloading restricted items from search results [PR#1070](https://github.com/ualbertalib/jupiter/pull/1070)
+- Added danger gem to project [#988](https://github.com/ualbertalib/jupiter/issues/998)
+- Added rack-attack for rate limiting [#954](https://github.com/ualbertalib/jupiter/issues/954)
 
 ### Changed
 - nginx configuration for docker-compose deployment (UAT, etc) so that active_storage/blobs are not served (configuration change) [PR#1081](https://github.com/ualbertalib/jupiter/pull/1081)
@@ -28,17 +31,10 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 ### Fixed
 - Addresses #1069 but without gem updates.
 
-
 ## [1.2.11] - 2019-04-05
 
 ### Fixed
 - anonymous users should not be able to download ccid protected items from search results [#1069](https://github.com/ualbertalib/jupiter/issues/1069)
-
-### Added
-- Added danger gem to project
-
-### Added
--  Added rack-attack for rate limiting [#954](https://github.com/ualbertalib/jupiter/issues/954)
 
 ## [1.2.10] - 2019-03-14
 
