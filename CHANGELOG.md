@@ -6,15 +6,19 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+### Security
+- bump nokogiri from 1.10.2 to 1.10.3 [PR#1098](https://github.com/ualbertalib/jupiter/pull/1098)
+
 ### Changed
 - Make supervisor and department facets to use existing functionality (requires reindex) [#1002](https://github.com/ualbertalib/jupiter/issues/1002)
+- i18n fallback to english (configuration change) [PR#1058](https://github.com/ualbertalib/jupiter/pull/1058)
 - pin rubocop version for hound [PR#1080](https://github.com/ualbertalib/jupiter/pull/1080)
 
 ## [1.2.14] - 2019-04-15
 
 ### Added
-- Added danger gem to project [#988](https://github.com/ualbertalib/jupiter/issues/998)
 - regression tests for downloading restricted items from search results [PR#1070](https://github.com/ualbertalib/jupiter/pull/1070)
+- Added danger gem to project [#988](https://github.com/ualbertalib/jupiter/issues/998)
 - Added rack-attack for rate limiting [#954](https://github.com/ualbertalib/jupiter/issues/954)
 
 ### Changed
@@ -27,7 +31,6 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ### Fixed
 - Addresses #1069 but without gem updates.
-
 
 ## [1.2.11] - 2019-04-05
 
