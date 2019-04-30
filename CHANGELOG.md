@@ -9,10 +9,16 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 ### Security
 - bump nokogiri from 1.10.2 to 1.10.3 [PR#1098](https://github.com/ualbertalib/jupiter/pull/1098)
 
+### Added
+- Ruby 2.5 to travis ci testing matrix [PR#1040](https://github.com/ualbertalib/jupiter/pull/1040)
+
 ### Changed
 - Make supervisor and department facets to use existing functionality (requires reindex) [#1002](https://github.com/ualbertalib/jupiter/issues/1002)
 - i18n fallback to english (configuration change) [PR#1058](https://github.com/ualbertalib/jupiter/pull/1058)
 - pin rubocop version for hound [PR#1080](https://github.com/ualbertalib/jupiter/pull/1080)
+
+### Fixed
+- fixed error in dangerfile [#1109](https://github.com/ualbertalib/jupiter/issues/1109)
 
 ## [1.2.14] - 2019-04-15
 
