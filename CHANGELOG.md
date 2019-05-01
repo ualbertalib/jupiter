@@ -12,6 +12,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 ### Added
 - Ruby 2.5 to travis ci testing matrix [PR#1040](https://github.com/ualbertalib/jupiter/pull/1040)
 - Added missing contoller tests [#865](https://github.com/ualbertalib/jupiter/issues/865)
+
 ### Changed
 - i18n fallback to english (configuration change) [PR#1058](https://github.com/ualbertalib/jupiter/pull/1058)
 - pin rubocop version for hound [PR#1080](https://github.com/ualbertalib/jupiter/pull/1080)

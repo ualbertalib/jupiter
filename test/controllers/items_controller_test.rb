@@ -12,7 +12,7 @@ class ItemsControllerTest < ActionDispatch::IntegrationTest
     @collection.unlock_and_fetch_ldp_object(&:save!)
 
     @item = Item.new_locked_ldp_object(
-      title: 'item for deletion',
+      title: 'item to edit',
       owner: 1,
       creators: ['Joe Blow'],
       created: '1972-08-08',
@@ -20,14 +20,14 @@ class ItemsControllerTest < ActionDispatch::IntegrationTest
       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
       visibility: JupiterCore::VISIBILITY_PUBLIC,
       item_type: CONTROLLED_VOCABULARIES[:item_type].book,
-      subject: ['Deletion']
+      subject: ['Edit']
     ).unlock_and_fetch_ldp_object do |unlocked_item|
       unlocked_item.add_to_path(@community.id, @collection.id)
       unlocked_item.save!
     end
 
     @thesis = Thesis.new_locked_ldp_object(
-      title: 'thesis',
+      title: 'thesis to edit',
       owner: 1,
       dissertant: 'Joe Blow',
       graduation_date: '2017-03-31',
