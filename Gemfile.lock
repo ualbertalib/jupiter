@@ -83,7 +83,7 @@ GEM
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
-    addressable (2.5.2)
+    addressable (2.6.0)
       public_suffix (>= 2.0.2, < 4.0)
     archive-zip (0.12.0)
       io-like (~> 0.3.0)
@@ -410,9 +410,9 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    sawyer (0.8.1)
-      addressable (>= 2.3.5, < 2.6)
-      faraday (~> 0.8, < 1.0)
+    sawyer (0.8.2)
+      addressable (>= 2.3.5)
+      faraday (> 0.8, < 2.0)
     scss_lint (0.57.1)
       rake (>= 0.9, < 13)
       sass (~> 3.5, >= 3.5.5)
@@ -505,7 +505,7 @@ DEPENDENCIES
   aasm
   active-fedora!
   active_link_to
-  addressable (~> 2.5.0)
+  addressable (~> 2.6.0)
   better_errors (>= 2.3.0)
   binding_of_caller
   bootsnap (>= 1.1.0)
