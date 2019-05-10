@@ -372,7 +372,7 @@ GEM
     rdoc (6.1.1)
     redis (4.1.1)
     regexp_parser (1.4.0)
-    rollbar (2.19.3)
+    rollbar (2.19.4)
       multi_json
     rsolr (2.2.1)
       builder (>= 2.1.2)
