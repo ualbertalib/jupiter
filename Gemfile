@@ -6,7 +6,7 @@ git_source(:github) do |repo_name|
 end
 
 # Core Rails stuff
-gem 'image_processing'
+gem 'image_processing' # for ActiveStorage Variants
 gem 'puma', '~> 3.12'
 gem 'rails', '~> 5.2.3'
 
@@ -55,16 +55,17 @@ gem 'sidekiq', '~> 5.2'
 gem 'sidekiq-unique-jobs'
 gem 'sinatra', '~> 2.0.5' # used by sidekiq/web
 # Sidekiq cron jobs
-gem 'rufus-scheduler', '3.5.2' # https://github.com/ondrejbartas/sidekiq-cron/issues/199
+gem 'rufus-scheduler', '3.6.0' # https://github.com/ondrejbartas/sidekiq-cron/issues/199
 gem 'sidekiq-cron'
 
 # Misc Utilities
 gem 'aasm' # state-machine management
-gem 'addressable', '~> 2.5.0' # Replacement for the standard URI implementation
+gem 'addressable', '~> 2.6.0' # Replacement for the standard URI implementation
 gem 'danger', '~> 6.0' # Pull Request etiquette enforcement
 gem 'ezid-client', '~> 1.8.0'
 gem 'jbuilder' # generate JSON objects
 gem 'kaminari' # Pagination
+gem 'rack-attack' # Rate limiting
 gem 'ransack' # ActiveRecord search/filter
 gem 'voight_kampff' # bot detection
 gem 'wicked' # Multi-step wizard
@@ -90,7 +91,7 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
 
-  gem 'rubocop', '~> 0.67.2', require: false
+  gem 'rubocop', '~> 0.68.1', require: false
   gem 'rubocop-performance'
 
   gem 'scss_lint', '>= 0.56.0', require: false

@@ -11,9 +11,36 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 - Remove validation for embargo date when embargo option is not selected [PR #1041](https://github.com/ualbertalib/jupiter/issues/1041) [Issue #996](https://github.com/ualbertalib/jupiter/issues/996)
 
-### Added
+### Security
+- bump nokogiri from 1.10.2 to 1.10.3 [PR#1098](https://github.com/ualbertalib/jupiter/pull/1098)
 
-- regression tests for downloading restricted items from search results [PR#1070](https://github.com/ualbertalib/jupiter/pull/1069)
+### Added
+- Ruby 2.5 to travis ci testing matrix [PR#1040](https://github.com/ualbertalib/jupiter/pull/1040)
+
+### Changed
+- i18n fallback to english (configuration change) [PR#1058](https://github.com/ualbertalib/jupiter/pull/1058)
+- pin rubocop version for hound [PR#1080](https://github.com/ualbertalib/jupiter/pull/1080)
+
+### Fixed
+- fixed error in dangerfile [#1109](https://github.com/ualbertalib/jupiter/issues/1109)
+
+## [1.2.14] - 2019-04-15
+
+### Added
+- regression tests for downloading restricted items from search results [PR#1070](https://github.com/ualbertalib/jupiter/pull/1070)
+- Added danger gem to project [#988](https://github.com/ualbertalib/jupiter/issues/998)
+- Added rack-attack for rate limiting [#954](https://github.com/ualbertalib/jupiter/issues/954)
+
+### Changed
+- nginx configuration for docker-compose deployment (UAT, etc) so that active_storage/blobs are not served (configuration change) [PR#1081](https://github.com/ualbertalib/jupiter/pull/1081)
+
+### Fixed
+- use the download url helper on the search results page [PR#1079](https://github.com/ualbertalib/jupiter/pull/1079)
+
+## [1.2.12] - 2019-04-05
+
+### Fixed
+- Addresses #1069 but without gem updates.
 
 ## [1.2.11] - 2019-04-05
 
@@ -21,10 +48,13 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 - anonymous users should not be able to download ccid protected items from search results [#1069](https://github.com/ualbertalib/jupiter/issues/1069)
 
+<<<<<<< HEAD
 ### Added
 
 - Added danger gem to project
 
+=======
+>>>>>>> ed4307f4764e58df49e657b784017ccd8c2df57a
 ## [1.2.10] - 2019-03-14
 
 ### Security
