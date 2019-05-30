@@ -369,7 +369,7 @@ GEM
     rdf-vocab (2.2.9)
       rdf (>= 2.2, < 4.0)
     rdoc (6.1.1)
-    redis (4.1.1)
+    redis (4.1.2)
     regexp_parser (1.5.1)
     rollbar (2.20.0)
       multi_json
