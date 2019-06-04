@@ -1,13 +1,6 @@
 $image-with-text-bg: $jupiter-primary;
 $image-with-text-opacity: 0.8;
 
-.j-era-a-v-link {
-  a:hover {
-    // TODO: similar css in communities.scss - create a utility instead?
-    text-decoration: none;
-  }
-}
-
 // Adapted from https://codepen.io/luisintosh/pen/gPGXOp
 .j-image-with-text {
   padding: 0px;

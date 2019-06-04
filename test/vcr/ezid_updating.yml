@@ -2,15 +2,17 @@
 http_interactions:
 - request:
     method: post
-    uri: https://ez.test.datacite.org/id/doi:10.21967/fk2-7jm3-d229
+    uri: https://ez.test.datacite.org/id/doi:10.21967/fk2-ycs2-dd92
     body:
       encoding: UTF-8
       string: |-
         datacite.creator: Joe Blow
         datacite.publisher: University of Alberta Libraries
         datacite.publicationyear: 2017
+        datacite.resourcetype: Text/Book
+        datacite.resourcetypegeneral: Text
         datacite.title: Different Title
-        _target: http://localhost/items/66a8c005-57e6-4bbf-9d78-1d1d4fb8736f
+        _target: http://localhost/items/7d4ef627-70cf-4378-b237-844e9a7b4539
         _status: public
         _export: yes
     headers:
@@ -30,7 +32,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Tue, 13 Nov 2018 20:03:24 GMT
+      - Thu, 28 Feb 2019 22:39:41 GMT
       Content-Type:
       - text/plain; charset=utf-8
       Transfer-Encoding:
@@ -44,24 +46,24 @@ http_interactions:
       Vary:
       - Accept-Encoding
       Server:
-      - nginx/1.14.0 + Phusion Passenger 5.3.6
+      - nginx/1.15.8 + Phusion Passenger 6.0.2
     body:
       encoding: ASCII-8BIT
       string: |-
-        success: doi:10.21967/fk2-7jm3-d229
-        _target: http://localhost/items/66a8c005-57e6-4bbf-9d78-1d1d4fb8736f
-        datacite: <?xml version="1.0" encoding="UTF-8"?>%0A<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://datacite.org/schema/kernel-4" xsi:schemaLocation="http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4/metadata.xsd">%0A  <identifier identifierType="DOI">10.21967/FK2-7JM3-D229</identifier>%0A  <creators>%0A    <creator>%0A      <creatorName>Joe Blow</creatorName>%0A    </creator>%0A  </creators>%0A  <titles>%0A    <title>Different Title</title>%0A  </titles>%0A  <publisher>University of Alberta Libraries</publisher>%0A  <publicationYear>2017</publicationYear>%0A  <resourceType resourceTypeGeneral="Text">Text/Book</resourceType>%0A  <dates>%0A    <date dateType="Issued">2017</date>%0A  </dates>%0A  <version/>%0A  <descriptions>%0A    <description descriptionType="Abstract"/>%0A  </descriptions>%0A</resource>%0A
+        success: doi:10.21967/fk2-ycs2-dd92
+        _target: http://localhost/items/7d4ef627-70cf-4378-b237-844e9a7b4539
+        datacite: <?xml version="1.0" encoding="UTF-8"?>%0A<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://datacite.org/schema/kernel-4" xsi:schemaLocation="http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4/metadata.xsd">%0A  <identifier identifierType="DOI">10.21967/FK2-YCS2-DD92</identifier>%0A  <creators>%0A    <creator>%0A      <creatorName>Joe Blow</creatorName>%0A    </creator>%0A  </creators>%0A  <titles>%0A    <title>Different Title</title>%0A  </titles>%0A  <publisher>University of Alberta Libraries</publisher>%0A  <publicationYear>2017</publicationYear>%0A  <resourceType resourceTypeGeneral="Text">Book</resourceType>%0A  <dates>%0A    <date dateType="Issued">2017</date>%0A  </dates>%0A  <version/>%0A  <descriptions>%0A    <description descriptionType="Abstract"/>%0A  </descriptions>%0A</resource>%0A
         _profile: datacite
         _datacenter: CISTI.UAL
         _export: yes
-        _created: 1542138723
-        _updated: 1542139404
+        _created: 1551393579
+        _updated: 1551393581
         _status: public
-    http_version:
-  recorded_at: Tue, 13 Nov 2018 20:03:24 GMT
+    http_version: 
+  recorded_at: Thu, 28 Feb 2019 22:39:41 GMT
 - request:
     method: get
-    uri: https://ez.test.datacite.org/id/doi:10.21967/fk2-7jm3-d229
+    uri: https://ez.test.datacite.org/id/doi:10.21967/fk2-ycs2-dd92
     body:
       encoding: US-ASCII
       string: ''
@@ -82,7 +84,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Tue, 13 Nov 2018 20:03:24 GMT
+      - Thu, 28 Feb 2019 22:39:42 GMT
       Content-Type:
       - text/plain; charset=utf-8
       Transfer-Encoding:
@@ -98,19 +100,19 @@ http_interactions:
       Vary:
       - Accept-Encoding
       Server:
-      - nginx/1.14.0 + Phusion Passenger 5.3.6
+      - nginx/1.15.8 + Phusion Passenger 6.0.2
     body:
       encoding: ASCII-8BIT
       string: |-
-        success: doi:10.21967/fk2-7jm3-d229
-        _target: http://localhost/items/66a8c005-57e6-4bbf-9d78-1d1d4fb8736f
-        datacite: <?xml version="1.0" encoding="UTF-8"?>%0A<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://datacite.org/schema/kernel-4" xsi:schemaLocation="http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4/metadata.xsd">%0A  <identifier identifierType="DOI">10.21967/FK2-7JM3-D229</identifier>%0A  <creators>%0A    <creator>%0A      <creatorName>Joe Blow</creatorName>%0A    </creator>%0A  </creators>%0A  <titles>%0A    <title>Different Title</title>%0A  </titles>%0A  <publisher>University of Alberta Libraries</publisher>%0A  <publicationYear>2017</publicationYear>%0A  <resourceType resourceTypeGeneral="Text">Text/Book</resourceType>%0A  <dates>%0A    <date dateType="Issued">2017</date>%0A  </dates>%0A  <version/>%0A  <descriptions>%0A    <description descriptionType="Abstract"/>%0A  </descriptions>%0A</resource>%0A
+        success: doi:10.21967/fk2-ycs2-dd92
+        _target: http://localhost/items/7d4ef627-70cf-4378-b237-844e9a7b4539
+        datacite: <?xml version="1.0" encoding="UTF-8"?>%0A<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://datacite.org/schema/kernel-4" xsi:schemaLocation="http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4/metadata.xsd">%0A  <identifier identifierType="DOI">10.21967/FK2-YCS2-DD92</identifier>%0A  <creators>%0A    <creator>%0A      <creatorName>Joe Blow</creatorName>%0A    </creator>%0A  </creators>%0A  <titles>%0A    <title>Different Title</title>%0A  </titles>%0A  <publisher>University of Alberta Libraries</publisher>%0A  <publicationYear>2017</publicationYear>%0A  <resourceType resourceTypeGeneral="Text">Book</resourceType>%0A  <dates>%0A    <date dateType="Issued">2017</date>%0A  </dates>%0A  <version/>%0A  <descriptions>%0A    <description descriptionType="Abstract"/>%0A  </descriptions>%0A</resource>%0A
         _profile: datacite
         _datacenter: CISTI.UAL
         _export: yes
-        _created: 1542138723
-        _updated: 1542139404
+        _created: 1551393579
+        _updated: 1551393581
         _status: public
-    http_version:
-  recorded_at: Tue, 13 Nov 2018 20:03:24 GMT
+    http_version: 
+  recorded_at: Thu, 28 Feb 2019 22:39:42 GMT
 recorded_with: VCR 4.0.0

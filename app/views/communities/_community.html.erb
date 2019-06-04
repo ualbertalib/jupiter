@@ -2,7 +2,7 @@
     only difference between this and admin partial is the community_path %>
 <li class="list-group-item list-group-item-action">
 
-  <%= link_to community_path(community), class: 'media jupiter-community-media mb-3' do %>
+  <%= link_to community_path(community), class: 'media text-decoration-none mb-3' do %>
     <%= render partial: 'thumbnail', locals: { object: community } %>
     <div class="media-body ml-3">
       <h3 class="mt-0"><%= community.title %></h3>

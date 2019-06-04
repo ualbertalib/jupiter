@@ -6,16 +6,16 @@ git_source(:github) do |repo_name|
 end
 
 # Core Rails stuff
-gem 'image_processing'
+gem 'image_processing' # for ActiveStorage Variants
 gem 'puma', '~> 3.12'
-gem 'rails', '~> 5.2.1'
+gem 'rails', '~> 5.2.3'
 
 # Assets (CSS/JS) stuff
-gem 'bootstrap', '~> 4.1.3'
+gem 'bootstrap', '~> 4.3.1'
 gem 'dropzonejs-rails'
 gem 'font-awesome-rails'
 gem 'jquery-rails'
-gem 'sass-rails', '~> 5'
+gem 'sassc-rails', '~> 2.1'
 gem 'selectize-rails'
 gem 'turbolinks', '~> 5'
 gem 'uglifier', '>= 1.3.0'
@@ -39,8 +39,8 @@ gem 'solrizer', github: 'ualbertalib/solrizer', branch: 'literally_types'
 
 # Database stuff
 gem 'connection_pool'
-gem 'pg', '~> 1.1.3'
-gem 'redis', '~> 4.0'
+gem 'pg', '~> 1.1.4'
+gem 'redis', '~> 4.1'
 gem 'rsolr'
 
 # Authentication
@@ -48,21 +48,24 @@ gem 'omniauth'
 gem 'omniauth-saml'
 
 # Authorization
-gem 'pundit'
+gem 'pundit', '1.1.0'
 
 # Background tasks
 gem 'sidekiq', '~> 5.2'
 gem 'sidekiq-unique-jobs'
-gem 'sinatra', '~> 2.0.4' # used by sidekiq/web
+gem 'sinatra', '~> 2.0.5' # used by sidekiq/web
 # Sidekiq cron jobs
-gem 'rufus-scheduler', '3.5.2' # https://github.com/ondrejbartas/sidekiq-cron/issues/199
+gem 'rufus-scheduler', '3.6.0' # https://github.com/ondrejbartas/sidekiq-cron/issues/199
 gem 'sidekiq-cron'
 
 # Misc Utilities
 gem 'aasm' # state-machine management
+gem 'addressable', '~> 2.6.0' # Replacement for the standard URI implementation
+gem 'danger', '~> 6.0' # Pull Request etiquette enforcement
 gem 'ezid-client', '~> 1.8.0'
 gem 'jbuilder' # generate JSON objects
 gem 'kaminari' # Pagination
+gem 'rack-attack' # Rate limiting
 gem 'ransack' # ActiveRecord search/filter
 gem 'voight_kampff' # bot detection
 gem 'wicked' # Multi-step wizard
@@ -88,12 +91,15 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
 
-  gem 'rubocop', '~> 0.60.0', require: false
+  gem 'rubocop', '~> 0.71.0', require: false
+  gem 'rubocop-performance'
 
   gem 'scss_lint', '>= 0.56.0', require: false
 end
 
 group :development do
+  gem 'bump', require: false
+
   gem 'better_errors', '>= 2.3.0'
   gem 'binding_of_caller'
 
@@ -107,7 +113,7 @@ group :test do
   # Faker added 0.5 seconds to the test suite per call. Haikunator seems much faster for faking strings
   gem 'haikunator'
   gem 'minitest-hooks'
-  gem 'shoulda-matchers', '~> 3.0'
+  gem 'shoulda-matchers', '~> 4.0'
 
   gem 'launchy'
   gem 'vcr', require: false

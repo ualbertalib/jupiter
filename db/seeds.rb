@@ -43,12 +43,12 @@ if Rails.env.development? || Rails.env.uat?
 
   # A bunch of non-identity users for to manipulate in the admin interface
   100.times do
-    name = Faker::GameOfThrones.unique.character
+    name = Faker::TvShows::GameOfThrones.unique.character
     User.create(name: name, email: "#{name.gsub(/ +/, '.').downcase}@example.edu", admin: false)
   end
 
   # Lets pick 10 prolific creators, 10 contributors
-  creators = 10.times.map { "#{Faker::Cat.unique.name} #{Faker::Cat.unique.breed.gsub(/[ ,]+/, '-')}" }
+  creators = 10.times.map { "#{Faker::Creature::Cat.unique.name} #{Faker::Creature::Cat.unique.breed.gsub(/[ ,]+/, '-')}" }
   contributors = 10.times.map { Faker::FunnyName.unique.name_with_initial }
 
   institutions = [CONTROLLED_VOCABULARIES[:institution].uofa, CONTROLLED_VOCABULARIES[:institution].st_stephens]

@@ -176,9 +176,9 @@ def item_ingest(item_data, index, csv_directory)
   log "ITEM #{index}: Successfully ingested an item! Item ID: `#{item.id}`"
 
   item
-rescue StandardError => ex
+rescue StandardError => e
   log 'ERROR: Ingest of item failed! The following error occured:'
-  log "EXCEPTION: #{ex.message}"
+  log "EXCEPTION: #{e.message}"
   log 'WARNING: Please be careful with rerunning batch ingest! Duplication of items may happen '\
       'if previous items were successfully deposited.'
   exit 1
