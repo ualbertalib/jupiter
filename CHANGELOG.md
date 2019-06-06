@@ -19,6 +19,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ### Fixed
 - fixed error in dangerfile [#1109](https://github.com/ualbertalib/jupiter/issues/1109)
+- allow batch ingest to lookup older licenses [#1115](https://github.com/ualbertalib/jupiter/issues/1115)
 
 ## [1.2.14] - 2019-04-15
 
