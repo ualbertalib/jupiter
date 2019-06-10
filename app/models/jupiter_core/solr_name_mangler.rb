@@ -1,4 +1,5 @@
 module JupiterCore::SolrNameMangler
+
   SOLR_MANGLED_STEMS_BY_TYPE = {
     path: { pathing: 'dpsim' },
     boolean: { exact_match: 'ssim' },
@@ -33,4 +34,5 @@ module JupiterCore::SolrNameMangler
 
     "#{name}_#{stem}"
   end
+
 end
