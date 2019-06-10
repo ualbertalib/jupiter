@@ -81,7 +81,7 @@ class JupiterCore::Search
     response = ActiveSupport::Notifications.instrument(JUPITER_SOLR_NOTIFICATION,
                                                        name: 'solr select',
                                                        query: params) do
-      ActiveFedora::SolrService.instance.conn.get('select', params: params)
+      JupiterCore::SolrClient.instance.connection.get('select', params: params)
     end
 
     raise SearchFailed unless response['responseHeader']['status'] == 0
