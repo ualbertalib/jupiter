@@ -16,6 +16,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 ### Changed
 - i18n fallback to english (configuration change) [PR#1058](https://github.com/ualbertalib/jupiter/pull/1058)
 - pin rubocop version for hound [PR#1080](https://github.com/ualbertalib/jupiter/pull/1080)
+- Replaced use of ActiveFedora's Solr connection with a direct connection to Solr setup locally.
 
 ### Fixed
 - fixed error in dangerfile [#1109](https://github.com/ualbertalib/jupiter/issues/1109)
