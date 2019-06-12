@@ -31,7 +31,7 @@ class JupiterCore::LockedLdpObject
   # these are the inheritance-safe attributes)
   class_attribute :af_parent_class, :attribute_cache, :attribute_names, :facets, :ranges,
                   :association_indexes, :reverse_solr_name_cache, :solr_calc_attributes,
-                  :default_sort_indexes, :default_sort_direction
+                  :default_sort_indexes, :default_sort_direction, :solr_exporter
 
   # Returns the id of the object in LDP as a String
   def id
@@ -228,6 +228,10 @@ class JupiterCore::LockedLdpObject
   #   => "title_tesim"
   def self.solr_name_for(attribute_name, role:)
     attribute_metadata = self.attribute_cache[attribute_name]
+
+    # either an attribute_name is in the attribute_cache (it's a "real" attribute, aka in Fedora)
+    # or it names a "solr_cacl_attribute" aka some data that isn't in Fedora but that gets indexed
+    # into solr
     if attribute_metadata.present?
       sort_attr_index = attribute_metadata[:solrize_for].index(role)
       raise ArgumentError, "No #{role} solr role is defined for #{attribute_name}" if sort_attr_index.blank?
@@ -412,6 +416,15 @@ class JupiterCore::LockedLdpObject
     self.class.to_s.downcase
   end
 
+  # An instance of an object's class' declared Solr exporter
+  def solr_exporter
+    @solr_exporter_class ||= begin
+      "Exporters::Solr::#{self.class.solr_exporter.to_s.classify}".constantize
+    end
+
+    @solr_exporter_class.new(self)
+  end
+
   private
 
   attr_reader :ldp_object
@@ -506,6 +519,7 @@ class JupiterCore::LockedLdpObject
       child.association_indexes = self.association_indexes.present? ? self.association_indexes.dup : []
       child.default_sort_indexes = self.default_sort_indexes.present? ? self.default_sort_indexes.dup : []
       child.default_sort_direction = self.default_sort_direction.present? ? self.default_sort_direction.dup : []
+      child.solr_exporter = nil
       # If there's no class between +LockedLdpObject+ and this child that's
       # already had +visibility+ and +owner+ defined, define them.
       child.class_eval do
@@ -838,6 +852,10 @@ class JupiterCore::LockedLdpObject
       end
     end
 
+    def has_solr_exporter(klass_name)
+      self.solr_exporter = klass_name
+    end
+
     def has_multival_attribute(name, predicate, solrize_for: [], type: :string)
       has_attribute(name, predicate, multiple: true, solrize_for: solrize_for, type: type)
     end
@@ -877,6 +895,8 @@ class JupiterCore::LockedLdpObject
         self.reverse_solr_name_cache[solr_name] = name
       end
 
+#      self.solr_exporter.solr_name_map_for_attr(name, type)
+
       facet_name = if solrize_for.include?(:facet)
                      JupiterCore::SolrNameMangler.mangled_name_for(name, role: :facet, type: solr_type)
                    elsif solrize_for.include?(:range_facet)
@@ -890,6 +910,8 @@ class JupiterCore::LockedLdpObject
                    end
 
       self.facets << facet_name if facet_name.present?
+
+      # self.facets << self.solr_exporter.facet_name(name) if self.solr_exporter.is_facet?(name, type)
 
       self.attribute_cache[name] = {
         predicate: predicate,

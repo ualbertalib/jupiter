@@ -12,6 +12,10 @@ class JupiterCore::SolrClient
     SOLR_TYPES.include?(type)
   end
 
+  def self.valid_solr_role?(role)
+    SOLR_ROLES.include?(role)
+  end
+
   def connection
     @connection ||= RSolr.connect url: SOLR_CONFIG[:url]
   end

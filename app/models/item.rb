@@ -5,6 +5,8 @@ class Item < JupiterCore::LockedLdpObject
   include GlobalID::Identification
   ldp_object_includes Hydra::Works::WorkBehavior
 
+  has_solr_exporter :item_exporter
+
   # Contributors (faceted in `all_contributors`)
   has_attribute :creators, RDF::Vocab::BIBO.authorList, type: :json_array, solrize_for: [:search]
   # copying the creator values into an un-json'd field for Metadata consumption
