@@ -53,6 +53,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - i18n fallback to english (configuration change) [PR#1058](https://github.com/ualbertalib/jupiter/pull/1058)
 - pin rubocop version for hound [PR#1080](https://github.com/ualbertalib/jupiter/pull/1080)
 - Skip flapping tests on travis CI [#1181](https://github.com/ualbertalib/jupiter/issues/1181)
+- Replaced use of ActiveFedora's Solr connection with a direct connection to Solr setup locally.
 - Made multiple seeds of db not duplicate types, languages, or institutions [#1117](https://github.com/ualbertalib/jupiter/issues/1117)
 
 ### Fixed
