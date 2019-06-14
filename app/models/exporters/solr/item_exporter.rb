@@ -1,7 +1,7 @@
 class Exporters::Solr::ItemExporter < Exporters::Solr::BaseExporter
-  exports Item
+  #exports Item
 
-  index :creators, role: :search
+  index :creators, type: :json_array, role: :search
   # copying the creator values into an un-json'd field for Metadata consumption
   index :unordered_creators, role: :search
 
@@ -12,7 +12,7 @@ class Exporters::Solr::ItemExporter < Exporters::Solr::BaseExporter
   index :temporal_subjects, role: :search
   index :spatial_subjects, role: :search
 
-  index :description, role: :search
+  index :description, type: :text, role: :search
   index :publisher, role: [:search, :facet]
 
   index :languages, role: [:search, :facet]
