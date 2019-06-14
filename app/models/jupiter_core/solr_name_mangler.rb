@@ -26,11 +26,11 @@ module JupiterCore::SolrNameMangler
   }.freeze
 
   def self.mangled_name_for(name, type:, role:)
-    stem = SOLR_MANGLED_STEMS_BY_TYPE.dig(type, role)
-    if stem.blank?
-      raise JupiterCore::SolrNameManglingError,
-            "Unmapped type/role combination for requested mangle of #{name}: type: #{type}, role: #{role}"
-    end
+    rawtype = ((type == :json_array) ? :string : type)
+
+    stem = SOLR_MANGLED_STEMS_BY_TYPE.dig(rawtype, role)
+    binding.pry if stem.nil?
+    raise JupiterCore::SolrNameManglingError, "Unmapped type/role combination for requested mangle of #{name}: type: #{type}, role: #{role}" unless stem.present?
 
     "#{name}_#{stem}"
   end

@@ -1,3 +1,4 @@
+# coding: utf-8
 # JupiterCore::LockedLdpObject classes are lightweight, read-only objects
 # TODO: this file could benefit from some reorganization, possibly into several files
 class JupiterCore::LockedLdpObject
@@ -416,11 +417,11 @@ class JupiterCore::LockedLdpObject
 
   # An instance of an object's class' declared Solr exporter
   def solr_exporter
-    @solr_exporter_class ||= begin
-      "Exporters::Solr::#{self.class.solr_exporter.to_s.classify}".constantize
-    end
+    self.class.solr_exporter_class.new(self)
+  end
 
-    @solr_exporter_class.new(self)
+  def self.solr_exporter_class
+    @solr_exporter_class
   end
 
   private
@@ -850,8 +851,8 @@ class JupiterCore::LockedLdpObject
       end
     end
 
-    def has_solr_exporter(klass_name)
-      self.solr_exporter = klass_name
+    def has_solr_exporter(klass)
+      @solr_exporter_class = klass
     end
 
     def has_multival_attribute(name, predicate, solrize_for: [], type: :string)
@@ -882,18 +883,20 @@ class JupiterCore::LockedLdpObject
 
       self.attribute_names << name
 
-      # json arrays are stored in Solr and Fedora as a single string
-      # otherwise, things are stored as what they're declared as.
-      solr_type = (type == :json_array ? :string : type)
-
       solr_name_cache ||= []
-      solrize_for.each do |descriptor|
-        solr_name = JupiterCore::SolrNameMangler.mangled_name_for(name, type: solr_type, role: descriptor)
-        solr_name_cache << solr_name
-        self.reverse_solr_name_cache[solr_name] = name
-      end
+      solr_type = nil
 
-#      self.solr_exporter.solr_name_map_for_attr(name, type)
+      if self.solr_exporter_class.nil?
+        # json arrays are stored in Solr and Fedora as a single string
+        # otherwise, things are stored as what they're declared as.
+
+        solr_type = (type == :json_array ? :string : type)
+
+        solrize_for.each do |descriptor|
+          solr_name = JupiterCore::SolrNameMangler.mangled_name_for(name, type: solr_type, role: descriptor)
+          solr_name_cache << solr_name
+          self.reverse_solr_name_cache[solr_name] = name
+        end
 
       facet_name = if solrize_for.include?(:facet)
                      JupiterCore::SolrNameMangler.mangled_name_for(name, role: :facet, type: solr_type)
@@ -901,23 +904,37 @@ class JupiterCore::LockedLdpObject
                      range_name = JupiterCore::SolrNameMangler.mangled_name_for(name,
                                                                                 role: :range_facet,
                                                                                 type: solr_type)
-                     self.ranges << range_name
-                     range_name
-                   elsif solrize_for.include?(:pathing)
-                     JupiterCore::SolrNameMangler.mangled_name_for(name, role: :pathing, type: solr_type)
-                   end
+                       self.ranges << range_name
+                       range_name
+                     elsif solrize_for.include?(:pathing)
+                       JupiterCore::SolrNameMangler.mangled_name_for(name, role: :pathing, type: solr_type)
+                     end
 
-      self.facets << facet_name if facet_name.present?
+        self.facets << facet_name if facet_name.present?
 
-      # self.facets << self.solr_exporter.facet_name(name) if self.solr_exporter.is_facet?(name, type)
+        self.attribute_cache[name] = {
+          predicate: predicate,
+          multiple: multiple,
+          solrize_for: solrize_for,
+          type: type,
+          solr_names: solr_name_cache
+        }
+      else
+        type = nil
+        type = self.solr_exporter_class.solr_type_for(name)
+        solr_type = (type == :json_array ? :string : type)
+        solr_name_cache = self.solr_exporter_class.solr_names_for(name)
+        self.facets << self.solr_exporter_class.mangled_facet_name_for(name) if self.solr_exporter_class.is_facet?(name)
+        self.ranges << self.solr_exporter_class.mangled_range_name_for(name) if self.solr_exporter_class.is_range?(name)
 
-      self.attribute_cache[name] = {
-        predicate: predicate,
-        multiple: multiple,
-        solrize_for: solrize_for,
-        type: type,
-        solr_names: solr_name_cache
-      }
+        self.attribute_cache[name] = {
+          predicate: predicate,
+          multiple: multiple,
+          solrize_for: self.solr_exporter_class.solr_roles_for(name),
+          type: type,
+          solr_names: solr_name_cache
+        }
+      end
 
       # define the read-only attribute method for the locked object
       #
