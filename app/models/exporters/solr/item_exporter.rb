@@ -1,5 +1,6 @@
 class Exporters::Solr::ItemExporter < Exporters::Solr::BaseExporter
-  #exports Item
+
+  # exports Item
 
   index :creators, type: :json_array, role: :search
   # copying the creator values into an un-json'd field for Metadata consumption

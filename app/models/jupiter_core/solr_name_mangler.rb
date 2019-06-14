@@ -1,5 +1,4 @@
 module JupiterCore::SolrNameMangler
-
   SOLR_MANGLED_STEMS_BY_TYPE = {
     path: { pathing: 'dpsim' },
     boolean: { exact_match: 'ssim' },
@@ -26,13 +25,14 @@ module JupiterCore::SolrNameMangler
   }.freeze
 
   def self.mangled_name_for(name, type:, role:)
-    rawtype = ((type == :json_array) ? :string : type)
+    rawtype = (type == :json_array ? :string : type)
 
     stem = SOLR_MANGLED_STEMS_BY_TYPE.dig(rawtype, role)
-    binding.pry if stem.nil?
-    raise JupiterCore::SolrNameManglingError, "Unmapped type/role combination for requested mangle of #{name}: type: #{type}, role: #{role}" unless stem.present?
+    if stem.blank?
+      raise JupiterCore::SolrNameManglingError,
+            "Unmapped type/role combination for requested mangle of #{name}: type: #{type}, role: #{role}"
+    end
 
     "#{name}_#{stem}"
   end
-
 end
