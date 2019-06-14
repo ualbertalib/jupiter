@@ -1,4 +1,5 @@
 class Exporters::Solr::ExportDriver
+
   def export(object)
     klass_name = object.class.name
     klass_sym = klass_name.to_sym
@@ -13,4 +14,5 @@ class Exporters::Solr::ExportDriver
       raise Exporters::NoSuchExporter, "Exporter #{exporter_klass_name} is not defined for #{klass_name}"
     end
   end
+
 end

@@ -1,4 +1,3 @@
-# coding: utf-8
 # JupiterCore::LockedLdpObject classes are lightweight, read-only objects
 # TODO: this file could benefit from some reorganization, possibly into several files
 class JupiterCore::LockedLdpObject
@@ -898,12 +897,12 @@ class JupiterCore::LockedLdpObject
           self.reverse_solr_name_cache[solr_name] = name
         end
 
-      facet_name = if solrize_for.include?(:facet)
-                     JupiterCore::SolrNameMangler.mangled_name_for(name, role: :facet, type: solr_type)
-                   elsif solrize_for.include?(:range_facet)
-                     range_name = JupiterCore::SolrNameMangler.mangled_name_for(name,
-                                                                                role: :range_facet,
-                                                                                type: solr_type)
+        facet_name = if solrize_for.include?(:facet)
+                       JupiterCore::SolrNameMangler.mangled_name_for(name, role: :facet, type: solr_type)
+                     elsif solrize_for.include?(:range_facet)
+                       range_name = JupiterCore::SolrNameMangler.mangled_name_for(name,
+                                                                                  role: :range_facet,
+                                                                                  type: solr_type)
                        self.ranges << range_name
                        range_name
                      elsif solrize_for.include?(:pathing)
@@ -924,8 +923,8 @@ class JupiterCore::LockedLdpObject
         type = self.solr_exporter_class.solr_type_for(name)
         solr_type = (type == :json_array ? :string : type)
         solr_name_cache = self.solr_exporter_class.solr_names_for(name)
-        self.facets << self.solr_exporter_class.mangled_facet_name_for(name) if self.solr_exporter_class.is_facet?(name)
-        self.ranges << self.solr_exporter_class.mangled_range_name_for(name) if self.solr_exporter_class.is_range?(name)
+        self.facets << self.solr_exporter_class.mangled_facet_name_for(name) if self.solr_exporter_class.facet?(name)
+        self.ranges << self.solr_exporter_class.mangled_range_name_for(name) if self.solr_exporter_class.range?(name)
 
         self.attribute_cache[name] = {
           predicate: predicate,
