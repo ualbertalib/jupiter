@@ -47,8 +47,8 @@ class Exporters::Solr::BaseExporter
 
   class << self
 
-    attr_accessor :reverse_solr_name_map, :solr_calc_attributes, :name_to_type_map, :name_to_roles_map,
-                  :name_to_solr_name_map
+    attr_accessor :reverse_solr_name_map, :name_to_type_map, :name_to_roles_map,
+                  :name_to_solr_name_map, :name_to_custom_lambda_map, :indexed_attributes
 
     protected
 
@@ -63,13 +63,10 @@ class Exporters::Solr::BaseExporter
 
       #  raise Exporters::Solr::UnknownAttributeError, "#{@export_class} does not have an attribute named #{attr}" unless @export_class.method_defined? attr
 
+      self.record_type(attr, type)
+      self.record_roles(attr, role)
+
       self.reverse_solr_name_map ||= {}
-
-      self.name_to_type_map ||= {}
-      self.name_to_type_map[attr] = type
-
-      self.name_to_roles_map ||= {}
-      self.name_to_roles_map[attr] = role
 
       self.name_to_solr_name_map ||= {}
       self.name_to_solr_name_map[attr] = []
@@ -79,9 +76,53 @@ class Exporters::Solr::BaseExporter
         self.reverse_solr_name_map[mangled_name] = attr
         self.name_to_solr_name_map[attr] << mangled_name
       end
+
+      indexed_attributes ||= []
+      indexed_attributes << attr
     end
 
-    def virtual_index(name, role:, as:); end
+    def custom_index(name, type: :string, role:, as:)
+      role = [role] unless role.is_a? Array
+
+      raise Exporters::Solr::IndexRoleInvalidError if role.count { |r| !JupiterCore::SolrClient.valid_solr_role?(r) } > 0
+
+      self.record_type(attr, type)
+      self.record_roles(attr, role)
+
+      self.reverse_solr_name_map ||= {}
+
+      self.name_to_solr_name_map ||= {}
+      self.name_to_solr_name_map[attr] = []
+
+      role.each do |r|
+        mangled_name = JupiterCore::SolrNameMangler.mangled_name_for(attr, type: type, role: r)
+        self.reverse_solr_name_map[mangled_name] = attr
+        self.name_to_solr_name_map[attr] << mangled_name
+      end
+
+      self.name_to_custom_lambda_map ||= {}
+      self.name_to_custom_lambda_map[name] = as
+    end
+
+    private
+
+    def record_type(name, type)
+      self.name_to_type_map ||= {}
+      self.name_to_type_map[name] = type
+    end
+
+    def record_roles(name, roles)
+      self.name_to_roles_map ||= {}
+      self.name_to_roles_map[attr] = role
+    end
+
+    def attribute_index?(name)
+      self.indexed_attributes.include? name
+    end
+
+    def custom_index?(name)
+      self.name_to_custom_lambda_map.key? name
+    end
 
   end
 
