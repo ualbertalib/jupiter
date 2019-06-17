@@ -26,18 +26,18 @@ class Exporters::Solr::ItemExporter < Exporters::Solr::BaseExporter
   index :publication_status, role: :exact_match
 
   # Solr only
-  virtual_index :doi_without_label, role: :exact_match,
+  custom_index :doi_without_label, role: :exact_match,
                                     as: ->(item) { item.doi.gsub('doi:', '') if item.doi.present? }
 
   # This combines both the controlled vocabulary codes from item_type and published_status above
   # (but only for items that are articles)
-  virtual_index :item_type_with_status, role: :facet, as: ->(item) { item.item_type_with_status_code }
+  custom_index :item_type_with_status, role: :facet, as: ->(item) { item.item_type_with_status_code }
 
   # Combine creators and contributors for faceting (Thesis also uses this index)
   # Note that contributors is converted to an array because it can be nil
-  virtual_index :all_contributors, role: :facet, as: ->(item) { item.creators + item.contributors.to_a }
+  custom_index :all_contributors, role: :facet, as: ->(item) { item.creators + item.contributors.to_a }
 
   # Combine all the subjects for faceting
-  virtual_index :all_subjects, role: :facet, as: ->(item) { item.all_subjects }
+  custom_index :all_subjects, role: :facet, as: ->(item) { item.all_subjects }
 
 end
