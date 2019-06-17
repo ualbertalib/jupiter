@@ -24,7 +24,7 @@ class Exporters::Solr::BaseExporter
   end
 
   def self.facet?(name)
-    return Exporters::Solr::UnknownAttributeError unless name_to_roles_map.key?(name)
+    raise Exporters::Solr::UnknownAttributeError, "no such attribute #{name}" unless name_to_roles_map.key?(name)
 
     (name_to_roles_map[name] & SOLR_FACET_ROLES).present?
   end
@@ -35,12 +35,13 @@ class Exporters::Solr::BaseExporter
   end
 
   def self.range?(name)
-    return Exporters::Solr::UnknownAttributeError unless name_to_roles_map.key?(name)
+    raise Exporters::Solr::UnknownAttributeError, "no such attribute #{name}" unless name_to_roles_map.key?(name)
 
     name_to_roles_map[name].include? :range_facet
   end
 
   def self.mangled_range_name_for(name)
+
     type = name_to_type_map[name]
     JupiterCore::SolrNameMangler.mangled_name_for(name, type: type, role: :range_facet)
   end
@@ -104,7 +105,7 @@ class Exporters::Solr::BaseExporter
       self.name_to_custom_lambda_map[name] = as
     end
 
-    private
+
 
     def record_type(name, type)
       self.name_to_type_map ||= {}
@@ -113,7 +114,7 @@ class Exporters::Solr::BaseExporter
 
     def record_roles(name, roles)
       self.name_to_roles_map ||= {}
-      self.name_to_roles_map[attr] = role
+      self.name_to_roles_map[name] = roles
     end
 
     def attribute_index?(name)
