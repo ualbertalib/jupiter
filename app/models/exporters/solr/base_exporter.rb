@@ -6,10 +6,49 @@ class Exporters::Solr::BaseExporter
   attr_reader :export_object
 
   SOLR_FACET_ROLES = [:facet, :range_facet, :pathing].freeze
+  SINGULAR_ROLES = [:sort, :range_facet].freeze
 
   def initialize(object)
     @export_object = object
   end
+
+  def export
+    solr_doc = {}
+    self.class.indexed_attributes.each do |attr|
+      roles = self.class.name_to_roles_map(attr)
+      type = self.class.name_to_type_map(attr)
+
+      raw_val = @export_object.send(attr)
+      # converted_val = convert_value(raw_val, to: type)
+
+      roles.each do |role|
+        solr_index_name = JupiterCore::SolrNameMangler.mangled_name_for(attr, type: type, role: role)
+        solr_doc[solr_index_name] = if singular_role?(role)
+          raw_val = raw_val.first if raw_val.is_a? Array
+          raw_val.to_s
+        else
+          if raw_val.is_a? Array
+            raw_val.each(&:to_s)
+          else
+            [raw_val.to_s]
+          end
+        end
+      end
+    end
+
+    self.class.name_to_custom_lambda_map.each do |index_name, index_lambda|
+      roles = self.class.name_to_roles_map(index_name)
+      type = self.class.name_to_type_map(index_name)
+
+      raw_val =  index_lambda.call(@export_object).to_s
+
+      roles.each do |role|
+        solr_index_name = JupiterCore::SolrNameMangler.mangled_name_for(index_name, type: type, role: role)
+        solr_doc[solr_index_name] = raw_val
+      end
+    end
+  end
+
 
   def self.solr_type_for(name)
     name_to_type_map[name]
@@ -41,7 +80,6 @@ class Exporters::Solr::BaseExporter
   end
 
   def self.mangled_range_name_for(name)
-
     type = name_to_type_map[name]
     JupiterCore::SolrNameMangler.mangled_name_for(name, type: type, role: :range_facet)
   end
@@ -105,8 +143,6 @@ class Exporters::Solr::BaseExporter
       self.name_to_custom_lambda_map[name] = as
     end
 
-
-
     def record_type(name, type)
       self.name_to_type_map ||= {}
       self.name_to_type_map[name] = type
@@ -123,6 +159,10 @@ class Exporters::Solr::BaseExporter
 
     def custom_index?(name)
       self.name_to_custom_lambda_map.key? name
+    end
+
+    def singular_role(role)
+      SINGULAR_ROLES.include? role
     end
 
   end
