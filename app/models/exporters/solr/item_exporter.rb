@@ -1,6 +1,28 @@
 class Exporters::Solr::ItemExporter < Exporters::Solr::BaseExporter
 
-  # exports Item
+  index :title, role: [:search, :sort]
+
+  # UAL attributes
+  index :fedora3_uuid, role: :exact_match
+  index :depositor, role: [:search]
+
+  index :alternative_title, role: :search
+  index :doi, role: :exact_match
+  index :embargo_end_date, type: :date, role: [:sort]
+  index :fedora3_handle, role: :exact_match
+  index :ingest_batch, role: :exact_match
+  index :northern_north_america_filename, role: :exact_match
+  index :northern_north_america_item_id, role: :exact_match
+  index :rights, role: :exact_match
+  index :sort_year, type: :integer, role: [:search, :sort, :range_facet]
+  index :visibility_after_embargo, role: :exact_match
+
+  index :embargo_history, role: :exact_match
+  index :is_version_of, role: :exact_match
+  index :member_of_paths, type: :path, role: :pathing
+
+  # See `all_subjects` in including class for faceting
+  index :subject, role: :search
 
   index :creators, type: :json_array, role: :search
   # copying the creator values into an un-json'd field for Metadata consumption
