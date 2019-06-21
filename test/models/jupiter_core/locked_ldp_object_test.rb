@@ -1,14 +1,24 @@
+# coding: utf-8
 require 'test_helper'
 
 class LockedLdpObjectTest < ActiveSupport::TestCase
 
+  @@exporter = Class.new(Exporters::Solr::BaseExporter) do
+    index :title, role: [:search, :facet]
+    index :creator, type: :json_array, role: [:search, :facet]
+    index :member_of_paths, role: :pathing
+
+    custom_index :my_solr_doc_attr, type: :string, role: :search, as: ->(object) { object.title&.upcase }
+  end
+
   @@klass = Class.new(JupiterCore::LockedLdpObject) do
     ldp_object_includes Hydra::Works::WorkBehavior
+
+    has_solr_exporter @@exporter
+
     has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
     has_attribute :creator, ::RDF::Vocab::DC.creator, type: :json_array, solrize_for: [:search, :facet]
     has_multival_attribute :member_of_paths, ::TERMS[:ual].path, solrize_for: :pathing
-
-    additional_search_index :my_solr_doc_attr, type: :string, solrize_for: :search, as: -> { title&.upcase }
 
     def locked_method_shouldnt_mutate(attempted_title)
       self.title = attempted_title
@@ -430,9 +440,24 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
 
   test 'hoisted activefedora associations' do
     klass = Class.new(JupiterCore::LockedLdpObject) do
+      exporter = Class.new(Exporters::Solr::BaseExporter) do
+        custom_index :item, role: :search, as: ->(file_set) {
+          ids = []
+          file_set.unlock_and_fetch_ldp_object do |uo|
+            uo.send(:member_of_collections)&.map do |member|
+              ids << member.id
+            end
+          end
+          ids
+        }
+      end
+
       ldp_object_includes Hydra::Works::FileSetBehavior
+
+      has_solr_exporter exporter
       belongs_to :item, using_existing_association: :member_of_collections
     end
+
     instance = klass.new_locked_ldp_object(owner: 1, visibility: JupiterCore::VISIBILITY_PUBLIC)
 
     assert instance.respond_to?(:item)
@@ -448,7 +473,6 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     assert_equal instance2.item, instance.id
 
     fetched_object = klass.where(item: instance.id).first
-
     assert fetched_object.present?
     assert_equal fetched_object.id, instance2.id
 

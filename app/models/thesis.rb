@@ -5,6 +5,8 @@ class Thesis < JupiterCore::LockedLdpObject
   include GlobalID::Identification
   ldp_object_includes Hydra::Works::WorkBehavior
 
+  has_solr_exporter Exporters::Solr::ThesisExporter
+
   # Dublin Core attributes
   has_attribute :abstract, ::RDF::Vocab::DC.abstract, type: :text, solrize_for: :search
   # Note: language is single-valued for Thesis, but languages is multi-valued for Item
@@ -33,22 +35,6 @@ class Thesis < JupiterCore::LockedLdpObject
   has_multival_attribute :committee_members, TERMS[:ual].committee_member, solrize_for: :exact_match
   has_multival_attribute :unordered_departments, TERMS[:ual].department, solrize_for: :search
   has_multival_attribute :unordered_supervisors, TERMS[:ual].supervisor, solrize_for: :exact_match
-
-  # This gets mixed with the item types for `Item`
-  additional_search_index :item_type_with_status,
-                          solrize_for: :facet,
-                          as: -> { item_type_with_status_code }
-
-  # Dissertants are indexed with the Item creators/contributors
-  additional_search_index :all_contributors, solrize_for: :facet, as: -> { [dissertant] }
-
-  # Index subjects with Item subjects (topical, temporal, etc).
-  additional_search_index :all_subjects, solrize_for: :facet, as: -> { subject }
-
-  # Making `language` consistent with Item `languages`
-  additional_search_index :languages,
-                          solrize_for: :facet,
-                          as: -> { [language] }
 
   # Present a consistent interface with Item#item_type_with_status_code
   def item_type_with_status_code

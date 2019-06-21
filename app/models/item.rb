@@ -35,23 +35,6 @@ class Item < JupiterCore::LockedLdpObject
   # This status is only for articles: either 'published' (alone) or two triples for 'draft'/'submitted'
   has_multival_attribute :publication_status, ::RDF::Vocab::BIBO.status, solrize_for: :exact_match
 
-  # Solr only
-  additional_search_index :doi_without_label, solrize_for: :exact_match,
-                                              as: -> { doi.gsub('doi:', '') if doi.present? }
-
-  # This combines both the controlled vocabulary codes from item_type and published_status above
-  # (but only for items that are articles)
-  additional_search_index :item_type_with_status,
-                          solrize_for: :facet,
-                          as: -> { item_type_with_status_code }
-
-  # Combine creators and contributors for faceting (Thesis also uses this index)
-  # Note that contributors is converted to an array because it can be nil
-  additional_search_index :all_contributors, solrize_for: :facet, as: -> { creators + contributors.to_a }
-
-  # Combine all the subjects for faceting
-  additional_search_index :all_subjects, solrize_for: :facet, as: -> { all_subjects }
-
   def self.from_draft(draft_item)
     item = Item.find(draft_item.uuid) if draft_item.uuid.present?
     item ||= Item.new_locked_ldp_object

@@ -9,7 +9,7 @@ class JupiterCore::Indexer < ActiveFedora::IndexingService
       solr_doc = exporter.export
 
       # These two attributes only appear in Solr, not ActiveFedora, and were managed by
-      # Solrizer for some random. Recreated here for compatibility in this stage of the refactoring
+      # Solrizer for some random reason. Recreated here for compatibility in this stage of the refactoring
       #
       # TODO: remove
 

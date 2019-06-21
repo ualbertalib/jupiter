@@ -84,7 +84,9 @@ class Exporters::Solr::BaseExporter
 
   def self.mangled_facet_name_for(name)
     type = name_to_type_map[name]
-    JupiterCore::SolrNameMangler.mangled_name_for(attr, type: type, role: :facet)
+    roles = name_to_roles_map[name]
+    facet_role = roles.detect {|r| SOLR_FACET_ROLES.include? r }
+    JupiterCore::SolrNameMangler.mangled_name_for(attr, type: type, role: facet_role)
   end
 
   def self.range?(name)
@@ -98,8 +100,16 @@ class Exporters::Solr::BaseExporter
     JupiterCore::SolrNameMangler.mangled_name_for(name, type: type, role: :range_facet)
   end
 
+  def self.name_for_mangled_name(mangled_name)
+    self.reverse_solr_name_map[mangled_name]
+  end
+
   def self.singular_role?(role)
     SINGULAR_ROLES.include? role
+  end
+
+  def self.custom_indexes
+    self.name_to_custom_lambda_map.keys
   end
 
   def serialize_value(value)
@@ -122,30 +132,14 @@ class Exporters::Solr::BaseExporter
 
     protected
 
-    def exports(klass)
-      #   @export_class = klass
-    end
-
     def index(attr, role:, type: :string)
       role = [role] unless role.is_a? Array
 
       raise Exporters::Solr::IndexRoleInvalidError if role.count { |r| !JupiterCore::SolrClient.valid_solr_role?(r) } > 0
 
-      #  raise Exporters::Solr::UnknownAttributeError, "#{@export_class} does not have an attribute named #{attr}" unless @export_class.method_defined? attr
-
       self.record_type(attr, type)
       self.record_roles(attr, role)
-
-      self.reverse_solr_name_map ||= {}
-
-      self.name_to_solr_name_map ||= {}
-      self.name_to_solr_name_map[attr] = []
-
-      role.each do |r|
-        mangled_name = JupiterCore::SolrNameMangler.mangled_name_for(attr, type: type, role: r)
-        self.reverse_solr_name_map[mangled_name] = attr
-        self.name_to_solr_name_map[attr] << mangled_name
-      end
+      self.record_solr_names(attr, type, role)
 
       self.indexed_attributes ||= []
       self.indexed_attributes << attr
@@ -158,17 +152,7 @@ class Exporters::Solr::BaseExporter
 
       self.record_type(attr, type)
       self.record_roles(attr, role)
-
-      self.reverse_solr_name_map ||= {}
-
-      self.name_to_solr_name_map ||= {}
-      self.name_to_solr_name_map[attr] = []
-
-      role.each do |r|
-        mangled_name = JupiterCore::SolrNameMangler.mangled_name_for(attr, type: type, role: r)
-        self.reverse_solr_name_map[mangled_name] = attr
-        self.name_to_solr_name_map[attr] << mangled_name
-      end
+      self.record_solr_names(attr, type, role)
 
       self.name_to_custom_lambda_map ||= {}
       self.name_to_custom_lambda_map[attr] = as
@@ -182,6 +166,19 @@ class Exporters::Solr::BaseExporter
     def record_roles(name, roles)
       self.name_to_roles_map ||= {}
       self.name_to_roles_map[name] = roles
+    end
+
+    def record_solr_names(attr, type, roles)
+      self.reverse_solr_name_map ||= {}
+
+      self.name_to_solr_name_map ||= {}
+      self.name_to_solr_name_map[attr] = []
+
+      roles.each do |r|
+        mangled_name = JupiterCore::SolrNameMangler.mangled_name_for(attr, type: type, role: r)
+        self.reverse_solr_name_map[mangled_name] = attr
+        self.name_to_solr_name_map[attr] << mangled_name
+      end
     end
 
     def attribute_index?(name)
