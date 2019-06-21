@@ -55,8 +55,8 @@ class Exporters::Solr::ThesisExporter < Exporters::Solr::BaseExporter
 
   # This gets mixed with the item types for `Item`
   custom_index :item_type_with_status,
-                          role: :facet,
-                          as: ->(thesis) { thesis.item_type_with_status_code }
+               role: :facet,
+               as: ->(thesis) { thesis.item_type_with_status_code }
 
   # Dissertants are indexed with the Item creators/contributors
   custom_index :all_contributors, role: :facet, as: ->(thesis) { [thesis.dissertant] }
@@ -66,11 +66,10 @@ class Exporters::Solr::ThesisExporter < Exporters::Solr::BaseExporter
 
   # Making `language` consistent with Item `languages`
   custom_index :languages,
-                          role: :facet,
-                          as: ->(thesis) { [thesis.language] }
+               role: :facet,
+               as: ->(thesis) { [thesis.language] }
 
   custom_index :doi_without_label, role: :exact_match,
-                                    as: ->(thesis) { thesis.doi.gsub('doi:', '') if thesis.doi.present? }
-
+                                   as: ->(thesis) { thesis.doi.gsub('doi:', '') if thesis.doi.present? }
 
 end

@@ -144,7 +144,7 @@ class JupiterCore::Search
 
     # combine the facet maps (solr_name => attribute_name) of all of the models being searched
     def construct_facet_map(models)
-      models.map(&:reverse_solr_name_cache).reduce(&:merge)
+      models.map(&:solr_name_to_attribute_name_map).reduce(&:merge)
     end
 
     # Disallow use of the visibility facet by non-admins

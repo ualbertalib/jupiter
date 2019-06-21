@@ -132,7 +132,7 @@ class JupiterCore::DeferredFacetedSolrQuery
     return :relevance if criteria[:sort].first == :score
 
     model = criteria[:restrict_to_model].first.owning_class
-    model.reverse_solr_name_cache[criteria[:sort].first]
+    model.solr_name_to_attribute_name_map[criteria[:sort].first]
   end
 
   def used_sort_order

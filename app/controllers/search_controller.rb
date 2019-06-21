@@ -34,8 +34,6 @@ class SearchController < ApplicationController
                                   .sort(sort_field, search_params[:direction])
                                   .page(search_params[:page])
 
-    puts @results.inspect_query
-
     respond_to do |format|
       format.html
       format.json { render json: @results }

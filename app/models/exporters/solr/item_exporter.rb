@@ -49,7 +49,7 @@ class Exporters::Solr::ItemExporter < Exporters::Solr::BaseExporter
 
   # Solr only
   custom_index :doi_without_label, role: :exact_match,
-                                    as: ->(item) { item.doi.gsub('doi:', '') if item.doi.present? }
+                                   as: ->(item) { item.doi.gsub('doi:', '') if item.doi.present? }
 
   # This combines both the controlled vocabulary codes from item_type and published_status above
   # (but only for items that are articles)

@@ -1,4 +1,5 @@
 class Exporters::Solr::CommunityExporter < Exporters::Solr::BaseExporter
+
   index :title, role: [:search, :sort]
 
   # UAL attributes
@@ -7,6 +8,5 @@ class Exporters::Solr::CommunityExporter < Exporters::Solr::BaseExporter
 
   index :description, role: [:search]
   index :creators, role: :exact_match
-
 
 end

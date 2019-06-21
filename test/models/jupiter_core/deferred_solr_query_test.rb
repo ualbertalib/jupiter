@@ -2,8 +2,15 @@ require 'test_helper'
 
 class DeferredSimpleSolrQueryTest < ActiveSupport::TestCase
 
+  @@exporter = Class.new(Exporters::Solr::BaseExporter) do
+    index :title, role: [:search, :facet, :sort]
+    index :creator, role: [:facet, :sort]
+  end
+
   @@klass = Class.new(JupiterCore::LockedLdpObject) do
     ldp_object_includes Hydra::Works::WorkBehavior
+    has_solr_exporter @@exporter
+
     has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet, :sort]
     has_attribute :creator, ::RDF::Vocab::DC.title, solrize_for: [:facet, :sort]
 

@@ -1,4 +1,3 @@
-# coding: utf-8
 # JupiterCore::LockedLdpObject classes are lightweight, read-only objects
 # TODO: this file could benefit from some reorganization, possibly into several files
 class JupiterCore::LockedLdpObject
@@ -424,6 +423,10 @@ class JupiterCore::LockedLdpObject
     @solr_exporter_class
   end
 
+  def self.solr_name_to_attribute_name_map
+    self.solr_exporter_class.reverse_solr_name_map
+  end
+
   private
 
   attr_reader :ldp_object
@@ -810,10 +813,10 @@ class JupiterCore::LockedLdpObject
     def has_solr_exporter(klass)
       @solr_exporter_class = klass
 
+      # import some information from the Solr Exporter for compatibility purposes with existing Fedora stuff
+      # TODO: remove
       @solr_exporter_class.custom_indexes.each do |name|
-        type = nil
         type = @solr_exporter_class.solr_type_for(name)
-        solr_type = (type == :json_array ? :string : type)
         solr_name_cache = @solr_exporter_class.solr_names_for(name)
         self.facets << @solr_exporter_class.mangled_facet_name_for(name) if @solr_exporter_class.facet?(name)
         self.ranges << @solr_exporter_class.mangled_range_name_for(name) if @solr_exporter_class.range?(name)

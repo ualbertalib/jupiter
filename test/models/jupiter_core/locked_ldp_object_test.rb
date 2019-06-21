@@ -1,4 +1,3 @@
-# coding: utf-8
 require 'test_helper'
 
 class LockedLdpObjectTest < ActiveSupport::TestCase
@@ -318,6 +317,13 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
 
     another_klass = Class.new(JupiterCore::LockedLdpObject) do
       ldp_object_includes Hydra::Works::WorkBehavior
+
+      exporter = Class.new(Exporters::Solr::BaseExporter) do
+        index :title, role: [:search, :facet]
+      end
+
+      has_solr_exporter exporter
+
       has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
     end
 
@@ -385,38 +391,15 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     end
   end
 
-  # You might ask yourself, "Should we be writing tests to validate basic functionality of upstream dependencies?"
-  #
-  # No.
-  # We should not _have_ to.
-  #
-  # (ﾉ °益°)ﾉ 彡 ┻━┻
-  test 'we are using a branch of ActiveFedora and Solrizer where index type works' do
-    klass = Class.new(ActiveFedora::Base) do
-      property :foo, predicate: ::RDF::Vocab::DC.created, multiple: false do |index|
-        index.type :date
-        index.as :stored_sortable
-      end
-    end
-
-    # This should work even with vanilla AF/Solrizer
-    instance = klass.new
-    instance.foo = Time.current
-
-    assert instance.to_solr.key? 'foo_dtsi'
-    assert_not instance.to_solr.key? 'foo_ssi'
-
-    # This will be broken on vanilla AF/Solrizer. Assigning a string will reveal that the index.type is non-functional
-    # and ignored. foo will be solrized as a stored sortable string, foo_ssi, and not a date.
-    instance.foo = Time.current
-
-    assert instance.to_solr.key? 'foo_dtsi'
-    assert_not instance.to_solr.key? 'foo_ssi'
-  end
-
   # This is definitely up there in terms of the craziest things I've ever had to write a test for.
   test 'times dont get warped into the past when the object is saved' do
     klass = Class.new(JupiterCore::LockedLdpObject) do
+      exporter = Class.new(Exporters::Solr::BaseExporter) do
+        index :embargo_date, type: :date, role: :sort
+      end
+
+      has_solr_exporter exporter
+
       has_attribute :embargo_date, ::RDF::Vocab::DC.modified, type: :date, solrize_for: [:sort]
     end
     instance = klass.new_locked_ldp_object(owner: 1, visibility: JupiterCore::VISIBILITY_PUBLIC)
@@ -441,7 +424,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
   test 'hoisted activefedora associations' do
     klass = Class.new(JupiterCore::LockedLdpObject) do
       exporter = Class.new(Exporters::Solr::BaseExporter) do
-        custom_index :item, role: :search, as: ->(file_set) {
+        custom_index :item, role: :search, as: lambda { |file_set|
           ids = []
           file_set.unlock_and_fetch_ldp_object do |uo|
             uo.send(:member_of_collections)&.map do |member|
@@ -478,6 +461,21 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
 
     another_klass = Class.new(JupiterCore::LockedLdpObject) do
       ldp_object_includes Hydra::Works::FileSetBehavior
+
+      exporter = Class.new(Exporters::Solr::BaseExporter) do
+        custom_index :items, role: :search, as: lambda { |file_set|
+          ids = []
+          file_set.unlock_and_fetch_ldp_object do |uo|
+            uo.send(:member_of_collections)&.map do |member|
+              ids << member.id
+            end
+          end
+          ids
+        }
+      end
+
+      has_solr_exporter exporter
+
       has_many :items, using_existing_association: :member_of_collections
     end
 

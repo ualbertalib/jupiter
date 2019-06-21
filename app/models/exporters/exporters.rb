@@ -1,3 +1,1 @@
-module Exporters
-  class NoSuchExporter < StandardError; end
-end
+module Exporters; end
