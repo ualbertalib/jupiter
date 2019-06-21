@@ -5,6 +5,8 @@ class FileSet < JupiterCore::LockedLdpObject
 
   ldp_object_includes Hydra::Works::FileSetBehavior
 
+  has_solr_exporter Exporters::Solr::FileSetExporter
+
   has_attribute :contained_filename, ::RDF::Vocab::DC.title, solrize_for: :exact_match
   has_attribute :sitemap_link, ::TERMS[:ual].sitemap_link, solrize_for: :exact_match
 

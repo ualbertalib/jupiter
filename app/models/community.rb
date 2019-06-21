@@ -6,6 +6,8 @@ class Community < JupiterCore::LockedLdpObject
 
   ldp_object_includes Hydra::PCDM::ObjectBehavior
 
+  has_solr_exporter Exporters::Solr::CommunityExporter
+
   has_attribute :description, ::RDF::Vocab::DC.description, solrize_for: [:search]
   has_multival_attribute :creators, ::RDF::Vocab::DC.creator, solrize_for: :exact_match
 

@@ -1,3 +1,4 @@
+# coding: utf-8
 # JupiterCore::LockedLdpObject classes are lightweight, read-only objects
 # TODO: this file could benefit from some reorganization, possibly into several files
 class JupiterCore::LockedLdpObject
@@ -214,7 +215,7 @@ class JupiterCore::LockedLdpObject
   #   Item.solr_name_to_attribute_name('title_tesim')
   #   => :title
   def self.solr_name_to_attribute_name(solr_name)
-    self.reverse_solr_name_cache[solr_name]
+    self.solr_exporter_class.name_for_mangled_name(solr_name)
   end
 
   # Accepts the symbolic name of an attribute, and the "solrize_for" role, and returns the string
@@ -735,43 +736,6 @@ class JupiterCore::LockedLdpObject
       end
     end
 
-    # Write properties directly to the solr index for an LDP object, without having to back them in the LDP
-    # a lambda, +as+, controls how it is calculated.
-    # Examples:
-    #
-    #    additional_search_index :downcased_title, solrize_for: :exact_match, as: -> { title.downcase }
-    #
-    # Note! Although Ruby makes this difficult to detect an enforce at declaration time, ANY data being used to create
-    # the index SHOULD be recreatable solely by inspecting the Fedora record for the object, and SHOULD NOT require that
-    # other objects already be indexed! This isn't a solution to any desire to avoid adding data to Fedora!
-    # See recover.rake and collection.rb's note on +additional_search_index :community_title` for an example of the
-    # ordering dependency issues that are created if the Solr index depends on the existence of other records.
-    def additional_search_index(name, solrize_for:, type: :string, as:)
-      raise JupiterCore::PropertyInvalidError unless as.respond_to?(:call)
-      raise JupiterCore::PropertyInvalidError if name.blank?
-      raise JupiterCore::PropertyInvalidError unless type.present? && type.is_a?(Symbol)
-
-      solrize_for = [solrize_for] unless solrize_for.is_a?(Array)
-
-      solr_descriptors = []
-      solr_names = []
-      solrize_for.each do |solr_role|
-        descriptor = SOLR_DESCRIPTOR_MAP[solr_role]
-        solr_name = JupiterCore::SolrNameMangler.mangled_name_for(name, role: solr_role, type: type)
-        solr_names << solr_name
-        self.reverse_solr_name_cache[solr_name] = name
-        self.facets << solr_name if solr_role == :facet
-        solr_descriptors << descriptor
-      end
-
-      self.solr_calc_attributes[name] = { type: type,
-                                          solrize_for: solrize_for,
-                                          # TODO: solr_descriptors is in Solrizer-speak, it should go away
-                                          solr_descriptors: solr_descriptors,
-                                          solr_names: solr_names,
-                                          callable: as }
-    end
-
     def belongs_to(name, using_existing_association:)
       index_and_hoist_existing_association(using_existing_association, as_name: name, multiple: false)
     end
@@ -803,13 +767,6 @@ class JupiterCore::LockedLdpObject
       self.association_indexes ||= []
       self.association_indexes << as_name
 
-      # Get association ids into solr
-      additional_search_index as_name, solrize_for: :search,
-                                       as: lambda {
-                                             self.send(association)&.map do |member|
-                                               member.id
-                                             end
-                                           }
       # add a reader to the locked object
       define_cached_reader(as_name, multiple: multiple, type: :string,
                                     canonical_solr_name: JupiterCore::SolrNameMangler.mangled_name_for(as_name,
@@ -854,6 +811,21 @@ class JupiterCore::LockedLdpObject
 
     def has_solr_exporter(klass)
       @solr_exporter_class = klass
+
+      @solr_exporter_class.custom_indexes.each do |name|
+        type = nil
+        type = @solr_exporter_class.solr_type_for(name)
+        solr_type = (type == :json_array ? :string : type)
+        solr_name_cache = @solr_exporter_class.solr_names_for(name)
+        self.facets << @solr_exporter_class.mangled_facet_name_for(name) if @solr_exporter_class.facet?(name)
+        self.ranges << @solr_exporter_class.mangled_range_name_for(name) if @solr_exporter_class.range?(name)
+
+        self.solr_calc_attributes[name] = {
+          solrize_for: @solr_exporter_class.solr_roles_for(name),
+          type: type,
+          solr_names: solr_name_cache
+        }
+      end
     end
 
     def has_multival_attribute(name, predicate, solrize_for: [], type: :string)

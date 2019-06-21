@@ -28,9 +28,6 @@ module ItemProperties
     # See `all_subjects` in including class for faceting
     has_multival_attribute :subject, ::RDF::Vocab::DC11.subject, solrize_for: :search
 
-    additional_search_index :doi_without_label, solrize_for: :exact_match,
-                                                as: -> { doi.gsub('doi:', '') if doi.present? }
-
     attr_accessor :skip_handle_doi_states
 
     has_many_attached :files
