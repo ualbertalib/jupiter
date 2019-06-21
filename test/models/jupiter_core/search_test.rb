@@ -6,8 +6,7 @@ class SearchTest < ActiveSupport::TestCase
     index :member_of_paths, type: :path, role: :pathing
     index :sort_year, type: :integer, role: :range_facet
 
-    custom_index :my_solr_doc_attr, role: :search, as: ->(object) { 'a_test_value' }
-
+    custom_index :my_solr_doc_attr, role: :search, as: ->(_object) { 'a_test_value' }
   end
 
   @@klass = Class.new(JupiterCore::LockedLdpObject) do

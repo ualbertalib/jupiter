@@ -1,4 +1,5 @@
 class Exporters::Solr::CollectionExporter < Exporters::Solr::BaseExporter
+
   index :title, role: [:search, :sort]
 
   # UAL attributes
@@ -19,7 +20,8 @@ class Exporters::Solr::CollectionExporter < Exporters::Solr::BaseExporter
   # scenarios. See recover.rake for information on the particular problems this is causing and why we want to
   # eliminate it.
   custom_index :community_title, role: :sort,
-                                            as: ->(collection) { Community.find(collection.community_id).title if collection.community_id.present? }
-
+                                 as: lambda { |collection|
+                                       Community.find(collection.community_id).title if collection.community_id.present?
+                                     }
 
 end

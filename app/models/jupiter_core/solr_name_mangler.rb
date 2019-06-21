@@ -8,15 +8,15 @@ module JupiterCore::SolrNameMangler
     },
     integer: {
       search: 'isim',
-      sort: 'isi', #singluar
-      range_facet: 'isi',  #singluar
+      sort: 'isi', # singluar
+      range_facet: 'isi', # singluar
       exact_match: 'ssim'
     },
     string: {
       pathing: 'dpsim',
       facet: 'sim',
       search: 'tesim',
-      sort: 'ssi',  #singluar
+      sort: 'ssi', # singluar
       exact_match: 'ssim'
     },
     text: {
