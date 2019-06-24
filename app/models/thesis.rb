@@ -7,8 +7,6 @@ class Thesis < JupiterCore::LockedLdpObject
   include GlobalID::Identification
   ldp_object_includes Hydra::Works::WorkBehavior
 
-  has_solr_exporter Exporters::Solr::ThesisExporter
-
   # Dublin Core attributes
   has_attribute :abstract, ::RDF::Vocab::DC.abstract
   # Note: language is single-valued for Thesis, but languages is multi-valued for Item
