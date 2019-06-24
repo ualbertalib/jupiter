@@ -770,9 +770,10 @@ class JupiterCore::LockedLdpObject
 
       # add a reader to the locked object
       define_cached_reader(as_name, multiple: multiple, type: :string,
-                                    canonical_solr_name: JupiterCore::SolrServices::NameMangling.mangled_name_for(as_name,
-                                                                                                       role: :search,
-                                                                                                       type: :string),
+                                    canonical_solr_name:
+                                      JupiterCore::SolrServices::NameMangling.mangled_name_for(as_name,
+                                                                                               role: :search,
+                                                                                               type: :string),
                                     specialized_ldp_reader: lambda {
                                                               self.send(association)&.map do |member|
                                                                 member.id
@@ -837,7 +838,6 @@ class JupiterCore::LockedLdpObject
     def has_attribute(name, predicate, multiple: false, solrize_for: [], type: :string)
       raise JupiterCore::PropertyInvalidError unless name.is_a? Symbol
       raise JupiterCore::PropertyInvalidError if predicate.blank?
-      raise JupiterCore::PropertyInvalidError if solrize_for.blank?
       # A "json_array" is a single valued property, because the array gets serialized to a single json string when saved
       # the main use-case for this is an ordered creator field
       raise JupiterCore::PropertyInvalidError if (type == :json_array) && (multiple == true)
@@ -876,8 +876,8 @@ class JupiterCore::LockedLdpObject
                        JupiterCore::SolrServices::NameMangling.mangled_name_for(name, role: :facet, type: solr_type)
                      elsif solrize_for.include?(:range_facet)
                        range_name = JupiterCore::SolrServices::NameMangling.mangled_name_for(name,
-                                                                                  role: :range_facet,
-                                                                                  type: solr_type)
+                                                                                             role: :range_facet,
+                                                                                             type: solr_type)
                        self.ranges << range_name
                        range_name
                      elsif solrize_for.include?(:pathing)
@@ -926,10 +926,7 @@ class JupiterCore::LockedLdpObject
       end
 
       derived_af_class.class_eval do
-        property name, predicate: predicate, multiple: multiple do |index|
-          index.type solr_type if type.present?
-          index.as(*(solrize_for.map { |idx| SOLR_DESCRIPTOR_MAP[idx] }))
-        end
+        property name, predicate: predicate, multiple: multiple
       end
 
       # A thrilling tale of Yet Another Community Bug™
