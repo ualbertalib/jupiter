@@ -8,25 +8,25 @@ module ItemProperties
                                 CONTROLLED_VOCABULARIES[:visibility].public].freeze
 
   included do
-    has_attribute :alternative_title, ::RDF::Vocab::DC.alternative, solrize_for: :search
-    has_attribute :doi, ::TERMS[:prism].doi, solrize_for: :exact_match
-    has_attribute :embargo_end_date, ::RDF::Vocab::DC.available, type: :date, solrize_for: [:sort]
-    has_attribute :fedora3_handle, ::TERMS[:ual].fedora3_handle, solrize_for: :exact_match
-    has_attribute :ingest_batch, ::TERMS[:ual].ingest_batch, solrize_for: :exact_match
+    has_attribute :alternative_title, ::RDF::Vocab::DC.alternative
+    has_attribute :doi, ::TERMS[:prism].doi
+    has_attribute :embargo_end_date, ::RDF::Vocab::DC.available
+    has_attribute :fedora3_handle, ::TERMS[:ual].fedora3_handle
+    has_attribute :ingest_batch, ::TERMS[:ual].ingest_batch
     has_attribute :northern_north_america_filename,
-                  ::TERMS[:ual].northern_north_america_filename, solrize_for: :exact_match
+                  ::TERMS[:ual].northern_north_america_filename
     has_attribute :northern_north_america_item_id,
-                  ::TERMS[:ual].northern_north_america_item_id, solrize_for: :exact_match
-    has_attribute :rights, ::RDF::Vocab::DC11.rights, solrize_for: :exact_match
-    has_attribute :sort_year, ::TERMS[:ual].sort_year, type: :integer, solrize_for: [:search, :sort, :range_facet]
-    has_attribute :visibility_after_embargo, ::TERMS[:acl].visibility_after_embargo, solrize_for: :exact_match
+                  ::TERMS[:ual].northern_north_america_item_id
+    has_attribute :rights, ::RDF::Vocab::DC11.rights
+    has_attribute :sort_year, ::TERMS[:ual].sort_year
+    has_attribute :visibility_after_embargo, ::TERMS[:acl].visibility_after_embargo
 
-    has_multival_attribute :embargo_history, ::TERMS[:acl].embargo_history, solrize_for: :exact_match
-    has_multival_attribute :is_version_of, ::RDF::Vocab::DC.isVersionOf, solrize_for: :exact_match
-    has_multival_attribute :member_of_paths, ::TERMS[:ual].path, type: :path, solrize_for: :pathing
+    has_multival_attribute :embargo_history, ::TERMS[:acl].embargo_history
+    has_multival_attribute :is_version_of, ::RDF::Vocab::DC.isVersionOf
+    has_multival_attribute :member_of_paths, ::TERMS[:ual].path
 
     # See `all_subjects` in including class for faceting
-    has_multival_attribute :subject, ::RDF::Vocab::DC11.subject, solrize_for: :search
+    has_multival_attribute :subject, ::RDF::Vocab::DC11.subject
 
     attr_accessor :skip_handle_doi_states
 

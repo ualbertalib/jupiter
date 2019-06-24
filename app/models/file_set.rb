@@ -1,14 +1,14 @@
 class FileSet < JupiterCore::LockedLdpObject
 
+  has_solr_exporter Exporters::Solr::FileSetExporter
+
   # TODO: Should move embargo visibility up into LockedLdpObject
   VISIBILITY_EMBARGO = CONTROLLED_VOCABULARIES[:visibility].embargo.freeze
 
   ldp_object_includes Hydra::Works::FileSetBehavior
 
-  has_solr_exporter Exporters::Solr::FileSetExporter
-
-  has_attribute :contained_filename, ::RDF::Vocab::DC.title, solrize_for: :exact_match
-  has_attribute :sitemap_link, ::TERMS[:ual].sitemap_link, solrize_for: :exact_match
+  has_attribute :contained_filename, ::RDF::Vocab::DC.title
+  has_attribute :sitemap_link, ::TERMS[:ual].sitemap_link
 
   belongs_to :item, using_existing_association: :member_of_collections
 
