@@ -23,7 +23,7 @@ class Exporters::Solr::BaseExporter
       next unless (raw_val.is_a?(Array) && raw_val.any?(&:present?)) || raw_val.present?
 
       roles.each do |role|
-        solr_index_name = JupiterCore::SolrNameMangler.mangled_name_for(attr, type: type, role: role)
+        solr_index_name = JupiterCore::SolrServices::NameMangling.mangled_name_for(attr, type: type, role: role)
 
         solr_doc[solr_index_name] = if self.class.singular_role?(role)
                                       raw_val = raw_val.first if raw_val.is_a? Array
@@ -44,7 +44,7 @@ class Exporters::Solr::BaseExporter
       next unless (raw_val.is_a?(Array) && raw_val.any?(&:present?)) || raw_val.present?
 
       roles.each do |role|
-        solr_index_name = JupiterCore::SolrNameMangler.mangled_name_for(index_name, type: type, role: role)
+        solr_index_name = JupiterCore::SolrServices::NameMangling.mangled_name_for(index_name, type: type, role: role)
         solr_doc[solr_index_name] = if self.class.singular_role?(role)
                                       raw_val = raw_val.first if raw_val.is_a? Array
                                       serialize_value(raw_val)
@@ -81,7 +81,7 @@ class Exporters::Solr::BaseExporter
     type = name_to_type_map[name]
     roles = name_to_roles_map[name]
     facet_role = roles.detect { |r| SOLR_FACET_ROLES.include? r }
-    JupiterCore::SolrNameMangler.mangled_name_for(name, type: type, role: facet_role)
+    JupiterCore::SolrServices::NameMangling.mangled_name_for(name, type: type, role: facet_role)
   end
 
   def self.range?(name)
@@ -92,7 +92,7 @@ class Exporters::Solr::BaseExporter
 
   def self.mangled_range_name_for(name)
     type = name_to_type_map[name]
-    JupiterCore::SolrNameMangler.mangled_name_for(name, type: type, role: :range_facet)
+    JupiterCore::SolrServices::NameMangling.mangled_name_for(name, type: type, role: :range_facet)
   end
 
   def self.name_for_mangled_name(mangled_name)
@@ -131,7 +131,7 @@ class Exporters::Solr::BaseExporter
     def index(attr, role:, type: :string)
       role = [role] unless role.is_a? Array
 
-      if role.count { |r| !JupiterCore::SolrClient.valid_solr_role?(r) } > 0
+      if role.count { |r| !JupiterCore::SolrServices.valid_solr_role?(r) } > 0
         raise Exporters::Solr::IndexRoleInvalidError
       end
 
@@ -148,7 +148,7 @@ class Exporters::Solr::BaseExporter
     def custom_index(attr, type: :string, role:, as:)
       role = [role] unless role.is_a? Array
 
-      if role.count { |r| !JupiterCore::SolrClient.valid_solr_role?(r) } > 0
+      if role.count { |r| !JupiterCore::SolrServices.valid_solr_role?(r) } > 0
         raise Exporters::Solr::IndexRoleInvalidError
       end
 
@@ -177,7 +177,7 @@ class Exporters::Solr::BaseExporter
       self.name_to_solr_name_map[attr] = []
 
       roles.each do |r|
-        mangled_name = JupiterCore::SolrNameMangler.mangled_name_for(attr, type: type, role: r)
+        mangled_name = JupiterCore::SolrServices::NameMangling.mangled_name_for(attr, type: type, role: r)
         self.reverse_solr_name_map[mangled_name] = attr
         self.name_to_solr_name_map[attr] << mangled_name
       end
