@@ -1,1 +1,4 @@
-module Exporters; end
+module Exporters
+  extend ActiveSupport::Autoload
+
+end

@@ -1,4 +1,4 @@
-module JupiterCore::SolrNameMangler
+module JupiterCore::SolrServices::NameMangling
   SOLR_MANGLED_STEMS_BY_TYPE = {
     path: { pathing: 'dpsim' },
     boolean: { exact_match: 'ssim' },
@@ -29,7 +29,7 @@ module JupiterCore::SolrNameMangler
 
     stem = SOLR_MANGLED_STEMS_BY_TYPE.dig(rawtype, role)
     if stem.blank?
-      raise JupiterCore::SolrNameManglingError,
+      raise JupiterCore::SolrServices::NameManglingError,
             "Unmapped type/role combination for requested mangle of #{name}: type: #{type}, role: #{role}"
     end
 

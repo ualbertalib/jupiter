@@ -1,12 +1,10 @@
-class JupiterCore::SolrClient
-
-  include Singleton
+module JupiterCore::SolrServices
+  extend ActiveSupport::Autoload
 
   SOLR_ROLES = [:search, :sort, :facet, :exact_match, :pathing, :range_facet].freeze
   SOLR_TYPES =  [:string, :text, :path, :boolean, :date, :integer, :float, :json_array].freeze
 
-  SOLR_CONFIG = YAML.safe_load(ERB.new(File.read(Rails.root.join('config', 'solr.yml'))).result,
-                               [], [], true)[Rails.env].symbolize_keys
+  class NameManglingError < StandardError; end
 
   def self.valid_solr_type?(type)
     SOLR_TYPES.include?(type)
@@ -14,10 +12,6 @@ class JupiterCore::SolrClient
 
   def self.valid_solr_role?(role)
     SOLR_ROLES.include?(role)
-  end
-
-  def connection
-    @connection ||= RSolr.connect url: SOLR_CONFIG[:url]
   end
 
 end
