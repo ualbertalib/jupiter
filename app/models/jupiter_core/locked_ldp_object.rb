@@ -421,10 +421,20 @@ class JupiterCore::LockedLdpObject
     self.class.solr_exporter_class.new(self)
   end
 
+  # The solr exporter that has been declared for a given class. nil if one has not been declared
+  # OR if the declaration hasn't been run yet (as in early class-inheritance hooks, see the note on has_attribute's
+  # implementation)
   def self.solr_exporter_class
     @solr_exporter_class
   end
 
+  # allows access to a solr exporter's map of mangled solr index names to the original attribute names through
+  # the class. The usecase for this is largely faceted searching, which receives facet results in terms of the
+  # solr index name, and needs a means of finding out the underlying attribute name that generated the index.
+  #
+  # the larger motivation of having the search infrastructure deal with something like +Item.solr_name_to_attribute_name_map+
+  # rather than +Item.solr_exporter_class.solr_name_to_attribute_name_map+ is mostly just to play nice with the law of demeter/
+  # reduce coupling through intermediate classes.
   def self.solr_name_to_attribute_name_map
     self.solr_exporter_class.reverse_solr_name_map
   end
@@ -862,6 +872,11 @@ class JupiterCore::LockedLdpObject
       solr_name_cache ||= []
       solr_type = nil
 
+      # There's a chicken and egg problem right now where early in app bootup we need to inject
+      # some attribute declarations into every subclass on +inherited+, but that happens _before_
+      # the class can declare a solr_exporter. I've left this older codepath (inwhich solr information is provided with has_attribute
+      # instead of in a separate Exporter) intact to handle this corner case, since it goes away
+      # in the next phase of ActiveFedora removal, and it doesn't seem worth fighting with now
       if self.solr_exporter_class.nil?
         # json arrays are stored in Solr and Fedora as a single string
         # otherwise, things are stored as what they're declared as.
@@ -896,7 +911,9 @@ class JupiterCore::LockedLdpObject
           solr_names: solr_name_cache
         }
       else
-        type = nil
+        # this is the new-style case in which solr information about attributes on a class lives in a separate Exporter.
+        # For now, we copy that information back to here to make our magic wrapping of ActiveFedora objects work.
+        # in the next phase, we stop using ActiveFedora and this copy back mostly goes away.
         type = self.solr_exporter_class.solr_type_for(name)
         solr_type = (type == :json_array ? :string : type)
         solr_name_cache = self.solr_exporter_class.solr_names_for(name)
