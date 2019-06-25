@@ -60,7 +60,7 @@ gem 'sidekiq-cron'
 
 # Misc Utilities
 gem 'aasm' # state-machine management
-gem 'addressable', '~> 2.5.0' # Replacement for the standard URI implementation
+gem 'addressable', '~> 2.6.0' # Replacement for the standard URI implementation
 gem 'danger', '~> 6.0' # Pull Request etiquette enforcement
 gem 'ezid-client', '~> 1.8.0'
 gem 'jbuilder' # generate JSON objects
@@ -91,7 +91,7 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
 
-  gem 'rubocop', '~> 0.67.2', require: false
+  gem 'rubocop', '~> 0.71.0', require: false
   gem 'rubocop-performance'
 
   gem 'scss_lint', '>= 0.56.0', require: false
@@ -113,7 +113,7 @@ group :test do
   # Faker added 0.5 seconds to the test suite per call. Haikunator seems much faster for faking strings
   gem 'haikunator'
   gem 'minitest-hooks'
-  gem 'shoulda-matchers', '~> 4.0'
+  gem 'shoulda-matchers', '~> 4.1'
 
   gem 'launchy'
   gem 'vcr', require: false
