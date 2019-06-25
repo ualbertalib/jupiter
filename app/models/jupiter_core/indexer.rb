@@ -12,6 +12,8 @@ class JupiterCore::Indexer < ActiveFedora::IndexingService
 
     # These two attributes only appear in Solr, not ActiveFedora, and were managed by
     # Solrizer for some random reason. Recreated here for compatibility in this stage of the refactoring
+    # The logic behind them seems squirly and we have other attributes that track equivalent data. I'm
+    # keeping these around solely to avoid breaking any ActiveFedora expectations at this stage.
     #
     # TODO: remove
 
