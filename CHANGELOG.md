@@ -56,6 +56,9 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Replaced use of ActiveFedora's Solr connection with a direct connection to Solr setup locally.
 - Made multiple seeds of db not duplicate types, languages, or institutions [#1117](https://github.com/ualbertalib/jupiter/issues/1117)
 - Replaced all calls to `Solrizer.solr_name` with simplified local code to map Solr types/roles to wildcard stems.
+- Removed Solrizer usage from the process of indexing ActiveFedora objects for Solr entirely. Replaced with Solr Exporter pattern for serialization of Solr data.
+
+
 
 ### Fixed
 - Cleared visibility_after_embargo and embargo_end_date when embargo option is not selected [PR#1041](https://github.com/ualbertalib/jupiter/pull/1041)
