@@ -322,7 +322,8 @@ GEM
     pry-rails (0.3.9)
       pry (>= 0.10.4)
     public_suffix (3.1.0)
-    puma (3.12.1)
+    puma (4.0.0)
+      nio4r (~> 2.0)
     pundit (1.1.0)
       activesupport (>= 3.0.0)
     raabro (1.1.6)
@@ -561,7 +562,7 @@ DEPENDENCIES
   pry
   pry-byebug
   pry-rails
-  puma (~> 3.12)
+  puma (~> 4.0)
   pundit (= 1.1.0)
   rack-attack
   rails (~> 5.2.3)
