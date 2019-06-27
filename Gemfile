@@ -7,7 +7,7 @@ end
 
 # Core Rails stuff
 gem 'image_processing' # for ActiveStorage Variants
-gem 'puma', '~> 3.12'
+gem 'puma', '~> 4.0'
 gem 'rails', '~> 5.2.3'
 
 # Assets (CSS/JS) stuff
