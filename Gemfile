@@ -91,7 +91,7 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
 
-  gem 'rubocop', '~> 0.71.0', require: false
+  gem 'rubocop', '~> 0.72.0', require: false
   gem 'rubocop-performance'
 
   gem 'scss_lint', '>= 0.56.0', require: false
