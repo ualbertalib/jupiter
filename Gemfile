@@ -33,7 +33,7 @@ gem 'canonical-rails'
 # Hydra stuff
 gem 'active-fedora', github: 'ualbertalib/active_fedora', branch: 'backport_rails52_fixes'
 gem 'hydra-derivatives', '3.3.2' # pinned this as 3.4.X has deprecation spam because of hydra-works
-gem 'hydra-works', '0.17.0'
+gem 'hydra-works', '1.2.0'
 gem 'rdf-vocab'
 gem 'solrizer', github: 'ualbertalib/solrizer', branch: 'literally_types'
 
