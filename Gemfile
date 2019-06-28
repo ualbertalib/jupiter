@@ -93,6 +93,7 @@ group :development, :test do
 
   gem 'rubocop', '~> 0.72.0', require: false
   gem 'rubocop-performance'
+  gem 'rubocop-rails'
 
   gem 'scss_lint', '>= 0.56.0', require: false
 end

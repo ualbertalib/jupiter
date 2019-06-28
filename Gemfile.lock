@@ -395,6 +395,9 @@ GEM
       unicode-display_width (>= 1.4.0, < 1.7)
     rubocop-performance (1.4.0)
       rubocop (>= 0.71.0)
+    rubocop-rails (2.1.0)
+      rack (>= 1.1)
+      rubocop (>= 0.72.0)
     ruby-progressbar (1.10.1)
     ruby-saml (1.9.0)
       nokogiri (>= 1.5.10)
@@ -573,6 +576,7 @@ DEPENDENCIES
   rsolr
   rubocop (~> 0.72.0)
   rubocop-performance
+  rubocop-rails
   rufus-scheduler (= 3.6.0)
   sassc-rails (~> 2.1)
   scss_lint (>= 0.56.0)
