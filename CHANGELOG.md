@@ -6,16 +6,23 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+## [1.2.15] - 2019-06-26
+
 ### Security
 - bump nokogiri from 1.10.2 to 1.10.3 [PR#1098](https://github.com/ualbertalib/jupiter/pull/1098)
 
 ### Added
 - Ruby 2.5 to travis ci testing matrix [PR#1040](https://github.com/ualbertalib/jupiter/pull/1040)
+- Added configuration for active storage to allow tifs to have a thumbnail [#991](https://github.com/ualbertalib/jupiter/issues/991)
+- Added missing contoller tests [#865](https://github.com/ualbertalib/jupiter/issues/865)
 
 ### Changed
 - i18n fallback to english (configuration change) [PR#1058](https://github.com/ualbertalib/jupiter/pull/1058)
 - pin rubocop version for hound [PR#1080](https://github.com/ualbertalib/jupiter/pull/1080)
 - Skip flapping tests on travis CI [#1181](https://github.com/ualbertalib/jupiter/issues/1181)
+
+### Fixed
+- fixed error in dangerfile [#1109](https://github.com/ualbertalib/jupiter/issues/1109)
 
 ## [1.2.14] - 2019-04-15
 

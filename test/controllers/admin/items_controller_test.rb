@@ -38,6 +38,11 @@ class Admin::ItemsControllerTest < ActionDispatch::IntegrationTest
     sign_in_as @admin
   end
 
+  test 'should get items index' do
+    get admin_items_url
+    assert_response :success
+  end
+
   test 'should destroy item and its derivatives' do
     # TODO: 'ActiveStorage::Attachment.count' || 'ActiveStorage::Blob.count'
     # wish I could test the thumbnail deletion but flaky on travis-ci
