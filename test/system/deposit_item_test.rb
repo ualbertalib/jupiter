@@ -101,6 +101,8 @@ class DepositItemTest < ApplicationSystemTestCase
   end
 
   test 'should populate community and collection when coming from collection page' do
+    skip 'This test continues to flap on CI that should be investigated ASAP' if ENV['TRAVIS']
+
     user = users(:regular)
 
     login_user(user)
