@@ -400,19 +400,19 @@ end
  :conference_workshop_presentation, :dataset,
  :image, :journal_article_draft, :journal_article_published,
  :learning_object, :report, :research_material, :review].each do |type_name|
-  Type.create(name: type_name)
+  Type.where(name: type_name).first_or_create
 end
 
 # Languages
 [:english, :french, :spanish, :chinese, :german,
  :italian, :russian, :ukrainian, :japanese,
  :no_linguistic_content, :other].each do |language_name|
-  Language.create(name: language_name)
+  Language.where(name: language_name).first_or_create
 end
 
 # Institutions
 [:uofa, :st_stephens].each do |institution_name|
-  Institution.create(name: institution_name)
+  Institution.where(name: institution_name).first_or_create
 end
 
 
