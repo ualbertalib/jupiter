@@ -11,6 +11,10 @@ module SearchHelper
     params[:ranges]&.fetch(range_facet_result.solr_index, false)
   end
 
+  # Rubocop now wants us to remove instance methods from helpers. This is a good idea
+  # but will require a bit of refactoring. Find other instances of this disabling
+  # and fix all at once.
+  # rubocop:disable Rails/HelperInstanceVariable
   def facet_display_order
     priority_facets = (params[:facets]&.keys || []) + (params[:ranges]&.keys || [])
     return priority_facets unless @search_models.include? Item
@@ -18,10 +22,13 @@ module SearchHelper
     priority_facets + [Item.solr_name_for(:all_contributors, role: :facet),
                        Item.solr_name_for(:all_subjects, role: :facet)]
   end
+  # rubocop:enable Rails/HelperInstanceVariable
 
+  # rubocop:disable Rails/HelperInstanceVariable
   def enable_item_sort?
     @search_models.include? Item
   end
+  # rubocop:enable Rails/HelperInstanceVariable
 
   def query_params_with_facet(facet_name, value)
     query_params = search_params_hash
@@ -70,6 +77,7 @@ module SearchHelper
     query_params
   end
 
+  # rubocop:disable Rails/HelperInstanceVariable
   def results_model_tab_link(model)
     # Create bootstrap nav-item, make it a link if there are results for the model
     classes = 'nav-link'
@@ -84,6 +92,7 @@ module SearchHelper
     content_tag(:li, content_tag(:a, text, class: classes, href: search_path(query_params_with_tab(name))),
                 class: 'nav-item')
   end
+  # rubocop:enable Rails/HelperInstanceVariable
 
   def search_sort_link(sort, direction)
     link_to search_sort_label(sort, direction), query_params_with_sort(sort, direction),
