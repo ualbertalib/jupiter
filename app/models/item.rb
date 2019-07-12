@@ -1,54 +1,39 @@
 class Item < JupiterCore::LockedLdpObject
 
+  has_solr_exporter Exporters::Solr::ItemExporter
+
   include ObjectProperties
   include ItemProperties
   include GlobalID::Identification
   ldp_object_includes Hydra::Works::WorkBehavior
 
   # Contributors (faceted in `all_contributors`)
-  has_attribute :creators, RDF::Vocab::BIBO.authorList, type: :json_array, solrize_for: [:search]
+  has_attribute :creators, RDF::Vocab::BIBO.authorList
   # copying the creator values into an un-json'd field for Metadata consumption
-  has_multival_attribute :unordered_creators, ::RDF::Vocab::DC11.creator, solrize_for: [:search]
-  has_multival_attribute :contributors, ::RDF::Vocab::DC11.contributor, solrize_for: [:search]
+  has_multival_attribute :unordered_creators, ::RDF::Vocab::DC11.creator
+  has_multival_attribute :contributors, ::RDF::Vocab::DC11.contributor
 
-  has_attribute :created, ::RDF::Vocab::DC.created, solrize_for: [:search, :sort]
+  has_attribute :created, ::RDF::Vocab::DC.created
 
   # Subject types (see `all_subjects` for faceting)
-  has_multival_attribute :temporal_subjects, ::RDF::Vocab::DC.temporal, solrize_for: [:search]
-  has_multival_attribute :spatial_subjects, ::RDF::Vocab::DC.spatial, solrize_for: [:search]
+  has_multival_attribute :temporal_subjects, ::RDF::Vocab::DC.temporal
+  has_multival_attribute :spatial_subjects, ::RDF::Vocab::DC.spatial
 
-  has_attribute :description, ::RDF::Vocab::DC.description, type: :text, solrize_for: :search
-  has_attribute :publisher, ::RDF::Vocab::DC.publisher, solrize_for: [:search, :facet]
+  has_attribute :description, ::RDF::Vocab::DC.description
+  has_attribute :publisher, ::RDF::Vocab::DC.publisher
   # has_attribute :date_modified, ::RDF::Vocab::DC.modified, type: :date, solrize_for: :sort
-  has_multival_attribute :languages, ::RDF::Vocab::DC.language, solrize_for: [:search, :facet]
-  has_attribute :license, ::RDF::Vocab::DC.license, solrize_for: [:search]
+  has_multival_attribute :languages, ::RDF::Vocab::DC.language
+  has_attribute :license, ::RDF::Vocab::DC.license
 
   # `type` is an ActiveFedora keyword, so we call it `item_type`
   # Note also the `item_type_with_status` below for searching, faceting and forms
-  has_attribute :item_type, ::RDF::Vocab::DC.type, solrize_for: :exact_match
-  has_attribute :source, ::RDF::Vocab::DC.source, solrize_for: :exact_match
-  has_attribute :related_link, ::RDF::Vocab::DC.relation, solrize_for: :exact_match
+  has_attribute :item_type, ::RDF::Vocab::DC.type
+  has_attribute :source, ::RDF::Vocab::DC.source
+  has_attribute :related_link, ::RDF::Vocab::DC.relation
 
   # Bibo attributes
   # This status is only for articles: either 'published' (alone) or two triples for 'draft'/'submitted'
-  has_multival_attribute :publication_status, ::RDF::Vocab::BIBO.status, solrize_for: :exact_match
-
-  # Solr only
-  additional_search_index :doi_without_label, solrize_for: :exact_match,
-                                              as: -> { doi.gsub('doi:', '') if doi.present? }
-
-  # This combines both the controlled vocabulary codes from item_type and published_status above
-  # (but only for items that are articles)
-  additional_search_index :item_type_with_status,
-                          solrize_for: :facet,
-                          as: -> { item_type_with_status_code }
-
-  # Combine creators and contributors for faceting (Thesis also uses this index)
-  # Note that contributors is converted to an array because it can be nil
-  additional_search_index :all_contributors, solrize_for: :facet, as: -> { creators + contributors.to_a }
-
-  # Combine all the subjects for faceting
-  additional_search_index :all_subjects, solrize_for: :facet, as: -> { all_subjects }
+  has_multival_attribute :publication_status, ::RDF::Vocab::BIBO.status
 
   def self.from_draft(draft_item)
     item = Item.find(draft_item.uuid) if draft_item.uuid.present?
