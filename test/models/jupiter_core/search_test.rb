@@ -1,13 +1,23 @@
 class SearchTest < ActiveSupport::TestCase
 
+  @@exporter = Class.new(Exporters::Solr::BaseExporter) do
+    index :title, role: [:search, :facet]
+    index :creator, role: [:search, :facet]
+    index :member_of_paths, type: :path, role: :pathing
+    index :sort_year, type: :integer, role: :range_facet
+
+    custom_index :my_solr_doc_attr, role: :search, as: ->(_object) { 'a_test_value' }
+  end
+
   @@klass = Class.new(JupiterCore::LockedLdpObject) do
     ldp_object_includes Hydra::Works::WorkBehavior
+
+    has_solr_exporter @@exporter
+
     has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
     has_attribute :creator, ::RDF::Vocab::DC.creator, solrize_for: [:search, :facet]
     has_multival_attribute :member_of_paths, ::TERMS[:ual].path, type: :path, solrize_for: :pathing
     has_attribute :sort_year, ::TERMS[:ual].sort_year, type: :integer, solrize_for: :range_facet
-
-    additional_search_index :my_solr_doc_attr, solrize_for: :search, as: -> { 'a_test_value' }
 
     def locked_method_shouldnt_mutate(attempted_title)
       self.title = attempted_title

@@ -60,6 +60,6 @@ namespace :jupiter do
 
     solr_data = {}
     object.unlock_and_fetch_ldp_object { |uo| solr_data = uo.to_solr }
-    JupiterCore::SolrClient.instance.connection.add(solr_data, 'softCommit' => true)
+    JupiterCore::SolrServices::Client.instance.connection.add(solr_data, 'softCommit' => true)
   end
 end
