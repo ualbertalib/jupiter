@@ -142,7 +142,7 @@ class JupiterCore::DeferredSimpleSolrQuery
   end
 
   def used_sort_index
-    criteria[:model].reverse_solr_name_cache[criteria[:sort].first]
+    criteria[:model].solr_name_to_attribute_name_map[criteria[:sort].first]
   end
 
   def used_sort_order

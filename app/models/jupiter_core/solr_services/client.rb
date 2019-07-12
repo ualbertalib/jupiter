@@ -1,4 +1,4 @@
-class JupiterCore::SolrClient
+class JupiterCore::SolrServices::Client
 
   include Singleton
 
