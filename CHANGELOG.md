@@ -6,6 +6,11 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+## [1.2.16] - 2019-07-19
+
+### Security 
+- bump mini_magick from 4.9.3 to 4.9.4 [PR#1212](https://github.com/ualbertalib/jupiter/pull/1212)
+
 ### Added
 - initializer for fits characterization (configuration change) [#1215](https://github.com/ualbertalib/jupiter/issues/1215)
 
