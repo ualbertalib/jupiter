@@ -11,6 +11,9 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 ### Security 
 - bump mini_magick from 4.9.3 to 4.9.4 [PR#1212](https://github.com/ualbertalib/jupiter/pull/1212)
 
+### Added
+- initializer for fits characterization (configuration change) [#1215](https://github.com/ualbertalib/jupiter/issues/1215)
+
 ### Changed
 - bump rubocop from 0.71.0 to 0.72.0 and add rubocop-rails gem [PR#1183](https://github.com/ualbertalib/jupiter/pull/1183)
 - bump rubocop-rails from 2.1.0 to 2.2.1 and remove unnecessary disabling of Rails/TimeZone [PR#1205](https://github.com/ualbertalib/jupiter/pull/1205)
