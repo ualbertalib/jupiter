@@ -167,12 +167,6 @@ class DraftItemTest < ActiveSupport::TestCase
     )
 
     assert draft_item.valid?
-
-    draft_item.assign_attributes(
-      visibility: DraftItem.visibilities[:open_access]
-    )
-
-    assert draft_item.valid?
   end
 
   test 'should handle community/collection validations on member_of_paths' do

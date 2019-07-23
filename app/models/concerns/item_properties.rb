@@ -100,6 +100,7 @@ module ItemProperties
       # If you're looking for rights and subject validations, note that they have separate implementations
       # on the Thesis and Item classes.
       validates :embargo_end_date, presence: true, if: ->(item) { item.visibility == VISIBILITY_EMBARGO }
+      validates :embargo_end_date, absence: true, if: ->(item) { item.visibility != VISIBILITY_EMBARGO }
       validates :visibility_after_embargo, presence: true, if: ->(item) { item.visibility == VISIBILITY_EMBARGO }
       validates :visibility_after_embargo, absence: true, if: ->(item) { item.visibility != VISIBILITY_EMBARGO }
       validates :member_of_paths, presence: true

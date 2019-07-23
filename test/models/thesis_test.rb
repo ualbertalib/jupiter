@@ -97,7 +97,7 @@ class ThesisTest < ActiveSupport::TestCase
     assert_includes thesis.errors[:embargo_end_date], "can't be blank"
   end
 
-  test 'embargo_end_date may be blank for non-embargo visibilities' do
+  test 'embargo_end_date must be blank for non-embargo visibilities' do
     thesis = Thesis.new_locked_ldp_object
     thesis.unlock_and_fetch_ldp_object do |unlocked_thesis|
       unlocked_thesis.visibility = JupiterCore::VISIBILITY_PUBLIC
@@ -105,7 +105,9 @@ class ThesisTest < ActiveSupport::TestCase
     end
 
     assert_not thesis.valid?
-    assert_not thesis.errors[:embargo_end_date].present?
+    assert thesis.errors[:embargo_end_date].present?
+    assert_includes thesis.errors[:embargo_end_date], 'must be blank'
+
     assert_not thesis.errors[:visibility].present?
   end
 
