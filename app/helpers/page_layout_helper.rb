@@ -1,4 +1,8 @@
 module PageLayoutHelper
+  # Rubocop now wants us to remove instance methods from helpers. This is a good idea
+  # but will require a bit of refactoring. Find other instances of this disabling
+  # and fix all at once.
+  # rubocop:disable Rails/HelperInstanceVariable
   def page_title(title = nil)
     # title tags should be around 55 characters, so lets truncate them if they quite long
     # With '... | ERA' being appended, we want to aim for a bit smaller like 45 characters
@@ -8,6 +12,7 @@ module PageLayoutHelper
     @page_title.push(title) if title.present?
     @page_title.join(' | ')
   end
+  # rubocop:enable Rails/HelperInstanceVariable
 
   # Define or get a description for the current page
   #
@@ -27,6 +32,7 @@ module PageLayoutHelper
   #   page_description # => "Bar Baz"
   #
   # Returns an HTML-safe String.
+  # rubocop:disable Rails/HelperInstanceVariable
   def page_description(description = nil)
     if description.present?
       @page_description = description.squish
@@ -36,7 +42,9 @@ module PageLayoutHelper
       @page_description = t('welcome.index.welcome_lead')
     end
   end
+  # rubocop:enable Rails/HelperInstanceVariable
 
+  # rubocop:disable Rails/HelperInstanceVariable
   def page_image
     default_url = image_url('era-logo.png')
     # We only have images on community and item/thesis show pages
@@ -44,6 +52,7 @@ module PageLayoutHelper
 
     image_url || default_url
   end
+  # rubocop:enable Rails/HelperInstanceVariable
 
   def page_type(type = nil)
     type || 'website'
