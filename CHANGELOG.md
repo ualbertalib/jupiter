@@ -6,6 +6,9 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+### Changed
+- display graduation date in season year format [#1003](https://github.com/ualbertalib/jupiter/issues/1003)
+
 ## [1.2.16] - 2019-07-19
 
 ### Security 
