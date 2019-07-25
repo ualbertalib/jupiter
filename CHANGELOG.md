@@ -6,6 +6,9 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+### Security
+- add omniauth-rails_csrf_protection gem and only use post requests to mitigate [CVE-2015-9284](https://nvd.nist.gov/vuln/detail/CVE-2015-9284) [PR#1212](https://github.com/ualbertalib/jupiter/pull/1212)
+
 ## [1.2.16] - 2019-07-19
 
 ### Security 
