@@ -45,8 +45,8 @@ gem 'rsolr'
 
 # Authentication
 gem 'omniauth'
+gem 'omniauth-rails_csrf_protection' # Remove after https://github.com/omniauth/omniauth/pull/809 will be resolved
 gem 'omniauth-saml'
-
 # Authorization
 gem 'pundit', '1.1.0'
 
@@ -91,8 +91,9 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
 
-  gem 'rubocop', '~> 0.71.0', require: false
+  gem 'rubocop', '~> 0.73.0', require: false
   gem 'rubocop-performance'
+  gem 'rubocop-rails'
 
   gem 'scss_lint', '>= 0.56.0', require: false
 end
