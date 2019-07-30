@@ -532,6 +532,9 @@ en:
       dissertant: 'Author / Creator'
       abstract: 'Description / Abstract'
       graduation_date: 'Graduation date'
+      graduation_terms:
+        spring: 'Spring'
+        fall: 'Fall'
       degree: 'Degree'
     thesis_more_information:
       thesis_level: 'Degree level'

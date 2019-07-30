@@ -12,6 +12,9 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 ### Changed
 - bump rubocop-performance from 1.4.0 to 1.4.1 and use match? instead of =~ [PR#1226](https://github.com/ualbertalib/jupiter/pull/1226)
 
+### Changed
+- display graduation date in season year format [#1003](https://github.com/ualbertalib/jupiter/issues/1003)
+
 ## [1.2.16] - 2019-07-19
 
 ### Security 
