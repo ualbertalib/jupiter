@@ -12,6 +12,9 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 ### Changed
 - bump rubocop-performance from 1.4.0 to 1.4.1 and use match? instead of =~ [PR#1226](https://github.com/ualbertalib/jupiter/pull/1226)
 
+### Fixed
+- allow batch ingest to lookup older licenses [#1115](https://github.com/ualbertalib/jupiter/issues/1115)
+
 ## [1.2.16] - 2019-07-19
 
 ### Security 
@@ -42,7 +45,6 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ### Fixed
 - fixed error in dangerfile [#1109](https://github.com/ualbertalib/jupiter/issues/1109)
-- allow batch ingest to lookup older licenses [#1115](https://github.com/ualbertalib/jupiter/issues/1115)
 
 ## [1.2.14] - 2019-04-15
 
