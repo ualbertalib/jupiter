@@ -21,5 +21,6 @@ Rails.application.config.middleware.use OmniAuth::Builder do
   # Uncomment the line below to turn this behavior off
   on_failure { |env| SessionsController.action(:failure).call(env) }
 
+  OmniAuth.config.allowed_request_methods = [:post]
   OmniAuth.config.logger = Rails.logger
 end
