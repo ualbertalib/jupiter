@@ -7,7 +7,10 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 ## [Unreleased]
 
 ### Security
-- add omniauth-rails_csrf_protection gem and only use post requests to mitigate [CVE-2015-9284](https://nvd.nist.gov/vuln/detail/CVE-2015-9284) [PR#1212](https://github.com/ualbertalib/jupiter/pull/1212)
+- add omniauth-rails_csrf_protection gem and only use post requests to mitigate [CVE-2015-9284](https://nvd.nist.gov/vuln/detail/CVE-2015-9284) [PR#1221](https://github.com/ualbertalib/jupiter/pull/1221)
+
+### Changed
+- bump rubocop-performance from 1.4.0 to 1.4.1 and use match? instead of =~ [PR#1226](https://github.com/ualbertalib/jupiter/pull/1226)
 
 ### Changed
 - display graduation date in season year format [#1003](https://github.com/ualbertalib/jupiter/issues/1003)

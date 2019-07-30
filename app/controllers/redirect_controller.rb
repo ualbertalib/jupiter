@@ -96,7 +96,7 @@ class RedirectController < ApplicationController
   end
 
   def uuid
-    return params[:uuid] if /^uuid:.+/ =~ params[:uuid]
+    return params[:uuid] if /^uuid:.+/.match?(params[:uuid])
 
     raise JupiterCore::ObjectNotFound
   end
