@@ -62,7 +62,7 @@ if Rails.env.development? || Rails.env.uat?
     community = Community.new_locked_ldp_object(
       owner: admin.id,
       title: title,
-      description: Faker::Lorem.sentence(20, false, 0).chop
+      description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop
     ).unlock_and_fetch_ldp_object(&:save!)
 
     # Attach logos, if possible
@@ -84,14 +84,14 @@ if Rails.env.development? || Rails.env.uat?
       owner: admin.id,
       title: "The annals of '#{thing.capitalize} International'",
       community_id: community.id,
-      description: Faker::Lorem.sentence(40, false, 0).chop
+      description: Faker::Lorem.sentence(word_count: 40, supplemental: false, random_words_to_add: 0).chop
     ).unlock_and_fetch_ldp_object(&:save!)
 
     thesis_collection = Collection.new_locked_ldp_object(
       owner: admin.id,
       title: "Theses about #{thing.pluralize}",
       community_id: community.id,
-      description: Faker::Lorem.sentence(40, false, 0).chop
+      description: Faker::Lorem.sentence(word_count: 40, supplemental: false, random_words_to_add: 0).chop
     ).unlock_and_fetch_ldp_object(&:save!)
 
     # Items
@@ -106,9 +106,9 @@ if Rails.env.development? || Rails.env.uat?
       }
       # Add an occasional verbose description
       description = if i % 10 == 5
-                      Faker::Lorem.sentence(100, false, 0).chop
+                      Faker::Lorem.sentence(word_count: 100, supplemental: false, random_words_to_add: 0).chop
                     else
-                      Faker::Lorem.sentence(20, false, 0).chop
+                      Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop
                     end
       # Probabilistically about 70% English, 20% French, 10% Ukrainian
       languages = if seed % 10 > 2
@@ -255,7 +255,7 @@ if Rails.env.development? || Rails.env.uat?
       visibility: JupiterCore::VISIBILITY_PRIVATE,
       created: rand(20_000).days.ago.to_s,
       title: "Private #{thing.pluralize}, public lives: a survey of social media trends",
-      description: Faker::Lorem.sentence(20, false, 0).chop,
+      description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop,
       languages: [CONTROLLED_VOCABULARIES[:language].english],
       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
       item_type: CONTROLLED_VOCABULARIES[:item_type].chapter,
@@ -273,7 +273,7 @@ if Rails.env.development? || Rails.env.uat?
       visibility: JupiterCore::VISIBILITY_AUTHENTICATED,
       created: rand(20_000).days.ago.to_s,
       title: "Everything You Need To Know About: University of Alberta and #{thing.pluralize}!",
-      description: Faker::Lorem.sentence(20, false, 0).chop,
+      description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop,
       languages: [CONTROLLED_VOCABULARIES[:language].english],
       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
       item_type: CONTROLLED_VOCABULARIES[:item_type].report,
@@ -291,7 +291,7 @@ if Rails.env.development? || Rails.env.uat?
       visibility: Item::VISIBILITY_EMBARGO,
       created: rand(20_000).days.ago.to_s,
       title: "Embargo and #{Faker::Address.country}: were the #{thing.pluralize} left behind?",
-      description: Faker::Lorem.sentence(20, false, 0).chop,
+      description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop,
       languages: [CONTROLLED_VOCABULARIES[:language].english],
       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
       item_type: CONTROLLED_VOCABULARIES[:item_type].conference_workshop_presentation,
@@ -311,7 +311,7 @@ if Rails.env.development? || Rails.env.uat?
       visibility: Item::VISIBILITY_EMBARGO,
       created: rand(20_000).days.ago.to_s,
       title: "Former embargo of #{Faker::Address.country}: the day the #{thing.pluralize} were free",
-      description: Faker::Lorem.sentence(20, false, 0).chop,
+      description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop,
       languages: [CONTROLLED_VOCABULARIES[:language].english],
       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
       item_type: CONTROLLED_VOCABULARIES[:item_type].dataset,
@@ -331,7 +331,7 @@ if Rails.env.development? || Rails.env.uat?
       visibility: JupiterCore::VISIBILITY_PUBLIC,
       created: rand(20_000).days.ago.to_s,
       title: "Impact of non-admin users on #{thing.pluralize}",
-      description: Faker::Lorem.sentence(20, false, 0).chop,
+      description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop,
       languages: [CONTROLLED_VOCABULARIES[:language].english],
       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
       item_type: CONTROLLED_VOCABULARIES[:item_type].learning_object,
@@ -351,7 +351,7 @@ if Rails.env.development? || Rails.env.uat?
       visibility: JupiterCore::VISIBILITY_PUBLIC,
       created: rand(20_000).days.ago.to_s,
       title: "Multi-collection random images of #{thing.pluralize}",
-      description: Faker::Lorem.sentence(20, false, 0).chop,
+      description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop,
       # No linguistic content
       languages: [CONTROLLED_VOCABULARIES[:language].no_linguistic_content],
       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
@@ -372,7 +372,7 @@ if Rails.env.development? || Rails.env.uat?
     Community.new_locked_ldp_object(
       owner: admin.id,
       title: "Zoo#{thing}ology Institute of North-Eastern Upper Alberta (and Saskatchewan)",
-      description: Faker::Lorem.sentence(20, false, 0).chop
+      description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop
     ).unlock_and_fetch_ldp_object(&:save!)
   end
 
@@ -380,7 +380,7 @@ if Rails.env.development? || Rails.env.uat?
   community = Community.new_locked_ldp_object(
     owner: admin.id,
     title: "The Everything Department",
-    description: Faker::Lorem.sentence(20, false, 0).chop
+    description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop
   ).unlock_and_fetch_ldp_object(&:save!)
 
   EXTRA_THINGS.each do |thing|
