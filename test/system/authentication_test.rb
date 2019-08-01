@@ -59,6 +59,8 @@ class AuthenticationTest < ApplicationSystemTestCase
 
     assert_current_path(profile_path)
     assert_text I18n.t('admin.users.created')
+
+    logout_user
   end
 
   test 'should get redirected to homepage then back to homepage again with error, if user is unauthorized' do
@@ -96,6 +98,8 @@ class AuthenticationTest < ApplicationSystemTestCase
     # Still on browse page
     assert_current_path(communities_path)
     assert_selector 'h1', text: I18n.t('communities.index.header')
+
+    logout_user
   end
 
 end
