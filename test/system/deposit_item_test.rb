@@ -98,6 +98,8 @@ class DepositItemTest < ApplicationSystemTestCase
     click_on I18n.t('items.draft.save_and_deposit_edits')
     assert_text I18n.t('items.draft.successful_deposit')
     assert_selector 'h1', text: 'The Winds of Winter'
+
+    logout_user
   end
 
   test 'should populate community and collection when coming from collection page' do
@@ -117,6 +119,8 @@ class DepositItemTest < ApplicationSystemTestCase
 
     assert has_select?('draft_item[community_id][]', selected: 'Books')
     assert has_select?('draft_item[collection_id][]', selected: 'Fantasy Books')
+
+    logout_user
   end
 
   # Helper methods for javascript fields (selectize/dropzone) and date select
