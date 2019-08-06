@@ -107,6 +107,8 @@ class DepositThesisTest < ApplicationSystemTestCase
     assert_selector 'h1', text: I18n.t('admin.theses.draft.header_edit')
     click_on I18n.t('admin.theses.draft.save_and_continue')
     assert_selector '#draft_thesis_visibility_open_access:checked'
+
+    logout_user
   end
 
   test 'should populate community and collection when coming from a restricted collection page' do
@@ -126,6 +128,8 @@ class DepositThesisTest < ApplicationSystemTestCase
 
     assert has_select?('draft_thesis[community_id][]', selected: @community.title)
     assert has_select?('draft_thesis[collection_id][]', selected: @collection.title)
+
+    logout_user
   end
 
   # Helper methods for javascript fields (dropzone)
