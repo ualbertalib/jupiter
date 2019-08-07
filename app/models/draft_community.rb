@@ -5,7 +5,7 @@ class DraftCommunity < ApplicationRecord
     config.creators has_predicate: ::RDF::Vocab::DC.creator
   end
 
-  def update_from_fedora_community(community, for_user)
+  def update_from_fedora_community(community, _for_user)
     draft_attributes = {
       community_id: community.id,
       visibility: community.visibility,
@@ -17,7 +17,7 @@ class DraftCommunity < ApplicationRecord
       fedora3_uuid: community.fedora3_uuid,
       depositor_id: community.depositor,
       description: community.description,
-      creators: community.creators,
+      creators: community.creators
     }
     assign_attributes(draft_attributes)
     save(validate: false)
@@ -30,4 +30,5 @@ class DraftCommunity < ApplicationRecord
     draft.update_from_fedora_community(community, for_user)
     draft
   end
+
 end
