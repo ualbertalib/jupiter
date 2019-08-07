@@ -1,4 +1,12 @@
 GIT
+  remote: https://github.com/mbarnett/acts_as_rdfable.git
+  revision: d1d3b79cab1f074976407e42f9e28d24de5131c8
+  tag: v0.01
+  specs:
+    acts_as_rdfable (0.1.0)
+      rails (~> 5.2.3)
+
+GIT
   remote: https://github.com/ualbertalib/active_fedora.git
   revision: 8e94346e6ed98df46c994726749542075e11ecd0
   branch: backport_rails52_fixes
@@ -508,6 +516,7 @@ DEPENDENCIES
   aasm
   active-fedora!
   active_link_to
+  acts_as_rdfable!
   addressable (~> 2.7.0)
   better_errors (>= 2.3.0)
   binding_of_caller
@@ -579,4 +588,4 @@ DEPENDENCIES
   wicked
 
 BUNDLED WITH
-   1.17.3
+   2.0.2

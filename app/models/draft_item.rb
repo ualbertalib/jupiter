@@ -86,6 +86,26 @@ class DraftItem < ApplicationRecord
   validates :license_text_area, presence: true, if: :validate_if_license_is_text?
   validate :license_not_unselected, if: :validate_choose_license_and_visibility?
 
+  acts_as_rdfable do |config|
+    config.title has_predicate: ::RDF::Vocab::DC.title
+    config.creators has_predicate: RDF::Vocab::BIBO.authorList
+    config.contributors has_predicate: ::RDF::Vocab::DC11.contributor
+    config.date_created has_predicate: ::RDF::Vocab::DC.created
+    config.time_periods has_predicate: ::RDF::Vocab::DC.temporal
+    config.places has_predicate: ::RDF::Vocab::DC.spatial
+    config.description has_predicate: ::RDF::Vocab::DC.description
+    # TODO add
+    # config.publisher has_predicate: ::RDF::Vocab::DC.publisher
+    # TODO join table
+    #config.languages has_predicate: ::RDF::Vocab::DC.language
+    config.license has_predicate: ::RDF::Vocab::DC.license
+    config.type_id has_predicate: ::RDF::Vocab::DC.type
+    config.source has_predicate: ::RDF::Vocab::DC.source
+    config.related_item has_predicate: ::RDF::Vocab::DC.relation
+    config.status has_predicate: ::RDF::Vocab::BIBO.status
+  end
+
+  # rubocop:disable Rails/TimeZone
   def update_from_fedora_item(item, for_user)
     # I suspect this will become some kind of string field, but for now, using UTC
     # HACK: temporarily falling back to a parsable date when editing unparsable data to fix a crasher in Prod,
@@ -159,6 +179,10 @@ class DraftItem < ApplicationRecord
 
     draft.update_from_fedora_item(item, for_user)
     draft
+  end
+
+  def self.foo
+    binding.pry
   end
 
   # Control Vocab Conversions
