@@ -38,27 +38,27 @@ class DraftThesis < ApplicationRecord
   validates :rights, :visibility, presence: true, if: :validate_choose_license_and_visibility?
 
   acts_as_rdfable do |config|
-      config.description has_predicate: ::RDF::Vocab::DC.abstract
-      config.language_id has_predicate: ::RDF::Vocab::DC.language
-      config.date_accepted has_predicate: ::RDF::Vocab::DC.dateAccepted
-      config.date_submitted has_predicate: ::RDF::Vocab::DC.dateSubmitted
-      config.degree has_predicate: ::RDF::Vocab::BIBO.degree
-      config.institution_id has_predicate: ::TERMS[:swrc].institution
-      config.creator has_predicate: ::TERMS[:ual].dissertant
-      # TODO add graduation date column
-      #config.graduation_date has_predicate: ::TERMS[:ual].graduation_date
-      # TODO add
-      #config.thesis_level has_predicate: ::TERMS[:ual].thesis_level
-      #TODO add
-      # config.proquest has_predicate: ::TERMS[:ual].proquest
-      # TODO add
-      # config.unicorn has_predicate: ::TERMS[:ual].unicorn
-      config.specialization has_predicate: ::TERMS[:ual].specialization
-      config.departments has_predicate: ::TERMS[:ual].department_list
-      config.supervisors has_predicate: ::TERMS[:ual].supervisor_list
-      config.committee_members has_predicate: ::TERMS[:ual].committee_member
-      config.departments has_predicate: ::TERMS[:ual].department
-      config.supervisors has_predicate: ::TERMS[:ual].supervisor
+    config.description has_predicate: ::RDF::Vocab::DC.abstract
+    config.language_id has_predicate: ::RDF::Vocab::DC.language
+    config.date_accepted has_predicate: ::RDF::Vocab::DC.dateAccepted
+    config.date_submitted has_predicate: ::RDF::Vocab::DC.dateSubmitted
+    config.degree has_predicate: ::RDF::Vocab::BIBO.degree
+    config.institution_id has_predicate: ::TERMS[:swrc].institution
+    config.creator has_predicate: ::TERMS[:ual].dissertant
+    # TODO: add graduation date column
+    # config.graduation_date has_predicate: ::TERMS[:ual].graduation_date
+    # TODO add
+    # config.thesis_level has_predicate: ::TERMS[:ual].thesis_level
+    # TODO add
+    # config.proquest has_predicate: ::TERMS[:ual].proquest
+    # TODO add
+    # config.unicorn has_predicate: ::TERMS[:ual].unicorn
+    config.specialization has_predicate: ::TERMS[:ual].specialization
+    config.departments has_predicate: ::TERMS[:ual].department_list
+    config.supervisors has_predicate: ::TERMS[:ual].supervisor_list
+    config.committee_members has_predicate: ::TERMS[:ual].committee_member
+    config.departments has_predicate: ::TERMS[:ual].department
+    config.supervisors has_predicate: ::TERMS[:ual].supervisor
   end
 
   def update_from_fedora_thesis(thesis, for_user)

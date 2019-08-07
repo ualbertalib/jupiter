@@ -19,4 +19,5 @@ class DraftCollectionTest < ActiveSupport::TestCase
     assert_equal @collection.community.id, draft_collection.community_id
     assert_equal @collection.description, draft_collection.description
   end
+
 end

@@ -18,4 +18,5 @@ class DraftCommunityTest < ActiveSupport::TestCase
     assert_equal @community.id, draft_community.community_id
     assert_equal @community.description, draft_community.description
   end
+
 end

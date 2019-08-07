@@ -94,10 +94,10 @@ class DraftItem < ApplicationRecord
     config.time_periods has_predicate: ::RDF::Vocab::DC.temporal
     config.places has_predicate: ::RDF::Vocab::DC.spatial
     config.description has_predicate: ::RDF::Vocab::DC.description
-    # TODO add
+    # TODO: add
     # config.publisher has_predicate: ::RDF::Vocab::DC.publisher
     # TODO join table
-    #config.languages has_predicate: ::RDF::Vocab::DC.language
+    # config.languages has_predicate: ::RDF::Vocab::DC.language
     config.license has_predicate: ::RDF::Vocab::DC.license
     config.type_id has_predicate: ::RDF::Vocab::DC.type
     config.source has_predicate: ::RDF::Vocab::DC.source
@@ -179,10 +179,6 @@ class DraftItem < ApplicationRecord
 
     draft.update_from_fedora_item(item, for_user)
     draft
-  end
-
-  def self.foo
-    binding.pry
   end
 
   # Control Vocab Conversions
