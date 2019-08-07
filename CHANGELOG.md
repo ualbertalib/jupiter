@@ -53,7 +53,6 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - jupiter:get_me_off_of_fedora rake task to perform data migration
 - drafts scope for DraftItem/DraftThesis
 
-
 ### Changed
 - DeferredSimpleSolrQuery#sort renamed to 'order' and its two arguments replaced with a key-value, to better align with ActiveRecord
   API and ease removal of ActiveFedora.
