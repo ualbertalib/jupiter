@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_20_203953) do
+ActiveRecord::Schema.define(version: 2019_08_06_193857) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,6 +52,44 @@ ActiveRecord::Schema.define(version: 2018_06_20_203953) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "logo_id"
+  end
+
+  create_table "draft_collections", force: :cascade do |t|
+    t.uuid "collection_id"
+    t.integer "visibility", default: 0, null: false
+    t.bigint "owner_id", null: false
+    t.date "record_created_at"
+    t.string "hydra_noid"
+    t.date "date_ingested"
+    t.string "title"
+    t.string "fedora3_uuid"
+    t.bigint "depositor_id"
+    t.uuid "community_id"
+    t.text "description"
+    t.json "creators", array: true
+    t.boolean "restricted", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["depositor_id"], name: "index_draft_collections_on_depositor_id"
+    t.index ["owner_id"], name: "index_draft_collections_on_owner_id"
+  end
+
+  create_table "draft_communities", force: :cascade do |t|
+    t.uuid "community_id"
+    t.integer "visibility", default: 0, null: false
+    t.bigint "owner_id", null: false
+    t.date "record_created_at"
+    t.string "hydra_noid"
+    t.date "date_ingested"
+    t.string "title"
+    t.string "fedora3_uuid"
+    t.bigint "depositor_id"
+    t.text "description"
+    t.json "creators", array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["depositor_id"], name: "index_draft_communities_on_depositor_id"
+    t.index ["owner_id"], name: "index_draft_communities_on_owner_id"
   end
 
   create_table "draft_items", force: :cascade do |t|
@@ -157,6 +195,14 @@ ActiveRecord::Schema.define(version: 2018_06_20_203953) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "rdf_annotations", force: :cascade do |t|
+    t.string "table"
+    t.string "column"
+    t.string "predicate"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "types", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
@@ -181,6 +227,10 @@ ActiveRecord::Schema.define(version: 2018_06_20_203953) do
   end
 
   add_foreign_key "announcements", "users"
+  add_foreign_key "draft_collections", "users", column: "depositor_id"
+  add_foreign_key "draft_collections", "users", column: "owner_id"
+  add_foreign_key "draft_communities", "users", column: "depositor_id"
+  add_foreign_key "draft_communities", "users", column: "owner_id"
   add_foreign_key "draft_items", "users"
   add_foreign_key "draft_theses", "institutions"
   add_foreign_key "draft_theses", "languages"

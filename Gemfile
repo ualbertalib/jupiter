@@ -37,6 +37,9 @@ gem 'hydra-works', '0.17.0'
 gem 'rdf-vocab'
 gem 'solrizer', github: 'ualbertalib/solrizer', branch: 'literally_types'
 
+# RDF stuff
+gem 'acts_as_rdfable', github: 'mbarnett/acts_as_rdfable', tag: 'v0.01'
+
 # Database stuff
 gem 'connection_pool'
 gem 'pg', '~> 1.1.4'
