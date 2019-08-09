@@ -11,7 +11,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ### Added
 - Ruby 2.5 to travis ci testing matrix [PR#1040](https://github.com/ualbertalib/jupiter/pull/1040)
-- Added selectize '|' delimiter to seperate authors or subjects [PR#1211](https://github.com/ualbertalib/jupiter/issues/1211)
+- Added selectize '|' delimiter to separate authors or subjects [#1211](https://github.com/ualbertalib/jupiter/issues/1211)
 
 ### Changed
 - i18n fallback to english (configuration change) [PR#1058](https://github.com/ualbertalib/jupiter/pull/1058)
