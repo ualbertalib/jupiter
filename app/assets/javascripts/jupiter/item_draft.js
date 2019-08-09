@@ -60,7 +60,7 @@ $(document).on('turbolinks:load', function() {
 
   // This one is for tagging/ability to create items on input
   $('.js-selectize-create').selectize({
-    delimiter: '', // We don't want commas to seperate items (Authors names for example, `Doe, Jane B.` )
+    delimiter: '|', // We want | to seperate items (Authors names for example, `Doe, Jane B. | Deer, John A.'
     persist: false,
     createOnBlur: true,
     create: function(input) {
