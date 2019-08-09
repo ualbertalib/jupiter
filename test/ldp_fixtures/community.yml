@@ -6,6 +6,7 @@ nice:
   owner: 1
 books:
   title: 'Books'
+  description: 'a bunch of books'
   owner: 1
 foo:
   title: 'Community'

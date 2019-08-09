@@ -31,7 +31,16 @@ class JupiterCore::DeferredSimpleSolrQuery
     self
   end
 
-  def sort(attr, order = nil)
+  def order(attrs = {})
+    ord = nil
+    attr = if attrs.is_a? Hash
+             a = attrs.keys.first
+             ord = attrs[a]
+             a
+           else
+             attrs
+           end
+
     if attr.present?
       solr_name = begin
                     criteria[:model].solr_name_for(attr.to_sym, role: :sort)
@@ -41,8 +50,8 @@ class JupiterCore::DeferredSimpleSolrQuery
       criteria[:sort] = [solr_name] if solr_name.present?
     end
     criteria[:sort] = criteria[:model].default_sort_indexes if criteria[:sort].blank?
-    criteria[:sort_order] = if order.present? && [:asc, :desc].include?(order.to_sym)
-                              [order]
+    criteria[:sort_order] = if ord.present? && [:asc, :desc].include?(ord.to_sym)
+                              [ord]
                             else
                               criteria[:model].default_sort_direction
                             end

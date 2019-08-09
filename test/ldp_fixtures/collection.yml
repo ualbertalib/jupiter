@@ -9,4 +9,5 @@ fancy:
 books:
   Community: books
   title: 'Fantasy Books'
+  description: 'some fantasy books'
   owner: 1

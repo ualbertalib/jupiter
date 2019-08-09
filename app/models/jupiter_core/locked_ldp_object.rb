@@ -318,7 +318,7 @@ class JupiterCore::LockedLdpObject
   # find with "return nil if no object with that ID is found" semantics
   # Note: This behaves differently then AR find_by.
   # As it can only take a single argument which is an ID (which is a limitation from ActiveFedora)
-  def self.find_by(id)
+  def self.find_by(id:)
     self.find(id)
   rescue JupiterCore::ObjectNotFound
     nil
@@ -356,18 +356,22 @@ class JupiterCore::LockedLdpObject
   end
 
   # attr, a string attribute name and sort order
-  def self.sort(attr, order = :asc)
-    all.sort(attr, order)
+  # def self.sort(attr, order = :asc)
+  #   all.order(attr => order)
+  # end
+
+  def self.order(attrs)
+    all.order(attrs)
   end
 
   # the least recently created record in Solr, as determined by the record_created_at timestamp
   def self.first
-    all.limit(1).sort(:record_created_at, :asc).first
+    all.limit(1).order(record_created_at: :asc).first
   end
 
   # the most recently created record in Solr, as determined by the record_created_at timestamp
   def self.last
-    all.limit(1).sort(:record_created_at, :desc).first
+    all.limit(1).order(record_created_at: :desc).first
   end
 
   def self.valid_visibilities
