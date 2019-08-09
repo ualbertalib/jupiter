@@ -198,7 +198,7 @@ class DraftThesis < ApplicationRecord
 
     member_of_paths['community_id'].each_with_index do |_community_id, idx|
       collection_id = member_of_paths['collection_id'][idx]
-      collection = Collection.find_by(collection_id)
+      collection = Collection.find_by(id: collection_id)
       next if collection.blank?
       next if collection.restricted && user.admin?
 

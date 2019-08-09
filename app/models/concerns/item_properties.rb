@@ -109,9 +109,9 @@ module ItemProperties
 
         member_of_paths.each do |path|
           community_id, collection_id = path.split('/')
-          community = Community.find_by(community_id)
+          community = Community.find_by(id: community_id)
           errors.add(:member_of_paths, :community_not_found, id: community_id) if community.blank?
-          collection = Collection.find_by(collection_id)
+          collection = Collection.find_by(id: collection_id)
           errors.add(:member_of_paths, :collection_not_found, id: collection_id) if collection.blank?
         end
       end
@@ -129,7 +129,7 @@ module ItemProperties
           self.member_of_collections = []
           member_of_paths.each do |path|
             _community_id, collection_id = path.split('/')
-            collection = Collection.find_by(collection_id)
+            collection = Collection.find_by(id: collection_id)
 
             # This sets `memberOf`
             # TODO: can this be streamlined so that a fetch from Fedora isn't needed?

@@ -292,7 +292,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
       @@klass.find(generate_random_string)
     end
 
-    assert_nil @@klass.find_by(generate_random_string)
+    assert_nil @@klass.find_by(id: generate_random_string)
 
     assert @@klass.find(obj.id).present?
 

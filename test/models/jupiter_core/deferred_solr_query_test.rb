@@ -22,7 +22,7 @@ class DeferredSimpleSolrQueryTest < ActiveSupport::TestCase
     assert_equal @@klass.all.total_count, 0
 
     assert @@klass.where(title: 'foo').is_a?(JupiterCore::DeferredSimpleSolrQuery)
-    assert @@klass.sort(:title).is_a?(JupiterCore::DeferredSimpleSolrQuery)
+    assert @@klass.order(:title).is_a?(JupiterCore::DeferredSimpleSolrQuery)
     assert @@klass.limit(5).is_a?(JupiterCore::DeferredSimpleSolrQuery)
     assert @@klass.offset(5).is_a?(JupiterCore::DeferredSimpleSolrQuery)
 
@@ -41,7 +41,7 @@ class DeferredSimpleSolrQueryTest < ActiveSupport::TestCase
     assert_equal @@klass.all.total_count, 3
     assert @@klass.where(title: 'foo').first.id == obj.id
 
-    assert_equal @@klass.sort(:title, :desc).map(&:id), [another_obj.id, obj.id, private_obj.id]
+    assert_equal @@klass.order(title: :desc).map(&:id), [another_obj.id, obj.id, private_obj.id]
 
     # visibility constraints
     assert_equal 2, @@klass.where(visibility: JupiterCore::VISIBILITY_PUBLIC).count
@@ -63,7 +63,7 @@ class DeferredSimpleSolrQueryTest < ActiveSupport::TestCase
   end
 
   test 'sorting by unknown attributes falls back to defaults' do
-    items = @@klass.sort(:blergh, :foobar)
+    items = @@klass.order(blergh: :foobar)
     assert_equal :creator, items.used_sort_index
     assert_equal :desc, items.used_sort_order
   end

@@ -5,7 +5,7 @@ class Admin::CommunitiesController < Admin::AdminController
   def index
     respond_to do |format|
       format.html do
-        @communities = Community.sort(params[:sort], params[:direction]).page params[:page]
+        @communities = Community.order(params[:sort] => params[:direction]).page params[:page]
         @title = t('.header')
         render template: 'communities/index'
       end
@@ -29,11 +29,11 @@ class Admin::CommunitiesController < Admin::AdminController
     respond_to do |format|
       format.js do
         # Used for the collapsable dropdown to show member collections
-        @collections = @community.member_collections.sort(params[:sort], params[:direction])
+        @collections = @community.member_collections.order(params[:sort] => params[:direction])
         render template: 'communities/show'
       end
       format.html do
-        @collections = @community.member_collections.sort(params[:sort], params[:direction]).page params[:page]
+        @collections = @community.member_collections.order(params[:sort] => params[:direction]).page params[:page]
         render template: 'communities/show'
       end
     end
