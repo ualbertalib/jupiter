@@ -69,8 +69,14 @@ class Item < JupiterCore::LockedLdpObject
 
       # Handle visibility plus embargo logic
       unlocked_obj.visibility = draft_item.visibility_as_uri
-      unlocked_obj.visibility_after_embargo = draft_item.visibility_after_embargo_as_uri
-      unlocked_obj.embargo_end_date = draft_item.embargo_end_date
+
+      if draft_item.visibility_as_uri == CONTROLLED_VOCABULARIES[:visibility].embargo
+        unlocked_obj.visibility_after_embargo = draft_item.visibility_after_embargo_as_uri
+        unlocked_obj.embargo_end_date = draft_item.embargo_end_date
+      else
+        unlocked_obj.visibility_after_embargo = nil
+        unlocked_obj.embargo_end_date = nil
+      end
 
       # Handle license vs rights
       unlocked_obj.license = draft_item.license_as_uri

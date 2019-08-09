@@ -7,7 +7,7 @@ end
 
 # Core Rails stuff
 gem 'image_processing' # for ActiveStorage Variants
-gem 'puma', '~> 3.12'
+gem 'puma', '~> 4.1'
 gem 'rails', '~> 5.2.3'
 
 # Assets (CSS/JS) stuff
@@ -45,8 +45,8 @@ gem 'rsolr'
 
 # Authentication
 gem 'omniauth'
+gem 'omniauth-rails_csrf_protection' # Remove after https://github.com/omniauth/omniauth/pull/809 will be resolved
 gem 'omniauth-saml'
-
 # Authorization
 gem 'pundit', '1.1.0'
 
@@ -60,7 +60,7 @@ gem 'sidekiq-cron'
 
 # Misc Utilities
 gem 'aasm' # state-machine management
-gem 'addressable', '~> 2.5.0' # Replacement for the standard URI implementation
+gem 'addressable', '~> 2.6.0' # Replacement for the standard URI implementation
 gem 'danger', '~> 6.0' # Pull Request etiquette enforcement
 gem 'ezid-client', '~> 1.8.0'
 gem 'jbuilder' # generate JSON objects
@@ -91,8 +91,9 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
 
-  gem 'rubocop', '~> 0.67.2', require: false
+  gem 'rubocop', '~> 0.74.0', require: false
   gem 'rubocop-performance'
+  gem 'rubocop-rails'
 
   gem 'scss_lint', '>= 0.56.0', require: false
 end
@@ -113,7 +114,7 @@ group :test do
   # Faker added 0.5 seconds to the test suite per call. Haikunator seems much faster for faking strings
   gem 'haikunator'
   gem 'minitest-hooks'
-  gem 'shoulda-matchers', '~> 4.0'
+  gem 'shoulda-matchers', '~> 4.1'
 
   gem 'launchy'
   gem 'vcr', require: false

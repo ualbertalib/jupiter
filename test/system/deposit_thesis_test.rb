@@ -14,7 +14,7 @@ class DepositThesisTest < ApplicationSystemTestCase
                             .unlock_and_fetch_ldp_object(&:save!)
   end
 
-  test 'be able to deposit a new thesis into jupiter successfully' do
+  test 'be able to deposit and edit a thesis successfully' do
     admin = users(:admin)
 
     login_user(admin)
@@ -86,19 +86,34 @@ class DepositThesisTest < ApplicationSystemTestCase
 
     click_on I18n.t('edit')
     assert_selector 'h1', text: I18n.t('admin.theses.draft.header_edit')
+
+    # edit title
     fill_in I18n.t('admin.theses.draft.describe_thesis.title'),
             currently_with: 'A Dance with Dragons',
             with: 'The Winds of Winter'
     click_on I18n.t('admin.theses.draft.save_and_continue')
 
+    # edit visibility
+    choose I18n.t('admin.theses.draft.choose_license_and_visibility.visibility.open_access')
     click_on I18n.t('admin.theses.draft.save_and_continue')
     click_on I18n.t('admin.theses.draft.save_and_continue')
     click_on I18n.t('admin.theses.draft.save_and_deposit_edits')
+
     assert_text I18n.t('admin.theses.draft.successful_deposit')
     assert_selector 'h1', text: 'The Winds of Winter'
+
+    # go back to editing to ensure visibility stuck
+    click_on I18n.t('edit')
+    assert_selector 'h1', text: I18n.t('admin.theses.draft.header_edit')
+    click_on I18n.t('admin.theses.draft.save_and_continue')
+    assert_selector '#draft_thesis_visibility_open_access:checked'
+
+    logout_user
   end
 
   test 'should populate community and collection when coming from a restricted collection page' do
+    skip 'This test continues to flap on CI that should be investigated ASAP' if ENV['TRAVIS']
+
     admin = users(:admin)
 
     login_user(admin)
@@ -113,6 +128,8 @@ class DepositThesisTest < ApplicationSystemTestCase
 
     assert has_select?('draft_thesis[community_id][]', selected: @community.title)
     assert has_select?('draft_thesis[collection_id][]', selected: @collection.title)
+
+    logout_user
   end
 
   # Helper methods for javascript fields (dropzone)

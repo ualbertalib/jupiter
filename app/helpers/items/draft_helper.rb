@@ -9,6 +9,10 @@ module Items::DraftHelper
     end
   end
 
+  # Rubocop now wants us to remove instance methods from helpers. This is a good idea
+  # but will require a bit of refactoring. Find other instances of this disabling
+  # and fix all at once.
+  # rubocop:disable Rails/HelperInstanceVariable
   def header
     if @draft.is_a? DraftItem
       @is_edit ? t('items.draft.header_edit') : t('items.draft.header')
@@ -16,6 +20,8 @@ module Items::DraftHelper
       @is_edit ? t('admin.theses.draft.header_edit') : t('admin.theses.draft.header')
     end
   end
+
+  # rubocop:enable Rails/HelperInstanceVariable
 
   def progress_bar_percentage
     ((step_index(step).to_f / wizard_steps.size) * 100).to_i

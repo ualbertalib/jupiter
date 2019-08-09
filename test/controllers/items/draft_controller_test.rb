@@ -70,7 +70,8 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
     }
 
     assert_redirected_to item_draft_path(id: :choose_license_and_visibility, item_id: draft_item.id)
-
+    get profile_url
+    assert_includes @response.body, 'Random Book'
     draft_item.reload
     assert_equal 'Random Book', draft_item.title
     assert_equal 'describe_item', draft_item.wizard_step
