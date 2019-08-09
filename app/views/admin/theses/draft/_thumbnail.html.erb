@@ -4,11 +4,11 @@ every file attached to an item via a JS callback rendering files/update_files_li
 whereas DraftItem#thumbnail specifically only deals with rendering the designated file for representing it as a
 thumbnail and is used on various other pages, like profiles, which use the application/_thumbnail partial.%>
   <% thumbnail = rails_representation_path(file.variant(resize: '100x100', auto_orient: true).processed) %>
-  <%= image_tag(thumbnail, class: 'j-thumbnail img-thumbnail', alt: '', title: file.filename, size: '100x100') %>
+  <%= image_tag(thumbnail, class: 'j-thumbnail img-thumbnail', alt: '', title: file.filename, size: '100x100', onerror: "default_thumbnail(this)") %>
 <% rescue  ActiveStorage::InvariableError %>
   <% begin %>
       <% thumbnail = rails_representation_path(file.preview(resize: '100x100', auto_orient: true).processed) %>
-      <%= image_tag(thumbnail, class: 'j-thumbnail img-thumbnail', alt: '', title: file.filename, size: '100x100') %>
+      <%= image_tag(thumbnail, class: 'j-thumbnail img-thumbnail', alt: '', title: file.filename, size: '100x100', onerror: "default_thumbnail(this)") %>
   <% rescue ActiveStorage::UnpreviewableError %>
     <div class="text-muted text-center img-thumbnail p-3">
       <%= fa_icon file_icon(file.content_type), class: 'fa-5x' %>
