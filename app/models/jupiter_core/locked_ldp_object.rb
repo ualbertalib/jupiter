@@ -355,11 +355,7 @@ class JupiterCore::LockedLdpObject
     all.offset(num)
   end
 
-  # attr, a string attribute name and sort order
-  # def self.sort(attr, order = :asc)
-  #   all.order(attr => order)
-  # end
-
+  # attrs, a Hash name => sort order key value pair
   def self.order(attrs)
     all.order(attrs)
   end

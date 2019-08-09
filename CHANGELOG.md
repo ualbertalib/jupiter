@@ -53,7 +53,8 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ### Changed
 - DeferredSimpleSolrQuery#sort renamed to 'order' and its two arguments replaced with a key-value, to better align with ActiveRecord
-  API and ease removal of ActiveFedora
+  API and ease removal of ActiveFedora.
+- Change LockedLDPObject#find_by to take a named 'id:' parameter, to better align callers with ActiveRecord
 - i18n fallback to english (configuration change) [PR#1058](https://github.com/ualbertalib/jupiter/pull/1058)
 - pin rubocop version for hound [PR#1080](https://github.com/ualbertalib/jupiter/pull/1080)
 - Skip flapping tests on travis CI [#1181](https://github.com/ualbertalib/jupiter/issues/1181)
