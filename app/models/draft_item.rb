@@ -1,5 +1,7 @@
 class DraftItem < ApplicationRecord
 
+  scope :drafts, -> { where(is_published_in_era: false).or(where(is_published_in_era: nil)) }
+
   include DraftProperties
 
   enum wizard_step: { describe_item: 0,
@@ -140,7 +142,8 @@ class DraftItem < ApplicationRecord
       time_periods: item.temporal_subjects,
       citations: item.is_version_of,
       source: item.source,
-      related_item: item.related_link
+      related_item: item.related_link,
+      is_published_in_era: false
     }
     assign_attributes(draft_attributes)
 
@@ -175,8 +178,8 @@ class DraftItem < ApplicationRecord
   end
 
   def self.from_item(item, for_user:)
-    draft = DraftItem.find_by(uuid: item.id)
-    draft ||= DraftItem.new(uuid: item.id)
+    draft = DraftItem.drafts.find_by(uuid: item.id)
+    draft ||= DraftItem.drafts.new(uuid: item.id)
 
     draft.update_from_fedora_item(item, for_user)
     draft

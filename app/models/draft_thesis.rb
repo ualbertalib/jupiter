@@ -1,5 +1,7 @@
 class DraftThesis < ApplicationRecord
 
+  scope :drafts, -> { where(is_published_in_era: false).or(where(is_published_in_era: nil)) }
+
   include DraftProperties
 
   # Metadata team prefers we store and use a number (e.g. '06' or '11')
@@ -117,8 +119,8 @@ class DraftThesis < ApplicationRecord
   end
 
   def self.from_thesis(thesis, for_user:)
-    draft = DraftThesis.find_by(uuid: thesis.id)
-    draft ||= DraftThesis.new(uuid: thesis.id)
+    draft = DraftThesis.drafts.find_by(uuid: thesis.id)
+    draft ||= DraftThesis.drafts.new(uuid: thesis.id)
 
     draft.update_from_fedora_thesis(thesis, for_user)
     draft

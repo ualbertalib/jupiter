@@ -1,5 +1,7 @@
 class DraftCollection < ApplicationRecord
 
+  scope :drafts, -> { where(is_published_in_era: false).or(where(is_published_in_era: nil)) }
+
   acts_as_rdfable do |config|
     config.community_id has_predicate: ::TERMS[:ual].path
     config.description has_predicate: ::RDF::Vocab::DC.description
@@ -28,8 +30,8 @@ class DraftCollection < ApplicationRecord
   end
 
   def self.from_collection(collection, for_user:)
-    draft = DraftCollection.find_by(collection_id: collection.id)
-    draft ||= DraftCollection.new(collection_id: collection.id)
+    draft = DraftCollection.drafts.find_by(collection_id: collection.id)
+    draft ||= DraftCollection.drafts.new(collection_id: collection.id)
 
     draft.update_from_fedora_collection(collection, for_user)
     draft
