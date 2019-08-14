@@ -212,7 +212,7 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should not be able to create a draft thesis if not logged in' do
-    assert_no_difference('DraftThesis.count') do
+    assert_no_difference('DraftThesis.drafts.count') do
       assert_raises ActionController::RoutingError do
         post create_draft_admin_theses_url
       end
@@ -222,7 +222,7 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
   test 'should not be able to create a draft thesis if not admin' do
     sign_in_as users(:regular)
 
-    assert_no_difference('DraftThesis.count') do
+    assert_no_difference('DraftThesis.drafts.count') do
       assert_raises ActionController::RoutingError do
         post create_draft_admin_theses_url
       end
@@ -232,11 +232,11 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
   test 'should be able to create a draft thesis if logged in' do
     sign_in_as @admin
 
-    assert_difference('DraftThesis.count', 1) do
+    assert_difference('DraftThesis.drafts.count', 1) do
       post create_draft_admin_theses_url
     end
 
-    assert_redirected_to admin_thesis_draft_path(id: :describe_thesis, thesis_id: DraftThesis.last.id)
+    assert_redirected_to admin_thesis_draft_path(id: :describe_thesis, thesis_id: DraftThesis.drafts.last.id)
   end
 
   test 'other admins should be able to delete a draft thesis even if they do not own the thesis' do
@@ -244,7 +244,7 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
 
     draft_thesis = draft_theses(:completed_choose_license_and_visibility_step)
 
-    assert_difference('DraftThesis.count', -1) do
+    assert_difference('DraftThesis.drafts.count', -1) do
       delete admin_thesis_delete_draft_url(thesis_id: draft_thesis.id)
     end
 
@@ -256,7 +256,7 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
 
     draft_thesis = draft_theses(:completed_choose_license_and_visibility_step)
 
-    assert_difference('DraftThesis.count', -1) do
+    assert_difference('DraftThesis.drafts.count', -1) do
       delete admin_thesis_delete_draft_url(thesis_id: draft_thesis.id)
     end
 

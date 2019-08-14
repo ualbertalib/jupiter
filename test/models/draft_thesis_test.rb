@@ -25,20 +25,20 @@ class DraftThesisTest < ActiveSupport::TestCase
   end
 
   test 'should not be able to create a draft thesis without user' do
-    draft_thesis = DraftThesis.new
+    draft_thesis = DraftThesis.drafts.new
     assert_not draft_thesis.valid?
     assert_equal 'User must exist', draft_thesis.errors.full_messages.first
   end
 
   test 'should be able to create a draft thesis with user when on inactive status' do
     user = users(:admin)
-    draft_thesis = DraftThesis.new(user: user)
+    draft_thesis = DraftThesis.drafts.new(user: user)
     assert draft_thesis.valid?
   end
 
   test 'should run validations when on describe_item step' do
     user = users(:admin)
-    draft_thesis = DraftThesis.new(user: user, status: DraftThesis.statuses[:active])
+    draft_thesis = DraftThesis.drafts.new(user: user, status: DraftThesis.statuses[:active])
 
     assert_not draft_thesis.valid?
     assert_equal 5, draft_thesis.errors.full_messages.count
@@ -58,7 +58,7 @@ class DraftThesisTest < ActiveSupport::TestCase
   test 'should run validations when on choose_license_and_visibility wizard step' do
     user = users(:admin)
 
-    draft_thesis = DraftThesis.new(
+    draft_thesis = DraftThesis.drafts.new(
       user: user,
       status: DraftThesis.statuses[:active],
       wizard_step: DraftThesis.wizard_steps[:choose_license_and_visibility],
@@ -119,7 +119,7 @@ class DraftThesisTest < ActiveSupport::TestCase
   test 'should handle embargo end date visibility validations' do
     user = users(:admin)
 
-    draft_thesis = DraftThesis.new(
+    draft_thesis = DraftThesis.drafts.new(
       user: user,
       status: DraftThesis.statuses[:active],
       wizard_step: DraftThesis.wizard_steps[:choose_license_and_visibility],
@@ -146,7 +146,7 @@ class DraftThesisTest < ActiveSupport::TestCase
   test 'should handle community/collection validations on member_of_paths' do
     user = users(:admin)
 
-    draft_thesis = DraftThesis.new(
+    draft_thesis = DraftThesis.drafts.new(
       user: user,
       status: DraftThesis.statuses[:active],
       title: 'Thesis of Random',
@@ -179,7 +179,7 @@ class DraftThesisTest < ActiveSupport::TestCase
   test 'regular user cannot deposit' do
     user = users(:regular)
 
-    draft_thesis = DraftThesis.new(
+    draft_thesis = DraftThesis.drafts.new(
       user: user,
       status: DraftThesis.statuses[:active],
       title: 'Thesis of Random',
@@ -201,7 +201,7 @@ class DraftThesisTest < ActiveSupport::TestCase
                                                                  community_id: @community.id)
                                           .unlock_and_fetch_ldp_object(&:save!)
 
-    draft_thesis = DraftThesis.new(
+    draft_thesis = DraftThesis.drafts.new(
       user: user,
       status: DraftThesis.statuses[:active],
       title: 'Thesis of Random',
@@ -218,7 +218,7 @@ class DraftThesisTest < ActiveSupport::TestCase
 
   test 'parse_graduation_term_from_fedora works correctly' do
     user = users(:admin)
-    draft_thesis = DraftThesis.new(user: user)
+    draft_thesis = DraftThesis.drafts.new(user: user)
 
     assert_equal '11', draft_thesis.send(:parse_graduation_term_from_fedora, '2018-11')
     assert_equal '06', draft_thesis.send(:parse_graduation_term_from_fedora, '2018-06')

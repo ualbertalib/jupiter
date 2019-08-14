@@ -1,4 +1,5 @@
 class DraftCommunity < ApplicationRecord
+  scope :drafts, -> { where(is_published_in_era: false).or(where(is_published_in_era: nil)) }
 
   acts_as_rdfable do |config|
     config.description has_predicate: ::RDF::Vocab::DC.description
@@ -24,8 +25,8 @@ class DraftCommunity < ApplicationRecord
   end
 
   def self.from_community(community, for_user:)
-    draft = DraftCommunity.find_by(community_id: community.id)
-    draft ||= DraftCommunity.new(community_id: community.id)
+    draft = DraftCommunity.drafts.find_by(community_id: community.id)
+    draft ||= DraftCommunity.drafts.new(community_id: community.id)
 
     draft.update_from_fedora_community(community, for_user)
     draft

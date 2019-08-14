@@ -53,12 +53,12 @@ class ItemsControllerTest < ActionDispatch::IntegrationTest
     sign_in_as @admin
     # test editing of an item.
     get edit_item_url(@item)
-    draft_item = DraftItem.find_by(uuid: @item.id)
+    draft_item = DraftItem.drafts.find_by(uuid: @item.id)
     assert_redirected_to item_draft_path(id: Wicked::FIRST_STEP, item_id: draft_item.id)
 
     # test editing of a thesis.
     get edit_item_url(@thesis)
-    draft_thesis = DraftThesis.find_by(uuid: @thesis.id)
+    draft_thesis = DraftThesis.drafts.find_by(uuid: @thesis.id)
     assert_redirected_to admin_thesis_draft_path(id: Wicked::FIRST_STEP, thesis_id: draft_thesis.id)
   end
 

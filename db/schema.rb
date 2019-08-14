@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_06_193857) do
+ActiveRecord::Schema.define(version: 2019_08_14_210221) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -70,6 +70,7 @@ ActiveRecord::Schema.define(version: 2019_08_06_193857) do
     t.boolean "restricted", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "is_published_in_era", default: false
     t.index ["depositor_id"], name: "index_draft_collections_on_depositor_id"
     t.index ["owner_id"], name: "index_draft_collections_on_owner_id"
   end
@@ -88,6 +89,7 @@ ActiveRecord::Schema.define(version: 2019_08_06_193857) do
     t.json "creators", array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "is_published_in_era", default: false
     t.index ["depositor_id"], name: "index_draft_communities_on_depositor_id"
     t.index ["owner_id"], name: "index_draft_communities_on_owner_id"
   end
@@ -119,6 +121,7 @@ ActiveRecord::Schema.define(version: 2019_08_06_193857) do
     t.json "citations", array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "is_published_in_era", default: false
     t.index ["type_id"], name: "index_draft_items_on_type_id"
     t.index ["user_id"], name: "index_draft_items_on_user_id"
   end
@@ -161,6 +164,7 @@ ActiveRecord::Schema.define(version: 2019_08_06_193857) do
     t.json "committee_members", array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "is_published_in_era", default: false
     t.index ["institution_id"], name: "index_draft_theses_on_institution_id"
     t.index ["language_id"], name: "index_draft_theses_on_language_id"
     t.index ["user_id"], name: "index_draft_theses_on_user_id"
