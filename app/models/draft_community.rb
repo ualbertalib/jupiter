@@ -1,4 +1,5 @@
 class DraftCommunity < ApplicationRecord
+
   scope :drafts, -> { where(is_published_in_era: false).or(where(is_published_in_era: nil)) }
 
   acts_as_rdfable do |config|

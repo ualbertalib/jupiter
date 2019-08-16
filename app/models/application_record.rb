@@ -2,6 +2,8 @@ class ApplicationRecord < ActiveRecord::Base
 
   self.abstract_class = true
 
+  # this isn't a predicate name you daft thing
+  # rubocop:disable Naming/PredicateName
   def self.has_solr_exporter(klass)
     # class << self
     #   attr_accessor :solr_calc_attributes, :facets, :ranges
@@ -11,7 +13,9 @@ class ApplicationRecord < ActiveRecord::Base
     # self.ranges = []
 
     class << self
+
       attr_accessor :solr_exporter_class
+
     end
     define_method :solr_exporter do
       return self.class.solr_exporter_class.new(self)
@@ -19,8 +23,6 @@ class ApplicationRecord < ActiveRecord::Base
 
     self.solr_exporter_class = klass
     after_commit :update_solr
-
-
 
     # import some information from the Solr Exporter for compatibility purposes with existing Fedora stuff
     # TODO: remove
@@ -37,9 +39,11 @@ class ApplicationRecord < ActiveRecord::Base
     #   }
     # end
   end
+  # rubocop:enable Naming/PredicateName
 
   def update_solr
-    solr_doc = self.solr_exporter.export
+    solr_doc = solr_exporter.export
     JupiterCore::SolrServices::Client.instance.add_or_update_document(solr_doc)
   end
+
 end

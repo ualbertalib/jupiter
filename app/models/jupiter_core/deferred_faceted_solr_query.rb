@@ -89,12 +89,12 @@ class JupiterCore::DeferredFacetedSolrQuery
   def each
     reify_result_set.map do |res|
       obj = if res['has_model_ssim'].first.start_with?('IR')
-        JupiterCore::LockedLdpObject.reify_solr_doc(res)
-      else
-        # TODO: This is inefficient and we should look at batching up IDs once Fedora is gone and I can change this a bit
-        arclass = res['has_model_ssim'].first.constantize
-        arclass.find(res['id'])
-      end
+              JupiterCore::LockedLdpObject.reify_solr_doc(res)
+            else
+              # TODO: This is inefficient and we should look at batching up IDs once Fedora is gone and I can change this a bit
+              arclass = res['has_model_ssim'].first.constantize
+              arclass.find(res['id'])
+            end
       yield(obj)
       obj
     end
