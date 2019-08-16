@@ -38,20 +38,22 @@ class JupiterCore::DeferredFacetedSolrQuery
   end
 
   def sort(attr, order = nil)
+    solr_exporter = raw_model_to_model(criteria[:restrict_to_model].first).solr_exporter_class
+
     if attr.present?
       attr = attr.to_sym
       solr_name = begin
                     if attr == :relevance
                       :score
                     else
-                      criteria[:restrict_to_model].first.owning_class.solr_name_for(attr, role: :sort)
+                      solr_exporter.solr_name_for(attr, role: :sort)
                     end
                   rescue ArgumentError
                     nil
                   end
       criteria[:sort] = [solr_name] if solr_name.present?
     end
-    criteria[:sort] = criteria[:restrict_to_model].first.owning_class.default_sort_indexes if criteria[:sort].blank?
+    criteria[:sort] = solr_exporter.default_sort_indexes if criteria[:sort].blank?
 
     # Note the elsif: if no explicit order was passed from the user, and we're ordering by score, we default
     # to sorting scores descending rather than ascending, as is otherwise used when eg) title is the default sort field
@@ -60,7 +62,7 @@ class JupiterCore::DeferredFacetedSolrQuery
                             elsif criteria[:sort] == [:score]
                               [:desc]
                             else
-                              criteria[:restrict_to_model].first.owning_class.default_sort_direction
+                              solr_exporter.default_sort_direction
                             end
     self
   end
@@ -86,7 +88,13 @@ class JupiterCore::DeferredFacetedSolrQuery
 
   def each
     reify_result_set.map do |res|
-      obj = JupiterCore::LockedLdpObject.reify_solr_doc(res)
+      obj = if res['has_model_ssim'].first.start_with?('IR')
+        JupiterCore::LockedLdpObject.reify_solr_doc(res)
+      else
+        # TODO: This is inefficient and we should look at batching up IDs once Fedora is gone and I can change this a bit
+        arclass = res['has_model_ssim'].first.constantize
+        arclass.find(res['id'])
+      end
       yield(obj)
       obj
     end
@@ -131,8 +139,8 @@ class JupiterCore::DeferredFacetedSolrQuery
   def used_sort_index
     return :relevance if criteria[:sort].first == :score
 
-    model = criteria[:restrict_to_model].first.owning_class
-    model.solr_name_to_attribute_name_map[criteria[:sort].first]
+    model = raw_model_to_model(criteria[:restrict_to_model].first)
+    model.solr_exporter_class.reverse_solr_name_map[criteria[:sort].first]
   end
 
   def used_sort_order
@@ -148,9 +156,10 @@ class JupiterCore::DeferredFacetedSolrQuery
   def reify_result_set
     return @results if @results.present?
 
-    model = criteria[:restrict_to_model].first.owning_class
-    model_has_sort_year = model.attribute_names.include?(:sort_year)
-    sort_year_facet = model.solr_name_for(:sort_year, role: :range_facet) if model_has_sort_year
+    model = raw_model_to_model(criteria[:restrict_to_model].first)
+    # TODO: refactor special treatment of this attribute name to be more generically applicable to any range facet
+    model_has_sort_year = model.solr_exporter_class.indexed_attributes.include?(:sort_year)
+    sort_year_facet = model.solr_exporter_class.solr_name_for(:sort_year, role: :range_facet) if model_has_sort_year
 
     @count_cache, @results, facet_data = JupiterCore::Search.perform_solr_query(
       search_args_with_limit(criteria[:limit])
@@ -170,10 +179,11 @@ class JupiterCore::DeferredFacetedSolrQuery
   end
 
   def sort_clause
-    model = criteria[:restrict_to_model].first.owning_class
-    indexes = criteria[:sort].presence || model.default_sort_indexes
-    indexes ||= [model.solr_name_for(:record_created_at, role: :sort)]
-    direction = criteria[:sort_order].presence || model.default_sort_direction
+    model = raw_model_to_model(criteria[:restrict_to_model].first)
+    solr_exporter = model.solr_exporter_class
+    indexes = criteria[:sort].presence || solr_exporter.default_sort_indexes
+    indexes ||= [solr_exporter.solr_name_for(:record_created_at, role: :sort)]
+    direction = criteria[:sort_order].presence || solr_exporter.default_sort_direction
     direction ||= [:desc]
 
     sorts = []
@@ -193,6 +203,15 @@ class JupiterCore::DeferredFacetedSolrQuery
       rows: limit,
       start: criteria[:offset],
       sort: sort_clause }
+  end
+
+  # Convert IRModel to corresponding LockedLDPObject class or justt pass through ActiveRecord class
+  def raw_model_to_model(raw_model)
+    if raw_model < ActiveFedora::Base
+      raw_model.owning_class
+    else
+      raw_model
+    end
   end
 
 end

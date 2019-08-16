@@ -99,7 +99,7 @@ class SearchTest < ActiveSupport::TestCase
 
     assert_equal 'solr select', events.first.payload[:name]
     assert_equal creator2, events.first.payload[:query][:q]
-    assert_equal 'title_tesim creator_tesim', events.first.payload[:query][:qf]
+    assert_equal 'title_tesim creator_tesim my_solr_doc_attr_tesim', events.first.payload[:query][:qf]
     assert events.first.payload[:query][:facet]
 
     # TODO: This assert below periodically fails? Sometimes comes back as 2 instead of 1
