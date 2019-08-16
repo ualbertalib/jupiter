@@ -15,7 +15,7 @@ class JupiterCore::SolrServices::Client
     #
     # if the params arg is missing for some reason, like you call connection.add(solr_doc, softCommit: true)
     # RSolr silently does nothing. Extremely cool and helpful behaviour.
-    connection.add(solr_doc, params: {softCommit: true})
+    connection.add(solr_doc, params: { softCommit: true })
   end
 
 end

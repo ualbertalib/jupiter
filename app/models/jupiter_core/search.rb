@@ -53,13 +53,13 @@ class JupiterCore::Search
                                               facet_map: construct_facet_map(models),
                                               facet_fields: construct_facet_fields(models, user: as),
                                               ranges: ranges,
-                                              restrict_to_model: models.map { |m|
+                                              restrict_to_model: models.map do |m|
                                                 if m < JupiterCore::LockedLdpObject
                                                   m.send(:derived_af_class)
                                                 else
                                                   m
                                                 end
-                                              })
+                                              end)
   end
 
   # derive additional restriction or broadening of the visibilitily query on top of the default
@@ -153,7 +153,7 @@ class JupiterCore::Search
       # the visibility facet is defined identically in all models
       visibility_facet = models.first.solr_exporter_class.solr_name_for(:visibility, role: :facet)
       facets = models.map do |model|
-          model.solr_exporter_class.facets
+        model.solr_exporter_class.facets
       end.flatten.uniq
       user&.admin? ? facets : facets.reject { |f| f == visibility_facet }
     end

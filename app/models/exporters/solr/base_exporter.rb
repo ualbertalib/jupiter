@@ -54,7 +54,7 @@ class Exporters::Solr::BaseExporter
   end
 
   def self.solr_name_for(name, role:)
-    type = self.name_to_type_map[name]
+    type = name_to_type_map[name]
     JupiterCore::SolrServices::NameMangling.mangled_name_for(name, type: type, role: role)
   end
 
@@ -184,7 +184,7 @@ class Exporters::Solr::BaseExporter
     def default_sort(index:, direction:)
       index = [index] unless index.is_a?(Array)
       direction = [direction] unless direction.is_a?(Array)
-      self.default_sort_indexes = index.map { |idx| self.solr_name_for(idx, role: :sort) }
+      self.default_sort_indexes = index.map { |idx| solr_name_for(idx, role: :sort) }
       self.default_sort_direction = direction
     end
 
@@ -236,7 +236,7 @@ class Exporters::Solr::BaseExporter
     def inherited(child)
       super
       child.class_eval do
-        custom_index :has_model, role: [:exact_match], as: ->(object) {
+        custom_index :has_model, role: [:exact_match], as: lambda { |object|
           if object.class < JupiterCore::LockedLdpObject
             object.class.send(:derived_af_class)
           else
@@ -244,7 +244,7 @@ class Exporters::Solr::BaseExporter
           end
         }
 
-        custom_index :owner, type: :integer, role: [:exact_match], as: ->(object) {
+        custom_index :owner, type: :integer, role: [:exact_match], as: lambda { |object|
           if object.class < JupiterCore::LockedLdpObject
             object.owner
           else

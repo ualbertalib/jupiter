@@ -1,7 +1,6 @@
 class ArItem < ApplicationRecord
 
-
-# TODO: !!!!!!!!!!!!!!!!!
+  # TODO: !!!!!!!!!!!!!!!!!
   has_solr_exporter Exporters::Solr::ArItemExporter
 
   belongs_to :owner, class_name: 'User'
@@ -11,19 +10,19 @@ class ArItem < ApplicationRecord
     config.creators has_predicate: RDF::Vocab::BIBO.authorList
     config.contributors has_predicate: ::RDF::Vocab::DC11.contributor
     # TODO
-  #  config.date_created has_predicate: ::RDF::Vocab::DC.created
-#    config.time_periods has_predicate: ::RDF::Vocab::DC.temporal
-#    config.places has_predicate: ::RDF::Vocab::DC.spatial
+    #  config.date_created has_predicate: ::RDF::Vocab::DC.created
+    #    config.time_periods has_predicate: ::RDF::Vocab::DC.temporal
+    #    config.places has_predicate: ::RDF::Vocab::DC.spatial
     config.description has_predicate: ::RDF::Vocab::DC.description
     # TODO: add
     # config.publisher has_predicate: ::RDF::Vocab::DC.publisher
     # TODO join table
     # config.languages has_predicate: ::RDF::Vocab::DC.language
     config.license has_predicate: ::RDF::Vocab::DC.license
-#config.type_id has_predicate: ::RDF::Vocab::DC.type
+    # config.type_id has_predicate: ::RDF::Vocab::DC.type
     config.source has_predicate: ::RDF::Vocab::DC.source
-#    config.related_item has_predicate: ::RDF::Vocab::DC.relation
-  #  config.status has_predicate: ::RDF::Vocab::BIBO.status
+    #    config.related_item has_predicate: ::RDF::Vocab::DC.relation
+    #  config.status has_predicate: ::RDF::Vocab::BIBO.status
   end
 
   before_validation :populate_sort_year
@@ -45,7 +44,7 @@ class ArItem < ApplicationRecord
   validate :license_xor_rights_must_be_present
 
   def self.from_draft(draft_item)
-    #item = ArItem.find(draft_item.uuid) if draft_item.uuid.present?
+    # item = ArItem.find(draft_item.uuid) if draft_item.uuid.present?
     item ||= ArItem.new(id: draft_item.uuid)
 
     item.owner_id = draft_item.user_id if item.owner_id.blank?
@@ -89,10 +88,10 @@ class ArItem < ApplicationRecord
     # remove old filesets and attachments and recreate
 
     # TODO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    #item.purge_filesets
+    # item.purge_filesets
     # NOTE: destroy the attachment record, DON'T use #purge, which will wipe the underlying blob shared with the
     # draft item
-    #item.files.each(&:destroy) if item.files.present?
+    # item.files.each(&:destroy) if item.files.present?
 
     # add an association between the same underlying blobs the Draft uses and the Item
     # draft_item.files_attachments.each do |attachment|
@@ -102,7 +101,6 @@ class ArItem < ApplicationRecord
     # end
     #
     # item.set_thumbnail(item.files.find_by(blob_id: draft_item.thumbnail.blob.id))
-
 
     draft_item.uuid = item.id
     draft_item.save!
@@ -171,4 +169,5 @@ class ArItem < ApplicationRecord
     # so that we can facet by community and/or collection properly
     # TODO: add collection_id to member_of_collections
   end
+
 end

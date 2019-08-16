@@ -13,7 +13,8 @@ namespace :jupiter do
     inactive_draft_items.destroy_all
 
     # Find all the inactive draft theses older than yesterday
-    inactive_draft_theses = DraftThesis.drafts.where('DATE(created_at) < DATE(?)', Date.yesterday).where(status: :inactive)
+    inactive_draft_theses = DraftThesis.drafts
+                                       .where('DATE(created_at) < DATE(?)', Date.yesterday).where(status: :inactive)
     puts "Deleting #{inactive_draft_theses.count} Inactive Draft Theses..."
 
     # delete them all
