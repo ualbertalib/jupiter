@@ -53,6 +53,11 @@ class Exporters::Solr::BaseExporter
     name_to_solr_name_map[name]
   end
 
+  def self.solr_name_for(name, role:)
+    type = self.name_to_type_map[name]
+    JupiterCore::SolrServices::NameMangling.mangled_name_for(name, type: type, role: role)
+  end
+
   def self.solr_roles_for(name)
     name_to_roles_map[name]
   end
@@ -133,7 +138,8 @@ class Exporters::Solr::BaseExporter
   class << self
 
     attr_accessor :reverse_solr_name_map, :name_to_type_map, :name_to_roles_map,
-                  :name_to_solr_name_map, :name_to_custom_lambda_map, :indexed_attributes
+                  :name_to_solr_name_map, :name_to_custom_lambda_map, :indexed_attributes, :searched_solr_names,
+                  :facets, :ranges, :default_sort_direction, :default_sort_indexes
 
     protected
 
@@ -175,6 +181,13 @@ class Exporters::Solr::BaseExporter
     end
     # rubocop:enable Naming/UncommunicativeMethodParamName
 
+    def default_sort(index:, direction:)
+      index = [index] unless index.is_a?(Array)
+      direction = [direction] unless direction.is_a?(Array)
+      self.default_sort_indexes = index.map { |idx| self.solr_name_for(idx, role: :sort) }
+      self.default_sort_direction = direction
+    end
+
     def record_type(name, type)
       self.name_to_type_map ||= {}
       self.name_to_type_map[name] = type
@@ -191,11 +204,21 @@ class Exporters::Solr::BaseExporter
       self.name_to_solr_name_map ||= {}
       self.name_to_solr_name_map[attr] = []
 
+      self.searched_solr_names ||= []
+      self.facets ||= []
+      self.ranges ||= []
+
       roles.each do |r|
         mangled_name = JupiterCore::SolrServices::NameMangling.mangled_name_for(attr, type: type, role: r)
         self.reverse_solr_name_map[mangled_name] = attr
         self.name_to_solr_name_map[attr] << mangled_name
+        self.searched_solr_names << mangled_name if r == :search
+        self.facets << mangled_name if SOLR_FACET_ROLES.include?(r)
+        self.ranges << mangled_name if r == :range_facet
       end
+      self.searched_solr_names.uniq!
+      self.facets.uniq!
+      self.ranges.uniq!
     end
 
     def attribute_index?(name)
@@ -213,10 +236,23 @@ class Exporters::Solr::BaseExporter
     def inherited(child)
       super
       child.class_eval do
-        custom_index :has_model, role: [:exact_match], as: ->(object) { object.class.send(:derived_af_class) }
-        index :visibility, role: [:exact_match, :facet]
+        custom_index :has_model, role: [:exact_match], as: ->(object) {
+          if object.class < JupiterCore::LockedLdpObject
+            object.class.send(:derived_af_class)
+          else
+            object.class.to_s
+          end
+        }
 
-        index :owner, type: :integer, role: [:exact_match]
+        custom_index :owner, type: :integer, role: [:exact_match], as: ->(object) {
+          if object.class < JupiterCore::LockedLdpObject
+            object.owner
+          else
+            object.owner_id
+          end
+        }
+
+        index :visibility, role: [:exact_match, :facet]
 
         index :record_created_at, type: :date, role: [:sort]
 

@@ -53,7 +53,13 @@ class JupiterCore::Search
                                               facet_map: construct_facet_map(models),
                                               facet_fields: construct_facet_fields(models, user: as),
                                               ranges: ranges,
-                                              restrict_to_model: models.map { |m| m.send(:derived_af_class) })
+                                              restrict_to_model: models.map { |m|
+                                                if m < JupiterCore::LockedLdpObject
+                                                  m.send(:derived_af_class)
+                                                else
+                                                  m
+                                                end
+                                              })
   end
 
   # derive additional restriction or broadening of the visibilitily query on top of the default
@@ -130,28 +136,25 @@ class JupiterCore::Search
     def calculate_queried_fields(models)
       queried_fields = []
       models.each do |model|
-        model.attribute_cache.each_value do |properties|
-          idx = properties[:solrize_for].find_index(:search)
-          queried_fields << properties[:solr_names][idx] if idx.present?
-        end
-        model.solr_calc_attributes.each_value do |solr_properties|
-          idx = solr_properties.find_index(:search)
-          queried_fields << solr_properties[:solr_names][idx] if idx.present?
-        end
+        queried_fields += model.solr_exporter_class.searched_solr_names
       end
       queried_fields.uniq.join(' ')
     end
 
     # combine the facet maps (solr_name => attribute_name) of all of the models being searched
     def construct_facet_map(models)
-      models.map(&:solr_name_to_attribute_name_map).reduce(&:merge)
+      models.map do |model|
+        model.solr_exporter_class.reverse_solr_name_map
+      end.reduce(&:merge)
     end
 
     # Disallow use of the visibility facet by non-admins
     def construct_facet_fields(models, user:)
       # the visibility facet is defined identically in all models
-      visibility_facet = models.first.solr_name_for(:visibility, role: :facet)
-      facets = models.map(&:facets).flatten.uniq
+      visibility_facet = models.first.solr_exporter_class.solr_name_for(:visibility, role: :facet)
+      facets = models.map do |model|
+          model.solr_exporter_class.facets
+      end.flatten.uniq
       user&.admin? ? facets : facets.reject { |f| f == visibility_facet }
     end
 

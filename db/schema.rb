@@ -10,10 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_14_210221) do
+ActiveRecord::Schema.define(version: 2019_08_15_215625) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
+  enable_extension "uuid-ossp"
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name"
@@ -44,6 +46,47 @@ ActiveRecord::Schema.define(version: 2019_08_14_210221) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_announcements_on_user_id"
+  end
+
+  create_table "ar_items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "visibility"
+    t.bigint "owner_id", null: false
+    t.datetime "record_created_at"
+    t.string "hydra_noid"
+    t.datetime "date_ingested"
+    t.string "title"
+    t.string "fedora3_uuid"
+    t.string "depositor"
+    t.string "alternative_title"
+    t.string "doi"
+    t.datetime "embargo_end_date"
+    t.string "visibility_after_embargo"
+    t.string "fedora3_handle"
+    t.string "ingest_batch"
+    t.string "northern_north_america_filename"
+    t.string "northern_north_america_item_id"
+    t.text "rights"
+    t.string "sort_year"
+    t.json "embargo_history", array: true
+    t.string "is_version_of"
+    t.json "member_of_paths", array: true
+    t.json "subject", array: true
+    t.json "creators", array: true
+    t.json "contributors", array: true
+    t.string "created"
+    t.json "temporal_subjects", array: true
+    t.json "spatial_subjects", array: true
+    t.text "description"
+    t.string "publisher"
+    t.json "languages", array: true
+    t.text "license"
+    t.string "item_type"
+    t.string "source"
+    t.string "related_link"
+    t.json "publication_status", array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["owner_id"], name: "index_ar_items_on_owner_id"
   end
 
   create_table "attachment_shims", force: :cascade do |t|
@@ -231,6 +274,7 @@ ActiveRecord::Schema.define(version: 2019_08_14_210221) do
   end
 
   add_foreign_key "announcements", "users"
+  add_foreign_key "ar_items", "users", column: "owner_id"
   add_foreign_key "draft_collections", "users", column: "depositor_id"
   add_foreign_key "draft_collections", "users", column: "owner_id"
   add_foreign_key "draft_communities", "users", column: "depositor_id"
