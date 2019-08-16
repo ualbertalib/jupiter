@@ -48,7 +48,7 @@ ActiveRecord::Schema.define(version: 2019_08_15_215625) do
     t.index ["user_id"], name: "index_announcements_on_user_id"
   end
 
-  create_table "ar_items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "ar_items", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string "visibility"
     t.bigint "owner_id", null: false
     t.datetime "record_created_at"
