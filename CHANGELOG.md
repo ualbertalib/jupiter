@@ -48,6 +48,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Made multiple seeds of db not duplicate types, languages, or institutions [#1117](https://github.com/ualbertalib/jupiter/issues/1117)
 
 ### Fixed
+- Cleared visibility_after_embargo and embargo_end_date when embargo option is not selected [PR#1041](https://github.com/ualbertalib/jupiter/pull/1041)
 - fixed error in dangerfile [#1109](https://github.com/ualbertalib/jupiter/issues/1109)
 
 ## [1.2.14] - 2019-04-15
