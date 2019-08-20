@@ -1,9 +1,11 @@
 class ArItem < ApplicationRecord
 
-  # TODO: !!!!!!!!!!!!!!!!!
   has_solr_exporter Exporters::Solr::ArItemExporter
 
   belongs_to :owner, class_name: 'User'
+
+  has_many_attached :files, dependent: false
+
 
   acts_as_rdfable do |config|
     config.title has_predicate: ::RDF::Vocab::DC.title
@@ -85,27 +87,47 @@ class ArItem < ApplicationRecord
     end
 
     item.save!
-    # remove old filesets and attachments and recreate
 
-    # TODO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    # item.purge_filesets
+    # remove old filesets and attachments and recreate
     # NOTE: destroy the attachment record, DON'T use #purge, which will wipe the underlying blob shared with the
     # draft item
-    # item.files.each(&:destroy) if item.files.present?
+    item.files.each(&:destroy) if item.files.present?
 
     # add an association between the same underlying blobs the Draft uses and the Item
-    # draft_item.files_attachments.each do |attachment|
-    #   new_attachment = ActiveStorage::Attachment.create(record: item.files_attachment_shim,
-    #                                                     blob: attachment.blob, name: :shimmed_files)
-    #   FileAttachmentIngestionJob.perform_later(new_attachment.id)
-    # end
-    #
-    # item.set_thumbnail(item.files.find_by(blob_id: draft_item.thumbnail.blob.id))
+    draft_item.files_attachments.each do |attachment|
+      new_attachment = ActiveStorage::Attachment.create(record: item,
+                                                        blob: attachment.blob, name: :files)
+    end
+
+    item.set_thumbnail(item.files.find_by(blob_id: draft_item.thumbnail.blob.id)) if draft_item.thumbnail.present?
 
     draft_item.uuid = item.id
     draft_item.save!
 
     item
+  end
+
+  def self.from_item(item)
+    raise ArgumentError, "Item #{id} already migrated to ActiveRecord" if ArItem.find_by(id: item.id) != nil
+
+    ar_item = ArItem.new
+
+    # this is named differently in ActiveFedora
+    ar_item.owner_id = item.owner
+
+    attributes = ar_item.attributes.keys.reject {|k| k == 'owner_id' || k == 'created_at' || k == 'updated_at'}
+
+    attributes.each do |attr|
+      ar_item.send("#{attr}=", item.send(attr))
+    end
+
+    # unconditionally save. If something doesn't pass validations in ActiveFedora, it still needs to come here
+    ar_item.save(validate: false)
+
+    # add an association between the same underlying blobs the Item uses and the new ActiveRecord version
+    ar_item.files_attachments.each do |attachment|
+      ActiveStorage::Attachment.create(record: ar_item, blob: attachment.blob, name: :files)
+    end
   end
 
   # This is stored in solr: combination of item_type and publication_status
@@ -164,10 +186,6 @@ class ArItem < ApplicationRecord
 
   def add_to_path(community_id, collection_id)
     self.member_of_paths += ["#{community_id}/#{collection_id}"]
-    # TODO: also add the collection (not the community) to the Item's memberOf relation, as metadata
-    # wants to continue to model this relationship in pure PCDM terms, and member_of_path is really for our needs
-    # so that we can facet by community and/or collection properly
-    # TODO: add collection_id to member_of_collections
   end
 
 end
