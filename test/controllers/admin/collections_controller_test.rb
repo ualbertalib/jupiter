@@ -85,9 +85,11 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
     ).unlock_and_fetch_ldp_object(&:save!)
 
     # Give the collection an item
-    Item.new_locked_ldp_object(
+    User.create_with(name: 'Adminy Adminderson', email: 'admin@notarealemailaddres.fake.co.uk.fake').find_or_create_by(id: 1)
+
+    item = Item.new(
       title: 'item blocking deletion',
-      owner: 1,
+      owner_id: 1,
       creators: ['Joe Blow'],
       created: '1972-08-08',
       languages: [CONTROLLED_VOCABULARIES[:language].english],

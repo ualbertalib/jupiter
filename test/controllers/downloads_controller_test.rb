@@ -6,7 +6,16 @@ class DownloadsControllerTest < ActionDispatch::IntegrationTest
     super
     community = locked_ldp_fixture(Community, :nice).unlock_and_fetch_ldp_object(&:save!)
     collection = locked_ldp_fixture(Collection, :nice).unlock_and_fetch_ldp_object(&:save!)
-    item = locked_ldp_fixture(Item, :fancy).unlock_and_fetch_ldp_object do |uo|
+    item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                               owner_id: 1, title: 'Fancy Item',
+                                               creators: ['Joe Blow'],
+                                               created: '1938-01-02',
+                                               languages: [CONTROLLED_VOCABULARIES[:language].english],
+                                               item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                                               publication_status:
+                                               [CONTROLLED_VOCABULARIES[:publication_status].published],
+                                               license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                                               subject: ['Items']).unlock_and_fetch_ldp_object do |uo|
       uo.add_to_path(community.id, collection.id)
       uo.save!
     end
@@ -19,9 +28,9 @@ class DownloadsControllerTest < ActionDispatch::IntegrationTest
 
     @file = item.files.first
 
-    item_requiring_authentication = Item.new_locked_ldp_object(
+    item_requiring_authentication = Item.new(
       title: 'item to download',
-      owner: 1,
+      owner_id: 1,
       creators: ['Joe Blow'],
       created: '1972-08-08',
       languages: [CONTROLLED_VOCABULARIES[:language].english],

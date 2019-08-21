@@ -46,6 +46,11 @@ class ActiveSupport::TestCase
     Haikunator.haikunate
   end
 
+  def before_all
+    super
+    User.create_with(name: 'Adminy Adminderson', email: 'admin@notarealemailaddres.fake.co.uk.fake').find_or_create_by(id: 1)
+  end
+
   # clean ActiveFedora at the end of all tests in a given test class
   def after_all
     super
@@ -53,6 +58,7 @@ class ActiveSupport::TestCase
     keys = Redis.current.keys("#{Rails.configuration.redis_key_prefix}*")
     Redis.current.del(keys) if keys.present?
     Sidekiq::Worker.clear_all
+    Item.delete_all
   end
 
   # Add more helper methods to be used by all tests here...

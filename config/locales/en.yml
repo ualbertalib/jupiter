@@ -138,6 +138,26 @@ en:
           st_stephens: "St. Stephen's College"
     errors:
       models:
+        item:
+          attributes:
+            base:
+              need_either_license_or_rights: 'must have either a license or a rights statement'
+              not_both_license_and_rights: 'should not have both a license and a rights statement'
+            member_of_paths:
+              community_not_found: 'is missing community with ID "%{id}"'
+              collection_not_found: 'is missing collection with ID "%{id}"'
+            languages:
+              not_recognized: 'is not recognized'
+            license:
+              not_recognized: 'is not recognized'
+            item_type:
+              not_recognized: 'is not recognized'
+            publication_status:
+              required_for_article: 'is required for articles'
+              not_recognized: 'is not recognized'
+              must_be_absent_for_non_articles: 'must be absent for non-articles'
+            visibility_after_embargo:
+              not_recognized: 'is not recognized'
         draft_item:
           attributes:
             member_of_paths:

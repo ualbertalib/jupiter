@@ -7,7 +7,12 @@ class Admin::ItemsController < Admin::AdminController
   end
 
   def destroy
-    @item = JupiterCore::LockedLdpObject.find(params[:id], types: [Item, Thesis])
+    @item = begin
+      Item.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      Thesis.find(params[:id])
+    end
+
     begin
       @item.unlock_and_fetch_ldp_object(&:destroy!)
       flash[:notice] = t('.deleted')

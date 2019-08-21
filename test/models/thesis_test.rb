@@ -164,10 +164,6 @@ class ThesisTest < ActiveSupport::TestCase
     assert_includes thesis.member_of_paths, "#{community_id}/#{collection_id}"
   end
 
-  test 'member_of_paths is not a display attribute' do
-    assert_not_includes Thesis.display_attribute_names, :member_of_paths
-  end
-
   test 'a community/collection path must be present' do
     thesis = Thesis.new_locked_ldp_object
 

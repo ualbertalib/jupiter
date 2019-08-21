@@ -19,8 +19,8 @@ module SearchHelper
     priority_facets = (params[:facets]&.keys || []) + (params[:ranges]&.keys || [])
     return priority_facets unless @search_models.include? Item
 
-    priority_facets + [Item.solr_name_for(:all_contributors, role: :facet),
-                       Item.solr_name_for(:all_subjects, role: :facet)]
+    priority_facets + [Item.solr_exporter_class.solr_name_for(:all_contributors, role: :facet),
+                      Item.solr_exporter_class.solr_name_for(:all_subjects, role: :facet)]
   end
   # rubocop:enable Rails/HelperInstanceVariable
 

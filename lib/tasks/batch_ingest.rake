@@ -68,7 +68,7 @@ end
 def item_ingest(item_data, index, csv_directory)
   log "ITEM #{index}: Starting ingest of an item..."
 
-  item = Item.new_locked_ldp_object
+  item = Item.new
   item.unlock_and_fetch_ldp_object do |unlocked_obj|
     unlocked_obj.owner = item_data[:owner_id]
     unlocked_obj.title = item_data[:title]

@@ -11,9 +11,9 @@ class Admin::ItemsControllerTest < ActionDispatch::IntegrationTest
                                                    owner: 1)
     @collection.unlock_and_fetch_ldp_object(&:save!)
 
-    @item = Item.new_locked_ldp_object(
+    @item = Item.new(
       title: 'item for deletion',
-      owner: 1,
+      owner_id: 1,
       creators: ['Joe Blow'],
       created: '1972-08-08',
       languages: [CONTROLLED_VOCABULARIES[:language].english],

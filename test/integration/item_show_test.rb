@@ -19,9 +19,9 @@ class ItemShowTest < ActionDispatch::IntegrationTest
                    .new_locked_ldp_object(community_id: @community1.id,
                                           title: 'Another collection', owner: 1)
                    .unlock_and_fetch_ldp_object(&:save!)
-    @item = Item.new_locked_ldp_object.unlock_and_fetch_ldp_object do |uo|
+    @item = Item.new.unlock_and_fetch_ldp_object do |uo|
       uo.title = 'Fantastic item'
-      uo.owner = 1
+      uo.owner_id = 1
       uo.creators = ['Joe Blow']
       uo.visibility = JupiterCore::VISIBILITY_PUBLIC
       uo.created = '1999-09-09'

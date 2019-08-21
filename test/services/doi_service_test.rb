@@ -20,7 +20,7 @@ class DoiServiceTest < ActiveSupport::TestCase
                                                   community_id: community.id)
     collection.unlock_and_fetch_ldp_object(&:save!)
 
-    item = Item.new_locked_ldp_object(title: 'Test Title', owner: 1, visibility: JupiterCore::VISIBILITY_PUBLIC,
+    item = Item.new(title: 'Test Title', owner_id: 1, visibility: JupiterCore::VISIBILITY_PUBLIC,
                                       created: '2017-02-02',
                                       languages: [CONTROLLED_VOCABULARIES[:language].english],
                                       creators: ['Joe Blow'],

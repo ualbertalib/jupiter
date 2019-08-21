@@ -23,7 +23,7 @@ class Collection < JupiterCore::LockedLdpObject
   end
 
   def member_items
-    Item.where(member_of_paths: path)
+   Item.where("member_of_paths::text LIKE ?", "%#{path}%")
   end
 
   def member_theses
@@ -31,7 +31,7 @@ class Collection < JupiterCore::LockedLdpObject
   end
 
   def member_objects
-    member_items + member_theses
+    member_items + member_theses.to_a
   end
 
   def as_json(_options)

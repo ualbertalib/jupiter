@@ -9,8 +9,8 @@ class EmbargoExpiryJobTest < ActiveJob::TestCase
   end
 
   test 'that job transitions only expired item embargos into proper state' do
-    expired_item = Item.new_locked_ldp_object(
-      owner: 1,
+    expired_item = Item.new(
+      owner_id: 1,
       title: 'Fancy Item',
       creators: ['Joe Blow'],
       created: 'Fall 2017',
@@ -27,8 +27,8 @@ class EmbargoExpiryJobTest < ActiveJob::TestCase
       uo.save!
     end
 
-    not_expired_item = Item.new_locked_ldp_object(
-      owner: 1,
+    not_expired_item = Item.new(
+      owner_id: 1,
       title: 'Fancy Item',
       creators: ['Joe Blow'],
       created: 'Fall 2017',

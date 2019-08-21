@@ -10,7 +10,15 @@ class ItemShowTest < ApplicationSystemTestCase
     @collection = locked_ldp_fixture(Collection, :fancy).unlock_and_fetch_ldp_object(&:save!)
 
     # Half items have 'Fancy' in title, others have 'Nice', distributed between the two collections
-    @item = locked_ldp_fixture(Item, :fancy).unlock_and_fetch_ldp_object do |uo|
+    @item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                        owner_id: 1, title: 'Fancy Item',
+                                        creators: ['Joe Blow'],
+                                        created: '1938-01-02',
+                                        languages: [CONTROLLED_VOCABULARIES[:language].english],
+                                        license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                                        item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                                        publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
+                                        subject: ['Items']).unlock_and_fetch_ldp_object do |uo|
       uo.add_to_path(@community.id, @collection.id)
       uo.add_to_path(@community.id, @collection.id)
       uo.save!
@@ -24,8 +32,8 @@ class ItemShowTest < ApplicationSystemTestCase
       end
     end
 
-    @item2 = Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_AUTHENTICATED,
-                                        owner: @user.id, title: 'CCID Item',
+    @item2 = Item.new(visibility: JupiterCore::VISIBILITY_AUTHENTICATED,
+                                        owner_id: @user.id, title: 'CCID Item',
                                         creators: ['Joe Blow'],
                                         created: '2011-11-11',
                                         languages: [CONTROLLED_VOCABULARIES[:language].english],

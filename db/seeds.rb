@@ -99,7 +99,6 @@ if Rails.env.development? || Rails.env.uat?
       seed = rand(10)
       seed2 = rand(10)
       base_attributes = {
-        owner: admin.id,
         visibility: JupiterCore::VISIBILITY_PUBLIC,
         subject: [thing.capitalize],
         doi: "doi:bogus-#{Time.current.utc.iso8601(3)}"
@@ -121,6 +120,7 @@ if Rails.env.development? || Rails.env.uat?
       licence_right = {}
 
       item_attributes = base_attributes.merge({
+        owner_id: admin.id,
         title: "The effects of #{Faker::Beer.name} on #{thing.pluralize}",
         created: rand(20_000).days.ago.to_s,
         creators: [creators[seed]],
@@ -169,7 +169,7 @@ if Rails.env.development? || Rails.env.uat?
         item_attributes[:source] = "Chapter 5 of '#{thing.pluralize.capitalize} and what they drink'"
       end
 
-      item = Item.new_locked_ldp_object(item_attributes).unlock_and_fetch_ldp_object do |uo|
+      item = Item.new(item_attributes).unlock_and_fetch_ldp_object do |uo|
         if i == 8
           uo.add_to_path(community.id, item_collection.id)
           uo.add_to_path(community.id, thesis_collection.id)
@@ -197,6 +197,7 @@ if Rails.env.development? || Rails.env.uat?
       field = Faker::Job.field
       level = ["Master's", 'Doctorate'][i % 2]
       thesis_attributes = base_attributes.merge({
+        owner: admin.id,
         title: "Thesis about the effects of #{Faker::Beer.name} on #{thing.pluralize}",
         graduation_date: "#{rand(20_000).days.ago.year}#{['-06','-11',''][i % 3]}",
         dissertant: creators[seed],
@@ -249,8 +250,8 @@ if Rails.env.development? || Rails.env.uat?
     end
 
     # Add a private item
-    Item.new_locked_ldp_object(
-      owner: admin.id,
+    Item.new(
+      owner_id: admin.id,
       creators: [creators[rand(10)]],
       visibility: JupiterCore::VISIBILITY_PRIVATE,
       created: rand(20_000).days.ago.to_s,
@@ -267,8 +268,8 @@ if Rails.env.development? || Rails.env.uat?
     end
 
     # Add a CCID protected item
-    Item.new_locked_ldp_object(
-      owner: admin.id,
+    Item.new(
+      owner_id: admin.id,
       creators: [creators[rand(10)]],
       visibility: JupiterCore::VISIBILITY_AUTHENTICATED,
       created: rand(20_000).days.ago.to_s,
@@ -285,8 +286,8 @@ if Rails.env.development? || Rails.env.uat?
     end
 
     # Add a currently embargoed item
-    Item.new_locked_ldp_object(
-      owner: admin.id,
+    Item.new(
+      owner_id: admin.id,
       creators: [creators[rand(10)]],
       visibility: Item::VISIBILITY_EMBARGO,
       created: rand(20_000).days.ago.to_s,
@@ -305,8 +306,8 @@ if Rails.env.development? || Rails.env.uat?
     end
 
     # Add a formerly embargoed item
-    Item.new_locked_ldp_object(
-      owner: admin.id,
+    Item.new(
+      owner_id: admin.id,
       creators: [creators[rand(10)]],
       visibility: Item::VISIBILITY_EMBARGO,
       created: rand(20_000).days.ago.to_s,
@@ -325,8 +326,8 @@ if Rails.env.development? || Rails.env.uat?
     end
 
     # Add an item owned by non-admin
-    Item.new_locked_ldp_object(
-      owner: non_admin.id,
+    Item.new(
+      owner_id: non_admin.id,
       creators: [creators[rand(10)]],
       visibility: JupiterCore::VISIBILITY_PUBLIC,
       created: rand(20_000).days.ago.to_s,
@@ -345,8 +346,8 @@ if Rails.env.development? || Rails.env.uat?
     end
 
     # Want one multi-collection item per community
-    Item.new_locked_ldp_object(
-      owner: admin.id,
+    Item.new(
+      owner_id: admin.id,
       creators: [creators[rand(10)]],
       visibility: JupiterCore::VISIBILITY_PUBLIC,
       created: rand(20_000).days.ago.to_s,
