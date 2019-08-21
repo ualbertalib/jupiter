@@ -117,7 +117,9 @@ def item_ingest(item_data, index, csv_directory)
 
     # Handle license vs rights
     if item_data[:license].present?
-      unlocked_obj.license = CONTROLLED_VOCABULARIES[:license].send(item_data[:license].to_sym)
+      unlocked_obj.license =
+        CONTROLLED_VOCABULARIES[:license].send(item_data[:license].to_sym) ||
+        CONTROLLED_VOCABULARIES[:old_license].send(item_data[:license].to_sym)
     end
     unlocked_obj.rights = item_data[:license_text]
 
