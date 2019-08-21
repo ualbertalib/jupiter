@@ -84,6 +84,11 @@ class DepositItemTest < ApplicationSystemTestCase
     assert_text I18n.t('items.draft.successful_deposit')
     assert_selector 'h1', text: Item.last.title
 
+    # Check to make sure there isn't any embargo_history
+    item_id = current_url.split("/")[-1]
+    _, item_results, _ = JupiterCore::Search.perform_solr_query(q: item_id, fq: "id:" + item_id, rows: 1)
+    assert_nil item_results.first['embargo_history_ssim']
+
     # verify editing
 
     click_on I18n.t('edit')
@@ -109,6 +114,10 @@ class DepositItemTest < ApplicationSystemTestCase
     assert_selector 'h1', text: I18n.t('items.draft.header_edit')
     click_on I18n.t('items.draft.save_and_continue')
     assert_selector '#draft_item_visibility_open_access:checked'
+
+    # Ensure embargo_history is now present
+    _, item_results, _ = JupiterCore::Search.perform_solr_query(q: item_id, fq: "id:" + item_id, rows: 1)
+    assert_not_nil item_results.first['embargo_history_ssim']
 
     logout_user
   end

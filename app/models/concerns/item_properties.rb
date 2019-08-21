@@ -190,6 +190,11 @@ module ItemProperties
         # TODO: add collection_id to member_of_collections
       end
 
+      def add_to_embargo_history
+        embargo_history_item = ["An embargo was deactivated on #{Time.new}. Its release date was #{self.embargo_end_date}. Intended visibility after embargo was #{self.visibility_after_embargo}"]
+        self.embargo_history += embargo_history_item
+      end
+
       def add_communities_and_collections(communities, collections)
         return unless communities.present? && collections.present?
 

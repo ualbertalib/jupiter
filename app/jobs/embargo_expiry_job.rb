@@ -33,6 +33,7 @@ class EmbargoExpiryJob < ApplicationJob
     (item_results + thesis_results).each do |result|
       obj = JupiterCore::LockedLdpObject.reify_solr_doc(result)
       obj.unlock_and_fetch_ldp_object do |item|
+        item.add_to_embargo_history
         item.visibility = item.visibility_after_embargo
         item.embargo_end_date = nil
         item.visibility_after_embargo = nil
