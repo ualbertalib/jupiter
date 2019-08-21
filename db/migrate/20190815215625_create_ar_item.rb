@@ -20,7 +20,7 @@ class CreateArItem < ActiveRecord::Migration[5.2]
       t.string :northern_north_america_filename
       t.string :northern_north_america_item_id
       t.text :rights
-      t.string :sort_year
+      t.integer :sort_year
       t.json :embargo_history, array: true
       t.string :is_version_of
       t.json :member_of_paths, array: true
