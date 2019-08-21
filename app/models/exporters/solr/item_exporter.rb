@@ -1,4 +1,5 @@
 class Exporters::Solr::ItemExporter < Exporters::Solr::BaseExporter
+  indexed_model_name 'ArItem'
 
   index :title, role: [:search, :sort]
 
@@ -25,8 +26,6 @@ class Exporters::Solr::ItemExporter < Exporters::Solr::BaseExporter
   index :subject, role: :search
 
   index :creators, type: :json_array, role: :search
-  # copying the creator values into an un-json'd field for Metadata consumption
-  index :unordered_creators, role: :search
 
   index :contributors, role: :search
   index :created, role: [:search, :sort]

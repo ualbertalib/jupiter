@@ -67,15 +67,15 @@ class JupiterCore::DeferredSimpleSolrQuery
   #
   # A single query returning all Items and all Theses:
   #
-  #    Item.all + Thesis.all
+  #   Item.all + Thesis.all
   #
   # All items and theses belonging to a certain path:
   #
-  #    Item.where(member_of_paths: path) + Thesis.where(member_of_paths: path)
+  #   Item.where(member_of_paths: path) + Thesis.where(member_of_paths: path)
   #
   # All items belonging to path 1 and all theses belonging to path 2:
   #
-  #    Item.where(member_of_paths: path1) + Thesis.where(member_of_paths: path2)
+  #   Item.where(member_of_paths: path1) + Thesis.where(member_of_paths: path2)
   #
   # All items and theses belonging to a certain path, and a certain user:
   #
@@ -87,11 +87,11 @@ class JupiterCore::DeferredSimpleSolrQuery
   #
   # A single query returning all items belonging to two different users:
   #
-  #    Item.where(owner: user1.id) + Item.where(owner: user2.id)
+  #   Item.where(owner: user1.id) +Item.where(owner: user2.id)
   #
   # A single query returning all Theses owned by user1, and all public Items:
   #
-  #    Item.public + Thesis.where(owner: user_id)
+  #   Item.public + Thesis.where(owner: user_id)
   #
   # A single query returning all Theses owned by user1, and all public Items where both Items and Theses are in a certain path
   #

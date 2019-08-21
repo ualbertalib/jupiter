@@ -9,8 +9,6 @@ class ArCollectionTest < ActiveSupport::TestCase
   end
 
   test 'can be made into a draft' do
-    # foreign key constraints won't allow invalid user IDs to own this collection
-    User.new(id: @collection.owner, email: 'fake@1234.com', name: 'fake').save(validate: false)
 
     ar_collection = ArCollection.from_collection(@collection)
 

@@ -70,6 +70,7 @@ gem 'jbuilder' # generate JSON objects
 gem 'kaminari' # Pagination
 gem 'rack-attack' # Rate limiting
 gem 'ransack' # ActiveRecord search/filter
+gem 'uuidtools'
 gem 'voight_kampff' # bot detection
 gem 'wicked' # Multi-step wizard
 

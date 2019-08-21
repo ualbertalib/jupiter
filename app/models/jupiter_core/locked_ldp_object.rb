@@ -211,7 +211,7 @@ class JupiterCore::LockedLdpObject
   #   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
   #
   # then:
-  #   Item.solr_name_to_attribute_name('title_tesim')
+  #  Item.solr_name_to_attribute_name('title_tesim')
   #   => :title
   def self.solr_name_to_attribute_name(solr_name)
     self.solr_exporter_class.name_for_mangled_name(solr_name)
@@ -224,7 +224,7 @@ class JupiterCore::LockedLdpObject
   #   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
   #
   # then:
-  #   Item.solr_name_for(:title, role: :search)
+  #  Item.solr_exporter_class.solr_name_for(:title, role: :search)
   #   => "title_tesim"
   def self.solr_name_for(attribute_name, role:)
     attribute_metadata = self.attribute_cache[attribute_name]
@@ -256,7 +256,7 @@ class JupiterCore::LockedLdpObject
   #   has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
   #
   # then:
-  #   Item.search_term_for(:title, 'science')
+  #  Item.search_term_for(:title, 'science')
   #   => "title_tesim:science"
   def self.search_term_for(attr_name, value, role: :search)
     raise ArgumentError, "search value can't be nil" if value.nil?
@@ -274,10 +274,10 @@ class JupiterCore::LockedLdpObject
   #   has_attribute :sort_year, ::TERMS[:ual].sort_year, type: :integer, solrize_for: [:search, :range_facet]
   #
   # then:
-  #   Item.facet_term_for(:title, 'science')
+  #  Item.facet_term_for(:title, 'science')
   #   => { 'title_tesim': ['science'] }
   # or
-  #   Item.facet_term_for(:sort_year, '1999')
+  #  Item.facet_term_for(:sort_year, '1999')
   #   => {"sort_year_isi"=>{:begin=>"1999", :end=>"1999"}
   def self.facet_term_for(attr_name, value, role: :facet)
     raise ArgumentError, "search value can't be nil" if value.nil?
@@ -342,7 +342,7 @@ class JupiterCore::LockedLdpObject
   # Accepts a hash of name-value pairs to query for, and returns an Array of matching +LockedLDPObject+
   #
   # For example:
-  #   Item.where(title: 'Test upload')
+  #  Item.where(title: 'Test upload')
   def self.where(attributes)
     all.where(attributes)
   end
@@ -419,6 +419,10 @@ class JupiterCore::LockedLdpObject
   # An instance of an object's class' declared Solr exporter
   def solr_exporter
     self.class.solr_exporter_class.new(self)
+  end
+
+  def solr_exporter_class
+    self.class.solr_exporter_class
   end
 
   # The solr exporter that has been declared for a given class. nil if one has not been declared
@@ -570,7 +574,7 @@ class JupiterCore::LockedLdpObject
     def derived_af_class_name
       return AF_CLASS_PREFIX + self.to_s if self.name.present?
 
-      "AnonymousDerivedClass#{self.object_id}"
+      "#{AF_CLASS_PREFIX}AnonymousDerivedClass#{self.object_id}"
     end
 
     def unlocked(&block)

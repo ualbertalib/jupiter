@@ -15,8 +15,8 @@ class SitemapController < ApplicationController
   end
 
   def items
-    @items = Item.public
-    Rollbar.warning 'items sitemap should contain less than 50,000 targets' if @items.total_count > 50_000
+    @items = Item.public_items
+    Rollbar.warning 'items sitemap should contain less than 50,000 targets' if @items.count > 50_000
   end
 
   def theses

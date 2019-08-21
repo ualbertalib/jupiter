@@ -15,8 +15,8 @@ class SearchTest < ApplicationSystemTestCase
     # Half items have 'Fancy' in title, others have 'Nice', distributed between the two collections
     @items = 10.times.map do |i|
       if i < 5
-        Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                   owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Item #{i}",
+        Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                   owner_id: 1, title: "#{['Fancy', 'Nice'][i % 2]} Item #{i}",
                                    creators: ['Joe Blow'],
                                    created: "19#{50 + i}-11-11",
                                    languages: [CONTROLLED_VOCABULARIES[:language].english],
@@ -41,8 +41,8 @@ class SearchTest < ApplicationSystemTestCase
       end
     end
     # one more item that is CCID protected
-    item = Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_AUTHENTICATED,
-                                      owner: 1, title: 'Fancy CCID Item',
+    item = Item.new(visibility: JupiterCore::VISIBILITY_AUTHENTICATED,
+                                      owner_id: 1, title: 'Fancy CCID Item',
                                       creators: ['Joe Blow'],
                                       created: '1950-11-11',
                                       languages: [CONTROLLED_VOCABULARIES[:language].english],
@@ -64,7 +64,7 @@ class SearchTest < ApplicationSystemTestCase
     # 10 more items. these are private (some 'Fancy' some 'Nice')
     @items += 10.times.map do |i|
       if i < 5
-        Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PRIVATE,
+        Item.new(visibility: JupiterCore::VISIBILITY_PRIVATE,
                                    owner: 1, title: "#{['Fancy', 'Nice'][i % 2]} Private Item #{i + 10}",
                                    creators: ['Joe Blow'],
                                    created: "19#{70 + i}-11-11",
@@ -97,8 +97,8 @@ class SearchTest < ApplicationSystemTestCase
       collection = Collection.new_locked_ldp_object(community_id: community.id,
                                                     title: "Extra Collection #{i}", owner: 1)
                              .unlock_and_fetch_ldp_object(&:save!)
-      Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                 owner: 1, title: "Extra Item #{i}",
+      Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                 owner_id: 1, title: "Extra Item #{i}",
                                  creators: ['Joe Blow'],
                                  created: "19#{90 + i}-11-11",
                                  languages: [CONTROLLED_VOCABULARIES[:language].english],
@@ -135,7 +135,7 @@ class SearchTest < ApplicationSystemTestCase
     assert_selector 'li a', text: /4\nFancy Community\/Fancy Collection 0/
     assert_selector 'li a', text: /2\nFancy Community\/Fancy Collection 1/
     assert_selector 'div.card-header', text: I18n.t('facets.sort_year')
-    sort_year_facet = Item.solr_name_for(:sort_year, role: :range_facet)
+    sort_year_facet =Item.solr_exporter_class.solr_name_for(:sort_year, role: :range_facet)
     assert_selector "#ranges_#{sort_year_facet}_begin"
     assert_selector "#ranges_#{sort_year_facet}_end"
     assert_selector 'input.btn'

@@ -14,8 +14,8 @@ class RedirectControllerTest < ActionDispatch::IntegrationTest
                                                    fedora3_uuid: 'uuid:collection', hydra_noid: 'collection-noid')
                             .unlock_and_fetch_ldp_object(&:save!)
     @filename = 'pdf-sample.pdf'
-    @item = Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                       owner: 1, title: 'Fancy Item',
+    @item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                       owner_id: 1, title: 'Fancy Item',
                                        creators: ['Joe Blow'],
                                        created: '1950',
                                        languages: [CONTROLLED_VOCABULARIES[:language].english],
@@ -34,6 +34,7 @@ class RedirectControllerTest < ActionDispatch::IntegrationTest
         @item.add_and_ingest_files([file])
       end
     end
+
     @file_set_id = @item.files.first.fileset_uuid
   end
 
@@ -207,6 +208,7 @@ class RedirectControllerTest < ActionDispatch::IntegrationTest
     # Action: redirect#fedora3_datastream
     get '/public/view/item/uuid:item/DS2/pdf-sample.pdf'
     assert_response :moved_permanently
+
     assert_redirected_to file_view_item_url(
       id: @item.id,
       file_set_id: @file_set_id,

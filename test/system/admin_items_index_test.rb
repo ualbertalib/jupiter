@@ -14,7 +14,7 @@ class AdminItemsIndexTest < ApplicationSystemTestCase
                            .unlock_and_fetch_ldp_object(&:save!)
 
     # Two things owned by regular user
-    Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
+    Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                owner: user.id, title: 'Fancy Item',
                                creators: ['Joe Blow'],
                                created: 'Fall 2017',
@@ -37,7 +37,7 @@ class AdminItemsIndexTest < ApplicationSystemTestCase
     end
 
     # One item owned by admin
-    Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
+    Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                owner: admin.id, title: 'Admin Item',
                                creators: ['Joe Blow'],
                                created: 'Winter 2017',

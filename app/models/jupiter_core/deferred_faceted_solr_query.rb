@@ -92,7 +92,7 @@ class JupiterCore::DeferredFacetedSolrQuery
               JupiterCore::LockedLdpObject.reify_solr_doc(res)
             else
               # TODO: This is inefficient and we should look at batching up IDs once Fedora is gone and I can change this a bit
-              arclass = res['has_model_ssim'].first.constantize
+              arclass = res['has_model_ssim'].first.sub(/^Ar/, '').constantize
               arclass.find(res['id'])
             end
       yield(obj)

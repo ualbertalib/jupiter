@@ -103,7 +103,8 @@ class JupiterCore::Search
     model_scopes = []
 
     restrict_to_model.compact.each do |model|
-      model_scopes << %Q(_query_:"{!raw f=has_model_ssim}#{model.name}")
+      model_name = model_to_name(model)
+      model_scopes << %Q(_query_:"{!raw f=has_model_ssim}#{model_name}")
     end
     fquery = []
     fquery << "(#{model_scopes.join(' OR ')})" if model_scopes.present?
@@ -156,6 +157,14 @@ class JupiterCore::Search
         model.solr_exporter_class.facets
       end.flatten.uniq
       user&.admin? ? facets : facets.reject { |f| f == visibility_facet }
+    end
+
+    def model_to_name(model)
+      if model.name.start_with?('IR')
+        model.name
+      else
+        "Ar#{model.name}"
+      end
     end
 
   end

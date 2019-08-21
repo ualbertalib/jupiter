@@ -13,7 +13,7 @@ class User < ApplicationRecord
   validates :name, presence: true
 
   def items
-    Item.where(owner: id)
+   Item.where(owner_id: id)
   end
 
   def update_activity!(now, remote_ip, sign_in: false)

@@ -82,7 +82,7 @@ class DepositItemTest < ApplicationSystemTestCase
     # Success! Deposit Successful
 
     assert_text I18n.t('items.draft.successful_deposit')
-    assert_selector 'h1', text: Item.last.title
+    assert_selector 'h1', text:Item.last.title
 
     # verify editing
 

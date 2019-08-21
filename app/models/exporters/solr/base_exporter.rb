@@ -43,6 +43,30 @@ class Exporters::Solr::BaseExporter
     solr_doc
   end
 
+  def search_term_for(attr)
+    self.class.search_term_for(attr, @export_object.send(attr))
+  end
+
+  def self.search_term_for(attr, value, role: :search)
+    raise ArgumentError, "search value can't be nil" if value.nil?
+
+    solr_attr_name = self.solr_name_for(attr_name, role: role)
+    %Q(#{solr_attr_name}:"#{value}")
+  end
+
+  def facet_term_for(attr_name)
+    self.class.facet_term_for(attr_name, @export_object.send(attr_name))
+  end
+
+  def self.facet_term_for(attr_name, value, role: :facet)
+    raise ArgumentError, "search value can't be nil" if value.nil?
+
+    solr_attr_name = solr_name_for(attr_name, role: role)
+    return { solr_attr_name => { begin: value, end: value } } if role == :range_facet
+
+    { solr_attr_name => [value].flatten }
+  end
+
   # basic information lookups leveraged by various pieces of our ActiveFedora wrapper and
   # search infrastructure
   def self.solr_type_for(name)
@@ -98,6 +122,10 @@ class Exporters::Solr::BaseExporter
     name_to_custom_lambda_map.keys
   end
 
+  def self.indexed_has_model_name
+    @indexed_model_name
+  end
+
   protected
 
   # provide a consistent representation of values in Solr, based on what we were doing previously with solrizer
@@ -142,6 +170,10 @@ class Exporters::Solr::BaseExporter
                   :facets, :ranges, :default_sort_direction, :default_sort_indexes
 
     protected
+
+    def indexed_model_name(name)
+      @indexed_model_name = name
+    end
 
     # the basic DSL for declaring Solr indexes who will take their contents from attributes
     # declared on the objects we will export
@@ -240,7 +272,7 @@ class Exporters::Solr::BaseExporter
           if object.class < JupiterCore::LockedLdpObject
             object.class.send(:derived_af_class)
           else
-            object.class.to_s
+            @indexed_model_name
           end
         }
 

@@ -59,7 +59,6 @@ class SearchTest < ActiveSupport::TestCase
     a_private_object.unlock_and_fetch_ldp_object(&:save!)
 
     search_results = JupiterCore::Search.faceted_search(models: @@klass, q: '')
-
     assert search_results.count == 2
 
     search_results.each do |res|

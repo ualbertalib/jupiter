@@ -8,10 +8,10 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
                                                  owner: 1)
     @community.unlock_and_fetch_ldp_object(&:save!)
     @collection = Collection.new_locked_ldp_object(community_id: @community.id,
-                                                   title: 'Collection', owner: 1).unlock_and_fetch_ldp_object(&:save!)
+                                                 title: 'Collection', owner: 1).unlock_and_fetch_ldp_object(&:save!)
 
-    @item1 = Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                        owner: 1, title: 'Ant',
+    @item1 = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                        owner_id: 1, title: 'Ant',
                                         creators: ['Joe Blow'],
                                         created: '1000000 BC',
                                         languages: [CONTROLLED_VOCABULARIES[:language].english],
@@ -23,8 +23,8 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
       uo.save!
     end
 
-    @item2 = Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                        owner: 1, title: 'Moose',
+    @item2 = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                        owner_id: 1, title: 'Moose',
                                         creators: ['Joe Blow'],
                                         created: '1000000 BC',
                                         languages: [CONTROLLED_VOCABULARIES[:language].english],
@@ -36,8 +36,8 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
       uo.save!
     end
 
-    @item3 = Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                        owner: 1, title: 'Zebra',
+    @item3 = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                        owner_id: 1, title: 'Zebra',
                                         creators: ['Joe Blow'],
                                         created: '1000000 BC',
                                         languages: [CONTROLLED_VOCABULARIES[:language].english],
@@ -49,8 +49,8 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
       uo.save!
     end
 
-    @item4 = Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                        owner: 1, title: 'Ant Moose Mouse',
+    @item4 = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                        owner_id: 1, title: 'Ant Moose Mouse',
                                         creators: ['Joe Blow'],
                                         created: '1000000 BC',
                                         languages: [CONTROLLED_VOCABULARIES[:language].english],
@@ -62,8 +62,8 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
       uo.save!
     end
 
-    @item5 = Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                        owner: 1, title: 'Moose Ant',
+    @item5 = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                        owner_id: 1, title: 'Moose Ant',
                                         creators: ['Joe Blow'],
                                         created: '1000000 BC',
                                         languages: [CONTROLLED_VOCABULARIES[:language].english],

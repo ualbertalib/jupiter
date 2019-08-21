@@ -34,7 +34,11 @@ class ItemDoiState < ApplicationRecord
   end
 
   def item
-    JupiterCore::LockedLdpObject.find(item_id, types: [Item, Thesis])
+    begin
+      Item.find(item_id)
+    rescue ActiveRecord::RecordNotFound
+      Thesis.find(item_id)
+    end
   end
 
   def withdraw_doi

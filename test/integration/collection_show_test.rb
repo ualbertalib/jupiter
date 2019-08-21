@@ -7,12 +7,11 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
 
   def before_all
     super
-
     @community = locked_ldp_fixture(Community, :nice).unlock_and_fetch_ldp_object(&:save!)
     @collection = locked_ldp_fixture(Collection, :nice).unlock_and_fetch_ldp_object(&:save!)
     @items = ['Fancy', 'Nice'].map do |adjective|
-      Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                 owner: 1,
+      Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                 owner_id: 1,
                                  creators: ['Joe Blow'],
                                  created: '1953-04-01',
                                  languages: [CONTROLLED_VOCABULARIES[:language].english],

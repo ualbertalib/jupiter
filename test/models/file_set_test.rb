@@ -32,7 +32,16 @@ class FileSetTest < ActiveSupport::TestCase
     collection = Collection.new_locked_ldp_object(title: 'foo', owner: users(:regular).id,
                                                   community_id: community.id).unlock_and_fetch_ldp_object(&:save!)
 
-    item = locked_ldp_fixture(Item, :random)
+    item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                               owner_id: 1, title: 'Fancy Item',
+                                               creators: ['Joe Blow'],
+                                               created: '1938-01-02',
+                                               languages: [CONTROLLED_VOCABULARIES[:language].english],
+                                               item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                                               publication_status:
+                                               [CONTROLLED_VOCABULARIES[:publication_status].published],
+                                               license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                                               subject: ['Items'])
     item.unlock_and_fetch_ldp_object do |unlocked_item|
       unlocked_item.add_to_path(community.id, collection.id)
       unlocked_item.save!
@@ -43,13 +52,10 @@ class FileSetTest < ActiveSupport::TestCase
     file_set = nil
     # we need to call this deprecated method to verify the model is working
     ActiveSupport::Deprecation.silence do
-      file_set = item.file_sets.first
+      file_set = item.files.first
     end
     assert_not file_set.nil?
-    assert_equal file_set.contained_filename, 'image-sample.jpeg'
-    file_set.unlock_and_fetch_ldp_object do |unlocked_fileset|
-      assert unlocked_fileset.original_file.uri =~ /http.*fcrepo\/rest\/.*#{file_set.id}\/files\/.*/
-    end
+    assert_equal file_set.blob.filename.to_s, 'image-sample.jpeg'
 
     item.set_thumbnail(item.files.first)
     assert item.thumbnail_url.present?

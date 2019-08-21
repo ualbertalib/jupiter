@@ -9,7 +9,16 @@ class SitemapTest < ActionDispatch::IntegrationTest
     @collection = Collection.new_locked_ldp_object(community_id: @community.id,
                                                    title: 'Fancy Collection', owner: 1)
                             .unlock_and_fetch_ldp_object(&:save!)
-    @item = locked_ldp_fixture(Item, :fancy).unlock_and_fetch_ldp_object do |uo|
+    @item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                               owner_id: 1, title: 'Fancy Item',
+                                               creators: ['Joe Blow'],
+                                               created: '1938-01-02',
+                                               languages: [CONTROLLED_VOCABULARIES[:language].english],
+                                               item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                                               publication_status:
+                                               [CONTROLLED_VOCABULARIES[:publication_status].published],
+                                               license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                                               subject: ['Items']).unlock_and_fetch_ldp_object do |uo|
       uo.add_to_path(@community.id, @collection.id)
       uo.save!
     end
@@ -31,8 +40,8 @@ class SitemapTest < ActionDispatch::IntegrationTest
                       uo.save!
                     end
     # 1 more item. this is private
-    @private_item = Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PRIVATE,
-                                               owner: 1, title: 'Fancy Private Item',
+    @private_item = Item.new(visibility: JupiterCore::VISIBILITY_PRIVATE,
+                                               owner_id: 1, title: 'Fancy Private Item',
                                                creators: ['Joe Blow'],
                                                created: '1983-11-11',
                                                languages: [CONTROLLED_VOCABULARIES[:language].english],

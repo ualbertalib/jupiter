@@ -8,7 +8,7 @@ class ItemEditTest < ApplicationSystemTestCase
     community = locked_ldp_fixture(Community, :fancy).unlock_and_fetch_ldp_object(&:save!)
     collection = locked_ldp_fixture(Collection, :fancy).unlock_and_fetch_ldp_object(&:save!)
 
-    item = Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
+    item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                       title: 'Book of Random',
                                       item_type: CONTROLLED_VOCABULARIES[:item_type].book,
                                       languages: [CONTROLLED_VOCABULARIES[:language].english],
@@ -19,7 +19,7 @@ class ItemEditTest < ApplicationSystemTestCase
                                       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
                                       contributors: ['Sue Flowers', 'Jonny Green'])
                .unlock_and_fetch_ldp_object do |uo|
-      uo.owner = user.id
+      uo.owner = user
       uo.add_to_path(community.id, collection.id)
       uo.save!
     end
