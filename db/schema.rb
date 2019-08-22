@@ -50,6 +50,7 @@ ActiveRecord::Schema.define(version: 2019_08_26_221814) do
   end
 
   create_table "ar_collections", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid "collection_id"
     t.string "visibility"
     t.bigint "owner_id", null: false
     t.datetime "record_created_at"
@@ -64,6 +65,8 @@ ActiveRecord::Schema.define(version: 2019_08_26_221814) do
     t.boolean "restricted", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "is_published_in_era", default: false
+    t.index ["depositor_id"], name: "index_ar_collections_on_depositor_id"
     t.index ["owner_id"], name: "index_ar_collections_on_owner_id"
   end
 
@@ -83,6 +86,7 @@ ActiveRecord::Schema.define(version: 2019_08_26_221814) do
     t.boolean "restricted", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "is_published_in_era", default: false
     t.index ["depositor_id"], name: "index_draft_collections_on_depositor_id"
     t.index ["owner_id"], name: "index_ar_communities_on_owner_id"
   end
@@ -329,7 +333,9 @@ ActiveRecord::Schema.define(version: 2019_08_26_221814) do
   end
 
   add_foreign_key "announcements", "users"
+  add_foreign_key "ar_collections", "users", column: "depositor_id"
   add_foreign_key "ar_collections", "users", column: "owner_id"
+  add_foreign_key "ar_communities", "users", column: "depositor_id"
   add_foreign_key "ar_communities", "users", column: "owner_id"
   add_foreign_key "ar_items", "active_storage_attachments", column: "logo_id"
   add_foreign_key "ar_items", "users", column: "owner_id"

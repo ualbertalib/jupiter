@@ -1,5 +1,7 @@
 class ArCollection < ApplicationRecord
 
+  scope :drafts, -> { where(is_published_in_era: false).or(where(is_published_in_era: nil)) }
+
   acts_as_rdfable do |config|
     config.community_id has_predicate: ::TERMS[:ual].path
     config.description has_predicate: ::RDF::Vocab::DC.description
@@ -7,26 +9,32 @@ class ArCollection < ApplicationRecord
     config.creators has_predicate: ::RDF::Vocab::DC.creator
   end
 
-  def self.from_collection(collection)
-    if ArCollection.find_by(id: collection.id).present?
-      raise ArgumentError, "Collection #{collection.id} already migrated"
-    end
+  def update_from_fedora_collection(collection, _for_user)
+    attributes = {
+      collection_id: collection.id,
+      visibility: collection.visibility,
+      owner_id: collection.owner,
+      record_created_at: collection.record_created_at,
+      hydra_noid: collection.hydra_noid,
+      date_ingested: collection.date_ingested,
+      title: collection.title,
+      fedora3_uuid: collection.fedora3_uuid,
+      depositor_id: collection.depositor,
+      community_id: collection.community_id,
+      description: collection.description,
+      creators: collection.creators,
+      restricted: (collection.restricted || false)
+    }
+    assign_attributes(attributes)
+    save(validate: false)
+  end
 
-    ar_collection = ArCollection.new(id: collection.id)
+  def self.from_collection(collection, for_user:)
+    new_ar_collection = ArCollection.drafts.find_by(collection_id: collection.id)
+    new_ar_collection ||= ArCollection.drafts.new(collection_id: collection.id)
 
-    # this is named differently in ActiveFedora
-    ar_collection.owner_id = collection.owner
-
-    attributes = ar_collection.attributes.keys.reject { |k| ['owner_id', 'created_at', 'updated_at'].include?(k) }
-
-    attributes.each do |attr|
-      ar_collection.send("#{attr}=", collection.send(attr))
-    end
-
-    # unconditionally save. If something doesn't pass validations in ActiveFedora, it still needs to come here
-    ar_collection.restricted ||= false
-    ar_collection.save(validate: false)
-    ar_collection
+    new_ar_collection.update_from_fedora_collection(collection, for_user)
+    new_ar_collection
   end
 
 end

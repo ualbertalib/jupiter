@@ -12,11 +12,10 @@ class ArCommunityTest < ActiveSupport::TestCase
     # foreign key constraints won't allow invalid user IDs to own this collection
     User.new(id: @community.owner, email: 'fake@1234.com', name: 'fake').save(validate: false)
 
-    ar_collection = ArCommunity.from_community(@community)
+    draft_community = ArCommunity.from_community(@community, for_user: users(:admin))
 
-    assert ar_collection.persisted?
-    assert_equal @community.id, ar_collection.id
-    assert_equal @community.description, ar_collection.description
+    assert draft_community.persisted?
+    assert_equal @community.id, draft_community.community_id
+    assert_equal @community.description, draft_community.description
   end
-
 end
