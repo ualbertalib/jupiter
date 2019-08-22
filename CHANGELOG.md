@@ -6,8 +6,11 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+## [1.2.17] - 2019-08-21
+
 ### Security
 - add omniauth-rails_csrf_protection gem and only use post requests to mitigate [CVE-2015-9284](https://nvd.nist.gov/vuln/detail/CVE-2015-9284) [PR#1221](https://github.com/ualbertalib/jupiter/pull/1221)
+- Bump nokogiri from 1.10.3 to 1.10.4 [PR#1243](https://github.com/ualbertalib/jupiter/pull/1243)
 
 ### Changed
 - bump rubocop-performance from 1.4.0 to 1.4.1 and use match? instead of =~ [PR#1226](https://github.com/ualbertalib/jupiter/pull/1226)
