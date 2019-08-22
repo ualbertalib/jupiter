@@ -39,7 +39,7 @@ class CreateArThesis < ActiveRecord::Migration[5.2]
       t.string :specialization
       t.json :departments, array: true
       t.json :supervisors, array: true
-      t.json :comittee_members, array: true
+      t.json :committee_members, array: true
       t.timestamps
     end
   end

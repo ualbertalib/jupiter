@@ -108,7 +108,7 @@ class ArItem < ApplicationRecord
   end
 
   def self.from_item(item)
-    raise ArgumentError, "Item #{id} already migrated to ActiveRecord" if ArItem.find_by(id: item.id) != nil
+    raise ArgumentError, "Item #{item.id} already migrated to ActiveRecord" if ArItem.find_by(id: item.id) != nil
 
     ar_item = ArItem.new
 

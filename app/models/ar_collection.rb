@@ -9,7 +9,7 @@ class ArCollection < ApplicationRecord
     config.creators has_predicate: ::RDF::Vocab::DC.creator
   end
 
-  def update_from_fedora_collection(collection, _for_user)
+  def update_from_fedora_collection(collection)
     attributes = {
       collection_id: collection.id,
       visibility: collection.visibility,
@@ -29,11 +29,11 @@ class ArCollection < ApplicationRecord
     save(validate: false)
   end
 
-  def self.from_collection(collection, for_user:)
+  def self.from_collection(collection)
     new_ar_collection = ArCollection.drafts.find_by(collection_id: collection.id)
     new_ar_collection ||= ArCollection.drafts.new(collection_id: collection.id)
 
-    new_ar_collection.update_from_fedora_collection(collection, for_user)
+    new_ar_collection.update_from_fedora_collection(collection)
     new_ar_collection
   end
 
