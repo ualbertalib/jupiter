@@ -166,7 +166,7 @@ ActiveRecord::Schema.define(version: 2019_08_22_183423) do
     t.string "specialization"
     t.json "departments", array: true
     t.json "supervisors", array: true
-    t.json "comittee_members", array: true
+    t.json "committee_members", array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["owner_id"], name: "index_ar_theses_on_owner_id"

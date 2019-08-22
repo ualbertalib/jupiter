@@ -7,7 +7,7 @@ class ArCommunity < ApplicationRecord
     config.creators has_predicate: ::RDF::Vocab::DC.creator
   end
 
-  def update_from_fedora_community(community, _for_user)
+  def update_from_fedora_community(community)
     attributes = {
       community_id: community.id,
       visibility: community.visibility,
@@ -25,11 +25,11 @@ class ArCommunity < ApplicationRecord
     save(validate: false)
   end
 
-  def self.from_community(community, for_user:)
+  def self.from_community(community)
     new_ar_community = ArCommunity.drafts.find_by(community_id: community.id)
     new_ar_community ||= ArCommunity.drafts.new(community_id: community.id)
 
-    new_ar_community.update_from_fedora_community(community, for_user)
+    new_ar_community.update_from_fedora_community(community)
     new_ar_community
   end
 

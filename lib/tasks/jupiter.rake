@@ -51,6 +51,25 @@ namespace :jupiter do
     puts 'done!'
   end
 
+  desc 'sayonara ActiveFedora'
+  task get_me_off_of_fedora: :environment do
+    puts 'Migrating Communities...'
+
+    Community.all.each { |community| ArCommunity.from_community(community) }
+
+    puts 'Migrating Collections...'
+
+    Collection.all.each { |collection| ArCollection.from_collection(collection) }
+
+    puts 'Migrating Items...'
+
+    Item.all.each { |item| ArItem.from_item(item) }
+
+    puts 'Migrating Theses...'
+
+    Thesis.all.each { |thesis| ArThesis.from_thesis(thesis) }
+  end
+
   desc 'turn existing filesets into attachments'
   task migrate_filesets: :environment do
     total_count = Item.count + Thesis.count
