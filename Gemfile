@@ -53,7 +53,7 @@ gem 'pundit', '1.1.0'
 # Background tasks
 gem 'sidekiq', '~> 5.2'
 gem 'sidekiq-unique-jobs'
-gem 'sinatra', '~> 2.0.5' # used by sidekiq/web
+gem 'sinatra', '~> 2.0.7' # used by sidekiq/web
 # Sidekiq cron jobs
 gem 'rufus-scheduler', '3.6.0' # https://github.com/ondrejbartas/sidekiq-cron/issues/199
 gem 'sidekiq-cron'
