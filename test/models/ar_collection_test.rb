@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class DraftCollectionTest < ActiveSupport::TestCase
+class ArCollectionTest < ActiveSupport::TestCase
 
   def before_all
     super
@@ -12,7 +12,7 @@ class DraftCollectionTest < ActiveSupport::TestCase
     # foreign key constraints won't allow invalid user IDs to own this collection
     User.new(id: @collection.owner, email: 'fake@1234.com', name: 'fake').save(validate: false)
 
-    draft_collection = DraftCollection.from_collection(@collection, for_user: users(:admin))
+    draft_collection = ArCollection.from_collection(@collection, for_user: users(:admin))
 
     assert draft_collection.persisted?
     assert_equal @collection.id, draft_collection.collection_id

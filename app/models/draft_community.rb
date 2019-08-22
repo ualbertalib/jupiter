@@ -1,4 +1,4 @@
-class DraftCommunity < ApplicationRecord
+class ArCommunity < ApplicationRecord
 
   scope :drafts, -> { where(is_published_in_era: false).or(where(is_published_in_era: nil)) }
 
@@ -8,7 +8,7 @@ class DraftCommunity < ApplicationRecord
   end
 
   def update_from_fedora_community(community, _for_user)
-    draft_attributes = {
+    attributes = {
       community_id: community.id,
       visibility: community.visibility,
       owner_id: community.owner,
@@ -21,16 +21,16 @@ class DraftCommunity < ApplicationRecord
       description: community.description,
       creators: community.creators
     }
-    assign_attributes(draft_attributes)
+    assign_attributes(attributes)
     save(validate: false)
   end
 
   def self.from_community(community, for_user:)
-    draft = DraftCommunity.drafts.find_by(community_id: community.id)
-    draft ||= DraftCommunity.drafts.new(community_id: community.id)
+    new_ar_community = ArCommunity.drafts.find_by(community_id: community.id)
+    new_ar_community ||= ArCommunity.drafts.new(community_id: community.id)
 
-    draft.update_from_fedora_community(community, for_user)
-    draft
+    new_ar_community.update_from_fedora_community(community, for_user)
+    new_ar_community
   end
 
 end

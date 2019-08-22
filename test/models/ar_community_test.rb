@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class DraftCommunityTest < ActiveSupport::TestCase
+class ArCommunityTest < ActiveSupport::TestCase
 
   def before_all
     super
@@ -12,7 +12,7 @@ class DraftCommunityTest < ActiveSupport::TestCase
     # foreign key constraints won't allow invalid user IDs to own this collection
     User.new(id: @community.owner, email: 'fake@1234.com', name: 'fake').save(validate: false)
 
-    draft_community = DraftCommunity.from_community(@community, for_user: users(:admin))
+    draft_community = ArCommunity.from_community(@community, for_user: users(:admin))
 
     assert draft_community.persisted?
     assert_equal @community.id, draft_community.community_id

@@ -1,4 +1,4 @@
-class DraftCollection < ApplicationRecord
+class ArCollection < ApplicationRecord
 
   scope :drafts, -> { where(is_published_in_era: false).or(where(is_published_in_era: nil)) }
 
@@ -10,7 +10,7 @@ class DraftCollection < ApplicationRecord
   end
 
   def update_from_fedora_collection(collection, _for_user)
-    draft_attributes = {
+    attributes = {
       collection_id: collection.id,
       visibility: collection.visibility,
       owner_id: collection.owner,
@@ -25,16 +25,16 @@ class DraftCollection < ApplicationRecord
       creators: collection.creators,
       restricted: (collection.restricted || false)
     }
-    assign_attributes(draft_attributes)
+    assign_attributes(attributes)
     save(validate: false)
   end
 
   def self.from_collection(collection, for_user:)
-    draft = DraftCollection.drafts.find_by(collection_id: collection.id)
-    draft ||= DraftCollection.drafts.new(collection_id: collection.id)
+    new_ar_collection = ArCollection.drafts.find_by(collection_id: collection.id)
+    new_ar_collection ||= ArCollection.drafts.new(collection_id: collection.id)
 
-    draft.update_from_fedora_collection(collection, for_user)
-    draft
+    new_ar_collection.update_from_fedora_collection(collection, for_user)
+    new_ar_collection
   end
 
 end
