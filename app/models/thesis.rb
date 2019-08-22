@@ -79,9 +79,7 @@ class Thesis < JupiterCore::LockedLdpObject
         unlocked_obj.embargo_end_date = draft_thesis.embargo_end_date
       else
         # If visibility was previously embargo but not anymore
-        if unlocked_obj.visibility == CONTROLLED_VOCABULARIES[:visibility].embargo
-          unlocked_obj.add_to_embargo_history
-        end
+        unlocked_obj.add_to_embargo_history if unlocked_obj.visibility == CONTROLLED_VOCABULARIES[:visibility].embargo
         unlocked_obj.visibility_after_embargo = nil
         unlocked_obj.embargo_end_date = nil
       end

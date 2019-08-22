@@ -191,7 +191,8 @@ module ItemProperties
       end
 
       def add_to_embargo_history
-        embargo_history_item = ["An embargo was deactivated on #{Time.new}. Its release date was #{self.embargo_end_date}. Intended visibility after embargo was #{self.visibility_after_embargo}"]
+        embargo_history_item = ["An embargo was deactivated on #{Time.now.getlocal('-06:00')}. Its release date was " \
+        "#{embargo_end_date}. Intended visibility after embargo was #{visibility_after_embargo}"]
         self.embargo_history += embargo_history_item
       end
 
