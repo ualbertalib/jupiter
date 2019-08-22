@@ -13,7 +13,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Ruby 2.5 to travis ci testing matrix [PR#1040](https://github.com/ualbertalib/jupiter/pull/1040)
 - Added missing contoller tests [#865](https://github.com/ualbertalib/jupiter/issues/865)
 - Dependency on ActsAsRdfable for annotating ActiveRecord classes with RDF predicates
-- DraftCollection and DraftCommunity models for further migration work
+- ArCollection and ArCommunity models for further migration work
 
 ### Changed
 - DeferredSimpleSolrQuery#sort renamed to 'order' and its two arguments replaced with a key-value, to better align with ActiveRecord
