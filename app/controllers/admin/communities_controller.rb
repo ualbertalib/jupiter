@@ -45,8 +45,8 @@ class Admin::CommunitiesController < Admin::AdminController
 
   def create
     @community =
-      Community.new_locked_ldp_object(permitted_attributes(Community)
-                                       .merge(owner: current_user&.id))
+      Community.new(permitted_attributes(Community)
+                                       .merge(owner_id: current_user&.id))
 
     @community.logo.attach(params[:community][:logo]) if params[:community][:logo].present?
 

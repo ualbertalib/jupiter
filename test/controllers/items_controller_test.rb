@@ -3,12 +3,12 @@ require 'test_helper'
 class ItemsControllerTest < ActionDispatch::IntegrationTest
 
   def setup
-    @community = Community.new_locked_ldp_object(title: 'Desolate community',
-                                                 owner: 1)
+    @community = Community.new(title: 'Desolate community',
+                                                 owner_id: 1)
     @community.unlock_and_fetch_ldp_object(&:save!)
-    @collection = Collection.new_locked_ldp_object(community_id: @community.id,
+    @collection = Collection.new(community_id: @community.id,
                                                    title: 'Desolate collection',
-                                                   owner: 1)
+                                                   owner_id: 1)
     @collection.unlock_and_fetch_ldp_object(&:save!)
 
     @item = Item.new(
@@ -26,9 +26,9 @@ class ItemsControllerTest < ActionDispatch::IntegrationTest
       unlocked_item.save!
     end
 
-    @thesis = Thesis.new_locked_ldp_object(
+    @thesis = Thesis.new(
       title: 'thesis to edit',
-      owner: 1,
+      owner_id: 1,
       dissertant: 'Joe Blow',
       graduation_date: '2017-03-31',
       visibility: ItemProperties::VISIBILITY_EMBARGO,

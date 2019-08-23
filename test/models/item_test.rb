@@ -3,10 +3,10 @@ require 'test_helper'
 class ItemTest < ActiveSupport::TestCase
 
   test 'a valid item can be constructed' do
-    community = Community.new_locked_ldp_object(title: 'Community', owner: 1,
+    community = Community.new(title: 'Community', owner_id: 1,
                                                 visibility: JupiterCore::VISIBILITY_PUBLIC)
     community.unlock_and_fetch_ldp_object(&:save!)
-    collection = Collection.new_locked_ldp_object(title: 'Collection', owner: 1,
+    collection = Collection.new(title: 'Collection', owner_id: 1,
                                                   visibility: JupiterCore::VISIBILITY_PUBLIC,
                                                   community_id: community.id)
     collection.unlock_and_fetch_ldp_object(&:save!)
@@ -322,8 +322,8 @@ class ItemTest < ActiveSupport::TestCase
     Redis.current.del Rails.application.secrets.preservation_queue_name
 
     # Setup an item...
-    community = Community.new_locked_ldp_object(title: 'Community', owner: 1).unlock_and_fetch_ldp_object(&:save!)
-    collection = Collection.new_locked_ldp_object(title: 'foo', owner: users(:regular).id,
+    community = Community.new(title: 'Community', owner_id: 1).unlock_and_fetch_ldp_object(&:save!)
+    collection = Collection.new(title: 'foo', owner_id: users(:regular).id,
                                                   community_id: community.id).unlock_and_fetch_ldp_object(&:save!)
 
     item = Item.new(title: generate_random_string,
@@ -358,8 +358,8 @@ class ItemTest < ActiveSupport::TestCase
     Redis.current.del Rails.application.secrets.preservation_queue_name
 
     # Setup an item...
-    community = Community.new_locked_ldp_object(title: 'Community', owner: 1).unlock_and_fetch_ldp_object(&:save!)
-    collection = Collection.new_locked_ldp_object(title: 'foo', owner: users(:regular).id,
+    community = Community.new(title: 'Community', owner_id: 1).unlock_and_fetch_ldp_object(&:save!)
+    collection = Collection.new(title: 'foo', owner_id: users(:regular).id,
                                                   community_id: community.id).unlock_and_fetch_ldp_object(&:save!)
 
     item = Item.new(title: generate_random_string,
@@ -404,8 +404,8 @@ class ItemTest < ActiveSupport::TestCase
     Redis.current.del Rails.application.secrets.preservation_queue_name
 
     # Setup some items...
-    community = Community.new_locked_ldp_object(title: 'Community', owner: 1).unlock_and_fetch_ldp_object(&:save!)
-    collection = Collection.new_locked_ldp_object(title: 'foo', owner: users(:regular).id,
+    community = Community.new(title: 'Community', owner_id: 1).unlock_and_fetch_ldp_object(&:save!)
+    collection = Collection.new(title: 'foo', owner_id: users(:regular).id,
                                                   community_id: community.id).unlock_and_fetch_ldp_object(&:save!)
     items = []
     3.times do

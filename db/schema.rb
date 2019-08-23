@@ -57,9 +57,9 @@ ActiveRecord::Schema.define(version: 2019_08_26_221814) do
     t.bigint "logo_id"
   end
 
-  create_table "ar_collections", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+  create_table "collections", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.uuid "collection_id"
-    t.string "visibility"
+    t.integer "visibility"
     t.bigint "owner_id", null: false
     t.datetime "record_created_at"
     t.string "hydra_noid"
@@ -75,10 +75,10 @@ ActiveRecord::Schema.define(version: 2019_08_26_221814) do
     t.datetime "updated_at", null: false
     t.boolean "is_published_in_era", default: false
     t.index ["depositor_id"], name: "index_ar_collections_on_depositor_id"
-    t.index ["owner_id"], name: "index_ar_collections_on_owner_id"
+    t.index ["owner_id"], name: "index_collections_on_owner_id"
   end
 
-  create_table "ar_communities", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+  create_table "communities", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.uuid "collection_id"
     t.string "visibility"
     t.bigint "owner_id", null: false
@@ -187,7 +187,7 @@ ActiveRecord::Schema.define(version: 2019_08_26_221814) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["logo_id"], name: "index_ar_theses_on_logo_id"
-    t.index ["owner_id"], name: "index_ar_theses_on_owner_id"
+    t.index ["owner_id"], name: "index_communities_on_owner_id"
   end
 
   create_table "attachment_shims", force: :cascade do |t|
@@ -358,6 +358,49 @@ ActiveRecord::Schema.define(version: 2019_08_26_221814) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "theses", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.string "visibility"
+    t.bigint "owner_id", null: false
+    t.datetime "record_created_at"
+    t.string "hydra_noid"
+    t.datetime "date_ingested"
+    t.string "title"
+    t.string "fedora3_uuid"
+    t.string "depositor"
+    t.string "alternative_title"
+    t.string "doi"
+    t.datetime "embargo_end_date"
+    t.string "visibility_after_embargo"
+    t.string "fedora3_handle"
+    t.string "ingest_batch"
+    t.string "northern_north_america_filename"
+    t.string "northern_north_america_item_id"
+    t.text "rights"
+    t.integer "sort_year"
+    t.json "embargo_history", array: true
+    t.string "is_version_of"
+    t.json "member_of_paths", array: true
+    t.json "subject", array: true
+    t.text "abstract"
+    t.string "language"
+    t.datetime "date_accepted"
+    t.datetime "date_submitted"
+    t.string "degree"
+    t.string "institution"
+    t.string "dissertant"
+    t.string "graduation_date"
+    t.string "thesis_level"
+    t.string "proquest"
+    t.string "unicorn"
+    t.string "specialization"
+    t.json "departments", array: true
+    t.json "supervisors", array: true
+    t.json "committee_members", array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["owner_id"], name: "index_theses_on_owner_id"
+  end
+
   create_table "types", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
@@ -383,16 +426,18 @@ ActiveRecord::Schema.define(version: 2019_08_26_221814) do
 
   add_foreign_key "announcements", "users"
   add_foreign_key "ar_collections", "users", column: "depositor_id"
-  add_foreign_key "ar_collections", "users", column: "owner_id"
+  add_foreign_key "collections", "users", column: "owner_id"
   add_foreign_key "ar_communities", "users", column: "depositor_id"
   add_foreign_key "ar_communities", "users", column: "owner_id"
   add_foreign_key "ar_items", "active_storage_attachments", column: "logo_id"
   add_foreign_key "ar_items", "users", column: "owner_id"
   add_foreign_key "ar_theses", "active_storage_attachments", column: "logo_id"
   add_foreign_key "ar_theses", "users", column: "owner_id"
+  add_foreign_key "communities", "users", column: "owner_id"
   add_foreign_key "draft_items", "users"
   add_foreign_key "draft_theses", "institutions"
   add_foreign_key "draft_theses", "languages"
   add_foreign_key "draft_theses", "users"
   add_foreign_key "items", "users", column: "owner_id"
+  add_foreign_key "theses", "users", column: "owner_id"
 end

@@ -6,8 +6,8 @@ class ProfileControllerTest < ActionDispatch::IntegrationTest
     super
     @community = locked_ldp_fixture(Community, :books).unlock_and_fetch_ldp_object(&:save!)
     @item_collection = locked_ldp_fixture(Collection, :books).unlock_and_fetch_ldp_object(&:save!)
-    @theses_collection = Collection.new_locked_ldp_object(title: 'Thesis collection',
-                                                          owner: 1,
+    @theses_collection = Collection.new(title: 'Thesis collection',
+                                                          owner_id: 1,
                                                           restricted: true,
                                                           community_id: @community.id)
                                    .unlock_and_fetch_ldp_object(&:save!)

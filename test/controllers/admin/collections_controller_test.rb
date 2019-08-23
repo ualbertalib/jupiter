@@ -63,10 +63,10 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should destroy collection if has no items' do
-    collection = Collection.new_locked_ldp_object(
+    collection = Collection.new(
       community_id: @community.id,
       title: 'Nice collection',
-      owner: 1
+      owner_id: 1
     ).unlock_and_fetch_ldp_object(&:save!)
 
     assert_difference('Collection.count', -1) do
@@ -78,10 +78,10 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should not destroy collection if has items' do
-    collection = Collection.new_locked_ldp_object(
+    collection = Collection.new(
       community_id: @community.id,
       title: 'Nice collection',
-      owner: 1
+      owner_id: 1
     ).unlock_and_fetch_ldp_object(&:save!)
 
     # Give the collection an item
@@ -114,15 +114,15 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should not destroy collection if has theses' do
-    collection = Collection.new_locked_ldp_object(
+    collection = Collection.new(
       community_id: @community.id,
       title: 'Nice collection',
-      owner: 1
+      owner_id: 1
     ).unlock_and_fetch_ldp_object(&:save!)
 
-    Thesis.new_locked_ldp_object(
+    Thesis.new(
       title: 'thesis blocking deletion',
-      owner: 1,
+      owner_id: 1,
       dissertant: 'Joe Blow',
       visibility: JupiterCore::VISIBILITY_PUBLIC,
       graduation_date: '2017-03-31'

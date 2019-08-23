@@ -1,16 +1,40 @@
-class ArThesis < ApplicationRecord
+class AfThesis < JupiterCore::LockedLdpObject
 
-  has_solr_exporter Exporters::Solr::ArThesisExporter
+  has_solr_exporter Exporters::Solr::ThesisExporter
 
-  belongs_to :owner, class_name: 'User'
+  include ObjectProperties
+  include ItemProperties
+  include GlobalID::Identification
+  ldp_object_includes Hydra::Works::WorkBehavior
 
-  has_many_attached :files, dependent: false
+  # Dublin Core attributes
+  has_attribute :abstract, ::RDF::Vocab::DC.abstract
+  # Note: language is single-valued for Thesis, but languages is multi-valued for Item
+  # See below for faceting
+  has_attribute :language, ::RDF::Vocab::DC.language
+  has_attribute :date_accepted, ::RDF::Vocab::DC.dateAccepted
+  has_attribute :date_submitted, ::RDF::Vocab::DC.dateSubmitted
 
-  acts_as_rdfable do |config|
-    config.title has_predicate: ::RDF::Vocab::DC.title
-  end
+  # BIBO
+  has_attribute :degree, ::RDF::Vocab::BIBO.degree
 
-  before_validation :populate_sort_year
+  # SWRC
+  has_attribute :institution, TERMS[:swrc].institution
+
+  # UAL attributes
+  # This one is faceted in `all_contributors`, along with the Item creators/contributors
+  has_attribute :dissertant, TERMS[:ual].dissertant
+  has_attribute :graduation_date, TERMS[:ual].graduation_date
+  has_attribute :thesis_level, TERMS[:ual].thesis_level
+  has_attribute :proquest, TERMS[:ual].proquest
+  has_attribute :unicorn, TERMS[:ual].unicorn
+
+  has_attribute :specialization, TERMS[:ual].specialization
+  has_attribute :departments, TERMS[:ual].department_list
+  has_attribute :supervisors, TERMS[:ual].supervisor_list
+  has_multival_attribute :committee_members, TERMS[:ual].committee_member
+  has_multival_attribute :unordered_departments, TERMS[:ual].department
+  has_multival_attribute :unordered_supervisors, TERMS[:ual].supervisor
 
   # Present a consistent interface with Item#item_type_with_status_code
   def item_type_with_status_code
@@ -92,7 +116,7 @@ class ArThesis < ApplicationRecord
   end
 
   def self.from_thesis(thesis)
-    raise ArgumentError, "Thesis #{thesis.id} already migrated" if ArThesis.find_by(id: thesis.id).present?
+    raise ArgumentError, "Thesis #{id} already migrated to ActiveRecord" if ArThesis.find_by(id: thesis.id) != nil
 
     ar_thesis = ArThesis.new(id: thesis.id)
 
@@ -127,22 +151,42 @@ class ArThesis < ApplicationRecord
     ar_thesis
   end
 
-  validates :dissertant, presence: true
-  validates :graduation_date, presence: true
-  validates :sort_year, presence: true
-  validates :language, uri: { in_vocabulary: :language }
-  validates :institution, uri: { in_vocabulary: :institution }
+  unlocked do
+    before_save :copy_departments_to_unordered_predicate
+    before_save :copy_supervisors_to_unordered_predicate
 
-  def populate_sort_year
-    self.sort_year = Date.parse(graduation_date).year.to_i if graduation_date.present?
-    rescue ArgumentError
-      # date was unparsable, try to pull out the first 4 digit number as a year
-      capture = graduation_date.scan(/\d{4}/)
-      self.sort_year = capture[0].to_i if capture.present?
-  end
+    validates :dissertant, presence: true
+    validates :graduation_date, presence: true
+    validates :sort_year, presence: true
+    validates :language, uri: { in_vocabulary: :language }
+    validates :institution, uri: { in_vocabulary: :institution }
 
-  def add_to_path(community_id, collection_id)
-    self.member_of_paths += ["#{community_id}/#{collection_id}"]
+    type [::Hydra::PCDM::Vocab::PCDMTerms.Object, ::RDF::Vocab::BIBO.Thesis]
+
+    before_validation do
+      # Note: for Item, the sort_year attribute is derived from dcterms:created
+      begin
+        self.sort_year = Date.parse(graduation_date).year.to_i if graduation_date.present?
+      rescue ArgumentError
+        # date was unparsable, try to pull out the first 4 digit number as a year
+        capture = graduation_date.scan(/\d{4}/)
+        self.sort_year = capture[0].to_i if capture.present?
+      end
+
+      def copy_departments_to_unordered_predicate
+        return unless departments_changed?
+
+        self.unordered_departments = []
+        departments.each { |d| self.unordered_departments += [d] }
+      end
+
+      def copy_supervisors_to_unordered_predicate
+        return unless supervisors_changed?
+
+        self.unordered_supervisors = []
+        supervisors.each { |s| self.unordered_supervisors += [s] }
+      end
+    end
   end
 
 end

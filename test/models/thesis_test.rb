@@ -3,10 +3,10 @@ require 'test_helper'
 class ThesisTest < ActiveSupport::TestCase
 
   test 'a valid item can be constructed' do
-    community = Community.new_locked_ldp_object(title: 'Community', owner: 1,
+    community = Community.new(title: 'Community', owner_id: 1,
                                                 visibility: JupiterCore::VISIBILITY_PUBLIC)
     community.unlock_and_fetch_ldp_object(&:save!)
-    collection = Collection.new_locked_ldp_object(title: 'Collection', owner: 1,
+    collection = Collection.new(title: 'Collection', owner_id: 1,
                                                   visibility: JupiterCore::VISIBILITY_PUBLIC,
                                                   community_id: community.id)
     collection_uri = nil
@@ -14,7 +14,7 @@ class ThesisTest < ActiveSupport::TestCase
       unlocked_collection.save!
       collection_uri = unlocked_collection.uri
     end
-    thesis = Thesis.new_locked_ldp_object(title: 'Thesis', owner: 1, visibility: JupiterCore::VISIBILITY_PUBLIC,
+    thesis = Thesis.new(title: 'Thesis', owner_id: 1, visibility: JupiterCore::VISIBILITY_PUBLIC,
                                           dissertant: 'Joe Blow',
                                           departments: ['Physics', 'Non-physics'],
                                           supervisors: ['Billy (Physics)', 'Sally (Non-physics)'],
@@ -218,7 +218,7 @@ class ThesisTest < ActiveSupport::TestCase
   end
 
   test 'a sort year is derived from graduation date' do
-    thesis = Thesis.new_locked_ldp_object(graduation_date: '2015-11')
+    thesis = Thesis.new(graduation_date: 'Fall 2015')
     thesis.valid?
     assert_not thesis.errors[:sort_year].present?
     assert_equal thesis.sort_year, 2015

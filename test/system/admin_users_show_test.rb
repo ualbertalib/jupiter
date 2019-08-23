@@ -153,15 +153,15 @@ class AdminUsersShowTest < ApplicationSystemTestCase
     user = users(:regular)
     admin = users(:admin)
 
-    community = Community.new_locked_ldp_object(title: 'Fancy Community', owner: 1)
+    community = Community.new(title: 'Fancy Community', owner_id: 1)
                          .unlock_and_fetch_ldp_object(&:save!)
-    collection = Collection.new_locked_ldp_object(community_id: community.id,
-                                                  title: 'Fancy Collection', owner: 1)
+    collection = Collection.new(community_id: community.id,
+                                                  title: 'Fancy Collection', owner_id: 1)
                            .unlock_and_fetch_ldp_object(&:save!)
 
     # Two things owned by regular user
     Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                               owner: user.id, title: 'Fancy Item',
+                               owner_id: user.id, title: 'Fancy Item',
                                creators: ['Joe Blow'],
                                created: 'Fall 2017',
                                languages: [CONTROLLED_VOCABULARIES[:language].english],
@@ -173,8 +173,8 @@ class AdminUsersShowTest < ApplicationSystemTestCase
       uo.add_to_path(community.id, collection.id)
       uo.save!
     end
-    Thesis.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                 owner: user.id, title: 'Nice Item',
+    Thesis.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                 owner_id: user.id, title: 'Nice Item',
                                  dissertant: 'Joe Blow',
                                  graduation_date: '2019')
           .unlock_and_fetch_ldp_object do |uo|
@@ -184,7 +184,7 @@ class AdminUsersShowTest < ApplicationSystemTestCase
 
     # One item owned by admin
     Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                               owner: admin.id, title: 'Admin Item',
+                               owner_id: admin.id, title: 'Admin Item',
                                creators: ['Joe Blow'],
                                created: 'Winter 2017',
                                languages: [CONTROLLED_VOCABULARIES[:language].english],

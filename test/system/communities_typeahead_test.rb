@@ -4,15 +4,15 @@ class CommunitiesTypeaheadTest < ApplicationSystemTestCase
 
   def before_all
     super
-    @community = Community.new_locked_ldp_object(title: 'Department of thing', owner: 1)
+    @community = Community.new(title: 'Department of thing', owner_id: 1)
                           .unlock_and_fetch_ldp_object(&:save!)
-    @community2 = Community.new_locked_ldp_object(title: 'Other community', owner: 1)
+    @community2 = Community.new(title: 'Other community', owner_id: 1)
                            .unlock_and_fetch_ldp_object(&:save!)
-    Collection.new_locked_ldp_object(title: 'Articles about thing', owner: 1, community_id: @community.id)
+    Collection.new(title: 'Articles about thing', owner_id: 1, community_id: @community.id)
               .unlock_and_fetch_ldp_object(&:save!)
-    Collection.new_locked_ldp_object(title: 'Other stuff', owner: 1, community_id: @community.id)
+    Collection.new(title: 'Other stuff', owner_id: 1, community_id: @community.id)
               .unlock_and_fetch_ldp_object(&:save!)
-    @collection = Collection.new_locked_ldp_object(title: 'Other stuff things', owner: 1, community_id: @community2.id)
+    @collection = Collection.new(title: 'Other stuff things', owner_id: 1, community_id: @community2.id)
                             .unlock_and_fetch_ldp_object(&:save!)
   end
 

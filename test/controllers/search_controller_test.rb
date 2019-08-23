@@ -4,11 +4,11 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
 
   def before_all
     super
-    @community = Community.new_locked_ldp_object(title: 'Community',
-                                                 owner: 1)
+    @community = Community.new(title: 'Community',
+                                                 owner_id: 1)
     @community.unlock_and_fetch_ldp_object(&:save!)
-    @collection = Collection.new_locked_ldp_object(community_id: @community.id,
-                                                 title: 'Collection', owner: 1).unlock_and_fetch_ldp_object(&:save!)
+    @collection = Collection.new(community_id: @community.id,
+                                                 title: 'Collection', owner_id: 1).unlock_and_fetch_ldp_object(&:save!)
 
     @item1 = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                         owner_id: 1, title: 'Ant',

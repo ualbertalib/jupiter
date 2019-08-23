@@ -1,4 +1,4 @@
-class Exporters::Solr::ArThesisExporter < Exporters::Solr::BaseExporter
+class Exporters::Solr::AfThesisExporter < Exporters::Solr::BaseExporter
 
   index :title, role: [:search, :sort]
 
@@ -50,6 +50,8 @@ class Exporters::Solr::ArThesisExporter < Exporters::Solr::BaseExporter
   index :departments, type: :json_array, role: [:search]
   index :supervisors, type: :json_array, role: [:search]
   index :committee_members, role: :exact_match
+  index :unordered_departments, role: :search
+  index :unordered_supervisors, role: :exact_match
 
   # This gets mixed with the item types for `Item`
   custom_index :item_type_with_status,

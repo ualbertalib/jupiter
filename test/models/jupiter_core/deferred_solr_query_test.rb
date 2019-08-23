@@ -26,11 +26,11 @@ class DeferredSimpleSolrQueryTest < ActiveSupport::TestCase
     assert @@klass.limit(5).is_a?(JupiterCore::DeferredSimpleSolrQuery)
     assert @@klass.offset(5).is_a?(JupiterCore::DeferredSimpleSolrQuery)
 
-    obj = @@klass.new_locked_ldp_object(title: 'foo', owner: users(:regular).id,
+    obj = @@klass.new_locked_ldp_object(title: 'foo', owner_id: users(:regular).id,
                                         visibility: JupiterCore::VISIBILITY_PUBLIC)
-    another_obj = @@klass.new_locked_ldp_object(title: 'zoo', owner: users(:regular).id,
+    another_obj = @@klass.new_locked_ldp_object(title: 'zoo', owner_id: users(:regular).id,
                                                 visibility: JupiterCore::VISIBILITY_PUBLIC)
-    private_obj = @@klass.new_locked_ldp_object(title: 'boo', owner: users(:regular).id,
+    private_obj = @@klass.new_locked_ldp_object(title: 'boo', owner_id: users(:regular).id,
                                                 visibility: JupiterCore::VISIBILITY_PRIVATE)
 
     obj.unlock_and_fetch_ldp_object(&:save!)

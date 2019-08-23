@@ -29,7 +29,7 @@ class FileSetTest < ActiveSupport::TestCase
     # It seems unfortunate as a side-effect of improved item validations, we need to create these in tests that
     # don't care about them...
     community = locked_ldp_fixture(Community, :foo).unlock_and_fetch_ldp_object(&:save!)
-    collection = Collection.new_locked_ldp_object(title: 'foo', owner: users(:regular).id,
+    collection = Collection.new(title: 'foo', owner_id: users(:regular).id,
                                                   community_id: community.id).unlock_and_fetch_ldp_object(&:save!)
 
     item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,

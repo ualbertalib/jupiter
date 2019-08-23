@@ -79,28 +79,28 @@ class JupiterCore::DeferredSimpleSolrQuery
   #
   # All items and theses belonging to a certain path, and a certain user:
   #
-  #    (Item.where(member_of_paths: path) + Thesis.where(member_of_paths: path)).where(owner: user_id)
+  #    (Item.where(member_of_paths: path) + Thesis.where(member_of_paths: path)).where(owner_id: user_id)
   #
   # A different way of retrieving all items and theses belonging to a certain path and user:
   #
-  #    (Item.all + Thesis.all).where(member_of_paths: path).where(owner: user_id)
+  #    (Item.all + Thesis.all).where(member_of_paths: path).where(owner_id: user_id)
   #
   # A single query returning all items belonging to two different users:
   #
-  #   Item.where(owner: user1.id) +Item.where(owner: user2.id)
+  #   Item.where(owner_id: user1.id) +Item.where(owner_id: user2.id)
   #
   # A single query returning all Theses owned by user1, and all public Items:
   #
-  #   Item.public + Thesis.where(owner: user_id)
+  #   Item.public + Thesis.where(owner_id: user_id)
   #
   # A single query returning all Theses owned by user1, and all public Items where both Items and Theses are in a certain path
   #
-  #    (Item.public + Thesis.where(owner: user_id)).where(member_of_paths: path)
+  #    (Item.public + Thesis.where(owner_id: user_id)).where(member_of_paths: path)
   #
   # A single solr query returning a count of all Collections in a community, all Theses owned by user1, and all
   # public Items where both Items and Theses are in a certain path
   #
-  #    (Collection.where(community_id: cid) + ((Item.public + Thesis.where(owner: user_id)).where(member_of_paths: path))).count
+  #    (Collection.where(community_id: cid) + ((Item.public + Thesis.where(owner_id: user_id)).where(member_of_paths: path))).count
   #
   def +(other)
     combined_query = JupiterCore::DeferredSimpleSolrQuery.new(nil)

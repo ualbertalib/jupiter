@@ -4,9 +4,9 @@ class AdminCommunitiesIndexTest < ApplicationSystemTestCase
 
   def before_all
     super
-    @community = Community.new_locked_ldp_object(title: 'Community', owner: 1).unlock_and_fetch_ldp_object(&:save!)
+    @community = Community.new(title: 'Community', owner_id: 1).unlock_and_fetch_ldp_object(&:save!)
     2.times do |i|
-      Collection.new_locked_ldp_object(title: "Fancy Collection #{i}", owner: 1,
+      Collection.new(title: "Fancy Collection #{i}", owner_id: 1,
                                        community_id: @community.id)
                 .unlock_and_fetch_ldp_object(&:save!)
     end

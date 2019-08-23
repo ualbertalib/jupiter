@@ -204,8 +204,8 @@ class DraftItemTest < ActiveSupport::TestCase
     assert draft_item.valid?
 
     # Regular user can't deposit to a restricted collection
-    restricted_collection = Collection.new_locked_ldp_object(title: 'Risque fantasy Books',
-                                                             owner: 1,
+    restricted_collection = Collection.new(title: 'Risque fantasy Books',
+                                                             owner_id: 1,
                                                              restricted: true,
                                                              community_id: @community.id)
                                       .unlock_and_fetch_ldp_object(&:save!)

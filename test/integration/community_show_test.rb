@@ -10,24 +10,24 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
 
     # A community with two collections and a logo
     @community1 = Community
-                  .new_locked_ldp_object(title: 'Two collection community', owner: 1)
+                  .new_locked_ldp_object(title: 'Two collection community', owner_id: 1)
                   .unlock_and_fetch_ldp_object(&:save!)
     @collection1 = Collection
                    .new_locked_ldp_object(community_id: @community1.id,
-                                          title: 'Nice collection', owner: 1)
+                                          title: 'Nice collection', owner_id: 1)
                    .unlock_and_fetch_ldp_object(&:save!)
     # A restricted (to deposit, not to view) collection
     @collection2 = Collection
                    .new_locked_ldp_object(community_id: @community1.id,
                                           restricted: true,
-                                          title: 'Another collection', owner: 1)
+                                          title: 'Another collection', owner_id: 1)
                    .unlock_and_fetch_ldp_object(&:save!)
     @community1.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
                             filename: 'image-sample.jpeg', content_type: 'image/jpeg'
 
     # A community with no collections
     @community2 = Community
-                  .new_locked_ldp_object(title: 'Empty community', owner: 1)
+                  .new_locked_ldp_object(title: 'Empty community', owner_id: 1)
                   .unlock_and_fetch_ldp_object(&:save!)
   end
 

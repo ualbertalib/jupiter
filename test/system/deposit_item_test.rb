@@ -6,9 +6,9 @@ class DepositItemTest < ApplicationSystemTestCase
     super
 
     # Setup a community/collection pair for respective dropdowns
-    @community = Community.new_locked_ldp_object(title: 'Books', owner: 1).unlock_and_fetch_ldp_object(&:save!)
-    @collection = Collection.new_locked_ldp_object(title: 'Fantasy Books',
-                                                   owner: 1,
+    @community = Community.new(title: 'Books', owner_id: 1).unlock_and_fetch_ldp_object(&:save!)
+    @collection = Collection.new(title: 'Fantasy Books',
+                                                   owner_id: 1,
                                                    community_id: @community.id)
                             .unlock_and_fetch_ldp_object(&:save!)
   end

@@ -4,8 +4,8 @@ class Admin::CommunitiesControllerTest < ActionDispatch::IntegrationTest
 
   def before_all
     super
-    @community = Community.new_locked_ldp_object(title: 'Nice community',
-                                                 owner: 1)
+    @community = Community.new(title: 'Nice community',
+                                                 owner_id: 1)
     @community.unlock_and_fetch_ldp_object(&:save!)
   end
 
@@ -68,9 +68,9 @@ class Admin::CommunitiesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should destroy collection if has no items' do
-    community = Community.new_locked_ldp_object(
+    community = Community.new(
       title: 'Nice community',
-      owner: 1
+      owner_id: 1
     ).unlock_and_fetch_ldp_object(&:save!)
 
     assert_difference('Community.count', -1) do
@@ -83,10 +83,10 @@ class Admin::CommunitiesControllerTest < ActionDispatch::IntegrationTest
 
   test 'should not destroy collection if has items' do
     # Give the community a collection
-    Collection.new_locked_ldp_object(
+    Collection.new(
       community_id: @community.id,
       title: 'Nice collection',
-      owner: 1
+      owner_id: 1
     ).unlock_and_fetch_ldp_object(&:save!)
 
     assert_no_difference('Collection.count') do
