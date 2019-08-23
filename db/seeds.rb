@@ -59,8 +59,8 @@ if Rails.env.development? || Rails.env.uat?
     else
       title = "Special reports about #{thing.pluralize}"
     end
-    community = Community.new_locked_ldp_object(
-      owner: admin.id,
+    community = Community.new(
+      owner_id: admin.id,
       title: title,
       description: Faker::Lorem.sentence(20, false, 0).chop
     ).unlock_and_fetch_ldp_object(&:save!)
@@ -80,15 +80,15 @@ if Rails.env.development? || Rails.env.uat?
       community.logo.attach(io: File.open(filename), filename: "#{thing}.png", content_type: "image/png")
     end
 
-    item_collection = Collection.new_locked_ldp_object(
-      owner: admin.id,
+    item_collection = Collection.new(
+      owner_id: admin.id,
       title: "The annals of '#{thing.capitalize} International'",
       community_id: community.id,
       description: Faker::Lorem.sentence(40, false, 0).chop
     ).unlock_and_fetch_ldp_object(&:save!)
 
-    thesis_collection = Collection.new_locked_ldp_object(
-      owner: admin.id,
+    thesis_collection = Collection.new(
+      owner_id: admin.id,
       title: "Theses about #{thing.pluralize}",
       community_id: community.id,
       description: Faker::Lorem.sentence(40, false, 0).chop
@@ -197,7 +197,7 @@ if Rails.env.development? || Rails.env.uat?
       field = Faker::Job.field
       level = ["Master's", 'Doctorate'][i % 2]
       thesis_attributes = base_attributes.merge({
-        owner: admin.id,
+        owner_id: admin.id,
         title: "Thesis about the effects of #{Faker::Beer.name} on #{thing.pluralize}",
         graduation_date: "Fall #{rand(20_000).days.ago.year}",
         dissertant: creators[seed],
@@ -226,7 +226,7 @@ if Rails.env.development? || Rails.env.uat?
         thesis_attributes[:committee_members] += ["#{contributors[(seed + 7 * seed2) % 10]} (#{department2})"]
       end
 
-      thesis = Thesis.new_locked_ldp_object(thesis_attributes).unlock_and_fetch_ldp_object do |uo|
+      thesis = Thesis.new(thesis_attributes).unlock_and_fetch_ldp_object do |uo|
         if i == 8
           uo.add_to_path(community.id, item_collection.id)
           uo.add_to_path(community.id, thesis_collection.id)
@@ -370,23 +370,23 @@ if Rails.env.development? || Rails.env.uat?
 
   # Pad with empty communities for pagination (starts with Z for sort order)
   EXTRA_THINGS.each do |thing|
-    Community.new_locked_ldp_object(
-      owner: admin.id,
+    Community.new(
+      owner_id: admin.id,
       title: "Zoo#{thing}ology Institute of North-Eastern Upper Alberta (and Saskatchewan)",
       description: Faker::Lorem.sentence(20, false, 0).chop
     ).unlock_and_fetch_ldp_object(&:save!)
   end
 
   # One community with a lot of empty restricted collections
-  community = Community.new_locked_ldp_object(
-    owner: admin.id,
+  community = Community.new(
+    owner_id: admin.id,
     title: "The Everything Department",
     description: Faker::Lorem.sentence(20, false, 0).chop
   ).unlock_and_fetch_ldp_object(&:save!)
 
   EXTRA_THINGS.each do |thing|
-    collection = Collection.new_locked_ldp_object(
-      owner: admin.id,
+    collection = Collection.new(
+      owner_id: admin.id,
       title: "Articles about the relationship between #{thing.pluralize} and non-#{thing.pluralize}",
       community_id: community.id,
       restricted: true,

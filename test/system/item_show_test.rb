@@ -47,7 +47,7 @@ class ItemShowTest < ApplicationSystemTestCase
       uo.save!
     end
 
-    @thesis = Thesis.new_locked_ldp_object(
+    @thesis = Thesis.new(
       title: 'Thesis about the effects of missing regression tests',
       graduation_date: 'Fall 1990',
       dissertant: 'Joe Blow',
@@ -62,7 +62,7 @@ class ItemShowTest < ApplicationSystemTestCase
       degree: "Doctorate of Failin' Hard or Hardly Failin'",
       institution: CONTROLLED_VOCABULARIES[:institution].uofa,
       visibility: JupiterCore::VISIBILITY_PUBLIC,
-      owner: @user.id
+      owner_id: @user.id
     ).unlock_and_fetch_ldp_object do |uo|
       uo.add_to_path(@community.id, @collection.id)
       uo.add_to_path(@community.id, @collection.id)

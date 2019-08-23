@@ -6,11 +6,11 @@ class RedirectControllerTest < ActionDispatch::IntegrationTest
     super
 
     # The fedora3_uuid and hydra_noid properties are the primary identifiers for locating these older objects
-    @community = Community.new_locked_ldp_object(title: 'Fancy Community', owner: 1,
+    @community = Community.new(title: 'Fancy Community', owner_id: 1,
                                                  fedora3_uuid: 'uuid:community', hydra_noid: 'community-noid')
                           .unlock_and_fetch_ldp_object(&:save!)
-    @collection = Collection.new_locked_ldp_object(community_id: @community.id,
-                                                   title: 'Fancy Collection', owner: 1,
+    @collection = Collection.new(community_id: @community.id,
+                                                   title: 'Fancy Collection', owner_id: 1,
                                                    fedora3_uuid: 'uuid:collection', hydra_noid: 'collection-noid')
                             .unlock_and_fetch_ldp_object(&:save!)
     @filename = 'pdf-sample.pdf'

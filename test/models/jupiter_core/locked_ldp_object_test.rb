@@ -76,7 +76,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     creator2 = generate_random_string
     creator3 = generate_random_string
     obj.unlock_and_fetch_ldp_object do |uo|
-      uo.owner = users(:regular).id
+      uo.owner_id = users(:regular).id
       uo.visibility = JupiterCore::VISIBILITY_PUBLIC
       uo.creator = [creator1, creator2, creator3]
       uo.save!
@@ -206,7 +206,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
   test '#inspect works as expected' do
     title = generate_random_string
     obj = @@klass.new_locked_ldp_object(title: title)
-    assert_equal '#<AnonymousClass id: nil, visibility: nil, owner: nil, record_created_at: nil, hydra_noid: nil, '\
+    assert_equal '#<AnonymousClass id: nil, visibility: nil, owner_id: nil, record_created_at: nil, hydra_noid: nil, '\
                  "date_ingested: nil, title: \"#{title}\", creator: [], member_of_paths: []>", obj.inspect
   end
 
@@ -246,7 +246,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     obj.unlock_and_fetch_ldp_object do |uo|
       uo.title = 'Title'
       uo.visibility = JupiterCore::VISIBILITY_PUBLIC
-      uo.owner = users(:regular).id
+      uo.owner_id = users(:regular).id
     end
 
     assert_predicate obj, :changed?
@@ -259,7 +259,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     creator = [generate_random_string]
     first_title = generate_random_string
 
-    obj = @@klass.new_locked_ldp_object(title: first_title, creator: creator, owner: users(:regular).id,
+    obj = @@klass.new_locked_ldp_object(title: first_title, creator: creator, owner_id: users(:regular).id,
                                         visibility: JupiterCore::VISIBILITY_PUBLIC)
 
     assert obj.record_created_at.nil?
@@ -279,7 +279,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
 
     second_title = generate_random_string
 
-    another_obj = @@klass.new_locked_ldp_object(title: second_title, creator: creator, owner: users(:regular).id,
+    another_obj = @@klass.new_locked_ldp_object(title: second_title, creator: creator, owner_id: users(:regular).id,
                                                 visibility: JupiterCore::VISIBILITY_PUBLIC)
     another_obj.unlock_and_fetch_ldp_object(&:save!)
 
@@ -327,7 +327,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
       has_attribute :title, ::RDF::Vocab::DC.title, solrize_for: [:search, :facet]
     end
 
-    different_obj = another_klass.new_locked_ldp_object(title: generate_random_string, owner: users(:regular).id,
+    different_obj = another_klass.new_locked_ldp_object(title: generate_random_string, owner_id: users(:regular).id,
                                                         visibility: JupiterCore::VISIBILITY_PRIVATE)
     different_obj.unlock_and_fetch_ldp_object(&:save!)
 
@@ -350,7 +350,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
     assert_equal 0, query.count
 
     # shared query criteria works
-    query = (@@klass.all + another_klass.all).where(owner: users(:regular).id)
+    query = (@@klass.all + another_klass.all).where(owner_id: users(:regular).id)
     assert_equal 3, query.count
 
     # everything is what we expect
@@ -402,7 +402,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
 
       has_attribute :embargo_date, ::RDF::Vocab::DC.modified, type: :date, solrize_for: [:sort]
     end
-    instance = klass.new_locked_ldp_object(owner: 1, visibility: JupiterCore::VISIBILITY_PUBLIC)
+    instance = klass.new_locked_ldp_object(owner_id: 1, visibility: JupiterCore::VISIBILITY_PUBLIC)
 
     instance.unlock_and_fetch_ldp_object do |unlocked_instance|
       unlocked_instance.embargo_date = Time.current + 200.years
@@ -441,15 +441,15 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
       belongs_to :item, using_existing_association: :member_of_collections
     end
 
-    instance = klass.new_locked_ldp_object(owner: 1, visibility: JupiterCore::VISIBILITY_PUBLIC)
+    instance = klass.new_locked_ldp_object(owner_id: 1, visibility: JupiterCore::VISIBILITY_PUBLIC)
 
     assert instance.respond_to?(:item)
     assert_nil instance.item, nil
     assert_equal instance.inspect, '#<AnonymousClass id: nil, visibility: "http://terms.library.ualberta.ca/public",'\
-                                   ' owner: 1, record_created_at: nil, hydra_noid: nil, date_ingested: nil, item: nil>'
+                                   ' owner_id: 1, record_created_at: nil, hydra_noid: nil, date_ingested: nil, item: nil>'
     instance.unlock_and_fetch_ldp_object(&:save)
 
-    instance2 = klass.new_locked_ldp_object(owner: 1,
+    instance2 = klass.new_locked_ldp_object(owner_id: 1,
                                             visibility: JupiterCore::VISIBILITY_PUBLIC, item: instance)
 
     instance2.unlock_and_fetch_ldp_object(&:save)
@@ -479,7 +479,7 @@ class LockedLdpObjectTest < ActiveSupport::TestCase
       has_many :items, using_existing_association: :member_of_collections
     end
 
-    another_instance = another_klass.new_locked_ldp_object(owner: 1, visibility: JupiterCore::VISIBILITY_PUBLIC,
+    another_instance = another_klass.new_locked_ldp_object(owner_id: 1, visibility: JupiterCore::VISIBILITY_PUBLIC,
                                                            items: [instance])
     assert another_instance.items.is_a?(Array)
     assert_equal another_instance.items.first, instance.id

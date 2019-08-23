@@ -9,6 +9,7 @@ class ArCollectionTest < ActiveSupport::TestCase
   end
 
   test 'can be made into a draft' do
+    draft_collection = ArCollection.from_collection(@collection)
 
     ar_collection = ArCollection.from_collection(@collection)
 

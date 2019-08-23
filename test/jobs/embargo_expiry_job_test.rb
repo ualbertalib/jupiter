@@ -60,9 +60,9 @@ class EmbargoExpiryJobTest < ActiveJob::TestCase
   end
 
   test 'that job transitions expired thesis embargos into proper state' do
-    expired_thesis = Thesis.new_locked_ldp_object(
+    expired_thesis = Thesis.new(
       title: 'thesis blocking deletion',
-      owner: 1,
+      owner_id: 1,
       dissertant: 'Joe Blow',
       graduation_date: '2017-03-31',
       visibility: ItemProperties::VISIBILITY_EMBARGO,
@@ -73,9 +73,9 @@ class EmbargoExpiryJobTest < ActiveJob::TestCase
       unlocked_thesis.save!
     end
 
-    not_expired_thesis = Thesis.new_locked_ldp_object(
+    not_expired_thesis = Thesis.new(
       title: 'thesis blocking deletion',
-      owner: 1,
+      owner_id: 1,
       dissertant: 'Joe Blow',
       graduation_date: '2017-03-31',
       visibility: ItemProperties::VISIBILITY_EMBARGO,

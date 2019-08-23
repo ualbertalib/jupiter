@@ -1,40 +1,31 @@
-class Thesis < JupiterCore::LockedLdpObject
+class Thesis < Depositable
 
   has_solr_exporter Exporters::Solr::ThesisExporter
 
-  include ObjectProperties
-  include ItemProperties
-  include GlobalID::Identification
-  ldp_object_includes Hydra::Works::WorkBehavior
+  belongs_to :owner, class_name: 'User'
 
-  # Dublin Core attributes
-  has_attribute :abstract, ::RDF::Vocab::DC.abstract
-  # Note: language is single-valued for Thesis, but languages is multi-valued for Item
-  # See below for faceting
-  has_attribute :language, ::RDF::Vocab::DC.language
-  has_attribute :date_accepted, ::RDF::Vocab::DC.dateAccepted
-  has_attribute :date_submitted, ::RDF::Vocab::DC.dateSubmitted
+  has_many_attached :files, dependent: false
 
-  # BIBO
-  has_attribute :degree, ::RDF::Vocab::BIBO.degree
 
-  # SWRC
-  has_attribute :institution, TERMS[:swrc].institution
+  acts_as_rdfable do |config|
+    config.title has_predicate: ::RDF::Vocab::DC.title
+    # TODO
+    #  config.date_created has_predicate: ::RDF::Vocab::DC.created
+    #    config.time_periods has_predicate: ::RDF::Vocab::DC.temporal
+    #    config.places has_predicate: ::RDF::Vocab::DC.spatial
+  #  config.description has_predicate: ::RDF::Vocab::DC.description
+    # TODO: add
+    # config.publisher has_predicate: ::RDF::Vocab::DC.publisher
+    # TODO join table
+    # config.languages has_predicate: ::RDF::Vocab::DC.language
+  #  config.license has_predicate: ::RDF::Vocab::DC.license
+    # config.type_id has_predicate: ::RDF::Vocab::DC.type
+#    config.source has_predicate: ::RDF::Vocab::DC.source
+#    #    config.related_item has_predicate: ::RDF::Vocab::DC.relation
+    #  config.status has_predicate: ::RDF::Vocab::BIBO.status
+  end
 
-  # UAL attributes
-  # This one is faceted in `all_contributors`, along with the Item creators/contributors
-  has_attribute :dissertant, TERMS[:ual].dissertant
-  has_attribute :graduation_date, TERMS[:ual].graduation_date
-  has_attribute :thesis_level, TERMS[:ual].thesis_level
-  has_attribute :proquest, TERMS[:ual].proquest
-  has_attribute :unicorn, TERMS[:ual].unicorn
-
-  has_attribute :specialization, TERMS[:ual].specialization
-  has_attribute :departments, TERMS[:ual].department_list
-  has_attribute :supervisors, TERMS[:ual].supervisor_list
-  has_multival_attribute :committee_members, TERMS[:ual].committee_member
-  has_multival_attribute :unordered_departments, TERMS[:ual].department
-  has_multival_attribute :unordered_supervisors, TERMS[:ual].supervisor
+  before_validation :populate_sort_year
 
   # Present a consistent interface with Item#item_type_with_status_code
   def item_type_with_status_code
@@ -45,7 +36,7 @@ class Thesis < JupiterCore::LockedLdpObject
     thesis = Thesis.find(draft_thesis.uuid) if draft_thesis.uuid.present?
     thesis ||= Thesis.new_locked_ldp_object
     thesis.unlock_and_fetch_ldp_object do |unlocked_obj|
-      unlocked_obj.owner = draft_thesis.user_id if unlocked_obj.owner.blank?
+      unlocked_obj.owner_id = draft_thesis.user_id if unlocked_obj.owner.blank?
       unlocked_obj.title = draft_thesis.title
       unlocked_obj.alternative_title = draft_thesis.alternate_title
 
@@ -115,42 +106,41 @@ class Thesis < JupiterCore::LockedLdpObject
     thesis
   end
 
-  unlocked do
-    before_save :copy_departments_to_unordered_predicate
-    before_save :copy_supervisors_to_unordered_predicate
+  def self.from_thesis(thesis)
+    raise ArgumentError, "Thesis #{thesis.id} already migrated to ActiveRecord" if ArThesis.find_by(id: thesis.id) != nil
 
-    validates :dissertant, presence: true
-    validates :graduation_date, presence: true
-    validates :sort_year, presence: true
-    validates :language, uri: { in_vocabulary: :language }
-    validates :institution, uri: { in_vocabulary: :institution }
-
-    type [::Hydra::PCDM::Vocab::PCDMTerms.Object, ::RDF::Vocab::BIBO.Thesis]
-
-    before_validation do
-      # Note: for Item, the sort_year attribute is derived from dcterms:created
-      begin
-        self.sort_year = Date.parse(graduation_date).year.to_i if graduation_date.present?
-      rescue ArgumentError
-        # date was unparsable, try to pull out the first 4 digit number as a year
-        capture = graduation_date.scan(/\d{4}/)
-        self.sort_year = capture[0].to_i if capture.present?
-      end
-
-      def copy_departments_to_unordered_predicate
-        return unless departments_changed?
-
-        self.unordered_departments = []
-        departments.each { |d| self.unordered_departments += [d] }
-      end
-
-      def copy_supervisors_to_unordered_predicate
-        return unless supervisors_changed?
-
-        self.unordered_supervisors = []
-        supervisors.each { |s| self.unordered_supervisors += [s] }
-      end
+    attributes.each do |attr|
+      ar_thesis.send("#{attr}=", thesis.send(attr))
     end
+
+    # unconditionally save. If something doesn't pass validations in ActiveFedora, it still needs to come here
+    ar_thesis.save(validate: false)
+
+    # add an association between the same underlying blobs the Item uses and the new ActiveRecord version
+    thesis.files_attachments.each do |attachment|
+      ActiveStorage::Attachment.create(record: ar_thesis, blob: attachment.blob, name: :files)
+    end
+  end
+
+  validates :dissertant, presence: true
+  validates :graduation_date, presence: true
+  validates :sort_year, presence: true
+  validates :language, uri: { in_vocabulary: :language }
+  validates :institution, uri: { in_vocabulary: :institution }
+
+
+  def populate_sort_year
+    self.sort_year = Date.parse(graduation_date).year.to_i if graduation_date.present?
+
+    rescue ArgumentError
+      # date was unparsable, try to pull out the first 4 digit number as a year
+      capture = graduation_date.scan(/\d{4}/)
+      self.sort_year = capture[0].to_i if capture.present?
+  end
+
+
+  def add_to_path(community_id, collection_id)
+    self.member_of_paths += ["#{community_id}/#{collection_id}"]
   end
 
 end

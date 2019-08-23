@@ -4,10 +4,10 @@ class SitemapTest < ActionDispatch::IntegrationTest
 
   def before_all
     super
-    @community = Community.new_locked_ldp_object(title: 'Fancy Community', owner: 1)
+    @community = Community.new(title: 'Fancy Community', owner_id: 1)
                           .unlock_and_fetch_ldp_object(&:save!)
-    @collection = Collection.new_locked_ldp_object(community_id: @community.id,
-                                                   title: 'Fancy Collection', owner: 1)
+    @collection = Collection.new(community_id: @community.id,
+                                                   title: 'Fancy Collection', owner_id: 1)
                             .unlock_and_fetch_ldp_object(&:save!)
     @item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                                owner_id: 1, title: 'Fancy Item',
@@ -30,8 +30,8 @@ class SitemapTest < ActionDispatch::IntegrationTest
       end
       @item.add_and_ingest_files([file])
     end
-    @thesis = Thesis.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                           owner: 1, title: 'Fancy Item',
+    @thesis = Thesis.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                           owner_id: 1, title: 'Fancy Item',
                                            dissertant: 'Joe Blow',
                                            language: CONTROLLED_VOCABULARIES[:language].english,
                                            graduation_date: 'Fall 2017')

@@ -6,9 +6,9 @@ class DepositThesisTest < ApplicationSystemTestCase
     super
 
     # Setup a community/collection pair for respective dropdowns
-    @community = Community.new_locked_ldp_object(title: 'Theses', owner: 1).unlock_and_fetch_ldp_object(&:save!)
-    @collection = Collection.new_locked_ldp_object(title: 'Theses Collection',
-                                                   owner: 1,
+    @community = Community.new(title: 'Theses', owner_id: 1).unlock_and_fetch_ldp_object(&:save!)
+    @collection = Collection.new(title: 'Theses Collection',
+                                                   owner_id: 1,
                                                    restricted: true,
                                                    community_id: @community.id)
                             .unlock_and_fetch_ldp_object(&:save!)

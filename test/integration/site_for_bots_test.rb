@@ -9,15 +9,15 @@ class SiteForBotsTest < ActionDispatch::IntegrationTest
 
     # A community with two collections
     @community1 = Community
-                  .new_locked_ldp_object(title: 'Two collection community', owner: 1)
+                  .new_locked_ldp_object(title: 'Two collection community', owner_id: 1)
                   .unlock_and_fetch_ldp_object(&:save!)
     @collection1 = Collection
                    .new_locked_ldp_object(community_id: @community1.id,
-                                          title: 'Nice collection', owner: 1)
+                                          title: 'Nice collection', owner_id: 1)
                    .unlock_and_fetch_ldp_object(&:save!)
     @collection2 = Collection
                    .new_locked_ldp_object(community_id: @community1.id,
-                                          title: 'Another collection', owner: 1)
+                                          title: 'Another collection', owner_id: 1)
                    .unlock_and_fetch_ldp_object(&:save!)
     @item = Item.new.unlock_and_fetch_ldp_object do |uo|
       uo.title = 'Fantastic item'
@@ -43,7 +43,7 @@ class SiteForBotsTest < ActionDispatch::IntegrationTest
     end
     @thesis = Thesis.new_locked_ldp_object.unlock_and_fetch_ldp_object do |uo|
       uo.title = 'Fantasitc thesis'
-      uo.owner = 1
+      uo.owner_id = 1
       uo.dissertant = 'Joe Blow'
       uo.visibility = JupiterCore::VISIBILITY_PUBLIC
       uo.graduation_date = '2017-03-31'

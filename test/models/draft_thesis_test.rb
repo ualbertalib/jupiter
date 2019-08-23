@@ -5,8 +5,8 @@ class DraftThesisTest < ActiveSupport::TestCase
   def before_all
     super
     @community = locked_ldp_fixture(Community, :books).unlock_and_fetch_ldp_object(&:save!)
-    @collection = Collection.new_locked_ldp_object(title: 'Risque fantasy Books',
-                                                   owner: 1,
+    @collection = Collection.new(title: 'Risque fantasy Books',
+                                                   owner_id: 1,
                                                    restricted: true,
                                                    community_id: @community.id)
                             .unlock_and_fetch_ldp_object(&:save!)
@@ -196,8 +196,8 @@ class DraftThesisTest < ActiveSupport::TestCase
 
   test 'cannot deposit thesis into a non restricted collection' do
     user = users(:admin)
-    non_restricted_collection = Collection.new_locked_ldp_object(title: 'Risque fantasy Books',
-                                                                 owner: 1,
+    non_restricted_collection = Collection.new(title: 'Risque fantasy Books',
+                                                                 owner_id: 1,
                                                                  community_id: @community.id)
                                           .unlock_and_fetch_ldp_object(&:save!)
 

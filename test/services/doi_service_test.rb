@@ -11,11 +11,11 @@ class DoiServiceTest < ActiveSupport::TestCase
 
     Rails.application.secrets.doi_minting_enabled = true
 
-    community = Community.new_locked_ldp_object(title: 'Community', owner: 1,
+    community = Community.new(title: 'Community', owner_id: 1,
                                                 visibility: JupiterCore::VISIBILITY_PUBLIC)
 
     community.unlock_and_fetch_ldp_object(&:save!)
-    collection = Collection.new_locked_ldp_object(title: 'Collection', owner: 1,
+    collection = Collection.new(title: 'Collection', owner_id: 1,
                                                   visibility: JupiterCore::VISIBILITY_PUBLIC,
                                                   community_id: community.id)
     collection.unlock_and_fetch_ldp_object(&:save!)

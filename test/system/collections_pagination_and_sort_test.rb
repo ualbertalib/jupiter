@@ -4,10 +4,10 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
 
   def before_all
     super
-    @community = Community.new_locked_ldp_object(title: 'Community', owner: 1).unlock_and_fetch_ldp_object(&:save!)
+    @community = Community.new(title: 'Community', owner_id: 1).unlock_and_fetch_ldp_object(&:save!)
     # For sorting, creation order is 'Fancy Collection 00', 'Nice Collection 01', 'Fancy Collection 02', etc. ...
     (0..10).each do |i|
-      Collection.new_locked_ldp_object(title: format("#{['Fancy', 'Nice'][i % 2]} Collection %02i", i), owner: 1,
+      Collection.new(title: format("#{['Fancy', 'Nice'][i % 2]} Collection %02i", i), owner_id: 1,
                                        community_id: @community.id)
                 .unlock_and_fetch_ldp_object(&:save!)
     end
