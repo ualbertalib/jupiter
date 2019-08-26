@@ -40,6 +40,8 @@ class CreateArThesis < ActiveRecord::Migration[5.2]
       t.json :departments, array: true
       t.json :supervisors, array: true
       t.json :committee_members, array: true
+      t.references :logo, foreign_key: {to_table: :active_storage_attachments, column: :id}
+
       t.timestamps
     end
   end

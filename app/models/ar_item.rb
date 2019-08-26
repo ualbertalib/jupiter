@@ -110,7 +110,7 @@ class ArItem < ApplicationRecord
   def self.from_item(item)
     raise ArgumentError, "Item #{item.id} already migrated to ActiveRecord" if ArItem.find_by(id: item.id) != nil
 
-    ar_item = ArItem.new
+    ar_item = ArItem.new(id: item.id)
 
     # this is named differently in ActiveFedora
     ar_item.owner_id = item.owner
@@ -125,8 +125,12 @@ class ArItem < ApplicationRecord
     ar_item.save(validate: false)
 
     # add an association between the same underlying blobs the Item uses and the new ActiveRecord version
-    ar_item.files_attachments.each do |attachment|
-      ActiveStorage::Attachment.create(record: ar_item, blob: attachment.blob, name: :files)
+    item.files_attachments.each do |attachment|
+      new_attachment = ActiveStorage::Attachment.create(record: ar_item, blob: attachment.blob, name: :files)
+      # because of the uuid id column, the record_id on new_attachment (currently of type integer), is broken
+      # but that's ok. we're going to fix that with this data
+      new_attachment.upcoming_record_id = ar_item.id
+      new_attachment.save!
     end
   end
 

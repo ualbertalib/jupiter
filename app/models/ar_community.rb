@@ -1,36 +1,35 @@
 class ArCommunity < ApplicationRecord
 
-  scope :drafts, -> { where(is_published_in_era: false).or(where(is_published_in_era: nil)) }
-
   acts_as_rdfable do |config|
     config.description has_predicate: ::RDF::Vocab::DC.description
     config.creators has_predicate: ::RDF::Vocab::DC.creator
   end
 
-  def update_from_fedora_community(community)
-    attributes = {
-      visibility: community.visibility,
-      owner_id: community.owner,
-      record_created_at: community.record_created_at,
-      hydra_noid: community.hydra_noid,
-      date_ingested: community.date_ingested,
-      title: community.title,
-      fedora3_uuid: community.fedora3_uuid,
-      depositor: community.depositor,
-      description: community.description,
-      creators: community.creators,
-      is_published_in_era: true
-    }
-    assign_attributes(attributes)
-    save(validate: false)
-  end
-
   def self.from_community(community)
-    new_ar_community = ArCommunity.drafts.find_by(id: community.id)
-    new_ar_community ||= ArCommunity.drafts.new(id: community.id)
+    raise ArgumentError, "Community #{community.id} already migrated to ActiveRecord" if ArCommunity.find_by(id: item.id) != nil
 
-    new_ar_community.update_from_fedora_community(community)
-    new_ar_community
+    ar_community = ArCommunity.new(id: community.id)
+
+    # this is named differently in ActiveFedora
+    ar_community.owner_id = community.owner
+
+    attributes = ar_community.attributes.keys.reject {|k| k == 'owner_id' || k == 'created_at' || k == 'updated_at'}
+
+    attributes.each do |attr|
+      ar_community.send("#{attr}=", community.send(attr))
+    end
+
+    # unconditionally save. If something doesn't pass validations in ActiveFedora, it still needs to come here
+    ar_community.save(validate: false)
+
+    # add an association between the same underlying blobs the Item uses and the new ActiveRecord version
+    community.files_attachments.each do |attachment|
+      new_attachment = ActiveStorage::Attachment.create(record: ar_community, blob: attachment.blob, name: :files)
+      # because of the uuid id column, the record_id on new_attachment (currently of type integer), is broken
+      # but that's ok. we're going to fix that with this data
+      new_attachment.upcoming_record_id = ar_community.id
+      new_attachment.save!
+    end
   end
 
 end
