@@ -1,6 +1,6 @@
 class AfCollection < JupiterCore::LockedLdpObject
 
-  has_solr_exporter Exporters::Solr::CollectionExporter
+  has_solr_exporter Exporters::Solr::AfCollectionExporter
 
   include ObjectProperties
 

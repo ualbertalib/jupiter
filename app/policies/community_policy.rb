@@ -1,4 +1,4 @@
-class CommunityPolicy < LockedLdpObjectPolicy
+class CommunityPolicy < DepositablePolicy
 
   def index?
     true

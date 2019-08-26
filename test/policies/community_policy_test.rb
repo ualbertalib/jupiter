@@ -4,7 +4,7 @@ class CommunityPolicyTest < ActiveSupport::TestCase
 
   test 'admin user should have proper authorization over communities' do
     current_user = users(:admin)
-    community = Community.new_locked_ldp_object
+    community = Community.new
 
     assert CommunityPolicy.new(current_user, community).index?
     assert CommunityPolicy.new(current_user, community).create?
@@ -17,7 +17,7 @@ class CommunityPolicyTest < ActiveSupport::TestCase
 
   test 'general user should only be able to see index and show of communities' do
     current_user = users(:regular)
-    community = Community.new_locked_ldp_object
+    community = Community.new
 
     assert CommunityPolicy.new(current_user, community).index?
     assert CommunityPolicy.new(current_user, community).show?
@@ -31,7 +31,7 @@ class CommunityPolicyTest < ActiveSupport::TestCase
 
   test 'anon user should only be able to see index and show of communities' do
     current_user = nil
-    community = Community.new_locked_ldp_object
+    community = Community.new
 
     assert CommunityPolicy.new(current_user, community).index?
     assert CommunityPolicy.new(current_user, community).show?

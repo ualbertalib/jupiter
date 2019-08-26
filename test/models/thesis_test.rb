@@ -2,17 +2,22 @@ require 'test_helper'
 
 class ThesisTest < ActiveSupport::TestCase
 
+  def before_all
+    super
+    Thesis.delete_all
+  end
+
   test 'a valid item can be constructed' do
+    User.create_with(name: 'Adminy Adminderson', email: 'admin@notarealemailaddres.fake.co.uk.fake').find_or_create_by(id: 1)
+
     community = Community.new(title: 'Community', owner_id: 1,
                                                 visibility: JupiterCore::VISIBILITY_PUBLIC)
     community.unlock_and_fetch_ldp_object(&:save!)
     collection = Collection.new(title: 'Collection', owner_id: 1,
                                                   visibility: JupiterCore::VISIBILITY_PUBLIC,
                                                   community_id: community.id)
-    collection_uri = nil
     collection.unlock_and_fetch_ldp_object do |unlocked_collection|
       unlocked_collection.save!
-      collection_uri = unlocked_collection.uri
     end
     thesis = Thesis.new(title: 'Thesis', owner_id: 1, visibility: JupiterCore::VISIBILITY_PUBLIC,
                                           dissertant: 'Joe Blow',
@@ -22,51 +27,30 @@ class ThesisTest < ActiveSupport::TestCase
     thesis.unlock_and_fetch_ldp_object do |unlocked_thesis|
       unlocked_thesis.add_to_path(community.id, collection.id)
       unlocked_thesis.save!
-      # Reload needed for dump below
-      unlocked_thesis.reload
-
-      # Dump some triples for sanity checks
-      triples = unlocked_thesis.resource.dump(:ntriples)
-      # Ensure correct type triple was saved
-      assert_match('<http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/ontology/bibo/Thesis>',
-                   triples)
-      # Ensure `memberOf` was set correctly to collection ID:
-      assert_match("<http://pcdm.org/models#memberOf> <#{collection_uri}>", triples)
     end
     assert thesis.valid?
-    assert_not_equal 0, Thesis.public.count
-    assert_equal thesis.id, Thesis.public.first.id
-
-    # Preserves order and writes to unordered triples on save
-    assert_equal thesis.departments, ['Physics', 'Non-physics']
-    assert_equal thesis.unordered_departments.length, 2
-    assert_includes thesis.unordered_departments, 'Physics'
-    assert_includes thesis.unordered_departments, 'Non-physics'
-
-    assert_equal thesis.supervisors, ['Billy (Physics)', 'Sally (Non-physics)']
-    assert_equal thesis.unordered_supervisors.length, 2
-    assert_includes thesis.unordered_supervisors, 'Billy (Physics)'
-    assert_includes thesis.unordered_supervisors, 'Sally (Non-physics)'
+    assert_not_equal 0, Thesis.public_items.count
+    assert_equal thesis.id, Thesis.public_items.first.id
 
     thesis.unlock_and_fetch_ldp_object(&:destroy)
   end
 
   test 'there is no default visibility' do
-    thesis = Thesis.new_locked_ldp_object
+    thesis = Thesis.new
 
     assert_nil thesis.visibility
-    assert_equal 0, Thesis.public.count
+    assert_equal 0, Thesis.public_items.count
   end
 
   test 'unknown visibilities are not valid' do
-    thesis = Thesis.new_locked_ldp_object
+    thesis = Thesis.new
 
     thesis.unlock_and_fetch_ldp_object do |unlocked_thesis|
       unlocked_thesis.visibility = 'some_fake_visibility'
     end
 
     assert_not thesis.valid?
-    assert_equal 0, Thesis.public.count
+    assert_equal 0, Thesis.public_items.count
     assert thesis.errors[:visibility].present?
     assert_includes thesis.errors[:visibility], 'some_fake_visibility is not a known visibility'
   end
@@ -76,7 +60,7 @@ class ThesisTest < ActiveSupport::TestCase
   end
 
   test 'graduation date allows fuzzy dates' do
-    thesis = Thesis.new_locked_ldp_object
+    thesis = Thesis.new
     assert_nothing_raised do
       thesis.unlock_and_fetch_ldp_object do |unlocked_thesis|
         unlocked_thesis.graduation_date = 'before 1997 or after 2084'
@@ -87,7 +71,7 @@ class ThesisTest < ActiveSupport::TestCase
   end
 
   test 'embargo_end_date must be present if visibility is embargo' do
-    thesis = Thesis.new_locked_ldp_object
+    thesis = Thesis.new
     thesis.unlock_and_fetch_ldp_object do |unlocked_thesis|
       unlocked_thesis.visibility = Thesis::VISIBILITY_EMBARGO
     end
@@ -98,7 +82,7 @@ class ThesisTest < ActiveSupport::TestCase
   end
 
   test 'embargo_end_date must be blank for non-embargo visibilities' do
-    thesis = Thesis.new_locked_ldp_object
+    thesis = Thesis.new
     thesis.unlock_and_fetch_ldp_object do |unlocked_thesis|
       unlocked_thesis.visibility = JupiterCore::VISIBILITY_PUBLIC
       unlocked_thesis.embargo_end_date = '1992-02-01'
@@ -112,19 +96,19 @@ class ThesisTest < ActiveSupport::TestCase
   end
 
   test 'visibility_after_embargo must be present if visibility is embargo' do
-    thesis = Thesis.new_locked_ldp_object
+    thesis = Thesis.new
     thesis.unlock_and_fetch_ldp_object do |unlocked_thesis|
       unlocked_thesis.visibility = Thesis::VISIBILITY_EMBARGO
     end
 
     assert_not thesis.valid?
-    assert_equal 0, Thesis.public.count
+    assert_equal 0, Thesis.public_items.count
     assert thesis.errors[:visibility_after_embargo].present?
     assert_includes thesis.errors[:visibility_after_embargo], "can't be blank"
   end
 
   test 'visibility_after_embargo must be blank for non-embargo visibilities' do
-    thesis = Thesis.new_locked_ldp_object
+    thesis = Thesis.new
     thesis.unlock_and_fetch_ldp_object do |unlocked_thesis|
       unlocked_thesis.visibility = JupiterCore::VISIBILITY_PUBLIC
       unlocked_thesis.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].draft
@@ -140,7 +124,7 @@ class ThesisTest < ActiveSupport::TestCase
   end
 
   test 'visibility_after_embargo must be from the controlled vocabulary' do
-    thesis = Thesis.new_locked_ldp_object
+    thesis = Thesis.new
     thesis.unlock_and_fetch_ldp_object do |unlocked_thesis|
       unlocked_thesis.visibility = Thesis::VISIBILITY_EMBARGO
       unlocked_thesis.visibility_after_embargo = 'whatever'
@@ -153,7 +137,7 @@ class ThesisTest < ActiveSupport::TestCase
   end
 
   test '#add_to_path assigns paths properly' do
-    thesis = Thesis.new_locked_ldp_object
+    thesis = Thesis.new
     community_id = generate_random_string
     collection_id = generate_random_string
 
@@ -165,14 +149,14 @@ class ThesisTest < ActiveSupport::TestCase
   end
 
   test 'a community/collection path must be present' do
-    thesis = Thesis.new_locked_ldp_object
+    thesis = Thesis.new
 
     assert_not thesis.valid?
     assert_includes thesis.errors[:member_of_paths], "can't be blank"
   end
 
   test 'community/collection must exist' do
-    thesis = Thesis.new_locked_ldp_object
+    thesis = Thesis.new
     community_id = generate_random_string
     collection_id = generate_random_string
     thesis.unlock_and_fetch_ldp_object do |unlocked|
@@ -181,38 +165,38 @@ class ThesisTest < ActiveSupport::TestCase
 
     assert_not thesis.valid?
     assert_includes thesis.errors[:member_of_paths],
-                    I18n.t('activemodel.errors.models.ir_thesis.attributes.member_of_paths.community_not_found',
+                    I18n.t('activerecord.errors.models.thesis.attributes.member_of_paths.community_not_found',
                            id: community_id)
     assert_includes thesis.errors[:member_of_paths],
-                    I18n.t('activemodel.errors.models.ir_thesis.attributes.member_of_paths.collection_not_found',
+                    I18n.t('activerecord.errors.models.thesis.attributes.member_of_paths.collection_not_found',
                            id: collection_id)
   end
 
   test 'item_type_with_status_code gets set correctly' do
-    thesis = Thesis.new_locked_ldp_object
+    thesis = Thesis.new
     assert_equal thesis.item_type_with_status_code, :thesis
   end
 
   test 'a title is required' do
-    thesis = Thesis.new_locked_ldp_object
+    thesis = Thesis.new
     assert_not thesis.valid?
     assert_includes thesis.errors[:title], "can't be blank"
   end
 
   test 'a dissertant is required' do
-    thesis = Thesis.new_locked_ldp_object
+    thesis = Thesis.new
     assert_not thesis.valid?
     assert_includes thesis.errors[:dissertant], "can't be blank"
   end
 
   test 'a graduation date is required' do
-    thesis = Thesis.new_locked_ldp_object
+    thesis = Thesis.new
     assert_not thesis.valid?
     assert_includes thesis.errors[:graduation_date], "can't be blank"
   end
 
   test 'a sort year is required' do
-    thesis = Thesis.new_locked_ldp_object
+    thesis = Thesis.new
     assert_not thesis.valid?
     assert_includes thesis.errors[:sort_year], "can't be blank"
   end

@@ -4,7 +4,7 @@ class CommunitiesController < ApplicationController
     authorize Community
     respond_to do |format|
       format.html do
-        @communities = Community.order(params[:sort] => params[:direction]).page params[:page]
+        @communities = Community.order(Community.sort_order(params)).page params[:page]
         @title = t('.header')
       end
       format.json do
@@ -28,11 +28,11 @@ class CommunitiesController < ApplicationController
     authorize @community
     respond_to do |format|
       format.html do
-        @collections = @community.member_collections.order(params[:sort] => params[:direction]).page params[:page]
+        @collections = @community.member_collections.order(Collection.sort_order(params)).page params[:page]
       end
       format.js do
         # Used for the collapsable dropdown to show member collections
-        @collections = @community.member_collections.order(params[:sort] => params[:direction])
+        @collections = @community.member_collections.order(Collection.sort_order(params))
       end
 
       format.json do

@@ -1,4 +1,5 @@
 class Exporters::Solr::CollectionExporter < Exporters::Solr::BaseExporter
+  indexed_model_name 'ArCollection'
 
   index :title, role: [:search, :sort]
 
@@ -24,4 +25,5 @@ class Exporters::Solr::CollectionExporter < Exporters::Solr::BaseExporter
                                        Community.find(collection.community_id).title if collection.community_id.present?
                                      }
 
+  default_sort index: :title, direction: :asc
 end

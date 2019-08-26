@@ -18,4 +18,12 @@ class JupiterCore::SolrServices::Client
     connection.add(solr_doc, params: { softCommit: true })
   end
 
+  def remove_document(id)
+    connection.delete_by_id(id)
+  end
+
+  def truncate_index
+    connection.delete_by_query('*:*')
+  end
+
 end

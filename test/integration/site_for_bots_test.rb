@@ -8,15 +8,12 @@ class SiteForBotsTest < ActionDispatch::IntegrationTest
     # TODO: setup proper fixtures for LockedLdpObjects
 
     # A community with two collections
-    @community1 = Community
-                  .new_locked_ldp_object(title: 'Two collection community', owner_id: 1)
+    @community1 = Community.new(title: 'Two collection community', owner_id: 1)
                   .unlock_and_fetch_ldp_object(&:save!)
-    @collection1 = Collection
-                   .new_locked_ldp_object(community_id: @community1.id,
+    @collection1 = Collection.new(community_id: @community1.id,
                                           title: 'Nice collection', owner_id: 1)
                    .unlock_and_fetch_ldp_object(&:save!)
-    @collection2 = Collection
-                   .new_locked_ldp_object(community_id: @community1.id,
+    @collection2 = Collection.new(community_id: @community1.id,
                                           title: 'Another collection', owner_id: 1)
                    .unlock_and_fetch_ldp_object(&:save!)
     @item = Item.new.unlock_and_fetch_ldp_object do |uo|
@@ -41,7 +38,7 @@ class SiteForBotsTest < ActionDispatch::IntegrationTest
         @item.add_and_ingest_files([file])
       end
     end
-    @thesis = Thesis.new_locked_ldp_object.unlock_and_fetch_ldp_object do |uo|
+    @thesis = Thesis.new.unlock_and_fetch_ldp_object do |uo|
       uo.title = 'Fantasitc thesis'
       uo.owner_id = 1
       uo.dissertant = 'Joe Blow'

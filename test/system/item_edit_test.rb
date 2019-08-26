@@ -7,8 +7,8 @@ class ItemEditTest < ApplicationSystemTestCase
 
     user = users(:regular)
 
-    community = locked_ldp_fixture(Community, :fancy).unlock_and_fetch_ldp_object(&:save!)
-    collection = locked_ldp_fixture(Collection, :fancy).unlock_and_fetch_ldp_object(&:save!)
+    community = Community.new(title: 'Fancy Community', owner_id: 1).unlock_and_fetch_ldp_object(&:save!)
+    collection = Collection.new(title: 'Fancy collection', owner_id: 1, community_id: community.id).unlock_and_fetch_ldp_object(&:save!)
 
     item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                       title: 'Book of Random',

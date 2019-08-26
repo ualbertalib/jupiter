@@ -167,7 +167,7 @@ class Exporters::Solr::BaseExporter
 
     attr_accessor :reverse_solr_name_map, :name_to_type_map, :name_to_roles_map,
                   :name_to_solr_name_map, :name_to_custom_lambda_map, :indexed_attributes, :searched_solr_names,
-                  :facets, :ranges, :default_sort_direction, :default_sort_indexes
+                  :facets, :ranges, :default_sort_direction, :default_sort_indexes, :default_ar_sort_args
 
     protected
 
@@ -214,6 +214,7 @@ class Exporters::Solr::BaseExporter
     # rubocop:enable Naming/UncommunicativeMethodParamName
 
     def default_sort(index:, direction:)
+      default_ar_sort_args = {index => direction}
       index = [index] unless index.is_a?(Array)
       direction = [direction] unless direction.is_a?(Array)
       self.default_sort_indexes = index.map { |idx| solr_name_for(idx, role: :sort) }

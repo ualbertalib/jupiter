@@ -77,7 +77,8 @@ if Rails.env.development? || Rails.env.uat?
       end
     end
     if File.exist?(filename)
-      community.logo.attach(io: File.open(filename), filename: "#{thing}.png", content_type: "image/png")
+      # TODO: !!!!!
+  #    community.logo.attach(io: File.open(filename), filename: "#{thing}.png", content_type: "image/png")
     end
 
     item_collection = Collection.new(

@@ -1,6 +1,6 @@
 class AfCommunity < JupiterCore::LockedLdpObject
 
-  has_solr_exporter Exporters::Solr::CommunityExporter
+  has_solr_exporter Exporters::Solr::AfCommunityExporter
 
   include ObjectProperties
   # Needed for ActiveStorage (logo)...

@@ -24,8 +24,8 @@ class EmbargoExpiryJob < ApplicationJob
 
     thesis_results_count, thesis_results, _ = JupiterCore::Search.perform_solr_query(
       q: '',
-      fq: "_query_:\"{!raw f=has_model_ssim}#{Thesis.af_parent_class}\""\
-          " AND #{visibility_solr_name}:\"#{ItemProperties::VISIBILITY_EMBARGO}\""\
+      fq: "_query_:\"{!raw f=has_model_ssim}#{Thesis.solr_exporter_class.indexed_has_model_name}\""\
+          " AND #{visibility_solr_name}:\"#{Depositable::VISIBILITY_EMBARGO}\""\
           " AND #{embargo_end_date_solr_name}:[* TO NOW]",
       rows: 10_000_000
     )
@@ -39,14 +39,11 @@ class EmbargoExpiryJob < ApplicationJob
     end
 
     thesis_results.each do |result|
-      obj = JupiterCore::LockedLdpObject.reify_solr_doc(result)
-      obj.unlock_and_fetch_ldp_object do |item|
-        item.add_to_embargo_history
-        item.visibility = item.visibility_after_embargo
-        item.embargo_end_date = nil
-        item.visibility_after_embargo = nil
-        item.save
-      end
+      obj = Thesis.find(result['id'])
+      obj.visibility = obj.visibility_after_embargo
+      obj.embargo_end_date = nil
+      obj.visibility_after_embargo = nil
+      obj.save
     end
 
     Rails.logger.info("Removed embargo expiry on #{item_results_count} items and #{thesis_results_count} theses")

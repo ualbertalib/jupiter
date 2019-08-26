@@ -5,16 +5,17 @@ class User < ApplicationRecord
   has_many :draft_items, dependent: :destroy
   has_many :draft_theses, dependent: :destroy
 
+  has_many :items, foreign_key: :owner_id, inverse_of: :owner
+  has_many :theses, foreign_key: :owner_id, inverse_of: :owner
+  has_many :collections, foreign_key: :owner_id, inverse_of: :owner
+  has_many :communities, foreign_key: :owner_id, inverse_of: :owner
+
   # We don't need to validate the format of an email address here,
   # as emails are supplied from SAML (so assuming...hopefully they are valid)
   validates :email, presence: true,
                     uniqueness: { case_sensitive: false }
 
   validates :name, presence: true
-
-  def items
-   Item.where(owner_id: id)
-  end
 
   def update_activity!(now, remote_ip, sign_in: false)
     raise ArgumentError, :remote_ip if remote_ip.blank?

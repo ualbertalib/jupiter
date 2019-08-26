@@ -4,7 +4,7 @@ class CollectionPolicyTest < ActiveSupport::TestCase
 
   test 'admin user should have proper authorization over collections' do
     current_user = users(:admin)
-    collection = Collection.new_locked_ldp_object
+    collection = Collection.new
 
     assert CollectionPolicy.new(current_user, collection).index?
     assert CollectionPolicy.new(current_user, collection).create?
@@ -17,7 +17,7 @@ class CollectionPolicyTest < ActiveSupport::TestCase
 
   test 'general user should only be able to see index and show of collections' do
     current_user = users(:regular)
-    collection = Collection.new_locked_ldp_object
+    collection = Collection.new
 
     assert CollectionPolicy.new(current_user, collection).index?
     assert CollectionPolicy.new(current_user, collection).show?
@@ -31,7 +31,7 @@ class CollectionPolicyTest < ActiveSupport::TestCase
 
   test 'anon user should only be able to see index and show of collections' do
     current_user = nil
-    collection = Collection.new_locked_ldp_object
+    collection = Collection.new
 
     assert CollectionPolicy.new(current_user, collection).index?
     assert CollectionPolicy.new(current_user, collection).show?

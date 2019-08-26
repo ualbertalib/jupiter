@@ -6,12 +6,12 @@ class SitemapController < ApplicationController
 
   def communities
     @communities = Community.all
-    Rollbar.warning 'communities sitemap should contain less than 50,000 targets' if @communities.total_count > 50_000
+    Rollbar.warning 'communities sitemap should contain less than 50,000 targets' if @communities.count > 50_000
   end
 
   def collections
     @collections = Collection.all
-    Rollbar.warning 'collections sitemap should contain less than 50,000 targets' if @collections.total_count > 50_000
+    Rollbar.warning 'collections sitemap should contain less than 50,000 targets' if @collections.count > 50_000
   end
 
   def items
@@ -20,8 +20,8 @@ class SitemapController < ApplicationController
   end
 
   def theses
-    @theses = Thesis.public
-    Rollbar.warning 'thesis sitemap should contain less than 50,000 targets' if @theses.total_count > 50_000
+    @theses = Thesis.public_items
+    Rollbar.warning 'thesis sitemap should contain less than 50,000 targets' if @theses.count > 50_000
   end
 
 end
