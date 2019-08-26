@@ -3,13 +3,11 @@ require 'test_helper'
 class ItemsControllerTest < ActionDispatch::IntegrationTest
 
   def setup
-    @community = Community.new(title: 'Desolate community',
-                                                 owner_id: 1)
-    @community.unlock_and_fetch_ldp_object(&:save!)
-    @collection = Collection.new(community_id: @community.id,
-                                                   title: 'Desolate collection',
-                                                   owner_id: 1)
-    @collection.unlock_and_fetch_ldp_object(&:save!)
+
+    @regular_user = users(:regular)
+    @admin =  users(:admin)
+    @community = Community.create!(title: 'Desolate community', owner_id: 1)
+    @collection = Collection.create!(community_id: @community.id, title: 'Desolate collection', owner_id: 1)
 
     @item = Item.new(
       title: 'item to edit',
@@ -39,8 +37,6 @@ class ItemsControllerTest < ActionDispatch::IntegrationTest
       unlocked_thesis.save!
     end
 
-    @regular_user = users(:regular)
-    @admin = users(:admin)
   end
 
   test 'should be able to show an item' do

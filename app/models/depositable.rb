@@ -9,9 +9,10 @@ class Depositable < ApplicationRecord
                                 CONTROLLED_VOCABULARIES[:visibility].public].freeze
 
   validate :visibility_must_be_known
-  validates :owner, presence: true
+  validates :owner_id, presence: true
   validates :record_created_at, presence: true
   validates :date_ingested, presence: true
+  validates :title, presence: true
 
   before_validation :set_record_created_at, on: :create
   before_validation :set_date_ingested
@@ -39,7 +40,17 @@ class Depositable < ApplicationRecord
     end
 
     self.solr_exporter_class = klass
+
     after_commit :update_solr
+
+    # Note the ordering here: we remove it from solr _before_ destroying it, so that
+    # queries happining around the time of the deletion in Postgres don't get results that crash the page
+    # when the ID that came back from Solr is no longer in Postgres.
+    before_destroy :remove_from_solr
+
+    # update on a rollback if the model is persisted after the rollback, because in some cases like a rolled-back
+    # destroy, the record may no longer be in Solr even though it still exists in Postgres
+    after_rollback :update_solr, if: :persisted?
 
     # import some information from the Solr Exporter for compatibility purposes with existing Fedora stuff
     # TODO: remove
@@ -61,6 +72,10 @@ class Depositable < ApplicationRecord
   def update_solr
     solr_doc = solr_exporter.export
     JupiterCore::SolrServices::Client.instance.add_or_update_document(solr_doc)
+  end
+
+  def remove_from_solr
+    JupiterCore::SolrServices::Client.instance.remove_document(id)
   end
 
   def self.valid_visibilities
@@ -234,4 +249,20 @@ class Depositable < ApplicationRecord
     Rollbar.error("Could not preserve #{id}", e)
   end
   # rubocop:enable Style/GlobalVars
+
+  def to_partial_path
+    self.class.to_s.downcase
+  end
+
+  def self.sort_order(params)
+    if params.has_key? :sort
+      params[:sort] = params[:direction]
+    else
+      solr_exporter_class.default_ar_sort_args
+    end
+  end
+
+  def self.safe_attributes
+    attribute_names.map(&:to_sym) - [:id]
+  end
 end

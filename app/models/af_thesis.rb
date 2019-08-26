@@ -1,6 +1,6 @@
 class AfThesis < JupiterCore::LockedLdpObject
 
-  has_solr_exporter Exporters::Solr::ThesisExporter
+  has_solr_exporter Exporters::Solr::AfThesisExporter
 
   include ObjectProperties
   include ItemProperties
@@ -43,7 +43,7 @@ class AfThesis < JupiterCore::LockedLdpObject
 
   def self.from_draft(draft_thesis)
     thesis = Thesis.find(draft_thesis.uuid) if draft_thesis.uuid.present?
-    thesis ||= Thesis.new_locked_ldp_object
+    thesis ||= Thesis.new
     thesis.unlock_and_fetch_ldp_object do |unlocked_obj|
       unlocked_obj.owner = draft_thesis.user_id if unlocked_obj.owner.blank?
       unlocked_obj.title = draft_thesis.title

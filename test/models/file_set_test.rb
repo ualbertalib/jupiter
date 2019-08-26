@@ -28,7 +28,7 @@ class FileSetTest < ActiveSupport::TestCase
 
     # It seems unfortunate as a side-effect of improved item validations, we need to create these in tests that
     # don't care about them...
-    community = locked_ldp_fixture(Community, :foo).unlock_and_fetch_ldp_object(&:save!)
+    community = Community.new(title: 'Community', owner_id: 1).unlock_and_fetch_ldp_object(&:save!)
     collection = Collection.new(title: 'foo', owner_id: users(:regular).id,
                                                   community_id: community.id).unlock_and_fetch_ldp_object(&:save!)
 

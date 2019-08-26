@@ -3,7 +3,7 @@ require 'test_helper'
 class CollectionTest < ActiveSupport::TestCase
 
   test 'a valid collection can be constructed' do
-    community = Community.new(title: 'Community', owner_id: 1).unlock_and_fetch_ldp_object(&:save!)
+    community = Community.new(title: 'Community', owner_id: users(:admin).id).unlock_and_fetch_ldp_object(&:save!)
     collection = Collection.new(title: 'foo', owner_id: users(:regular).id,
                                                   community_id: community.id)
     assert collection.valid?
@@ -29,7 +29,7 @@ class CollectionTest < ActiveSupport::TestCase
   end
 
   test 'community must exist' do
-    community_id = generate_random_string
+    community_id = UUIDTools::UUID.random_create
     collection = Collection.new(title: 'foo', owner_id: users(:regular).id)
     # assign this separately in order to bypass the initial Solr document generation, which would otherwise
     # raise an exception about the non-existent Community
@@ -37,23 +37,8 @@ class CollectionTest < ActiveSupport::TestCase
 
     assert_not collection.valid?
     assert_includes collection.errors[:community_id],
-                    I18n.t('activemodel.errors.models.ir_collection.attributes.community_id.community_not_found',
+                    I18n.t('activerecord.errors.models.collection.attributes.community_id.community_not_found',
                            id: community_id)
-  end
-
-  test 'member_of gets set on save' do
-    community_uri = nil
-    community = Community.new(title: 'Community', owner_id: 1).unlock_and_fetch_ldp_object do |uo|
-      uo.save!
-      community_uri = uo.uri
-    end
-    Collection.new(title: 'foo', owner_id: users(:regular).id,
-                                     community_id: community.id).unlock_and_fetch_ldp_object do |uo|
-      uo.save!
-      uo.reload
-      # Make sure the triple has the right predicate and object
-      assert_match(/#{::Hydra::PCDM::Vocab::PCDMTerms.memberOf}.*#{community_uri}/, uo.resource.dump(:ntriples))
-    end
   end
 
 end

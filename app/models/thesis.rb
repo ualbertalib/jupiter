@@ -6,6 +6,7 @@ class Thesis < Depositable
 
   has_many_attached :files, dependent: false
 
+  scope :public_items, -> { where(visibility: JupiterCore::VISIBILITY_PUBLIC) }
 
   acts_as_rdfable do |config|
     config.title has_predicate: ::RDF::Vocab::DC.title
@@ -34,7 +35,7 @@ class Thesis < Depositable
 
   def self.from_draft(draft_thesis)
     thesis = Thesis.find(draft_thesis.uuid) if draft_thesis.uuid.present?
-    thesis ||= Thesis.new_locked_ldp_object
+    thesis ||= Thesis.new
     thesis.unlock_and_fetch_ldp_object do |unlocked_obj|
       unlocked_obj.owner_id = draft_thesis.user_id if unlocked_obj.owner.blank?
       unlocked_obj.title = draft_thesis.title
@@ -122,11 +123,21 @@ class Thesis < Depositable
     end
   end
 
+  after_save :push_item_id_for_preservation
+
   validates :dissertant, presence: true
   validates :graduation_date, presence: true
   validates :sort_year, presence: true
   validates :language, uri: { in_vocabulary: :language }
   validates :institution, uri: { in_vocabulary: :institution }
+
+  validates :embargo_end_date, presence: true, if: ->(item) { item.visibility == VISIBILITY_EMBARGO }
+  validates :embargo_end_date, absence: true, if: ->(item) { item.visibility != VISIBILITY_EMBARGO }
+  validates :visibility_after_embargo, presence: true, if: ->(item) { item.visibility == VISIBILITY_EMBARGO }
+  validates :visibility_after_embargo, absence: true, if: ->(item) { item.visibility != VISIBILITY_EMBARGO }
+  validates :member_of_paths, presence: true
+  validate :communities_and_collections_must_exist
+  validate :visibility_after_embargo_must_be_valid
 
 
   def populate_sort_year
@@ -140,7 +151,12 @@ class Thesis < Depositable
 
 
   def add_to_path(community_id, collection_id)
+    self.member_of_paths ||= []
     self.member_of_paths += ["#{community_id}/#{collection_id}"]
+  end
+
+  def self.valid_visibilities
+    super + [VISIBILITY_EMBARGO]
   end
 
 end

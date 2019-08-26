@@ -1,4 +1,4 @@
-class ThesisPolicy < LockedLdpObjectPolicy
+class ThesisPolicy < DepositablePolicy
 
   def index?
     true

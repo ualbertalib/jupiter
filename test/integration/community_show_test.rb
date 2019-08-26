@@ -9,16 +9,13 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
     # TODO: setup proper fixtures for LockedLdpObjects
 
     # A community with two collections and a logo
-    @community1 = Community
-                  .new_locked_ldp_object(title: 'Two collection community', owner_id: 1)
+    @community1 = Community.new(title: 'Two collection community', owner_id: 1)
                   .unlock_and_fetch_ldp_object(&:save!)
-    @collection1 = Collection
-                   .new_locked_ldp_object(community_id: @community1.id,
+    @collection1 = Collection.new(community_id: @community1.id,
                                           title: 'Nice collection', owner_id: 1)
                    .unlock_and_fetch_ldp_object(&:save!)
     # A restricted (to deposit, not to view) collection
-    @collection2 = Collection
-                   .new_locked_ldp_object(community_id: @community1.id,
+    @collection2 = Collection.new(community_id: @community1.id,
                                           restricted: true,
                                           title: 'Another collection', owner_id: 1)
                    .unlock_and_fetch_ldp_object(&:save!)
@@ -26,8 +23,7 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
                             filename: 'image-sample.jpeg', content_type: 'image/jpeg'
 
     # A community with no collections
-    @community2 = Community
-                  .new_locked_ldp_object(title: 'Empty community', owner_id: 1)
+    @community2 = Community .new(title: 'Empty community', owner_id: 1)
                   .unlock_and_fetch_ldp_object(&:save!)
   end
 

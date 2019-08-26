@@ -4,7 +4,7 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
 
   def before_all
     super
-    @community = locked_ldp_fixture(Community, :books).unlock_and_fetch_ldp_object(&:save!)
+    @community = Community.new(title: 'Books', description: 'a bunch of books' , owner_id: 1).unlock_and_fetch_ldp_object(&:save!)
     @collection = Collection.new(title: 'Thesis collection',
                                                    owner_id: 1,
                                                    restricted: true,

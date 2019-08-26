@@ -180,12 +180,4 @@ class Item < Depositable
     super + [VISIBILITY_EMBARGO]
   end
 
-  def to_partial_path
-    'item'
-  end
-
-  def self.policy_class
-    ItemPolicy
-  end
-
 end

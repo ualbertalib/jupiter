@@ -164,10 +164,10 @@ class ItemTest < ActiveSupport::TestCase
 
     assert_not item.valid?
     assert_includes item.errors[:member_of_paths],
-                    I18n.t('activemodel.errors.models.ir_item.attributes.member_of_paths.community_not_found',
+                    I18n.t('activerecord.errors.models.item.attributes.member_of_paths.community_not_found',
                            id: community_id)
     assert_includes item.errors[:member_of_paths],
-                    I18n.t('activemodel.errors.models.ir_item.attributes.member_of_paths.collection_not_found',
+                    I18n.t('activerecord.errors.models.item.attributes.member_of_paths.collection_not_found',
                            id: collection_id)
   end
 

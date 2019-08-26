@@ -60,49 +60,6 @@ en:
   updated_at: 'Updated At'
   view_more: 'View More'
 
-  activemodel:
-    errors:
-      models:
-        ir_item:
-          attributes:
-            base:
-              need_either_license_or_rights: 'must have either a license or a rights statement'
-              not_both_license_and_rights: 'should not have both a license and a rights statement'
-            member_of_paths:
-              community_not_found: 'is missing community with ID "%{id}"'
-              collection_not_found: 'is missing collection with ID "%{id}"'
-            languages:
-              not_recognized: 'is not recognized'
-            license:
-              not_recognized: 'is not recognized'
-            item_type:
-              not_recognized: 'is not recognized'
-            publication_status:
-              required_for_article: 'is required for articles'
-              not_recognized: 'is not recognized'
-              must_be_absent_for_non_articles: 'must be absent for non-articles'
-            visibility_after_embargo:
-              not_recognized: 'is not recognized'
-        ir_thesis:
-          attributes:
-            member_of_paths:
-              community_not_found: 'is missing community with ID "%{id}"'
-              collection_not_found: 'is missing collection with ID "%{id}"'
-            visibility_after_embargo:
-              not_recognized: 'is not recognized'
-            institution:
-              not_recognized: 'is not recognized'
-        ir_collection:
-          attributes:
-            # TODO: Just show the count of items? If collection has lots of items, this looks poorly
-            member_objects:
-              must_be_empty: "must be empty. Could not delete collection. Currently contains: %{list_of_objects}"
-            community_id:
-              community_not_found: 'is missing community with ID "%{id}"'
-        ir_community:
-          attributes:
-            member_collections:
-              must_be_empty: "must be empty. Could not delete community. Currently contains: %{list_of_collections}"
   activerecord:
     attributes:
       language:
@@ -158,6 +115,26 @@ en:
               must_be_absent_for_non_articles: 'must be absent for non-articles'
             visibility_after_embargo:
               not_recognized: 'is not recognized'
+        thesis:
+          attributes:
+            member_of_paths:
+              community_not_found: 'is missing community with ID "%{id}"'
+              collection_not_found: 'is missing collection with ID "%{id}"'
+            visibility_after_embargo:
+              not_recognized: 'is not recognized'
+            institution:
+              not_recognized: 'is not recognized'
+        collection:
+          attributes:
+            # TODO: Just show the count of items? If collection has lots of items, this looks poorly
+            member_objects:
+              must_be_empty: "must be empty. Could not delete collection. Currently contains: %{list_of_objects}"
+            community_id:
+              community_not_found: 'is missing community with ID "%{id}"'
+        community:
+          attributes:
+            member_collections:
+              must_be_empty: "must be empty. Could not delete community. Currently contains: %{list_of_collections}"
         draft_item:
           attributes:
             member_of_paths:

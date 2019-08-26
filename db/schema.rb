@@ -58,7 +58,7 @@ ActiveRecord::Schema.define(version: 2019_08_26_221814) do
   end
 
   create_table "collections", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
-    t.integer "visibility"
+    t.string "visibility"
     t.bigint "owner_id", null: false
     t.datetime "record_created_at"
     t.string "hydra_noid"
