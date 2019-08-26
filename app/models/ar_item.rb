@@ -115,11 +115,12 @@ class ArItem < ApplicationRecord
     # this is named differently in ActiveFedora
     ar_item.owner_id = item.owner
 
-    attributes = ar_item.attributes.keys.reject {|k| k == 'owner_id' || k == 'created_at' || k == 'updated_at'}
+    attributes = ar_item.attributes.keys.reject {|k| k == 'owner_id' || k == 'created_at' || k == 'updated_at' || k == 'logo_id'}
 
     attributes.each do |attr|
       ar_item.send("#{attr}=", item.send(attr))
     end
+    ar_item.logo_id = item.files_attachment_shim.logo_id
 
     # unconditionally save. If something doesn't pass validations in ActiveFedora, it still needs to come here
     ar_item.save(validate: false)

@@ -62,10 +62,8 @@ ActiveRecord::Schema.define(version: 2019_08_26_221814) do
     t.text "description"
     t.json "creators", array: true
     t.boolean "restricted", default: false, null: false
-    t.bigint "logo_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["logo_id"], name: "index_ar_collections_on_logo_id"
     t.index ["owner_id"], name: "index_ar_collections_on_owner_id"
   end
 
@@ -324,7 +322,6 @@ ActiveRecord::Schema.define(version: 2019_08_26_221814) do
   end
 
   add_foreign_key "announcements", "users"
-  add_foreign_key "ar_collections", "active_storage_attachments", column: "logo_id"
   add_foreign_key "ar_collections", "users", column: "owner_id"
   add_foreign_key "ar_communities", "active_storage_attachments", column: "logo_id"
   add_foreign_key "ar_communities", "users", column: "owner_id"
