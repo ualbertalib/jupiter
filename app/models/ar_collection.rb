@@ -8,7 +8,7 @@ class ArCollection < ApplicationRecord
   end
 
   def self.from_collection(collection)
-    raise ArgumentError, "Community #{collection.id} already migrated to ActiveRecord" if ArCollection.find_by(id: item.id) != nil
+    raise ArgumentError, "Community #{collection.id} already migrated to ActiveRecord" if ArCollection.find_by(id: collection.id) != nil
 
     ar_collection = ArCollection.new(id: collection.id)
 
@@ -22,6 +22,7 @@ class ArCollection < ApplicationRecord
     end
 
     # unconditionally save. If something doesn't pass validations in ActiveFedora, it still needs to come here
+    ar_collection.restricted ||= false
     ar_collection.save(validate: false)
   end
 

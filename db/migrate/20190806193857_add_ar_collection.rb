@@ -13,8 +13,6 @@ class AddArCollection < ActiveRecord::Migration[5.2]
       t.text :description
       t.json :creators, array: true
       t.boolean :restricted, default: false, null: false
-      t.references :logo, foreign_key: {to_table: :active_storage_attachments, column: :id}
-
       t.timestamps
     end
   end
