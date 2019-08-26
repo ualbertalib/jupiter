@@ -9,7 +9,6 @@ class ArCommunity < ApplicationRecord
 
   def update_from_fedora_community(community)
     attributes = {
-      community_id: community.id,
       visibility: community.visibility,
       owner_id: community.owner,
       record_created_at: community.record_created_at,
@@ -17,17 +16,18 @@ class ArCommunity < ApplicationRecord
       date_ingested: community.date_ingested,
       title: community.title,
       fedora3_uuid: community.fedora3_uuid,
-      depositor_id: community.depositor,
+      depositor: community.depositor,
       description: community.description,
-      creators: community.creators
+      creators: community.creators,
+      is_published_in_era: true
     }
     assign_attributes(attributes)
     save(validate: false)
   end
 
   def self.from_community(community)
-    new_ar_community = ArCommunity.drafts.find_by(community_id: community.id)
-    new_ar_community ||= ArCommunity.drafts.new(community_id: community.id)
+    new_ar_community = ArCommunity.drafts.find_by(id: community.id)
+    new_ar_community ||= ArCommunity.drafts.new(id: community.id)
 
     new_ar_community.update_from_fedora_community(community)
     new_ar_community

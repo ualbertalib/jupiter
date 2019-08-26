@@ -48,16 +48,15 @@ ActiveRecord::Schema.define(version: 2019_08_22_183423) do
     t.index ["user_id"], name: "index_announcements_on_user_id"
   end
 
-  create_table "ar_collections", force: :cascade do |t|
-    t.uuid "collection_id"
-    t.integer "visibility", default: 0, null: false
+  create_table "ar_collections", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.string "visibility"
     t.bigint "owner_id", null: false
     t.datetime "record_created_at"
     t.string "hydra_noid"
     t.datetime "date_ingested"
     t.string "title"
     t.string "fedora3_uuid"
-    t.bigint "depositor_id"
+    t.string "depositor"
     t.uuid "community_id"
     t.text "description"
     t.json "creators", array: true
@@ -65,26 +64,23 @@ ActiveRecord::Schema.define(version: 2019_08_22_183423) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "is_published_in_era", default: false
-    t.index ["depositor_id"], name: "index_ar_collections_on_depositor_id"
     t.index ["owner_id"], name: "index_ar_collections_on_owner_id"
   end
 
-  create_table "ar_communities", force: :cascade do |t|
-    t.uuid "community_id"
-    t.integer "visibility", default: 0, null: false
+  create_table "ar_communities", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.string "visibility"
     t.bigint "owner_id", null: false
     t.datetime "record_created_at"
     t.string "hydra_noid"
     t.datetime "date_ingested"
     t.string "title"
     t.string "fedora3_uuid"
-    t.bigint "depositor_id"
+    t.string "depositor"
     t.text "description"
     t.json "creators", array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "is_published_in_era", default: false
-    t.index ["depositor_id"], name: "index_ar_communities_on_depositor_id"
     t.index ["owner_id"], name: "index_ar_communities_on_owner_id"
   end
 
@@ -317,9 +313,7 @@ ActiveRecord::Schema.define(version: 2019_08_22_183423) do
   end
 
   add_foreign_key "announcements", "users"
-  add_foreign_key "ar_collections", "users", column: "depositor_id"
   add_foreign_key "ar_collections", "users", column: "owner_id"
-  add_foreign_key "ar_communities", "users", column: "depositor_id"
   add_foreign_key "ar_communities", "users", column: "owner_id"
   add_foreign_key "ar_items", "users", column: "owner_id"
   add_foreign_key "ar_theses", "users", column: "owner_id"
