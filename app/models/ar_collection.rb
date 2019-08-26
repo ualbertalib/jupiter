@@ -1,7 +1,5 @@
 class ArCollection < ApplicationRecord
 
-  scope :drafts, -> { where(is_published_in_era: false).or(where(is_published_in_era: nil)) }
-
   acts_as_rdfable do |config|
     config.community_id has_predicate: ::TERMS[:ual].path
     config.description has_predicate: ::RDF::Vocab::DC.description
@@ -9,32 +7,22 @@ class ArCollection < ApplicationRecord
     config.creators has_predicate: ::RDF::Vocab::DC.creator
   end
 
-  def update_from_fedora_collection(collection)
-    attributes = {
-      visibility: collection.visibility,
-      owner_id: collection.owner,
-      record_created_at: collection.record_created_at,
-      hydra_noid: collection.hydra_noid,
-      date_ingested: collection.date_ingested,
-      title: collection.title,
-      fedora3_uuid: collection.fedora3_uuid,
-      depositor: collection.depositor,
-      community_id: collection.community_id,
-      description: collection.description,
-      creators: collection.creators,
-      restricted: (collection.restricted || false),
-      is_published_in_era: true
-    }
-    assign_attributes(attributes)
-    save(validate: false)
-  end
-
   def self.from_collection(collection)
-    new_ar_collection = ArCollection.drafts.find_by(id: collection.id)
-    new_ar_collection ||= ArCollection.drafts.new(id: collection.id)
+    raise ArgumentError, "Community #{collection.id} already migrated to ActiveRecord" if ArCollection.find_by(id: item.id) != nil
 
-    new_ar_collection.update_from_fedora_collection(collection)
-    new_ar_collection
+    ar_collection = ArCollection.new(id: collection.id)
+
+    # this is named differently in ActiveFedora
+    ar_collection.owner_id = collection.owner
+
+    attributes = ar_collection.attributes.keys.reject {|k| k == 'owner_id' || k == 'created_at' || k == 'updated_at'}
+
+    attributes.each do |attr|
+      ar_collection.send("#{attr}=", collection.send(attr))
+    end
+
+    # unconditionally save. If something doesn't pass validations in ActiveFedora, it still needs to come here
+    ar_collection.save(validate: false)
   end
 
 end

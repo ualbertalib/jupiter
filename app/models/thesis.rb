@@ -115,29 +115,6 @@ class Thesis < JupiterCore::LockedLdpObject
     thesis
   end
 
-  def self.from_thesis(thesis)
-    raise ArgumentError, "Thesis #{id} already migrated to ActiveRecord" if ArThesis.find_by(id: thesis.id) != nil
-
-    ar_thesis = ArThesis.new
-
-    # this is named differently in ActiveFedora
-    ar_thesis.owner_id = thesis.owner
-
-    attributes = ar_thesis.attributes.keys.reject {|k| k == 'owner_id' || k == 'created_at' || k == 'updated_at'}
-
-    attributes.each do |attr|
-      ar_thesis.send("#{attr}=", thesis.send(attr))
-    end
-
-    # unconditionally save. If something doesn't pass validations in ActiveFedora, it still needs to come here
-    ar_thesis.save(validate: false)
-
-    # add an association between the same underlying blobs the Item uses and the new ActiveRecord version
-    thesis.files_attachments.each do |attachment|
-      ActiveStorage::Attachment.create(record: ar_thesis, blob: attachment.blob, name: :files)
-    end
-  end
-
   unlocked do
     before_save :copy_departments_to_unordered_predicate
     before_save :copy_supervisors_to_unordered_predicate
