@@ -88,9 +88,6 @@ class Thesis < Depositable
 
       unlocked_obj.save!
 
-      # remove old filesets and attachments and recreate
-      unlocked_obj.purge_filesets
-
       # NOTE: destroy the attachment record, DON'T use #purge, which will wipe the underlying blob shared with the
       # draft item
       thesis.files.each(&:destroy) if thesis.files.present?

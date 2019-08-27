@@ -196,7 +196,7 @@ ActiveRecord::Schema.define(version: 2019_08_26_235029) do
     t.bigint "logo_id"
   end
 
-  create_table "draft_items", id: false, force: :cascade do |t|
+  create_table "draft_items", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.uuid "uuid"
     t.integer "status", default: 0, null: false
     t.integer "wizard_step", default: 0, null: false
@@ -224,7 +224,6 @@ ActiveRecord::Schema.define(version: 2019_08_26_235029) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "is_published_in_era", default: false
-    t.uuid "id", default: -> { "uuid_generate_v4()" }, null: false
     t.index ["id"], name: "index_draft_items_on_id", unique: true
     t.index ["type_id"], name: "index_draft_items_on_type_id"
     t.index ["user_id"], name: "index_draft_items_on_user_id"
@@ -241,7 +240,7 @@ ActiveRecord::Schema.define(version: 2019_08_26_235029) do
     t.index ["upcoming_draft_item_id"], name: "index_draft_items_languages_on_upcoming_draft_item_id"
   end
 
-  create_table "draft_theses", id: false, force: :cascade do |t|
+  create_table "draft_theses", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string "uuid"
     t.integer "status", default: 0, null: false
     t.integer "wizard_step", default: 0, null: false
@@ -271,7 +270,6 @@ ActiveRecord::Schema.define(version: 2019_08_26_235029) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "is_published_in_era", default: false
-    t.uuid "id", default: -> { "uuid_generate_v4()" }, null: false
     t.index ["id"], name: "index_draft_theses_on_id", unique: true
     t.index ["institution_id"], name: "index_draft_theses_on_institution_id"
     t.index ["language_id"], name: "index_draft_theses_on_language_id"
