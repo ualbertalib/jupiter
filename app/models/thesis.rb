@@ -91,7 +91,7 @@ class Thesis < Depositable
 
       # add an association between the same underlying blobs the Draft uses and the Item
       draft_thesis.files_attachments.each do |attachment|
-        new_attachment = ActiveStorage::Attachment.create(record: thesis.files_attachment_shim,
+        new_attachment = ActiveStorage::Attachment.create(record: thesis,
                                                           blob: attachment.blob, name: :shimmed_files)
         FileAttachmentIngestionJob.perform_later(new_attachment.id)
       end
