@@ -7,6 +7,8 @@ class Community < Depositable
   belongs_to :owner, class_name: 'User'
   has_many :collections
 
+  has_one_attached :logo
+
   before_destroy :can_be_destroyed?
   before_destroy -> { logo.purge_later }
 

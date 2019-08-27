@@ -5,8 +5,10 @@ class ChangeActivestorageRecordsToUuidPart2 < ActiveRecord::Migration[5.2]
 
     remove_column :draft_items, :id
     rename_column :draft_items, :upcoming_id, :id
+    execute 'ALTER TABLE draft_items ADD PRIMARY KEY (id);'
 
     remove_column :draft_theses, :id
     rename_column :draft_theses, :upcoming_id, :id
+    execute 'ALTER TABLE draft_theses ADD PRIMARY KEY (id);'
   end
 end

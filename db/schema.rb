@@ -17,16 +17,14 @@ ActiveRecord::Schema.define(version: 2019_08_26_235029) do
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
 
-  create_table "active_storage_attachments", id: false, force: :cascade do |t|
+  create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name"
     t.bigint "blob_id", null: false
     t.datetime "created_at"
-    t.bigint "record_id"
     t.string "record_type"
     t.uuid "fileset_uuid"
-    t.uuid "id"
+    t.uuid "record_id"
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
-    t.index ["record_type", "record_id", "name", "blob_id"], name: "unique_active_storage_attachment", unique: true
   end
 
   create_table "active_storage_blobs", force: :cascade do |t|
