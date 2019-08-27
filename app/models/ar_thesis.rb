@@ -119,7 +119,6 @@ class ArThesis < ApplicationRecord
     attributes.each do |attr|
       ar_thesis.send("#{attr}=", thesis.send(attr))
     end
-    ar_thesis.logo_id = thesis.files_attachment_shim.logo_id
 
     # unconditionally save. If something doesn't pass validations in ActiveFedora, it still needs to come here
     ar_thesis.save(validate: false)
@@ -131,6 +130,10 @@ class ArThesis < ApplicationRecord
       # but that's ok. we're going to fix that with this data
       new_attachment.upcoming_record_id = ar_thesis.id
       new_attachment.save!
+      if attachment.id == thesis.files_attachment_shim.logo_id
+        ar_thesis.logo_id = new_attachment.id
+        ar_thesis.save!
+      end
     end
   end
 

@@ -78,10 +78,8 @@ ActiveRecord::Schema.define(version: 2019_08_26_221814) do
     t.string "depositor"
     t.text "description"
     t.json "creators", array: true
-    t.bigint "logo_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["logo_id"], name: "index_ar_communities_on_logo_id"
     t.index ["owner_id"], name: "index_ar_communities_on_owner_id"
   end
 
@@ -121,10 +119,9 @@ ActiveRecord::Schema.define(version: 2019_08_26_221814) do
     t.string "source"
     t.string "related_link"
     t.json "publication_status", array: true
-    t.bigint "logo_id"
+    t.uuid "logo_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["logo_id"], name: "index_ar_items_on_logo_id"
     t.index ["owner_id"], name: "index_ar_items_on_owner_id"
   end
 
@@ -166,10 +163,9 @@ ActiveRecord::Schema.define(version: 2019_08_26_221814) do
     t.json "departments", array: true
     t.json "supervisors", array: true
     t.json "committee_members", array: true
-    t.bigint "logo_id"
+    t.uuid "logo_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["logo_id"], name: "index_ar_theses_on_logo_id"
     t.index ["owner_id"], name: "index_ar_theses_on_owner_id"
   end
 
@@ -323,11 +319,8 @@ ActiveRecord::Schema.define(version: 2019_08_26_221814) do
 
   add_foreign_key "announcements", "users"
   add_foreign_key "ar_collections", "users", column: "owner_id"
-  add_foreign_key "ar_communities", "active_storage_attachments", column: "logo_id"
   add_foreign_key "ar_communities", "users", column: "owner_id"
-  add_foreign_key "ar_items", "active_storage_attachments", column: "logo_id"
   add_foreign_key "ar_items", "users", column: "owner_id"
-  add_foreign_key "ar_theses", "active_storage_attachments", column: "logo_id"
   add_foreign_key "ar_theses", "users", column: "owner_id"
   add_foreign_key "draft_items", "users"
   add_foreign_key "draft_theses", "institutions"
