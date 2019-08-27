@@ -10,21 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_26_221814) do
+ActiveRecord::Schema.define(version: 2019_08_26_235029) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
 
-  create_table "active_storage_attachments", force: :cascade do |t|
+  create_table "active_storage_attachments", id: false, force: :cascade do |t|
     t.string "name"
     t.bigint "blob_id", null: false
     t.datetime "created_at"
     t.bigint "record_id"
     t.string "record_type"
     t.uuid "fileset_uuid"
-    t.uuid "upcoming_record_id"
+    t.uuid "id"
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "unique_active_storage_attachment", unique: true
   end
@@ -189,7 +189,7 @@ ActiveRecord::Schema.define(version: 2019_08_26_221814) do
     t.bigint "logo_id"
   end
 
-  create_table "draft_items", force: :cascade do |t|
+  create_table "draft_items", id: false, force: :cascade do |t|
     t.uuid "uuid"
     t.integer "status", default: 0, null: false
     t.integer "wizard_step", default: 0, null: false
@@ -217,9 +217,9 @@ ActiveRecord::Schema.define(version: 2019_08_26_221814) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "is_published_in_era", default: false
-    t.uuid "upcoming_id", default: -> { "uuid_generate_v4()" }, null: false
+    t.uuid "id", default: -> { "uuid_generate_v4()" }, null: false
+    t.index ["id"], name: "index_draft_items_on_id", unique: true
     t.index ["type_id"], name: "index_draft_items_on_type_id"
-    t.index ["upcoming_id"], name: "index_draft_items_on_upcoming_id", unique: true
     t.index ["user_id"], name: "index_draft_items_on_user_id"
   end
 
@@ -234,7 +234,7 @@ ActiveRecord::Schema.define(version: 2019_08_26_221814) do
     t.index ["upcoming_draft_item_id"], name: "index_draft_items_languages_on_upcoming_draft_item_id"
   end
 
-  create_table "draft_theses", force: :cascade do |t|
+  create_table "draft_theses", id: false, force: :cascade do |t|
     t.string "uuid"
     t.integer "status", default: 0, null: false
     t.integer "wizard_step", default: 0, null: false
@@ -264,10 +264,10 @@ ActiveRecord::Schema.define(version: 2019_08_26_221814) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "is_published_in_era", default: false
-    t.uuid "upcoming_id", default: -> { "uuid_generate_v4()" }, null: false
+    t.uuid "id", default: -> { "uuid_generate_v4()" }, null: false
+    t.index ["id"], name: "index_draft_theses_on_id", unique: true
     t.index ["institution_id"], name: "index_draft_theses_on_institution_id"
     t.index ["language_id"], name: "index_draft_theses_on_language_id"
-    t.index ["upcoming_id"], name: "index_draft_theses_on_upcoming_id", unique: true
     t.index ["user_id"], name: "index_draft_theses_on_user_id"
   end
 
@@ -330,6 +330,7 @@ ActiveRecord::Schema.define(version: 2019_08_26_221814) do
     t.string "source"
     t.string "related_link"
     t.json "publication_status", array: true
+    t.uuid "logo_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["owner_id"], name: "index_items_on_owner_id"
@@ -387,6 +388,7 @@ ActiveRecord::Schema.define(version: 2019_08_26_221814) do
     t.json "departments", array: true
     t.json "supervisors", array: true
     t.json "committee_members", array: true
+    t.uuid "logo_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["owner_id"], name: "index_theses_on_owner_id"
