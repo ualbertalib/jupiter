@@ -53,16 +53,21 @@ namespace :jupiter do
 
   desc 'sayonara ActiveFedora'
   task get_me_off_of_fedora: :environment do
-    puts 'Preparing Draft Item attachments...'
+    puts 'Preparing Draft Item ...'
 
     DraftItem.all.each do |draft_item|
       draft_item.files_attachments.each do |attachment|
         attachment.upcoming_record_id = draft_item.upcoming_id
         attachment.save!
       end
+
+      draft_item.draft_items_languages.each do |join_record|
+        join_record.upcoming_draft_item_id = draft_item.upcoming_id
+        join_record.save!
+      end
     end
 
-    puts 'Preparing Draft Thesis attachments...'
+    puts 'Preparing Draft Thesis ...'
 
     DraftThesis.all.each do |draft_thesis|
       draft_thesis.files_attachments.each do |attachment|
