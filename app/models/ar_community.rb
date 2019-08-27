@@ -18,7 +18,6 @@ class ArCommunity < ApplicationRecord
     attributes.each do |attr|
       ar_community.send("#{attr}=", community.send(attr))
     end
-    ar_community.logo_id = community.logo_attachment_shim.logo_id
 
     # unconditionally save. If something doesn't pass validations in ActiveFedora, it still needs to come here
     ar_community.save(validate: false)
