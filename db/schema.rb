@@ -216,8 +216,10 @@ ActiveRecord::Schema.define(version: 2019_08_26_221814) do
     t.bigint "language_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "upcoming_draft_item_id"
     t.index ["draft_item_id"], name: "index_draft_items_languages_on_draft_item_id"
     t.index ["language_id"], name: "index_draft_items_languages_on_language_id"
+    t.index ["upcoming_draft_item_id"], name: "index_draft_items_languages_on_upcoming_draft_item_id"
   end
 
   create_table "draft_theses", force: :cascade do |t|
