@@ -33,7 +33,7 @@ namespace :jupiter do
   desc 'queue all items and theses in the system for preservation'
   task preserve_all_items_and_theses: :environment do
     puts 'Adding all Items and Theses to preservation queue...'
-    (Item.all + Thesis.all).each { |item| item.unlock_and_fetch_ldp_object(&:preserve) }
+    (Item.all + Thesis.all).each { |item| item.tap(&:preserve) }
     puts 'All Items and Theses have been added to preservation queue!'
   end
 
@@ -149,7 +149,7 @@ namespace :jupiter do
     item.files.purge
 
     item.file_sets.each do |fs|
-      fs.unlock_and_fetch_ldp_object do |ufs|
+      fs.tap do |ufs|
         ufs.fetch_raw_original_file_data do |content_type, io|
           attachment = item.files.attach(io: io, filename: ufs.contained_filename, content_type: content_type).first
           attachment.fileset_uuid = fs.id

@@ -50,7 +50,7 @@ class Admin::CommunitiesController < Admin::AdminController
 
     @community.logo.attach(params[:community][:logo]) if params[:community][:logo].present?
 
-    @community.unlock_and_fetch_ldp_object do |unlocked_community|
+    @community.tap do |unlocked_community|
       if unlocked_community.save
         redirect_to [:admin, @community], notice: t('.created')
       else
@@ -67,7 +67,7 @@ class Admin::CommunitiesController < Admin::AdminController
       @community.logo.attach(params[:community][:logo])
     end
 
-    @community.unlock_and_fetch_ldp_object do |unlocked_community|
+    @community.tap do |unlocked_community|
       if unlocked_community.update(permitted_attributes(Community))
         redirect_to [:admin, @community], notice: t('.updated')
       else
@@ -77,7 +77,7 @@ class Admin::CommunitiesController < Admin::AdminController
   end
 
   def destroy
-    @community.unlock_and_fetch_ldp_object do |unlocked_community|
+    @community.tap do |unlocked_community|
       if unlocked_community.destroy
         flash[:notice] = t('.deleted')
       else

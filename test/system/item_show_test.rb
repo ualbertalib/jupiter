@@ -18,7 +18,7 @@ class ItemShowTest < ApplicationSystemTestCase
                                         license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
                                         item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                         publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-                                        subject: ['Items']).unlock_and_fetch_ldp_object do |uo|
+                                        subject: ['Items']).tap do |uo|
       uo.add_to_path(@community.id, @collection.id)
       uo.add_to_path(@community.id, @collection.id)
       uo.save!
@@ -41,7 +41,7 @@ class ItemShowTest < ApplicationSystemTestCase
                                         item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                         publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
                                         subject: ['Fancy things'])
-                 .unlock_and_fetch_ldp_object do |uo|
+                 .tap do |uo|
       uo.add_to_path(@community.id, @collection.id)
       uo.add_to_path(@community.id, @collection.id)
       uo.save!
@@ -63,7 +63,7 @@ class ItemShowTest < ApplicationSystemTestCase
       institution: CONTROLLED_VOCABULARIES[:institution].uofa,
       visibility: JupiterCore::VISIBILITY_PUBLIC,
       owner_id: @user.id
-    ).unlock_and_fetch_ldp_object do |uo|
+    ).tap do |uo|
       uo.add_to_path(@community.id, @collection.id)
       uo.add_to_path(@community.id, @collection.id)
       uo.save!

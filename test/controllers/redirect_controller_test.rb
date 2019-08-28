@@ -23,7 +23,7 @@ class RedirectControllerTest < ActionDispatch::IntegrationTest
                                        subject: ['Items'],
                                        fedora3_uuid: 'uuid:item',
                                        hydra_noid: 'item-noid')
-                .unlock_and_fetch_ldp_object do |uo|
+                .tap do |uo|
       uo.add_to_path(@community.id, @collection.id)
       uo.save!
     end

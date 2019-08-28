@@ -29,7 +29,7 @@ class DOIService
 
     ezid_identifer = Ezid::Identifier.mint(Ezid::Client.config.default_shoulder, ezid_metadata)
     if ezid_identifer.present?
-      @item.unlock_and_fetch_ldp_object do |uo|
+      @item.tap do |uo|
         uo.doi = ezid_identifer.id
         uo.save!
       end

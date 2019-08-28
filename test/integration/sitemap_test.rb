@@ -18,7 +18,7 @@ class SitemapTest < ActionDispatch::IntegrationTest
                                                publication_status:
                                                [CONTROLLED_VOCABULARIES[:publication_status].published],
                                                license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                                               subject: ['Items']).unlock_and_fetch_ldp_object do |uo|
+                                               subject: ['Items']).tap do |uo|
       uo.add_to_path(@community.id, @collection.id)
       uo.save!
     end
@@ -35,7 +35,7 @@ class SitemapTest < ActionDispatch::IntegrationTest
                                            dissertant: 'Joe Blow',
                                            language: CONTROLLED_VOCABULARIES[:language].english,
                                            graduation_date: 'Fall 2017')
-                    .unlock_and_fetch_ldp_object do |uo|
+                    .tap do |uo|
                       uo.add_to_path(@community.id, @collection.id)
                       uo.save!
                     end
@@ -50,7 +50,7 @@ class SitemapTest < ActionDispatch::IntegrationTest
                                                [CONTROLLED_VOCABULARIES[:publication_status].published],
                                                license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
                                                subject: ['Items'])
-                        .unlock_and_fetch_ldp_object do |uo|
+                        .tap do |uo|
                           uo.add_to_path(@community.id, @collection.id)
                           uo.save!
                         end

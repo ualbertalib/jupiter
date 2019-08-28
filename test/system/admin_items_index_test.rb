@@ -7,11 +7,9 @@ class AdminItemsIndexTest < ApplicationSystemTestCase
     user = users(:regular)
     admin = User.find_by(email: 'administrator@example.com')
 
-    community = Community.new(title: 'Fancy Community', owner_id: admin.id)
-                         .save!
-    collection = Collection.new(community_id: community.id,
+    community = Community.create!(title: 'Fancy Community', owner_id: admin.id)
+    collection = Collection.create!(community_id: community.id,
                                                   title: 'Fancy Collection', owner_id: admin.id)
-                           .save!
 
     # Two things owned by regular user
     Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
@@ -23,7 +21,7 @@ class AdminItemsIndexTest < ApplicationSystemTestCase
                                item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
                                subject: ['Fancy things'])
-        .unlock_and_fetch_ldp_object do |uo|
+        .tap do |uo|
       uo.add_to_path(community.id, collection.id)
       uo.save!
     end
@@ -31,7 +29,7 @@ class AdminItemsIndexTest < ApplicationSystemTestCase
                                  owner_id: user.id, title: 'Nice Item',
                                  dissertant: 'Joe Blow',
                                  graduation_date: '2019')
-          .unlock_and_fetch_ldp_object do |uo|
+          .tap do |uo|
       uo.add_to_path(community.id, collection.id)
       uo.save!
     end
@@ -46,7 +44,7 @@ class AdminItemsIndexTest < ApplicationSystemTestCase
                                item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
                                subject: ['Ownership'])
-        .unlock_and_fetch_ldp_object do |uo|
+        .tap do |uo|
       uo.add_to_path(community.id, collection.id)
       uo.save!
     end

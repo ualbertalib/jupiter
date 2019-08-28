@@ -33,7 +33,7 @@ class CollectionTest < ActiveSupport::TestCase
     collection = Collection.new(title: 'foo', owner_id: users(:regular).id)
     # assign this separately in order to bypass the initial Solr document generation, which would otherwise
     # raise an exception about the non-existent Community
-    collection.unlock_and_fetch_ldp_object { |uo| uo.community_id = community_id }
+    collection.tap { |uo| uo.community_id = community_id }
 
     assert_not collection.valid?
     assert_includes collection.errors[:community_id],

@@ -15,7 +15,7 @@ class DownloadsControllerTest < ActionDispatch::IntegrationTest
                                                publication_status:
                                                [CONTROLLED_VOCABULARIES[:publication_status].published],
                                                license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                                               subject: ['Items']).unlock_and_fetch_ldp_object do |uo|
+                                               subject: ['Items']).tap do |uo|
       uo.add_to_path(community.id, collection.id)
       uo.save!
     end
@@ -38,7 +38,7 @@ class DownloadsControllerTest < ActionDispatch::IntegrationTest
       visibility: JupiterCore::VISIBILITY_AUTHENTICATED,
       item_type: CONTROLLED_VOCABULARIES[:item_type].book,
       subject: ['Download']
-    ).unlock_and_fetch_ldp_object do |uo|
+    ).tap do |uo|
       uo.add_to_path(community.id, collection.id)
       uo.save!
     end

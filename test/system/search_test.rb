@@ -5,12 +5,10 @@ class SearchTest < ApplicationSystemTestCase
   def before_all
     super
     admin = User.find_by(email: 'administrator@example.com')
-    @community = Community.new(title: 'Fancy Community', owner_id: admin.id)
-                          .save!
+    @community = Community.create!(title: 'Fancy Community', owner_id: admin.id)
     @collections = 2.times.map do |i|
-      Collection.new(community_id: @community.id,
+      Collection.create!(community_id: @community.id,
                                        title: "Fancy Collection #{i}", owner_id: admin.id)
-                .save!
     end
 
     # Half items have 'Fancy' in title, others have 'Nice', distributed between the two collections
@@ -25,7 +23,7 @@ class SearchTest < ApplicationSystemTestCase
                                    publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
                                    license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
                                    subject: ['Items'])
-            .unlock_and_fetch_ldp_object do |uo|
+            .tap do |uo|
           uo.add_to_path(@community.id, @collections[0].id)
           uo.save!
         end
@@ -35,7 +33,7 @@ class SearchTest < ApplicationSystemTestCase
                                      dissertant: 'Joe Blow',
                                      language: CONTROLLED_VOCABULARIES[:language].english,
                                      graduation_date: "19#{50 + i}-11-11")
-              .unlock_and_fetch_ldp_object do |uo|
+              .tap do |uo|
           uo.add_to_path(@community.id, @collections[1].id)
           uo.save!
         end
@@ -51,7 +49,7 @@ class SearchTest < ApplicationSystemTestCase
                                       publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
                                       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
                                       subject: ['Items'])
-               .unlock_and_fetch_ldp_object do |uo|
+               .tap do |uo|
       uo.add_to_path(@community.id, @collections[0].id)
       uo.save!
     end
@@ -74,7 +72,7 @@ class SearchTest < ApplicationSystemTestCase
                                    publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
                                    license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
                                    subject: ['Items'])
-            .unlock_and_fetch_ldp_object do |uo|
+            .tap do |uo|
           uo.add_to_path(@community.id, @collections[0].id)
           uo.save!
         end
@@ -84,7 +82,7 @@ class SearchTest < ApplicationSystemTestCase
                                      dissertant: 'Joe Blow',
                                      language: CONTROLLED_VOCABULARIES[:language].english,
                                      graduation_date: "19#{70 + i}-11-11")
-              .unlock_and_fetch_ldp_object do |uo|
+              .tap do |uo|
           uo.add_to_path(@community.id, @collections[1].id)
           uo.save!
         end
@@ -93,11 +91,9 @@ class SearchTest < ApplicationSystemTestCase
 
     # Create extra items/collections/communities to test 'show more'
     10.times do |i|
-      community = Community.new(title: "Extra Community #{i}", owner_id: admin.id)
-                           .save!
-      collection = Collection.new(community_id: community.id,
+      community = Community.create!(title: "Extra Community #{i}", owner_id: admin.id)
+      collection = Collection.create!(community_id: community.id,
                                                     title: "Extra Collection #{i}", owner_id: admin.id)
-                             .save!
       Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                  owner_id: admin.id, title: "Extra Item #{i}",
                                  creators: ['Joe Blow'],
@@ -107,7 +103,7 @@ class SearchTest < ApplicationSystemTestCase
                                  publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
                                  license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
                                  subject: ['Items'])
-          .unlock_and_fetch_ldp_object do |uo|
+          .tap do |uo|
         uo.add_to_path(community.id, collection.id)
         uo.save!
       end

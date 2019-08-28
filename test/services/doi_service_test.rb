@@ -28,7 +28,7 @@ class DoiServiceTest < ActiveSupport::TestCase
                                       subject: ['Things'],
                                       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
                                       item_type: CONTROLLED_VOCABULARIES[:item_type].book)
-    item.unlock_and_fetch_ldp_object do |unlocked_item|
+    item.tap do |unlocked_item|
       unlocked_item.add_to_path(community.id, collection.id)
       unlocked_item.save!
     end
@@ -57,7 +57,7 @@ class DoiServiceTest < ActiveSupport::TestCase
 
     VCR.use_cassette('ezid_updating', erb: { id: item.id }, record: :none) do
       assert_no_enqueued_jobs
-      item.unlock_and_fetch_ldp_object do |uo|
+      item.tap do |uo|
         uo.title = 'Different Title'
         uo.save!
       end
@@ -77,7 +77,7 @@ class DoiServiceTest < ActiveSupport::TestCase
     VCR.use_cassette('ezid_updating_unavailable', erb: { id: item.id }, record: :none) do
       assert_no_enqueued_jobs
 
-      item.unlock_and_fetch_ldp_object do |uo|
+      item.tap do |uo|
         uo.visibility = JupiterCore::VISIBILITY_PRIVATE
         uo.save!
       end
@@ -94,7 +94,7 @@ class DoiServiceTest < ActiveSupport::TestCase
 
     VCR.use_cassette('ezid_removal', erb: { id: item.id }, record: :none, allow_unused_http_interactions: false) do
       assert_equal 0, Sidekiq::Worker.jobs.size
-      item.unlock_and_fetch_ldp_object(&:destroy)
+      item.tap(&:destroy)
 
       assert_enqueued_jobs 1, only: DOIRemoveJob
       clear_enqueued_jobs

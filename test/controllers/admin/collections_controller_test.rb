@@ -125,7 +125,7 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
       dissertant: 'Joe Blow',
       visibility: JupiterCore::VISIBILITY_PUBLIC,
       graduation_date: '2017-03-31'
-    ).unlock_and_fetch_ldp_object do |unlocked_item|
+    ).tap do |unlocked_item|
       unlocked_item.add_to_path(@community.id, collection.id)
       unlocked_item.save!
     end

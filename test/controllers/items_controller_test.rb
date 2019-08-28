@@ -19,7 +19,7 @@ class ItemsControllerTest < ActionDispatch::IntegrationTest
       visibility: JupiterCore::VISIBILITY_PUBLIC,
       item_type: CONTROLLED_VOCABULARIES[:item_type].book,
       subject: ['Edit']
-    ).unlock_and_fetch_ldp_object do |unlocked_item|
+    ).tap do |unlocked_item|
       unlocked_item.add_to_path(@community.id, @collection.id)
       unlocked_item.save!
     end
@@ -29,10 +29,10 @@ class ItemsControllerTest < ActionDispatch::IntegrationTest
       owner_id: users(:admin).id,
       dissertant: 'Joe Blow',
       graduation_date: '2017-03-31',
-      visibility: ItemProperties::VISIBILITY_EMBARGO,
+      visibility: Depositable::VISIBILITY_EMBARGO,
       embargo_end_date: 2.days.from_now.to_date,
       visibility_after_embargo: CONTROLLED_VOCABULARIES[:visibility].public
-    ).unlock_and_fetch_ldp_object do |unlocked_thesis|
+    ).tap do |unlocked_thesis|
       unlocked_thesis.add_to_path(@community.id, @collection.id)
       unlocked_thesis.save!
     end

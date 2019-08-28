@@ -7,11 +7,10 @@ class DepositThesisTest < ApplicationSystemTestCase
     admin = User.find_by(email: 'administrator@example.com')
     # Setup a community/collection pair for respective dropdowns
     @community = Community.create!(title: 'Theses', owner_id: admin.id)
-    @collection = Collection.new(title: 'Theses Collection',
+    @collection = Collection.create!(title: 'Theses Collection',
                                                    owner_id: admin.id,
                                                    restricted: true,
                                                    community_id: @community.id)
-                            .save!
   end
 
   test 'be able to deposit a new thesis into jupiter successfully' do
