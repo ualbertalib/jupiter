@@ -9,11 +9,11 @@ class Admin::ItemsControllerTest < ActionDispatch::IntegrationTest
 
     @community = Community.new(title: 'Desolate community',
                                                  owner_id: @admin.id)
-    @community.unlock_and_fetch_ldp_object(&:save!)
+    @community.save!
     @collection = Collection.new(community_id: @community.id,
                                                    title: 'Desolate collection',
                                                    owner_id: @admin.id)
-    @collection.unlock_and_fetch_ldp_object(&:save!)
+    @collection.save!
 
     @item = Item.new(
       title: 'item for deletion',

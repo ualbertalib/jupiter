@@ -4,14 +4,14 @@ class DepositThesisTest < ApplicationSystemTestCase
 
   def before_all
     super
-
+    admin = User.find_by(email: 'administrator@example.com')
     # Setup a community/collection pair for respective dropdowns
-    @community = Community.new(title: 'Theses', owner_id: 1).unlock_and_fetch_ldp_object(&:save!)
+    @community = Community.create!(title: 'Theses', owner_id: admin.id)
     @collection = Collection.new(title: 'Theses Collection',
-                                                   owner_id: 1,
+                                                   owner_id: admin.id,
                                                    restricted: true,
                                                    community_id: @community.id)
-                            .unlock_and_fetch_ldp_object(&:save!)
+                            .save!
   end
 
   test 'be able to deposit a new thesis into jupiter successfully' do

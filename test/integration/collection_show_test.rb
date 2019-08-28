@@ -7,11 +7,11 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
 
   def before_all
     super
-    @community = Community.new(title: 'Nice community', owner_id: 1).unlock_and_fetch_ldp_object(&:save!)
-    @collection = Collection.new(title: 'Nice collection', owner_id: 1, community_id: @community.id).unlock_and_fetch_ldp_object(&:save!)
+    @community = Community.create!(title: 'Nice community', owner_id: users(:admin).id)
+    @collection = Collection.create!(title: 'Nice collection', owner_id: users(:admin).id, community_id: @community.id)
     @items = ['Fancy', 'Nice'].map do |adjective|
       Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                 owner_id: 1,
+                                 owner_id: users(:admin).id,
                                  creators: ['Joe Blow'],
                                  created: '1953-04-01',
                                  languages: [CONTROLLED_VOCABULARIES[:language].english],

@@ -4,8 +4,8 @@ class Items::FilesControllerTest < ActionDispatch::IntegrationTest
 
   def before_all
     super
-    @community = Community.new(title: 'Books', description: 'a bunch of books' , owner_id: 1).unlock_and_fetch_ldp_object(&:save!)
-    @collection = Collection.new(title: 'Fantasy Books', description: 'some fantasy books', owner_id: 1, community_id: @community.id).unlock_and_fetch_ldp_object(&:save!)
+    @community = Community.create!(title: 'Books', description: 'a bunch of books' , owner_id: users(:admin).id)
+    @collection = Collection.create!(title: 'Fantasy Books', description: 'some fantasy books', owner_id: users(:admin).id, community_id: @community.id)
   end
 
   setup do

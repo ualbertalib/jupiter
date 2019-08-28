@@ -63,7 +63,7 @@ if Rails.env.development? || Rails.env.uat?
       owner_id: admin.id,
       title: title,
       description: Faker::Lorem.sentence(20, false, 0).chop
-    ).unlock_and_fetch_ldp_object(&:save!)
+    ).save!
 
     # Attach logos, if possible
     filename = File.expand_path(Rails.root + "tmp/#{thing}.png")
@@ -86,14 +86,14 @@ if Rails.env.development? || Rails.env.uat?
       title: "The annals of '#{thing.capitalize} International'",
       community_id: community.id,
       description: Faker::Lorem.sentence(40, false, 0).chop
-    ).unlock_and_fetch_ldp_object(&:save!)
+    ).save!
 
     thesis_collection = Collection.new(
       owner_id: admin.id,
       title: "Theses about #{thing.pluralize}",
       community_id: community.id,
       description: Faker::Lorem.sentence(40, false, 0).chop
-    ).unlock_and_fetch_ldp_object(&:save!)
+    ).save!
 
     # Items
     20.times do |i|
@@ -375,7 +375,7 @@ if Rails.env.development? || Rails.env.uat?
       owner_id: admin.id,
       title: "Zoo#{thing}ology Institute of North-Eastern Upper Alberta (and Saskatchewan)",
       description: Faker::Lorem.sentence(20, false, 0).chop
-    ).unlock_and_fetch_ldp_object(&:save!)
+    ).save!
   end
 
   # One community with a lot of empty restricted collections
@@ -383,7 +383,7 @@ if Rails.env.development? || Rails.env.uat?
     owner_id: admin.id,
     title: "The Everything Department",
     description: Faker::Lorem.sentence(20, false, 0).chop
-  ).unlock_and_fetch_ldp_object(&:save!)
+  ).save!
 
   EXTRA_THINGS.each do |thing|
     collection = Collection.new(
@@ -392,7 +392,7 @@ if Rails.env.development? || Rails.env.uat?
       community_id: community.id,
       restricted: true,
       description: "A restricted collection"
-    ).unlock_and_fetch_ldp_object(&:save!)
+    ).save!
   end
 
 end

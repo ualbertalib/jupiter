@@ -26,7 +26,7 @@ namespace :jupiter do
   desc 'fetch and unlock every object then save'
   task reindex: :environment do
     puts 'Reindexing all Items and Theses...'
-    (Item.all + Thesis.all).each { |item| item.unlock_and_fetch_ldp_object(&:save!) }
+    (Item.all + Thesis.all).each { |item| item.save! }
     puts 'Reindex completed!'
   end
 

@@ -33,9 +33,9 @@ class DeferredSimpleSolrQueryTest < ActiveSupport::TestCase
     private_obj = @@klass.new_locked_ldp_object(title: 'boo', owner: users(:regular).id,
                                                 visibility: JupiterCore::VISIBILITY_PRIVATE)
 
-    obj.unlock_and_fetch_ldp_object(&:save!)
-    another_obj.unlock_and_fetch_ldp_object(&:save!)
-    private_obj.unlock_and_fetch_ldp_object(&:save!)
+    obj.save!
+    another_obj.save!
+    private_obj.save!
 
     assert @@klass.all.present?
     assert_equal @@klass.all.total_count, 3

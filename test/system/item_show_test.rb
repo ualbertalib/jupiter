@@ -5,13 +5,13 @@ class ItemShowTest < ApplicationSystemTestCase
   def before_all
     super
     @user = User.find_by(email: 'john_snow@example.com')
-
-    @community = Community.new(title: 'Fancy Community', owner_id: 1).unlock_and_fetch_ldp_object(&:save!)
-    @collection = Collection.new(title: 'Fancy collection', owner_id: 1, community_id: @community.id).unlock_and_fetch_ldp_object(&:save!)
+    admin = User.find_by(email: 'administrator@example.com')
+    @community = Community.create!(title: 'Fancy Community', owner_id: admin.id)
+    @collection = Collection.create!(title: 'Fancy collection', owner_id: admin.id, community_id: @community.id)
 
     # Half items have 'Fancy' in title, others have 'Nice', distributed between the two collections
     @item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                        owner_id: 1, title: 'Fancy Item',
+                                        owner_id: admin.id, title: 'Fancy Item',
                                         creators: ['Joe Blow'],
                                         created: '1938-01-02',
                                         languages: [CONTROLLED_VOCABULARIES[:language].english],

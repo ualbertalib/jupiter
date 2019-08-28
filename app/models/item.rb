@@ -56,7 +56,7 @@ class Item < Doiable
   validate :visibility_after_embargo_must_be_valid
 
   def self.from_draft(draft_item)
-    # item = Item.find(draft_item.uuid) if draft_item.uuid.present?
+    item = Item.find(draft_item.uuid) if draft_item.uuid.present?
     item ||= Item.new(id: draft_item.uuid)
 
     item.owner_id = draft_item.user_id if item.owner_id.blank?

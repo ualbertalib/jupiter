@@ -4,16 +4,17 @@ class CommunitiesTypeaheadTest < ApplicationSystemTestCase
 
   def before_all
     super
-    @community = Community.new(title: 'Department of thing', owner_id: 1)
-                          .unlock_and_fetch_ldp_object(&:save!)
-    @community2 = Community.new(title: 'Other community', owner_id: 1)
-                           .unlock_and_fetch_ldp_object(&:save!)
-    Collection.new(title: 'Articles about thing', owner_id: 1, community_id: @community.id)
-              .unlock_and_fetch_ldp_object(&:save!)
-    Collection.new(title: 'Other stuff', owner_id: 1, community_id: @community.id)
-              .unlock_and_fetch_ldp_object(&:save!)
-    @collection = Collection.new(title: 'Other stuff things', owner_id: 1, community_id: @community2.id)
-                            .unlock_and_fetch_ldp_object(&:save!)
+    admin = User.find_by(email: 'administrator@example.com')
+    @community = Community.new(title: 'Department of thing', owner_id: admin.id)
+                          .save!
+    @community2 = Community.new(title: 'Other community', owner_id: admin.id)
+                           .save!
+    Collection.new(title: 'Articles about thing', owner_id: admin.id, community_id: @community.id)
+              .save!
+    Collection.new(title: 'Other stuff', owner_id: admin.id, community_id: @community.id)
+              .save!
+    @collection = Collection.new(title: 'Other stuff things', owner_id: admin.id, community_id: @community2.id)
+                            .save!
   end
 
   test 'anybody should be able to typeahead communities and collections' do

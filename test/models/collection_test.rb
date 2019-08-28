@@ -3,7 +3,7 @@ require 'test_helper'
 class CollectionTest < ActiveSupport::TestCase
 
   test 'a valid collection can be constructed' do
-    community = Community.new(title: 'Community', owner_id: users(:admin).id).unlock_and_fetch_ldp_object(&:save!)
+    community = Community.create!(title: 'Community', owner_id: users(:admin).id)
     collection = Collection.new(title: 'foo', owner_id: users(:regular).id,
                                                   community_id: community.id)
     assert collection.valid?

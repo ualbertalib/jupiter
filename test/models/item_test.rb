@@ -3,14 +3,14 @@ require 'test_helper'
 class ItemTest < ActiveSupport::TestCase
 
   test 'a valid item can be constructed' do
-    community = Community.new(title: 'Community', owner_id: 1,
+    community = Community.new(title: 'Community', owner_id: users(:admin).id,
                                                 visibility: JupiterCore::VISIBILITY_PUBLIC)
-    community.unlock_and_fetch_ldp_object(&:save!)
-    collection = Collection.new(title: 'Collection', owner_id: 1,
+    community.save!
+    collection = Collection.new(title: 'Collection', owner_id: users(:admin).id,
                                                   visibility: JupiterCore::VISIBILITY_PUBLIC,
                                                   community_id: community.id)
-    collection.unlock_and_fetch_ldp_object(&:save!)
-    item = Item.new(title: 'Item', owner_id: 1, visibility: JupiterCore::VISIBILITY_PUBLIC,
+    collection.save!
+    item = Item.new(title: 'Item', owner_id: users(:admin).id, visibility: JupiterCore::VISIBILITY_PUBLIC,
                                       created: '2017-02-02',
                                       languages: [CONTROLLED_VOCABULARIES[:language].english],
                                       creators: ['Joe Blow'],
@@ -322,15 +322,15 @@ class ItemTest < ActiveSupport::TestCase
     Redis.current.del Rails.application.secrets.preservation_queue_name
 
     # Setup an item...
-    community = Community.new(title: 'Community', owner_id: 1).unlock_and_fetch_ldp_object(&:save!)
-    collection = Collection.new(title: 'foo', owner_id: users(:regular).id,
-                                                  community_id: community.id).unlock_and_fetch_ldp_object(&:save!)
+    community = Community.create!(title: 'Community', owner_id: users(:admin).id)
+    collection = Collection.create!(title: 'foo', owner_id: users(:regular).id,
+                                                  community_id: community.id)
 
     item = Item.new(title: generate_random_string,
                                       creators: [generate_random_string],
                                       visibility: JupiterCore::VISIBILITY_PUBLIC,
                                       created: '1978-01-01',
-                                      owner_id: 1,
+                                      owner_id: users(:admin).id,
                                       item_type: CONTROLLED_VOCABULARIES[:item_type].report,
                                       languages: [CONTROLLED_VOCABULARIES[:language].english],
                                       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
@@ -358,26 +358,25 @@ class ItemTest < ActiveSupport::TestCase
     Redis.current.del Rails.application.secrets.preservation_queue_name
 
     # Setup an item...
-    community = Community.new(title: 'Community', owner_id: 1).unlock_and_fetch_ldp_object(&:save!)
-    collection = Collection.new(title: 'foo', owner_id: users(:regular).id,
-                                                  community_id: community.id).unlock_and_fetch_ldp_object(&:save!)
+    community = Community.create!(title: 'Community', owner_id: users(:admin).id)
+    collection = Collection.create!(title: 'foo', owner_id: users(:regular).id, community_id: community.id)
 
     item = Item.new(title: generate_random_string,
                                       creators: [generate_random_string],
                                       visibility: JupiterCore::VISIBILITY_PUBLIC,
                                       created: '1978-01-01',
-                                      owner_id: 1,
+                                      owner_id: users(:admin).id,
                                       item_type: CONTROLLED_VOCABULARIES[:item_type].report,
                                       languages: [CONTROLLED_VOCABULARIES[:language].english],
                                       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
                                       subject: ['Randomness'])
 
     travel 1.minute do
-      item.unlock_and_fetch_ldp_object(&:save)
+      item.save
     end
 
     travel 3.minutes do
-      item.unlock_and_fetch_ldp_object(&:save)
+      item.save
     end
 
     freeze_time do
@@ -404,16 +403,16 @@ class ItemTest < ActiveSupport::TestCase
     Redis.current.del Rails.application.secrets.preservation_queue_name
 
     # Setup some items...
-    community = Community.new(title: 'Community', owner_id: 1).unlock_and_fetch_ldp_object(&:save!)
-    collection = Collection.new(title: 'foo', owner_id: users(:regular).id,
-                                                  community_id: community.id).unlock_and_fetch_ldp_object(&:save!)
+    community = Community.create!(title: 'Community', owner_id: users(:admin).id)
+    collection = Collection.create!(title: 'foo', owner_id: users(:regular).id,
+                                                  community_id: community.id)
     items = []
     3.times do
       items << Item.new(title: generate_random_string,
                                           creators: [generate_random_string],
                                           visibility: JupiterCore::VISIBILITY_PUBLIC,
                                           created: '1978-01-01',
-                                          owner_id: 1,
+                                          owner_id: users(:admin).id,
                                           item_type: CONTROLLED_VOCABULARIES[:item_type].report,
                                           languages: [CONTROLLED_VOCABULARIES[:language].english],
                                           license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,

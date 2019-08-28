@@ -8,17 +8,14 @@ class ItemShowTest < ActionDispatch::IntegrationTest
     # TODO: setup proper fixtures for LockedLdpObjects
 
     # A community with two collections
-    @community1 = Community.new(title: 'Two collection community', owner_id: 1)
-                  .unlock_and_fetch_ldp_object(&:save!)
-    @collection1 = Collection.new(community_id: @community1.id,
-                                          title: 'Nice collection', owner_id: 1)
-                   .unlock_and_fetch_ldp_object(&:save!)
-    @collection2 = Collection.new(community_id: @community1.id,
-                                          title: 'Another collection', owner_id: 1)
-                   .unlock_and_fetch_ldp_object(&:save!)
+    @community1 = Community.create!(title: 'Two collection community', owner_id: users(:admin).id)
+    @collection1 = Collection.create!(community_id: @community1.id,
+                                          title: 'Nice collection', owner_id: users(:admin).id)
+    @collection2 = Collection.create!(community_id: @community1.id,
+                                          title: 'Another collection', owner_id: users(:admin).id)
     @item = Item.new.unlock_and_fetch_ldp_object do |uo|
       uo.title = 'Fantastic item'
-      uo.owner_id = 1
+      uo.owner_id = users(:admin).id
       uo.creators = ['Joe Blow']
       uo.visibility = JupiterCore::VISIBILITY_PUBLIC
       uo.created = '1999-09-09'

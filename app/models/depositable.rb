@@ -8,8 +8,6 @@ class Depositable < ApplicationRecord
                                 CONTROLLED_VOCABULARIES[:visibility].draft,
                                 CONTROLLED_VOCABULARIES[:visibility].public].freeze
 
-  default_scope -> { order(created_at: :desc) }
-
   validate :visibility_must_be_known
   validates :owner_id, presence: true
   validates :record_created_at, presence: true
@@ -22,17 +20,8 @@ class Depositable < ApplicationRecord
   # this isn't a predicate name you daft thing
   # rubocop:disable Naming/PredicateName
   def self.has_solr_exporter(klass)
-    # class << self
-    #   attr_accessor :solr_calc_attributes, :facets, :ranges
-    # end
-    # self.solr_calc_attributes = {}
-    # self.facets = []
-    # self.ranges = []
-
     class << self
-
       attr_accessor :solr_exporter_class
-
     end
     define_method :solr_exporter do
       return self.solr_exporter_class.new(self)
@@ -43,31 +32,17 @@ class Depositable < ApplicationRecord
 
     self.solr_exporter_class = klass
 
-    after_commit :update_solr
+    after_save :update_solr
 
     # Note the ordering here: we remove it from solr _before_ destroying it, so that
     # queries happining around the time of the deletion in Postgres don't get results that crash the page
     # when the ID that came back from Solr is no longer in Postgres.
     before_destroy :remove_from_solr
 
+    # TODO
     # update on a rollback if the model is persisted after the rollback, because in some cases like a rolled-back
     # destroy, the record may no longer be in Solr even though it still exists in Postgres
-    after_rollback :update_solr, if: :persisted?
-
-    # import some information from the Solr Exporter for compatibility purposes with existing Fedora stuff
-    # TODO: remove
-    # @solr_exporter_class.custom_indexes.each do |name|
-    #   type = @solr_exporter_class.solr_type_for(name)
-    #   solr_name_cache = @solr_exporter_class.solr_names_for(name)
-    #   self.facets << @solr_exporter_class.mangled_facet_name_for(name) if @solr_exporter_class.facet?(name)
-    #   self.ranges << @solr_exporter_class.mangled_range_name_for(name) if @solr_exporter_class.range?(name)
-    #
-    #   self.solr_calc_attributes[name] = {
-    #     solrize_for: @solr_exporter_class.solr_roles_for(name),
-    #     type: type,
-    #     solr_names: solr_name_cache
-    #   }
-    # end
+  #  after_rollback :remove_from_solr
   end
   # rubocop:enable Naming/PredicateName
 
@@ -252,7 +227,7 @@ class Depositable < ApplicationRecord
 
   def self.sort_order(params)
     if params.has_key? :sort
-      params[:sort] = params[:direction]
+      { params[:sort] => params[:direction] }
     else
       solr_exporter_class.default_ar_sort_args
     end

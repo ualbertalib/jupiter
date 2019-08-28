@@ -58,11 +58,11 @@ class ProfileIndexTest < ApplicationSystemTestCase
     user = users(:regular)
     admin = users(:admin)
 
-    community = Community.new(title: 'Fancy Community', owner_id: 1)
-                         .unlock_and_fetch_ldp_object(&:save!)
+    community = Community.new(title: 'Fancy Community', owner_id: users(:admin).id)
+                         .save!
     collection = Collection.new(community_id: community.id,
-                                                  title: 'Fancy Collection', owner_id: 1)
-                           .unlock_and_fetch_ldp_object(&:save!)
+                                                  title: 'Fancy Collection', owner_id: users(:admin).id)
+                           .save!
 
     # Two things owned by regular user
     Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
