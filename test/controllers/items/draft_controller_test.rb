@@ -9,6 +9,8 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
   end
 
   setup do
+    # some of the cleanup in integration tests is sloppy, so we need to manually clean up Solr
+    JupiterCore::SolrServices::Client.instance.truncate_index
     @user = users(:regular)
   end
 
@@ -52,7 +54,6 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
   # wizard_step: :describe_item
   test 'should be able to update a draft item properly when saving describe_item form' do
     sign_in_as @user
-
     draft_item = draft_items(:inactive)
 
     patch item_draft_url(id: :describe_item, item_id: draft_item.id), params: {
@@ -71,6 +72,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to item_draft_path(id: :choose_license_and_visibility, item_id: draft_item.id)
     get profile_url
+    assert_response :success
     assert_includes @response.body, 'Random Book'
     draft_item.reload
     assert_equal 'Random Book', draft_item.title
@@ -170,10 +172,15 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
       patch item_draft_url(id: :review_and_deposit_item, item_id: draft_item.id)
     end
 
-    assert_redirected_to item_url(Item.last)
-    assert_equal I18n.t('items.draft.successful_deposit'), flash[:notice]
-
     draft_item.reload
+
+    assert draft_item.uuid.present?
+
+    item = Item.find(draft_item.uuid)
+    assert item.present?
+
+    assert_redirected_to item_url(item)
+    assert_equal I18n.t('items.draft.successful_deposit'), flash[:notice]
 
     assert_equal 'review_and_deposit_item', draft_item.wizard_step
     assert_equal 'archived', draft_item.status
@@ -223,8 +230,8 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
     assert_difference('DraftItem.drafts.count', 1) do
       post create_draft_items_url
     end
+    assert_redirected_to item_draft_path(id: :describe_item, item_id: DraftItem.drafts.order(created_at: :asc).last.id)
 
-    assert_redirected_to item_draft_path(id: :describe_item, item_id: DraftItem.drafts.last.id)
   end
 
   test 'should not be able to delete a draft item if you do not own the item' do

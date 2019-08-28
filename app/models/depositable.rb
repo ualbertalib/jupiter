@@ -8,6 +8,8 @@ class Depositable < ApplicationRecord
                                 CONTROLLED_VOCABULARIES[:visibility].draft,
                                 CONTROLLED_VOCABULARIES[:visibility].public].freeze
 
+  default_scope -> { order(created_at: :desc) }
+
   validate :visibility_must_be_known
   validates :owner_id, presence: true
   validates :record_created_at, presence: true
@@ -135,16 +137,12 @@ class Depositable < ApplicationRecord
   end
 
   def set_thumbnail(attachment)
-    # TODO !!!!!
-    return true
-    files_attachment_shim.logo_id = attachment.id
-    files_attachment_shim.save!
+    self.logo_id = attachment.id
+    self.save!
   end
 
   def thumbnail_url(args = { resize: '100x100', auto_orient: true })
-    # TODO !!!
-    #logo = files.logo_file
-    return nil
+    logo = files.find_by(id: logo_id)
     return nil if logo.blank?
 
     Rails.application.routes.url_helpers.rails_representation_path(logo.variant(args).processed)
@@ -157,9 +155,7 @@ class Depositable < ApplicationRecord
   end
 
   def thumbnail_file
-    # TODO !!!
-    return nil
-    files_attachment_shim.logo_file
+    files.find_by(id: logo_id)
   end
 
   def add_and_ingest_files(file_handles = [])

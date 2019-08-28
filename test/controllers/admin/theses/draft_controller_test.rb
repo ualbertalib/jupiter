@@ -14,6 +14,7 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
 
   setup do
     @admin = users(:admin)
+    Thesis.destroy_all
   end
 
   test 'should be able to get to show page for a draft thesis' do
@@ -171,7 +172,7 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
       patch admin_thesis_draft_url(id: :review_and_deposit_thesis, thesis_id: draft_thesis.id)
     end
 
-    assert_redirected_to item_url(Thesis.last)
+    assert_redirected_to item_url(Thesis.order(created_at: :asc).last)
     assert_equal I18n.t('admin.theses.draft.successful_deposit'), flash[:notice]
 
     draft_thesis.reload
@@ -236,7 +237,7 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
       post create_draft_admin_theses_url
     end
 
-    assert_redirected_to admin_thesis_draft_path(id: :describe_thesis, thesis_id: DraftThesis.drafts.last.id)
+    assert_redirected_to admin_thesis_draft_path(id: :describe_thesis, thesis_id: DraftThesis.drafts.order(created_at: :asc).last.id)
   end
 
   test 'other admins should be able to delete a draft thesis even if they do not own the thesis' do

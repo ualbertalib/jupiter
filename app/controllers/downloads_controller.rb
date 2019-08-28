@@ -29,12 +29,10 @@ class DownloadsController < ApplicationController
   private
 
   def load_and_authorize_file
-    @file_set = FileSet.find(params[:file_set_id])
-    raise JupiterCore::ObjectNotFound unless @file_set.item == params[:id]
+    @file = ActiveStorage::Attachment.find_by(fileset_uuid: params[:file_set_id])
+    raise JupiterCore::ObjectNotFound unless @file.record_id == params[:id]
 
-    authorize @file_set.owning_item, :download?
-    @file = @file_set.owning_item.files_attachments.find_by(fileset_uuid: @file_set.id)
-    raise ActiveRecord::RecordNotFound, "no attachment for file_set with UUID: #{@file_set.id} " if @file.blank?
+    authorize @file.record, :download?
   end
 
   def update_download_count

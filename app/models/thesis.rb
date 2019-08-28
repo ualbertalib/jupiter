@@ -1,4 +1,4 @@
-class Thesis < Depositable
+class Thesis < Doiable
 
   has_solr_exporter Exporters::Solr::ThesisExporter
 
@@ -7,6 +7,23 @@ class Thesis < Depositable
   has_many_attached :files, dependent: false
 
   scope :public_items, -> { where(visibility: JupiterCore::VISIBILITY_PUBLIC) }
+
+  after_save :push_item_id_for_preservation
+  before_validation :populate_sort_year
+
+  validates :dissertant, presence: true
+  validates :graduation_date, presence: true
+  validates :sort_year, presence: true
+  validates :language, uri: { in_vocabulary: :language }
+  validates :institution, uri: { in_vocabulary: :institution }
+
+  validates :embargo_end_date, presence: true, if: ->(item) { item.visibility == VISIBILITY_EMBARGO }
+  validates :embargo_end_date, absence: true, if: ->(item) { item.visibility != VISIBILITY_EMBARGO }
+  validates :visibility_after_embargo, presence: true, if: ->(item) { item.visibility == VISIBILITY_EMBARGO }
+  validates :visibility_after_embargo, absence: true, if: ->(item) { item.visibility != VISIBILITY_EMBARGO }
+  validates :member_of_paths, presence: true
+  validate :communities_and_collections_must_exist
+  validate :visibility_after_embargo_must_be_valid
 
   acts_as_rdfable do |config|
     config.title has_predicate: ::RDF::Vocab::DC.title
@@ -25,8 +42,6 @@ class Thesis < Depositable
 #    #    config.related_item has_predicate: ::RDF::Vocab::DC.relation
     #  config.status has_predicate: ::RDF::Vocab::BIBO.status
   end
-
-  before_validation :populate_sort_year
 
   # Present a consistent interface with Item#item_type_with_status_code
   def item_type_with_status_code
@@ -92,7 +107,7 @@ class Thesis < Depositable
       # add an association between the same underlying blobs the Draft uses and the Item
       draft_thesis.files_attachments.each do |attachment|
         new_attachment = ActiveStorage::Attachment.create(record: thesis,
-                                                          blob: attachment.blob, name: :shimmed_files)
+                                                          blob: attachment.blob, name: :files)
         FileAttachmentIngestionJob.perform_later(new_attachment.id)
       end
 
@@ -103,23 +118,6 @@ class Thesis < Depositable
     draft_thesis.save!
     thesis
   end
-
-  after_save :push_item_id_for_preservation
-
-  validates :dissertant, presence: true
-  validates :graduation_date, presence: true
-  validates :sort_year, presence: true
-  validates :language, uri: { in_vocabulary: :language }
-  validates :institution, uri: { in_vocabulary: :institution }
-
-  validates :embargo_end_date, presence: true, if: ->(item) { item.visibility == VISIBILITY_EMBARGO }
-  validates :embargo_end_date, absence: true, if: ->(item) { item.visibility != VISIBILITY_EMBARGO }
-  validates :visibility_after_embargo, presence: true, if: ->(item) { item.visibility == VISIBILITY_EMBARGO }
-  validates :visibility_after_embargo, absence: true, if: ->(item) { item.visibility != VISIBILITY_EMBARGO }
-  validates :member_of_paths, presence: true
-  validate :communities_and_collections_must_exist
-  validate :visibility_after_embargo_must_be_valid
-
 
   def populate_sort_year
     self.sort_year = Date.parse(graduation_date).year.to_i if graduation_date.present?

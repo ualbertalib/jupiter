@@ -6,8 +6,8 @@ class ItemsControllerTest < ActionDispatch::IntegrationTest
 
     @regular_user = users(:regular)
     @admin =  users(:admin)
-    @community = Community.create!(title: 'Desolate community', owner_id: 1)
-    @collection = Collection.create!(community_id: @community.id, title: 'Desolate collection', owner_id: 1)
+    @community = Community.create!(title: 'Desolate community', owner_id: @admin.id)
+    @collection = Collection.create!(community_id: @community.id, title: 'Desolate collection', owner_id: @admin.id)
 
     @item = Item.new(
       title: 'item to edit',

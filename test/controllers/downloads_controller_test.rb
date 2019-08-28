@@ -53,7 +53,7 @@ class DownloadsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'file should be viewable with proper headings' do
-    get file_view_item_url(id: @file.record.owner.id,
+    get file_view_item_url(id: @file.record.id,
                            file_set_id: @file.fileset_uuid,
                            file_name: @file.filename)
 
@@ -64,7 +64,7 @@ class DownloadsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'file should be downloadable with proper headings' do
-    get file_download_item_url(id: @file.record.owner.id,
+    get file_download_item_url(id: @file.record.id,
                                file_set_id: @file.fileset_uuid)
 
     assert_response :success
@@ -74,7 +74,7 @@ class DownloadsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'authentication required file shouldnt be viewable if not authenticated' do
-    get file_view_item_url(id: @file_requiring_authentication.record.owner.id,
+    get file_view_item_url(id: @file_requiring_authentication.record.id,
                            file_set_id: @file_requiring_authentication.fileset_uuid,
                            file_name: @file_requiring_authentication.filename)
 
@@ -83,7 +83,7 @@ class DownloadsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'authentication required file should be downloadable if not authenticated' do
-    get file_download_item_url(id: @file_requiring_authentication.record.owner.id,
+    get file_download_item_url(id: @file_requiring_authentication.record.id,
                                file_set_id: @file_requiring_authentication.fileset_uuid)
 
     assert_redirected_to root_url

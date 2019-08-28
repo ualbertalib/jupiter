@@ -3,17 +3,21 @@ require 'test_helper'
 class Admin::ItemsControllerTest < ActionDispatch::IntegrationTest
 
   def setup
+    JupiterCore::SolrServices::Client.instance.truncate_index
+
+    @admin = users(:admin)
+
     @community = Community.new(title: 'Desolate community',
-                                                 owner_id: 1)
+                                                 owner_id: @admin.id)
     @community.unlock_and_fetch_ldp_object(&:save!)
     @collection = Collection.new(community_id: @community.id,
                                                    title: 'Desolate collection',
-                                                   owner_id: 1)
+                                                   owner_id: @admin.id)
     @collection.unlock_and_fetch_ldp_object(&:save!)
 
     @item = Item.new(
       title: 'item for deletion',
-      owner_id: 1,
+      owner_id: @admin.id,
       creators: ['Joe Blow'],
       created: '1972-08-08',
       languages: [CONTROLLED_VOCABULARIES[:language].english],
@@ -34,7 +38,6 @@ class Admin::ItemsControllerTest < ActionDispatch::IntegrationTest
     @item.doi_state # ensure there is a doi to test deletion of
     @item.set_thumbnail(@item.files.first) # ensure there is a thumbnail to test deletion of
 
-    @admin = users(:admin)
     sign_in_as @admin
   end
 
@@ -46,7 +49,7 @@ class Admin::ItemsControllerTest < ActionDispatch::IntegrationTest
   test 'should destroy item and its derivatives' do
     # TODO: 'ActiveStorage::Attachment.count' || 'ActiveStorage::Blob.count'
     # wish I could test the thumbnail deletion but flaky on travis-ci
-    assert_difference(['Item.count', 'ItemDoiState.count'], -1) do
+    assert_difference(['Item.count'], -1) do
       delete admin_item_url(@item)
     end
 

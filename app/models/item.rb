@@ -1,4 +1,4 @@
-class Item < Depositable
+class Item < Doiable
 
   has_solr_exporter Exporters::Solr::ItemExporter
 

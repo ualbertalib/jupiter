@@ -4,7 +4,7 @@ class ThesisTest < ActiveSupport::TestCase
 
   def before_all
     super
-    Thesis.delete_all
+    Thesis.destroy_all
   end
 
   test 'a valid item can be constructed' do
