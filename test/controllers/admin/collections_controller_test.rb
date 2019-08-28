@@ -4,8 +4,8 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
 
   def before_all
     super
-    @community = Community.new(title: 'Nice community', owner_id: 1).unlock_and_fetch_ldp_object(&:save!)
-    @collection = Collection.new(title: 'Nice collection', owner_id: 1, community_id: @community.id).unlock_and_fetch_ldp_object(&:save!)
+    @community = Community.create!(title: 'Nice community', owner_id: users(:admin).id)
+    @collection = Collection.create!(title: 'Nice collection', owner_id: users(:admin).id, community_id: @community.id)
   end
 
   def setup
@@ -63,11 +63,11 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should destroy collection if has no items' do
-    collection = Collection.new(
+    collection = Collection.create!(
       community_id: @community.id,
       title: 'Nice collection',
       owner_id: @admin.id
-    ).unlock_and_fetch_ldp_object(&:save!)
+    )
 
     assert_difference('Collection.count', -1) do
       delete admin_community_collection_url(@community, collection)
@@ -78,14 +78,13 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should not destroy collection if has items' do
-    collection = Collection.new(
+    collection = Collection.create!(
       community_id: @community.id,
       title: 'Nice collection',
       owner_id: @admin.id
-    ).unlock_and_fetch_ldp_object(&:save!)
+    )
 
     # Give the collection an item
-    User.create_with(name: 'Adminy Adminderson', email: 'admin@notarealemailaddres.fake.co.uk.fake').find_or_create_by(id: 1)
 
     item = Item.new(
       title: 'item blocking deletion',
@@ -98,7 +97,7 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
       item_type: CONTROLLED_VOCABULARIES[:item_type].article,
       publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
       subject: ['Invincibility']
-    ).unlock_and_fetch_ldp_object do |unlocked_item|
+    ).tap do |unlocked_item|
       unlocked_item.add_to_path(@community.id, collection.id)
       unlocked_item.save!
     end
@@ -114,11 +113,11 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should not destroy collection if has theses' do
-    collection = Collection.new(
+    collection = Collection.create!(
       community_id: @community.id,
       title: 'Nice collection',
       owner_id: @admin.id
-    ).unlock_and_fetch_ldp_object(&:save!)
+    )
 
     Thesis.new(
       title: 'thesis blocking deletion',

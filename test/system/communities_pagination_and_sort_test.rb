@@ -4,10 +4,11 @@ class CommunitiesPaginationAndSortTest < ApplicationSystemTestCase
 
   def before_all
     super
+    admin = User.find_by(email: 'administrator@example.com')
     # For sorting, creation order is 'Fancy Community 00', 'Nice Community 01', 'Fancy Community 02', etc. ...
     (0..10).each do |i|
-      Community.new(title: format("#{['Fancy', 'Nice'][i % 2]} Community %02i", i), owner_id: 1)
-               .unlock_and_fetch_ldp_object(&:save!)
+      Community.new(title: format("#{['Fancy', 'Nice'][i % 2]} Community %02i", i), owner_id: admin.id)
+               .save!
     end
   end
 

@@ -54,9 +54,9 @@ class SearchTest < ActiveSupport::TestCase
                                                      visibility: JupiterCore::VISIBILITY_PRIVATE,
                                                      owner: users(:regular).id)
 
-    obj.unlock_and_fetch_ldp_object(&:save!)
-    another_obj.unlock_and_fetch_ldp_object(&:save!)
-    a_private_object.unlock_and_fetch_ldp_object(&:save!)
+    obj.save!
+    another_obj.save!
+    a_private_object.save!
 
     search_results = JupiterCore::Search.faceted_search(models: @@klass, q: '')
     assert search_results.count == 2

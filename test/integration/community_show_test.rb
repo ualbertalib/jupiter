@@ -9,22 +9,18 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
     # TODO: setup proper fixtures for LockedLdpObjects
 
     # A community with two collections and a logo
-    @community1 = Community.new(title: 'Two collection community', owner_id: 1)
-                  .unlock_and_fetch_ldp_object(&:save!)
-    @collection1 = Collection.new(community_id: @community1.id,
-                                          title: 'Nice collection', owner_id: 1)
-                   .unlock_and_fetch_ldp_object(&:save!)
+    @community1 = Community.create!(title: 'Two collection community', owner_id: users(:admin).id)
+    @collection1 = Collection.create!(community_id: @community1.id,
+                                          title: 'Nice collection', owner_id: users(:admin).id)
     # A restricted (to deposit, not to view) collection
-    @collection2 = Collection.new(community_id: @community1.id,
+    @collection2 = Collection.create!(community_id: @community1.id,
                                           restricted: true,
-                                          title: 'Another collection', owner_id: 1)
-                   .unlock_and_fetch_ldp_object(&:save!)
+                                          title: 'Another collection', owner_id: users(:admin).id)
     @community1.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
                             filename: 'image-sample.jpeg', content_type: 'image/jpeg'
 
     # A community with no collections
-    @community2 = Community .new(title: 'Empty community', owner_id: 1)
-                  .unlock_and_fetch_ldp_object(&:save!)
+    @community2 = Community.create!(title: 'Empty community', owner_id: users(:admin).id)
   end
 
   test 'visiting the show page for a community with two collections as an admin' do

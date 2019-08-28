@@ -3,7 +3,7 @@ require 'application_system_test_case'
 class AdminUsersIndexTest < ApplicationSystemTestCase
 
   test 'should be able to sort columns' do
-    admin = users(:admin)
+    admin = User.find_by(email: 'administrator@example.com')
 
     login_user(admin)
 

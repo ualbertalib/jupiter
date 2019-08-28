@@ -8,18 +8,17 @@ class ThesisTest < ActiveSupport::TestCase
   end
 
   test 'a valid item can be constructed' do
-    User.create_with(name: 'Adminy Adminderson', email: 'admin@notarealemailaddres.fake.co.uk.fake').find_or_create_by(id: 1)
-
-    community = Community.new(title: 'Community', owner_id: 1,
+    admin = users(:admin)
+    community = Community.new(title: 'Community', owner_id: admin.id,
                                                 visibility: JupiterCore::VISIBILITY_PUBLIC)
-    community.unlock_and_fetch_ldp_object(&:save!)
-    collection = Collection.new(title: 'Collection', owner_id: 1,
+    community.save!
+    collection = Collection.new(title: 'Collection', owner_id: admin.id,
                                                   visibility: JupiterCore::VISIBILITY_PUBLIC,
                                                   community_id: community.id)
     collection.unlock_and_fetch_ldp_object do |unlocked_collection|
       unlocked_collection.save!
     end
-    thesis = Thesis.new(title: 'Thesis', owner_id: 1, visibility: JupiterCore::VISIBILITY_PUBLIC,
+    thesis = Thesis.new(title: 'Thesis', owner_id: admin.id, visibility: JupiterCore::VISIBILITY_PUBLIC,
                                           dissertant: 'Joe Blow',
                                           departments: ['Physics', 'Non-physics'],
                                           supervisors: ['Billy (Physics)', 'Sally (Non-physics)'],

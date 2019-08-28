@@ -62,8 +62,8 @@ if Rails.env.development? || Rails.env.uat?
     community = Community.new(
       owner_id: admin.id,
       title: title,
-      description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop
-    ).unlock_and_fetch_ldp_object(&:save!)
+      description: Faker::Lorem.sentence(20, false, 0).chop
+    ).save!
 
     # Attach logos, if possible
     filename = File.expand_path(Rails.root + "tmp/#{thing}.png")
@@ -85,15 +85,15 @@ if Rails.env.development? || Rails.env.uat?
       owner_id: admin.id,
       title: "The annals of '#{thing.capitalize} International'",
       community_id: community.id,
-      description: Faker::Lorem.sentence(word_count: 40, supplemental: false, random_words_to_add: 0).chop
-    ).unlock_and_fetch_ldp_object(&:save!)
+      description: Faker::Lorem.sentence(40, false, 0).chop
+    ).save!
 
     thesis_collection = Collection.new(
       owner_id: admin.id,
       title: "Theses about #{thing.pluralize}",
       community_id: community.id,
-      description: Faker::Lorem.sentence(word_count: 40, supplemental: false, random_words_to_add: 0).chop
-    ).unlock_and_fetch_ldp_object(&:save!)
+      description: Faker::Lorem.sentence(40, false, 0).chop
+    ).save!
 
     # Items
     20.times do |i|
@@ -374,16 +374,16 @@ if Rails.env.development? || Rails.env.uat?
     Community.new(
       owner_id: admin.id,
       title: "Zoo#{thing}ology Institute of North-Eastern Upper Alberta (and Saskatchewan)",
-      description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop
-    ).unlock_and_fetch_ldp_object(&:save!)
+      description: Faker::Lorem.sentence(20, false, 0).chop
+    ).save!
   end
 
   # One community with a lot of empty restricted collections
   community = Community.new(
     owner_id: admin.id,
     title: "The Everything Department",
-    description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop
-  ).unlock_and_fetch_ldp_object(&:save!)
+    description: Faker::Lorem.sentence(20, false, 0).chop
+  ).save!
 
   EXTRA_THINGS.each do |thing|
     collection = Collection.new(
@@ -392,7 +392,7 @@ if Rails.env.development? || Rails.env.uat?
       community_id: community.id,
       restricted: true,
       description: "A restricted collection"
-    ).unlock_and_fetch_ldp_object(&:save!)
+    ).save!
   end
 
 end

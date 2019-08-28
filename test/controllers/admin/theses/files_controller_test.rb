@@ -4,12 +4,11 @@ class Admin::Theses::FilesControllerTest < ActionDispatch::IntegrationTest
 
   def before_all
     super
-    @community = Community.new(title: 'Books', description: 'a bunch of books' , owner_id: 1).unlock_and_fetch_ldp_object(&:save!)
-    @collection = Collection.new(title: 'Thesis collection',
-                                                   owner_id: 1,
+    @community = Community.create!(title: 'Books', description: 'a bunch of books' , owner_id: users(:admin).id)
+    @collection = Collection.create!(title: 'Thesis collection',
+                                                   owner_id: users(:admin).id,
                                                    restricted: true,
                                                    community_id: @community.id)
-                            .unlock_and_fetch_ldp_object(&:save!)
   end
 
   setup do

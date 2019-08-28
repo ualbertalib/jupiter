@@ -4,11 +4,14 @@ class AdminCommunitiesIndexTest < ApplicationSystemTestCase
 
   def before_all
     super
-    @community = Community.new(title: 'Community', owner_id: 1).unlock_and_fetch_ldp_object(&:save!)
+    Community.destroy_all
+    Collection.destroy_all
+    admin = User.find_by(email: 'administrator@example.com')
+    @community = Community.create!(title: 'Community', owner_id: admin.id)
     2.times do |i|
-      Collection.new(title: "Fancy Collection #{i}", owner_id: 1,
+      Collection.new(title: "Fancy Collection #{i}", owner_id: admin.id,
                                        community_id: @community.id)
-                .unlock_and_fetch_ldp_object(&:save!)
+                .save!
     end
   end
 
@@ -34,7 +37,7 @@ class AdminCommunitiesIndexTest < ApplicationSystemTestCase
     assert_link 'Fancy Collection 0'
     assert_link 'Fancy Collection 1'
     assert_button 'Close'
-    refute_selector 'a.btn', text: 'Collections'
+    refute_selector "a.btn[data-community-id='#{@community.id}']", text: 'Collections'
 
     # Clicking close restores initial state
     click_button 'Close'

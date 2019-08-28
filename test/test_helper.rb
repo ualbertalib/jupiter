@@ -47,7 +47,9 @@ class ActiveSupport::TestCase
 
   def before_all
     super
-    User.create_with(name: 'Adminy Adminderson', email: 'admin@notarealemailaddres.fake.co.uk.fake').find_or_create_by(id: 1)
+    # unclear why this isn't running in all cases, but resolves obscure error in which fetching a fixture throws
+    # NoMethodError: undefined method `[]' for nil:NilClass deep inside ActiveRecord in some cases when loading a fixture
+    setup_fixtures
   end
 
   # clean ActiveFedora at the end of all tests in a given test class

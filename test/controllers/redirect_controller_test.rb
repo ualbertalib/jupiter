@@ -6,16 +6,14 @@ class RedirectControllerTest < ActionDispatch::IntegrationTest
     super
 
     # The fedora3_uuid and hydra_noid properties are the primary identifiers for locating these older objects
-    @community = Community.new(title: 'Fancy Community', owner_id: 1,
+    @community = Community.create!(title: 'Fancy Community', owner_id: users(:admin).id,
                                                  fedora3_uuid: 'uuid:community', hydra_noid: 'community-noid')
-                          .unlock_and_fetch_ldp_object(&:save!)
-    @collection = Collection.new(community_id: @community.id,
-                                                   title: 'Fancy Collection', owner_id: 1,
+    @collection = Collection.create!(community_id: @community.id,
+                                                   title: 'Fancy Collection', owner_id: users(:admin).id,
                                                    fedora3_uuid: 'uuid:collection', hydra_noid: 'collection-noid')
-                            .unlock_and_fetch_ldp_object(&:save!)
     @filename = 'pdf-sample.pdf'
     @item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                       owner_id: 1, title: 'Fancy Item',
+                                       owner_id: users(:admin).id, title: 'Fancy Item',
                                        creators: ['Joe Blow'],
                                        created: '1950',
                                        languages: [CONTROLLED_VOCABULARIES[:language].english],

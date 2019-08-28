@@ -50,7 +50,7 @@ class Exporters::Solr::BaseExporter
   def self.search_term_for(attr, value, role: :search)
     raise ArgumentError, "search value can't be nil" if value.nil?
 
-    solr_attr_name = self.solr_name_for(attr_name, role: role)
+    solr_attr_name = self.solr_name_for(attr, role: role)
     %Q(#{solr_attr_name}:"#{value}")
   end
 
@@ -214,7 +214,7 @@ class Exporters::Solr::BaseExporter
     # rubocop:enable Naming/UncommunicativeMethodParamName
 
     def default_sort(index:, direction:)
-      default_ar_sort_args = {index => direction}
+      @default_ar_sort_args = {index => direction}
       index = [index] unless index.is_a?(Array)
       direction = [direction] unless direction.is_a?(Array)
       self.default_sort_indexes = index.map { |idx| solr_name_for(idx, role: :sort) }

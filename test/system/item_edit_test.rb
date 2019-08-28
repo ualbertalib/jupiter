@@ -3,15 +3,16 @@ require 'application_system_test_case'
 class ItemEditTest < ApplicationSystemTestCase
 
   test 'can edit item' do
-    skip 'This test continues to flap on CI that should be investigated ASAP' if ENV['TRAVIS']
+    user = User.find_by(email: 'john_snow@example.com')
 
-    user = users(:regular)
+    admin = User.find_by(email: 'administrator@example.com')
 
-    community = Community.new(title: 'Fancy Community', owner_id: 1).unlock_and_fetch_ldp_object(&:save!)
-    collection = Collection.new(title: 'Fancy collection', owner_id: 1, community_id: community.id).unlock_and_fetch_ldp_object(&:save!)
+    community = Community.create!(title: 'Fancy Community', owner_id: admin.id)
+    collection = Collection.create!(title: 'Fancy collection', owner_id: admin.id, community_id: community.id)
 
     item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
                                       title: 'Book of Random',
+                                      owner_id: user.id,
                                       item_type: CONTROLLED_VOCABULARIES[:item_type].book,
                                       languages: [CONTROLLED_VOCABULARIES[:language].english],
                                       creators: ['Jane Doe', 'Bob Smith'],
@@ -21,7 +22,6 @@ class ItemEditTest < ApplicationSystemTestCase
                                       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
                                       contributors: ['Sue Flowers', 'Jonny Green'])
                .unlock_and_fetch_ldp_object do |uo|
-      uo.owner_id = user
       uo.add_to_path(community.id, collection.id)
       uo.save!
     end

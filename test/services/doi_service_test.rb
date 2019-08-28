@@ -15,11 +15,11 @@ class DoiServiceTest < ActiveSupport::TestCase
     community = Community.new(title: 'Community', owner_id: @admin.id,
                                                 visibility: JupiterCore::VISIBILITY_PUBLIC)
 
-    community.unlock_and_fetch_ldp_object(&:save!)
+    community.save!
     collection = Collection.new(title: 'Collection', owner_id: @admin.id,
                                                   visibility: JupiterCore::VISIBILITY_PUBLIC,
                                                   community_id: community.id)
-    collection.unlock_and_fetch_ldp_object(&:save!)
+    collection.save!
 
     item = Item.new(title: 'Test Title', owner_id: @admin.id, visibility: JupiterCore::VISIBILITY_PUBLIC,
                                       created: '2017-02-02',

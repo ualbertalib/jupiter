@@ -28,12 +28,12 @@ class FileSetTest < ActiveSupport::TestCase
 
     # It seems unfortunate as a side-effect of improved item validations, we need to create these in tests that
     # don't care about them...
-    community = Community.new(title: 'Community', owner_id: 1).unlock_and_fetch_ldp_object(&:save!)
-    collection = Collection.new(title: 'foo', owner_id: users(:regular).id,
-                                                  community_id: community.id).unlock_and_fetch_ldp_object(&:save!)
+    community = Community.create!(title: 'Community', owner_id: users(:admin).id)
+    collection = Collection.create!(title: 'foo', owner_id: users(:regular).id,
+                                                  community_id: community.id)
 
     item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                               owner_id: 1, title: 'Fancy Item',
+                                               owner_id: users(:admin).id, title: 'Fancy Item',
                                                creators: ['Joe Blow'],
                                                created: '1938-01-02',
                                                languages: [CONTROLLED_VOCABULARIES[:language].english],

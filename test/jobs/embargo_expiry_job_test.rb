@@ -4,13 +4,13 @@ class EmbargoExpiryJobTest < ActiveJob::TestCase
 
   def before_all
     super
-    @community = Community.new(title: 'Nice community', owner_id: 1).unlock_and_fetch_ldp_object(&:save!)
-    @collection = Collection.new(title: 'Nice collection', owner_id: 1, community_id: @community.id).unlock_and_fetch_ldp_object(&:save!)
+    @community = Community.create!(title: 'Nice community', owner_id: users(:admin).id)
+    @collection = Collection.create!(title: 'Nice collection', owner_id: users(:admin).id, community_id: @community.id)
   end
 
   test 'that job transitions only expired item embargos into proper state' do
     expired_item = Item.new(
-      owner_id: 1,
+      owner_id: users(:admin).id,
       title: 'Fancy Item',
       creators: ['Joe Blow'],
       created: 'Fall 2017',
@@ -28,7 +28,7 @@ class EmbargoExpiryJobTest < ActiveJob::TestCase
     end
 
     not_expired_item = Item.new(
-      owner_id: 1,
+      owner_id: users(:admin).id,
       title: 'Fancy Item',
       creators: ['Joe Blow'],
       created: 'Fall 2017',
@@ -64,7 +64,7 @@ class EmbargoExpiryJobTest < ActiveJob::TestCase
   test 'that job transitions expired thesis embargos into proper state' do
     expired_thesis = Thesis.new(
       title: 'thesis blocking deletion',
-      owner_id: 1,
+      owner_id: users(:admin).id,
       dissertant: 'Joe Blow',
       graduation_date: '2017-03-31',
       visibility: ItemProperties::VISIBILITY_EMBARGO,
@@ -77,7 +77,7 @@ class EmbargoExpiryJobTest < ActiveJob::TestCase
 
     not_expired_thesis = Thesis.new(
       title: 'thesis blocking deletion',
-      owner_id: 1,
+      owner_id: users(:admin).id,
       dissertant: 'Joe Blow',
       graduation_date: '2017-03-31',
       visibility: ItemProperties::VISIBILITY_EMBARGO,

@@ -5,13 +5,13 @@ class AdminItemsIndexTest < ApplicationSystemTestCase
   test 'should be able to view all items/theses owned by anybody' do
     # Note: searching and faceting is covered more extensively in tests elsewhere
     user = users(:regular)
-    admin = users(:admin)
+    admin = User.find_by(email: 'administrator@example.com')
 
-    community = Community.new(title: 'Fancy Community', owner_id: 1)
-                         .unlock_and_fetch_ldp_object(&:save!)
+    community = Community.new(title: 'Fancy Community', owner_id: admin.id)
+                         .save!
     collection = Collection.new(community_id: community.id,
-                                                  title: 'Fancy Collection', owner_id: 1)
-                           .unlock_and_fetch_ldp_object(&:save!)
+                                                  title: 'Fancy Collection', owner_id: admin.id)
+                           .save!
 
     # Two things owned by regular user
     Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,

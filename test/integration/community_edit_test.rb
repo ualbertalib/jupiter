@@ -9,15 +9,13 @@ class CommunityEditTest < ActionDispatch::IntegrationTest
 
     # A community with a logo
     @community1 = Community
-                  .new(title: 'Logo Community', owner_id: 1)
-                  .unlock_and_fetch_ldp_object(&:save!)
+                  .create!(title: 'Logo Community', owner_id: users(:admin).id)
     @community1.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
                             filename: 'image-sample.jpeg', content_type: 'image/jpeg'
 
     # A community with no collections, no logo
     @community2 = Community
-                  .new(title: 'Empty community', owner_id: 1)
-                  .unlock_and_fetch_ldp_object(&:save!)
+                  .create!(title: 'Empty community', owner_id: users(:admin).id)
   end
 
   test 'visiting the edit page for a community with a logo as an admin' do

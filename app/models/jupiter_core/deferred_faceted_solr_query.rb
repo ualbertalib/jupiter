@@ -93,11 +93,18 @@ class JupiterCore::DeferredFacetedSolrQuery
             else
               # TODO: This is inefficient and we should look at batching up IDs once Fedora is gone and I can change this a bit
               arclass = res['has_model_ssim'].first.sub(/^Ar/, '').constantize
-              arclass.find(res['id'])
+              begin
+                arclass.find(res['id'])
+              rescue ActiveRecord::RecordNotFound
+                # TODO handle this better?
+                puts "MISSING #{res['id']} STALE INDEX ERROR"
+                JupiterCore::SolrServices::Client.instance.remove_document(res['id'])
+                nil
+              end
             end
-      yield(obj)
+      yield obj if obj.present?
       obj
-    end
+    end.flatten
   end
 
   # Kaminari integration
@@ -164,7 +171,7 @@ class JupiterCore::DeferredFacetedSolrQuery
     @count_cache, @results, facet_data = JupiterCore::Search.perform_solr_query(
       search_args_with_limit(criteria[:limit])
     )
-    binding.pry if $ASDF
+
     @facets = facet_data['facet_fields'].map do |k, v|
       if model_has_sort_year && (k == sort_year_facet)
         JupiterCore::RangeFacetResult.new(criteria[:facet_map], k, criteria[:ranges].fetch(k,

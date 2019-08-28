@@ -103,6 +103,12 @@ module SearchHelper
     t("search.sort_#{sort}_#{direction}")
   end
 
+  def search_sort_label_for_relation(relation)
+    direction = relation.arel.orders.first.direction
+    sort = relation.arel.orders.first.value.name
+    search_sort_label(sort, direction)
+  end
+
   def results_range(results)
     first = results.offset_value + 1
     last = results.offset_value + results.count

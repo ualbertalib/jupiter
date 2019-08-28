@@ -18,8 +18,7 @@ class CommunityTest < ActiveSupport::TestCase
 
   test 'a logo can be attached' do
     # We need to create this LdpObject to get a GlobalID
-    c = Community.new(owner_id: users(:admin).id, title: 'Logo test')
-                 .unlock_and_fetch_ldp_object(&:save!)
+    c = Community.create!(owner_id: users(:admin).id, title: 'Logo test')
     assert c.to_gid.present?
 
     c.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
@@ -39,8 +38,7 @@ class CommunityTest < ActiveSupport::TestCase
   end
 
   test 'an updated logo replaces the old one' do
-    c = Community.new(owner_id: users(:admin).id, title: 'Logo test')
-                 .unlock_and_fetch_ldp_object(&:save!)
+    c = Community.create!(owner_id: users(:admin).id, title: 'Logo test')
     c.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
                   filename: 'sample1.jpeg', content_type: 'image/jpeg'
 

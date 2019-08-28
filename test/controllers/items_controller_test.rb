@@ -11,7 +11,7 @@ class ItemsControllerTest < ActionDispatch::IntegrationTest
 
     @item = Item.new(
       title: 'item to edit',
-      owner_id: 1,
+      owner_id: users(:admin).id,
       creators: ['Joe Blow'],
       created: '1972-08-08',
       languages: [CONTROLLED_VOCABULARIES[:language].english],
@@ -26,7 +26,7 @@ class ItemsControllerTest < ActionDispatch::IntegrationTest
 
     @thesis = Thesis.new(
       title: 'thesis to edit',
-      owner_id: 1,
+      owner_id: users(:admin).id,
       dissertant: 'Joe Blow',
       graduation_date: '2017-03-31',
       visibility: ItemProperties::VISIBILITY_EMBARGO,

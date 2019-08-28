@@ -4,11 +4,10 @@ class Admin::CommunitiesControllerTest < ActionDispatch::IntegrationTest
 
   def before_all
     super
-    @admin = User.create_with(name: 'Adminy Adminderson', email: 'admin@notarealemailaddres.fake.co.uk.fake').find_or_create_by(id: 1)
-
+    @admin = users(:admin)
     @community = Community.new(title: 'Nice community',
                                                  owner_id: @admin.id)
-    @community.unlock_and_fetch_ldp_object(&:save!)
+    @community.save!
   end
 
   def setup
@@ -70,10 +69,10 @@ class Admin::CommunitiesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should destroy collection if has no items' do
-    community = Community.new(
+    community = Community.create!(
       title: 'Nice community',
       owner_id: @admin.id
-    ).unlock_and_fetch_ldp_object(&:save!)
+    )
 
     assert_difference('Community.count', -1) do
       delete admin_community_url(community)
@@ -89,7 +88,7 @@ class Admin::CommunitiesControllerTest < ActionDispatch::IntegrationTest
       community_id: @community.id,
       title: 'Nice collection',
       owner_id: @admin.id
-    ).unlock_and_fetch_ldp_object(&:save!)
+    ).save!
 
     assert_no_difference('Collection.count') do
       delete admin_community_url(@community)

@@ -4,13 +4,14 @@ class DepositItemTest < ApplicationSystemTestCase
 
   def before_all
     super
-
+    DraftItem.destroy_all
+    admin = User.find_by(email: 'administrator@example.com')
     # Setup a community/collection pair for respective dropdowns
-    @community = Community.new(title: 'Books', owner_id: 1).unlock_and_fetch_ldp_object(&:save!)
+    @community = Community.create!(title: 'Books', owner_id: admin.id)
     @collection = Collection.new(title: 'Fantasy Books',
-                                                   owner_id: 1,
+                                                   owner_id: admin.id,
                                                    community_id: @community.id)
-                            .unlock_and_fetch_ldp_object(&:save!)
+                            .save!
   end
 
   test 'be able to deposit and edit an item successfully' do

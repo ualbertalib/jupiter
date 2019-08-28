@@ -4,19 +4,20 @@ class SearchTest < ApplicationSystemTestCase
 
   def before_all
     super
-    @community = Community.new(title: 'Fancy Community', owner_id: 1)
-                          .unlock_and_fetch_ldp_object(&:save!)
+    admin = User.find_by(email: 'administrator@example.com')
+    @community = Community.new(title: 'Fancy Community', owner_id: admin.id)
+                          .save!
     @collections = 2.times.map do |i|
       Collection.new(community_id: @community.id,
-                                       title: "Fancy Collection #{i}", owner_id: 1)
-                .unlock_and_fetch_ldp_object(&:save!)
+                                       title: "Fancy Collection #{i}", owner_id: admin.id)
+                .save!
     end
 
     # Half items have 'Fancy' in title, others have 'Nice', distributed between the two collections
     @items = 10.times.map do |i|
       if i < 5
         Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                   owner_id: 1, title: "#{['Fancy', 'Nice'][i % 2]} Item #{i}",
+                                   owner_id: admin.id, title: "#{['Fancy', 'Nice'][i % 2]} Item #{i}",
                                    creators: ['Joe Blow'],
                                    created: "19#{50 + i}-11-11",
                                    languages: [CONTROLLED_VOCABULARIES[:language].english],
@@ -30,7 +31,7 @@ class SearchTest < ApplicationSystemTestCase
         end
       else
         Thesis.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                     owner_id: 1, title: "#{['Fancy', 'Nice'][i % 2]} Item #{i}",
+                                     owner_id: admin.id, title: "#{['Fancy', 'Nice'][i % 2]} Item #{i}",
                                      dissertant: 'Joe Blow',
                                      language: CONTROLLED_VOCABULARIES[:language].english,
                                      graduation_date: "19#{50 + i}-11-11")
@@ -42,7 +43,7 @@ class SearchTest < ApplicationSystemTestCase
     end
     # one more item that is CCID protected
     item = Item.new(visibility: JupiterCore::VISIBILITY_AUTHENTICATED,
-                                      owner_id: 1, title: 'Fancy CCID Item',
+                                      owner_id: admin.id, title: 'Fancy CCID Item',
                                       creators: ['Joe Blow'],
                                       created: '1950-11-11',
                                       languages: [CONTROLLED_VOCABULARIES[:language].english],
@@ -65,7 +66,7 @@ class SearchTest < ApplicationSystemTestCase
     @items += 10.times.map do |i|
       if i < 5
         Item.new(visibility: JupiterCore::VISIBILITY_PRIVATE,
-                                   owner_id: 1, title: "#{['Fancy', 'Nice'][i % 2]} Private Item #{i + 10}",
+                                   owner_id: admin.id, title: "#{['Fancy', 'Nice'][i % 2]} Private Item #{i + 10}",
                                    creators: ['Joe Blow'],
                                    created: "19#{70 + i}-11-11",
                                    languages: [CONTROLLED_VOCABULARIES[:language].english],
@@ -79,7 +80,7 @@ class SearchTest < ApplicationSystemTestCase
         end
       else
         Thesis.new(visibility: JupiterCore::VISIBILITY_PRIVATE,
-                                     owner_id: 1, title: "#{['Fancy', 'Nice'][i % 2]} Private Item #{i + 10}",
+                                     owner_id: admin.id, title: "#{['Fancy', 'Nice'][i % 2]} Private Item #{i + 10}",
                                      dissertant: 'Joe Blow',
                                      language: CONTROLLED_VOCABULARIES[:language].english,
                                      graduation_date: "19#{70 + i}-11-11")
@@ -92,13 +93,13 @@ class SearchTest < ApplicationSystemTestCase
 
     # Create extra items/collections/communities to test 'show more'
     10.times do |i|
-      community = Community.new(title: "Extra Community #{i}", owner_id: 1)
-                           .unlock_and_fetch_ldp_object(&:save!)
+      community = Community.new(title: "Extra Community #{i}", owner_id: admin.id)
+                           .save!
       collection = Collection.new(community_id: community.id,
-                                                    title: "Extra Collection #{i}", owner_id: 1)
-                             .unlock_and_fetch_ldp_object(&:save!)
+                                                    title: "Extra Collection #{i}", owner_id: admin.id)
+                             .save!
       Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                 owner_id: 1, title: "Extra Item #{i}",
+                                 owner_id: admin.id, title: "Extra Item #{i}",
                                  creators: ['Joe Blow'],
                                  created: "19#{90 + i}-11-11",
                                  languages: [CONTROLLED_VOCABULARIES[:language].english],

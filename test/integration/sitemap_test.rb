@@ -6,13 +6,11 @@ class SitemapTest < ActionDispatch::IntegrationTest
     super
     Item.destroy_all
     Thesis.destroy_all
-    @community = Community.new(title: 'Fancy Community', owner_id: 1)
-                          .unlock_and_fetch_ldp_object(&:save!)
-    @collection = Collection.new(community_id: @community.id,
-                                                   title: 'Fancy Collection', owner_id: 1)
-                            .unlock_and_fetch_ldp_object(&:save!)
+    @community = Community.create!(title: 'Fancy Community', owner_id: users(:admin).id)
+    @collection = Collection.create!(community_id: @community.id,
+                                                   title: 'Fancy Collection', owner_id: users(:admin).id)
     @item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                               owner_id: 1, title: 'Fancy Item',
+                                               owner_id: users(:admin).id, title: 'Fancy Item',
                                                creators: ['Joe Blow'],
                                                created: '1938-01-02',
                                                languages: [CONTROLLED_VOCABULARIES[:language].english],
@@ -33,7 +31,7 @@ class SitemapTest < ActionDispatch::IntegrationTest
       @item.add_and_ingest_files([file])
     end
     @thesis = Thesis.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                           owner_id: 1, title: 'Fancy Item',
+                                           owner_id: users(:admin).id, title: 'Fancy Item',
                                            dissertant: 'Joe Blow',
                                            language: CONTROLLED_VOCABULARIES[:language].english,
                                            graduation_date: 'Fall 2017')
@@ -43,7 +41,7 @@ class SitemapTest < ActionDispatch::IntegrationTest
                     end
     # 1 more item. this is private
     @private_item = Item.new(visibility: JupiterCore::VISIBILITY_PRIVATE,
-                                               owner_id: 1, title: 'Fancy Private Item',
+                                               owner_id: users(:admin).id, title: 'Fancy Private Item',
                                                creators: ['Joe Blow'],
                                                created: '1983-11-11',
                                                languages: [CONTROLLED_VOCABULARIES[:language].english],
