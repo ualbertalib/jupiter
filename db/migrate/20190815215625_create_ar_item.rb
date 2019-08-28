@@ -36,7 +36,7 @@ class CreateArItem < ActiveRecord::Migration[5.2]
       t.string :source
       t.string :related_link
       t.json :publication_status, array: true
-      t.references :logo, foreign_key: {to_table: :active_storage_attachments, column: :id}
+      t.references :logo, foreign_key: {to_table: :active_storage_attachments, column: :id, on_delete: :nullify}
       t.string :aasm_state
       t.timestamps
     end

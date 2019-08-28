@@ -29,7 +29,7 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
            params: { collection: { title: 'New collection' } }
     end
 
-    assert_redirected_to admin_community_collection_url(@community, Collection.last)
+    assert_redirected_to admin_community_collection_url(@community, Collection.find_by(title: 'New collection'))
     assert_equal I18n.t('admin.collections.create.created'), flash[:notice]
   end
 
@@ -66,7 +66,7 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
     collection = Collection.new(
       community_id: @community.id,
       title: 'Nice collection',
-      owner_id: 1
+      owner_id: @admin.id
     ).unlock_and_fetch_ldp_object(&:save!)
 
     assert_difference('Collection.count', -1) do
@@ -81,7 +81,7 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
     collection = Collection.new(
       community_id: @community.id,
       title: 'Nice collection',
-      owner_id: 1
+      owner_id: @admin.id
     ).unlock_and_fetch_ldp_object(&:save!)
 
     # Give the collection an item
@@ -89,7 +89,7 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
 
     item = Item.new(
       title: 'item blocking deletion',
-      owner_id: 1,
+      owner_id: @admin.id,
       creators: ['Joe Blow'],
       created: '1972-08-08',
       languages: [CONTROLLED_VOCABULARIES[:language].english],
@@ -109,7 +109,7 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to admin_community_url(@community)
 
-    assert_match I18n.t('activemodel.errors.models.ir_collection.attributes.member_objects.must_be_empty',
+    assert_match I18n.t('activerecord.errors.models.collection.attributes.member_objects.must_be_empty',
                         list_of_objects: collection.member_objects.map(&:title).join(', ')), flash[:alert]
   end
 
@@ -117,12 +117,12 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
     collection = Collection.new(
       community_id: @community.id,
       title: 'Nice collection',
-      owner_id: 1
+      owner_id: @admin.id
     ).unlock_and_fetch_ldp_object(&:save!)
 
     Thesis.new(
       title: 'thesis blocking deletion',
-      owner_id: 1,
+      owner_id: @admin.id,
       dissertant: 'Joe Blow',
       visibility: JupiterCore::VISIBILITY_PUBLIC,
       graduation_date: '2017-03-31'
@@ -137,7 +137,7 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to admin_community_url(@community)
 
-    assert_match I18n.t('activemodel.errors.models.ir_collection.attributes.member_objects.must_be_empty',
+    assert_match I18n.t('activerecord.errors.models.collection.attributes.member_objects.must_be_empty',
                         list_of_objects: collection.member_objects.map(&:title).join(', ')), flash[:alert]
   end
 

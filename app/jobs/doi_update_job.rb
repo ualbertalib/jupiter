@@ -3,8 +3,10 @@ class DOIUpdateJob < ApplicationJob
   queue_as :default
 
   def perform(id)
-    item = JupiterCore::LockedLdpObject.find(id, types: [Item, Thesis])
-    DOIService.new(item).update if item
+    item = Item.find(id)
+    DOIService.new(item).update
+  rescue ActiveRecord::RecordNotFound
+    thesis = Thesis.find(id)
+    DOIService.new(thesis).update
   end
-
 end

@@ -4,8 +4,10 @@ class Admin::CommunitiesControllerTest < ActionDispatch::IntegrationTest
 
   def before_all
     super
+    @admin = User.create_with(name: 'Adminy Adminderson', email: 'admin@notarealemailaddres.fake.co.uk.fake').find_or_create_by(id: 1)
+
     @community = Community.new(title: 'Nice community',
-                                                 owner_id: 1)
+                                                 owner_id: @admin.id)
     @community.unlock_and_fetch_ldp_object(&:save!)
   end
 
@@ -34,7 +36,7 @@ class Admin::CommunitiesControllerTest < ActionDispatch::IntegrationTest
            params: { community: { title: 'New community' } }
     end
 
-    assert_redirected_to admin_community_url(Community.last)
+    assert_redirected_to admin_community_url(Community.find_by(title: 'New community'))
     assert_equal I18n.t('admin.communities.create.created'), flash[:notice]
   end
 
@@ -70,7 +72,7 @@ class Admin::CommunitiesControllerTest < ActionDispatch::IntegrationTest
   test 'should destroy collection if has no items' do
     community = Community.new(
       title: 'Nice community',
-      owner_id: 1
+      owner_id: @admin.id
     ).unlock_and_fetch_ldp_object(&:save!)
 
     assert_difference('Community.count', -1) do
@@ -86,7 +88,7 @@ class Admin::CommunitiesControllerTest < ActionDispatch::IntegrationTest
     Collection.new(
       community_id: @community.id,
       title: 'Nice collection',
-      owner_id: 1
+      owner_id: @admin.id
     ).unlock_and_fetch_ldp_object(&:save!)
 
     assert_no_difference('Collection.count') do

@@ -38,6 +38,15 @@ class RedirectControllerTest < ActionDispatch::IntegrationTest
     @file_set_id = @item.files.first.fileset_uuid
   end
 
+  # TODO: for some reason, this specific test suite is leaving stale data in Postgres? Even though this should be
+  # running transactionally? Needs investigation
+  def after_all
+    super
+    Community.destroy_all
+    Collection.destroy_all
+    Item.destroy_all
+  end
+
   # HydraNorth paths containing the string "files"
 
   test 'should redirect old HydraNorth "files" items' do

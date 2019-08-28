@@ -14,7 +14,7 @@ class Admin::ItemsController < Admin::AdminController
     end
 
     begin
-      @item.unlock_and_fetch_ldp_object(&:destroy!)
+      @item.destroy!
       flash[:notice] = t('.deleted')
     rescue StandardError => e
       flash[:alert] = t('.failed')

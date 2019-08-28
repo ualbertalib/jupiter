@@ -10,6 +10,8 @@ class Collection < Depositable
   validates :community_id, presence: true
   validate :community_validations
 
+  before_destroy :can_be_destroyed?
+
   before_validation do
     self.visibility = JupiterCore::VISIBILITY_PUBLIC
   end

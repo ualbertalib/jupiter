@@ -333,9 +333,11 @@ ActiveRecord::Schema.define(version: 2019_08_26_235029) do
     t.string "source"
     t.string "related_link"
     t.json "publication_status", array: true
-    t.uuid "logo_id"
+    t.bigint "logo_id"
+    t.string "aasm_state"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["logo_id"], name: "index_items_on_logo_id"
     t.index ["owner_id"], name: "index_items_on_owner_id"
   end
 
@@ -391,9 +393,11 @@ ActiveRecord::Schema.define(version: 2019_08_26_235029) do
     t.json "departments", array: true
     t.json "supervisors", array: true
     t.json "committee_members", array: true
-    t.uuid "logo_id"
+    t.bigint "logo_id"
+    t.string "aasm_state"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["logo_id"], name: "index_theses_on_logo_id"
     t.index ["owner_id"], name: "index_theses_on_owner_id"
   end
 
@@ -434,6 +438,8 @@ ActiveRecord::Schema.define(version: 2019_08_26_235029) do
   add_foreign_key "draft_theses", "institutions"
   add_foreign_key "draft_theses", "languages"
   add_foreign_key "draft_theses", "users"
+  add_foreign_key "items", "active_storage_attachments", column: "logo_id", on_delete: :nullify
   add_foreign_key "items", "users", column: "owner_id"
+  add_foreign_key "theses", "active_storage_attachments", column: "logo_id", on_delete: :nullify
   add_foreign_key "theses", "users", column: "owner_id"
 end

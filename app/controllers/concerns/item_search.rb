@@ -21,6 +21,7 @@ module ItemSearch
     options = { q: params[:search], models: @search_models, as: current_user, facets: facets }
 
     @results = JupiterCore::Search.faceted_search(options).sort(params[:sort], params[:direction]).page params[:page]
+    @results
   end
 
   def results

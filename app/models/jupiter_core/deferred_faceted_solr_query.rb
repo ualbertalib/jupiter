@@ -164,7 +164,7 @@ class JupiterCore::DeferredFacetedSolrQuery
     @count_cache, @results, facet_data = JupiterCore::Search.perform_solr_query(
       search_args_with_limit(criteria[:limit])
     )
-
+    binding.pry if $ASDF
     @facets = facet_data['facet_fields'].map do |k, v|
       if model_has_sort_year && (k == sort_year_facet)
         JupiterCore::RangeFacetResult.new(criteria[:facet_map], k, criteria[:ranges].fetch(k,

@@ -56,7 +56,6 @@ class FileSetTest < ActiveSupport::TestCase
     end
     assert_not file_set.nil?
     assert_equal file_set.blob.filename.to_s, 'image-sample.jpeg'
-
     item.set_thumbnail(item.files.first)
     assert item.thumbnail_url.present?
   end

@@ -93,7 +93,6 @@ module DraftActions
       }
     end
     @draft = draft_class.drafts.create(create_params)
-
     authorize @draft if needs_authorization?
 
     redirect_to wizard_path(steps.first, draft_id_param => @draft.id)

@@ -4,6 +4,8 @@ class SitemapTest < ActionDispatch::IntegrationTest
 
   def before_all
     super
+    Item.destroy_all
+    Thesis.destroy_all
     @community = Community.new(title: 'Fancy Community', owner_id: 1)
                           .unlock_and_fetch_ldp_object(&:save!)
     @collection = Collection.new(community_id: @community.id,
@@ -86,8 +88,7 @@ class SitemapTest < ActionDispatch::IntegrationTest
 
     # show public item attributes
     assert_select 'loc', item_url(@item)
-    assert_select 'lastmod', @item.updated_at.to_s
-
+    assert_select 'lastmod', @item.updated_at.iso8601
     # not show private items
     assert_select 'url', count: 2
     assert_select 'loc', { count: 0, text: item_url(@private_item) }, 'private items should not appear in the sitemap'
