@@ -51,7 +51,7 @@ class Thesis < Doiable
   def self.from_draft(draft_thesis)
     thesis = Thesis.find(draft_thesis.uuid) if draft_thesis.uuid.present?
     thesis ||= Thesis.new
-    thesis.unlock_and_fetch_ldp_object do |unlocked_obj|
+    thesis.tap do |unlocked_obj|
       unlocked_obj.owner_id = draft_thesis.user_id if unlocked_obj.owner.blank?
       unlocked_obj.title = draft_thesis.title
       unlocked_obj.alternative_title = draft_thesis.alternate_title

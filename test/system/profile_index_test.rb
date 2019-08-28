@@ -58,11 +58,9 @@ class ProfileIndexTest < ApplicationSystemTestCase
     user = users(:regular)
     admin = users(:admin)
 
-    community = Community.new(title: 'Fancy Community', owner_id: users(:admin).id)
-                         .save!
-    collection = Collection.new(community_id: community.id,
+    community = Community.create!(title: 'Fancy Community', owner_id: users(:admin).id)
+    collection = Collection.create!(community_id: community.id,
                                                   title: 'Fancy Collection', owner_id: users(:admin).id)
-                           .save!
 
     # Two things owned by regular user
     Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
@@ -74,7 +72,7 @@ class ProfileIndexTest < ApplicationSystemTestCase
                                item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
                                subject: ['Fancy things'])
-        .unlock_and_fetch_ldp_object do |uo|
+        .tap do |uo|
       uo.add_to_path(community.id, collection.id)
       uo.save!
     end
@@ -82,7 +80,7 @@ class ProfileIndexTest < ApplicationSystemTestCase
                                  owner_id: user.id, title: 'Nice Item',
                                  dissertant: 'Joe Blow',
                                  graduation_date: '2019')
-          .unlock_and_fetch_ldp_object do |uo|
+          .tap do |uo|
       uo.add_to_path(community.id, collection.id)
       uo.save!
     end
@@ -97,7 +95,7 @@ class ProfileIndexTest < ApplicationSystemTestCase
                                item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
                                subject: ['Ownership'])
-        .unlock_and_fetch_ldp_object do |uo|
+        .tap do |uo|
       uo.add_to_path(community.id, collection.id)
       uo.save!
     end

@@ -13,7 +13,7 @@ class ItemShowTest < ActionDispatch::IntegrationTest
                                           title: 'Nice collection', owner_id: users(:admin).id)
     @collection2 = Collection.create!(community_id: @community1.id,
                                           title: 'Another collection', owner_id: users(:admin).id)
-    @item = Item.new.unlock_and_fetch_ldp_object do |uo|
+    @item = Item.new.tap do |uo|
       uo.title = 'Fantastic item'
       uo.owner_id = users(:admin).id
       uo.creators = ['Joe Blow']

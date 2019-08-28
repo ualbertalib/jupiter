@@ -15,15 +15,15 @@ class ThesisTest < ActiveSupport::TestCase
     collection = Collection.new(title: 'Collection', owner_id: admin.id,
                                                   visibility: JupiterCore::VISIBILITY_PUBLIC,
                                                   community_id: community.id)
-    collection.unlock_and_fetch_ldp_object do |unlocked_collection|
+    collection.tap do |unlocked_collection|
       unlocked_collection.save!
     end
     thesis = Thesis.new(title: 'Thesis', owner_id: admin.id, visibility: JupiterCore::VISIBILITY_PUBLIC,
                                           dissertant: 'Joe Blow',
                                           departments: ['Physics', 'Non-physics'],
                                           supervisors: ['Billy (Physics)', 'Sally (Non-physics)'],
-                                          graduation_date: '2013-11')
-    thesis.unlock_and_fetch_ldp_object do |unlocked_thesis|
+                                          graduation_date: 'Fall 2013')
+    thesis.tap do |unlocked_thesis|
       unlocked_thesis.add_to_path(community.id, collection.id)
       unlocked_thesis.save!
     end
@@ -31,7 +31,7 @@ class ThesisTest < ActiveSupport::TestCase
     assert_not_equal 0, Thesis.public_items.count
     assert_equal thesis.id, Thesis.public_items.first.id
 
-    thesis.unlock_and_fetch_ldp_object(&:destroy)
+    thesis.tap(&:destroy)
   end
 
   test 'there is no default visibility' do
@@ -44,7 +44,7 @@ class ThesisTest < ActiveSupport::TestCase
   test 'unknown visibilities are not valid' do
     thesis = Thesis.new
 
-    thesis.unlock_and_fetch_ldp_object do |unlocked_thesis|
+    thesis.tap do |unlocked_thesis|
       unlocked_thesis.visibility = 'some_fake_visibility'
     end
 
@@ -61,7 +61,7 @@ class ThesisTest < ActiveSupport::TestCase
   test 'graduation date allows fuzzy dates' do
     thesis = Thesis.new
     assert_nothing_raised do
-      thesis.unlock_and_fetch_ldp_object do |unlocked_thesis|
+      thesis.tap do |unlocked_thesis|
         unlocked_thesis.graduation_date = 'before 1997 or after 2084'
       end
     end
@@ -71,7 +71,7 @@ class ThesisTest < ActiveSupport::TestCase
 
   test 'embargo_end_date must be present if visibility is embargo' do
     thesis = Thesis.new
-    thesis.unlock_and_fetch_ldp_object do |unlocked_thesis|
+    thesis.tap do |unlocked_thesis|
       unlocked_thesis.visibility = Thesis::VISIBILITY_EMBARGO
     end
 
@@ -82,7 +82,7 @@ class ThesisTest < ActiveSupport::TestCase
 
   test 'embargo_end_date must be blank for non-embargo visibilities' do
     thesis = Thesis.new
-    thesis.unlock_and_fetch_ldp_object do |unlocked_thesis|
+    thesis.tap do |unlocked_thesis|
       unlocked_thesis.visibility = JupiterCore::VISIBILITY_PUBLIC
       unlocked_thesis.embargo_end_date = '1992-02-01'
     end
@@ -96,7 +96,7 @@ class ThesisTest < ActiveSupport::TestCase
 
   test 'visibility_after_embargo must be present if visibility is embargo' do
     thesis = Thesis.new
-    thesis.unlock_and_fetch_ldp_object do |unlocked_thesis|
+    thesis.tap do |unlocked_thesis|
       unlocked_thesis.visibility = Thesis::VISIBILITY_EMBARGO
     end
 
@@ -108,7 +108,7 @@ class ThesisTest < ActiveSupport::TestCase
 
   test 'visibility_after_embargo must be blank for non-embargo visibilities' do
     thesis = Thesis.new
-    thesis.unlock_and_fetch_ldp_object do |unlocked_thesis|
+    thesis.tap do |unlocked_thesis|
       unlocked_thesis.visibility = JupiterCore::VISIBILITY_PUBLIC
       unlocked_thesis.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].draft
     end
@@ -124,7 +124,7 @@ class ThesisTest < ActiveSupport::TestCase
 
   test 'visibility_after_embargo must be from the controlled vocabulary' do
     thesis = Thesis.new
-    thesis.unlock_and_fetch_ldp_object do |unlocked_thesis|
+    thesis.tap do |unlocked_thesis|
       unlocked_thesis.visibility = Thesis::VISIBILITY_EMBARGO
       unlocked_thesis.visibility_after_embargo = 'whatever'
     end
@@ -140,7 +140,7 @@ class ThesisTest < ActiveSupport::TestCase
     community_id = generate_random_string
     collection_id = generate_random_string
 
-    thesis.unlock_and_fetch_ldp_object do |unlocked_thesis|
+    thesis.tap do |unlocked_thesis|
       unlocked_thesis.add_to_path(community_id, collection_id)
     end
 
@@ -158,7 +158,7 @@ class ThesisTest < ActiveSupport::TestCase
     thesis = Thesis.new
     community_id = generate_random_string
     collection_id = generate_random_string
-    thesis.unlock_and_fetch_ldp_object do |unlocked|
+    thesis.tap do |unlocked|
       unlocked.add_to_path(community_id, collection_id)
     end
 

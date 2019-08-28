@@ -26,7 +26,7 @@ class Admin::ItemsControllerTest < ActionDispatch::IntegrationTest
       item_type: CONTROLLED_VOCABULARIES[:item_type].article,
       publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
       subject: ['Deletion']
-    ).unlock_and_fetch_ldp_object do |unlocked_item|
+    ).tap do |unlocked_item|
       unlocked_item.add_to_path(@community.id, @collection.id)
       unlocked_item.save!
     end

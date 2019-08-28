@@ -20,7 +20,7 @@ class Admin::CollectionsController < Admin::AdminController
     @collection =
       Collection.new(permitted_attributes(Collection)
                 .merge(owner_id: current_user.id, community_id: @community.id))
-    @collection.unlock_and_fetch_ldp_object do |unlocked_collection|
+    @collection.tap do |unlocked_collection|
       if unlocked_collection.save
         redirect_to admin_community_collection_path(@community, @collection), notice: t('.created')
       else
@@ -32,7 +32,7 @@ class Admin::CollectionsController < Admin::AdminController
   def edit; end
 
   def update
-    @collection.unlock_and_fetch_ldp_object do |unlocked_collection|
+    @collection.tap do |unlocked_collection|
       if unlocked_collection.update(permitted_attributes(Collection))
         redirect_to admin_community_collection_path(@community, @collection), notice: t('.updated')
       else
@@ -42,7 +42,7 @@ class Admin::CollectionsController < Admin::AdminController
   end
 
   def destroy
-    @collection.unlock_and_fetch_ldp_object do |unlocked_collection|
+    @collection.tap do |unlocked_collection|
       if unlocked_collection.destroy
         flash[:notice] = t('.deleted')
       else

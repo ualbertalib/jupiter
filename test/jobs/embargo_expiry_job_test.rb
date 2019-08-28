@@ -19,10 +19,10 @@ class EmbargoExpiryJobTest < ActiveJob::TestCase
       item_type: CONTROLLED_VOCABULARIES[:item_type].article,
       publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
       subject: ['Fancy things'],
-      visibility: ItemProperties::VISIBILITY_EMBARGO,
+      visibility: Depositable::VISIBILITY_EMBARGO,
       embargo_end_date: 2.days.ago.to_date,
       visibility_after_embargo: CONTROLLED_VOCABULARIES[:visibility].public
-    ).unlock_and_fetch_ldp_object do |uo|
+    ).tap do |uo|
       uo.add_to_path(@community.id, @collection.id)
       uo.save!
     end
@@ -37,25 +37,25 @@ class EmbargoExpiryJobTest < ActiveJob::TestCase
       item_type: CONTROLLED_VOCABULARIES[:item_type].article,
       publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
       subject: ['Fancy things'],
-      visibility: ItemProperties::VISIBILITY_EMBARGO,
+      visibility: Depositable::VISIBILITY_EMBARGO,
       embargo_end_date: 2.days.from_now.to_date,
       visibility_after_embargo: CONTROLLED_VOCABULARIES[:visibility].public
-    ).unlock_and_fetch_ldp_object do |uo|
+    ).tap do |uo|
       uo.add_to_path(@community.id, @collection.id)
       uo.save!
     end
 
     EmbargoExpiryJob.perform_now
 
-    expired_item.unlock_and_fetch_ldp_object(&:reload)
-    not_expired_item.unlock_and_fetch_ldp_object(&:reload)
+    expired_item.tap(&:reload)
+    not_expired_item.tap(&:reload)
 
     assert_equal expired_item.visibility, JupiterCore::VISIBILITY_PUBLIC
     assert_nil expired_item.visibility_after_embargo
     assert_nil expired_item.embargo_end_date
     assert_not_empty expired_item.embargo_history
 
-    assert_equal not_expired_item.visibility, ItemProperties::VISIBILITY_EMBARGO
+    assert_equal not_expired_item.visibility, Depositable::VISIBILITY_EMBARGO
     assert_equal not_expired_item.visibility_after_embargo, CONTROLLED_VOCABULARIES[:visibility].public
     assert_equal not_expired_item.embargo_end_date, 2.days.from_now.to_date
     assert_empty not_expired_item.embargo_history
@@ -67,10 +67,10 @@ class EmbargoExpiryJobTest < ActiveJob::TestCase
       owner_id: users(:admin).id,
       dissertant: 'Joe Blow',
       graduation_date: '2017-03-31',
-      visibility: ItemProperties::VISIBILITY_EMBARGO,
+      visibility: Depositable::VISIBILITY_EMBARGO,
       embargo_end_date: 2.days.ago.to_date,
       visibility_after_embargo: CONTROLLED_VOCABULARIES[:visibility].public
-    ).unlock_and_fetch_ldp_object do |unlocked_thesis|
+    ).tap do |unlocked_thesis|
       unlocked_thesis.add_to_path(@community.id, @collection.id)
       unlocked_thesis.save!
     end
@@ -80,25 +80,25 @@ class EmbargoExpiryJobTest < ActiveJob::TestCase
       owner_id: users(:admin).id,
       dissertant: 'Joe Blow',
       graduation_date: '2017-03-31',
-      visibility: ItemProperties::VISIBILITY_EMBARGO,
+      visibility: Depositable::VISIBILITY_EMBARGO,
       embargo_end_date: 2.days.from_now.to_date,
       visibility_after_embargo: CONTROLLED_VOCABULARIES[:visibility].public
-    ).unlock_and_fetch_ldp_object do |unlocked_thesis|
+    ).tap do |unlocked_thesis|
       unlocked_thesis.add_to_path(@community.id, @collection.id)
       unlocked_thesis.save!
     end
 
     EmbargoExpiryJob.perform_now
 
-    expired_thesis.unlock_and_fetch_ldp_object(&:reload)
-    not_expired_thesis.unlock_and_fetch_ldp_object(&:reload)
+    expired_thesis.tap(&:reload)
+    not_expired_thesis.tap(&:reload)
 
     assert_equal expired_thesis.visibility, JupiterCore::VISIBILITY_PUBLIC
     assert_nil expired_thesis.visibility_after_embargo
     assert_nil expired_thesis.embargo_end_date
     assert_not_empty expired_thesis.embargo_history
 
-    assert_equal not_expired_thesis.visibility, ItemProperties::VISIBILITY_EMBARGO
+    assert_equal not_expired_thesis.visibility, Depositable::VISIBILITY_EMBARGO
     assert_equal not_expired_thesis.visibility_after_embargo, CONTROLLED_VOCABULARIES[:visibility].public
     assert_equal not_expired_thesis.embargo_end_date, 2.days.from_now.to_date
     assert_empty not_expired_thesis.embargo_history

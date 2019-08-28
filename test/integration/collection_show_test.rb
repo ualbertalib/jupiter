@@ -19,7 +19,7 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
                                  item_type: CONTROLLED_VOCABULARIES[:item_type].article,
                                  publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
                                  subject: ['Niceness', 'Fanciness'],
-                                 title: "#{adjective} Item").unlock_and_fetch_ldp_object do |uo|
+                                 title: "#{adjective} Item").tap do |uo|
         uo.add_to_path(@community.id, @collection.id)
         uo.save!
       end

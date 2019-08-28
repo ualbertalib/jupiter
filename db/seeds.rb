@@ -170,7 +170,7 @@ if Rails.env.development? || Rails.env.uat?
         item_attributes[:source] = "Chapter 5 of '#{thing.pluralize.capitalize} and what they drink'"
       end
 
-      item = Item.new(item_attributes).unlock_and_fetch_ldp_object do |uo|
+      item = Item.new(item_attributes).tap do |uo|
         if i == 8
           uo.add_to_path(community.id, item_collection.id)
           uo.add_to_path(community.id, thesis_collection.id)
@@ -227,7 +227,7 @@ if Rails.env.development? || Rails.env.uat?
         thesis_attributes[:committee_members] += ["#{contributors[(seed + 7 * seed2) % 10]} (#{department2})"]
       end
 
-      thesis = Thesis.new(thesis_attributes).unlock_and_fetch_ldp_object do |uo|
+      thesis = Thesis.new(thesis_attributes).tap do |uo|
         if i == 8
           uo.add_to_path(community.id, item_collection.id)
           uo.add_to_path(community.id, thesis_collection.id)
@@ -263,7 +263,7 @@ if Rails.env.development? || Rails.env.uat?
       item_type: CONTROLLED_VOCABULARIES[:item_type].chapter,
       subject: [thing.capitalize, 'Privacy'],
       doi: "doi:bogus-#{Time.current.utc.iso8601(3)}"
-    ).unlock_and_fetch_ldp_object do |uo|
+    ).tap do |uo|
       uo.add_to_path(community.id, item_collection.id)
       uo.save!
     end
@@ -281,7 +281,7 @@ if Rails.env.development? || Rails.env.uat?
       item_type: CONTROLLED_VOCABULARIES[:item_type].report,
       subject: [thing.capitalize, 'CCID'],
       doi: "doi:bogus-#{Time.current.utc.iso8601(3)}"
-    ).unlock_and_fetch_ldp_object do |uo|
+    ).tap do |uo|
       uo.add_to_path(community.id, item_collection.id)
       uo.save!
     end
@@ -299,7 +299,7 @@ if Rails.env.development? || Rails.env.uat?
       item_type: CONTROLLED_VOCABULARIES[:item_type].conference_workshop_presentation,
       subject: [thing.capitalize, 'Embargoes'],
       doi: "doi:bogus-#{Time.current.utc.iso8601(3)}"
-    ).unlock_and_fetch_ldp_object do |uo|
+    ).tap do |uo|
       uo.add_to_path(community.id, item_collection.id)
       uo.embargo_end_date = 20.years.from_now.to_date
       uo.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].public
@@ -319,7 +319,7 @@ if Rails.env.development? || Rails.env.uat?
       item_type: CONTROLLED_VOCABULARIES[:item_type].dataset,
       subject: [thing.capitalize, 'Freedom'],
       doi: "doi:bogus-#{Time.current.utc.iso8601(3)}"
-    ).unlock_and_fetch_ldp_object do |uo|
+    ).tap do |uo|
       uo.add_to_path(community.id, item_collection.id)
       uo.embargo_end_date = 2.days.ago.to_date
       uo.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].public
@@ -341,7 +341,7 @@ if Rails.env.development? || Rails.env.uat?
       # Add a temporal subject
       temporal_subjects: ['The 1950s'],
       doi: "doi:bogus-#{Time.current.utc.iso8601(3)}"
-    ).unlock_and_fetch_ldp_object do |uo|
+    ).tap do |uo|
       uo.add_to_path(community.id, item_collection.id)
       uo.save!
     end
@@ -362,7 +362,7 @@ if Rails.env.development? || Rails.env.uat?
       # Add a spacial subject
       spatial_subjects: ['Onoway'],
       doi: "doi:bogus-#{Time.current.utc.iso8601(3)}"
-    ).unlock_and_fetch_ldp_object do |uo|
+    ).tap do |uo|
       uo.add_to_path(community.id, item_collection.id)
       uo.add_to_path(community.id, thesis_collection.id)
       uo.save!

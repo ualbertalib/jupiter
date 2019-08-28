@@ -20,7 +20,7 @@ class ItemTest < ActiveSupport::TestCase
                                       publication_status: [CONTROLLED_VOCABULARIES[:publication_status].draft,
                                                            CONTROLLED_VOCABULARIES[:publication_status].submitted])
     assert_difference -> {Item.public_items.count } do
-      item.unlock_and_fetch_ldp_object do |unlocked_item|
+      item.tap do |unlocked_item|
         unlocked_item.add_to_path(community.id, collection.id)
         unlocked_item.save!
       end
@@ -29,7 +29,7 @@ class ItemTest < ActiveSupport::TestCase
     assert Item.public_items.map(&:id).include?(item.id)
 
     assert_difference -> {Item.public_items.count }, -1 do
-      item.unlock_and_fetch_ldp_object do |unlocked_item|
+      item.tap do |unlocked_item|
         unlocked_item.visibility = JupiterCore::VISIBILITY_PRIVATE
         unlocked_item.save!
       end
@@ -47,7 +47,7 @@ class ItemTest < ActiveSupport::TestCase
   test 'unknown visibilities are not valid' do
     item = Item.new
 
-    item.unlock_and_fetch_ldp_object do |unlocked_item|
+    item.tap do |unlocked_item|
       unlocked_item.visibility = 'some_fake_visibility'
     end
     assert_not item.valid?
@@ -62,7 +62,7 @@ class ItemTest < ActiveSupport::TestCase
   test 'created allows fuzzy dates' do
     item = Item.new
     assert_nothing_raised do
-      item.unlock_and_fetch_ldp_object do |unlocked_item|
+      item.tap do |unlocked_item|
         unlocked_item.created = 'before 1997 or after 2084'
       end
     end
@@ -72,7 +72,7 @@ class ItemTest < ActiveSupport::TestCase
 
   test 'embargo_end_date must be present if visibility is embargo' do
     item = Item.new
-    item.unlock_and_fetch_ldp_object do |unlocked_item|
+    item.tap do |unlocked_item|
       unlocked_item.visibility = Item::VISIBILITY_EMBARGO
     end
 
@@ -83,7 +83,7 @@ class ItemTest < ActiveSupport::TestCase
 
   test 'embargo_end_date must be blank for non-embargo visibilities' do
     item = Item.new
-    item.unlock_and_fetch_ldp_object do |unlocked_item|
+    item.tap do |unlocked_item|
       unlocked_item.visibility = JupiterCore::VISIBILITY_PUBLIC
       unlocked_item.embargo_end_date = '1992-02-01'
     end
@@ -97,7 +97,7 @@ class ItemTest < ActiveSupport::TestCase
 
   test 'visibility_after_embargo must be present if visibility is embargo' do
     item = Item.new
-    item.unlock_and_fetch_ldp_object do |unlocked_item|
+    item.tap do |unlocked_item|
       unlocked_item.visibility = Item::VISIBILITY_EMBARGO
     end
 
@@ -108,7 +108,7 @@ class ItemTest < ActiveSupport::TestCase
 
   test 'visibility_after_embargo must be blank for non-embargo visibilities' do
     item = Item.new
-    item.unlock_and_fetch_ldp_object do |unlocked_item|
+    item.tap do |unlocked_item|
       unlocked_item.visibility = JupiterCore::VISIBILITY_PUBLIC
       unlocked_item.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].draft
     end
@@ -124,7 +124,7 @@ class ItemTest < ActiveSupport::TestCase
 
   test 'visibility_after_embargo must be from the controlled vocabulary' do
     item = Item.new
-    item.unlock_and_fetch_ldp_object do |unlocked_item|
+    item.tap do |unlocked_item|
       unlocked_item.visibility = Item::VISIBILITY_EMBARGO
       unlocked_item.visibility_after_embargo = 'whatever'
     end
@@ -140,7 +140,7 @@ class ItemTest < ActiveSupport::TestCase
     community_id = generate_random_string
     collection_id = generate_random_string
 
-    item.unlock_and_fetch_ldp_object do |unlocked_item|
+    item.tap do |unlocked_item|
       unlocked_item.add_to_path(community_id, collection_id)
     end
 
@@ -158,7 +158,7 @@ class ItemTest < ActiveSupport::TestCase
     item = Item.new
     community_id = generate_random_string
     collection_id = generate_random_string
-    item.unlock_and_fetch_ldp_object do |unlocked|
+    item.tap do |unlocked|
       unlocked.add_to_path(community_id, collection_id)
     end
 
@@ -337,7 +337,7 @@ class ItemTest < ActiveSupport::TestCase
                                       subject: ['Randomness'])
 
     freeze_time do
-      item.unlock_and_fetch_ldp_object do |unlocked_item|
+      item.tap do |unlocked_item|
         unlocked_item.add_to_path(community.id, collection.id)
         unlocked_item.save
       end
@@ -380,7 +380,7 @@ class ItemTest < ActiveSupport::TestCase
     end
 
     freeze_time do
-      item.unlock_and_fetch_ldp_object do |unlocked_item|
+      item.tap do |unlocked_item|
         unlocked_item.add_to_path(community.id, collection.id)
         unlocked_item.save
       end
@@ -423,21 +423,21 @@ class ItemTest < ActiveSupport::TestCase
     items = items.shuffle
 
     freeze_time do
-      items[0].unlock_and_fetch_ldp_object do |unlocked_item|
+      items[0].tap do |unlocked_item|
         unlocked_item.add_to_path(community.id, collection.id)
         unlocked_item.save
       end
     end
 
     travel_to 6.minutes.ago do
-      items[1].unlock_and_fetch_ldp_object do |unlocked_item|
+      items[1].tap do |unlocked_item|
         unlocked_item.add_to_path(community.id, collection.id)
         unlocked_item.save
       end
     end
 
     travel_to 2.hours.from_now do
-      items[2].unlock_and_fetch_ldp_object do |unlocked_item|
+      items[2].tap do |unlocked_item|
         unlocked_item.add_to_path(community.id, collection.id)
         unlocked_item.save
       end

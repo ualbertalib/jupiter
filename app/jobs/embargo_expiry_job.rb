@@ -5,7 +5,7 @@ class EmbargoExpiryJob < ApplicationJob
   def perform(*_args)
     # TODO: Should be a better way to query solr?
     # Can't do date logic like this:
-    #Item.where(visibility: ItemProperties::VISIBILITY_EMBARGO, embargo_end_date: [* TO NOW])
+    #Item.where(visibility: Depositable::VISIBILITY_EMBARGO, embargo_end_date: [* TO NOW])
     # And faceted_search has visibility based on current_user
     # So dropped down to perform_solr_query to get what I need
 

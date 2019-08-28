@@ -59,12 +59,6 @@ class Depositable < ApplicationRecord
     [JupiterCore::VISIBILITY_PUBLIC, JupiterCore::VISIBILITY_PRIVATE, JupiterCore::VISIBILITY_AUTHENTICATED]
   end
 
-  # TODO!!!!! remove
-  def unlock_and_fetch_ldp_object
-    yield self
-    self
-  end
-
   def self.valid_visibilities
     [JupiterCore::VISIBILITY_PUBLIC, JupiterCore::VISIBILITY_PRIVATE, JupiterCore::VISIBILITY_AUTHENTICATED]
   end
