@@ -269,21 +269,11 @@ class Exporters::Solr::BaseExporter
     def inherited(child)
       super
       child.class_eval do
-        custom_index :has_model, role: [:exact_match], as: lambda { |object|
-          if object.class < JupiterCore::LockedLdpObject
-            object.class.send(:derived_af_class)
-          else
-            @indexed_model_name
-          end
-        }
+        custom_index :has_model, role: [:exact_match], as: lambda { |object| @indexed_model_name }
 
-        custom_index :owner, type: :integer, role: [:exact_match], as: lambda { |object|
-          if object.class < JupiterCore::LockedLdpObject
-            object.owner
-          else
-            object.owner_id
-          end
-        }
+        # The original Fedora property was called 'owner' even though it held an id, so for compatibility
+        # we keep that index name here
+        custom_index :owner, type: :integer, role: [:exact_match], as: lambda { |object| object.owner_id }
 
         index :visibility, role: [:exact_match, :facet]
 

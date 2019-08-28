@@ -88,19 +88,19 @@ class JupiterCore::DeferredFacetedSolrQuery
 
   def each
     reify_result_set.map do |res|
-      obj = if res['has_model_ssim'].first.start_with?('IR')
-              JupiterCore::LockedLdpObject.reify_solr_doc(res)
-            else
-              # TODO: This is inefficient and we should look at batching up IDs once Fedora is gone and I can change this a bit
+      obj = begin
+              # For the migration, ActiveRecord models had the prefix Ar, so that's what has_model_ssim
+              # reflects in Solr. We've kept this post-migration to avoid the need to re-index, so for now
+              # we remove the prefix when getting the model
+              #
+              # TODO: This is inefficient and we should look at batching up IDs
               arclass = res['has_model_ssim'].first.sub(/^Ar/, '').constantize
-              begin
-                arclass.find(res['id'])
-              rescue ActiveRecord::RecordNotFound
-                # TODO handle this better?
-                puts "MISSING #{res['id']} STALE INDEX ERROR"
-                JupiterCore::SolrServices::Client.instance.remove_document(res['id'])
-                nil
-              end
+              arclass.find(res['id'])
+            rescue ActiveRecord::RecordNotFound
+              # TODO handle this better?
+              puts "MISSING #{res['id']} STALE INDEX ERROR"
+              JupiterCore::SolrServices::Client.instance.remove_document(res['id'])
+              nil
             end
       yield obj if obj.present?
       obj
