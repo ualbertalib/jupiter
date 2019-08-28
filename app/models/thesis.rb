@@ -111,7 +111,6 @@ class Thesis < Doiable
       draft_thesis.files_attachments.each do |attachment|
         new_attachment = ActiveStorage::Attachment.create(record: thesis,
                                                           blob: attachment.blob, name: :files)
-        FileAttachmentIngestionJob.perform_later(new_attachment.id)
       end
 
       thesis.set_thumbnail(thesis.files.find_by(blob_id: draft_thesis.thumbnail.blob.id))
