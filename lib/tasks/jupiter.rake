@@ -53,6 +53,7 @@ namespace :jupiter do
 
   desc 'sayonara ActiveFedora'
   task get_me_off_of_fedora: :environment do
+    puts
     puts 'Preparing Draft Item ...'
 
     DraftItem.all.each do |draft_item|
@@ -65,8 +66,10 @@ namespace :jupiter do
         join_record.upcoming_draft_item_id = draft_item.upcoming_id
         join_record.save!
       end
+      print '.'
     end
 
+    puts
     puts 'Preparing Draft Thesis ...'
 
     DraftThesis.all.each do |draft_thesis|
@@ -74,23 +77,43 @@ namespace :jupiter do
         attachment.upcoming_record_id = draft_thesis.upcoming_id
         attachment.save!
       end
+      print '.'
     end
 
+    puts
     puts 'Migrating Communities...'
 
-    Community.all.each { |community| ArCommunity.from_community(community) }
+    Community.all.each do |community|
+      ArCommunity.from_community(community)
+      print '.'
+    end
 
+    puts
     puts 'Migrating Collections...'
 
-    Collection.all.each { |collection| ArCollection.from_collection(collection) }
+    Collection.all.each do |collection|
+      ArCollection.from_collection(collection)
+      print '.'
+    end
 
+    puts
     puts 'Migrating Items...'
 
-    Item.all.each { |item| ArItem.from_item(item) }
+    Item.all.each do |item|
+      ArItem.from_item(item)
+      print '.'
+    end
 
+    puts
     puts 'Migrating Theses...'
 
-    Thesis.all.each { |thesis| ArThesis.from_thesis(thesis) }
+    Thesis.all.each do |thesis|
+      ArThesis.from_thesis(thesis)
+      print '.'
+    end
+
+    puts
+    puts 'Finished!'
   end
 
   desc 'turn existing filesets into attachments'

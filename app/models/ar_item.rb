@@ -114,8 +114,8 @@ class ArItem < ApplicationRecord
 
     # this is named differently in ActiveFedora
     ar_item.owner_id = item.owner
-
-    attributes = ar_item.attributes.keys.reject {|k| k == 'owner_id' || k == 'created_at' || k == 'updated_at' || k == 'logo_id'}
+    ar_item.aasm_state = item.doi_state.aasm_state
+    attributes = ar_item.attributes.keys.reject {|k| k == 'owner_id' || k == 'created_at' || k == 'updated_at' || k == 'logo_id' || k == 'aasm_state'}
 
     attributes.each do |attr|
       ar_item.send("#{attr}=", item.send(attr))
