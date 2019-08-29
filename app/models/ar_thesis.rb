@@ -113,8 +113,9 @@ class ArThesis < ApplicationRecord
 
     # this is named differently in ActiveFedora
     ar_thesis.owner_id = thesis.owner
+    ar_thesis.aasm_state = thesis.doi_state.aasm_state
 
-    attributes = ar_thesis.attributes.keys.reject {|k| k == 'owner_id' || k == 'created_at' || k == 'updated_at' || k == 'logo_id'}
+    attributes = ar_thesis.attributes.keys.reject {|k| k == 'owner_id' || k == 'created_at' || k == 'updated_at' || k == 'logo_id' || k == 'aasm_state'}
 
     attributes.each do |attr|
       ar_thesis.send("#{attr}=", thesis.send(attr))
