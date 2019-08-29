@@ -6,7 +6,6 @@ class ArItem < ApplicationRecord
 
   has_many_attached :files, dependent: false
 
-
   acts_as_rdfable do |config|
     config.title has_predicate: ::RDF::Vocab::DC.title
     config.creators has_predicate: RDF::Vocab::BIBO.authorList
@@ -95,8 +94,8 @@ class ArItem < ApplicationRecord
 
     # add an association between the same underlying blobs the Draft uses and the Item
     draft_item.files_attachments.each do |attachment|
-      new_attachment = ActiveStorage::Attachment.create(record: item,
-                                                        blob: attachment.blob, name: :files)
+      ActiveStorage::Attachment.create(record: item,
+                                       blob: attachment.blob, name: :files)
     end
 
     item.set_thumbnail(item.files.find_by(blob_id: draft_item.thumbnail.blob.id)) if draft_item.thumbnail.present?
@@ -108,14 +107,16 @@ class ArItem < ApplicationRecord
   end
 
   def self.from_item(item)
-    raise ArgumentError, "Item #{item.id} already migrated to ActiveRecord" if ArItem.find_by(id: item.id) != nil
+    raise ArgumentError, "Item #{item.id} already migrated" if ArItem.find_by(id: item.id).present?
 
     ar_item = ArItem.new(id: item.id)
 
     # this is named differently in ActiveFedora
     ar_item.owner_id = item.owner
     ar_item.aasm_state = item.doi_state.aasm_state
-    attributes = ar_item.attributes.keys.reject {|k| k == 'owner_id' || k == 'created_at' || k == 'updated_at' || k == 'logo_id' || k == 'aasm_state'}
+    attributes = ar_item.attributes.keys.reject do |k|
+      ['owner_id', 'created_at', 'updated_at', 'logo_id', 'aasm_state'].include?(k)
+    end
 
     attributes.each do |attr|
       ar_item.send("#{attr}=", item.send(attr))
@@ -136,6 +137,7 @@ class ArItem < ApplicationRecord
         ar_item.save!
       end
     end
+    ar_item
   end
 
   # This is stored in solr: combination of item_type and publication_status

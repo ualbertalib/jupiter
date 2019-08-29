@@ -8,14 +8,16 @@ class ArCollection < ApplicationRecord
   end
 
   def self.from_collection(collection)
-    raise ArgumentError, "Community #{collection.id} already migrated to ActiveRecord" if ArCollection.find_by(id: collection.id) != nil
+    if ArCollection.find_by(id: collection.id).present?
+      raise ArgumentError, "Collection #{collection.id} already migrated"
+    end
 
     ar_collection = ArCollection.new(id: collection.id)
 
     # this is named differently in ActiveFedora
     ar_collection.owner_id = collection.owner
 
-    attributes = ar_collection.attributes.keys.reject {|k| k == 'owner_id' || k == 'created_at' || k == 'updated_at'}
+    attributes = ar_collection.attributes.keys.reject { |k| ['owner_id', 'created_at', 'updated_at'].include?(k) }
 
     attributes.each do |attr|
       ar_collection.send("#{attr}=", collection.send(attr))
@@ -24,6 +26,7 @@ class ArCollection < ApplicationRecord
     # unconditionally save. If something doesn't pass validations in ActiveFedora, it still needs to come here
     ar_collection.restricted ||= false
     ar_collection.save(validate: false)
+    ar_collection
   end
 
 end

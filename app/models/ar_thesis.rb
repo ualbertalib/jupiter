@@ -6,22 +6,21 @@ class ArThesis < ApplicationRecord
 
   has_many_attached :files, dependent: false
 
-
   acts_as_rdfable do |config|
     config.title has_predicate: ::RDF::Vocab::DC.title
     # TODO
     #  config.date_created has_predicate: ::RDF::Vocab::DC.created
     #    config.time_periods has_predicate: ::RDF::Vocab::DC.temporal
     #    config.places has_predicate: ::RDF::Vocab::DC.spatial
-  #  config.description has_predicate: ::RDF::Vocab::DC.description
+    #  config.description has_predicate: ::RDF::Vocab::DC.description
     # TODO: add
     # config.publisher has_predicate: ::RDF::Vocab::DC.publisher
     # TODO join table
     # config.languages has_predicate: ::RDF::Vocab::DC.language
-  #  config.license has_predicate: ::RDF::Vocab::DC.license
+    #  config.license has_predicate: ::RDF::Vocab::DC.license
     # config.type_id has_predicate: ::RDF::Vocab::DC.type
-#    config.source has_predicate: ::RDF::Vocab::DC.source
-#    #    config.related_item has_predicate: ::RDF::Vocab::DC.relation
+    #    config.source has_predicate: ::RDF::Vocab::DC.source
+    #    #    config.related_item has_predicate: ::RDF::Vocab::DC.relation
     #  config.status has_predicate: ::RDF::Vocab::BIBO.status
   end
 
@@ -107,7 +106,7 @@ class ArThesis < ApplicationRecord
   end
 
   def self.from_thesis(thesis)
-    raise ArgumentError, "Thesis #{thesis.id} already migrated to ActiveRecord" if ArThesis.find_by(id: thesis.id) != nil
+    raise ArgumentError, "Thesis #{thesis.id} already migrated" if ArThesis.find_by(id: thesis.id).present?
 
     ar_thesis = ArThesis.new(id: thesis.id)
 
@@ -115,7 +114,9 @@ class ArThesis < ApplicationRecord
     ar_thesis.owner_id = thesis.owner
     ar_thesis.aasm_state = thesis.doi_state.aasm_state
 
-    attributes = ar_thesis.attributes.keys.reject {|k| k == 'owner_id' || k == 'created_at' || k == 'updated_at' || k == 'logo_id' || k == 'aasm_state'}
+    attributes = ar_thesis.attributes.keys.reject do |k|
+      ['owner_id', 'created_at', 'updated_at', 'logo_id', 'aasm_state'].include?(k)
+    end
 
     attributes.each do |attr|
       ar_thesis.send("#{attr}=", thesis.send(attr))
@@ -136,6 +137,7 @@ class ArThesis < ApplicationRecord
         ar_thesis.save!
       end
     end
+    ar_thesis
   end
 
   validates :dissertant, presence: true
@@ -144,16 +146,13 @@ class ArThesis < ApplicationRecord
   validates :language, uri: { in_vocabulary: :language }
   validates :institution, uri: { in_vocabulary: :institution }
 
-
   def populate_sort_year
     self.sort_year = Date.parse(graduation_date).year.to_i if graduation_date.present?
-
     rescue ArgumentError
       # date was unparsable, try to pull out the first 4 digit number as a year
       capture = graduation_date.scan(/\d{4}/)
       self.sort_year = capture[0].to_i if capture.present?
   end
-
 
   def add_to_path(community_id, collection_id)
     self.member_of_paths += ["#{community_id}/#{collection_id}"]
