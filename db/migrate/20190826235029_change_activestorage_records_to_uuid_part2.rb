@@ -1,5 +1,8 @@
 class ChangeActivestorageRecordsToUuidPart2 < ActiveRecord::Migration[5.2]
   def change
+    execute "UPDATE active_storage_attachments SET record_type = 'Community' where record_type = 'ArCommunity'"
+    execute "UPDATE active_storage_attachments SET record_type = 'Item' where record_type = 'ArItem'"
+    execute "UPDATE active_storage_attachments SET record_type = 'Thesis' where record_type = 'ArThesis'"
     remove_column :active_storage_attachments, :record_id
     rename_column :active_storage_attachments, :upcoming_record_id, :record_id
 
