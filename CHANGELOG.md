@@ -13,7 +13,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Ruby 2.5 to travis ci testing matrix [PR#1040](https://github.com/ualbertalib/jupiter/pull/1040)
 - Added missing contoller tests [#865](https://github.com/ualbertalib/jupiter/issues/865)
 - Dependency on ActsAsRdfable for annotating ActiveRecord classes with RDF predicates
-- ArCollection, ArCommunity ArItem, and ArThesis models for migration
+- Collection, Community Item, and Thesis ActiveRecord models
 - jupiter:get_me_off_of_fedora rake task to perform data migration
 - drafts scope for DraftItem/DraftThesis
 
@@ -28,7 +28,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Replaced all calls to `Solrizer.solr_name` with simplified local code to map Solr types/roles to wildcard stems.
 - Removed Solrizer usage from the process of indexing ActiveFedora objects for Solr entirely. Replaced with Solr Exporter pattern for serialization of Solr data.
 - DraftItem and DraftThesis have basic RDF annotations
-
+- Removed: ActiveFedora
 
 ### Fixed
 - fixed error in dangerfile [#1109](https://github.com/ualbertalib/jupiter/issues/1109)
