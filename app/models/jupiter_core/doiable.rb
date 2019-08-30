@@ -1,4 +1,4 @@
-class Doiable < Depositable
+class JupiterCore::Doiable < JupiterCore::Depositable
 
   self.abstract_class = true
 
@@ -44,49 +44,50 @@ class Doiable < Depositable
 
     return if id.blank?
 
-    # ActiveFedora doesn't have skip_callbacks built in? So handle this ourselves.
     # Allow this logic to be skipped if skip_handle_doi_states is set.
     # This is mainly used so we can rollback the state when a job fails and
     # we do not wish to rerun all this logic again which would queue up the same job again
     return (self.skip_handle_doi_states = false) if skip_handle_doi_states.present?
 
     if doi.blank? # Never been minted before
-      self.initially_created!(id) if !private? && self.not_available?
-    elsif (self.not_available? && transitioned_from_private?) ||
-          (self.available? && (self.doi_fields_changed? || transitioned_to_private?))
+      initially_created!(id) if !private? && not_available?
+    elsif (not_available? && transitioned_from_private?) ||
+          (available? && (doi_fields_changed? || transitioned_to_private?))
       # If private, we only care if visibility has been made public
       # If public, we care if visibility changed to private or doi fields have been changed
-      self.altered!(id)
+      altered!(id)
     end
   end
 
   def remove_doi
-    self.removed! if doi.present? && (self.available? || self.not_available?)
+    removed! if doi.present? && (available? || not_available?)
   end
 
   # for use when deleting items for later re-migration, to avoid tombstoning
   # manually updates the underlying aasm_state to preclude running the Withdrawl job
   # rubocop:disable Rails/SkipsModelValidations
   def doi_safe_destroy!
-    self.update_attribute(:aasm_state, 'excluded')
+    update_attribute(:aasm_state, 'excluded')
     destroy!
   end
+  # rubocop:enable Rails/SkipsModelValidations
 
   def withdraw_doi
-    DOIRemoveJob.perform_later(self.doi) if self.doi.present?
+    DOIRemoveJob.perform_later(doi) if doi.present?
   end
 
   def doi_fields_changed?
-    self.changed.any? do |changed_field|
+    changed.any? do |changed_field|
       ['title', 'creator', 'dissertant', 'item_type', 'publication_status'].include? changed_field
     end
   end
 
   def queue_create_job
-    DOICreateJob.perform_later(self.id)
+    DOICreateJob.perform_later(id)
   end
 
   def queue_update_job
-    DOIUpdateJob.perform_later(self.id)
+    DOIUpdateJob.perform_later(id)
   end
+
 end

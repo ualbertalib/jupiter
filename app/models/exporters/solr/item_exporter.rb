@@ -1,4 +1,5 @@
 class Exporters::Solr::ItemExporter < Exporters::Solr::BaseExporter
+
   indexed_model_name 'ArItem'
 
   index :title, role: [:search, :sort]

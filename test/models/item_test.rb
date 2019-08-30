@@ -4,22 +4,22 @@ class ItemTest < ActiveSupport::TestCase
 
   test 'a valid item can be constructed' do
     community = Community.new(title: 'Community', owner_id: users(:admin).id,
-                                                visibility: JupiterCore::VISIBILITY_PUBLIC)
+                              visibility: JupiterCore::VISIBILITY_PUBLIC)
     community.save!
     collection = Collection.new(title: 'Collection', owner_id: users(:admin).id,
-                                                  visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                                  community_id: community.id)
+                                visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                community_id: community.id)
     collection.save!
     item = Item.new(title: 'Item', owner_id: users(:admin).id, visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                      created: '2017-02-02',
-                                      languages: [CONTROLLED_VOCABULARIES[:language].english],
-                                      creators: ['Joe Blow'],
-                                      subject: ['Things'],
-                                      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                                      item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                      publication_status: [CONTROLLED_VOCABULARIES[:publication_status].draft,
-                                                           CONTROLLED_VOCABULARIES[:publication_status].submitted])
-    assert_difference -> {Item.public_items.count } do
+                    created: '2017-02-02',
+                    languages: [CONTROLLED_VOCABULARIES[:language].english],
+                    creators: ['Joe Blow'],
+                    subject: ['Things'],
+                    license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                    item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                    publication_status: [CONTROLLED_VOCABULARIES[:publication_status].draft,
+                                         CONTROLLED_VOCABULARIES[:publication_status].submitted])
+    assert_difference -> { Item.public_items.count } do
       item.tap do |unlocked_item|
         unlocked_item.add_to_path(community.id, collection.id)
         unlocked_item.save!
@@ -28,7 +28,7 @@ class ItemTest < ActiveSupport::TestCase
     assert item.valid?
     assert Item.public_items.map(&:id).include?(item.id)
 
-    assert_difference -> {Item.public_items.count }, -1 do
+    assert_difference -> { Item.public_items.count }, -1 do
       item.tap do |unlocked_item|
         unlocked_item.visibility = JupiterCore::VISIBILITY_PRIVATE
         unlocked_item.save!
@@ -197,7 +197,7 @@ class ItemTest < ActiveSupport::TestCase
 
   test 'a rights statement must not be present if a license is present' do
     item = Item.new(rights: 'Share my work with everybody',
-                                      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international)
+                    license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international)
 
     assert_not item.valid?
     assert_includes item.errors[:base], 'should not have both a license and a rights statement'
@@ -237,49 +237,49 @@ class ItemTest < ActiveSupport::TestCase
 
   test 'publication status must come from controlled vocabulary' do
     item = Item.new(item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                      publication_status: ['whatever'])
+                    publication_status: ['whatever'])
     assert_not item.valid?
     assert_includes item.errors[:publication_status], 'is not recognized'
   end
 
   test 'publication status must either be published or both draft/submitted' do
     item = Item.new(item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                      publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published])
+                    publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published])
     item.valid?
     assert_not item.errors[:publication_status].present?
 
     item = Item.new(item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                      publication_status: [CONTROLLED_VOCABULARIES[:publication_status].draft,
-                                                           CONTROLLED_VOCABULARIES[:publication_status].submitted])
+                    publication_status: [CONTROLLED_VOCABULARIES[:publication_status].draft,
+                                         CONTROLLED_VOCABULARIES[:publication_status].submitted])
     item.valid?
     assert_not item.errors[:publication_status].present?
 
     item = Item.new(item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                      publication_status: [CONTROLLED_VOCABULARIES[:publication_status].draft])
+                    publication_status: [CONTROLLED_VOCABULARIES[:publication_status].draft])
     item.valid?
     assert_includes item.errors[:publication_status], 'is not recognized'
 
     item = Item.new(item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                      publication_status: [CONTROLLED_VOCABULARIES[:publication_status].submitted])
+                    publication_status: [CONTROLLED_VOCABULARIES[:publication_status].submitted])
     item.valid?
     assert_includes item.errors[:publication_status], 'is not recognized'
   end
 
   test 'publication status must be absent for non-articles' do
     item = Item.new(item_type: CONTROLLED_VOCABULARIES[:item_type].book,
-                                      publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published])
+                    publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published])
     assert_not item.valid?
     assert_includes item.errors[:publication_status], 'must be absent for non-articles'
   end
 
   test 'item_type_with_status_code gets set correctly' do
     item = Item.new(item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                      publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published])
+                    publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published])
     assert_equal :article_published, item.item_type_with_status_code
 
     item = Item.new(item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                      publication_status: [CONTROLLED_VOCABULARIES[:publication_status].draft,
-                                                           CONTROLLED_VOCABULARIES[:publication_status].submitted])
+                    publication_status: [CONTROLLED_VOCABULARIES[:publication_status].draft,
+                                         CONTROLLED_VOCABULARIES[:publication_status].submitted])
     assert_equal :article_submitted, item.item_type_with_status_code
 
     item = Item.new(item_type: CONTROLLED_VOCABULARIES[:item_type].report)
@@ -324,17 +324,17 @@ class ItemTest < ActiveSupport::TestCase
     # Setup an item...
     community = Community.create!(title: 'Community', owner_id: users(:admin).id)
     collection = Collection.create!(title: 'foo', owner_id: users(:regular).id,
-                                                  community_id: community.id)
+                                    community_id: community.id)
 
     item = Item.new(title: generate_random_string,
-                                      creators: [generate_random_string],
-                                      visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                      created: '1978-01-01',
-                                      owner_id: users(:admin).id,
-                                      item_type: CONTROLLED_VOCABULARIES[:item_type].report,
-                                      languages: [CONTROLLED_VOCABULARIES[:language].english],
-                                      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                                      subject: ['Randomness'])
+                    creators: [generate_random_string],
+                    visibility: JupiterCore::VISIBILITY_PUBLIC,
+                    created: '1978-01-01',
+                    owner_id: users(:admin).id,
+                    item_type: CONTROLLED_VOCABULARIES[:item_type].report,
+                    languages: [CONTROLLED_VOCABULARIES[:language].english],
+                    license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                    subject: ['Randomness'])
 
     freeze_time do
       item.tap do |unlocked_item|
@@ -362,14 +362,14 @@ class ItemTest < ActiveSupport::TestCase
     collection = Collection.create!(title: 'foo', owner_id: users(:regular).id, community_id: community.id)
 
     item = Item.new(title: generate_random_string,
-                                      creators: [generate_random_string],
-                                      visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                      created: '1978-01-01',
-                                      owner_id: users(:admin).id,
-                                      item_type: CONTROLLED_VOCABULARIES[:item_type].report,
-                                      languages: [CONTROLLED_VOCABULARIES[:language].english],
-                                      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                                      subject: ['Randomness'])
+                    creators: [generate_random_string],
+                    visibility: JupiterCore::VISIBILITY_PUBLIC,
+                    created: '1978-01-01',
+                    owner_id: users(:admin).id,
+                    item_type: CONTROLLED_VOCABULARIES[:item_type].report,
+                    languages: [CONTROLLED_VOCABULARIES[:language].english],
+                    license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                    subject: ['Randomness'])
 
     travel 1.minute do
       item.save
@@ -405,18 +405,18 @@ class ItemTest < ActiveSupport::TestCase
     # Setup some items...
     community = Community.create!(title: 'Community', owner_id: users(:admin).id)
     collection = Collection.create!(title: 'foo', owner_id: users(:regular).id,
-                                                  community_id: community.id)
+                                    community_id: community.id)
     items = []
     3.times do
       items << Item.new(title: generate_random_string,
-                                          creators: [generate_random_string],
-                                          visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                          created: '1978-01-01',
-                                          owner_id: users(:admin).id,
-                                          item_type: CONTROLLED_VOCABULARIES[:item_type].report,
-                                          languages: [CONTROLLED_VOCABULARIES[:language].english],
-                                          license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                                          subject: ['Randomness'])
+                        creators: [generate_random_string],
+                        visibility: JupiterCore::VISIBILITY_PUBLIC,
+                        created: '1978-01-01',
+                        owner_id: users(:admin).id,
+                        item_type: CONTROLLED_VOCABULARIES[:item_type].report,
+                        languages: [CONTROLLED_VOCABULARIES[:language].english],
+                        license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                        subject: ['Randomness'])
     end
 
     # this is all maybe a bit too "there's nothing up my sleeve" about item id orders, but c'est la vie

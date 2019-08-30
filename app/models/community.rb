@@ -1,11 +1,15 @@
-class Community < Depositable
+class Community < JupiterCore::Depositable
 
   scope :drafts, -> { where(is_published_in_era: false).or(where(is_published_in_era: nil)) }
 
   has_solr_exporter Exporters::Solr::CommunityExporter
 
   belongs_to :owner, class_name: 'User'
+
+  # technically this could be dependent: :restrict_with_error, but we already handle this with a custom validation & error message
+  # rubocop:disable Rails/HasManyOrHasOneDependent
   has_many :collections
+  # rubocop:enable Rails/HasManyOrHasOneDependent
 
   has_one_attached :logo
 
@@ -59,6 +63,5 @@ class Community < Depositable
                list_of_collections: member_collections.map(&:title).join(', '))
     throw(:abort)
   end
-
 
 end

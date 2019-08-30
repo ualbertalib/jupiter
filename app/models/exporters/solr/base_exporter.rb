@@ -50,7 +50,7 @@ class Exporters::Solr::BaseExporter
   def self.search_term_for(attr, value, role: :search)
     raise ArgumentError, "search value can't be nil" if value.nil?
 
-    solr_attr_name = self.solr_name_for(attr, role: role)
+    solr_attr_name = solr_name_for(attr, role: role)
     %Q(#{solr_attr_name}:"#{value}")
   end
 
@@ -171,9 +171,11 @@ class Exporters::Solr::BaseExporter
 
     protected
 
+    # rubocop:disable Style/TrivialAccessors
     def indexed_model_name(name)
       @indexed_model_name = name
     end
+    # rubocop:enable Style/TrivialAccessors
 
     # the basic DSL for declaring Solr indexes who will take their contents from attributes
     # declared on the objects we will export
@@ -214,7 +216,7 @@ class Exporters::Solr::BaseExporter
     # rubocop:enable Naming/UncommunicativeMethodParamName
 
     def default_sort(index:, direction:)
-      @default_ar_sort_args = {index => direction}
+      @default_ar_sort_args = { index => direction }
       index = [index] unless index.is_a?(Array)
       direction = [direction] unless direction.is_a?(Array)
       self.default_sort_indexes = index.map { |idx| solr_name_for(idx, role: :sort) }
@@ -269,11 +271,11 @@ class Exporters::Solr::BaseExporter
     def inherited(child)
       super
       child.class_eval do
-        custom_index :has_model, role: [:exact_match], as: lambda { |object| @indexed_model_name }
+        custom_index :has_model, role: [:exact_match], as: ->(_object) { @indexed_model_name }
 
         # The original Fedora property was called 'owner' even though it held an id, so for compatibility
         # we keep that index name here
-        custom_index :owner, type: :integer, role: [:exact_match], as: lambda { |object| object.owner_id }
+        custom_index :owner, type: :integer, role: [:exact_match], as: ->(object) { object.owner_id }
 
         index :visibility, role: [:exact_match, :facet]
 

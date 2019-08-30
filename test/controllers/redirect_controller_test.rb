@@ -7,22 +7,22 @@ class RedirectControllerTest < ActionDispatch::IntegrationTest
 
     # The fedora3_uuid and hydra_noid properties are the primary identifiers for locating these older objects
     @community = Community.create!(title: 'Fancy Community', owner_id: users(:admin).id,
-                                                 fedora3_uuid: 'uuid:community', hydra_noid: 'community-noid')
+                                   fedora3_uuid: 'uuid:community', hydra_noid: 'community-noid')
     @collection = Collection.create!(community_id: @community.id,
-                                                   title: 'Fancy Collection', owner_id: users(:admin).id,
-                                                   fedora3_uuid: 'uuid:collection', hydra_noid: 'collection-noid')
+                                     title: 'Fancy Collection', owner_id: users(:admin).id,
+                                     fedora3_uuid: 'uuid:collection', hydra_noid: 'collection-noid')
     @filename = 'pdf-sample.pdf'
     @item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                       owner_id: users(:admin).id, title: 'Fancy Item',
-                                       creators: ['Joe Blow'],
-                                       created: '1950',
-                                       languages: [CONTROLLED_VOCABULARIES[:language].english],
-                                       item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                       publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-                                       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                                       subject: ['Items'],
-                                       fedora3_uuid: 'uuid:item',
-                                       hydra_noid: 'item-noid')
+                     owner_id: users(:admin).id, title: 'Fancy Item',
+                     creators: ['Joe Blow'],
+                     created: '1950',
+                     languages: [CONTROLLED_VOCABULARIES[:language].english],
+                     item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                     publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
+                     license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                     subject: ['Items'],
+                     fedora3_uuid: 'uuid:item',
+                     hydra_noid: 'item-noid')
                 .tap do |uo|
       uo.add_to_path(@community.id, @collection.id)
       uo.save!

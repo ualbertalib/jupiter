@@ -1,4 +1,5 @@
 class Exporters::Solr::CommunityExporter < Exporters::Solr::BaseExporter
+
   indexed_model_name 'ArCommunity'
 
   index :title, role: [:search, :sort]
@@ -11,4 +12,5 @@ class Exporters::Solr::CommunityExporter < Exporters::Solr::BaseExporter
   index :creators, role: :exact_match
 
   default_sort index: :title, direction: :asc
+
 end

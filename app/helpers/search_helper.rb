@@ -16,7 +16,7 @@ module SearchHelper
     return priority_facets unless @search_models.include? Item
 
     priority_facets + [Item.solr_exporter_class.solr_name_for(:all_contributors, role: :facet),
-                      Item.solr_exporter_class.solr_name_for(:all_subjects, role: :facet)]
+                       Item.solr_exporter_class.solr_name_for(:all_subjects, role: :facet)]
   end
 
   def enable_item_sort?

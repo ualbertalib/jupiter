@@ -13,21 +13,21 @@ class DoiServiceTest < ActiveSupport::TestCase
     Rails.application.secrets.doi_minting_enabled = true
 
     community = Community.new(title: 'Community', owner_id: @admin.id,
-                                                visibility: JupiterCore::VISIBILITY_PUBLIC)
+                              visibility: JupiterCore::VISIBILITY_PUBLIC)
 
     community.save!
     collection = Collection.new(title: 'Collection', owner_id: @admin.id,
-                                                  visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                                  community_id: community.id)
+                                visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                community_id: community.id)
     collection.save!
 
     item = Item.new(title: 'Test Title', owner_id: @admin.id, visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                      created: '2017-02-02',
-                                      languages: [CONTROLLED_VOCABULARIES[:language].english],
-                                      creators: ['Joe Blow'],
-                                      subject: ['Things'],
-                                      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                                      item_type: CONTROLLED_VOCABULARIES[:item_type].book)
+                    created: '2017-02-02',
+                    languages: [CONTROLLED_VOCABULARIES[:language].english],
+                    creators: ['Joe Blow'],
+                    subject: ['Things'],
+                    license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                    item_type: CONTROLLED_VOCABULARIES[:item_type].book)
     item.tap do |unlocked_item|
       unlocked_item.add_to_path(community.id, collection.id)
       unlocked_item.save!

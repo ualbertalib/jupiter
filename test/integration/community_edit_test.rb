@@ -4,9 +4,6 @@ class CommunityEditTest < ActionDispatch::IntegrationTest
 
   def before_all
     super
-
-    # TODO: setup proper fixtures for LockedLdpObjects
-
     # A community with a logo
     @community1 = Community
                   .create!(title: 'Logo Community', owner_id: users(:admin).id)

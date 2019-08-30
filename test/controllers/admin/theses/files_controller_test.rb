@@ -4,11 +4,11 @@ class Admin::Theses::FilesControllerTest < ActionDispatch::IntegrationTest
 
   def before_all
     super
-    @community = Community.create!(title: 'Books', description: 'a bunch of books' , owner_id: users(:admin).id)
+    @community = Community.create!(title: 'Books', description: 'a bunch of books', owner_id: users(:admin).id)
     @collection = Collection.create!(title: 'Thesis collection',
-                                                   owner_id: users(:admin).id,
-                                                   restricted: true,
-                                                   community_id: @community.id)
+                                     owner_id: users(:admin).id,
+                                     restricted: true,
+                                     community_id: @community.id)
   end
 
   setup do

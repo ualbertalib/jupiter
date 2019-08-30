@@ -3,9 +3,8 @@ require 'test_helper'
 class ItemsControllerTest < ActionDispatch::IntegrationTest
 
   def setup
-
     @regular_user = users(:regular)
-    @admin =  users(:admin)
+    @admin = users(:admin)
     @community = Community.create!(title: 'Desolate community', owner_id: @admin.id)
     @collection = Collection.create!(community_id: @community.id, title: 'Desolate collection', owner_id: @admin.id)
 
@@ -29,14 +28,13 @@ class ItemsControllerTest < ActionDispatch::IntegrationTest
       owner_id: users(:admin).id,
       dissertant: 'Joe Blow',
       graduation_date: '2017-03-31',
-      visibility: Depositable::VISIBILITY_EMBARGO,
+      visibility: JupiterCore::Depositable::VISIBILITY_EMBARGO,
       embargo_end_date: 2.days.from_now.to_date,
       visibility_after_embargo: CONTROLLED_VOCABULARIES[:visibility].public
     ).tap do |unlocked_thesis|
       unlocked_thesis.add_to_path(@community.id, @collection.id)
       unlocked_thesis.save!
     end
-
   end
 
   test 'should be able to show an item' do

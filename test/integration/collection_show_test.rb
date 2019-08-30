@@ -11,15 +11,15 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
     @collection = Collection.create!(title: 'Nice collection', owner_id: users(:admin).id, community_id: @community.id)
     @items = ['Fancy', 'Nice'].map do |adjective|
       Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                 owner_id: users(:admin).id,
-                                 creators: ['Joe Blow'],
-                                 created: '1953-04-01',
-                                 languages: [CONTROLLED_VOCABULARIES[:language].english],
-                                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                                 item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                 publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-                                 subject: ['Niceness', 'Fanciness'],
-                                 title: "#{adjective} Item").tap do |uo|
+               owner_id: users(:admin).id,
+               creators: ['Joe Blow'],
+               created: '1953-04-01',
+               languages: [CONTROLLED_VOCABULARIES[:language].english],
+               license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+               item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+               publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
+               subject: ['Niceness', 'Fanciness'],
+               title: "#{adjective} Item").tap do |uo|
         uo.add_to_path(@community.id, @collection.id)
         uo.save!
       end

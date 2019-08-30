@@ -66,7 +66,6 @@ module DraftActions
 
       if @draft.update(permitted_attributes(draft_class))
 
-        # TODO: Improve this? Is there a way to gracefully handle errors coming back from fedora?
         item = item_class.from_draft(@draft)
 
         # Redirect to the new item show page

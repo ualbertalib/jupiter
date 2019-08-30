@@ -8,31 +8,31 @@ class SearchTest < ApplicationSystemTestCase
     @community = Community.create!(title: 'Fancy Community', owner_id: admin.id)
     @collections = 2.times.map do |i|
       Collection.create!(community_id: @community.id,
-                                       title: "Fancy Collection #{i}", owner_id: admin.id)
+                         title: "Fancy Collection #{i}", owner_id: admin.id)
     end
 
     # Half items have 'Fancy' in title, others have 'Nice', distributed between the two collections
     @items = 10.times.map do |i|
       if i < 5
         Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                   owner_id: admin.id, title: "#{['Fancy', 'Nice'][i % 2]} Item #{i}",
-                                   creators: ['Joe Blow'],
-                                   created: "19#{50 + i}-11-11",
-                                   languages: [CONTROLLED_VOCABULARIES[:language].english],
-                                   item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                   publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-                                   license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                                   subject: ['Items'])
+                 owner_id: admin.id, title: "#{['Fancy', 'Nice'][i % 2]} Item #{i}",
+                 creators: ['Joe Blow'],
+                 created: "19#{50 + i}-11-11",
+                 languages: [CONTROLLED_VOCABULARIES[:language].english],
+                 item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                 publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
+                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                 subject: ['Items'])
             .tap do |uo|
           uo.add_to_path(@community.id, @collections[0].id)
           uo.save!
         end
       else
         Thesis.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                     owner_id: admin.id, title: "#{['Fancy', 'Nice'][i % 2]} Item #{i}",
-                                     dissertant: 'Joe Blow',
-                                     language: CONTROLLED_VOCABULARIES[:language].english,
-                                     graduation_date: "19#{50 + i}-11-11")
+                   owner_id: admin.id, title: "#{['Fancy', 'Nice'][i % 2]} Item #{i}",
+                   dissertant: 'Joe Blow',
+                   language: CONTROLLED_VOCABULARIES[:language].english,
+                   graduation_date: "19#{50 + i}-11-11")
               .tap do |uo|
           uo.add_to_path(@community.id, @collections[1].id)
           uo.save!
@@ -41,14 +41,14 @@ class SearchTest < ApplicationSystemTestCase
     end
     # one more item that is CCID protected
     item = Item.new(visibility: JupiterCore::VISIBILITY_AUTHENTICATED,
-                                      owner_id: admin.id, title: 'Fancy CCID Item',
-                                      creators: ['Joe Blow'],
-                                      created: '1950-11-11',
-                                      languages: [CONTROLLED_VOCABULARIES[:language].english],
-                                      item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                      publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-                                      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                                      subject: ['Items'])
+                    owner_id: admin.id, title: 'Fancy CCID Item',
+                    creators: ['Joe Blow'],
+                    created: '1950-11-11',
+                    languages: [CONTROLLED_VOCABULARIES[:language].english],
+                    item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                    publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
+                    license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                    subject: ['Items'])
                .tap do |uo|
       uo.add_to_path(@community.id, @collections[0].id)
       uo.save!
@@ -64,24 +64,24 @@ class SearchTest < ApplicationSystemTestCase
     @items += 10.times.map do |i|
       if i < 5
         Item.new(visibility: JupiterCore::VISIBILITY_PRIVATE,
-                                   owner_id: admin.id, title: "#{['Fancy', 'Nice'][i % 2]} Private Item #{i + 10}",
-                                   creators: ['Joe Blow'],
-                                   created: "19#{70 + i}-11-11",
-                                   languages: [CONTROLLED_VOCABULARIES[:language].english],
-                                   item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                   publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-                                   license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                                   subject: ['Items'])
+                 owner_id: admin.id, title: "#{['Fancy', 'Nice'][i % 2]} Private Item #{i + 10}",
+                 creators: ['Joe Blow'],
+                 created: "19#{70 + i}-11-11",
+                 languages: [CONTROLLED_VOCABULARIES[:language].english],
+                 item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                 publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
+                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                 subject: ['Items'])
             .tap do |uo|
           uo.add_to_path(@community.id, @collections[0].id)
           uo.save!
         end
       else
         Thesis.new(visibility: JupiterCore::VISIBILITY_PRIVATE,
-                                     owner_id: admin.id, title: "#{['Fancy', 'Nice'][i % 2]} Private Item #{i + 10}",
-                                     dissertant: 'Joe Blow',
-                                     language: CONTROLLED_VOCABULARIES[:language].english,
-                                     graduation_date: "19#{70 + i}-11-11")
+                   owner_id: admin.id, title: "#{['Fancy', 'Nice'][i % 2]} Private Item #{i + 10}",
+                   dissertant: 'Joe Blow',
+                   language: CONTROLLED_VOCABULARIES[:language].english,
+                   graduation_date: "19#{70 + i}-11-11")
               .tap do |uo|
           uo.add_to_path(@community.id, @collections[1].id)
           uo.save!
@@ -93,16 +93,16 @@ class SearchTest < ApplicationSystemTestCase
     10.times do |i|
       community = Community.create!(title: "Extra Community #{i}", owner_id: admin.id)
       collection = Collection.create!(community_id: community.id,
-                                                    title: "Extra Collection #{i}", owner_id: admin.id)
+                                      title: "Extra Collection #{i}", owner_id: admin.id)
       Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                 owner_id: admin.id, title: "Extra Item #{i}",
-                                 creators: ['Joe Blow'],
-                                 created: "19#{90 + i}-11-11",
-                                 languages: [CONTROLLED_VOCABULARIES[:language].english],
-                                 item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                 publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-                                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                                 subject: ['Items'])
+               owner_id: admin.id, title: "Extra Item #{i}",
+               creators: ['Joe Blow'],
+               created: "19#{90 + i}-11-11",
+               languages: [CONTROLLED_VOCABULARIES[:language].english],
+               item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+               publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
+               license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+               subject: ['Items'])
           .tap do |uo|
         uo.add_to_path(community.id, collection.id)
         uo.save!
@@ -132,7 +132,7 @@ class SearchTest < ApplicationSystemTestCase
     assert_selector 'li a', text: /4\nFancy Community\/Fancy Collection 0/
     assert_selector 'li a', text: /2\nFancy Community\/Fancy Collection 1/
     assert_selector 'div.card-header', text: I18n.t('facets.sort_year')
-    sort_year_facet =Item.solr_exporter_class.solr_name_for(:sort_year, role: :range_facet)
+    sort_year_facet = Item.solr_exporter_class.solr_name_for(:sort_year, role: :range_facet)
     assert_selector "#ranges_#{sort_year_facet}_begin"
     assert_selector "#ranges_#{sort_year_facet}_end"
     assert_selector 'input.btn'
@@ -353,6 +353,7 @@ class SearchTest < ApplicationSystemTestCase
     assert_selector 'a', text: 'Fancy Private Item 10'
     assert_selector 'a', text: 'Fancy Private Item 12'
     assert_selector 'a', text: 'Fancy Private Item 14'
+    #    binding.pry unless has_selector?('a', text: 'Fancy Private Item 16')
     assert_selector 'a', text: 'Fancy Private Item 16'
 
     # Should see the download link for CCID item

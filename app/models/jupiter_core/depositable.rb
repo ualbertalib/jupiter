@@ -1,4 +1,4 @@
-class Depositable < ApplicationRecord
+class JupiterCore::Depositable < ApplicationRecord
 
   self.abstract_class = true
 
@@ -21,10 +21,12 @@ class Depositable < ApplicationRecord
   # rubocop:disable Naming/PredicateName
   def self.has_solr_exporter(klass)
     class << self
+
       attr_accessor :solr_exporter_class
+
     end
     define_method :solr_exporter do
-      return self.solr_exporter_class.new(self)
+      return solr_exporter_class.new(self)
     end
     define_method :solr_exporter_class do
       return self.class.solr_exporter_class
@@ -42,7 +44,7 @@ class Depositable < ApplicationRecord
     # TODO
     # update on a rollback if the model is persisted after the rollback, because in some cases like a rolled-back
     # destroy, the record may no longer be in Solr even though it still exists in Postgres
-  #  after_rollback :remove_from_solr
+    #  after_rollback :remove_from_solr
   end
   # rubocop:enable Naming/PredicateName
 
@@ -53,10 +55,6 @@ class Depositable < ApplicationRecord
 
   def remove_from_solr
     JupiterCore::SolrServices::Client.instance.remove_document(id)
-  end
-
-  def self.valid_visibilities
-    [JupiterCore::VISIBILITY_PUBLIC, JupiterCore::VISIBILITY_PRIVATE, JupiterCore::VISIBILITY_AUTHENTICATED]
   end
 
   def self.valid_visibilities
@@ -74,7 +72,6 @@ class Depositable < ApplicationRecord
   def authenticated?
     visibility == JupiterCore::VISIBILITY_AUTHENTICATED
   end
-
 
   def doi_url
     "https://doi.org/#{doi.gsub(/^doi\:/, '')}"
@@ -99,16 +96,13 @@ class Depositable < ApplicationRecord
     respond_to?(:license) ? license : rights
   end
 
-  def doi_state
-    @state ||= ItemDoiState.find_or_create_by!(item_id: id) do |state|
-      state.aasm_state = (doi.present? ? :available : :not_available)
-    end
-  end
-
+  # this method came with us from LockedLdpObject, and it'll keep this name until it gets refactored
+  # rubocop:disable Naming/AccessorMethodName
   def set_thumbnail(attachment)
     self.logo_id = attachment.id
-    self.save!
+    save!
   end
+  # rubocop:enable Naming/AccessorMethodName
 
   def thumbnail_url(args = { resize: '100x100', auto_orient: true })
     logo = files.find_by(id: logo_id)
@@ -220,7 +214,7 @@ class Depositable < ApplicationRecord
   end
 
   def self.sort_order(params)
-    if params.has_key? :sort
+    if params.key? :sort
       { params[:sort] => params[:direction] }
     else
       solr_exporter_class.default_ar_sort_args
@@ -230,4 +224,5 @@ class Depositable < ApplicationRecord
   def self.safe_attributes
     attribute_names.map(&:to_sym) - [:id]
   end
+
 end

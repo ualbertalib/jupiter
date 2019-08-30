@@ -7,9 +7,9 @@ class SiteForBotsTest < ActionDispatch::IntegrationTest
     # A community with two collections
     @community1 = Community.create!(title: 'Two collection community', owner_id: users(:admin).id)
     @collection1 = Collection.create!(community_id: @community1.id,
-                                          title: 'Nice collection', owner_id: users(:admin).id)
+                                      title: 'Nice collection', owner_id: users(:admin).id)
     @collection2 = Collection.create!(community_id: @community1.id,
-                                          title: 'Another collection', owner_id: users(:admin).id)
+                                      title: 'Another collection', owner_id: users(:admin).id)
     @item = Item.new.tap do |uo|
       uo.title = 'Fantastic item'
       uo.owner_id = users(:admin).id

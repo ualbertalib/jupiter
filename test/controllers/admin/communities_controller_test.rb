@@ -6,7 +6,7 @@ class Admin::CommunitiesControllerTest < ActionDispatch::IntegrationTest
     super
     @admin = users(:admin)
     @community = Community.new(title: 'Nice community',
-                                                 owner_id: @admin.id)
+                               owner_id: @admin.id)
     @community.save!
   end
 

@@ -8,11 +8,11 @@ class Admin::ItemsControllerTest < ActionDispatch::IntegrationTest
     @admin = users(:admin)
 
     @community = Community.new(title: 'Desolate community',
-                                                 owner_id: @admin.id)
+                               owner_id: @admin.id)
     @community.save!
     @collection = Collection.new(community_id: @community.id,
-                                                   title: 'Desolate collection',
-                                                   owner_id: @admin.id)
+                                 title: 'Desolate collection',
+                                 owner_id: @admin.id)
     @collection.save!
 
     @item = Item.new(
@@ -35,7 +35,6 @@ class Admin::ItemsControllerTest < ActionDispatch::IntegrationTest
         @item.add_and_ingest_files([file])
       end
     end
-    @item.doi_state # ensure there is a doi to test deletion of
     @item.set_thumbnail(@item.files.first) # ensure there is a thumbnail to test deletion of
 
     sign_in_as @admin

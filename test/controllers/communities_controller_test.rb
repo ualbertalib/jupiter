@@ -5,7 +5,7 @@ class CommunitiesControllerTest < ActionDispatch::IntegrationTest
   def before_all
     super
     @community = Community.new(title: 'Nice community',
-                                                 owner_id: users(:admin).id)
+                               owner_id: users(:admin).id)
     @community.save!
   end
 

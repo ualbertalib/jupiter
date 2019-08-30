@@ -6,7 +6,7 @@ module PresentersHelper
     # string to class conversion dozens of times during facet rendering
     @presenter_cache ||= {}
     # FacetValues are special insofar as they dynamically specify their own presenter per-attribute-name involved
-    if obj.is_a?(JupiterCore::FacetResult::FacetValue)
+    if obj.is_a?(JupiterCore::SolrServices::FacetResult::FacetValue)
       present_facet(obj)
     else
       presenter_for(obj).new(self, obj)

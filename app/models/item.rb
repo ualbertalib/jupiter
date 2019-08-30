@@ -1,4 +1,4 @@
-class Item < Doiable
+class Item < JupiterCore::Doiable
 
   has_solr_exporter Exporters::Solr::ItemExporter
 
@@ -105,8 +105,8 @@ class Item < Doiable
 
     # add an association between the same underlying blobs the Draft uses and the Item
     draft_item.files_attachments.each do |attachment|
-      new_attachment = ActiveStorage::Attachment.create(record: item,
-                                                        blob: attachment.blob, name: :files)
+      ActiveStorage::Attachment.create(record: item,
+                                       blob: attachment.blob, name: :files)
     end
 
     item.set_thumbnail(item.files.find_by(blob_id: draft_item.thumbnail.blob.id)) if draft_item.thumbnail.present?

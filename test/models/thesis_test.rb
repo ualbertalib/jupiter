@@ -10,19 +10,17 @@ class ThesisTest < ActiveSupport::TestCase
   test 'a valid item can be constructed' do
     admin = users(:admin)
     community = Community.new(title: 'Community', owner_id: admin.id,
-                                                visibility: JupiterCore::VISIBILITY_PUBLIC)
+                              visibility: JupiterCore::VISIBILITY_PUBLIC)
     community.save!
     collection = Collection.new(title: 'Collection', owner_id: admin.id,
-                                                  visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                                  community_id: community.id)
-    collection.tap do |unlocked_collection|
-      unlocked_collection.save!
-    end
+                                visibility: JupiterCore::VISIBILITY_PUBLIC,
+                                community_id: community.id)
+    collection.tap(&:save!)
     thesis = Thesis.new(title: 'Thesis', owner_id: admin.id, visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                          dissertant: 'Joe Blow',
-                                          departments: ['Physics', 'Non-physics'],
-                                          supervisors: ['Billy (Physics)', 'Sally (Non-physics)'],
-                                          graduation_date: 'Fall 2013')
+                        dissertant: 'Joe Blow',
+                        departments: ['Physics', 'Non-physics'],
+                        supervisors: ['Billy (Physics)', 'Sally (Non-physics)'],
+                        graduation_date: 'Fall 2013')
     thesis.tap do |unlocked_thesis|
       unlocked_thesis.add_to_path(community.id, collection.id)
       unlocked_thesis.save!

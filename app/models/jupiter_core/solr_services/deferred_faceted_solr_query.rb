@@ -1,9 +1,4 @@
-# TODO: There's enough overlap that we could look at combining this with DeferredSimpleSolrQuery although
-# the wide difference in what we need to pass in and get out of the two different kinds of uses of Solr, particularly
-# wrt the need for this to support results mixing multiple models, may make that trickier than just living with the
-# similarities. Also, DeferredSimpleSolrQuery probably goes away if we move to ActiveRecord, as it's mostly just an
-# AR-finder simulation layer of low value
-class JupiterCore::DeferredFacetedSolrQuery
+class JupiterCore::SolrServices::DeferredFacetedSolrQuery
 
   include Enumerable
   include Kaminari::PageScopeMethods
@@ -97,8 +92,11 @@ class JupiterCore::DeferredFacetedSolrQuery
               arclass = res['has_model_ssim'].first.sub(/^Ar/, '').constantize
               arclass.find(res['id'])
             rescue ActiveRecord::RecordNotFound
-              # TODO handle this better?
-              puts "MISSING #{res['id']} STALE INDEX ERROR"
+              # This _should_ only crop up in tests, where truncation of tables is bypassing callbacks that clean up
+              # solr. BUT, I want to track this just in case.
+              msg = "Removing a stale Solr result, #{res['id']}: #{res.inspect}"
+              Rollbar.warning(msg)
+              Rails.logger.warning(msg)
               JupiterCore::SolrServices::Client.instance.remove_document(res['id'])
               nil
             end
@@ -174,11 +172,12 @@ class JupiterCore::DeferredFacetedSolrQuery
 
     @facets = facet_data['facet_fields'].map do |k, v|
       if model_has_sort_year && (k == sort_year_facet)
-        JupiterCore::RangeFacetResult.new(criteria[:facet_map], k, criteria[:ranges].fetch(k,
-                                                                                           begin: 1880,
-                                                                                           end: Time.current.year).to_h)
+        JupiterCore::SolrServices::RangeFacetResult.new(criteria[:facet_map], k, criteria[:ranges]
+          .fetch(k,
+                 begin: 1880,
+                 end: Time.current.year).to_h)
       elsif v.present?
-        JupiterCore::FacetResult.new(criteria[:facet_map], k, v)
+        JupiterCore::SolrServices::FacetResult.new(criteria[:facet_map], k, v)
       end
     end.compact
 
@@ -212,13 +211,8 @@ class JupiterCore::DeferredFacetedSolrQuery
       sort: sort_clause }
   end
 
-  # Convert IRModel to corresponding LockedLDPObject class or justt pass through ActiveRecord class
   def raw_model_to_model(raw_model)
-    if raw_model < ActiveFedora::Base
-      raw_model.owning_class
-    else
-      raw_model
-    end
+    raw_model
   end
 
 end

@@ -47,13 +47,13 @@ class JupiterCore::Search
 
     # queried fields, by default, are all of the fields marked as :search (see calculate_queried_fields).
     # We can revist if we need to customize this more granularly
-    JupiterCore::DeferredFacetedSolrQuery.new(q: base_query,
-                                              fq: fq.join(' AND '),
-                                              qf: calculate_queried_fields(models),
-                                              facet_map: construct_facet_map(models),
-                                              facet_fields: construct_facet_fields(models, user: as),
-                                              ranges: ranges,
-                                              restrict_to_model: models)
+    JupiterCore::SolrServices::DeferredFacetedSolrQuery.new(q: base_query,
+                                                            fq: fq.join(' AND '),
+                                                            qf: calculate_queried_fields(models),
+                                                            facet_map: construct_facet_map(models),
+                                                            facet_fields: construct_facet_fields(models, user: as),
+                                                            ranges: ranges,
+                                                            restrict_to_model: models)
   end
 
   # derive additional restriction or broadening of the visibilitily query on top of the default

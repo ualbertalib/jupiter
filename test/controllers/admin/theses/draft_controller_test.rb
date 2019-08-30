@@ -4,11 +4,11 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
 
   def before_all
     super
-    @community = Community.create!(title: 'Books', description: 'a bunch of books' , owner_id: users(:admin).id)
+    @community = Community.create!(title: 'Books', description: 'a bunch of books', owner_id: users(:admin).id)
     @collection = Collection.create!(title: 'Thesis collection',
-                                                   owner_id: users(:admin).id,
-                                                   restricted: true,
-                                                   community_id: @community.id)
+                                     owner_id: users(:admin).id,
+                                     restricted: true,
+                                     community_id: @community.id)
   end
 
   setup do
@@ -114,10 +114,9 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
     draft_thesis.save!
 
     file_fixture = fixture_file_upload('/files/image-sample.jpeg', 'image/jpeg')
-    image_file = ActiveStorage::Blob.create_after_upload!(
-      io: file_fixture.open,
-      filename: file_fixture.original_filename, content_type: file_fixture.content_type
-    )
+    image_file = ActiveStorage::Blob.create_after_upload!(io: file_fixture.open,
+                                                          filename: file_fixture.original_filename,
+                                                          content_type: file_fixture.content_type)
 
     draft_thesis.files.attach image_file
 
@@ -236,7 +235,8 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
       post create_draft_admin_theses_url
     end
 
-    assert_redirected_to admin_thesis_draft_path(id: :describe_thesis, thesis_id: DraftThesis.drafts.order(created_at: :asc).last.id)
+    assert_redirected_to admin_thesis_draft_path(id: :describe_thesis,
+                                                 thesis_id: DraftThesis.drafts.order(created_at: :asc).last.id)
   end
 
   test 'other admins should be able to delete a draft thesis even if they do not own the thesis' do

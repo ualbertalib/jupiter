@@ -4,8 +4,11 @@ class DraftItemTest < ActiveSupport::TestCase
 
   def before_all
     super
-    @community = Community.create!(title: 'Books', description: 'a bunch of books' , owner_id: users(:admin).id)
-    @collection = Collection.create!(title: 'Fantasy Books', description: 'some fantasy books', owner_id: users(:admin).id, community_id: @community.id)
+    @community = Community.create!(title: 'Books', description: 'a bunch of books', owner_id: users(:admin).id)
+    @collection = Collection.create!(title: 'Fantasy Books',
+                                     description: 'some fantasy books',
+                                     owner_id: users(:admin).id,
+                                     community_id: @community.id)
   end
 
   test 'enums' do
@@ -205,9 +208,9 @@ class DraftItemTest < ActiveSupport::TestCase
 
     # Regular user can't deposit to a restricted collection
     restricted_collection = Collection.create!(title: 'Risque fantasy Books',
-                                                             owner_id: user.id,
-                                                             restricted: true,
-                                                             community_id: @community.id)
+                                               owner_id: user.id,
+                                               restricted: true,
+                                               community_id: @community.id)
     draft_item.assign_attributes(
       member_of_paths: { community_id: [@community.id], collection_id: [restricted_collection.id] }
     )
