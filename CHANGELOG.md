@@ -49,7 +49,10 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Added configuration for active storage to allow tifs to have a thumbnail [#991](https://github.com/ualbertalib/jupiter/issues/991)
 - Added missing contoller tests [#865](https://github.com/ualbertalib/jupiter/issues/865)
 - Dependency on ActsAsRdfable for annotating ActiveRecord classes with RDF predicates
-- ArCollection and ArCommunity models for further migration work
+- ArCollection, ArCommunity ArItem, and ArThesis models for migration
+- jupiter:get_me_off_of_fedora rake task to perform data migration
+- drafts scope for DraftItem/DraftThesis
+
 
 ### Changed
 - DeferredSimpleSolrQuery#sort renamed to 'order' and its two arguments replaced with a key-value, to better align with ActiveRecord

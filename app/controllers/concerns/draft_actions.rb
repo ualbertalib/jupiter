@@ -121,7 +121,6 @@ module DraftActions
   end
 
   def item_class
-    # TODO: .published
     Item
   end
 
