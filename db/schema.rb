@@ -427,8 +427,8 @@ ActiveRecord::Schema.define(version: 2019_08_26_235029) do
   add_foreign_key "draft_theses", "institutions"
   add_foreign_key "draft_theses", "languages"
   add_foreign_key "draft_theses", "users"
-  add_foreign_key "items", "active_storage_attachments", column: "logo_id"
+  add_foreign_key "items", "active_storage_attachments", column: "logo_id", on_delete: :nullify
   add_foreign_key "items", "users", column: "owner_id"
-  add_foreign_key "theses", "active_storage_attachments", column: "logo_id"
+  add_foreign_key "theses", "active_storage_attachments", column: "logo_id", on_delete: :nullify
   add_foreign_key "theses", "users", column: "owner_id"
 end
