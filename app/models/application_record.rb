@@ -6,9 +6,7 @@ class ApplicationRecord < ActiveRecord::Base
   # rubocop:disable Naming/PredicateName
   def self.has_solr_exporter(klass)
     class << self
-
       attr_accessor :solr_exporter_class
-
     end
     define_method :solr_exporter do
       return self.class.solr_exporter_class.new(self)
