@@ -7,15 +7,15 @@ class DownloadsControllerTest < ActionDispatch::IntegrationTest
     community = Community.create!(title: 'Nice community', owner_id: users(:admin).id)
     collection = Collection.create!(title: 'Nice collection', owner_id: users(:admin).id, community_id: community.id)
     item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                               owner_id: users(:admin).id, title: 'Fancy Item',
-                                               creators: ['Joe Blow'],
-                                               created: '1938-01-02',
-                                               languages: [CONTROLLED_VOCABULARIES[:language].english],
-                                               item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                               publication_status:
+                    owner_id: users(:admin).id, title: 'Fancy Item',
+                    creators: ['Joe Blow'],
+                    created: '1938-01-02',
+                    languages: [CONTROLLED_VOCABULARIES[:language].english],
+                    item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                    publication_status:
                                                [CONTROLLED_VOCABULARIES[:publication_status].published],
-                                               license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                                               subject: ['Items']).tap do |uo|
+                    license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                    subject: ['Items']).tap do |uo|
       uo.add_to_path(community.id, collection.id)
       uo.save!
     end

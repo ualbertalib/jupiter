@@ -4,11 +4,11 @@ class DraftThesisTest < ActiveSupport::TestCase
 
   def before_all
     super
-    @community = Community.create!(title: 'Books', description: 'a bunch of books' , owner_id: users(:admin).id)
+    @community = Community.create!(title: 'Books', description: 'a bunch of books', owner_id: users(:admin).id)
     @collection = Collection.create!(title: 'Risque fantasy Books',
-                                                   owner_id: users(:admin).id,
-                                                   restricted: true,
-                                                   community_id: @community.id)
+                                     owner_id: users(:admin).id,
+                                     restricted: true,
+                                     community_id: @community.id)
   end
 
   test 'enums' do
@@ -196,8 +196,8 @@ class DraftThesisTest < ActiveSupport::TestCase
   test 'cannot deposit thesis into a non restricted collection' do
     user = users(:admin)
     non_restricted_collection = Collection.create!(title: 'Risque fantasy Books',
-                                                                 owner_id: users(:admin).id,
-                                                                 community_id: @community.id)
+                                                   owner_id: users(:admin).id,
+                                                   community_id: @community.id)
 
     draft_thesis = DraftThesis.drafts.new(
       user: user,

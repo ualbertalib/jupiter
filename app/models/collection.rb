@@ -1,4 +1,4 @@
-class Collection < Depositable
+class Collection < JupiterCore::Depositable
 
   scope :drafts, -> { where(is_published_in_era: false).or(where(is_published_in_era: nil)) }
 
@@ -28,15 +28,20 @@ class Collection < Depositable
   end
 
   def member_items
-   Item.where("member_of_paths::text LIKE ?", "%#{path}%")
+    # TODO: this (casting a json array to text and doing a LIKE against it) is kind of a nasty hack to deal with the fact
+    # that production is currently using a 7 or 8 year old version of Postgresql (9.2) that lacks proper operators for
+    # testing whether a value is in a json array, which newer version of Postgresql have.
+    #
+    # with an upgraded version of Postgresql this could be done more cleanly and performanetly
+    Item.where('member_of_paths::text LIKE ?', "%#{path}%")
   end
 
   def member_theses
-    Thesis.where("member_of_paths::text LIKE ?", "%#{path}%")
+    Thesis.where('member_of_paths::text LIKE ?', "%#{path}%")
   end
 
   def member_objects
-    member_items + member_theses.to_a
+    member_items + member_theses
   end
 
   def as_json(_options)

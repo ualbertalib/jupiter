@@ -6,16 +6,14 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
   def before_all
     super
 
-    # TODO: setup proper fixtures for LockedLdpObjects
-
     # A community with two collections and a logo
     @community1 = Community.create!(title: 'Two collection community', owner_id: users(:admin).id)
     @collection1 = Collection.create!(community_id: @community1.id,
-                                          title: 'Nice collection', owner_id: users(:admin).id)
+                                      title: 'Nice collection', owner_id: users(:admin).id)
     # A restricted (to deposit, not to view) collection
     @collection2 = Collection.create!(community_id: @community1.id,
-                                          restricted: true,
-                                          title: 'Another collection', owner_id: users(:admin).id)
+                                      restricted: true,
+                                      title: 'Another collection', owner_id: users(:admin).id)
     @community1.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
                             filename: 'image-sample.jpeg', content_type: 'image/jpeg'
 

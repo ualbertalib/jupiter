@@ -4,8 +4,11 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
 
   def before_all
     super
-    @community = Community.create!(title: 'Books', description: 'a bunch of books' , owner_id: users(:admin).id)
-    @collection = Collection.create!(title: 'Fantasy Books', description: 'some fantasy books', owner_id: users(:admin).id, community_id: @community.id)
+    @community = Community.create!(title: 'Books', description: 'a bunch of books', owner_id: users(:admin).id)
+    @collection = Collection.create!(title: 'Fantasy Books',
+                                     description: 'some fantasy books',
+                                     owner_id: users(:admin).id,
+                                     community_id: @community.id)
   end
 
   setup do
@@ -231,7 +234,6 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
       post create_draft_items_url
     end
     assert_redirected_to item_draft_path(id: :describe_item, item_id: DraftItem.drafts.order(created_at: :asc).last.id)
-
   end
 
   test 'should not be able to delete a draft item if you do not own the item' do

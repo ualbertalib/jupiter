@@ -65,6 +65,7 @@ class AuthenticationTest < ApplicationSystemTestCase
 
   test 'should get redirected to homepage then back to homepage again with error, if user is unauthorized' do
     draft_item = draft_items(:completed_describe_item_step)
+    draft_item.save
     visit item_draft_path(item_id: draft_item.id, id: :describe_item)
 
     assert_text I18n.t('authorization.user_not_authorized_try_logging_in')

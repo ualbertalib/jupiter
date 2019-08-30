@@ -9,4 +9,5 @@ class DOIUpdateJob < ApplicationJob
     thesis = Thesis.find(id)
     DOIService.new(thesis).update
   end
+
 end

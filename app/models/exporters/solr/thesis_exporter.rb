@@ -1,4 +1,5 @@
 class Exporters::Solr::ThesisExporter < Exporters::Solr::BaseExporter
+
   indexed_model_name 'ArThesis'
 
   index :title, role: [:search, :sort]
@@ -72,4 +73,5 @@ class Exporters::Solr::ThesisExporter < Exporters::Solr::BaseExporter
                                    as: ->(thesis) { thesis.doi.gsub('doi:', '') if thesis.doi.present? }
 
   default_sort index: :title, direction: :asc
+
 end

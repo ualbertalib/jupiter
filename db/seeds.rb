@@ -7,7 +7,6 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 if Rails.env.development? || Rails.env.uat?
-  require 'active_fedora/cleaner'
   require "open-uri"
   require 'faker'
 
@@ -20,10 +19,8 @@ if Rails.env.development? || Rails.env.uat?
   puts 'Starting seeding of dev database...'
 
   # start fresh
-  [Announcement, ActiveStorage::Blob, ActiveStorage::Attachment, JupiterCore::AttachmentShim,
+  [Announcement, ActiveStorage::Blob, ActiveStorage::Attachment,
    Identity, User, Type, Language, Institution].each(&:destroy_all)
-
-  ActiveFedora::Cleaner.clean!
 
   # Seed an admin user
   admin = User.create(name: 'Jane Admin', email: 'admin@ualberta.ca', admin: true)
@@ -59,11 +56,11 @@ if Rails.env.development? || Rails.env.uat?
     else
       title = "Special reports about #{thing.pluralize}"
     end
-    community = Community.new(
+    community = Community.create!(
       owner_id: admin.id,
       title: title,
       description: Faker::Lorem.sentence(20, false, 0).chop
-    ).save!
+    )
 
     # Attach logos, if possible
     filename = File.expand_path(Rails.root + "tmp/#{thing}.png")
@@ -77,23 +74,22 @@ if Rails.env.development? || Rails.env.uat?
       end
     end
     if File.exist?(filename)
-      # TODO: !!!!!
-  #    community.logo.attach(io: File.open(filename), filename: "#{thing}.png", content_type: "image/png")
+      community.logo.attach(io: File.open(filename), filename: "#{thing}.png", content_type: "image/png")
     end
 
-    item_collection = Collection.new(
+    item_collection = Collection.create!(
       owner_id: admin.id,
       title: "The annals of '#{thing.capitalize} International'",
       community_id: community.id,
       description: Faker::Lorem.sentence(40, false, 0).chop
-    ).save!
+    )
 
-    thesis_collection = Collection.new(
+    thesis_collection = Collection.create!(
       owner_id: admin.id,
       title: "Theses about #{thing.pluralize}",
       community_id: community.id,
       description: Faker::Lorem.sentence(40, false, 0).chop
-    ).save!
+    )
 
     # Items
     20.times do |i|
@@ -371,28 +367,28 @@ if Rails.env.development? || Rails.env.uat?
 
   # Pad with empty communities for pagination (starts with Z for sort order)
   EXTRA_THINGS.each do |thing|
-    Community.new(
+    Community.create!(
       owner_id: admin.id,
       title: "Zoo#{thing}ology Institute of North-Eastern Upper Alberta (and Saskatchewan)",
       description: Faker::Lorem.sentence(20, false, 0).chop
-    ).save!
+    )
   end
 
   # One community with a lot of empty restricted collections
-  community = Community.new(
+  community = Community.create!(
     owner_id: admin.id,
     title: "The Everything Department",
     description: Faker::Lorem.sentence(20, false, 0).chop
-  ).save!
+  )
 
   EXTRA_THINGS.each do |thing|
-    collection = Collection.new(
+    collection = Collection.create!(
       owner_id: admin.id,
       title: "Articles about the relationship between #{thing.pluralize} and non-#{thing.pluralize}",
       community_id: community.id,
       restricted: true,
       description: "A restricted collection"
-    ).save!
+    )
   end
 
 end

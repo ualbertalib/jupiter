@@ -86,7 +86,7 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
 
     # Give the collection an item
 
-    item = Item.new(
+    Item.new(
       title: 'item blocking deletion',
       owner_id: @admin.id,
       creators: ['Joe Blow'],

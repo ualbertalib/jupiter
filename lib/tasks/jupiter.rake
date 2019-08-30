@@ -26,7 +26,7 @@ namespace :jupiter do
   desc 'fetch and unlock every object then save'
   task reindex: :environment do
     puts 'Reindexing all Items and Theses...'
-    (Item.all + Thesis.all).each { |item| item.save! }
+    (Item.all + Thesis.all).each(&:save!)
     puts 'Reindex completed!'
   end
 
@@ -118,14 +118,14 @@ namespace :jupiter do
 
   desc 'turn existing filesets into attachments'
   task migrate_filesets: :environment do
-    total_count =Item.count + Thesis.count
+    total_count = Item.count + Thesis.count
     progress = 0
 
     puts "Migrating filesets for #{total_count} items..."
     # Processing these separately to cut down on the size of the Solr document we pull back in the query
     # if we see this task getting pinned in GC we may need to further refine this to process records in more
     # granular chunks
-   Item.all.each do |item|
+    Item.all.each do |item|
       migrate_fileset_item(item)
       print '.'
       progress += 1

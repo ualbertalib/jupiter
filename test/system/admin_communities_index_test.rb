@@ -4,13 +4,11 @@ class AdminCommunitiesIndexTest < ApplicationSystemTestCase
 
   def before_all
     super
-    Community.destroy_all
-    Collection.destroy_all
     admin = User.find_by(email: 'administrator@example.com')
     @community = Community.create!(title: 'Community', owner_id: admin.id)
     2.times do |i|
       Collection.new(title: "Fancy Collection #{i}", owner_id: admin.id,
-                                       community_id: @community.id)
+                     community_id: @community.id)
                 .save!
     end
   end

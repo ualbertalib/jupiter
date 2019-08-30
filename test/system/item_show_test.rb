@@ -11,14 +11,14 @@ class ItemShowTest < ApplicationSystemTestCase
 
     # Half items have 'Fancy' in title, others have 'Nice', distributed between the two collections
     @item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                        owner_id: admin.id, title: 'Fancy Item',
-                                        creators: ['Joe Blow'],
-                                        created: '1938-01-02',
-                                        languages: [CONTROLLED_VOCABULARIES[:language].english],
-                                        license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                                        item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                        publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-                                        subject: ['Items']).tap do |uo|
+                     owner_id: admin.id, title: 'Fancy Item',
+                     creators: ['Joe Blow'],
+                     created: '1938-01-02',
+                     languages: [CONTROLLED_VOCABULARIES[:language].english],
+                     license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                     item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                     publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
+                     subject: ['Items']).tap do |uo|
       uo.add_to_path(@community.id, @collection.id)
       uo.add_to_path(@community.id, @collection.id)
       uo.save!
@@ -33,14 +33,14 @@ class ItemShowTest < ApplicationSystemTestCase
     end
 
     @item2 = Item.new(visibility: JupiterCore::VISIBILITY_AUTHENTICATED,
-                                        owner_id: @user.id, title: 'CCID Item',
-                                        creators: ['Joe Blow'],
-                                        created: '2011-11-11',
-                                        languages: [CONTROLLED_VOCABULARIES[:language].english],
-                                        license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                                        item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                        publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-                                        subject: ['Fancy things'])
+                      owner_id: @user.id, title: 'CCID Item',
+                      creators: ['Joe Blow'],
+                      created: '2011-11-11',
+                      languages: [CONTROLLED_VOCABULARIES[:language].english],
+                      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                      item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                      publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
+                      subject: ['Fancy things'])
                  .tap do |uo|
       uo.add_to_path(@community.id, @collection.id)
       uo.add_to_path(@community.id, @collection.id)

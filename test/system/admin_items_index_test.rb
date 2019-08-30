@@ -9,26 +9,26 @@ class AdminItemsIndexTest < ApplicationSystemTestCase
 
     community = Community.create!(title: 'Fancy Community', owner_id: admin.id)
     collection = Collection.create!(community_id: community.id,
-                                                  title: 'Fancy Collection', owner_id: admin.id)
+                                    title: 'Fancy Collection', owner_id: admin.id)
 
     # Two things owned by regular user
     Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                               owner_id: user.id, title: 'Fancy Item',
-                               creators: ['Joe Blow'],
-                               created: 'Fall 2017',
-                               languages: [CONTROLLED_VOCABULARIES[:language].english],
-                               license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                               item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                               publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-                               subject: ['Fancy things'])
+             owner_id: user.id, title: 'Fancy Item',
+             creators: ['Joe Blow'],
+             created: 'Fall 2017',
+             languages: [CONTROLLED_VOCABULARIES[:language].english],
+             license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+             item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+             publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
+             subject: ['Fancy things'])
         .tap do |uo|
       uo.add_to_path(community.id, collection.id)
       uo.save!
     end
     Thesis.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                 owner_id: user.id, title: 'Nice Item',
-                                 dissertant: 'Joe Blow',
-                                 graduation_date: '2019')
+               owner_id: user.id, title: 'Nice Item',
+               dissertant: 'Joe Blow',
+               graduation_date: '2019')
           .tap do |uo|
       uo.add_to_path(community.id, collection.id)
       uo.save!
@@ -36,14 +36,14 @@ class AdminItemsIndexTest < ApplicationSystemTestCase
 
     # One item owned by admin
     Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                               owner_id: admin.id, title: 'Admin Item',
-                               creators: ['Joe Blow'],
-                               created: 'Winter 2017',
-                               languages: [CONTROLLED_VOCABULARIES[:language].english],
-                               license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                               item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                               publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-                               subject: ['Ownership'])
+             owner_id: admin.id, title: 'Admin Item',
+             creators: ['Joe Blow'],
+             created: 'Winter 2017',
+             languages: [CONTROLLED_VOCABULARIES[:language].english],
+             license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+             item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+             publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
+             subject: ['Ownership'])
         .tap do |uo|
       uo.add_to_path(community.id, collection.id)
       uo.save!

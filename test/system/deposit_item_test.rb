@@ -4,13 +4,12 @@ class DepositItemTest < ApplicationSystemTestCase
 
   def before_all
     super
-    DraftItem.destroy_all
     admin = User.find_by(email: 'administrator@example.com')
     # Setup a community/collection pair for respective dropdowns
     @community = Community.create!(title: 'Books', owner_id: admin.id)
     @collection = Collection.create!(title: 'Fantasy Books',
-                                                   owner_id: admin.id,
-                                                   community_id: @community.id)
+                                     owner_id: admin.id,
+                                     community_id: @community.id)
   end
 
   test 'be able to deposit and edit an item successfully' do
@@ -82,7 +81,8 @@ class DepositItemTest < ApplicationSystemTestCase
     # Success! Deposit Successful
 
     assert_text I18n.t('items.draft.successful_deposit')
-    assert_selector 'h1', text:Item.last.title
+    assert Item.find_by(title: 'A Dance with Dragons').present?
+    assert_selector 'h1', text: 'A Dance with Dragons'
 
     # Check to make sure there isn't any embargo_history
     item_id = current_url.split('/').last
@@ -122,6 +122,10 @@ class DepositItemTest < ApplicationSystemTestCase
     logout_user
   end
 
+  # TODO: note really clear on why, but sometimes this test ends up 404 not found at line 112
+  # see eg) SEED=48675
+  #
+  # presumably this could be resolved by using proper fixtures rather than mutation
   test 'should populate community and collection when coming from collection page' do
     skip 'This test continues to flap on CI that should be investigated ASAP' if ENV['TRAVIS']
 

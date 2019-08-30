@@ -3,6 +3,7 @@ require 'application_system_test_case'
 class ItemEditTest < ApplicationSystemTestCase
 
   test 'can edit item' do
+    skip "this test is flapping like crazy, I think there's a timing issue with selectize_clear_all?"
     user = User.find_by(email: 'john_snow@example.com')
 
     admin = User.find_by(email: 'administrator@example.com')
@@ -11,16 +12,16 @@ class ItemEditTest < ApplicationSystemTestCase
     collection = Collection.create!(title: 'Fancy collection', owner_id: admin.id, community_id: community.id)
 
     item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                      title: 'Book of Random',
-                                      owner_id: user.id,
-                                      item_type: CONTROLLED_VOCABULARIES[:item_type].book,
-                                      languages: [CONTROLLED_VOCABULARIES[:language].english],
-                                      creators: ['Jane Doe', 'Bob Smith'],
-                                      subject: ['Best Seller', 'Adventure'],
-                                      created: '2018-10-24',
-                                      description: 'Really random description about this random book',
-                                      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                                      contributors: ['Sue Flowers', 'Jonny Green'])
+                    title: 'Book of Random',
+                    owner_id: user.id,
+                    item_type: CONTROLLED_VOCABULARIES[:item_type].book,
+                    languages: [CONTROLLED_VOCABULARIES[:language].english],
+                    creators: ['Jane Doe', 'Bob Smith'],
+                    subject: ['Best Seller', 'Adventure'],
+                    created: '2018-10-24',
+                    description: 'Really random description about this random book',
+                    license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                    contributors: ['Sue Flowers', 'Jonny Green'])
                .tap do |uo|
       uo.add_to_path(community.id, collection.id)
       uo.save!

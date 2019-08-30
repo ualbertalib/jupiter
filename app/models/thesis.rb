@@ -1,4 +1,4 @@
-class Thesis < Doiable
+class Thesis < JupiterCore::Doiable
 
   has_solr_exporter Exporters::Solr::ThesisExporter
 
@@ -31,15 +31,15 @@ class Thesis < Doiable
     #  config.date_created has_predicate: ::RDF::Vocab::DC.created
     #    config.time_periods has_predicate: ::RDF::Vocab::DC.temporal
     #    config.places has_predicate: ::RDF::Vocab::DC.spatial
-  #  config.description has_predicate: ::RDF::Vocab::DC.description
+    #  config.description has_predicate: ::RDF::Vocab::DC.description
     # TODO: add
     # config.publisher has_predicate: ::RDF::Vocab::DC.publisher
     # TODO join table
     # config.languages has_predicate: ::RDF::Vocab::DC.language
-  #  config.license has_predicate: ::RDF::Vocab::DC.license
+    #  config.license has_predicate: ::RDF::Vocab::DC.license
     # config.type_id has_predicate: ::RDF::Vocab::DC.type
-#    config.source has_predicate: ::RDF::Vocab::DC.source
-#    #    config.related_item has_predicate: ::RDF::Vocab::DC.relation
+    #    config.source has_predicate: ::RDF::Vocab::DC.source
+    #    #    config.related_item has_predicate: ::RDF::Vocab::DC.relation
     #  config.status has_predicate: ::RDF::Vocab::BIBO.status
   end
 
@@ -51,70 +51,77 @@ class Thesis < Doiable
   def self.from_draft(draft_thesis)
     thesis = Thesis.find(draft_thesis.uuid) if draft_thesis.uuid.present?
     thesis ||= Thesis.new
-    thesis.tap do |unlocked_obj|
+    thesis.owner_id = draft_thesis.user_id if thesis.owner.blank?
       unlocked_obj.owner_id = draft_thesis.user_id if unlocked_obj.owner.blank?
-      unlocked_obj.title = draft_thesis.title
-      unlocked_obj.alternative_title = draft_thesis.alternate_title
+    thesis.title = draft_thesis.title
+    thesis.alternative_title = draft_thesis.alternate_title
 
-      unlocked_obj.language = draft_thesis.language_as_uri
-      unlocked_obj.dissertant = draft_thesis.creator
-      unlocked_obj.abstract = draft_thesis.description
+    thesis.language = draft_thesis.language_as_uri
+    thesis.dissertant = draft_thesis.creator
+    thesis.abstract = draft_thesis.description
 
-      unlocked_obj.graduation_date = if draft_thesis.graduation_term.present?
+    thesis.graduation_date = if draft_thesis.graduation_term.present?
+                               "#{draft_thesis.graduation_year}-#{draft_thesis.graduation_term}"
+                             else
+                               draft_thesis.graduation_year.to_s
+                             end
+
+    # Handle visibility plus embargo logic
                                        "#{draft_thesis.graduation_year}-#{draft_thesis.graduation_term}"
                                      else
                                        draft_thesis.graduation_year.to_s
-                                     end
+    thesis.visibility = draft_thesis.visibility_as_uri
 
-      # Handle visibility plus embargo logic
+    if draft_thesis.embargo_end_date.present?
       if draft_thesis.visibility_as_uri == CONTROLLED_VOCABULARIES[:visibility].embargo
-        unlocked_obj.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].public
+      thesis.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].public
         unlocked_obj.embargo_end_date = draft_thesis.embargo_end_date
       else
         # If visibility was previously embargo but not anymore
         unlocked_obj.add_to_embargo_history if unlocked_obj.visibility == CONTROLLED_VOCABULARIES[:visibility].embargo
         unlocked_obj.visibility_after_embargo = nil
         unlocked_obj.embargo_end_date = nil
-      end
+    end
       unlocked_obj.visibility = draft_thesis.visibility_as_uri
 
-      # Handle rights
-      unlocked_obj.rights = draft_thesis.rights
+    thesis.embargo_end_date = draft_thesis.embargo_end_date
 
-      # Additional fields
-      unlocked_obj.date_accepted = draft_thesis.date_accepted
-      unlocked_obj.date_submitted = draft_thesis.date_submitted
+    # Handle rights
+    thesis.rights = draft_thesis.rights
 
-      unlocked_obj.degree = draft_thesis.degree
-      unlocked_obj.thesis_level = draft_thesis.degree_level
-      unlocked_obj.institution = draft_thesis.institution_as_uri
-      unlocked_obj.specialization = draft_thesis.specialization
+    # Additional fields
+    thesis.date_accepted = draft_thesis.date_accepted
+    thesis.date_submitted = draft_thesis.date_submitted
 
-      unlocked_obj.subject = draft_thesis.subjects
-      unlocked_obj.committee_members = draft_thesis.committee_members
-      unlocked_obj.supervisors = draft_thesis.supervisors
-      unlocked_obj.departments = draft_thesis.departments
+    thesis.degree = draft_thesis.degree
+    thesis.thesis_level = draft_thesis.degree_level
+    thesis.institution = draft_thesis.institution_as_uri
+    thesis.specialization = draft_thesis.specialization
 
-      unlocked_obj.member_of_paths = []
+    thesis.subject = draft_thesis.subjects
+    thesis.committee_members = draft_thesis.committee_members
+    thesis.supervisors = draft_thesis.supervisors
+    thesis.departments = draft_thesis.departments
 
-      draft_thesis.each_community_collection do |community, collection|
-        unlocked_obj.add_to_path(community.id, collection.id)
-      end
+    thesis.member_of_paths = []
 
-      unlocked_obj.save!
-
-      # NOTE: destroy the attachment record, DON'T use #purge, which will wipe the underlying blob shared with the
-      # draft item
-      thesis.files.each(&:destroy) if thesis.files.present?
-
-      # add an association between the same underlying blobs the Draft uses and the Item
-      draft_thesis.files_attachments.each do |attachment|
-        new_attachment = ActiveStorage::Attachment.create(record: thesis,
-                                                          blob: attachment.blob, name: :files)
-      end
-
-      thesis.set_thumbnail(thesis.files.find_by(blob_id: draft_thesis.thumbnail.blob.id))
+    draft_thesis.each_community_collection do |community, collection|
+      thesis.add_to_path(community.id, collection.id)
     end
+
+    thesis.save!
+
+    # NOTE: destroy the attachment record, DON'T use #purge, which will wipe the underlying blob shared with the
+    # draft item
+    thesis.files.each(&:destroy) if thesis.files.present?
+
+    # add an association between the same underlying blobs the Draft uses and the Item
+    draft_thesis.files_attachments.each do |attachment|
+      ActiveStorage::Attachment.create(record: thesis,
+                                       blob: attachment.blob, name: :files)
+    end
+
+    thesis.set_thumbnail(thesis.files.find_by(blob_id: draft_thesis.thumbnail.blob.id))
 
     draft_thesis.uuid = thesis.id
     draft_thesis.save!
@@ -123,13 +130,11 @@ class Thesis < Doiable
 
   def populate_sort_year
     self.sort_year = Date.parse(graduation_date).year.to_i if graduation_date.present?
-
     rescue ArgumentError
       # date was unparsable, try to pull out the first 4 digit number as a year
       capture = graduation_date.scan(/\d{4}/)
       self.sort_year = capture[0].to_i if capture.present?
   end
-
 
   def add_to_path(community_id, collection_id)
     self.member_of_paths ||= []

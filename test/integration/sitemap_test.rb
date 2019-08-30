@@ -8,17 +8,17 @@ class SitemapTest < ActionDispatch::IntegrationTest
     Thesis.destroy_all
     @community = Community.create!(title: 'Fancy Community', owner_id: users(:admin).id)
     @collection = Collection.create!(community_id: @community.id,
-                                                   title: 'Fancy Collection', owner_id: users(:admin).id)
+                                     title: 'Fancy Collection', owner_id: users(:admin).id)
     @item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                               owner_id: users(:admin).id, title: 'Fancy Item',
-                                               creators: ['Joe Blow'],
-                                               created: '1938-01-02',
-                                               languages: [CONTROLLED_VOCABULARIES[:language].english],
-                                               item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                               publication_status:
+                     owner_id: users(:admin).id, title: 'Fancy Item',
+                     creators: ['Joe Blow'],
+                     created: '1938-01-02',
+                     languages: [CONTROLLED_VOCABULARIES[:language].english],
+                     item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                     publication_status:
                                                [CONTROLLED_VOCABULARIES[:publication_status].published],
-                                               license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                                               subject: ['Items']).tap do |uo|
+                     license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                     subject: ['Items']).tap do |uo|
       uo.add_to_path(@community.id, @collection.id)
       uo.save!
     end
@@ -31,25 +31,25 @@ class SitemapTest < ActionDispatch::IntegrationTest
       @item.add_and_ingest_files([file])
     end
     @thesis = Thesis.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                           owner_id: users(:admin).id, title: 'Fancy Item',
-                                           dissertant: 'Joe Blow',
-                                           language: CONTROLLED_VOCABULARIES[:language].english,
-                                           graduation_date: 'Fall 2017')
+                         owner_id: users(:admin).id, title: 'Fancy Item',
+                         dissertant: 'Joe Blow',
+                         language: CONTROLLED_VOCABULARIES[:language].english,
+                         graduation_date: 'Fall 2017')
                     .tap do |uo|
                       uo.add_to_path(@community.id, @collection.id)
                       uo.save!
                     end
     # 1 more item. this is private
     @private_item = Item.new(visibility: JupiterCore::VISIBILITY_PRIVATE,
-                                               owner_id: users(:admin).id, title: 'Fancy Private Item',
-                                               creators: ['Joe Blow'],
-                                               created: '1983-11-11',
-                                               languages: [CONTROLLED_VOCABULARIES[:language].english],
-                                               item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                               publication_status:
+                             owner_id: users(:admin).id, title: 'Fancy Private Item',
+                             creators: ['Joe Blow'],
+                             created: '1983-11-11',
+                             languages: [CONTROLLED_VOCABULARIES[:language].english],
+                             item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                             publication_status:
                                                [CONTROLLED_VOCABULARIES[:publication_status].published],
-                                               license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                                               subject: ['Items'])
+                             license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                             subject: ['Items'])
                         .tap do |uo|
                           uo.add_to_path(@community.id, @collection.id)
                           uo.save!

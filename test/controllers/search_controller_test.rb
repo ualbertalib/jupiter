@@ -5,71 +5,71 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
   def before_all
     super
     @community = Community.create!(title: 'Community',
-                                                 owner_id: users(:admin).id)
+                                   owner_id: users(:admin).id)
     @collection = Collection.create!(community_id: @community.id,
-                                                 title: 'Collection', owner_id: users(:admin).id)
+                                     title: 'Collection', owner_id: users(:admin).id)
 
     @item1 = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                        owner_id: users(:admin).id, title: 'Ant',
-                                        creators: ['Joe Blow'],
-                                        created: '1000000 BC',
-                                        languages: [CONTROLLED_VOCABULARIES[:language].english],
-                                        item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                        publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-                                        license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                                        subject: ['Items']).tap do |uo|
+                      owner_id: users(:admin).id, title: 'Ant',
+                      creators: ['Joe Blow'],
+                      created: '1000000 BC',
+                      languages: [CONTROLLED_VOCABULARIES[:language].english],
+                      item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                      publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
+                      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                      subject: ['Items']).tap do |uo|
       uo.add_to_path(@community.id, @collection.id)
       uo.save!
     end
 
     @item2 = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                        owner_id: users(:admin).id, title: 'Moose',
-                                        creators: ['Joe Blow'],
-                                        created: '1000000 BC',
-                                        languages: [CONTROLLED_VOCABULARIES[:language].english],
-                                        item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                        publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-                                        license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                                        subject: ['Items']).tap do |uo|
+                      owner_id: users(:admin).id, title: 'Moose',
+                      creators: ['Joe Blow'],
+                      created: '1000000 BC',
+                      languages: [CONTROLLED_VOCABULARIES[:language].english],
+                      item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                      publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
+                      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                      subject: ['Items']).tap do |uo|
       uo.add_to_path(@community.id, @collection.id)
       uo.save!
     end
 
     @item3 = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                        owner_id: users(:admin).id, title: 'Zebra',
-                                        creators: ['Joe Blow'],
-                                        created: '1000000 BC',
-                                        languages: [CONTROLLED_VOCABULARIES[:language].english],
-                                        item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                        publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-                                        license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                                        subject: ['Items']).tap do |uo|
+                      owner_id: users(:admin).id, title: 'Zebra',
+                      creators: ['Joe Blow'],
+                      created: '1000000 BC',
+                      languages: [CONTROLLED_VOCABULARIES[:language].english],
+                      item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                      publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
+                      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                      subject: ['Items']).tap do |uo|
       uo.add_to_path(@community.id, @collection.id)
       uo.save!
     end
 
     @item4 = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                        owner_id: users(:admin).id, title: 'Ant Moose Mouse',
-                                        creators: ['Joe Blow'],
-                                        created: '1000000 BC',
-                                        languages: [CONTROLLED_VOCABULARIES[:language].english],
-                                        item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                        publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-                                        license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                                        subject: ['Items']).tap do |uo|
+                      owner_id: users(:admin).id, title: 'Ant Moose Mouse',
+                      creators: ['Joe Blow'],
+                      created: '1000000 BC',
+                      languages: [CONTROLLED_VOCABULARIES[:language].english],
+                      item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                      publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
+                      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                      subject: ['Items']).tap do |uo|
       uo.add_to_path(@community.id, @collection.id)
       uo.save!
     end
 
     @item5 = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                        owner_id: users(:admin).id, title: 'Moose Ant',
-                                        creators: ['Joe Blow'],
-                                        created: '1000000 BC',
-                                        languages: [CONTROLLED_VOCABULARIES[:language].english],
-                                        item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                        publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-                                        license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                                        subject: ['Items']).tap do |uo|
+                      owner_id: users(:admin).id, title: 'Moose Ant',
+                      creators: ['Joe Blow'],
+                      created: '1000000 BC',
+                      languages: [CONTROLLED_VOCABULARIES[:language].english],
+                      item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                      publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
+                      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                      subject: ['Items']).tap do |uo|
       uo.add_to_path(@community.id, @collection.id)
       uo.save!
     end

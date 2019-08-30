@@ -2,7 +2,6 @@ require 'simplecov'
 SimpleCov.start 'rails' unless ENV['NO_COVERAGE']
 
 require File.expand_path('../config/environment', __dir__)
-require 'active_fedora/cleaner'
 require 'minitest/hooks/test'
 require 'minitest/mock'
 require 'rails/test_help'
@@ -36,6 +35,7 @@ end
 Sidekiq::Testing.fake!
 
 class ActiveSupport::TestCase
+
   include Minitest::Hooks
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
@@ -52,10 +52,8 @@ class ActiveSupport::TestCase
     setup_fixtures
   end
 
-  # clean ActiveFedora at the end of all tests in a given test class
   def after_all
     super
-    ActiveFedora::Cleaner.clean!
     keys = Redis.current.keys("#{Rails.configuration.redis_key_prefix}*")
     Redis.current.del(keys) if keys.present?
     Sidekiq::Worker.clear_all

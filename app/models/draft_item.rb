@@ -172,7 +172,7 @@ class DraftItem < ApplicationRecord
   # This would happen if, eg) someone manually updated the Fedora record in the Rails console
   # and then someone visited this item's draft URL directly without bouncing through ItemsController#edit
   def sync_with_fedora(for_user:)
-    item =Item.find(uuid)
+    item = Item.find(uuid)
     update_from_fedora_item(item, for_user) if item.updated_at > updated_at
   end
 
