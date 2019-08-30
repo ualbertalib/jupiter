@@ -10,20 +10,6 @@ class ArItem < ApplicationRecord
     config.title has_predicate: ::RDF::Vocab::DC.title
     config.creators has_predicate: RDF::Vocab::BIBO.authorList
     config.contributors has_predicate: ::RDF::Vocab::DC11.contributor
-    # TODO
-    #  config.date_created has_predicate: ::RDF::Vocab::DC.created
-    #    config.time_periods has_predicate: ::RDF::Vocab::DC.temporal
-    #    config.places has_predicate: ::RDF::Vocab::DC.spatial
-    config.description has_predicate: ::RDF::Vocab::DC.description
-    # TODO: add
-    # config.publisher has_predicate: ::RDF::Vocab::DC.publisher
-    # TODO join table
-    # config.languages has_predicate: ::RDF::Vocab::DC.language
-    config.license has_predicate: ::RDF::Vocab::DC.license
-    # config.type_id has_predicate: ::RDF::Vocab::DC.type
-    config.source has_predicate: ::RDF::Vocab::DC.source
-    #    config.related_item has_predicate: ::RDF::Vocab::DC.relation
-    #  config.status has_predicate: ::RDF::Vocab::BIBO.status
   end
 
   before_validation :populate_sort_year
@@ -127,7 +113,8 @@ class ArItem < ApplicationRecord
 
     # add an association between the same underlying blobs the Item uses and the new ActiveRecord version
     item.files_attachments.each do |attachment|
-      new_attachment = ActiveStorage::Attachment.create(record: ar_item, blob: attachment.blob, name: :files)
+      new_attachment = ActiveStorage::Attachment.create(record: ar_item, blob: attachment.blob, name: :files,
+                                                        fileset_uuid: attachment.fileset_uuid)
       # because of the uuid id column, the record_id on new_attachment (currently of type integer), is broken
       # but that's ok. we're going to fix that with this data
       new_attachment.upcoming_record_id = ar_item.id
