@@ -20,7 +20,7 @@ class CreateArItem < ActiveRecord::Migration[5.2]
       t.text :rights
       t.integer :sort_year
       t.json :embargo_history, array: true
-      t.string :is_version_of
+      t.json :is_version_of, array: true
       t.json :member_of_paths, array: true
       t.json :subject, array: true
       t.json :creators, array: true
