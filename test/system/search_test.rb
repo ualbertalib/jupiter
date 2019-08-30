@@ -357,7 +357,6 @@ class SearchTest < ApplicationSystemTestCase
     assert_selector 'a', text: 'Fancy Private Item 10'
     assert_selector 'a', text: 'Fancy Private Item 12'
     assert_selector 'a', text: 'Fancy Private Item 14'
-    #    binding.pry unless has_selector?('a', text: 'Fancy Private Item 16')
     assert_selector 'a', text: 'Fancy Private Item 16'
 
     # Should see the download link for CCID item
