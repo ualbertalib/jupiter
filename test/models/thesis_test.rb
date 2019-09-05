@@ -18,7 +18,7 @@ class ThesisTest < ActiveSupport::TestCase
                                           dissertant: 'Joe Blow',
                                           departments: ['Physics', 'Non-physics'],
                                           supervisors: ['Billy (Physics)', 'Sally (Non-physics)'],
-                                          graduation_date: 'Fall 2013')
+                                          graduation_date: '2013-11')
     thesis.unlock_and_fetch_ldp_object do |unlocked_thesis|
       unlocked_thesis.add_to_path(community.id, collection.id)
       unlocked_thesis.save!
@@ -222,7 +222,7 @@ class ThesisTest < ActiveSupport::TestCase
   end
 
   test 'a sort year is derived from graduation date' do
-    thesis = Thesis.new_locked_ldp_object(graduation_date: 'Fall 2015')
+    thesis = Thesis.new_locked_ldp_object(graduation_date: '2015-11')
     thesis.valid?
     assert_not thesis.errors[:sort_year].present?
     assert_equal thesis.sort_year, 2015

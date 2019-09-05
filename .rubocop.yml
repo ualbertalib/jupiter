@@ -3,7 +3,9 @@
 # https://github.com/bbatsov/rubocop/blob/master/config/disabled.yml
 # https://github.com/bbatsov/rubocop/blob/master/config/enabled.yml
 
-require: rubocop-performance
+require:
+  - rubocop-performance
+  - rubocop-rails
 
 AllCops:
   DisplayCopNames: true

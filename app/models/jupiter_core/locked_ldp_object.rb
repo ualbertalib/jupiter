@@ -47,13 +47,11 @@ class JupiterCore::LockedLdpObject
   # Listen, rubocop, I get it, but I need to be bug-for-bug compatible with
   # https://github.com/samvera/active_fedora/blob/7e9c365c00ced6ce4175096a3ff7b423cc72bf64/lib/active_fedora/indexing_service.rb#L55
   # or half the time this method will return one thing, and half another
-  # rubocop:disable Rails/TimeZone
   def updated_at
     return ldp_object.modified_date if ldp_object.present?
 
     DateTime.parse(solr_representation['system_modified_dtsi']) if solr_representation
   end
-  # rubocop:enable Rails/TimeZone
 
   # Provides structured, mediated interaction for mutating the underlying LDP object
   #

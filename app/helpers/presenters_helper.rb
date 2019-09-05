@@ -1,6 +1,10 @@
 module PresentersHelper
   class NoSuchPresenter < StandardError; end
 
+  # Rubocop now wants us to remove instance methods from helpers. This is a good idea
+  # but will require a bit of refactoring. Find other instances of this disabling
+  # and fix all at once.
+  # rubocop:disable Rails/HelperInstanceVariable
   def present(obj)
     # cache the obj => presenter mappings for the lifetime of the request, to avoid the overhead of
     # string to class conversion dozens of times during facet rendering
@@ -34,4 +38,5 @@ module PresentersHelper
       raise NoSuchPresenter, "Presenter #{klass_name} is not defined for #{obj}"
     end
   end
+  # rubocop:enable Rails/HelperInstanceVariable
 end

@@ -90,12 +90,12 @@
           </li>
         <% else %>
           <li role="presentation" class="nav-item">
-            <%= link_to t('.links.login'), '/auth/saml', class: 'nav-item nav-link text-nowrap' %>
+            <%= link_to t('.links.login'), '/auth/saml', class: 'nav-item nav-link text-nowrap', method: :post %>
           </li>
           <% if Rails.env.development? || Rails.env.uat? %>
             <%# TODO: Temporary login form for local development or UAT %>
             <li role="presentation" class="nav-item">
-              <%= link_to t('.links.login_as_dev'), '/auth/developer', class: 'nav-item nav-link text-nowrap' %>
+              <%= link_to t('.links.login_as_dev'), '/auth/developer', class: 'nav-item nav-link text-nowrap', method: :post %>
             </li>
           <% end %>
         <% end %>

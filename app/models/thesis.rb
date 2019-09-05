@@ -76,11 +76,13 @@ class Thesis < JupiterCore::LockedLdpObject
       # Handle visibility plus embargo logic
       unlocked_obj.visibility = draft_thesis.visibility_as_uri
 
-      if draft_thesis.embargo_end_date.present?
+      if draft_thesis.visibility_as_uri == CONTROLLED_VOCABULARIES[:visibility].embargo
         unlocked_obj.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].public
+        unlocked_obj.embargo_end_date = draft_thesis.embargo_end_date
+      else
+        unlocked_obj.visibility_after_embargo = nil
+        unlocked_obj.embargo_end_date = nil
       end
-
-      unlocked_obj.embargo_end_date = draft_thesis.embargo_end_date
 
       # Handle rights
       unlocked_obj.rights = draft_thesis.rights
