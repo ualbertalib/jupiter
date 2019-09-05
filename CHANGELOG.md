@@ -13,6 +13,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - bump rubocop-performance from 1.4.0 to 1.4.1 and use match? instead of =~ [PR#1226](https://github.com/ualbertalib/jupiter/pull/1226)
 - display graduation date in season year format [#1003](https://github.com/ualbertalib/jupiter/issues/1003)
 - Lifting of embargo now stores item in embargo_history [#1219](https://github.com/ualbertalib/jupiter/issues/1219)
+- bump ruby from 2.4 to 2.6 in travis jobs [#1214](https://github.com/ualbertalib/jupiter/issues/1214)
 
 ### Fixed
 - bump faker from 1.9.6 to 2.1.0 and fix breaking changes to dev seed data [PR#1231](https://github.com/ualbertalib/jupiter/pull/1231)
