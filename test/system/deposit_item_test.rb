@@ -85,7 +85,7 @@ class DepositItemTest < ApplicationSystemTestCase
     assert_selector 'h1', text: Item.last.title
 
     # Check to make sure there isn't any embargo_history
-    item_id = current_url.split('/')[-1]
+    item_id = current_url.split('/').last
     _, item_results, _ = JupiterCore::Search.perform_solr_query(q: item_id, fq: 'id:' + item_id, rows: 1)
     assert_nil item_results.first['embargo_history_ssim']
 
