@@ -1,6 +1,6 @@
 language: ruby
 sudo: required
-dist: trusty
+dist: xenial
 
 services:
   - postgresql
@@ -17,7 +17,6 @@ cache: bundler
 bundler_args: --without development production --jobs=3 --retry=3
 before_install:
   - gem install bundler:1.17.3
-  - sudo apt-get install -y dpkg  # to upgrade to dpkg >= 1.17.5ubuntu5.8, which fixes https://bugs.launchpad.net/ubuntu/+source/dpkg/+bug/1730627
 
 before_script:
   - bundle exec danger
