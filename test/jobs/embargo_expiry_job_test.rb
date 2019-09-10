@@ -53,10 +53,12 @@ class EmbargoExpiryJobTest < ActiveJob::TestCase
     assert_equal expired_item.visibility, JupiterCore::VISIBILITY_PUBLIC
     assert_nil expired_item.visibility_after_embargo
     assert_nil expired_item.embargo_end_date
+    assert_not_empty expired_item.embargo_history
 
     assert_equal not_expired_item.visibility, ItemProperties::VISIBILITY_EMBARGO
     assert_equal not_expired_item.visibility_after_embargo, CONTROLLED_VOCABULARIES[:visibility].public
     assert_equal not_expired_item.embargo_end_date, 2.days.from_now.to_date
+    assert_empty not_expired_item.embargo_history
   end
 
   test 'that job transitions expired thesis embargos into proper state' do
@@ -94,10 +96,12 @@ class EmbargoExpiryJobTest < ActiveJob::TestCase
     assert_equal expired_thesis.visibility, JupiterCore::VISIBILITY_PUBLIC
     assert_nil expired_thesis.visibility_after_embargo
     assert_nil expired_thesis.embargo_end_date
+    assert_not_empty expired_thesis.embargo_history
 
     assert_equal not_expired_thesis.visibility, ItemProperties::VISIBILITY_EMBARGO
     assert_equal not_expired_thesis.visibility_after_embargo, CONTROLLED_VOCABULARIES[:visibility].public
     assert_equal not_expired_thesis.embargo_end_date, 2.days.from_now.to_date
+    assert_empty not_expired_thesis.embargo_history
   end
 
 end
