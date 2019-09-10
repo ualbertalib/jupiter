@@ -24,4 +24,11 @@ module ImagesHelper
       'file-o'
     end
   end
+
+  def safe_thumbnail_tag(thumbnail, image_tag_options)
+    image_tag_options[:class] = 'j-thumbnail img-thumbnail'
+    image_tag_options[:onerror] = "default_thumbnail(this)"
+
+    image_tag(thumbnail, image_tag_options)
+  end
 end
