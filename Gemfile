@@ -118,7 +118,6 @@ group :test do
 
   gem 'launchy'
   gem 'vcr', require: false
-  # Easy installation and use of chromedriver to run system tests with Chrome
   gem 'webdrivers', '~> 4.0'
   gem 'webmock', require: false
 end

@@ -17,7 +17,7 @@ VCR.configure do |config|
   # Only want VCR to intercept requests to external URLs.
   config.ignore_localhost = true
 
-  # Allow drivers to download
+  # Allow drivers to download though webdrivers gem https://github.com/titusfortner/webdrivers/wiki/Using-with-VCR-or-WebMock
   driver_urls = Webdrivers::Common.subclasses.map do |driver|
     Addressable::URI.parse(driver.base_url).host
   end
