@@ -21,6 +21,8 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - allow batch ingest to lookup older licenses [#1115](https://github.com/ualbertalib/jupiter/issues/1115)
 - Added selectize '|' delimiter to separate authors or subjects [#1211](https://github.com/ualbertalib/jupiter/issues/1211)
 
+### Added
+- Added javascript for thumbnail replacement on error [#1228](https://github.com/ualbertalib/jupiter/issues/1228)
 
 ## [1.2.16] - 2019-07-19
 
