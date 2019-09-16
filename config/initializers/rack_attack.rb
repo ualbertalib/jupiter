@@ -2,17 +2,22 @@ class Rack::Attack
 
   class Request < ::Rack::Request
 
-    def allowed_ip?
-      allowed_ips = []
-      if Rails.application.secrets.rack_attack_safelisted_ips.present?
-        allowed_ips = Rails.application.secrets.rack_attack_safelisted_ips.split(',')
-      end
+    class << self
 
-      allowed_ips.include?(ip)
+      attr_accessor :allowed_ips
+
+    end
+
+    def allowed_ip?
+      Request.allowed_ips.include?(ip)
     end
 
   end
 
+  Request.allowed_ips = []
+  if Rails.application.secrets.rack_attack_safelisted_ips.present?
+    Request.allowed_ips = Rails.application.secrets.rack_attack_safelisted_ips.split(',')
+  end
   safelist('allow safelisted ips', &:allowed_ip?)
 
   throttle('req/ip', limit: 60, period: 1.minute) do |req|
