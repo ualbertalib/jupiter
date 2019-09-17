@@ -20,7 +20,7 @@ class Rack::Attack
   Request.allowed_ips = allowed_ips_array.each_with_object({}) { |k, h| h[k] = true }
   safelist('allow safelisted ips', &:allowed_ip?)
 
-  throttle('req/ip', limit: 2, period: 1.minute) do |req|
+  throttle('req/ip', limit: 60, period: 1.minute) do |req|
     req.ip if ['/search', '/', '/auth/saml'].include?(req.path)
   end
 
