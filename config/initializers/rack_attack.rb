@@ -9,15 +9,18 @@ class Rack::Attack
     end
 
     def allowed_ip?
-      Request.allowed_ips.include?(ip)
+      Request.allowed_ips[ip]
     end
 
   end
 
-  Request.allowed_ips = Rails.application.secrets.rack_attack_safelisted_ips.split(',')
+  # Using hash table to store allowed ips because it was found to be more efficient in benchmarking
+  # https://github.com/ualbertalib/jupiter/issues/1247
+  allowed_ips_array = Rails.application.secrets.rack_attack_safelisted_ips.split(',')
+  Request.allowed_ips = allowed_ips_array.each_with_object({}) { |k, h| h[k] = true }
   safelist('allow safelisted ips', &:allowed_ip?)
 
-  throttle('req/ip', limit: 60, period: 1.minute) do |req|
+  throttle('req/ip', limit: 2, period: 1.minute) do |req|
     req.ip if ['/search', '/', '/auth/saml'].include?(req.path)
   end
 
