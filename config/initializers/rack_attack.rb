@@ -2,17 +2,22 @@ class Rack::Attack
 
   class Request < ::Rack::Request
 
-    def allowed_ip?
-      allowed_ips = []
-      if Rails.application.secrets.rack_attack_safelisted_ips.present?
-        allowed_ips = Rails.application.secrets.rack_attack_safelisted_ips.split(',')
-      end
+    class << self
 
-      allowed_ips.include?(ip)
+      attr_accessor :allowed_ips
+
+    end
+
+    def allowed_ip?
+      Request.allowed_ips[ip]
     end
 
   end
 
+  # Using hash table to store allowed ips because it was found to be more efficient in benchmarking
+  # https://github.com/ualbertalib/jupiter/issues/1247
+  allowed_ips_array = Rails.application.secrets.rack_attack_safelisted_ips.split(',')
+  Request.allowed_ips = allowed_ips_array.each_with_object({}) { |k, h| h[k] = true }
   safelist('allow safelisted ips', &:allowed_ip?)
 
   throttle('req/ip', limit: 60, period: 1.minute) do |req|
