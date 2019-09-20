@@ -49,7 +49,7 @@
         <dd>
           <ul class="list-unstyled">
             <% @item.departments.each do |department| %>
-              <li><%= search_link_for(@item, :departments, facet: :search, value: department) %></li>
+              <li><%= search_link_for(@item, :departments, value: department) %></li>
             <% end %>
           </ul>
         </dd>
@@ -77,7 +77,7 @@
         <dd>
           <ul class="list-unstyled">
             <% @item.supervisors.each do |supervisor| %>
-              <li><%= search_link_for(@item, :supervisors, facet: :search, value: supervisor) %></li>
+              <li><%= search_link_for(@item, :supervisors, value: supervisor) %></li>
             <% end %>
           </ul>
         </dd>
