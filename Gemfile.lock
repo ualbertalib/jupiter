@@ -163,7 +163,7 @@ GEM
     ezid-client (1.8.0)
       hashie (~> 3.4, >= 3.4.3)
       nokogiri
-    faker (2.2.2)
+    faker (2.4.0)
       i18n (~> 1.6.0)
     faraday (0.12.2)
       multipart-post (>= 1.2, < 3)
