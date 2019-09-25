@@ -2,8 +2,7 @@ require 'application_system_test_case'
 
 class DepositItemTest < ApplicationSystemTestCase
 
-  def before_all
-    super
+  def setup
     admin = User.find_by(email: 'administrator@example.com')
     # Setup a community/collection pair for respective dropdowns
     @community = Community.create!(title: 'Books', owner_id: admin.id)
