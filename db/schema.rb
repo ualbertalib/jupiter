@@ -167,9 +167,6 @@ ActiveRecord::Schema.define(version: 2019_09_26_213733) do
     t.index ["user_id"], name: "index_draft_theses_on_user_id"
   end
 
-  create_table "foo", force: :cascade do |t|
-  end
-
   create_table "identities", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "uid", null: false
