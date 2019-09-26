@@ -18,8 +18,6 @@ class Collection < JupiterCore::Depositable
     self.visibility = JupiterCore::VISIBILITY_PUBLIC
   end
 
-  acts_as_rdfable
-
   def path
     "#{community_id}/#{id}"
   end
