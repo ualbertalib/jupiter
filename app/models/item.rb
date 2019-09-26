@@ -1,4 +1,5 @@
 class Item < JupiterCore::Doiable
+
   acts_as_rdfable
 
   has_solr_exporter Exporters::Solr::ItemExporter
