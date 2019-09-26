@@ -31,7 +31,7 @@ gem 'simple_form'
 gem 'canonical-rails'
 
 # RDF stuff
-gem 'acts_as_rdfable', github: 'mbarnett/acts_as_rdfable', tag: 'v0.01'
+gem 'acts_as_rdfable', github: 'mbarnett/acts_as_rdfable', ref: '3f8471b93f943ed48cff644c70f8a603645ba441'
 gem 'rdf-vocab'
 
 # Database stuff

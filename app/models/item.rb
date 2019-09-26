@@ -1,4 +1,5 @@
 class Item < JupiterCore::Doiable
+  acts_as_rdfable
 
   has_solr_exporter Exporters::Solr::ItemExporter
 
@@ -7,39 +8,6 @@ class Item < JupiterCore::Doiable
   has_many_attached :files, dependent: false
 
   scope :public_items, -> { where(visibility: JupiterCore::VISIBILITY_PUBLIC) }
-
-  acts_as_rdfable do |config|
-    config.title has_predicate: ::RDF::Vocab::DC.title
-    config.fedora3_uuid has_predicate: ::TERMS[:ual].fedora3_uuid
-    config.depositor has_predicate: ::TERMS[:ual].depositor
-    config.alternative_title has_predicate: ::RDF::Vocab::DC.alternative
-    config.doi has_predicate: ::TERMS[:prism].doi
-    config.embargo_end_date has_predicate: ::RDF::Vocab::DC.available
-    config.fedora3_handle has_predicate: ::TERMS[:ual].fedora3_handle
-    config.ingest_batch has_predicate: ::TERMS[:ual].ingest_batch
-    config.northern_north_america_filename has_predicate: ::TERMS[:ual].northern_north_america_filename
-    config.northern_north_america_item_id has_predicate: ::TERMS[:ual].northern_north_america_item_id
-    config.rights has_predicate: ::RDF::Vocab::DC11.rights
-    config.sort_year has_predicate: ::TERMS[:ual].sort_year
-    config.visibility_after_embargo has_predicate: ::TERMS[:acl].visibility_after_embargo
-    config.embargo_history has_predicate: ::TERMS[:acl].embargo_history
-    config.is_version_of has_predicate: ::RDF::Vocab::DC.isVersionOf
-    config.member_of_paths has_predicate: ::TERMS[:ual].path
-    config.subject has_predicate: ::RDF::Vocab::DC11.subject
-    config.creators has_predicate: RDF::Vocab::BIBO.authorList
-    config.contributors has_predicate: ::RDF::Vocab::DC11.contributor
-    config.created has_predicate: ::RDF::Vocab::DC.created
-    config.temporal_subjects has_predicate: ::RDF::Vocab::DC.temporal
-    config.spatial_subjects has_predicate: ::RDF::Vocab::DC.spatial
-    config.description has_predicate: ::RDF::Vocab::DC.description
-    config.publisher has_predicate: ::RDF::Vocab::DC.publisher
-    config.languages has_predicate: ::RDF::Vocab::DC.language
-    config.license has_predicate: ::RDF::Vocab::DC.license
-    config.item_type has_predicate: ::RDF::Vocab::DC.type
-    config.source has_predicate: ::RDF::Vocab::DC.source
-    config.related_link has_predicate: ::RDF::Vocab::DC.relation
-    config.publication_status has_predicate: ::RDF::Vocab::BIBO.status
-  end
 
   before_validation :populate_sort_year
   after_save :push_item_id_for_preservation

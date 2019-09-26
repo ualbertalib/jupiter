@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_26_235029) do
+ActiveRecord::Schema.define(version: 2019_09_26_213733) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -165,6 +165,9 @@ ActiveRecord::Schema.define(version: 2019_08_26_235029) do
     t.index ["institution_id"], name: "index_draft_theses_on_institution_id"
     t.index ["language_id"], name: "index_draft_theses_on_language_id"
     t.index ["user_id"], name: "index_draft_theses_on_user_id"
+  end
+
+  create_table "foo", force: :cascade do |t|
   end
 
   create_table "identities", force: :cascade do |t|
