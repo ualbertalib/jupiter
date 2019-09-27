@@ -32,6 +32,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ### Fixed
 - fixed error in dangerfile [#1109](https://github.com/ualbertalib/jupiter/issues/1109)
+- Fixed order-dependence in system tests regarding test data bleeding into other tests [#1286](https://github.com/ualbertalib/jupiter/issues/1286)
 
 ## [1.2.14] - 2019-04-15
 

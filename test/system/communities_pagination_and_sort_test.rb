@@ -2,8 +2,7 @@ require 'application_system_test_case'
 
 class CommunitiesPaginationAndSortTest < ApplicationSystemTestCase
 
-  def before_all
-    super
+  def setup
     @admin = User.find_by(email: 'administrator@example.com')
     (0..10).each do |i|
       Community.new(title: format("#{['Fancy', 'Nice'][i % 2]} Community %02i", i), owner_id: @admin.id).save!
@@ -12,12 +11,9 @@ class CommunitiesPaginationAndSortTest < ApplicationSystemTestCase
 
   # TODO: Slow test
   test 'anybody should be able to sort and paginate communities' do
-    # for some runs/seeds (like SEED=1099), stale Communities are left over from other tests. We can't assume the
-    # communities created here are the only ones! This test needs to be re-written
     # For sorting, creation order is 'Fancy Community 00', 'Nice Community 01', 'Fancy Community 02', etc. ...
     #
     # Try SEED=8921
-    skip 'This test makes a number of bad assumptions that cause it to regularly flap'
 
     visit communities_path
 

@@ -2,8 +2,7 @@ require 'application_system_test_case'
 
 class ItemShowTest < ApplicationSystemTestCase
 
-  def before_all
-    super
+  def setup
     @user = User.find_by(email: 'john_snow@example.com')
     admin = User.find_by(email: 'administrator@example.com')
     @community = Community.create!(title: 'Fancy Community', owner_id: admin.id)
