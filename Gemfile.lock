@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/mbarnett/acts_as_rdfable.git
-  revision: 3f8471b93f943ed48cff644c70f8a603645ba441
-  ref: 3f8471b93f943ed48cff644c70f8a603645ba441
+  revision: 9ef84dc6a57ec280a5785e21ba146345f6b88e95
+  tag: v0.2
   specs:
-    acts_as_rdfable (0.1.0)
+    acts_as_rdfable (0.2.0)
       rails (~> 5.2.3)
 
 GEM
