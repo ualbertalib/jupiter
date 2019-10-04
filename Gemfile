@@ -61,7 +61,7 @@ gem 'sidekiq-cron'
 # Misc Utilities
 gem 'aasm' # state-machine management
 gem 'addressable', '~> 2.7.0' # Replacement for the standard URI implementation
-gem 'danger', '~> 6.0' # Pull Request etiquette enforcement
+gem 'danger', '~> 6.1' # Pull Request etiquette enforcement
 gem 'ezid-client', '~> 1.8.0'
 gem 'jbuilder' # generate JSON objects
 gem 'kaminari' # Pagination
