@@ -62,10 +62,12 @@ class ActiveSupport::TestCase
     # grab first user identitiy, dont care just need to login user
     identity = user.identities.first
 
+    # rubocop:disable Layout/IndentAssignment
     Rails.application.env_config['omniauth.auth'] =
       OmniAuth.config.mock_auth[identity.provider.to_sym] =
         OmniAuth::AuthHash.new(provider: identity.provider,
                                uid: identity.uid)
+    # rubocop:enable Layout/IndentAssignment
 
     post "/auth/#{identity.provider}/callback"
   end

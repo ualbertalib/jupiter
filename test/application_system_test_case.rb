@@ -16,10 +16,12 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   def login_user(user)
     identity = user.identities.first
 
+    # rubocop:disable Layout/IndentAssignment
     Rails.application.env_config['omniauth.auth'] =
       OmniAuth.config.mock_auth[:saml] =
         OmniAuth::AuthHash.new(provider: identity.provider,
                                uid: identity.uid)
+    # rubocop:enable Layout/IndentAssignment
 
     visit root_url
 
