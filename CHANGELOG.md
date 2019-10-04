@@ -6,6 +6,9 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+### Changed
+- disable rubocop Layout/IndentAssignment because https://github.com/rubocop-hq/rubocop/issues/7404 [PR#1318](https://github.com/ualbertalib/jupiter/pull/1318)
+
 ## [1.2.17] - 2019-09-24
 
 ### Security
