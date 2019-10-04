@@ -1,5 +1,7 @@
 class Thesis < JupiterCore::Doiable
 
+  acts_as_rdfable
+
   has_solr_exporter Exporters::Solr::ThesisExporter
 
   belongs_to :owner, class_name: 'User'
@@ -24,41 +26,6 @@ class Thesis < JupiterCore::Doiable
   validates :member_of_paths, presence: true
   validate :communities_and_collections_must_exist
   validate :visibility_after_embargo_must_be_valid
-
-  acts_as_rdfable do |config|
-    config.title has_predicate: ::RDF::Vocab::DC.title
-    config.fedora3_uuid has_predicate: ::TERMS[:ual].fedora3_uuid
-    config.depositor has_predicate: ::TERMS[:ual].depositor
-    config.alternative_title has_predicate: ::RDF::Vocab::DC.alternative
-    config.doi has_predicate: ::TERMS[:prism].doi
-    config.embargo_end_date has_predicate: ::RDF::Vocab::DC.available
-    config.fedora3_handle has_predicate: ::TERMS[:ual].fedora3_handle
-    config.ingest_batch has_predicate: ::TERMS[:ual].ingest_batch
-    config.northern_north_america_filename has_predicate: ::TERMS[:ual].northern_north_america_filename
-    config.northern_north_america_item_id has_predicate: ::TERMS[:ual].northern_north_america_item_id
-    config.rights has_predicate: ::RDF::Vocab::DC11.rights
-    config.sort_year has_predicate: ::TERMS[:ual].sort_year
-    config.visibility_after_embargo has_predicate: ::TERMS[:acl].visibility_after_embargo
-    config.embargo_history has_predicate: ::TERMS[:acl].embargo_history
-    config.is_version_of has_predicate: ::RDF::Vocab::DC.isVersionOf
-    config.member_of_paths has_predicate: ::TERMS[:ual].path
-    config.subject has_predicate: ::RDF::Vocab::DC11.subject
-    config.abstract has_predicate: ::RDF::Vocab::DC.abstract
-    config.language has_predicate: ::RDF::Vocab::DC.language
-    config.date_accepted has_predicate: ::RDF::Vocab::DC.dateAccepted
-    config.date_submitted has_predicate: ::RDF::Vocab::DC.dateSubmitted
-    config.degree has_predicate: ::RDF::Vocab::BIBO.degree
-    config.institution has_predicate: TERMS[:swrc].institution
-    config.dissertant has_predicate: TERMS[:ual].dissertant
-    config.graduation_date has_predicate: TERMS[:ual].graduation_date
-    config.thesis_level has_predicate: TERMS[:ual].thesis_level
-    config.proquest has_predicate: TERMS[:ual].proquest
-    config.unicorn has_predicate: TERMS[:ual].unicorn
-    config.specialization has_predicate: TERMS[:ual].specialization
-    config.departments has_predicate: TERMS[:ual].department_list
-    config.supervisors has_predicate: TERMS[:ual].supervisor_list
-    config.committee_members has_predicate: TERMS[:ual].committee_member
-  end
 
   # Present a consistent interface with Item#item_type_with_status_code
   def item_type_with_status_code

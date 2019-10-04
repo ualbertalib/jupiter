@@ -15,8 +15,6 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Dependency on ActsAsRdfable for annotating ActiveRecord classes with RDF predicates
 - Collection, Community Item, and Thesis ActiveRecord models
 - jupiter:get_me_off_of_fedora rake task to perform data migration
-- drafts scope for DraftItem/DraftThesis
-
 
 ### Changed
 - DeferredSimpleSolrQuery#sort renamed to 'order' and its two arguments replaced with a key-value, to better align with ActiveRecord
@@ -27,8 +25,8 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Replaced use of ActiveFedora's Solr connection with a direct connection to Solr setup locally.
 - Replaced all calls to `Solrizer.solr_name` with simplified local code to map Solr types/roles to wildcard stems.
 - Removed Solrizer usage from the process of indexing ActiveFedora objects for Solr entirely. Replaced with Solr Exporter pattern for serialization of Solr data.
-- DraftItem and DraftThesis have basic RDF annotations
 - Removed: ActiveFedora
+- Items, Theses, Collections, and Communities now have RDF predicates defined for their PostgreSQL columns via migration
 
 ### Fixed
 - fixed error in dangerfile [#1109](https://github.com/ualbertalib/jupiter/issues/1109)

@@ -1,5 +1,7 @@
 class Community < JupiterCore::Depositable
 
+  acts_as_rdfable
+
   scope :drafts, -> { where(is_published_in_era: false).or(where(is_published_in_era: nil)) }
 
   has_solr_exporter Exporters::Solr::CommunityExporter
@@ -20,14 +22,6 @@ class Community < JupiterCore::Depositable
 
   before_validation do
     self.visibility = JupiterCore::VISIBILITY_PUBLIC
-  end
-
-  acts_as_rdfable do |config|
-    config.title has_predicate: ::RDF::Vocab::DC.title
-    config.fedora3_uuid has_predicate: ::TERMS[:ual].fedora3_uuid
-    config.depositor has_predicate: ::TERMS[:ual].depositor
-    config.description has_predicate: ::RDF::Vocab::DC.description
-    config.creators has_predicate: ::RDF::Vocab::DC.creator
   end
 
   # this method can be used on the SolrCached object OR the ActiveFedora object
