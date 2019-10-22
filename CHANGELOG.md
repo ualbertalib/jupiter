@@ -6,7 +6,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
-## [1.2.18] - 2019-09-24
+## [1.2.18] - 2019-10-22
 - Removed Rack Attack
 
 ## [1.2.17] - 2019-09-24
