@@ -316,8 +316,6 @@ GEM
       activesupport (>= 3.0.0)
     raabro (1.1.6)
     rack (2.0.7)
-    rack-attack (6.1.0)
-      rack (>= 1.0, < 3)
     rack-protection (2.0.7)
       rack
     rack-test (1.1.0)
@@ -544,7 +542,6 @@ DEPENDENCIES
   pry-rails
   puma (~> 4.2)
   pundit (= 1.1.0)
-  rack-attack
   rails (~> 5.2.3)
   ransack
   rdf-vocab
@@ -579,4 +576,4 @@ DEPENDENCIES
   wicked
 
 BUNDLED WITH
-   1.17.3
+   2.0.1
