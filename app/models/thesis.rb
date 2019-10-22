@@ -68,8 +68,8 @@ class Thesis < JupiterCore::Doiable
   def self.from_draft(draft_thesis)
     thesis = Thesis.find(draft_thesis.uuid) if draft_thesis.uuid.present?
     thesis ||= Thesis.new
+
     thesis.owner_id = draft_thesis.user_id if thesis.owner.blank?
-      unlocked_obj.owner_id = draft_thesis.user_id if unlocked_obj.owner.blank?
     thesis.title = draft_thesis.title
     thesis.alternative_title = draft_thesis.alternate_title
 
@@ -84,22 +84,11 @@ class Thesis < JupiterCore::Doiable
                              end
 
     # Handle visibility plus embargo logic
-                                       "#{draft_thesis.graduation_year}-#{draft_thesis.graduation_term}"
-                                     else
-                                       draft_thesis.graduation_year.to_s
     thesis.visibility = draft_thesis.visibility_as_uri
 
     if draft_thesis.embargo_end_date.present?
-      if draft_thesis.visibility_as_uri == CONTROLLED_VOCABULARIES[:visibility].embargo
       thesis.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].public
-        unlocked_obj.embargo_end_date = draft_thesis.embargo_end_date
-      else
-        # If visibility was previously embargo but not anymore
-        unlocked_obj.add_to_embargo_history if unlocked_obj.visibility == CONTROLLED_VOCABULARIES[:visibility].embargo
-        unlocked_obj.visibility_after_embargo = nil
-        unlocked_obj.embargo_end_date = nil
     end
-      unlocked_obj.visibility = draft_thesis.visibility_as_uri
 
     thesis.embargo_end_date = draft_thesis.embargo_end_date
 

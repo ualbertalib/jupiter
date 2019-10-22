@@ -102,9 +102,9 @@ if Rails.env.development? || Rails.env.uat?
       }
       # Add an occasional verbose description
       description = if i % 10 == 5
-                      Faker::Lorem.sentence(word_count: 100, supplemental: false, random_words_to_add: 0).chop
+                      Faker::Lorem.sentence(100, false, 0).chop
                     else
-                      Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop
+                      Faker::Lorem.sentence(20, false, 0).chop
                     end
       # Probabilistically about 70% English, 20% French, 10% Ukrainian
       languages = if seed % 10 > 2
@@ -196,7 +196,7 @@ if Rails.env.development? || Rails.env.uat?
       thesis_attributes = base_attributes.merge({
         owner_id: admin.id,
         title: "Thesis about the effects of #{Faker::Beer.name} on #{thing.pluralize}",
-        graduation_date: "#{rand(20_000).days.ago.year}#{['-06','-11',''][i % 3]}",
+        graduation_date: "Fall #{rand(20_000).days.ago.year}",
         dissertant: creators[seed],
         abstract: description,
         language: languages.first,
@@ -253,7 +253,7 @@ if Rails.env.development? || Rails.env.uat?
       visibility: JupiterCore::VISIBILITY_PRIVATE,
       created: rand(20_000).days.ago.to_s,
       title: "Private #{thing.pluralize}, public lives: a survey of social media trends",
-      description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop,
+      description: Faker::Lorem.sentence(20, false, 0).chop,
       languages: [CONTROLLED_VOCABULARIES[:language].english],
       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
       item_type: CONTROLLED_VOCABULARIES[:item_type].chapter,
@@ -271,7 +271,7 @@ if Rails.env.development? || Rails.env.uat?
       visibility: JupiterCore::VISIBILITY_AUTHENTICATED,
       created: rand(20_000).days.ago.to_s,
       title: "Everything You Need To Know About: University of Alberta and #{thing.pluralize}!",
-      description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop,
+      description: Faker::Lorem.sentence(20, false, 0).chop,
       languages: [CONTROLLED_VOCABULARIES[:language].english],
       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
       item_type: CONTROLLED_VOCABULARIES[:item_type].report,
@@ -289,7 +289,7 @@ if Rails.env.development? || Rails.env.uat?
       visibility: Item::VISIBILITY_EMBARGO,
       created: rand(20_000).days.ago.to_s,
       title: "Embargo and #{Faker::Address.country}: were the #{thing.pluralize} left behind?",
-      description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop,
+      description: Faker::Lorem.sentence(20, false, 0).chop,
       languages: [CONTROLLED_VOCABULARIES[:language].english],
       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
       item_type: CONTROLLED_VOCABULARIES[:item_type].conference_workshop_presentation,
@@ -309,7 +309,7 @@ if Rails.env.development? || Rails.env.uat?
       visibility: Item::VISIBILITY_EMBARGO,
       created: rand(20_000).days.ago.to_s,
       title: "Former embargo of #{Faker::Address.country}: the day the #{thing.pluralize} were free",
-      description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop,
+      description: Faker::Lorem.sentence(20, false, 0).chop,
       languages: [CONTROLLED_VOCABULARIES[:language].english],
       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
       item_type: CONTROLLED_VOCABULARIES[:item_type].dataset,
@@ -329,7 +329,7 @@ if Rails.env.development? || Rails.env.uat?
       visibility: JupiterCore::VISIBILITY_PUBLIC,
       created: rand(20_000).days.ago.to_s,
       title: "Impact of non-admin users on #{thing.pluralize}",
-      description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop,
+      description: Faker::Lorem.sentence(20, false, 0).chop,
       languages: [CONTROLLED_VOCABULARIES[:language].english],
       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
       item_type: CONTROLLED_VOCABULARIES[:item_type].learning_object,
@@ -349,7 +349,7 @@ if Rails.env.development? || Rails.env.uat?
       visibility: JupiterCore::VISIBILITY_PUBLIC,
       created: rand(20_000).days.ago.to_s,
       title: "Multi-collection random images of #{thing.pluralize}",
-      description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop,
+      description: Faker::Lorem.sentence(20, false, 0).chop,
       # No linguistic content
       languages: [CONTROLLED_VOCABULARIES[:language].no_linguistic_content],
       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
@@ -398,19 +398,19 @@ end
  :conference_workshop_presentation, :dataset,
  :image, :journal_article_draft, :journal_article_published,
  :learning_object, :report, :research_material, :review].each do |type_name|
-  Type.where(name: type_name).first_or_create
+  Type.create(name: type_name)
 end
 
 # Languages
 [:english, :french, :spanish, :chinese, :german,
  :italian, :russian, :ukrainian, :japanese,
  :no_linguistic_content, :other].each do |language_name|
-  Language.where(name: language_name).first_or_create
+  Language.create(name: language_name)
 end
 
 # Institutions
 [:uofa, :st_stephens].each do |institution_name|
-  Institution.where(name: institution_name).first_or_create
+  Institution.create(name: institution_name)
 end
 
 
