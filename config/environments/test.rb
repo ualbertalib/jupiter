@@ -48,5 +48,4 @@ Rails.application.configure do
 
   # FITS characterization
   config.run_fits_characterization = false
-
 end
