@@ -6,6 +6,9 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+## [1.2.18] - 2019-10-22
+- Removed Rack Attack
+
 ## [1.2.17] - 2019-09-24
 
 ### Security
@@ -29,7 +32,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [1.2.16] - 2019-07-19
 
-### Security 
+### Security
 - bump mini_magick from 4.9.3 to 4.9.4 [PR#1212](https://github.com/ualbertalib/jupiter/pull/1212)
 
 ### Added

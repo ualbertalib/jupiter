@@ -62,7 +62,6 @@ gem 'danger', '~> 6.1' # Pull Request etiquette enforcement
 gem 'ezid-client', '~> 1.8.0'
 gem 'jbuilder' # generate JSON objects
 gem 'kaminari' # Pagination
-gem 'rack-attack' # Rate limiting
 gem 'ransack' # ActiveRecord search/filter
 gem 'uuidtools'
 gem 'voight_kampff' # bot detection
