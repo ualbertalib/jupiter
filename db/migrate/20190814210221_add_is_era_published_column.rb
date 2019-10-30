@@ -1,4 +1,3 @@
-
 class AddIsEraPublishedColumn < ActiveRecord::Migration[5.2]
   def change
     add_column :draft_items, :is_published_in_era, :boolean, default: false, index: true

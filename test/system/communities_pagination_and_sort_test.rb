@@ -2,8 +2,7 @@ require 'application_system_test_case'
 
 class CommunitiesPaginationAndSortTest < ApplicationSystemTestCase
 
-  def before_all
-    super
+  def setup
     @admin = User.find_by(email: 'administrator@example.com')
     (0..10).each do |i|
       Community.new(title: format("#{['Fancy', 'Nice'][i % 2]} Community %02i", i), owner_id: @admin.id).save!

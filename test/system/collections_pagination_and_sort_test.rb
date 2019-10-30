@@ -2,8 +2,7 @@ require 'application_system_test_case'
 
 class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
 
-  def before_all
-    super
+  def setup
     admin = User.find_by(email: 'administrator@example.com')
     @community = Community.create!(title: 'Community', owner_id: admin.id)
     # For sorting, creation order is 'Fancy Collection 00', 'Nice Collection 01', 'Fancy Collection 02', etc. ...

@@ -69,10 +69,12 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Removed Solrizer usage from the process of indexing ActiveFedora objects for Solr entirely. Replaced with Solr Exporter pattern for serialization of Solr data.
 - DraftItem and DraftThesis have basic RDF annotations
 - Removed: ActiveFedora
+- Items, Theses, Collections, and Communities now have RDF predicates defined for their PostgreSQL columns via migration
 
 ### Fixed
 - Cleared visibility_after_embargo and embargo_end_date when embargo option is not selected [PR#1041](https://github.com/ualbertalib/jupiter/pull/1041)
 - fixed error in dangerfile [#1109](https://github.com/ualbertalib/jupiter/issues/1109)
+- Fixed order-dependence in system tests regarding test data bleeding into other tests [#1286](https://github.com/ualbertalib/jupiter/issues/1286)
 
 ## [1.2.14] - 2019-04-15
 
