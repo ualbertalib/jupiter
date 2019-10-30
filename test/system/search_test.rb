@@ -2,8 +2,7 @@ require 'application_system_test_case'
 
 class SearchTest < ApplicationSystemTestCase
 
-  def before_all
-    super
+  def setup
     admin = User.find_by(email: 'administrator@example.com')
     @community = Community.create!(title: 'Fancy Community', owner_id: admin.id)
     @collections = 2.times.map do |i|

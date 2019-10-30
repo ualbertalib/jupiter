@@ -1,4 +1,3 @@
-
 class AddArCollection < ActiveRecord::Migration[5.2]
   def change
     create_table :ar_collections, id: :uuid,  default: 'uuid_generate_v4()' do |t|

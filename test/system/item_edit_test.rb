@@ -7,7 +7,6 @@ class ItemEditTest < ApplicationSystemTestCase
     user = User.find_by(email: 'john_snow@example.com')
 
     admin = User.find_by(email: 'administrator@example.com')
-
     community = Community.create!(title: 'Fancy Community', owner_id: admin.id)
     collection = Collection.create!(title: 'Fancy collection', owner_id: admin.id, community_id: community.id)
 
