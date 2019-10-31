@@ -27,6 +27,7 @@ before_script:
 
   - RAILS_ENV=test bundle exec rails db:create
   - RAILS_ENV=test bundle exec rails db:migrate
+  - bundle --version
 
 script:
   - bundle exec rails test
