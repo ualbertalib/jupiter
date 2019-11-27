@@ -6,6 +6,9 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+### Added
+- Mounted Oaisys engine
+
 ## [1.2.18] - 2019-10-22
 - Removed Rack Attack
 
