@@ -72,6 +72,10 @@ gem 'skylight'
 # resolve production errors in minutes
 gem 'rollbar'
 
+# OAI-PMH
+gem 'oaisys', github: 'ualbertalib/oaisys', ref:'fbdf90e1c5cd9bb1edfb6fbbeb767b91222af48c'
+gem 'builder_deferred_tagging', github: 'ualbertalib/builder_deferred_tagging', tag: 'v0.01'
+
 # Seeds
 group :development, :test, :uat do
   gem 'faker', require: false

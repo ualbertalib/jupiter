@@ -9,6 +9,7 @@ class Item < JupiterCore::Doiable
   has_many_attached :files, dependent: false
 
   scope :public_items, -> { where(visibility: JupiterCore::VISIBILITY_PUBLIC) }
+  scope :belongs_to_set, ->(set) { where('member_of_paths::text LIKE ?', "%#{set}%") }
 
   before_validation :populate_sort_year
   after_save :push_item_id_for_preservation
