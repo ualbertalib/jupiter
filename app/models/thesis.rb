@@ -9,7 +9,14 @@ class Thesis < JupiterCore::Doiable
   has_many_attached :files, dependent: false
 
   scope :public_items, -> { where(visibility: JupiterCore::VISIBILITY_PUBLIC) }
-  scope :belongs_to_set, ->(set) { where('member_of_paths::text LIKE ?', "%#{set}%") }
+  # TODO: this (casting a json array to text and doing a LIKE against it) is kind of a nasty hack to deal with the fact
+  # that production is currently using a 7 or 8 year old version of Postgresql (9.2) that lacks proper operators for
+  # testing whether a value is in a json array, which newer version of Postgresql have.
+  #
+  # with an upgraded version of Postgresql this could be done more cleanly and performanetly
+  scope :belongs_to_path, ->(path) { where('member_of_paths::text LIKE ?', "%#{path}%") }
+  scope :record_created_from, ->(date) { where('record_created_at >= ?', date) }
+  scope :record_created_until, ->(date) { where('record_created_at <= ?', date) }
 
   after_save :push_item_id_for_preservation
   before_validation :populate_sort_year
