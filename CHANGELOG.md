@@ -6,6 +6,9 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+### Fixed
+- delete the list node and indirect container proxy when you purge a fileset [#1354](https://github.com/ualbertalib/jupiter/issues/1354)
+
 ## [1.2.18] - 2019-10-22
 - Removed Rack Attack
 
