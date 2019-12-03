@@ -40,7 +40,7 @@ module Jupiter
     config.redis_key_prefix = "jupiter.#{Rails.env}."
 
     # Set an action on unpermitted parameters to raise an exception, used to validate parameters in Oaisys.
-    ActionController::Parameters.action_on_unpermitted_parameters = :raise
+    config.action_controller.action_on_unpermitted_parameters = :raise
 
   end
 end
