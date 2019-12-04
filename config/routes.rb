@@ -115,4 +115,12 @@ Rails.application.routes.draw do
   get '/rails/blobs/:key', to: redirect('/rails/active_storage/blobs/%{key}/thumbnail.jpg')
 
   match '/oai/(*all)', to: 'application#service_unavailable', via: [:get, :post]
+
+  # API v1
+  namespace :api, defaults: {format: :json} do
+    namespace :v1 do
+      resources :items, only: [:show]
+    end
+  end
+  
 end

@@ -1,5 +1,7 @@
 class ItemsController < ApplicationController
 
+  include ItemLoad
+
   after_action :update_item_statistics, only: :show, unless: -> { request.bot? }
   before_action :load_item, only: [:show, :edit]
 
@@ -23,14 +25,6 @@ class ItemsController < ApplicationController
   end
 
   private
-
-  def load_item
-    @item = begin
-      Item.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      Thesis.find(params[:id])
-    end
-  end
 
   def update_item_statistics
     Statistics.increment_view_count_for(item_id: params[:id], ip: request.ip)
