@@ -38,11 +38,12 @@ namespace :jupiter do
         indexes = []
         uo.ordered_member_proxies.each_with_index do |proxy, index|
           next if proxy.proxy_for
+
           indexes << index
           puts "#{item.id} has a nil proxy"
           changed = true
         end
-        indexes.sort { |a,b| b <=> a }.each {|index| uo.ordered_member_proxies.delete_at(index)}
+        indexes.sort { |a, b| b <=> a }.each { |index| uo.ordered_member_proxies.delete_at(index) }
         uo.save! if changed
       end
     end
