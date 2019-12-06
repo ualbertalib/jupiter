@@ -207,14 +207,13 @@ module ItemProperties
       def purge_filesets
         FileSet.where(item: id).each do |fs|
           fs.unlock_and_fetch_ldp_object do |fileset|
-            self.ordered_members.delete(fs) # delete the list node
-            self.members.delete(fs) # delete the indirect container proxy
+            ordered_members.delete(fs) # delete the list node
+            members.delete(fs) # delete the indirect container proxy
             fileset.delete # delete the fileset
           end
         end
 
-
-        self.save
+        save
       end
 
       def push_item_id_for_preservation

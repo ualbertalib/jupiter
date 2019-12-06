@@ -36,11 +36,11 @@ namespace :jupiter do
       item.unlock_and_fetch_ldp_object do |uo|
         changed = false
         uo.ordered_member_proxies.each_with_index do |proxy, index|
-          unless proxy.proxy_for
-            uo.ordered_member_proxies.delete_at(index)
-            puts "#{item.id} has a nil proxy"
-            changed = true
-          end
+          next if proxy.proxy_for
+
+          uo.ordered_member_proxies.delete_at(index)
+          puts "#{item.id} has a nil proxy"
+          changed = true
         end
         uo.save! if changed
       end
