@@ -35,17 +35,18 @@ namespace :jupiter do
     (Item.all + Thesis.all).each do |item|
       item.unlock_and_fetch_ldp_object do |uo|
         changed = false
+        indexes = []
         uo.ordered_member_proxies.each_with_index do |proxy, index|
           next if proxy.proxy_for
-
-          uo.ordered_member_proxies.delete_at(index)
+          indexes << index
           puts "#{item.id} has a nil proxy"
           changed = true
         end
+        indexes.sort { |a,b| b <=> a }.each {|index| uo.ordered_member_proxies.delete_at(index)}
         uo.save! if changed
       end
     end
-    puts 'Reindex completed!'
+    puts 'Nil proxy search completed!'
   end
 
   desc 'queue all items and theses in the system for preservation'
