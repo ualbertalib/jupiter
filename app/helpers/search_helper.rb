@@ -1,7 +1,7 @@
 module SearchHelper
   def search_params_hash
     params.permit(:search, { facets: {} }, { ranges: {} }, :tab, :sort, :direction, :community_id, :id, :page)
-      .to_h.except(:page)
+          .to_h.except(:page)
   end
 
   def active_facet?(facet_value)
