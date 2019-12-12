@@ -6,6 +6,9 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+### Fixed
+- tests that were failing [#1376](https://github.com/ualbertalib/jupiter/issues/1376)
+
 ## [1.2.18] - 2019-10-22
 - Removed Rack Attack
 

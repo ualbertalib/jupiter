@@ -1,0 +1,9 @@
+fantasy_books:
+  title: 'Fantasy Books'
+  owner: admin
+  community: books
+thesis:
+  title: 'Thesis Collection'
+  restricted: true
+  owner: admin
+  community: thesis
