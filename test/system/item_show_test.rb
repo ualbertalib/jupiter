@@ -69,33 +69,31 @@ class ItemShowTest < ApplicationSystemTestCase
     end
   end
 
-  test 'unauthed users should be able to download all files from a public item' do
+  test 'massive test because index truncation happens in between tests' do
+
+    # test 'unauthed users should be able to download all files from a public item' do
     visit item_path @item
     assert_selector '.js-download', count: 2
     assert_selector '.js-download-all'
     # TODO: test that the files are downloaded via js successfully without making the suite brittle
-  end
 
-  test 'Search faceting on item values is not broken' do
+    # test 'Search faceting on item values is not broken' do
     visit item_path @item
     click_link 'Joe Blow'
     assert_selector "a[href='/search?tab=item']", count: 1
-  end
 
-  test 'Visiting authenticated items as an unauthenticated user works' do
+    # test 'Visiting authenticated items as an unauthenticated user works' do
     visit item_path @item2
     assert_selector 'h1', text: 'CCID Item', count: 1
-  end
 
-  test 'Theses are working correctly' do
+    #  test 'Theses are working correctly' do
     visit item_path @thesis
 
     assert_selector 'h1', text: 'Thesis about the effects of missing regression tests', count: 1
     assert_selector 'dt', text: 'Type of Item', count: 1
     assert_selector 'dd a', text: 'Thesis', count: 1
-  end
 
-  test 'Item statistics are present' do
+    #  test 'Item statistics are present' do
     visit item_path @thesis
     assert_selector "div[class='card-header']", text: 'Usage', count: 1
     assert_selector 'div ul li', text: 'No download information available'
