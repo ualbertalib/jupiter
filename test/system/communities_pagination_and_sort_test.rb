@@ -16,7 +16,6 @@ class CommunitiesPaginationAndSortTest < ApplicationSystemTestCase
     # For sorting, creation order is 'Fancy Community 00', 'Nice Community 01', 'Fancy Community 02', etc. ...
     #
     # Try SEED=8921
-    skip 'This test makes a number of bad assumptions that cause it to regularly flap'
 
     visit communities_path
 

@@ -236,8 +236,6 @@ class SearchTest < ApplicationSystemTestCase
   end
 
   test 'anybody should only see some facet results by default, with a "show more" button' do
-    skip 'This test continues to flap on CI that should be investigated ASAP' if ENV['TRAVIS']
-
     visit root_path
     fill_in name: 'search', with: 'Extra'
     click_button 'Search'
@@ -266,8 +264,6 @@ class SearchTest < ApplicationSystemTestCase
   end
 
   test 'anybody should be able to sort results' do
-    skip 'This test continues to flap on CI that should be investigated ASAP' if ENV['TRAVIS']
-
     visit root_path
     fill_in name: 'search', with: 'Fancy'
     click_button 'Search'
