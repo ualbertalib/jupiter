@@ -2,16 +2,6 @@ require 'application_system_test_case'
 
 class DepositThesisTest < ApplicationSystemTestCase
 
-  def setup
-    admin = User.find_by(email: 'administrator@example.com')
-    # Setup a community/collection pair for respective dropdowns
-    @community = Community.create!(title: 'Theses', owner_id: admin.id)
-    @collection = Collection.create!(title: 'Theses Collection',
-                                     owner_id: admin.id,
-                                     restricted: true,
-                                     community_id: @community.id)
-  end
-
   test 'be able to deposit and edit a thesis successfully' do
     admin = users(:admin)
 
@@ -41,8 +31,8 @@ class DepositThesisTest < ApplicationSystemTestCase
     fill_in I18n.t('admin.theses.draft.describe_thesis.description'),
             with: 'A Dance with Dragons Description Goes Here!!!'
 
-    select @community.title, from: 'draft_thesis[community_id][]'
-    select @collection.title, from: 'draft_thesis[collection_id][]'
+    select communities(:thesis).title, from: 'draft_thesis[community_id][]'
+    select collections(:thesis).title, from: 'draft_thesis[collection_id][]'
 
     click_on I18n.t('admin.theses.draft.save_and_continue')
 
@@ -114,26 +104,30 @@ class DepositThesisTest < ApplicationSystemTestCase
     _, item_results, _ = JupiterCore::Search.perform_solr_query(q: item_id, fq: 'id:' + item_id, rows: 1)
     assert_not_nil item_results.first['embargo_history_ssim']
     logout_user
+
+    # This method will add an item that exists in Solr with the member of paths matching the books/fantasy_books communities/collections fixtures
+    # in order for the other test to work we need to clean this out.
+    JupiterCore::SolrServices::Client.instance.truncate_index
   end
 
   test 'should populate community and collection when coming from a restricted collection page' do
-    # TODO: investigate. Try SEED=8921
-    skip 'this test is routinely erroring out with Selenium::WebDriver::Error::StaleElementReferenceError: stale '\
-         'element reference: element is not attached to the page document'
+    community = communities(:thesis)
+    collection = collections(:thesis)
+
     admin = users(:admin)
 
     login_user(admin)
 
     # Navigate to restricted collection page
     click_link I18n.t('application.navbar.links.communities')
-    click_link @community.title
-    click_link @collection.title
+    click_link community.title
+    click_link collection.title
 
     # Click deposit button
     click_link I18n.t('collections.show.deposit_thesis')
 
-    assert has_select?('draft_thesis[community_id][]', selected: @community.title)
-    assert has_select?('draft_thesis[collection_id][]', selected: @collection.title)
+    assert has_select?('draft_thesis[community_id][]', selected: community.title)
+    assert has_select?('draft_thesis[collection_id][]', selected: collection.title)
 
     logout_user
   end

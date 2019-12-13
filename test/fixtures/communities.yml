@@ -1,0 +1,6 @@
+books:
+  title: 'Books'
+  owner: admin
+thesis:
+  title: 'Thesis'
+  owner: admin
