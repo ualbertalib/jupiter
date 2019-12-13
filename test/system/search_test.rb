@@ -264,7 +264,6 @@ class SearchTest < ApplicationSystemTestCase
     # Again, only 6 collections/communities should be shown
     assert_selector 'li a', text: /Extra Community/, count: 6
 
-
     # test 'anybody should be able to sort results' do
     skip 'This test continues to flap on CI that should be investigated ASAP' if ENV['TRAVIS']
 

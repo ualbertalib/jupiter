@@ -70,7 +70,6 @@ class ItemShowTest < ApplicationSystemTestCase
   end
 
   test 'massive test because index truncation happens in between tests' do
-
     # test 'unauthed users should be able to download all files from a public item' do
     visit item_path @item
     assert_selector '.js-download', count: 2
