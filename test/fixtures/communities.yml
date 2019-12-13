@@ -4,6 +4,6 @@ books:
 thesis:
   title: 'Thesis'
   owner: admin
-fancy:
+fancy_community:
   title: 'Fancy Community'
   owner: admin

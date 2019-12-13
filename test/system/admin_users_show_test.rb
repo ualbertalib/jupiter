@@ -153,46 +153,10 @@ class AdminUsersShowTest < ApplicationSystemTestCase
     user = users(:regular)
     admin = users(:admin)
 
-    community = communities(:fancy)
-    collection = collections(:fancy)
-
-    # Two things owned by regular user
-    Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-             owner_id: user.id, title: 'Fancy Item',
-             creators: ['Joe Blow'],
-             created: 'Fall 2017',
-             languages: [CONTROLLED_VOCABULARIES[:language].english],
-             license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-             item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-             publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-             subject: ['Fancy things'])
-        .tap do |uo|
-      uo.add_to_path(community.id, collection.id)
-      uo.save!
-    end
-    Thesis.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-               owner_id: user.id, title: 'Nice Item',
-               dissertant: 'Joe Blow',
-               graduation_date: '2019')
-          .tap do |uo|
-      uo.add_to_path(community.id, collection.id)
-      uo.save!
-    end
-
-    # One item owned by admin
-    Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-             owner_id: admin.id, title: 'Admin Item',
-             creators: ['Joe Blow'],
-             created: 'Winter 2017',
-             languages: [CONTROLLED_VOCABULARIES[:language].english],
-             license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-             item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-             publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-             subject: ['Ownership'])
-        .tap do |uo|
-      uo.add_to_path(community.id, collection.id)
-      uo.save!
-    end
+    # creating the index from the fixtures requires a save?
+    items(:fancy).save
+    items(:admin).save
+    thesis(:nice).save
 
     login_user(admin)
 

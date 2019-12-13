@@ -7,7 +7,7 @@ thesis:
   restricted: true
   owner: admin
   community: thesis
-fancy:
+fancy_collection:
   title: 'Fancy Collection'
   owner: admin
   community: fancy
