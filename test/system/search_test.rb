@@ -235,7 +235,7 @@ class SearchTest < ApplicationSystemTestCase
     assert_selector 'div.jupiter-results-list a', text: 'Community', count: 0
     assert_selector 'div.jupiter-results-list a', text: 'Collection', count: 2
 
-  test 'anybody should only see some facet results by default, with a "show more" button' do
+    # test 'anybody should only see some facet results by default, with a "show more" button' do
     visit root_path
     fill_in name: 'search', with: 'Extra'
     click_button 'Search'
@@ -262,7 +262,7 @@ class SearchTest < ApplicationSystemTestCase
     # Again, only 6 collections/communities should be shown
     assert_selector 'li a', text: /Extra Community/, count: 6
 
-  test 'anybody should be able to sort results' do
+    # test 'anybody should be able to sort results' do
     visit root_path
     fill_in name: 'search', with: 'Fancy'
     click_button 'Search'
