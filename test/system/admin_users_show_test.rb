@@ -3,7 +3,7 @@ require 'application_system_test_case'
 class AdminUsersShowTest < ApplicationSystemTestCase
 
   test 'should not be able to toggle suspended/admin or login as yourself' do
-    admin = User.find_by(email: 'administrator@example.com')
+    admin = users(:admin)
 
     login_user(admin)
 
@@ -153,9 +153,8 @@ class AdminUsersShowTest < ApplicationSystemTestCase
     user = users(:regular)
     admin = users(:admin)
 
-    community = Community.create!(title: 'Fancy Community', owner_id: admin.id)
-    collection = Collection.create!(community_id: community.id,
-                                    title: 'Fancy Collection', owner_id: admin.id)
+    community = communities(:fancy)
+    collection = collections(:fancy)
 
     # Two things owned by regular user
     Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
@@ -219,6 +218,7 @@ class AdminUsersShowTest < ApplicationSystemTestCase
     refute_selector 'div.jupiter-results-list li.list-group-item .media-body a', text: 'Nice Item'
 
     logout_user
+    JupiterCore::SolrServices::Client.instance.truncate_index
   end
 
 end
