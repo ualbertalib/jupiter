@@ -3,9 +3,13 @@ require 'application_system_test_case'
 class CommunitiesPaginationAndSortTest < ApplicationSystemTestCase
 
   def setup
-    @admin = User.find_by(email: 'administrator@example.com')
+    # for some runs/seeds (like SEED=1099), stale Communities are left over from other tests.
+    # We need to assume the communities created here are the only ones!
+    Community.delete_all
+
+    admin = users(:admin)
     (0..10).each do |i|
-      Community.new(title: format("#{['Fancy', 'Nice'][i % 2]} Community %02i", i), owner_id: @admin.id).save!
+      Community.new(title: format("#{['Fancy', 'Nice'][i % 2]} Community %02i", i), owner_id: admin.id).save!
     end
   end
 
