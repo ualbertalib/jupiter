@@ -117,7 +117,7 @@ Rails.application.routes.draw do
   match '/oai/(*all)', to: 'application#service_unavailable', via: [:get, :post]
 
   # AIP v1
-  namespace :aip, defaults: { format: :json } do
+  namespace :aip, defaults: { format: :n3 } do
     namespace :v1 do
       resources :items, only: [:show]
     end
