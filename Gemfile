@@ -32,7 +32,10 @@ gem 'canonical-rails'
 
 # RDF stuff
 gem 'acts_as_rdfable', github: 'mbarnett/acts_as_rdfable', tag: 'v0.2'
+# gem 'acts_as_rdfable', path:'../acts_as_rdfable'
 gem 'rdf-vocab'
+gem 'rdf', '~> 3.0.13'
+gem 'rdf-n3'
 
 # Database stuff
 gem 'connection_pool'

@@ -1,7 +1,5 @@
-GIT
-  remote: https://github.com/mbarnett/acts_as_rdfable.git
-  revision: 9ef84dc6a57ec280a5785e21ba146345f6b88e95
-  tag: v0.2
+PATH
+  remote: ../acts_as_rdfable
   specs:
     acts_as_rdfable (0.2.0)
       rails (~> 5.2.3)
@@ -121,6 +119,9 @@ GEM
     docile (1.3.2)
     dropzonejs-rails (0.8.4)
       rails (> 3.1)
+    ebnf (1.1.3)
+      rdf (~> 3.0)
+      sxp (~> 1.0)
     erubi (1.9.0)
     et-orbi (1.1.8)
       tzinfo
@@ -198,10 +199,11 @@ GEM
     minitest-hooks (1.5.0)
       minitest (> 5.3)
     msgpack (1.3.1)
-    multi_json (1.13.1)
     multipart-post (2.1.1)
     mustermann (1.0.3)
     nap (1.1.0)
+    net-http-persistent (3.1.0)
+      connection_pool (~> 2.2)
     nio4r (2.5.2)
     no_proxy_fix (0.1.2)
     nokogiri (1.10.4)
@@ -279,11 +281,19 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.10.0)
       ffi (~> 1.0)
-    rdf (2.2.12)
+    rdf (3.0.13)
       hamster (~> 3.0)
       link_header (~> 0.0, >= 0.0.8)
+    rdf-aggregate-repo (2.2.1)
+      rdf (>= 2.2, < 4.0)
+    rdf-n3 (3.1.0)
+      rdf (~> 3.0)
+      sparql (~> 3.0)
+      sxp (~> 1.0)
     rdf-vocab (2.2.9)
       rdf (>= 2.2, < 4.0)
+    rdf-xsd (3.0.1)
+      rdf (~> 3.0)
     rdoc (6.1.1)
     redis (4.1.3)
     regexp_parser (1.6.0)
@@ -369,6 +379,17 @@ GEM
       skylight-core (= 4.1.2)
     skylight-core (4.1.2)
       activesupport (>= 4.2.0)
+    sparql (3.0.2)
+      builder (~> 3.2)
+      ebnf (~> 1.1)
+      rdf (~> 3.0)
+      rdf-aggregate-repo (>= 2.2, < 4.0)
+      rdf-xsd (~> 3.0)
+      sparql-client (~> 3.0)
+      sxp (~> 1.0)
+    sparql-client (3.0.1)
+      net-http-persistent (>= 2.9, < 4)
+      rdf (~> 3.0)
     sprockets (3.7.2)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
@@ -376,6 +397,8 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
+    sxp (1.0.2)
+      rdf (~> 3.0)
     terminal-table (1.8.0)
       unicode-display_width (~> 1.1, >= 1.1.1)
     thor (0.20.3)
@@ -457,6 +480,8 @@ DEPENDENCIES
   pundit (= 1.1.0)
   rails (~> 5.2.3)
   ransack
+  rdf (~> 3.0.13)
+  rdf-n3
   rdf-vocab
   redis (~> 4.1)
   rollbar
