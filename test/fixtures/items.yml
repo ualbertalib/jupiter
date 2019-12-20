@@ -1,0 +1,25 @@
+DEFAULT_ITEM: &DEFAULT_ITEM
+  title: item
+  owner: admin_user
+  creators: 
+    - Joe Blow
+  created: '1972-08-08'
+  languages: 
+    - <%= CONTROLLED_VOCABULARIES[:language].english %>
+  license: <%= CONTROLLED_VOCABULARIES[:license].attribution_4_0_international %>
+  visibility: <%= JupiterCore::VISIBILITY_PUBLIC %>
+  item_type: <%= CONTROLLED_VOCABULARIES[:item_type].book %>
+  subject: 
+    - Edit
+  member_of_paths:
+    - <%= "#{ActiveRecord::FixtureSet.identify(:desolate_communitym, :uuid)}/#{ActiveRecord::FixtureSet.identify(:desolate_collection, :uuid)}" %>
+
+public_item:
+  <<: *DEFAULT_ITEM
+  title: public item
+  visibility: <%= JupiterCore::VISIBILITY_PUBLIC %>
+
+private_item:
+  <<: *DEFAULT_ITEM
+  title: private item
+  visibility: <%= JupiterCore::VISIBILITY_PRIVATE %>

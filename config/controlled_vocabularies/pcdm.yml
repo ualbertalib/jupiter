@@ -1,0 +1,4 @@
+pcdm:
+  has_file: 'http://pcdm.org/models#hasFile'
+  has_member: 'http://pcdm.org/models#hasMember'
+  original_file: 'http://pcdm.org/use#OriginalFile'
