@@ -153,7 +153,8 @@ class AdminUsersShowTest < ApplicationSystemTestCase
     user = users(:regular)
     admin = users(:admin)
 
-    # creating the index from the fixtures requires a save?
+    # creating the index from the fixtures requires a save
+    # TODO: these would be good candidates for using factories instead.
     items(:fancy).save
     items(:admin).save
     thesis(:nice).save
@@ -182,6 +183,8 @@ class AdminUsersShowTest < ApplicationSystemTestCase
     refute_selector 'div.jupiter-results-list li.list-group-item .media-body a', text: 'Nice Item'
 
     logout_user
+
+    # this is the cleanup for the #save above
     JupiterCore::SolrServices::Client.instance.truncate_index
   end
 

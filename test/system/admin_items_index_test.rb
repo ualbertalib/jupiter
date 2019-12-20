@@ -6,7 +6,8 @@ class AdminItemsIndexTest < ApplicationSystemTestCase
     # Note: searching and faceting is covered more extensively in tests elsewhere
     admin = User.find_by(email: 'administrator@example.com')
 
-    # creating the index from the fixtures requires a save?
+    # creating the index from the fixtures requires a save
+    # TODO: these would be good candidates for using factories instead.
     items(:fancy).save
     items(:admin).save
     thesis(:nice).save
