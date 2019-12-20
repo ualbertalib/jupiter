@@ -69,6 +69,11 @@ class ItemShowTest < ApplicationSystemTestCase
     end
   end
 
+  def teardown
+    # is clearing the database but not the index, for that it needs the following
+    JupiterCore::SolrServices::Client.instance.truncate_index
+  end
+
   test 'unauthed users should be able to download all files from a public item' do
     visit item_path @item
     assert_selector '.js-download', count: 2

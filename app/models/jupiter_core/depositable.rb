@@ -180,6 +180,13 @@ class JupiterCore::Depositable < ApplicationRecord
                    (changes['visibility'][1] != JupiterCore::VISIBILITY_PRIVATE)
   end
 
+  def add_to_embargo_history
+    self.embargo_history ||= []
+    embargo_history_item = "An embargo was deactivated on #{Time.now.getlocal('-06:00')}. Its release date was " \
+    "#{embargo_end_date}. Intended visibility after embargo was #{visibility_after_embargo}"
+    self.embargo_history << embargo_history_item
+  end
+
   def push_item_id_for_preservation
     if preserve == false
       Rails.logger.warn("Could not preserve #{id}")

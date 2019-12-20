@@ -86,13 +86,16 @@ class Thesis < JupiterCore::Doiable
                              end
 
     # Handle visibility plus embargo logic
-    thesis.visibility = draft_thesis.visibility_as_uri
-
-    if draft_thesis.embargo_end_date.present?
+    if draft_thesis.visibility_as_uri == CONTROLLED_VOCABULARIES[:visibility].embargo
       thesis.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].public
+      thesis.embargo_end_date = draft_thesis.embargo_end_date
+    else
+      # If visibility was previously embargo but not anymore
+      thesis.add_to_embargo_history if thesis.visibility == CONTROLLED_VOCABULARIES[:visibility].embargo
+      thesis.visibility_after_embargo = nil
+      thesis.embargo_end_date = nil
     end
-
-    thesis.embargo_end_date = draft_thesis.embargo_end_date
+    thesis.visibility = draft_thesis.visibility_as_uri
 
     # Handle rights
     thesis.rights = draft_thesis.rights
