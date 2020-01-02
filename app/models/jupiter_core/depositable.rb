@@ -113,7 +113,7 @@ class JupiterCore::Depositable < ApplicationRecord
     begin
       Rails.application.routes.url_helpers.rails_representation_path(logo.preview(args).processed)
     rescue ActiveStorage::UnpreviewableError
-      return nil
+      nil
     end
   end
 
