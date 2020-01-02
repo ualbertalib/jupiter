@@ -31,9 +31,9 @@ class JupiterCore::Search
     # assign you additional permissions based on the user passed to it.
 
     # Why can't I split %Q() strings over multiple lines? Seems incorrect
-    # rubocop:disable Metrics/LineLength
+    # rubocop:disable Layout/LineLength
     fq << %Q((visibility_ssim:"#{JupiterCore::VISIBILITY_PUBLIC}" OR visibility_ssim:"#{JupiterCore::VISIBILITY_AUTHENTICATED}"#{ownership_query}))
-    # rubocop:enable Metrics/LineLength
+    # rubocop:enable Layout/LineLength
 
     base_query << q if q.present?
     facets.each do |key, values|

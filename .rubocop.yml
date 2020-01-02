@@ -26,6 +26,11 @@ Layout/IndentationConsistency:
   Enabled: true
   EnforcedStyle: normal
 
+Layout/LineLength:
+    Enabled: true
+    Max: 120 # default is 80
+    IgnoredPatterns: ['\A\s*#'] # tweak to ignore long comments, which often are examples or URLs that are not easily broken up
+
 # readability is Actually Good
 Layout/RescueEnsureAlignment:
   Enabled: false
@@ -42,11 +47,6 @@ Metrics/ClassLength:
 # of test cases needed to validate a method.
 Metrics/CyclomaticComplexity:
   Enabled: false
-
-Metrics/LineLength:
-  Enabled: true
-  Max: 120 # default is 80
-  IgnoredPatterns: ['\A\s*#'] # tweak to ignore long comments, which often are examples or URLs that are not easily broken up
 
 # Avoid methods longer than 10 lines of code.
 Metrics/MethodLength:
@@ -78,7 +78,7 @@ Naming/MemoizedInstanceVariableName:
   Exclude:
     - app/models/jupiter_core//solr_services/deferred_faceted_solr_query.rb
 
-Naming/UncommunicativeMethodParamName:
+Naming/MethodParameterName:
   Exclude:
     - app/models/jupiter_core//solr_services/deferred_faceted_solr_query.rb
     - app/models/jupiter_core/search.rb
