@@ -1,4 +1,4 @@
-INGEST_REPORTS_LOCATION = Rails.root.join('tmp', 'ingest_reports')
+INGEST_REPORTS_LOCATION = Rails.root.join('tmp/ingest_reports')
 INDEX_OFFSET = 1
 
 namespace :jupiter do
