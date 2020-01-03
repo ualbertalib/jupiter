@@ -115,7 +115,7 @@ group :test do
 
   gem 'launchy'
   gem 'vcr', require: false
-  gem 'webdrivers', '~> 4.1'
+  gem 'webdrivers', '~> 4.2'
   gem 'webmock', require: false
 end
 
