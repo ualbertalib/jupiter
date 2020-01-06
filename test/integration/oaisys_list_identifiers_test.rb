@@ -33,55 +33,55 @@ class ExpectArgsTest < ActionDispatch::IntegrationTest
       uo.save!
     end
 
-    # I hate having a sleep here but it is required for testing of both from and until arguments
-    sleep 2
-    @item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                     owner_id: users(:admin).id, title: 'Fancy Item 2',
-                     creators: ['Jane Doe'],
-                     created: '1938-01-02',
-                     languages: [CONTROLLED_VOCABULARIES[:language].english],
-                     item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                     publication_status:
-                       [CONTROLLED_VOCABULARIES[:publication_status].published],
-                     license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                     subject: ['Items']).tap do |uo|
-      uo.add_to_path(@community.id, @collection2.id)
-      uo.save!
+    travel_to 2.seconds.from_now do
+      @item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
+                       owner_id: users(:admin).id, title: 'Fancy Item 2',
+                       creators: ['Jane Doe'],
+                       created: '1938-01-02',
+                       languages: [CONTROLLED_VOCABULARIES[:language].english],
+                       item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                       publication_status:
+                         [CONTROLLED_VOCABULARIES[:publication_status].published],
+                       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                       subject: ['Items']).tap do |uo|
+        uo.add_to_path(@community.id, @collection2.id)
+        uo.save!
+      end
+
+      @thesis_in_embargo = Thesis.new(
+        title: 'thesis 1',
+        owner_id: users(:admin).id,
+        dissertant: 'Joe Blow',
+        graduation_date: '2017-03-31',
+        visibility: JupiterCore::Depositable::VISIBILITY_EMBARGO,
+        embargo_end_date: 2.days.from_now.to_date,
+        visibility_after_embargo: CONTROLLED_VOCABULARIES[:visibility].public
+      ).tap do |unlocked_thesis|
+        unlocked_thesis.add_to_path(@community.id, @embargo_collection.id)
+        unlocked_thesis.save!
+      end
     end
 
-    @thesis_in_embargo = Thesis.new(
-      title: 'thesis 1',
-      owner_id: users(:admin).id,
-      dissertant: 'Joe Blow',
-      graduation_date: '2017-03-31',
-      visibility: JupiterCore::Depositable::VISIBILITY_EMBARGO,
-      embargo_end_date: 2.days.from_now.to_date,
-      visibility_after_embargo: CONTROLLED_VOCABULARIES[:visibility].public
-    ).tap do |unlocked_thesis|
-      unlocked_thesis.add_to_path(@community.id, @embargo_collection.id)
-      unlocked_thesis.save!
-    end
+    travel_to 4.seconds.from_now do
+      @thesis1 = Thesis.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
+                            owner_id: users(:admin).id, title: 'Fancy thesis 1',
+                            dissertant: 'Joe Blow',
+                            language: CONTROLLED_VOCABULARIES[:language].english,
+                            graduation_date: 'Fall 2017')
+                       .tap do |uo|
+        uo.add_to_path(@community.id, @collection1.id)
+        uo.save!
+      end
 
-    # I hate having a sleep here but it is required for testing of both from and until arguments
-    sleep 2
-    @thesis1 = Thesis.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                          owner_id: users(:admin).id, title: 'Fancy thesis 1',
-                          dissertant: 'Joe Blow',
-                          language: CONTROLLED_VOCABULARIES[:language].english,
-                          graduation_date: 'Fall 2017')
-                 .tap do |uo|
-      uo.add_to_path(@community.id, @collection1.id)
-      uo.save!
-    end
-
-    @thesis2 = Thesis.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                          owner_id: users(:admin).id, title: 'Fancy thesis 2',
-                          dissertant: 'Jane Doe',
-                          language: CONTROLLED_VOCABULARIES[:language].english,
-                          graduation_date: 'Fall 2017')
-                 .tap do |uo|
-      uo.add_to_path(@community.id, @collection2.id)
-      uo.save!
+      @thesis2 = Thesis.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
+                            owner_id: users(:admin).id, title: 'Fancy thesis 2',
+                            dissertant: 'Jane Doe',
+                            language: CONTROLLED_VOCABULARIES[:language].english,
+                            graduation_date: 'Fall 2017')
+                       .tap do |uo|
+        uo.add_to_path(@community.id, @collection2.id)
+        uo.save!
+      end
     end
   end
 
@@ -119,7 +119,7 @@ class ExpectArgsTest < ActionDispatch::IntegrationTest
     document = Nokogiri::XML(@response.body)
     assert_empty schema.validate(document)
     thesis_identifiers = Oaisys::Engine.config.oai_etdms_model.public_items
-                           .pluck(:id, :record_created_at, :member_of_paths)
+                                       .pluck(:id, :record_created_at, :member_of_paths)
     assert_select 'OAI-PMH' do
       assert_select 'responseDate'
       assert_select 'request'
@@ -147,7 +147,7 @@ class ExpectArgsTest < ActionDispatch::IntegrationTest
     assert_empty schema.validate(document)
 
     item_identifiers = Oaisys::Engine.config.oai_dc_model.public_items.belongs_to_path(@collection2.id)
-                         .pluck(:id, :record_created_at, :member_of_paths)
+                                     .pluck(:id, :record_created_at, :member_of_paths)
     assert_select 'OAI-PMH' do
       assert_select 'responseDate'
       assert_select 'request'
@@ -175,7 +175,7 @@ class ExpectArgsTest < ActionDispatch::IntegrationTest
     assert_empty schema.validate(document)
 
     thesis_identifiers = Oaisys::Engine.config.oai_etdms_model.public_items.belongs_to_path(@collection2.id)
-                           .pluck(:id, :record_created_at, :member_of_paths)
+                                       .pluck(:id, :record_created_at, :member_of_paths)
     assert_select 'OAI-PMH' do
       assert_select 'responseDate'
       assert_select 'request'
@@ -219,7 +219,7 @@ class ExpectArgsTest < ActionDispatch::IntegrationTest
     document = Nokogiri::XML(@response.body)
     assert_empty schema.validate(document)
     item_identifiers = Oaisys::Engine.config.oai_dc_model.public_items.created_on_or_before(just_after_current_time)
-                         .pluck(:id, :record_created_at, :member_of_paths)
+                                     .pluck(:id, :record_created_at, :member_of_paths)
     assert_select 'OAI-PMH' do
       assert_select 'responseDate'
       assert_select 'request'
@@ -238,7 +238,7 @@ class ExpectArgsTest < ActionDispatch::IntegrationTest
   end
 
   def test_list_identifiers_thesis_until_date_xml
-    just_after_current_time = (Time.current + 1).utc.xmlschema
+    just_after_current_time = (Time.current + 5).utc.xmlschema
     get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_etdms', until: just_after_current_time),
         headers: { 'Accept' => 'application/xml' }
     assert_response :success
@@ -247,8 +247,8 @@ class ExpectArgsTest < ActionDispatch::IntegrationTest
     document = Nokogiri::XML(@response.body)
     assert_empty schema.validate(document)
     thesis_identifiers = Oaisys::Engine.config.oai_etdms_model
-                           .public_items.created_on_or_before(just_after_current_time)
-                           .pluck(:id, :record_created_at, :member_of_paths)
+                                       .public_items.created_on_or_before(just_after_current_time)
+                                       .pluck(:id, :record_created_at, :member_of_paths)
     assert_select 'OAI-PMH' do
       assert_select 'responseDate'
       assert_select 'request'
@@ -267,7 +267,7 @@ class ExpectArgsTest < ActionDispatch::IntegrationTest
   end
 
   def test_list_identifiers_item_from_date_xml
-    just_after_current_time = (Time.current + 1).utc.xmlschema
+    just_after_current_time = (Time.current + 5).utc.xmlschema
     get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_dc', from: just_after_current_time),
         headers: { 'Accept' => 'application/xml' }
     assert_response :success
@@ -284,7 +284,7 @@ class ExpectArgsTest < ActionDispatch::IntegrationTest
   end
 
   def test_list_identifiers_thesis_from_date_xml
-    just_after_current_time = (Time.current + 1).utc.xmlschema
+    just_after_current_time = (Time.current + 5).utc.xmlschema
     get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_etdms', from: just_after_current_time),
         headers: { 'Accept' => 'application/xml' }
     assert_response :success
@@ -303,7 +303,7 @@ class ExpectArgsTest < ActionDispatch::IntegrationTest
   def test_list_identifiers_item_from_until_date_xml
     item = Oaisys::Engine.config.oai_dc_model.public_items.first
     item_creation_time = item[:record_created_at].utc.xmlschema
-    just_after_item_creation_time = (item[:record_created_at] + 1.second).utc.xmlschema
+    just_after_item_creation_time = (item[:record_created_at] + 5.seconds).utc.xmlschema
     get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_dc', from: item_creation_time,
                     until: just_after_item_creation_time),
         headers: { 'Accept' => 'application/xml' }
