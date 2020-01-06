@@ -25,11 +25,11 @@ class Aip::V1::ItemsController < ApplicationController
     # handle files separately since they are not a part of the acts_as_rdfable
     # table entries
 
-    file_list = @item.files.map(&:record_id)
+    file_list = @item.files.map(&:fileset_uuid)
     unless file_list.empty?
       add_statement!(
         subject: subject,
-        predicate: CONTROLLED_VOCABULARIES[:pcdm].has_file,
+        predicate: CONTROLLED_VOCABULARIES[:pcdm].has_member,
         object: file_list
       )
     end
