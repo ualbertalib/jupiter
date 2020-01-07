@@ -29,6 +29,27 @@ namespace :jupiter do
     puts 'Reindex completed!'
   end
 
+  desc 'cleanup orphaned proxies'
+  task cleanup_proxies: :environment do
+    puts 'Visiting all Items and Theses...'
+    (Item.all + Thesis.all).each do |item|
+      item.unlock_and_fetch_ldp_object do |uo|
+        changed = false
+        indexes = []
+        uo.ordered_member_proxies.each_with_index do |proxy, index|
+          next if proxy.proxy_for
+
+          indexes << index
+          puts "#{item.id} has a nil proxy"
+          changed = true
+        end
+        indexes.sort { |a, b| b <=> a }.each { |index| uo.ordered_member_proxies.delete_at(index) }
+        uo.save! if changed
+      end
+    end
+    puts 'Nil proxy search completed!'
+  end
+
   desc 'queue all items and theses in the system for preservation'
   task preserve_all_items_and_theses: :environment do
     puts 'Adding all Items and Theses to preservation queue...'
