@@ -1,25 +1,26 @@
-DEFAULT_ITEM: &DEFAULT_ITEM
-  title: item
-  owner: admin_user
-  creators: 
-    - Joe Blow
-  created: '1972-08-08'
-  languages: 
-    - <%= CONTROLLED_VOCABULARIES[:language].english %>
+fancy:
+  visibility: <%= JupiterCore::VISIBILITY_PUBLIC %>
+  owner: regular
+  title: 'Fancy Item'
+  creators: ['Joe Blow']
+  created: 'Fall 2017'
+  record_created_at: <%= 5.day.ago.to_s(:db) %>
+  languages: <%= [CONTROLLED_VOCABULARIES[:language].english] %>
   license: <%= CONTROLLED_VOCABULARIES[:license].attribution_4_0_international %>
+  item_type: <%= CONTROLLED_VOCABULARIES[:item_type].article %>
+  publication_status: <%= [CONTROLLED_VOCABULARIES[:publication_status].published] %>
+  subject: ['Fancy things']
+  member_of_paths: <%= ["#{ActiveRecord::FixtureSet.identify(:fancy_community, :uuid)}/#{ActiveRecord::FixtureSet.identify(:fancy_collection, :uuid)}"] %>
+admin:
   visibility: <%= JupiterCore::VISIBILITY_PUBLIC %>
-  item_type: <%= CONTROLLED_VOCABULARIES[:item_type].book %>
-  subject: 
-    - Edit
-  member_of_paths:
-    - <%= "#{ActiveRecord::FixtureSet.identify(:desolate_communitym, :uuid)}/#{ActiveRecord::FixtureSet.identify(:desolate_collection, :uuid)}" %>
-
-public_item:
-  <<: *DEFAULT_ITEM
-  title: public item
-  visibility: <%= JupiterCore::VISIBILITY_PUBLIC %>
-
-private_item:
-  <<: *DEFAULT_ITEM
-  title: private item
-  visibility: <%= JupiterCore::VISIBILITY_PRIVATE %>
+  owner: admin
+  title: 'Admin Item'
+  creators: ['Joe Blow']
+  created: 'Winter 2017'
+  record_created_at: <%= 5.day.ago.to_s(:db) %>
+  languages: <%= [CONTROLLED_VOCABULARIES[:language].english] %>
+  license: <%= CONTROLLED_VOCABULARIES[:license].attribution_4_0_international %>
+  item_type: <%= CONTROLLED_VOCABULARIES[:item_type].article %>
+  publication_status: <%= [CONTROLLED_VOCABULARIES[:publication_status].published] %>
+  subject: ['Ownership']
+  member_of_paths: <%= ["#{ActiveRecord::FixtureSet.identify(:fancy_community, :uuid)}/#{ActiveRecord::FixtureSet.identify(:fancy_collection, :uuid)}"] %>

@@ -1,3 +1,9 @@
-desolate_community:
-  title: Desolate community
+books:
+  title: 'Books'
+  owner: admin
+thesis:
+  title: 'Thesis'
+  owner: admin
+fancy_community:
+  title: 'Fancy Community'
   owner: admin
