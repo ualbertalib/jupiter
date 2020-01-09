@@ -70,7 +70,7 @@ GEM
       debug_inspector (>= 0.0.1)
     bootsnap (1.4.5)
       msgpack (~> 1.0)
-    bootstrap (4.3.1)
+    bootstrap (4.4.1)
       autoprefixer-rails (>= 9.1.0)
       popper_js (>= 1.14.3, < 2)
       sassc-rails (>= 2.0.0)
@@ -148,7 +148,7 @@ GEM
       concurrent-ruby (~> 1.0)
     hashdiff (1.0.0)
     hashie (3.6.0)
-    i18n (1.7.0)
+    i18n (1.7.1)
       concurrent-ruby (~> 1.0)
     image_processing (1.10.1)
       mini_magick (>= 4.9.5, < 5)
@@ -425,7 +425,7 @@ DEPENDENCIES
   better_errors (>= 2.3.0)
   binding_of_caller
   bootsnap (>= 1.1.0)
-  bootstrap (~> 4.3.1)
+  bootstrap (~> 4.4.1)
   brakeman
   bump
   canonical-rails
