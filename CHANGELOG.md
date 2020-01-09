@@ -11,6 +11,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ### Fixed
 - failing tests [#1376](https://github.com/ualbertalib/jupiter/issues/1376)
+- Fix Sprockets v4.0.0 upgrade problem with how Sass Variables were being defined
 
 ## [1.2.18] - 2019-10-22
 - Removed Rack Attack
