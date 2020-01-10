@@ -112,7 +112,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     schema = Nokogiri::XML::Schema(File.open(file_fixture('OAI-PMH.xsd')))
     document = Nokogiri::XML(@response.body)
     assert_empty schema.validate(document)
-    puts @response.body
+
     item_identifiers = Oaisys::Engine.config.oai_dc_model.public_items.page(1)
                                      .per(Oaisys::Engine.config.items_per_request)
                                      .pluck(:id, :record_created_at, :member_of_paths)
