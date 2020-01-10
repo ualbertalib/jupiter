@@ -3,7 +3,7 @@
 # See <tt>config/terms.yml</tt> for detailed descriptions of the file format and expected usage
 terms = {}
 
-config = YAML.safe_load(File.open(Rails.root.join('config', 'terms.yml')))
+config = YAML.safe_load(File.open(Rails.root.join('config/terms.yml')))
 
 config.each do |vocab|
   name = vocab['vocabulary'].to_sym

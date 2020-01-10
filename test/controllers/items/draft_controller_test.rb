@@ -4,11 +4,16 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
 
   def before_all
     super
-    @community = locked_ldp_fixture(Community, :books).unlock_and_fetch_ldp_object(&:save!)
-    @collection = locked_ldp_fixture(Collection, :books).unlock_and_fetch_ldp_object(&:save!)
+    @community = Community.create!(title: 'Books', description: 'a bunch of books', owner_id: users(:admin).id)
+    @collection = Collection.create!(title: 'Fantasy Books',
+                                     description: 'some fantasy books',
+                                     owner_id: users(:admin).id,
+                                     community_id: @community.id)
   end
 
   setup do
+    # some of the cleanup in integration tests is sloppy, so we need to manually clean up Solr
+    JupiterCore::SolrServices::Client.instance.truncate_index
     @user = users(:regular)
   end
 
@@ -52,7 +57,6 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
   # wizard_step: :describe_item
   test 'should be able to update a draft item properly when saving describe_item form' do
     sign_in_as @user
-
     draft_item = draft_items(:inactive)
 
     patch item_draft_url(id: :describe_item, item_id: draft_item.id), params: {
@@ -71,6 +75,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to item_draft_path(id: :choose_license_and_visibility, item_id: draft_item.id)
     get profile_url
+    assert_response :success
     assert_includes @response.body, 'Random Book'
     draft_item.reload
     assert_equal 'Random Book', draft_item.title
@@ -170,10 +175,15 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
       patch item_draft_url(id: :review_and_deposit_item, item_id: draft_item.id)
     end
 
-    assert_redirected_to item_url(Item.last)
-    assert_equal I18n.t('items.draft.successful_deposit'), flash[:notice]
-
     draft_item.reload
+
+    assert draft_item.uuid.present?
+
+    item = Item.find(draft_item.uuid)
+    assert item.present?
+
+    assert_redirected_to item_url(item)
+    assert_equal I18n.t('items.draft.successful_deposit'), flash[:notice]
 
     assert_equal 'review_and_deposit_item', draft_item.wizard_step
     assert_equal 'archived', draft_item.status
@@ -211,7 +221,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should not be able to create a draft item if not logged in' do
-    assert_no_difference('DraftItem.count') do
+    assert_no_difference('DraftItem.drafts.count') do
       post create_draft_items_url
     end
     assert_redirected_to root_url
@@ -220,11 +230,10 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
   test 'should be able to create a draft item if logged in' do
     sign_in_as @user
 
-    assert_difference('DraftItem.count', 1) do
+    assert_difference('DraftItem.drafts.count', 1) do
       post create_draft_items_url
     end
-
-    assert_redirected_to item_draft_path(id: :describe_item, item_id: DraftItem.last.id)
+    assert_redirected_to item_draft_path(id: :describe_item, item_id: DraftItem.drafts.order(created_at: :asc).last.id)
   end
 
   test 'should not be able to delete a draft item if you do not own the item' do
@@ -232,7 +241,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
 
     draft_item = draft_items(:completed_choose_license_and_visibility_step)
 
-    assert_no_difference('DraftItem.count') do
+    assert_no_difference('DraftItem.drafts.count') do
       delete item_delete_draft_url(item_id: draft_item.id)
     end
 
@@ -245,7 +254,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
 
     draft_item = draft_items(:completed_choose_license_and_visibility_step)
 
-    assert_difference('DraftItem.count', -1) do
+    assert_difference('DraftItem.drafts.count', -1) do
       delete item_delete_draft_url(item_id: draft_item.id)
     end
 

@@ -1,0 +1,13 @@
+fantasy_books:
+  title: 'Fantasy Books'
+  owner: admin
+  community: books
+thesis:
+  title: 'Thesis Collection'
+  restricted: true
+  owner: admin
+  community: thesis
+fancy_collection:
+  title: 'Fancy Collection'
+  owner: admin
+  community: fancy_community

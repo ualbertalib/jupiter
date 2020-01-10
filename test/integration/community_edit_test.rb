@@ -4,20 +4,15 @@ class CommunityEditTest < ActionDispatch::IntegrationTest
 
   def before_all
     super
-
-    # TODO: setup proper fixtures for LockedLdpObjects
-
     # A community with a logo
     @community1 = Community
-                  .new_locked_ldp_object(title: 'Logo Community', owner: 1)
-                  .unlock_and_fetch_ldp_object(&:save!)
+                  .create!(title: 'Logo Community', owner_id: users(:admin).id)
     @community1.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
                             filename: 'image-sample.jpeg', content_type: 'image/jpeg'
 
     # A community with no collections, no logo
     @community2 = Community
-                  .new_locked_ldp_object(title: 'Empty community', owner: 1)
-                  .unlock_and_fetch_ldp_object(&:save!)
+                  .create!(title: 'Empty community', owner_id: users(:admin).id)
   end
 
   test 'visiting the edit page for a community with a logo as an admin' do

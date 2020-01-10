@@ -4,24 +4,15 @@ class SiteForBotsTest < ActionDispatch::IntegrationTest
 
   def before_all
     super
-
-    # TODO: setup proper fixtures for LockedLdpObjects
-
     # A community with two collections
-    @community1 = Community
-                  .new_locked_ldp_object(title: 'Two collection community', owner: 1)
-                  .unlock_and_fetch_ldp_object(&:save!)
-    @collection1 = Collection
-                   .new_locked_ldp_object(community_id: @community1.id,
-                                          title: 'Nice collection', owner: 1)
-                   .unlock_and_fetch_ldp_object(&:save!)
-    @collection2 = Collection
-                   .new_locked_ldp_object(community_id: @community1.id,
-                                          title: 'Another collection', owner: 1)
-                   .unlock_and_fetch_ldp_object(&:save!)
-    @item = Item.new_locked_ldp_object.unlock_and_fetch_ldp_object do |uo|
+    @community1 = Community.create!(title: 'Two collection community', owner_id: users(:admin).id)
+    @collection1 = Collection.create!(community_id: @community1.id,
+                                      title: 'Nice collection', owner_id: users(:admin).id)
+    @collection2 = Collection.create!(community_id: @community1.id,
+                                      title: 'Another collection', owner_id: users(:admin).id)
+    @item = Item.new.tap do |uo|
       uo.title = 'Fantastic item'
-      uo.owner = 1
+      uo.owner_id = users(:admin).id
       uo.creators = ['Joe Blow', 'Smokey Chantilly-Tiffany', 'Céline Marie Claudette Dion']
       uo.visibility = JupiterCore::VISIBILITY_PUBLIC
       uo.created = '1999-09-09'
@@ -41,9 +32,9 @@ class SiteForBotsTest < ActionDispatch::IntegrationTest
         @item.add_and_ingest_files([file])
       end
     end
-    @thesis = Thesis.new_locked_ldp_object.unlock_and_fetch_ldp_object do |uo|
+    @thesis = Thesis.new.tap do |uo|
       uo.title = 'Fantasitc thesis'
-      uo.owner = 1
+      uo.owner_id = users(:admin).id
       uo.dissertant = 'Joe Blow'
       uo.visibility = JupiterCore::VISIBILITY_PUBLIC
       uo.graduation_date = '2017-03-31'

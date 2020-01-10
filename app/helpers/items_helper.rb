@@ -41,7 +41,7 @@ module ItemsHelper
       term = Date.strptime(dateish, '%Y-%m')
 
       # Fall back to just YYYY for any other value of MM or when MM is absent.
-      return "#{SEASON[term.month]} #{term.year}".strip
+      "#{SEASON[term.month]} #{term.year}".strip
     end
   rescue ArgumentError
     dateish

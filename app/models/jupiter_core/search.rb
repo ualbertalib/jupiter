@@ -31,9 +31,9 @@ class JupiterCore::Search
     # assign you additional permissions based on the user passed to it.
 
     # Why can't I split %Q() strings over multiple lines? Seems incorrect
-    # rubocop:disable Metrics/LineLength
+    # rubocop:disable Layout/LineLength
     fq << %Q((visibility_ssim:"#{JupiterCore::VISIBILITY_PUBLIC}" OR visibility_ssim:"#{JupiterCore::VISIBILITY_AUTHENTICATED}"#{ownership_query}))
-    # rubocop:enable Metrics/LineLength
+    # rubocop:enable Layout/LineLength
 
     base_query << q if q.present?
     facets.each do |key, values|
@@ -47,13 +47,13 @@ class JupiterCore::Search
 
     # queried fields, by default, are all of the fields marked as :search (see calculate_queried_fields).
     # We can revist if we need to customize this more granularly
-    JupiterCore::DeferredFacetedSolrQuery.new(q: base_query,
-                                              fq: fq.join(' AND '),
-                                              qf: calculate_queried_fields(models),
-                                              facet_map: construct_facet_map(models),
-                                              facet_fields: construct_facet_fields(models, user: as),
-                                              ranges: ranges,
-                                              restrict_to_model: models.map { |m| m.send(:derived_af_class) })
+    JupiterCore::SolrServices::DeferredFacetedSolrQuery.new(q: base_query,
+                                                            fq: fq.join(' AND '),
+                                                            qf: calculate_queried_fields(models),
+                                                            facet_map: construct_facet_map(models),
+                                                            facet_fields: construct_facet_fields(models, user: as),
+                                                            ranges: ranges,
+                                                            restrict_to_model: models)
   end
 
   # derive additional restriction or broadening of the visibilitily query on top of the default
@@ -81,7 +81,7 @@ class JupiterCore::Search
     response = ActiveSupport::Notifications.instrument(JUPITER_SOLR_NOTIFICATION,
                                                        name: 'solr select',
                                                        query: params) do
-      ActiveFedora::SolrService.instance.conn.get('select', params: params)
+      JupiterCore::SolrServices::Client.instance.connection.get('select', params: params)
     end
 
     raise SearchFailed unless response['responseHeader']['status'] == 0
@@ -97,7 +97,8 @@ class JupiterCore::Search
     model_scopes = []
 
     restrict_to_model.compact.each do |model|
-      model_scopes << %Q(_query_:"{!raw f=has_model_ssim}#{model.name}")
+      model_name = model_to_name(model)
+      model_scopes << %Q(_query_:"{!raw f=has_model_ssim}#{model_name}")
     end
     fquery = []
     fquery << "(#{model_scopes.join(' OR ')})" if model_scopes.present?
@@ -130,29 +131,34 @@ class JupiterCore::Search
     def calculate_queried_fields(models)
       queried_fields = []
       models.each do |model|
-        model.attribute_cache.each_value do |properties|
-          idx = properties[:solrize_for].find_index(:search)
-          queried_fields << properties[:solr_names][idx] if idx.present?
-        end
-        model.solr_calc_attributes.each_value do |solr_properties|
-          idx = solr_properties.find_index(:search)
-          queried_fields << solr_properties[:solr_names][idx] if idx.present?
-        end
+        queried_fields += model.solr_exporter_class.searched_solr_names
       end
       queried_fields.uniq.join(' ')
     end
 
     # combine the facet maps (solr_name => attribute_name) of all of the models being searched
     def construct_facet_map(models)
-      models.map(&:reverse_solr_name_cache).reduce(&:merge)
+      models.map do |model|
+        model.solr_exporter_class.reverse_solr_name_map
+      end.reduce(&:merge)
     end
 
     # Disallow use of the visibility facet by non-admins
     def construct_facet_fields(models, user:)
       # the visibility facet is defined identically in all models
-      visibility_facet = models.first.solr_name_for(:visibility, role: :facet)
-      facets = models.map(&:facets).flatten.uniq
+      visibility_facet = models.first.solr_exporter_class.solr_name_for(:visibility, role: :facet)
+      facets = models.map do |model|
+        model.solr_exporter_class.facets
+      end.flatten.uniq
       user&.admin? ? facets : facets.reject { |f| f == visibility_facet }
+    end
+
+    def model_to_name(model)
+      if model.name.start_with?('IR')
+        model.name
+      else
+        "Ar#{model.name}"
+      end
     end
 
   end

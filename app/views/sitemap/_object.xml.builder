@@ -11,7 +11,7 @@ cache 'sitemap', expires_in: 24.hours do
     objects.each do |object|
       xml.url do
         xml.loc item_url(object)
-        xml.lastmod object.updated_at
+        xml.lastmod object.updated_at.iso8601
         xml.changefreq 'weekly'
         xml.priority   1
       end

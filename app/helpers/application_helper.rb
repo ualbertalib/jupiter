@@ -42,12 +42,16 @@ module ApplicationHelper
     value ||= object.send(attribute)
     display ||= value
     if facet == :range_facet
-      link_to(display, search_path(ranges: object.class.facet_term_for(attribute, value, role: :range_facet)),
+      link_to(display, search_path(ranges: object.solr_exporter_class.facet_term_for(attribute,
+                                                                                     value,
+                                                                                     role: :range_facet)),
               rel: 'nofollow')
     elsif facet == :facet
-      link_to(display, search_path(facets: object.class.facet_term_for(attribute, value)), rel: 'nofollow')
+      link_to(display, search_path(facets: object.solr_exporter_class.facet_term_for(attribute, value)),
+              rel: 'nofollow')
     else
-      link_to(display, search_path(search: object.class.search_term_for(attribute, value)), rel: 'nofollow')
+      link_to(display, search_path(search: object.solr_exporter_class.search_term_for(attribute, value)),
+              rel: 'nofollow')
     end
   end
 

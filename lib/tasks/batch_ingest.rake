@@ -1,4 +1,4 @@
-INGEST_REPORTS_LOCATION = Rails.root.join('tmp', 'ingest_reports')
+INGEST_REPORTS_LOCATION = Rails.root.join('tmp/ingest_reports')
 INDEX_OFFSET = 1
 
 namespace :jupiter do
@@ -68,8 +68,8 @@ end
 def item_ingest(item_data, index, csv_directory)
   log "ITEM #{index}: Starting ingest of an item..."
 
-  item = Item.new_locked_ldp_object
-  item.unlock_and_fetch_ldp_object do |unlocked_obj|
+  item = Item.new
+  item.tap do |unlocked_obj|
     unlocked_obj.owner = item_data[:owner_id]
     unlocked_obj.title = item_data[:title]
     unlocked_obj.alternative_title = item_data[:alternate_title]

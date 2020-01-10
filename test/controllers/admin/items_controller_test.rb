@@ -3,17 +3,21 @@ require 'test_helper'
 class Admin::ItemsControllerTest < ActionDispatch::IntegrationTest
 
   def setup
-    @community = Community.new_locked_ldp_object(title: 'Desolate community',
-                                                 owner: 1)
-    @community.unlock_and_fetch_ldp_object(&:save!)
-    @collection = Collection.new_locked_ldp_object(community_id: @community.id,
-                                                   title: 'Desolate collection',
-                                                   owner: 1)
-    @collection.unlock_and_fetch_ldp_object(&:save!)
+    JupiterCore::SolrServices::Client.instance.truncate_index
 
-    @item = Item.new_locked_ldp_object(
+    @admin = users(:admin)
+
+    @community = Community.new(title: 'Desolate community',
+                               owner_id: @admin.id)
+    @community.save!
+    @collection = Collection.new(community_id: @community.id,
+                                 title: 'Desolate collection',
+                                 owner_id: @admin.id)
+    @collection.save!
+
+    @item = Item.new(
       title: 'item for deletion',
-      owner: 1,
+      owner_id: @admin.id,
       creators: ['Joe Blow'],
       created: '1972-08-08',
       languages: [CONTROLLED_VOCABULARIES[:language].english],
@@ -22,7 +26,7 @@ class Admin::ItemsControllerTest < ActionDispatch::IntegrationTest
       item_type: CONTROLLED_VOCABULARIES[:item_type].article,
       publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
       subject: ['Deletion']
-    ).unlock_and_fetch_ldp_object do |unlocked_item|
+    ).tap do |unlocked_item|
       unlocked_item.add_to_path(@community.id, @collection.id)
       unlocked_item.save!
     end
@@ -31,10 +35,8 @@ class Admin::ItemsControllerTest < ActionDispatch::IntegrationTest
         @item.add_and_ingest_files([file])
       end
     end
-    @item.doi_state # ensure there is a doi to test deletion of
     @item.set_thumbnail(@item.files.first) # ensure there is a thumbnail to test deletion of
 
-    @admin = users(:admin)
     sign_in_as @admin
   end
 
@@ -46,7 +48,7 @@ class Admin::ItemsControllerTest < ActionDispatch::IntegrationTest
   test 'should destroy item and its derivatives' do
     # TODO: 'ActiveStorage::Attachment.count' || 'ActiveStorage::Blob.count'
     # wish I could test the thumbnail deletion but flaky on travis-ci
-    assert_difference(['Item.count', 'ItemDoiState.count'], -1) do
+    assert_difference(['Item.count'], -1) do
       delete admin_item_url(@item)
     end
 

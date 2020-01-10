@@ -1,0 +1,26 @@
+fancy:
+  visibility: <%= JupiterCore::VISIBILITY_PUBLIC %>
+  owner: regular
+  title: 'Fancy Item'
+  creators: ['Joe Blow']
+  created: 'Fall 2017'
+  record_created_at: <%= 5.day.ago.to_s(:db) %>
+  languages: <%= [CONTROLLED_VOCABULARIES[:language].english] %>
+  license: <%= CONTROLLED_VOCABULARIES[:license].attribution_4_0_international %>
+  item_type: <%= CONTROLLED_VOCABULARIES[:item_type].article %>
+  publication_status: <%= [CONTROLLED_VOCABULARIES[:publication_status].published] %>
+  subject: ['Fancy things']
+  member_of_paths: <%= ["#{ActiveRecord::FixtureSet.identify(:fancy_community, :uuid)}/#{ActiveRecord::FixtureSet.identify(:fancy_collection, :uuid)}"] %>
+admin:
+  visibility: <%= JupiterCore::VISIBILITY_PUBLIC %>
+  owner: admin
+  title: 'Admin Item'
+  creators: ['Joe Blow']
+  created: 'Winter 2017'
+  record_created_at: <%= 5.day.ago.to_s(:db) %>
+  languages: <%= [CONTROLLED_VOCABULARIES[:language].english] %>
+  license: <%= CONTROLLED_VOCABULARIES[:license].attribution_4_0_international %>
+  item_type: <%= CONTROLLED_VOCABULARIES[:item_type].article %>
+  publication_status: <%= [CONTROLLED_VOCABULARIES[:publication_status].published] %>
+  subject: ['Ownership']
+  member_of_paths: <%= ["#{ActiveRecord::FixtureSet.identify(:fancy_community, :uuid)}/#{ActiveRecord::FixtureSet.identify(:fancy_collection, :uuid)}"] %>

@@ -2,13 +2,13 @@ require 'application_system_test_case'
 
 class AdminCommunitiesIndexTest < ApplicationSystemTestCase
 
-  def before_all
-    super
-    @community = Community.new_locked_ldp_object(title: 'Community', owner: 1).unlock_and_fetch_ldp_object(&:save!)
+  def setup
+    admin = User.find_by(email: 'administrator@example.com')
+    @community = Community.create!(title: 'Community', owner_id: admin.id)
     2.times do |i|
-      Collection.new_locked_ldp_object(title: "Fancy Collection #{i}", owner: 1,
-                                       community_id: @community.id)
-                .unlock_and_fetch_ldp_object(&:save!)
+      Collection.new(title: "Fancy Collection #{i}", owner_id: admin.id,
+                     community_id: @community.id)
+                .save!
     end
   end
 
@@ -34,7 +34,7 @@ class AdminCommunitiesIndexTest < ApplicationSystemTestCase
     assert_link 'Fancy Collection 0'
     assert_link 'Fancy Collection 1'
     assert_button 'Close'
-    refute_selector 'a.btn', text: 'Collections'
+    refute_selector "a.btn[data-community-id='#{@community.id}']", text: 'Collections'
 
     # Clicking close restores initial state
     click_button 'Close'

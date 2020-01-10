@@ -2,25 +2,12 @@ require 'application_system_test_case'
 
 class DepositItemTest < ApplicationSystemTestCase
 
-  def before_all
-    super
-
-    # Setup a community/collection pair for respective dropdowns
-    @community = Community.new_locked_ldp_object(title: 'Books', owner: 1).unlock_and_fetch_ldp_object(&:save!)
-    @collection = Collection.new_locked_ldp_object(title: 'Fantasy Books',
-                                                   owner: 1,
-                                                   community_id: @community.id)
-                            .unlock_and_fetch_ldp_object(&:save!)
-  end
-
   test 'be able to deposit and edit an item successfully' do
     user = users(:regular)
 
     login_user(user)
 
     click_link I18n.t('application.navbar.links.new_item')
-
-    skip 'This test continues to flap on CI for unknown reasons that should be investigated ASAP' if ENV['TRAVIS']
 
     # 1. Describe Item Form
 
@@ -44,8 +31,8 @@ class DepositItemTest < ApplicationSystemTestCase
 
     fill_in I18n.t('items.draft.describe_item.description'), with: 'A Dance with Dragons Description Goes Here!!!'
 
-    select @community.title, from: 'draft_item[community_id][]'
-    select @collection.title, from: 'draft_item[collection_id][]'
+    select communities(:books).title, from: 'draft_item[community_id][]'
+    select collections(:fantasy_books).title, from: 'draft_item[collection_id][]'
 
     click_on I18n.t('items.draft.save_and_continue')
 
@@ -82,7 +69,8 @@ class DepositItemTest < ApplicationSystemTestCase
     # Success! Deposit Successful
 
     assert_text I18n.t('items.draft.successful_deposit')
-    assert_selector 'h1', text: Item.last.title
+    assert Item.find_by(title: 'A Dance with Dragons').present?
+    assert_selector 'h1', text: 'A Dance with Dragons'
 
     # Check to make sure there isn't any embargo_history
     item_id = current_url.split('/').last
@@ -120,10 +108,15 @@ class DepositItemTest < ApplicationSystemTestCase
     assert_not_nil item_results.first['embargo_history_ssim']
 
     logout_user
+
+    # This method will add an item that exists in Solr with the member of paths matching the books/fantasy_books communities/collections fixtures
+    # in order for the other test to work we need to clean this out.
+    JupiterCore::SolrServices::Client.instance.truncate_index
   end
 
   test 'should populate community and collection when coming from collection page' do
-    skip 'This test continues to flap on CI that should be investigated ASAP' if ENV['TRAVIS']
+    community = communities(:books)
+    collection = collections(:fantasy_books)
 
     user = users(:regular)
 
@@ -131,14 +124,14 @@ class DepositItemTest < ApplicationSystemTestCase
 
     # Navigate to collection page
     click_link I18n.t('application.navbar.links.communities')
-    click_link 'Books'
-    click_link 'Fantasy Books'
+    click_link community.title
+    click_link collection.title
 
     # Click deposit button
     click_link I18n.t('collections.show.deposit_item')
 
-    assert has_select?('draft_item[community_id][]', selected: 'Books')
-    assert has_select?('draft_item[collection_id][]', selected: 'Fantasy Books')
+    assert has_select?('draft_item[community_id][]', selected: community.title)
+    assert has_select?('draft_item[collection_id][]', selected: collection.title)
 
     logout_user
   end

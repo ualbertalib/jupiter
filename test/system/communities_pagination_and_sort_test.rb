@@ -2,20 +2,27 @@ require 'application_system_test_case'
 
 class CommunitiesPaginationAndSortTest < ApplicationSystemTestCase
 
-  def before_all
-    super
-    # For sorting, creation order is 'Fancy Community 00', 'Nice Community 01', 'Fancy Community 02', etc. ...
+  def setup
+    # for some runs/seeds (like SEED=1099), stale Communities are left over from other tests.
+    # We need to assume the communities created here are the only ones!
+    Community.delete_all
+
+    admin = users(:admin)
     (0..10).each do |i|
-      Community.new_locked_ldp_object(title: format("#{['Fancy', 'Nice'][i % 2]} Community %02i", i), owner: 1)
-               .unlock_and_fetch_ldp_object(&:save!)
+      Community.new(title: format("#{['Fancy', 'Nice'][i % 2]} Community %02i", i), owner_id: admin.id).save!
     end
   end
 
-  # TODO: Slow Test, consistently around ~8-9 seconds
+  # TODO: Slow test
   test 'anybody should be able to sort and paginate communities' do
-    skip 'This test continues to flap on CI for unknown reasons that should be investigated ASAP' if ENV['TRAVIS']
+    # for some runs/seeds (like SEED=1099), stale Communities are left over from other tests. We can't assume the
+    # communities created here are the only ones! This test needs to be re-written
+    # For sorting, creation order is 'Fancy Community 00', 'Nice Community 01', 'Fancy Community 02', etc. ...
+    #
+    # Try SEED=8921
 
     visit communities_path
+
     assert_selector 'div', text: '1 - 10 of 11'
     # Default sort is by title. First 6 say 'Fancy', last 4 say 'Nice'
     assert_selector 'li:first-child a', text: 'Fancy Community 00'

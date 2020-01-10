@@ -4,8 +4,11 @@ class DraftItemTest < ActiveSupport::TestCase
 
   def before_all
     super
-    @community = locked_ldp_fixture(Community, :books).unlock_and_fetch_ldp_object(&:save!)
-    @collection = locked_ldp_fixture(Collection, :books).unlock_and_fetch_ldp_object(&:save!)
+    @community = Community.create!(title: 'Books', description: 'a bunch of books', owner_id: users(:admin).id)
+    @collection = Collection.create!(title: 'Fantasy Books',
+                                     description: 'some fantasy books',
+                                     owner_id: users(:admin).id,
+                                     community_id: @community.id)
   end
 
   test 'enums' do
@@ -24,20 +27,20 @@ class DraftItemTest < ActiveSupport::TestCase
   end
 
   test 'should not be able to create a draft item without user' do
-    draft_item = DraftItem.new
+    draft_item = DraftItem.drafts.new
     assert_not draft_item.valid?
     assert_equal 'User must exist', draft_item.errors.full_messages.first
   end
 
   test 'should be able to create a draft item with user when on inactive status' do
     user = users(:regular)
-    draft_item = DraftItem.new(user: user)
+    draft_item = DraftItem.drafts.new(user: user)
     assert draft_item.valid?
   end
 
   test 'should run validations when on describe_item step' do
     user = users(:regular)
-    draft_item = DraftItem.new(user: user, status: DraftItem.statuses[:active])
+    draft_item = DraftItem.drafts.new(user: user, status: DraftItem.statuses[:active])
     assert_not draft_item.valid?
 
     draft_item.assign_attributes(
@@ -56,7 +59,7 @@ class DraftItemTest < ActiveSupport::TestCase
   test 'should run validations when on choose_license_and_visibility wizard step' do
     user = users(:regular)
 
-    draft_item = DraftItem.new(
+    draft_item = DraftItem.drafts.new(
       user: user,
       status: DraftItem.statuses[:active],
       wizard_step: DraftItem.wizard_steps[:choose_license_and_visibility],
@@ -119,7 +122,7 @@ class DraftItemTest < ActiveSupport::TestCase
   test 'should handle license text validations' do
     user = users(:regular)
 
-    draft_item = DraftItem.new(
+    draft_item = DraftItem.drafts.new(
       user: user,
       status: DraftItem.statuses[:active],
       wizard_step: DraftItem.wizard_steps[:choose_license_and_visibility],
@@ -145,7 +148,7 @@ class DraftItemTest < ActiveSupport::TestCase
   test 'should handle embargo end date visibility validations' do
     user = users(:regular)
 
-    draft_item = DraftItem.new(
+    draft_item = DraftItem.drafts.new(
       user: user,
       status: DraftItem.statuses[:active],
       wizard_step: DraftItem.wizard_steps[:choose_license_and_visibility],
@@ -172,7 +175,7 @@ class DraftItemTest < ActiveSupport::TestCase
   test 'should handle community/collection validations on member_of_paths' do
     user = users(:regular)
 
-    draft_item = DraftItem.new(
+    draft_item = DraftItem.drafts.new(
       user: user,
       status: DraftItem.statuses[:active],
       title: 'Book of Random',
@@ -204,11 +207,10 @@ class DraftItemTest < ActiveSupport::TestCase
     assert draft_item.valid?
 
     # Regular user can't deposit to a restricted collection
-    restricted_collection = Collection.new_locked_ldp_object(title: 'Risque fantasy Books',
-                                                             owner: 1,
-                                                             restricted: true,
-                                                             community_id: @community.id)
-                                      .unlock_and_fetch_ldp_object(&:save!)
+    restricted_collection = Collection.create!(title: 'Risque fantasy Books',
+                                               owner_id: user.id,
+                                               restricted: true,
+                                               community_id: @community.id)
     draft_item.assign_attributes(
       member_of_paths: { community_id: [@community.id], collection_id: [restricted_collection.id] }
     )
@@ -225,7 +227,7 @@ class DraftItemTest < ActiveSupport::TestCase
   test '#strip_input_fields should strip empty strings from array fields' do
     user = users(:regular)
 
-    draft_item = DraftItem.new(
+    draft_item = DraftItem.drafts.new(
       user: user,
       status: DraftItem.statuses[:active],
       title: 'Book of Random',

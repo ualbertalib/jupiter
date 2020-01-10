@@ -6,6 +6,16 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+### Added
+- Mounted Oaisys engine
+
+### Changed
+- bump rubocop-rails to 2.4.1 Rails/FilePath default changed to slashes [PR#1398](https://github.com/ualbertalib/jupiter/pull/1398)
+
+### Fixed
+- failing tests [#1376](https://github.com/ualbertalib/jupiter/issues/1376)
+- Fix Sprockets v4.0.0 upgrade problem with how Sass Variables were being defined
+
 ## [1.2.18] - 2019-10-22
 - Removed Rack Attack
 
@@ -51,16 +61,30 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Ruby 2.5 to travis ci testing matrix [PR#1040](https://github.com/ualbertalib/jupiter/pull/1040)
 - Added configuration for active storage to allow tifs to have a thumbnail [#991](https://github.com/ualbertalib/jupiter/issues/991)
 - Added missing contoller tests [#865](https://github.com/ualbertalib/jupiter/issues/865)
+- Dependency on ActsAsRdfable for annotating ActiveRecord classes with RDF predicates
+- Collection, Community Item, and Thesis ActiveRecord models
+- jupiter:get_me_off_of_fedora rake task to perform data migration
+- drafts scope for DraftItem/DraftThesis
 
 ### Changed
+- DeferredSimpleSolrQuery#sort renamed to 'order' and its two arguments replaced with a key-value, to better align with ActiveRecord
+  API and ease removal of ActiveFedora.
+- Change LockedLDPObject#find_by to take a named 'id:' parameter, to better align callers with ActiveRecord
 - i18n fallback to english (configuration change) [PR#1058](https://github.com/ualbertalib/jupiter/pull/1058)
 - pin rubocop version for hound [PR#1080](https://github.com/ualbertalib/jupiter/pull/1080)
 - Skip flapping tests on travis CI [#1181](https://github.com/ualbertalib/jupiter/issues/1181)
+- Replaced use of ActiveFedora's Solr connection with a direct connection to Solr setup locally.
 - Made multiple seeds of db not duplicate types, languages, or institutions [#1117](https://github.com/ualbertalib/jupiter/issues/1117)
+- Replaced all calls to `Solrizer.solr_name` with simplified local code to map Solr types/roles to wildcard stems.
+- Removed Solrizer usage from the process of indexing ActiveFedora objects for Solr entirely. Replaced with Solr Exporter pattern for serialization of Solr data.
+- DraftItem and DraftThesis have basic RDF annotations
+- Removed: ActiveFedora
+- Items, Theses, Collections, and Communities now have RDF predicates defined for their PostgreSQL columns via migration
 
 ### Fixed
 - Cleared visibility_after_embargo and embargo_end_date when embargo option is not selected [PR#1041](https://github.com/ualbertalib/jupiter/pull/1041)
 - fixed error in dangerfile [#1109](https://github.com/ualbertalib/jupiter/issues/1109)
+- Fixed order-dependence in system tests regarding test data bleeding into other tests [#1286](https://github.com/ualbertalib/jupiter/issues/1286)
 
 ## [1.2.14] - 2019-04-15
 

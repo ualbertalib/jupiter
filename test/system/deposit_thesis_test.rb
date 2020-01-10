@@ -2,18 +2,6 @@ require 'application_system_test_case'
 
 class DepositThesisTest < ApplicationSystemTestCase
 
-  def before_all
-    super
-
-    # Setup a community/collection pair for respective dropdowns
-    @community = Community.new_locked_ldp_object(title: 'Theses', owner: 1).unlock_and_fetch_ldp_object(&:save!)
-    @collection = Collection.new_locked_ldp_object(title: 'Theses Collection',
-                                                   owner: 1,
-                                                   restricted: true,
-                                                   community_id: @community.id)
-                            .unlock_and_fetch_ldp_object(&:save!)
-  end
-
   test 'be able to deposit and edit a thesis successfully' do
     admin = users(:admin)
 
@@ -23,8 +11,6 @@ class DepositThesisTest < ApplicationSystemTestCase
     click_link I18n.t('application.navbar.links.admin')
     click_link I18n.t('admin.items.index.header')
     click_link I18n.t('admin.items.index.deposit_thesis')
-
-    skip 'This test continues to flap on CI for unknown reasons that should be investigated ASAP' if ENV['TRAVIS']
 
     # 1. Describe Thesis Form
 
@@ -45,8 +31,8 @@ class DepositThesisTest < ApplicationSystemTestCase
     fill_in I18n.t('admin.theses.draft.describe_thesis.description'),
             with: 'A Dance with Dragons Description Goes Here!!!'
 
-    select @community.title, from: 'draft_thesis[community_id][]'
-    select @collection.title, from: 'draft_thesis[collection_id][]'
+    select communities(:thesis).title, from: 'draft_thesis[community_id][]'
+    select collections(:thesis).title, from: 'draft_thesis[collection_id][]'
 
     click_on I18n.t('admin.theses.draft.save_and_continue')
 
@@ -80,7 +66,8 @@ class DepositThesisTest < ApplicationSystemTestCase
     # Success! Deposit Successful
 
     assert_text I18n.t('admin.theses.draft.successful_deposit')
-    assert_selector 'h1', text: Thesis.last.title
+    assert Thesis.find_by(title: 'A Dance with Dragons').present?
+    assert_selector 'h1', text: 'A Dance with Dragons'
 
     # Check to make sure there isn't any embargo_history
     item_id = current_url.split('/').last
@@ -117,10 +104,15 @@ class DepositThesisTest < ApplicationSystemTestCase
     _, item_results, _ = JupiterCore::Search.perform_solr_query(q: item_id, fq: 'id:' + item_id, rows: 1)
     assert_not_nil item_results.first['embargo_history_ssim']
     logout_user
+
+    # This method will add an item that exists in Solr with the member of paths matching the books/fantasy_books communities/collections fixtures
+    # in order for the other test to work we need to clean this out.
+    JupiterCore::SolrServices::Client.instance.truncate_index
   end
 
   test 'should populate community and collection when coming from a restricted collection page' do
-    skip 'This test continues to flap on CI that should be investigated ASAP' if ENV['TRAVIS']
+    community = communities(:thesis)
+    collection = collections(:thesis)
 
     admin = users(:admin)
 
@@ -128,14 +120,14 @@ class DepositThesisTest < ApplicationSystemTestCase
 
     # Navigate to restricted collection page
     click_link I18n.t('application.navbar.links.communities')
-    click_link @community.title
-    click_link @collection.title
+    click_link community.title
+    click_link collection.title
 
     # Click deposit button
     click_link I18n.t('collections.show.deposit_thesis')
 
-    assert has_select?('draft_thesis[community_id][]', selected: @community.title)
-    assert has_select?('draft_thesis[collection_id][]', selected: @collection.title)
+    assert has_select?('draft_thesis[community_id][]', selected: community.title)
+    assert has_select?('draft_thesis[collection_id][]', selected: collection.title)
 
     logout_user
   end

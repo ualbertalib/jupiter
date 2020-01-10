@@ -4,12 +4,11 @@ class DraftThesisTest < ActiveSupport::TestCase
 
   def before_all
     super
-    @community = locked_ldp_fixture(Community, :books).unlock_and_fetch_ldp_object(&:save!)
-    @collection = Collection.new_locked_ldp_object(title: 'Risque fantasy Books',
-                                                   owner: 1,
-                                                   restricted: true,
-                                                   community_id: @community.id)
-                            .unlock_and_fetch_ldp_object(&:save!)
+    @community = Community.create!(title: 'Books', description: 'a bunch of books', owner_id: users(:admin).id)
+    @collection = Collection.create!(title: 'Risque fantasy Books',
+                                     owner_id: users(:admin).id,
+                                     restricted: true,
+                                     community_id: @community.id)
   end
 
   test 'enums' do
@@ -25,20 +24,20 @@ class DraftThesisTest < ActiveSupport::TestCase
   end
 
   test 'should not be able to create a draft thesis without user' do
-    draft_thesis = DraftThesis.new
+    draft_thesis = DraftThesis.drafts.new
     assert_not draft_thesis.valid?
     assert_equal 'User must exist', draft_thesis.errors.full_messages.first
   end
 
   test 'should be able to create a draft thesis with user when on inactive status' do
     user = users(:admin)
-    draft_thesis = DraftThesis.new(user: user)
+    draft_thesis = DraftThesis.drafts.new(user: user)
     assert draft_thesis.valid?
   end
 
   test 'should run validations when on describe_item step' do
     user = users(:admin)
-    draft_thesis = DraftThesis.new(user: user, status: DraftThesis.statuses[:active])
+    draft_thesis = DraftThesis.drafts.new(user: user, status: DraftThesis.statuses[:active])
 
     assert_not draft_thesis.valid?
     assert_equal 5, draft_thesis.errors.full_messages.count
@@ -58,7 +57,7 @@ class DraftThesisTest < ActiveSupport::TestCase
   test 'should run validations when on choose_license_and_visibility wizard step' do
     user = users(:admin)
 
-    draft_thesis = DraftThesis.new(
+    draft_thesis = DraftThesis.drafts.new(
       user: user,
       status: DraftThesis.statuses[:active],
       wizard_step: DraftThesis.wizard_steps[:choose_license_and_visibility],
@@ -119,7 +118,7 @@ class DraftThesisTest < ActiveSupport::TestCase
   test 'should handle embargo end date visibility validations' do
     user = users(:admin)
 
-    draft_thesis = DraftThesis.new(
+    draft_thesis = DraftThesis.drafts.new(
       user: user,
       status: DraftThesis.statuses[:active],
       wizard_step: DraftThesis.wizard_steps[:choose_license_and_visibility],
@@ -146,7 +145,7 @@ class DraftThesisTest < ActiveSupport::TestCase
   test 'should handle community/collection validations on member_of_paths' do
     user = users(:admin)
 
-    draft_thesis = DraftThesis.new(
+    draft_thesis = DraftThesis.drafts.new(
       user: user,
       status: DraftThesis.statuses[:active],
       title: 'Thesis of Random',
@@ -179,7 +178,7 @@ class DraftThesisTest < ActiveSupport::TestCase
   test 'regular user cannot deposit' do
     user = users(:regular)
 
-    draft_thesis = DraftThesis.new(
+    draft_thesis = DraftThesis.drafts.new(
       user: user,
       status: DraftThesis.statuses[:active],
       title: 'Thesis of Random',
@@ -196,12 +195,11 @@ class DraftThesisTest < ActiveSupport::TestCase
 
   test 'cannot deposit thesis into a non restricted collection' do
     user = users(:admin)
-    non_restricted_collection = Collection.new_locked_ldp_object(title: 'Risque fantasy Books',
-                                                                 owner: 1,
-                                                                 community_id: @community.id)
-                                          .unlock_and_fetch_ldp_object(&:save!)
+    non_restricted_collection = Collection.create!(title: 'Risque fantasy Books',
+                                                   owner_id: users(:admin).id,
+                                                   community_id: @community.id)
 
-    draft_thesis = DraftThesis.new(
+    draft_thesis = DraftThesis.drafts.new(
       user: user,
       status: DraftThesis.statuses[:active],
       title: 'Thesis of Random',
@@ -218,7 +216,7 @@ class DraftThesisTest < ActiveSupport::TestCase
 
   test 'parse_graduation_term_from_fedora works correctly' do
     user = users(:admin)
-    draft_thesis = DraftThesis.new(user: user)
+    draft_thesis = DraftThesis.drafts.new(user: user)
 
     assert_equal '11', draft_thesis.send(:parse_graduation_term_from_fedora, '2018-11')
     assert_equal '06', draft_thesis.send(:parse_graduation_term_from_fedora, '2018-06')

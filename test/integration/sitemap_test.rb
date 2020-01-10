@@ -4,12 +4,21 @@ class SitemapTest < ActionDispatch::IntegrationTest
 
   def before_all
     super
-    @community = Community.new_locked_ldp_object(title: 'Fancy Community', owner: 1)
-                          .unlock_and_fetch_ldp_object(&:save!)
-    @collection = Collection.new_locked_ldp_object(community_id: @community.id,
-                                                   title: 'Fancy Collection', owner: 1)
-                            .unlock_and_fetch_ldp_object(&:save!)
-    @item = locked_ldp_fixture(Item, :fancy).unlock_and_fetch_ldp_object do |uo|
+    Item.destroy_all
+    Thesis.destroy_all
+    @community = Community.create!(title: 'Fancy Community', owner_id: users(:admin).id)
+    @collection = Collection.create!(community_id: @community.id,
+                                     title: 'Fancy Collection', owner_id: users(:admin).id)
+    @item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
+                     owner_id: users(:admin).id, title: 'Fancy Item',
+                     creators: ['Joe Blow'],
+                     created: '1938-01-02',
+                     languages: [CONTROLLED_VOCABULARIES[:language].english],
+                     item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                     publication_status:
+                                               [CONTROLLED_VOCABULARIES[:publication_status].published],
+                     license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                     subject: ['Items']).tap do |uo|
       uo.add_to_path(@community.id, @collection.id)
       uo.save!
     end
@@ -21,27 +30,27 @@ class SitemapTest < ActionDispatch::IntegrationTest
       end
       @item.add_and_ingest_files([file])
     end
-    @thesis = Thesis.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                           owner: 1, title: 'Fancy Item',
-                                           dissertant: 'Joe Blow',
-                                           language: CONTROLLED_VOCABULARIES[:language].english,
-                                           graduation_date: 'Fall 2017')
-                    .unlock_and_fetch_ldp_object do |uo|
+    @thesis = Thesis.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
+                         owner_id: users(:admin).id, title: 'Fancy Item',
+                         dissertant: 'Joe Blow',
+                         language: CONTROLLED_VOCABULARIES[:language].english,
+                         graduation_date: 'Fall 2017')
+                    .tap do |uo|
                       uo.add_to_path(@community.id, @collection.id)
                       uo.save!
                     end
     # 1 more item. this is private
-    @private_item = Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PRIVATE,
-                                               owner: 1, title: 'Fancy Private Item',
-                                               creators: ['Joe Blow'],
-                                               created: '1983-11-11',
-                                               languages: [CONTROLLED_VOCABULARIES[:language].english],
-                                               item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                               publication_status:
+    @private_item = Item.new(visibility: JupiterCore::VISIBILITY_PRIVATE,
+                             owner_id: users(:admin).id, title: 'Fancy Private Item',
+                             creators: ['Joe Blow'],
+                             created: '1983-11-11',
+                             languages: [CONTROLLED_VOCABULARIES[:language].english],
+                             item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                             publication_status:
                                                [CONTROLLED_VOCABULARIES[:publication_status].published],
-                                               license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                                               subject: ['Items'])
-                        .unlock_and_fetch_ldp_object do |uo|
+                             license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                             subject: ['Items'])
+                        .tap do |uo|
                           uo.add_to_path(@community.id, @collection.id)
                           uo.save!
                         end
@@ -77,8 +86,7 @@ class SitemapTest < ActionDispatch::IntegrationTest
 
     # show public item attributes
     assert_select 'loc', item_url(@item)
-    assert_select 'lastmod', @item.updated_at.to_s
-
+    assert_select 'lastmod', @item.updated_at.iso8601
     # not show private items
     assert_select 'url', count: 2
     assert_select 'loc', { count: 0, text: item_url(@private_item) }, 'private items should not appear in the sitemap'

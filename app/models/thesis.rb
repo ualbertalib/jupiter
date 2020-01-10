@@ -1,54 +1,74 @@
-class Thesis < JupiterCore::LockedLdpObject
+class Thesis < JupiterCore::Doiable
 
-  include ObjectProperties
-  include ItemProperties
-  include GlobalID::Identification
-  ldp_object_includes Hydra::Works::WorkBehavior
+  acts_as_rdfable
 
-  # Dublin Core attributes
-  has_attribute :abstract, ::RDF::Vocab::DC.abstract, type: :text, solrize_for: :search
-  # Note: language is single-valued for Thesis, but languages is multi-valued for Item
-  # See below for faceting
-  has_attribute :language, ::RDF::Vocab::DC.language, solrize_for: :search
-  has_attribute :date_accepted, ::RDF::Vocab::DC.dateAccepted, type: :date, solrize_for: :exact_match
-  has_attribute :date_submitted, ::RDF::Vocab::DC.dateSubmitted, type: :date, solrize_for: :exact_match
+  has_solr_exporter Exporters::Solr::ThesisExporter
 
-  # BIBO
-  has_attribute :degree, ::RDF::Vocab::BIBO.degree, solrize_for: :exact_match
+  belongs_to :owner, class_name: 'User'
 
-  # SWRC
-  has_attribute :institution, TERMS[:swrc].institution, solrize_for: :exact_match
+  has_many_attached :files, dependent: false
 
-  # UAL attributes
-  # This one is faceted in `all_contributors`, along with the Item creators/contributors
-  has_attribute :dissertant, TERMS[:ual].dissertant, solrize_for: [:search, :sort]
-  has_attribute :graduation_date, TERMS[:ual].graduation_date, solrize_for: [:search, :sort]
-  has_attribute :thesis_level, TERMS[:ual].thesis_level, solrize_for: :exact_match
-  has_attribute :proquest, TERMS[:ual].proquest, solrize_for: :exact_match
-  has_attribute :unicorn, TERMS[:ual].unicorn, solrize_for: :exact_match
+  scope :public_items, -> { where(visibility: JupiterCore::VISIBILITY_PUBLIC) }
+  # TODO: this (casting a json array to text and doing a LIKE against it) is kind of a nasty hack to deal with the fact
+  # that production is currently using a 7 or 8 year old version of Postgresql (9.2) that lacks proper operators for
+  # testing whether a value is in a json array, which newer version of Postgresql have.
+  #
+  # with an upgraded version of Postgresql this could be done more cleanly and performanetly
+  scope :belongs_to_path, ->(path) { where('member_of_paths::text LIKE ?', "%#{path}%") }
+  scope :created_on_or_after, ->(date) { where('record_created_at >= ?', date) }
+  scope :created_on_or_before, ->(date) { where('record_created_at <= ?', date) }
 
-  has_attribute :specialization, TERMS[:ual].specialization, solrize_for: :search
-  has_attribute :departments, TERMS[:ual].department_list, type: :json_array, solrize_for: [:search, :facet]
-  has_attribute :supervisors, TERMS[:ual].supervisor_list, type: :json_array, solrize_for: [:search, :facet]
-  has_multival_attribute :committee_members, TERMS[:ual].committee_member, solrize_for: :exact_match
-  has_multival_attribute :unordered_departments, TERMS[:ual].department, solrize_for: :search
-  has_multival_attribute :unordered_supervisors, TERMS[:ual].supervisor, solrize_for: :exact_match
+  after_save :push_item_id_for_preservation
+  before_validation :populate_sort_year
 
-  # This gets mixed with the item types for `Item`
-  additional_search_index :item_type_with_status,
-                          solrize_for: :facet,
-                          as: -> { item_type_with_status_code }
+  validates :dissertant, presence: true
+  validates :graduation_date, presence: true
+  validates :sort_year, presence: true
+  validates :language, uri: { in_vocabulary: :language }
+  validates :institution, uri: { in_vocabulary: :institution }
 
-  # Dissertants are indexed with the Item creators/contributors
-  additional_search_index :all_contributors, solrize_for: :facet, as: -> { [dissertant] }
+  validates :embargo_end_date, presence: true, if: ->(item) { item.visibility == VISIBILITY_EMBARGO }
+  validates :embargo_end_date, absence: true, if: ->(item) { item.visibility != VISIBILITY_EMBARGO }
+  validates :visibility_after_embargo, presence: true, if: ->(item) { item.visibility == VISIBILITY_EMBARGO }
+  validates :visibility_after_embargo, absence: true, if: ->(item) { item.visibility != VISIBILITY_EMBARGO }
+  validates :member_of_paths, presence: true
+  validate :communities_and_collections_must_exist
+  validate :visibility_after_embargo_must_be_valid
 
-  # Index subjects with Item subjects (topical, temporal, etc).
-  additional_search_index :all_subjects, solrize_for: :facet, as: -> { subject }
-
-  # Making `language` consistent with Item `languages`
-  additional_search_index :languages,
-                          solrize_for: :facet,
-                          as: -> { [language] }
+  acts_as_rdfable do |config|
+    config.title has_predicate: ::RDF::Vocab::DC.title
+    config.fedora3_uuid has_predicate: ::TERMS[:ual].fedora3_uuid
+    config.depositor has_predicate: ::TERMS[:ual].depositor
+    config.alternative_title has_predicate: ::RDF::Vocab::DC.alternative
+    config.doi has_predicate: ::TERMS[:prism].doi
+    config.embargo_end_date has_predicate: ::RDF::Vocab::DC.available
+    config.fedora3_handle has_predicate: ::TERMS[:ual].fedora3_handle
+    config.ingest_batch has_predicate: ::TERMS[:ual].ingest_batch
+    config.northern_north_america_filename has_predicate: ::TERMS[:ual].northern_north_america_filename
+    config.northern_north_america_item_id has_predicate: ::TERMS[:ual].northern_north_america_item_id
+    config.rights has_predicate: ::RDF::Vocab::DC11.rights
+    config.sort_year has_predicate: ::TERMS[:ual].sort_year
+    config.visibility_after_embargo has_predicate: ::TERMS[:acl].visibility_after_embargo
+    config.embargo_history has_predicate: ::TERMS[:acl].embargo_history
+    config.is_version_of has_predicate: ::RDF::Vocab::DC.isVersionOf
+    config.member_of_paths has_predicate: ::TERMS[:ual].path
+    config.subject has_predicate: ::RDF::Vocab::DC11.subject
+    config.abstract has_predicate: ::RDF::Vocab::DC.abstract
+    config.language has_predicate: ::RDF::Vocab::DC.language
+    config.date_accepted has_predicate: ::RDF::Vocab::DC.dateAccepted
+    config.date_submitted has_predicate: ::RDF::Vocab::DC.dateSubmitted
+    config.degree has_predicate: ::RDF::Vocab::BIBO.degree
+    config.institution has_predicate: TERMS[:swrc].institution
+    config.dissertant has_predicate: TERMS[:ual].dissertant
+    config.graduation_date has_predicate: TERMS[:ual].graduation_date
+    config.thesis_level has_predicate: TERMS[:ual].thesis_level
+    config.proquest has_predicate: TERMS[:ual].proquest
+    config.unicorn has_predicate: TERMS[:ual].unicorn
+    config.specialization has_predicate: TERMS[:ual].specialization
+    config.departments has_predicate: TERMS[:ual].department_list
+    config.supervisors has_predicate: TERMS[:ual].supervisor_list
+    config.committee_members has_predicate: TERMS[:ual].committee_member
+  end
 
   # Present a consistent interface with Item#item_type_with_status_code
   def item_type_with_status_code
@@ -57,117 +77,91 @@ class Thesis < JupiterCore::LockedLdpObject
 
   def self.from_draft(draft_thesis)
     thesis = Thesis.find(draft_thesis.uuid) if draft_thesis.uuid.present?
-    thesis ||= Thesis.new_locked_ldp_object
-    thesis.unlock_and_fetch_ldp_object do |unlocked_obj|
-      unlocked_obj.owner = draft_thesis.user_id if unlocked_obj.owner.blank?
-      unlocked_obj.title = draft_thesis.title
-      unlocked_obj.alternative_title = draft_thesis.alternate_title
+    thesis ||= Thesis.new
 
-      unlocked_obj.language = draft_thesis.language_as_uri
-      unlocked_obj.dissertant = draft_thesis.creator
-      unlocked_obj.abstract = draft_thesis.description
+    thesis.owner_id = draft_thesis.user_id if thesis.owner.blank?
+    thesis.title = draft_thesis.title
+    thesis.alternative_title = draft_thesis.alternate_title
 
-      unlocked_obj.graduation_date = if draft_thesis.graduation_term.present?
-                                       "#{draft_thesis.graduation_year}-#{draft_thesis.graduation_term}"
-                                     else
-                                       draft_thesis.graduation_year.to_s
-                                     end
+    thesis.language = draft_thesis.language_as_uri
+    thesis.dissertant = draft_thesis.creator
+    thesis.abstract = draft_thesis.description
 
-      # Handle visibility plus embargo logic
-      if draft_thesis.visibility_as_uri == CONTROLLED_VOCABULARIES[:visibility].embargo
-        unlocked_obj.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].public
-        unlocked_obj.embargo_end_date = draft_thesis.embargo_end_date
-      else
-        # If visibility was previously embargo but not anymore
-        unlocked_obj.add_to_embargo_history if unlocked_obj.visibility == CONTROLLED_VOCABULARIES[:visibility].embargo
-        unlocked_obj.visibility_after_embargo = nil
-        unlocked_obj.embargo_end_date = nil
-      end
-      unlocked_obj.visibility = draft_thesis.visibility_as_uri
+    thesis.graduation_date = if draft_thesis.graduation_term.present?
+                               "#{draft_thesis.graduation_year}-#{draft_thesis.graduation_term}"
+                             else
+                               draft_thesis.graduation_year.to_s
+                             end
 
-      # Handle rights
-      unlocked_obj.rights = draft_thesis.rights
-
-      # Additional fields
-      unlocked_obj.date_accepted = draft_thesis.date_accepted
-      unlocked_obj.date_submitted = draft_thesis.date_submitted
-
-      unlocked_obj.degree = draft_thesis.degree
-      unlocked_obj.thesis_level = draft_thesis.degree_level
-      unlocked_obj.institution = draft_thesis.institution_as_uri
-      unlocked_obj.specialization = draft_thesis.specialization
-
-      unlocked_obj.subject = draft_thesis.subjects
-      unlocked_obj.committee_members = draft_thesis.committee_members
-      unlocked_obj.supervisors = draft_thesis.supervisors
-      unlocked_obj.departments = draft_thesis.departments
-
-      unlocked_obj.member_of_paths = []
-
-      draft_thesis.each_community_collection do |community, collection|
-        unlocked_obj.add_to_path(community.id, collection.id)
-      end
-
-      unlocked_obj.save!
-
-      # remove old filesets and attachments and recreate
-      unlocked_obj.purge_filesets
-
-      # NOTE: destroy the attachment record, DON'T use #purge, which will wipe the underlying blob shared with the
-      # draft item
-      thesis.files.each(&:destroy) if thesis.files.present?
-
-      # add an association between the same underlying blobs the Draft uses and the Item
-      draft_thesis.files_attachments.each do |attachment|
-        new_attachment = ActiveStorage::Attachment.create(record: thesis.files_attachment_shim,
-                                                          blob: attachment.blob, name: :shimmed_files)
-        FileAttachmentIngestionJob.perform_later(new_attachment.id)
-      end
-
-      thesis.set_thumbnail(thesis.files.find_by(blob_id: draft_thesis.thumbnail.blob.id))
+    # Handle visibility plus embargo logic
+    if draft_thesis.visibility_as_uri == CONTROLLED_VOCABULARIES[:visibility].embargo
+      thesis.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].public
+      thesis.embargo_end_date = draft_thesis.embargo_end_date
+    else
+      # If visibility was previously embargo but not anymore
+      thesis.add_to_embargo_history if thesis.visibility == CONTROLLED_VOCABULARIES[:visibility].embargo
+      thesis.visibility_after_embargo = nil
+      thesis.embargo_end_date = nil
     end
+    thesis.visibility = draft_thesis.visibility_as_uri
+
+    # Handle rights
+    thesis.rights = draft_thesis.rights
+
+    # Additional fields
+    thesis.date_accepted = draft_thesis.date_accepted
+    thesis.date_submitted = draft_thesis.date_submitted
+
+    thesis.degree = draft_thesis.degree
+    thesis.thesis_level = draft_thesis.degree_level
+    thesis.institution = draft_thesis.institution_as_uri
+    thesis.specialization = draft_thesis.specialization
+
+    thesis.subject = draft_thesis.subjects
+    thesis.committee_members = draft_thesis.committee_members
+    thesis.supervisors = draft_thesis.supervisors
+    thesis.departments = draft_thesis.departments
+
+    thesis.member_of_paths = []
+
+    draft_thesis.each_community_collection do |community, collection|
+      thesis.add_to_path(community.id, collection.id)
+    end
+
+    thesis.save!
+
+    # NOTE: destroy the attachment record, DON'T use #purge, which will wipe the underlying blob shared with the
+    # draft item
+    thesis.files.each(&:destroy) if thesis.files.present?
+
+    # add an association between the same underlying blobs the Draft uses and the Item
+    draft_thesis.files_attachments.each do |attachment|
+      ActiveStorage::Attachment.create(record: thesis,
+                                       blob: attachment.blob, name: :files)
+    end
+
+    thesis.set_thumbnail(thesis.files.find_by(blob_id: draft_thesis.thumbnail.blob.id))
 
     draft_thesis.uuid = thesis.id
     draft_thesis.save!
     thesis
   end
 
-  unlocked do
-    before_save :copy_departments_to_unordered_predicate
-    before_save :copy_supervisors_to_unordered_predicate
+  def populate_sort_year
+    self.sort_year = Date.parse(graduation_date).year.to_i if graduation_date.present?
+    rescue ArgumentError
+      # date was unparsable, try to pull out the first 4 digit number as a year
+      capture = graduation_date.scan(/\d{4}/)
+      self.sort_year = capture[0].to_i if capture.present?
+  end
 
-    validates :dissertant, presence: true
-    validates :graduation_date, presence: true
-    validates :sort_year, presence: true
-    validates :language, uri: { in_vocabulary: :language }
-    validates :institution, uri: { in_vocabulary: :institution }
+  def add_to_path(community_id, collection_id)
+    self.member_of_paths ||= []
+    self.member_of_paths += ["#{community_id}/#{collection_id}"]
+  end
 
-    type [::Hydra::PCDM::Vocab::PCDMTerms.Object, ::RDF::Vocab::BIBO.Thesis]
-
-    before_validation do
-      # Note: for Item, the sort_year attribute is derived from dcterms:created
-      begin
-        self.sort_year = Date.parse(graduation_date).year.to_i if graduation_date.present?
-      rescue ArgumentError
-        # date was unparsable, try to pull out the first 4 digit number as a year
-        capture = graduation_date.scan(/\d{4}/)
-        self.sort_year = capture[0].to_i if capture.present?
-      end
-
-      def copy_departments_to_unordered_predicate
-        return unless departments_changed?
-
-        self.unordered_departments = []
-        departments.each { |d| self.unordered_departments += [d] }
-      end
-
-      def copy_supervisors_to_unordered_predicate
-        return unless supervisors_changed?
-
-        self.unordered_supervisors = []
-        supervisors.each { |s| self.unordered_supervisors += [s] }
-      end
-    end
+  def self.valid_visibilities
+    super + [VISIBILITY_EMBARGO]
   end
 
 end

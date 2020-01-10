@@ -26,13 +26,14 @@ Layout/IndentationConsistency:
   Enabled: true
   EnforcedStyle: normal
 
+Layout/LineLength:
+    Enabled: true
+    Max: 120 # default is 80
+    IgnoredPatterns: ['\A\s*#'] # tweak to ignore long comments, which often are examples or URLs that are not easily broken up
+
 # readability is Actually Good
 Layout/RescueEnsureAlignment:
   Enabled: false
-
-Lint/Void:
-  Exclude:
-    - app/models/jupiter_core/locked_ldp_object.rb
 
 # A calculated magnitude based on number of assignments,
 # branches, and conditions.
@@ -46,11 +47,6 @@ Metrics/ClassLength:
 # of test cases needed to validate a method.
 Metrics/CyclomaticComplexity:
   Enabled: false
-
-Metrics/LineLength:
-  Enabled: true
-  Max: 120 # default is 80
-  IgnoredPatterns: ['\A\s*#'] # tweak to ignore long comments, which often are examples or URLs that are not easily broken up
 
 # Avoid methods longer than 10 lines of code.
 Metrics/MethodLength:
@@ -69,16 +65,8 @@ Metrics/PerceivedComplexity:
 Metrics/ParameterLists:
   Exclude:
     - app/models/jupiter_core/search.rb
-    - app/models/jupiter_core/locked_ldp_object.rb
-    - app/models/jupiter_core/deferred_faceted_solr_query.rb
+    - app/models/jupiter_core/solr_services/deferred_faceted_solr_query.rb
 
-
-Naming/PredicateName:
-  Exclude:
-    - app/models/jupiter_core/locked_ldp_object.rb
-Naming/AccessorMethodName:
-  Exclude:
-    - app/models/concerns/item_properties.rb
 
 Naming/FileName:
   Exclude:
@@ -86,24 +74,15 @@ Naming/FileName:
     - Rakefile
     - Gemfile
 
-# TODO: Review and fix these
 Naming/MemoizedInstanceVariableName:
   Exclude:
-    - app/models/jupiter_core/deferred_faceted_solr_query.rb
-    - app/models/concerns/item_properties.rb
+    - app/models/jupiter_core//solr_services/deferred_faceted_solr_query.rb
 
-# TODO: Review and fix these
-Naming/UncommunicativeMethodParamName:
+Naming/MethodParameterName:
   Exclude:
-    - app/models/jupiter_core/locked_ldp_object.rb
-    - app/models/jupiter_core/deferred_faceted_solr_query.rb
+    - app/models/jupiter_core//solr_services/deferred_faceted_solr_query.rb
     - app/models/jupiter_core/search.rb
     - app/services/statistics.rb
-
-# We using activefedora here... not activerecord
-Style/UnneededSort:
-  Exclude:
-    - app/models/jupiter_core/locked_ldp_object.rb
 
 Rails:
   Enabled: true
@@ -111,11 +90,6 @@ Rails:
 # Autocorrecting this actively breaks code
 Rails/FindEach:
   Enabled: false
-
-# TODO: False postivies on headers, remove this once on rubocop > 0.56.0 as fixed in next release
-Rails/HttpPositionalArguments:
-  Exclude:
-    - test/controllers/file_sets_controller_test.rb
 
 # There comes a point where I question Rubocop's maintainer's sanity
 Rails/UnknownEnv:
@@ -159,10 +133,6 @@ Style/RedundantBegin:
   Exclude:
     - bin/yarn
 
-Style/RedundantSelf:
-  Exclude:
-    - app/models/jupiter_core/locked_ldp_object.rb
-
 # Perfer to use // but %r can be better in certain scenarios
 Style/RegexpLiteral:
   Enabled: false
@@ -175,10 +145,6 @@ Style/SymbolArray:
 
 Style/TrailingUnderscoreVariable:
   Enabled: false
-
-Style/TrivialAccessors:
-  Exclude:
-    - app/models/jupiter_core/locked_ldp_object.rb
 
 # Use %w or %W for arrays of words.
 Style/WordArray:

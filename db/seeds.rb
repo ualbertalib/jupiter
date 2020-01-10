@@ -7,7 +7,6 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 if Rails.env.development? || Rails.env.uat?
-  require 'active_fedora/cleaner'
   require "open-uri"
   require 'faker'
 
@@ -20,10 +19,8 @@ if Rails.env.development? || Rails.env.uat?
   puts 'Starting seeding of dev database...'
 
   # start fresh
-  [Announcement, ActiveStorage::Blob, ActiveStorage::Attachment, JupiterCore::AttachmentShim,
+  [Announcement, ActiveStorage::Blob, ActiveStorage::Attachment,
    Identity, User, Type, Language, Institution].each(&:destroy_all)
-
-  ActiveFedora::Cleaner.clean!
 
   # Seed an admin user
   admin = User.create(name: 'Jane Admin', email: 'admin@ualberta.ca', admin: true)
@@ -59,11 +56,11 @@ if Rails.env.development? || Rails.env.uat?
     else
       title = "Special reports about #{thing.pluralize}"
     end
-    community = Community.new_locked_ldp_object(
-      owner: admin.id,
+    community = Community.create!(
+      owner_id: admin.id,
       title: title,
-      description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop
-    ).unlock_and_fetch_ldp_object(&:save!)
+      description: Faker::Lorem.sentence(20, false, 0).chop
+    )
 
     # Attach logos, if possible
     filename = File.expand_path(Rails.root + "tmp/#{thing}.png")
@@ -80,35 +77,34 @@ if Rails.env.development? || Rails.env.uat?
       community.logo.attach(io: File.open(filename), filename: "#{thing}.png", content_type: "image/png")
     end
 
-    item_collection = Collection.new_locked_ldp_object(
-      owner: admin.id,
+    item_collection = Collection.create!(
+      owner_id: admin.id,
       title: "The annals of '#{thing.capitalize} International'",
       community_id: community.id,
-      description: Faker::Lorem.sentence(word_count: 40, supplemental: false, random_words_to_add: 0).chop
-    ).unlock_and_fetch_ldp_object(&:save!)
+      description: Faker::Lorem.sentence(40, false, 0).chop
+    )
 
-    thesis_collection = Collection.new_locked_ldp_object(
-      owner: admin.id,
+    thesis_collection = Collection.create!(
+      owner_id: admin.id,
       title: "Theses about #{thing.pluralize}",
       community_id: community.id,
-      description: Faker::Lorem.sentence(word_count: 40, supplemental: false, random_words_to_add: 0).chop
-    ).unlock_and_fetch_ldp_object(&:save!)
+      description: Faker::Lorem.sentence(40, false, 0).chop
+    )
 
     # Items
     20.times do |i|
       seed = rand(10)
       seed2 = rand(10)
       base_attributes = {
-        owner: admin.id,
         visibility: JupiterCore::VISIBILITY_PUBLIC,
         subject: [thing.capitalize],
         doi: "doi:bogus-#{Time.current.utc.iso8601(3)}"
       }
       # Add an occasional verbose description
       description = if i % 10 == 5
-                      Faker::Lorem.sentence(word_count: 100, supplemental: false, random_words_to_add: 0).chop
+                      Faker::Lorem.sentence(100, false, 0).chop
                     else
-                      Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop
+                      Faker::Lorem.sentence(20, false, 0).chop
                     end
       # Probabilistically about 70% English, 20% French, 10% Ukrainian
       languages = if seed % 10 > 2
@@ -121,6 +117,7 @@ if Rails.env.development? || Rails.env.uat?
       licence_right = {}
 
       item_attributes = base_attributes.merge({
+        owner_id: admin.id,
         title: "The effects of #{Faker::Beer.name} on #{thing.pluralize}",
         created: rand(20_000).days.ago.to_s,
         creators: [creators[seed]],
@@ -169,7 +166,7 @@ if Rails.env.development? || Rails.env.uat?
         item_attributes[:source] = "Chapter 5 of '#{thing.pluralize.capitalize} and what they drink'"
       end
 
-      item = Item.new_locked_ldp_object(item_attributes).unlock_and_fetch_ldp_object do |uo|
+      item = Item.new(item_attributes).tap do |uo|
         if i == 8
           uo.add_to_path(community.id, item_collection.id)
           uo.add_to_path(community.id, thesis_collection.id)
@@ -197,8 +194,9 @@ if Rails.env.development? || Rails.env.uat?
       field = Faker::Job.field
       level = ["Master's", 'Doctorate'][i % 2]
       thesis_attributes = base_attributes.merge({
+        owner_id: admin.id,
         title: "Thesis about the effects of #{Faker::Beer.name} on #{thing.pluralize}",
-        graduation_date: "#{rand(20_000).days.ago.year}#{['-06','-11',''][i % 3]}",
+        graduation_date: "Fall #{rand(20_000).days.ago.year}",
         dissertant: creators[seed],
         abstract: description,
         language: languages.first,
@@ -225,7 +223,7 @@ if Rails.env.development? || Rails.env.uat?
         thesis_attributes[:committee_members] += ["#{contributors[(seed + 7 * seed2) % 10]} (#{department2})"]
       end
 
-      thesis = Thesis.new_locked_ldp_object(thesis_attributes).unlock_and_fetch_ldp_object do |uo|
+      thesis = Thesis.new(thesis_attributes).tap do |uo|
         if i == 8
           uo.add_to_path(community.id, item_collection.id)
           uo.add_to_path(community.id, thesis_collection.id)
@@ -249,55 +247,55 @@ if Rails.env.development? || Rails.env.uat?
     end
 
     # Add a private item
-    Item.new_locked_ldp_object(
-      owner: admin.id,
+    Item.new(
+      owner_id: admin.id,
       creators: [creators[rand(10)]],
       visibility: JupiterCore::VISIBILITY_PRIVATE,
       created: rand(20_000).days.ago.to_s,
       title: "Private #{thing.pluralize}, public lives: a survey of social media trends",
-      description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop,
+      description: Faker::Lorem.sentence(20, false, 0).chop,
       languages: [CONTROLLED_VOCABULARIES[:language].english],
       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
       item_type: CONTROLLED_VOCABULARIES[:item_type].chapter,
       subject: [thing.capitalize, 'Privacy'],
       doi: "doi:bogus-#{Time.current.utc.iso8601(3)}"
-    ).unlock_and_fetch_ldp_object do |uo|
+    ).tap do |uo|
       uo.add_to_path(community.id, item_collection.id)
       uo.save!
     end
 
     # Add a CCID protected item
-    Item.new_locked_ldp_object(
-      owner: admin.id,
+    Item.new(
+      owner_id: admin.id,
       creators: [creators[rand(10)]],
       visibility: JupiterCore::VISIBILITY_AUTHENTICATED,
       created: rand(20_000).days.ago.to_s,
       title: "Everything You Need To Know About: University of Alberta and #{thing.pluralize}!",
-      description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop,
+      description: Faker::Lorem.sentence(20, false, 0).chop,
       languages: [CONTROLLED_VOCABULARIES[:language].english],
       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
       item_type: CONTROLLED_VOCABULARIES[:item_type].report,
       subject: [thing.capitalize, 'CCID'],
       doi: "doi:bogus-#{Time.current.utc.iso8601(3)}"
-    ).unlock_and_fetch_ldp_object do |uo|
+    ).tap do |uo|
       uo.add_to_path(community.id, item_collection.id)
       uo.save!
     end
 
     # Add a currently embargoed item
-    Item.new_locked_ldp_object(
-      owner: admin.id,
+    Item.new(
+      owner_id: admin.id,
       creators: [creators[rand(10)]],
       visibility: Item::VISIBILITY_EMBARGO,
       created: rand(20_000).days.ago.to_s,
       title: "Embargo and #{Faker::Address.country}: were the #{thing.pluralize} left behind?",
-      description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop,
+      description: Faker::Lorem.sentence(20, false, 0).chop,
       languages: [CONTROLLED_VOCABULARIES[:language].english],
       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
       item_type: CONTROLLED_VOCABULARIES[:item_type].conference_workshop_presentation,
       subject: [thing.capitalize, 'Embargoes'],
       doi: "doi:bogus-#{Time.current.utc.iso8601(3)}"
-    ).unlock_and_fetch_ldp_object do |uo|
+    ).tap do |uo|
       uo.add_to_path(community.id, item_collection.id)
       uo.embargo_end_date = 20.years.from_now.to_date
       uo.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].public
@@ -305,19 +303,19 @@ if Rails.env.development? || Rails.env.uat?
     end
 
     # Add a formerly embargoed item
-    Item.new_locked_ldp_object(
-      owner: admin.id,
+    Item.new(
+      owner_id: admin.id,
       creators: [creators[rand(10)]],
       visibility: Item::VISIBILITY_EMBARGO,
       created: rand(20_000).days.ago.to_s,
       title: "Former embargo of #{Faker::Address.country}: the day the #{thing.pluralize} were free",
-      description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop,
+      description: Faker::Lorem.sentence(20, false, 0).chop,
       languages: [CONTROLLED_VOCABULARIES[:language].english],
       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
       item_type: CONTROLLED_VOCABULARIES[:item_type].dataset,
       subject: [thing.capitalize, 'Freedom'],
       doi: "doi:bogus-#{Time.current.utc.iso8601(3)}"
-    ).unlock_and_fetch_ldp_object do |uo|
+    ).tap do |uo|
       uo.add_to_path(community.id, item_collection.id)
       uo.embargo_end_date = 2.days.ago.to_date
       uo.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].public
@@ -325,13 +323,13 @@ if Rails.env.development? || Rails.env.uat?
     end
 
     # Add an item owned by non-admin
-    Item.new_locked_ldp_object(
-      owner: non_admin.id,
+    Item.new(
+      owner_id: non_admin.id,
       creators: [creators[rand(10)]],
       visibility: JupiterCore::VISIBILITY_PUBLIC,
       created: rand(20_000).days.ago.to_s,
       title: "Impact of non-admin users on #{thing.pluralize}",
-      description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop,
+      description: Faker::Lorem.sentence(20, false, 0).chop,
       languages: [CONTROLLED_VOCABULARIES[:language].english],
       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
       item_type: CONTROLLED_VOCABULARIES[:item_type].learning_object,
@@ -339,19 +337,19 @@ if Rails.env.development? || Rails.env.uat?
       # Add a temporal subject
       temporal_subjects: ['The 1950s'],
       doi: "doi:bogus-#{Time.current.utc.iso8601(3)}"
-    ).unlock_and_fetch_ldp_object do |uo|
+    ).tap do |uo|
       uo.add_to_path(community.id, item_collection.id)
       uo.save!
     end
 
     # Want one multi-collection item per community
-    Item.new_locked_ldp_object(
-      owner: admin.id,
+    Item.new(
+      owner_id: admin.id,
       creators: [creators[rand(10)]],
       visibility: JupiterCore::VISIBILITY_PUBLIC,
       created: rand(20_000).days.ago.to_s,
       title: "Multi-collection random images of #{thing.pluralize}",
-      description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop,
+      description: Faker::Lorem.sentence(20, false, 0).chop,
       # No linguistic content
       languages: [CONTROLLED_VOCABULARIES[:language].no_linguistic_content],
       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
@@ -360,7 +358,7 @@ if Rails.env.development? || Rails.env.uat?
       # Add a spacial subject
       spatial_subjects: ['Onoway'],
       doi: "doi:bogus-#{Time.current.utc.iso8601(3)}"
-    ).unlock_and_fetch_ldp_object do |uo|
+    ).tap do |uo|
       uo.add_to_path(community.id, item_collection.id)
       uo.add_to_path(community.id, thesis_collection.id)
       uo.save!
@@ -369,28 +367,28 @@ if Rails.env.development? || Rails.env.uat?
 
   # Pad with empty communities for pagination (starts with Z for sort order)
   EXTRA_THINGS.each do |thing|
-    Community.new_locked_ldp_object(
-      owner: admin.id,
+    Community.create!(
+      owner_id: admin.id,
       title: "Zoo#{thing}ology Institute of North-Eastern Upper Alberta (and Saskatchewan)",
-      description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop
-    ).unlock_and_fetch_ldp_object(&:save!)
+      description: Faker::Lorem.sentence(20, false, 0).chop
+    )
   end
 
   # One community with a lot of empty restricted collections
-  community = Community.new_locked_ldp_object(
-    owner: admin.id,
+  community = Community.create!(
+    owner_id: admin.id,
     title: "The Everything Department",
-    description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop
-  ).unlock_and_fetch_ldp_object(&:save!)
+    description: Faker::Lorem.sentence(20, false, 0).chop
+  )
 
   EXTRA_THINGS.each do |thing|
-    collection = Collection.new_locked_ldp_object(
-      owner: admin.id,
+    collection = Collection.create!(
+      owner_id: admin.id,
       title: "Articles about the relationship between #{thing.pluralize} and non-#{thing.pluralize}",
       community_id: community.id,
       restricted: true,
       description: "A restricted collection"
-    ).unlock_and_fetch_ldp_object(&:save!)
+    )
   end
 
 end
@@ -400,19 +398,19 @@ end
  :conference_workshop_presentation, :dataset,
  :image, :journal_article_draft, :journal_article_published,
  :learning_object, :report, :research_material, :review].each do |type_name|
-  Type.where(name: type_name).first_or_create
+  Type.create(name: type_name)
 end
 
 # Languages
 [:english, :french, :spanish, :chinese, :german,
  :italian, :russian, :ukrainian, :japanese,
  :no_linguistic_content, :other].each do |language_name|
-  Language.where(name: language_name).first_or_create
+  Language.create(name: language_name)
 end
 
 # Institutions
 [:uofa, :st_stephens].each do |institution_name|
-  Institution.where(name: institution_name).first_or_create
+  Institution.create(name: institution_name)
 end
 
 

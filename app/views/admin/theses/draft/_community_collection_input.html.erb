@@ -7,7 +7,7 @@
 
     <%= select_tag 'draft_thesis[community_id][]',
                     options_for_select(
-                      Collection.where(restricted: true).sort(:title, :asc)
+                      Collection.where(restricted: true).order(:title => :asc)
                                 .map { |collection| [collection.community.title, collection.community.id] }
                                 .uniq,
                       community.present? ? community.id : nil ),

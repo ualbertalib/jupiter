@@ -69,15 +69,13 @@ class PageLayoutHelperTest < ActionView::TestCase
   end
 
   test 'page_image should return default image on community/item with no logo' do
-    @community = Community.new_locked_ldp_object(title: 'Random community', owner: 1)
-                          .unlock_and_fetch_ldp_object(&:save!)
+    @community = Community.create!(title: 'Random community', owner_id: users(:admin).id)
 
     assert_equal image_url('era-logo.png'), page_image
   end
 
   test 'page_image should return community/item logo' do
-    @community = Community.new_locked_ldp_object(title: 'Random community', owner: 1)
-                          .unlock_and_fetch_ldp_object(&:save!)
+    @community = Community.create!(title: 'Random community', owner_id: users(:admin).id)
 
     @community.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
                            filename: 'image-sample.jpeg', content_type: 'image/jpeg'
