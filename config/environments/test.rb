@@ -48,4 +48,7 @@ Rails.application.configure do
 
   # FITS characterization
   config.run_fits_characterization = false
+
+  # Action on unpermitted parameters
+  config.action_controller.action_on_unpermitted_parameters = :raise
 end
