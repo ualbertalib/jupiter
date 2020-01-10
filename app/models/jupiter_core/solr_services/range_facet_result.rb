@@ -1,4 +1,4 @@
-class JupiterCore::RangeFacetResult
+class JupiterCore::SolrServices::RangeFacetResult
 
   attr_reader :solr_index, :category_name, :range
 

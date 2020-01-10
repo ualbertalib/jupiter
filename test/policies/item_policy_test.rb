@@ -4,7 +4,7 @@ class ItemPolicyTest < ActiveSupport::TestCase
 
   test 'admin should have proper authorization over items' do
     current_user = users(:admin)
-    item = Item.new_locked_ldp_object
+    item = Item.new
 
     assert ItemPolicy.new(current_user, item).index?
     assert ItemPolicy.new(current_user, item).create?
@@ -19,7 +19,7 @@ class ItemPolicyTest < ActiveSupport::TestCase
 
   test 'authenticated user should only be able to create, see and modify, but not delete, their own items' do
     current_user = users(:regular)
-    item = Item.new_locked_ldp_object(owner: current_user.id)
+    item = Item.new(owner_id: current_user.id)
 
     assert ItemPolicy.new(current_user, item).index?
     assert ItemPolicy.new(current_user, item).show?
@@ -35,7 +35,7 @@ class ItemPolicyTest < ActiveSupport::TestCase
     current_user = users(:regular)
     another_user = users(:admin)
 
-    item = Item.new_locked_ldp_object(owner: another_user.id, visibility: JupiterCore::VISIBILITY_PUBLIC)
+    item = Item.new(owner_id: another_user.id, visibility: JupiterCore::VISIBILITY_PUBLIC)
 
     assert ItemPolicy.new(current_user, item).index?
     assert ItemPolicy.new(current_user, item).show?
@@ -51,7 +51,7 @@ class ItemPolicyTest < ActiveSupport::TestCase
     current_user = users(:regular)
     another_user = users(:admin)
 
-    item = Item.new_locked_ldp_object(owner: another_user.id, visibility: JupiterCore::VISIBILITY_AUTHENTICATED)
+    item = Item.new(owner_id: another_user.id, visibility: JupiterCore::VISIBILITY_AUTHENTICATED)
 
     assert ItemPolicy.new(current_user, item).index?
     assert ItemPolicy.new(current_user, item).show?
@@ -65,7 +65,7 @@ class ItemPolicyTest < ActiveSupport::TestCase
 
   test 'anon user should only be able to index, show, download, and view thumbnails of public items' do
     current_user = nil
-    item = Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC)
+    item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC)
 
     assert ItemPolicy.new(current_user, item).index?
     assert ItemPolicy.new(current_user, item).show?
@@ -81,7 +81,7 @@ class ItemPolicyTest < ActiveSupport::TestCase
 
   test 'anon user should only be able to index and show authenticated items' do
     current_user = nil
-    item = Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_AUTHENTICATED)
+    item = Item.new(visibility: JupiterCore::VISIBILITY_AUTHENTICATED)
 
     assert ItemPolicy.new(current_user, item).index?
     assert ItemPolicy.new(current_user, item).show?

@@ -4,9 +4,18 @@ class DownloadsControllerTest < ActionDispatch::IntegrationTest
 
   def before_all
     super
-    community = locked_ldp_fixture(Community, :nice).unlock_and_fetch_ldp_object(&:save!)
-    collection = locked_ldp_fixture(Collection, :nice).unlock_and_fetch_ldp_object(&:save!)
-    item = locked_ldp_fixture(Item, :fancy).unlock_and_fetch_ldp_object do |uo|
+    community = Community.create!(title: 'Nice community', owner_id: users(:admin).id)
+    collection = Collection.create!(title: 'Nice collection', owner_id: users(:admin).id, community_id: community.id)
+    item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
+                    owner_id: users(:admin).id, title: 'Fancy Item',
+                    creators: ['Joe Blow'],
+                    created: '1938-01-02',
+                    languages: [CONTROLLED_VOCABULARIES[:language].english],
+                    item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                    publication_status:
+                                               [CONTROLLED_VOCABULARIES[:publication_status].published],
+                    license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                    subject: ['Items']).tap do |uo|
       uo.add_to_path(community.id, collection.id)
       uo.save!
     end
@@ -19,9 +28,9 @@ class DownloadsControllerTest < ActionDispatch::IntegrationTest
 
     @file = item.files.first
 
-    item_requiring_authentication = Item.new_locked_ldp_object(
+    item_requiring_authentication = Item.new(
       title: 'item to download',
-      owner: 1,
+      owner_id: users(:admin).id,
       creators: ['Joe Blow'],
       created: '1972-08-08',
       languages: [CONTROLLED_VOCABULARIES[:language].english],
@@ -29,7 +38,7 @@ class DownloadsControllerTest < ActionDispatch::IntegrationTest
       visibility: JupiterCore::VISIBILITY_AUTHENTICATED,
       item_type: CONTROLLED_VOCABULARIES[:item_type].book,
       subject: ['Download']
-    ).unlock_and_fetch_ldp_object do |uo|
+    ).tap do |uo|
       uo.add_to_path(community.id, collection.id)
       uo.save!
     end
@@ -44,7 +53,7 @@ class DownloadsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'file should be viewable with proper headings' do
-    get file_view_item_url(id: @file.record.owner.id,
+    get file_view_item_url(id: @file.record.id,
                            file_set_id: @file.fileset_uuid,
                            file_name: @file.filename)
 
@@ -55,7 +64,7 @@ class DownloadsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'file should be downloadable with proper headings' do
-    get file_download_item_url(id: @file.record.owner.id,
+    get file_download_item_url(id: @file.record.id,
                                file_set_id: @file.fileset_uuid)
 
     assert_response :success
@@ -65,7 +74,7 @@ class DownloadsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'authentication required file shouldnt be viewable if not authenticated' do
-    get file_view_item_url(id: @file_requiring_authentication.record.owner.id,
+    get file_view_item_url(id: @file_requiring_authentication.record.id,
                            file_set_id: @file_requiring_authentication.fileset_uuid,
                            file_name: @file_requiring_authentication.filename)
 
@@ -74,7 +83,7 @@ class DownloadsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'authentication required file should be downloadable if not authenticated' do
-    get file_download_item_url(id: @file_requiring_authentication.record.owner.id,
+    get file_download_item_url(id: @file_requiring_authentication.record.id,
                                file_set_id: @file_requiring_authentication.fileset_uuid)
 
     assert_redirected_to root_url

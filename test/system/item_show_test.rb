@@ -2,15 +2,22 @@ require 'application_system_test_case'
 
 class ItemShowTest < ApplicationSystemTestCase
 
-  def before_all
-    super
+  def setup
     @user = User.find_by(email: 'john_snow@example.com')
-
-    @community = locked_ldp_fixture(Community, :fancy).unlock_and_fetch_ldp_object(&:save!)
-    @collection = locked_ldp_fixture(Collection, :fancy).unlock_and_fetch_ldp_object(&:save!)
+    admin = User.find_by(email: 'administrator@example.com')
+    @community = Community.create!(title: 'Fancy Community', owner_id: admin.id)
+    @collection = Collection.create!(title: 'Fancy collection', owner_id: admin.id, community_id: @community.id)
 
     # Half items have 'Fancy' in title, others have 'Nice', distributed between the two collections
-    @item = locked_ldp_fixture(Item, :fancy).unlock_and_fetch_ldp_object do |uo|
+    @item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
+                     owner_id: admin.id, title: 'Fancy Item',
+                     creators: ['Joe Blow'],
+                     created: '1938-01-02',
+                     languages: [CONTROLLED_VOCABULARIES[:language].english],
+                     license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                     item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                     publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
+                     subject: ['Items']).tap do |uo|
       uo.add_to_path(@community.id, @collection.id)
       uo.add_to_path(@community.id, @collection.id)
       uo.save!
@@ -24,22 +31,22 @@ class ItemShowTest < ApplicationSystemTestCase
       end
     end
 
-    @item2 = Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_AUTHENTICATED,
-                                        owner: @user.id, title: 'CCID Item',
-                                        creators: ['Joe Blow'],
-                                        created: '2011-11-11',
-                                        languages: [CONTROLLED_VOCABULARIES[:language].english],
-                                        license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                                        item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                        publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-                                        subject: ['Fancy things'])
-                 .unlock_and_fetch_ldp_object do |uo|
+    @item2 = Item.new(visibility: JupiterCore::VISIBILITY_AUTHENTICATED,
+                      owner_id: @user.id, title: 'CCID Item',
+                      creators: ['Joe Blow'],
+                      created: '2011-11-11',
+                      languages: [CONTROLLED_VOCABULARIES[:language].english],
+                      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                      item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                      publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
+                      subject: ['Fancy things'])
+                 .tap do |uo|
       uo.add_to_path(@community.id, @collection.id)
       uo.add_to_path(@community.id, @collection.id)
       uo.save!
     end
 
-    @thesis = Thesis.new_locked_ldp_object(
+    @thesis = Thesis.new(
       title: 'Thesis about the effects of missing regression tests',
       graduation_date: 'Fall 1990',
       dissertant: 'Joe Blow',
@@ -54,12 +61,17 @@ class ItemShowTest < ApplicationSystemTestCase
       degree: "Doctorate of Failin' Hard or Hardly Failin'",
       institution: CONTROLLED_VOCABULARIES[:institution].uofa,
       visibility: JupiterCore::VISIBILITY_PUBLIC,
-      owner: @user.id
-    ).unlock_and_fetch_ldp_object do |uo|
+      owner_id: @user.id
+    ).tap do |uo|
       uo.add_to_path(@community.id, @collection.id)
       uo.add_to_path(@community.id, @collection.id)
       uo.save!
     end
+  end
+
+  def teardown
+    # is clearing the database but not the index, for that it needs the following
+    JupiterCore::SolrServices::Client.instance.truncate_index
   end
 
   test 'unauthed users should be able to download all files from a public item' do

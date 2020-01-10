@@ -7,20 +7,19 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
 
   def before_all
     super
-
-    @community = locked_ldp_fixture(Community, :nice).unlock_and_fetch_ldp_object(&:save!)
-    @collection = locked_ldp_fixture(Collection, :nice).unlock_and_fetch_ldp_object(&:save!)
+    @community = Community.create!(title: 'Nice community', owner_id: users(:admin).id)
+    @collection = Collection.create!(title: 'Nice collection', owner_id: users(:admin).id, community_id: @community.id)
     @items = ['Fancy', 'Nice'].map do |adjective|
-      Item.new_locked_ldp_object(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                 owner: 1,
-                                 creators: ['Joe Blow'],
-                                 created: '1953-04-01',
-                                 languages: [CONTROLLED_VOCABULARIES[:language].english],
-                                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                                 item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                                 publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-                                 subject: ['Niceness', 'Fanciness'],
-                                 title: "#{adjective} Item").unlock_and_fetch_ldp_object do |uo|
+      Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
+               owner_id: users(:admin).id,
+               creators: ['Joe Blow'],
+               created: '1953-04-01',
+               languages: [CONTROLLED_VOCABULARIES[:language].english],
+               license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+               item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+               publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
+               subject: ['Niceness', 'Fanciness'],
+               title: "#{adjective} Item").tap do |uo|
         uo.add_to_path(@community.id, @collection.id)
         uo.save!
       end

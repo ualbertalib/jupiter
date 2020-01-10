@@ -4,9 +4,10 @@ class Admin::CommunitiesControllerTest < ActionDispatch::IntegrationTest
 
   def before_all
     super
-    @community = Community.new_locked_ldp_object(title: 'Nice community',
-                                                 owner: 1)
-    @community.unlock_and_fetch_ldp_object(&:save!)
+    @admin = users(:admin)
+    @community = Community.new(title: 'Nice community',
+                               owner_id: @admin.id)
+    @community.save!
   end
 
   def setup
@@ -34,7 +35,7 @@ class Admin::CommunitiesControllerTest < ActionDispatch::IntegrationTest
            params: { community: { title: 'New community' } }
     end
 
-    assert_redirected_to admin_community_url(Community.last)
+    assert_redirected_to admin_community_url(Community.find_by(title: 'New community'))
     assert_equal I18n.t('admin.communities.create.created'), flash[:notice]
   end
 
@@ -68,10 +69,10 @@ class Admin::CommunitiesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should destroy collection if has no items' do
-    community = Community.new_locked_ldp_object(
+    community = Community.create!(
       title: 'Nice community',
-      owner: 1
-    ).unlock_and_fetch_ldp_object(&:save!)
+      owner_id: @admin.id
+    )
 
     assert_difference('Community.count', -1) do
       delete admin_community_url(community)
@@ -83,11 +84,11 @@ class Admin::CommunitiesControllerTest < ActionDispatch::IntegrationTest
 
   test 'should not destroy collection if has items' do
     # Give the community a collection
-    Collection.new_locked_ldp_object(
+    Collection.new(
       community_id: @community.id,
       title: 'Nice collection',
-      owner: 1
-    ).unlock_and_fetch_ldp_object(&:save!)
+      owner_id: @admin.id
+    ).save!
 
     assert_no_difference('Collection.count') do
       delete admin_community_url(@community)
@@ -95,7 +96,7 @@ class Admin::CommunitiesControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to admin_communities_url
 
-    assert_match I18n.t('activemodel.errors.models.ir_community.attributes.member_collections.must_be_empty',
+    assert_match I18n.t('activerecord.errors.models.community.attributes.member_collections.must_be_empty',
                         list_of_collections: @community.member_collections.map(&:title).join(', ')), flash[:alert]
   end
 

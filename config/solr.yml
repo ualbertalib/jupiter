@@ -1,4 +1,4 @@
-# Needed and used by active fedora, to specify where to find solr
+# Needed and used by active fedora and JupiterCore::SolrServices::Client, to specify where to find solr
 default: &default
   url: <%= Rails.application.secrets.solr_url %>
 development:

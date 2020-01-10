@@ -4,9 +4,9 @@ class CommunitiesControllerTest < ActionDispatch::IntegrationTest
 
   def before_all
     super
-    @community = Community.new_locked_ldp_object(title: 'Nice community',
-                                                 owner: 1)
-    @community.unlock_and_fetch_ldp_object(&:save!)
+    @community = Community.new(title: 'Nice community',
+                               owner_id: users(:admin).id)
+    @community.save!
   end
 
   test 'should get index' do

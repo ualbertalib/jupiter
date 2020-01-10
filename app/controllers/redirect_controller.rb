@@ -14,7 +14,7 @@ class RedirectController < ApplicationController
     item = find_item_by_noid(noid)
     file = find_item_file(item, params[:filename] || params[:file])
     if file
-      redirect_to file_view_item_url(id: file.record.owner.id,
+      redirect_to file_view_item_url(id: file.record.id,
                                      file_set_id: file.fileset_uuid,
                                      file_name: file.filename.to_s), status: :moved_permanently
     else
@@ -56,8 +56,9 @@ class RedirectController < ApplicationController
     end
 
     file = find_item_file(item, params[:filename])
+
     if file
-      redirect_to file_view_item_url(id: file.record.owner.id,
+      redirect_to file_view_item_url(id: file.record.id,
                                      file_set_id: file.fileset_uuid,
                                      file_name: file.filename.to_s), status: :moved_permanently
     else
@@ -76,8 +77,11 @@ class RedirectController < ApplicationController
   end
 
   def find_item_by_noid(noid)
-    object = (Item.where(hydra_noid: noid) + Thesis.where(hydra_noid: noid)).first
-    return object if object.present?
+    item = Item.find_by(hydra_noid: noid)
+    return item if item.present?
+
+    item = Thesis.find_by(hydra_noid: noid)
+    return item if item.present?
 
     raise JupiterCore::ObjectNotFound
   end
@@ -89,7 +93,10 @@ class RedirectController < ApplicationController
   end
 
   def find_community_or_collection_by_noid(noid)
-    object = (Community.where(hydra_noid: noid) + Collection.where(hydra_noid: noid)).first
+    object = Community.find_by(hydra_noid: noid)
+    return object if object.present?
+
+    object = Collection.find_by(hydra_noid: noid)
     return object if object.present?
 
     raise JupiterCore::ObjectNotFound
@@ -102,21 +109,24 @@ class RedirectController < ApplicationController
   end
 
   def find_item_by_uuid(uuid)
-    object = (Item.where(fedora3_uuid: uuid) + Thesis.where(fedora3_uuid: uuid)).first
-    return object if object.present?
+    item = Item.find_by(fedora3_uuid: uuid)
+    return item if item.present?
+
+    item = Thesis.find_by(fedora3_uuid: uuid)
+    return item if item.present?
 
     raise JupiterCore::ObjectNotFound
   end
 
   def find_community_by_uuid(uuid)
-    object = Community.where(fedora3_uuid: uuid).first
+    object = Community.find_by(fedora3_uuid: uuid)
     return object if object.present?
 
     raise JupiterCore::ObjectNotFound
   end
 
   def find_collection_by_uuid(uuid)
-    object = Collection.where(fedora3_uuid: uuid).first
+    object = Collection.find_by(fedora3_uuid: uuid)
     return object if object.present?
 
     raise JupiterCore::ObjectNotFound

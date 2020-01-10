@@ -48,7 +48,7 @@ class SearchController < ApplicationController
     r = {}
     f = {}
     @search_models.each do |model|
-      model.ranges.each do |range|
+      model.solr_exporter_class.ranges.each do |range|
         next unless params[:ranges].present? && params[:ranges][range].present?
 
         if validate_range(params[:ranges][range])
@@ -57,7 +57,7 @@ class SearchController < ApplicationController
           params[:ranges].delete(range)
         end
       end
-      model.facets.each do |facet|
+      model.solr_exporter_class.facets.each do |facet|
         f[facet] = []
       end
     end

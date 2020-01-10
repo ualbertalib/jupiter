@@ -4,8 +4,11 @@ class Items::FilesControllerTest < ActionDispatch::IntegrationTest
 
   def before_all
     super
-    @community = locked_ldp_fixture(Community, :books).unlock_and_fetch_ldp_object(&:save!)
-    @collection = locked_ldp_fixture(Collection, :books).unlock_and_fetch_ldp_object(&:save!)
+    @community = Community.create!(title: 'Books', description: 'a bunch of books', owner_id: users(:admin).id)
+    @collection = Collection.create!(title: 'Fantasy Books',
+                                     description: 'some fantasy books',
+                                     owner_id: users(:admin).id,
+                                     community_id: @community.id)
   end
 
   setup do

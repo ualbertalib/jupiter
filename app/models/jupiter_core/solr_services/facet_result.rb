@@ -1,4 +1,4 @@
-class JupiterCore::FacetResult
+class JupiterCore::SolrServices::FacetResult
 
   FacetValue = Struct.new(:attribute_name, :solr_index, :value, :count)
 

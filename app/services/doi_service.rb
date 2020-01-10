@@ -25,15 +25,15 @@ class DOIService
   end
 
   def create
-    return unless @item.doi_state.unminted? && !@item.private?
+    return unless @item.unminted? && !@item.private?
 
     ezid_identifer = Ezid::Identifier.mint(Ezid::Client.config.default_shoulder, ezid_metadata)
     if ezid_identifer.present?
-      @item.unlock_and_fetch_ldp_object do |uo|
+      @item.tap do |uo|
         uo.doi = ezid_identifer.id
         uo.save!
       end
-      @item.doi_state.synced!
+      @item.synced!
       ezid_identifer
     end
   rescue StandardError => e
@@ -43,21 +43,21 @@ class DOIService
     # right back here again resulting in an infinite loop. This all works around a bug in ActiveFedora
     # preventing us from skipping this automatically
     @item.skip_handle_doi_states = true
-    @item.doi_state.unpublish!
+    @item.unpublish!
 
     raise e
   end
 
   def update
-    return unless @item.doi_state.awaiting_update?
+    return unless @item.awaiting_update?
 
     ezid_identifer = Ezid::Identifier.modify(@item.doi, ezid_metadata)
     return if ezid_identifer.blank?
 
     if @item.private?
-      @item.doi_state.unpublish!
+      @item.unpublish!
     else
-      @item.doi_state.synced!
+      @item.synced!
     end
     ezid_identifer
   rescue StandardError => e
@@ -68,9 +68,9 @@ class DOIService
     # preventing us from skipping this automatically
     @item.skip_handle_doi_states = true
     if @item.private?
-      @item.doi_state.synced!
+      @item.synced!
     else
-      @item.doi_state.unpublish!
+      @item.unpublish!
     end
     raise e
   end

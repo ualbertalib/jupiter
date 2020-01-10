@@ -1,32 +1,31 @@
-class Collection < JupiterCore::LockedLdpObject
+class Collection < JupiterCore::Depositable
 
-  include ObjectProperties
+  acts_as_rdfable
 
-  ldp_object_includes Hydra::Works::CollectionBehavior
+  scope :drafts, -> { where(is_published_in_era: false).or(where(is_published_in_era: nil)) }
 
-  # TODO: this should probably be renamed to share a name with member_of_paths on Item, so that their
-  # facet results can be coalesced when Collections are mixed into search results along with Items, as in the
-  # main search results
-  has_attribute :community_id, ::TERMS[:ual].path,
-                type: :path,
-                solrize_for: :pathing
+  has_solr_exporter Exporters::Solr::CollectionExporter
 
-  has_attribute :description, ::RDF::Vocab::DC.description, solrize_for: [:search]
-  has_attribute :restricted, ::TERMS[:ual].restricted_collection, type: :boolean, solrize_for: :exact_match
-  has_multival_attribute :creators, ::RDF::Vocab::DC.creator, solrize_for: :exact_match
+  belongs_to :owner, class_name: 'User'
+  belongs_to :community
 
-  # TODO: refactor this next line and move the title into Fedora, if we're still on Fedora at that point.
-  #
-  # We got lucky in that there are not expected to be a large number of Collections in this phase of Jupiter
-  # but using +additional_search_index+ to store data that isn't recreatable solely by inspecting this object's
-  # Fedora record creates data-ordering issues that are complicated to work around during Solr-index recovery
-  # scenarios. See recover.rake for information on the particular problems this is causing and why we want to
-  # eliminate it.
-  additional_search_index :community_title, solrize_for: :sort,
-                                            as: -> { Community.find(community_id).title if community_id.present? }
+  validates :community_id, presence: true
+  validate :community_validations
 
-  def community
-    Community.find(community_id)
+  before_destroy :can_be_destroyed?
+
+  before_validation do
+    self.visibility = JupiterCore::VISIBILITY_PUBLIC
+  end
+
+  acts_as_rdfable do |config|
+    config.title has_predicate: ::RDF::Vocab::DC.title
+    config.fedora3_uuid has_predicate: ::TERMS[:ual].fedora3_uuid
+    config.depositor has_predicate: ::TERMS[:ual].depositor
+    config.community_id has_predicate: ::TERMS[:ual].path
+    config.description has_predicate: ::RDF::Vocab::DC.description
+    config.restricted has_predicate: ::TERMS[:ual].restricted_collection
+    config.creators has_predicate: ::RDF::Vocab::DC.creator
   end
 
   def path
@@ -34,11 +33,16 @@ class Collection < JupiterCore::LockedLdpObject
   end
 
   def member_items
-    Item.where(member_of_paths: path)
+    # TODO: this (casting a json array to text and doing a LIKE against it) is kind of a nasty hack to deal with the fact
+    # that production is currently using a 7 or 8 year old version of Postgresql (9.2) that lacks proper operators for
+    # testing whether a value is in a json array, which newer version of Postgresql have.
+    #
+    # with an upgraded version of Postgresql this could be done more cleanly and performanetly
+    Item.where('member_of_paths::text LIKE ?', "%#{path}%")
   end
 
   def member_theses
-    Thesis.where(member_of_paths: path)
+    Thesis.where('member_of_paths::text LIKE ?', "%#{path}%")
   end
 
   def member_objects
@@ -49,41 +53,19 @@ class Collection < JupiterCore::LockedLdpObject
     super(only: [:title, :id])
   end
 
-  unlocked do
-    before_destroy :can_be_destroyed?
+  def can_be_destroyed?
+    return true if member_objects.count == 0
 
-    validates :community_id, presence: true
-    validate :community_validations
+    errors.add(:member_objects, :must_be_empty,
+               list_of_objects: member_objects.map(&:title).join(', '))
+    throw(:abort)
+  end
 
-    before_validation do
-      self.visibility = JupiterCore::VISIBILITY_PUBLIC
-    end
+  def community_validations
+    return unless community_id
 
-    before_save do
-      if community_id_changed?
-        # This adds the `pcdm::memberOf` predicate, pointing to the community
-        self.member_of_collections = []
-        # TODO: can this be streamlined so that a fetch from Fedora isn't needed?
-        community.unlock_and_fetch_ldp_object do |unlocked_community|
-          self.member_of_collections += [unlocked_community]
-        end
-      end
-    end
-
-    def can_be_destroyed?
-      return true if member_objects.count == 0
-
-      errors.add(:member_objects, :must_be_empty,
-                 list_of_objects: member_objects.map(&:title).join(', '))
-      throw(:abort)
-    end
-
-    def community_validations
-      return unless community_id
-
-      community = Community.find_by(community_id)
-      errors.add(:community_id, :community_not_found, id: community_id) if community.blank?
-    end
+    community = Community.find_by(id: community_id)
+    errors.add(:community_id, :community_not_found, id: community_id) if community.blank?
   end
 
 end

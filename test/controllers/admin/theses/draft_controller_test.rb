@@ -4,16 +4,16 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
 
   def before_all
     super
-    @community = locked_ldp_fixture(Community, :books).unlock_and_fetch_ldp_object(&:save!)
-    @collection = Collection.new_locked_ldp_object(title: 'Thesis collection',
-                                                   owner: 1,
-                                                   restricted: true,
-                                                   community_id: @community.id)
-                            .unlock_and_fetch_ldp_object(&:save!)
+    @community = Community.create!(title: 'Books', description: 'a bunch of books', owner_id: users(:admin).id)
+    @collection = Collection.create!(title: 'Thesis collection',
+                                     owner_id: users(:admin).id,
+                                     restricted: true,
+                                     community_id: @community.id)
   end
 
   setup do
     @admin = users(:admin)
+    Thesis.destroy_all
   end
 
   test 'should be able to get to show page for a draft thesis' do
@@ -114,10 +114,9 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
     draft_thesis.save!
 
     file_fixture = fixture_file_upload('/files/image-sample.jpeg', 'image/jpeg')
-    image_file = ActiveStorage::Blob.create_after_upload!(
-      io: file_fixture.open,
-      filename: file_fixture.original_filename, content_type: file_fixture.content_type
-    )
+    image_file = ActiveStorage::Blob.create_after_upload!(io: file_fixture.open,
+                                                          filename: file_fixture.original_filename,
+                                                          content_type: file_fixture.content_type)
 
     draft_thesis.files.attach image_file
 
@@ -171,7 +170,7 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
       patch admin_thesis_draft_url(id: :review_and_deposit_thesis, thesis_id: draft_thesis.id)
     end
 
-    assert_redirected_to item_url(Thesis.last)
+    assert_redirected_to item_url(Thesis.order(created_at: :asc).last)
     assert_equal I18n.t('admin.theses.draft.successful_deposit'), flash[:notice]
 
     draft_thesis.reload
@@ -212,7 +211,7 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should not be able to create a draft thesis if not logged in' do
-    assert_no_difference('DraftThesis.count') do
+    assert_no_difference('DraftThesis.drafts.count') do
       assert_raises ActionController::RoutingError do
         post create_draft_admin_theses_url
       end
@@ -222,7 +221,7 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
   test 'should not be able to create a draft thesis if not admin' do
     sign_in_as users(:regular)
 
-    assert_no_difference('DraftThesis.count') do
+    assert_no_difference('DraftThesis.drafts.count') do
       assert_raises ActionController::RoutingError do
         post create_draft_admin_theses_url
       end
@@ -232,11 +231,12 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
   test 'should be able to create a draft thesis if logged in' do
     sign_in_as @admin
 
-    assert_difference('DraftThesis.count', 1) do
+    assert_difference('DraftThesis.drafts.count', 1) do
       post create_draft_admin_theses_url
     end
 
-    assert_redirected_to admin_thesis_draft_path(id: :describe_thesis, thesis_id: DraftThesis.last.id)
+    assert_redirected_to admin_thesis_draft_path(id: :describe_thesis,
+                                                 thesis_id: DraftThesis.drafts.order(created_at: :asc).last.id)
   end
 
   test 'other admins should be able to delete a draft thesis even if they do not own the thesis' do
@@ -244,7 +244,7 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
 
     draft_thesis = draft_theses(:completed_choose_license_and_visibility_step)
 
-    assert_difference('DraftThesis.count', -1) do
+    assert_difference('DraftThesis.drafts.count', -1) do
       delete admin_thesis_delete_draft_url(thesis_id: draft_thesis.id)
     end
 
@@ -256,7 +256,7 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
 
     draft_thesis = draft_theses(:completed_choose_license_and_visibility_step)
 
-    assert_difference('DraftThesis.count', -1) do
+    assert_difference('DraftThesis.drafts.count', -1) do
       delete admin_thesis_delete_draft_url(thesis_id: draft_thesis.id)
     end
 

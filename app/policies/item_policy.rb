@@ -1,4 +1,4 @@
-class ItemPolicy < LockedLdpObjectPolicy
+class ItemPolicy < DepositablePolicy
 
   def index?
     true

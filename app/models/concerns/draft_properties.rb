@@ -54,7 +54,7 @@ module DraftProperties
       begin
         Rails.application.routes.url_helpers.rails_representation_path(thumbnail.preview(args).processed)
       rescue ActiveStorage::UnpreviewableError
-        return nil
+        nil
       end
     end
 
@@ -116,10 +116,10 @@ module DraftProperties
 
       member_of_paths['community_id'].each_with_index do |community_id, idx|
         collection_id = member_of_paths['collection_id'][idx]
-        community = Community.find_by(community_id)
+        community = Community.find_by(id: community_id)
         errors.add(:member_of_paths, :community_not_found) if community.blank?
 
-        collection = Collection.find_by(collection_id)
+        collection = Collection.find_by(id: collection_id)
         if collection.blank?
           errors.add(:member_of_paths, :collection_not_found)
         elsif collection.community_id != community.id

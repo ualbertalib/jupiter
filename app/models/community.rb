@@ -1,19 +1,40 @@
-class Community < JupiterCore::LockedLdpObject
+class Community < JupiterCore::Depositable
 
-  include ObjectProperties
-  # Needed for ActiveStorage (logo)...
-  include GlobalID::Identification
+  acts_as_rdfable
 
-  ldp_object_includes Hydra::PCDM::ObjectBehavior
+  scope :drafts, -> { where(is_published_in_era: false).or(where(is_published_in_era: nil)) }
 
-  has_attribute :description, ::RDF::Vocab::DC.description, solrize_for: [:search]
-  has_multival_attribute :creators, ::RDF::Vocab::DC.creator, solrize_for: :exact_match
+  has_solr_exporter Exporters::Solr::CommunityExporter
+
+  belongs_to :owner, class_name: 'User'
+
+  # technically this could be dependent: :restrict_with_error, but we already handle this with a custom validation & error message
+  # rubocop:disable Rails/HasManyOrHasOneDependent
+  has_many :collections
+  # rubocop:enable Rails/HasManyOrHasOneDependent
 
   has_one_attached :logo
 
+  before_destroy :can_be_destroyed?
+  before_destroy -> { logo.purge_later }
+
+  validates :title, presence: true
+
+  before_validation do
+    self.visibility = JupiterCore::VISIBILITY_PUBLIC
+  end
+
+  acts_as_rdfable do |config|
+    config.title has_predicate: ::RDF::Vocab::DC.title
+    config.fedora3_uuid has_predicate: ::TERMS[:ual].fedora3_uuid
+    config.depositor has_predicate: ::TERMS[:ual].depositor
+    config.description has_predicate: ::RDF::Vocab::DC.description
+    config.creators has_predicate: ::RDF::Vocab::DC.creator
+  end
+
   # this method can be used on the SolrCached object OR the ActiveFedora object
   def member_collections
-    Collection.where(community_id: id)
+    collections
   end
 
   # A virtual attribute to handle removing logos on forms ...
@@ -40,29 +61,12 @@ class Community < JupiterCore::LockedLdpObject
     logo.attachment
   end
 
-  def self.safe_attributes
-    super + [:remove_logo]
-  end
+  def can_be_destroyed?
+    return true if member_collections.count == 0
 
-  unlocked do
-    type [::Hydra::PCDM::Vocab::PCDMTerms.Object, ::TERMS[:ual].community]
-
-    before_destroy :can_be_destroyed?
-    before_destroy -> { logo.purge_later }
-
-    validates :title, presence: true
-
-    before_validation do
-      self.visibility = JupiterCore::VISIBILITY_PUBLIC
-    end
-
-    def can_be_destroyed?
-      return true if member_collections.count == 0
-
-      errors.add(:member_collections, :must_be_empty,
-                 list_of_collections: member_collections.map(&:title).join(', '))
-      throw(:abort)
-    end
+    errors.add(:member_collections, :must_be_empty,
+               list_of_collections: member_collections.map(&:title).join(', '))
+    throw(:abort)
   end
 
 end

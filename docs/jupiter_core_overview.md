@@ -101,7 +101,7 @@ causes the following to happen:
     - defines methods to check whether something just transitioned to or from private visibility (needed for DOI logic)
     - defines a `convert_value` method used internally in the ActiveFedora objects. We use this to pre-convert values (or raise an error if they're the wrong type) to the type they were
     declared to be BEFORE handing them to ActiveFedora, which is extremely buggy and generally silently does bad things. An example
-    here is if we did `item.unlock_and_fetch_ldp_object {|uo| uo.title = 3}`, 3 would pass through `convert_value` before being assigned to the title attribute in activefedora, and an error
+    here is if we did `item.tap {|uo| uo.title = 3}`, 3 would pass through `convert_value` before being assigned to the title attribute in activefedora, and an error
     would be raised (whereas raw ActiveFedora would just silently store a 3, type declarations irrelevant, and then bad things would happen with solr later).
     Doing this ourselves bypasses multiple date conversion bugs we've hit in Fedora over time.
     - papers over an ActiveFedora bug that would otherwise lead to validations not running.

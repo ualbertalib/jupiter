@@ -7,20 +7,20 @@ class Admin::CollectionsController < Admin::AdminController
 
   def show
     respond_to do |format|
-      restrict_items_to(Item.solr_name_for(:member_of_paths, role: :pathing), @collection.path)
+      restrict_items_to(Item.solr_exporter_class.solr_name_for(:member_of_paths, role: :pathing), @collection.path)
       format.html { render template: 'collections/show' }
     end
   end
 
   def new
-    @collection = Collection.new_locked_ldp_object(community_id: @community.id)
+    @collection = Collection.new(community_id: @community.id)
   end
 
   def create
     @collection =
-      Collection.new_locked_ldp_object(permitted_attributes(Collection)
-                .merge(owner: current_user.id, community_id: @community.id))
-    @collection.unlock_and_fetch_ldp_object do |unlocked_collection|
+      Collection.new(permitted_attributes(Collection)
+                .merge(owner_id: current_user.id, community_id: @community.id))
+    @collection.tap do |unlocked_collection|
       if unlocked_collection.save
         redirect_to admin_community_collection_path(@community, @collection), notice: t('.created')
       else
@@ -32,7 +32,7 @@ class Admin::CollectionsController < Admin::AdminController
   def edit; end
 
   def update
-    @collection.unlock_and_fetch_ldp_object do |unlocked_collection|
+    @collection.tap do |unlocked_collection|
       if unlocked_collection.update(permitted_attributes(Collection))
         redirect_to admin_community_collection_path(@community, @collection), notice: t('.updated')
       else
@@ -42,7 +42,7 @@ class Admin::CollectionsController < Admin::AdminController
   end
 
   def destroy
-    @collection.unlock_and_fetch_ldp_object do |unlocked_collection|
+    @collection.tap do |unlocked_collection|
       if unlocked_collection.destroy
         flash[:notice] = t('.deleted')
       else

@@ -5,7 +5,7 @@ class Admin::CommunitiesController < Admin::AdminController
   def index
     respond_to do |format|
       format.html do
-        @communities = Community.sort(params[:sort], params[:direction]).page params[:page]
+        @communities = Community.order(Community.sort_order(params)).page params[:page]
         @title = t('.header')
         render template: 'communities/index'
       end
@@ -29,28 +29,28 @@ class Admin::CommunitiesController < Admin::AdminController
     respond_to do |format|
       format.js do
         # Used for the collapsable dropdown to show member collections
-        @collections = @community.member_collections.sort(params[:sort], params[:direction])
+        @collections = @community.member_collections.order(Collection.sort_order(params))
         render template: 'communities/show'
       end
       format.html do
-        @collections = @community.member_collections.sort(params[:sort], params[:direction]).page params[:page]
+        @collections = @community.member_collections.order(Collection.sort_order(params)).page params[:page]
         render template: 'communities/show'
       end
     end
   end
 
   def new
-    @community = Community.new_locked_ldp_object
+    @community = Community.new
   end
 
   def create
     @community =
-      Community.new_locked_ldp_object(permitted_attributes(Community)
-                                       .merge(owner: current_user&.id))
+      Community.new(permitted_attributes(Community)
+                                       .merge(owner_id: current_user&.id))
 
     @community.logo.attach(params[:community][:logo]) if params[:community][:logo].present?
 
-    @community.unlock_and_fetch_ldp_object do |unlocked_community|
+    @community.tap do |unlocked_community|
       if unlocked_community.save
         redirect_to [:admin, @community], notice: t('.created')
       else
@@ -67,7 +67,7 @@ class Admin::CommunitiesController < Admin::AdminController
       @community.logo.attach(params[:community][:logo])
     end
 
-    @community.unlock_and_fetch_ldp_object do |unlocked_community|
+    @community.tap do |unlocked_community|
       if unlocked_community.update(permitted_attributes(Community))
         redirect_to [:admin, @community], notice: t('.updated')
       else
@@ -77,7 +77,7 @@ class Admin::CommunitiesController < Admin::AdminController
   end
 
   def destroy
-    @community.unlock_and_fetch_ldp_object do |unlocked_community|
+    @community.tap do |unlocked_community|
       if unlocked_community.destroy
         flash[:notice] = t('.deleted')
       else

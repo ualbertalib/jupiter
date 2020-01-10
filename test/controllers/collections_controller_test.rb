@@ -4,8 +4,8 @@ class CollectionsControllerTest < ActionDispatch::IntegrationTest
 
   def before_all
     super
-    @community = locked_ldp_fixture(Community, :nice).unlock_and_fetch_ldp_object(&:save!)
-    @collection = locked_ldp_fixture(Collection, :nice).unlock_and_fetch_ldp_object(&:save!)
+    @community = Community.create!(title: 'Nice community', owner_id: users(:admin).id)
+    @collection = Collection.create!(title: 'Nice collection', owner_id: users(:admin).id, community_id: @community.id)
   end
 
   test 'should show collection' do

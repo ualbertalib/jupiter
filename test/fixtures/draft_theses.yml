@@ -1,5 +1,6 @@
 inactive:
   user: admin
+  is_published_in_era: false
 
 completed_describe_thesis_step:
   user: admin
@@ -13,6 +14,7 @@ completed_describe_thesis_step:
     'Doggo ipsum long woofer much ruin diet waggy wags borkdrive, pupper doggo long doggo,
     such treat doggorino. Most angery pupper I have ever seen thicc long woofer much ruin
     diet borkf heckin corgo, fat boi heckin good boys and girls super chub heck.'
+  is_published_in_era: false
 
 completed_choose_license_and_visibility_step:
   user: admin
@@ -31,3 +33,4 @@ completed_choose_license_and_visibility_step:
   visibility: <%= DraftThesis.visibilities[:embargo] %>
   embargo_end_date: <%= Date.current + 5.year %>
   rights: 'License text goes here'
+  is_published_in_era: false

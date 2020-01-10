@@ -9,7 +9,7 @@
       <% if policy(thesis).download? %>
         <% primary_file = thesis.files.first %>
         <% if primary_file.present? && primary_file.fileset_uuid.present? %>
-          <%= link_to file_download_item_url(id: primary_file.record.owner.id,
+          <%= link_to file_download_item_url(id: primary_file.record.id,
                                  file_set_id: primary_file.fileset_uuid),
                       class: 'btn btn-secondary mr-2 mb-2 mb-md-0',
                       rel: 'nofollow',

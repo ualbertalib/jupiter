@@ -4,8 +4,8 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
 
   def before_all
     super
-    @community = locked_ldp_fixture(Community, :nice).unlock_and_fetch_ldp_object(&:save!)
-    @collection = locked_ldp_fixture(Collection, :nice).unlock_and_fetch_ldp_object(&:save!)
+    @community = Community.create!(title: 'Nice community', owner_id: users(:admin).id)
+    @collection = Collection.create!(title: 'Nice collection', owner_id: users(:admin).id, community_id: @community.id)
   end
 
   def setup
@@ -29,7 +29,7 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
            params: { collection: { title: 'New collection' } }
     end
 
-    assert_redirected_to admin_community_collection_url(@community, Collection.last)
+    assert_redirected_to admin_community_collection_url(@community, Collection.find_by(title: 'New collection'))
     assert_equal I18n.t('admin.collections.create.created'), flash[:notice]
   end
 
@@ -63,11 +63,11 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should destroy collection if has no items' do
-    collection = Collection.new_locked_ldp_object(
+    collection = Collection.create!(
       community_id: @community.id,
       title: 'Nice collection',
-      owner: 1
-    ).unlock_and_fetch_ldp_object(&:save!)
+      owner_id: @admin.id
+    )
 
     assert_difference('Collection.count', -1) do
       delete admin_community_collection_url(@community, collection)
@@ -78,16 +78,17 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should not destroy collection if has items' do
-    collection = Collection.new_locked_ldp_object(
+    collection = Collection.create!(
       community_id: @community.id,
       title: 'Nice collection',
-      owner: 1
-    ).unlock_and_fetch_ldp_object(&:save!)
+      owner_id: @admin.id
+    )
 
     # Give the collection an item
-    Item.new_locked_ldp_object(
+
+    Item.new(
       title: 'item blocking deletion',
-      owner: 1,
+      owner_id: @admin.id,
       creators: ['Joe Blow'],
       created: '1972-08-08',
       languages: [CONTROLLED_VOCABULARIES[:language].english],
@@ -96,7 +97,7 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
       item_type: CONTROLLED_VOCABULARIES[:item_type].article,
       publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
       subject: ['Invincibility']
-    ).unlock_and_fetch_ldp_object do |unlocked_item|
+    ).tap do |unlocked_item|
       unlocked_item.add_to_path(@community.id, collection.id)
       unlocked_item.save!
     end
@@ -107,24 +108,24 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to admin_community_url(@community)
 
-    assert_match I18n.t('activemodel.errors.models.ir_collection.attributes.member_objects.must_be_empty',
+    assert_match I18n.t('activerecord.errors.models.collection.attributes.member_objects.must_be_empty',
                         list_of_objects: collection.member_objects.map(&:title).join(', ')), flash[:alert]
   end
 
   test 'should not destroy collection if has theses' do
-    collection = Collection.new_locked_ldp_object(
+    collection = Collection.create!(
       community_id: @community.id,
       title: 'Nice collection',
-      owner: 1
-    ).unlock_and_fetch_ldp_object(&:save!)
+      owner_id: @admin.id
+    )
 
-    Thesis.new_locked_ldp_object(
+    Thesis.new(
       title: 'thesis blocking deletion',
-      owner: 1,
+      owner_id: @admin.id,
       dissertant: 'Joe Blow',
       visibility: JupiterCore::VISIBILITY_PUBLIC,
       graduation_date: '2017-03-31'
-    ).unlock_and_fetch_ldp_object do |unlocked_item|
+    ).tap do |unlocked_item|
       unlocked_item.add_to_path(@community.id, collection.id)
       unlocked_item.save!
     end
@@ -135,7 +136,7 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to admin_community_url(@community)
 
-    assert_match I18n.t('activemodel.errors.models.ir_collection.attributes.member_objects.must_be_empty',
+    assert_match I18n.t('activerecord.errors.models.collection.attributes.member_objects.must_be_empty',
                         list_of_objects: collection.member_objects.map(&:title).join(', ')), flash[:alert]
   end
 

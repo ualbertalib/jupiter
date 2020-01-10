@@ -6,14 +6,15 @@ namespace :jupiter do
   desc 'removes stale inactive drafts from the database'
   task remove_inactive_drafts: :environment do
     # Find all the inactive draft items older than yesterday
-    inactive_draft_items = DraftItem.where('DATE(created_at) < DATE(?)', Date.yesterday).where(status: :inactive)
+    inactive_draft_items = DraftItem.drafts.where('DATE(created_at) < DATE(?)', Date.yesterday).where(status: :inactive)
     puts "Deleting #{inactive_draft_items.count} Inactive Draft Items..."
 
     # delete them all
     inactive_draft_items.destroy_all
 
     # Find all the inactive draft theses older than yesterday
-    inactive_draft_theses = DraftThesis.where('DATE(created_at) < DATE(?)', Date.yesterday).where(status: :inactive)
+    inactive_draft_theses = DraftThesis.drafts
+                                       .where('DATE(created_at) < DATE(?)', Date.yesterday).where(status: :inactive)
     puts "Deleting #{inactive_draft_theses.count} Inactive Draft Theses..."
 
     # delete them all
@@ -25,14 +26,14 @@ namespace :jupiter do
   desc 'fetch and unlock every object then save'
   task reindex: :environment do
     puts 'Reindexing all Items and Theses...'
-    (Item.all + Thesis.all).each { |item| item.unlock_and_fetch_ldp_object(&:save!) }
+    (Item.all + Thesis.all).each(&:save!)
     puts 'Reindex completed!'
   end
 
   desc 'queue all items and theses in the system for preservation'
   task preserve_all_items_and_theses: :environment do
     puts 'Adding all Items and Theses to preservation queue...'
-    (Item.all + Thesis.all).each { |item| item.unlock_and_fetch_ldp_object(&:preserve) }
+    (Item.all + Thesis.all).each { |item| item.tap(&:preserve) }
     puts 'All Items and Theses have been added to preservation queue!'
   end
 
@@ -48,6 +49,71 @@ namespace :jupiter do
     end
     puts
     puts 'done!'
+  end
+
+  desc 'sayonara ActiveFedora'
+  task get_me_off_of_fedora: :environment do
+    puts
+    puts 'Preparing Draft Item ...'
+
+    DraftItem.all.each do |draft_item|
+      draft_item.files_attachments.each do |attachment|
+        attachment.upcoming_record_id = draft_item.upcoming_id
+        attachment.save!
+      end
+
+      draft_item.draft_items_languages.each do |join_record|
+        join_record.upcoming_draft_item_id = draft_item.upcoming_id
+        join_record.save!
+      end
+      print '.'
+    end
+
+    puts
+    puts 'Preparing Draft Thesis ...'
+
+    DraftThesis.all.each do |draft_thesis|
+      draft_thesis.files_attachments.each do |attachment|
+        attachment.upcoming_record_id = draft_thesis.upcoming_id
+        attachment.save!
+      end
+      print '.'
+    end
+
+    puts
+    puts 'Migrating Communities...'
+
+    Community.all.each do |community|
+      ArCommunity.from_community(community)
+      print '.'
+    end
+
+    puts
+    puts 'Migrating Collections...'
+
+    Collection.all.each do |collection|
+      ArCollection.from_collection(collection)
+      print '.'
+    end
+
+    puts
+    puts 'Migrating Items...'
+
+    Item.all.each do |item|
+      ArItem.from_item(item)
+      print '.'
+    end
+
+    puts
+    puts 'Migrating Theses...'
+
+    Thesis.all.each do |thesis|
+      ArThesis.from_thesis(thesis)
+      print '.'
+    end
+
+    puts
+    puts 'Finished!'
   end
 
   desc 'turn existing filesets into attachments'
@@ -83,7 +149,7 @@ namespace :jupiter do
     item.files.purge
 
     item.file_sets.each do |fs|
-      fs.unlock_and_fetch_ldp_object do |ufs|
+      fs.tap do |ufs|
         ufs.fetch_raw_original_file_data do |content_type, io|
           attachment = item.files.attach(io: io, filename: ufs.contained_filename, content_type: content_type).first
           attachment.fileset_uuid = fs.id

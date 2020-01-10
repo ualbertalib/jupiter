@@ -1,6 +1,7 @@
 module SearchHelper
   def search_params_hash
-    params.permit(:search, { facets: {} }, { ranges: {} }, :tab, :sort, :direction, :community_id, :id).to_h
+    params.permit(:search, { facets: {} }, { ranges: {} }, :tab, :sort, :direction, :community_id, :id, :page, :utf8)
+          .to_h.except(:page, :utf8)
   end
 
   def active_facet?(facet_value)
@@ -19,8 +20,8 @@ module SearchHelper
     priority_facets = (params[:facets]&.keys || []) + (params[:ranges]&.keys || [])
     return priority_facets unless @search_models.include? Item
 
-    priority_facets + [Item.solr_name_for(:all_contributors, role: :facet),
-                       Item.solr_name_for(:all_subjects, role: :facet)]
+    priority_facets + [Item.solr_exporter_class.solr_name_for(:all_contributors, role: :facet),
+                       Item.solr_exporter_class.solr_name_for(:all_subjects, role: :facet)]
   end
   # rubocop:enable Rails/HelperInstanceVariable
 
@@ -101,6 +102,12 @@ module SearchHelper
 
   def search_sort_label(sort, direction)
     t("search.sort_#{sort}_#{direction}")
+  end
+
+  def search_sort_label_for_relation(relation)
+    direction = relation.arel.orders.first.direction
+    sort = relation.arel.orders.first.value.name
+    search_sort_label(sort, direction)
   end
 
   def results_range(results)
