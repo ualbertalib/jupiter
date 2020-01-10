@@ -33,11 +33,6 @@ GIT
   revision: 4c9712f9309b99e1552a0c2a092a2b4a91eaf52c
   branch: literally_types
 
-  specs:
-    builder_deferred_tagging (0.1.0)
-      builder
-      request_store
-
 GIT
   remote: https://github.com/ualbertalib/oaisys.git
   revision: a484bebdcc01a46956dfdbed3d51b536eeb45c88
