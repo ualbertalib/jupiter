@@ -7,11 +7,11 @@ end
 
 # Core Rails stuff
 gem 'image_processing' # for ActiveStorage Variants
-gem 'puma', '~> 4.2'
+gem 'puma', '~> 4.3'
 gem 'rails', '~> 5.2.3'
 
 # Assets (CSS/JS) stuff
-gem 'bootstrap', '~> 4.3.1'
+gem 'bootstrap', '~> 4.4.1'
 gem 'dropzonejs-rails'
 gem 'font-awesome-rails'
 gem 'jquery-rails'
@@ -31,12 +31,12 @@ gem 'simple_form'
 gem 'canonical-rails'
 
 # RDF stuff
-gem 'acts_as_rdfable', github: 'mbarnett/acts_as_rdfable', tag: 'v0.2'
+gem 'acts_as_rdfable', github: 'mbarnett/acts_as_rdfable', tag: 'v0.2.1'
 gem 'rdf-vocab'
 
 # Database stuff
 gem 'connection_pool'
-gem 'pg', '~> 1.1.4'
+gem 'pg', '~> 1.2.2'
 gem 'redis', '~> 4.1'
 gem 'rsolr'
 
@@ -50,7 +50,7 @@ gem 'pundit', '1.1.0'
 # Background tasks
 gem 'sidekiq', '~> 5.2'
 gem 'sidekiq-unique-jobs'
-gem 'sinatra', '~> 2.0.7' # used by sidekiq/web
+gem 'sinatra', '~> 2.0.8' # used by sidekiq/web
 # Sidekiq cron jobs
 gem 'rufus-scheduler', '3.6.0' # https://github.com/ondrejbartas/sidekiq-cron/issues/199
 gem 'sidekiq-cron'
@@ -92,7 +92,7 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
 
-  gem 'rubocop', '~> 0.74.0', require: false
+  gem 'rubocop', '~> 0.79.0', require: false
   gem 'rubocop-performance'
   gem 'rubocop-rails'
 
@@ -115,11 +115,11 @@ group :test do
   # Faker added 0.5 seconds to the test suite per call. Haikunator seems much faster for faking strings
   gem 'haikunator'
   gem 'minitest-hooks'
-  gem 'shoulda-matchers', '~> 4.1'
+  gem 'shoulda-matchers', '~> 4.2'
 
   gem 'launchy'
   gem 'vcr', require: false
-  gem 'webdrivers', '~> 4.1'
+  gem 'webdrivers', '~> 4.2'
   gem 'webmock', require: false
 end
 

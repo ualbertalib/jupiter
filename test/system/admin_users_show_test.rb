@@ -3,7 +3,7 @@ require 'application_system_test_case'
 class AdminUsersShowTest < ApplicationSystemTestCase
 
   test 'should not be able to toggle suspended/admin or login as yourself' do
-    admin = User.find_by(email: 'administrator@example.com')
+    admin = users(:admin)
 
     login_user(admin)
 
@@ -153,47 +153,11 @@ class AdminUsersShowTest < ApplicationSystemTestCase
     user = users(:regular)
     admin = users(:admin)
 
-    community = Community.create!(title: 'Fancy Community', owner_id: admin.id)
-    collection = Collection.create!(community_id: community.id,
-                                    title: 'Fancy Collection', owner_id: admin.id)
-
-    # Two things owned by regular user
-    Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-             owner_id: user.id, title: 'Fancy Item',
-             creators: ['Joe Blow'],
-             created: 'Fall 2017',
-             languages: [CONTROLLED_VOCABULARIES[:language].english],
-             license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-             item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-             publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-             subject: ['Fancy things'])
-        .tap do |uo|
-      uo.add_to_path(community.id, collection.id)
-      uo.save!
-    end
-    Thesis.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-               owner_id: user.id, title: 'Nice Item',
-               dissertant: 'Joe Blow',
-               graduation_date: '2019')
-          .tap do |uo|
-      uo.add_to_path(community.id, collection.id)
-      uo.save!
-    end
-
-    # One item owned by admin
-    Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-             owner_id: admin.id, title: 'Admin Item',
-             creators: ['Joe Blow'],
-             created: 'Winter 2017',
-             languages: [CONTROLLED_VOCABULARIES[:language].english],
-             license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-             item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-             publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-             subject: ['Ownership'])
-        .tap do |uo|
-      uo.add_to_path(community.id, collection.id)
-      uo.save!
-    end
+    # creating the index from the fixtures requires a save
+    # TODO: these would be good candidates for using factories instead.
+    items(:fancy).save
+    items(:admin).save
+    thesis(:nice).save
 
     login_user(admin)
 
@@ -219,6 +183,9 @@ class AdminUsersShowTest < ApplicationSystemTestCase
     refute_selector 'div.jupiter-results-list li.list-group-item .media-body a', text: 'Nice Item'
 
     logout_user
+
+    # this is the cleanup for the #save above
+    JupiterCore::SolrServices::Client.instance.truncate_index
   end
 
 end

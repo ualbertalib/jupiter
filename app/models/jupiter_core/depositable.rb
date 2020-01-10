@@ -113,7 +113,7 @@ class JupiterCore::Depositable < ApplicationRecord
     begin
       Rails.application.routes.url_helpers.rails_representation_path(logo.preview(args).processed)
     rescue ActiveStorage::UnpreviewableError
-      return nil
+      nil
     end
   end
 
@@ -178,6 +178,13 @@ class JupiterCore::Depositable < ApplicationRecord
     return true if changes['visibility'].present? &&
                    (changes['visibility'][0] == JupiterCore::VISIBILITY_PRIVATE) &&
                    (changes['visibility'][1] != JupiterCore::VISIBILITY_PRIVATE)
+  end
+
+  def add_to_embargo_history
+    self.embargo_history ||= []
+    embargo_history_item = "An embargo was deactivated on #{Time.now.getlocal('-06:00')}. Its release date was " \
+    "#{embargo_end_date}. Intended visibility after embargo was #{visibility_after_embargo}"
+    self.embargo_history << embargo_history_item
   end
 
   def push_item_id_for_preservation

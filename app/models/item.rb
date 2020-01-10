@@ -63,9 +63,16 @@ class Item < JupiterCore::Doiable
     item.description = draft_item.description
 
     # Handle visibility plus embargo logic
+    if draft_item.visibility_as_uri == CONTROLLED_VOCABULARIES[:visibility].embargo
+      item.visibility_after_embargo = draft_item.visibility_after_embargo_as_uri
+      item.embargo_end_date = draft_item.embargo_end_date
+    else
+      # If visibility was previously embargo but not anymore
+      item.add_to_embargo_history if item.visibility == CONTROLLED_VOCABULARIES[:visibility].embargo
+      item.visibility_after_embargo = nil
+      item.embargo_end_date = nil
+    end
     item.visibility = draft_item.visibility_as_uri
-    item.visibility_after_embargo = draft_item.visibility_after_embargo_as_uri
-    item.embargo_end_date = draft_item.embargo_end_date
 
     # Handle license vs rights
     item.license = draft_item.license_as_uri
