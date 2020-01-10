@@ -51,8 +51,8 @@ module DraftActions
       params[draft_param].delete :collection_id
 
       # TODO: Handle required year but optional day/month better? Keep as string?
-      # Set month/day to Jan 1st if left blank
-      if params[draft_param][:date_created].blank?
+      # Set month/day to Jan 1st if left blank and draft is a DraftItem
+      if params[draft_param][:date_created].blank? && @draft.is_a?(DraftItem)
         params[draft_param]['date_created(3i)'] = '1' if params[draft_param]['date_created(3i)'].blank?
 
         params[draft_param]['date_created(2i)'] = '1' if params[draft_param]['date_created(2i)'].blank?
