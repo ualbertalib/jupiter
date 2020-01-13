@@ -76,7 +76,7 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should get results in alphabetical order when no query present' do
-    get search_url, as: :json
+    get search_url, as: :json, params: { search: '' }
     assert_response :success
     data = JSON.parse(response.body)
     assert_equal([@item1.id, @item4.id, @item2.id, @item5.id, @item3.id], data.map { |result| result['id'] })

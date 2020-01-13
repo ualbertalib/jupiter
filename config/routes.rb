@@ -4,6 +4,8 @@ require_dependency 'admin_constraint'
 
 # rubocop is bad and recommends insane things
 Rails.application.routes.draw do
+  mount Oaisys::Engine, at: '/oai'
+
   root to: 'welcome#index'
 
   resources :items, only: [:show, :edit] do
