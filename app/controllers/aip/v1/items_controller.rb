@@ -26,7 +26,7 @@ class Aip::V1::ItemsController < ApplicationController
     # table entries
 
     @item.files.each do |file|
-      fileset_url = request.original_url + "/filesets/#{file.fileset_uuid}"
+      fileset_url = "#{request.original_url}/filesets/#{file.fileset_uuid}"
       add_statement!(
         subject: subject,
         predicate: CONTROLLED_VOCABULARIES[:pcdm].has_member,
@@ -34,15 +34,13 @@ class Aip::V1::ItemsController < ApplicationController
       )
     end
 
-    # Add owners email seperatedly because is a relation with 2 steps in
-    # distance
-
-    owners_email = @item.owner.email
+    # Add owners email seperatedly because there is currently no predicate set
+    # to specify this relation directly
 
     add_statement!(
       subject: subject,
       predicate: RDF::Vocab::BIBO.owner,
-      object: owners_email
+      object: @item.owner.email
     )
 
     triples = @graph.dump(:n3)
@@ -51,6 +49,12 @@ class Aip::V1::ItemsController < ApplicationController
 
   def file_sets
     authorize @item
+
+    # The underscore for xml.uuid_ is intentional. Nokogiri builder makes
+    # use of method_missing to create its xml model. There could be
+    # problems with preexisting methods so we play it safe and add an underscore
+    # to avoid unintended behaviuor. You can find more info here:
+    # https://www.rubydoc.info/github/sparklemotion/nokogiri/Nokogiri/XML/Builder
 
     builder = Nokogiri::XML::Builder.new do |xml|
       xml.file_order do
