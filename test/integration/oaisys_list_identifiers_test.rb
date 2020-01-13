@@ -17,6 +17,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     @big_community = Community.create!(title: 'Big Community', owner_id: users(:admin).id)
     @big_collection = Collection.create!(community_id: @big_community.id,
                                          title: 'Big Collection', owner_id: users(:admin).id)
+
     @collection1 = Collection.create!(community_id: @community.id,
                                       title: 'Fancy Collection 1', owner_id: users(:admin).id)
     @collection2 = Collection.create!(community_id: @community.id,
@@ -145,6 +146,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     item_identifiers = Oaisys::Engine.config.oai_dc_model.public_items.page(2)
                                      .per(Oaisys::Engine.config.items_per_request)
                                      .pluck(:id, :record_created_at, :member_of_paths)
+
     assert_select 'OAI-PMH' do
       assert_select 'responseDate'
       assert_select 'request'
