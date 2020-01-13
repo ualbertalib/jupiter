@@ -36,7 +36,7 @@ class ItemPolicy < DepositablePolicy
   # namespaces in its policies
 
   def file_sets?
-    true
+    admin? || record_requires_authentication?
   end
 
 end
