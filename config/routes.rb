@@ -123,6 +123,10 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :items, only: [:show]
       get '/items/:id/filesets', to: 'items#file_sets'
+      get '/items/:id/filesets/:file_set_id', to: 'items#file_set'
+      get '/items/:id/filesets/:file_set_id/download', to: 'items#download_file'
+      get '/items/:id/filesets/:file_set_id/fixity', to: 'items#fixity_file'
+      get '/items/:id/filesets/:file_set_id/original_file', to: 'items#original_file'
     end
   end
 end

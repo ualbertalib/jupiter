@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/ualbertalib/acts_as_rdfable.git
-  revision: 1314de0a93f623b742fccb257bb7f2cf905fe675
+  revision: deed1e5fa585c5517a626985ef6037dee03c6a6f
   tag: v0.2.1
   specs:
     acts_as_rdfable (0.2.1)
@@ -14,24 +14,6 @@ GIT
     builder_deferred_tagging (0.1.0)
       builder
       request_store
-
-GIT
-  remote: https://github.com/ualbertalib/oaisys.git
-  revision: a484bebdcc01a46956dfdbed3d51b536eeb45c88
-  ref: a484bebdcc01a46956dfdbed3d51b536eeb45c88
-  specs:
-    oaisys (0.1.0)
-      builder (~> 3.0)
-      pg
-      rails (~> 5.2.3)
-      rubocop
-      rubocop-performance
-      rubocop-rails
-
-GIT
-  remote: https://github.com/ualbertalib/solrizer.git
-  revision: 4c9712f9309b99e1552a0c2a092a2b4a91eaf52c
-  branch: literally_types
 
 GIT
   remote: https://github.com/ualbertalib/oaisys.git
