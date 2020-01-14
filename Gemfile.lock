@@ -28,24 +28,6 @@ GIT
       rubocop-performance
       rubocop-rails
 
-GIT
-  remote: https://github.com/ualbertalib/solrizer.git
-  revision: 4c9712f9309b99e1552a0c2a092a2b4a91eaf52c
-  branch: literally_types
-
-GIT
-  remote: https://github.com/ualbertalib/oaisys.git
-  revision: a484bebdcc01a46956dfdbed3d51b536eeb45c88
-  ref: a484bebdcc01a46956dfdbed3d51b536eeb45c88
-  specs:
-    oaisys (0.1.0)
-      builder (~> 3.0)
-      pg
-      rails (~> 5.2.3)
-      rubocop
-      rubocop-performance
-      rubocop-rails
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -168,8 +150,8 @@ GEM
     ezid-client (1.8.0)
       hashie (~> 3.4, >= 3.4.3)
       nokogiri
-    faker (2.10.0)
-      i18n (>= 1.6, < 1.8)
+    faker (2.10.1)
+      i18n (>= 1.6, < 2)
     faraday (0.17.3)
       multipart-post (>= 1.2, < 3)
     faraday-http-cache (2.0.0)
@@ -188,7 +170,7 @@ GEM
       concurrent-ruby (~> 1.0)
     hashdiff (1.0.0)
     hashie (3.6.0)
-    i18n (1.7.1)
+    i18n (1.8.2)
       concurrent-ruby (~> 1.0)
     image_processing (1.10.3)
       mini_magick (>= 4.9.5, < 5)
