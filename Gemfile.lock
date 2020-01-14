@@ -28,24 +28,6 @@ GIT
       rubocop-performance
       rubocop-rails
 
-GIT
-  remote: https://github.com/ualbertalib/solrizer.git
-  revision: 4c9712f9309b99e1552a0c2a092a2b4a91eaf52c
-  branch: literally_types
-
-GIT
-  remote: https://github.com/ualbertalib/oaisys.git
-  revision: a484bebdcc01a46956dfdbed3d51b536eeb45c88
-  ref: a484bebdcc01a46956dfdbed3d51b536eeb45c88
-  specs:
-    oaisys (0.1.0)
-      builder (~> 3.0)
-      pg
-      rails (~> 5.2.3)
-      rubocop
-      rubocop-performance
-      rubocop-rails
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -330,7 +312,7 @@ GEM
     regexp_parser (1.6.0)
     request_store (1.5.0)
       rack (>= 1.4)
-    rollbar (2.23.1)
+    rollbar (2.23.2)
     rsolr (2.2.1)
       builder (>= 2.1.2)
       faraday (>= 0.9.0)
