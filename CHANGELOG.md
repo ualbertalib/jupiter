@@ -8,6 +8,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ### Added
 - Mounted Oaisys engine
+- Added tests surrounding Oaisys ListSets response
 - Version 1 of AIP API
 - Added and set up papertrail gem
 - Set up papertrail admin view

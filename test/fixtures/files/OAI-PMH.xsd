@@ -5,6 +5,7 @@
         attributeFormDefault="unqualified">
 
   <import schemaLocation="oai-identifier.xsd"/>
+  <import schemaLocation="oai_dc.xsd"/>
   <annotation>
     <documentation>
       XML Schema which can be used to validate replies to all OAI-PMH
