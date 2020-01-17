@@ -32,4 +32,8 @@ class ThesisPolicy < DepositablePolicy
     download?
   end
 
+  def file_sets?
+    admin? || record_requires_authentication?
+  end
+
 end
