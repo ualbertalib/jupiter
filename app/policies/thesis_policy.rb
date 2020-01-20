@@ -32,8 +32,11 @@ class ThesisPolicy < DepositablePolicy
     download?
   end
 
+  # This policy are used for the AIP V1 API. Pundit does not allow use of
+  # namespaces in its policies
+
   def file_sets?
-    admin? || record_requires_authentication?
+    user_is_authenticated_for_record?
   end
 
 end

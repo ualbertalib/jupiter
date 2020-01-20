@@ -121,19 +121,26 @@ Rails.application.routes.draw do
   # AIP API v1
   namespace :aip, defaults: { format: :n3 } do
     namespace :v1 do
-      resources :items, only: [:show]
-      get '/items/:id/filesets', to: 'items#file_sets'
-      get '/items/:id/filesets/:file_set_id', to: 'items#file_set'
-      get '/items/:id/filesets/:file_set_id/download', to: 'items#download_file'
-      get '/items/:id/filesets/:file_set_id/fixity', to: 'items#fixity_file'
-      get '/items/:id/filesets/:file_set_id/original_file', to: 'items#original_file'
+      get '/:model/:id', to: 'aip#show'
+      get '/:model/:id/filesets', to: 'aip#file_sets'
+      get '/:model/:id/filesets/:file_set_id', to: 'aip#file_set'
+      get '/:model/:id/filesets/:file_set_id/download', to: 'aip#download_file'
+      get '/:model/:id/filesets/:file_set_id/fixity', to: 'aip#fixity_file'
+      get '/:model/:id/filesets/:file_set_id/original_file', to: 'aip#original_file'
 
-      resources :theses, only: [:show]
-      get '/theses/:id/filesets', to: 'theses#file_sets'
-      get '/theses/:id/filesets/:file_set_id', to: 'theses#file_set'
-      get '/theses/:id/filesets/:file_set_id/download', to: 'theses#download_file'
-      get '/theses/:id/filesets/:file_set_id/fixity', to: 'theses#fixity_file'
-      get '/theses/:id/filesets/:file_set_id/original_file', to: 'theses#original_file'
+      # resources :items, only: [:show]
+      # get '/items/:id/filesets', to: 'items#file_sets'
+      # get '/items/:id/filesets/:file_set_id', to: 'items#file_set'
+      # get '/items/:id/filesets/:file_set_id/download', to: 'items#download_file'
+      # get '/items/:id/filesets/:file_set_id/fixity', to: 'items#fixity_file'
+      # get '/items/:id/filesets/:file_set_id/original_file', to: 'items#original_file'
+
+      # resources :theses, only: [:show]
+      # get '/theses/:id/filesets', to: 'theses#file_sets'
+      # get '/theses/:id/filesets/:file_set_id', to: 'theses#file_set'
+      # get '/theses/:id/filesets/:file_set_id/download', to: 'theses#download_file'
+      # get '/theses/:id/filesets/:file_set_id/fixity', to: 'theses#fixity_file'
+      # get '/theses/:id/filesets/:file_set_id/original_file', to: 'theses#original_file'
     end
   end
 end

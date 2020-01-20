@@ -34,7 +34,7 @@ gem 'canonical-rails'
 gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', tag: 'v0.2.1'
 gem 'rdf', '~> 3.1.0'
 gem 'rdf-n3'
-gem 'rdf-vocab'
+gem 'rdf-vocab', '~> 3.1.1'
 
 # Database stuff
 gem 'connection_pool'

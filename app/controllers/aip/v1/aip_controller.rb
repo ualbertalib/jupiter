@@ -1,10 +1,4 @@
-require 'rdf/n3'
-require 'rdf/vocab'
-require 'acts_as_rdfable'
-import RDF
-import ActsAsRdfable
-
-class Aip::V1::AIPBaseController < ApplicationController
+class Aip::V1::AipController < ApplicationController
 
   # load_and_authorize_asset method needs to be defined on the subclasses where
   # different type of object is required
@@ -20,11 +14,13 @@ class Aip::V1::AIPBaseController < ApplicationController
     # These are the prefixes defined as required by the metadata team. The
     # hardcoded strings need to be replaced. The namespaces could be added to
     # the rdf-vocab gem.
+    # The fedora prefixes will be replaced at a later point from another
+    # ontology, for now these remain as placeholders.
     prefixes = [
       RDF::Vocab::DC,
       RDF::Vocab::DC11,
       'http://terms.library.ualberta.ca/',
-      'http://pcdm.org/models#', # Coming on a new release from rdf_vocab gem
+      RDF::Vocab::PCDM,
       'http://prismstandard.org/namespaces/basic/3.0/',
       RDF::Vocab::BIBO,
       'http://ontoware.org/swrc/ontology#',
@@ -56,15 +52,14 @@ class Aip::V1::AIPBaseController < ApplicationController
   end
 
   def file_sets
-    # The underscore for xml.uuid_ is intentional. Nokogiri builder makes
-    # use of method_missing to create its xml model. There could be
-    # problems with preexisting methods so we play it safe and add an underscore
-    # to avoid unintended behaviuor. You can find more info here:
-    # https://www.rubydoc.info/github/sparklemotion/nokogiri/Nokogiri/XML/Builder
-
     builder = Nokogiri::XML::Builder.new do |xml|
       xml.file_order do
         @asset.files.each do |file|
+          # The underscore for xml.uuid_ is intentional. Nokogiri builder makes
+          # use of method_missing to create its xml model. There could be
+          # problems with preexisting methods so we play it safe and add an
+          # underscore to avoid unintended behaviuor. You can find more info here:
+          # https://www.rubydoc.info/github/sparklemotion/nokogiri/Nokogiri/XML/Builder
           xml.uuid_ file.fileset_uuid
         end
       end
@@ -74,10 +69,12 @@ class Aip::V1::AIPBaseController < ApplicationController
 
   def file_set
     # Prefixes provided by the metadata team
+    # The fedora prefixes will be replaced at a later point from another
+    # ontology, for now these remain as placeholders.
     prefixes = [
       RDF::Vocab::DC,
       'http://terms.library.ualberta.ca/',
-      'http://pcdm.org/models#', # Coming on a new release from rdf_vocab gem
+      RDF::Vocab::PCDM,
       RDF::Vocab::BIBO,
       RDF::Vocab::EBUCore,
       'info:fedora/fedora-system:def/model#hasModel',
@@ -182,7 +179,7 @@ class Aip::V1::AIPBaseController < ApplicationController
       fileset_url = "#{request.original_url}/filesets/#{file.fileset_uuid}"
       statement = prepare_statement(
         subject: self_subject,
-        predicate: CONTROLLED_VOCABULARIES[:pcdm].has_member,
+        predicate: RDF::Vocab::PCDM.hasMember,
         object: fileset_url
       )
       file_statements << statement unless statement.nil?
@@ -211,6 +208,19 @@ class Aip::V1::AIPBaseController < ApplicationController
   # each rdf annotation for the requested digital object
   def self_subject
     RDF::URI(request.url)
+  end
+
+  def load_and_authorize_asset
+    case params[:model]
+    when Item.name.underscore.pluralize
+      @asset = Item.find(params[:id])
+    when Thesis.name.underscore.pluralize
+      @asset = Thesis.find(params[:id])
+    else
+      raise ActiveRecord::RecordNotFound
+    end
+
+    authorize @asset
   end
 
 end

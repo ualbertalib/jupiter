@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/ualbertalib/acts_as_rdfable.git
-  revision: deed1e5fa585c5517a626985ef6037dee03c6a6f
+  revision: b3f9011b3c42c3bfd3bb2fe1d4f526dc30de401a
   tag: v0.2.1
   specs:
     acts_as_rdfable (0.2.1)
@@ -510,7 +510,7 @@ DEPENDENCIES
   ransack
   rdf (~> 3.1.0)
   rdf-n3
-  rdf-vocab
+  rdf-vocab (~> 3.1.1)
   redis (~> 4.1)
   rollbar
   rsolr
