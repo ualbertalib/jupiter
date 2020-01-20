@@ -6,6 +6,8 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+## [1.2.19] - 2020-01-20
+
 ### Fixed
 - delete the list node and indirect container proxy when you purge a fileset [#1354](https://github.com/ualbertalib/jupiter/issues/1354)
 
