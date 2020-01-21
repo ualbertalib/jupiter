@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/ualbertalib/acts_as_rdfable.git
   revision: b3f9011b3c42c3bfd3bb2fe1d4f526dc30de401a
-  tag: v0.2.1
+  tag: v0.2.2
   specs:
     acts_as_rdfable (0.2.1)
       rails (~> 5.2.3)
