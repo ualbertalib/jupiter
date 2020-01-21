@@ -27,7 +27,7 @@ class Aip::V1::AipController < ApplicationController
       ::TERMS[:acl].schema,
       RDF::Vocab::EBUCore,
       # The following prefixes need to be reevaluated and replaced
-      ::TERMS[:fedora].schema + ::TERMS[:fedora].has_mdoel,
+      ::TERMS[:fedora].schema + ::TERMS[:fedora].has_model,
       RDF::Vocab::Fcrepo4.created,
       RDF::Vocab::Fcrepo4.createdBy,
       RDF::Vocab::Fcrepo4.lastModified,
