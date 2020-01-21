@@ -63,3 +63,18 @@
   schema: 'http://ontoware.org/swrc/ontology#'
   terms:
     institution: institution
+
+# 
+- vocabulary: fits
+  schema: 'http://projecthydra.org/ns/fits/'
+
+- vocabulary: odf
+  schema: 'http://projecthydra.org/ns/odf/'
+
+- vocabulary: semantic
+  schema: 'http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#'
+
+- vocabulary: fedora
+  schema: 'info:fedora/fedora-system:def/model#'
+  terms:
+    has_model: hasModel

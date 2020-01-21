@@ -19,21 +19,21 @@ class Aip::V1::AipController < ApplicationController
     prefixes = [
       RDF::Vocab::DC,
       RDF::Vocab::DC11,
-      'http://terms.library.ualberta.ca/',
+      ::TERMS[:ual].schema,
       RDF::Vocab::PCDM,
-      'http://prismstandard.org/namespaces/basic/3.0/',
+      ::TERMS[:prism].schema,
       RDF::Vocab::BIBO,
-      'http://ontoware.org/swrc/ontology#',
-      'http://projecthydra.org/ns/auth/acl#',
+      ::TERMS[:swrc].schema,
+      ::TERMS[:acl].schema,
       RDF::Vocab::EBUCore,
-      'info:fedora/fedora-system:def/model#hasModel',
-      'http://fedora.info/definitions/v4/repository#created',
-      'http://fedora.info/definitions/v4/repository#createdBy',
-      'http://fedora.info/definitions/v4/repository#lastmodified',
-      'http://fedora.info/definitions/v4/repository#lastmodifiedBy',
-      'http://fedora.info/definitions/v4/repository#writable'
+      # The following prefixes need to be reevaluated and replaced
+      ::TERMS[:fedora].schema + ::TERMS[:fedora].has_mdoel,
+      RDF::Vocab::Fcrepo4.created,
+      RDF::Vocab::Fcrepo4.createdBy,
+      RDF::Vocab::Fcrepo4.lastModified,
+      RDF::Vocab::Fcrepo4.lastModifiedBy,
+      RDF::Vocab::Fcrepo4.writable
     ]
-
     graph = create_graph(@asset, prefixes)
 
     # Handle files separately since currently they are not a part of the
@@ -73,16 +73,17 @@ class Aip::V1::AipController < ApplicationController
     # ontology, for now these remain as placeholders.
     prefixes = [
       RDF::Vocab::DC,
-      'http://terms.library.ualberta.ca/',
+      ::TERMS[:ual].schema,
       RDF::Vocab::PCDM,
       RDF::Vocab::BIBO,
       RDF::Vocab::EBUCore,
-      'info:fedora/fedora-system:def/model#hasModel',
-      'http://fedora.info/definitions/v4/repository#created',
-      'http://fedora.info/definitions/v4/repository#createdBy',
-      'http://fedora.info/definitions/v4/repository#lastmodified',
-      'http://fedora.info/definitions/v4/repository#lastmodifiedBy',
-      'http://fedora.info/definitions/v4/repository#writable'
+      # The following prefixes need to be reevaluated and replaced
+      ::TERMS[:fedora].schema + ::TERMS[:fedora].has_mdoel,
+      RDF::Vocab::Fcrepo4.created,
+      RDF::Vocab::Fcrepo4.createdBy,
+      RDF::Vocab::Fcrepo4.lastModified,
+      RDF::Vocab::Fcrepo4.lastModifiedBy,
+      RDF::Vocab::Fcrepo4.writable
     ]
 
     graph = create_graph(@file, prefixes)
@@ -105,10 +106,11 @@ class Aip::V1::AipController < ApplicationController
     prefixes = [
       RDF::Vocab::EBUCore,
       RDF::Vocab::PREMIS,
-      'http://projecthydra.org/ns/fits/',
-      'http://projecthydra.org/ns/odf/',
-      'http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#',
-      RDF::Vocab::DC11
+      RDF::Vocab::DC11,
+      # The following prefixes need to be reevaluated and replaced
+      ::TERMS[:fits].schema,
+      ::TERMS[:odf].schema,
+      ::TERMS[:semantic].schema
     ]
 
     graph = create_graph(@file, prefixes)
