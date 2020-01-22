@@ -106,7 +106,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     end
   end
 
-  def test_list_identifiers_items_xml
+  def test_list_identifiers_items_resumption_token_xml
     get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_dc'), headers: { 'Accept' => 'application/xml' }
     assert_response :success
 
@@ -130,17 +130,20 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
             end
           end
         end
-        assert_select 'resumptionToken', 'metadataPrefix%3Doai_dc%26page%3D2'
+        assert_select 'resumptionToken'
       end
     end
-  end
 
-  def test_list_identifiers_resumption_token_xml
-    get oaisys_path + '?verb=ListIdentifiers&resumptionToken=metadataPrefix%3Doai_dc%26page%3D2',
+    resumption_token = document.css('OAI-PMH ListIdentifiers resumptionToken').text
+    # TODO: look into why every second request to Oaisys in the same test gives a 503.
+    get oaisys_path(verb: 'ListIdentifiers', resumptionToken: resumption_token),
+        headers: { 'Accept' => 'application/xml' }
+
+    # Test use of resumption token.
+    get oaisys_path(verb: 'ListIdentifiers', resumptionToken: resumption_token),
         headers: { 'Accept' => 'application/xml' }
     assert_response :success
 
-    schema = Nokogiri::XML::Schema(File.open(file_fixture('OAI-PMH.xsd')))
     document = Nokogiri::XML(@response.body)
     assert_empty schema.validate(document)
     item_identifiers = Oaisys::Engine.config.oai_dc_model.public_items.page(2)
@@ -162,6 +165,36 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
         end
         assert_select 'resumptionToken'
       end
+    end
+
+    resumption_token = document.css('OAI-PMH ListIdentifiers resumptionToken').text
+    # TODO: look into why every second request to Oaisys in the same test gives a 503.
+    get oaisys_path(verb: 'ListIdentifiers', resumptionToken: resumption_token),
+        headers: { 'Accept' => 'application/xml' }
+
+    # Test expiration of resumption token when results change.
+    @item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
+                     owner_id: users(:admin).id, title: 'Fancy Item 1',
+                     creators: ['Joe Blow'],
+                     created: '1938-01-02',
+                     languages: [CONTROLLED_VOCABULARIES[:language].english],
+                     item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                     publication_status:
+                       [CONTROLLED_VOCABULARIES[:publication_status].published],
+                     license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                     subject: ['Items']).tap do |uo|
+      uo.add_to_path(@community.id, @collection1.id)
+      uo.save!
+    end
+
+    get oaisys_path(verb: 'ListIdentifiers', resumptionToken: resumption_token),
+        headers: { 'Accept' => 'application/xml' }
+    assert_response :success
+
+    assert_select 'OAI-PMH' do
+      assert_select 'responseDate'
+      assert_select 'request'
+      assert_select 'error', I18n.t('error_messages.resumption_token_invalid')
     end
   end
 

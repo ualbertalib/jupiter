@@ -27,7 +27,7 @@ class OaisysListSetsTest < ActionDispatch::IntegrationTest
                        description: '')
   end
 
-  def test_list_sets_xml
+  def test_list_sets_resumption_token_xml
     get oaisys_path(verb: 'ListSets'), headers: { 'Accept' => 'application/xml' }
     assert_response :success
 
@@ -56,13 +56,18 @@ class OaisysListSetsTest < ActionDispatch::IntegrationTest
             end
           end
         end
-        assert_select 'resumptionToken', 'page%3D2'
+        assert_select 'resumptionToken'
       end
     end
-  end
 
-  def test_list_sets_resumption_token_xml
-    get oaisys_path(verb: 'ListSets', resumptionToken: 'page%3D2'), headers: { 'Accept' => 'application/xml' }
+    resumption_token = document.css('OAI-PMH ListSets resumptionToken').text
+    # TODO: look into why every second request to Oaisys in the same test gives a 503.
+    get oaisys_path(verb: 'ListSets', resumptionToken: resumption_token),
+        headers: { 'Accept' => 'application/xml' }
+
+    # Test use of resumption token.
+    get oaisys_path(verb: 'ListSets', resumptionToken: resumption_token),
+        headers: { 'Accept' => 'application/xml' }
     assert_response :success
 
     schema = Nokogiri::XML::Schema(File.open(file_fixture('OAI-PMH.xsd')))
@@ -92,6 +97,26 @@ class OaisysListSetsTest < ActionDispatch::IntegrationTest
         end
         assert_select 'resumptionToken'
       end
+    end
+
+    resumption_token = document.css('OAI-PMH ListIdentifiers resumptionToken').text
+    # TODO: look into why every second request to Oaisys in the same test gives a 503.
+    get oaisys_path(verb: 'ListIdentifiers', resumptionToken: resumption_token),
+        headers: { 'Accept' => 'application/xml' }
+
+    # Test expiration of resumption token when results change.
+    Collection.create!(community_id: @community.id,
+                       title: 'Fancy Collection 7', owner_id: users(:admin).id,
+                       description: '')
+
+    get oaisys_path(verb: 'ListSets', resumptionToken: resumption_token),
+        headers: { 'Accept' => 'application/xml' }
+    assert_response :success
+
+    assert_select 'OAI-PMH' do
+      assert_select 'responseDate'
+      assert_select 'request'
+      assert_select 'error', I18n.t('error_messages.resumption_token_invalid')
     end
   end
 
