@@ -116,7 +116,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
 
     item_identifiers = Oaisys::Engine.config.oai_dc_model.public_items.page(1)
                                      .per(Oaisys::Engine.config.items_per_request)
-                                     .pluck(:id, :record_created_at, :member_of_paths)
+                                     .pluck(:id, :updated_at, :member_of_paths)
     assert_select 'OAI-PMH' do
       assert_select 'responseDate'
       assert_select 'request'
@@ -148,7 +148,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     assert_empty schema.validate(document)
     item_identifiers = Oaisys::Engine.config.oai_dc_model.public_items.page(2)
                                      .per(Oaisys::Engine.config.items_per_request)
-                                     .pluck(:id, :record_created_at, :member_of_paths)
+                                     .pluck(:id, :updated_at, :member_of_paths)
 
     assert_select 'OAI-PMH' do
       assert_select 'responseDate'
@@ -206,7 +206,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     document = Nokogiri::XML(@response.body)
     assert_empty schema.validate(document)
     thesis_identifiers = Oaisys::Engine.config.oai_etdms_model.public_items
-                                       .pluck(:id, :record_created_at, :member_of_paths)
+                                       .pluck(:id, :updated_at, :member_of_paths)
     assert_select 'OAI-PMH' do
       assert_select 'responseDate'
       assert_select 'request'
@@ -234,7 +234,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     assert_empty schema.validate(document)
 
     item_identifiers = Oaisys::Engine.config.oai_dc_model.public_items.belongs_to_path(@collection2.id)
-                                     .pluck(:id, :record_created_at, :member_of_paths)
+                                     .pluck(:id, :updated_at, :member_of_paths)
     assert_select 'OAI-PMH' do
       assert_select 'responseDate'
       assert_select 'request'
@@ -262,7 +262,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     assert_empty schema.validate(document)
 
     thesis_identifiers = Oaisys::Engine.config.oai_etdms_model.public_items.belongs_to_path(@collection2.id)
-                                       .pluck(:id, :record_created_at, :member_of_paths)
+                                       .pluck(:id, :updated_at, :member_of_paths)
     assert_select 'OAI-PMH' do
       assert_select 'responseDate'
       assert_select 'request'
@@ -305,8 +305,8 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     schema = Nokogiri::XML::Schema(File.open(file_fixture('OAI-PMH.xsd')))
     document = Nokogiri::XML(@response.body)
     assert_empty schema.validate(document)
-    item_identifiers = Oaisys::Engine.config.oai_dc_model.public_items.created_on_or_before(just_after_current_time)
-                                     .belongs_to_path(@community.id).pluck(:id, :record_created_at, :member_of_paths)
+    item_identifiers = Oaisys::Engine.config.oai_dc_model.public_items.updated_on_or_before(just_after_current_time)
+                                     .belongs_to_path(@community.id).pluck(:id, :updated_at, :member_of_paths)
     assert_select 'OAI-PMH' do
       assert_select 'responseDate'
       assert_select 'request'
@@ -334,9 +334,9 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     document = Nokogiri::XML(@response.body)
     assert_empty schema.validate(document)
     thesis_identifiers = Oaisys::Engine.config.oai_etdms_model
-                                       .public_items.created_on_or_before(just_after_current_time)
+                                       .public_items.updated_on_or_before(just_after_current_time)
                                        .belongs_to_path(@community.id)
-                                       .pluck(:id, :record_created_at, :member_of_paths)
+                                       .pluck(:id, :updated_at, :member_of_paths)
     assert_select 'OAI-PMH' do
       assert_select 'responseDate'
       assert_select 'request'
@@ -390,8 +390,8 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
 
   def test_list_identifiers_item_from_until_date_xml
     item = Oaisys::Engine.config.oai_dc_model.public_items.belongs_to_path(@community.id).first
-    item_creation_time = item[:record_created_at].utc.xmlschema
-    just_after_item_creation_time = (item[:record_created_at] + 5.seconds).utc.xmlschema
+    item_creation_time = item[:updated_at].utc.xmlschema
+    just_after_item_creation_time = (item[:updated_at] + 5.seconds).utc.xmlschema
     get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_dc', set: @community.id, from: item_creation_time,
                     until: just_after_item_creation_time),
         headers: { 'Accept' => 'application/xml' }
@@ -418,8 +418,8 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
 
   def test_list_identifiers_thesis_from_until_date_xml
     thesis = Oaisys::Engine.config.oai_etdms_model.public_items.belongs_to_path(@community.id).first
-    thesis_creation_time = thesis[:record_created_at].utc.xmlschema
-    just_after_thesis_creation_time = (thesis[:record_created_at] + 5.seconds).utc.xmlschema
+    thesis_creation_time = thesis[:updated_at].utc.xmlschema
+    just_after_thesis_creation_time = (thesis[:updated_at] + 5.seconds).utc.xmlschema
     get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_etdms', set: @community.id,
                     from: thesis_creation_time, until: just_after_thesis_creation_time),
         headers: { 'Accept' => 'application/xml' }
