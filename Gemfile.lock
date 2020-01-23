@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/mbarnett/acts_as_rdfable.git
-  revision: 1314de0a93f623b742fccb257bb7f2cf905fe675
+  revision: b3f9011b3c42c3bfd3bb2fe1d4f526dc30de401a
   tag: v0.2.1
   specs:
     acts_as_rdfable (0.2.1)
