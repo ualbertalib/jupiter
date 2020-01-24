@@ -93,6 +93,7 @@ class Item < JupiterCore::Doiable
       item.add_to_path(community.id, collection.id)
     end
 
+    item.logo_id = nil
     item.save!
 
     # remove old filesets and attachments and recreate

@@ -128,6 +128,7 @@ class Thesis < JupiterCore::Doiable
       thesis.add_to_path(community.id, collection.id)
     end
 
+    thesis.logo_id = nil
     thesis.save!
 
     # NOTE: destroy the attachment record, DON'T use #purge, which will wipe the underlying blob shared with the
