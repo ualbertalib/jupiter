@@ -51,4 +51,8 @@ Rails.application.configure do
 
   # Action on unpermitted parameters
   config.action_controller.action_on_unpermitted_parameters = :raise
+
+  config.after_initialize do
+    PaperTrail.enabled = false
+  end
 end
