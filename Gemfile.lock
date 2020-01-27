@@ -1,5 +1,5 @@
 GIT
-  remote: https://github.com/mbarnett/acts_as_rdfable.git
+  remote: https://github.com/ualbertalib/acts_as_rdfable.git
   revision: b3f9011b3c42c3bfd3bb2fe1d4f526dc30de401a
   tag: v0.2.2
   specs:
