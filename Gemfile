@@ -31,7 +31,7 @@ gem 'simple_form'
 gem 'canonical-rails'
 
 # RDF stuff
-gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', tag: 'v0.2.1'
+gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', tag: 'v0.2.2'
 gem 'rdf', '~> 3.1.0'
 gem 'rdf-n3'
 gem 'rdf-vocab', '~> 3.1.1'
@@ -112,7 +112,7 @@ group :development do
 end
 
 group :test do
-  gem 'danger', '~> 6.1', require: false # Pull Request etiquette enforcement
+  gem 'danger', '~> 6.2', require: false # Pull Request etiquette enforcement
   gem 'simplecov'
   # Faker added 0.5 seconds to the test suite per call. Haikunator seems much faster for faking strings
   gem 'haikunator'
