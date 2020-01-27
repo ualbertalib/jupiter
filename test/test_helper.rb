@@ -8,7 +8,6 @@ require 'rails/test_help'
 require 'sidekiq/testing'
 require 'vcr'
 require 'webmock/minitest'
-Dir[Rails.root.join('test/controllers/concerns/*')].sort.each { |f| require f }
 
 VCR.configure do |config|
   config.cassette_library_dir = 'test/vcr'

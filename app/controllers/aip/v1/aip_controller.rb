@@ -1,16 +1,19 @@
 class Aip::V1::AipController < ApplicationController
 
-  # load_and_authorize_asset method needs to be defined on the subclasses where
+  # load_and_authorize_entity method needs to be defined on the subclasses where
   # different type of object is required
-  before_action :load_and_authorize_asset, only: [:show, :file_sets]
+  before_action :load_and_authorize_entity, only: [
+    :show_entity,
+    :file_sets,
+    :file_paths
+  ]
   before_action :load_and_authorize_file, only: [
     :file_set,
     :fixity_file,
-    :download_file,
     :original_file
   ]
 
-  def show
+  def show_entity
     # These are the prefixes defined as required by the metadata team. The
     # hardcoded strings need to be replaced. The namespaces could be added to
     # the rdf-vocab gem.
@@ -34,7 +37,7 @@ class Aip::V1::AipController < ApplicationController
       RDF::Vocab::Fcrepo4.lastModifiedBy,
       RDF::Vocab::Fcrepo4.writable
     ]
-    graph = create_graph(@asset, prefixes)
+    graph = create_graph(@entity, prefixes)
 
     # Handle files separately since currently they are not a part of the
     # acts_as_rdfable table entries
@@ -54,7 +57,7 @@ class Aip::V1::AipController < ApplicationController
   def file_sets
     builder = Nokogiri::XML::Builder.new do |xml|
       xml.file_order do
-        @asset.files.each do |file|
+        @entity.files.each do |file|
           # The underscore for xml.uuid_ is intentional. Nokogiri builder makes
           # use of method_missing to create its xml model. There could be
           # problems with preexisting methods so we play it safe and add an
@@ -150,25 +153,32 @@ class Aip::V1::AipController < ApplicationController
     render plain: triples, status: :ok
   end
 
-  def download_file
-    send_data(
-      ActiveStorage::Blob.service.download(@file.blob.key),
-      disposition: 'attachment',
-      type: @file.blob.content_type,
-      filename: @file.filename.to_s
-    )
+  def file_paths
+    result = []
+    result = { files: [] }
+
+    @entity.files.each do |file|
+      # Consider using olive branch for formating response with camel case keys
+      entry = {
+        file_name: file.blob.filename,
+        file_path: ActiveStorage::Blob.service.send(:path_for, file.blob.key)
+      }
+
+      result[:files] << entry
+    end
+    render json: result.to_json
   end
 
   protected
 
-  def create_graph(rdfable_asset, prefixes, subject = nil)
+  def create_graph(rdfable_entity, prefixes, subject = nil)
     subject = self_subject if subject.nil?
     graph = RDF::Graph.new
-    annotations = get_prefixed_predicates(rdfable_asset, prefixes)
+    annotations = get_prefixed_predicates(rdfable_entity, prefixes)
 
     annotations.each do |rdf_annotation|
       column = rdf_annotation.column
-      value = rdfable_asset.send(column)
+      value = rdfable_entity.send(column)
 
       statement = prepare_statement(
         subject: subject,
@@ -182,13 +192,13 @@ class Aip::V1::AipController < ApplicationController
     graph
   end
 
-  def get_prefixed_predicates(rdfable_asset, prefixes)
+  def get_prefixed_predicates(rdfable_entity, prefixes)
     result = RdfAnnotation.none
-    ActsAsRdfable.add_annotation_bindings!(rdfable_asset)
+    ActsAsRdfable.add_annotation_bindings!(rdfable_entity)
     prefixes.each do |prefix|
-      result = result.or rdfable_asset.rdf_annotations
-                                      .where('predicate like :prefix',
-                                             prefix: "#{prefix}%")
+      result = result.or rdfable_entity.rdf_annotations
+                                       .where('predicate like :prefix',
+                                              prefix: "#{prefix}%")
     end
     result
   end
@@ -209,7 +219,7 @@ class Aip::V1::AipController < ApplicationController
 
   def file_statements
     file_statements = []
-    @asset.files.each do |file|
+    @entity.files.each do |file|
       fileset_url = "#{request.original_url}/filesets/#{file.fileset_uuid}"
       statement = prepare_statement(
         subject: self_subject,
@@ -226,16 +236,15 @@ class Aip::V1::AipController < ApplicationController
     prepare_statement(
       subject: self_subject,
       predicate: RDF::Vocab::BIBO.owner,
-      object: @asset.owner.email
+      object: @entity.owner.email
     )
   end
 
-  # Copied from /app/controllers/downloads_controller.rb
   def load_and_authorize_file
     @file = ActiveStorage::Attachment.find_by(fileset_uuid: params[:file_set_id])
     raise JupiterCore::ObjectNotFound unless @file.record_id == params[:id]
 
-    authorize @file, :download_file?
+    authorize @file
   end
 
   # Return the url from the request to be used as the statement's subject for
@@ -244,17 +253,18 @@ class Aip::V1::AipController < ApplicationController
     RDF::URI(request.url)
   end
 
-  def load_and_authorize_asset
-    case params[:model]
+  def load_and_authorize_entity
+    case params[:entity]
+    # There is a routing constraint specifying which models are available
+    # through the url. We need to update the routing constraint whenever a new
+    # entity is made available
     when Item.name.underscore.pluralize
-      @asset = Item.find(params[:id])
+      @entity = Item.find(params[:id])
     when Thesis.name.underscore.pluralize
-      @asset = Thesis.find(params[:id])
-    else
-      raise ActiveRecord::RecordNotFound
+      @entity = Thesis.find(params[:id])
     end
 
-    authorize @asset
+    authorize @entity
   end
 
 end

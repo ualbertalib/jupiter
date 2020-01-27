@@ -119,14 +119,34 @@ Rails.application.routes.draw do
   match '/oai/(*all)', to: 'application#service_unavailable', via: [:get, :post]
 
   # AIP API v1
+
+  entity_contraint_regex = /(?:#{Item.name.underscore.pluralize}|#{Thesis.name.underscore.pluralize})/
   namespace :aip, defaults: { format: :n3 } do
     namespace :v1 do
-      get '/:model/:id', to: 'aip#show', as: 'model'
-      get '/:model/:id/filesets', to: 'aip#file_sets', as: 'model_filesets'
-      get '/:model/:id/filesets/:file_set_id', to: 'aip#file_set', as: 'model_file_set'
-      get '/:model/:id/filesets/:file_set_id/download', to: 'aip#download_file', as: 'model_fileset_download'
-      get '/:model/:id/filesets/:file_set_id/fixity', to: 'aip#fixity_file', as: 'model_fileset_fixity'
-      get '/:model/:id/filesets/:file_set_id/original_file', to: 'aip#original_file', as: 'model_fileset_original_file'
+      get '/:entity/:id',
+          to: 'aip#show_entity',
+          as: 'entity',
+          constraints: { entity: entity_contraint_regex }
+      get '/:entity/:id/filesets',
+          to: 'aip#file_sets',
+          as: 'entity_filesets',
+          constraints: { entity: entity_contraint_regex }
+      get '/:entity/:id/file_paths',
+          to: 'aip#file_paths',
+          as: 'entity_file_paths',
+          constraints: { entity: entity_contraint_regex }
+      get '/:entity/:id/filesets/:file_set_id',
+          to: 'aip#file_set',
+          as: 'entity_file_set',
+          constraints: { entity: entity_contraint_regex }
+      get '/:entity/:id/filesets/:file_set_id/fixity',
+          to: 'aip#fixity_file',
+          as: 'entity_fileset_fixity',
+          constraints: { entity: entity_contraint_regex }
+      get '/:entity/:id/filesets/:file_set_id/original_file',
+          to: 'aip#original_file',
+          as: 'entity_fileset_original_file',
+          constraints: { entity: entity_contraint_regex }
     end
   end
 end

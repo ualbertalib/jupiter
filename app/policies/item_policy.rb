@@ -32,11 +32,19 @@ class ItemPolicy < DepositablePolicy
     download?
   end
 
-  # This policy are used for the AIP V1 API. Pundit does not allow use of
-  # namespaces in its policies
+  # These policies are used for the AIP V1 API. Pundit does not allow use of
+  # namespaces
+
+  def show_entity?
+    admin?
+  end
 
   def file_sets?
-    admin? || user_is_authenticated_for_record?
+    admin?
+  end
+
+  def file_paths?
+    admin?
   end
 
 end

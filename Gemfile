@@ -119,6 +119,7 @@ group :test do
   gem 'minitest-hooks'
   gem 'shoulda-matchers', '~> 4.2'
 
+  gem 'json-schema', '~> 2.8.1'
   gem 'launchy'
   gem 'vcr', require: false
   gem 'webdrivers', '~> 4.2'
