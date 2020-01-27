@@ -1,0 +1,296 @@
+predicate_0:
+  :table: items
+  :column: title
+  :predicate: http://purl.org/dc/terms/title
+predicate_1:
+  :table: items
+  :column: fedora3_uuid
+  :predicate: http://terms.library.ualberta.ca/fedora3UUID
+predicate_2:
+  :table: items
+  :column: depositor
+  :predicate: http://terms.library.ualberta.ca/depositor
+predicate_3:
+  :table: items
+  :column: alternative_title
+  :predicate: http://purl.org/dc/terms/alternative
+predicate_4:
+  :table: items
+  :column: doi
+  :predicate: http://prismstandard.org/namespaces/basic/3.0/doi
+predicate_5:
+  :table: items
+  :column: embargo_end_date
+  :predicate: http://purl.org/dc/terms/available
+predicate_6:
+  :table: items
+  :column: fedora3_handle
+  :predicate: http://terms.library.ualberta.ca/fedora3Handle
+predicate_7:
+  :table: items
+  :column: ingest_batch
+  :predicate: http://terms.library.ualberta.ca/ingestBatch
+predicate_8:
+  :table: items
+  :column: northern_north_america_filename
+  :predicate: http://terms.library.ualberta.ca/nnaFile
+predicate_9:
+  :table: items
+  :column: northern_north_america_item_id
+  :predicate: http://terms.library.ualberta.ca/nnaItem
+predicate_10:
+  :table: items
+  :column: rights
+  :predicate: http://purl.org/dc/elements/1.1/rights
+predicate_11:
+  :table: items
+  :column: sort_year
+  :predicate: http://terms.library.ualberta.ca/sortYear
+predicate_12:
+  :table: items
+  :column: visibility_after_embargo
+  :predicate: http://projecthydra.org/ns/auth/acl#visibilityAfterEmbargo
+predicate_13:
+  :table: items
+  :column: embargo_history
+  :predicate: http://projecthydra.org/ns/auth/acl#embargoHistory
+predicate_14:
+  :table: items
+  :column: is_version_of
+  :predicate: http://purl.org/dc/terms/isVersionOf
+predicate_15:
+  :table: items
+  :column: member_of_paths
+  :predicate: http://terms.library.ualberta.ca/path
+predicate_16:
+  :table: items
+  :column: subject
+  :predicate: http://purl.org/dc/elements/1.1/subject
+predicate_17:
+  :table: items
+  :column: creators
+  :predicate: http://purl.org/ontology/bibo/authorList
+predicate_18:
+  :table: items
+  :column: contributors
+  :predicate: http://purl.org/dc/elements/1.1/contributor
+predicate_19:
+  :table: items
+  :column: created
+  :predicate: http://purl.org/dc/terms/created
+predicate_20:
+  :table: items
+  :column: temporal_subjects
+  :predicate: http://purl.org/dc/terms/temporal
+predicate_21:
+  :table: items
+  :column: spatial_subjects
+  :predicate: http://purl.org/dc/terms/spatial
+predicate_22:
+  :table: items
+  :column: description
+  :predicate: http://purl.org/dc/terms/description
+predicate_23:
+  :table: items
+  :column: publisher
+  :predicate: http://purl.org/dc/terms/publisher
+predicate_24:
+  :table: items
+  :column: languages
+  :predicate: http://purl.org/dc/terms/language
+predicate_25:
+  :table: items
+  :column: license
+  :predicate: http://purl.org/dc/terms/license
+predicate_26:
+  :table: items
+  :column: item_type
+  :predicate: http://purl.org/dc/terms/type
+predicate_27:
+  :table: items
+  :column: source
+  :predicate: http://purl.org/dc/terms/source
+predicate_28:
+  :table: items
+  :column: related_link
+  :predicate: http://purl.org/dc/terms/relation
+predicate_29:
+  :table: items
+  :column: publication_status
+  :predicate: http://purl.org/ontology/bibo/status
+predicate_30:
+  :table: theses
+  :column: title
+  :predicate: http://purl.org/dc/terms/title
+predicate_31:
+  :table: theses
+  :column: fedora3_uuid
+  :predicate: http://terms.library.ualberta.ca/fedora3UUID
+predicate_32:
+  :table: theses
+  :column: depositor
+  :predicate: http://terms.library.ualberta.ca/depositor
+predicate_33:
+  :table: theses
+  :column: alternative_title
+  :predicate: http://purl.org/dc/terms/alternative
+predicate_34:
+  :table: theses
+  :column: doi
+  :predicate: http://prismstandard.org/namespaces/basic/3.0/doi
+predicate_35:
+  :table: theses
+  :column: embargo_end_date
+  :predicate: http://purl.org/dc/terms/available
+predicate_36:
+  :table: theses
+  :column: fedora3_handle
+  :predicate: http://terms.library.ualberta.ca/fedora3Handle
+predicate_37:
+  :table: theses
+  :column: ingest_batch
+  :predicate: http://terms.library.ualberta.ca/ingestBatch
+predicate_38:
+  :table: theses
+  :column: northern_north_america_filename
+  :predicate: http://terms.library.ualberta.ca/nnaFile
+predicate_39:
+  :table: theses
+  :column: northern_north_america_item_id
+  :predicate: http://terms.library.ualberta.ca/nnaItem
+predicate_40:
+  :table: theses
+  :column: rights
+  :predicate: http://purl.org/dc/elements/1.1/rights
+predicate_41:
+  :table: theses
+  :column: sort_year
+  :predicate: http://terms.library.ualberta.ca/sortYear
+predicate_42:
+  :table: theses
+  :column: visibility_after_embargo
+  :predicate: http://projecthydra.org/ns/auth/acl#visibilityAfterEmbargo
+predicate_43:
+  :table: theses
+  :column: embargo_history
+  :predicate: http://projecthydra.org/ns/auth/acl#embargoHistory
+predicate_44:
+  :table: theses
+  :column: is_version_of
+  :predicate: http://purl.org/dc/terms/isVersionOf
+predicate_45:
+  :table: theses
+  :column: member_of_paths
+  :predicate: http://terms.library.ualberta.ca/path
+predicate_46:
+  :table: theses
+  :column: subject
+  :predicate: http://purl.org/dc/elements/1.1/subject
+predicate_47:
+  :table: theses
+  :column: abstract
+  :predicate: http://purl.org/dc/terms/abstract
+predicate_48:
+  :table: theses
+  :column: language
+  :predicate: http://purl.org/dc/terms/language
+predicate_49:
+  :table: theses
+  :column: date_accepted
+  :predicate: http://purl.org/dc/terms/dateAccepted
+predicate_50:
+  :table: theses
+  :column: date_submitted
+  :predicate: http://purl.org/dc/terms/dateSubmitted
+predicate_51:
+  :table: theses
+  :column: degree
+  :predicate: http://purl.org/ontology/bibo/degree
+predicate_52:
+  :table: theses
+  :column: institution
+  :predicate: http://ontoware.org/swrc/ontology#institution
+predicate_53:
+  :table: theses
+  :column: dissertant
+  :predicate: http://terms.library.ualberta.ca/dissertant
+predicate_54:
+  :table: theses
+  :column: graduation_date
+  :predicate: http://terms.library.ualberta.ca/graduationDate
+predicate_55:
+  :table: theses
+  :column: thesis_level
+  :predicate: http://terms.library.ualberta.ca/thesisLevel
+predicate_56:
+  :table: theses
+  :column: proquest
+  :predicate: http://terms.library.ualberta.ca/proquest
+predicate_57:
+  :table: theses
+  :column: unicorn
+  :predicate: http://terms.library.ualberta.ca/unicorn
+predicate_58:
+  :table: theses
+  :column: specialization
+  :predicate: http://terms.library.ualberta.ca/specialization
+predicate_59:
+  :table: theses
+  :column: departments
+  :predicate: http://terms.library.ualberta.ca/departmentList
+predicate_60:
+  :table: theses
+  :column: supervisors
+  :predicate: http://terms.library.ualberta.ca/supervisorList
+predicate_61:
+  :table: theses
+  :column: committee_members
+  :predicate: http://terms.library.ualberta.ca/commiteeMember
+predicate_62:
+  :table: collections
+  :column: title
+  :predicate: http://purl.org/dc/terms/title
+predicate_63:
+  :table: collections
+  :column: fedora3_uuid
+  :predicate: http://terms.library.ualberta.ca/fedora3UUID
+predicate_64:
+  :table: collections
+  :column: depositor
+  :predicate: http://terms.library.ualberta.ca/depositor
+predicate_65:
+  :table: collections
+  :column: community_id
+  :predicate: http://terms.library.ualberta.ca/path
+predicate_66:
+  :table: collections
+  :column: description
+  :predicate: http://purl.org/dc/terms/description
+predicate_67:
+  :table: collections
+  :column: restricted
+  :predicate: http://terms.library.ualberta.ca/restrictedCollection
+predicate_68:
+  :table: collections
+  :column: creators
+  :predicate: http://purl.org/dc/terms/creator
+predicate_69:
+  :table: communities
+  :column: title
+  :predicate: http://purl.org/dc/terms/title
+predicate_70:
+  :table: communities
+  :column: fedora3_uuid
+  :predicate: http://terms.library.ualberta.ca/fedora3UUID
+predicate_71:
+  :table: communities
+  :column: depositor
+  :predicate: http://terms.library.ualberta.ca/depositor
+predicate_72:
+  :table: communities
+  :column: description
+  :predicate: http://purl.org/dc/terms/description
+predicate_73:
+  :table: communities
+  :column: creators
+  :predicate: http://purl.org/dc/terms/creator

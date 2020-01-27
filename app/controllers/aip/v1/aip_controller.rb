@@ -78,7 +78,7 @@ class Aip::V1::AipController < ApplicationController
       RDF::Vocab::BIBO,
       RDF::Vocab::EBUCore,
       # The following prefixes need to be reevaluated and replaced
-      ::TERMS[:fedora].schema + ::TERMS[:fedora].has_mdoel,
+      ::TERMS[:fedora].schema + ::TERMS[:fedora].has_model,
       RDF::Vocab::Fcrepo4.created,
       RDF::Vocab::Fcrepo4.createdBy,
       RDF::Vocab::Fcrepo4.lastModified,
@@ -86,7 +86,8 @@ class Aip::V1::AipController < ApplicationController
       RDF::Vocab::Fcrepo4.writable
     ]
 
-    graph = create_graph(@file, prefixes)
+    ActsAsRdfable.add_annotation_bindings!(@file.blob)
+    graph = create_graph(@file.blob, prefixes)
 
     triples = graph.dump(:n3)
     render plain: triples, status: :ok
@@ -96,7 +97,33 @@ class Aip::V1::AipController < ApplicationController
     # Prefix provided by the metadata team
     prefixes = [RDF::Vocab::PREMIS]
 
-    graph = create_graph(@file, prefixes)
+    ActsAsRdfable.add_annotation_bindings!(@file.blob)
+
+    subject = RDF::URI(request.url.split('/')[0..-2].join('/'))
+    graph = create_graph(@file.blob, prefixes, subject)
+
+    statements = []
+    statements << prepare_statement(
+      subject: subject,
+      predicate: RDF::Vocab::PREMIS.hasFixity,
+      object: self_subject
+    )
+
+    statements << prepare_statement(
+      subject: subject,
+      predicate: RDF::Vocab::PREMIS.hasEventOutcome,
+      object: 'SUCCESS'
+    )
+
+    statements << prepare_statement(
+      subject: subject,
+      predicate: RDF::Vocab::PREMIS.hasMessageDigestAlgorithm,
+      object: 'md5'
+    )
+
+    statements.each do |statement|
+      graph << statement unless statement.nil?
+    end
 
     triples = graph.dump(:n3)
     render plain: triples, status: :ok
@@ -108,12 +135,16 @@ class Aip::V1::AipController < ApplicationController
       RDF::Vocab::PREMIS,
       RDF::Vocab::DC11,
       # The following prefixes need to be reevaluated and replaced
+      RDF::Vocab::Fcrepo4,
       ::TERMS[:fits].schema,
       ::TERMS[:odf].schema,
       ::TERMS[:semantic].schema
     ]
 
-    graph = create_graph(@file, prefixes)
+    ActsAsRdfable.add_annotation_bindings!(@file.blob)
+    graph = create_graph(@file.blob, prefixes)
+
+    # add fixity service url
 
     triples = graph.dump(:n3)
     render plain: triples, status: :ok
@@ -130,7 +161,8 @@ class Aip::V1::AipController < ApplicationController
 
   protected
 
-  def create_graph(rdfable_asset, prefixes)
+  def create_graph(rdfable_asset, prefixes, subject = nil)
+    subject = self_subject if subject.nil?
     graph = RDF::Graph.new
     annotations = get_prefixed_predicates(rdfable_asset, prefixes)
 
@@ -139,7 +171,7 @@ class Aip::V1::AipController < ApplicationController
       value = rdfable_asset.send(column)
 
       statement = prepare_statement(
-        subject: self_subject,
+        subject: subject,
         predicate: rdf_annotation.predicate,
         object: value
       )
