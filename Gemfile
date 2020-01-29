@@ -1,14 +1,10 @@
 source 'https://rubygems.org'
-
-git_source(:github) do |repo_name|
-  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?('/')
-  "https://github.com/#{repo_name}.git"
-end
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 # Core Rails stuff
 gem 'image_processing' # for ActiveStorage Variants
 gem 'puma', '~> 4.3'
-gem 'rails', '~> 5.2.3'
+gem 'rails', '~> 6.0.2'
 
 # Assets (CSS/JS) stuff
 gem 'bootstrap', '~> 4.4.1'
@@ -31,7 +27,7 @@ gem 'simple_form'
 gem 'canonical-rails'
 
 # RDF stuff
-gem 'acts_as_rdfable', github: 'mbarnett/acts_as_rdfable', tag: 'v0.2.2'
+gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', ref: 'ac8acad'
 gem 'rdf-vocab'
 
 # Database stuff
@@ -73,7 +69,7 @@ gem 'rollbar'
 
 # OAI-PMH
 gem 'builder_deferred_tagging', github: 'ualbertalib/builder_deferred_tagging', tag: 'v0.01'
-gem 'oaisys', github: 'ualbertalib/oaisys', ref: 'a484bebdcc01a46956dfdbed3d51b536eeb45c88'
+gem 'oaisys', github: 'ualbertalib/oaisys', ref: '6827c1d'
 
 # Seeds
 group :development, :test, :uat do

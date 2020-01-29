@@ -126,7 +126,8 @@ class JupiterCore::Depositable < ApplicationRecord
     raise 'Item not yet saved!' if id.nil?
 
     file_handles.each do |fileio|
-      attachment = files.attach(io: fileio, filename: File.basename(fileio.path)).first
+      files.attach(io: fileio, filename: File.basename(fileio.path))
+      attachment = files.attachments.last
       attachment.fileset_uuid = UUIDTools::UUID.random_create
       attachment.save!
     end
