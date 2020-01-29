@@ -15,6 +15,8 @@ class ApplicationController < ActionController::Base
               ActiveRecord::RecordNotFound,
               ActionController::RoutingError, with: :render_404
 
+  before_action :set_paper_trail_whodunnit
+
   def service_unavailable
     head :service_unavailable, 'Retry-After' => 24.hours
   end

@@ -8,6 +8,8 @@ class Thesis < JupiterCore::Doiable
 
   has_many_attached :files, dependent: false
 
+  has_paper_trail
+
   scope :public_items, -> { where(visibility: JupiterCore::VISIBILITY_PUBLIC) }
   # TODO: this (casting a json array to text and doing a LIKE against it) is kind of a nasty hack to deal with the fact
   # that production is currently using a 7 or 8 year old version of Postgresql (9.2) that lacks proper operators for
@@ -128,6 +130,7 @@ class Thesis < JupiterCore::Doiable
       thesis.add_to_path(community.id, collection.id)
     end
 
+    thesis.logo_id = nil
     thesis.save!
 
     # NOTE: destroy the attachment record, DON'T use #purge, which will wipe the underlying blob shared with the
