@@ -54,9 +54,11 @@ gem 'sidekiq-cron'
 # Misc Utilities
 gem 'aasm' # state-machine management
 gem 'addressable', '~> 2.7.0' # Replacement for the standard URI implementation
+gem 'draper'
 gem 'ezid-client', '~> 1.8.0'
 gem 'jbuilder' # generate JSON objects
 gem 'kaminari' # Pagination
+gem 'paper_trail' # Track object changes
 gem 'ransack' # ActiveRecord search/filter
 gem 'uuidtools'
 gem 'voight_kampff' # bot detection
