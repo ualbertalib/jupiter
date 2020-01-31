@@ -1,4 +1,4 @@
-class Facets::License < Facets::DefaultFacetDecorator
+class Facets::License < Facets::URIValue
 
   def display
     translate_uri(:license, @value)
