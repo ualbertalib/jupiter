@@ -31,7 +31,7 @@ gem 'simple_form'
 gem 'canonical-rails'
 
 # RDF stuff
-gem 'acts_as_rdfable', github: 'mbarnett/acts_as_rdfable', tag: 'v0.2.2'
+gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', tag: 'v0.2.2'
 gem 'rdf-vocab'
 
 # Database stuff
@@ -58,6 +58,7 @@ gem 'sidekiq-cron'
 # Misc Utilities
 gem 'aasm' # state-machine management
 gem 'addressable', '~> 2.7.0' # Replacement for the standard URI implementation
+gem 'draper'
 gem 'ezid-client', '~> 1.8.0'
 gem 'jbuilder' # generate JSON objects
 gem 'kaminari' # Pagination

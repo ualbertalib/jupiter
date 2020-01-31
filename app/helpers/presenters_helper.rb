@@ -13,7 +13,7 @@ module PresentersHelper
     if obj.is_a?(JupiterCore::SolrServices::FacetResult::FacetValue)
       present_facet(obj)
     else
-      presenter_for(obj).new(self, obj)
+      presenter_for(obj).decorate(obj)
     end
   end
 
@@ -21,10 +21,10 @@ module PresentersHelper
 
   def present_facet(facet_value)
     @presenter_cache[facet_value] ||= begin
-      klass_name = "Presenters::FacetValues::#{facet_value.attribute_name.to_s.camelize}"
+      klass_name = "Facets::#{facet_value.attribute_name.to_s.camelize}"
       klass_name.constantize
     rescue NameError
-      ::Presenters::FacetValues::DefaultPresenter
+      ::Facets::DefaultFacetDecorator
     end
 
     @presenter_cache[facet_value].new(self, params[:facets], facet_value)
@@ -32,10 +32,10 @@ module PresentersHelper
 
   def presenter_for(obj)
     @presenter_cache[obj] ||= begin
-      klass_name = "Presenters::#{obj.class}"
+      klass_name = "Models::#{obj.class}Decorator"
       klass_name.constantize
     rescue NameError
-      raise NoSuchPresenter, "Presenter #{klass_name} is not defined for #{obj}"
+      raise NoSuchPresenter, "Draper-derived Decorator #{klass_name} is not defined for #{obj}"
     end
   end
   # rubocop:enable Rails/HelperInstanceVariable
