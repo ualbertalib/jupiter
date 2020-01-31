@@ -5,8 +5,6 @@ class ApplicationController < ActionController::Base
   before_action :store_user_location!, if: :storable_location?
   after_action :verify_authorized, except: [:service_unavailable]
 
-  protect_from_forgery with: :exception
-
   helper_method :current_announcements, :current_user
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized

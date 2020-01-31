@@ -461,7 +461,7 @@ DEPENDENCIES
   addressable (~> 2.7.0)
   better_errors (>= 2.3.0)
   binding_of_caller
-  bootsnap (>= 1.1.0)
+  bootsnap (>= 1.4.2)
   bootstrap (~> 4.4.1)
   brakeman
   builder_deferred_tagging!
