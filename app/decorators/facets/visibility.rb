@@ -1,4 +1,4 @@
-class Facets::Visibility < Facets::DefaultFacetDecorator
+class Facets::Visibility < Facets::URIValue
 
   def display
     translate_uri(:visibility, @value)
