@@ -39,6 +39,9 @@ module AipHelper
               },
               file_path: {
                 type: 'string'
+              },
+              file_uuid: {
+                type: 'string'
               }
             }
           }

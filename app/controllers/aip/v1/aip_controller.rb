@@ -13,6 +13,8 @@ class Aip::V1::AipController < ApplicationController
     :original_file
   ]
 
+  skip_before_action :verify_authenticity_token
+
   def show_entity
     # These are the prefixes defined as required by the metadata team. The
     # hardcoded strings need to be replaced. The namespaces could be added to
@@ -161,7 +163,8 @@ class Aip::V1::AipController < ApplicationController
       # Consider using olive branch for formating response with camel case keys
       entry = {
         file_name: file.blob.filename,
-        file_path: ActiveStorage::Blob.service.send(:path_for, file.blob.key)
+        file_path: ActiveStorage::Blob.service.send(:path_for, file.blob.key),
+        file_uuid: file.fileset_uuid
       }
 
       result[:files] << entry
