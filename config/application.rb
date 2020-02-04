@@ -1,14 +1,17 @@
 require_relative 'boot'
 
-# not requiring rails/all to avoid loading ActionCable, at the moment
 require 'rails'
+# Pick the frameworks you want:
 require 'active_model/railtie'
 require 'active_job/railtie'
 require 'active_record/railtie'
+require 'active_storage/engine'
 require 'action_controller/railtie'
 require 'action_mailer/railtie'
-require 'active_storage/engine'
+require 'action_mailbox/engine'
+require 'action_text/engine'
 require 'action_view/railtie'
+# require "action_cable/engine"
 require 'sprockets/railtie'
 require 'rails/test_unit/railtie'
 
@@ -22,11 +25,15 @@ module Jupiter
   class Application < Rails::Application
 
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 5.1
+    config.load_defaults 6.0
+
+    # TODO: Remove soon once we tackle zeitwerk upgrade
+    config.autoloader = :classic
 
     # Settings in config/environments/* take precedence over those specified here.
-    # Application configuration should go into files in config/initializers
-    # -- all .rb files in that directory are automatically loaded.
+    # Application configuration can go into files in config/initializers
+    # -- all .rb files in that directory are automatically loaded after loading
+    # the framework and any gems in your application.
 
     # Set ActiveJob adapter
     config.active_job.queue_adapter = :sidekiq
@@ -38,9 +45,6 @@ module Jupiter
     config.eager_load_paths.prepend("#{config.root}/app/models/jupiter_core")
 
     config.redis_key_prefix = "jupiter.#{Rails.env}."
-
-    # Set an action on unpermitted parameters to raise an exception, used to validate parameters in Oaisys.
-    config.action_controller.action_on_unpermitted_parameters = :raise
 
   end
 end

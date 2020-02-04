@@ -58,7 +58,7 @@ class DownloadsControllerTest < ActionDispatch::IntegrationTest
                            file_name: @file.filename)
 
     assert_response :success
-    assert_equal @response.content_type, 'text/plain'
+    assert_equal @response.media_type, 'text/plain'
     assert_equal @response.headers['Content-Disposition'], 'inline'
     assert_includes @response.body, 'A nice, brief file, with some great text.'
   end
@@ -68,7 +68,7 @@ class DownloadsControllerTest < ActionDispatch::IntegrationTest
                                file_set_id: @file.fileset_uuid)
 
     assert_response :success
-    assert_equal @response.content_type, 'text/plain'
+    assert_equal @response.media_type, 'text/plain'
     assert_equal @response.headers['Content-Disposition'], 'attachment'
     assert_includes @response.body, 'A nice, brief file, with some great text.'
   end

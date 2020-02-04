@@ -27,6 +27,9 @@
 /docker-compose.*custom*.yml
 vendor/bundle
 
-# ActiveStorage local storage
-/storage
+# Ignore uploaded files in development
+/storage/*
+!/storage/.keep
+
+# Fits
 fits.log
