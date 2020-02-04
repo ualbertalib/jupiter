@@ -1,19 +1,16 @@
 class Aip::V1::AipController < ApplicationController
 
-  # load_and_authorize_entity method needs to be defined on the subclasses where
-  # different type of object is required
   before_action :load_and_authorize_entity, only: [
     :show_entity,
     :file_sets,
     :file_paths
   ]
+
   before_action :load_and_authorize_file, only: [
     :file_set,
     :fixity_file,
     :original_file
   ]
-
-  skip_before_action :verify_authenticity_token
 
   def show_entity
     # These are the prefixes defined as required by the metadata team. The
