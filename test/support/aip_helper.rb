@@ -51,6 +51,15 @@ module AipHelper
     }
   end
 
+  # TODO: We will very likely stop using the create_entity method once settle on
+  # a consistent way of defining data for our tests. Initially the entities were
+  # fetched from fixtures instead of being instantiated, however multiple tests
+  # for Item entity started flipping with this approach, likely having to do
+  # with the order the tests were run. The errors included:
+  # - No items on the database
+  # - Items not being found on database by id
+  # - Items defined to have files did not contain them
+
   def create_entity(
     entity_class: Item,
     parameters: {},
@@ -67,11 +76,11 @@ module AipHelper
     end
 
     Sidekiq::Testing.inline! do
-      entity.add_and_ingest_files(
-        files.map do |file|
-          File.open(file, 'r')
+      files.map do |file|
+        File.open(file, 'r') do |file_handle|
+          entity.add_and_ingest_files([file_handle])
         end
-      )
+      end
     end
 
     entity
