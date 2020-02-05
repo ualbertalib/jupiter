@@ -14,15 +14,10 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
     @regular_user = users(:regular)
     @private_thesis = thesis(:private)
     @entity = Thesis.name.underscore.pluralize
-    @public_thesis = create_entity(
-      entity_class: Thesis,
-      parameters: {
-        title: 'Thesis with files',
-        owner_id: @admin_user.id,
-        dissertant: 'Joe Blow',
-        visibility: JupiterCore::VISIBILITY_PUBLIC,
-        graduation_date: '2017-03-31'
-      },
+    @public_thesis = thesis(:nice)
+
+    attach_files_to_entity(
+      @public_thesis,
       files: [
         file_fixture('image-sample.jpeg'),
         file_fixture('text-sample.txt')

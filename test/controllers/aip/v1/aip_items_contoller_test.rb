@@ -15,20 +15,10 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
     @regular_user = users(:regular)
     @private_item = items(:fancy_private)
     @entity = Item.name.underscore.pluralize
-    @public_item = create_entity(
-      entity_class: Item,
-      parameters: {
-        visibility: JupiterCore::VISIBILITY_PUBLIC,
-        owner_id: users(:admin).id,
-        title: 'Item with files',
-        creators: ['Joe Blow'],
-        created: '1000000 BC',
-        languages: [CONTROLLED_VOCABULARIES[:language].english],
-        item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-        publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-        license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-        subject: ['Items']
-      },
+    @public_item = items(:fancy)
+
+    attach_files_to_entity(
+      @public_item,
       files: [
         file_fixture('image-sample.jpeg'),
         file_fixture('text-sample.txt')

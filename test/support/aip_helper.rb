@@ -51,21 +51,7 @@ module AipHelper
     }
   end
 
-  def create_entity(entity_class: Item, parameters: {}, files: [])
-    community = Community.create!(
-      title: 'Nice community',
-      owner_id: users(:admin).id
-    )
-    collection = Collection.create!(
-      title: 'Nice collection',
-      owner_id: users(:admin).id,
-      community_id: community.id
-    )
-    entity = entity_class.new(parameters).tap do |current_entity|
-      current_entity.add_to_path(community.id, collection.id)
-      current_entity.save!
-    end
-
+  def attach_files_to_entity(entity, files: [])
     Sidekiq::Testing.inline! do
       entity.add_and_ingest_files(
         files.map do |file|
@@ -73,6 +59,5 @@ module AipHelper
         end
       )
     end
-    entity
   end
 end
