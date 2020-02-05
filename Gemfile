@@ -28,7 +28,9 @@ gem 'canonical-rails'
 
 # RDF stuff
 gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', ref: 'ac8acad'
-gem 'rdf-vocab'
+gem 'rdf', '~> 3.1.0'
+gem 'rdf-n3'
+gem 'rdf-vocab', '~> 3.1.1'
 
 # Database stuff
 gem 'connection_pool'
@@ -115,6 +117,7 @@ group :test do
   gem 'minitest-hooks'
   gem 'shoulda-matchers', '~> 4.2'
 
+  gem 'json-schema', '~> 2.8.1'
   gem 'launchy'
   gem 'vcr', require: false
   gem 'webdrivers', '~> 4.2'

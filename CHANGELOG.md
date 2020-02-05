@@ -8,6 +8,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ### Added
 - Mounted Oaisys engine
+- Version 1 of AIP API
 - Added and set up papertrail gem
 - Added Draper and re-organized facet presenters
 
