@@ -51,7 +51,21 @@ module AipHelper
     }
   end
 
-  def attach_files_to_entity(entity, files: [])
+  def create_entity(
+    entity_class: Item,
+    parameters: {},
+    files: [],
+    community: nil,
+    collection: nil
+  )
+    community ||= communities(:fancy_community)
+    collection ||= collections(:fancy_collection)
+
+    entity = entity_class.new(parameters).tap do |current_entity|
+      current_entity.add_to_path(community.id, collection.id)
+      current_entity.save!
+    end
+
     Sidekiq::Testing.inline! do
       entity.add_and_ingest_files(
         files.map do |file|
@@ -59,5 +73,7 @@ module AipHelper
         end
       )
     end
+
+    entity
   end
 end

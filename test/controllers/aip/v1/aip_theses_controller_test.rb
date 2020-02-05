@@ -14,10 +14,15 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
     @regular_user = users(:regular)
     @private_thesis = thesis(:private)
     @entity = Thesis.name.underscore.pluralize
-    @public_thesis = thesis(:nice)
-
-    attach_files_to_entity(
-      @public_thesis,
+    @public_thesis = create_entity(
+      entity_class: Thesis,
+      parameters: {
+        title: 'Thesis with files',
+        owner_id: @admin_user.id,
+        dissertant: 'Joe Blow',
+        visibility: JupiterCore::VISIBILITY_PUBLIC,
+        graduation_date: '2017-03-31'
+      },
       files: [
         file_fixture('image-sample.jpeg'),
         file_fixture('text-sample.txt')
@@ -104,7 +109,7 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
     get aip_v1_entity_file_set_url(
       entity: @entity,
       id: @public_thesis,
-      file_set_id: @public_thesis.files[0].fileset_uuid
+      file_set_id: @public_thesis.files.first.fileset_uuid
     )
     assert_response :success
 
@@ -118,7 +123,7 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
     url = aip_v1_entity_fileset_fixity_url(
       entity: @entity,
       id: @public_thesis,
-      file_set_id: @public_thesis.files[0].fileset_uuid
+      file_set_id: @public_thesis.files.first.fileset_uuid
     )
 
     graph = get_n3_graph(url)
@@ -132,7 +137,7 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
     url = aip_v1_entity_fileset_original_file_url(
       entity: @entity,
       id: @public_thesis,
-      file_set_id: @public_thesis.files[0].fileset_uuid
+      file_set_id: @public_thesis.files.first.fileset_uuid
     )
 
     graph = get_n3_graph(url)
