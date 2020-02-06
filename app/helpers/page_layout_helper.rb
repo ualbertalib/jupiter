@@ -57,4 +57,8 @@ module PageLayoutHelper
   def page_type(type = nil)
     type || 'website'
   end
+
+  def canonical_href(request_path = request.path)
+    "https://era.library.ualberta.ca#{request_path == '/' ? '' : request_path}"
+  end
 end

@@ -11,6 +11,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 2020_01_29_044248) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -315,7 +316,7 @@ ActiveRecord::Schema.define(version: 2020_01_29_044248) do
     t.string "last_seen_ip"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
-  
+
   create_table "versions", force: :cascade do |t|
     t.string "item_type", null: false
     t.bigint "item_id", null: false

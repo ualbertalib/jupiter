@@ -1,4 +1,4 @@
-class UriValidator < ActiveModel::EachValidator
+class URIValidator < ActiveModel::EachValidator
 
   def validate_each(record, attr, value)
     vocabs = options[:in_vocabularies]

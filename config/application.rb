@@ -27,9 +27,6 @@ module Jupiter
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.0
 
-    # TODO: Remove soon once we tackle zeitwerk upgrade
-    config.autoloader = :classic
-
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading
@@ -40,9 +37,6 @@ module Jupiter
 
     # Run skylight in UAT for performance metric monitoring pre-launch
     config.skylight.environments += ['uat']
-
-    # Finding jupiter_core code before the ApplicationController loads
-    config.eager_load_paths.prepend("#{config.root}/app/models/jupiter_core")
 
     config.redis_key_prefix = "jupiter.#{Rails.env}."
 
