@@ -467,7 +467,7 @@ GEM
       execjs (>= 0.3.0, < 3)
     unicode-display_width (1.6.1)
     uuidtools (2.1.5)
-    vcr (5.0.0)
+    vcr (5.1.0)
     voight_kampff (1.1.3)
       rack (>= 1.4, < 3.0)
     web-console (4.0.1)
