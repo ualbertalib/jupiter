@@ -84,12 +84,12 @@
         aria-expanded="false"
         aria-controls="more-information-hidden"
         class="btn btn-outline-secondary mb-3 js-more-information-btn font-italic">
-    <span class="js-hidden-text">
+    <span class="js-more-information-hidden">
       <%= t(:more_information) %>
       <%= icon('fas', 'chevron-down') %>
     </span>
 
-    <span class="d-none js-shown-text">
+    <span class="d-none js-more-information-shown">
       <%= t(:show_less) %>
       <%= icon('fas', 'chevron-up')%>
     </span>
@@ -98,3 +98,5 @@
 <div class="collapse" id='more-information-hidden'>
   <%= render partial: 'thesis_more_information' %>
 </div>
+
+<%= render partial: 'edit_history' %>

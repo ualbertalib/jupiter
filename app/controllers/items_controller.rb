@@ -26,9 +26,9 @@ class ItemsController < ApplicationController
 
   def load_item
     @item = begin
-      Item.find(params[:id])
+      Item.find(params[:id]).decorate
     rescue ActiveRecord::RecordNotFound
-      Thesis.find(params[:id])
+      Thesis.find(params[:id]).decorate
     end
   end
 
