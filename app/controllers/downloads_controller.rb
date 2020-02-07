@@ -21,7 +21,7 @@ class DownloadsController < ApplicationController
     # LAC, who we have to support with our OAI implementation, absolutely cannot handle spaces
     # special-casing this is the easiest work-around ¯\_(ツ)_/¯
     raise JupiterCore::ObjectNotFound unless ((requested_filename == filename) ||
-                                              (requested_filename == filename.tr(' ', '_'))
+                                              (requested_filename == filename.tr(' ', '_')))
 
     send_data(ActiveStorage::Blob.service.download(@file.blob.key), disposition: 'inline',
                                                                     type: @file.blob.content_type)
