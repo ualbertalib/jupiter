@@ -1,5 +1,5 @@
 class Metadata::OaiEtdms::ThesisDecorator < ApplicationDecorator
-  delegate :subject, :title, :updated_at
+  delegate :degree, :subject, :title, :updated_at
 
   def creator
     object.dissertant
@@ -38,6 +38,18 @@ class Metadata::OaiEtdms::ThesisDecorator < ApplicationDecorator
 
   def language
     h.humanize_uri(:language, object.language)
+  end
+
+  def degree_level
+    object.thesis_level
+  end
+
+  def discipline
+    object.departments.first
+  end
+
+  def institution
+    h.humanize_uri(:institution, object.institution)
   end
 
 end
