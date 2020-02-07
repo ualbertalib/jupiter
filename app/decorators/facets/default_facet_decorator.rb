@@ -1,4 +1,4 @@
-class Presenters::FacetValues::DefaultPresenter
+class Facets::DefaultFacetDecorator
 
   attr_reader :count
 
