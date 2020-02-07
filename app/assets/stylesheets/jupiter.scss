@@ -53,3 +53,13 @@ body {
   background-position: center 10%;
   background-size: cover;
 }
+
+// Used for differ gem.
+ins.differ {
+  background: #d4fdd5;
+  text-decoration: none;
+}
+del.differ {
+  background: #ff9999;
+  text-decoration: none;
+}

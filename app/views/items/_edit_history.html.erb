@@ -1,0 +1,42 @@
+<% if current_user.present? && current_user.admin? %>
+  <div>
+    <button type="button"
+            data-toggle="collapse"
+            data-target="#edit-history-hidden"
+            aria-expanded="false"
+            aria-controls="edit-history-hidden"
+            class="btn btn-outline-secondary mb-3 js-edit-history-btn font-italic">
+    <span class="js-eh-hidden-text">
+      <%= t(:edit_history) %>
+      <%= fa_icon('chevron-down')%>
+    </span>
+
+      <span class="d-none js-eh-shown-text">
+        <%= t(:show_less) %>
+        <%= fa_icon('chevron-up')%>
+    </span>
+    </button>
+  </div>
+
+  <div class="collapse" id='edit-history-hidden'>
+    <% history = get_history(@item.versions)  %>
+    <% history.each do |history_item|  %>
+
+      <li class="list-unstyled list-group-item-action">
+        <h3><%= history_item[:date] %></h3>
+
+        <dl>
+          <dt><%= 'Edited by' %></dt>
+          <dd><%= history_item[:user] %></dd>
+        </dl>
+
+        <% history_item[:changes].each do |attribute, change|  %>
+          <dl>
+            <dt><%= attribute %></dt>
+            <dd><%= raw Differ.diff_by_word(change[1].to_s, change[0].to_s).format_as(:html) %></dd>
+          </dl>
+        <% end %>
+      </li>
+    <% end %>
+  </div>
+<% end %>
