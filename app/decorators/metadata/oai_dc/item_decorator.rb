@@ -1,4 +1,5 @@
 class Metadata::OaiDc::ItemDecorator < ApplicationDecorator
+
   delegate :description, :publisher, :subject, :title, :updated_at
 
   def creator
@@ -10,7 +11,7 @@ class Metadata::OaiDc::ItemDecorator < ApplicationDecorator
   end
 
   def rights
-    object.license.present? ? object.license : object.rights
+    object.license.presence || object.rights
   end
 
   def identifiers
@@ -26,7 +27,7 @@ class Metadata::OaiDc::ItemDecorator < ApplicationDecorator
   end
 
   def languages
-    object.languages.map {|l| h.humanize_uri(:language, l)}
+    object.languages.map { |l| h.humanize_uri(:language, l) }
   end
 
 end

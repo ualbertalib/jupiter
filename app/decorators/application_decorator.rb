@@ -1,4 +1,5 @@
 class ApplicationDecorator < Draper::Decorator
+
   # see https://github.com/drapergem/draper/issues/859 for why we never want to NOT
   # delgate the id method
   delegate :id
@@ -9,4 +10,5 @@ class ApplicationDecorator < Draper::Decorator
   # decorated methods involving paths. By directly importing the Rails application instance's
   # URL helpers, we can ensure the decorated methods behave consistently.
   include Rails.application.routes.url_helpers
+
 end

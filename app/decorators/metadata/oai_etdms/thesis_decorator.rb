@@ -1,4 +1,5 @@
 class Metadata::OaiEtdms::ThesisDecorator < ApplicationDecorator
+
   delegate :degree, :subject, :title, :updated_at
 
   def creator
@@ -18,7 +19,7 @@ class Metadata::OaiEtdms::ThesisDecorator < ApplicationDecorator
   end
 
   def date
-    # TODO need to talk to metadata about fallback if date accepted is not present, which it isn't for legacy theses
+    # TODO: need to talk to metadata about fallback if date accepted is not present, which it isn't for legacy theses
     object.date_accepted || object.created_at
   end
 
@@ -32,9 +33,7 @@ class Metadata::OaiEtdms::ThesisDecorator < ApplicationDecorator
     [item_url(object), object.doi, files].flatten
   end
 
-  def rights
-    object.rights
-  end
+  delegate :rights, to: :object
 
   def language
     h.humanize_uri(:language, object.language)
