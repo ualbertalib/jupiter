@@ -162,19 +162,19 @@ class SiteForBotsTest < ActionDispatch::IntegrationTest
   test 'search page with query params should link to canonical version of search' do
     # canonical should appear for the default
     get search_path
-    assert_select 'link[rel="canonical"]:match("href", ?)', 'https://era.library.ualberta.ca/search'
+    assert_select 'link[rel="canonical"]:match("href", ?)', "#{Jupiter::PRODUCTION_URL}/search"
 
     # canonical should appear for the item tab
     get search_path(search: 'random', tab: 'item')
-    assert_select 'link[rel="canonical"]:match("href", ?)', 'https://era.library.ualberta.ca/search'
+    assert_select 'link[rel="canonical"]:match("href", ?)', "#{Jupiter::PRODUCTION_URL}/search"
 
     # canonical should appear for the collection tab
     get search_path(tab: 'collection')
-    assert_select 'link[rel="canonical"]:match("href", ?)', 'https://era.library.ualberta.ca/search'
+    assert_select 'link[rel="canonical"]:match("href", ?)', "#{Jupiter::PRODUCTION_URL}/search"
 
     # canonical should appear for the community tab
     get search_path(tab: 'community')
-    assert_select 'link[rel="canonical"]:match("href", ?)', 'https://era.library.ualberta.ca/search'
+    assert_select 'link[rel="canonical"]:match("href", ?)', "#{Jupiter::PRODUCTION_URL}/search"
   end
 
 end

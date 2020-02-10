@@ -84,10 +84,10 @@ class PageLayoutHelperTest < ActionView::TestCase
   end
 
   test 'canonical_href is returning the correct canoncial url' do
-    assert_equal 'https://era.library.ualberta.ca', canonical_href(nil)
-    assert_equal 'https://era.library.ualberta.ca', canonical_href('/')
-    assert_equal 'https://era.library.ualberta.ca/search', canonical_href('/search')
-    assert_equal 'https://era.library.ualberta.ca/search/nested', canonical_href('/search/nested')
+    assert_equal Jupiter::PRODUCTION_URL, canonical_href(nil)
+    assert_equal Jupiter::PRODUCTION_URL, canonical_href('/')
+    assert_equal "#{Jupiter::PRODUCTION_URL}/search", canonical_href('/search')
+    assert_equal "#{Jupiter::PRODUCTION_URL}/search/nested", canonical_href('/search/nested')
   end
 
 end
