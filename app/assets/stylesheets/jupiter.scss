@@ -1,6 +1,8 @@
 $header-height-large-screen: 81px;
 $header-height-small-screen: 139px;
 $footer-height: 72px;
+$light-green: #d4fdd5;
+$light-red: #f99;
 
 html {
   // needed for sticky footer
@@ -55,11 +57,16 @@ body {
 }
 
 // Used for differ gem.
-ins.differ {
-  background: #d4fdd5;
-  text-decoration: none;
+ins {
+  &.differ {
+    background: $light-green;
+    text-decoration: none;
+  }
 }
-del.differ {
-  background: #ff9999;
-  text-decoration: none;
+
+del {
+  &.differ {
+    background: $light-red;
+    text-decoration: none;
+  }
 }

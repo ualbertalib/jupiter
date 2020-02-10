@@ -15,9 +15,6 @@ class ItemEditHistoryTest < ApplicationSystemTestCase
       login_user admin
 
       visit item_path thesis
-      # TODO: not sure why the login didn't persist.
-      click_on I18n.t('application.navbar.links.login')
-
       click_on I18n.t('edit')
       fill_in 'draft_thesis_title', with: 'New title'
 
@@ -62,8 +59,6 @@ class ItemEditHistoryTest < ApplicationSystemTestCase
       login_user admin
 
       visit item_path item
-      # TODO: not sure why the login didn't persist.
-      click_on I18n.t('application.navbar.links.login')
       click_on I18n.t('edit')
 
       fill_in 'draft_item_title', with: 'New title'
