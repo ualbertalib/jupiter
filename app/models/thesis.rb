@@ -167,4 +167,20 @@ class Thesis < JupiterCore::Doiable
     super + [VISIBILITY_EMBARGO]
   end
 
+  def edit_history
+    history = []
+    versions.each do |version|
+      next if version.changeset.nil?
+
+      history_item = {}
+      history_item[:date] = version.created_at
+      history_item[:user] = version.whodunnit
+      history_item[:changes] = version.changeset
+      history_item[:version_id] = version.id
+
+      history << history_item if history_item[:changes].present?
+    end
+    history
+  end
+
 end

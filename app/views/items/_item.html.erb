@@ -91,12 +91,12 @@
         aria-expanded="false"
         aria-controls="more-information-hidden"
         class="btn btn-outline-secondary mb-3 js-more-information-btn font-italic">
-    <span class="js-mi-hidden-text">
+    <span class="js-more-information-hidden">
       <%= t(:more_information) %>
       <%= fa_icon('chevron-down')%>
     </span>
 
-    <span class="d-none js-mi-shown-text">
+    <span class="d-none js-more-information-shown">
       <%= t(:show_less) %>
       <%= fa_icon('chevron-up')%>
     </span>
@@ -106,5 +106,4 @@
   <%= render partial: 'item_more_information' %>
 </div>
 
-<%# Edit History %>
 <%= render partial: 'edit_history' %>

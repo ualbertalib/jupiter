@@ -5,12 +5,12 @@ $(document).on('turbolinks:load', function() {
   });
 
   $('#more-information-hidden').on('hidden.bs.collapse shown.bs.collapse', function() {
-    $('.js-mi-shown-text').toggleClass('d-none');
-    $('.js-mi-hidden-text').toggleClass('d-none');
+    $('.js-more-information-shown').toggleClass('d-none');
+    $('.js-more-information-hidden').toggleClass('d-none');
   });
 
   $('#edit-history-hidden').on('hidden.bs.collapse shown.bs.collapse', function() {
-    $('.js-eh-shown-text').toggleClass('d-none');
-    $('.js-eh-hidden-text').toggleClass('d-none');
+    $('.js-edit-history-shown').toggleClass('d-none');
+    $('.js-edit-history-hidden').toggleClass('d-none');
   });
 });

@@ -1,26 +1,26 @@
 <% if current_user.present? && current_user.admin? %>
-  <div>
+  <div class='d-block'>
     <button type="button"
             data-toggle="collapse"
             data-target="#edit-history-hidden"
             aria-expanded="false"
             aria-controls="edit-history-hidden"
             class="btn btn-outline-secondary mb-3 js-edit-history-btn font-italic">
-    <span class="js-eh-hidden-text">
+    <span class="js-edit-history-hidden">
       <%= t(:edit_history) %>
       <%= fa_icon('chevron-down')%>
     </span>
 
-      <span class="d-none js-eh-shown-text">
-        <%= t(:show_less) %>
+      <span class="d-none js-edit-history-shown">
+        <%= t(:hide_edit_history) %>
         <%= fa_icon('chevron-up')%>
     </span>
     </button>
   </div>
 
   <div class="collapse" id='edit-history-hidden'>
-    <% history = get_history(@item.versions)  %>
-    <% history.each do |history_item|  %>
+    <% clean_history = clean_history(@item.edit_history)  %>
+    <% clean_history.each do |history_item|  %>
 
       <li class="list-unstyled list-group-item-action">
         <h3><%= history_item[:date] %></h3>
@@ -33,7 +33,7 @@
         <% history_item[:changes].each do |attribute, change|  %>
           <dl>
             <dt><%= attribute %></dt>
-            <dd><%= raw Differ.diff_by_word(change[1].to_s, change[0].to_s).format_as(:html) %></dd>
+            <dd><%= change_diff(change) %></dd>
           </dl>
         <% end %>
       </li>
