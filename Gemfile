@@ -23,9 +23,6 @@ gem 'bootsnap', '>= 1.4.2', require: false
 gem 'active_link_to'
 gem 'simple_form'
 
-# SEO
-gem 'canonical-rails'
-
 # RDF stuff
 gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', ref: 'ac8acad'
 gem 'rdf', '~> 3.1.0'

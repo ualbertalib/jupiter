@@ -16,4 +16,6 @@
 # end
 ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.acronym 'PMH'
+  inflect.acronym 'DOI'
+  inflect.acronym 'URI'
 end
