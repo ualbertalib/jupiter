@@ -27,7 +27,7 @@ gem 'simple_form'
 gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', ref: 'ac8acad'
 gem 'rdf', '~> 3.1.0'
 gem 'rdf-n3'
-gem 'rdf-vocab', '~> 3.1.1'
+gem 'rdf-vocab', '~> 3.1.2'
 
 # Database stuff
 gem 'connection_pool'
