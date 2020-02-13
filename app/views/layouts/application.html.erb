@@ -17,10 +17,12 @@
     <meta name="description" content="<%= page_description %>">
     <meta name="generator" content="<%= "Jupiter #{Jupiter::VERSION} - https://github.com/ualbertalib/jupiter" %>">
 
+    <link rel="canonical" href="<%= canonical_href %>">
+
     <%# Open Graph - http://ogp.me/ %>
     <meta property="og:type"         content="<%= page_type %>">
     <meta property="og:site_name"    content="<%= t('site_name') %>">
-    <meta property="og:url"          content="<%= request.base_url + request.fullpath %>">
+    <meta property="og:url"          content="<%= canonical_href %>">
     <meta property="og:locale"       content="en_US">
     <meta property="og:title"        content="<%= page_title %>">
     <meta property="og:description"  content="<%= page_description %>">
@@ -29,15 +31,12 @@
     <%#  Twitter Card - https://dev.twitter.com/cards/types/summary %>
     <meta name="twitter:card"        content="summary">
     <meta name="twitter:site"        content="@uofalibraries">
-    <meta name="twitter:url"         content="<%= request.base_url + request.fullpath %>">
+    <meta name="twitter:url"         content="<%= canonical_href %>">
     <meta name="twitter:title"       content="<%= page_title %>">
     <meta name="twitter:description" content="<%= page_description %>">
     <meta name="twitter:image"       content="<%= request.base_url + page_image %>">
 
     <%= yield(:extra_social_meta) %>
-
-    <%= canonical_tag -%>
-
 
     <%= csrf_meta_tags %>
 

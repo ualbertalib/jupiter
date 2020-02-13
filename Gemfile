@@ -1,14 +1,10 @@
 source 'https://rubygems.org'
-
-git_source(:github) do |repo_name|
-  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?('/')
-  "https://github.com/#{repo_name}.git"
-end
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 # Core Rails stuff
 gem 'image_processing' # for ActiveStorage Variants
 gem 'puma', '~> 4.3'
-gem 'rails', '~> 5.2.3'
+gem 'rails', '~> 6.0.2'
 
 # Assets (CSS/JS) stuff
 gem 'bootstrap', '~> 4.4.1'
@@ -21,18 +17,17 @@ gem 'turbolinks', '~> 5'
 gem 'uglifier', '>= 1.3.0'
 
 # Reduces boot times through caching; required in config/boot.rb
-gem 'bootsnap', '>= 1.1.0', require: false
+gem 'bootsnap', '>= 1.4.2', require: false
 
 # View stuff
 gem 'active_link_to'
 gem 'simple_form'
 
-# SEO
-gem 'canonical-rails'
-
 # RDF stuff
 gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', ref: '37915a9581713524f95f28425a10fdfee4335d06'
-gem 'rdf-vocab'
+gem 'rdf', '~> 3.1.0'
+gem 'rdf-n3'
+gem 'rdf-vocab', '~> 3.1.2'
 
 # Database stuff
 gem 'connection_pool'
@@ -119,8 +114,9 @@ group :test do
   gem 'minitest-hooks'
   gem 'shoulda-matchers', '~> 4.2'
 
+  gem 'json-schema', '~> 2.8.1'
   gem 'launchy'
-  gem 'vcr', require: false
+  gem 'vcr', '5.0', require: false
   gem 'webdrivers', '~> 4.2'
   gem 'webmock', require: false
 end

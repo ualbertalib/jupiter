@@ -63,3 +63,25 @@
   schema: 'http://ontoware.org/swrc/ontology#'
   terms:
     institution: institution
+
+# The following ontologies will be replaced and for now are just
+# placeholders
+- vocabulary: fits
+  schema: 'http://projecthydra.org/ns/fits/'
+  terms:
+    palceholder: palceholder
+    
+- vocabulary: odf
+  schema: 'http://projecthydra.org/ns/odf/'
+  terms:
+    palceholder: palceholder
+
+- vocabulary: semantic
+  schema: 'http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#'
+  terms:
+    palceholder: palceholder
+
+- vocabulary: fedora
+  schema: 'info:fedora/fedora-system:def/model#'
+  terms:
+    has_model: hasModel
