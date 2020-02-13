@@ -134,7 +134,7 @@ GEM
     clamby (1.6.2)
     coderay (1.1.2)
     colored2 (3.1.2)
-    concurrent-ruby (1.1.5)
+    concurrent-ruby (1.1.6)
     connection_pool (2.2.2)
     cork (0.3.0)
       colored2 (~> 3.1)
@@ -344,7 +344,7 @@ GEM
       rdf (~> 3.1)
       sparql (~> 3.1)
       sxp (~> 1.1)
-    rdf-vocab (3.1.1)
+    rdf-vocab (3.1.2)
       rdf (~> 3.1)
     rdf-xsd (3.1.0)
       rdf (~> 3.1)
@@ -541,7 +541,7 @@ DEPENDENCIES
   ransack
   rdf (~> 3.1.0)
   rdf-n3
-  rdf-vocab (~> 3.1.1)
+  rdf-vocab (~> 3.1.2)
   redis (~> 4.1)
   rollbar
   rsolr
