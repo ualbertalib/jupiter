@@ -14,8 +14,14 @@ class DownloadsController < ApplicationController
   # Used to serve files from the "permanent" vanity URLS /items/item_id/view/file_set_id/filesname and
   # /items/item_id/download/file_set_id/
   def view
-    file_name = params[:file_name]
-    raise JupiterCore::ObjectNotFound unless file_name == @file.filename.to_s
+    requested_filename = params[:file_name]
+    filename = @file.filename.to_s
+
+    # We distribute view URLs via OAI that have all spaces mapped to underscores, because
+    # LAC, who we have to support with our OAI implementation, absolutely cannot handle spaces
+    # special-casing this is the easiest work-around ¯\_(ツ)_/¯
+    raise JupiterCore::ObjectNotFound unless (requested_filename == filename) ||
+                                             (requested_filename == filename.tr(' ', '_'))
 
     send_data(ActiveStorage::Blob.service.download(@file.blob.key), disposition: 'inline',
                                                                     type: @file.blob.content_type)
