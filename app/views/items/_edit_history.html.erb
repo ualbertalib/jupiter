@@ -19,8 +19,7 @@
   </div>
 
   <div class="collapse" id='edit-history-hidden'>
-    <% clean_history = clean_history(@item.edit_history)  %>
-    <% clean_history.each do |history_item|  %>
+    <% @item.decorate.clean_history.each do |history_item|  %>
 
       <li class="list-unstyled list-group-item-action">
         <h3><%= history_item[:date] %></h3>
@@ -30,10 +29,10 @@
           <dd><%= history_item[:user_info] %></dd>
         </dl>
 
-        <% history_item[:changes].each do |attribute, change|  %>
+        <% history_item[:changes].each do |attribute, change_diff|  %>
           <dl>
             <dt><%= attribute %></dt>
-            <dd><%= change_diff(change) %></dd>
+            <dd><%= sanitize(change_diff, tags: ['del', 'ins']) %></dd>
           </dl>
         <% end %>
       </li>
