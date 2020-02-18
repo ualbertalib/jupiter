@@ -1,6 +1,6 @@
 class Item < JupiterCore::Doiable
 
-  acts_as_rdfable
+  acts_as_rdfable formats: :oai_dc
 
   has_solr_exporter Exporters::Solr::ItemExporter
 

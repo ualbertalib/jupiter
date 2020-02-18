@@ -23,14 +23,11 @@ gem 'bootsnap', '>= 1.4.2', require: false
 gem 'active_link_to'
 gem 'simple_form'
 
-# SEO
-gem 'canonical-rails'
-
 # RDF stuff
-gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', ref: 'ac8acad'
+gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', ref: '37915a9581713524f95f28425a10fdfee4335d06'
 gem 'rdf', '~> 3.1.0'
 gem 'rdf-n3'
-gem 'rdf-vocab', '~> 3.1.1'
+gem 'rdf-vocab', '~> 3.1.2'
 
 # Database stuff
 gem 'connection_pool'
@@ -74,7 +71,7 @@ gem 'rollbar'
 
 # OAI-PMH
 gem 'builder_deferred_tagging', github: 'ualbertalib/builder_deferred_tagging', tag: 'v0.01'
-gem 'oaisys', github: 'ualbertalib/oaisys', ref: '6827c1d'
+gem 'oaisys', github: 'ualbertalib/oaisys', ref: 'e98b73f8bc45f39ad8b6bb224bcedba16948f6bd'
 
 # Seeds
 group :development, :test, :uat do
@@ -116,11 +113,11 @@ group :test do
   # Faker added 0.5 seconds to the test suite per call. Haikunator seems much faster for faking strings
   gem 'haikunator'
   gem 'minitest-hooks'
-  gem 'shoulda-matchers', '~> 4.2'
+  gem 'shoulda-matchers', '~> 4.3'
 
   gem 'json-schema', '~> 2.8.1'
   gem 'launchy'
-  gem 'vcr', require: false
+  gem 'vcr', '5.0', require: false
   gem 'webdrivers', '~> 4.2'
   gem 'webmock', require: false
 end
