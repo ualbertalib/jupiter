@@ -15,13 +15,13 @@ class Facets::DefaultFacetDecorator
     if @active_facets[@solr_index].present? && @active_facets[@solr_index].include?(@value)
       @view.link_to @view.query_params_without_facet_value(@solr_index, @value), rel: 'nofollow' do
         @view.concat(@view.content_tag(:span, @count, class: 'ml-2 badge badge-light float-right'))
-        @view.concat(@view.fa_icon('check-square-o', class: 'mr-2'))
+        @view.concat(@view.icon('far', 'check-square', class: 'mr-2'))
         @view.concat(display)
       end
     else
       @view.link_to @view.query_params_with_facet(@solr_index, @value), rel: 'nofollow' do
         @view.concat(@view.content_tag(:span, @count, class: 'ml-2 badge badge-light float-right'))
-        @view.concat(@view.fa_icon('square-o', class: 'mr-2'))
+        @view.concat(@view.icon('far', 'square', class: 'mr-2'))
         @view.concat(display)
       end
     end

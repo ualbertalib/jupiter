@@ -7,7 +7,7 @@
 
     <% if policy(Community).create? %>
       <%= link_to new_admin_community_path, class: 'btn btn-primary' do %>
-        <%= fa_icon('plus-circle') %>
+        <%= icon('fas', 'plus-circle') %>
         <%=  t('communities.index.create_community') %>
       <% end %>
     <% end %>

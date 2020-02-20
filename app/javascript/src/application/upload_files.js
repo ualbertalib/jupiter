@@ -1,3 +1,5 @@
+import Dropzone from 'dropzone/dist/dropzone';
+
 $(document).on('turbolinks:load', function() {
 
   // Disable auto discover for all elements:

@@ -4,13 +4,13 @@
   <%= render partial: 'progress_bar' %>
 
   <h2 class="mt-3">
-    <%= fa_icon t('.header_icon') %>
+    <%= icon(t('.header_icon_type'), t('.header_icon')) %>
     <%= t('.header') %>
   </h2>
 
   <% if @draft.errors.any? %>
     <p class="alert alert-danger">
-      <%= fa_icon 'exclamation-circle' %>
+      <%= icon('fas', 'exclamation-circle') %>
       <%= t('items.draft.please_fix_errors') %>
     </p>
   <% end %>
@@ -36,8 +36,8 @@
                   aria-expanded="<%= license_accordion_open?(accordion_name, @draft.license) %>"
                   aria-controls="js-collapse-<%= accordion_name %>">
                   <%= t(".license.#{accordion_name}") %>
-                  <%= fa_icon "#{license_accordion_open?(accordion_name, @draft.license, 'chevron-up', 'chevron-down')}",
-                              class: "js-more-less float-right" %>
+                  <%= icon('fas', "#{license_accordion_open?(accordion_name, @draft.license, 'chevron-up', 'chevron-down')}",
+                              class: "js-more-less float-right") %>
                 </a>
               </h5>
             </div>
@@ -120,12 +120,12 @@
 
     <div class="mt-3 d-flex flex-wrap justify-content-end">
       <%= link_to previous_wizard_path, class: 'btn btn-secondary mr-2 mb-2 mb-md-0' do %>
-        <%= fa_icon 'chevron-left' %>
+        <%= icon('fas', 'chevron-left') %>
         <%= t('items.draft.previous') %>
       <% end %>
       <%= button_tag type: :submit, class: 'btn btn-primary' do %>
         <%= t('items.draft.save_and_continue') %>
-        <%= fa_icon 'chevron-right' %>
+        <%= icon('fas', 'chevron-right') %>
       <% end %>
     </div>
   <% end %>
