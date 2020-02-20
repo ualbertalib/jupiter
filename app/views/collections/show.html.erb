@@ -12,14 +12,14 @@
         <% if policy(@collection).edit? %>
           <%= link_to edit_admin_community_collection_path(@community, @collection),
               class:'btn btn-outline-secondary' do %>
-            <%= fa_icon('pencil-square-o') %>
+            <%= icon('fas', 'edit') %>
             <%= t('edit') %>
           <% end %>
         <% end %>
         <% if policy(@collection).destroy? %>
           <%= link_to admin_community_collection_path(@community, @collection), method: :delete,
               class:'btn btn-outline-secondary', data: { confirm: t('.delete_confirm', title: @collection.title) } do %>
-            <%= fa_icon('trash') %>
+            <%= icon('fas', 'trash-alt') %>
             <%= t('delete') %>
           <% end %>
         <% end %>
@@ -42,7 +42,7 @@
       <% if policy(:item).new? %>
         <%= link_to create_draft_items_path(collection: @collection.id), method: :post,
             class: 'btn btn-primary' do %>
-          <%= fa_icon('plus-circle') %>
+          <%= icon('fas', 'plus-circle') %>
           <%= t('.deposit_item') %>
         <% end %>
       <% end %>
@@ -50,7 +50,7 @@
       <% if policy(:thesis).new? %>
         <%= link_to create_draft_admin_theses_path(collection: @collection.id), method: :post,
             class: 'btn btn-primary' do %>
-          <%= fa_icon('plus-circle') %>
+          <%= icon('fas', 'plus-circle') %>
           <%= t('.deposit_thesis') %>
         <% end %>
       <% end %>

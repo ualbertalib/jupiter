@@ -20,7 +20,7 @@
           <div class="btn-group" role="group" aria-label="Draft Item Actions">
             <% if policy(draft_item).update? %>
               <%= link_to item_draft_path(item_id: draft_item.id, id: draft_item.last_completed_step), class:'btn btn-outline-primary' do %>
-                <%= fa_icon('pencil-square-o') %>
+                <%= icon('fas', 'edit') %>
                 <%= t('items.draft.continue_draft') %>
               <% end %>
             <% end %>
@@ -28,7 +28,7 @@
             <% if policy(draft_item).destroy? %>
               <%= link_to item_delete_draft_path(item_id: draft_item.id), class: 'btn btn-outline-secondary', method: :delete,
                   data: { confirm: t('items.draft.delete_confirm', title: draft_item.title) } do %>
-                <%= fa_icon('trash') %>
+                <%= icon('fas', 'trash-alt') %>
                 <%= t('delete') %>
               <% end %>
             <% end %>
@@ -69,7 +69,7 @@
             <% if policy(draft_thesis).update? %>
               <%= link_to admin_thesis_draft_path(thesis_id: draft_thesis.id, id: draft_thesis.last_completed_step),
                           class:'btn btn-outline-primary' do %>
-                <%= fa_icon('pencil-square-o') %>
+                <%= icon('fas', 'edit') %>
                 <%= t('admin.theses.draft.continue_draft') %>
               <% end %>
             <% end %>
@@ -79,7 +79,7 @@
                           class: 'btn btn-outline-secondary',
                           method: :delete,
                           data: { confirm: t('admin.theses.draft.delete_confirm', title: draft_thesis.title) } do %>
-                <%= fa_icon('trash') %>
+                <%= icon('fas', 'trash-alt') %>
                 <%= t('delete') %>
               <% end %>
             <% end %>

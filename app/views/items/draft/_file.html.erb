@@ -6,7 +6,7 @@
     <div class="float-right">
       <% if @draft.thumbnail != file %>
         <%= link_to set_thumbnail_item_file_path(@draft, file), method: :patch, remote: true, class: 'btn btn-secondary mb-2 mb-md-0' do %>
-          <%= fa_icon 'file-image-o' %>
+          <%= icon('far', 'file-image') %>
           <%= t('.set_as_thumbnail') %>
         <% end %>
       <% end %>
@@ -15,7 +15,7 @@
                   remote: true,
                   data: { confirm: t('.delete_file_dialog') },
                   class: 'btn btn-secondary' do %>
-        <%= fa_icon 'times' %>
+        <%= icon('fas', 'times') %>
         <%= t('remove') %>
       <% end %>
     </div>

@@ -14,7 +14,7 @@
                       class: 'btn btn-secondary mr-2 mb-2 mb-md-0',
                       rel: 'nofollow',
                       download: primary_file.filename.to_s do %>
-            <%= fa_icon 'cloud-download' %>
+            <%= icon('fas', 'cloud-download-alt') %>
             <%= t('download') %>
           <% end %>
         <% end %>
@@ -23,14 +23,14 @@
         <div class="btn-group">
           <% if policy(item).update? %>
             <%= link_to edit_item_path(item), class:'btn btn-outline-secondary'  do %>
-              <%= fa_icon('pencil-square-o') %>
+              <%= icon('fas', 'edit') %>
               <%= t('edit') %>
             <% end %>
           <% end %>
           <% if policy(item).destroy? %>
             <%= link_to admin_item_path(item), method: :delete, class:'btn btn-outline-secondary',
                 data: { confirm: t('collections.show.item_delete_confirm', title: item.title) } do %>
-              <%= fa_icon('trash') %>
+              <%= icon('fas', 'trash-alt') %>
               <%= t('delete') %>
             <% end %>
           <% end %>

@@ -14,7 +14,7 @@
       <%= link_to(suspend_admin_user_path(@user), method: :patch,
         class: 'btn btn-secondary',
         data: { confirm: t('.suspend_dialog', user: @user.name) }) do %>
-        <%= fa_icon 'ban' %>
+        <%= icon('fas', 'ban') %>
         <%= t('.suspend_link_text') %>
       <% end %>
     <% end %>
@@ -23,7 +23,7 @@
       <%= link_to(unsuspend_admin_user_path(@user), method: :patch,
         class: 'btn btn-secondary',
         data: { confirm: t('.unsuspend_dialog', user: @user.name) }) do %>
-        <%= fa_icon 'check-circle' %>
+        <%= icon('fas', 'check-circle') %>
         <%= t('.unsuspend_link_text') %>
       <% end %>
     <% end %>
@@ -32,7 +32,7 @@
       <%= link_to(revoke_admin_admin_user_path(@user), method: :patch,
         class: 'btn btn-secondary',
         data: { confirm: t('.revoke_admin_dialog', user: @user.name) }) do %>
-        <%= fa_icon 'minus-circle' %>
+        <%= icon('fas', 'minus-circle') %>
         <%= t('.revoke_admin_link_text') %>
       <% end %>
     <% end %>
@@ -41,7 +41,7 @@
       <%= link_to(grant_admin_admin_user_path(@user), method: :patch,
         class: 'btn btn-secondary',
         data: { confirm: t('.grant_admin_dialog', user: @user.name) }) do %>
-        <%= fa_icon 'shield' %>
+        <%= icon('fas', 'shield-alt') %>
         <%= t('.grant_admin_link_text') %>
       <% end %>
     <% end %>
@@ -50,7 +50,7 @@
       <%= link_to(login_as_user_admin_user_path(@user), method: :post,
         class: 'btn btn-secondary',
         data: { confirm: t('.login_as_user_dialog', user: @user.name) }) do %>
-        <%= fa_icon 'user-secret' %>
+        <%= icon('fas', 'user-secret') %>
         <%= t('.login_as_user_link_text') %>
       <% end %>
     <% end %>

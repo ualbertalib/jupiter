@@ -54,7 +54,7 @@ class SearchTest < ApplicationSystemTestCase
     end
     # needs a file for the download link
     Sidekiq::Testing.inline! do
-      File.open(Rails.root + 'app/assets/images/era-logo.png', 'r') do |file|
+      File.open(file_fixture('image-sample.jpeg'), 'r') do |file|
         item.add_and_ingest_files([file])
       end
     end
@@ -157,7 +157,7 @@ class SearchTest < ApplicationSystemTestCase
 
     # A checkbox for the facet should be unchecked, and link should turn on facet
     within 'div.jupiter-filters a', text: 'Fancy Collection 1' do
-      assert_selector 'i.fa-square-o', count: 1
+      assert_selector 'i.far.fa-square', count: 1
     end
 
     # Click on facet
@@ -182,7 +182,7 @@ class SearchTest < ApplicationSystemTestCase
 
     # A checkbox for the selected facet should be checked, and link should turn off facet
     within 'div.jupiter-filters a', text: 'Fancy Collection 1' do
-      assert_selector 'i.fa-check-square-o', count: 1
+      assert_selector 'i.far.fa-check-square', count: 1
     end
 
     # 2 items shown, 3 not shown
@@ -372,7 +372,7 @@ class SearchTest < ApplicationSystemTestCase
 
     # A checkbox for the facet should be unchecked, and link should turn on facet
     within 'div.jupiter-filters a', text: 'Fancy Collection 1' do
-      assert_selector 'i.fa-square-o', count: 1
+      assert_selector 'i.far.fa-square', count: 1
     end
 
     # Click on facet
@@ -397,7 +397,7 @@ class SearchTest < ApplicationSystemTestCase
 
     # A checkbox for the selected facet should be checked, and link should turn off facet
     within 'div.jupiter-filters a', text: 'Fancy Collection 1' do
-      assert_selector 'i.fa-check-square-o', count: 1
+      assert_selector 'i.far.fa-check-square', count: 1
     end
 
     # 2 items shown, 3 not shown
