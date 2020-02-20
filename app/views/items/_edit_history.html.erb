@@ -1,4 +1,8 @@
 <% if current_user.present? && current_user.admin? %>
+  <% content_for(:head) do %>
+    <%= javascript_include_tag 'admin' %>
+  <% end %>
+
   <div class='d-block'>
     <button type="button"
             data-toggle="collapse"
@@ -19,21 +23,16 @@
   </div>
 
   <div class="collapse" id='edit-history-hidden'>
-    <% @item.decorate.clean_history.each do |history_item|  %>
-
+    <% @item.history.reverse.each do |changeset| %>
       <li class="list-unstyled list-group-item-action">
-        <h3><%= history_item[:date] %></h3>
-
+        <h3><%= changeset.date %></h3>
         <dl>
-          <dt><%= 'Edited by' %></dt>
-          <dd><%= history_item[:user_info] %></dd>
+          <dt><%= t(:edited_by) %></dt>
+          <dd><%= changeset.user_info %></dd>
         </dl>
-
-        <% history_item[:changes].each do |attribute, change_diff|  %>
-          <dl>
-            <dt><%= attribute %></dt>
-            <dd><%= sanitize(change_diff, tags: ['del', 'ins']) %></dd>
-          </dl>
+        <% changeset.html_diffs.each do |html_diff| %>
+          <dt><%= html_diff[:attribute] %></dt>
+          <dd><%= html_diff[:html] %></dd>
         <% end %>
       </li>
     <% end %>

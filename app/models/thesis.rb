@@ -132,8 +132,4 @@ class Thesis < JupiterCore::Doiable
     super + [VISIBILITY_EMBARGO]
   end
 
-  def clean_versions
-    versions.select { |version| version.changeset.present? }
-  end
-
 end

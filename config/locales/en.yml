@@ -42,6 +42,7 @@ en:
   delete: 'Delete'
   download: 'Download'
   edit: 'Edit'
+  edited_by: 'Edited by'
   edit_history: 'Edit history ...'
   filter_by: 'Filter by'
   home: 'Home'

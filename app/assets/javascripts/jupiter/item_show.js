@@ -8,9 +8,4 @@ $(document).on('turbolinks:load', function() {
     $('.js-more-information-shown').toggleClass('d-none');
     $('.js-more-information-hidden').toggleClass('d-none');
   });
-
-  $('#edit-history-hidden').on('hidden.bs.collapse shown.bs.collapse', function() {
-    $('.js-edit-history-shown').toggleClass('d-none');
-    $('.js-edit-history-hidden').toggleClass('d-none');
-  });
 });

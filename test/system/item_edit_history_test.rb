@@ -31,7 +31,7 @@ class ItemEditHistoryTest < ApplicationSystemTestCase
       assert_text I18n.t('admin.theses.draft.successful_deposit')
 
       click_on I18n.t('edit_history')
-      assert_selector 'dt', text: 'Edited by'
+      assert_selector 'dt', text: I18n.t('edited_by')
       assert_selector 'dd', text: 'Administrator - administrator@example.com'
       assert_selector 'dt', text: 'Title'
       assert_selector 'dd', text: 'OldNew title'
@@ -71,7 +71,7 @@ class ItemEditHistoryTest < ApplicationSystemTestCase
       assert_text I18n.t('items.draft.successful_deposit')
 
       click_on I18n.t('edit_history')
-      assert_selector 'dt', text: 'Edited by'
+      assert_selector 'dt', text: I18n.t('edited_by')
       assert_selector 'dd', text: 'Administrator - administrator@example.com'
       assert_selector 'dt', text: 'Title'
       assert_selector 'dd', text: 'OldNew title'
