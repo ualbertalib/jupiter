@@ -28,11 +28,18 @@ module AipHelper
   def file_paths_json_schema
     {
       type: 'object',
+      required: [:files],
       properties: {
         files: {
           type: 'array',
           items: {
             type: 'object',
+            required: [
+              :file_name,
+              :file_path,
+              :file_uuid,
+              :file_checksum
+            ],
             properties: {
               file_name: {
                 type: 'string'
@@ -42,12 +49,14 @@ module AipHelper
               },
               file_uuid: {
                 type: 'string'
+              },
+              file_checksum: {
+                type: 'string'
               }
             }
           }
         }
-      },
-      required: [:files]
+      }
     }
   end
 
