@@ -1,4 +1,4 @@
-class Presenters::FacetValues::MemberOfPaths < Presenters::FacetValues::DefaultPresenter
+class Facets::MemberOfPaths < Facets::DefaultFacetDecorator
 
   def display
     # This would be the seam where we may want to introduce a more efficient cache for mapping

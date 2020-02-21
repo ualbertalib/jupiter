@@ -5,8 +5,6 @@ class ApplicationController < ActionController::Base
   before_action :store_user_location!, if: :storable_location?
   after_action :verify_authorized, except: [:service_unavailable]
 
-  protect_from_forgery with: :exception
-
   helper_method :current_announcements, :current_user
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
@@ -14,6 +12,8 @@ class ApplicationController < ActionController::Base
   rescue_from JupiterCore::ObjectNotFound,
               ActiveRecord::RecordNotFound,
               ActionController::RoutingError, with: :render_404
+
+  before_action :set_paper_trail_whodunnit
 
   def service_unavailable
     head :service_unavailable, 'Retry-After' => 24.hours
@@ -92,7 +92,7 @@ class ApplicationController < ActionController::Base
 
     respond_to do |format|
       format.html do
-        render file: Rails.root.join('public/404'), layout: false, status: :not_found
+        render file: Rails.root.join('public/404.html'), layout: false, status: :not_found
       end
       format.js { render json: '', status: :not_found, content_type: 'application/json' }
       format.any { head :not_found }

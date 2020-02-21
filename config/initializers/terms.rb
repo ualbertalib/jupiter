@@ -14,6 +14,12 @@ config.each do |vocab|
   end
 
   terms[name] = Object.new.tap do |obj|
+    obj.define_singleton_method :schema do
+      vocab['schema']
+    end
+    obj.define_singleton_method :rdf_class do
+      rdf_class
+    end
     vocab['terms'].each do |key, value|
       obj.define_singleton_method key.to_sym do
         rdf_class.send(value.to_sym)

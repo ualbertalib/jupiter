@@ -1,12 +1,14 @@
 class Item < JupiterCore::Doiable
 
-  acts_as_rdfable
+  acts_as_rdfable formats: :oai_dc
 
   has_solr_exporter Exporters::Solr::ItemExporter
 
   belongs_to :owner, class_name: 'User'
 
   has_many_attached :files, dependent: false
+
+  has_paper_trail
 
   scope :public_items, -> { where(visibility: JupiterCore::VISIBILITY_PUBLIC) }
   # TODO: this (casting a json array to text and doing a LIKE against it) is kind of a nasty hack to deal with the fact
@@ -93,6 +95,7 @@ class Item < JupiterCore::Doiable
       item.add_to_path(community.id, collection.id)
     end
 
+    item.logo_id = nil
     item.save!
 
     # remove old filesets and attachments and recreate

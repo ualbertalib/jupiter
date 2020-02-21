@@ -1,6 +1,7 @@
 require 'sidekiq/web'
 require 'sidekiq/cron/web'
 require_dependency 'admin_constraint'
+require_dependency 'entity_constraint'
 
 # rubocop is bad and recommends insane things
 Rails.application.routes.draw do
@@ -117,4 +118,31 @@ Rails.application.routes.draw do
   get '/rails/blobs/:key', to: redirect('/rails/active_storage/blobs/%{key}/thumbnail.jpg')
 
   match '/oai/(*all)', to: 'application#service_unavailable', via: [:get, :post]
+
+  # AIP API v1
+
+  namespace :aip,
+            constraints: EntityConstraint.new,
+            defaults: { format: :n3 } do
+    namespace :v1 do
+      get '/:entity/:id',
+          to: 'aip#show_entity',
+          as: 'entity'
+      get '/:entity/:id/filesets',
+          to: 'aip#file_sets',
+          as: 'entity_filesets'
+      get '/:entity/:id/file_paths',
+          to: 'aip#file_paths',
+          as: 'entity_file_paths'
+      get '/:entity/:id/filesets/:file_set_id',
+          to: 'aip#file_set',
+          as: 'entity_file_set'
+      get '/:entity/:id/filesets/:file_set_id/fixity',
+          to: 'aip#fixity_file',
+          as: 'entity_fileset_fixity'
+      get '/:entity/:id/filesets/:file_set_id/original_file',
+          to: 'aip#original_file',
+          as: 'entity_fileset_original_file'
+    end
+  end
 end

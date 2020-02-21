@@ -83,4 +83,11 @@ class PageLayoutHelperTest < ActionView::TestCase
     assert_equal page_image, @community.thumbnail_url
   end
 
+  test 'canonical_href is returning the correct canoncial url' do
+    assert_equal Jupiter::PRODUCTION_URL, canonical_href(nil)
+    assert_equal Jupiter::PRODUCTION_URL, canonical_href('/')
+    assert_equal "#{Jupiter::PRODUCTION_URL}/search", canonical_href('/search')
+    assert_equal "#{Jupiter::PRODUCTION_URL}/search/nested", canonical_href('/search/nested')
+  end
+
 end

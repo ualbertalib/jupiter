@@ -1,4 +1,4 @@
-class Presenters::FacetValues::URIValue < Presenters::FacetValues::DefaultPresenter
+class Facets::URIValue < Facets::DefaultFacetDecorator
 
   protected
 

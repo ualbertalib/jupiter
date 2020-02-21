@@ -1,4 +1,4 @@
-class CreateItemDoiStates < ActiveRecord::Migration[5.1]
+class CreateItemDOIStates < ActiveRecord::Migration[5.1]
   def change
     create_table :item_doi_states do |t|
       t.uuid :item_id
