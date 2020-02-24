@@ -1,9 +1,46 @@
-var unsavedChanges = false;
+let unsavedChanges = false;
 
-$(document).on('turbolinks:load', function() {
+// Find collection select
+function collectionSelect($element) {
+  const $root = $element.hasClass('.js-community-collection') ? $element : $element.closest('.js-community-collection');
+  return $root.find('.js-collection-select');
+}
+
+function toggleRemoveVisibility() {
+  if ($('div.js-community-collection').length > 1) {
+    $('.js-remove-community-collection').show();
+  } else {
+    $('.js-remove-community-collection').hide();
+  }
+}
+
+function addCommunityCollectionInput() {
+  const $newInput = $('div.js-community-collection').first().clone();
+  // Clear selections and disable collection select
+  $newInput.find('.js-community-select').val(null);
+  collectionSelect($newInput).attr('disabled', true).val(null);
+
+  $newInput.appendTo('.js-communities-collections-list');
+  toggleRemoveVisibility();
+}
+
+function removeCommunityCollectionInput($link) {
+  if ($('div.js-community-collection').length > 1) {
+    $link.closest('div.js-community-collection').remove();
+    toggleRemoveVisibility();
+  }
+}
+
+function toggleIcon(e) {
+  $(e.target).prev('.card-header')
+    .find('.js-more-less')
+    .toggleClass('fa-chevron-down fa-chevron-up');
+}
+
+document.addEventListener('turbolinks:load', () => {
   unsavedChanges = false;
 
-  toggle_remove_visibility();
+  toggleRemoveVisibility();
 
   $('#js-license-accordion .card').on('hidden.bs.collapse', toggleIcon);
   $('#js-license-accordion .card').on('shown.bs.collapse', toggleIcon);
@@ -12,42 +49,41 @@ $(document).on('turbolinks:load', function() {
   $('#js-additional-fields-accordion .card').on('shown.bs.collapse', toggleIcon);
 
 
-  $('form.js-deposit-item').on('change', 'input, select, textarea', function() {
+  $('form.js-deposit-item').on('change', 'input, select, textarea', () => {
     unsavedChanges = true;
   });
 
-  $('form.js-deposit-item').submit(function() {
+  $('form.js-deposit-item').submit(() => {
     unsavedChanges = false;
   });
 
   // disables links to future steps
-  $('.nav-item .disabled').click(function(e){
+  $('.nav-item .disabled').click((e) => {
     e.preventDefault();
   });
 
-  $('form.js-deposit-item .js-add-community-collection').click(function(e) {
+  $('form.js-deposit-item .js-add-community-collection').click((e) => {
     e.preventDefault();
-    add_community_collection_input();
+    addCommunityCollectionInput();
   });
 
-  $('form.js-deposit-item').on('click', '.js-remove-community-collection', function() {
-      event.preventDefault();
-      remove_community_collection_input($(this));
-    });
+  $('form.js-deposit-item').on('click', '.js-remove-community-collection', (e) => {
+    e.preventDefault();
+    removeCommunityCollectionInput($(this));
+  });
 
-  $('form.js-deposit-item').on('change', '.js-community-select', function() {
-    var $collectionSelect = collection_select($(this));
-    var id =  $(this).find('option:selected').val();
+  $('form.js-deposit-item').on('change', '.js-community-select', () => {
+    const $collectionSelect = collectionSelect($(this));
+    const id = $(this).find('option:selected').val();
     if (!id) {
       $collectionSelect.prop('disabled', true).empty();
     } else {
-      $.getJSON('/communities/' + id + '.json').done(function(data) {
-        var items = '<option value>' + $collectionSelect.data('placeholder') + '</option>';
-        $.each(data.collections, function(idx, item) {
-          items += '<option value="' + item.id + '">' + item.title + '</option>';
+      $.getJSON(`/communities/${id}.json`).done((data) => {
+        let items = `<option value>${$collectionSelect.data('placeholder')}</option>`;
+        $.each(data.collections, (idx, item) => {
+          items += `<option value="${item.id}">${item.title}</option>`;
         });
-        $collectionSelect.prop('disabled', false)
-                         .empty().append(items);
+        $collectionSelect.prop('disabled', false).empty().append(items);
       });
     }
   });
@@ -55,7 +91,7 @@ $(document).on('turbolinks:load', function() {
   // global selectize initailization could be moved elsewhere
   $('.js-selectize').selectize({
     selectOnTab: true,
-    closeAfterSelect: true,
+    closeAfterSelect: true
   });
 
   // This one is for tagging/ability to create items on input
@@ -63,63 +99,28 @@ $(document).on('turbolinks:load', function() {
     delimiter: '|', // We want | to seperate items (Authors names for example, `Doe, Jane B. | Deer, John A.' )
     persist: false,
     createOnBlur: true,
-    create: function(input) {
-        return {
-            value: input,
-            text: input
-        };
+    create(input) {
+      return {
+        value: input,
+        text: input
+      };
     }
   });
-
 });
 
-$(document).on('turbolinks:before-visit', function() {
+$(document).on('turbolinks:before-visit', () => {
   if (unsavedChanges) {
-    return confirm("Any changes you have made will NOT be saved. Are you sure you want to leave?");
+    // eslint-disable-next-line no-alert
+    return window.confirm('Any changes you have made will NOT be saved. Are you sure you want to leave?');
   }
+  return null;
 });
 
-$(window).bind('beforeunload', function(event) {
+$(window).bind('beforeunload', (event) => {
   if (unsavedChanges) {
-    var msg = "Any changes you have made will NOT be saved. Are you sure you want to leave?";
+    const msg = 'Any changes you have made will NOT be saved. Are you sure you want to leave?';
+    // eslint-disable-next-line no-param-reassign
     event.returnValue = msg;
-    return msg;
   }
+  return null;
 });
-
-// Find collection select
-function collection_select($element) {
-  var $root = $element.hasClass('.js-community-collection') ? $element : $element.closest('.js-community-collection');
-  return $root.find('.js-collection-select');
-}
-
-function add_community_collection_input() {
-  var $new_input = $("div.js-community-collection").first().clone();
-  // Clear selections and disable collection select
-  $new_input.find('.js-community-select').val(null);
-  collection_select($new_input).attr('disabled', true).val(null);
-
-  $new_input.appendTo('.js-communities-collections-list');
-  toggle_remove_visibility();
-}
-
-function remove_community_collection_input($link) {
-  if ($('div.js-community-collection').length > 1) {
-    $link.closest('div.js-community-collection').remove();
-    toggle_remove_visibility();
-  }
-}
-
-function toggle_remove_visibility() {
-  if ($('div.js-community-collection').length > 1) {
-    $('.js-remove-community-collection').show();
-  } else {
-    $('.js-remove-community-collection').hide();
-  }
-}
-
-function toggleIcon(e) {
-  $(e.target).prev('.card-header')
-             .find('.js-more-less')
-             .toggleClass('fa-chevron-down fa-chevron-up');
-}

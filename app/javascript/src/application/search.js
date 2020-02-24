@@ -1,13 +1,13 @@
-$(document).on('turbolinks:load', function() {
+document.addEventListener('turbolinks:load', () => {
   // Toggle between 'Show more...' and 'Hide' for longer lists of facets
   $('.js-hideshow-control')
-    .on('click', function() {
-      var $hideshow = $(this).closest('.js-hideshow');
+    .on('click', () => {
+      const $hideshow = $(this).closest('.js-hideshow');
       $hideshow.find('.js-hideshow-control').toggleClass('d-none');
     });
 
   // Filter/facet sidebar open (on small screens)
-  $('.js-filters-open').on('click', function (event) {
+  $('.js-filters-open').on('click', (event) => {
     event.preventDefault();
 
     // fade in the overlay
@@ -17,7 +17,7 @@ $(document).on('turbolinks:load', function() {
   });
 
   // Filter/facet sidebar close (on small screens)
-  $('.js-filters-close, .overlay').on('click', function (event) {
+  $('.js-filters-close, .overlay').on('click', (event) => {
     event.preventDefault();
 
     // hide the sidebar
@@ -25,5 +25,4 @@ $(document).on('turbolinks:load', function() {
     // fade out the overlay
     $('.filters-overlay').fadeOut();
   });
-
 });
