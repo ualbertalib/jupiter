@@ -1,5 +1,5 @@
-$(document).on('turbolinks:load', function() {
-  $(".js-skip-to-content").click(function (event) {
+document.addEventListener('turbolinks:load', () => {
+  $('.js-skip-to-content').click((event) => {
     $($(this).attr('href')).attr('tabIndex', -1).focus();
     event.preventDefault();
   });
