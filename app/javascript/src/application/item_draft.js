@@ -113,7 +113,7 @@ $(document).on('turbolinks:before-visit', () => {
     // eslint-disable-next-line no-alert
     return window.confirm('Any changes you have made will NOT be saved. Are you sure you want to leave?');
   }
-  return null;
+  return undefined;
 });
 
 $(window).bind('beforeunload', (event) => {
@@ -121,6 +121,8 @@ $(window).bind('beforeunload', (event) => {
     const msg = 'Any changes you have made will NOT be saved. Are you sure you want to leave?';
     // eslint-disable-next-line no-param-reassign
     event.returnValue = msg;
+    return msg;
   }
-  return null;
+
+  return undefined;
 });
