@@ -41,4 +41,3 @@ script:
   - bundle exec rails test
   - bundle exec rails test:system
   - bundle exec rubocop
-  - bundle exec scss-lint
