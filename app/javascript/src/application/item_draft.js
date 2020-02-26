@@ -37,6 +37,22 @@ function toggleIcon(e) {
     .toggleClass('fa-chevron-down fa-chevron-up');
 }
 
+function fetchCollections() {
+  const $collectionSelect = collectionSelect($(this));
+  const id = $(this).find('option:selected').val();
+  if (!id) {
+    $collectionSelect.prop('disabled', true).empty();
+  } else {
+    $.getJSON(`/communities/${id}.json`).done((data) => {
+      let items = `<option value>${$collectionSelect.data('placeholder')}</option>`;
+      $.each(data.collections, (idx, item) => {
+        items += `<option value="${item.id}">${item.title}</option>`;
+      });
+      $collectionSelect.prop('disabled', false).empty().append(items);
+    });
+  }
+}
+
 document.addEventListener('turbolinks:load', () => {
   unsavedChanges = false;
 
@@ -72,21 +88,7 @@ document.addEventListener('turbolinks:load', () => {
     removeCommunityCollectionInput($(this));
   });
 
-  $('form.js-deposit-item').on('change', '.js-community-select', () => {
-    const $collectionSelect = collectionSelect($(this));
-    const id = $(this).find('option:selected').val();
-    if (!id) {
-      $collectionSelect.prop('disabled', true).empty();
-    } else {
-      $.getJSON(`/communities/${id}.json`).done((data) => {
-        let items = `<option value>${$collectionSelect.data('placeholder')}</option>`;
-        $.each(data.collections, (idx, item) => {
-          items += `<option value="${item.id}">${item.title}</option>`;
-        });
-        $collectionSelect.prop('disabled', false).empty().append(items);
-      });
-    }
-  });
+  $('form.js-deposit-item').on('change', '.js-community-select', fetchCollections);
 
   // global selectize initailization could be moved elsewhere
   $('.js-selectize').selectize({
