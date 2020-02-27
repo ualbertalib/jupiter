@@ -10,7 +10,6 @@ module.exports = {
     'prefer-const': ['error'],
     'getter-return': ['error'],
     'curly': ['error', 'multi-line'],
-    'comma-dangle': ['error', 'never'],
     'max-len': ['error', { 'code': 120 }],
     'no-underscore-dangle': 'off'
   },

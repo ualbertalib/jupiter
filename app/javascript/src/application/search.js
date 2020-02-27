@@ -1,7 +1,7 @@
 document.addEventListener('turbolinks:load', () => {
   // Toggle between 'Show more...' and 'Hide' for longer lists of facets
   $('.js-hideshow-control')
-    .on('click', () => {
+    .on('click', function toggleHideShow() {
       const $hideshow = $(this).closest('.js-hideshow');
       $hideshow.find('.js-hideshow-control').toggleClass('d-none');
     });
