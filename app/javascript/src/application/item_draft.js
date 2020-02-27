@@ -93,7 +93,7 @@ document.addEventListener('turbolinks:load', () => {
   // global selectize initailization could be moved elsewhere
   $('.js-selectize').selectize({
     selectOnTab: true,
-    closeAfterSelect: true
+    closeAfterSelect: true,
   });
 
   // This one is for tagging/ability to create items on input
@@ -104,9 +104,9 @@ document.addEventListener('turbolinks:load', () => {
     create(input) {
       return {
         value: input,
-        text: input
+        text: input,
       };
-    }
+    },
   });
 });
 

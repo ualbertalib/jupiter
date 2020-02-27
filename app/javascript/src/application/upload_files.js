@@ -23,7 +23,7 @@ document.addEventListener('turbolinks:load', () => {
             filesDropzone.removeFile(file);
           }, 1000);
         });
-      }
+      },
     });
   }
 });

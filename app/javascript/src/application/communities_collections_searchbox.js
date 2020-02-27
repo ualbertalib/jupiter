@@ -23,15 +23,15 @@ document.addEventListener('turbolinks:load', () => {
           maxNumberOfElements: maxItems,
           listLocation: 'collections',
           header: '<strong>Collections</strong>',
-        }
+        },
       ],
       list: {
         onChooseEvent() {
           const { url } = $input.getSelectedItemData();
           $input.val('');
           Turbolinks.visit(url);
-        }
-      }
+        },
+      },
     };
 
     $input.easyAutocomplete(options);
