@@ -1,4 +1,3 @@
-require_dependency 'humanized_change_set'
 class ThesisDecorator < Draper::Decorator
 
   delegate_all

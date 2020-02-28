@@ -38,13 +38,16 @@ class HumanizedChangeSet
 
       transformed_values = begin
         send(attribute_name)
+      # No modifications to the changeset needed.
       rescue NoMethodError
         @changeset[attribute_name]
       end
 
       html_diff = Differ.diff_by_word(transformed_values[1].to_s, transformed_values[0].to_s).format_as(:html)
+      # Allowing del and ins html tags as the differ gem uses them to display deleted and inserted text.
       sanitized_html_diff = @h.sanitize(html_diff, tags: ['del', 'ins'])
 
+      # Some attributes have different labels due to preference of Admins.
       attribute_name = case attribute_name
                        when 'dissertant'
                          'Author'
@@ -57,80 +60,92 @@ class HumanizedChangeSet
   end
 
   def visibility
-    transform_visibility_attribute(:visibility)
+    humanize_visibility_attribute(:visibility)
   end
 
   def visibility_after_embargo
-    transform_visibility_attribute(:visibility_after_embargo)
+    humanize_visibility_attribute(:visibility_after_embargo)
   end
 
   def record_created_at
-    transform_date_attribute(:record_created_at)
+    localize_date_to_timezone(:record_created_at)
   end
 
   def date_ingested
-    transform_date_attribute(:date_ingested)
+    localize_date_to_timezone(:date_ingested)
   end
 
   def embargo_end_date
-    transform_date_attribute(:embargo_end_date)
+    localize_date_to_timezone(:embargo_end_date)
   end
 
   def created_at
-    transform_date_attribute(:created_at)
+    localize_date_to_timezone(:created_at)
   end
 
   def date_accepted
-    transform_date_attribute(:date_accepted)
+    localize_date_to_timezone(:date_accepted)
   end
 
   def date_submitted
-    transform_date_attribute(:date_submitted)
+    localize_date_to_timezone(:date_submitted)
   end
 
   # rubocop:disable Naming/PredicateName
   def is_version_of
-    transform_array_attribute(:is_version_of)
+    concat_array_attribute(:is_version_of)
   end
   # rubocop:enable Naming/PredicateName
 
   def subject
-    transform_array_attribute(:subject)
+    concat_array_attribute(:subject)
   end
 
   def creators
-    transform_array_attribute(:creators)
+    concat_array_attribute(:creators)
   end
 
   def contributors
-    transform_array_attribute(:contributors)
+    concat_array_attribute(:contributors)
   end
 
   def temporal_subjects
-    transform_array_attribute(:temporal_subjects)
+    concat_array_attribute(:temporal_subjects)
   end
 
   def spatial_subjects
-    transform_array_attribute(:spatial_subjects)
+    concat_array_attribute(:spatial_subjects)
   end
 
   def departments
-    transform_array_attribute(:departments)
+    concat_array_attribute(:departments)
   end
 
   def supervisors
-    transform_array_attribute(:supervisors)
+    concat_array_attribute(:supervisors)
   end
 
   def committee_members
-    transform_array_attribute(:committee_members)
+    concat_array_attribute(:committee_members)
   end
 
-  def transform_visibility_attribute(attribute)
+  def graduation_date
+    humanize_dates(:graduation_date)
+  end
+
+  def creation_date
+    humanize_dates(:creation_date)
+  end
+
+  def created
+    humanize_dates(:created)
+  end
+
+  def humanize_visibility_attribute(attribute)
     @changeset[attribute].map { |visibility| @h.humanize_uri(:visibility, visibility) }
   end
 
-  def transform_date_attribute(attribute)
+  def localize_date_to_timezone(attribute)
     @changeset[attribute].map do |date|
       next nil if date.nil?
 
@@ -138,7 +153,7 @@ class HumanizedChangeSet
     end
   end
 
-  def transform_array_attribute(attribute)
+  def concat_array_attribute(attribute)
     @changeset[attribute].map do |change_item|
       next nil if change_item.nil?
 
@@ -146,8 +161,16 @@ class HumanizedChangeSet
     end
   end
 
+  def humanize_dates(attribute)
+    @changeset[attribute].map do |date|
+      next nil if date.nil?
+
+      @h.humanize_date(date)
+    end
+  end
+
   def member_of_paths
-    transformed_member_of_paths = @changeset[:member_of_paths].map do |change_item|
+    humanized_member_of_paths = @changeset[:member_of_paths].map do |change_item|
       next [] if change_item.nil?
 
       change_item.map do |path|
@@ -158,11 +181,11 @@ class HumanizedChangeSet
       end
     end
 
-    transformed_member_of_paths.map { |change_item| change_item.join(', ') }
+    humanized_member_of_paths.map { |change_item| change_item.join(', ') }
   end
 
   def languages
-    transformed_languages = @changeset[:languages].map do |change_item|
+    humanized_languages = @changeset[:languages].map do |change_item|
       next [] if change_item.nil?
 
       change_item.map do |language|
@@ -170,7 +193,7 @@ class HumanizedChangeSet
       end
     end
 
-    transformed_languages.map { |change_item| change_item.join(', ') }
+    humanized_languages.map { |change_item| change_item.join(', ') }
   end
 
   def language
@@ -186,7 +209,7 @@ class HumanizedChangeSet
   end
 
   def publication_status
-    transformed_publication_status = @changeset[:publication_status].map do |change_item|
+    humanized_publication_status = @changeset[:publication_status].map do |change_item|
       next [] if change_item.nil?
 
       change_item.map do |publication_status|
@@ -194,33 +217,25 @@ class HumanizedChangeSet
       end
     end
 
-    transformed_publication_status.map { |change_item| change_item.join(', ') }
-  end
-
-  def created
-    @changeset[:created].map do |date|
-      next nil if date.nil?
-
-      @h.humanize_date(date)
-    end
+    humanized_publication_status.map { |change_item| change_item.join(', ') }
   end
 
   def item_type
-    transformed_item_type = []
+    humanized_item_type = []
     last_version = @version
     last_version_object = last_version.reify
     last_version_type = last_version_object.item_type_with_status_code
     if last_version_type.present?
-      transformed_item_type[0] = I18n.t("controlled_vocabularies.item_type_with_status.#{last_version_type}")
+      humanized_item_type[0] = I18n.t("controlled_vocabularies.item_type_with_status.#{last_version_type}")
     end
 
     new_version_object = last_version.next.reify
     new_version_type = new_version_object.item_type_with_status_code
     if new_version_type.present?
-      transformed_item_type[1] = I18n.t("controlled_vocabularies.item_type_with_status.#{new_version_type}")
+      humanized_item_type[1] = I18n.t("controlled_vocabularies.item_type_with_status.#{new_version_type}")
     end
 
-    transformed_item_type
+    humanized_item_type
   end
 
 end

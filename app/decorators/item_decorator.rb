@@ -1,4 +1,3 @@
-require_dependency 'humanized_change_set'
 class ItemDecorator < Draper::Decorator
 
   delegate_all
