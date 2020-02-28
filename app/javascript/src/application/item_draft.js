@@ -83,7 +83,7 @@ document.addEventListener('turbolinks:load', () => {
     addCommunityCollectionInput();
   });
 
-  $('form.js-deposit-item').on('click', '.js-remove-community-collection', (e) => {
+  $('form.js-deposit-item').on('click', '.js-remove-community-collection', function removeCommunityCollection(e) {
     e.preventDefault();
     removeCommunityCollectionInput($(this));
   });
