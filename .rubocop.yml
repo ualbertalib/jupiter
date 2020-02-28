@@ -130,7 +130,7 @@ Style/HashTransformKeys:
 
 Style/HashTransformValues:
   Enabled: true
-  
+
 Style/NumericPredicate:
   EnforcedStyle: comparison
 
