@@ -255,7 +255,7 @@ class Aip::V1::AipController < ApplicationController
   end
 
   def load_and_authorize_entity
-    case params[:entity]
+    case params[:entity]      
     # There is a routing constraint specifying which models are available
     # through the url. We need to update the routing constraint whenever a new
     # entity is made available
