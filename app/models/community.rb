@@ -51,7 +51,7 @@ class Community < JupiterCore::Depositable
   end
 
   # compatibility with item thumbnail API
-  def thumbnail_url(args = { resize: '100x100', auto_orient: true })
+  def thumbnail_path(args = { resize: '100x100', auto_orient: true })
     return nil if logo_attachment.blank?
 
     Rails.application.routes.url_helpers.rails_representation_path(logo_attachment.variant(args).processed)

@@ -2,6 +2,16 @@ require 'test_helper'
 
 class PageLayoutHelperTest < ActionView::TestCase
 
+  attr_reader :request
+
+  def setup
+    @request = Class.new do
+      def base_url
+        'https://example.com'
+      end
+    end.new
+  end
+
   # page_title
 
   test 'should return the page title when given one' do
@@ -62,25 +72,25 @@ class PageLayoutHelperTest < ActionView::TestCase
     assert_equal 'Bold Text: &amp; "Header"', page_description
   end
 
-  # page_image
+  # page_image_url
 
-  test 'page_image defaults to the jupiter logo' do
-    assert_equal image_url('era-logo.png'), page_image
+  test 'page_image_url defaults to the jupiter logo' do
+    assert_equal image_url('era-logo.png'), page_image_url
   end
 
-  test 'page_image should return default image on community/item with no logo' do
+  test 'page_image_url should return default image on community/item with no logo' do
     @community = Community.create!(title: 'Random community', owner_id: users(:admin).id)
 
-    assert_equal image_url('era-logo.png'), page_image
+    assert_equal image_url('era-logo.png'), page_image_url
   end
 
-  test 'page_image should return community/item logo' do
+  test 'page_image_url should return community/item logo' do
     @community = Community.create!(title: 'Random community', owner_id: users(:admin).id)
 
     @community.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
                            filename: 'image-sample.jpeg', content_type: 'image/jpeg'
 
-    assert_equal page_image, @community.thumbnail_url
+    assert_equal page_image_url, request.base_url + @community.thumbnail_path
   end
 
   test 'canonical_href is returning the correct canoncial url' do

@@ -1,6 +1,6 @@
 <% if policy(object).thumbnail? %>
-  <% if object.thumbnail_url.present? %>
-    <%= safe_thumbnail_tag(object.thumbnail_url(resize:'350x350', auto_orient: true), alt: '', size: '350x350') %>
+  <% if object.thumbnail_path.present? %>
+    <%= safe_thumbnail_tag(object.thumbnail_path(resize:'350x350', auto_orient: true), alt: '', size: '350x350') %>
   <% else %>
     <div class="d-flex justify-content-center align-items-center img-thumbnail p-5">
       <%= fa_icon file_icon(object.thumbnail_file&.content_type), class: 'fa-5x text-muted' %>

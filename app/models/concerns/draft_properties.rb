@@ -46,7 +46,7 @@ module DraftProperties
     end
 
     # compatibility with the thumbnail API used in Items/Theses and Communities
-    def thumbnail_url(args = { resize: '100x100', auto_orient: true })
+    def thumbnail_path(args = { resize: '100x100', auto_orient: true })
       return nil unless thumbnail.present? && thumbnail.blob.present?
 
       Rails.application.routes.url_helpers.rails_representation_path(thumbnail.variant(args).processed)

@@ -1,6 +1,6 @@
 <% if policy(object).thumbnail? %>
-  <% if object.thumbnail_url.present? %>
-    <%= safe_thumbnail_tag(object.thumbnail_url, alt: '', title: object.title, size: '100x100') %>
+  <% if object.thumbnail_path.present? %>
+    <%= safe_thumbnail_tag(object.thumbnail_path, alt: '', title: object.title, size: '100x100') %>
   <% else %>
     <% if object.is_a? Community %>
       <%= image_tag('era-logo-without-text.png', class: 'j-thumbnail img-thumbnail', alt: '', title: object.title, size: '100x100') %>
