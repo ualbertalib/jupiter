@@ -254,7 +254,7 @@ GEM
       connection_pool (~> 2.2)
     nio4r (2.5.2)
     no_proxy_fix (0.1.2)
-    nokogiri (1.10.8)
+    nokogiri (1.10.9)
       mini_portile2 (~> 2.4.0)
     octokit (4.16.0)
       faraday (>= 0.9)
