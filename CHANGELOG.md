@@ -14,6 +14,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - bump loofah from 2.3.0 to 2.4.0 [CVE#2019-15587](https://github.com/rubysec/ruby-advisory-db/blob/master/gems/loofah/CVE-2019-15587.yml)
 - bump nokogiri from 1.10.4 to 1.10.9 [CVE#2019-13117](https://github.com/rubysec/ruby-advisory-db/blob/master/gems/nokogiri/CVE-2019-13117.yml)
 - bump brakeman from 4.7.0 to 4.8.0 [CVE#2019-18409](https://github.com/rubysec/ruby-advisory-db/blob/master/gems/brakeman/CVE-2019-18409.yml)
+- add `noopener noreferrer` when opening a link in a new tab
 
 ## [1.2.19] - 2020-01-20
 
