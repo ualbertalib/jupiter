@@ -225,4 +225,32 @@ class DraftThesisTest < ActiveSupport::TestCase
     assert_nil draft_thesis.send(:parse_graduation_term_from_fedora, nil)
   end
 
+  test 'should handle thesis description validations' do
+    user = users(:admin)
+
+    draft_thesis = DraftThesis.drafts.new(
+      user: user,
+      status: DraftThesis.statuses[:active],
+      wizard_step: DraftThesis.wizard_steps[:choose_license_and_visibility],
+      title: 'Thesis Missing Description',
+      creator: 'Jane Doe',
+      description: '',
+      graduation_term: '06',
+      graduation_year: 2018,
+      member_of_paths: { community_id: [@community.id], collection_id: [@collection.id] },
+      visibility: DraftThesis.visibilities[:embargo],
+      embargo_end_date: Date.current + 1.year,
+      rights: 'License text goes here'
+    )
+
+    assert_not draft_thesis.valid?
+    assert_equal "Description can't be blank", draft_thesis.errors.full_messages.first
+
+    draft_thesis.assign_attributes(
+      graduation_year: 2000
+    )
+
+    assert draft_thesis.valid?
+  end
+
 end

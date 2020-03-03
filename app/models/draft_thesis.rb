@@ -29,9 +29,14 @@ class DraftThesis < ApplicationRecord
   belongs_to :language, optional: true
   belongs_to :institution, optional: true
 
-  validates :title, :description, :creator,
-            :member_of_paths, :graduation_year,
+  validates :title, :creator, :member_of_paths, :graduation_year,
             presence: true, if: :validate_describe_thesis?
+
+  validates :description, presence: true,
+                          if: [:validate_describe_thesis?,
+                               lambda do |draft_thesis|
+                                 draft_thesis.graduation_year.nil? || (draft_thesis.graduation_year >= 2009)
+                               end]
 
   validate :communities_and_collections_presence,
            :communities_and_collections_existence,

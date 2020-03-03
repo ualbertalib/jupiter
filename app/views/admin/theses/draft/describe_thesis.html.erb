@@ -54,7 +54,7 @@
 
     <%= f.input :description,
                 as: :text,
-                required: true,
+                required: @draft.graduation_year.nil? || (@draft.graduation_year >= 2009),
                 label: t('.description'),
                 input_html: { rows: '5' },
                 placeholder: t('.description_placeholder') %>
