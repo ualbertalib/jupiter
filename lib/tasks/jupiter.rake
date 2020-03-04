@@ -144,6 +144,71 @@ namespace :jupiter do
     puts 'done!'
   end
 
+  desc 'creates local api system account which will not be able to log into the system by other means'
+  task create_local_system_account: :environment do
+    cli = HighLine.new
+
+    puts 'Creating local system account'
+    email = cli.ask('Account email used to log in') do |q|
+      q.validate = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+      q.responses[:not_valid] = 'Input is not a valid email address'
+    end
+
+    account_name = cli.ask('Account user name')
+
+    password_error_message = <<-STRONGER_PASSWORD_ERROR_MESSAGE
+    Password must be stronger and follow these rules:
+     + Must be at least 16 characters long
+     + Must contain at least one lower case letter
+     + Must contain at least one upper case letter
+     + Must contain at least one number
+     + Must contain at least one symbol
+    STRONGER_PASSWORD_ERROR_MESSAGE
+
+    password_regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{16,})/
+
+    password = cli.ask('Enter password') do |q|
+      q.validate = password_regex
+      q.echo = '*'
+      q.responses[:not_valid] = password_error_message
+    end
+
+    password_confirmation = cli.ask('Confirm password') do |q|
+      q.validate = password_regex
+      q.echo = '*'
+      q.responses[:not_valid] = password_error_message
+    end
+
+    user = User.new(
+      name: account_name,
+      email: email,
+      api: true
+    )
+
+    identity = Identity.new(
+      provider: 'system',
+      uid: user.email,
+      password: password,
+      password_confirmation: password_confirmation
+    )
+
+    user.identities << identity
+    puts
+    if user.save
+      puts "#{email} API system acount created"
+    else
+      puts 'Problem creating account'
+      if user.errors.full_messages
+        puts 'Errors creating user:'
+        user.errors.full_messages.each { |error| puts "  #{error}" }
+      end
+      if identity.errors.full_messages
+        puts 'Errors creating identity:'
+        identity.errors.full_messages.each { |error| puts "  #{error}" }
+      end
+    end
+  end
+
   def migrate_fileset_item(item)
     # re-migrate if something went wrong previously
     item.files.purge

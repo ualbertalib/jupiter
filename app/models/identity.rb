@@ -8,7 +8,7 @@ class Identity < ApplicationRecord
   validates :uid, presence: true, uniqueness: { scope: :provider }
   validates :user_id, uniqueness: { scope: :provider }
   # Check if the password is present only when working with system accounts
-  validates :password, presence: true, if: lambda { |identity|
+  validates :password, presence: true, confirmation: true, if: lambda { |identity|
     identity.provider == 'system'
   }
 
