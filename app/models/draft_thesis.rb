@@ -29,9 +29,12 @@ class DraftThesis < ApplicationRecord
   belongs_to :language, optional: true
   belongs_to :institution, optional: true
 
-  validates :title, :description, :creator,
-            :member_of_paths, :graduation_year,
+  validates :title, :creator, :member_of_paths, :graduation_year,
             presence: true, if: :validate_describe_thesis?
+
+  validates :description, presence: true,
+                          if: [:validate_describe_thesis?,
+                               :description_required?]
 
   validate :communities_and_collections_presence,
            :communities_and_collections_existence,
@@ -179,6 +182,10 @@ class DraftThesis < ApplicationRecord
     raise ArgumentError, "No draft institution found for code: #{code}" if institution.blank?
 
     institution
+  end
+
+  def description_required?
+    graduation_year.nil? || (graduation_year >= 2009)
   end
 
   private

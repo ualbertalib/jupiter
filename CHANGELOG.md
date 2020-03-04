@@ -18,6 +18,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Upgrade Rails gem to latest v6.x [#1430](https://github.com/ualbertalib/jupiter/issues/1430)
 - Transition to Zeitwerk for Autoloading [#1432](https://github.com/ualbertalib/jupiter/issues/1432)
 - Changed default docker setup and updated docker/docker-compose/travis/README [PR#1519](https://github.com/ualbertalib/jupiter/pull/1519)
+- Description now optional for theses prior to 2009 [#1357](https://github.com/ualbertalib/jupiter/issues/1357)
 
 ### Fixed
 - failing tests [#1376](https://github.com/ualbertalib/jupiter/issues/1376)
