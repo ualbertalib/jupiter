@@ -34,9 +34,7 @@ class DraftThesis < ApplicationRecord
 
   validates :description, presence: true,
                           if: [:validate_describe_thesis?,
-                               lambda do |draft_thesis|
-                                 draft_thesis.graduation_year.nil? || (draft_thesis.graduation_year >= 2009)
-                               end]
+                               :description_required?]
 
   validate :communities_and_collections_presence,
            :communities_and_collections_existence,
@@ -184,6 +182,10 @@ class DraftThesis < ApplicationRecord
     raise ArgumentError, "No draft institution found for code: #{code}" if institution.blank?
 
     institution
+  end
+
+  def description_required?
+    graduation_year.nil? || (graduation_year >= 2009)
   end
 
   private
