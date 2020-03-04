@@ -23,3 +23,9 @@ regular_two_saml:
   user: regular_two
   uid: regular_two_ccid@ualberta.ca
   provider: saml
+
+system_identity:
+  user: system_user
+  uid: ditech@ualberta.ca
+  provider: system
+  password_digest: <%= BCrypt::Password.create('correct horse battery staple') %>

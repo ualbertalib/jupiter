@@ -28,3 +28,9 @@ suspended:
   email: joffrey_baratheon@example.com
   admin: false
   suspended: true
+
+system_user:
+  name: System user
+  email: ditech@ualberta.ca
+  admin: false
+  api: true
