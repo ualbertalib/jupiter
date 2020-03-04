@@ -1,82 +1,30 @@
-version: '3'
+# Lightweight docker-compose which only has the datastores, so you can still develop rails locally
 
-volumes:
-  postgres:
-    driver: local
-  solr:
-    driver: local
-  fcrepo:
-    driver: local
-  redis:
-    driver: local
+# To use, run docker-compose up -d
+version: '3.4'
 
 services:
-
-  # Selenium with chrome driver for system tests
-  selenium:
-    image: selenium/standalone-chrome
-    volumes:
-      # copy fixture files for file uploads
-      - ./test/fixtures/files:/app/test/fixtures/files
-
   postgres:
-    image: postgres:9.6-alpine
-    environment:
-      PGDATA: /var/lib/postgresql/data/pgdata
-      POSTGRES_PASSWORD: mysecretpassword
-      POSTGRES_USER: jupiter
+    image: postgres:11-alpine
     volumes:
-      - postgres:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
 
   solr:
     image: solr:6.6
-    # Uncomment this if you want to access SOLR's web interface
-    # ports:
-    #   - "8983:8983"
+    ports:
+      - '8983:8983'
     volumes:
-      - solr:/opt/solr/server/solr/mycores
+      - solr-data:/opt/solr/server/solr/mycores
       - ./solr/config:/config
       - ./solr/scripts/solr-precreate-jupiter.sh:/docker-entrypoint-initdb.d/solr-precreate-jupiter.sh
 
-  fcrepo:
-    image: ualbertalib/docker-fcrepo4
-    volumes:
-      - fcrepo:/fcrepo4-data
-    # Uncomment this if you want to access Fedora's web interface
-    # ports:
-    #   - "8080:8080"
-
   redis:
     image: redis:alpine
-    volumes:
-      - redis:/data
-
-  # Sidekiq
-  worker: &rails
-    build: .
-    image: ualbertalib/jupiter
-    command: bundle exec sidekiq
-    environment:
-      RAILS_ENV: development
-      DATABASE_URL: 'postgresql://jupiter:mysecretpassword@postgres:5432/'
-      FCREPO_URL: http://fcrepo:8080/fcrepo/rest
-      SOLR_URL: http://solr:8983/solr/development
-      SOLR_TEST_URL: http://solr:8983/solr/test
-      REDIS_URL: 'redis://redis/1'
-      SELENIUM_URL: 'http://selenium:4444/wd/hub'
-      CAPYBARA_NO_HEADLESS: 'true'
-    volumes:
-      - .:/app
-    depends_on:
-      - postgres
-      - fcrepo
-      - redis
-      - solr
-      - selenium
-
-  # Rails server
-  web:
-    <<: *rails
-    command: bin/docker-start
     ports:
-      - "3000:3000"
+      - '6379:6379'
+
+volumes:
+  postgres-data:
+  solr-data:
