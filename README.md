@@ -98,7 +98,7 @@ Now everything is ready, you can go and view Jupiter! Just open your favorite br
 
 ## Docker compose lightweight edition
 
-If you want to develop in rails locally on your own machine, there is also a `docker-compose.yml` provided. This will give you the datastores you require (solr/fedora) and potentially others if you need them (postgres/redis (commented out by default)). Just run:
+If you want to develop in rails locally on your own machine, there is also a `docker-compose.yml` provided. This will give you the datastores you require (solr/postgres/redis). Just run:
   ```shell
   docker-compose up -d
   ```
