@@ -1,7 +1,7 @@
-# Full docker-compose for development environment
+# Full docker-compose for demoing development environment
 
 # To use, you must pass in the `-f` flag to docker-compose
-# For example: docker-compose -f docker-compose.development.yml up -d
+# For example: docker-compose -f docker-compose.demo.yml up -d
 
 version: '3.4'
 
