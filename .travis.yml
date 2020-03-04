@@ -17,19 +17,17 @@ cache: bundler
 bundler_args: --without development production --jobs=3 --retry=3
 
 before_script:
-  - bundle exec danger
-  - docker version
-  - docker-compose version
-
-  - docker-compose -f docker-compose.lightweight.yml up -d
-
-  - docker ps
-
+  - >
+    docker run -d -p 8983:8983
+    -v solr:/opt/solr/server/solr/mycores
+    -v "$PWD/solr/config:/config"
+    -v "$PWD/solr/scripts/solr-precreate-jupiter.sh:/docker-entrypoint-initdb.d/solr-precreate-jupiter.sh"
+    solr:6.6
   - RAILS_ENV=test bundle exec rails db:create
   - RAILS_ENV=test bundle exec rails db:migrate
-  - bundle --version
 
 script:
+  - bundle exec danger
   - bundle exec rails test
   - bundle exec rails test:system
   - bundle exec rubocop

@@ -5,8 +5,6 @@ volumes:
     driver: local
   solr:
     driver: local
-  fcrepo:
-    driver: local
   redis:
     driver: local
   assets:
@@ -34,14 +32,6 @@ services:
       - jupiter-uat
       - /config
 
-  fcrepo:
-    restart: always
-    image: ualbertalib/docker-fcrepo4
-    volumes:
-      - fcrepo:/fcrepo4-data
-    ports:
-      - "8080:8080"
-
   redis:
     restart: always
     image: redis:alpine
@@ -58,7 +48,6 @@ services:
     env_file: .env_deployment
     depends_on:
       - postgres
-      - fcrepo
       - redis
       - solr
 

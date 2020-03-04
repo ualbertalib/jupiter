@@ -1,0 +1,57 @@
+# Full docker-compose for development environment
+
+# To use, you must pass in the `-f` flag to docker-compose
+# For example: docker-compose -f docker-compose.development.yml up -d
+
+version: '3.4'
+
+services:
+  postgres:
+    image: postgres:11-alpine
+    environment:
+      - POSTGRES_PASSWORD=mysecretpassword
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  solr:
+    image: solr:6.6
+    volumes:
+      - solr-data:/opt/solr/server/solr/mycores
+      - ./solr/config:/config
+      - ./solr/scripts/solr-precreate-jupiter.sh:/docker-entrypoint-initdb.d/solr-precreate-jupiter.sh
+
+  redis:
+    image: redis:alpine
+
+  web: &app_base
+    image: jupiter_development
+    build:
+      context: .
+    environment:
+      - RAILS_ENV=development
+      - DB_HOST=postgres
+      - DB_USER=postgres
+      - DB_PASSWORD=mysecretpassword
+      - SOLR_URL=http://solr:8983/solr/development
+      - SOLR_TEST_URL=http://solr:8983/solr/test
+      - REDIS_URL='redis://redis/1'
+    ports:
+      - "3000:3000"
+    links:
+      - solr
+      - postgres
+      - redis
+    volumes:
+      - .:/app
+    command: bin/docker-start
+
+  worker:
+    <<: *app_base
+    command: bundle exec sidekiq
+    ports: []
+    depends_on:
+      - web
+
+volumes:
+  postgres-data:
+  solr-data:

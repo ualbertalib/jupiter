@@ -5,15 +5,19 @@
 # `sudo -u postgres alter user ${USER} superuser
 default: &default
   adapter: postgresql
-  encoding: utf8
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  encoding: unicode
+  timeout: 5000
+  username: <%= ENV['DB_USER'] || 'postgres' %>
+  password: <%= ENV['DB_PASSWORD'] %>
+  host: <%= ENV['DB_HOST'] || 'localhost' %>
+  # For details on connection pooling, see Rails configuration guide
+  # https://guides.rubyonrails.org/configuring.html#database-pooling
+  pool: <%= ENV.fetch('RAILS_MAX_THREADS') { 5 } %>
+
 
 development:
   <<: *default
   database: jupiter_development
-  # e.g. for connecting with docker image from docker-compose.lightweight.yml:
-  #   JUPITER_DATABASE_URL=postgresql://jupiter:mysecretpassword@127.0.0.1?pool=5
-  url: <%= ENV['JUPITER_DATABASE_URL'] || ENV['DATABASE_URL'] %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -21,13 +25,6 @@ development:
 test:
   <<: *default
   database: jupiter_test
-
-  # TODO: Review this later
-  # This is a temporary fix for docker with using DATABASE_URL environment variable,
-  # rails 5 will provision both dev and test database when running db:* rake tasks but it only uses the DATABASE_URL
-  # for the dev database. A fix for this is upstream in rails here https://github.com/rails/rails/pull/28933
-  # More information can be found here: https://github.com/rails/rails/issues/28827
-  url: <%= ENV['JUPITER_DATABASE_URL'] || ENV['DATABASE_URL'] %>
 
 # As with config/secrets.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is

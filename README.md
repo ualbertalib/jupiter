@@ -80,17 +80,14 @@ cd jupiter
 ### For development environment
 To build, create, start and setup your docker containers simply run:
 ```shell
-docker-compose build
+docker-compose -f docker-compose.development.yml build
 ```
 
 ```shell
-docker-compose up -d
+docker-compose -f docker-compose.development.yml up -d
 ```
 
-Now everything should be up and running. If you need seed data for your database, then run the following command:
-```shell
-docker-compose run web rails db:seed
-```
+Now everything should be up and running!
 
 ## Step 4: Open and view Jupiter!
 Now everything is ready, you can go and view Jupiter! Just open your favorite browser and go to the following url:
@@ -99,31 +96,11 @@ Now everything is ready, you can go and view Jupiter! Just open your favorite br
 
 (Note: ip address may be different if you are using `docker-machine`)
 
-## Want to run the test suite in docker?
-
-1. Start up all the docker containers, like you did above (if its not already running):
-
-  ```shell
-  docker-compose up -d
-  ```
-3. Then you can run the test suite:
-  ```shell
-  docker-compose run web rails test
-  ```
-4. Run system tests or rubocop? Just change the command:
-  ```shell
-  docker-compose run web rails test:system
-  ```
-
-  ```shell
-  docker-compose run web rubocop
-  ```
-
 ## Docker compose lightweight edition
 
-If you want to develop in rails locally on your own machine, there is also a `docker-compose.lightweight.yml` provided. This will give you the datastores you require (solr/fedora) and potentially others if you need them (postgres/redis (commented out by default)). Just run:
+If you want to develop in rails locally on your own machine, there is also a `docker-compose.yml` provided. This will give you the datastores you require (solr/fedora) and potentially others if you need them (postgres/redis (commented out by default)). Just run:
   ```shell
-  docker-compose -f docker-compose.lightweight.yml up -d
+  docker-compose up -d
   ```
 And everything else is how you would normally develop in a rails project.
 
@@ -137,12 +114,12 @@ vi .env_deployment
 ```
 To build, create, start and setup your docker containers simply run:
 ```shell
-docker-compose -f docker-compose.deployment.yml up -d
+docker-compose -f docker-compose.production.yml up -d
 ```
 
 For the first time of the deployment, set up the database:
 ```shell
-docker-compose run web rails db:setup
+docker-compose -f docker-compose.production.yml run web rails db:setup
 ```
 
 ## Common gotchas for docker?
