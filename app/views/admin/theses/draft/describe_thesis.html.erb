@@ -54,7 +54,7 @@
 
     <%= f.input :description,
                 as: :text,
-                required: true,
+                required: @draft.description_required?,
                 label: t('.description'),
                 input_html: { rows: '5' },
                 placeholder: t('.description_placeholder') %>
