@@ -36,15 +36,15 @@ class ItemPolicy < DepositablePolicy
   # namespaces
 
   def show_entity?
-    api? || admin?
+    system? || admin?
   end
 
   def file_sets?
-    api? || admin?
+    system? || admin?
   end
 
   def file_paths?
-    api? || admin?
+    system? || admin?
   end
 
 end

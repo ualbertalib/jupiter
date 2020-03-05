@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_02_164449) do
+ActiveRecord::Schema.define(version: 2020_03_05_210657) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -173,7 +173,6 @@ ActiveRecord::Schema.define(version: 2020_03_02_164449) do
     t.string "provider", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "password_digest", default: "", null: false
     t.index ["uid", "provider"], name: "index_identities_on_uid_and_provider", unique: true
     t.index ["user_id"], name: "index_identities_on_user_id"
   end
@@ -315,7 +314,7 @@ ActiveRecord::Schema.define(version: 2020_03_02_164449) do
     t.string "previous_sign_in_ip"
     t.datetime "last_seen_at"
     t.string "last_seen_ip"
-    t.boolean "api", default: false, null: false
+    t.string "password_digest"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 

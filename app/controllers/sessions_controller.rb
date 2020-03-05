@@ -68,18 +68,16 @@ class SessionsController < ApplicationController
   end
 
   def system_login
-    uid = params[:uid]
+    email = params[:email]
     password = params[:password]
-    provider = 'system'.freeze
-    identity = Identity.find_by(provider: provider, uid: uid)
+    user = User.find_by(email: email)
 
-    return head :unauthorized unless identity.present? &&
-                                     identity.authenticate(password)
+    return head :ok if user.present? &&
+                       user.authenticate(password) &&
+                       sign_in(user)
 
-    user = identity.try(:user)
-    return head :ok if sign_in(user)
+    head :unauthorized
 
-    head :internal_server_error
   end
 
 end

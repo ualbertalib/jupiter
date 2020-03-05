@@ -196,7 +196,6 @@ GEM
       concurrent-ruby (~> 1.0)
     hashdiff (1.0.0)
     hashie (3.6.0)
-    highline (2.0.3)
     i18n (1.8.2)
       concurrent-ruby (~> 1.0)
     image_processing (1.10.3)
@@ -522,7 +521,6 @@ DEPENDENCIES
   faker
   font-awesome-rails
   haikunator
-  highline (~> 2.0.3)
   image_processing
   jbuilder
   jquery-rails

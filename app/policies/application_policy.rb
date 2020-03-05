@@ -40,8 +40,8 @@ class ApplicationPolicy
     user.try(:admin?)
   end
 
-  def api?
-    user.try(:api?)
+  def system?
+    user.try(:password_digest?)
   end
 
   def logged_in?

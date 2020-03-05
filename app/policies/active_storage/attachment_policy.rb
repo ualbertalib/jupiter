@@ -1,15 +1,15 @@
 class ActiveStorage::AttachmentPolicy < DepositablePolicy
 
   def file_set?
-    api? || admin?
+    system? || admin?
   end
 
   def fixity_file?
-    api? || admin?
+    system? || admin?
   end
 
   def original_file?
-    api? || admin?
+    system? || admin?
   end
 
 end

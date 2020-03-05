@@ -149,35 +149,21 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should log in as local system account' do
     user = users(:system_user)
-    uid = 'ditech@ualberta.ca'
+    email = 'ditech@ualberta.ca'
     password = 'correct horse battery staple'
-    post auth_system_url, params: { uid: uid, password: password }
+    post auth_system_url, params: { email: email, password: password }
 
     assert_equal user.id, session[:user_id]
     assert_response :success
   end
 
   test 'should not log in if password is incorrect' do
-    uid = 'ditech@ualberta.ca'
+    email = 'ditech@ualberta.ca'
     password = 'wrong password is wrong'
-    post auth_system_url, params: { uid: uid, password: password }
+    post auth_system_url, params: { email: email, password: password }
 
     # Receive unauthorized response
     assert_response 401
-  end
-
-  test 'should not create system identity' do
-    user = users(:regular)
-
-    Rails.application.env_config['omniauth.auth'] = OmniAuth::AuthHash.new(
-      provider: 'system',
-      uid: 'unauthorizeduser@example.com',
-      info: { email: user.email, name: user.name }
-    )
-
-    assert_no_difference('Identity.count') do
-      post '/auth/twitter/callback'
-    end
   end
 
 end
