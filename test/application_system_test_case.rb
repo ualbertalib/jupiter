@@ -3,7 +3,11 @@ require 'selenium-webdriver'
 
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
 
-  driven_by :selenium, using: :headless_chrome, screen_size: [1400, 1400]
+  if ENV['CAPYBARA_NO_HEADLESS']
+    driven_by :selenium, using: :chrome, screen_size: [1400, 1400]
+  else
+    driven_by :selenium, using: :headless_chrome, screen_size: [1400, 1400]
+  end
 
   # Logs in a test user. Used for system tests.
   def login_user(user)
