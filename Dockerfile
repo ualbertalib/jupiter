@@ -6,6 +6,7 @@ RUN apk add --update --no-cache \
   build-base \
   netcat-openbsd \
   nodejs \
+  yarn \
   git \
   imagemagick \
   postgresql-dev \
@@ -14,6 +15,10 @@ RUN apk add --update --no-cache \
 ENV APP_ROOT /app
 RUN mkdir -p $APP_ROOT
 WORKDIR $APP_ROOT
+
+# Install standard Node modules
+COPY package.json yarn.lock $APP_ROOT/
+RUN yarn install
 
 # Update bundler
 RUN gem install bundler:2.1.4
