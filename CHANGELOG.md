@@ -27,6 +27,9 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Fix Sprockets v4.0.0 upgrade problem with how Sass Variables were being defined
 - Fix bug for page_image_url helper which was double rendering urls for default image [PR#1512](https://github.com/ualbertalib/jupiter/pull/1512)
 
+### Security
+- add `noopener noreferrer` when opening a link in a new tab [PR#1344](https://github.com/ualbertalib/jupiter/pull/1344)
+
 ## [1.2.18] - 2019-10-22
 - Removed Rack Attack
 
