@@ -27,7 +27,7 @@ module ImagesHelper
 
   def safe_thumbnail_tag(thumbnail, image_tag_options)
     image_tag_options[:class] = 'j-thumbnail img-thumbnail'
-    image_tag_options[:onerror] = "this.onerror=null;this.src='#{asset_pack_url('media/images/era-logo.png')}';"
+    image_tag_options[:onerror] = "this.onerror=null;this.src='#{asset_pack_url('media/images/era-logo-without-text.png')}';"
 
     image_tag(thumbnail, image_tag_options)
   end
