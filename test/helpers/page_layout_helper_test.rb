@@ -1,6 +1,7 @@
 require 'test_helper'
 
 class PageLayoutHelperTest < ActionView::TestCase
+
   include Webpacker::Helper
 
   attr_reader :request
