@@ -11,7 +11,6 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
   self.use_transactional_tests = false
 
   def setup
-    # @system_user = users(:system_user)
     @regular_user = users(:regular)
     @private_item = items(:fancy_private)
     @entity = Item.name.underscore.pluralize

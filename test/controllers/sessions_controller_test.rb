@@ -149,15 +149,20 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should log in as local system account' do
     user = users(:system_user)
-    sign_in_as_system_user
+    post auth_system_url, params: {
+      email: 'ditech@ualberta.ca',
+      password: 'correct horse battery staple'
+    }
+
     assert_equal user.id, session[:user_id]
     assert_response :success
   end
 
   test 'should not log in if password is incorrect' do
-    email = 'ditech@ualberta.ca'
-    password = 'wrong password is wrong'
-    post auth_system_url, params: { email: email, password: password }
+    post auth_system_url, params: {
+      email: 'ditech@ualberta.ca',
+      password: 'wrong password is wrong'
+    }
 
     # Receive unauthorized response
     assert_response 401
