@@ -149,10 +149,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should log in as local system account' do
     user = users(:system_user)
-    email = 'ditech@ualberta.ca'
-    password = 'correct horse battery staple'
-    post auth_system_url, params: { email: email, password: password }
-
+    sign_in_as_system_user
     assert_equal user.id, session[:user_id]
     assert_response :success
   end

@@ -79,6 +79,12 @@ class ActiveSupport::TestCase
     post "/auth/#{identity.provider}/callback"
   end
 
+  def sign_in_as_system_user
+    user = users(:system_user)
+    password = 'correct horse battery staple'
+    post auth_system_url, params: { email: user.email, password: password }
+  end
+
   # Returns true if a test user is logged in.
   def logged_in?
     session[:user_id].present?
