@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  
+
   has_secure_password validations: false
   has_many :identities, dependent: :destroy
   has_many :announcements, dependent: :destroy

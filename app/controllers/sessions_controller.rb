@@ -77,7 +77,6 @@ class SessionsController < ApplicationController
                        sign_in(user)
 
     head :unauthorized
-
   end
 
 end
