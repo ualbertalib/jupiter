@@ -90,4 +90,35 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
+  test 'should validate without a password' do
+    user = User.new(
+      name: 'User name',
+      email: 'valid@example.com'
+    )
+
+    assert user.valid?
+  end
+
+  test 'should validate with matching password and confirmation' do
+    user = User.new(
+      name: 'User name', 
+      email: 'valid@example.com', 
+      password: 'secure password', 
+      password_confirmation: 'secure password'
+    )
+
+    assert user.valid?
+  end
+
+  test 'should not validate with different password and confirmation' do
+    user = User.new(
+      name: 'User name', 
+      email: 'invalid@example.com', 
+      password: 'secure password', 
+      password_confirmation: 'wrong password'
+    )
+
+    refute user.valid?
+  end
+
 end
