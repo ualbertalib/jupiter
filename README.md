@@ -8,7 +8,7 @@
 
 **Requirements:**
 
-- **Ruby** 2.6+
+- **Ruby** 2.5+
 - **PostgreSQL**
 - **Redis**
 - **Solr**
