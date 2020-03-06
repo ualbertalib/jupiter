@@ -13,7 +13,7 @@ module ApplicationHelper
   end
 
   def help_tooltip(text)
-    content_tag(:span, fa_icon('question-circle'), title: text)
+    content_tag(:span, icon('fas', 'question-circle'), title: text)
   end
 
   # Simple wrapper around time_tag and time_ago_in_words to handle nil case (otherwise time_tag 500s)

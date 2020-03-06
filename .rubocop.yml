@@ -15,6 +15,7 @@ AllCops:
     - 'tmp/**/*'
     - 'vendor/**/*'
     - 'Dangerfile'
+    - 'node_modules/**/*'
   ExtraDetails: true
   TargetRubyVersion: 2.5
 
@@ -129,7 +130,7 @@ Style/HashTransformKeys:
 
 Style/HashTransformValues:
   Enabled: true
-  
+
 Style/NumericPredicate:
   EnforcedStyle: comparison
 

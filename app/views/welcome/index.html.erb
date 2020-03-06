@@ -22,7 +22,7 @@
       <div class="j-image-with-text mx-3 col-md-3">
         <%= link_to community_collection_path(FeaturedCollection.afns_community,
           FeaturedCollection.afns_journals_collection) do %>
-          <%= image_tag 'dept-of-agriculture.jpg', alt: '',
+          <%= image_pack_tag 'dept-of-agriculture.jpg', alt: '',
               class: 'agriculture' %>
           <h3 class="h5"><%= t('.afns_collection') %></h3>
         <% end %>
@@ -33,7 +33,7 @@
         <div class="d-flex flex-row mb-3">
           <div class="j-image-with-text mr-3">
             <%= link_to community_path(FeaturedCollection.research_images_community) do %>
-              <%= image_tag 'images-of-research.jpg', alt: '',
+              <%= image_pack_tag 'images-of-research.jpg', alt: '',
                   title: t('.images_of_research_attribution') %>
               <h3 class="h5"><%= t('.images_of_research_collection') %></h3>
             <% end %>
@@ -42,7 +42,7 @@
           <div class="j-image-with-text">
             <%= link_to community_collection_path(FeaturedCollection.grad_studies_community,
               FeaturedCollection.thesis_collection) do %>
-              <%= image_tag 'theses.jpg', alt: '' %>
+              <%= image_pack_tag 'theses.jpg', alt: '' %>
               <h3 class="h5"><%= t('.theses_collection') %></h3>
             <% end %>
           </div>
@@ -51,7 +51,7 @@
 
         <div class="j-image-with-text mt-auto">
           <%= link_to community_path(FeaturedCollection.osrin_community) do %>
-            <%= image_tag 'oil-sands.jpg', alt: '',
+            <%= image_pack_tag 'oil-sands.jpg', alt: '',
                 title: t('.osrin_attribution') %>
             <h3 class="h5"><%= t('.osrin_collection') %></h3>
           <% end %>
@@ -81,7 +81,7 @@
   <div class="row mt-5">
     <div class="col-md-6 offset-md-3">
       <%= link_to 'https://era-av.library.ualberta.ca', target: :_blank, rel: 'noopener', class: 'media bg-light p-3 border border-primary rounded text-decoration-none' do %>
-        <%= fa_icon 'play-circle-o 4x', class: 'mr-3' %>
+        <%= icon('far', 'play-circle', class: 'fa-4x mr-3') %>
         <div class="media-body text-dark">
           <h4>
             <%= t('.era_av_header') %>

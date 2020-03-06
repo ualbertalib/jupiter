@@ -26,7 +26,7 @@ class ItemEditTest < ApplicationSystemTestCase
       uo.save!
     end
     Sidekiq::Testing.inline! do
-      File.open(Rails.root + 'app/assets/images/era-logo.png', 'r') do |file|
+      File.open(file_fixture('image-sample.jpeg'), 'r') do |file|
         item.add_and_ingest_files([file])
       end
     end

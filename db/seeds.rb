@@ -179,7 +179,7 @@ if Rails.env.development? || Rails.env.uat?
 
       if i == 8
         # Attach two files to the mondo-item
-        File.open(Rails.root + 'app/assets/images/theses.jpg', 'r') do |file1|
+        File.open(Rails.root + 'app/javascript/images/theses.jpg', 'r') do |file1|
           File.open(Rails.root + 'test/fixtures/files/image-sample.jpeg', 'r') do |file2|
             # Bit of a hack to fake a long file name ...
             def file2.original_filename
@@ -235,9 +235,9 @@ if Rails.env.development? || Rails.env.uat?
       end
       if i == 8
         # To test PCDM/list_source ordering, attach three files to the mondo-thesis!
-        File.open(Rails.root + 'app/assets/images/theses.jpg', 'r') do |file1|
+        File.open(Rails.root + 'app/javascript/images/theses.jpg', 'r') do |file1|
           File.open(Rails.root + 'test/fixtures/files/image-sample.jpeg', 'r') do |file2|
-            File.open(Rails.root + 'app/assets/images/era-logo.png', 'r') do |file3|
+            File.open(Rails.root + 'app/javascript/images/era-logo.png', 'r') do |file3|
               thesis.add_and_ingest_files([file1, file2, file3])
             end
           end

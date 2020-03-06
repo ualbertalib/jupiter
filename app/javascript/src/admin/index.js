@@ -1,0 +1,1 @@
+import './ajax_table';

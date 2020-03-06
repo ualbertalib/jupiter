@@ -19,6 +19,11 @@ class Admin::CommunitiesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test 'should get index json response' do
+    get admin_communities_url, as: :json
+    assert_response :success
+  end
+
   test 'should show community' do
     get admin_community_url(@community)
     assert_response :success
