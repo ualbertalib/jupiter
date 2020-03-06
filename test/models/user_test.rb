@@ -101,9 +101,9 @@ class UserTest < ActiveSupport::TestCase
 
   test 'should validate with matching password and confirmation' do
     user = User.new(
-      name: 'User name', 
-      email: 'valid@example.com', 
-      password: 'secure password', 
+      name: 'User name',
+      email: 'valid@example.com',
+      password: 'secure password',
       password_confirmation: 'secure password'
     )
 
@@ -112,13 +112,13 @@ class UserTest < ActiveSupport::TestCase
 
   test 'should not validate with different password and confirmation' do
     user = User.new(
-      name: 'User name', 
-      email: 'invalid@example.com', 
-      password: 'secure password', 
+      name: 'User name',
+      email: 'invalid@example.com',
+      password: 'secure password',
       password_confirmation: 'wrong password'
     )
 
-    refute user.valid?
+    assert_not user.valid?
   end
 
 end

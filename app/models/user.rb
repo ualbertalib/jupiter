@@ -18,8 +18,7 @@ class User < ApplicationRecord
 
   validates :name, presence: true
 
-  validates :password, confirmation: true, if:  lambda {|user| user.password.present? }
-  # validates :password_confirmation, presence: true, if: lambda {|user| user.password.present? }
+  validates :password, confirmation: true, if: ->(user) { user.password.present? }
 
   def update_activity!(now, remote_ip, sign_in: false)
     raise ArgumentError, :remote_ip if remote_ip.blank?
