@@ -6,6 +6,16 @@
 
 ![Jupiter Architecture Diagram](docs/jupiter_architecture.png)
 
+**Requirements:**
+
+- **Ruby** 2.5+
+- **PostgreSQL**
+- **Redis**
+- **Solr**
+- **ImageMagick**
+- **Node.js**
+- **Yarn**
+
 # Generate Documentation
 
 `$ bundle exec rake rdoc`

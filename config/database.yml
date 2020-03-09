@@ -8,7 +8,7 @@ default: &default
   encoding: unicode
   timeout: 5000
   username: <%= ENV['DB_USER'] || 'postgres' %>
-  password: <%= ENV['DB_PASSWORD'] %>
+  password: <%= ENV['DB_PASSWORD'] || 'mysecretpassword' %>
   host: <%= ENV['DB_HOST'] || 'localhost' %>
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling

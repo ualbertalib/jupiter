@@ -4,13 +4,13 @@
   <%= render partial: 'progress_bar' %>
 
   <h2 class="mt-3">
-    <%= fa_icon t('.header_icon') %>
+    <%= icon(t('.header_icon_type'), t('.header_icon')) %>
     <%= t('.header') %>
   </h2>
 
   <% if @draft.errors.any? %>
     <p class="alert alert-danger">
-      <%= fa_icon 'exclamation-circle' %>
+      <%= icon('fas', 'exclamation-circle') %>
       <%= t('admin.theses.draft.please_fix_errors') %>
     </p>
   <% end %>
@@ -107,7 +107,7 @@
                 aria-expanded="false"
                 aria-controls="js-collapse-additional-fields">
               <%= t('.additional_fields') %>
-              <%= fa_icon "chevron-down", class: "js-more-less float-right" %>
+              <%= icon('fas', 'chevron-down', class: "js-more-less float-right") %>
             </a>
           </h5>
         </div>
@@ -201,12 +201,12 @@
 
     <div class="mt-3 d-flex flex-wrap justify-content-end">
       <%= link_to admin_items_path, class: 'btn btn-secondary mr-2' do %>
-        <%= fa_icon 'ban' %>
+        <%= icon('fas', 'ban') %>
         <%= t('cancel') %>
       <% end %>
       <%= f.button :button, type: :submit, class: 'btn btn-primary' do %>
         <%= t('admin.theses.draft.save_and_continue') %>
-        <%= fa_icon 'chevron-right' %>
+        <%= icon('fas', 'chevron-right') %>
       <% end %>
     </div>
   <% end %>

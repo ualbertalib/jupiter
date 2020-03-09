@@ -78,7 +78,7 @@
       <% if policy(@item).edit? %>
         <%= link_to edit_item_path(@item),
                     class:'btn btn-outline-secondary float-right' do %>
-            <%= fa_icon('pencil-square-o') %>
+            <%= icon('fas', 'edit') %>
             <%= t('edit') %>
         <% end %>
       <% end %>
