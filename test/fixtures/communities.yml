@@ -1,9 +1,15 @@
 books:
   title: 'Books'
   owner: admin
+  record_created_at: <%= Time.zone.now - 1.hour %>
+  date_ingested: <%= Time.zone.now - 1.hour %>
 thesis:
   title: 'Thesis'
   owner: admin
+  record_created_at: <%= Time.zone.now - 1.hour %>
+  date_ingested: <%= Time.zone.now - 1.hour %>
 fancy_community:
   title: 'Fancy Community'
   owner: admin
+  record_created_at: <%= Time.zone.now - 1.hour %>
+  date_ingested: <%= Time.zone.now - 1.hour %>

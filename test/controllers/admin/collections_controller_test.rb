@@ -2,13 +2,9 @@ require 'test_helper'
 
 class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
 
-  def before_all
-    super
-    @community = Community.create!(title: 'Nice community', owner_id: users(:admin).id)
-    @collection = Collection.create!(title: 'Nice collection', owner_id: users(:admin).id, community_id: @community.id)
-  end
-
   def setup
+    @community = communities(:books)
+    @collection = collections(:fantasy_books)
     @admin = users(:admin)
     sign_in_as @admin
   end
