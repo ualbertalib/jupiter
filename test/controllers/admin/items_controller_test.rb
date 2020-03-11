@@ -21,4 +21,5 @@ class Admin::ItemsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_path
     assert_equal I18n.t('admin.items.destroy.deleted'), flash[:notice]
   end
+
 end
