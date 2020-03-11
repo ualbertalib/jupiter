@@ -41,7 +41,7 @@ class ApplicationPolicy
   end
 
   def system?
-    user.try(:password_digest?)
+    user.try(:system?)
   end
 
   def logged_in?

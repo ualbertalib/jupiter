@@ -314,7 +314,8 @@ ActiveRecord::Schema.define(version: 2020_03_05_210657) do
     t.string "previous_sign_in_ip"
     t.datetime "last_seen_at"
     t.string "last_seen_ip"
-    t.string "password_digest"
+    t.string "api_key_digest"
+    t.boolean "system", default: false, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 

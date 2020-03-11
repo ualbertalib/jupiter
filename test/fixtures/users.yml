@@ -33,4 +33,5 @@ system_user:
   name: System user
   email: ditech@ualberta.ca
   admin: false
-  password_digest: <%= BCrypt::Password.create('correct horse battery staple') %>
+  system: true
+  api_key_digest: <%= BCrypt::Password.create('3eeb395e-63b7-11ea-bc55-0242ac130003') %>

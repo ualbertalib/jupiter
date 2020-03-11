@@ -69,11 +69,11 @@ class SessionsController < ApplicationController
 
   def system_login
     email = params[:email]
-    password = params[:password]
+    api_key = params[:api_key]
     user = User.find_by(email: email)
 
     return head :ok if user.present? &&
-                       user.authenticate(password) &&
+                       user.authenticate_api_key(api_key) &&
                        sign_in(user)
 
     head :unauthorized

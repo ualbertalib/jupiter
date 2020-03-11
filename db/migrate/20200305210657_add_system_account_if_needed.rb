@@ -4,9 +4,10 @@ class AddSystemAccountIfNeeded < ActiveRecord::Migration[6.0]
     user = User.find_or_create_by email: 'ditech@ualberta.ca'
     user.name ||= 'System user'
     user.admin = false
-    user.password_digest = BCrypt::Password.create(
-      Rails.application.secrets.system_user_password
+    user.api_key_digest = BCrypt::Password.create(
+      Rails.application.secrets.system_user_api_key
     )
+    user.system = true
     user.save
   end
   # We are not defining a down method because we are assuming that our system

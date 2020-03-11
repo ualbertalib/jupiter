@@ -151,17 +151,17 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     user = users(:system_user)
     post auth_system_url, params: {
       email: 'ditech@ualberta.ca',
-      password: 'correct horse battery staple'
+      api_key: '3eeb395e-63b7-11ea-bc55-0242ac130003'
     }
 
     assert_equal user.id, session[:user_id]
     assert_response :success
   end
 
-  test 'should not log in if password is incorrect' do
+  test 'should not log in if api_key is incorrect' do
     post auth_system_url, params: {
       email: 'ditech@ualberta.ca',
-      password: 'wrong password is wrong'
+      api_key: '2eeb395e-63b7-11ea-bc55-0242ac130003'
     }
 
     # Receive unauthorized response

@@ -90,32 +90,42 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
-  test 'should validate without a password' do
-    user = User.new(
-      name: 'User name',
-      email: 'valid@example.com'
-    )
-
-    assert user.valid?
-  end
-
-  test 'should validate with matching password and confirmation' do
+  test 'should validate if it does not have an api key and it is not a system account' do
     user = User.new(
       name: 'User name',
       email: 'valid@example.com',
-      password: 'secure password',
-      password_confirmation: 'secure password'
+      system: false
     )
 
     assert user.valid?
   end
 
-  test 'should not validate with different password and confirmation' do
+  test 'should validate if it has an api key and it is a system account' do
     user = User.new(
       name: 'User name',
-      email: 'invalid@example.com',
-      password: 'secure password',
-      password_confirmation: 'wrong password'
+      email: 'valid@example.com',
+      api_key: '70d800e9-5fe8-49e4-86ed-eefc11ebfa52',
+      system: true
+    )
+
+    assert user.valid?
+  end
+
+  test 'should not validate if it has an api key and it is not a system account' do
+    user = User.new(
+      name: 'User name',
+      email: 'valid@example.com',
+      api_key: '70d800e9-5fe8-49e4-86ed-eefc11ebfa52'
+    )
+
+    assert_not user.valid?
+  end
+
+  test 'should not validate if it does not have an api key and it is a system account' do
+    user = User.new(
+      name: 'User name',
+      email: 'valid@example.com',
+      system: true
     )
 
     assert_not user.valid?

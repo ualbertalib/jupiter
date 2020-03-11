@@ -1,6 +1,6 @@
 class User < ApplicationRecord
 
-  has_secure_password validations: false
+  has_secure_password :api_key, validations: false
   has_many :identities, dependent: :destroy
   has_many :announcements, dependent: :destroy
   has_many :draft_items, dependent: :destroy
@@ -18,7 +18,23 @@ class User < ApplicationRecord
 
   validates :name, presence: true
 
-  validates :password, confirmation: true, if: ->(user) { user.password.present? }
+  # User validation for sysatem and api key values
+  #             | System | Api key | Valid
+  #             ---------------------------
+  # Presence(X) |   X    |    X    | True
+  #             |        |         | True
+  #             |   X    |         | False
+  #             |        |    X    | False
+
+  # Check if the api key is there only if the user is a system account
+  validates :api_key_digest,
+            presence: { message: 'must be present if System value is true' },
+            if: -> { system && api_key_digest.blank? }
+
+  # Check that the api key is not present if it is not a system account
+  validates :api_key_digest,
+            absence: { message: 'must be blank if System value is false' },
+            if: -> { !system && api_key_digest.present? }
 
   def update_activity!(now, remote_ip, sign_in: false)
     raise ArgumentError, :remote_ip if remote_ip.blank?
