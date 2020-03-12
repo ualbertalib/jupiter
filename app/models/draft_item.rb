@@ -18,7 +18,12 @@ class DraftItem < ApplicationRecord
                   cco_universal: 6,
                   public_domain_mark: 7,
                   license_text: 8,
-                  unselected: 9 }
+                  attribution_3_0: 9,
+                  attribution_non_commercial_3_0: 10,
+                  attribution_share_alike_3_0: 11,
+                  attribution_non_commercial_no_derivatives_3_0: 12,
+                  attribution_non_commercial_share_alike_2_5: 13,
+                  unselected: 14 }
   LICENSE_TO_URI_CODE =
     { attribution_non_commercial: :attribution_noncommercial_4_0_international,
       attribution: :attribution_4_0_international,
@@ -27,7 +32,12 @@ class DraftItem < ApplicationRecord
       attribution_no_derivatives: :attribution_noderivatives_4_0_international,
       attribution_share_alike: :attribution_sharealike_4_0_international,
       cco_universal: :cc0_1_0_universal,
-      public_domain_mark: :public_domain_mark_1_0 }.freeze
+      public_domain_mark: :public_domain_mark_1_0,
+      attribution_3_0: :attribution_3_0_international,
+      attribution_non_commercial_3_0: :attribution_noncommercial_3_0_international,
+      attribution_share_alike_3_0: :attribution_sharealike_3_0_international,
+      attribution_non_commercial_no_derivatives_3_0: :attribution_noncommercial_noderivatives_3_0_international,
+      attribution_non_commercial_share_alike_2_5: :attribution_noncommercial_sharealike_2_5_canada }.freeze
   URI_CODE_TO_LICENSE = LICENSE_TO_URI_CODE.invert
 
   # Can't use public as this is a ActiveRecord method, using open_access instead
@@ -191,13 +201,18 @@ class DraftItem < ApplicationRecord
     return nil if license == 'license_text'
 
     code = LICENSE_TO_URI_CODE.fetch(license.to_sym)
-    CONTROLLED_VOCABULARIES[:license].send(code)
+
+    begin
+      CONTROLLED_VOCABULARIES[:license].send(code)
+    rescue RuntimeError
+      CONTROLLED_VOCABULARIES[:old_license].send(code)
+    end
   end
 
   def license_for_uri(uri)
     return 'license_text' if uri.nil?
 
-    code = CONTROLLED_VOCABULARIES[:license].from_uri(uri)
+    code = CONTROLLED_VOCABULARIES[:license].from_uri(uri) || CONTROLLED_VOCABULARIES[:old_license].from_uri(uri)
     license = URI_CODE_TO_LICENSE[code].to_s
 
     license.presence || 'unselected'
