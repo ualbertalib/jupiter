@@ -14,7 +14,7 @@ class AdminUsersIndexTest < ApplicationSystemTestCase
 
     click_link I18n.t('admin.users.index.header')
     assert_selector 'h1', text: I18n.t('admin.users.index.header')
-    assert_selector 'tbody tr', count: 5
+    assert_selector 'tbody tr', count: 7
 
     click_link 'Email' # email ascending
 
@@ -89,7 +89,7 @@ class AdminUsersIndexTest < ApplicationSystemTestCase
     # Filter to show user(s) with role of user
     select(I18n.t('admin.users.user_role'), from: I18n.t('admin.users.role'))
 
-    assert_selector 'tbody tr', count: 3
+    assert_selector 'tbody tr', count: 5
     assert_selector 'tbody tr th[scope="row"]', text: regular_user.email
     assert_selector 'tbody tr th[scope="row"]', text: second_user.email
 

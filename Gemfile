@@ -29,6 +29,7 @@ gem 'redis', '~> 4.1'
 gem 'rsolr'
 
 # Authentication
+gem 'bcrypt', '>= 3.1.13'
 gem 'omniauth'
 gem 'omniauth-rails_csrf_protection' # Remove after https://github.com/omniauth/omniauth/pull/809 will be resolved
 gem 'omniauth-saml'

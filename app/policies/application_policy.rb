@@ -40,6 +40,10 @@ class ApplicationPolicy
     user.try(:admin?)
   end
 
+  def system?
+    user.try(:system?)
+  end
+
   def logged_in?
     # Note: `ApplicationController#current_user` ensures user isn't suspended
     user.present?

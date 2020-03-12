@@ -23,3 +23,8 @@ regular_two_saml:
   user: regular_two
   uid: regular_two_ccid@ualberta.ca
   provider: saml
+
+new_system_user_saml:
+  user: new_system_user
+  uid: sandor_clegane@example.com
+  provider: saml

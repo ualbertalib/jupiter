@@ -4,7 +4,7 @@ class SessionsController < ApplicationController
   # need to disable this otherwise session will be clobbered by rails
   # https://github.com/omniauth/omniauth/wiki/FAQ#rails-session-is-clobbered-after-callback-on-openid-providers
   # TODO just limit this to development mode? since this doesnt effect saml?
-  skip_before_action :verify_authenticity_token, only: :create
+  skip_before_action :verify_authenticity_token, only: [:create, :system_login]
 
   skip_after_action :verify_authorized
 
@@ -29,6 +29,9 @@ class SessionsController < ApplicationController
       user.identities.create(provider: auth_hash.provider, uid: auth_hash.uid)
     end
 
+    # System user accounts should not be able to access application through
+    # omniauth authentication
+    return redirect_to root_path, alert: t('login.error') if user&.system?
     return redirect_to root_path, alert: t('login.user_suspended') if user&.suspended?
 
     # Sign the user in, if they exist
@@ -65,6 +68,18 @@ class SessionsController < ApplicationController
     session[:admin_id] = nil
 
     redirect_to admin_user_path(original_user), notice: t('.flash', original_user: original_user.name)
+  end
+
+  def system_login
+    email = params[:email]
+    api_key = params[:api_key]
+    user = User.find_by(email: email)
+
+    return head :ok if user.present? &&
+                       user.authenticate_api_key(api_key) &&
+                       sign_in(user)
+
+    head :unauthorized
   end
 
 end

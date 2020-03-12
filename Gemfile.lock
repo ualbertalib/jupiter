@@ -98,6 +98,7 @@ GEM
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
     ast (2.4.0)
+    bcrypt (3.1.13)
     better_errors (2.6.0)
       coderay (>= 1.0.0)
       erubi (>= 1.0.0)
@@ -471,6 +472,7 @@ DEPENDENCIES
   active_link_to
   acts_as_rdfable!
   addressable (~> 2.7.0)
+  bcrypt (>= 3.1.13)
   better_errors (>= 2.3.0)
   binding_of_caller
   bootsnap (>= 1.4.2)

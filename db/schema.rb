@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_29_044248) do
+ActiveRecord::Schema.define(version: 2020_03_05_210657) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -314,6 +314,8 @@ ActiveRecord::Schema.define(version: 2020_01_29_044248) do
     t.string "previous_sign_in_ip"
     t.datetime "last_seen_at"
     t.string "last_seen_ip"
+    t.string "api_key_digest"
+    t.boolean "system", default: false, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
