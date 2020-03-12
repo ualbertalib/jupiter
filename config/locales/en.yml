@@ -157,7 +157,12 @@ en:
               collection_restricted: "Deposit is restricted for this collection"
             files:
               infected: '%{filename} is infected with a virus'
-
+        user:
+          attributes:
+            api_key_digest:
+              present_if_system_true: 'must be present if System value is true'
+              blank_if_system_false: 'must be blank if System value is false'
+            
   application:
     navbar:
       era_logo_alt: 'ERA - Education and Research Archive'

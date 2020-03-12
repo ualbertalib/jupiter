@@ -19,21 +19,22 @@ class User < ApplicationRecord
   validates :name, presence: true
 
   # User validation for sysatem and api key values
-  #             | System | Api key | Valid
-  #             ---------------------------
-  # Presence(X) |   X    |    X    | True
-  #             |        |         | True
-  #             |   X    |         | False
-  #             |        |    X    | False
+  #             | System | Api key | Valid |
+  #             ----------------------------
+  # Presence(X) |   X    |    X    | True  |
+  #             |        |         | True  |
+  #             |   X    |         | False |
+  #             |        |    X    | False |
+  #             ----------------------------
 
   # Check if the api key is there only if the user is a system account
   validates :api_key_digest,
-            presence: { message: 'must be present if System value is true' },
+            presence: { message: :present_if_system_true },
             if: -> { system && api_key_digest.blank? }
 
   # Check that the api key is not present if it is not a system account
   validates :api_key_digest,
-            absence: { message: 'must be blank if System value is false' },
+            absence: { message: :blank_if_system_false },
             if: -> { !system && api_key_digest.present? }
 
   def update_activity!(now, remote_ip, sign_in: false)
