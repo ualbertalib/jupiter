@@ -119,7 +119,8 @@ class UserTest < ActiveSupport::TestCase
     )
 
     assert_not user.valid?
-    assert_equal user.errors[:api_key_digest].first, 'must be blank if System value is false'
+    assert_equal user.errors[:api_key_digest].first,
+                 I18n.t('activerecord.errors.models.user.attributes.api_key_digest.blank_if_system_false')
   end
 
   test 'should not validate if it does not have an api key and it is a system account' do
@@ -130,7 +131,8 @@ class UserTest < ActiveSupport::TestCase
     )
 
     assert_not user.valid?
-    assert_equal user.errors[:api_key_digest].first, 'must be present if System value is true'
+    assert_equal user.errors[:api_key_digest].first,
+                 I18n.t('activerecord.errors.models.user.attributes.api_key_digest.present_if_system_true')
   end
 
 end
