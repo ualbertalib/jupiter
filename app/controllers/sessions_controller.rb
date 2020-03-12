@@ -29,6 +29,9 @@ class SessionsController < ApplicationController
       user.identities.create(provider: auth_hash.provider, uid: auth_hash.uid)
     end
 
+    # System user accounts should not be able to access application through
+    # omniauth authentication
+    return redirect_to root_path, alert: t('login.error') if user&.system?
     return redirect_to root_path, alert: t('login.user_suspended') if user&.suspended?
 
     # Sign the user in, if they exist

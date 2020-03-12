@@ -158,6 +158,31 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test 'should not log in as a system account with new omniauth identity' do
+    Rails.application.env_config['omniauth.auth'] = OmniAuth::AuthHash.new(
+      provider: 'twitter',
+      uid: 'twitter-012345',
+      # The ditech@ualberta.ca email would come from authentication provider
+      # and we know that it is a system account
+      info: { email: 'ditech@ualberta.ca', name: 'Twitter user name' }
+    )
+    post '/auth/twitter/callback'
+
+    assert_redirected_to root_path
+    assert_equal I18n.t('login.error'), flash[:alert]
+    assert_not logged_in?
+  end
+
+  test 'should not log in from a saml account that was changed to system' do
+    user = users(:new_system_user)
+
+    sign_in_as user
+
+    assert_redirected_to root_path
+    assert_equal I18n.t('login.error'), flash[:alert]
+    assert_not logged_in?
+  end
+
   test 'should not log in if api_key is incorrect' do
     post auth_system_url, params: {
       email: 'ditech@ualberta.ca',
