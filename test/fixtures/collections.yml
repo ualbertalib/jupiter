@@ -11,3 +11,7 @@ fancy_collection:
   title: 'Fancy Collection'
   owner: admin
   community: fancy_community
+fancier_collection:
+  title: 'Fancier Collection'
+  owner: admin
+  community: fancy_community

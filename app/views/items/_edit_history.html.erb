@@ -1,0 +1,40 @@
+<% if current_user.present? && current_user.admin? %>
+  <% content_for(:head) do %>
+    <%= javascript_include_tag 'admin' %>
+  <% end %>
+
+  <div class='d-block'>
+    <button type="button"
+            data-toggle="collapse"
+            data-target="#edit-history-hidden"
+            aria-expanded="false"
+            aria-controls="edit-history-hidden"
+            class="btn btn-outline-secondary mb-3 js-edit-history-btn font-italic">
+    <span class="js-edit-history-hidden">
+      <%= t(:edit_history) %>
+      <%= fa_icon('chevron-down')%>
+    </span>
+
+      <span class="d-none js-edit-history-shown">
+        <%= t(:hide_edit_history) %>
+        <%= fa_icon('chevron-up')%>
+    </span>
+    </button>
+  </div>
+
+  <div class="collapse" id='edit-history-hidden'>
+    <% @item.history.reverse.each do |changeset| %>
+      <li class="list-unstyled list-group-item-action">
+        <h3><%= changeset.date %></h3>
+        <dl>
+          <dt><%= t(:edited_by) %></dt>
+          <dd><%= changeset.user_info %></dd>
+        </dl>
+        <% changeset.html_diffs.each do |html_diff| %>
+          <dt><%= html_diff[:attribute] %></dt>
+          <dd><%= html_diff[:html] %></dd>
+        <% end %>
+      </li>
+    <% end %>
+  </div>
+<% end %>
