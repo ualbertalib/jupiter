@@ -19,7 +19,7 @@
     "jquery": "^3.4.1",
     "jquery-multidownload": "^4.0.1",
     "popper.js": "^1.16.0",
-    "regenerator-runtime": "^0.13.3",
+    "regenerator-runtime": "^0.13.5",
     "selectize": "^0.12.6",
     "trix": "^1.2.3",
     "turbolinks": "^5.2.0"
