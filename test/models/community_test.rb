@@ -35,6 +35,8 @@ class CommunityTest < ActiveSupport::TestCase
     file_path = ActiveStorage::Blob.service.root + "/#{key[0..1]}/#{key[2..3]}/#{key}"
     assert File.exist?(file_path)
     assert_equal c.logo.blob.checksum, 'GxpIjJsC4KnRoBKNjWnkJA=='
+
+    c.destroy
   end
 
   test 'an updated logo replaces the old one' do
@@ -47,6 +49,8 @@ class CommunityTest < ActiveSupport::TestCase
     c.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
                   filename: 'sample2.jpeg', content_type: 'image/jpeg'
     assert_equal c.logo.filename, 'sample2.jpeg'
+
+    c.destroy
   end
 
 end

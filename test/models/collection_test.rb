@@ -7,6 +7,8 @@ class CollectionTest < ActiveSupport::TestCase
     collection = Collection.new(title: 'foo', owner_id: users(:regular).id,
                                 community_id: community.id)
     assert collection.valid?
+
+    community.destroy
   end
 
   test 'needs title' do

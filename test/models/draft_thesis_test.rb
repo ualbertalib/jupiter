@@ -2,13 +2,9 @@ require 'test_helper'
 
 class DraftThesisTest < ActiveSupport::TestCase
 
-  def before_all
-    super
-    @community = Community.create!(title: 'Books', description: 'a bunch of books', owner_id: users(:admin).id)
-    @collection = Collection.create!(title: 'Risque fantasy Books',
-                                     owner_id: users(:admin).id,
-                                     restricted: true,
-                                     community_id: @community.id)
+  setup do
+    @community = communities(:thesis)
+    @collection = collections(:thesis)
   end
 
   test 'enums' do
@@ -212,6 +208,8 @@ class DraftThesisTest < ActiveSupport::TestCase
 
     assert_not draft_thesis.valid?
     assert_equal ['Deposit is restricted for this collection'], draft_thesis.errors.messages[:member_of_paths]
+
+    non_restricted_collection.destroy
   end
 
   test 'parse_graduation_term_from_fedora works correctly' do
