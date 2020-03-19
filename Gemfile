@@ -24,7 +24,7 @@ gem 'rdf-vocab', '~> 3.1.2'
 
 # Database stuff
 gem 'connection_pool'
-gem 'pg', '~> 1.2.2'
+gem 'pg', '~> 1.2.3'
 gem 'redis', '~> 4.1'
 gem 'rsolr'
 
