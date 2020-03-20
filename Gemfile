@@ -70,7 +70,7 @@ gem 'rollbar'
 
 # OAI-PMH
 gem 'builder_deferred_tagging', github: 'ualbertalib/builder_deferred_tagging', tag: 'v0.01'
-gem 'oaisys', github: 'ualbertalib/oaisys', ref: 'e98b73f8bc45f39ad8b6bb224bcedba16948f6bd'
+gem 'oaisys', github: 'ualbertalib/oaisys', ref: 'b8dbfc1ce6f0568ecff58425aee46991d6e782e8'
 
 # Seeds
 group :development, :test, :uat do

@@ -17,8 +17,8 @@ GIT
 
 GIT
   remote: https://github.com/ualbertalib/oaisys.git
-  revision: e98b73f8bc45f39ad8b6bb224bcedba16948f6bd
-  ref: e98b73f8bc45f39ad8b6bb224bcedba16948f6bd
+  revision: b8dbfc1ce6f0568ecff58425aee46991d6e782e8
+  ref: b8dbfc1ce6f0568ecff58425aee46991d6e782e8
   specs:
     oaisys (0.1.0)
       builder (~> 3.0)
