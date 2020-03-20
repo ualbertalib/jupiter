@@ -765,24 +765,17 @@
   resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-5.12.1.tgz#2a98fea9fbb8a606ddc79a4680034e9d5591c550"
   integrity sha512-ZtjIIFplxncqxvogq148C3hBLQE+W3iJ8E4UvJ09zIJUgzwLcROsWwFDErVSXY2Plzao5J9KUYNHKHMEUYDMKw==
 
-"@rails/actiontext@^6.0.2-1":
-  version "6.0.2-1"
-  resolved "https://registry.yarnpkg.com/@rails/actiontext/-/actiontext-6.0.2-1.tgz#6ca7750f98b5321ea6ec0cd81c1a3d3c2c9046e5"
-  integrity sha512-Eh+AKDK+v9vMREcBDfK5grbmhXH4WInCD/WR/ooGpv/nbQLlIvw/+FYznALONcNqA7v2YgwoiCCR08NPJCxxgw==
+"@rails/actiontext@^6.0.2-2":
+  version "6.0.2-2"
+  resolved "https://registry.yarnpkg.com/@rails/actiontext/-/actiontext-6.0.2-2.tgz#57482adbbfaab65520b5433e7e44d63b7784c739"
+  integrity sha512-qPD6tN2QiJ+zuzpr15AiY0VXScFiRcDJRP1zzxXT3L5fTuMpToA6Bq1JFJm9ckLKZZxqWUilff1stqM51QABVQ==
   dependencies:
     "@rails/activestorage" "^6.0.0-alpha"
 
-"@rails/activestorage@^6.0.0-alpha":
+"@rails/activestorage@^6.0.0-alpha", "@rails/activestorage@^6.0.2-2":
   version "6.0.2"
   resolved "https://registry.yarnpkg.com/@rails/activestorage/-/activestorage-6.0.2.tgz#3882da2716d1f21091840fc52b71091d406a9c43"
   integrity sha512-X0uGBLNsSKvVw5n93rH7k+7rbxc3Cq7p0ShiQbrk1cN0xflGjElzEJRY3okZZHsKkCV+h6rFCk0BOBVrLSrJ0A==
-  dependencies:
-    spark-md5 "^3.0.0"
-
-"@rails/activestorage@^6.0.2-2":
-  version "6.0.2-2"
-  resolved "https://registry.yarnpkg.com/@rails/activestorage/-/activestorage-6.0.2-2.tgz#108b0ad80a7cbf8d7e4c3ef5e54ea6ddb2a06d3c"
-  integrity sha512-bIQJqywfagz/UV0RP4jgLclUaBBsRoIdzGClaJ6z9EGa2QAnzu2Fdr7MrqlIDZl0/SZgteOmgF+WjZXNewSucA==
   dependencies:
     spark-md5 "^3.0.0"
 
