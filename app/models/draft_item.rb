@@ -1,6 +1,6 @@
 class DraftItem < ApplicationRecord
 
-  scope :drafts, -> { where(is_published_in_era: false).or(where(is_published_in_era: nil)) }
+  scope :drafts, -> { where(is_published_in_era: false) }
 
   include DraftProperties
 
