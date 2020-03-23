@@ -386,7 +386,7 @@ GEM
     sidekiq-cron (1.1.0)
       fugit (~> 1.1)
       sidekiq (>= 4.2.1)
-    sidekiq-unique-jobs (6.0.18)
+    sidekiq-unique-jobs (6.0.20)
       concurrent-ruby (~> 1.0, >= 1.0.5)
       sidekiq (>= 4.0, < 7.0)
       thor (~> 0)
