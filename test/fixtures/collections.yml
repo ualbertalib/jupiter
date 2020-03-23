@@ -4,6 +4,7 @@ fantasy_books:
   community: books
   record_created_at: <%= Time.zone.now - 1.hour %>
   date_ingested: <%= Time.zone.now - 1.hour %>
+
 thesis:
   title: 'Thesis Collection'
   restricted: true
@@ -11,12 +12,14 @@ thesis:
   community: thesis
   record_created_at: <%= Time.zone.now - 1.hour %>
   date_ingested: <%= Time.zone.now - 1.hour %>
+
 fancy_collection:
   title: 'Fancy Collection'
   owner: admin
   community: fancy_community
   record_created_at: <%= Time.zone.now - 1.hour %>
   date_ingested: <%= Time.zone.now - 1.hour %>
+
 fancier_collection:
   title: 'Fancier Collection'
   owner: admin

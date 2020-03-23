@@ -6,13 +6,9 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
 
   include AipHelper
 
-  # Transactional tests were creating a problem where a collection defined as a
-  # fixture would only be found sometimes (a race condition?)
-  self.use_transactional_tests = false
-
-  def setup
+  setup do
     @regular_user = users(:regular)
-    @private_item = items(:fancy_private)
+    @private_item = items(:private_item)
     @entity = Item.name.underscore.pluralize
 
     @public_item = create_entity(

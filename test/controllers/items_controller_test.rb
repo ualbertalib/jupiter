@@ -2,7 +2,7 @@ require 'test_helper'
 
 class ItemsControllerTest < ActionDispatch::IntegrationTest
 
-  def setup
+  setup do
     @regular_user = users(:regular)
     @admin = users(:admin)
     @community = Community.create!(title: 'Desolate community', owner_id: @admin.id)

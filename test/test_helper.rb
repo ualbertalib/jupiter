@@ -2,7 +2,6 @@ require 'simplecov'
 SimpleCov.start 'rails' unless ENV['NO_COVERAGE']
 
 require File.expand_path('../config/environment', __dir__)
-require 'minitest/hooks/test'
 require 'minitest/mock'
 require 'rails/test_help'
 require 'sidekiq/testing'
@@ -40,7 +39,6 @@ class ActiveSupport::TestCase
   # TODO: Enable this after test cleanup: https://github.com/ualbertalib/jupiter/issues/1445
   # parallelize(workers: :number_of_processors)
 
-  include Minitest::Hooks
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
 
@@ -49,18 +47,7 @@ class ActiveSupport::TestCase
     Haikunator.haikunate
   end
 
-  def before_all
-    super
-    # unclear why this isn't running in all cases, but resolves obscure error in which fetching a fixture throws
-    # NoMethodError: undefined method `[]' for nil:NilClass deep inside ActiveRecord in some cases when loading a fixture
-    setup_fixtures
-  end
-
-  def after_all
-    super
-    keys = Redis.current.keys("#{Rails.configuration.redis_key_prefix}*")
-    Redis.current.del(keys) if keys.present?
-    Sidekiq::Worker.clear_all
+  def teardown
     JupiterCore::SolrServices::Client.instance.truncate_index
   end
 

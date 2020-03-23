@@ -2,7 +2,7 @@ require 'application_system_test_case'
 
 class CommunitiesTypeaheadTest < ApplicationSystemTestCase
 
-  def setup
+  setup do
     admin = User.find_by(email: 'administrator@example.com')
     @community = Community.create!(title: 'Department of thing', owner_id: admin.id)
     @community2 = Community.create!(title: 'Other community', owner_id: admin.id)

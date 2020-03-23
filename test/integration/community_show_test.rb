@@ -3,9 +3,7 @@ require 'test_helper'
 # TODO: This test would be better as an System Acceptance test instead?
 class CommunityShowTest < ActionDispatch::IntegrationTest
 
-  def before_all
-    super
-
+  setup do
     # A community with two collections and a logo
     @community1 = Community.create!(title: 'Two collection community', owner_id: users(:admin).id)
     @collection1 = Collection.create!(community_id: @community1.id,

@@ -2,7 +2,7 @@ require 'application_system_test_case'
 
 class ItemShowTest < ApplicationSystemTestCase
 
-  def setup
+  setup do
     @user = User.find_by(email: 'john_snow@example.com')
     admin = User.find_by(email: 'administrator@example.com')
     @community = Community.create!(title: 'Fancy Community', owner_id: admin.id)
@@ -69,7 +69,7 @@ class ItemShowTest < ApplicationSystemTestCase
     end
   end
 
-  def teardown
+  teardown do
     # is clearing the database but not the index, for that it needs the following
     JupiterCore::SolrServices::Client.instance.truncate_index
   end

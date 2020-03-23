@@ -2,7 +2,7 @@ require 'test_helper'
 
 class Admin::CommunitiesControllerTest < ActionDispatch::IntegrationTest
 
-  def setup
+  setup do
     @admin = users(:admin)
     @community = communities(:books)
     sign_in_as users(:admin)

@@ -230,8 +230,6 @@ GEM
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
     minitest (5.14.0)
-    minitest-hooks (1.5.0)
-      minitest (> 5.3)
     msgpack (1.3.3)
     multipart-post (2.1.1)
     mustermann (1.1.1)
@@ -497,7 +495,6 @@ DEPENDENCIES
   kaminari
   launchy
   listen (>= 3.0.5, < 3.3)
-  minitest-hooks
   nokogiri
   oaisys!
   omniauth

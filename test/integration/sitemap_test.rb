@@ -2,26 +2,11 @@ require 'test_helper'
 
 class SitemapTest < ActionDispatch::IntegrationTest
 
-  def before_all
-    super
-    Item.destroy_all
-    Thesis.destroy_all
-    @community = Community.create!(title: 'Fancy Community', owner_id: users(:admin).id)
-    @collection = Collection.create!(community_id: @community.id,
-                                     title: 'Fancy Collection', owner_id: users(:admin).id)
-    @item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                     owner_id: users(:admin).id, title: 'Fancy Item',
-                     creators: ['Joe Blow'],
-                     created: '1938-01-02',
-                     languages: [CONTROLLED_VOCABULARIES[:language].english],
-                     item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                     publication_status:
-                                               [CONTROLLED_VOCABULARIES[:publication_status].published],
-                     license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                     subject: ['Items']).tap do |uo|
-      uo.add_to_path(@community.id, @collection.id)
-      uo.save!
-    end
+  setup do
+    @community = communities(:books)
+    @collection = collections(:fantasy_books)
+    @item = items(:fancy)
+
     # Attach a file to the item so that it has attributes to check for
     File.open(file_fixture('image-sample.jpeg'), 'r') do |file|
       # Bit of a hack to fake a file name with characters that require escaping ...
@@ -30,30 +15,9 @@ class SitemapTest < ActionDispatch::IntegrationTest
       end
       @item.add_and_ingest_files([file])
     end
-    @thesis = Thesis.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                         owner_id: users(:admin).id, title: 'Fancy Item',
-                         dissertant: 'Joe Blow',
-                         language: CONTROLLED_VOCABULARIES[:language].english,
-                         graduation_date: 'Fall 2017')
-                    .tap do |uo|
-                      uo.add_to_path(@community.id, @collection.id)
-                      uo.save!
-                    end
-    # 1 more item. this is private
-    @private_item = Item.new(visibility: JupiterCore::VISIBILITY_PRIVATE,
-                             owner_id: users(:admin).id, title: 'Fancy Private Item',
-                             creators: ['Joe Blow'],
-                             created: '1983-11-11',
-                             languages: [CONTROLLED_VOCABULARIES[:language].english],
-                             item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                             publication_status:
-                                               [CONTROLLED_VOCABULARIES[:publication_status].published],
-                             license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                             subject: ['Items'])
-                        .tap do |uo|
-                          uo.add_to_path(@community.id, @collection.id)
-                          uo.save!
-                        end
+
+    @thesis = thesis(:nice)
+    @private_item = items(:private_item)
   end
 
   test 'sitemap index should be valid sitemapindex xml' do
@@ -88,7 +52,7 @@ class SitemapTest < ActionDispatch::IntegrationTest
     assert_select 'loc', item_url(@item)
     assert_select 'lastmod', @item.updated_at.iso8601
     # not show private items
-    assert_select 'url', count: 2
+    assert_select 'url', count: 3
     assert_select 'loc', { count: 0, text: item_url(@private_item) }, 'private items should not appear in the sitemap'
   end
 

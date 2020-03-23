@@ -2,7 +2,7 @@ require 'application_system_test_case'
 
 class SearchTest < ApplicationSystemTestCase
 
-  def setup
+  setup do
     admin = User.find_by(email: 'administrator@example.com')
     @community = Community.create!(title: 'Fancy Community', owner_id: admin.id)
     @collections = 2.times.map do |i|
@@ -109,7 +109,7 @@ class SearchTest < ApplicationSystemTestCase
     end
   end
 
-  def teardown
+  teardown do
     # is clearing the database but not the index, for that it needs the following
     JupiterCore::SolrServices::Client.instance.truncate_index
   end

@@ -2,7 +2,7 @@ require 'test_helper'
 
 class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
 
-  def setup
+  setup do
     @community = communities(:books)
     @collection = collections(:fantasy_books)
     @admin = users(:admin)

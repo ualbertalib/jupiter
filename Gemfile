@@ -104,7 +104,6 @@ group :test do
   gem 'simplecov'
   # Faker added 0.5 seconds to the test suite per call. Haikunator seems much faster for faking strings
   gem 'haikunator'
-  gem 'minitest-hooks'
   gem 'shoulda-matchers', '~> 4.3'
 
   gem 'json-schema', '~> 2.8.1'

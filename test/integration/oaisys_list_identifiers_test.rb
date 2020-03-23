@@ -7,12 +7,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
   setup do
     @routes = Oaisys::Engine.routes
     Oaisys::Engine.config.items_per_request = 5
-  end
 
-  def before_all
-    super
-    Item.destroy_all
-    Thesis.destroy_all
     @community = Community.create!(title: 'Fancy Community', owner_id: users(:admin).id)
     @big_community = Community.create!(title: 'Big Community', owner_id: users(:admin).id)
     @big_collection = Collection.create!(community_id: @big_community.id,

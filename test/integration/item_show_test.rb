@@ -2,8 +2,7 @@ require 'test_helper'
 
 class ItemShowTest < ActionDispatch::IntegrationTest
 
-  def before_all
-    super
+  setup do
     # A community with two collections
     @community1 = Community.create!(title: 'Two collection community', owner_id: users(:admin).id)
     @collection1 = Collection.create!(community_id: @community1.id,

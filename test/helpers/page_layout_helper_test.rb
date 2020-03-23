@@ -6,7 +6,7 @@ class PageLayoutHelperTest < ActionView::TestCase
 
   attr_reader :request
 
-  def setup
+  setup do
     @request = Class.new do
       def base_url
         'https://example.com'

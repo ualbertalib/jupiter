@@ -2,7 +2,7 @@ require 'test_helper'
 
 class Admin::ItemsControllerTest < ActionDispatch::IntegrationTest
 
-  def setup
+  setup do
     @item = items(:fancy)
     @admin = users(:admin)
     sign_in_as @admin

@@ -2,7 +2,7 @@ require 'application_system_test_case'
 
 class AdminCommunitiesIndexTest < ApplicationSystemTestCase
 
-  def setup
+  setup do
     admin = User.find_by(email: 'administrator@example.com')
     @community = Community.create!(title: 'Community', owner_id: admin.id)
     2.times do |i|
