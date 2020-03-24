@@ -32,7 +32,7 @@ class HumanizedChangeSet
   private
 
   def generate_html_diffs
-    @changeset.keys.each do |attribute_name|
+    @changeset.each_key do |attribute_name|
       # skip changes to these attributes – we don't care to present them
       next if ['logo_id', 'updated_at', 'embargo_history', 'aasm_state'].include? attribute_name
 
