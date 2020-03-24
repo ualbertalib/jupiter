@@ -2,8 +2,6 @@ class Collection < JupiterCore::Depositable
 
   acts_as_rdfable
 
-  scope :drafts, -> { where(is_published_in_era: false) }
-
   has_solr_exporter Exporters::Solr::CollectionExporter
 
   belongs_to :owner, class_name: 'User'
