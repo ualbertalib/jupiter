@@ -306,7 +306,9 @@ class DraftItem < ApplicationRecord
 
   def strip_input_fields
     attributes.each do |key, value|
-      self[key] = value.reject(&:blank?) if value.is_a?(Array)
+      next unless value.is_a?(Array)
+
+      self[key] = value.reject(&:blank?)
       self[key] = nil if self[key].blank?
     end
   end
