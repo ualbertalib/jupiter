@@ -6,7 +6,7 @@
     "lint": "eslint --ext .js app/javascript"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.12.1",
+    "@fortawesome/fontawesome-free": "^5.13.0",
     "@rails/actiontext": "^6.0.2-2",
     "@rails/activestorage": "^6.0.2-2",
     "@rails/ujs": "^6.0.2-2",
