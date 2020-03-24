@@ -22,8 +22,10 @@ GIT
   specs:
     oaisys (0.1.0)
       builder (~> 3.0)
+      nanoid
       pg
       rails (>= 5.2.3)
+      redis (~> 4.1)
       rubocop
       rubocop-performance
       rubocop-rails
@@ -249,6 +251,7 @@ GEM
     multipart-post (2.1.1)
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
+    nanoid (2.0.0)
     nap (1.1.0)
     net-http-persistent (3.1.0)
       connection_pool (~> 2.2)
