@@ -1,8 +1,4 @@
 <% if current_user.present? && current_user.admin? %>
-  <% content_for(:head) do %>
-    <%= javascript_include_tag 'admin' %>
-  <% end %>
-
   <div class='d-block'>
     <button type="button"
             data-toggle="collapse"
