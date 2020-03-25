@@ -13,7 +13,7 @@
 - **Redis**
 - **Solr**
 - **ImageMagick**
-- **Node.js**
+- **Node.js** 10.13.0+
 - **Yarn**
 
 # Generate Documentation
