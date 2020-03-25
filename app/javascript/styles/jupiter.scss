@@ -55,16 +55,3 @@ body {
   background-position: center 10%;
   background-size: cover;
 }
-
-// Used for differ gem.
-ins {
-  &.differ {
-    background: $light-green;
-  }
-}
-
-del {
-  &.differ {
-    background: $light-red;
-  }
-}
