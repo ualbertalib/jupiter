@@ -204,7 +204,7 @@ class DraftItem < ApplicationRecord
 
     begin
       CONTROLLED_VOCABULARIES[:license].send(code)
-    rescue RuntimeError
+    rescue JupiterCore::VocabularyMissingError
       CONTROLLED_VOCABULARIES[:old_license].send(code)
     end
   end

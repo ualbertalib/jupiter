@@ -14,6 +14,8 @@ class EditItemOldLicenseTest < ApplicationSystemTestCase
     login_user admin
 
     visit item_path item
+    assert_text I18n.t('controlled_vocabularies.old_license.attribution_3_0_international')
+
     click_on I18n.t('edit')
 
     click_on I18n.t('items.draft.save_and_continue')
@@ -22,6 +24,7 @@ class EditItemOldLicenseTest < ApplicationSystemTestCase
     click_on I18n.t('items.draft.save_and_deposit_edits')
     assert_text I18n.t('items.draft.successful_deposit')
 
+    assert_text I18n.t('controlled_vocabularies.old_license.attribution_3_0_international')
     logout_user
   end
 

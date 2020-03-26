@@ -28,6 +28,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Fix Sprockets v4.0.0 upgrade problem with how Sass Variables were being defined
 - Fix bug for page_image_url helper which was double rendering urls for default image [PR#1512](https://github.com/ualbertalib/jupiter/pull/1512)
 - Fix three-state logic problems on DraftItem and DraftThesis models where boolean attribute is_published_in_era was nullable [#1408](https://github.com/ualbertalib/jupiter/issues/1408)
+- Can now go through wizard with an old license [#1539](https://github.com/ualbertalib/jupiter/pull/1539)
 
 ### Security
 - add `noopener noreferrer` when opening a link in a new tab [PR#1344](https://github.com/ualbertalib/jupiter/pull/1344)
