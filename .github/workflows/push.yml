@@ -9,6 +9,7 @@ jobs:
       postgres:
         image: postgres:11-alpine
         ports: ["5432:5432"]
+        options: -e="POSTGRES_PASSWORD=mysecretpassword"
 
       redis:
         image: redis:alpine
