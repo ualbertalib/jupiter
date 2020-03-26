@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_05_210657) do
+ActiveRecord::Schema.define(version: 2020_03_20_164053) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -116,7 +116,7 @@ ActiveRecord::Schema.define(version: 2020_03_05_210657) do
     t.json "citations", array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "is_published_in_era", default: false
+    t.boolean "is_published_in_era", default: false, null: false
     t.index ["id"], name: "index_draft_items_on_id", unique: true
     t.index ["type_id"], name: "index_draft_items_on_type_id"
     t.index ["user_id"], name: "index_draft_items_on_user_id"
@@ -160,7 +160,7 @@ ActiveRecord::Schema.define(version: 2020_03_05_210657) do
     t.json "committee_members", array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "is_published_in_era", default: false
+    t.boolean "is_published_in_era", default: false, null: false
     t.index ["id"], name: "index_draft_theses_on_id", unique: true
     t.index ["institution_id"], name: "index_draft_theses_on_institution_id"
     t.index ["language_id"], name: "index_draft_theses_on_language_id"

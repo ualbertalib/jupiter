@@ -2,8 +2,6 @@ class Community < JupiterCore::Depositable
 
   acts_as_rdfable
 
-  scope :drafts, -> { where(is_published_in_era: false).or(where(is_published_in_era: nil)) }
-
   has_solr_exporter Exporters::Solr::CommunityExporter
 
   belongs_to :owner, class_name: 'User'
