@@ -36,15 +36,15 @@ class ThesisPolicy < DepositablePolicy
   # namespaces
 
   def show_entity?
-    admin?
+    system? || admin?
   end
 
   def file_sets?
-    admin?
+    system? || admin?
   end
 
   def file_paths?
-    admin?
+    system? || admin?
   end
 
 end

@@ -6,15 +6,8 @@ gem 'image_processing' # for ActiveStorage Variants
 gem 'puma', '~> 4.3'
 gem 'rails', '~> 6.0.2'
 
-# Assets (CSS/JS) stuff
-gem 'bootstrap', '~> 4.4.1'
-gem 'dropzonejs-rails'
-gem 'font-awesome-rails'
-gem 'jquery-rails'
-gem 'sassc-rails', '~> 2.1'
-gem 'selectize-rails'
-gem 'turbolinks', '~> 5'
-gem 'uglifier', '>= 1.3.0'
+# Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
+gem 'webpacker', '~> 5.0'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
@@ -31,11 +24,12 @@ gem 'rdf-vocab', '~> 3.1.2'
 
 # Database stuff
 gem 'connection_pool'
-gem 'pg', '~> 1.2.2'
+gem 'pg', '~> 1.2.3'
 gem 'redis', '~> 4.1'
 gem 'rsolr'
 
 # Authentication
+gem 'bcrypt', '>= 3.1.13'
 gem 'omniauth'
 gem 'omniauth-rails_csrf_protection' # Remove after https://github.com/omniauth/omniauth/pull/809 will be resolved
 gem 'omniauth-saml'
@@ -91,8 +85,6 @@ group :development, :test do
   gem 'rubocop', '~> 0.80.1', require: false
   gem 'rubocop-performance'
   gem 'rubocop-rails'
-
-  gem 'scss_lint', '>= 0.56.0', require: false
 end
 
 group :development do

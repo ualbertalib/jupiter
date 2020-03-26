@@ -2,6 +2,8 @@ require 'test_helper'
 
 class PageLayoutHelperTest < ActionView::TestCase
 
+  include Webpacker::Helper
+
   attr_reader :request
 
   def setup
@@ -14,6 +16,7 @@ class PageLayoutHelperTest < ActionView::TestCase
 
   # page_title
 
+  # page_title
   test 'should return the page title when given one' do
     assert_equal t('site_name'), page_title(t('site_name'))
   end
@@ -75,13 +78,13 @@ class PageLayoutHelperTest < ActionView::TestCase
   # page_image_url
 
   test 'page_image_url defaults to the jupiter logo' do
-    assert_equal image_url('era-logo.png'), page_image_url
+    assert_equal asset_pack_url('media/images/era-logo.png'), page_image_url
   end
 
   test 'page_image_url should return default image on community/item with no logo' do
     @community = Community.create!(title: 'Random community', owner_id: users(:admin).id)
 
-    assert_equal image_url('era-logo.png'), page_image_url
+    assert_equal asset_pack_url('media/images/era-logo.png'), page_image_url
   end
 
   test 'page_image_url should return community/item logo' do

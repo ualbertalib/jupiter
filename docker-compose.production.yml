@@ -1,0 +1,72 @@
+version: '3'
+
+volumes:
+  postgres:
+    driver: local
+  solr:
+    driver: local
+  redis:
+    driver: local
+  assets:
+    driver: local
+  file-storage:
+    driver: local
+
+services:
+  postgres:
+    restart: always
+    image: postgres:9.6-alpine
+    env_file: .env_deployment
+
+  solr:
+    restart: always
+    image: solr:6.6
+    ports:
+      - "8983:8983"
+    volumes:
+      - solr:/opt/solr/server/solr/mycores
+      - ./solr/config:/config
+    entrypoint:
+      - docker-entrypoint.sh
+      - solr-precreate
+      - jupiter-uat
+      - /config
+
+  redis:
+    restart: always
+    image: redis:alpine
+    volumes:
+      - redis:/data
+
+  # Sidekiq
+  worker: &rails
+    restart: always
+    image: ualbertalib/jupiter:deployment
+    volumes:
+      - file-storage:/app/storage/
+    command: bundle exec sidekiq
+    env_file: .env_deployment
+    depends_on:
+      - postgres
+      - redis
+      - solr
+
+  # Rails
+  web:
+    <<: *rails
+    volumes:
+      - assets:/app/public/assets/
+      - file-storage:/app/storage/
+    command: bundle exec puma -e uat
+
+  nginx:
+    restart: always
+    image: nginx
+    depends_on:
+      - web
+    env_file: .env_deployment
+    volumes:
+      - ./config/nginx.conf:/etc/nginx/conf.d/default.conf
+      - assets:/app/public/assets/
+    ports:
+      - "80:80"

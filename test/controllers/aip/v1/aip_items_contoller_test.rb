@@ -11,7 +11,6 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
   self.use_transactional_tests = false
 
   def setup
-    @admin_user = users(:admin)
     @regular_user = users(:regular)
     @private_item = items(:fancy_private)
     @entity = Item.name.underscore.pluralize
@@ -38,7 +37,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should be able to show a visible item to admin' do
-    sign_in_as @admin_user
+    sign_in_as_system_user
     get aip_v1_entity_url(
       id: @public_item,
       entity: @entity
@@ -66,7 +65,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
 
   # Basic test checking if response has n3 serialization.
   test 'should get item metadata graph with n3 serialization' do
-    sign_in_as @admin_user
+    sign_in_as_system_user
     get aip_v1_entity_url(
       entity: @entity,
       id: @public_item
@@ -79,7 +78,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
 
   # Basic test checking if response has xml format.
   test 'should get item filesets order in xml format' do
-    sign_in_as @admin_user
+    sign_in_as_system_user
     get aip_v1_entity_filesets_url(
       entity: @entity,
       id: @public_item
@@ -91,7 +90,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should get item file paths' do
-    sign_in_as @admin_user
+    sign_in_as_system_user
     get aip_v1_entity_file_paths_url(
       entity: @entity,
       id: @public_item
@@ -114,7 +113,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
   # This should be changed to verify the response content is correct.
 
   test 'should get item file set metadata graph with n3 serialization' do
-    sign_in_as @admin_user
+    sign_in_as_system_user
     get aip_v1_entity_file_set_url(
       entity: @entity,
       id: @public_item,
@@ -127,8 +126,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should get item fixity metadata graph with n3 serialization' do
-    sign_in_as @admin_user
-
+    sign_in_as_system_user
     url = aip_v1_entity_fileset_fixity_url(
       entity: @entity,
       id: @public_item,
@@ -141,8 +139,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should get item original file metadata graph with n3 serialization' do
-    sign_in_as @admin_user
-
+    sign_in_as_system_user
     url = aip_v1_entity_fileset_original_file_url(
       entity: @entity,
       id: @public_item,

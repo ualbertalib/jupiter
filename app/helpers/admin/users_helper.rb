@@ -11,7 +11,7 @@ module Admin::UsersHelper
   # rubocop:disable Rails/OutputSafety
   def user_role(user)
     if user.admin?
-      "<span class='user-admin'>#{fa_icon('shield')} #{t('admin.users.admin_role')}</span>".html_safe
+      "<span class='user-admin'>#{icon('fas', 'shield-alt')} #{t('admin.users.admin_role')}</span>".html_safe
     else
       t('admin.users.user_role')
     end
@@ -19,7 +19,7 @@ module Admin::UsersHelper
 
   def user_status(user)
     if user.suspended?
-      "<span class='user-suspended'>#{fa_icon('ban')} #{t('admin.users.suspended_status')}</span>".html_safe
+      "<span class='user-suspended'>#{icon('fas', 'ban')} #{t('admin.users.suspended_status')}</span>".html_safe
     else
       t('admin.users.active_status')
     end

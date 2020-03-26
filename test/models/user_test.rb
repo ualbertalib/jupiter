@@ -90,4 +90,49 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
+  test 'should validate if it does not have an api key and it is not a system account' do
+    user = User.new(
+      name: 'User name',
+      email: 'valid@example.com',
+      system: false
+    )
+
+    assert user.valid?
+  end
+
+  test 'should validate if it has an api key and it is a system account' do
+    user = User.new(
+      name: 'User name',
+      email: 'valid@example.com',
+      api_key: '70d800e9-5fe8-49e4-86ed-eefc11ebfa52',
+      system: true
+    )
+
+    assert user.valid?
+  end
+
+  test 'should not validate if it has an api key and it is not a system account' do
+    user = User.new(
+      name: 'User name',
+      email: 'valid@example.com',
+      api_key: '70d800e9-5fe8-49e4-86ed-eefc11ebfa52'
+    )
+
+    assert_not user.valid?
+    assert_equal user.errors[:api_key_digest].first,
+                 I18n.t('activerecord.errors.models.user.attributes.api_key_digest.blank_if_system_false')
+  end
+
+  test 'should not validate if it does not have an api key and it is a system account' do
+    user = User.new(
+      name: 'User name',
+      email: 'valid@example.com',
+      system: true
+    )
+
+    assert_not user.valid?
+    assert_equal user.errors[:api_key_digest].first,
+                 I18n.t('activerecord.errors.models.user.attributes.api_key_digest.present_if_system_true')
+  end
+
 end

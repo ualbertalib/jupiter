@@ -157,7 +157,12 @@ en:
               collection_restricted: "Deposit is restricted for this collection"
             files:
               infected: '%{filename} is infected with a virus'
-
+        user:
+          attributes:
+            api_key_digest:
+              present_if_system_true: 'must be present if System value is true'
+              blank_if_system_false: 'must be blank if System value is false'
+            
   application:
     navbar:
       era_logo_alt: 'ERA - Education and Research Archive'
@@ -343,7 +348,7 @@ en:
         please_fix_errors: 'Please correct all errors below and try again'
         please_follow_the_steps: 'Looks like you tried to skip ahead. Please follow the steps accordingly'
         files_are_required_to_continue: 'You are required at least one file attached before continuing'
-        submit_draft_btn_loading_html: "<i class='fa fa-spinner fa-pulse fa-lg fa-fw'></i>Saving..."
+        submit_draft_btn_loading_html: "<i class='fas fa-spinner fa-pulse fa-lg fa-fw'></i>Saving..."
         successful_deposit: 'Thesis Deposit was successful!'
         continue_draft: 'Continue Draft'
         delete_confirm: 'Are you sure you want to delete draft thesis "%{title}"?'
@@ -357,7 +362,8 @@ en:
 
         describe_thesis:
           header: 'Describe Thesis'
-          header_icon: 'pencil'
+          header_icon_type: 'fas'
+          header_icon: 'pencil-alt'
           title: 'Title'
           title_placeholder: 'Enter title'
           alternate_title: 'Alternate Title'
@@ -398,6 +404,7 @@ en:
           committee_members_help: 'Example: Jones, Mary (English)'
         choose_license_and_visibility:
           header: 'Choose License and Visibility'
+          header_icon_type: 'fab'
           header_icon: 'creative-commons'
           license:
             default_rights: 'This thesis is made available by the University of Alberta Libraries
@@ -417,6 +424,7 @@ en:
 
         upload_files:
           header: 'Upload Files'
+          header_icon_type: 'fas'
           header_icon: 'paperclip'
           attach_files: 'Attach Files'
           saved_files: 'Thesis File Attachments'
@@ -434,7 +442,8 @@ en:
         review_and_deposit_thesis:
           header: 'Review and Deposit Thesis'
           header_edit: 'Review and Update Thesis'
-          header_icon: 'check-square-o'
+          header_icon_type: 'far'
+          header_icon: 'check-square'
           please_review_thesis: 'Please review your thesis before depositing into ERA'
           legal_disclaimer_html: 'By depositing this thesis into ERA you agree to the <a href="/policies">ERA Deposit Policy agreements</a>'
 
@@ -572,7 +581,7 @@ en:
       please_fix_errors: 'Please correct all errors below and try again'
       please_follow_the_steps: 'Looks like you tried to skip ahead. Please follow the steps accordingly'
       files_are_required_to_continue: 'You are required at least one file attached before continuing'
-      submit_draft_btn_loading_html: "<i class='fa fa-spinner fa-pulse fa-lg fa-fw'></i>Saving..."
+      submit_draft_btn_loading_html: "<i class='fas fa-spinner fa-pulse fa-lg fa-fw'></i>Saving..."
       successful_deposit: 'Item Deposit was successful!'
       continue_draft: 'Continue Draft'
       delete_confirm: 'Are you sure you want to delete draft item "%{title}"?'
@@ -586,7 +595,8 @@ en:
 
       describe_item:
         header: 'Describe Item'
-        header_icon: 'pencil'
+        header_icon_type: 'fas'
+        header_icon: 'pencil-alt'
         title: 'Title'
         title_placeholder: 'Enter title'
         alternate_title: 'Alternate Title'
@@ -638,6 +648,7 @@ en:
 
       choose_license_and_visibility:
         header: 'Choose License and Visibility'
+        header_icon_type: 'fab'
         header_icon: 'creative-commons'
         license:
           header: 'License'
@@ -687,6 +698,7 @@ en:
 
       upload_files:
         header: 'Upload Files'
+        header_icon_type: 'fas'
         header_icon: 'paperclip'
         attach_files: 'Attach Files'
         saved_files: 'Item File Attachments'
@@ -704,7 +716,8 @@ en:
       review_and_deposit_item:
         header: 'Review and Deposit Item'
         header_edit: 'Review and Update Item'
-        header_icon: 'check-square-o'
+        header_icon_type: 'far'
+        header_icon: 'check-square'
         please_review_item: 'Please review your item before depositing into ERA'
         legal_disclaimer_html: 'By depositing this item into ERA you agree to the <a href="/policies">ERA Deposit Policy agreements</a>'
 

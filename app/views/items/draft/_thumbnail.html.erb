@@ -11,7 +11,7 @@ thumbnail and is used on various other pages, like profiles, which use the appli
       <%= safe_thumbnail_tag(thumbnail, alt: '', title: file.filename, size: '100x100') %>
   <% rescue ActiveStorage::UnpreviewableError %>
     <div class="text-muted text-center img-thumbnail p-3">
-      <%= fa_icon file_icon(file.content_type), class: 'fa-5x' %>
+      <%= icon('far', file_icon(file.content_type), class: 'fa-5x') %>
       <span class="sr-only"><%= file.filename %></span>
     </div>
   <% end %>

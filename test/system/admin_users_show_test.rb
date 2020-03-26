@@ -14,7 +14,7 @@ class AdminUsersShowTest < ApplicationSystemTestCase
 
     click_link I18n.t('admin.users.index.header')
     assert_selector 'h1', text: I18n.t('admin.users.index.header')
-    assert_selector 'tbody tr', count: 5
+    assert_selector 'tbody tr', count: 7
     assert_selector 'tbody tr:first-child th[scope="row"]', text: admin.email
 
     click_link admin.email
@@ -44,7 +44,7 @@ class AdminUsersShowTest < ApplicationSystemTestCase
 
     click_link I18n.t('admin.users.index.header')
     assert_selector 'h1', text: I18n.t('admin.users.index.header')
-    assert_selector 'tbody tr', count: 5
+    assert_selector 'tbody tr', count: 7
     assert_selector 'tbody tr:first-child th[scope="row"]', text: admin.email
 
     click_link user.email
@@ -117,7 +117,7 @@ class AdminUsersShowTest < ApplicationSystemTestCase
 
     click_link I18n.t('admin.users.index.header')
     assert_selector 'h1', text: I18n.t('admin.users.index.header')
-    assert_selector 'tbody tr', count: 5
+    assert_selector 'tbody tr', count: 7
     assert_selector 'tbody tr:first-child th[scope="row"]', text: admin.email
 
     click_link user.email
