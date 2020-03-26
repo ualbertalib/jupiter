@@ -5,25 +5,11 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:11-alpine
-        ports: ["5432:5432"]
-        options: -e="POSTGRES_PASSWORD=mysecretpassword"
-
-      redis:
-        image: redis:alpine
-        ports: ["6379:6379"]
-
-      solr:
-        image: solr:6.6
-        ports: ["8983:8983"]
-        volumes:
-          - ./solr/config:/config
-          - ./solr/scripts/solr-precreate-jupiter.sh:/docker-entrypoint-initdb.d/solr-precreate-jupiter.sh
-
     steps:
       - uses: actions/checkout@v1
+
+      - name: Build the docker-compose stack
+        run: docker-compose up -d
 
       - name: Set up Ruby 2.6
         uses: actions/setup-ruby@v1
