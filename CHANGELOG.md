@@ -10,6 +10,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Mounted Oaisys engine
 - Version 1 of AIP API
 - Added and set up papertrail gem
+- Set up papertrail admin view
 - Added Draper and re-organized facet presenters
 - Metadata Presenters for OAI:DC & OAI:ETDMS
 - Local system accounts authentication
