@@ -10,7 +10,6 @@ class Admin::ItemsControllerTest < ActionDispatch::IntegrationTest
     File.open(file_fixture('text-sample.txt'), 'r') do |file|
       @item.add_and_ingest_files([file])
     end
-
   end
 
   test 'should get items index' do
