@@ -1,2 +1,6 @@
 # https://help.github.com/articles/about-codeowners/
 * @ConnorSheremeta @lagoan @mbarnett @murny @pgwillia
+
+# Make sure you bug @mbarnett when touching files in these directories
+app/models/jupiter_core/ @mbarnett
+app/models/exporters/ @mbarnett
