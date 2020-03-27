@@ -391,6 +391,104 @@ if Rails.env.development? || Rails.env.uat?
     )
   end
 
+  # Radioactive entities
+  # TODO: Add our own radioactive community and collection
+  
+  community_with_collection = Community.joins(:collections).first
+
+  base_radioactive_values = {
+    # Check with metadata team if we will continue to use the fedora predicates
+    # Set id on each new Item so we can find it easily when testing
+    # id: 'e2ec88e3-3266-4e95-8575-8b04fac2a679',
+    owner_id: admin.id,
+    doi: "doi:10.7939/xxxxxxxxx",
+    visibility: JupiterCore::VISIBILITY_PUBLIC,
+    creators: ['dc:creator1$ Doe, Jane', 'dc:creator2$ Doe, John'],
+    contributors: ['dc:contributor1$ Perez, Juan', 'dc:contributor2$ Perez, Maria'],
+    subject: ['dc:subject1$ Some subject heading', 'dc:subject2$ Some subject heading'],    
+    created: '1000-01-01',
+    # TODO: Check if we can add miltiple descriptions
+    description: 'dcterms:description2$ Sea lettuce melon cabbage leek bamboo shoot lettuce rutabaga jícama silver beet amaranth pea dandelion scallion pea sprouts yarrow salsify bitterleaf courgette.
+    Azuki bean horseradish potato kale welsh onion fennel green bean azuki bean chickweed aubergine bell pepper sea lettuce rutabaga cucumber grape.
+    Radish grape rutabaga celery beetroot kombu spring onion cauliflower soybean. Sea lettuce melon cabbage leek bamboo shoot lettuce rutabaga jícama silver beet amaranth pea dandelion scallion pea sprouts yarrow salsify bitterleaf courgette.',
+    is_version_of: '["dcterms:isVersionOf1$ Sydorenko, Dmytro & Rankin, Robert. (2013). Simulation of O+ upflows created by electron precipitation and Alfvén waves in the ionosphere. Journal of Geophysical Research: Space Physics, 118(9), 5562-5578. http://doi.org/10.1002/jgra.50531", "dcterms:isVersionOf2$ Another version"]',
+    languages: ["http://id.loc.gov/vocabulary/iso639-2/zxx", "http://id.loc.gov/vocabulary/iso639-2/fre"],    
+    related_link: '"dcterms:relation1$ http://doi.org/10.1007/xxxxxx-xxx-xxxx-x", "dcterms:relation2$ http://doi.org/10.1007/xxxxxx-xxx-xxxx-x"',
+    source: '"dcterms:source1$ Some source" ,"dcterms:source2$ Some source"',
+    spatial_subjects: ["dcterms:spatial1$ Canada", "dcterms:spatial2$ Nicaragua"],
+    temporal_subjects: ["dcterms:temporal1$ Holocene", "dcterms:temporal2$ Holocene"],
+    title: 'dcterms:title1$ Some Title',
+    alternative_title: 'dcterms:alternative1$ Some Alternative Title',
+    item_type: 'http://purl.org/ontology/bibo/Image',
+    publication_status: 'http://purl.org/ontology/bibo/status#published',
+    # TODO: Check if predicate http://purl.org/ontology/bibo/owner is missing
+    depositor: 'eraadmi@ualberta.ca',
+    #
+    # Values for both license and rights cannot be set at the same time
+    license: 'http://creativecommons.org/licenses/by-sa/4.0/',
+    # rights: JupiterCore::VISIBILITY_PUBLIC,
+    #
+    # In order to set embargo values the visibility value needs to be set to 
+    # Item::VISIBILITY_EMBARGO
+    # embargo_history: 'An expired embargo was deactivated on 2000-01-01T00:00:00.000Z.  Its release date was 2000-01-01T00:00:00.000Z.  Visibility during embargo was restricted and intended visibility after embargo was open',
+    # embargo_end_date: '2000-01-01T00:00:00.000Z',
+    # visibility_after_embargo: JupiterCore::VISIBILITY_PUBLIC,
+  }
+
+  Item.new(    
+    base_radioactive_values.merge(id: 'e2ec88e3-3266-4e95-8575-8b04fac2a679')
+  ).tap do |uo|
+    uo.add_to_path(community_with_collection.id, community_with_collection.collections[0].id)
+
+    # Attach a file
+    File.open(Rails.root + 'test/fixtures/files/image-sample.jpeg', 'r') do |file1|
+      uo.add_and_ingest_files([file1])
+    end
+
+    uo.set_thumbnail(uo.files.first) if uo.files.first.present?
+    uo.save!
+  end
+
+  # Add Item with rigts value and no license
+  Item.new(
+    base_radioactive_values.merge(
+      id: 'c795337f-075f-429a-bb18-16b56d9b750f',
+      license: '',
+      rights: JupiterCore::VISIBILITY_PUBLIC
+    )
+  ).tap do |uo|
+    uo.add_to_path(community_with_collection.id, community_with_collection.collections[0].id)
+    uo.save!
+  end
+
+  # Add Item with that is currently embargoed
+  Item.new(
+    base_radioactive_values.merge(
+      id: '3bb26070-0d25-4f0e-b44f-e9879da333ec',
+      visibility: Item::VISIBILITY_EMBARGO,
+      embargo_history: 'Item currently embargoed',
+      embargo_end_date: 20.years.from_now.to_date,
+      visibility_after_embargo: CONTROLLED_VOCABULARIES[:visibility].public
+    )
+  ).tap do |uo|
+    uo.add_to_path(community_with_collection.id, community_with_collection.collections[0].id)
+    uo.save!
+  end
+
+  # Add Item that was previously embargoed
+  Item.new(
+    base_radioactive_values.merge(
+      id: '2107bfb6-2670-4ffc-94a1-aeb4f8c1fd81',
+      visibility: Item::VISIBILITY_EMBARGO,
+      embargo_end_date: '2000-01-01T00:00:00.000Z',
+      embargo_history: 'An expired embargo was deactivated on 2000-01-01T00:00:00.000Z.  Its release date was 2000-01-01T00:00:00.000Z.  Visibility during embargo was restricted and intended visibility after embargo was open',
+      visibility_after_embargo: CONTROLLED_VOCABULARIES[:visibility].public
+    )
+  ).tap do |uo|
+    uo.add_to_path(community_with_collection.id, community_with_collection.collections[0].id)    
+    uo.save!
+  end
+
 end
 
 # Types

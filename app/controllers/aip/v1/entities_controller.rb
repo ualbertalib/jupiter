@@ -1,4 +1,6 @@
-class Aip::V1::AipController < ApplicationController
+class Aip::V1::EntitiesController < ApplicationController
+
+  include GraphCreation
 
   before_action :load_and_authorize_entity, only: [
     :show_entity,
@@ -18,6 +20,7 @@ class Aip::V1::AipController < ApplicationController
     # the rdf-vocab gem.
     # The fedora prefixes will be replaced at a later point from another
     # ontology, for now these remain as placeholders.
+
     prefixes = [
       RDF::Vocab::DC,
       RDF::Vocab::DC11,
@@ -36,6 +39,7 @@ class Aip::V1::AipController < ApplicationController
       RDF::Vocab::Fcrepo4.lastModifiedBy,
       RDF::Vocab::Fcrepo4.writable
     ]
+
     graph = create_graph(@entity, prefixes)
 
     # Handle files separately since currently they are not a part of the
@@ -49,8 +53,32 @@ class Aip::V1::AipController < ApplicationController
     owners_email = owner_email_statement
     graph << owners_email unless owners_email.nil?
 
-    triples = graph.dump(:n3)
-    render plain: triples, status: :ok
+    graph << rdf_type_statement(RDF::Vocab::PCDM.Object)
+
+    # To set the value for the predicate http://pcdm.org/models#memberOf we use
+    # the data from column member_of_paths, strip the collection id, and
+    # concatenate the url for the collection. This should be done cleaner
+
+    @entity.member_of_paths.each do |community_collection|
+      collection_id = community_collection.split('/')[1]
+      aip_base_url = request.url.split('/')[0..-3].join('/')
+      collection_url = "#{aip_base_url}/collections/#{collection_id}"
+
+      graph << prepare_statement(
+        subject: self_subject,
+        predicate: RDF::Vocab::PCDM.memberOf,
+        object: RDF::URI.new(collection_url)
+      )
+    end
+
+    # Add entity model
+    graph << prepare_statement(
+      subject: self_subject,
+      predicate: RDF::URI.new('info:fedora/fedora-system:def/model#hasModel'),
+      object: entity_institutional_repository_name
+    )
+
+    render plain: graph.to_n3, status: :ok
   end
 
   def file_sets
@@ -90,9 +118,9 @@ class Aip::V1::AipController < ApplicationController
 
     ActsAsRdfable.add_annotation_bindings!(@file.blob)
     graph = create_graph(@file.blob, prefixes)
+    graph << rdf_type_statement(RDF::Vocab::PCDM.Object)
 
-    triples = graph.dump(:n3)
-    render plain: triples, status: :ok
+    render plain: graph.to_n3, status: :ok
   end
 
   def fixity_file
@@ -102,33 +130,42 @@ class Aip::V1::AipController < ApplicationController
     ActsAsRdfable.add_annotation_bindings!(@file.blob)
 
     subject = RDF::URI(request.url.split('/')[0..-2].join('/'))
-    graph = create_graph(@file.blob, prefixes, subject)
+    graph = create_graph(@file.blob, prefixes, self_subject)
 
-    statements = []
-    statements << prepare_statement(
-      subject: subject,
-      predicate: RDF::Vocab::PREMIS.hasFixity,
-      object: self_subject
-    )
+    statement_definitions = [
+      {
+        subject: subject,
+        predicate: RDF::Vocab::PREMIS.hasFixity,
+        object: self_subject
+      },
+      {
+        subject: self_subject,
+        predicate: RDF::Vocab::PREMIS.hasEventOutcome,
+        object: 'SUCCESS'
+      },
+      {
+        subject: self_subject,
+        predicate: RDF::Vocab::PREMIS.hasMessageDigestAlgorithm,
+        object: 'md5'
+      },
+      {
+        subject: self_subject,
+        predicate: RDF.type,
+        object: RDF::Vocab::PREMIS.EventOutcomeDetail
+      },
+      {
+        subject: self_subject,
+        predicate: RDF.type,
+        object: RDF::Vocab::PREMIS.Fixity
+      }
+    ]
 
-    statements << prepare_statement(
-      subject: subject,
-      predicate: RDF::Vocab::PREMIS.hasEventOutcome,
-      object: 'SUCCESS'
-    )
-
-    statements << prepare_statement(
-      subject: subject,
-      predicate: RDF::Vocab::PREMIS.hasMessageDigestAlgorithm,
-      object: 'md5'
-    )
-
-    statements.each do |statement|
+    statement_definitions.each do |statement_definition|
+      statement = prepare_statement(statement_definition)
       graph << statement unless statement.nil?
     end
 
-    triples = graph.dump(:n3)
-    render plain: triples, status: :ok
+    render plain: graph.to_n3, status: :ok
   end
 
   def original_file
@@ -136,6 +173,7 @@ class Aip::V1::AipController < ApplicationController
       RDF::Vocab::EBUCore,
       RDF::Vocab::PREMIS,
       RDF::Vocab::DC11,
+      RDF::Vocab::PCDM,
       # The following prefixes need to be reevaluated and replaced
       RDF::Vocab::Fcrepo4,
       ::TERMS[:fits].schema,
@@ -145,11 +183,11 @@ class Aip::V1::AipController < ApplicationController
 
     ActsAsRdfable.add_annotation_bindings!(@file.blob)
     graph = create_graph(@file.blob, prefixes)
+    graph << rdf_type_statement(RDF::Vocab::PCDM.File)
 
     # add fixity service url
 
-    triples = graph.dump(:n3)
-    render plain: triples, status: :ok
+    render plain: graph.to_n3, status: :ok
   end
 
   def file_paths
@@ -172,55 +210,21 @@ class Aip::V1::AipController < ApplicationController
 
   protected
 
-  def create_graph(rdfable_entity, prefixes, subject = nil)
-    subject = self_subject if subject.nil?
-    graph = RDF::Graph.new
-    annotations = get_prefixed_predicates(rdfable_entity, prefixes)
-
-    annotations.each do |rdf_annotation|
-      column = rdf_annotation.column
-      value = rdfable_entity.send(column)
-
-      statement = prepare_statement(
-        subject: subject,
-        predicate: rdf_annotation.predicate,
-        object: value
-      )
-
-      graph << statement unless statement.nil?
+  def entity_institutional_repository_name
+    case @entity.class.to_s
+    when 'Item'
+      return 'IRItem'
+    when 'Thesis'
+      return 'IRThesis'
     end
 
-    graph
-  end
-
-  def get_prefixed_predicates(rdfable_entity, prefixes)
-    result = RdfAnnotation.none
-    ActsAsRdfable.add_annotation_bindings!(rdfable_entity)
-    prefixes.each do |prefix|
-      result = result.or rdfable_entity.rdf_annotations
-                                       .where('predicate like :prefix',
-                                              prefix: "#{prefix}%")
-    end
-    result
-  end
-
-  def prepare_statement(subject:, predicate:, object:)
-    return if object.nil?
-
-    object = [object] unless object.is_a?(Array)
-    rdf_predicate = RDF::Vocabulary::Term.new(predicate)
-    stringed_value = object.join(' , ')
-
-    RDF::Statement(
-      subject: subject,
-      predicate: rdf_predicate,
-      object: stringed_value
-    )
+    'IREntity'
   end
 
   def file_statements
     file_statements = []
-    @entity.files.each do |file|
+
+    @entity.try(:files).try(:each) do |file|
       fileset_url = "#{request.original_url}/filesets/#{file.fileset_uuid}"
       statement = prepare_statement(
         subject: self_subject,
@@ -233,25 +237,11 @@ class Aip::V1::AipController < ApplicationController
     file_statements
   end
 
-  def owner_email_statement
-    prepare_statement(
-      subject: self_subject,
-      predicate: RDF::Vocab::BIBO.owner,
-      object: @entity.owner.email
-    )
-  end
-
   def load_and_authorize_file
     @file = ActiveStorage::Attachment.find_by(fileset_uuid: params[:file_set_id])
     raise JupiterCore::ObjectNotFound unless @file.record_id == params[:id]
 
     authorize @file
-  end
-
-  # Return the url from the request to be used as the statement's subject for
-  # each rdf annotation for the requested digital object
-  def self_subject
-    RDF::URI(request.url)
   end
 
   def load_and_authorize_entity

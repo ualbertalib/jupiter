@@ -16,16 +16,6 @@ class Collection < JupiterCore::Depositable
     self.visibility = JupiterCore::VISIBILITY_PUBLIC
   end
 
-  acts_as_rdfable do |config|
-    config.title has_predicate: ::RDF::Vocab::DC.title
-    config.fedora3_uuid has_predicate: ::TERMS[:ual].fedora3_uuid
-    config.depositor has_predicate: ::TERMS[:ual].depositor
-    config.community_id has_predicate: ::TERMS[:ual].path
-    config.description has_predicate: ::RDF::Vocab::DC.description
-    config.restricted has_predicate: ::TERMS[:ual].restricted_collection
-    config.creators has_predicate: ::RDF::Vocab::DC.creator
-  end
-
   def path
     "#{community_id}/#{id}"
   end
