@@ -51,6 +51,14 @@ jobs:
       - name: Install Node modules
         run: yarn install
 
+      - name: Lint with Eslint
+        run: yarn lint
+
+      - name: Run Danger
+        env:
+          DANGER_GITHUB_API_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
+        run: bundle exec danger
+
       - name: Run Tests
         env:
           RAILS_ENV: test
