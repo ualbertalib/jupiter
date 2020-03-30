@@ -90,7 +90,7 @@ class DraftThesis < ApplicationRecord
       departments: thesis.departments,
       supervisors: thesis.supervisors,
       committee_members: thesis.committee_members,
-      thumbnail_id: thumbnail_file.nil? ? nil : thumbnail_file.blob_id
+      thumbnail_id: thumbnail_file&.blob_id
     }
     assign_attributes(draft_attributes)
 

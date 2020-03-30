@@ -125,7 +125,7 @@ class DraftItem < ApplicationRecord
       source: item.source,
       related_item: item.related_link,
       is_published_in_era: false,
-      thumbnail_id: thumbnail_file.nil? ? nil : thumbnail_file.blob_id
+      thumbnail_id: thumbnail_file&.blob_id
     }
     assign_attributes(draft_attributes)
 
