@@ -3,15 +3,15 @@ require 'test_helper'
 class CommunityEditTest < ActionDispatch::IntegrationTest
 
   setup do
-     # A community with a logo
-     @community1 = Community
-     .create!(title: 'Logo Community', owner_id: users(:admin).id)
-@community1.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
-               filename: 'image-sample.jpeg', content_type: 'image/jpeg'
+    # A community with a logo
+    @community1 = Community
+                  .create!(title: 'Logo Community', owner_id: users(:admin).id)
+    @community1.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
+                            filename: 'image-sample.jpeg', content_type: 'image/jpeg'
 
-# A community with no collections, no logo
-@community2 = Community
-     .create!(title: 'Empty community', owner_id: users(:admin).id)
+    # A community with no collections, no logo
+    @community2 = Community
+                  .create!(title: 'Empty community', owner_id: users(:admin).id)
   end
 
   test 'visiting the edit page for a community with a logo as an admin' do
