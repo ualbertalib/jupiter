@@ -4,7 +4,7 @@ class ThumbnailResettingTest < ApplicationSystemTestCase
 
   test "thumbnail choice doesn't reset between saves" do
     admin = users(:admin)
-    item = items(:thumbnail_resetting)
+    item = items(:admin)
 
     File.open(file_fixture('image-sample.jpeg'), 'r') do |file1|
       File.open(file_fixture('image-sample2.jpeg'), 'r') do |file2|
