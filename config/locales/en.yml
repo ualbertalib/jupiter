@@ -671,6 +671,16 @@ en:
             (<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>)'
           cco_universal_html: 'CC0 1.0 Universal
             (<a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noopener">CC0 1.0</a>)'
+          attribution_3_0_html: 'Attribution 3.0 Unported
+          (<a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener">CC BY 3.0</a>)'
+          attribution_non_commercial_3_0: 'Attribution-NonCommercial 3.0 Unported
+          (<a href="https://creativecommons.org/licenses/by-nc/3.0/" target="_blank" rel="noopener">CC BY-NC 3.0</a>)'
+          attribution_share_alike_3_0: 'Attribution-ShareAlike 3.0 Unported
+          (<a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener">CC BY-SA 3.0</a>)'
+          attribution_non_commercial_no_derivatives_3_0: 'Attribution-NonCommercial-NoDerivs 3.0 Unported
+          (<a href="https://creativecommons.org/licenses/by-nc-nd/3.0/" target="_blank" rel="noopener">CC BY-NC-ND 3.0</a>)'
+          attribution_non_commercial_share_alike_2_5: 'Attribution-NonCommercial-ShareAlike 2.5 Generic
+          (<a href="https://creativecommons.org/licenses/by-nc-sa/2.5/" target="_blank" rel="noopener">CC BY-NC-SA 2.5</a>)'
           public_domain: 'This work is in the public domain'
           public_domain_mark_html: 'Public Domain Mark 1.0
             (<a href="https://creativecommons.org/publicdomain/mark/1.0/" target="_blank" rel="noopener">Public Domain 1.0</a>)'
