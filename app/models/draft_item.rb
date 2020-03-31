@@ -112,6 +112,7 @@ class DraftItem < ApplicationRecord
         Date.parse("1/1/#{Date.current.year}")
       end
     end
+    thumbnail_file = item.files.find_by(id: item.logo_id)
     draft_attributes = {
       user_id: for_user.id,
       title: item.title,
@@ -133,7 +134,8 @@ class DraftItem < ApplicationRecord
       citations: item.is_version_of,
       source: item.source,
       related_item: item.related_link,
-      is_published_in_era: false
+      is_published_in_era: false,
+      thumbnail_id: thumbnail_file&.blob_id
     }
     assign_attributes(draft_attributes)
 
