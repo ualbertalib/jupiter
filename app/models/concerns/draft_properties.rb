@@ -38,7 +38,7 @@ module DraftProperties
 
     def thumbnail
       if thumbnail_id.present?
-        file = files.find_by(id: thumbnail_id)
+        file = files.find_by(blob_id: thumbnail_id)
         return file if file.present? # If not present, then fall below and just return first file
       end
 
