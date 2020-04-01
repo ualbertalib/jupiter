@@ -6,6 +6,10 @@ class Admin::ItemsControllerTest < ActionDispatch::IntegrationTest
     @item = items(:fancy)
     @admin = users(:admin)
     sign_in_as @admin
+
+    File.open(file_fixture('text-sample.txt'), 'r') do |file|
+      @item.add_and_ingest_files([file])
+    end
   end
 
   test 'should get items index' do
@@ -14,7 +18,7 @@ class Admin::ItemsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should destroy item and its derivatives' do
-    assert_difference(['Item.count'], -1) do
+    assert_difference(['Item.count', 'ActiveStorage::Attachment.count'], -1) do
       delete admin_item_url(@item)
     end
 
