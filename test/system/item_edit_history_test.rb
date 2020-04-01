@@ -5,7 +5,7 @@ class ItemEditHistoryTest < ApplicationSystemTestCase
   test 'can view thesis edit history' do
     with_versioning do
       admin = users(:admin)
-      thesis = thesis(:edit_thesis_history)
+      thesis = thesis(:nice)
       thesis.save
 
       # Need to add file to thesis to be able to go through editing wizard.
@@ -34,7 +34,7 @@ class ItemEditHistoryTest < ApplicationSystemTestCase
       assert_selector 'dt', text: I18n.t('edited_by')
       assert_selector 'dd', text: 'Administrator - administrator@example.com'
       assert_selector 'dt', text: 'Title'
-      assert_selector 'dd', text: 'OldNew title'
+      assert_selector 'dd', text: 'NiceNew Itemtitle'
       assert_selector 'dt', text: 'Visibility'
       assert_selector 'dd', text: 'PublicEmbargo'
       assert_selector 'dt', text: 'Embargo End Date'
@@ -49,7 +49,7 @@ class ItemEditHistoryTest < ApplicationSystemTestCase
   test 'can view item edit history' do
     with_versioning do
       admin = users(:admin)
-      item = items(:edit_item_history)
+      item = items(:admin)
       item.save
 
       # Need to add file to item to be able to go through editing wizard.
@@ -74,7 +74,7 @@ class ItemEditHistoryTest < ApplicationSystemTestCase
       assert_selector 'dt', text: I18n.t('edited_by')
       assert_selector 'dd', text: 'Administrator - administrator@example.com'
       assert_selector 'dt', text: 'Title'
-      assert_selector 'dd', text: 'OldNew title'
+      assert_selector 'dd', text: 'AdminNew Itemtitle'
       assert_selector 'dt', text: 'Member Of Paths'
       assert_selector 'dd', text: 'Fancy Community/FancyFancier Collection'
 

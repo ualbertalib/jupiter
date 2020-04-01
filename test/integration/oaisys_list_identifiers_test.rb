@@ -101,7 +101,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     end
   end
 
-  def test_list_identifiers_items_xml
+  test 'list identifers items xml' do
     get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_dc'), headers: { 'Accept' => 'application/xml' }
     assert_response :success
 
@@ -130,7 +130,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     end
   end
 
-  def test_list_identifiers_resumption_token_xml
+  test 'list identifers resumption token xml' do
     get oaisys_path + '?verb=ListIdentifiers&resumptionToken=metadataPrefix%3Doai_dc%26page%3D2',
         headers: { 'Accept' => 'application/xml' }
     assert_response :success
@@ -160,7 +160,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     end
   end
 
-  def test_list_identifiers_theses_xml
+  test 'list identifers theses xml' do
     get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_etdms'), headers: { 'Accept' => 'application/xml' }
     assert_response :success
 
@@ -186,7 +186,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     end
   end
 
-  def test_list_identifiers_item_set_xml
+  test 'list identifers item set xml' do
     get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_dc', set: @collection2.id),
         headers: { 'Accept' => 'application/xml' }
     assert_response :success
@@ -214,7 +214,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     end
   end
 
-  def test_list_identifiers_thesis_set_xml
+  test 'list identifers thesis set xml' do
     get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_etdms', set: @collection2.id),
         headers: { 'Accept' => 'application/xml' }
     assert_response :success
@@ -242,7 +242,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     end
   end
 
-  def test_list_identifiers_embargo_thesis_xml
+  test 'list identifers embargo thesis xml' do
     get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_etdms', set: @embargo_collection.id),
         headers: { 'Accept' => 'application/xml' }
     assert_response :success
@@ -258,7 +258,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     end
   end
 
-  def test_list_identifiers_item_until_date_xml
+  test 'list identifers item until date xml' do
     just_after_current_time = (Time.current + 5).utc.xmlschema
     get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_dc', set: @community.id,
                     until: just_after_current_time), headers: { 'Accept' => 'application/xml' }
@@ -286,7 +286,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     end
   end
 
-  def test_list_identifiers_thesis_until_date_xml
+  test 'list identifers thesis until date xml' do
     just_after_current_time = (Time.current + 5).utc.xmlschema
     get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_etdms', set: @community.id,
                     until: just_after_current_time), headers: { 'Accept' => 'application/xml' }
@@ -316,7 +316,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     end
   end
 
-  def test_list_identifiers_item_from_date_xml
+  test 'list identifers item from date xml' do
     just_after_current_time = (Time.current + 5).utc.xmlschema
     get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_dc', set: @community.id,
                     from: just_after_current_time), headers: { 'Accept' => 'application/xml' }
@@ -333,7 +333,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     end
   end
 
-  def test_list_identifiers_thesis_from_date_xml
+  test 'list identifers thesis from date xml' do
     just_after_current_time = (Time.current + 5).utc.xmlschema
     get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_etdms', set: @community.id,
                     from: just_after_current_time), headers: { 'Accept' => 'application/xml' }
@@ -350,7 +350,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     end
   end
 
-  def test_list_identifiers_item_from_until_date_xml
+  test 'list identifers item from until date xml' do
     item = Oaisys::Engine.config.oai_dc_model.public_items.belongs_to_path(@community.id).first
     item_creation_time = item[:record_created_at].utc.xmlschema
     just_after_item_creation_time = (item[:record_created_at] + 5.seconds).utc.xmlschema
@@ -378,7 +378,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     end
   end
 
-  def test_list_identifiers_thesis_from_until_date_xml
+  test 'list identifers thesis from until date xml' do
     thesis = Oaisys::Engine.config.oai_etdms_model.public_items.belongs_to_path(@community.id).first
     thesis_creation_time = thesis[:record_created_at].utc.xmlschema
     just_after_thesis_creation_time = (thesis[:record_created_at] + 5.seconds).utc.xmlschema

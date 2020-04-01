@@ -26,19 +26,6 @@ admin:
   subject: ['Ownership']
   member_of_paths: <%= ["#{ActiveRecord::FixtureSet.identify(:fancy_community, :uuid)}/#{ActiveRecord::FixtureSet.identify(:fancy_collection, :uuid)}"] %>
 
-edit_item_history:
-  visibility: <%= JupiterCore::VISIBILITY_PUBLIC %>
-  owner: admin
-  title: 'Old'
-  creators: ['Joe Blow']
-  created: 'Winter 2017'
-  record_created_at: <%= 5.day.ago.to_s(:db) %>
-  languages: <%= [CONTROLLED_VOCABULARIES[:language].english] %>
-  license: <%= CONTROLLED_VOCABULARIES[:license].attribution_4_0_international %>
-  item_type: <%= CONTROLLED_VOCABULARIES[:item_type].book %>
-  subject: ['Ownership']
-  member_of_paths: <%= ["#{ActiveRecord::FixtureSet.identify(:fancy_community, :uuid)}/#{ActiveRecord::FixtureSet.identify(:fancy_collection, :uuid)}"] %>
-
 private_item:
   visibility: <%= JupiterCore::VISIBILITY_PRIVATE %>
   owner: admin
@@ -64,6 +51,7 @@ old_license:
   license: <%= CONTROLLED_VOCABULARIES[:old_license].attribution_3_0_international %>
   item_type: <%= CONTROLLED_VOCABULARIES[:item_type].book %>
   subject: ['Ownership']
+  member_of_paths: <%= ["#{ActiveRecord::FixtureSet.identify(:fancy_community, :uuid)}/#{ActiveRecord::FixtureSet.identify(:fancy_collection, :uuid)}"] %>
 
 authenticated_item:
   visibility: <%= JupiterCore::VISIBILITY_AUTHENTICATED %>

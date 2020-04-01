@@ -8,7 +8,7 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
     @item3 = items(:authenticated_item)
     @item4 = items(:private_item)
 
-    Item.all.each(&:update_solr)
+    [@item1, @item2, @item3, @item4].each(&:update_solr)
   end
 
   test 'should get results in alphabetical order when no query present' do
