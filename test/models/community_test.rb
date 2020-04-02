@@ -22,7 +22,7 @@ class CommunityTest < ActiveSupport::TestCase
     assert community.to_gid.present?
 
     community.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
-                  filename: 'image-sample.jpeg', content_type: 'image/jpeg'
+                          filename: 'image-sample.jpeg', content_type: 'image/jpeg'
 
     assert community.logo.is_a?(ActiveStorage::Attached::One)
     assert_equal community.logo.filename, 'image-sample.jpeg'
@@ -40,12 +40,12 @@ class CommunityTest < ActiveSupport::TestCase
   test 'an updated logo replaces the old one' do
     community = communities(:books)
     community.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
-                  filename: 'sample1.jpeg', content_type: 'image/jpeg'
+                          filename: 'sample1.jpeg', content_type: 'image/jpeg'
 
     assert_equal community.logo.filename, 'sample1.jpeg'
 
     community.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
-                  filename: 'sample2.jpeg', content_type: 'image/jpeg'
+                          filename: 'sample2.jpeg', content_type: 'image/jpeg'
     assert_equal community.logo.filename, 'sample2.jpeg'
   end
 

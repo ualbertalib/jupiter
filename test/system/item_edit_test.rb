@@ -5,8 +5,6 @@ class ItemEditTest < ApplicationSystemTestCase
   test 'can edit item' do
     skip "this test is flapping like crazy, I think there's a timing issue with selectize_clear_all?"
     user = User.find_by(email: 'john_snow@example.com')
-
-    admin = User.find_by(email: 'administrator@example.com')
     community = communities(:books)
     collection = collections(:fantasy_books)
 
