@@ -4,7 +4,7 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
 
   setup do
     admin = User.find_by(email: 'administrator@example.com')
-    @community = Community.create!(title: 'Community', owner_id: admin.id)
+    @community = communities(:books)
     # For sorting, creation order is 'Fancy Collection 00', 'Nice Collection 01', 'Fancy Collection 02', etc. ...
     (0..10).each do |i|
       Collection.create!(title: format("#{['Fancy', 'Nice'][i % 2]} Collection %02i", i), owner_id: admin.id,

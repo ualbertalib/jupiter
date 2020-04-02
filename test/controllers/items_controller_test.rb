@@ -5,12 +5,12 @@ class ItemsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @regular_user = users(:regular)
     @admin = users(:admin)
-    @community = Community.create!(title: 'Desolate community', owner_id: @admin.id)
-    @collection = Collection.create!(community_id: @community.id, title: 'Desolate collection', owner_id: @admin.id)
+    @community = communities(:books)
+    @collection = collections(:fantasy_books)
 
     @item = Item.new(
       title: 'item to edit',
-      owner_id: users(:admin).id,
+      owner_id: @admin.id,
       creators: ['Joe Blow'],
       created: '1972-08-08',
       languages: [CONTROLLED_VOCABULARIES[:language].english],
@@ -25,7 +25,7 @@ class ItemsControllerTest < ActionDispatch::IntegrationTest
 
     @thesis = Thesis.new(
       title: 'thesis to edit',
-      owner_id: users(:admin).id,
+      owner_id: @admin.id,
       dissertant: 'Joe Blow',
       graduation_date: '2017-03-31',
       visibility: JupiterCore::Depositable::VISIBILITY_EMBARGO,

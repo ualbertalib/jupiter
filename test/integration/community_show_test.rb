@@ -16,7 +16,7 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
                             filename: 'image-sample.jpeg', content_type: 'image/jpeg'
 
     # A community with no collections
-    @community2 = Community.create!(title: 'Empty community', owner_id: users(:admin).id)
+    @community2 = communities(:community_with_no_collections)
   end
 
   test 'visiting the show page for a community with two collections as an admin' do

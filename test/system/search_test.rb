@@ -4,7 +4,7 @@ class SearchTest < ApplicationSystemTestCase
 
   setup do
     admin = User.find_by(email: 'administrator@example.com')
-    @community = Community.create!(title: 'Fancy Community', owner_id: admin.id)
+    @community = communities(:books)
     @collections = 2.times.map do |i|
       Collection.create!(community_id: @community.id,
                          title: "Fancy Collection #{i}", owner_id: admin.id)

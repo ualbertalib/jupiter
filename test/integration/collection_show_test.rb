@@ -3,6 +3,8 @@ require 'test_helper'
 # TODO: This test would be better as an System Acceptance test instead?
 class CollectionShowTest < ActionDispatch::IntegrationTest
 
+  # TODO: add tests involving non-public items
+
   setup do
     @community = communities(:fancy_community)
     @collection = collections(:fancy_collection)

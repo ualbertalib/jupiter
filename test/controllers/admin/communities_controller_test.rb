@@ -74,10 +74,7 @@ class Admin::CommunitiesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should destroy collection if has no items' do
-    community = Community.create!(
-      title: 'Nice community',
-      owner_id: @admin.id
-    )
+    community = communities(:community_with_no_collections)
 
     assert_difference('Community.count', -1) do
       delete admin_community_url(community)
@@ -88,13 +85,6 @@ class Admin::CommunitiesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should not destroy collection if has items' do
-    # Give the community a collection
-    Collection.new(
-      community_id: @community.id,
-      title: 'Nice collection',
-      owner_id: @admin.id
-    ).save!
-
     assert_no_difference('Collection.count') do
       delete admin_community_url(@community)
     end

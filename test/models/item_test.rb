@@ -3,13 +3,8 @@ require 'test_helper'
 class ItemTest < ActiveSupport::TestCase
 
   test 'a valid item can be constructed' do
-    community = Community.new(title: 'Community', owner_id: users(:admin).id,
-                              visibility: JupiterCore::VISIBILITY_PUBLIC)
-    community.save!
-    collection = Collection.new(title: 'Collection', owner_id: users(:admin).id,
-                                visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                community_id: community.id)
-    collection.save!
+    community = communities(:books)
+    collection = collections(:fantasy_books)
     item = Item.new(title: 'Item', owner_id: users(:admin).id, visibility: JupiterCore::VISIBILITY_PUBLIC,
                     created: '2017-02-02',
                     languages: [CONTROLLED_VOCABULARIES[:language].english],
@@ -322,9 +317,8 @@ class ItemTest < ActiveSupport::TestCase
     Redis.current.del Rails.application.secrets.preservation_queue_name
 
     # Setup an item...
-    community = Community.create!(title: 'Community', owner_id: users(:admin).id)
-    collection = Collection.create!(title: 'foo', owner_id: users(:regular).id,
-                                    community_id: community.id)
+    community = communities(:books)
+    collection = collections(:fantasy_books)
 
     item = Item.new(title: generate_random_string,
                     creators: [generate_random_string],
@@ -358,8 +352,8 @@ class ItemTest < ActiveSupport::TestCase
     Redis.current.del Rails.application.secrets.preservation_queue_name
 
     # Setup an item...
-    community = Community.create!(title: 'Community', owner_id: users(:admin).id)
-    collection = Collection.create!(title: 'foo', owner_id: users(:regular).id, community_id: community.id)
+    community = communities(:books)
+    collection = collections(:fantasy_books)
 
     item = Item.new(title: generate_random_string,
                     creators: [generate_random_string],
@@ -403,9 +397,9 @@ class ItemTest < ActiveSupport::TestCase
     Redis.current.del Rails.application.secrets.preservation_queue_name
 
     # Setup some items...
-    community = Community.create!(title: 'Community', owner_id: users(:admin).id)
-    collection = Collection.create!(title: 'foo', owner_id: users(:regular).id,
-                                    community_id: community.id)
+    community = communities(:books)
+    collection = collections(:fantasy_books)
+
     items = []
     3.times do
       items << Item.new(title: generate_random_string,

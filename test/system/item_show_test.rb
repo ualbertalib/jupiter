@@ -5,8 +5,8 @@ class ItemShowTest < ApplicationSystemTestCase
   setup do
     @user = User.find_by(email: 'john_snow@example.com')
     admin = User.find_by(email: 'administrator@example.com')
-    @community = Community.create!(title: 'Fancy Community', owner_id: admin.id)
-    @collection = Collection.create!(title: 'Fancy collection', owner_id: admin.id, community_id: @community.id)
+    @community = communities(:books)
+    @collection = collections(:fantasy_books)
 
     # Half items have 'Fancy' in title, others have 'Nice', distributed between the two collections
     @item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
