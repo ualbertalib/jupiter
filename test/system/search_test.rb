@@ -3,8 +3,8 @@ require 'application_system_test_case'
 class SearchTest < ApplicationSystemTestCase
 
   setup do
-    admin = User.find_by(email: 'administrator@example.com')
-    @community = communities(:books)
+    admin = users(:admin)
+    @community = Community.create!(title: 'Fancy Community', owner_id: admin.id)
     @collections = 2.times.map do |i|
       Collection.create!(community_id: @community.id,
                          title: "Fancy Collection #{i}", owner_id: admin.id)

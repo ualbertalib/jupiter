@@ -3,8 +3,8 @@ require 'application_system_test_case'
 class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
 
   setup do
-    admin = User.find_by(email: 'administrator@example.com')
-    @community = communities(:books)
+    admin = users(:admin)
+    @community = communities(:community_with_no_collections)
     # For sorting, creation order is 'Fancy Collection 00', 'Nice Collection 01', 'Fancy Collection 02', etc. ...
     (0..10).each do |i|
       Collection.create!(title: format("#{['Fancy', 'Nice'][i % 2]} Collection %02i", i), owner_id: admin.id,

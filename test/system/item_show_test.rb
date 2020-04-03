@@ -3,8 +3,8 @@ require 'application_system_test_case'
 class ItemShowTest < ApplicationSystemTestCase
 
   setup do
-    @user = User.find_by(email: 'john_snow@example.com')
-    admin = User.find_by(email: 'administrator@example.com')
+    @user = users(:regular)
+    admin = users(:admin)
     @community = communities(:books)
     @collection = collections(:fantasy_books)
 
