@@ -48,6 +48,8 @@ class ActiveSupport::TestCase
   end
 
   def teardown
+    # Clear our solr index after every test run.
+    # TODO: Maybe should look into this and only clear it out for tests that are actually testing against solr
     JupiterCore::SolrServices::Client.instance.truncate_index
   end
 

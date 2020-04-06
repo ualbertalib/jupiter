@@ -183,9 +183,6 @@ class AdminUsersShowTest < ApplicationSystemTestCase
     refute_selector 'div.jupiter-results-list li.list-group-item .media-body a', text: 'Nice Item'
 
     logout_user
-
-    # this is the cleanup for the #save above
-    JupiterCore::SolrServices::Client.instance.truncate_index
   end
 
 end

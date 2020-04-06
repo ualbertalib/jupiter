@@ -109,11 +109,6 @@ class SearchTest < ApplicationSystemTestCase
     end
   end
 
-  teardown do
-    # is clearing the database but not the index, for that it needs the following
-    JupiterCore::SolrServices::Client.instance.truncate_index
-  end
-
   test 'anybody should be able to filter the public items' do
     visit root_path
     fill_in name: 'search', with: 'Fancy'
