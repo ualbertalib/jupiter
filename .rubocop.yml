@@ -36,6 +36,12 @@ Layout/LineLength:
 Layout/RescueEnsureAlignment:
   Enabled: false
 
+Lint/RaiseException:
+  Enabled: true
+
+Lint/StructNewOverride:
+  Enabled: true
+
 # A calculated magnitude based on number of assignments,
 # branches, and conditions.
 Metrics/AbcSize:
