@@ -2,8 +2,8 @@ require 'application_system_test_case'
 
 class AdminCommunitiesIndexTest < ApplicationSystemTestCase
 
-  def setup
-    admin = User.find_by(email: 'administrator@example.com')
+  setup do
+    admin = users(:admin)
     @community = Community.create!(title: 'Community', owner_id: admin.id)
     2.times do |i|
       Collection.new(title: "Fancy Collection #{i}", owner_id: admin.id,

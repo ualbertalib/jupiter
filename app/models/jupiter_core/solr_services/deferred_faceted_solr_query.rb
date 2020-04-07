@@ -96,7 +96,7 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
               # solr. BUT, I want to track this just in case.
               msg = "Removing a stale Solr result, #{res['id']}: #{res.inspect}"
               Rollbar.warning(msg)
-              Rails.logger.warning(msg)
+              Rails.logger.warn(msg)
               JupiterCore::SolrServices::Client.instance.remove_document(res['id'])
               nil
             end

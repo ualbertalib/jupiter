@@ -9,7 +9,7 @@ class DoiServiceTest < ActiveSupport::TestCase
   test 'DOI state transitions' do
     @admin = users(:admin)
 
-    assert_no_enqueued_jobs
+    assert_no_enqueued_jobs only: DOIRemoveJob
     Rails.application.secrets.doi_minting_enabled = true
 
     community = Community.new(title: 'Community', owner_id: @admin.id,
@@ -56,7 +56,7 @@ class DoiServiceTest < ActiveSupport::TestCase
     end
 
     VCR.use_cassette('ezid_updating', erb: { id: item.id }, record: :none) do
-      assert_no_enqueued_jobs
+      assert_no_enqueued_jobs only: DOIRemoveJob
       item.tap do |uo|
         uo.title = 'Different Title'
         uo.save!
@@ -75,7 +75,7 @@ class DoiServiceTest < ActiveSupport::TestCase
     end
 
     VCR.use_cassette('ezid_updating_unavailable', erb: { id: item.id }, record: :none) do
-      assert_no_enqueued_jobs
+      assert_no_enqueued_jobs only: DOIRemoveJob
 
       item.tap do |uo|
         uo.visibility = JupiterCore::VISIBILITY_PRIVATE
@@ -93,7 +93,8 @@ class DoiServiceTest < ActiveSupport::TestCase
     end
 
     VCR.use_cassette('ezid_removal', erb: { id: item.id }, record: :none, allow_unused_http_interactions: false) do
-      assert_equal 0, Sidekiq::Worker.jobs.size
+      assert_no_enqueued_jobs only: DOIRemoveJob
+
       item.tap(&:destroy)
 
       assert_enqueued_jobs 1, only: DOIRemoveJob

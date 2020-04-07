@@ -2,16 +2,9 @@ require 'test_helper'
 
 class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
 
-  def before_all
-    super
-    @community = Community.create!(title: 'Books', description: 'a bunch of books', owner_id: users(:admin).id)
-    @collection = Collection.create!(title: 'Thesis collection',
-                                     owner_id: users(:admin).id,
-                                     restricted: true,
-                                     community_id: @community.id)
-  end
-
   setup do
+    @community = communities(:thesis)
+    @collection = collections(:thesis)
     @admin = users(:admin)
     Thesis.destroy_all
   end

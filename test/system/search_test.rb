@@ -2,8 +2,8 @@ require 'application_system_test_case'
 
 class SearchTest < ApplicationSystemTestCase
 
-  def setup
-    admin = User.find_by(email: 'administrator@example.com')
+  setup do
+    admin = users(:admin)
     @community = Community.create!(title: 'Fancy Community', owner_id: admin.id)
     @collections = 2.times.map do |i|
       Collection.create!(community_id: @community.id,
@@ -107,11 +107,6 @@ class SearchTest < ApplicationSystemTestCase
         uo.save!
       end
     end
-  end
-
-  def teardown
-    # is clearing the database but not the index, for that it needs the following
-    JupiterCore::SolrServices::Client.instance.truncate_index
   end
 
   test 'anybody should be able to filter the public items' do

@@ -5,11 +5,7 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
 
   include AipHelper
 
-  # Transactional tests were creating a problem where a collection defined as a
-  # fixture would only be found sometimes (a race condition?)
-  self.use_transactional_tests = false
-
-  def setup
+  setup do
     @system_user = users(:system_user)
     @regular_user = users(:regular)
     @private_thesis = thesis(:private)

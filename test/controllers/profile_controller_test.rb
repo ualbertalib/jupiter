@@ -2,20 +2,9 @@ require 'test_helper'
 
 class ProfileControllerTest < ActionDispatch::IntegrationTest
 
-  def before_all
-    super
-    @community = Community.create!(title: 'Books', description: 'a bunch of books', owner_id: users(:admin).id)
-    @item_collection = Collection.create!(title: 'Fantasy Books',
-                                          description: 'some fantasy books',
-                                          owner_id: users(:admin).id,
-                                          community_id: @community.id)
-    @theses_collection = Collection.create!(title: 'Thesis collection',
-                                            owner_id: users(:admin).id,
-                                            restricted: true,
-                                            community_id: @community.id)
-  end
-
   setup do
+    @item_collection = collections(:fantasy_books)
+    @theses_collection = collections(:thesis)
     @admin = users(:admin)
     @user = users(:regular)
   end
@@ -40,11 +29,11 @@ class ProfileControllerTest < ActionDispatch::IntegrationTest
         subjects: ['Best Seller', 'Adventure'],
         date_created: Date.current,
         description: 'Really random description about this random book',
-        community_id: [@community.id],
+        community_id: [@item_collection.community_id],
         collection_id: [@item_collection.id]
       }
     }
-    # debugger
+
     get profile_url
     assert_includes @response.body, 'Random Book'
   end
@@ -60,7 +49,7 @@ class ProfileControllerTest < ActionDispatch::IntegrationTest
         graduation_year: 2018,
         graduation_term: '06',
         description: 'Really random description about this random thesis',
-        community_id: [@community.id],
+        community_id: [@theses_collection.community_id],
         collection_id: [@theses_collection.id]
       }
     }

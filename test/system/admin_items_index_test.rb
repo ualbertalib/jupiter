@@ -4,7 +4,7 @@ class AdminItemsIndexTest < ApplicationSystemTestCase
 
   test 'should be able to view all items/theses owned by anybody' do
     # Note: searching and faceting is covered more extensively in tests elsewhere
-    admin = User.find_by(email: 'administrator@example.com')
+    admin = users(:admin)
 
     # creating the index from the fixtures requires a save
     # TODO: these would be good candidates for using factories instead.

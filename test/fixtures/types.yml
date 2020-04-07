@@ -1,26 +1,24 @@
-article_published:
-  name: 'article_published'
-article_submitted:
-  name: 'article_submitted'
 book:
   name: 'book'
-chapter:
-  name: 'chapter'
+book_chapter:
+  name: 'book_chapter'
+conference_workshop_poster:
+  name: 'conference_workshop_poster'
+conference_workshop_presentation:
+  name: 'conference_workshop_presentation'
+dataset:
+  name: 'dataset'
 image:
   name: 'image'
+journal_article_draft:
+  name: 'journal_article_draft'
+journal_article_published:
+  name: 'journal_article_published'
+learning_object:
+  name: 'learning_object'
 report:
   name: 'report'
 research_material:
-  name: 'research_material'
-conference_workshop_presentation:
-  name: 'conference_workshop_presentation'
-conference_workshop_poster:
-  name: 'conference_workshop_poster'
-dataset:
-  name: 'dataset'
+  name:  'research_material'
 review:
   name: 'review'
-learning_object:
-  name: 'learning_object'
-thesis:
-  name: 'thesis'
