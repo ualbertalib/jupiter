@@ -2,10 +2,9 @@ require 'test_helper'
 
 class CollectionsControllerTest < ActionDispatch::IntegrationTest
 
-  def before_all
-    super
-    @community = Community.create!(title: 'Nice community', owner_id: users(:admin).id)
-    @collection = Collection.create!(title: 'Nice collection', owner_id: users(:admin).id, community_id: @community.id)
+  setup do
+    @community = communities(:books)
+    @collection = collections(:fantasy_books)
   end
 
   test 'should show collection' do

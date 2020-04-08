@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_29_044248) do
+ActiveRecord::Schema.define(version: 2020_04_03_231907) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -116,7 +116,7 @@ ActiveRecord::Schema.define(version: 2020_01_29_044248) do
     t.json "citations", array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "is_published_in_era", default: false
+    t.boolean "is_published_in_era", default: false, null: false
     t.index ["id"], name: "index_draft_items_on_id", unique: true
     t.index ["type_id"], name: "index_draft_items_on_type_id"
     t.index ["user_id"], name: "index_draft_items_on_user_id"
@@ -160,7 +160,7 @@ ActiveRecord::Schema.define(version: 2020_01_29_044248) do
     t.json "committee_members", array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "is_published_in_era", default: false
+    t.boolean "is_published_in_era", default: false, null: false
     t.index ["id"], name: "index_draft_theses_on_id", unique: true
     t.index ["institution_id"], name: "index_draft_theses_on_institution_id"
     t.index ["language_id"], name: "index_draft_theses_on_language_id"
@@ -174,6 +174,7 @@ ActiveRecord::Schema.define(version: 2020_01_29_044248) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["uid", "provider"], name: "index_identities_on_uid_and_provider", unique: true
+    t.index ["user_id", "provider"], name: "index_identities_on_user_id_and_provider", unique: true
     t.index ["user_id"], name: "index_identities_on_user_id"
   end
 
@@ -314,12 +315,14 @@ ActiveRecord::Schema.define(version: 2020_01_29_044248) do
     t.string "previous_sign_in_ip"
     t.datetime "last_seen_at"
     t.string "last_seen_ip"
+    t.string "api_key_digest"
+    t.boolean "system", default: false, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
   create_table "versions", force: :cascade do |t|
     t.string "item_type", null: false
-    t.bigint "item_id", null: false
+    t.uuid "item_id", null: false
     t.string "event", null: false
     t.string "whodunnit"
     t.text "object"

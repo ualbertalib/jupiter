@@ -1,6 +1,6 @@
 class DraftThesis < ApplicationRecord
 
-  scope :drafts, -> { where(is_published_in_era: false).or(where(is_published_in_era: nil)) }
+  scope :drafts, -> { where(is_published_in_era: false) }
 
   include DraftProperties
 
@@ -29,9 +29,12 @@ class DraftThesis < ApplicationRecord
   belongs_to :language, optional: true
   belongs_to :institution, optional: true
 
-  validates :title, :description, :creator,
-            :member_of_paths, :graduation_year,
+  validates :title, :creator, :member_of_paths, :graduation_year,
             presence: true, if: :validate_describe_thesis?
+
+  validates :description, presence: true,
+                          if: [:validate_describe_thesis?,
+                               :description_required?]
 
   validate :communities_and_collections_presence,
            :communities_and_collections_existence,
@@ -64,6 +67,7 @@ class DraftThesis < ApplicationRecord
   end
 
   def update_from_fedora_thesis(thesis, for_user)
+    thumbnail_file = thesis.files.find_by(id: thesis.logo_id)
     draft_attributes = {
       user_id: for_user.id,
       title: thesis.title,
@@ -85,7 +89,8 @@ class DraftThesis < ApplicationRecord
       specialization: thesis.specialization,
       departments: thesis.departments,
       supervisors: thesis.supervisors,
-      committee_members: thesis.committee_members
+      committee_members: thesis.committee_members,
+      thumbnail_id: thumbnail_file&.blob_id
     }
     assign_attributes(draft_attributes)
 
@@ -179,6 +184,10 @@ class DraftThesis < ApplicationRecord
     raise ArgumentError, "No draft institution found for code: #{code}" if institution.blank?
 
     institution
+  end
+
+  def description_required?
+    graduation_year.nil? || (graduation_year >= 2009)
   end
 
   private

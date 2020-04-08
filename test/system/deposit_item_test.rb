@@ -108,10 +108,6 @@ class DepositItemTest < ApplicationSystemTestCase
     assert_not_nil item_results.first['embargo_history_ssim']
 
     logout_user
-
-    # This method will add an item that exists in Solr with the member of paths matching the books/fantasy_books communities/collections fixtures
-    # in order for the other test to work we need to clean this out.
-    JupiterCore::SolrServices::Client.instance.truncate_index
   end
 
   test 'should populate community and collection when coming from collection page' do

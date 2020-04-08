@@ -10,8 +10,8 @@ class Admin::CommunitiesController < Admin::AdminController
         render template: 'communities/index'
       end
       format.json do
-        community_title_index = Community.solr_name_for(:title, role: :search)
-        collection_title_index = Collection.solr_name_for(:title, role: :search)
+        community_title_index = Community.solr_exporter_class.solr_name_for(:title, role: :search)
+        collection_title_index = Collection.solr_exporter_class.solr_name_for(:title, role: :search)
         @communities = JupiterCore::Search.faceted_search(q: "#{community_title_index}:#{params[:search]}*",
                                                           models: [Community],
                                                           as: current_user)

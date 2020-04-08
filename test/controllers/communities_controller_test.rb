@@ -2,11 +2,8 @@ require 'test_helper'
 
 class CommunitiesControllerTest < ActionDispatch::IntegrationTest
 
-  def before_all
-    super
-    @community = Community.new(title: 'Nice community',
-                               owner_id: users(:admin).id)
-    @community.save!
+  setup do
+    @community = communities(:books)
   end
 
   test 'should get index' do

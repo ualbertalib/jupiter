@@ -104,7 +104,7 @@ class JupiterCore::Depositable < ApplicationRecord
   end
   # rubocop:enable Naming/AccessorMethodName
 
-  def thumbnail_url(args = { resize: '100x100', auto_orient: true })
+  def thumbnail_path(args = { resize: '100x100', auto_orient: true })
     logo = files.find_by(id: logo_id)
     return nil if logo.blank?
 

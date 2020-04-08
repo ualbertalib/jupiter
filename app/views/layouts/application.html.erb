@@ -26,7 +26,7 @@
     <meta property="og:locale"       content="en_US">
     <meta property="og:title"        content="<%= page_title %>">
     <meta property="og:description"  content="<%= page_description %>">
-    <meta property="og:image"        content="<%= request.base_url + page_image %>">
+    <meta property="og:image"        content="<%= page_image_url %>">
 
     <%#  Twitter Card - https://dev.twitter.com/cards/types/summary %>
     <meta name="twitter:card"        content="summary">
@@ -34,17 +34,16 @@
     <meta name="twitter:url"         content="<%= canonical_href %>">
     <meta name="twitter:title"       content="<%= page_title %>">
     <meta name="twitter:description" content="<%= page_description %>">
-    <meta name="twitter:image"       content="<%= request.base_url + page_image %>">
+    <meta name="twitter:image"       content="<%= page_image_url %>">
 
     <%= yield(:extra_social_meta) %>
 
     <%= csrf_meta_tags %>
 
-    <%# TODO: Investigate CSP when more documentation with doing js.erb/turbolinks etc. %>
-    <%#= csp_meta_tag %>
+    <%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'application', defer: true, 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
 
     <%= render partial: 'analytics' %>
 

@@ -45,12 +45,12 @@ module PageLayoutHelper
   # rubocop:enable Rails/HelperInstanceVariable
 
   # rubocop:disable Rails/HelperInstanceVariable
-  def page_image
-    default_url = image_url('era-logo.png')
+  def page_image_url
+    default_url = asset_pack_url('media/images/era-logo.png')
     # We only have images on community and item/thesis show pages
-    image_url = @community&.thumbnail_url || @item&.thumbnail_url
+    image_path = @community&.thumbnail_path || @item&.thumbnail_path
 
-    image_url || default_url
+    image_path ? request.base_url + image_path : default_url
   end
   # rubocop:enable Rails/HelperInstanceVariable
 

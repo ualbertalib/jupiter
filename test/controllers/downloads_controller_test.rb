@@ -2,54 +2,22 @@ require 'test_helper'
 
 class DownloadsControllerTest < ActionDispatch::IntegrationTest
 
-  def before_all
-    super
-    community = Community.create!(title: 'Nice community', owner_id: users(:admin).id)
-    collection = Collection.create!(title: 'Nice collection', owner_id: users(:admin).id, community_id: community.id)
-    item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                    owner_id: users(:admin).id, title: 'Fancy Item',
-                    creators: ['Joe Blow'],
-                    created: '1938-01-02',
-                    languages: [CONTROLLED_VOCABULARIES[:language].english],
-                    item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                    publication_status:
-                                               [CONTROLLED_VOCABULARIES[:publication_status].published],
-                    license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                    subject: ['Items']).tap do |uo|
-      uo.add_to_path(community.id, collection.id)
-      uo.save!
+  setup do
+    item = items(:fancy)
+
+    File.open(file_fixture('text-sample.txt'), 'r') do |file|
+      item.add_and_ingest_files([file])
     end
 
-    Sidekiq::Testing.inline! do
-      File.open(file_fixture('text-sample.txt'), 'r') do |file|
-        item.add_and_ingest_files([file])
-      end
+    @file = item.reload.files.first
+
+    item_requiring_authentication = items(:authenticated_item)
+
+    File.open(file_fixture('text-sample.txt'), 'r') do |file|
+      item_requiring_authentication.add_and_ingest_files([file])
     end
 
-    @file = item.files.first
-
-    item_requiring_authentication = Item.new(
-      title: 'item to download',
-      owner_id: users(:admin).id,
-      creators: ['Joe Blow'],
-      created: '1972-08-08',
-      languages: [CONTROLLED_VOCABULARIES[:language].english],
-      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-      visibility: JupiterCore::VISIBILITY_AUTHENTICATED,
-      item_type: CONTROLLED_VOCABULARIES[:item_type].book,
-      subject: ['Download']
-    ).tap do |uo|
-      uo.add_to_path(community.id, collection.id)
-      uo.save!
-    end
-
-    Sidekiq::Testing.inline! do
-      File.open(file_fixture('text-sample.txt'), 'r') do |file|
-        item_requiring_authentication.add_and_ingest_files([file])
-      end
-    end
-
-    @file_requiring_authentication = item_requiring_authentication.files.first
+    @file_requiring_authentication = item_requiring_authentication.reload.files.first
   end
 
   test 'file should be viewable with proper headings' do

@@ -157,11 +157,12 @@ class Aip::V1::AipController < ApplicationController
     result = { files: [] }
 
     @entity.files.each do |file|
-      # Consider using olive branch for formating response with camel case keys
+      # TODO: Consider using olive branch for formating response with camel case keys
       entry = {
         file_name: file.blob.filename,
         file_path: ActiveStorage::Blob.service.send(:path_for, file.blob.key),
-        file_uuid: file.fileset_uuid
+        file_uuid: file.fileset_uuid,
+        file_checksum: file.blob.checksum
       }
 
       result[:files] << entry

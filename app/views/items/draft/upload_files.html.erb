@@ -4,7 +4,7 @@
   <%= render partial: 'progress_bar' %>
 
   <h2 class="mt-3">
-    <%= fa_icon t('.header_icon') %>
+    <%= icon(t('.header_icon_type'), t('.header_icon')) %>
     <%= t('.header') %>
   </h2>
 
@@ -29,7 +29,7 @@
     <div class="row">
       <div class="col">
         <button type="button" class="btn btn-primary js-add-files">
-          <%= fa_icon 'files-o' %>
+          <%= icon('far', 'copy') %>
           <%= t('.attach_files') %>
         </button>
       </div>
@@ -82,12 +82,12 @@
 
     <div class="mt-3 d-flex flex-wrap justify-content-end">
       <%= link_to previous_wizard_path, class: 'btn btn-secondary mr-2 mb-2 mb-md-0' do %>
-        <%= fa_icon 'chevron-left' %>
+        <%= icon('fas', 'chevron-left') %>
         <%= t('items.draft.previous') %>
       <% end %>
       <%= button_tag type: :submit, class: 'btn btn-primary' do %>
         <%= t('items.draft.save_and_continue') %>
-        <%= fa_icon 'chevron-right' %>
+        <%= icon('fas', 'chevron-right') %>
       <% end %>
     </div>
   <% end %>

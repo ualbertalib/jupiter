@@ -32,8 +32,7 @@ module DraftFilesActions
   def set_thumbnail
     authorize @draft, :set_thumbnail? if needs_authorization?
 
-    @draft.thumbnail_id = params[:id]
-
+    @draft.thumbnail_id = @draft.files.find_by(id: params[:id]).blob_id
     if @draft.save
       render :update_files_list
     else

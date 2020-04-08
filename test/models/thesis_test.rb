@@ -2,41 +2,28 @@ require 'test_helper'
 
 class ThesisTest < ActiveSupport::TestCase
 
-  def before_all
-    super
-    Thesis.destroy_all
-  end
-
   test 'a valid item can be constructed' do
     admin = users(:admin)
-    community = Community.new(title: 'Community', owner_id: admin.id,
-                              visibility: JupiterCore::VISIBILITY_PUBLIC)
-    community.save!
-    collection = Collection.new(title: 'Collection', owner_id: admin.id,
-                                visibility: JupiterCore::VISIBILITY_PUBLIC,
-                                community_id: community.id)
-    collection.tap(&:save!)
-    thesis = Thesis.new(title: 'Thesis', owner_id: admin.id, visibility: JupiterCore::VISIBILITY_PUBLIC,
-                        dissertant: 'Joe Blow',
-                        departments: ['Physics', 'Non-physics'],
-                        supervisors: ['Billy (Physics)', 'Sally (Non-physics)'],
-                        graduation_date: 'Fall 2013')
-    thesis.tap do |unlocked_thesis|
-      unlocked_thesis.add_to_path(community.id, collection.id)
-      unlocked_thesis.save!
+    community = communities(:books)
+    collection = collections(:fantasy_books)
+    assert_difference('Thesis.count') do
+      thesis = Thesis.new(title: 'Thesis', owner_id: admin.id, visibility: JupiterCore::VISIBILITY_PUBLIC,
+                          dissertant: 'Joe Blow',
+                          departments: ['Physics', 'Non-physics'],
+                          supervisors: ['Billy (Physics)', 'Sally (Non-physics)'],
+                          graduation_date: 'Fall 2013')
+      thesis.tap do |unlocked_thesis|
+        unlocked_thesis.add_to_path(community.id, collection.id)
+        unlocked_thesis.save!
+      end
     end
     assert thesis.valid?
-    assert_not_equal 0, Thesis.public_items.count
-    assert_equal thesis.id, Thesis.public_items.first.id
-
-    thesis.tap(&:destroy)
   end
 
   test 'there is no default visibility' do
     thesis = Thesis.new
 
     assert_nil thesis.visibility
-    assert_equal 0, Thesis.public_items.count
   end
 
   test 'unknown visibilities are not valid' do
@@ -47,7 +34,6 @@ class ThesisTest < ActiveSupport::TestCase
     end
 
     assert_not thesis.valid?
-    assert_equal 0, Thesis.public_items.count
     assert thesis.errors[:visibility].present?
     assert_includes thesis.errors[:visibility], 'some_fake_visibility is not a known visibility'
   end
@@ -99,7 +85,6 @@ class ThesisTest < ActiveSupport::TestCase
     end
 
     assert_not thesis.valid?
-    assert_equal 0, Thesis.public_items.count
     assert thesis.errors[:visibility_after_embargo].present?
     assert_includes thesis.errors[:visibility_after_embargo], "can't be blank"
   end

@@ -2,8 +2,6 @@ class Community < JupiterCore::Depositable
 
   acts_as_rdfable
 
-  scope :drafts, -> { where(is_published_in_era: false).or(where(is_published_in_era: nil)) }
-
   has_solr_exporter Exporters::Solr::CommunityExporter
 
   belongs_to :owner, class_name: 'User'
@@ -51,7 +49,7 @@ class Community < JupiterCore::Depositable
   end
 
   # compatibility with item thumbnail API
-  def thumbnail_url(args = { resize: '100x100', auto_orient: true })
+  def thumbnail_path(args = { resize: '100x100', auto_orient: true })
     return nil if logo_attachment.blank?
 
     Rails.application.routes.url_helpers.rails_representation_path(logo_attachment.variant(args).processed)

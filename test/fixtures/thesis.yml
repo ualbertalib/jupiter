@@ -5,7 +5,9 @@ nice:
   dissertant: 'Joe Blow'
   graduation_date: '2019'
   record_created_at: <%= 5.day.ago.to_s(:db) %>
-  member_of_paths: <%= ["#{ActiveRecord::FixtureSet.identify(:fancy_community, :uuid)}/#{ActiveRecord::FixtureSet.identify(:fancy_collection, :uuid)}"] %>
+  abstract: 'This is my abstract'
+  member_of_paths: <%= ["#{ActiveRecord::FixtureSet.identify(:thesis, :uuid)}/#{ActiveRecord::FixtureSet.identify(:thesis, :uuid)}"] %>
+
 private:
   visibility: <%= JupiterCore::VISIBILITY_PRIVATE %>
   owner: admin
@@ -13,4 +15,5 @@ private:
   dissertant: 'Joe Blow'
   graduation_date: '2019'
   record_created_at: <%= 5.day.ago.to_s(:db) %>
-  member_of_paths: <%= ["#{ActiveRecord::FixtureSet.identify(:fancy_community, :uuid)}/#{ActiveRecord::FixtureSet.identify(:fancy_collection, :uuid)}"] %>
+  abstract: 'This is my abstract'
+  member_of_paths: <%= ["#{ActiveRecord::FixtureSet.identify(:thesis, :uuid)}/#{ActiveRecord::FixtureSet.identify(:thesis, :uuid)}"] %>

@@ -19,7 +19,7 @@ config_files.each do |file|
       uri_mappings[uri]
     end
     vocab.define_singleton_method(:method_missing) do |name, *args, &block|
-      super(name, *args, &block) || (raise "Unknown #{vocab_name} key: #{name}")
+      super(name, *args, &block) || (raise JupiterCore::VocabularyMissingError, "Unknown #{vocab_name} key: #{name}")
     end
   end
 end

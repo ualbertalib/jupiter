@@ -91,17 +91,19 @@
         aria-expanded="false"
         aria-controls="more-information-hidden"
         class="btn btn-outline-secondary mb-3 js-more-information-btn font-italic">
-    <span class="js-hidden-text">
+    <span class="js-more-information-hidden">
       <%= t(:more_information) %>
-      <%= fa_icon('chevron-down')%>
+      <%= icon('fas', 'chevron-down') %>
     </span>
 
-    <span class="d-none js-shown-text">
+    <span class="d-none js-more-information-shown">
       <%= t(:show_less) %>
-      <%= fa_icon('chevron-up')%>
+      <%= icon('fas', 'chevron-up')%>
     </span>
 </button>
 
 <div class="collapse" id='more-information-hidden'>
   <%= render partial: 'item_more_information' %>
 </div>
+
+<%= render partial: 'edit_history' %>

@@ -3,31 +3,33 @@ module ImagesHelper
   def file_icon(content_type)
     case content_type
     when /^image/
-      'file-image-o'
+      'file-image'
     when /^audio/
-      'file-audio-o'
+      'file-audio'
     when /^video/
-      'file-video-o'
+      'file-video'
     when /^text/
-      'file-text-o'
+      'file-alt'
     when /pdf/
-      'file-pdf-o'
+      'file-pdf'
     when /zip/
-      'file-archive-o'
+      'file-archive'
     when /(excel|sheet)/
-      'file-excel-o'
+      'file-excel'
     when /(powerpoint|presentation)/
-      'file-powerpoint-o'
+      'file-powerpoint'
     when /word/
-      'file-word-o'
+      'file-word'
     else
-      'file-o'
+      'file'
     end
   end
 
   def safe_thumbnail_tag(thumbnail, image_tag_options)
     image_tag_options[:class] = 'j-thumbnail img-thumbnail'
-    image_tag_options[:onerror] = 'default_thumbnail(this)'
+    image_tag_options[:onerror] = "this.onerror=null;this.src='#{
+      asset_pack_url('media/images/era-logo-without-text.png')
+    }';"
 
     image_tag(thumbnail, image_tag_options)
   end

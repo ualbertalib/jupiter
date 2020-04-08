@@ -1,10 +1,21 @@
 # Jupiter
 
 [![Build Status](https://travis-ci.org/ualbertalib/jupiter.svg?branch=master)](https://travis-ci.org/ualbertalib/jupiter)
+[![Github Build Status](https://github.com/ualbertalib/jupiter/workflows/CI/badge.svg)](https://github.com/ualbertalib/jupiter/actions)
 
 # Architecture
 
 ![Jupiter Architecture Diagram](docs/jupiter_architecture.png)
+
+**Requirements:**
+
+- **Ruby** 2.5+
+- **PostgreSQL**
+- **Redis**
+- **Solr**
+- **ImageMagick**
+- **Node.js** 10.13.0+
+- **Yarn**
 
 # Generate Documentation
 
@@ -51,10 +62,12 @@ The UAT server is accessible on all library staff workstation, and through VPN o
 # Docker
 This project comes with a docker setup to easily setup your own local development environment for jupiter in just a few steps.
 
-## Step 1: Make sure you have docker and docker-compose installed:
+## Step 1: Make sure you have docker, docker-compose, git and Ruby  installed:
 
 1. [Install Docker](https://docs.docker.com/engine/installation/) (Requires version 1.13.0+)
 2. [Install Docker Compose](https://docs.docker.com/compose/install/) (Requires version 1.10.0+)
+3. Install git
+4. Install Ruby (v2.6+)
 
 ### Still need more help? Check out the following
 
@@ -77,59 +90,74 @@ cd jupiter
 
 ## Step 3: Start docker and docker compose
 
-### For development environment
-To build, create, start and setup your docker containers simply run:
+We use docker for provisioning all of our datastores we require for jupiter (solr/postgres/redis)
+
+To start and setup your docker containers simply
 ```shell
-docker-compose build
+docker-compose -f docker-compose.yml up -d
 ```
 
+## Step 4: Bundle install project's dependencies
+
 ```shell
-docker-compose up -d
+bundle install
 ```
 
-Now everything should be up and running. If you need seed data for your database, then run the following command:
+
+## Step 5: Setup Database
+
 ```shell
-docker-compose run web rails db:seed
+bundle exec rails db:prepare
 ```
+
+
+## Step 6: Start the Rails server
+
+```shell
+bin/rails s
+```
+
+Now everything should be up and running!
 
 ## Step 4: Open and view Jupiter!
 Now everything is ready, you can go and view Jupiter! Just open your favorite browser and go to the following url:
 
   - Development environment: [localhost:3000](http://localhost:3000)
 
+
+## Docker compose demo edition
+
+Want to quickly try out and explore Jupiter? This project comes with a demo docker setup to easily setup your own local development environment for jupiter in just a few steps.
+
+
+## Step 1: Get Jupiter source code
+Clone the Jupiter repository from github:
+```shell
+git clone git@github.com:ualbertalib/jupiter.git
+cd jupiter
+```
+
+## Step 2: Start docker and docker compose
+
+To build, create, start and setup your docker containers simply run:
+```shell
+docker-compose -f docker-compose.demo.yml build
+```
+
+```shell
+docker-compose -f docker-compose.demo.yml up -d
+```
+
+Now everything should be up and running!
+
+## Step 3: Open and view Jupiter!
+Now everything is ready, you can go and view Jupiter! Just open your favorite browser and go to the following url:
+
+[localhost:3000](http://localhost:3000)
+
 (Note: ip address may be different if you are using `docker-machine`)
 
-## Want to run the test suite in docker?
-
-1. Start up all the docker containers, like you did above (if its not already running):
-
-  ```shell
-  docker-compose up -d
-  ```
-3. Then you can run the test suite:
-  ```shell
-  docker-compose run web rails test
-  ```
-4. Run system tests or rubocop? Just change the command:
-  ```shell
-  docker-compose run web rails test:system
-  ```
-
-  ```shell
-  docker-compose run web rubocop
-  ```
-
-## Docker compose lightweight edition
-
-If you want to develop in rails locally on your own machine, there is also a `docker-compose.lightweight.yml` provided. This will give you the datastores you require (solr/fedora) and potentially others if you need them (postgres/redis (commented out by default)). Just run:
-  ```shell
-  docker-compose -f docker-compose.lightweight.yml up -d
-  ```
-And everything else is how you would normally develop in a rails project.
-
-(See other sections of this README for more information about developing in a rails project environment)
-
-## For deployment (on UAT environment)
+## For production deployment (on UAT environment)
 To setup the environment variables needed for deployment, modify the sample .env_deployment file with variable values needed for the deployment:
 ```shell
 cp .env_deployment_sample .env_deployment
@@ -137,12 +165,12 @@ vi .env_deployment
 ```
 To build, create, start and setup your docker containers simply run:
 ```shell
-docker-compose -f docker-compose.deployment.yml up -d
+docker-compose -f docker-compose.production.yml up -d
 ```
 
 For the first time of the deployment, set up the database:
 ```shell
-docker-compose run web rails db:setup
+docker-compose -f docker-compose.production.yml run web rails db:setup
 ```
 
 ## Common gotchas for docker?

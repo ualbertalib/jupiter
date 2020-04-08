@@ -2,8 +2,21 @@ require 'test_helper'
 
 class PageLayoutHelperTest < ActionView::TestCase
 
+  include Webpacker::Helper
+
+  attr_reader :request
+
+  setup do
+    @request = Class.new do
+      def base_url
+        'https://example.com'
+      end
+    end.new
+  end
+
   # page_title
 
+  # page_title
   test 'should return the page title when given one' do
     assert_equal t('site_name'), page_title(t('site_name'))
   end
@@ -62,25 +75,25 @@ class PageLayoutHelperTest < ActionView::TestCase
     assert_equal 'Bold Text: &amp; "Header"', page_description
   end
 
-  # page_image
+  # page_image_url
 
-  test 'page_image defaults to the jupiter logo' do
-    assert_equal image_url('era-logo.png'), page_image
+  test 'page_image_url defaults to the jupiter logo' do
+    assert_equal asset_pack_url('media/images/era-logo.png'), page_image_url
   end
 
-  test 'page_image should return default image on community/item with no logo' do
-    @community = Community.create!(title: 'Random community', owner_id: users(:admin).id)
+  test 'page_image_url should return default image on community/item with no logo' do
+    @community = communities(:books)
 
-    assert_equal image_url('era-logo.png'), page_image
+    assert_equal asset_pack_url('media/images/era-logo.png'), page_image_url
   end
 
-  test 'page_image should return community/item logo' do
-    @community = Community.create!(title: 'Random community', owner_id: users(:admin).id)
+  test 'page_image_url should return community/item logo' do
+    @community = communities(:books)
 
     @community.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
                            filename: 'image-sample.jpeg', content_type: 'image/jpeg'
 
-    assert_equal page_image, @community.thumbnail_url
+    assert_equal page_image_url, request.base_url + @community.thumbnail_path
   end
 
   test 'canonical_href is returning the correct canoncial url' do
