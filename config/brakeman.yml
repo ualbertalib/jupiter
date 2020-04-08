@@ -1,0 +1,5 @@
+---
+:run_all_checks: true
+:skip_checks:
+        - CheckUnscopedFind
+:github_repo: ualbertalib/jupiter
