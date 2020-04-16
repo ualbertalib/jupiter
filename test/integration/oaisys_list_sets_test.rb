@@ -6,28 +6,10 @@ class OaisysListSetsTest < ActionDispatch::IntegrationTest
 
   setup do
     @routes = Oaisys::Engine.routes
-    Oaisys::Engine.config.items_per_request = 5
+    Oaisys::Engine.config.items_per_request = 3
   end
 
-  def before_all
-    super
-    Item.destroy_all
-    Thesis.destroy_all
-    Community.destroy_all
-    Collection.destroy_all
-    @community = Community.create!(title: 'Fancy Community', owner_id: users(:admin).id)
-
-    @collections = 5.times.map do |i|
-      Collection.create!(community_id: @community.id,
-                         title: 'Fancy Collection ' + i.to_s, owner_id: users(:admin).id,
-                         description: 'Fancy Description ' + i.to_s)
-    end
-    Collection.create!(community_id: @community.id,
-                       title: 'Fancy Collection 6', owner_id: users(:admin).id,
-                       description: '')
-  end
-
-  def test_list_sets_resumption_token_xml
+  test 'test_list_sets_resumption_token_xml' do
     get oaisys_path(verb: 'ListSets'), headers: { 'Accept' => 'application/xml' }
     assert_response :success
 
@@ -47,7 +29,7 @@ class OaisysListSetsTest < ActionDispatch::IntegrationTest
           assert_select 'set' do
             assert_select 'setSpec', community_id + ':' + id
             assert_select 'setName', top_level_sets.find { |a| a[0] == community_id }[1] + ' / ' + title
-            unless description.empty?
+            if description.present?
               assert_select 'setDescription' do
                 assert_select 'oai_dc|dc' do
                   assert_select 'dc|description', description
@@ -86,7 +68,7 @@ class OaisysListSetsTest < ActionDispatch::IntegrationTest
           assert_select 'set' do
             assert_select 'setSpec', community_id + ':' + id
             assert_select 'setName', top_level_sets.find { |a| a[0] == community_id }[1] + ' / ' + title
-            unless description.empty?
+            if description.present?
               assert_select 'setDescription' do
                 assert_select 'oai_dc|dc' do
                   assert_select 'dc|description', description
@@ -105,7 +87,7 @@ class OaisysListSetsTest < ActionDispatch::IntegrationTest
         headers: { 'Accept' => 'application/xml' }
 
     # Test expiration of resumption token when results change.
-    Collection.create!(community_id: @community.id,
+    Collection.create!(community_id: communities(:books).id,
                        title: 'Fancy Collection 7', owner_id: users(:admin).id,
                        description: '')
 

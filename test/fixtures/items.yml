@@ -5,6 +5,7 @@ fancy:
   creators: ['Joe Blow']
   created: 'Fall 2017'
   record_created_at: <%= 5.day.ago.to_s(:db) %>
+  updated_at: <%= 5.day.ago.to_s(:db) %>
   languages: <%= [CONTROLLED_VOCABULARIES[:language].english] %>
   license: <%= CONTROLLED_VOCABULARIES[:license].attribution_4_0_international %>
   item_type: <%= CONTROLLED_VOCABULARIES[:item_type].article %>
@@ -19,6 +20,7 @@ admin:
   creators: ['Joe Blow']
   created: 'Winter 2017'
   record_created_at: <%= 5.day.ago.to_s(:db) %>
+  updated_at: <%= 5.day.from_now.to_s(:db) %>
   languages: <%= [CONTROLLED_VOCABULARIES[:language].english] %>
   license: <%= CONTROLLED_VOCABULARIES[:license].attribution_4_0_international %>
   item_type: <%= CONTROLLED_VOCABULARIES[:item_type].book %>
