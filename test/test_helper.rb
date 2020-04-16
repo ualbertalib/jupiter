@@ -35,10 +35,6 @@ Sidekiq::Testing.fake!
 
 class ActiveSupport::TestCase
 
-  # Run tests in parallel with specified workers
-  # TODO: Enable this after test cleanup: https://github.com/ualbertalib/jupiter/issues/1445
-  # parallelize(workers: :number_of_processors)
-
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
 
