@@ -8,6 +8,7 @@ require 'sidekiq/testing'
 require 'vcr'
 require 'webmock/minitest'
 
+
 VCR.configure do |config|
   config.cassette_library_dir = 'test/vcr'
   config.hook_into :webmock
@@ -34,10 +35,12 @@ end
 Sidekiq::Testing.fake!
 
 class ActiveSupport::TestCase
-
   # Run tests in parallel with specified workers
-  # TODO: Enable this after test cleanup: https://github.com/ualbertalib/jupiter/issues/1445
-  # parallelize(workers: :number_of_processors)
+  parallelize(workers: :number_of_processors)
+
+  parallelize_setup do |worker|
+    JupiterCore::SolrServices.index_suffix = worker
+  end
 
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
@@ -50,7 +53,11 @@ class ActiveSupport::TestCase
   def teardown
     # Clear our solr index after every test run.
     # TODO: Maybe should look into this and only clear it out for tests that are actually testing against solr
-    JupiterCore::SolrServices::Client.instance.truncate_index
+    if JupiterCore::SolrServices.index_suffix
+      JupiterCore::SolrServices::Client.instance.truncate_index_with_suffix
+    else
+      JupiterCore::SolrServices::Client.instance.truncate_index
+    end
   end
 
   # Add more helper methods to be used by all tests here...

@@ -157,7 +157,11 @@ class JupiterCore::Search
       if model.name.start_with?('IR')
         model.name
       else
-        "Ar#{model.name}"
+        if JupiterCore::SolrServices.index_suffix
+          ["Ar#{model.name}", JupiterCore::SolrServices.index_suffix].compact.join('_')
+        else
+          "Ar#{model.name}"
+        end
       end
     end
 

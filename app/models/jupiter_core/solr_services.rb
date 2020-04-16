@@ -6,6 +6,10 @@ module JupiterCore::SolrServices
 
   class NameManglingError < StandardError; end
 
+  class << self
+    attr_accessor :index_suffix
+  end
+
   def self.valid_solr_type?(type)
     SOLR_TYPES.include?(type)
   end

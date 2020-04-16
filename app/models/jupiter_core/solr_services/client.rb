@@ -29,4 +29,7 @@ class JupiterCore::SolrServices::Client
     connection.delete_by_query('*:*', params: { softCommit: true })
   end
 
+  def truncate_index_with_suffix
+    connection.delete_by_query("has_model_ssim:*_#{JupiterCore::SolrServices.index_suffix}", params: { softCommit: true })
+  end
 end

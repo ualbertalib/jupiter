@@ -89,7 +89,12 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
               # we remove the prefix when getting the model
               #
               # TODO: This is inefficient and we should look at batching up IDs
-              arclass = res['has_model_ssim'].first.sub(/^Ar/, '').constantize
+              if JupiterCore::SolrServices.index_suffix
+                arclass = res['has_model_ssim'].first.sub(/^Ar/, '').sub(/_.*/,'').constantize
+              else
+                arclass = res['has_model_ssim'].first.sub(/^Ar/, '').constantize
+              end
+
               arclass.find(res['id'])
             rescue ActiveRecord::RecordNotFound
               # This _should_ only crop up in tests, where truncation of tables is bypassing callbacks that clean up

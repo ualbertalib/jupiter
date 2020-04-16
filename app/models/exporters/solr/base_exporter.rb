@@ -123,7 +123,11 @@ class Exporters::Solr::BaseExporter
   end
 
   def self.indexed_has_model_name
-    @indexed_model_name
+    if JupiterCore::SolrServices.index_suffix
+      [@indexed_model_name, JupiterCore::SolrServices.index_suffix].compact.join('_')
+    else
+      @indexed_model_name
+    end
   end
 
   protected
@@ -269,7 +273,7 @@ class Exporters::Solr::BaseExporter
     def inherited(child)
       super
       child.class_eval do
-        custom_index :has_model, role: [:exact_match], as: ->(_object) { @indexed_model_name }
+        custom_index :has_model, role: [:exact_match], as: ->(_object) { self.indexed_has_model_name }
 
         # The original Fedora property was called 'owner' even though it held an id, so for compatibility
         # we keep that index name here
