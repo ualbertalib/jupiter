@@ -32,6 +32,9 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 ### Security
 - add `noopener noreferrer` when opening a link in a new tab [PR#1344](https://github.com/ualbertalib/jupiter/pull/1344)
 
+### Removed
+- Removed Matomo analytic tracking [#1493](https://github.com/ualbertalib/jupiter/issues/1493)
+
 ## [1.2.18] - 2019-10-22
 - Removed Rack Attack
 
