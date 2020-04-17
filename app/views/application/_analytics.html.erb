@@ -15,32 +15,3 @@
   <% end %>
   <!-- End Google Analytics -->
 <% end %>
-
-<% if Rails.application.secrets.matomo_url.present? && Rails.application.secrets.matomo_site_id.present? %>
-  <!-- Matomo -->
-  <%# TODO: javascript_tag, nonce: true do %>
-  <%= javascript_tag do %>
-    var _paq = _paq || [];
-
-    // tracker methods like "setCustomDimension" should be called before "trackPageView"
-    document.addEventListener('turbolinks:load', function() {
-      _paq.push(['trackPageView']);
-      _paq.push(['enableLinkTracking']);
-    });
-
-    (function() {
-      var u="//<%= Rails.application.secrets.matomo_url %>/";
-      _paq.push(['setTrackerUrl', u+'piwik.php']);
-      _paq.push(['setSiteId', <%= Rails.application.secrets.matomo_site_id %>]);
-      var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-      g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
-    })();
-  <% end %>
-  <!-- End Matomo Code -->
-
-  <!-- Matomo Image Tracker -->
-  <noscript>
-    <p><img src="//<%= Rails.application.secrets.matomo_url %>/piwik.php?idsite=<%= Rails.application.secrets.matomo_site_id %>&amp;rec=1" style="border:0" alt="" /></p>
-  </noscript>
-  <!-- End Matomo -->
-<% end %>
