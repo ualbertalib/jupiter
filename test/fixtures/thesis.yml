@@ -44,6 +44,7 @@ fancy:
 embargoed:
   visibility: <%= JupiterCore::Depositable::VISIBILITY_EMBARGO %>
   visibility_after_embargo: <%= JupiterCore::VISIBILITY_PUBLIC %>
+  embargo_end_date: <%= 5.day.from_now.to_s(:db) %>
   owner: admin
   title: 'Embargoed Item'
   dissertant: 'Joe Blow'
