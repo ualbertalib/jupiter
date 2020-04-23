@@ -24,18 +24,20 @@ namespace :jupiter do
   end
 
   desc 'fetch and unlock every object then save'
-  task reindex: :environment do
+  task :reindex, [:batch_size] => :environment do |_, args|
+    desired_batch_size = args.batch_size.to_i ||= 1000
     puts 'Reindexing all Items and Theses...'
-    Item.find_each(&:save!)
-    Thesis.find_each(&:save!)
+    Item.find_each(batch_size: desired_batch_size, &:save!)
+    Thesis.find_each(batch_size: desired_batch_size, &:save!)
     puts 'Reindex completed!'
   end
 
   desc 'queue all items and theses in the system for preservation'
-  task preserve_all_items_and_theses: :environment do
+  task :preserve_all_items_and_theses, [:batch_size] => :environment do |_, args|
+    desired_batch_size = args.batch_size.to_i ||= 1000
     puts 'Adding all Items and Theses to preservation queue...'
-    Item.find_each { |item| item.tap(&:preserve) }
-    Thesis.find_each { |item| item.tap(&:preserve) }
+    Item.find_each(batch_size: desired_batch_size) { |item| item.tap(&:preserve) }
+    Thesis.find_each(batch_size: desired_batch_size) { |item| item.tap(&:preserve) }
     puts 'All Items and Theses have been added to preservation queue!'
   end
 
@@ -54,11 +56,12 @@ namespace :jupiter do
   end
 
   desc 'sayonara ActiveFedora'
-  task get_me_off_of_fedora: :environment do
+  task :get_me_off_of_fedora, [:batch_size] => :environment do |_, args|
+    desired_batch_size = args.batch_size.to_i ||= 1000
     puts
     puts 'Preparing Draft Item ...'
 
-    DraftItem.find_each do |draft_item|
+    DraftItem.find_each(batch_size: desired_batch_size) do |draft_item|
       draft_item.files_attachments.each do |attachment|
         attachment.upcoming_record_id = draft_item.upcoming_id
         attachment.save!
@@ -74,7 +77,7 @@ namespace :jupiter do
     puts
     puts 'Preparing Draft Thesis ...'
 
-    DraftThesis.find_each do |draft_thesis|
+    DraftThesis.find_each(batch_size: desired_batch_size) do |draft_thesis|
       draft_thesis.files_attachments.each do |attachment|
         attachment.upcoming_record_id = draft_thesis.upcoming_id
         attachment.save!
@@ -85,7 +88,7 @@ namespace :jupiter do
     puts
     puts 'Migrating Communities...'
 
-    Community.find_each do |community|
+    Community.find_each(batch_size: desired_batch_size) do |community|
       ArCommunity.from_community(community)
       print '.'
     end
@@ -93,7 +96,7 @@ namespace :jupiter do
     puts
     puts 'Migrating Collections...'
 
-    Collection.find_each do |collection|
+    Collection.find_each(batch_size: desired_batch_size) do |collection|
       ArCollection.from_collection(collection)
       print '.'
     end
@@ -101,7 +104,7 @@ namespace :jupiter do
     puts
     puts 'Migrating Items...'
 
-    Item.find_each do |item|
+    Item.find_each(batch_size: desired_batch_size) do |item|
       ArItem.from_item(item)
       print '.'
     end
@@ -109,7 +112,7 @@ namespace :jupiter do
     puts
     puts 'Migrating Theses...'
 
-    Thesis.find_each do |thesis|
+    Thesis.find_each(batch_size: desired_batch_size) do |thesis|
       ArThesis.from_thesis(thesis)
       print '.'
     end
