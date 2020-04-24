@@ -22,6 +22,11 @@ This should not be a description of a particular wished-for solution – to quot
 so that... < Context. How does the immediate desire to do something fit into the bigger picture?
 What’s the overall benefit we’re trying to achieve? What is the big problem that needs solving?>
 
+
+### Additional information:
+
+Any other information you can think of related to this! Links to discussion, other details that would be helpful to know, etc, etc
+
 ## Step 2: The Elevator Pitch & Refinement
 
 ### Elevator Pitch
