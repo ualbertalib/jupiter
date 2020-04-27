@@ -1,6 +1,5 @@
 # Jupiter
 
-[![Build Status](https://travis-ci.org/ualbertalib/jupiter.svg?branch=master)](https://travis-ci.org/ualbertalib/jupiter)
 [![Github Build Status](https://github.com/ualbertalib/jupiter/workflows/CI/badge.svg)](https://github.com/ualbertalib/jupiter/actions)
 
 # Architecture
