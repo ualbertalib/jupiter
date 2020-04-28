@@ -91,7 +91,7 @@ module DraftActions
         'collection_id' => [collection.id]
       }
     end
-    @draft = draft_class.drafts.create(create_params)
+    @draft = draft_class.create(create_params)
     authorize @draft if needs_authorization?
 
     redirect_to wizard_path(steps.first, draft_id_param => @draft.id)
@@ -139,7 +139,7 @@ module DraftActions
   end
 
   def set_draft
-    @draft = draft_class.drafts.find(params[draft_id_param])
+    @draft = draft_class.find(params[draft_id_param])
   end
 
   def initialize_communities
