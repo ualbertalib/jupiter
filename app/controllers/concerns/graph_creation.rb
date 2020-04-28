@@ -15,7 +15,7 @@ module GraphCreation
       # and not concatenated values like
       # "Pictures, Randomness, Unicorn"
 
-      values = Array(rdfable_entity.send(column))
+      values = Array.wrap(rdfable_entity.send(column))
 
       values.each do |value|
         statement = prepare_statement(
