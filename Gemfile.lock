@@ -17,13 +17,15 @@ GIT
 
 GIT
   remote: https://github.com/ualbertalib/oaisys.git
-  revision: e98b73f8bc45f39ad8b6bb224bcedba16948f6bd
-  ref: e98b73f8bc45f39ad8b6bb224bcedba16948f6bd
+  revision: d0e3f515472b304c6b728c01ddbda99a50af91a8
+  ref: d0e3f515472b304c6b728c01ddbda99a50af91a8
   specs:
     oaisys (0.1.0)
       builder (~> 3.0)
+      nanoid
       pg
       rails (>= 5.2.3)
+      redis (~> 4.1)
       rubocop
       rubocop-performance
       rubocop-rails
@@ -234,6 +236,7 @@ GEM
     multipart-post (2.1.1)
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
+    nanoid (2.0.0)
     nap (1.1.0)
     net-http-persistent (3.1.0)
       connection_pool (~> 2.2)
