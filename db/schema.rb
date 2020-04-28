@@ -174,6 +174,7 @@ ActiveRecord::Schema.define(version: 2020_04_22_214606) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["uid", "provider"], name: "index_identities_on_uid_and_provider", unique: true
+    t.index ["user_id", "provider"], name: "index_identities_on_user_id_and_provider", unique: true
     t.index ["user_id"], name: "index_identities_on_user_id"
   end
 
@@ -321,7 +322,7 @@ ActiveRecord::Schema.define(version: 2020_04_22_214606) do
 
   create_table "versions", force: :cascade do |t|
     t.string "item_type", null: false
-    t.bigint "item_id", null: false
+    t.uuid "item_id", null: false
     t.string "event", null: false
     t.string "whodunnit"
     t.text "object"

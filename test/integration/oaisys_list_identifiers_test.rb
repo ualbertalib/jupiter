@@ -6,107 +6,16 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
 
   setup do
     @routes = Oaisys::Engine.routes
-    Oaisys::Engine.config.items_per_request = 5
+    Oaisys::Engine.config.items_per_request = 2
+
+    @community = communities(:fancy_community)
+    @collection = collections(:fancy_collection)
+
+    @thesis_collection = collections(:thesis)
+    @embargoed_thesis_collection = collections(:embargoed_thesis)
   end
 
-  def before_all
-    super
-    Item.destroy_all
-    Thesis.destroy_all
-    @community = Community.create!(title: 'Fancy Community', owner_id: users(:admin).id)
-    @big_community = Community.create!(title: 'Big Community', owner_id: users(:admin).id)
-    @big_collection = Collection.create!(community_id: @big_community.id,
-                                         title: 'Big Collection', owner_id: users(:admin).id)
-
-    @collection1 = Collection.create!(community_id: @community.id,
-                                      title: 'Fancy Collection 1', owner_id: users(:admin).id)
-    @collection2 = Collection.create!(community_id: @community.id,
-                                      title: 'Fancy Collection 2', owner_id: users(:admin).id)
-    @embargo_collection = Collection.create!(community_id: @community.id,
-                                             title: 'Embargo Collection', owner_id: users(:admin).id)
-    @item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                     owner_id: users(:admin).id, title: 'Fancy Item 1',
-                     creators: ['Joe Blow'],
-                     created: '1938-01-02',
-                     languages: [CONTROLLED_VOCABULARIES[:language].english],
-                     item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                     publication_status:
-                       [CONTROLLED_VOCABULARIES[:publication_status].published],
-                     license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                     subject: ['Items']).tap do |uo|
-      uo.add_to_path(@community.id, @collection1.id)
-      uo.save!
-    end
-
-    travel_to 2.seconds.from_now do
-      @item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                       owner_id: users(:admin).id, title: 'Fancy Item 2',
-                       creators: ['Jane Doe'],
-                       created: '1938-01-02',
-                       languages: [CONTROLLED_VOCABULARIES[:language].english],
-                       item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                       publication_status:
-                         [CONTROLLED_VOCABULARIES[:publication_status].published],
-                       license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                       subject: ['Items']).tap do |uo|
-        uo.add_to_path(@community.id, @collection2.id)
-        uo.save!
-      end
-
-      @thesis_in_embargo = Thesis.new(
-        title: 'thesis 1',
-        owner_id: users(:admin).id,
-        dissertant: 'Joe Blow',
-        graduation_date: '2017-03-31',
-        visibility: JupiterCore::Depositable::VISIBILITY_EMBARGO,
-        embargo_end_date: 2.days.from_now.to_date,
-        visibility_after_embargo: CONTROLLED_VOCABULARIES[:visibility].public
-      ).tap do |unlocked_thesis|
-        unlocked_thesis.add_to_path(@community.id, @embargo_collection.id)
-        unlocked_thesis.save!
-      end
-    end
-
-    travel_to 4.seconds.from_now do
-      @thesis1 = Thesis.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                            owner_id: users(:admin).id, title: 'Fancy thesis 1',
-                            dissertant: 'Joe Blow',
-                            language: CONTROLLED_VOCABULARIES[:language].english,
-                            graduation_date: 'Fall 2017')
-                       .tap do |uo|
-        uo.add_to_path(@community.id, @collection1.id)
-        uo.save!
-      end
-
-      @thesis2 = Thesis.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                            owner_id: users(:admin).id, title: 'Fancy thesis 2',
-                            dissertant: 'Jane Doe',
-                            language: CONTROLLED_VOCABULARIES[:language].english,
-                            graduation_date: 'Fall 2017')
-                       .tap do |uo|
-        uo.add_to_path(@community.id, @collection2.id)
-        uo.save!
-      end
-
-      @items = 4.times.map do |i|
-        Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                 owner_id: users(:admin).id, title: "#{['Fancy', 'Nice'][i % 2]} Item #{i}",
-                 creators: ['Joe Blow'],
-                 created: "#{1950 + i}-11-11",
-                 languages: [CONTROLLED_VOCABULARIES[:language].english],
-                 item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                 publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                 subject: ['Items'])
-            .tap do |uo|
-          uo.add_to_path(@big_community.id, @big_collection.id)
-          uo.save!
-        end
-      end
-    end
-  end
-
-  def test_list_identifiers_items_xml
+  test 'list identifers items xml' do
     get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_dc'), headers: { 'Accept' => 'application/xml' }
     assert_response :success
 
@@ -116,7 +25,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
 
     item_identifiers = Oaisys::Engine.config.oai_dc_model.public_items.page(1)
                                      .per(Oaisys::Engine.config.items_per_request)
-                                     .pluck(:id, :record_created_at, :member_of_paths)
+                                     .pluck(:id, :updated_at, :member_of_paths)
     assert_select 'OAI-PMH' do
       assert_select 'responseDate'
       assert_select 'request'
@@ -130,22 +39,25 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
             end
           end
         end
-        assert_select 'resumptionToken', 'metadataPrefix%3Doai_dc%26page%3D2'
+        assert_select 'resumptionToken'
       end
     end
-  end
 
-  def test_list_identifiers_resumption_token_xml
-    get oaisys_path + '?verb=ListIdentifiers&resumptionToken=metadataPrefix%3Doai_dc%26page%3D2',
+    resumption_token = document.css('OAI-PMH ListIdentifiers resumptionToken').text
+    # TODO: look into why every second request to Oaisys in the same test gives a 503.
+    get oaisys_path(verb: 'ListIdentifiers', resumptionToken: resumption_token),
+        headers: { 'Accept' => 'application/xml' }
+
+    # Test use of resumption token.
+    get oaisys_path(verb: 'ListIdentifiers', resumptionToken: resumption_token),
         headers: { 'Accept' => 'application/xml' }
     assert_response :success
 
-    schema = Nokogiri::XML::Schema(File.open(file_fixture('OAI-PMH.xsd')))
     document = Nokogiri::XML(@response.body)
     assert_empty schema.validate(document)
     item_identifiers = Oaisys::Engine.config.oai_dc_model.public_items.page(2)
                                      .per(Oaisys::Engine.config.items_per_request)
-                                     .pluck(:id, :record_created_at, :member_of_paths)
+                                     .pluck(:id, :updated_at, :member_of_paths)
 
     assert_select 'OAI-PMH' do
       assert_select 'responseDate'
@@ -163,9 +75,39 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
         assert_select 'resumptionToken'
       end
     end
+
+    resumption_token = document.css('OAI-PMH ListIdentifiers resumptionToken').text
+    # TODO: look into why every second request to Oaisys in the same test gives a 503.
+    get oaisys_path(verb: 'ListIdentifiers', resumptionToken: resumption_token),
+        headers: { 'Accept' => 'application/xml' }
+
+    # Test expiration of resumption token when results change.
+    @item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
+                     owner_id: users(:admin).id, title: 'Fancy Item 1',
+                     creators: ['Joe Blow'],
+                     created: '1938-01-02',
+                     languages: [CONTROLLED_VOCABULARIES[:language].english],
+                     item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                     publication_status:
+                       [CONTROLLED_VOCABULARIES[:publication_status].published],
+                     license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                     subject: ['Items']).tap do |uo|
+      uo.add_to_path(@community.id, @collection.id)
+      uo.save!
+    end
+
+    get oaisys_path(verb: 'ListIdentifiers', resumptionToken: resumption_token),
+        headers: { 'Accept' => 'application/xml' }
+    assert_response :success
+
+    assert_select 'OAI-PMH' do
+      assert_select 'responseDate'
+      assert_select 'request'
+      assert_select 'error', I18n.t('error_messages.resumption_token_invalid')
+    end
   end
 
-  def test_list_identifiers_theses_xml
+  test 'list identifers theses xml' do
     get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_etdms'), headers: { 'Accept' => 'application/xml' }
     assert_response :success
 
@@ -173,7 +115,8 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     document = Nokogiri::XML(@response.body)
     assert_empty schema.validate(document)
     thesis_identifiers = Oaisys::Engine.config.oai_etdms_model.public_items
-                                       .pluck(:id, :record_created_at, :member_of_paths)
+                                       .limit(Oaisys::Engine.config.items_per_request)
+                                       .pluck(:id, :updated_at, :member_of_paths)
     assert_select 'OAI-PMH' do
       assert_select 'responseDate'
       assert_select 'request'
@@ -191,8 +134,8 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     end
   end
 
-  def test_list_identifiers_item_set_xml
-    get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_dc', set: @collection2.id),
+  test 'list identifers item set xml' do
+    get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_dc', set: @collection.id),
         headers: { 'Accept' => 'application/xml' }
     assert_response :success
 
@@ -200,8 +143,9 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     document = Nokogiri::XML(@response.body)
     assert_empty schema.validate(document)
 
-    item_identifiers = Oaisys::Engine.config.oai_dc_model.public_items.belongs_to_path(@collection2.id)
-                                     .pluck(:id, :record_created_at, :member_of_paths)
+    item_identifiers = Oaisys::Engine.config.oai_dc_model.public_items.belongs_to_path(@collection.id)
+                                     .limit(Oaisys::Engine.config.items_per_request)
+                                     .pluck(:id, :updated_at, :member_of_paths)
     assert_select 'OAI-PMH' do
       assert_select 'responseDate'
       assert_select 'request'
@@ -219,8 +163,8 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     end
   end
 
-  def test_list_identifiers_thesis_set_xml
-    get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_etdms', set: @collection2.id),
+  test 'list identifers thesis set xml' do
+    get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_etdms', set: @thesis_collection.id),
         headers: { 'Accept' => 'application/xml' }
     assert_response :success
 
@@ -228,8 +172,9 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     document = Nokogiri::XML(@response.body)
     assert_empty schema.validate(document)
 
-    thesis_identifiers = Oaisys::Engine.config.oai_etdms_model.public_items.belongs_to_path(@collection2.id)
-                                       .pluck(:id, :record_created_at, :member_of_paths)
+    thesis_identifiers = Oaisys::Engine.config.oai_etdms_model.public_items.belongs_to_path(@thesis_collection.id)
+                                       .limit(Oaisys::Engine.config.items_per_request)
+                                       .pluck(:id, :updated_at, :member_of_paths)
     assert_select 'OAI-PMH' do
       assert_select 'responseDate'
       assert_select 'request'
@@ -247,15 +192,14 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     end
   end
 
-  def test_list_identifiers_embargo_thesis_xml
-    get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_etdms', set: @embargo_collection.id),
+  test 'list identifers embargo thesis xml' do
+    get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_etdms', set: @embargoed_thesis_collection.id),
         headers: { 'Accept' => 'application/xml' }
     assert_response :success
 
     schema = Nokogiri::XML::Schema(File.open(file_fixture('OAI-PMH.xsd')))
     document = Nokogiri::XML(@response.body)
     assert_empty schema.validate(document)
-
     assert_select 'OAI-PMH' do
       assert_select 'responseDate'
       assert_select 'request'
@@ -263,7 +207,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     end
   end
 
-  def test_list_identifiers_item_until_date_xml
+  test 'list identifers item until date xml' do
     just_after_current_time = (Time.current + 5).utc.xmlschema
     get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_dc', set: @community.id,
                     until: just_after_current_time), headers: { 'Accept' => 'application/xml' }
@@ -272,8 +216,9 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     schema = Nokogiri::XML::Schema(File.open(file_fixture('OAI-PMH.xsd')))
     document = Nokogiri::XML(@response.body)
     assert_empty schema.validate(document)
-    item_identifiers = Oaisys::Engine.config.oai_dc_model.public_items.created_on_or_before(just_after_current_time)
-                                     .belongs_to_path(@community.id).pluck(:id, :record_created_at, :member_of_paths)
+    item_identifiers = Oaisys::Engine.config.oai_dc_model.public_items.updated_on_or_before(just_after_current_time)
+                                     .limit(Oaisys::Engine.config.items_per_request)
+                                     .belongs_to_path(@community.id).pluck(:id, :updated_at, :member_of_paths)
     assert_select 'OAI-PMH' do
       assert_select 'responseDate'
       assert_select 'request'
@@ -291,9 +236,9 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     end
   end
 
-  def test_list_identifiers_thesis_until_date_xml
+  test 'list identifers thesis until date xml' do
     just_after_current_time = (Time.current + 5).utc.xmlschema
-    get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_etdms', set: @community.id,
+    get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_etdms', set: @thesis_collection.id,
                     until: just_after_current_time), headers: { 'Accept' => 'application/xml' }
     assert_response :success
 
@@ -301,9 +246,10 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     document = Nokogiri::XML(@response.body)
     assert_empty schema.validate(document)
     thesis_identifiers = Oaisys::Engine.config.oai_etdms_model
-                                       .public_items.created_on_or_before(just_after_current_time)
-                                       .belongs_to_path(@community.id)
-                                       .pluck(:id, :record_created_at, :member_of_paths)
+                                       .public_items.updated_on_or_before(just_after_current_time)
+                                       .belongs_to_path(@thesis_collection.id)
+                                       .limit(Oaisys::Engine.config.items_per_request)
+                                       .pluck(:id, :updated_at, :member_of_paths)
     assert_select 'OAI-PMH' do
       assert_select 'responseDate'
       assert_select 'request'
@@ -321,10 +267,10 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     end
   end
 
-  def test_list_identifiers_item_from_date_xml
-    just_after_current_time = (Time.current + 5).utc.xmlschema
+  test 'list identifers item from date xml' do
+    six_days_from_now = (Time.current + 6.days).utc.xmlschema
     get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_dc', set: @community.id,
-                    from: just_after_current_time), headers: { 'Accept' => 'application/xml' }
+                    from: six_days_from_now), headers: { 'Accept' => 'application/xml' }
     assert_response :success
 
     schema = Nokogiri::XML::Schema(File.open(file_fixture('OAI-PMH.xsd')))
@@ -338,10 +284,10 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     end
   end
 
-  def test_list_identifiers_thesis_from_date_xml
-    just_after_current_time = (Time.current + 5).utc.xmlschema
-    get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_etdms', set: @community.id,
-                    from: just_after_current_time), headers: { 'Accept' => 'application/xml' }
+  test 'list identifers thesis from date xml' do
+    six_days_from_now = (Time.current + 5).utc.xmlschema
+    get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_etdms', set: @thesis_collection.id,
+                    from: six_days_from_now), headers: { 'Accept' => 'application/xml' }
     assert_response :success
 
     schema = Nokogiri::XML::Schema(File.open(file_fixture('OAI-PMH.xsd')))
@@ -355,10 +301,10 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     end
   end
 
-  def test_list_identifiers_item_from_until_date_xml
+  test 'list identifers item from until date xml' do
     item = Oaisys::Engine.config.oai_dc_model.public_items.belongs_to_path(@community.id).first
-    item_creation_time = item[:record_created_at].utc.xmlschema
-    just_after_item_creation_time = (item[:record_created_at] + 5.seconds).utc.xmlschema
+    item_creation_time = item[:updated_at].utc.xmlschema
+    just_after_item_creation_time = (item[:updated_at] + 5.seconds).utc.xmlschema
     get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_dc', set: @community.id, from: item_creation_time,
                     until: just_after_item_creation_time),
         headers: { 'Accept' => 'application/xml' }
@@ -383,11 +329,11 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     end
   end
 
-  def test_list_identifiers_thesis_from_until_date_xml
-    thesis = Oaisys::Engine.config.oai_etdms_model.public_items.belongs_to_path(@community.id).first
-    thesis_creation_time = thesis[:record_created_at].utc.xmlschema
-    just_after_thesis_creation_time = (thesis[:record_created_at] + 5.seconds).utc.xmlschema
-    get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_etdms', set: @community.id,
+  test 'list identifers thesis from until date xml' do
+    thesis = Oaisys::Engine.config.oai_etdms_model.public_items.belongs_to_path(@thesis_collection.id).first
+    thesis_creation_time = thesis[:updated_at].utc.xmlschema
+    just_after_thesis_creation_time = (thesis[:updated_at] + 5.seconds).utc.xmlschema
+    get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_etdms', set: @thesis_collection.id,
                     from: thesis_creation_time, until: just_after_thesis_creation_time),
         headers: { 'Accept' => 'application/xml' }
     assert_response :success

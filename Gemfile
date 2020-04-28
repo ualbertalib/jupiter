@@ -7,7 +7,7 @@ gem 'puma', '~> 4.3'
 gem 'rails', '~> 6.0.2'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem 'webpacker', '~> 4.0'
+gem 'webpacker', '~> 5.1'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
@@ -20,7 +20,7 @@ gem 'simple_form'
 gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', ref: '37915a9581713524f95f28425a10fdfee4335d06'
 gem 'rdf', '~> 3.1.0'
 gem 'rdf-n3'
-gem 'rdf-vocab', '~> 3.1.2'
+gem 'rdf-vocab', '~> 3.1.4'
 
 # Database stuff
 gem 'connection_pool'
@@ -47,6 +47,7 @@ gem 'sidekiq-cron'
 # Misc Utilities
 gem 'aasm' # state-machine management
 gem 'addressable', '~> 2.7.0' # Replacement for the standard URI implementation
+gem 'differ' # Used to diff two strings
 gem 'draper'
 gem 'ezid-client', '~> 1.8.0'
 gem 'jbuilder' # generate JSON objects
@@ -64,7 +65,7 @@ gem 'rollbar'
 
 # OAI-PMH
 gem 'builder_deferred_tagging', github: 'ualbertalib/builder_deferred_tagging', tag: 'v0.01'
-gem 'oaisys', github: 'ualbertalib/oaisys', ref: 'e98b73f8bc45f39ad8b6bb224bcedba16948f6bd'
+gem 'oaisys', github: 'ualbertalib/oaisys', ref: 'd0e3f515472b304c6b728c01ddbda99a50af91a8'
 
 # Seeds
 group :development, :test, :uat do
@@ -82,7 +83,7 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
 
-  gem 'rubocop', '~> 0.80.1', require: false
+  gem 'rubocop', '~> 0.82.0', require: false
   gem 'rubocop-performance'
   gem 'rubocop-rails'
 end
@@ -99,17 +100,16 @@ group :development do
 end
 
 group :test do
-  gem 'danger', '~> 6.3', require: false # Pull Request etiquette enforcement
+  gem 'danger', '~> 7.0', require: false # Pull Request etiquette enforcement
   gem 'simplecov'
   # Faker added 0.5 seconds to the test suite per call. Haikunator seems much faster for faking strings
   gem 'haikunator'
-  gem 'minitest-hooks'
   gem 'shoulda-matchers', '~> 4.3'
 
   gem 'json-schema', '~> 2.8.1'
   gem 'launchy'
   gem 'vcr', '5.0', require: false
-  gem 'webdrivers', '~> 4.2'
+  gem 'webdrivers', '~> 4.3'
   gem 'webmock', require: false
 end
 

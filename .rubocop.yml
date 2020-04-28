@@ -36,6 +36,15 @@ Layout/LineLength:
 Layout/RescueEnsureAlignment:
   Enabled: false
 
+Layout/SpaceAroundMethodCallOperator:
+  Enabled: true
+
+Lint/RaiseException:
+  Enabled: true
+
+Lint/StructNewOverride:
+  Enabled: true
+
 # A calculated magnitude based on number of assignments,
 # branches, and conditions.
 Metrics/AbcSize:
@@ -114,6 +123,9 @@ Style/ClassVars:
 
 Style/Documentation:
   Enabled: false
+
+Style/ExponentialNotation:
+  Enabled: true
 
 Style/FormatStringToken:
   Enabled: false

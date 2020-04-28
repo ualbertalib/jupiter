@@ -1,6 +1,6 @@
 # Jupiter
 
-[![Build Status](https://travis-ci.org/ualbertalib/jupiter.svg?branch=master)](https://travis-ci.org/ualbertalib/jupiter)
+[![Github Build Status](https://github.com/ualbertalib/jupiter/workflows/CI/badge.svg)](https://github.com/ualbertalib/jupiter/actions)
 
 # Architecture
 
@@ -13,7 +13,7 @@
 - **Redis**
 - **Solr**
 - **ImageMagick**
-- **Node.js**
+- **Node.js** 10.13.0+
 - **Yarn**
 
 # Generate Documentation

@@ -2,16 +2,10 @@ require 'test_helper'
 
 class Items::FilesControllerTest < ActionDispatch::IntegrationTest
 
-  def before_all
-    super
-    @community = Community.create!(title: 'Books', description: 'a bunch of books', owner_id: users(:admin).id)
-    @collection = Collection.create!(title: 'Fantasy Books',
-                                     description: 'some fantasy books',
-                                     owner_id: users(:admin).id,
-                                     community_id: @community.id)
-  end
-
   setup do
+    @community = communities(:books)
+    @collection = collections(:fantasy_books)
+
     @user = users(:regular)
     sign_in_as @user
 
@@ -30,10 +24,9 @@ class Items::FilesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should be able to attach files to a draft item' do
-    # TODO: Why this failing?
-    # assert_difference('ActiveStorage::Attachment.count', 1) do
-    post item_files_url(@draft_item), params: { file: @file_attachment }, xhr: true
-    # end
+    assert_difference('ActiveStorage::Attachment.count', 1) do
+      post item_files_url(@draft_item), params: { file: @file_attachment }, xhr: true
+    end
 
     assert_response :success
 

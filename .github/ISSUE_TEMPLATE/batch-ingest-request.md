@@ -1,6 +1,9 @@
 ---
 name: Batch Ingest request
 about: Create a request for batch ingest
+title: ''
+labels: ''
+assignees: ''
 
 ---
 

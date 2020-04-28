@@ -1,6 +1,8 @@
 class JupiterCore::SolrServices::FacetResult
 
+  # rubocop:disable Lint/StructNewOverride
   FacetValue = Struct.new(:attribute_name, :solr_index, :value, :count)
+  # rubocop:enable Lint/StructNewOverride
 
   attr_accessor :category_name, :attribute_name, :values, :solr_index
 

@@ -2,11 +2,11 @@ require 'application_system_test_case'
 
 class ItemShowTest < ApplicationSystemTestCase
 
-  def setup
-    @user = User.find_by(email: 'john_snow@example.com')
-    admin = User.find_by(email: 'administrator@example.com')
-    @community = Community.create!(title: 'Fancy Community', owner_id: admin.id)
-    @collection = Collection.create!(title: 'Fancy collection', owner_id: admin.id, community_id: @community.id)
+  setup do
+    @user = users(:regular)
+    admin = users(:admin)
+    @community = communities(:books)
+    @collection = collections(:fantasy_books)
 
     # Half items have 'Fancy' in title, others have 'Nice', distributed between the two collections
     @item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
@@ -67,11 +67,6 @@ class ItemShowTest < ApplicationSystemTestCase
       uo.add_to_path(@community.id, @collection.id)
       uo.save!
     end
-  end
-
-  def teardown
-    # is clearing the database but not the index, for that it needs the following
-    JupiterCore::SolrServices::Client.instance.truncate_index
   end
 
   test 'unauthed users should be able to download all files from a public item' do

@@ -2,15 +2,9 @@ require 'test_helper'
 
 class Admin::CommunitiesControllerTest < ActionDispatch::IntegrationTest
 
-  def before_all
-    super
+  setup do
     @admin = users(:admin)
-    @community = Community.new(title: 'Nice community',
-                               owner_id: @admin.id)
-    @community.save!
-  end
-
-  def setup
+    @community = communities(:books)
     sign_in_as users(:admin)
   end
 
@@ -26,6 +20,12 @@ class Admin::CommunitiesControllerTest < ActionDispatch::IntegrationTest
 
   test 'should show community' do
     get admin_community_url(@community)
+    assert_response :success
+  end
+
+  test 'should show community for js response' do
+    get admin_community_url(@community), xhr: true
+
     assert_response :success
   end
 
@@ -74,10 +74,7 @@ class Admin::CommunitiesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should destroy collection if has no items' do
-    community = Community.create!(
-      title: 'Nice community',
-      owner_id: @admin.id
-    )
+    community = communities(:community_with_no_collections)
 
     assert_difference('Community.count', -1) do
       delete admin_community_url(community)
@@ -88,13 +85,6 @@ class Admin::CommunitiesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should not destroy collection if has items' do
-    # Give the community a collection
-    Collection.new(
-      community_id: @community.id,
-      title: 'Nice collection',
-      owner_id: @admin.id
-    ).save!
-
     assert_no_difference('Collection.count') do
       delete admin_community_url(@community)
     end

@@ -2,13 +2,9 @@ require 'test_helper'
 
 class DraftItemTest < ActiveSupport::TestCase
 
-  def before_all
-    super
-    @community = Community.create!(title: 'Books', description: 'a bunch of books', owner_id: users(:admin).id)
-    @collection = Collection.create!(title: 'Fantasy Books',
-                                     description: 'some fantasy books',
-                                     owner_id: users(:admin).id,
-                                     community_id: @community.id)
+  setup do
+    @community = communities(:books)
+    @collection = collections(:fantasy_books)
   end
 
   test 'enums' do
@@ -221,6 +217,8 @@ class DraftItemTest < ActiveSupport::TestCase
     admin = users(:admin)
     draft_item.user = admin
     assert draft_item.valid?
+
+    restricted_collection.destroy
   end
 
   # should be able to delete additional contributors https://github.com/ualbertalib/jupiter/issues/830

@@ -2,12 +2,35 @@ fantasy_books:
   title: 'Fantasy Books'
   owner: admin
   community: books
+  record_created_at: <%= Time.zone.now - 1.hour %>
+  date_ingested: <%= Time.zone.now - 1.hour %>
+
 thesis:
   title: 'Thesis Collection'
   restricted: true
   owner: admin
   community: thesis
+  record_created_at: <%= Time.zone.now - 1.hour %>
+  date_ingested: <%= Time.zone.now - 1.hour %>
+
+embargoed_thesis:
+  title: 'Theses in Emabargo Collection'
+  restricted: true
+  owner: admin
+  community: thesis
+  record_created_at: <%= Time.zone.now - 1.hour %>
+  date_ingested: <%= Time.zone.now - 1.hour %>
+
 fancy_collection:
   title: 'Fancy Collection'
   owner: admin
   community: fancy_community
+  record_created_at: <%= Time.zone.now - 1.hour %>
+  date_ingested: <%= Time.zone.now - 1.hour %>
+
+fancier_collection:
+  title: 'Fancier Collection'
+  owner: admin
+  community: fancy_community
+  record_created_at: <%= Time.zone.now - 1.hour %>
+  date_ingested: <%= Time.zone.now - 1.hour %>

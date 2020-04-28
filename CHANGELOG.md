@@ -8,8 +8,10 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ### Added
 - Mounted Oaisys engine
+- Added tests surrounding Oaisys ListSets response
 - Version 1 of AIP API
 - Added and set up papertrail gem
+- Set up papertrail admin view
 - Added Draper and re-organized facet presenters
 - Metadata Presenters for OAI:DC & OAI:ETDMS
 - Local system accounts authentication
@@ -22,15 +24,21 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Changed thumbnail fallback to ERA logo without text instead of file icon [PR#1521](https://github.com/ualbertalib/jupiter/pull/1521)
 - Description now optional for theses prior to 2009 [#1357](https://github.com/ualbertalib/jupiter/issues/1357)
 - Transition to Webpacker from Sprockets [#1431](https://github.com/ualbertalib/jupiter/issues/1431)
+- Post Fedora Automated Test Cleanup [#1445](https://github.com/ualbertalib/jupiter/issues/1445)
 
 ### Fixed
 - failing tests [#1376](https://github.com/ualbertalib/jupiter/issues/1376)
 - Fix Sprockets v4.0.0 upgrade problem with how Sass Variables were being defined
 - Fix bug for page_image_url helper which was double rendering urls for default image [PR#1512](https://github.com/ualbertalib/jupiter/pull/1512)
+- Thumbnail choice no longer resets between saves [#1435](https://github.com/ualbertalib/jupiter/issues/1435)
 - Fix three-state logic problems on DraftItem and DraftThesis models where boolean attribute is_published_in_era was nullable [#1408](https://github.com/ualbertalib/jupiter/issues/1408)
+- Can now go through wizard with an old license [#1539](https://github.com/ualbertalib/jupiter/pull/1539)
 
 ### Security
 - add `noopener noreferrer` when opening a link in a new tab [PR#1344](https://github.com/ualbertalib/jupiter/pull/1344)
+
+### Removed
+- Removed Matomo analytic tracking [#1493](https://github.com/ualbertalib/jupiter/issues/1493)
 
 ## [1.2.18] - 2019-10-22
 - Removed Rack Attack

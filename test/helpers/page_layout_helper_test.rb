@@ -6,7 +6,7 @@ class PageLayoutHelperTest < ActionView::TestCase
 
   attr_reader :request
 
-  def setup
+  setup do
     @request = Class.new do
       def base_url
         'https://example.com'
@@ -82,13 +82,13 @@ class PageLayoutHelperTest < ActionView::TestCase
   end
 
   test 'page_image_url should return default image on community/item with no logo' do
-    @community = Community.create!(title: 'Random community', owner_id: users(:admin).id)
+    @community = communities(:books)
 
     assert_equal asset_pack_url('media/images/era-logo.png'), page_image_url
   end
 
   test 'page_image_url should return community/item logo' do
-    @community = Community.create!(title: 'Random community', owner_id: users(:admin).id)
+    @community = communities(:books)
 
     @community.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
                            filename: 'image-sample.jpeg', content_type: 'image/jpeg'

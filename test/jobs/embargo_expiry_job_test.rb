@@ -2,10 +2,9 @@ require 'test_helper'
 
 class EmbargoExpiryJobTest < ActiveJob::TestCase
 
-  def before_all
-    super
-    @community = Community.create!(title: 'Nice community', owner_id: users(:admin).id)
-    @collection = Collection.create!(title: 'Nice collection', owner_id: users(:admin).id, community_id: @community.id)
+  setup do
+    @community = communities(:books)
+    @collection = collections(:fantasy_books)
   end
 
   test 'that job transitions only expired item embargos into proper state' do

@@ -67,6 +67,7 @@ class DraftThesis < ApplicationRecord
   end
 
   def update_from_fedora_thesis(thesis, for_user)
+    thumbnail_file = thesis.files.find_by(id: thesis.logo_id)
     draft_attributes = {
       user_id: for_user.id,
       title: thesis.title,
@@ -88,7 +89,8 @@ class DraftThesis < ApplicationRecord
       specialization: thesis.specialization,
       departments: thesis.departments,
       supervisors: thesis.supervisors,
-      committee_members: thesis.committee_members
+      committee_members: thesis.committee_members,
+      thumbnail_id: thumbnail_file&.blob_id
     }
     assign_attributes(draft_attributes)
 

@@ -2,16 +2,17 @@ require 'test_helper'
 
 class RedirectControllerTest < ActionDispatch::IntegrationTest
 
-  def before_all
-    super
-
+  setup do
     # The fedora3_uuid and hydra_noid properties are the primary identifiers for locating these older objects
     @community = Community.create!(title: 'Fancy Community', owner_id: users(:admin).id,
                                    fedora3_uuid: 'uuid:community', hydra_noid: 'community-noid')
+
     @collection = Collection.create!(community_id: @community.id,
                                      title: 'Fancy Collection', owner_id: users(:admin).id,
                                      fedora3_uuid: 'uuid:collection', hydra_noid: 'collection-noid')
+
     @filename = 'pdf-sample.pdf'
+
     @item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
                      owner_id: users(:admin).id, title: 'Fancy Item',
                      creators: ['Joe Blow'],
@@ -27,6 +28,7 @@ class RedirectControllerTest < ActionDispatch::IntegrationTest
       uo.add_to_path(@community.id, @collection.id)
       uo.save!
     end
+
     Sidekiq::Testing.inline! do
       File.open(file_fixture(@filename), 'r') do |file|
         @item.add_and_ingest_files([file])
@@ -35,17 +37,6 @@ class RedirectControllerTest < ActionDispatch::IntegrationTest
 
     @file_set_id = @item.files.first.fileset_uuid
   end
-
-  # TODO: for some reason, this specific test suite is leaving stale data in Postgres? Even though this should be
-  # running transactionally? Needs investigation
-  def after_all
-    super
-    Community.destroy_all
-    Collection.destroy_all
-    Item.destroy_all
-  end
-
-  # HydraNorth paths containing the string "files"
 
   test 'should redirect old HydraNorth "files" items' do
     # Action: redirect#hydra_north_item

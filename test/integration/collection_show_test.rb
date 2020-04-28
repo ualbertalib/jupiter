@@ -5,25 +5,14 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
 
   # TODO: add tests involving non-public items
 
-  def before_all
-    super
-    @community = Community.create!(title: 'Nice community', owner_id: users(:admin).id)
-    @collection = Collection.create!(title: 'Nice collection', owner_id: users(:admin).id, community_id: @community.id)
-    @items = ['Fancy', 'Nice'].map do |adjective|
-      Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-               owner_id: users(:admin).id,
-               creators: ['Joe Blow'],
-               created: '1953-04-01',
-               languages: [CONTROLLED_VOCABULARIES[:language].english],
-               license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-               item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-               publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-               subject: ['Niceness', 'Fanciness'],
-               title: "#{adjective} Item").tap do |uo|
-        uo.add_to_path(@community.id, @collection.id)
-        uo.save!
-      end
-    end
+  setup do
+    @community = communities(:fancy_community)
+    @collection = collections(:fancy_collection)
+    fancy_item = items(:fancy)
+    admin_item = items(:admin)
+    @items = [fancy_item, admin_item]
+
+    @items.each(&:update_solr)
   end
 
   test 'visiting the show page for a collection as an admin' do
@@ -71,7 +60,7 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
   end
 
   test 'visiting the show page for a collection as a regular user' do
-    user = users(:regular)
+    user = users(:regular_two)
     sign_in_as user
     get community_collection_url(@community, @collection)
 
