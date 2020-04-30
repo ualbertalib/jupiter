@@ -4,7 +4,6 @@ module DraftProperties
   UNIVERSITY_INCEPTION_YEAR = 1908
 
   included do
-
     # "status" enum is for keeping track of where a draft object is within the deposit wizard workflow
     # Possible status values are as follows:
     # inactive: Draft objects where the user never passed first step of deposit wizard.
