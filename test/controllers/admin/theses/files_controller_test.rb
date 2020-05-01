@@ -24,7 +24,7 @@ class Admin::Theses::FilesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should be able to attach files to a draft thesis' do
-    assert_difference('ActiveStorage::Attachment.count', 1) do
+    assert_difference('@draft_thesis.files.count', 1) do
       post admin_thesis_files_url(@draft_thesis), params: { file: @file_attachment }, xhr: true
     end
 
@@ -33,22 +33,19 @@ class Admin::Theses::FilesControllerTest < ActionDispatch::IntegrationTest
     @draft_thesis.reload
 
     assert @draft_thesis.files.attached?
-    assert_equal 2, @draft_thesis.files.count
     assert_equal 'pdf-sample.pdf', @draft_thesis.files.first.filename.to_s
     assert_equal 'image-sample.jpeg', @draft_thesis.files.last.filename.to_s
   end
 
   test 'should be able to remove files from a draft thesis' do
-    assert_difference('ActiveStorage::Attachment.count', -1) do
+    assert_difference('@draft_thesis.files.count', -1) do
       delete admin_thesis_file_url(@draft_thesis, @draft_thesis.files.first), xhr: true
     end
 
     assert_response :success
 
     @draft_thesis.reload
-
     assert_not @draft_thesis.files.attached?
-    assert_equal 0, @draft_thesis.files.count
   end
 
   test 'should be able to toggle the selection of the draft theses thumbnail' do

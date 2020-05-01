@@ -24,31 +24,27 @@ class Items::FilesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should be able to attach files to a draft item' do
-    assert_difference('ActiveStorage::Attachment.count', 1) do
+    assert_difference('@draft_item.files.count', 1) do
       post item_files_url(@draft_item), params: { file: @file_attachment }, xhr: true
     end
-
     assert_response :success
 
     @draft_item.reload
 
     assert @draft_item.files.attached?
-    assert_equal 2, @draft_item.files.count
     assert_equal 'pdf-sample.pdf', @draft_item.files.first.filename.to_s
     assert_equal 'image-sample.jpeg', @draft_item.files.last.filename.to_s
   end
 
   test 'should be able to remove files from a draft item' do
-    assert_difference('ActiveStorage::Attachment.count', -1) do
+    assert_difference('@draft_item.files.count', -1) do
       delete item_file_url(@draft_item, @draft_item.files.first), xhr: true
     end
 
     assert_response :success
 
     @draft_item.reload
-
     assert_not @draft_item.files.attached?
-    assert_equal 0, @draft_item.files.count
   end
 
   test 'should be able to toggle the selection of the draft items thumbnail' do
