@@ -19,6 +19,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Thesis ingest rewrite [PR#1670](https://github.com/ualbertalib/jupiter/pull/1670)
 - Rails 6 sidekiq queues
 - Add stylelint to Jupiter [#1120](https://github.com/ualbertalib/jupiter/issues/1430
+- migration to fix concatenated subjects (part 1) [#1449](https://github.com/ualbertalib/jupiter/issues/1449)
 
 ### Changed
 - bump rubocop-rails to 2.4.1 Rails/FilePath default changed to slashes [PR#1398](https://github.com/ualbertalib/jupiter/pull/1398)
