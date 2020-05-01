@@ -212,7 +212,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should not be able to create a draft item if not logged in' do
-    assert_no_difference('DraftItem.drafts.count') do
+    assert_no_difference('DraftItem.count') do
       post create_draft_items_url
     end
     assert_redirected_to root_url
@@ -221,10 +221,10 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
   test 'should be able to create a draft item if logged in' do
     sign_in_as @user
 
-    assert_difference('DraftItem.drafts.count', 1) do
+    assert_difference('DraftItem.count', 1) do
       post create_draft_items_url
     end
-    assert_redirected_to item_draft_path(id: :describe_item, item_id: DraftItem.drafts.order(created_at: :asc).last.id)
+    assert_redirected_to item_draft_path(id: :describe_item, item_id: DraftItem.order(created_at: :asc).last.id)
   end
 
   test 'should not be able to delete a draft item if you do not own the item' do
@@ -232,7 +232,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
 
     draft_item = draft_items(:completed_choose_license_and_visibility_step)
 
-    assert_no_difference('DraftItem.drafts.count') do
+    assert_no_difference('DraftItem.count') do
       delete item_delete_draft_url(item_id: draft_item.id)
     end
 
@@ -245,7 +245,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
 
     draft_item = draft_items(:completed_choose_license_and_visibility_step)
 
-    assert_difference('DraftItem.drafts.count', -1) do
+    assert_difference('DraftItem.count', -1) do
       delete item_delete_draft_url(item_id: draft_item.id)
     end
 

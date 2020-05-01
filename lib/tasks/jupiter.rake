@@ -6,15 +6,14 @@ namespace :jupiter do
   desc 'removes stale inactive drafts from the database'
   task remove_inactive_drafts: :environment do
     # Find all the inactive draft items older than yesterday
-    inactive_draft_items = DraftItem.drafts.where('DATE(created_at) < DATE(?)', Date.yesterday).where(status: :inactive)
+    inactive_draft_items = DraftItem.where('DATE(created_at) < DATE(?)', Date.yesterday).where(status: :inactive)
     puts "Deleting #{inactive_draft_items.count} Inactive Draft Items..."
 
     # delete them all
     inactive_draft_items.destroy_all
 
     # Find all the inactive draft theses older than yesterday
-    inactive_draft_theses = DraftThesis.drafts
-                                       .where('DATE(created_at) < DATE(?)', Date.yesterday).where(status: :inactive)
+    inactive_draft_theses = DraftThesis.where('DATE(created_at) < DATE(?)', Date.yesterday).where(status: :inactive)
     puts "Deleting #{inactive_draft_theses.count} Inactive Draft Theses..."
 
     # delete them all

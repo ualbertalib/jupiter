@@ -1,6 +1,5 @@
 inactive:
   user: regular
-  is_published_in_era: false
 
 completed_describe_item_step:
   user: regular
@@ -18,7 +17,6 @@ completed_describe_item_step:
     a genuine masterpiece, bringing together the best the genre has to offer. Mystery, intrigue,
     romance, and adventure fill the pages of this magnificent saga, the first volume in an epic
     series sure to delight fantasy fans everywhere.'
-  is_published_in_era: false
 
 completed_choose_license_and_visibility_step:
   user: regular
@@ -39,4 +37,3 @@ completed_choose_license_and_visibility_step:
   license_text_area: 'Copyright license goes here'
   visibility: <%= DraftItem.visibilities[:embargo] %>
   embargo_end_date: <%= Date.current + 5.year %>
-  is_published_in_era: false

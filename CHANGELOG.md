@@ -39,6 +39,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ### Removed
 - Removed Matomo analytic tracking [#1493](https://github.com/ualbertalib/jupiter/issues/1493)
+- Cleanup all references of `is_published_in_era` and `drafts` scope on DraftItem/DraftThesis [#1614](https://github.com/ualbertalib/jupiter/issues/1614)
 
 ## [1.2.18] - 2019-10-22
 - Removed Rack Attack

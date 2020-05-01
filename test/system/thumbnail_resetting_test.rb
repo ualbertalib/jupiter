@@ -24,7 +24,7 @@ class ThumbnailResettingTest < ApplicationSystemTestCase
 
     click_on I18n.t('edit')
     # Thumbnail set as first attachment by default.
-    first_thumbnail_id = DraftItem.drafts.find_by(uuid: item.id).thumbnail_id
+    first_thumbnail_id = DraftItem.find_by(uuid: item.id).thumbnail_id
     click_on I18n.t('items.draft.save_and_continue')
     click_on I18n.t('items.draft.save_and_continue')
     click_on 'Set as Thumbnail'
@@ -34,7 +34,7 @@ class ThumbnailResettingTest < ApplicationSystemTestCase
 
     click_on I18n.t('edit')
     # Thumbnail set as second attachment.
-    second_thumbnail_id = DraftItem.drafts.find_by(uuid: item.id).thumbnail_id
+    second_thumbnail_id = DraftItem.find_by(uuid: item.id).thumbnail_id
     click_on I18n.t('items.draft.save_and_continue')
     click_on I18n.t('items.draft.save_and_continue')
     click_on I18n.t('items.draft.save_and_continue')
@@ -43,7 +43,7 @@ class ThumbnailResettingTest < ApplicationSystemTestCase
 
     click_on I18n.t('edit')
     # Thumbnail still set as second attachment.
-    third_thumbnail_id = DraftItem.drafts.find_by(uuid: item.id).thumbnail_id
+    third_thumbnail_id = DraftItem.find_by(uuid: item.id).thumbnail_id
     click_on I18n.t('items.draft.save_and_continue')
     click_on I18n.t('items.draft.save_and_continue')
     click_on I18n.t('items.draft.save_and_continue')
