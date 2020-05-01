@@ -24,9 +24,9 @@ class Admin::Theses::FilesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should be able to attach files to a draft thesis' do
-    assert_difference('ActiveStorage::Attachment.count', 1) do
-      post admin_thesis_files_url(@draft_thesis), params: { file: @file_attachment }, xhr: true
-    end
+    assert_equal 1, @draft_thesis.files.count
+
+    post admin_thesis_files_url(@draft_thesis), params: { file: @file_attachment }, xhr: true
 
     assert_response :success
 
@@ -39,9 +39,9 @@ class Admin::Theses::FilesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should be able to remove files from a draft thesis' do
-    assert_difference('ActiveStorage::Attachment.count', -1) do
-      delete admin_thesis_file_url(@draft_thesis, @draft_thesis.files.first), xhr: true
-    end
+    assert_equal 1, @draft_thesis.files.count
+
+    delete admin_thesis_file_url(@draft_thesis, @draft_thesis.files.first), xhr: true
 
     assert_response :success
 
