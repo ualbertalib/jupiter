@@ -25,6 +25,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Description now optional for theses prior to 2009 [#1357](https://github.com/ualbertalib/jupiter/issues/1357)
 - Transition to Webpacker from Sprockets [#1431](https://github.com/ualbertalib/jupiter/issues/1431)
 - Post Fedora Automated Test Cleanup [#1445](https://github.com/ualbertalib/jupiter/issues/1445)
+- Update UAL Logo [#1616](https://github.com/ualbertalib/jupiter/issues/1616)
 
 ### Fixed
 - failing tests [#1376](https://github.com/ualbertalib/jupiter/issues/1376)
