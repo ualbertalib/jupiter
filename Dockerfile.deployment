@@ -1,5 +1,5 @@
 FROM ruby:2.5.0
-LABEL maintainer="University of Alberta Libraries"
+LABEL maintainer="University of Alberta Library"
 
 # Need to add jessie-backports repo so we can get FFMPEG, doesn't come with jessie debian by default
 # RUN echo 'deb http://ftp.debian.org/debian jessie-backports main'  >> /etc/apt/sources.list
