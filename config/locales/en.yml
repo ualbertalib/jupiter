@@ -191,7 +191,7 @@ en:
         policies: Policies
         contact: Contact Us
         powered_by_jupiter: Powered by Jupiter
-      uofa_library_logo_alt: 'University of Alberta Libraries'
+      uofa_library_logo_alt: 'University of Alberta Library'
     results:
       no_items_found: 'No items found'
       skip_to_results: 'Skip to Search Results'
@@ -501,7 +501,7 @@ en:
       theses_collection: 'University of Alberta Theses and Dissertations'
       afns_collection: 'Department of Agriculture, Food and Nutritional Science Journal Articles'
       era_av_header: 'Explore ERA Audio+Video'
-      era_av_text: "The University of Alberta Libraries' Media Streaming Service"
+      era_av_text: "The University of Alberta Library's Media Streaming Service"
 
   items:
     index:
