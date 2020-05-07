@@ -783,10 +783,10 @@
   resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-5.13.0.tgz#fcb113d1aca4b471b709e8c9c168674fbd6e06d9"
   integrity sha512-xKOeQEl5O47GPZYIMToj6uuA2syyFlq9EMSl2ui0uytjY9xbe8XS0pexNWmxrdcCyNGyDmLyYw5FtKsalBUeOg==
 
-"@rails/actiontext@^6.0.2-2":
-  version "6.0.2-2"
-  resolved "https://registry.yarnpkg.com/@rails/actiontext/-/actiontext-6.0.2-2.tgz#57482adbbfaab65520b5433e7e44d63b7784c739"
-  integrity sha512-qPD6tN2QiJ+zuzpr15AiY0VXScFiRcDJRP1zzxXT3L5fTuMpToA6Bq1JFJm9ckLKZZxqWUilff1stqM51QABVQ==
+"@rails/actiontext@^6.0.3":
+  version "6.0.3"
+  resolved "https://registry.yarnpkg.com/@rails/actiontext/-/actiontext-6.0.3.tgz#71dacd49df7c16a363e20aa89a53efcad8fcecde"
+  integrity sha512-z6NtXRd/Scoqkf8ZRThEZhAUPh/+Yk8knsLgqlGBRXqxth1LToEWubzSeac4b26TDNgVbbTTm7BtLE/R5R4wbA==
   dependencies:
     "@rails/activestorage" "^6.0.0-alpha"
 
