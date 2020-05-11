@@ -1,0 +1,59 @@
+---
+  linters:
+    # Default linters
+    AllowedScriptType:
+      enabled: true
+    ClosingErbTagIndent:
+      enabled: true
+    ExtraNewline:
+      enabled: true
+    FinalNewline:
+      enabled: true
+    NoJavascriptTagHelper:
+      enabled: true
+    ParserErrors:
+      enabled: true
+    RightTrim:
+      enabled: true
+      enforced_style: '-'
+    SpaceAroundErbTag:
+      enabled: true
+    SpaceIndentation:
+      enabled: true
+    SpaceInHtmlTag:
+      enabled: true
+    TrailingWhitespace:
+      enabled: true
+
+    DeprecatedClasses:
+      enabled: false
+
+    # Project custom linters
+    SelfClosingTag:
+      enforced_style: 'never' # We want HTML5 style
+    HardCodedString:
+      enabled: true
+    ErbSafety:
+      enabled: true
+
+    Rubocop:
+      enabled: true
+      rubocop_config:
+        inherit_from:
+          - .rubocop.yml
+        Layout/InitialIndentation:
+          Enabled: false
+        Layout/LineLength:
+          Enabled: false
+        Layout/TrailingEmptyLines:
+          Enabled: false
+        Layout/TrailingWhitespace:
+          Enabled: false
+        Naming/FileName:
+          Enabled: false
+        Style/FrozenStringLiteralComment:
+          Enabled: false
+        Lint/UselessAssignment:
+          Enabled: false
+        Rails/OutputSafety:
+          Enabled: false
