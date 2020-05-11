@@ -8,7 +8,7 @@
     <% if policy(Community).create? %>
       <%= link_to new_admin_community_path, class: 'btn btn-primary' do %>
         <%= icon('fas', 'plus-circle') %>
-        <%=  t('communities.index.create_community') %>
+        <%= t('communities.index.create_community') %>
       <% end %>
     <% end %>
   </div>
@@ -25,12 +25,12 @@
     </div>
   </form>
 
-  <div class="my-4" >
+  <div class="my-4">
     <div class="d-flex flex-wrap justify-content-between align-items-start mt-3">
       <h2><%= t(:browse_all) %></h2>
 
       <div>
-        <%= render partial: 'communities/sort', locals: {collection: @communities} %>
+        <%= render partial: 'communities/sort', locals: { collection: @communities } %>
       </div>
     </div>
 

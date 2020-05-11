@@ -1,4 +1,4 @@
-<% page_title( t('admin.header')) %>
+<% page_title(t('admin.header')) %>
 
 <% content_for(:head) do %>
   <%= javascript_pack_tag 'admin' %>
@@ -11,25 +11,25 @@
         <%= active_link_to t('admin.dashboard.index.header'), admin_root_path, class: 'nav-link', active: :exclusive %>
       </li>
       <li class="nav-item">
-        <%= active_link_to t('admin.users.index.header'), admin_users_path, class: 'nav-link', active: :exclusive  %>
+        <%= active_link_to t('admin.users.index.header'), admin_users_path, class: 'nav-link', active: :exclusive %>
       </li>
       <li class="nav-item">
-        <%= active_link_to t('admin.announcements.index.header'), admin_announcements_path, class: 'nav-link', active: :exclusive  %>
+        <%= active_link_to t('admin.announcements.index.header'), admin_announcements_path, class: 'nav-link', active: :exclusive %>
       </li>
       <li class="nav-item">
-        <%= active_link_to t('admin.communities.index.header'), admin_communities_path, class: 'nav-link', active: :exclusive  %>
+        <%= active_link_to t('admin.communities.index.header'), admin_communities_path, class: 'nav-link', active: :exclusive %>
       </li>
       <li class="nav-item">
-        <%= active_link_to t('admin.items.index.header'), admin_items_path, class: 'nav-link', active: :exclusive  %>
+        <%= active_link_to t('admin.items.index.header'), admin_items_path, class: 'nav-link', active: :exclusive %>
       </li>
       <li class="nav-item">
-        <%= active_link_to "(TODO) #{t('admin.pages.index.header')}", '#', class: 'nav-link', active: :exclusive  %>
+        <%= active_link_to "(TODO) #{t('admin.pages.index.header')}", '#', class: 'nav-link', active: :exclusive %>
       </li>
       <li class="nav-item">
-        <%= active_link_to "(TODO) #{t('admin.analytics.index.header')}", '#', class: 'nav-link', active: :exclusive  %>
+        <%= active_link_to "(TODO) #{t('admin.analytics.index.header')}", '#', class: 'nav-link', active: :exclusive %>
       </li>
     </ul>
-    <%= yield  %>
+    <%= yield %>
   </div>
 <% end %>
 

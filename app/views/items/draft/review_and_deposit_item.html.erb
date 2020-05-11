@@ -8,7 +8,7 @@
     <%= @is_edit ? t('.header_edit') : t('.header') %>
   </h2>
 
-  <%= simple_form_for @draft, url: wizard_path, method: :put, html: { class:'js-deposit-item' } do |f| %>
+  <%= simple_form_for @draft, url: wizard_path, method: :put, html: { class: 'js-deposit-item' } do |f| %>
     <p><%= t('.please_review_item') %></p>
 
     <div class="row">
@@ -21,17 +21,17 @@
               <%= icon('fas', 'edit') %>
               <%= t('edit') %>
             <% end %>
-            <%=  t('items.draft.upload_files.header') %>
+            <%= t('items.draft.upload_files.header') %>
           </div>
 
           <div class="card-body">
             <%= render partial: 'feature_image', locals: { object: @draft } %>
 
             <ul class="list-group mt-3">
-              <% @draft.files.each do |file|%>
+              <% @draft.files.each do |file| %>
                 <li class="list-group-item">
                   <%= icon('far', file_icon(file.content_type)) %>
-                  <%=file.filename %>
+                  <%= file.filename %>
                   <span class="badge badge-primary badge-pill float-right">
                   <%= number_to_human_size(file.byte_size) %>
                   </span>
@@ -46,7 +46,7 @@
               <%= icon('fas', 'edit') %>
               <%= t('edit') %>
             <% end %>
-            <%=  t('items.draft.choose_license_and_visibility.header') %>
+            <%= t('items.draft.choose_license_and_visibility.header') %>
           </div>
           <div class="card-body">
             <h4 class="card-title">License</h4>
@@ -75,30 +75,30 @@
               <%= icon('fas', 'edit') %>
               <%= t('edit') %>
             <% end %>
-            <%=  t('items.draft.describe_item.header') %>
+            <%= t('items.draft.describe_item.header') %>
           </div>
           <div class="card-body">
             <h6 class="card-subtitle mb-1 text-muted">
-              <%=  t('items.draft.describe_item.title') %>
+              <%= t('items.draft.describe_item.title') %>
             </h6>
             <p class="card-text"><%= @draft.title %></p>
 
             <% if @draft.alternate_title.present? %>
               <h6 class="card-subtitle mb-1 text-muted">
-                <%=  t('items.draft.describe_item.alternate_title') %>
+                <%= t('items.draft.describe_item.alternate_title') %>
               </h6>
               <p class="card-text"><%= @draft.alternate_title %></p>
             <% end %>
 
             <h6 class="card-subtitle mb-1 text-muted">
-              <%=  t('items.draft.describe_item.type_id') %>
+              <%= t('items.draft.describe_item.type_id') %>
             </h6>
             <p class="card-text">
               <%= @draft.type.translated_name %>
             </p>
 
             <h6 class="card-subtitle mb-1 text-muted">
-              <%=  t('items.draft.describe_item.languages') %>
+              <%= t('items.draft.describe_item.languages') %>
             </h6>
             <ul>
               <% @draft.languages.each do |language| %>
@@ -107,7 +107,7 @@
             </ul>
 
             <h6 class="card-subtitle mb-1 text-muted">
-              <%=  t('items.draft.describe_item.creators') %>
+              <%= t('items.draft.describe_item.creators') %>
             </h6>
             <ul>
               <% @draft.creators.each do |creator| %>
@@ -116,7 +116,7 @@
             </ul>
 
             <h6 class="card-subtitle mb-1 text-muted">
-              <%=  t('items.draft.describe_item.subjects') %>
+              <%= t('items.draft.describe_item.subjects') %>
             </h6>
             <ul>
               <% @draft.subjects.each do |subject| %>
@@ -125,7 +125,7 @@
             </ul>
 
             <h6 class="card-subtitle mb-1 text-muted">
-              <%=  t('items.draft.describe_item.date_created') %>
+              <%= t('items.draft.describe_item.date_created') %>
             </h6>
             <p class="card-text">
               <%= @draft.date_created %>
@@ -133,7 +133,7 @@
 
             <% if @draft.description.present? %>
               <h6 class="card-subtitle mb-1 text-muted">
-                <%=  t('items.draft.describe_item.description') %>
+                <%= t('items.draft.describe_item.description') %>
               </h6>
               <p class="card-text">
                 <%= @draft.description %>
@@ -141,7 +141,7 @@
             <% end %>
 
             <h6 class="card-subtitle mb-1 text-muted">
-              <%=  t('items.draft.describe_item.community_and_collection') %>
+              <%= t('items.draft.describe_item.community_and_collection') %>
             </h6>
             <ul>
               <% @draft.each_community_collection do |community, collection| %>
@@ -155,7 +155,7 @@
 
             <% if @draft.contributors.present? %>
               <h6 class="card-subtitle mb-1 text-muted">
-                <%=  t('items.draft.describe_item.contributors') %>
+                <%= t('items.draft.describe_item.contributors') %>
               </h6>
               <ul>
                 <% @draft.contributors.each do |contributor| %>
@@ -166,7 +166,7 @@
 
             <% if @draft.places.present? %>
               <h6 class="card-subtitle mb-1 text-muted">
-                <%=  t('items.draft.describe_item.places') %>
+                <%= t('items.draft.describe_item.places') %>
               </h6>
               <ul>
                 <% @draft.places.each do |place| %>
@@ -177,7 +177,7 @@
 
             <% if @draft.time_periods.present? %>
               <h6 class="card-subtitle mb-1 text-muted">
-                <%=  t('items.draft.describe_item.time_periods') %>
+                <%= t('items.draft.describe_item.time_periods') %>
               </h6>
               <ul>
                 <% @draft.time_periods.each do |time_period| %>
@@ -188,7 +188,7 @@
 
             <% if @draft.citations.present? %>
               <h6 class="card-subtitle mb-1 text-muted">
-                <%=  t('items.draft.describe_item.citations') %>
+                <%= t('items.draft.describe_item.citations') %>
               </h6>
               <ul>
                 <% @draft.citations.each do |citation| %>
@@ -199,7 +199,7 @@
 
             <% if @draft.source.present? %>
               <h6 class="card-subtitle mb-1 text-muted">
-                <%=  t('items.draft.describe_item.source') %>
+                <%= t('items.draft.describe_item.source') %>
               </h6>
               <p class="card-text">
                 <%= @draft.source %>
@@ -208,7 +208,7 @@
 
             <% if @draft.related_item.present? %>
               <h6 class="card-subtitle mb-1 text-muted">
-                <%=  t('items.draft.describe_item.related_item') %>
+                <%= t('items.draft.describe_item.related_item') %>
               </h6>
               <p class="card-text">
                 <%= @draft.related_item %>

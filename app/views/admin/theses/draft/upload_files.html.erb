@@ -8,7 +8,6 @@
     <%= t('.header') %>
   </h2>
 
-
   <% if @draft.errors.any? %>
     <ul class="list-unstyled alert alert-danger">
       <% @draft.errors.full_messages.each do |message| %>
@@ -23,7 +22,7 @@
                       html: {
                         id: :upload_files_form,
                         multipart: true,
-                        class:'js-files-dropzone'
+                        class: 'js-files-dropzone'
                       } do |f| %>
 
     <div class="row">
@@ -69,11 +68,10 @@
     </li>
   </ul>
 
-
   <%= simple_form_for @draft,
                       url: wizard_path,
                       method: :put,
-                      html: { class:'js-deposit-item' } do |f| %>
+                      html: { class: 'js-deposit-item' } do |f| %>
 
     <h4><%= t('.saved_files') %></h4>
     <div id="js-files-list">

@@ -6,13 +6,14 @@
     <% end %>
 
     <%= select_tag 'draft_item[community_id][]',
-                    options_from_collection_for_select(
-                      Community.all.order(:title => :asc),
-                      :id,
-                      :title,
-                      community.present? ? community.id : nil ),
-                    prompt: t('.community_placeholder'),
-                    class: 'form-control js-community-select' %>
+                   options_from_collection_for_select(
+                     Community.all.order(title: :asc),
+                     :id,
+                     :title,
+                     community.present? ? community.id : nil
+                   ),
+                   prompt: t('.community_placeholder'),
+                   class: 'form-control js-community-select' %>
   </div>
   <div class="form-group">
     <%= label_tag 'draft_item[collection_id][]' do %>
@@ -26,16 +27,17 @@
                            community.member_collections,
                            :id,
                            :title,
-                           collection.present? ? collection.id : nil),
+                           collection.present? ? collection.id : nil
+                         ),
                          prompt: t('.collection_placeholder'),
-                         data: { placeholder: t('.collection_placeholder')},
+                         data: { placeholder: t('.collection_placeholder') },
                          class: 'form-control js-collection-select' %>
     <% else %>
       <%= select_tag 'draft_item[collection_id][]',
-                      nil,
-                      data: { placeholder: t('.collection_placeholder')},
-                      class: 'form-control js-collection-select',
-                      disabled: true %>
+                     nil,
+                     data: { placeholder: t('.collection_placeholder') },
+                     class: 'form-control js-collection-select',
+                     disabled: true %>
     <% end %>
     <div class="d-flex flex-row-reverse">
       <div class="p-3">

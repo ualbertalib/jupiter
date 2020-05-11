@@ -3,7 +3,7 @@
 <ol class="breadcrumb mb-5">
   <li class="breadcrumb-item"><%= link_to t('admin.header'), admin_root_path %></li>
   <li class="breadcrumb-item"><%= link_to t('admin.users.index.header'), admin_users_path %></li>
-  <li class="breadcrumb-item active"><%=@user.email %></li>
+  <li class="breadcrumb-item active"><%= @user.email %></li>
 </ol>
 
 <div class="d-flex flex-wrap justify-content-between mb-3">
@@ -12,8 +12,8 @@
   <div class="align-self-center">
     <% if policy([:admin, @user]).suspend? %>
       <%= link_to(suspend_admin_user_path(@user), method: :patch,
-        class: 'btn btn-secondary',
-        data: { confirm: t('.suspend_dialog', user: @user.name) }) do %>
+                                                  class: 'btn btn-secondary',
+                                                  data: { confirm: t('.suspend_dialog', user: @user.name) }) do %>
         <%= icon('fas', 'ban') %>
         <%= t('.suspend_link_text') %>
       <% end %>
@@ -21,8 +21,8 @@
 
     <% if policy([:admin, @user]).unsuspend? %>
       <%= link_to(unsuspend_admin_user_path(@user), method: :patch,
-        class: 'btn btn-secondary',
-        data: { confirm: t('.unsuspend_dialog', user: @user.name) }) do %>
+                                                    class: 'btn btn-secondary',
+                                                    data: { confirm: t('.unsuspend_dialog', user: @user.name) }) do %>
         <%= icon('fas', 'check-circle') %>
         <%= t('.unsuspend_link_text') %>
       <% end %>
@@ -30,8 +30,8 @@
 
     <% if policy([:admin, @user]).revoke_admin? %>
       <%= link_to(revoke_admin_admin_user_path(@user), method: :patch,
-        class: 'btn btn-secondary',
-        data: { confirm: t('.revoke_admin_dialog', user: @user.name) }) do %>
+                                                       class: 'btn btn-secondary',
+                                                       data: { confirm: t('.revoke_admin_dialog', user: @user.name) }) do %>
         <%= icon('fas', 'minus-circle') %>
         <%= t('.revoke_admin_link_text') %>
       <% end %>
@@ -39,8 +39,8 @@
 
     <% if policy([:admin, @user]).grant_admin? %>
       <%= link_to(grant_admin_admin_user_path(@user), method: :patch,
-        class: 'btn btn-secondary',
-        data: { confirm: t('.grant_admin_dialog', user: @user.name) }) do %>
+                                                      class: 'btn btn-secondary',
+                                                      data: { confirm: t('.grant_admin_dialog', user: @user.name) }) do %>
         <%= icon('fas', 'shield-alt') %>
         <%= t('.grant_admin_link_text') %>
       <% end %>
@@ -48,8 +48,8 @@
 
     <% if policy([:admin, @user]).login_as_user? %>
       <%= link_to(login_as_user_admin_user_path(@user), method: :post,
-        class: 'btn btn-secondary',
-        data: { confirm: t('.login_as_user_dialog', user: @user.name) }) do %>
+                                                        class: 'btn btn-secondary',
+                                                        data: { confirm: t('.login_as_user_dialog', user: @user.name) }) do %>
         <%= icon('fas', 'user-secret') %>
         <%= t('.login_as_user_link_text') %>
       <% end %>
@@ -58,7 +58,7 @@
 </div>
 
 <dl class="row">
-  <dt class="col-sm-3"><%= t('admin.users.email')%></dt>
+  <dt class="col-sm-3"><%= t('admin.users.email') %></dt>
   <dd class="col-sm-9">
     <%= @user.email %>
   </dd>

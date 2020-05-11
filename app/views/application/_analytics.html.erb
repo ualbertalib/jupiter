@@ -2,7 +2,9 @@
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=<%= Rails.application.secrets.google_analytics_token %>"></script>
   <%# TODO: javascript_tag, nonce: true do %>
-  <%= javascript_tag do %>
+  <script>
+//<![CDATA[
+
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
@@ -12,6 +14,8 @@
         'page_path': window.location.pathname
       });
     });
-  <% end %>
+
+//]]>
+</script>
   <!-- End Google Analytics -->
 <% end %>

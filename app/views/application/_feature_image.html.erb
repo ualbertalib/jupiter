@@ -1,11 +1,11 @@
 <% if policy(object).thumbnail? %>
   <% if object.thumbnail_path.present? %>
-    <%= safe_thumbnail_tag(object.thumbnail_path(resize:'350x350', auto_orient: true), alt: '', size: '350x350') %>
+    <%= safe_thumbnail_tag(object.thumbnail_path(resize: '350x350', auto_orient: true), alt: '', size: '350x350') %>
   <% else %>
     <div class="d-flex justify-content-center align-items-center img-thumbnail p-5">
       <%= icon('far', file_icon(object.thumbnail_file&.content_type), class: 'fa-5x text-muted') %>
     </div>
   <% end %>
 <% else %>
-  <%= image_pack_tag('locked-uofa-logo.png', class: 'j-feature-image img-thumbnail',  alt: '', size: '350x350') %>
+  <%= image_pack_tag('locked-uofa-logo.png', class: 'j-feature-image img-thumbnail', alt: '', size: '350x350') %>
 <% end %>
