@@ -1,20 +1,14 @@
 <% page_title(t('.header')) %>
-
 <div class="container mt-3">
   <%= render partial: 'progress_bar' %>
-
   <h2 class="mt-3">
     <%= icon(t('.header_icon_type'), t('.header_icon')) %>
     <%= @is_edit ? t('.header_edit') : t('.header') %>
   </h2>
-
   <%= simple_form_for @draft, url: wizard_path, method: :put, html: { class: 'js-deposit-item' } do |f| %>
     <p><%= t('.please_review_thesis') %></p>
-
     <div class="row">
-
       <div class="col-md-4">
-
         <div class="card mb-3">
           <div class="card-header">
             <%= link_to wizard_path(:upload_files), class: 'float-right' do %>
@@ -23,17 +17,15 @@
             <% end %>
             <%= t('admin.theses.draft.upload_files.header') %>
           </div>
-
           <div class="card-body">
             <%= render partial: 'feature_image', locals: { object: @draft } %>
-
             <ul class="list-group mt-3">
               <% @draft.files.each do |file| %>
                 <li class="list-group-item">
                   <%= icon('far', file_icon(file.content_type)) %>
                   <%= file.filename %>
                   <span class="badge badge-primary badge-pill float-right">
-                  <%= number_to_human_size(file.byte_size) %>
+                    <%= number_to_human_size(file.byte_size) %>
                   </span>
                 </li>
               <% end %>
@@ -49,23 +41,22 @@
             <%= t('admin.theses.draft.choose_license_and_visibility.header') %>
           </div>
           <div class="card-body">
-            <h4 class="card-title">License</h4>
+            <h4 class="card-title"><%= t('admin.theses.draft.choose_license_and_visibility.license.header') %></h4>
             <p class="card-text">
               <% if @draft.rights.present? %>
                 <%= @draft.rights %>
               <% end %>
             </p>
-            <h4 class="card-title">Visibility</h4>
-              <p class="card-text">
-                <%= t("admin.theses.draft.choose_license_and_visibility.visibility.#{@draft.visibility}") %>
-                <% if @draft.embargo? %>
-                  <%= jupiter_time_tag(@draft.embargo_end_date) %>
-                <% end %>
-              </p>
+            <h4 class="card-title"><%= t('admin.theses.draft.choose_license_and_visibility.visibility.header') %></h4>
+            <p class="card-text">
+              <%= t("admin.theses.draft.choose_license_and_visibility.visibility.#{@draft.visibility}") %>
+              <% if @draft.embargo? %>
+                <%= jupiter_time_tag(@draft.embargo_end_date) %>
+              <% end %>
+            </p>
           </div>
         </div>
       </div>
-
       <div class="col-md-8">
         <div class="card mb-3">
           <div class="card-header">
@@ -80,14 +71,12 @@
               <%= t('admin.theses.draft.describe_thesis.title') %>
             </h6>
             <p class="card-text"><%= @draft.title %></p>
-
             <% if @draft.alternate_title.present? %>
               <h6 class="card-subtitle mb-1 text-muted">
                 <%= t('admin.theses.draft.describe_thesis.alternate_title') %>
               </h6>
               <p class="card-text"><%= @draft.alternate_title %></p>
             <% end %>
-
             <% if @draft.language.present? %>
               <h6 class="card-subtitle mb-1 text-muted">
                 <%= t('admin.theses.draft.describe_thesis.language') %>
@@ -96,30 +85,26 @@
                 <%= @draft.language.translated_name %>
               </p>
             <% end %>
-
             <h6 class="card-subtitle mb-1 text-muted">
               <%= t('admin.theses.draft.describe_thesis.creator') %>
             </h6>
             <p class="card-text"><%= @draft.creator %></p>
-
             <% if @draft.subjects.present? %>
               <h6 class="card-subtitle mb-1 text-muted">
                 <%= t('admin.theses.draft.describe_thesis.subjects') %>
               </h6>
               <ul>
                 <% @draft.subjects.each do |subject| %>
-                <li><%= subject %></li>
+                  <li><%= subject %></li>
                 <% end %>
               </ul>
             <% end %>
-
             <h6 class="card-subtitle mb-1 text-muted">
               <%= t('admin.theses.draft.describe_thesis.description') %>
             </h6>
             <p class="card-text">
               <%= @draft.description %>
             </p>
-
             <% if @draft.graduation_term.present? %>
               <h6 class="card-subtitle mb-1 text-muted">
                 <%= t('admin.theses.draft.describe_thesis.graduation_term') %>
@@ -128,14 +113,12 @@
                 <%= @draft.graduation_term %>
               </p>
             <% end %>
-
             <h6 class="card-subtitle mb-1 text-muted">
               <%= t('admin.theses.draft.describe_thesis.graduation_year') %>
             </h6>
             <p class="card-text">
               <%= @draft.graduation_year %>
             </p>
-
             <h6 class="card-subtitle mb-1 text-muted">
               <%= t('admin.theses.draft.describe_thesis.community_and_collection') %>
             </h6>
@@ -148,42 +131,36 @@
                 </li>
               <% end %>
             </ul>
-
             <% if @draft.date_submitted.present? %>
               <h6 class="card-subtitle mb-1 text-muted">
                 <%= t('admin.theses.draft.describe_thesis.date_submitted') %>
               </h6>
               <p class="card-text"><%= jupiter_time_tag(@draft.date_submitted) %></p>
             <% end %>
-
             <% if @draft.date_accepted.present? %>
               <h6 class="card-subtitle mb-1 text-muted">
                 <%= t('admin.theses.draft.describe_thesis.date_accepted') %>
               </h6>
               <p class="card-text"><%= jupiter_time_tag(@draft.date_accepted) %></p>
             <% end %>
-
             <% if @draft.degree_level.present? %>
               <h6 class="card-subtitle mb-1 text-muted">
                 <%= t('admin.theses.draft.describe_thesis.degree_level') %>
               </h6>
               <p class="card-text"><%= @draft.degree_level %></p>
             <% end %>
-
             <% if @draft.degree.present? %>
               <h6 class="card-subtitle mb-1 text-muted">
                 <%= t('admin.theses.draft.describe_thesis.degree') %>
               </h6>
               <p class="card-text"><%= @draft.degree %></p>
             <% end %>
-
             <% if @draft.specialization.present? %>
               <h6 class="card-subtitle mb-1 text-muted">
                 <%= t('admin.theses.draft.describe_thesis.specialization') %>
               </h6>
               <p class="card-text"><%= @draft.specialization %></p>
             <% end %>
-
             <% if @draft.institution.present? %>
               <h6 class="card-subtitle mb-1 text-muted">
                 <%= t('admin.theses.draft.describe_thesis.institution_id') %>
@@ -192,43 +169,38 @@
                 <%= @draft.institution.translated_name %>
               </p>
             <% end %>
-
             <% if @draft.departments.present? %>
               <h6 class="card-subtitle mb-1 text-muted">
                 <%= t('admin.theses.draft.describe_thesis.departments') %>
               </h6>
               <ul>
                 <% @draft.departments.each do |subject| %>
-                <li><%= subject %></li>
+                  <li><%= subject %></li>
                 <% end %>
               </ul>
             <% end %>
-
             <% if @draft.supervisors.present? %>
               <h6 class="card-subtitle mb-1 text-muted">
                 <%= t('admin.theses.draft.describe_thesis.supervisors') %>
               </h6>
               <ul>
                 <% @draft.supervisors.each do |subject| %>
-                <li><%= subject %></li>
+                  <li><%= subject %></li>
                 <% end %>
               </ul>
             <% end %>
-
             <% if @draft.committee_members.present? %>
               <h6 class="card-subtitle mb-1 text-muted">
                 <%= t('admin.theses.draft.describe_thesis.committee_members') %>
               </h6>
               <ul>
                 <% @draft.committee_members.each do |subject| %>
-                <li><%= subject %></li>
+                  <li><%= subject %></li>
                 <% end %>
               </ul>
             <% end %>
-
           </div>
         </div>
-
         <p><%= t('.legal_disclaimer_html') %></p>
         <div class="mb-3 d-flex flex-wrap justify-content-end">
           <%= link_to previous_wizard_path, class: 'btn btn-secondary mr-2' do %>

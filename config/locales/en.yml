@@ -165,7 +165,7 @@ en:
             api_key_digest:
               present_if_system_true: 'must be present if System value is true'
               blank_if_system_false: 'must be blank if System value is false'
-            
+
   application:
     navbar:
       era_logo_alt: 'ERA - Education and Research Archive'
@@ -195,6 +195,8 @@ en:
     results:
       no_items_found: 'No items found'
       skip_to_results: 'Skip to Search Results'
+    range_facet_result:
+      to: 'to'
 
   locked_ldp_object:
     errors:
