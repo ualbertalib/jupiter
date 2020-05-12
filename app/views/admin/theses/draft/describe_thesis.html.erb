@@ -15,7 +15,7 @@
     </p>
   <% end %>
 
-  <%= simple_form_for @draft, url: wizard_path, method: :put, html: { class:'js-deposit-item' } do |f| %>
+  <%= simple_form_for @draft, url: wizard_path, method: :put, html: { class: 'js-deposit-item' } do |f| %>
     <p class="text-muted"><%= t('required_fields_html') %></p>
 
     <%= f.input :title,
@@ -29,28 +29,28 @@
                 hint: t('.alternate_title_help') %>
 
     <%= f.association :language,
-        label: t('.language'),
-        label_method: :translated_name,
-        value_method: :id,
-        prompt: t('.language_placeholder') %>
+                      label: t('.language'),
+                      label_method: :translated_name,
+                      value_method: :id,
+                      prompt: t('.language_placeholder') %>
 
     <%= f.input :creator,
-        label: t('.creator'),
-        required: true,
-        placeholder: t('.creator_placeholder'),
-        hint: t('.creator_help') %>
+                label: t('.creator'),
+                required: true,
+                placeholder: t('.creator_placeholder'),
+                hint: t('.creator_help') %>
 
     <%= f.input :subjects,
-        label: t('.subjects'),
-        collection: @draft.subjects || [],
-        include_hidden: false,
-        input_html: {
-          multiple: true,
-          data: { placeholder: t('.subjects_placeholder') },
-          class: 'js-selectize-create'
-        },
-        prompt: t('.subjects_placeholder'),
-        hint: t('.subjects_help') %>
+                label: t('.subjects'),
+                collection: @draft.subjects || [],
+                include_hidden: false,
+                input_html: {
+                  multiple: true,
+                  data: { placeholder: t('.subjects_placeholder') },
+                  class: 'js-selectize-create'
+                },
+                prompt: t('.subjects_placeholder'),
+                hint: t('.subjects_help') %>
 
     <%= f.input :description,
                 as: :text,
@@ -67,7 +67,7 @@
     <%= f.input :graduation_year,
                 label: t('.graduation_year'),
                 required: true,
-                collection: (Date.today.year + 1).downto(DraftProperties::UNIVERSITY_INCEPTION_YEAR),
+                collection: (Time.zone.today.year + 1).downto(DraftProperties::UNIVERSITY_INCEPTION_YEAR),
                 include_blank: t('select_a_year') %>
 
     <fieldset>
@@ -89,11 +89,11 @@
         <% if @draft.communities.present? %>
           <% @draft.each_community_collection do |community, collection| %>
             <%= render partial: 'community_collection_input',
-                locals: { community: community, collection: collection } %>
+                       locals: { community: community, collection: collection } %>
           <% end %>
         <% else %>
           <%= render partial: 'community_collection_input',
-              locals: { community: nil, collection: nil} %>
+                     locals: { community: nil, collection: nil } %>
         <% end %>
       </div>
     </fieldset>
@@ -107,7 +107,7 @@
                 aria-expanded="false"
                 aria-controls="js-collapse-additional-fields">
               <%= t('.additional_fields') %>
-              <%= icon('fas', 'chevron-down', class: "js-more-less float-right") %>
+              <%= icon('fas', 'chevron-down', class: 'js-more-less float-right') %>
             </a>
           </h5>
         </div>
@@ -120,80 +120,80 @@
           <div class="card-body">
 
             <%= f.input :date_submitted,
-                as: :date,
-                label: t('.date_submitted'),
-                order: [:year, :month, :day],
-                prompt: {
-                  day: t('select_a_day'),
-                  month: t('select_a_month'),
-                  year: t('select_a_year')
-                },
-                start_year: Date.today.year + 1,
-                end_year: DraftProperties::UNIVERSITY_INCEPTION_YEAR,
-                input_html: { class: 'mr-2 mb-2', 'aria-labelledby': 'draft_date_submitted_1i' } %>
+                        as: :date,
+                        label: t('.date_submitted'),
+                        order: [:year, :month, :day],
+                        prompt: {
+                          day: t('select_a_day'),
+                          month: t('select_a_month'),
+                          year: t('select_a_year')
+                        },
+                        start_year: Time.zone.today.year + 1,
+                        end_year: DraftProperties::UNIVERSITY_INCEPTION_YEAR,
+                        input_html: { class: 'mr-2 mb-2', 'aria-labelledby': 'draft_date_submitted_1i' } %>
 
             <%= f.input :date_accepted,
-                as: :date,
-                label: t('.date_accepted'),
-                order: [:year, :month, :day],
-                prompt: {
-                  day: t('select_a_day'),
-                  month: t('select_a_month'),
-                  year: t('select_a_year')
-                },
-                start_year: Date.today.year + 1,
-                end_year: DraftProperties::UNIVERSITY_INCEPTION_YEAR,
-                input_html: { class: 'mr-2 mb-2', 'aria-labelledby': 'draft_date_accepted_1i' } %>
+                        as: :date,
+                        label: t('.date_accepted'),
+                        order: [:year, :month, :day],
+                        prompt: {
+                          day: t('select_a_day'),
+                          month: t('select_a_month'),
+                          year: t('select_a_year')
+                        },
+                        start_year: Time.zone.today.year + 1,
+                        end_year: DraftProperties::UNIVERSITY_INCEPTION_YEAR,
+                        input_html: { class: 'mr-2 mb-2', 'aria-labelledby': 'draft_date_accepted_1i' } %>
 
             <%= f.input :degree_level,
-                label: t('.degree_level') %>
+                        label: t('.degree_level') %>
 
             <%= f.input :degree,
-                label: t('.degree') %>
+                        label: t('.degree') %>
 
             <%= f.input :specialization,
-                label: t('.specialization') %>
+                        label: t('.specialization') %>
 
             <%= f.association :institution,
-                label: t('.institution_id'),
-                label_method: :translated_name,
-                value_method: :id,
-                prompt: t('.institution_id_placeholder') %>
+                              label: t('.institution_id'),
+                              label_method: :translated_name,
+                              value_method: :id,
+                              prompt: t('.institution_id_placeholder') %>
 
             <%= f.input :departments,
-                label: t('.departments'),
-                collection: @draft.departments || [],
-                include_hidden: false,
-                input_html: {
-                  multiple: true,
-                  data: { placeholder: t('.departments_placeholder') },
-                  class: 'js-selectize-create'
-                },
-                include_blank: false %>
+                        label: t('.departments'),
+                        collection: @draft.departments || [],
+                        include_hidden: false,
+                        input_html: {
+                          multiple: true,
+                          data: { placeholder: t('.departments_placeholder') },
+                          class: 'js-selectize-create'
+                        },
+                        include_blank: false %>
 
             <%= f.input :supervisors,
-                label: t('.supervisors'),
-                collection: @draft.supervisors || [],
-                include_hidden: false,
-                input_html: {
-                  multiple: true,
-                  data: { placeholder: t('.supervisors_placeholder') },
-                  class: 'js-selectize-create'
-                },
-                include_blank: false,
-                hint: t('.supervisors_help') %>
+                        label: t('.supervisors'),
+                        collection: @draft.supervisors || [],
+                        include_hidden: false,
+                        input_html: {
+                          multiple: true,
+                          data: { placeholder: t('.supervisors_placeholder') },
+                          class: 'js-selectize-create'
+                        },
+                        include_blank: false,
+                        hint: t('.supervisors_help') %>
 
             <%= f.input :committee_members,
-                label: t('.committee_members'),
-                collection: @draft.committee_members || [],
-                include_hidden: false,
-                input_html: {
-                  multiple: true,
-                  data: { placeholder: t('.committee_members_placeholder') },
-                  class: 'js-selectize-create'
-                },
-                include_blank: false,
-                hint: t('.committee_members_help') %>
+                        label: t('.committee_members'),
+                        collection: @draft.committee_members || [],
+                        include_hidden: false,
+                        input_html: {
+                          multiple: true,
+                          data: { placeholder: t('.committee_members_placeholder') },
+                          class: 'js-selectize-create'
+                        },
+                        include_blank: false,
+                        hint: t('.committee_members_help') %>
           </div>
         </div>
       </div>

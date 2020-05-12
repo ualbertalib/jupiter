@@ -64,7 +64,7 @@
                       month: t('select_a_month'),
                       year: t('select_a_year')
                     },
-                    start_year: Date.today.year,
+                    start_year: Time.zone.today.year,
                     input_html: { class: 'mr-2 mb-2', 'aria-label': t('.visibility.embargo') } %>
       </div>
     </fieldset>

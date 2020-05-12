@@ -31,10 +31,14 @@
     # Project custom linters
     SelfClosingTag:
       enforced_style: 'never' # We want HTML5 style
+
     HardCodedString:
       enabled: true
-    ErbSafety:
-      enabled: true
+      exclude:
+        - '**/*.en.html.erb'
+
+    # ErbSafety:
+    #   enabled: true
 
     Rubocop:
       enabled: true
