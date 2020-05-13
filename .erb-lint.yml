@@ -39,8 +39,9 @@
       exclude:
         - '**/*.en.html.erb'
 
-    # ErbSafety:
-    #   enabled: true
+    # Needs more thought into this. Disable this for now.
+    ErbSafety:
+      enabled: false
 
     Rubocop:
       enabled: true
