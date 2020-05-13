@@ -4,7 +4,7 @@
 
 <%= simple_form_for [:admin, @new_announcement] do |f| %>
   <fieldset>
-    <legend><%= t('.post_new_announcement')%></legend>
+    <legend><%= t('.post_new_announcement') %></legend>
 
     <%= f.input :message %>
     <%= f.button :submit, t('.new_button_text'), class: 'float-right' %>
@@ -23,7 +23,7 @@
                       admin_announcement_path(announcement),
                       method: :delete,
                       class: 'btn btn-danger',
-                      data: {confirm: t('.are_you_sure_you_want_to_remove')} %>
+                      data: { confirm: t('.are_you_sure_you_want_to_remove') } %>
       </div>
       <p>
         <%= t('.created_by') %>
@@ -40,16 +40,15 @@
 <h2 class="mt-5"><%= t('.past_announcements') %></h2>
 
 <%= search_form_for @search, url: admin_announcements_path,
-                        html: { method: :get, class: 'js-autocomplete my-3 form-inline'} do |f| %>
+                             html: { method: :get, class: 'js-autocomplete my-3 form-inline' } do |f| %>
 
   <div class="form-group">
     <%= f.label :message_cont, t('search_label'), class: 'mr-sm-2' %>
     <%= f.search_field :message_cont,
-          placeholder: t('.search_placeholder'),
-          class: 'form-control' %>
+                       placeholder: t('.search_placeholder'),
+                       class: 'form-control' %>
   </div>
 <% end %>
-
 
 <div id="js-ajax-table">
   <%= render partial: 'past_announcements' %>

@@ -15,7 +15,7 @@
     </p>
   <% end %>
 
-  <%= simple_form_for @draft, url: wizard_path, method: :put, html: { class:'js-deposit-item' } do |f| %>
+  <%= simple_form_for @draft, url: wizard_path, method: :put, html: { class: 'js-deposit-item' } do |f| %>
     <p class="text-muted"><%= t('required_fields_html') %></p>
 
     <%= f.input :title,
@@ -29,49 +29,48 @@
                 hint: t('.alternate_title_help') %>
 
     <%= f.association :type,
-        label: t('.type_id'),
-        label_method: :translated_name,
-        value_method: :id,
-        required: true,
-        prompt: t('.type_id_placeholder'),
-        hint: t('.type_id_help_html') %>
-
+                      label: t('.type_id'),
+                      label_method: :translated_name,
+                      value_method: :id,
+                      required: true,
+                      prompt: t('.type_id_placeholder'),
+                      hint: t('.type_id_help_html') %>
 
     <%= f.association :languages,
-        label: t('.languages'),
-        label_method: :translated_name,
-        value_method: :id,
-        multiple: true,
-        input_html: {
-          data: { placeholder: t('.languages_placeholder') },
-          class: 'js-selectize'
-        },
-        required: true,
-        prompt: t('.languages_placeholder') %>
+                      label: t('.languages'),
+                      label_method: :translated_name,
+                      value_method: :id,
+                      multiple: true,
+                      input_html: {
+                        data: { placeholder: t('.languages_placeholder') },
+                        class: 'js-selectize'
+                      },
+                      required: true,
+                      prompt: t('.languages_placeholder') %>
 
     <%= f.input :creators,
-        label: t('.creators'),
-        collection: @draft.creators || [],
-        input_html: {
-          multiple: true,
-          data: { placeholder: t('.creators_placeholder') },
-          class: 'js-selectize-create'
-        },
-        required: true,
-        prompt: t('.creators_placeholder'),
-        hint: t('.creators_help') %>
+                label: t('.creators'),
+                collection: @draft.creators || [],
+                input_html: {
+                  multiple: true,
+                  data: { placeholder: t('.creators_placeholder') },
+                  class: 'js-selectize-create'
+                },
+                required: true,
+                prompt: t('.creators_placeholder'),
+                hint: t('.creators_help') %>
 
     <%= f.input :subjects,
-        label: t('.subjects'),
-        collection: @draft.subjects || [],
-        input_html: {
-          multiple: true,
-          data: { placeholder: t('.subjects_placeholder') },
-          class: 'js-selectize-create'
-        },
-        required: true,
-        prompt: t('.subjects_placeholder'),
-        hint: t('.subjects_help') %>
+                label: t('.subjects'),
+                collection: @draft.subjects || [],
+                input_html: {
+                  multiple: true,
+                  data: { placeholder: t('.subjects_placeholder') },
+                  class: 'js-selectize-create'
+                },
+                required: true,
+                prompt: t('.subjects_placeholder'),
+                hint: t('.subjects_help') %>
 
     <%= f.input :date_created,
                 as: :date,
@@ -82,7 +81,7 @@
                   month: t('select_a_month'),
                   year: t('select_a_year')
                 },
-                start_year: Date.today.year + 1,
+                start_year: Time.zone.today.year + 1,
                 end_year: DraftProperties::UNIVERSITY_INCEPTION_YEAR,
                 input_html: { class: 'mr-2 mb-2', 'aria-labelledby': 'draft_item_date_created_1i' },
                 required: true,
@@ -115,17 +114,17 @@
 
           <% @draft.each_community_collection do |community, collection| %>
             <%= render partial: 'community_collection_input',
-                locals: { community: community, collection: collection } %>
+                       locals: { community: community, collection: collection } %>
           <% end %>
         <% else %>
           <%= render partial: 'community_collection_input',
-              locals: { community: nil, collection: nil} %>
+                     locals: { community: nil, collection: nil } %>
         <% end %>
       </div>
       <div class="d-flex flex-row-reverse">
         <div class="p-3">
           <%= link_to "#{icon('fas', 'plus')} #{t(:add_another_community_collection)}".html_safe,
-              '#', class: 'btn btn-secondary js-add-community-collection' %>
+                      '#', class: 'btn btn-secondary js-add-community-collection' %>
         </div>
       </div>
     </fieldset>
@@ -139,7 +138,7 @@
                 aria-expanded="false"
                 aria-controls="js-collapse-additional-fields">
               <%= t('.additional_fields') %>
-              <%= icon('fas', 'chevron-down', class: "js-more-less float-right") %>
+              <%= icon('fas', 'chevron-down', class: 'js-more-less float-right') %>
             </a>
           </h5>
         </div>
@@ -151,56 +150,56 @@
               aria-labelledby="js-heading-additional-fields">
           <div class="card-body">
             <%= f.input :contributors,
-                label: t('.contributors'),
-                collection: @draft.contributors || [],
-                input_html: {
-                  multiple: true,
-                  data: { placeholder: t('.contributors_placeholder') },
-                  class: 'js-selectize-create'
-                },
-                include_blank: false,
-                hint: t('.contributors_help') %>
+                        label: t('.contributors'),
+                        collection: @draft.contributors || [],
+                        input_html: {
+                          multiple: true,
+                          data: { placeholder: t('.contributors_placeholder') },
+                          class: 'js-selectize-create'
+                        },
+                        include_blank: false,
+                        hint: t('.contributors_help') %>
 
             <%= f.input :places,
-                label: t('.places'),
-                collection: @draft.places || [],
-                input_html: {
-                  multiple: true,
-                  data: { placeholder: t('.places_placeholder') },
-                  class: 'js-selectize-create'
-                },
-                include_blank: false,
-                hint: t('.places_help') %>
+                        label: t('.places'),
+                        collection: @draft.places || [],
+                        input_html: {
+                          multiple: true,
+                          data: { placeholder: t('.places_placeholder') },
+                          class: 'js-selectize-create'
+                        },
+                        include_blank: false,
+                        hint: t('.places_help') %>
 
             <%= f.input :time_periods,
-                label: t('.time_periods'),
-                collection: @draft.time_periods || [],
-                input_html: {
-                  multiple: true,
-                  data: { placeholder: t('.time_periods_placeholder') },
-                  class: 'js-selectize-create'
-                },
-                include_blank: false,
-                hint: t('.time_periods_help_html') %>
+                        label: t('.time_periods'),
+                        collection: @draft.time_periods || [],
+                        input_html: {
+                          multiple: true,
+                          data: { placeholder: t('.time_periods_placeholder') },
+                          class: 'js-selectize-create'
+                        },
+                        include_blank: false,
+                        hint: t('.time_periods_help_html') %>
 
             <%= f.input :citations,
-                label: t('.citations'),
-                collection: @draft.citations || [],
-                input_html: {
-                  multiple: true,
-                  data: { placeholder: t('.citations_placeholder') },
-                  class: 'js-selectize-create'
-                },
-                include_blank: false,
-                hint: t('.citations_help') %>
+                        label: t('.citations'),
+                        collection: @draft.citations || [],
+                        input_html: {
+                          multiple: true,
+                          data: { placeholder: t('.citations_placeholder') },
+                          class: 'js-selectize-create'
+                        },
+                        include_blank: false,
+                        hint: t('.citations_help') %>
 
             <%= f.input :source,
-                label: t('.source'),
-                hint: t('.source_help') %>
+                        label: t('.source'),
+                        hint: t('.source_help') %>
 
             <%= f.input :related_item,
-                label: t('.related_item'),
-                hint: t('.related_item_help') %>
+                        label: t('.related_item'),
+                        hint: t('.related_item_help') %>
           </div>
         </div>
       </div>

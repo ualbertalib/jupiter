@@ -28,7 +28,14 @@
 
 # Check your style
 
+For Ruby files:
 `$ bundle exec rubocop`
+
+For ERB files:
+`$ bundle exec erblint .`
+
+For javascript files:
+`$ yarn lint`
 
 # Run tests
 

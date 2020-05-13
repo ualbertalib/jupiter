@@ -11,14 +11,14 @@
       <div class="btn-group">
         <% if policy(@collection).edit? %>
           <%= link_to edit_admin_community_collection_path(@community, @collection),
-              class:'btn btn-outline-secondary' do %>
+                      class: 'btn btn-outline-secondary' do %>
             <%= icon('fas', 'edit') %>
             <%= t('edit') %>
           <% end %>
         <% end %>
         <% if policy(@collection).destroy? %>
           <%= link_to admin_community_collection_path(@community, @collection), method: :delete,
-              class:'btn btn-outline-secondary', data: { confirm: t('.delete_confirm', title: @collection.title) } do %>
+                                                                                class: 'btn btn-outline-secondary', data: { confirm: t('.delete_confirm', title: @collection.title) } do %>
             <%= icon('fas', 'trash-alt') %>
             <%= t('delete') %>
           <% end %>
@@ -41,7 +41,7 @@
     <% if @collection.restricted.blank? %>
       <% if policy(:item).new? %>
         <%= link_to create_draft_items_path(collection: @collection.id), method: :post,
-            class: 'btn btn-primary' do %>
+                                                                         class: 'btn btn-primary' do %>
           <%= icon('fas', 'plus-circle') %>
           <%= t('.deposit_item') %>
         <% end %>
@@ -49,7 +49,7 @@
     <% else %>
       <% if policy(:thesis).new? %>
         <%= link_to create_draft_admin_theses_path(collection: @collection.id), method: :post,
-            class: 'btn btn-primary' do %>
+                                                                                class: 'btn btn-primary' do %>
           <%= icon('fas', 'plus-circle') %>
           <%= t('.deposit_thesis') %>
         <% end %>
@@ -57,7 +57,7 @@
     <% end %>
   </div>
 
-  <%= render partial: 'search_bar', locals: {placeholder: t('.search_placeholder')} %>
+  <%= render partial: 'search_bar', locals: { placeholder: t('.search_placeholder') } %>
   <%= render partial: 'results' %>
 
 </div>

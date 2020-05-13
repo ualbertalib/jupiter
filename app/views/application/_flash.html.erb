@@ -1,7 +1,7 @@
 <% if flash.any? %>
   <div class="container mt-3 alert alert-<%= flash[:notice] ? 'success' : 'danger' %>" role="alert">
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
+      <span aria-hidden="true"><%= icon('fas', 'times') %></span>
     </button>
     <%= flash[:notice] || flash[:alert] %>
   </div>

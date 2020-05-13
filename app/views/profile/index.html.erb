@@ -9,14 +9,14 @@
       <%= jupiter_time_tag(@user.created_at) %>
     </dd>
 
-    <dt class="col-sm-3"><%= t('admin.users.email')%></dt>
+    <dt class="col-sm-3"><%= t('admin.users.email') %></dt>
     <dd class="col-sm-9">
       <%= @user.email %>
     </dd>
   </dl>
 
   <%= render partial: 'user_items',
-            locals: { draft_items_header: t('.draft_items_header'),
-                      draft_theses_header: t('.draft_theses_header'),
-                      items_header: t('.items_header') } %>
+             locals: { draft_items_header: t('.draft_items_header'),
+                       draft_theses_header: t('.draft_theses_header'),
+                       items_header: t('.items_header') } %>
 </div>

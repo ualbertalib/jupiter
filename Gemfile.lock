@@ -105,6 +105,14 @@ GEM
       coderay (>= 1.0.0)
       erubi (>= 1.0.0)
       rack (>= 0.9.0)
+    better_html (1.0.14)
+      actionview (>= 4.0)
+      activesupport (>= 4.0)
+      ast (~> 2.0)
+      erubi (~> 1.4)
+      html_tokenizer (~> 0.0.6)
+      parser (>= 2.4)
+      smart_properties
     bindex (0.8.1)
     binding_of_caller (0.8.0)
       debug_inspector (>= 0.0.1)
@@ -163,6 +171,13 @@ GEM
     ebnf (1.2.0)
       rdf (~> 3.1)
       sxp (~> 1.1)
+    erb_lint (0.0.32)
+      activesupport
+      better_html (~> 1.0.7)
+      html_tokenizer
+      rainbow
+      rubocop (~> 0.79)
+      smart_properties
     erubi (1.9.0)
     et-orbi (1.2.4)
       tzinfo
@@ -188,6 +203,7 @@ GEM
       concurrent-ruby (~> 1.0)
     hashdiff (1.0.1)
     hashie (3.6.0)
+    html_tokenizer (0.0.7)
     i18n (1.8.2)
       concurrent-ruby (~> 1.0)
     image_processing (1.10.3)
@@ -411,6 +427,7 @@ GEM
       skylight-core (= 4.3.0)
     skylight-core (4.3.0)
       activesupport (>= 4.2.0)
+    smart_properties (1.15.0)
     sparql (3.1.0)
       builder (~> 3.2)
       ebnf (~> 1.2)
@@ -491,6 +508,7 @@ DEPENDENCIES
   danger (~> 8.0)
   differ
   draper
+  erb_lint (>= 0.0.32)
   ezid-client (~> 1.8.0)
   faker
   haikunator

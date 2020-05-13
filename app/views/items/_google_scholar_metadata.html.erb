@@ -1,17 +1,17 @@
 <!-- Google Scholar metadata -->
-<meta name="citation_title" content="<%= @item.title%>"/>
+<meta name="citation_title" content="<%= @item.title %>">
 <% @item.authors.each do |author| %>
-  <meta name="citation_author" content="<%= author %>"/>
+  <meta name="citation_author" content="<%= author %>">
 <% end %>
 <% if @item.creation_date.present? %>
-  <meta name="citation_publication_date" content="<%= humanize_date(@item.creation_date) %>"/>
+  <meta name="citation_publication_date" content="<%= humanize_date(@item.creation_date) %>">
 <% end %>
 <% citation_file = @item.files.first %>
 <% if citation_file.present? && citation_file.fileset_uuid.present? %>
   <%# TODO: limit to pdf mime-type if/when that gets stored %>
   <meta name="citation_pdf_url" content="<%= file_view_item_url(id: citation_file.record.id,
                                                                 file_set_id: citation_file.fileset_uuid,
-                                                                file_name: citation_file.filename.to_s) %>"/>
+                                                                file_name: citation_file.filename.to_s) %>">
 <% end %>
-<meta name="dc.identifier" content="<%= @item.doi %>"/>
-<meta name="citation_doi" content="<%= @item.doi %>"/>
+<meta name="dc.identifier" content="<%= @item.doi %>">
+<meta name="citation_doi" content="<%= @item.doi %>">

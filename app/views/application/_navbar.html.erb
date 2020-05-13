@@ -1,17 +1,17 @@
 <header class="j-header navbar navbar-light fixed-top navbar-expand-md bg-jupiter-primary">
   <a href="#content" class="j-skip js-skip-to-content d-block p-3 sr-only sr-only-focusable">
-    <%= t('.skip_to_main_content')%>
+    <%= t('.skip_to_main_content') %>
   </a>
   <nav class="container">
     <%= link_to root_path, class: 'navbar-brand' do %>
       <%= image_pack_tag('era-logo.png',
-          width: '100',
-          class: 'align-top d-none d-md-block',
-          alt: t('.era_logo_alt')) %>
+                         width: '100',
+                         class: 'align-top d-none d-md-block',
+                         alt: t('.era_logo_alt')) %>
       <%= image_pack_tag('era-logo-without-text.png',
-          width: '100',
-          class: 'd-inline-block align-top d-md-none',
-          alt: t('.era_logo_alt')) %>
+                         width: '100',
+                         class: 'd-inline-block align-top d-md-none',
+                         alt: t('.era_logo_alt')) %>
     <% end %>
 
     <button type="button"
@@ -31,7 +31,7 @@
           <form class="d-inline" action="<%= search_path %>">
             <div class="input-group">
               <%= search_field_tag 'search', nil, placeholder: t('.search.placeholder'),
-                  value: params[:search], id: 'navbar-search-lg', 'aria-label': t('.search.placeholder'), class: "form-control" %>
+                                                  value: params[:search], id: 'navbar-search-lg', 'aria-label': t('.search.placeholder'), class: 'form-control' %>
               <div class="input-group-btn">
                 <button type="submit" class="btn btn-secondary">
                   <%= icon('fas', 'search') %>
@@ -47,15 +47,15 @@
       <ul class="navbar-nav pull-xs-right mr-2 float-right text-right">
 
         <li role="presentation" class="nav-item">
-          <%= active_link_to t('.links.communities'), communities_path, class: "nav-link" %>
+          <%= active_link_to t('.links.communities'), communities_path, class: 'nav-link' %>
         </li>
 
         <li role="presentation" class="nav-item">
-          <%= active_link_to t('.links.new_item'), create_draft_items_path, method: :post, class: "nav-link" %>
+          <%= active_link_to t('.links.new_item'), create_draft_items_path, method: :post, class: 'nav-link' %>
         </li>
 
         <li role="presentation" class="nav-item">
-          <%= active_link_to t('.links.about'), about_path, class: "nav-link" %>
+          <%= active_link_to t('.links.about'), about_path, class: 'nav-link' %>
         </li>
 
         <% if current_user.present? %>
@@ -82,7 +82,7 @@
               <% if session[:admin_id] %>
                 <div class="dropdown-divider"></div>
                 <%= link_to t('.links.logout_as_user'), logout_as_user_path, method: :post,
-                    class: 'dropdown-item' %>
+                                                                             class: 'dropdown-item' %>
               <% end %>
 
               <% if current_user.admin? %>
@@ -111,7 +111,7 @@
     <form action="<%= search_path %>">
       <div class="input-group container px-0">
         <%= search_field_tag 'search', nil, placeholder: t('.search.placeholder'),
-            value: params[:search], id: 'navbar-search-sm', 'aria-label': t('.search.placeholder'), class: "form-control" %>
+                                            value: params[:search], id: 'navbar-search-sm', 'aria-label': t('.search.placeholder'), class: 'form-control' %>
         <div class="input-group-btn">
           <button type="submit" class="btn btn-secondary" title="<%= t('.search.button_text') %>">
             <%= icon('fas', 'search') %>

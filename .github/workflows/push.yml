@@ -60,6 +60,9 @@ jobs:
           DANGER_GITHUB_API_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
         run: bundle exec danger
 
+      - name: Run ERBLint
+        run: bundle exec erblint .
+
       - name: Run Tests
         env:
           RAILS_ENV: test
