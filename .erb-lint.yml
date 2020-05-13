@@ -1,4 +1,6 @@
 ---
+  exclude:
+    - '**/vendor/**/*'
   linters:
     # Default linters
     AllowedScriptType:
