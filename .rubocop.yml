@@ -174,3 +174,9 @@ Style/WordArray:
 
 Performance/TimesMap:
   Enabled: false
+
+Layout/EmptyLinesAroundAttributeAccessor:
+  Enabled: true
+
+Style/SlicingWithRange:
+  Enabled: true
