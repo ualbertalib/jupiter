@@ -3,7 +3,8 @@ class Admin::ItemsController < Admin::AdminController
   include ItemSearch
 
   def index
-    restrict_items_to nil # no restrictions on items searched for
+    # no restrictions on items searched for
+    search_query_results
   end
 
   def destroy

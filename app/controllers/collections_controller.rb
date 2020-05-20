@@ -6,7 +6,10 @@ class CollectionsController < ApplicationController
   before_action :fetch_and_authorize_collection
 
   def show
-    restrict_items_to(Item.solr_exporter_class.solr_name_for(:member_of_paths, role: :pathing), @collection.path)
+    search_query_results(
+      base_restriction_key: Item.solr_exporter_class.solr_name_for(:member_of_paths, role: :pathing),
+      value: @collection.path
+    )
   end
 
   private
