@@ -1,6 +1,6 @@
 <div class="card mt-3">
   <div class="card-header"><%= range_facet_result.category_name %></div>
-  <%= form_tag search_path, method: :get, class: 'form-group' do %>
+  <%= form_tag search_params_hash, method: :get, class: 'form-group' do %>
     <div class='row m-2'>
       <%= number_field_tag "ranges[#{range_facet_result.solr_index}][begin]", range_facet_result.range.first, placeholder: 1880, class: 'form-control col-xl-5 col-lg-6 col-md-8', size: 4, maxlength: 4, 'aria-label' => t('search.range_begin') %>
       <div class='p-2'><%= t('.to') %></div>
