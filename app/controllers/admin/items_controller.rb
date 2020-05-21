@@ -1,10 +1,10 @@
 class Admin::ItemsController < Admin::AdminController
 
-  include ItemSearch
-
   def index
     # no restrictions on items searched for
-    search_query_results
+    search_query_index = SearchQueryIndexService.new(params: params, current_user: current_user)
+    @results = search_query_index.results
+    @search_models = search_query_index.search_models
   end
 
   def destroy

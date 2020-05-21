@@ -58,6 +58,6 @@
   </div>
 
   <%= render partial: 'search_bar', locals: { placeholder: t('.search_placeholder') } %>
-  <%= render partial: 'results' %>
+  <%= render partial: 'results', locals: { results: @results } %>
 
 </div>

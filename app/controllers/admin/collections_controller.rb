@@ -1,16 +1,20 @@
 class Admin::CollectionsController < Admin::AdminController
 
-  include ItemSearch
-
   before_action :fetch_community
   before_action :fetch_collection, only: [:show, :edit, :update, :destroy]
 
   def show
+    search_query_index = SearchQueryIndexService.new(
+      base_restriction_key: Item.solr_exporter_class.solr_name_for(:member_of_paths, role: :pathing),
+      value: @collection.path,
+      params: params,
+      current_user: current_user
+    )
+
+    @results = search_query_index.results
+    @search_models = search_query_index.search_models
+
     respond_to do |format|
-      search_query_results(
-        base_restriction_key: Item.solr_exporter_class.solr_name_for(:member_of_paths, role: :pathing),
-        value: @collection.path
-      )
       format.html { render template: 'collections/show' }
     end
   end
