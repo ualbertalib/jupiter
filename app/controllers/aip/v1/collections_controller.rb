@@ -16,7 +16,7 @@ class Aip::V1::CollectionsController < ApplicationController
 
     graph << rdf_type_statement(RDF::Vocab::PCDM.Collection)
 
-    graph << prepare_statement(
+    graph << RDF::Statement(
       subject: self_subject,
       predicate: RDF::URI.new('info:fedora/fedora-system:def/model#hasModel'),
       object: 'IRCollection'

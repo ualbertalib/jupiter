@@ -18,9 +18,11 @@ module GraphCreation
       values = Array.wrap(rdfable_entity.send(column))
 
       values.each do |value|
-        statement = prepare_statement(
+        next if value.blank?
+
+        statement = RDF::Statement(
           subject: subject,
-          predicate: rdf_annotation.predicate,
+          predicate: RDF::Vocabulary::Term.new(rdf_annotation.predicate),
           object: value
         )
 
@@ -42,22 +44,8 @@ module GraphCreation
     result
   end
 
-  def prepare_statement(subject:, predicate:, object:)
-    return if object.nil?
-
-    object = [object] unless object.is_a?(Array)
-    rdf_predicate = RDF::Vocabulary::Term.new(predicate)
-    stringed_value = object.join(' , ')
-
-    RDF::Statement(
-      subject: subject,
-      predicate: rdf_predicate,
-      object: stringed_value
-    )
-  end
-
   def owner_email_statement
-    prepare_statement(
+    RDF::Statement(
       subject: self_subject,
       predicate: RDF::Vocab::BIBO.owner,
       object: @entity.owner.email
@@ -65,7 +53,7 @@ module GraphCreation
   end
 
   def rdf_type_statement(object)
-    prepare_statement(
+    RDF::Statement(
       subject: self_subject,
       predicate: RDF.type,
       object: object

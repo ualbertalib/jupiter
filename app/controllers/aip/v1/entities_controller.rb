@@ -64,7 +64,7 @@ class Aip::V1::EntitiesController < ApplicationController
       aip_base_url = request.url.split('/')[0..-3].join('/')
       collection_url = "#{aip_base_url}/collections/#{collection_id}"
 
-      graph << prepare_statement(
+      graph << RDF::Statement(
         subject: self_subject,
         predicate: RDF::Vocab::PCDM.memberOf,
         object: RDF::URI.new(collection_url)
@@ -72,13 +72,15 @@ class Aip::V1::EntitiesController < ApplicationController
     end
 
     # Add entity model
-    graph << prepare_statement(
+    graph << RDF::Statement(
       subject: self_subject,
       predicate: RDF::URI.new('info:fedora/fedora-system:def/model#hasModel'),
       object: entity_institutional_repository_name
     )
 
-    render plain: graph.to_n3, status: :ok
+    deal_with_special_cases(graph)
+
+    render plain: graph.dump(:n3), status: :ok
   end
 
   def file_sets
@@ -161,7 +163,7 @@ class Aip::V1::EntitiesController < ApplicationController
     ]
 
     statement_definitions.each do |statement_definition|
-      statement = prepare_statement(statement_definition)
+      statement = RDF::Statement(statement_definition)
       graph << statement unless statement.nil?
     end
 
@@ -225,11 +227,10 @@ class Aip::V1::EntitiesController < ApplicationController
     file_statements = []
 
     @entity.try(:files).try(:each) do |file|
-      fileset_url = "#{request.original_url}/filesets/#{file.fileset_uuid}"
-      statement = prepare_statement(
+      statement = RDF::Statement(
         subject: self_subject,
         predicate: RDF::Vocab::PCDM.hasMember,
-        object: fileset_url
+        object: RDF::URI.new("#{request.original_url}/filesets/#{file.fileset_uuid}")
       )
       file_statements << statement unless statement.nil?
     end
@@ -256,6 +257,33 @@ class Aip::V1::EntitiesController < ApplicationController
     end
 
     authorize @entity
+  end
+
+  def deal_with_special_cases(graph)
+    case @entity.class.to_s
+    when 'Item'
+      # Deal with authorList special case for Item entity where value needs to
+      # maintain the order of its values
+      # This comes from: https://github.com/ualbertalib/jupiter/issues/333
+
+      column = @entity.rdf_annotations.find_by(
+        predicate: ::RDF::Vocab::DC.creator.to_s
+      ).column
+
+      # Here we expect the value of @entity.send(column)
+      # (::RDF::Vocab::DC.creator predicate) to be a JSON array in order to
+      # create the RDF::List
+      list = RDF::List(@entity.send(column))
+      statement = RDF::Statement(
+        subject: self_subject,
+        predicate: RDF::Vocab::BIBO.authorList,
+        object: list
+      )
+
+      graph << list
+      graph << statement
+
+    end
   end
 
 end

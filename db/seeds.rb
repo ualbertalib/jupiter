@@ -432,7 +432,8 @@ if Rails.env.development? || Rails.env.uat?
     title: 'dcterms:title1$ Some Title',
     alternative_title: 'dcterms:alternative1$ Some Alternative Title',
     item_type: 'http://purl.org/ontology/bibo/Image',
-    publication_status: 'http://purl.org/ontology/bibo/status#published',
+    # The value for publication_status only appears for article item type
+    # publication_status: ['http://purl.org/ontology/bibo/status#published'],
     depositor: 'eraadmi@ualberta.ca',
     #
     # Values for both license and rights cannot be set at the same time
@@ -444,6 +445,12 @@ if Rails.env.development? || Rails.env.uat?
     # embargo_history: 'An expired embargo was deactivated on 2000-01-01T00:00:00.000Z.  Its release date was 2000-01-01T00:00:00.000Z.  Visibility during embargo was restricted and intended visibility after embargo was open',
     # embargo_end_date: '2000-01-01T00:00:00.000Z',
     # visibility_after_embargo: JupiterCore::VISIBILITY_PUBLIC,
+    fedora3_uuid: 'uuid:97b1a8e2-a4b9-4941-b6ed-c4730f0a2a61',
+    fedora3_handle: 'http://hdl.handle.net/10402/era.33419',
+    hydra_noid: 'cgq67jr26k',
+    ingest_batch: '9019s326c',
+    date_ingested: '1000-01-01T00:00:00.007Z',
+    record_created_at: '1000-01-01T00:00:00.007Z'
   }
 
   Item.new(
@@ -496,7 +503,20 @@ if Rails.env.development? || Rails.env.uat?
       visibility_after_embargo: CONTROLLED_VOCABULARIES[:visibility].public
     )
   ).tap do |uo|
-    uo.add_to_path(community_with_collection.id, community_with_collection.collections[0].id)    
+    uo.add_to_path(community_with_collection.id, community_with_collection.collections[0].id)
+    uo.save!
+  end
+
+  # Add Item with article type and publication status
+
+  Item.new(
+    base_radioactive_values.merge(
+      id: '93126aae-4b9d-4db2-98f1-4e04b40778cf',
+      item_type: 'http://purl.org/ontology/bibo/Article',
+      publication_status: ['http://purl.org/ontology/bibo/status#published']
+    )
+  ).tap do |uo|
+    uo.add_to_path(community_with_collection.id, community_with_collection.collections[0].id)
     uo.save!
   end
 
