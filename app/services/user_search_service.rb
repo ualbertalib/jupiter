@@ -1,4 +1,4 @@
-class SearchQueryIndexService
+class UserSearchService
 
   QUERY_MAX = 500
   # How many facets are shown before it says 'Show more ...'
@@ -7,7 +7,7 @@ class SearchQueryIndexService
   attr_reader :search_models
 
   def initialize(base_restriction_key: nil, value: nil,
-                 search_models: [Item, Thesis], params: nil, current_user: nil)
+                 search_models: [Item, Thesis], params: nil, current_user:)
     raise ArgumentError, 'Must supply both a key and value' if @base_restriction_key.present? && @value.blank?
 
     @base_restriction_key = base_restriction_key

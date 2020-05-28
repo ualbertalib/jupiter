@@ -16,7 +16,7 @@ class SearchController < ApplicationController
                return redirect_to search_path(tab: :item)
              end
 
-    search_query_index = SearchQueryIndexService.new(
+    search_query_index = UserSearchService.new(
       search_models: models,
       params: params,
       current_user: current_user

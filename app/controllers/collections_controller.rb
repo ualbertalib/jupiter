@@ -4,7 +4,7 @@ class CollectionsController < ApplicationController
   before_action :fetch_and_authorize_collection
 
   def show
-    search_query_index = SearchQueryIndexService.new(
+    search_query_index = UserSearchService.new(
       base_restriction_key: Item.solr_exporter_class.solr_name_for(:member_of_paths, role: :pathing),
       value: @collection.path,
       params: params,
