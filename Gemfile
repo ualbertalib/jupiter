@@ -110,7 +110,7 @@ group :test do
 
   gem 'json-schema', '~> 2.8.1'
   gem 'launchy'
-  gem 'vcr', '6.0.0', require: false
+  gem 'vcr', '5.0', require: false
   gem 'webdrivers', '~> 4.3'
   gem 'webmock', require: false
 end
