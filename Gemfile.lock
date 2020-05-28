@@ -458,7 +458,7 @@ GEM
       thread_safe (~> 0.1)
     unicode-display_width (1.7.0)
     uuidtools (2.1.5)
-    vcr (5.0.0)
+    vcr (6.0.0)
     voight_kampff (1.1.4)
       rack (>= 1.4, < 3.0)
     web-console (4.0.2)
@@ -554,7 +554,7 @@ DEPENDENCIES
   sinatra (~> 2.0.8)
   skylight
   uuidtools
-  vcr (= 5.0)
+  vcr (= 6.0.0)
   voight_kampff
   web-console (>= 3.3.0)
   webdrivers (~> 4.3)
