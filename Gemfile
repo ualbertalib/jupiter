@@ -52,7 +52,7 @@ gem 'pundit', '1.1.0'
 
 # Background tasks
 gem 'sidekiq', '~> 5.2'
-gem 'sidekiq-unique-jobs'
+gem 'sidekiq-unique-jobs', '~> 6.0.22'
 gem 'sinatra', '~> 2.0.7' # used by sidekiq/web
 # Sidekiq cron jobs
 gem 'rufus-scheduler', '3.6.0' # https://github.com/ondrejbartas/sidekiq-cron/issues/199
@@ -64,7 +64,7 @@ gem 'addressable', '~> 2.7.0' # Replacement for the standard URI implementation
 gem 'danger', '~> 6.1' # Pull Request etiquette enforcement
 gem 'ezid-client', '~> 1.8.0'
 gem 'jbuilder' # generate JSON objects
-gem 'kaminari' # Pagination
+gem 'kaminari', '>= 1.2.1' # Pagination
 gem 'ransack' # ActiveRecord search/filter
 gem 'voight_kampff' # bot detection
 gem 'wicked' # Multi-step wizard
