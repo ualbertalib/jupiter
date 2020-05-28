@@ -64,7 +64,7 @@ gem 'addressable', '~> 2.7.0' # Replacement for the standard URI implementation
 gem 'danger', '~> 6.1' # Pull Request etiquette enforcement
 gem 'ezid-client', '~> 1.8.0'
 gem 'jbuilder' # generate JSON objects
-gem 'kaminari' # Pagination
+gem 'kaminari', '>= 1.2.1' # Pagination
 gem 'ransack' # ActiveRecord search/filter
 gem 'voight_kampff' # bot detection
 gem 'wicked' # Multi-step wizard
