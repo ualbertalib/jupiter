@@ -38,9 +38,7 @@
     <div class="col-md-4 mt-5">
       <%# FILES SIDEBAR %>
       <% if @item.files.present? %>
-        <div class="mb-3">
-          <%= render partial: 'files_section_sidebar' %>
-        </div>
+        <%= render partial: 'files_section_sidebar' %>
       <% end %>
 
       <%# COMMUNITY/COLLECTION PATHS %>
