@@ -17,6 +17,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Local system accounts authentication
 - Bring in ERBLint [PR#1646](https://github.com/ualbertalib/jupiter/pull/1646)
 - Thesis ingest rewrite [PR#1670](https://github.com/ualbertalib/jupiter/pull/1670)
+- Rails 6 sidekiq queues
 
 ### Changed
 - bump rubocop-rails to 2.4.1 Rails/FilePath default changed to slashes [PR#1398](https://github.com/ualbertalib/jupiter/pull/1398)
