@@ -5,7 +5,7 @@ Any time someone views an item/thesis page, or downloads a file attached to an i
 
 If a request appears to be coming from a bot, no statistics related to the visit are recorded. Otherwise, views and downloads are recorded separately in the following manner:
 
-* Using a data structure in Redis known as an HyperLogLog (http://antirez.com/news/75), if the IP address of the visitor is not already recorded for a view or download, the IP address of the visitor performing the request is recorded. Every item & thesis has two associated HLLs -- one tracking viewing IP addresses, the other tracking downloading IP addresses. These data structures allow us to quickly determine whether or now we have already seen the visiting address.
+* Using a data structure in Redis known as an HyperLogLog (http://antirez.com/news/75), if the IP address of the visitor is not already recorded for a view or download, the IP address of the visitor performing the request is recorded. Every item & thesis has two associated HLLs -- one tracking viewing IP addresses, the other tracking downloading IP addresses. These data structures allow us to quickly determine whether or not we have already seen the visiting address.
 
 * If the IP address was not in the HLL prior to this request, an atomic increment (non-jargony: "atomic" meaning that no matter how many visits are downloads are happening simultaneously, the updates always happen in an indivisible, defined order that ensures the math work out correctly and no increments get lost or doubled) is performed on the associated counter in Redis. Again, each Item & Thesis has two associated counters -- one counting the number of views, the other counting the number of downloads.
 

@@ -16,6 +16,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Metadata Presenters for OAI:DC & OAI:ETDMS
 - Local system accounts authentication
 - Bring in ERBLint [PR#1646](https://github.com/ualbertalib/jupiter/pull/1646)
+- Thesis ingest rewrite [PR#1670](https://github.com/ualbertalib/jupiter/pull/1670)
 - Rails 6 sidekiq queues
 
 ### Changed
@@ -30,6 +31,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Update UAL Logo [#1616](https://github.com/ualbertalib/jupiter/issues/1616)
 - Refactor `inactive` draft cleanup rake task to be sidekiq cron job [#1611](https://github.com/ualbertalib/jupiter/issues/1611)
 - Move Logic from SearchController into ItemSearch Concern [#932](https://github.com/ualbertalib/jupiter/issues/932)
+- Feature Image on Item show page need to be centered align within column [#1405](https://github.com/ualbertalib/jupiter/issues/1405)
 
 ### Fixed
 - failing tests [#1376](https://github.com/ualbertalib/jupiter/issues/1376)
