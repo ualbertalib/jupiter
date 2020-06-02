@@ -104,19 +104,6 @@ class JupiterCore::Depositable < ApplicationRecord
   end
   # rubocop:enable Naming/AccessorMethodName
 
-  def thumbnail_path(args = { resize: '100x100', auto_orient: true })
-    logo = files.find_by(id: logo_id)
-    return nil if logo.blank?
-
-    Rails.application.routes.url_helpers.rails_representation_path(logo.variant(args).processed)
-  rescue ActiveStorage::InvariableError
-    begin
-      Rails.application.routes.url_helpers.rails_representation_path(logo.preview(args).processed)
-    rescue ActiveStorage::UnpreviewableError
-      nil
-    end
-  end
-
   def thumbnail_file
     files.find_by(id: logo_id)
   end

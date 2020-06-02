@@ -50,19 +50,6 @@ module DraftProperties
       files.first
     end
 
-    # compatibility with the thumbnail API used in Items/Theses and Communities
-    def thumbnail_path(args = { resize: '100x100', auto_orient: true })
-      return nil unless thumbnail.present? && thumbnail.blob.present?
-
-      Rails.application.routes.url_helpers.rails_representation_path(thumbnail.variant(args).processed)
-    rescue ActiveStorage::InvariableError
-      begin
-        Rails.application.routes.url_helpers.rails_representation_path(thumbnail.preview(args).processed)
-      rescue ActiveStorage::UnpreviewableError
-        nil
-      end
-    end
-
     def thumbnail_file
       thumbnail if thumbnail.present? && thumbnail.blob.present?
     end
