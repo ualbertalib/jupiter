@@ -97,32 +97,23 @@ class PageLayoutHelperTest < ActionView::TestCase
 
   # thumbnail_path
 
+  def mupdf_exists?
+    ActiveStorage::Previewer::MuPDFPreviewer.mutool_exists?
+  end
+
+  def poppler_exists?
+    ActiveStorage::Previewer::PopplerPDFPreviewer.pdftoppm_exists?
+  end
+
   test 'thumbnail_path should return preview for pdf (Invariable but Previewable)' do
-    community = communities(:books)
-    collection = collections(:fantasy_books)
-    @item = Item.new.tap do |uo|
-      uo.title = 'Fantastic item'
-      uo.owner_id = users(:admin).id
-      uo.creators = ['Joe Blow', 'Smokey Chantilly-Tiffany', 'Céline Marie Claudette Dion']
-      uo.visibility = JupiterCore::VISIBILITY_PUBLIC
-      uo.created = '1999-09-09'
-      uo.languages = [CONTROLLED_VOCABULARIES[:language].english]
-      uo.license = CONTROLLED_VOCABULARIES[:license].attribution_4_0_international
-      uo.item_type = CONTROLLED_VOCABULARIES[:item_type].article
-      uo.publication_status = [CONTROLLED_VOCABULARIES[:publication_status].draft,
-                               CONTROLLED_VOCABULARIES[:publication_status].submitted]
-      uo.subject = ['Items']
-      uo.add_to_path(community.id, collection.id)
-      uo.save!
-    end
-    Sidekiq::Testing.inline! do
-      # Attach a file to the item so that it provide preview
-      File.open(file_fixture('pdf-sample.pdf'), 'r') do |file|
-        @item.add_and_ingest_files([file])
-      end
+    skip 'this test requires the dependency MuPDF or Poppler to be installed' unless mupdf_exists? || poppler_exists?
+
+    item = items(:fancy)
+    File.open(file_fixture('pdf-sample.pdf'), 'r') do |file|
+      item.add_and_ingest_files([file])
     end
 
-    logo = @item.files.first
+    logo = item.reload.files.first
     expected = Rails.application.routes.url_helpers.rails_representation_path(
       logo.preview(resize: '100x100', auto_orient: true).processed
     )
@@ -130,31 +121,12 @@ class PageLayoutHelperTest < ActionView::TestCase
   end
 
   test 'thumbnail_path should return preview for image (Variable)' do
-    community = communities(:books)
-    collection = collections(:fantasy_books)
-    @item = Item.new.tap do |uo|
-      uo.title = 'Fantastic item'
-      uo.owner_id = users(:admin).id
-      uo.creators = ['Joe Blow', 'Smokey Chantilly-Tiffany', 'Céline Marie Claudette Dion']
-      uo.visibility = JupiterCore::VISIBILITY_PUBLIC
-      uo.created = '1999-09-09'
-      uo.languages = [CONTROLLED_VOCABULARIES[:language].english]
-      uo.license = CONTROLLED_VOCABULARIES[:license].attribution_4_0_international
-      uo.item_type = CONTROLLED_VOCABULARIES[:item_type].article
-      uo.publication_status = [CONTROLLED_VOCABULARIES[:publication_status].draft,
-                               CONTROLLED_VOCABULARIES[:publication_status].submitted]
-      uo.subject = ['Items']
-      uo.add_to_path(community.id, collection.id)
-      uo.save!
-    end
-    Sidekiq::Testing.inline! do
-      # Attach a file to the item so that it can provide variant
-      File.open(file_fixture('image-sample.jpeg'), 'r') do |file|
-        @item.add_and_ingest_files([file])
-      end
+    item = items(:fancy)
+    File.open(file_fixture('image-sample.jpeg'), 'r') do |file|
+      item.add_and_ingest_files([file])
     end
 
-    logo = @item.files.first
+    logo = item.reload.files.first
     expected = Rails.application.routes.url_helpers.rails_representation_path(
       logo.variant(resize: '100x100', auto_orient: true).processed
     )
