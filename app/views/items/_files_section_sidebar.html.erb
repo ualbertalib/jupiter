@@ -52,8 +52,8 @@
                     <div class="p-1">
                       <%= link_to(t('.view'),
                                   file_view_item_url(id: file.record.id,
-                                                    file_set_id: file.fileset_uuid,
-                                                    file_name: file.filename.to_s),
+                                                     file_set_id: file.fileset_uuid,
+                                                     file_name: file.filename.to_s),
                                   class: 'btn btn-outline-primary',
                                   rel: 'noopener noreferrer',
                                   target: :_blank) %>
@@ -61,7 +61,7 @@
                     <div class="p-1">
                       <%= link_to(t('.download'),
                                   file_download_item_url(id: file.record.id,
-                                                        file_set_id: file.fileset_uuid),
+                                                         file_set_id: file.fileset_uuid),
                                   class: 'js-download btn btn-outline-primary',
                                   rel: 'nofollow',
                                   download: file.filename) %>
