@@ -12,7 +12,7 @@
 - **PostgreSQL**
 - **Redis**
 - **Solr**
-- **ImageMagick**
+- **ImageMagick, Poppler, FFMpeg**
 - **Node.js** 10.13.0+
 - **Yarn**
 
