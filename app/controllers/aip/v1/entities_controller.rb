@@ -42,43 +42,19 @@ class Aip::V1::EntitiesController < ApplicationController
 
     graph = create_graph(@entity, prefixes)
 
-    # Handle files separately since currently they are not a part of the
-    # acts_as_rdfable table entries
-
-    file_statements.each { |file_statement| graph << file_statement }
-
-    # Add owners email seperatedly because there is currently no predicate set
-    # to specify this relation directly
-
-    owners_email = owner_email_statement
-    graph << owners_email unless owners_email.nil?
-
-    graph << rdf_type_statement(RDF::Vocab::PCDM.Object)
-
-    # To set the value for the predicate http://pcdm.org/models#memberOf we use
-    # the data from column member_of_paths, strip the collection id, and
-    # concatenate the url for the collection. This should be done cleaner
-
-    @entity.member_of_paths.each do |community_collection|
-      collection_id = community_collection.split('/')[1]
-      aip_base_url = request.url.split('/')[0..-3].join('/')
-      collection_url = "#{aip_base_url}/collections/#{collection_id}"
-
-      graph << RDF::Statement(
-        subject: self_subject,
-        predicate: RDF::Vocab::PCDM.memberOf,
-        object: RDF::URI.new(collection_url)
-      )
-    end
-
-    # Add entity model
-    graph << RDF::Statement(
-      subject: self_subject,
-      predicate: RDF::URI.new('info:fedora/fedora-system:def/model#hasModel'),
-      object: entity_institutional_repository_name
-    )
-
-    deal_with_special_cases(graph)
+    # The following nodes are statements/lists that are required for entitites
+    # but are not directly referenced by a predicate in the system because they
+    # require some level of processing to obtain.
+    nodes = [
+      owner_email_statement,
+      rdf_type_statement(RDF::Vocab::PCDM.Object),
+      entity_model_statement,
+      *entity_file_statements,
+      *entity_member_of_statements,
+      *entity_author_list_statements,
+      *entity_contributor_list_statements
+    ]
+    nodes.each { |node| graph << node }
 
     render plain: graph.dump(:n3), status: :ok
   end
@@ -223,21 +199,6 @@ class Aip::V1::EntitiesController < ApplicationController
     'IREntity'
   end
 
-  def file_statements
-    file_statements = []
-
-    @entity.try(:files).try(:each) do |file|
-      statement = RDF::Statement(
-        subject: self_subject,
-        predicate: RDF::Vocab::PCDM.hasMember,
-        object: RDF::URI.new("#{request.original_url}/filesets/#{file.fileset_uuid}")
-      )
-      file_statements << statement unless statement.nil?
-    end
-
-    file_statements
-  end
-
   def load_and_authorize_file
     @file = ActiveStorage::Attachment.find_by(fileset_uuid: params[:file_set_id])
     raise JupiterCore::ObjectNotFound unless @file.record_id == params[:id]
@@ -259,31 +220,73 @@ class Aip::V1::EntitiesController < ApplicationController
     authorize @entity
   end
 
-  def deal_with_special_cases(graph)
-    case @entity.class.to_s
-    when 'Item'
-      # Deal with authorList special case for Item entity where value needs to
-      # maintain the order of its values
-      # This comes from: https://github.com/ualbertalib/jupiter/issues/333
+  private
 
-      column = @entity.rdf_annotations.find_by(
-        predicate: ::RDF::Vocab::DC.creator.to_s
-      ).column
+  def entity_file_statements
+    file_statements = []
 
-      # Here we expect the value of @entity.send(column)
-      # (::RDF::Vocab::DC.creator predicate) to be a JSON array in order to
-      # create the RDF::List
-      list = RDF::List(@entity.send(column))
+    @entity.try(:files).try(:each) do |file|
       statement = RDF::Statement(
         subject: self_subject,
-        predicate: RDF::Vocab::BIBO.authorList,
-        object: list
+        predicate: RDF::Vocab::PCDM.hasMember,
+        object: RDF::URI.new("#{request.original_url}/filesets/#{file.fileset_uuid}")
       )
-
-      graph << list
-      graph << statement
-
+      file_statements << statement unless statement.nil?
     end
+
+    file_statements
+  end
+
+  def entity_author_list_statements
+    # Deal with authorList predicate special case where value needs to maintain
+    # the order of its values
+    # This comes from: https://github.com/ualbertalib/jupiter/issues/333
+
+    derivate_list_values(
+      @entity,
+      self_subject,
+      RDF::Vocab::DC.creator,
+      RDF::Vocab::BIBO.authorList
+    )
+  end
+
+  def entity_contributor_list_statements
+    # As with creators, contributors also need an ordered analogue
+
+    derivate_list_values(
+      @entity,
+      self_subject,
+      RDF::Vocab::DC11.contributor,
+      RDF::Vocab::BIBO.contributorList
+    )
+  end
+
+  def entity_member_of_statements
+    # To set the value for the predicate http://pcdm.org/models#memberOf we use
+    # the data from column member_of_paths, strip the collection id, and
+    # concatenate the url for the collection. This should be done cleaner
+
+    statements = []
+    @entity.member_of_paths.each do |community_collection|
+      collection_id = community_collection.split('/')[1]
+      aip_base_url = request.url.split('/')[0..-3].join('/')
+      collection_url = "#{aip_base_url}/collections/#{collection_id}"
+
+      statements << RDF::Statement(
+        subject: self_subject,
+        predicate: RDF::Vocab::PCDM.memberOf,
+        object: RDF::URI.new(collection_url)
+      )
+    end
+    statements
+  end
+
+  def entity_model_statement
+    RDF::Statement(
+      subject: self_subject,
+      predicate: RDF::URI.new('info:fedora/fedora-system:def/model#hasModel'),
+      object: entity_institutional_repository_name
+    )
   end
 
 end

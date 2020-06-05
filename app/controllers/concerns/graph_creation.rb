@@ -65,4 +65,26 @@ module GraphCreation
   def self_subject
     RDF::URI(request.url)
   end
+
+  def derivate_list_values(
+    rdfable_entity,
+    subject,
+    rdf_original_predicate,
+    rdf_list_predicate
+  )
+
+    # Here we expect the value of @entity.send(column) to be a JSON array
+    column = rdfable_entity.rdf_annotations.find_by(
+      predicate: rdf_original_predicate.to_s
+    ).column
+
+    list = RDF::List(rdfable_entity.send(column))
+    statement = RDF::Statement(
+      subject: subject,
+      predicate: rdf_list_predicate,
+      object: list
+    )
+
+    [list, statement]
+  end
 end
