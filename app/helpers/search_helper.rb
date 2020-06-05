@@ -23,9 +23,7 @@ module SearchHelper
     priority_facets + [Item.solr_exporter_class.solr_name_for(:all_contributors, role: :facet),
                        Item.solr_exporter_class.solr_name_for(:all_subjects, role: :facet)]
   end
-  # rubocop:enable Rails/HelperInstanceVariable
 
-  # rubocop:disable Rails/HelperInstanceVariable
   def enable_item_sort?
     @search_models.include? Item
   end
@@ -84,7 +82,7 @@ module SearchHelper
     classes = 'nav-link'
     name = model.name.downcase.to_sym
     if @search_models.include? model
-      count = results.total_count
+      count = @results.total_count
       text = content_tag(:h2, t("search.tab_header_#{name}_with_count", count: count), class: 'h5')
       classes += ' active'
     else

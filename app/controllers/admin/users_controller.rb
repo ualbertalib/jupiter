@@ -1,17 +1,11 @@
 class Admin::UsersController < Admin::AdminController
 
-  include ItemSearch
-
   before_action :fetch_user, only: [:show,
                                     :suspend,
                                     :unsuspend,
                                     :grant_admin,
                                     :revoke_admin,
                                     :login_as_user]
-
-  def results
-    super.sort(params[:sort] || :sort_year, params[:direction] || :desc)
-  end
 
   def index
     @search = User.ransack(params[:q])
@@ -28,7 +22,14 @@ class Admin::UsersController < Admin::AdminController
   end
 
   def show
-    restrict_items_to(Item.solr_exporter_class.solr_name_for(:owner, role: :exact_match), @user.id)
+    search_query_index = UserSearchService.new(
+      base_restriction_key: Item.solr_exporter_class.solr_name_for(:owner, role: :exact_match),
+      value: @user.id,
+      params: params,
+      current_user: current_user
+    )
+    @results = search_query_index.results
+    @search_models = search_query_index.search_models
 
     @draft_items = @user.draft_items.unpublished
     @draft_theses = @user.draft_theses.unpublished

@@ -30,6 +30,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Post Fedora Automated Test Cleanup [#1445](https://github.com/ualbertalib/jupiter/issues/1445)
 - Update UAL Logo [#1616](https://github.com/ualbertalib/jupiter/issues/1616)
 - Refactor `inactive` draft cleanup rake task to be sidekiq cron job [#1611](https://github.com/ualbertalib/jupiter/issues/1611)
+- Move Logic from SearchController into ItemSearch Concern [#932](https://github.com/ualbertalib/jupiter/issues/932)
 - Feature Image on Item show page need to be centered align within column [#1405](https://github.com/ualbertalib/jupiter/issues/1405)
 - Centralize Abstraction for Thumbnail Generation [#1343](https://github.com/ualbertalib/jupiter/issues/1343)
 
