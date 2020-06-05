@@ -41,6 +41,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Fix three-state logic problems on DraftItem and DraftThesis models where boolean attribute is_published_in_era was nullable [#1408](https://github.com/ualbertalib/jupiter/issues/1408)
 - Can now go through wizard with an old license [#1539](https://github.com/ualbertalib/jupiter/pull/1539)
 - Fixed rake tasks [#1585](https://github.com/ualbertalib/jupiter/issues/1585)
+- Style "Files" section as a card to keep consistent with rest of sidebar on item show page [#1676](https://github.com/ualbertalib/jupiter/issues/1676)
 
 ### Security
 - add `noopener noreferrer` when opening a link in a new tab [PR#1344](https://github.com/ualbertalib/jupiter/pull/1344)
