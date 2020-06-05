@@ -1,0 +1,6 @@
+jpeg:
+  key: '12345'
+  filename: 'image-sample.jpeg'
+  content_type: 'image/jpeg'
+  byte_size: 12086
+  checksum: "GxpIjJsC4KnRoBKNjWnkJA=="

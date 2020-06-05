@@ -1,18 +1,8 @@
-<% begin %>
-<%# NOTE: This is superficially similar to the logic in DraftItem#thumbnail, but this file is run against
-every file attached to an item via a JS callback rendering files/update_files_list.js.erb calling _files_list.html.erb
-whereas DraftItem#thumbnail specifically only deals with rendering the designated file for representing it as a
-thumbnail and is used on various other pages, like profiles, which use the application/_thumbnail partial.%>
-  <% thumbnail = rails_representation_path(file.variant(resize: '100x100', auto_orient: true).processed) %>
-  <%= safe_thumbnail_tag(thumbnail, alt: '', title: file.filename, size: '100x100') %>
-<% rescue  ActiveStorage::InvariableError %>
-  <% begin %>
-      <% thumbnail = rails_representation_path(file.preview(resize: '100x100', auto_orient: true).processed) %>
-      <%= safe_thumbnail_tag(thumbnail, alt: '', title: file.filename, size: '100x100') %>
-  <% rescue ActiveStorage::UnpreviewableError %>
-    <div class="text-muted text-center img-thumbnail p-3">
-      <%= icon('far', file_icon(file.content_type), class: 'fa-5x') %>
-      <span class="sr-only"><%= file.filename %></span>
-    </div>
-  <% end %>
+<% if thumbnail_path(file).present? %>
+  <%= safe_thumbnail_tag(thumbnail_path(file), alt: '', title: file.filename, size: '100x100') %>
+<% else %>
+  <div class="text-muted text-center img-thumbnail p-3">
+    <%= icon('far', file_icon(file.content_type), class: 'fa-5x') %>
+    <span class="sr-only"><%= file.filename %></span>
+  </div>
 <% end %>
