@@ -2,6 +2,12 @@ class Aip::V1::EntitiesController < ApplicationController
 
   include GraphCreation
 
+  ITEM_CLASS_NAME = 'Item'.freeze
+  THESIS_CLASS_NAME = 'Theses'.freeze
+  ITEM_INSTITUTIONAL_REPOSITORY_NAME = 'IRItem'.freeze
+  THESIS_INSTITUTIONAL_REPOSITORY_NAME = 'IRThesis'.freeze
+  ENTITY_INSTITUTIONAL_REPOSITORY_NAME = 'IREntity'.freeze
+
   before_action :load_and_authorize_entity, only: [
     :show_entity,
     :file_sets,
@@ -32,7 +38,7 @@ class Aip::V1::EntitiesController < ApplicationController
       ::TERMS[:acl].schema,
       RDF::Vocab::EBUCore,
       # The following prefixes need to be reevaluated and replaced
-      ::TERMS[:fedora].schema + ::TERMS[:fedora].has_model,
+      ::TERMS[:fedora].schema,
       RDF::Vocab::Fcrepo4.created,
       RDF::Vocab::Fcrepo4.createdBy,
       RDF::Vocab::Fcrepo4.lastModified,
@@ -47,13 +53,14 @@ class Aip::V1::EntitiesController < ApplicationController
     # require some level of processing to obtain.
     nodes = [
       owner_email_statement,
-      rdf_type_statement(RDF::Vocab::PCDM.Object),
       entity_model_statement,
+      *entity_type_statements,
       *entity_file_statements,
       *entity_member_of_statements,
       *entity_author_list_statements,
       *entity_contributor_list_statements
     ]
+
     nodes.each { |node| graph << node }
 
     render plain: graph.dump(:n3), status: :ok
@@ -190,13 +197,13 @@ class Aip::V1::EntitiesController < ApplicationController
 
   def entity_institutional_repository_name
     case @entity.class.to_s
-    when 'Item'
-      return 'IRItem'
-    when 'Thesis'
-      return 'IRThesis'
+    when ITEM_CLASS_NAME
+      return ITEM_INSTITUTIONAL_REPOSITORY_NAME
+    when THESIS_CLASS_NAME
+      return THESIS_INSTITUTIONAL_REPOSITORY_NAME
     end
 
-    'IREntity'
+    ENTITY_INSTITUTIONAL_REPOSITORY_NAME
   end
 
   def load_and_authorize_file
@@ -264,7 +271,7 @@ class Aip::V1::EntitiesController < ApplicationController
   def entity_member_of_statements
     # To set the value for the predicate http://pcdm.org/models#memberOf we use
     # the data from column member_of_paths, strip the collection id, and
-    # concatenate the url for the collection. This should be done cleaner
+    # concatenate the url for the collection.
 
     statements = []
     @entity.member_of_paths.each do |community_collection|
@@ -284,9 +291,19 @@ class Aip::V1::EntitiesController < ApplicationController
   def entity_model_statement
     RDF::Statement(
       subject: self_subject,
-      predicate: RDF::URI.new('info:fedora/fedora-system:def/model#hasModel'),
+      predicate: RDF::URI.new(::TERMS[:fedora].has_model),
       object: entity_institutional_repository_name
     )
+  end
+
+  def entity_type_statements
+    statements = [
+      rdf_type_statement(RDF::Vocab::PCDM.Object)
+    ]
+
+    statements << rdf_type_statement(RDF::Vocab::BIBO.Thesis) if @entity.class.to_s == THESIS_CLASS_NAME
+
+    statements
   end
 
 end

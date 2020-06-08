@@ -18,7 +18,7 @@ class Aip::V1::CollectionsController < ApplicationController
 
     graph << RDF::Statement(
       subject: self_subject,
-      predicate: RDF::URI.new('info:fedora/fedora-system:def/model#hasModel'),
+      predicate: RDF::URI.new(::TERMS[:fedora].has_model),
       object: 'IRCollection'
     )
 

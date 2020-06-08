@@ -420,9 +420,7 @@ if Rails.env.development? || Rails.env.uat?
     created: '1000-01-01',
     sort_year: '2000',
     # TODO: Check if we can add miltiple descriptions
-    description: "dcterms:description2$ Sea lettuce melon cabbage leek bamboo shoot lettuce rutabaga jícama silver beet amaranth pea dandelion scallion pea sprouts yarrow salsify bitterleaf courgette.\n" +
-                 "Azuki bean horseradish potato kale welsh onion fennel green bean azuki bean chickweed aubergine bell pepper sea lettuce rutabaga cucumber grape.\n" +
-                 'Radish grape rutabaga celery beetroot kombu spring onion cauliflower soybean. Sea lettuce melon cabbage leek bamboo shoot lettuce rutabaga jícama silver beet amaranth pea dandelion scallion pea sprouts yarrow salsify bitterleaf courgette.',
+    description: 'dcterms:description1$ Arabic ناتيومرلبسفأعدقحكهجشطصزخضغذثئةظؤىءآإ Greek αβγδεζηθικλμνξοπρςστυφχψω ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ Cyrillic абвгдеёжзийклмнопрстуфхцчшщъыьэюя АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ Lao ກ-ໝ Thai ก-๎ Burmese က-ၙ Khmer ក-៹ Korean 가-힣 Bengali অ-ৱ // Spanish áéíóúüñ French àâçèéêëîïôùûü Portuguese àáâãçéêíóôõú Hindi ऄ-ॿ Pujabi ਅ-ੴ Mandarin 海萵苣白菜冬瓜韭菜竹筍生菜大頭菜豆薯銀甜菜莧菜豌豆蒲公英蔥豌豆苗亞羅婆羅門參西葫蘆。小豆辣根土豆 Japanese アオサメロンキャベツニラ竹シュートレタスルタバガのクズイモ銀ビートアマランスエンドウタンポポねぎ',
     is_version_of: ['dcterms:isVersionOf1$ Sydorenko, Dmytro & Rankin, Robert. (2013). Simulation of O+ upflows created by electron precipitation and Alfvén waves in the ionosphere. Journal of Geophysical Research: Space Physics, 118(9), 5562-5578. http://doi.org/10.1002/jgra.50531', 'dcterms:isVersionOf2$ Another version'],
     languages: ['http://id.loc.gov/vocabulary/iso639-2/zxx', 'http://id.loc.gov/vocabulary/iso639-2/fre'],
     related_link: '"dcterms:relation1$ http://doi.org/10.1007/xxxxxx-xxx-xxxx-x", "dcterms:relation2$ http://doi.org/10.1007/xxxxxx-xxx-xxxx-x"',
