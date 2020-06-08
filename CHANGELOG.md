@@ -20,6 +20,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Rails 6 sidekiq queues
 
 ### Changed
+- bump rubocop-rails to 2.6.0 use tag instead of content_tag [PR#1697](https://github.com/ualbertalib/jupiter/pull/1697)
 - bump rubocop-rails to 2.4.1 Rails/FilePath default changed to slashes [PR#1398](https://github.com/ualbertalib/jupiter/pull/1398)
 - Upgrade Rails gem to latest v6.x [#1430](https://github.com/ualbertalib/jupiter/issues/1430)
 - Transition to Zeitwerk for Autoloading [#1432](https://github.com/ualbertalib/jupiter/issues/1432)
