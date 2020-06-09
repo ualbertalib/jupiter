@@ -6,6 +6,9 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+### Fixed
+- Now ignoring strings of length 4 for dates in coerce_value
+
 ## [1.2.17] - 2019-09-24
 
 ### Security
