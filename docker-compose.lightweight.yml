@@ -5,30 +5,30 @@
 version: '3'
 
 volumes:
-  postgres:
-    driver: local
+  # postgres:
+  #   driver: local
   solr:
     driver: local
   fcrepo:
     driver: local
-  redis:
-    driver: local
+  # redis:
+  #   driver: local
 
 services:
   # Need postgres? Uncomment postgres settings below and respective volume above
   # To configure the app for the settings below, use environment varable setting:
   #   JUPITER_DATABASE_URL=postgresql://jupiter:mysecretpassword@127.0.0.1?pool=5
   #
-  postgres:
-    image: postgres:9.6-alpine
-    environment:
-      PGDATA: /var/lib/postgresql/data/pgdata
-      POSTGRES_PASSWORD: mysecretpassword
-      POSTGRES_USER: jupiter
-    volumes:
-      - postgres:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+  # postgres:
+  #   image: postgres:9.6-alpine
+  #   environment:
+  #     PGDATA: /var/lib/postgresql/data/pgdata
+  #     POSTGRES_PASSWORD: mysecretpassword
+  #     POSTGRES_USER: jupiter
+  #   volumes:
+  #     - postgres:/var/lib/postgresql/data
+  #   ports:
+  #     - "5432:5432"
 
   solr:
     image: solr:6.6
@@ -47,9 +47,9 @@ services:
       - "8080:8080"
 
   # Need redis? Uncomment this and respective volume above
-  redis:
-    image: redis:alpine
-    volumes:
-      - redis:/data
-    ports:
-      - "6379:6379"
+  # redis:
+  #   image: redis:alpine
+  #   volumes:
+  #     - redis:/data
+  #   ports:
+  #     - "6379:6379"
