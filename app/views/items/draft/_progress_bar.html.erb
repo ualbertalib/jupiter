@@ -17,12 +17,11 @@
     </ul>
   </nav>
   <div class="progress">
-    <%= content_tag :div,
-                    progress_bar_text,
-                    class: "progress-bar w-#{progress_bar_percentage}",
-                    role: 'progressbar',
-                    'aria-valuenow' => progress_bar_percentage,
-                    'aria-valuemin' => '0',
-                    'aria-valuemax' => '100' %>
+    <%= tag.div progress_bar_text,
+                {class: "progress-bar w-#{progress_bar_percentage}",
+                role: 'progressbar',
+                'aria-valuenow' => progress_bar_percentage,
+                'aria-valuemin' => '0',
+                'aria-valuemax' => '100'}.symbolize_keys  %>
   </div>
 </section>
