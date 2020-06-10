@@ -106,7 +106,9 @@ class Item < JupiterCore::Doiable
     # add an association between the same underlying blobs the Draft uses and the Item
     draft_item.files_attachments.each do |attachment|
       ActiveStorage::Attachment.create(record: item,
-                                       blob: attachment.blob, name: :files)
+                                       blob: attachment.blob,
+                                       name: :files,
+                                       fileset_uuid: UUIDTools::UUID.random_create)
     end
 
     item.set_thumbnail(item.files.find_by(blob_id: draft_item.thumbnail.blob.id)) if draft_item.thumbnail.present?

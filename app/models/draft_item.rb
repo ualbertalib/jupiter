@@ -153,7 +153,10 @@ class DraftItem < ApplicationRecord
 
     # add an association between the same underlying blobs the Item uses and the Draft
     item.files_attachments.each do |attachment|
-      ActiveStorage::Attachment.create(record: self, blob: attachment.blob, name: :files)
+      ActiveStorage::Attachment.create(record: self,
+                                       blob: attachment.blob,
+                                       name: :files,
+                                       fileset_uuid: UUIDTools::UUID.random_create)
     end
   end
 
