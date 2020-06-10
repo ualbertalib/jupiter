@@ -105,6 +105,10 @@ Rails/FindEach:
 Rails/UnknownEnv:
   Enabled: false
 
+# TODO: content_tag is deprecated, we should work to replace this with tag.<name> but the autocorrect was not helpful
+Rails/ContentTag:
+  Enabled: false
+
 Style/AsciiComments:
   Enabled: false
 
