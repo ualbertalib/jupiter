@@ -44,6 +44,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Fixed rake tasks [#1585](https://github.com/ualbertalib/jupiter/issues/1585)
 - Style "Files" section as a card to keep consistent with rest of sidebar on item show page [#1676](https://github.com/ualbertalib/jupiter/issues/1676)
 - Feature Images on Item show page are being styled as Thumbnails [#1675](https://github.com/ualbertalib/jupiter/issues/1675)
+- Fix "This file is processing and will be available shortly [#1669](https://github.com/ualbertalib/jupiter/issues/1669)
 
 ### Security
 - add `noopener noreferrer` when opening a link in a new tab [PR#1344](https://github.com/ualbertalib/jupiter/pull/1344)

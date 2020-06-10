@@ -563,7 +563,6 @@ en:
       header: 'Files'
       ccid_restricted_item: Item Restricted to University of Alberta Users
       login_with_ccid_to_view: Log In with CCID to View Item
-      processing: 'This file is processing and will be available shortly'
     new:
       header: 'Deposit Item'
     create:
