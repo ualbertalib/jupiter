@@ -354,7 +354,7 @@ GEM
     rdf-xsd (3.1.0)
       rdf (~> 3.1)
     rdoc (6.2.1)
-    redis (4.1.4)
+    redis (4.2.0)
     regexp_parser (1.7.0)
     request_store (1.5.0)
       rack (>= 1.4)
@@ -537,7 +537,7 @@ DEPENDENCIES
   rdf (~> 3.1.2)
   rdf-n3
   rdf-vocab (~> 3.1.5)
-  redis (~> 4.1)
+  redis (~> 4.2)
   rollbar
   rsolr
   rubocop (~> 0.85.1)
