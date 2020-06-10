@@ -423,8 +423,8 @@ if Rails.env.development? || Rails.env.uat?
     description: 'dcterms:description1$ Arabic ناتيومرلبسفأعدقحكهجشطصزخضغذثئةظؤىءآإ Greek αβγδεζηθικλμνξοπρςστυφχψω ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ Cyrillic абвгдеёжзийклмнопрстуфхцчшщъыьэюя АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ Lao ກ-ໝ Thai ก-๎ Burmese က-ၙ Khmer ក-៹ Korean 가-힣 Bengali অ-ৱ // Spanish áéíóúüñ French àâçèéêëîïôùûü Portuguese àáâãçéêíóôõú Hindi ऄ-ॿ Pujabi ਅ-ੴ Mandarin 海萵苣白菜冬瓜韭菜竹筍生菜大頭菜豆薯銀甜菜莧菜豌豆蒲公英蔥豌豆苗亞羅婆羅門參西葫蘆。小豆辣根土豆 Japanese アオサメロンキャベツニラ竹シュートレタスルタバガのクズイモ銀ビートアマランスエンドウタンポポねぎ',
     is_version_of: ['dcterms:isVersionOf1$ Sydorenko, Dmytro & Rankin, Robert. (2013). Simulation of O+ upflows created by electron precipitation and Alfvén waves in the ionosphere. Journal of Geophysical Research: Space Physics, 118(9), 5562-5578. http://doi.org/10.1002/jgra.50531', 'dcterms:isVersionOf2$ Another version'],
     languages: ['http://id.loc.gov/vocabulary/iso639-2/zxx', 'http://id.loc.gov/vocabulary/iso639-2/fre'],
-    related_link: '"dcterms:relation1$ http://doi.org/10.1007/xxxxxx-xxx-xxxx-x", "dcterms:relation2$ http://doi.org/10.1007/xxxxxx-xxx-xxxx-x"',
-    source: '"dcterms:source1$ Some source" ,"dcterms:source2$ Some source"',
+    related_link: 'dcterms:relation1$ http://doi.org/10.1007/xxxxxx-xxx-xxxx-x',
+    source: 'dcterms:source1$ Some source',
     spatial_subjects: ['dcterms:spatial1$ Canada', 'dcterms:spatial2$ Nicaragua'],
     temporal_subjects: ['dcterms:temporal1$ Holocene', 'dcterms:temporal2$ Holocene'],
     title: 'dcterms:title1$ Some Title',
@@ -440,7 +440,7 @@ if Rails.env.development? || Rails.env.uat?
     #
     # In order to set embargo values the visibility value needs to be set to
     # Item::VISIBILITY_EMBARGO
-    # embargo_history: 'An expired embargo was deactivated on 2000-01-01T00:00:00.000Z.  Its release date was 2000-01-01T00:00:00.000Z.  Visibility during embargo was restricted and intended visibility after embargo was open',
+    # embargo_history: ['An expired embargo was deactivated on 2000-01-01T00:00:00.000Z.  Its release date was 2000-01-01T00:00:00.000Z.  Visibility during embargo was restricted and intended visibility after embargo was open'],
     # embargo_end_date: '2000-01-01T00:00:00.000Z',
     # visibility_after_embargo: JupiterCore::VISIBILITY_PUBLIC,
     fedora3_uuid: 'uuid:97b1a8e2-a4b9-4941-b6ed-c4730f0a2a61',
@@ -482,7 +482,7 @@ if Rails.env.development? || Rails.env.uat?
     base_radioactive_values.merge(
       id: '3bb26070-0d25-4f0e-b44f-e9879da333ec',
       visibility: Item::VISIBILITY_EMBARGO,
-      embargo_history: 'Item currently embargoed',
+      embargo_history: ['acl:embargoHistory1$ Item currently embargoed'],
       embargo_end_date: 20.years.from_now.to_date,
       visibility_after_embargo: CONTROLLED_VOCABULARIES[:visibility].public
     )
@@ -497,7 +497,10 @@ if Rails.env.development? || Rails.env.uat?
       id: '2107bfb6-2670-4ffc-94a1-aeb4f8c1fd81',
       visibility: Item::VISIBILITY_EMBARGO,
       embargo_end_date: '2000-01-01T00:00:00.000Z',
-      embargo_history: 'An expired embargo was deactivated on 2000-01-01T00:00:00.000Z.  Its release date was 2000-01-01T00:00:00.000Z.  Visibility during embargo was restricted and intended visibility after embargo was open',
+      embargo_history: [
+        'acl:embargoHistory1$ An expired embargo was deactivated on 2000-01-01T00:00:00.000Z.  Its release date was 2000-01-01T00:00:00.000Z.  Visibility during embargo was restricted and intended visibility after embargo was open', 
+        'acl:embargoHistory2$ An expired embargo was deactivated on 2000-01-01T00:00:00.000Z.  Its release date was 2000-01-01T00:00:00.000Z.  Visibility during embargo was restricted and intended visibility after embargo was open'
+      ],
       visibility_after_embargo: CONTROLLED_VOCABULARIES[:visibility].public
     )
   ).tap do |uo|

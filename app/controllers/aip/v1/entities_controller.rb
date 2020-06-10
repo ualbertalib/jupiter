@@ -42,8 +42,7 @@ class Aip::V1::EntitiesController < ApplicationController
       RDF::Vocab::Fcrepo4.created,
       RDF::Vocab::Fcrepo4.createdBy,
       RDF::Vocab::Fcrepo4.lastModified,
-      RDF::Vocab::Fcrepo4.lastModifiedBy,
-      RDF::Vocab::Fcrepo4.writable
+      RDF::Vocab::Fcrepo4.lastModifiedBy
     ]
 
     graph = create_graph(@entity, prefixes)
@@ -51,7 +50,8 @@ class Aip::V1::EntitiesController < ApplicationController
     # The following nodes are statements/lists that are required for entitites
     # but are not directly referenced by a predicate in the system because they
     # require some level of processing to obtain.
-    nodes = [
+
+    graph.insert(
       owner_email_statement,
       entity_model_statement,
       *entity_type_statements,
@@ -59,9 +59,21 @@ class Aip::V1::EntitiesController < ApplicationController
       *entity_member_of_statements,
       *entity_author_list_statements,
       *entity_contributor_list_statements
-    ]
+    )
 
-    nodes.each { |node| graph << node }
+    # Handle special case where predicate http://projecthydra.org/ns/auth/acl#embargoHistory
+    # needs to maintain the order in which it was entered. The original nodes
+    # the predicate are removed and a new rdf list is inserted instead with the
+    # predicate
+
+    graph.delete_insert(
+      graph.query(predicate: ::TERMS[:acl].embargo_history),
+      derivate_list_values(
+        @entity,
+        self_subject,
+        ::TERMS[:acl].embargo_history
+      )
+    )
 
     render plain: graph.dump(:n3), status: :ok
   end
@@ -291,7 +303,7 @@ class Aip::V1::EntitiesController < ApplicationController
   def entity_model_statement
     RDF::Statement(
       subject: self_subject,
-      predicate: RDF::URI.new(::TERMS[:fedora].has_model),
+      predicate: ::TERMS[:fedora].has_model,
       object: entity_institutional_repository_name
     )
   end

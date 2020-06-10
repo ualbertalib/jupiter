@@ -2,7 +2,7 @@ module GraphCreation
   extend ActiveSupport::Concern
 
   def create_graph(rdfable_entity, prefixes, subject = nil)
-    subject = self_subject if subject.nil?
+    subject ||= self_subject
     graph = RDF::Graph.new
     annotations = get_prefixed_predicates(rdfable_entity, prefixes)
 
@@ -70,8 +70,9 @@ module GraphCreation
     rdfable_entity,
     subject,
     rdf_original_predicate,
-    rdf_list_predicate
+    rdf_list_predicate = nil
   )
+    rdf_list_predicate ||= rdf_original_predicate
 
     # Here we expect the value of @entity.send(column) to be a JSON array
     column = rdfable_entity.rdf_annotations.find_by(
@@ -86,5 +87,20 @@ module GraphCreation
     )
 
     [list, statement]
+  end
+
+  def delete_insert_list_values_statements(
+    rdfable_entity,
+    subject,
+    rdf_original_predicate
+  )
+
+    {
+      statements_to_insert: derivate_list_values(
+        rdfable_entity,
+        subject,
+        rdf_original_predicate
+      )
+    }
   end
 end
