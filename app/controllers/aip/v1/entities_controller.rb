@@ -66,14 +66,16 @@ class Aip::V1::EntitiesController < ApplicationController
     # the predicate are removed and a new rdf list is inserted instead with the
     # predicate
 
-    graph.delete_insert(
-      graph.query(predicate: ::TERMS[:acl].embargo_history),
-      derivate_list_values(
-        @entity,
-        self_subject,
-        ::TERMS[:acl].embargo_history
+    if graph.has_predicate?(::TERMS[:acl].embargo_history)
+      graph.delete_insert(
+        graph.query(predicate: ::TERMS[:acl].embargo_history),
+        derivate_list_values(
+          @entity,
+          self_subject,
+          ::TERMS[:acl].embargo_history
+        )
       )
-    )
+    end
 
     render plain: graph.dump(:n3), status: :ok
   end
