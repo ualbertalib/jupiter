@@ -408,7 +408,6 @@ if Rails.env.development? || Rails.env.uat?
   community_with_collection = Community.joins(:collections).first
 
   base_radioactive_values = {
-    # Check with metadata team if we will continue to use the fedora predicates
     # Set id on each new Item so we can find it easily when testing
     # id: 'e2ec88e3-3266-4e95-8575-8b04fac2a679',
     owner_id: admin.id,
@@ -419,7 +418,6 @@ if Rails.env.development? || Rails.env.uat?
     subject: ['dc:subject1$ Some subject heading', 'dc:subject2$ Some subject heading'],
     created: '1000-01-01',
     sort_year: '2000',
-    # TODO: Check if we can add miltiple descriptions
     description: 'dcterms:description1$ Arabic ناتيومرلبسفأعدقحكهجشطصزخضغذثئةظؤىءآإ Greek αβγδεζηθικλμνξοπρςστυφχψω ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ Cyrillic абвгдеёжзийклмнопрстуфхцчшщъыьэюя АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ Lao ກ-ໝ Thai ก-๎ Burmese က-ၙ Khmer ក-៹ Korean 가-힣 Bengali অ-ৱ // Spanish áéíóúüñ French àâçèéêëîïôùûü Portuguese àáâãçéêíóôõú Hindi ऄ-ॿ Pujabi ਅ-ੴ Mandarin 海萵苣白菜冬瓜韭菜竹筍生菜大頭菜豆薯銀甜菜莧菜豌豆蒲公英蔥豌豆苗亞羅婆羅門參西葫蘆。小豆辣根土豆 Japanese アオサメロンキャベツニラ竹シュートレタスルタバガのクズイモ銀ビートアマランスエンドウタンポポねぎ',
     is_version_of: ['dcterms:isVersionOf1$ Sydorenko, Dmytro & Rankin, Robert. (2013). Simulation of O+ upflows created by electron precipitation and Alfvén waves in the ionosphere. Journal of Geophysical Research: Space Physics, 118(9), 5562-5578. http://doi.org/10.1002/jgra.50531', 'dcterms:isVersionOf2$ Another version'],
     languages: ['http://id.loc.gov/vocabulary/iso639-2/zxx', 'http://id.loc.gov/vocabulary/iso639-2/fre'],
@@ -430,7 +428,7 @@ if Rails.env.development? || Rails.env.uat?
     title: 'dcterms:title1$ Some Title',
     alternative_title: 'dcterms:alternative1$ Some Alternative Title',
     item_type: 'http://purl.org/ontology/bibo/Image',
-    # The value for publication_status only appears for article item type
+    # The value for publication_status published only appears for article item type
     # publication_status: ['http://purl.org/ontology/bibo/status#published'],
     depositor: 'eraadmi@ualberta.ca',
     #
