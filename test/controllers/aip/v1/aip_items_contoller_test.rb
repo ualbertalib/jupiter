@@ -144,7 +144,6 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
     assert_equal true, rendered_graph.isomorphic_with?(graph)
   end
 
-
   # Basic test checking if response has xml format.
   test 'should get item filesets order in xml format' do
     sign_in_as_system_user
