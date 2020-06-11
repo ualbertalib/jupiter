@@ -111,6 +111,7 @@ group :test do
   gem 'vcr', '5.0', require: false
   gem 'webdrivers', '~> 4.3'
   gem 'webmock', require: false
+  gem 'rdf-isomorphic', '~> 3.1.0'
 end
 
 group :staging, :production do

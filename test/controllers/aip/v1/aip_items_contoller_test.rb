@@ -1,5 +1,6 @@
 require 'test_helper'
 require 'json-schema'
+require 'rdf/isomorphic'
 require Rails.root.join('test/support/aip_helper')
 
 class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
@@ -59,18 +60,90 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
     assert_response :redirect
   end
 
-  # Basic test checking if response has n3 serialization.
-  test 'should get item metadata graph with n3 serialization' do
+  test 'should get item metadata graph with n3 serialization for base example' do
     sign_in_as_system_user
     get aip_v1_entity_url(
       entity: @entity,
-      id: @public_item
+      id: items(:radioactive_item_base)
     )
     assert_response :success
 
     graph = generate_graph_from_n3(response.body)
-    assert_equal true, graph.graph?
+    rendered_graph = generate_graph_from_n3(
+      file_fixture('n3/e2ec88e3-3266-4e95-8575-8b04fac2a679-base.n3').read
+    )
+
+    assert_equal true, rendered_graph.isomorphic_with?(graph)
   end
+
+  test 'should get item metadata graph with n3 serialization for embargo example' do
+    sign_in_as_system_user
+    get aip_v1_entity_url(
+      entity: @entity,
+      id: items(:radioactive_item_embargoed)
+    )
+    assert_response :success
+
+    graph = generate_graph_from_n3(response.body)
+
+    rendered_graph = generate_graph_from_n3(
+      file_fixture('n3/3bb26070-0d25-4f0e-b44f-e9879da333ec-embargoed.n3').read
+    )
+
+    assert_equal true, rendered_graph.isomorphic_with?(graph)
+  end
+
+  test 'should get item metadata graph with n3 serialization for previously embargoed example' do
+    sign_in_as_system_user
+    get aip_v1_entity_url(
+      entity: @entity,
+      id: items(:radioactive_item_prev_embargoed)
+    )
+    assert_response :success
+
+    graph = generate_graph_from_n3(response.body)
+
+    rendered_graph = generate_graph_from_n3(
+      file_fixture('n3/2107bfb6-2670-4ffc-94a1-aeb4f8c1fd81-prev-embargoed.n3').read
+    )
+
+    assert_equal true, rendered_graph.isomorphic_with?(graph)
+  end
+
+  test 'should get item metadata graph with n3 serialization for rights example' do
+    sign_in_as_system_user
+    get aip_v1_entity_url(
+      entity: @entity,
+      id: items(:radioactive_item_rights)
+    )
+    assert_response :success
+
+    graph = generate_graph_from_n3(response.body)
+
+    rendered_graph = generate_graph_from_n3(
+      file_fixture('n3/c795337f-075f-429a-bb18-16b56d9b750f-rights.n3').read
+    )
+
+    assert_equal true, rendered_graph.isomorphic_with?(graph)
+  end
+
+  test 'should get item metadata graph with n3 serialization for published status example' do
+    sign_in_as_system_user
+    get aip_v1_entity_url(
+      entity: @entity,
+      id: items(:radioactive_item_published_status)
+    )
+    assert_response :success
+
+    graph = generate_graph_from_n3(response.body)
+
+    rendered_graph = generate_graph_from_n3(
+      file_fixture('n3/93126aae-4b9d-4db2-98f1-4e04b40778cf-published-status.n3').read
+    )
+
+    assert_equal true, rendered_graph.isomorphic_with?(graph)
+  end
+
 
   # Basic test checking if response has xml format.
   test 'should get item filesets order in xml format' do

@@ -481,7 +481,7 @@ if Rails.env.development? || Rails.env.uat?
       id: '3bb26070-0d25-4f0e-b44f-e9879da333ec',
       visibility: Item::VISIBILITY_EMBARGO,
       embargo_history: ['acl:embargoHistory1$ Item currently embargoed'],
-      embargo_end_date: 20.years.from_now.to_date,
+      embargo_end_date: '2080-01-01T00:00:00.000Z',
       visibility_after_embargo: CONTROLLED_VOCABULARIES[:visibility].public
     )
   ).tap do |uo|

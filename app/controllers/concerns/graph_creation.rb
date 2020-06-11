@@ -75,11 +75,13 @@ module GraphCreation
     rdf_list_predicate ||= rdf_original_predicate
 
     # Here we expect the value of @entity.send(column) to be a JSON array
-    column = rdfable_entity.rdf_annotations.find_by(
+    rdf_annotation = rdfable_entity.rdf_annotations.find_by(
       predicate: rdf_original_predicate.to_s
-    ).column
+    )
 
-    list = RDF::List(rdfable_entity.send(column))
+    return nil unless rdf_annotation
+
+    list = RDF::List(rdfable_entity.send(rdf_annotation.column))
     statement = RDF::Statement(
       subject: subject,
       predicate: rdf_list_predicate,
