@@ -1,6 +1,6 @@
 <% if policy(object).thumbnail? %>
   <% if thumbnail_path(object&.thumbnail_file).present? %>
-    <%= safe_thumbnail_tag(thumbnail_path(object&.thumbnail_file, resize: '350x350', auto_orient: true),
+    <%= safe_thumbnail_tag(thumbnail_path(object&.thumbnail_file, resize_to_limit: [350, 350], auto_orient: true),
                            alt: '',
                            size: '350x350',
                            class: 'j-feature-image img-thumbnail') %>
