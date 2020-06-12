@@ -12,7 +12,7 @@
 - **PostgreSQL**
 - **Redis**
 - **Solr**
-- **ImageMagick**
+- **ImageMagick, Poppler, FFMpeg**
 - **Node.js** 10.13.0+
 - **Yarn**
 
@@ -28,7 +28,14 @@
 
 # Check your style
 
+For Ruby files:
 `$ bundle exec rubocop`
+
+For ERB files:
+`$ bundle exec erblint .`
+
+For javascript files:
+`$ yarn lint`
 
 # Run tests
 

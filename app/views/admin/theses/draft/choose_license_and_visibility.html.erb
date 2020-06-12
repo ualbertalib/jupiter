@@ -1,4 +1,4 @@
-<% page_title( t('.header')) %>
+<% page_title(t('.header')) %>
 
 <div class="container mt-3">
   <%= render partial: 'progress_bar' %>
@@ -15,7 +15,7 @@
     </p>
   <% end %>
 
-  <%= simple_form_for @draft, url: wizard_path, method: :put, html: { class:'js-deposit-item' } do |f| %>
+  <%= simple_form_for @draft, url: wizard_path, method: :put, html: { class: 'js-deposit-item' } do |f| %>
     <fieldset class="my-3">
       <legend class="mb-0">
         <span class="text-danger font-weight-bold">*</span>
@@ -43,29 +43,29 @@
       <div class="form-check">
         <label class="form-check-label">
           <%= f.radio_button :visibility,
-                            :open_access,
-                            class: 'form-check-input' %>
+                             :open_access,
+                             class: 'form-check-input' %>
           <%= t('.visibility.open_access') %>
         </label>
       </div>
       <div class="form-check">
         <label class="form-check-label">
           <%= f.radio_button :visibility,
-                            :embargo,
-                            class: 'form-check-input' %>
+                             :embargo,
+                             class: 'form-check-input' %>
           <%= t('.visibility.embargo') %>
         </label>
         <%= f.input :embargo_end_date,
-          as: :date,
-          label: false,
-          order: [:year, :month, :day],
-          prompt: {
-            day: t('select_a_day'),
-            month: t('select_a_month'),
-            year: t('select_a_year')
-          },
-          start_year: Date.today.year,
-          input_html: { class: 'mr-2 mb-2', 'aria-label': t('.visibility.embargo') } %>
+                    as: :date,
+                    label: false,
+                    order: [:year, :month, :day],
+                    prompt: {
+                      day: t('select_a_day'),
+                      month: t('select_a_month'),
+                      year: t('select_a_year')
+                    },
+                    start_year: Time.zone.today.year,
+                    input_html: { class: 'mr-2 mb-2', 'aria-label': t('.visibility.embargo') } %>
       </div>
     </fieldset>
 

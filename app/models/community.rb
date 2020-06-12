@@ -40,13 +40,6 @@ class Community < JupiterCore::Depositable
     logo_attachment.purge
   end
 
-  # compatibility with item thumbnail API
-  def thumbnail_path(args = { resize: '100x100', auto_orient: true })
-    return nil if logo_attachment.blank?
-
-    Rails.application.routes.url_helpers.rails_representation_path(logo_attachment.variant(args).processed)
-  end
-
   def thumbnail_file
     logo.attachment
   end

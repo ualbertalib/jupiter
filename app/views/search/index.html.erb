@@ -1,6 +1,6 @@
-<% page_title( t('.header')) %>
+<% page_title(t('.header')) %>
 <% content_for :head do %>
-  <meta name="robots" content="noindex" />
+  <meta name="robots" content="noindex">
 <% end %>
 
 <div class="container mt-3">
@@ -12,5 +12,5 @@
     <% end %>
   </ul>
 
-    <%= render partial: 'results' %>
+    <%= render partial: 'results', locals: { results: @results } %>
 </div>

@@ -165,7 +165,7 @@ en:
             api_key_digest:
               present_if_system_true: 'must be present if System value is true'
               blank_if_system_false: 'must be blank if System value is false'
-            
+
   application:
     navbar:
       era_logo_alt: 'ERA - Education and Research Archive'
@@ -191,10 +191,12 @@ en:
         policies: Policies
         contact: Contact Us
         powered_by_jupiter: Powered by Jupiter
-      uofa_library_logo_alt: 'University of Alberta Libraries'
+      uofa_library_logo_alt: 'University of Alberta Library'
     results:
       no_items_found: 'No items found'
       skip_to_results: 'Skip to Search Results'
+    range_facet_result:
+      to: 'to'
 
   locked_ldp_object:
     errors:
@@ -501,7 +503,7 @@ en:
       theses_collection: 'University of Alberta Theses and Dissertations'
       afns_collection: 'Department of Agriculture, Food and Nutritional Science Journal Articles'
       era_av_header: 'Explore ERA Audio+Video'
-      era_av_text: "The University of Alberta Libraries' Media Streaming Service"
+      era_av_text: "The University of Alberta Library's Media Streaming Service"
 
   items:
     index:
@@ -561,7 +563,6 @@ en:
       header: 'Files'
       ccid_restricted_item: Item Restricted to University of Alberta Users
       login_with_ccid_to_view: Log In with CCID to View Item
-      processing: 'This file is processing and will be available shortly'
     new:
       header: 'Deposit Item'
     create:

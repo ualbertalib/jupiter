@@ -1,9 +1,16 @@
 # NOTE: Time in this file is in Coordinated Universal Time (UTC). So you must convert your local time into UTC.
 # For example, if you want a job to run at 10 PM MDT, this should be defined in the cron as 4 AM UTC.
 check_embargo_expiry:
+  # Every day at 10 PM MDT
   cron: "0 4 * * *"
   class: "EmbargoExpiryJob"
 
 garbage_collect_orphan_blobs:
+  # Every Sunday at 11 PM MDT
   cron: "0 5 * * 0"
   class: "GarbageCollectBlobsJob"
+
+remove_inactive_drafts:
+  # Every Saturday at 11 PM MDT
+  cron: "0 4 * * 6"
+  class: "RemoveInactiveDraftsJob"

@@ -5,15 +5,15 @@
     <%= t('.header') %>
   </h1>
   <%= link_to create_draft_items_path, method: :post,
-      class: 'btn btn-primary mr-3' do %>
+                                       class: 'btn btn-primary mr-3' do %>
     <%= icon('fas', 'plus-circle') %>
     <%= t('collections.show.deposit_item') %>
   <% end %>
   <%= link_to create_draft_admin_theses_path, method: :post,
-    class: 'btn btn-primary' do %>
+                                              class: 'btn btn-primary' do %>
   <%= icon('fas', 'plus-circle') %>
   <%= t('.deposit_thesis') %>
   <% end %>
 </div>
 <%= render partial: 'search_bar', locals: { placeholder: t('.search_placeholder') } %>
-<%= render partial: 'results' %>
+<%= render partial: 'results', locals: { results: @results } %>

@@ -105,7 +105,9 @@ class Thesis < JupiterCore::Doiable
     # add an association between the same underlying blobs the Draft uses and the Item
     draft_thesis.files_attachments.each do |attachment|
       ActiveStorage::Attachment.create(record: thesis,
-                                       blob: attachment.blob, name: :files)
+                                       blob: attachment.blob,
+                                       name: :files,
+                                       fileset_uuid: UUIDTools::UUID.random_create)
     end
 
     thesis.set_thumbnail(thesis.files.find_by(blob_id: draft_thesis.thumbnail.blob.id))

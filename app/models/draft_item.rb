@@ -1,7 +1,5 @@
 class DraftItem < ApplicationRecord
 
-  scope :drafts, -> { where(is_published_in_era: false) }
-
   include DraftProperties
 
   enum wizard_step: { describe_item: 0,
@@ -134,7 +132,6 @@ class DraftItem < ApplicationRecord
       citations: item.is_version_of,
       source: item.source,
       related_item: item.related_link,
-      is_published_in_era: false,
       thumbnail_id: thumbnail_file&.blob_id
     }
     assign_attributes(draft_attributes)
@@ -156,7 +153,10 @@ class DraftItem < ApplicationRecord
 
     # add an association between the same underlying blobs the Item uses and the Draft
     item.files_attachments.each do |attachment|
-      ActiveStorage::Attachment.create(record: self, blob: attachment.blob, name: :files)
+      ActiveStorage::Attachment.create(record: self,
+                                       blob: attachment.blob,
+                                       name: :files,
+                                       fileset_uuid: UUIDTools::UUID.random_create)
     end
   end
 
@@ -169,8 +169,8 @@ class DraftItem < ApplicationRecord
   end
 
   def self.from_item(item, for_user:)
-    draft = DraftItem.drafts.find_by(uuid: item.id)
-    draft ||= DraftItem.drafts.new(uuid: item.id)
+    draft = DraftItem.find_by(uuid: item.id)
+    draft ||= DraftItem.new(uuid: item.id)
 
     draft.update_from_fedora_item(item, for_user)
     draft

@@ -2,8 +2,12 @@
 :concurrency: 5
 :pidfile: tmp/pids/sidekiq.pid
 :queues:
-  - default
-  - mailers
+ - critical
+ - default
+ - active_storage_analysis
+ - active_storage_purge
+ - mailers
+ - low
 development:
   :logfile: log/sidekiq_development.log
 uat:

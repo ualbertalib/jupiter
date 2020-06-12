@@ -29,8 +29,8 @@
 <p class="text-center">
   <%# TODO: Switch to chris' application helper results count instead once merged %>
   <%= t('.display_past_announcements_count',
-      past_announcements_count: @past_announcements.count,
-      matching_past_announcements_count: @past_announcements.total_count,
-      total_past_announcements_count: Announcement.past.count) %>
+        past_announcements_count: @past_announcements.count,
+        matching_past_announcements_count: @past_announcements.total_count,
+        total_past_announcements_count: Announcement.past.count) %>
 </p>
 <%= paginate @past_announcements %>

@@ -2,7 +2,7 @@
   <div class="card-header"><%= facet_result.category_name %></div>
 
   <ul class="list-group list-group-flush">
-    <% facet_result.each_facet_value(0..ItemSearch::MAX_FACETS - 1) do |facet_value| %>
+    <% facet_result.each_facet_value(0..UserSearchService::MAX_FACETS - 1) do |facet_value| %>
       <li class="list-group-item">
         <%= present(facet_value).facet_search_link %>
       </li>
@@ -19,12 +19,12 @@
       <% end %>
     <% end %>
   </ul>
-  <% if facet_result.count > ItemSearch::MAX_FACETS %>
+  <% if facet_result.count > UserSearchService::MAX_FACETS %>
     <%# Other results collapsed by default %>
     <div class='js-hideshow'>
       <div class="collapse" id='<%= "#{facet_result.solr_index}_hidden" %>'>
         <ul class="list-group list-group-flush">
-          <% facet_result.each_facet_value(ItemSearch::MAX_FACETS..-1) do |facet_value| %>
+          <% facet_result.each_facet_value(UserSearchService::MAX_FACETS..-1) do |facet_value| %>
             <li class="list-group-item">
               <%= present(facet_value).facet_search_link %>
             </li>
@@ -39,10 +39,10 @@
             aria-expanded="false"
             aria-controls="<%= "#{facet_result.solr_index}_hidden" %>">
           <span class='js-hideshow-control'>
-            <%= t('search.show_count_more', count: facet_result.count - ItemSearch::MAX_FACETS) %>
+            <%= t('search.show_count_more', count: facet_result.count - UserSearchService::MAX_FACETS) %>
           </span>
           <span class='js-hideshow-control d-none'>
-            <%= t('search.hide_last_count', count: facet_result.count - ItemSearch::MAX_FACETS) %>
+            <%= t('search.hide_last_count', count: facet_result.count - UserSearchService::MAX_FACETS) %>
           </span>
         </a>
       </div>

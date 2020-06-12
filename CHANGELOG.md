@@ -1,5 +1,5 @@
 # Changelog
-All notable changes to Jupiter project will be documented in this file. Jupiter is a University of Alberta Libraries-based initiative to create a sustainable and extensible digital asset management system. Currently it is for phase 1 (Institutional Repository). https://era.library.ualberta.ca/.
+All notable changes to Jupiter project will be documented in this file. Jupiter is a University of Alberta Library-based initiative to create a sustainable and extensible digital asset management system. Currently it is for phase 1 (Institutional Repository). https://era.library.ualberta.ca/.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and releases in Jupiter project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
@@ -15,6 +15,9 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Added Draper and re-organized facet presenters
 - Metadata Presenters for OAI:DC & OAI:ETDMS
 - Local system accounts authentication
+- Bring in ERBLint [PR#1646](https://github.com/ualbertalib/jupiter/pull/1646)
+- Thesis ingest rewrite [PR#1670](https://github.com/ualbertalib/jupiter/pull/1670)
+- Rails 6 sidekiq queues
 
 ### Changed
 - bump rubocop-rails to 2.4.1 Rails/FilePath default changed to slashes [PR#1398](https://github.com/ualbertalib/jupiter/pull/1398)
@@ -25,6 +28,11 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Description now optional for theses prior to 2009 [#1357](https://github.com/ualbertalib/jupiter/issues/1357)
 - Transition to Webpacker from Sprockets [#1431](https://github.com/ualbertalib/jupiter/issues/1431)
 - Post Fedora Automated Test Cleanup [#1445](https://github.com/ualbertalib/jupiter/issues/1445)
+- Update UAL Logo [#1616](https://github.com/ualbertalib/jupiter/issues/1616)
+- Refactor `inactive` draft cleanup rake task to be sidekiq cron job [#1611](https://github.com/ualbertalib/jupiter/issues/1611)
+- Move Logic from SearchController into ItemSearch Concern [#932](https://github.com/ualbertalib/jupiter/issues/932)
+- Feature Image on Item show page need to be centered align within column [#1405](https://github.com/ualbertalib/jupiter/issues/1405)
+- Centralize Abstraction for Thumbnail Generation [#1343](https://github.com/ualbertalib/jupiter/issues/1343)
 
 ### Fixed
 - failing tests [#1376](https://github.com/ualbertalib/jupiter/issues/1376)
@@ -33,12 +41,17 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Thumbnail choice no longer resets between saves [#1435](https://github.com/ualbertalib/jupiter/issues/1435)
 - Fix three-state logic problems on DraftItem and DraftThesis models where boolean attribute is_published_in_era was nullable [#1408](https://github.com/ualbertalib/jupiter/issues/1408)
 - Can now go through wizard with an old license [#1539](https://github.com/ualbertalib/jupiter/pull/1539)
+- Fixed rake tasks [#1585](https://github.com/ualbertalib/jupiter/issues/1585)
+- Style "Files" section as a card to keep consistent with rest of sidebar on item show page [#1676](https://github.com/ualbertalib/jupiter/issues/1676)
+- Feature Images on Item show page are being styled as Thumbnails [#1675](https://github.com/ualbertalib/jupiter/issues/1675)
+- Fix "This file is processing and will be available shortly [#1669](https://github.com/ualbertalib/jupiter/issues/1669)
 
 ### Security
 - add `noopener noreferrer` when opening a link in a new tab [PR#1344](https://github.com/ualbertalib/jupiter/pull/1344)
 
 ### Removed
 - Removed Matomo analytic tracking [#1493](https://github.com/ualbertalib/jupiter/issues/1493)
+- Cleanup all references of `is_published_in_era` and `drafts` scope on DraftItem/DraftThesis [#1614](https://github.com/ualbertalib/jupiter/issues/1614)
 
 ## [1.2.18] - 2019-10-22
 - Removed Rack Attack

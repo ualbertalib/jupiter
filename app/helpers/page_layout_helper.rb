@@ -44,11 +44,34 @@ module PageLayoutHelper
   end
   # rubocop:enable Rails/HelperInstanceVariable
 
+  def thumbnail_path(logo, args = { resize: '100x100', auto_orient: true })
+    return nil if logo.blank?
+
+    # images have variants
+    Rails.application.routes.url_helpers.rails_representation_path(logo.variant(args).processed)
+  rescue ActiveStorage::InvariableError
+    begin
+      # pdfs and video have previews
+      Rails.application.routes.url_helpers.rails_representation_path(logo.preview(args).processed)
+    # ActiveStorage::UnpreviewableError and sometimes MiniMagick::Error gets thrown here
+    rescue StandardError => e
+      logger.warn("#{logo.record_type} with id: #{logo.record_id} and thumnail #{logo.name} \
+      threw an error after ActiveStorage::InvariableError.")
+      Rollbar.warn("#{logo.record_type} with id: #{logo.record_id} and thumnail #{logo.name} \
+      threw an error after ActiveStorage::InvariableError.", e)
+      nil
+    end
+  rescue StandardError => e
+    logger.warn("#{logo.record_type} with id: #{logo.record_id} and thumnail #{logo.name} threw an error.")
+    Rollbar.warn("#{logo.record_type} with id: #{logo.record_id} and thumnail #{logo.name} threw an error.", e)
+    nil
+  end
+
   # rubocop:disable Rails/HelperInstanceVariable
   def page_image_url
     default_url = asset_pack_url('media/images/era-logo.png')
     # We only have images on community and item/thesis show pages
-    image_path = @community&.thumbnail_path || @item&.thumbnail_path
+    image_path = thumbnail_path(@community&.thumbnail_file) || thumbnail_path(@item&.thumbnail_file)
 
     image_path ? request.base_url + image_path : default_url
   end

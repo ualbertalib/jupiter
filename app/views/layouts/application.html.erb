@@ -20,21 +20,21 @@
     <link rel="canonical" href="<%= canonical_href %>">
 
     <%# Open Graph - http://ogp.me/ %>
-    <meta property="og:type"         content="<%= page_type %>">
-    <meta property="og:site_name"    content="<%= t('site_name') %>">
-    <meta property="og:url"          content="<%= canonical_href %>">
-    <meta property="og:locale"       content="en_US">
-    <meta property="og:title"        content="<%= page_title %>">
-    <meta property="og:description"  content="<%= page_description %>">
-    <meta property="og:image"        content="<%= page_image_url %>">
+    <meta property="og:type" content="<%= page_type %>">
+    <meta property="og:site_name" content="<%= t('site_name') %>">
+    <meta property="og:url" content="<%= canonical_href %>">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:title" content="<%= page_title %>">
+    <meta property="og:description" content="<%= page_description %>">
+    <meta property="og:image" content="<%= page_image_url %>">
 
     <%#  Twitter Card - https://dev.twitter.com/cards/types/summary %>
-    <meta name="twitter:card"        content="summary">
-    <meta name="twitter:site"        content="@uofalibraries">
-    <meta name="twitter:url"         content="<%= canonical_href %>">
-    <meta name="twitter:title"       content="<%= page_title %>">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@uofalibraries">
+    <meta name="twitter:url" content="<%= canonical_href %>">
+    <meta name="twitter:title" content="<%= page_title %>">
     <meta name="twitter:description" content="<%= page_description %>">
-    <meta name="twitter:image"       content="<%= page_image_url %>">
+    <meta name="twitter:image" content="<%= page_image_url %>">
 
     <%= yield(:extra_social_meta) %>
 

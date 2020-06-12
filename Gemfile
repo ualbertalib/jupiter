@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 # Core Rails stuff
 gem 'image_processing' # for ActiveStorage Variants
 gem 'puma', '~> 4.3'
-gem 'rails', '~> 6.0.2'
+gem 'rails', '~> 6.0.3'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 gem 'webpacker', '~> 5.1'
@@ -18,14 +18,14 @@ gem 'simple_form'
 
 # RDF stuff
 gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', ref: '37915a9581713524f95f28425a10fdfee4335d06'
-gem 'rdf', '~> 3.1.0'
+gem 'rdf', '~> 3.1.2'
 gem 'rdf-n3'
-gem 'rdf-vocab', '~> 3.1.4'
+gem 'rdf-vocab', '~> 3.1.5'
 
 # Database stuff
 gem 'connection_pool'
 gem 'pg', '~> 1.2.3'
-gem 'redis', '~> 4.1'
+gem 'redis', '~> 4.2'
 gem 'rsolr'
 
 # Authentication
@@ -79,11 +79,13 @@ group :development, :test do
   gem 'nokogiri'
   gem 'selenium-webdriver', require: false
 
+  gem 'erb_lint', '>= 0.0.32', require: false
+
   gem 'pry'
   gem 'pry-byebug'
   gem 'pry-rails'
 
-  gem 'rubocop', '~> 0.82.0', require: false
+  gem 'rubocop', '~> 0.85.1', require: false
   gem 'rubocop-performance'
   gem 'rubocop-rails'
 end
@@ -100,7 +102,7 @@ group :development do
 end
 
 group :test do
-  gem 'danger', '~> 7.0', require: false # Pull Request etiquette enforcement
+  gem 'danger', '~> 8.0', require: false # Pull Request etiquette enforcement
   gem 'simplecov'
   # Faker added 0.5 seconds to the test suite per call. Haikunator seems much faster for faking strings
   gem 'haikunator'
@@ -110,7 +112,7 @@ group :test do
   gem 'launchy'
   gem 'rdf-isomorphic', '~> 3.1.0'
   gem 'vcr', '5.0', require: false
-  gem 'webdrivers', '~> 4.3'
+  gem 'webdrivers', '~> 4.4'
   gem 'webmock', require: false
 end
 

@@ -11,15 +11,15 @@
       <div class="btn-group">
       <% if policy(@community).edit? %>
           <%= link_to edit_admin_community_path(@community),
-              class:'btn btn-outline-secondary' do %>
+                      class: 'btn btn-outline-secondary' do %>
             <%= icon('fas', 'edit') %>
             <%= t('edit') %>
           <% end %>
         <% end %>
             <% if policy(@community).destroy? %>
           <%= link_to admin_community_path(@community), method: :delete,
-              class:'btn btn-outline-secondary',
-              data: { confirm: t('.delete_confirm', title: @community.title) } do %>
+                                                        class: 'btn btn-outline-secondary',
+                                                        data: { confirm: t('.delete_confirm', title: @community.title) } do %>
             <%= icon('fas', 'trash-alt') %>
             <%= t('delete') %>
           <% end %>
@@ -41,7 +41,7 @@
     </h2>
     <% if policy(:collection).create? %>
         <%= link_to new_admin_community_collection_path(@community),
-            class: 'btn btn-primary' do %>
+                    class: 'btn btn-primary' do %>
           <%= icon('fas', 'plus-circle') %>
           <%= t('.create_collection') %>
         <% end %>
@@ -51,7 +51,7 @@
   <div class="row mt-3">
     <div class="col-md-12">
       <div class="d-flex justify-content-end mb-3">
-        <%= render partial: 'communities/sort', locals: {collection: @collections} %>
+        <%= render partial: 'communities/sort', locals: { collection: @collections } %>
       </div>
       <ul class="list-group">
         <%= render partial: 'communities/collections_list' %>

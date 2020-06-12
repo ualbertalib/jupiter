@@ -4,13 +4,13 @@
 
 <% content_for :extra_social_meta do %>
   <% if @item.subject.present? %>
-    <meta name="twitter:label1" content="Keywords"/>
-    <meta name="twitter:data1" content="<%= @item.subject.join(', ') %>"/>
+    <meta name="twitter:label1" content="Keywords">
+    <meta name="twitter:data1" content="<%= @item.subject.join(', ') %>">
   <% end %>
 
   <% if @item.copyright.present? %>
-    <meta name="twitter:label2" content="Rights"/>
-    <meta name="twitter:data2" content="<%= @item.copyright %>"/>
+    <meta name="twitter:label2" content="Rights">
+    <meta name="twitter:data2" content="<%= @item.copyright %>">
   <% end %>
 <% end %>
 
@@ -38,9 +38,7 @@
     <div class="col-md-4 mt-5">
       <%# FILES SIDEBAR %>
       <% if @item.files.present? %>
-        <div class="mb-3">
-          <%= render partial: 'files_section_sidebar' %>
-        </div>
+        <%= render partial: 'files_section_sidebar' %>
       <% end %>
 
       <%# COMMUNITY/COLLECTION PATHS %>
@@ -60,14 +58,14 @@
         </div>
       </div>
 
-      <div class="card mt-2">
+      <div class="card mt-3">
         <div class="card-header">
           <%= t('.usage') %>
         </div>
         <div class="card-body p-2">
           <ul class="list-group">
-            <li class="list-group-item"><%=t('.views', count: @views_count)%></li>
-            <li class="list-group-item"><%=t('.downloads', count: @downloads_count)%></li>
+            <li class="list-group-item"><%= t('.views', count: @views_count) %></li>
+            <li class="list-group-item"><%= t('.downloads', count: @downloads_count) %></li>
           </ul>
         </div>
       </div>
@@ -77,7 +75,7 @@
     <div class="col-md-8 pl-5 mt-5">
       <% if policy(@item).edit? %>
         <%= link_to edit_item_path(@item),
-                    class:'btn btn-outline-secondary float-right' do %>
+                    class: 'btn btn-outline-secondary float-right' do %>
             <%= icon('fas', 'edit') %>
             <%= t('edit') %>
         <% end %>
