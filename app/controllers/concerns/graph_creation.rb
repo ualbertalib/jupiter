@@ -44,14 +44,6 @@ module GraphCreation
     result
   end
 
-  def owner_email_statement
-    RDF::Statement(
-      subject: self_subject,
-      predicate: RDF::Vocab::BIBO.owner,
-      object: @entity.owner.email
-    )
-  end
-
   def rdf_type_statement(object)
     RDF::Statement(
       subject: self_subject,
@@ -74,13 +66,13 @@ module GraphCreation
   )
     rdf_list_predicate ||= rdf_original_predicate
 
-    # Here we expect the value of @entity.send(column) to be a JSON array
     rdf_annotation = rdfable_entity.rdf_annotations.find_by(
       predicate: rdf_original_predicate.to_s
     )
 
     return nil unless rdf_annotation
 
+    # Here we expect the value of rdfable_entity.send(column) to be a JSON array
     list = RDF::List(rdfable_entity.send(rdf_annotation.column))
     statement = RDF::Statement(
       subject: subject,

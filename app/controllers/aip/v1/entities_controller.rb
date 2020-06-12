@@ -243,6 +243,14 @@ class Aip::V1::EntitiesController < ApplicationController
 
   private
 
+  def owner_email_statement
+    RDF::Statement(
+      subject: self_subject,
+      predicate: RDF::Vocab::BIBO.owner,
+      object: @entity.owner.email
+    )
+  end
+
   def entity_file_statements
     file_statements = []
 
