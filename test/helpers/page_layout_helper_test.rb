@@ -115,7 +115,7 @@ class PageLayoutHelperTest < ActionView::TestCase
 
     logo = item.reload.files.first
     expected = Rails.application.routes.url_helpers.rails_representation_path(
-      logo.preview(resize: '100x100', auto_orient: true).processed
+      logo.preview(resize_to_limit: [100, 100], auto_orient: true).processed
     )
     assert_equal expected, thumbnail_path(logo)
   end
@@ -128,7 +128,7 @@ class PageLayoutHelperTest < ActionView::TestCase
 
     logo = item.reload.files.first
     expected = Rails.application.routes.url_helpers.rails_representation_path(
-      logo.variant(resize: '100x100', auto_orient: true).processed
+      logo.variant(resize_to_limit: [100, 100], auto_orient: true).processed
     )
     assert_equal expected, thumbnail_path(logo)
   end
