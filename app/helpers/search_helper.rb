@@ -83,13 +83,13 @@ module SearchHelper
     name = model.name.downcase.to_sym
     if @search_models.include? model
       count = @results.total_count
-      text = content_tag(:h2, t("search.tab_header_#{name}_with_count", count: count), class: 'h5')
+      text = tag.h2(t("search.tab_header_#{name}_with_count", count: count), class: 'h5')
       classes += ' active'
     else
-      text = content_tag(:h2, t("search.tab_header_#{name}"), class: 'h5')
+      text = tag.h2(t("search.tab_header_#{name}"), class: 'h5')
     end
-    content_tag(:li, content_tag(:a, text, class: classes, href: search_path(query_params_with_tab(name))),
-                class: 'nav-item')
+    tag.li(tag.a(text, class: classes, href: search_path(query_params_with_tab(name))),
+           class: 'nav-item')
   end
   # rubocop:enable Rails/HelperInstanceVariable
 
