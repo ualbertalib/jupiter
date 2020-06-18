@@ -7,6 +7,7 @@ class Collection < JupiterCore::Depositable
   belongs_to :owner, class_name: 'User'
   belongs_to :community
 
+  validates :title, presence: true
   validates :community_id, presence: true
   validate :community_validations
 
