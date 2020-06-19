@@ -6,6 +6,11 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+## [1.2.18] - 2020-06-19
+
+### Changed
+- Beefed up AR migrations by stating that certain attributes cannot be null [PR#1704](https://github.com/ualbertalib/jupiter/pull/1704)
+
 ## [1.2.17] - 2019-09-24
 
 ### Security
