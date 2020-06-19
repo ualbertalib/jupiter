@@ -5,8 +5,8 @@ class CreateArThesis < ActiveRecord::Migration[5.2]
       t.references :owner, null: false, index: true, foreign_key: {to_table: :users, column: :id}
       t.datetime :record_created_at
       t.string :hydra_noid
-      t.datetime :date_ingested
-      t.string :title
+      t.datetime :date_ingested, null: false
+      t.string :title, null: false
       t.string :fedora3_uuid
       t.string :depositor
       t.string :alternative_title
@@ -22,7 +22,7 @@ class CreateArThesis < ActiveRecord::Migration[5.2]
       t.json :embargo_history, array: true
       t.json :is_version_of, array: true
 
-      t.json :member_of_paths, array: true
+      t.json :member_of_paths, null: false, array: true
       t.json :subject, array: true
 
       t.text :abstract
