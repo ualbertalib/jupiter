@@ -20,13 +20,11 @@ module GraphCreation
       values.each do |value|
         next if value.blank?
 
-        statement = RDF::Statement(
+        graph << RDF::Statement(
           subject: subject,
           predicate: RDF::Vocabulary::Term.new(rdf_annotation.predicate),
           object: value
         )
-
-        graph << statement unless statement.nil?
       end
     end
 
@@ -36,20 +34,16 @@ module GraphCreation
   def get_prefixed_predicates(rdfable_entity, prefixes)
     result = RdfAnnotation.none
     ActsAsRdfable.add_annotation_bindings!(rdfable_entity)
+
     prefixes.each do |prefix|
-      result = result.or rdfable_entity.rdf_annotations
-                                       .where('predicate like :prefix',
-                                              prefix: "#{prefix}%")
+      result = result.or(rdfable_entity.rdf_annotations.where('predicate like :prefix', prefix: "#{prefix}%"))
     end
+
     result
   end
 
   def rdf_type_statement(object)
-    RDF::Statement(
-      subject: self_subject,
-      predicate: RDF.type,
-      object: object
-    )
+    RDF::Statement(subject: self_subject, predicate: RDF.type, object: object)
   end
 
   # Return the url from the request to be used as the statement's subject for
@@ -58,43 +52,23 @@ module GraphCreation
     RDF::URI(request.url)
   end
 
-  def derivate_list_values(
-    rdfable_entity,
-    subject,
-    rdf_original_predicate,
-    rdf_list_predicate = nil
-  )
+  def derivate_list_values(rdfable_entity, subject, rdf_original_predicate, rdf_list_predicate = nil)
     rdf_list_predicate ||= rdf_original_predicate
 
-    rdf_annotation = rdfable_entity.rdf_annotations.find_by(
-      predicate: rdf_original_predicate.to_s
-    )
+    rdf_annotation = rdfable_entity.rdf_annotations.find_by(predicate: rdf_original_predicate.to_s)
 
     return nil unless rdf_annotation
 
     # Here we expect the value of rdfable_entity.send(column) to be a JSON array
     list = RDF::List(rdfable_entity.send(rdf_annotation.column))
-    statement = RDF::Statement(
-      subject: subject,
-      predicate: rdf_list_predicate,
-      object: list
-    )
+    statement = RDF::Statement(subject: subject, predicate: rdf_list_predicate, object: list)
 
     [list, statement]
   end
 
-  def delete_insert_list_values_statements(
-    rdfable_entity,
-    subject,
-    rdf_original_predicate
-  )
-
+  def delete_insert_list_values_statements(rdfable_entity, subject, rdf_original_predicate)
     {
-      statements_to_insert: derivate_list_values(
-        rdfable_entity,
-        subject,
-        rdf_original_predicate
-      )
+      statements_to_insert: derivate_list_values(rdfable_entity, subject, rdf_original_predicate)
     }
   end
 end

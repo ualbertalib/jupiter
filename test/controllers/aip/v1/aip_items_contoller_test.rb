@@ -1,6 +1,4 @@
 require 'test_helper'
-require 'json-schema'
-require 'rdf/isomorphic'
 require Rails.root.join('test/support/aip_helper')
 
 class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest

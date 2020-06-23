@@ -2,23 +2,14 @@ class Aip::V1::EntitiesController < ApplicationController
 
   include GraphCreation
 
-  ITEM_CLASS_NAME = 'Item'.freeze
-  THESIS_CLASS_NAME = 'Theses'.freeze
+  ITEM_CLASS_NAME = Item.name.freeze
+  THESIS_CLASS_NAME = Thesis.name.freeze
   ITEM_INSTITUTIONAL_REPOSITORY_NAME = 'IRItem'.freeze
   THESIS_INSTITUTIONAL_REPOSITORY_NAME = 'IRThesis'.freeze
   ENTITY_INSTITUTIONAL_REPOSITORY_NAME = 'IREntity'.freeze
 
-  before_action :load_and_authorize_entity, only: [
-    :show_entity,
-    :file_sets,
-    :file_paths
-  ]
-
-  before_action :load_and_authorize_file, only: [
-    :file_set,
-    :fixity_file,
-    :original_file
-  ]
+  before_action :load_and_authorize_entity, only: [:show_entity, :file_sets, :file_paths]
+  before_action :load_and_authorize_file, only: [:file_set, :fixity_file, :original_file]
 
   def show_entity
     # These are the prefixes defined as required by the metadata team. The
@@ -69,11 +60,7 @@ class Aip::V1::EntitiesController < ApplicationController
     if graph.has_predicate?(::TERMS[:acl].embargo_history)
       graph.delete_insert(
         graph.query(predicate: ::TERMS[:acl].embargo_history),
-        derivate_list_values(
-          @entity,
-          self_subject,
-          ::TERMS[:acl].embargo_history
-        )
+        derivate_list_values(@entity, self_subject, ::TERMS[:acl].embargo_history)
       )
     end
 
@@ -132,36 +119,15 @@ class Aip::V1::EntitiesController < ApplicationController
     graph = create_graph(@file.blob, prefixes, self_subject)
 
     statement_definitions = [
-      {
-        subject: subject,
-        predicate: RDF::Vocab::PREMIS.hasFixity,
-        object: self_subject
-      },
-      {
-        subject: self_subject,
-        predicate: RDF::Vocab::PREMIS.hasEventOutcome,
-        object: 'SUCCESS'
-      },
-      {
-        subject: self_subject,
-        predicate: RDF::Vocab::PREMIS.hasMessageDigestAlgorithm,
-        object: 'md5'
-      },
-      {
-        subject: self_subject,
-        predicate: RDF.type,
-        object: RDF::Vocab::PREMIS.EventOutcomeDetail
-      },
-      {
-        subject: self_subject,
-        predicate: RDF.type,
-        object: RDF::Vocab::PREMIS.Fixity
-      }
+      { subject: subject, predicate: RDF::Vocab::PREMIS.hasFixity, object: self_subject },
+      { subject: self_subject, predicate: RDF::Vocab::PREMIS.hasEventOutcome, object: 'SUCCESS' },
+      { subject: self_subject, predicate: RDF::Vocab::PREMIS.hasMessageDigestAlgorithm, object: 'md5' },
+      { subject: self_subject, predicate: RDF.type, object: RDF::Vocab::PREMIS.EventOutcomeDetail },
+      { subject: self_subject, predicate: RDF.type, object: RDF::Vocab::PREMIS.Fixity }
     ]
 
     statement_definitions.each do |statement_definition|
-      statement = RDF::Statement(statement_definition)
-      graph << statement unless statement.nil?
+      graph << RDF::Statement(statement_definition)
     end
 
     render plain: graph.to_n3, status: :ok
@@ -190,7 +156,6 @@ class Aip::V1::EntitiesController < ApplicationController
   end
 
   def file_paths
-    result = []
     result = { files: [] }
 
     @entity.files.each do |file|
@@ -212,12 +177,12 @@ class Aip::V1::EntitiesController < ApplicationController
   def entity_institutional_repository_name
     case @entity.class.to_s
     when ITEM_CLASS_NAME
-      return ITEM_INSTITUTIONAL_REPOSITORY_NAME
+      ITEM_INSTITUTIONAL_REPOSITORY_NAME
     when THESIS_CLASS_NAME
-      return THESIS_INSTITUTIONAL_REPOSITORY_NAME
+      THESIS_INSTITUTIONAL_REPOSITORY_NAME
+    else
+      ENTITY_INSTITUTIONAL_REPOSITORY_NAME
     end
-
-    ENTITY_INSTITUTIONAL_REPOSITORY_NAME
   end
 
   def load_and_authorize_file
@@ -232,9 +197,9 @@ class Aip::V1::EntitiesController < ApplicationController
     # There is a routing constraint specifying which models are available
     # through the url. We need to update the routing constraint whenever a new
     # entity is made available
-    when Item.name.underscore.pluralize
+    when Item.table_name
       @entity = Item.find(params[:id])
-    when Thesis.name.underscore.pluralize
+    when Thesis.table_name
       @entity = Thesis.find(params[:id])
     end
 
@@ -244,23 +209,18 @@ class Aip::V1::EntitiesController < ApplicationController
   private
 
   def owner_email_statement
-    RDF::Statement(
-      subject: self_subject,
-      predicate: RDF::Vocab::BIBO.owner,
-      object: @entity.owner.email
-    )
+    RDF::Statement(subject: self_subject, predicate: RDF::Vocab::BIBO.owner, object: @entity.owner.email)
   end
 
   def entity_file_statements
     file_statements = []
 
-    @entity.try(:files).try(:each) do |file|
-      statement = RDF::Statement(
+    @entity.files.each do |file|
+      file_statements << RDF::Statement(
         subject: self_subject,
         predicate: RDF::Vocab::PCDM.hasMember,
         object: RDF::URI.new("#{request.original_url}/filesets/#{file.fileset_uuid}")
       )
-      file_statements << statement unless statement.nil?
     end
 
     file_statements
@@ -271,23 +231,13 @@ class Aip::V1::EntitiesController < ApplicationController
     # the order of its values
     # This comes from: https://github.com/ualbertalib/jupiter/issues/333
 
-    derivate_list_values(
-      @entity,
-      self_subject,
-      RDF::Vocab::DC.creator,
-      RDF::Vocab::BIBO.authorList
-    )
+    derivate_list_values(@entity, self_subject, RDF::Vocab::DC.creator, RDF::Vocab::BIBO.authorList)
   end
 
   def entity_contributor_list_statements
     # As with creators, contributors also need an ordered analogue
 
-    derivate_list_values(
-      @entity,
-      self_subject,
-      RDF::Vocab::DC11.contributor,
-      RDF::Vocab::BIBO.contributorList
-    )
+    derivate_list_values(@entity, self_subject, RDF::Vocab::DC11.contributor, RDF::Vocab::BIBO.contributorList)
   end
 
   def entity_member_of_statements
@@ -319,10 +269,7 @@ class Aip::V1::EntitiesController < ApplicationController
   end
 
   def entity_type_statements
-    statements = [
-      rdf_type_statement(RDF::Vocab::PCDM.Object)
-    ]
-
+    statements = [rdf_type_statement(RDF::Vocab::PCDM.Object)]
     statements << rdf_type_statement(RDF::Vocab::BIBO.Thesis) if @entity.class.to_s == THESIS_CLASS_NAME
 
     statements

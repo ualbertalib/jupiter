@@ -196,7 +196,7 @@ radioactive_item_rights:
   ingest_batch: '9019s326c'
   date_ingested: '1000-01-01T00:00:00.007Z'
   record_created_at: '1000-01-01T00:00:00.007Z'
-  rights: JupiterCore::VISIBILITY_PUBLIC
+  rights: '© The Author(s) 2015. Published by Oxford University Press on behalf of the Society for Molecular Biology and Evolution.'
 
 
 radioactive_item_published_status:

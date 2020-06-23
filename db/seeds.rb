@@ -408,8 +408,7 @@ if Rails.env.development? || Rails.env.uat?
   community_with_collection = Community.joins(:collections).first
 
   base_radioactive_values = {
-    # Set id on each new Item so we can find it easily when testing
-    # id: 'e2ec88e3-3266-4e95-8575-8b04fac2a679',
+    # Set model id on each new Item so we can find it easily when testing
     owner_id: admin.id,
     doi: 'doi:10.7939/xxxxxxxxx',
     visibility: JupiterCore::VISIBILITY_PUBLIC,
@@ -428,71 +427,72 @@ if Rails.env.development? || Rails.env.uat?
     title: 'dcterms:title1$ Some Title',
     alternative_title: 'dcterms:alternative1$ Some Alternative Title',
     item_type: 'http://purl.org/ontology/bibo/Image',
-    # The value for publication_status published only appears for article item type
-    # publication_status: ['http://purl.org/ontology/bibo/status#published'],
     depositor: 'eraadmi@ualberta.ca',
-    #
-    # Values for both license and rights cannot be set at the same time
     license: 'http://creativecommons.org/licenses/by-sa/4.0/',
-    # rights: JupiterCore::VISIBILITY_PUBLIC,
-    #
-    # In order to set embargo values the visibility value needs to be set to
-    # Item::VISIBILITY_EMBARGO
-    # embargo_history: ['An expired embargo was deactivated on 2000-01-01T00:00:00.000Z.  Its release date was 2000-01-01T00:00:00.000Z.  Visibility during embargo was restricted and intended visibility after embargo was open'],
-    # embargo_end_date: '2000-01-01T00:00:00.000Z',
-    # visibility_after_embargo: JupiterCore::VISIBILITY_PUBLIC,
     fedora3_uuid: 'uuid:97b1a8e2-a4b9-4941-b6ed-c4730f0a2a61',
     fedora3_handle: 'http://hdl.handle.net/10402/era.33419',
     hydra_noid: 'cgq67jr26k',
     ingest_batch: '9019s326c',
     date_ingested: '1000-01-01T00:00:00.007Z',
-    record_created_at: '1000-01-01T00:00:00.007Z'
+    record_created_at: '1000-01-01T00:00:00.007Z',
+    member_of_paths: ["#{community_with_collection.id}/#{community_with_collection.collections[0].id}"]
   }
 
   Item.new(
     base_radioactive_values.merge(id: 'e2ec88e3-3266-4e95-8575-8b04fac2a679')
-  ).tap do |uo|
-    uo.add_to_path(community_with_collection.id, community_with_collection.collections[0].id)
-
+  ).tap do |item|
     # Attach a file
     File.open(Rails.root + 'test/fixtures/files/image-sample.jpeg', 'r') do |file1|
-      uo.add_and_ingest_files([file1])
+      item.add_and_ingest_files([file1])
     end
+    item.set_thumbnail(item.files.first) if item.files.first.present?
 
-    uo.set_thumbnail(uo.files.first) if uo.files.first.present?
-    uo.save!
+    item.save!
   end
 
   # Add Item with rigts value and no license
   Item.new(
     base_radioactive_values.merge(
+      # Values for both license and rights cannot be set at the same time
       id: 'c795337f-075f-429a-bb18-16b56d9b750f',
       license: '',
-      rights: JupiterCore::VISIBILITY_PUBLIC
+      rights: '© The Author(s) 2015. Published by Oxford University Press on behalf of the Society for Molecular Biology and Evolution.'
     )
-  ).tap do |uo|
-    uo.add_to_path(community_with_collection.id, community_with_collection.collections[0].id)
-    uo.save!
+  ).tap do |item|
+    # Attach a file
+    File.open(Rails.root + 'test/fixtures/files/image-sample.jpeg', 'r') do |file1|
+      item.add_and_ingest_files([file1])
+    end
+    item.set_thumbnail(item.files.first) if item.files.first.present?
+
+    item.save!
   end
 
   # Add Item with that is currently embargoed
   Item.new(
     base_radioactive_values.merge(
       id: '3bb26070-0d25-4f0e-b44f-e9879da333ec',
+      # In order to set embargo values the visibility value needs to be set to
       visibility: Item::VISIBILITY_EMBARGO,
       embargo_history: ['acl:embargoHistory1$ Item currently embargoed'],
       embargo_end_date: '2080-01-01T00:00:00.000Z',
       visibility_after_embargo: CONTROLLED_VOCABULARIES[:visibility].public
     )
-  ).tap do |uo|
-    uo.add_to_path(community_with_collection.id, community_with_collection.collections[0].id)
-    uo.save!
+  ).tap do |item|
+    # Attach a file
+    File.open(Rails.root + 'test/fixtures/files/image-sample.jpeg', 'r') do |file1|
+      item.add_and_ingest_files([file1])
+    end
+    item.set_thumbnail(item.files.first) if item.files.first.present?
+
+    item.save!
   end
 
   # Add Item that was previously embargoed
   Item.new(
     base_radioactive_values.merge(
       id: '2107bfb6-2670-4ffc-94a1-aeb4f8c1fd81',
+      # In order to set embargo values the visibility value needs to be set to
       visibility: Item::VISIBILITY_EMBARGO,
       embargo_end_date: '2000-01-01T00:00:00.000Z',
       embargo_history: [
@@ -501,9 +501,13 @@ if Rails.env.development? || Rails.env.uat?
       ],
       visibility_after_embargo: CONTROLLED_VOCABULARIES[:visibility].public
     )
-  ).tap do |uo|
-    uo.add_to_path(community_with_collection.id, community_with_collection.collections[0].id)
-    uo.save!
+  ).tap do |item|
+    # Attach a file
+    File.open(Rails.root + 'test/fixtures/files/image-sample.jpeg', 'r') do |file1|
+      item.add_and_ingest_files([file1])
+    end
+    item.set_thumbnail(item.files.first) if item.files.first.present?
+    item.save!
   end
 
   # Add Item with article type and publication status
@@ -511,12 +515,18 @@ if Rails.env.development? || Rails.env.uat?
   Item.new(
     base_radioactive_values.merge(
       id: '93126aae-4b9d-4db2-98f1-4e04b40778cf',
+      # The value for publication_status published only appears for article item type
       item_type: 'http://purl.org/ontology/bibo/Article',
       publication_status: ['http://purl.org/ontology/bibo/status#published']
     )
-  ).tap do |uo|
-    uo.add_to_path(community_with_collection.id, community_with_collection.collections[0].id)
-    uo.save!
+  ).tap do |item|
+    # Attach a file
+    File.open(Rails.root + 'test/fixtures/files/image-sample.jpeg', 'r') do |file1|
+      item.add_and_ingest_files([file1])
+    end
+    item.set_thumbnail(item.files.first) if item.files.first.present?
+
+    item.save!
   end
 
 end

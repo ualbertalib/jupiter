@@ -28,7 +28,8 @@ class Aip::V1::CollectionsController < ApplicationController
   protected
 
   def load_and_authorize_collection
-    authorize @collection = Collection.find(params[:id])
+    @collection = Collection.find(params[:id])
+    authorize @collection
   end
 
 end
