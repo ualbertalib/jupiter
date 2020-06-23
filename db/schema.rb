@@ -55,7 +55,7 @@ ActiveRecord::Schema.define(version: 2019_08_26_221814) do
     t.datetime "record_created_at"
     t.string "hydra_noid"
     t.datetime "date_ingested"
-    t.string "title"
+    t.string "title", null: false
     t.string "fedora3_uuid"
     t.string "depositor"
     t.uuid "community_id"
@@ -73,7 +73,7 @@ ActiveRecord::Schema.define(version: 2019_08_26_221814) do
     t.datetime "record_created_at"
     t.string "hydra_noid"
     t.datetime "date_ingested"
-    t.string "title"
+    t.string "title", null: false
     t.string "fedora3_uuid"
     t.string "depositor"
     t.text "description"
@@ -88,8 +88,8 @@ ActiveRecord::Schema.define(version: 2019_08_26_221814) do
     t.bigint "owner_id", null: false
     t.datetime "record_created_at"
     t.string "hydra_noid"
-    t.datetime "date_ingested"
-    t.string "title"
+    t.datetime "date_ingested", null: false
+    t.string "title", null: false
     t.string "fedora3_uuid"
     t.string "depositor"
     t.string "alternative_title"
@@ -104,7 +104,7 @@ ActiveRecord::Schema.define(version: 2019_08_26_221814) do
     t.integer "sort_year"
     t.json "embargo_history", array: true
     t.json "is_version_of", array: true
-    t.json "member_of_paths", array: true
+    t.json "member_of_paths", null: false, array: true
     t.json "subject", array: true
     t.json "creators", array: true
     t.json "contributors", array: true
@@ -132,8 +132,8 @@ ActiveRecord::Schema.define(version: 2019_08_26_221814) do
     t.bigint "owner_id", null: false
     t.datetime "record_created_at"
     t.string "hydra_noid"
-    t.datetime "date_ingested"
-    t.string "title"
+    t.datetime "date_ingested", null: false
+    t.string "title", null: false
     t.string "fedora3_uuid"
     t.string "depositor"
     t.string "alternative_title"
@@ -148,7 +148,7 @@ ActiveRecord::Schema.define(version: 2019_08_26_221814) do
     t.integer "sort_year"
     t.json "embargo_history", array: true
     t.json "is_version_of", array: true
-    t.json "member_of_paths", array: true
+    t.json "member_of_paths", null: false, array: true
     t.json "subject", array: true
     t.text "abstract"
     t.string "language"
