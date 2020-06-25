@@ -2,6 +2,8 @@ class Aip::V1::CollectionsController < ApplicationController
 
   include GraphCreation
 
+  COLLECTION_INSTITUTIONAL_REPOSITORY_NAME = 'IRCollection'.freeze
+
   before_action :load_and_authorize_collection
 
   def show_collection
@@ -19,7 +21,7 @@ class Aip::V1::CollectionsController < ApplicationController
     graph << RDF::Statement(
       subject: self_subject,
       predicate: ::TERMS[:fedora].has_model,
-      object: 'IRCollection'
+      object: COLLECTION_INSTITUTIONAL_REPOSITORY_NAME
     )
 
     render plain: graph.to_n3, status: :ok

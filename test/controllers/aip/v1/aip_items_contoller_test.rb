@@ -58,87 +58,147 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
     assert_response :redirect
   end
 
-  test 'should get item metadata graph with n3 serialization for base example' do
+  test 'should get item metadata graph with n3 serialization for base example including hasMember predicates' do
+    radioactive_item = items(:radioactive_item_base)
+
+    file_paths = [
+      'test/fixtures/files/image-sample.jpeg',
+      'test/fixtures/files/image-sample2.jpeg'
+    ]
+
+    file_paths.each do |file_path|
+      File.open(Rails.root + file_path, 'r') do |file|
+        radioactive_item.add_and_ingest_files([file])
+      end
+    end
+
+    radioactive_item.id = 'e2ec88e3-3266-4e95-8575-8b04fac2a679'.freeze
+    radioactive_item.save!
+    radioactive_item.reload
+
     sign_in_as_system_user
+
     get aip_v1_entity_url(
       entity: @entity,
-      id: items(:radioactive_item_base)
+      id: radioactive_item.id
     )
     assert_response :success
 
     graph = generate_graph_from_n3(response.body)
+
+    # n3_template repalces the 2 fileset uuids because they will change everytime the test is run and the files are added
+    fileset_0_uuid = radioactive_item.files[0].fileset_uuid
+    fileset_1_uuid = radioactive_item.files[1].fileset_uuid
+
+    n3_template = ERB.new(file_fixture("n3/#{radioactive_item.id}-base.n3").read)
     rendered_graph = generate_graph_from_n3(
-      file_fixture('n3/e2ec88e3-3266-4e95-8575-8b04fac2a679-base.n3').read
+      n3_template.result(binding)
     )
 
     assert_equal true, rendered_graph.isomorphic_with?(graph)
   end
 
   test 'should get item metadata graph with n3 serialization for embargo example' do
+    radioactive_item = items(:radioactive_item_base)
+    radioactive_item.id = '3bb26070-0d25-4f0e-b44f-e9879da333ec'.freeze
+    radioactive_item.visibility = Item::VISIBILITY_EMBARGO
+    radioactive_item.embargo_history = ['acl:embargoHistory1$ Item currently embargoed']
+    radioactive_item.embargo_end_date = '2080-01-01T00:00:00.000Z'
+    radioactive_item.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].public
+    radioactive_item.save!
+
     sign_in_as_system_user
     get aip_v1_entity_url(
       entity: @entity,
-      id: items(:radioactive_item_embargoed)
+      id: radioactive_item.id
     )
     assert_response :success
 
     graph = generate_graph_from_n3(response.body)
 
     rendered_graph = generate_graph_from_n3(
-      file_fixture('n3/3bb26070-0d25-4f0e-b44f-e9879da333ec-embargoed.n3').read
+      file_fixture("n3/#{radioactive_item.id}-embargoed.n3").read
     )
 
     assert_equal true, rendered_graph.isomorphic_with?(graph)
   end
 
   test 'should get item metadata graph with n3 serialization for previously embargoed example' do
+    radioactive_item = items(:radioactive_item_base)
+    radioactive_item.id = '2107bfb6-2670-4ffc-94a1-aeb4f8c1fd81'.freeze
+    radioactive_item.visibility = Item::VISIBILITY_EMBARGO
+    radioactive_item.embargo_end_date = '2000-01-01T00:00:00.000Z'
+    radioactive_item.embargo_history = [
+      'acl:embargoHistory1$ An expired embargo was deactivated on 2000-01-01T00:00:00.000Z.  Its release date was ' \
+      '2000-01-01T00:00:00.000Z.  Visibility during embargo was restricted and intended visibility after embargo was ' \
+      'open',
+      'acl:embargoHistory2$ An expired embargo was deactivated on 2000-01-01T00:00:00.000Z.  Its release date was ' \
+      '2000-01-01T00:00:00.000Z.  Visibility during embargo was restricted and intended visibility after embargo was ' \
+      'open'
+    ]
+    radioactive_item.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].public
+    radioactive_item.save!
+
     sign_in_as_system_user
     get aip_v1_entity_url(
       entity: @entity,
-      id: items(:radioactive_item_prev_embargoed)
+      id: radioactive_item.id
     )
     assert_response :success
 
     graph = generate_graph_from_n3(response.body)
 
     rendered_graph = generate_graph_from_n3(
-      file_fixture('n3/2107bfb6-2670-4ffc-94a1-aeb4f8c1fd81-prev-embargoed.n3').read
+      file_fixture("n3/#{radioactive_item.id}-prev-embargoed.n3").read
     )
 
     assert_equal true, rendered_graph.isomorphic_with?(graph)
   end
 
   test 'should get item metadata graph with n3 serialization for rights example' do
+    radioactive_item = items(:radioactive_item_base)
+    radioactive_item.id = 'c795337f-075f-429a-bb18-16b56d9b750f'.freeze
+    radioactive_item.license = ''
+    radioactive_item.rights = '© The Author(s) 2015. Published by Oxford University Press on behalf of the Society ' \
+                              'for Molecular Biology and Evolution.'
+    radioactive_item.save!
+
     sign_in_as_system_user
     get aip_v1_entity_url(
       entity: @entity,
-      id: items(:radioactive_item_rights)
+      id: radioactive_item.id
     )
     assert_response :success
 
     graph = generate_graph_from_n3(response.body)
 
     rendered_graph = generate_graph_from_n3(
-      file_fixture('n3/c795337f-075f-429a-bb18-16b56d9b750f-rights.n3').read
+      file_fixture("n3/#{radioactive_item.id}-rights.n3").read
     )
 
     assert_equal true, rendered_graph.isomorphic_with?(graph)
   end
 
   test 'should get item metadata graph with n3 serialization for published status example' do
+    radioactive_item = items(:radioactive_item_base)
+    radioactive_item.id = '93126aae-4b9d-4db2-98f1-4e04b40778cf'.freeze
+    radioactive_item.item_type = 'http://purl.org/ontology/bibo/Article'
+    radioactive_item.publication_status = ['http://purl.org/ontology/bibo/status#published']
+    radioactive_item.save!
+
     sign_in_as_system_user
     get aip_v1_entity_url(
       entity: @entity,
-      id: items(:radioactive_item_published_status)
+      id: radioactive_item.id
     )
     assert_response :success
 
     graph = generate_graph_from_n3(response.body)
 
     rendered_graph = generate_graph_from_n3(
-      file_fixture('n3/93126aae-4b9d-4db2-98f1-4e04b40778cf-published-status.n3').read
+      file_fixture("n3/#{radioactive_item.id}-published-status.n3").read
     )
-
+    # binding.pry
     assert_equal true, rendered_graph.isomorphic_with?(graph)
   end
 

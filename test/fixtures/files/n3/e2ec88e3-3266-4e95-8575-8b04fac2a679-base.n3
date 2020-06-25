@@ -1,26 +1,28 @@
 <http://localhost/aip/v1/items/e2ec88e3-3266-4e95-8575-8b04fac2a679> a <http://pcdm.org/models#Object>;
   <http://purl.org/dc/terms/title> "dcterms:title1$ Some Title";
+  <http://pcdm.org/models#hasMember> <http://localhost/aip/v1/items/e2ec88e3-3266-4e95-8575-8b04fac2a679/filesets/<%= fileset_0_uuid %>>,
+    <http://localhost/aip/v1/items/e2ec88e3-3266-4e95-8575-8b04fac2a679/filesets/<%= fileset_1_uuid %>>;
   <http://pcdm.org/models#memberOf> <http://localhost/aip/v1/collections/929c81d5-d15e-570e-83c4-ec41755c879d>;
   <http://prismstandard.org/namespaces/basic/3.0/doi> "doi:10.7939/xxxxxxxxx";
   <http://purl.org/dc/elements/1.1/contributor> "dc:contributor2$ Perez, Maria",
     "dc:contributor1$ Perez, Juan";
-  <http://purl.org/dc/elements/1.1/subject> "dc:subject1$ Some subject heading",
-    "dc:subject2$ Some subject heading";
+  <http://purl.org/dc/elements/1.1/subject> "dc:subject2$ Some subject heading",
+    "dc:subject1$ Some subject heading";
   <http://purl.org/dc/terms/accessRights> "http://terms.library.ualberta.ca/public";
   <http://purl.org/dc/terms/alternative> "dcterms:alternative1$ Some Alternative Title";
   <http://purl.org/dc/terms/created> "1000-01-01";
-  <http://purl.org/dc/terms/creator> "dc:creator2$ Doe, John",
-    "dc:creator1$ Doe, Jane";
+  <http://purl.org/dc/terms/creator> "dc:creator1$ Doe, Jane",
+    "dc:creator2$ Doe, John";
   <http://purl.org/dc/terms/description> "dcterms:description1$ Arabic ناتيومرلبسفأعدقحكهجشطصزخضغذثئةظؤىءآإ Greek αβγδεζηθικλμνξοπρςστυφχψω ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ Cyrillic абвгдеёжзийклмнопрстуфхцчшщъыьэюя АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ Lao ກ-ໝ Thai ก-๎ Burmese က-ၙ Khmer ក-៹ Korean 가-힣 Bengali অ-ৱ // Spanish áéíóúüñ French àâçèéêëîïôùûü Portuguese àáâãçéêíóôõú Hindi ऄ-ॿ Pujabi ਅ-ੴ Mandarin 海萵苣白菜冬瓜韭菜竹筍生菜大頭菜豆薯銀甜菜莧菜豌豆蒲公英蔥豌豆苗亞羅婆羅門參西葫蘆。小豆辣根土豆 Japanese アオサメロンキャベツニラ竹シュートレタスルタバガのクズイモ銀ビートアマランスエンドウタンポポねぎ";
   <http://purl.org/dc/terms/isVersionOf> "dcterms:isVersionOf2$ Another version",
     "dcterms:isVersionOf1$ Sydorenko, Dmytro & Rankin, Robert. (2013). Simulation of O+ upflows created by electron precipitation and Alfvén waves in the ionosphere. Journal of Geophysical Research: Space Physics, 118(9), 5562-5578. http://doi.org/10.1002/jgra.50531";
-  <http://purl.org/dc/terms/language> "http://id.loc.gov/vocabulary/iso639-2/fre",
-    "http://id.loc.gov/vocabulary/iso639-2/zxx";
+  <http://purl.org/dc/terms/language> "http://id.loc.gov/vocabulary/iso639-2/zxx",
+    "http://id.loc.gov/vocabulary/iso639-2/fre";
   <http://purl.org/dc/terms/license> "http://creativecommons.org/licenses/by-sa/4.0/";
   <http://purl.org/dc/terms/relation> "dcterms:relation1$ http://doi.org/10.1007/xxxxxx-xxx-xxxx-x";
   <http://purl.org/dc/terms/source> "dcterms:source1$ Some source";
-  <http://purl.org/dc/terms/spatial> "dcterms:spatial2$ Nicaragua",
-    "dcterms:spatial1$ Canada";
+  <http://purl.org/dc/terms/spatial> "dcterms:spatial1$ Canada",
+    "dcterms:spatial2$ Nicaragua";
   <http://purl.org/dc/terms/temporal> "dcterms:temporal2$ Holocene",
     "dcterms:temporal1$ Holocene";
   <http://purl.org/dc/terms/type> "http://purl.org/ontology/bibo/Image";
@@ -34,6 +36,6 @@
   <http://terms.library.ualberta.ca/ingestBatch> "9019s326c";
   <http://terms.library.ualberta.ca/path> "f0755e45-0aef-537a-98ce-6c8ed1165b92/929c81d5-d15e-570e-83c4-ec41755c879d";
   <http://terms.library.ualberta.ca/recordCreatedInJupiter> "1000-01-01T00:00:00.007Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
-  <http://terms.library.ualberta.ca/sortYear> 2000;
+  <http://terms.library.ualberta.ca/sortYear> 1000;
   <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#dateIngested> "1000-01-01T00:00:00.007Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
   <info:fedora/fedora-system:def/model#hasModel> "IRItem" .

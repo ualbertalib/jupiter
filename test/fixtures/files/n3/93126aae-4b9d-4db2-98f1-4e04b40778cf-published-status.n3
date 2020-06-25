@@ -35,6 +35,6 @@
   <http://terms.library.ualberta.ca/ingestBatch> "9019s326c";
   <http://terms.library.ualberta.ca/path> "f0755e45-0aef-537a-98ce-6c8ed1165b92/929c81d5-d15e-570e-83c4-ec41755c879d";
   <http://terms.library.ualberta.ca/recordCreatedInJupiter> "1000-01-01T00:00:00.007Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
-  <http://terms.library.ualberta.ca/sortYear> 2000;
+  <http://terms.library.ualberta.ca/sortYear> 1000;
   <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#dateIngested> "1000-01-01T00:00:00.007Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
   <info:fedora/fedora-system:def/model#hasModel> "IRItem" .

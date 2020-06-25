@@ -52,7 +52,7 @@ class SitemapTest < ActionDispatch::IntegrationTest
     assert_select 'loc', item_url(@item)
     assert_select 'lastmod', @item.updated_at.iso8601
     # not show private items
-    assert_select 'url', count: 7
+    assert_select 'url', count: 5
     assert_select 'loc', { count: 0, text: item_url(@private_item) }, 'private items should not appear in the sitemap'
   end
 
