@@ -504,7 +504,7 @@ class JupiterCore::LockedLdpObject
       when :json_array
         JSON.parse(value)
       when :date
-        if value.is_a?(String)
+        if value.is_a?(String) && value.length != 4
           Time.zone.parse(value)
         elsif value.is_a?(DateTime)
           value

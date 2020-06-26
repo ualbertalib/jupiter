@@ -6,6 +6,9 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+### Fixed
+- Now ignoring strings of length 4 for dates in coerce_value [PR#1700](https://github.com/ualbertalib/jupiter/pull/1700)
+
 ### Changed
 - Beefed up AR migrations by stating that certain attributes cannot be null [PR#1704](https://github.com/ualbertalib/jupiter/pull/1704)
 
