@@ -6,8 +6,22 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+## [2.0.0.pre2.5] 2020-07-03
+
+### Fixed
+- Now catching and ignoring ArgumentError in coerce_value [PR#1742](https://github.com/ualbertalib/jupiter/pull/1742)
+
+## [2.0.0.pre2.4] 2020-06-29
+
+### Fixed
+- Bumped sidekiq-unique-jobs as our version was yanked [PR#1738](https://github.com/ualbertalib/jupiter/pull/1738)
+
+## [2.0.0.pre2.3] 2020-06-26
+
 ### Fixed
 - Now ignoring strings of length 4 for dates in coerce_value [PR#1700](https://github.com/ualbertalib/jupiter/pull/1700)
+
+## [2.0.0.pre2.2] 2020-06-22
 
 ### Changed
 - Beefed up AR migrations by stating that certain attributes cannot be null [PR#1704](https://github.com/ualbertalib/jupiter/pull/1704)
