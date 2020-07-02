@@ -504,8 +504,12 @@ class JupiterCore::LockedLdpObject
       when :json_array
         JSON.parse(value)
       when :date
-        if value.is_a?(String) && value.length != 4
-          Time.zone.parse(value)
+        if value.is_a?(String)
+          begin
+            Time.zone.parse(value)
+          rescue ArgumentError
+            # Invalid date value, ignore.
+          end
         elsif value.is_a?(DateTime)
           value
         elsif value.is_a?(Date) || value.is_a?(Time)
