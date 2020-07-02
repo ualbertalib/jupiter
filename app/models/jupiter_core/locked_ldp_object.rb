@@ -509,6 +509,7 @@ class JupiterCore::LockedLdpObject
             Time.zone.parse(value)
           rescue ArgumentError
             # Invalid date value, ignore.
+            nil
           end
         elsif value.is_a?(DateTime)
           value
