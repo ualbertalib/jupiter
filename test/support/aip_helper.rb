@@ -60,11 +60,10 @@ module AipHelper
     }
   end
 
-  # TODO: We will very likely stop using the create_entity method once settle on
-  # a consistent way of defining data for our tests. Initially the entities were
-  # fetched from fixtures instead of being instantiated, however multiple tests
-  # for Item entity started flipping with this approach, likely having to do
-  # with the order the tests were run. The errors included:
+  # TODO: We will very likely stop using the create_entity method once settle on a consistent way of defining data for
+  # our tests. Initially the entities were fetched from fixtures instead of being instantiated, however multiple tests
+  # for Item entity started flipping with this approach, likely having to do with the order the tests were run. The
+  # errors included:
   # - No items on the database
   # - Items not being found on database by id
   # - Items defined to have files did not contain them
@@ -97,116 +96,171 @@ module AipHelper
 
   def seed_active_storage_blobs_rdf_annotations
     active_storage_blob_table_name = ActiveStorage::Blob.table_name.freeze
-    RdfAnnotation.create(table: active_storage_blob_table_name, column: 'byte_size', predicate: 'http://www.loc.gov/premis/rdf/v1#hasSize')
-    RdfAnnotation.create(table: active_storage_blob_table_name, column: 'checksum', predicate: 'http://www.loc.gov/premis/rdf/v1#hasMessageDigest')
-    RdfAnnotation.create(table: active_storage_blob_table_name, column: 'content_type', predicate: 'http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasMimeType')
-    RdfAnnotation.create(table: active_storage_blob_table_name, column: 'filename', predicate: 'http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#resourceFilename')
+    RdfAnnotation.create_or_find_by(table: active_storage_blob_table_name, column: 'byte_size',
+                                    predicate: RDF::Vocab::PREMIS.hasSize)
+    RdfAnnotation.create_or_find_by(table: active_storage_blob_table_name, column: 'checksum',
+                                    predicate: RDF::Vocab::PREMIS.hasMessageDigest)
+    RdfAnnotation.create_or_find_by(table: active_storage_blob_table_name, column: 'content_type',
+                                    predicate: RDF::Vocab::EBUCore.hasMimeType)
+    RdfAnnotation.create_or_find_by(table: active_storage_blob_table_name, column: 'filename',
+                                    predicate: RDF::Vocab::EBUCore.resourceFilename)
   end
 
   def seed_collections_rdf_annotations
     collection_table_name = Collection.table_name.freeze
-    RdfAnnotation.create(table: collection_table_name, column: 'community_id', predicate: 'http://terms.library.ualberta.ca/path')
-    RdfAnnotation.create(table: collection_table_name, column: 'creators', predicate: 'http://purl.org/dc/terms/creator')
-    RdfAnnotation.create(table: collection_table_name, column: 'date_ingested', predicate: 'http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#dateIngested')
-    RdfAnnotation.create(table: collection_table_name, column: 'depositor', predicate: 'http://terms.library.ualberta.ca/depositor')
-    RdfAnnotation.create(table: collection_table_name, column: 'description', predicate: 'http://purl.org/dc/terms/description')
-    RdfAnnotation.create(table: collection_table_name, column: 'fedora3_uuid', predicate: 'http://terms.library.ualberta.ca/fedora3UUID')
-    RdfAnnotation.create(table: collection_table_name, column: 'hydra_noid', predicate: 'http://terms.library.ualberta.ca/hydraNoid')
-    RdfAnnotation.create(table: collection_table_name, column: 'record_created_at', predicate: 'http://terms.library.ualberta.ca/recordCreatedInJupiter')
-    RdfAnnotation.create(table: collection_table_name, column: 'restricted', predicate: 'http://terms.library.ualberta.ca/restrictedCollection')
-    RdfAnnotation.create(table: collection_table_name, column: 'title', predicate: 'http://purl.org/dc/terms/title')
-    RdfAnnotation.create(table: collection_table_name, column: 'visibility', predicate: 'http://purl.org/dc/terms/accessRights')
+    RdfAnnotation.create_or_find_by(table: collection_table_name, column: 'community_id', predicate: TERMS[:ual].path)
+    RdfAnnotation.create_or_find_by(table: collection_table_name, column: 'creators', predicate: RDF::Vocab::DC.creator)
+    RdfAnnotation.create_or_find_by(table: collection_table_name, column: 'date_ingested',
+                                    predicate: RDF::Vocab::EBUCore.dateIngested)
+    RdfAnnotation.create_or_find_by(table: collection_table_name, column: 'depositor', predicate: TERMS[:ual].depositor)
+    RdfAnnotation.create_or_find_by(table: collection_table_name, column: 'description',
+                                    predicate: RDF::Vocab::DC.description)
+    RdfAnnotation.create_or_find_by(table: collection_table_name, column: 'fedora3_uuid',
+                                    predicate: TERMS[:ual].fedora3_uuid)
+    RdfAnnotation.create_or_find_by(table: collection_table_name, column: 'hydra_noid',
+                                    predicate: TERMS[:ual].hydra_noid)
+    RdfAnnotation.create_or_find_by(table: collection_table_name, column: 'record_created_at',
+                                    predicate: TERMS[:ual].record_created_in_jupiter)
+    RdfAnnotation.create_or_find_by(table: collection_table_name, column: 'restricted',
+                                    predicate: TERMS[:ual].restricted_collection)
+    RdfAnnotation.create_or_find_by(table: collection_table_name, column: 'title', predicate: RDF::Vocab::DC.title)
+    RdfAnnotation.create_or_find_by(table: collection_table_name, column: 'visibility',
+                                    predicate: RDF::Vocab::DC.accessRights)
   end
 
   def seed_communities_rdf_annotations
     community_table_name = Community.table_name.freeze
-    RdfAnnotation.create(table: community_table_name, column: 'creators', predicate: 'http://purl.org/dc/terms/creator')
-    RdfAnnotation.create(table: community_table_name, column: 'date_ingested', predicate: 'http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#dateIngested')
-    RdfAnnotation.create(table: community_table_name, column: 'depositor', predicate: 'http://terms.library.ualberta.ca/depositor')
-    RdfAnnotation.create(table: community_table_name, column: 'description', predicate: 'http://purl.org/dc/terms/description')
-    RdfAnnotation.create(table: community_table_name, column: 'fedora3_uuid', predicate: 'http://terms.library.ualberta.ca/fedora3UUID')
-    RdfAnnotation.create(table: community_table_name, column: 'hydra_noid', predicate: 'http://terms.library.ualberta.ca/hydraNoid')
-    RdfAnnotation.create(table: community_table_name, column: 'record_created_at', predicate: 'http://terms.library.ualberta.ca/recordCreatedInJupiter')
-    RdfAnnotation.create(table: community_table_name, column: 'title', predicate: 'http://purl.org/dc/terms/title')
-    RdfAnnotation.create(table: community_table_name, column: 'visibility', predicate: 'http://purl.org/dc/terms/accessRights')
+    RdfAnnotation.create_or_find_by(table: community_table_name, column: 'creators', predicate: RDF::Vocab::DC.creator)
+    RdfAnnotation.create_or_find_by(table: community_table_name, column: 'date_ingested',
+                                    predicate: RDF::Vocab::EBUCore.dateIngested)
+    RdfAnnotation.create_or_find_by(table: community_table_name, column: 'depositor', predicate: TERMS[:ual].depositor)
+    RdfAnnotation.create_or_find_by(table: community_table_name, column: 'description',
+                                    predicate: RDF::Vocab::DC.description)
+    RdfAnnotation.create_or_find_by(table: community_table_name, column: 'fedora3_uuid',
+                                    predicate: TERMS[:ual].fedora3_uuid)
+    RdfAnnotation.create_or_find_by(table: community_table_name, column: 'hydra_noid',
+                                    predicate: TERMS[:ual].hydra_noid)
+    RdfAnnotation.create_or_find_by(table: community_table_name, column: 'record_created_at',
+                                    predicate: TERMS[:ual].record_created_in_jupiter)
+    RdfAnnotation.create_or_find_by(table: community_table_name, column: 'title', predicate: RDF::Vocab::DC.title)
+    RdfAnnotation.create_or_find_by(table: community_table_name, column: 'visibility',
+                                    predicate: RDF::Vocab::DC.accessRights)
   end
 
   def seed_item_rdf_annotations
     item_table_name = Item.table_name.freeze
-    RdfAnnotation.create(table: item_table_name, column: 'alternative_title', predicate: 'http://purl.org/dc/terms/alternative')
-    RdfAnnotation.create(table: item_table_name, column: 'contributors', predicate: 'http://purl.org/dc/elements/1.1/contributor')
-    RdfAnnotation.create(table: item_table_name, column: 'created', predicate: 'http://purl.org/dc/terms/created')
-    RdfAnnotation.create(table: item_table_name, column: 'creators', predicate: 'http://purl.org/dc/elements/1.1/creator')
-    RdfAnnotation.create(table: item_table_name, column: 'date_ingested', predicate: 'http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#dateIngested')
-    RdfAnnotation.create(table: item_table_name, column: 'depositor', predicate: 'http://terms.library.ualberta.ca/depositor')
-    RdfAnnotation.create(table: item_table_name, column: 'description', predicate: 'http://purl.org/dc/terms/description')
-    RdfAnnotation.create(table: item_table_name, column: 'doi', predicate: 'http://prismstandard.org/namespaces/basic/3.0/doi')
-    RdfAnnotation.create(table: item_table_name, column: 'embargo_end_date', predicate: 'http://purl.org/dc/terms/available')
-    RdfAnnotation.create(table: item_table_name, column: 'embargo_history', predicate: 'http://projecthydra.org/ns/auth/acl#embargoHistory')
-    RdfAnnotation.create(table: item_table_name, column: 'fedora3_handle', predicate: 'http://terms.library.ualberta.ca/fedora3Handle')
-    RdfAnnotation.create(table: item_table_name, column: 'fedora3_uuid', predicate: 'http://terms.library.ualberta.ca/fedora3UUID')
-    RdfAnnotation.create(table: item_table_name, column: 'hydra_noid', predicate: 'http://terms.library.ualberta.ca/hydraNoid')
-    RdfAnnotation.create(table: item_table_name, column: 'ingest_batch', predicate: 'http://terms.library.ualberta.ca/ingestBatch')
-    RdfAnnotation.create(table: item_table_name, column: 'is_version_of', predicate: 'http://purl.org/dc/terms/isVersionOf')
-    RdfAnnotation.create(table: item_table_name, column: 'item_type', predicate: 'http://purl.org/dc/terms/type')
-    RdfAnnotation.create(table: item_table_name, column: 'languages', predicate: 'http://purl.org/dc/terms/language')
-    RdfAnnotation.create(table: item_table_name, column: 'license', predicate: 'http://purl.org/dc/terms/license')
-    RdfAnnotation.create(table: item_table_name, column: 'member_of_paths', predicate: 'http://terms.library.ualberta.ca/path')
-    RdfAnnotation.create(table: item_table_name, column: 'northern_north_america_filename', predicate: 'http://terms.library.ualberta.ca/nnaFile')
-    RdfAnnotation.create(table: item_table_name, column: 'northern_north_america_item_id', predicate: 'http://terms.library.ualberta.ca/nnaItem')
-    RdfAnnotation.create(table: item_table_name, column: 'publication_status', predicate: 'http://purl.org/ontology/bibo/status')
-    RdfAnnotation.create(table: item_table_name, column: 'publisher', predicate: 'http://purl.org/dc/terms/publisher')
-    RdfAnnotation.create(table: item_table_name, column: 'record_created_at', predicate: 'http://terms.library.ualberta.ca/recordCreatedInJupiter')
-    RdfAnnotation.create(table: item_table_name, column: 'related_link', predicate: 'http://purl.org/dc/terms/relation')
-    RdfAnnotation.create(table: item_table_name, column: 'rights', predicate: 'http://purl.org/dc/elements/1.1/rights')
-    RdfAnnotation.create(table: item_table_name, column: 'sort_year', predicate: 'http://terms.library.ualberta.ca/sortYear')
-    RdfAnnotation.create(table: item_table_name, column: 'source', predicate: 'http://purl.org/dc/terms/source')
-    RdfAnnotation.create(table: item_table_name, column: 'spatial_subjects', predicate: 'http://purl.org/dc/terms/spatial')
-    RdfAnnotation.create(table: item_table_name, column: 'subject', predicate: 'http://purl.org/dc/elements/1.1/subject')
-    RdfAnnotation.create(table: item_table_name, column: 'temporal_subjects', predicate: 'http://purl.org/dc/terms/temporal')
-    RdfAnnotation.create(table: item_table_name, column: 'title', predicate: 'http://purl.org/dc/terms/title')
-    RdfAnnotation.create(table: item_table_name, column: 'visibility_after_embargo', predicate: 'http://projecthydra.org/ns/auth/acl#visibilityAfterEmbargo')
-    RdfAnnotation.create(table: item_table_name, column: 'visibility', predicate: 'http://purl.org/dc/terms/accessRights')
+    RdfAnnotation.create_or_find_by(table: item_table_name, column: 'alternative_title',
+                                    predicate: RDF::Vocab::DC.alternative)
+    RdfAnnotation.create_or_find_by(table: item_table_name, column: 'contributors',
+                                    predicate: RDF::Vocab::DC11.contributor)
+    RdfAnnotation.create_or_find_by(table: item_table_name, column: 'created', predicate: RDF::Vocab::DC.created)
+    RdfAnnotation.create_or_find_by(table: item_table_name, column: 'creators', predicate: RDF::Vocab::DC11.creator)
+    RdfAnnotation.create_or_find_by(table: item_table_name, column: 'date_ingested',
+                                    predicate: RDF::Vocab::EBUCore.dateIngested)
+    RdfAnnotation.create_or_find_by(table: item_table_name, column: 'depositor', predicate: TERMS[:ual].depositor)
+    RdfAnnotation.create_or_find_by(table: item_table_name, column: 'description',
+                                    predicate: RDF::Vocab::DC.description)
+    RdfAnnotation.create_or_find_by(table: item_table_name, column: 'doi', predicate: TERMS[:prism].doi)
+    RdfAnnotation.create_or_find_by(table: item_table_name, column: 'embargo_end_date',
+                                    predicate: RDF::Vocab::DC.available)
+    RdfAnnotation.create_or_find_by(table: item_table_name, column: 'embargo_history',
+                                    predicate: TERMS[:acl].embargo_history)
+    RdfAnnotation.create_or_find_by(table: item_table_name, column: 'fedora3_handle',
+                                    predicate: TERMS[:ual].fedora3_handle)
+    RdfAnnotation.create_or_find_by(table: item_table_name, column: 'fedora3_uuid', predicate: TERMS[:ual].fedora3_uuid)
+    RdfAnnotation.create_or_find_by(table: item_table_name, column: 'hydra_noid', predicate: TERMS[:ual].hydra_noid)
+    RdfAnnotation.create_or_find_by(table: item_table_name, column: 'ingest_batch', predicate: TERMS[:ual].ingest_batch)
+    RdfAnnotation.create_or_find_by(table: item_table_name, column: 'is_version_of',
+                                    predicate: RDF::Vocab::DC.isVersionOf)
+    RdfAnnotation.create_or_find_by(table: item_table_name, column: 'item_type', predicate: RDF::Vocab::DC.type)
+    RdfAnnotation.create_or_find_by(table: item_table_name, column: 'languages', predicate: RDF::Vocab::DC.language)
+    RdfAnnotation.create_or_find_by(table: item_table_name, column: 'license', predicate: RDF::Vocab::DC.license)
+    RdfAnnotation.create_or_find_by(table: item_table_name, column: 'member_of_paths', predicate: TERMS[:ual].path)
+    RdfAnnotation.create_or_find_by(table: item_table_name, column: 'northern_north_america_filename',
+                                    predicate: TERMS[:ual].northern_north_america_filename)
+    RdfAnnotation.create_or_find_by(table: item_table_name, column: 'northern_north_america_item_id',
+                                    predicate: TERMS[:ual].northern_north_america_item_id)
+    RdfAnnotation.create_or_find_by(table: item_table_name, column: 'publication_status',
+                                    predicate: RDF::Vocab::BIBO.status)
+    RdfAnnotation.create_or_find_by(table: item_table_name, column: 'publisher', predicate: RDF::Vocab::DC.publisher)
+    RdfAnnotation.create_or_find_by(table: item_table_name, column: 'record_created_at',
+                                    predicate: TERMS[:ual].record_created_in_jupiter)
+    RdfAnnotation.create_or_find_by(table: item_table_name, column: 'related_link', predicate: RDF::Vocab::DC.relation)
+    RdfAnnotation.create_or_find_by(table: item_table_name, column: 'rights', predicate: RDF::Vocab::DC11.rights)
+    RdfAnnotation.create_or_find_by(table: item_table_name, column: 'sort_year', predicate: TERMS[:ual].sort_year)
+    RdfAnnotation.create_or_find_by(table: item_table_name, column: 'source', predicate: RDF::Vocab::DC.source)
+    RdfAnnotation.create_or_find_by(table: item_table_name, column: 'spatial_subjects',
+                                    predicate: RDF::Vocab::DC.spatial)
+    RdfAnnotation.create_or_find_by(table: item_table_name, column: 'subject', predicate: RDF::Vocab::DC11.subject)
+    RdfAnnotation.create_or_find_by(table: item_table_name, column: 'temporal_subjects',
+                                    predicate: RDF::Vocab::DC.temporal)
+    RdfAnnotation.create_or_find_by(table: item_table_name, column: 'title', predicate: RDF::Vocab::DC.title)
+    RdfAnnotation.create_or_find_by(table: item_table_name, column: 'visibility_after_embargo',
+                                    predicate: TERMS[:acl].visibility_after_embargo)
+    RdfAnnotation.create_or_find_by(table: item_table_name, column: 'visibility',
+                                    predicate: RDF::Vocab::DC.accessRights)
   end
 
   def seed_theses_rdf_annotations
     thesis_table_name = Thesis.table_name.freeze
-    RdfAnnotation.create(table: thesis_table_name, column: 'abstract', predicate: 'http://purl.org/dc/terms/abstract')
-    RdfAnnotation.create(table: thesis_table_name, column: 'alternative_title', predicate: 'http://purl.org/dc/terms/alternative')
-    RdfAnnotation.create(table: thesis_table_name, column: 'committee_members', predicate: 'http://terms.library.ualberta.ca/commiteeMember')
-    RdfAnnotation.create(table: thesis_table_name, column: 'date_accepted', predicate: 'http://purl.org/dc/terms/dateAccepted')
-    RdfAnnotation.create(table: thesis_table_name, column: 'date_ingested', predicate: 'http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#dateIngested')
-    RdfAnnotation.create(table: thesis_table_name, column: 'date_submitted', predicate: 'http://purl.org/dc/terms/dateSubmitted')
-    RdfAnnotation.create(table: thesis_table_name, column: 'degree', predicate: 'http://purl.org/ontology/bibo/degree')
-    RdfAnnotation.create(table: thesis_table_name, column: 'departments', predicate: 'http://terms.library.ualberta.ca/departmentList')
-    RdfAnnotation.create(table: thesis_table_name, column: 'depositor', predicate: 'http://terms.library.ualberta.ca/depositor')
-    RdfAnnotation.create(table: thesis_table_name, column: 'dissertant', predicate: 'http://terms.library.ualberta.ca/dissertant')
-    RdfAnnotation.create(table: thesis_table_name, column: 'doi', predicate: 'http://prismstandard.org/namespaces/basic/3.0/doi')
-    RdfAnnotation.create(table: thesis_table_name, column: 'embargo_end_date', predicate: 'http://purl.org/dc/terms/available')
-    RdfAnnotation.create(table: thesis_table_name, column: 'embargo_history', predicate: 'http://projecthydra.org/ns/auth/acl#embargoHistory')
-    RdfAnnotation.create(table: thesis_table_name, column: 'fedora3_handle', predicate: 'http://terms.library.ualberta.ca/fedora3Handle')
-    RdfAnnotation.create(table: thesis_table_name, column: 'fedora3_uuid', predicate: 'http://terms.library.ualberta.ca/fedora3UUID')
-    RdfAnnotation.create(table: thesis_table_name, column: 'graduation_date', predicate: 'http://terms.library.ualberta.ca/graduationDate')
-    RdfAnnotation.create(table: thesis_table_name, column: 'hydra_noid', predicate: 'http://terms.library.ualberta.ca/hydraNoid')
-    RdfAnnotation.create(table: thesis_table_name, column: 'ingest_batch', predicate: 'http://terms.library.ualberta.ca/ingestBatch')
-    RdfAnnotation.create(table: thesis_table_name, column: 'institution', predicate: 'http://ontoware.org/swrc/ontology#institution')
-    RdfAnnotation.create(table: thesis_table_name, column: 'is_version_of', predicate: 'http://purl.org/dc/terms/isVersionOf')
-    RdfAnnotation.create(table: thesis_table_name, column: 'language', predicate: 'http://purl.org/dc/terms/language')
-    RdfAnnotation.create(table: thesis_table_name, column: 'member_of_paths', predicate: 'http://terms.library.ualberta.ca/path')
-    RdfAnnotation.create(table: thesis_table_name, column: 'northern_north_america_filename', predicate: 'http://terms.library.ualberta.ca/nnaFile')
-    RdfAnnotation.create(table: thesis_table_name, column: 'northern_north_america_item_id', predicate: 'http://terms.library.ualberta.ca/nnaItem')
-    RdfAnnotation.create(table: thesis_table_name, column: 'proquest', predicate: 'http://terms.library.ualberta.ca/proquest')
-    RdfAnnotation.create(table: thesis_table_name, column: 'record_created_at', predicate: 'http://terms.library.ualberta.ca/recordCreatedInJupiter')
-    RdfAnnotation.create(table: thesis_table_name, column: 'rights', predicate: 'http://purl.org/dc/elements/1.1/rights')
-    RdfAnnotation.create(table: thesis_table_name, column: 'sort_year', predicate: 'http://terms.library.ualberta.ca/sortYear')
-    RdfAnnotation.create(table: thesis_table_name, column: 'specialization', predicate: 'http://terms.library.ualberta.ca/specialization')
-    RdfAnnotation.create(table: thesis_table_name, column: 'subject', predicate: 'http://purl.org/dc/elements/1.1/subject')
-    RdfAnnotation.create(table: thesis_table_name, column: 'supervisors', predicate: 'http://terms.library.ualberta.ca/supervisorList')
-    RdfAnnotation.create(table: thesis_table_name, column: 'thesis_level', predicate: 'http://terms.library.ualberta.ca/thesisLevel')
-    RdfAnnotation.create(table: thesis_table_name, column: 'title', predicate: 'http://purl.org/dc/terms/title')
-    RdfAnnotation.create(table: thesis_table_name, column: 'unicorn', predicate: 'http://terms.library.ualberta.ca/unicorn')
-    RdfAnnotation.create(table: thesis_table_name, column: 'visibility_after_embargo', predicate: 'http://projecthydra.org/ns/auth/acl#visibilityAfterEmbargo')
-    RdfAnnotation.create(table: thesis_table_name, column: 'visibility', predicate: 'http://purl.org/dc/terms/accessRights')
+    RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'abstract', predicate: RDF::Vocab::DC.abstract)
+    RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'alternative_title',
+                                    predicate: RDF::Vocab::DC.alternative)
+    RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'committee_members',
+                                    predicate: TERMS[:ual].committee_member)
+    RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'date_accepted',
+                                    predicate: RDF::Vocab::DC.dateAccepted)
+    RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'date_ingested',
+                                    predicate: RDF::Vocab::EBUCore.dateIngested)
+    RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'date_submitted',
+                                    predicate: RDF::Vocab::DC.dateSubmitted)
+    RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'degree', predicate: RDF::Vocab::BIBO.degree)
+    RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'departments',
+                                    predicate: TERMS[:ual].department_list)
+    RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'depositor', predicate: TERMS[:ual].depositor)
+    RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'dissertant', predicate: TERMS[:ual].dissertant)
+    RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'doi', predicate: TERMS[:prism].doi)
+    RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'embargo_end_date',
+                                    predicate: RDF::Vocab::DC.available)
+    RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'embargo_history',
+                                    predicate: TERMS[:acl].embargo_history)
+    RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'fedora3_handle',
+                                    predicate: TERMS[:ual].fedora3_handle)
+    RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'fedora3_uuid',
+                                    predicate: TERMS[:ual].fedora3_uuid)
+    RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'graduation_date',
+                                    predicate: TERMS[:ual].graduation_date)
+    RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'hydra_noid', predicate: TERMS[:ual].hydra_noid)
+    RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'ingest_batch',
+                                    predicate: TERMS[:ual].ingest_batch)
+    RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'institution',
+                                    predicate: TERMS[:swrc].institution)
+    RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'is_version_of',
+                                    predicate: RDF::Vocab::DC.isVersionOf)
+    RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'language', predicate: RDF::Vocab::DC.language)
+    RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'member_of_paths', predicate: TERMS[:ual].path)
+    RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'northern_north_america_filename',
+                                    predicate: TERMS[:ual].northern_north_america_filename)
+    RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'northern_north_america_item_id',
+                                    predicate: TERMS[:ual].northern_north_america_item_id)
+    RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'proquest', predicate: TERMS[:ual].proquest)
+    RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'record_created_at',
+                                    predicate: TERMS[:ual].record_created_in_jupiter)
+    RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'rights', predicate: RDF::Vocab::DC11.rights)
+    RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'sort_year', predicate: TERMS[:ual].sort_year)
+    RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'specialization',
+                                    predicate: TERMS[:ual].specialization)
+    RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'subject', predicate: RDF::Vocab::DC11.subject)
+    RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'supervisors',
+                                    predicate: TERMS[:ual].supervisor_list)
+    RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'thesis_level',
+                                    predicate: TERMS[:ual].thesis_level)
+    RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'title', predicate: RDF::Vocab::DC.title)
+    RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'unicorn', predicate: TERMS[:ual].unicorn)
+    RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'visibility_after_embargo',
+                                    predicate: TERMS[:acl].visibility_after_embargo)
+    RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'visibility',
+                                    predicate: RDF::Vocab::DC.accessRights)
   end
 
   def ingest_files_for_entity(entity)

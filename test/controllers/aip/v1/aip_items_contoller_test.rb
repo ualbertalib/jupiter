@@ -31,7 +31,6 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
     )
 
     # Load just the RDF annotations we need for these tests
-    seed_active_storage_blobs_rdf_annotations
     seed_item_rdf_annotations
   end
 
