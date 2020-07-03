@@ -406,6 +406,7 @@ if Rails.env.development? || Rails.env.uat?
   # TODO: Add our own radioactive community and collection
 
   community_with_collection = Community.joins(:collections).first
+  radioactive_example_file_paths = ['test/fixtures/files/image-sample.jpeg', 'test/fixtures/files/image-sample2.jpeg']
 
   base_radioactive_values = {
     # Set model id on each new Item so we can find it easily when testing
@@ -419,16 +420,16 @@ if Rails.env.development? || Rails.env.uat?
     sort_year: '1000',
     description: 'dcterms:description1$ Arabic ناتيومرلبسفأعدقحكهجشطصزخضغذثئةظؤىءآإ Greek αβγδεζηθικλμνξοπρςστυφχψω ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ Cyrillic абвгдеёжзийклмнопрстуфхцчшщъыьэюя АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ Lao ກ-ໝ Thai ก-๎ Burmese က-ၙ Khmer ក-៹ Korean 가-힣 Bengali অ-ৱ // Spanish áéíóúüñ French àâçèéêëîïôùûü Portuguese àáâãçéêíóôõú Hindi ऄ-ॿ Pujabi ਅ-ੴ Mandarin 海萵苣白菜冬瓜韭菜竹筍生菜大頭菜豆薯銀甜菜莧菜豌豆蒲公英蔥豌豆苗亞羅婆羅門參西葫蘆。小豆辣根土豆 Japanese アオサメロンキャベツニラ竹シュートレタスルタバガのクズイモ銀ビートアマランスエンドウタンポポねぎ',
     is_version_of: ['dcterms:isVersionOf1$ Sydorenko, Dmytro & Rankin, Robert. (2013). Simulation of O+ upflows created by electron precipitation and Alfvén waves in the ionosphere. Journal of Geophysical Research: Space Physics, 118(9), 5562-5578. http://doi.org/10.1002/jgra.50531', 'dcterms:isVersionOf2$ Another version'],
-    languages: ['http://id.loc.gov/vocabulary/iso639-2/zxx', 'http://id.loc.gov/vocabulary/iso639-2/fre'],
+    languages: [CONTROLLED_VOCABULARIES[:language].no_linguistic_content, CONTROLLED_VOCABULARIES[:language].french],
     related_link: 'dcterms:relation1$ http://doi.org/10.1007/xxxxxx-xxx-xxxx-x',
     source: 'dcterms:source1$ Some source',
     spatial_subjects: ['dcterms:spatial1$ Canada', 'dcterms:spatial2$ Nicaragua'],
     temporal_subjects: ['dcterms:temporal1$ Holocene', 'dcterms:temporal2$ Holocene'],
-    title: 'dcterms:title1$ Some Title',
+    title: 'dcterms:title1$ Some Title for Item',
     alternative_title: 'dcterms:alternative1$ Some Alternative Title',
-    item_type: 'http://purl.org/ontology/bibo/Image',
+    item_type: CONTROLLED_VOCABULARIES[:item_type].image,
     depositor: 'eraadmi@ualberta.ca',
-    license: 'http://creativecommons.org/licenses/by-sa/4.0/',
+    license: CONTROLLED_VOCABULARIES[:license].attribution_sharealike_4_0_international,
     fedora3_uuid: 'uuid:97b1a8e2-a4b9-4941-b6ed-c4730f0a2a61',
     fedora3_handle: 'http://hdl.handle.net/10402/era.33419',
     hydra_noid: 'cgq67jr26k',
@@ -441,10 +442,14 @@ if Rails.env.development? || Rails.env.uat?
   Item.new(
     base_radioactive_values.merge(id: 'e2ec88e3-3266-4e95-8575-8b04fac2a679')
   ).tap do |item|
-    # Attach a file
-    File.open(Rails.root + 'test/fixtures/files/image-sample.jpeg', 'r') do |file1|
-      item.add_and_ingest_files([file1])
+    # Attach files
+
+    radioactive_example_file_paths.each do |file_path|
+      File.open(Rails.root + file_path, 'r') do |file|
+        item.add_and_ingest_files([file])
+      end
     end
+
     item.set_thumbnail(item.files.first) if item.files.first.present?
 
     item.save!
@@ -459,10 +464,14 @@ if Rails.env.development? || Rails.env.uat?
       rights: '© The Author(s) 2015. Published by Oxford University Press on behalf of the Society for Molecular Biology and Evolution.'
     )
   ).tap do |item|
-    # Attach a file
-    File.open(Rails.root + 'test/fixtures/files/image-sample.jpeg', 'r') do |file1|
-      item.add_and_ingest_files([file1])
+    # Attach files
+
+    radioactive_example_file_paths.each do |file_path|
+      File.open(Rails.root + file_path, 'r') do |file|
+        item.add_and_ingest_files([file])
+      end
     end
+
     item.set_thumbnail(item.files.first) if item.files.first.present?
 
     item.save!
@@ -479,10 +488,14 @@ if Rails.env.development? || Rails.env.uat?
       visibility_after_embargo: CONTROLLED_VOCABULARIES[:visibility].public
     )
   ).tap do |item|
-    # Attach a file
-    File.open(Rails.root + 'test/fixtures/files/image-sample.jpeg', 'r') do |file1|
-      item.add_and_ingest_files([file1])
+    # Attach files
+   
+    radioactive_example_file_paths.each do |file_path|
+      File.open(Rails.root + file_path, 'r') do |file|
+        item.add_and_ingest_files([file])
+      end
     end
+
     item.set_thumbnail(item.files.first) if item.files.first.present?
 
     item.save!
@@ -502,11 +515,16 @@ if Rails.env.development? || Rails.env.uat?
       visibility_after_embargo: CONTROLLED_VOCABULARIES[:visibility].public
     )
   ).tap do |item|
-    # Attach a file
-    File.open(Rails.root + 'test/fixtures/files/image-sample.jpeg', 'r') do |file1|
-      item.add_and_ingest_files([file1])
+    # Attach files
+
+    radioactive_example_file_paths.each do |file_path|
+      File.open(Rails.root + file_path, 'r') do |file|
+        item.add_and_ingest_files([file])
+      end
     end
+
     item.set_thumbnail(item.files.first) if item.files.first.present?
+
     item.save!
   end
 
@@ -516,14 +534,18 @@ if Rails.env.development? || Rails.env.uat?
     base_radioactive_values.merge(
       id: '93126aae-4b9d-4db2-98f1-4e04b40778cf',
       # The value for publication_status published only appears for article item type
-      item_type: 'http://purl.org/ontology/bibo/Article',
-      publication_status: ['http://purl.org/ontology/bibo/status#published']
+      item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+      publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published]
     )
   ).tap do |item|
-    # Attach a file
-    File.open(Rails.root + 'test/fixtures/files/image-sample.jpeg', 'r') do |file1|
-      item.add_and_ingest_files([file1])
+    # Attach files
+    
+    radioactive_example_file_paths.each do |file_path|
+      File.open(Rails.root + file_path, 'r') do |file|
+        item.add_and_ingest_files([file])
+      end
     end
+
     item.set_thumbnail(item.files.first) if item.files.first.present?
 
     item.save!

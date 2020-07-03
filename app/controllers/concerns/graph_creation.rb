@@ -65,10 +65,4 @@ module GraphCreation
 
     [list, statement]
   end
-
-  def delete_insert_list_values_statements(rdfable_entity, subject, rdf_original_predicate)
-    {
-      statements_to_insert: derivate_list_values(rdfable_entity, subject, rdf_original_predicate)
-    }
-  end
 end

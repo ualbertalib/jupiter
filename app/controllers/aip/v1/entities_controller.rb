@@ -1,7 +1,5 @@
 class Aip::V1::EntitiesController < ApplicationController
 
-  include GraphCreation
-
   ITEM_CLASS_NAME = Item.name.freeze
   THESIS_CLASS_NAME = Thesis.name.freeze
   ITEM_INSTITUTIONAL_REPOSITORY_NAME = 'IRItem'.freeze
@@ -36,20 +34,33 @@ class Aip::V1::EntitiesController < ApplicationController
       RDF::Vocab::Fcrepo4.lastModifiedBy
     ]
 
-    graph = create_graph(@entity, prefixes)
+    rdf_graph_creator = RdfGraphCreationService.new(@entity, prefixes, self_subject)
 
     # The following nodes are statements/lists that are required for entitites
     # but are not directly referenced by a predicate in the system because they
     # require some level of processing to obtain.
 
-    graph.insert(
+    rdf_graph_creator.insert(
       owner_email_statement,
       entity_model_statement,
       *entity_type_statements,
       *entity_file_statements,
-      *entity_member_of_statements,
-      *entity_author_list_statements,
-      *entity_contributor_list_statements
+      *entity_member_of_statements
+    )
+
+    # Creators and contributors are a special case where we also need to maintain the order of their values, for this
+    # reason we add the sorted rdf list for predicates authorList and contributorList respectively
+    # This comes from: https://github.com/ualbertalib/jupiter/issues/333
+
+    rdf_graph_creator.copy_predicate_to_sorted_rdf_list(
+      self_subject,
+      RDF::Vocab::DC11.creator,
+      RDF::Vocab::BIBO.authorList
+    )
+    rdf_graph_creator.copy_predicate_to_sorted_rdf_list(
+      self_subject,
+      RDF::Vocab::DC11.contributor,
+      RDF::Vocab::BIBO.contributorList
     )
 
     # Handle special case where predicate http://projecthydra.org/ns/auth/acl#embargoHistory
@@ -57,14 +68,10 @@ class Aip::V1::EntitiesController < ApplicationController
     # the predicate are removed and a new rdf list is inserted instead with the
     # predicate
 
-    if graph.has_predicate?(::TERMS[:acl].embargo_history)
-      graph.delete_insert(
-        graph.query(predicate: ::TERMS[:acl].embargo_history),
-        derivate_list_values(@entity, self_subject, ::TERMS[:acl].embargo_history)
-      )
-    end
+    rdf_graph_creator.replace_predicate_with_sorted_rdf_list(self_subject, ::TERMS[:acl].embargo_history)
 
-    render plain: graph.dump(:n3), status: :ok
+    # binding.pry
+    render plain: rdf_graph_creator.to_n3, status: :ok
   end
 
   def file_sets
@@ -84,9 +91,9 @@ class Aip::V1::EntitiesController < ApplicationController
   end
 
   def file_set
-    # Prefixes provided by the metadata team
-    # The fedora prefixes will be replaced at a later point from another
-    # ontology, for now these remain as placeholders.
+    # # Prefixes provided by the metadata team
+    # # The fedora prefixes will be replaced at a later point from another
+    # # ontology, for now these remain as placeholders.
     prefixes = [
       RDF::Vocab::DC,
       ::TERMS[:ual].schema,
@@ -103,10 +110,13 @@ class Aip::V1::EntitiesController < ApplicationController
     ]
 
     ActsAsRdfable.add_annotation_bindings!(@file.blob)
-    graph = create_graph(@file.blob, prefixes)
-    graph << rdf_type_statement(RDF::Vocab::PCDM.Object)
 
-    render plain: graph.to_n3, status: :ok
+    rdf_graph_creator = RdfGraphCreationService.new(@file.blob, prefixes, self_subject)
+    rdf_graph_creator.insert(
+      RDF::Statement(subject: self_subject, predicate: RDF.type, object: RDF::Vocab::PCDM.Object)
+    )
+
+    render plain: rdf_graph_creator.to_n3, status: :ok
   end
 
   def fixity_file
@@ -116,7 +126,10 @@ class Aip::V1::EntitiesController < ApplicationController
     ActsAsRdfable.add_annotation_bindings!(@file.blob)
 
     subject = RDF::URI(request.url.split('/')[0..-2].join('/'))
-    graph = create_graph(@file.blob, prefixes, self_subject)
+
+    rdf_graph_creator = RdfGraphCreationService.new(
+      @file.blob, prefixes, subject
+    )
 
     statement_definitions = [
       { subject: subject, predicate: RDF::Vocab::PREMIS.hasFixity, object: self_subject },
@@ -127,10 +140,10 @@ class Aip::V1::EntitiesController < ApplicationController
     ]
 
     statement_definitions.each do |statement_definition|
-      graph << RDF::Statement(statement_definition)
+      rdf_graph_creator.insert(RDF::Statement(statement_definition))
     end
 
-    render plain: graph.to_n3, status: :ok
+    render plain: rdf_graph_creator.to_n3, status: :ok
   end
 
   def original_file
@@ -147,12 +160,13 @@ class Aip::V1::EntitiesController < ApplicationController
     ]
 
     ActsAsRdfable.add_annotation_bindings!(@file.blob)
-    graph = create_graph(@file.blob, prefixes)
-    graph << rdf_type_statement(RDF::Vocab::PCDM.File)
 
     # add fixity service url
 
-    render plain: graph.to_n3, status: :ok
+    rdf_graph_creator = RdfGraphCreationService.new(@file.blob, prefixes, self_subject)
+    rdf_graph_creator.insert(RDF::Statement(subject: self_subject, predicate: RDF.type, object: RDF::Vocab::PCDM.File))
+
+    render plain: rdf_graph_creator.to_n3, status: :ok
   end
 
   def file_paths
@@ -208,6 +222,10 @@ class Aip::V1::EntitiesController < ApplicationController
 
   private
 
+  def self_subject
+    RDF::URI(request.url)
+  end
+
   def owner_email_statement
     RDF::Statement(subject: self_subject, predicate: RDF::Vocab::BIBO.owner, object: @entity.owner.email)
   end
@@ -224,20 +242,6 @@ class Aip::V1::EntitiesController < ApplicationController
     end
 
     file_statements
-  end
-
-  def entity_author_list_statements
-    # Deal with authorList predicate special case where value needs to maintain
-    # the order of its values
-    # This comes from: https://github.com/ualbertalib/jupiter/issues/333
-
-    derivate_list_values(@entity, self_subject, RDF::Vocab::DC.creator, RDF::Vocab::BIBO.authorList)
-  end
-
-  def entity_contributor_list_statements
-    # As with creators, contributors also need an ordered analogue
-
-    derivate_list_values(@entity, self_subject, RDF::Vocab::DC11.contributor, RDF::Vocab::BIBO.contributorList)
   end
 
   def entity_member_of_statements
@@ -269,8 +273,10 @@ class Aip::V1::EntitiesController < ApplicationController
   end
 
   def entity_type_statements
-    statements = [rdf_type_statement(RDF::Vocab::PCDM.Object)]
-    statements << rdf_type_statement(RDF::Vocab::BIBO.Thesis) if @entity.class.to_s == THESIS_CLASS_NAME
+    statements = [RDF::Statement(subject: self_subject, predicate: RDF.type, object: RDF::Vocab::PCDM.Object)]
+    if @entity.class.to_s == THESIS_CLASS_NAME
+      statements << RDF::Statement(subject: self_subject, predicate: RDF.type, object: RDF::Vocab::BIBO.Thesis)
+    end
 
     statements
   end

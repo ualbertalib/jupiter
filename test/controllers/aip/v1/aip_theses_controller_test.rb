@@ -9,7 +9,7 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
     @system_user = users(:system_user)
     @regular_user = users(:regular)
     @private_thesis = thesis(:private)
-    @entity = Thesis.name.underscore.pluralize
+    @entity = Thesis.table_name
     @public_thesis = create_entity(
       entity_class: Thesis,
       parameters: {
