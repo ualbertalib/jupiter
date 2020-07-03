@@ -126,10 +126,10 @@ Rails.application.routes.draw do
             defaults: { format: :n3 } do
     namespace :v1 do
       get '/collections/:id',
-          to: 'collections#show_collection',
+          to: 'collections#show',
           as: 'collection'
       get '/:entity/:id',
-          to: 'entities#show_entity',
+          to: 'entities#show',
           as: 'entity',
           constraints: EntityConstraint.new
       get '/:entity/:id/filesets',

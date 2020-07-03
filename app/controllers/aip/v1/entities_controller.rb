@@ -6,10 +6,11 @@ class Aip::V1::EntitiesController < ApplicationController
   THESIS_INSTITUTIONAL_REPOSITORY_NAME = 'IRThesis'.freeze
   ENTITY_INSTITUTIONAL_REPOSITORY_NAME = 'IREntity'.freeze
 
-  before_action :load_and_authorize_entity, only: [:show_entity, :file_sets, :file_paths]
-  before_action :load_and_authorize_file, only: [:file_set, :fixity_file, :original_file]
+  before_action :load_entity, only: [:show, :file_sets, :file_paths]
+  before_action :load_file, only: [:file_set, :fixity_file, :original_file]
+  before_action :ensure_access
 
-  def show_entity
+  def show
     # These are the prefixes defined as required by the metadata team. The
     # hardcoded strings need to be replaced. The namespaces could be added to
     # the rdf-vocab gem.
@@ -199,14 +200,12 @@ class Aip::V1::EntitiesController < ApplicationController
     end
   end
 
-  def load_and_authorize_file
+  def load_file
     @file = ActiveStorage::Attachment.find_by(fileset_uuid: params[:file_set_id])
     raise JupiterCore::ObjectNotFound unless @file.record_id == params[:id]
-
-    authorize @file
   end
 
-  def load_and_authorize_entity
+  def load_entity
     case params[:entity]
     # There is a routing constraint specifying which models are available
     # through the url. We need to update the routing constraint whenever a new
@@ -216,8 +215,10 @@ class Aip::V1::EntitiesController < ApplicationController
     when Thesis.table_name
       @entity = Thesis.find(params[:id])
     end
+  end
 
-    authorize @entity
+  def ensure_access
+    authorize :aip, :access?
   end
 
   private

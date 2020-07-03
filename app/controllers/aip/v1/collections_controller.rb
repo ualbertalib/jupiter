@@ -2,9 +2,10 @@ class Aip::V1::CollectionsController < ApplicationController
 
   COLLECTION_INSTITUTIONAL_REPOSITORY_NAME = 'IRCollection'.freeze
 
-  before_action :load_and_authorize_collection
+  before_action :load_collection
+  before_action :ensure_access
 
-  def show_collection
+  def show
     # TODO: Check information included with metadata team, this set is only a
     # placeholder.
     prefixes = [
@@ -28,9 +29,12 @@ class Aip::V1::CollectionsController < ApplicationController
 
   protected
 
-  def load_and_authorize_collection
+  def load_collection
     @collection = Collection.find(params[:id])
-    authorize @collection
+  end
+
+  def ensure_access
+    authorize :aip, :access?
   end
 
   def self_subject
