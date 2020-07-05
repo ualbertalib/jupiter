@@ -15,7 +15,7 @@ module FontAwesomeHelper
                              "#{style} fa-#{name}"
                            end
 
-    html = content_tag(:i, nil, html_options)
+    html = tag.i(nil, html_options)
     html << ' ' << text.to_s if text.present?
     html
   end

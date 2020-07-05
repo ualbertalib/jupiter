@@ -44,7 +44,7 @@ module PageLayoutHelper
   end
   # rubocop:enable Rails/HelperInstanceVariable
 
-  def thumbnail_path(logo, args = { resize: '100x100', auto_orient: true })
+  def thumbnail_path(logo, args = { resize_to_limit: [100, 100], auto_orient: true })
     return nil if logo.blank?
 
     # images have variants
