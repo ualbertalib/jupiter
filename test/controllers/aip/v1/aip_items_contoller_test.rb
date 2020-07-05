@@ -81,15 +81,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     graph = generate_graph_from_n3(response.body)
-
-    # n3_template repalces the 2 fileset uuids because they will change everytime the test is run and the files are added
-    fileset_0_uuid = radioactive_item.files[0].fileset_uuid
-    fileset_1_uuid = radioactive_item.files[1].fileset_uuid
-
-    n3_template = ERB.new(file_fixture("n3/#{radioactive_item.id}-base.n3").read)
-    rendered_graph = generate_graph_from_n3(
-      n3_template.result(binding)
-    )
+    rendered_graph = load_rendered_graph(radioactive_item, 'base')
 
     assert_equal true, rendered_graph.isomorphic_with?(graph)
   end
@@ -113,15 +105,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     graph = generate_graph_from_n3(response.body)
-
-    # n3_template repalces the 2 fileset uuids because they will change everytime the test is run and the files are added
-    fileset_0_uuid = radioactive_item.files[0].fileset_uuid
-    fileset_1_uuid = radioactive_item.files[1].fileset_uuid
-
-    n3_template = ERB.new(file_fixture("n3/#{radioactive_item.id}-embargoed.n3").read)
-    rendered_graph = generate_graph_from_n3(
-      n3_template.result(binding)
-    )
+    rendered_graph = load_rendered_graph(radioactive_item, 'embargoed')
 
     assert_equal true, rendered_graph.isomorphic_with?(graph)
   end
@@ -152,15 +136,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     graph = generate_graph_from_n3(response.body)
-
-    # n3_template repalces the 2 fileset uuids because they will change everytime the test is run and the files are added
-    fileset_0_uuid = radioactive_item.files[0].fileset_uuid
-    fileset_1_uuid = radioactive_item.files[1].fileset_uuid
-
-    n3_template = ERB.new(file_fixture("n3/#{radioactive_item.id}-prev-embargoed.n3").read)
-    rendered_graph = generate_graph_from_n3(
-      n3_template.result(binding)
-    )
+    rendered_graph = load_rendered_graph(radioactive_item, 'prev-embargoed')
 
     assert_equal true, rendered_graph.isomorphic_with?(graph)
   end
@@ -183,15 +159,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     graph = generate_graph_from_n3(response.body)
-
-    # n3_template repalces the 2 fileset uuids because they will change everytime the test is run and the files are added
-    fileset_0_uuid = radioactive_item.files[0].fileset_uuid
-    fileset_1_uuid = radioactive_item.files[1].fileset_uuid
-
-    n3_template = ERB.new(file_fixture("n3/#{radioactive_item.id}-rights.n3").read)
-    rendered_graph = generate_graph_from_n3(
-      n3_template.result(binding)
-    )
+    rendered_graph = load_rendered_graph(radioactive_item, 'rights')
 
     assert_equal true, rendered_graph.isomorphic_with?(graph)
   end
@@ -213,15 +181,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     graph = generate_graph_from_n3(response.body)
-
-    # n3_template repalces the 2 fileset uuids because they will change everytime the test is run and the files are added
-    fileset_0_uuid = radioactive_item.files[0].fileset_uuid
-    fileset_1_uuid = radioactive_item.files[1].fileset_uuid
-
-    n3_template = ERB.new(file_fixture("n3/#{radioactive_item.id}-published-status.n3").read)
-    rendered_graph = generate_graph_from_n3(
-      n3_template.result(binding)
-    )
+    rendered_graph = load_rendered_graph(radioactive_item, 'published-status')
 
     assert_equal true, rendered_graph.isomorphic_with?(graph)
   end

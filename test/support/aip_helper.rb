@@ -94,6 +94,28 @@ module AipHelper
     entity
   end
 
+  def ingest_files_for_entity(entity)
+    file_paths = [
+      'test/fixtures/files/image-sample.jpeg',
+      'test/fixtures/files/image-sample2.jpeg'
+    ]
+
+    file_paths.each do |file_path|
+      File.open(Rails.root + file_path, 'r') do |file|
+        entity.add_and_ingest_files([file])
+      end
+    end
+  end
+
+  def load_rendered_graph(entity, postfix)
+    # n3_template repalces the 2 fileset uuids because they will change everytime the test is run and the files are added
+    fileset_0_uuid = entity.files[0].fileset_uuid
+    fileset_1_uuid = entity.files[1].fileset_uuid
+
+    n3_template = ERB.new(file_fixture("n3/#{entity.id}-#{postfix}.n3").read)
+    generate_graph_from_n3(n3_template.result(binding))
+  end
+
   def seed_active_storage_blobs_rdf_annotations
     active_storage_blob_table_name = ActiveStorage::Blob.table_name.freeze
     RdfAnnotation.create_or_find_by(table: active_storage_blob_table_name, column: 'byte_size',
@@ -261,19 +283,6 @@ module AipHelper
                                     predicate: TERMS[:acl].visibility_after_embargo)
     RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'visibility',
                                     predicate: RDF::Vocab::DC.accessRights)
-  end
-
-  def ingest_files_for_entity(entity)
-    file_paths = [
-      'test/fixtures/files/image-sample.jpeg',
-      'test/fixtures/files/image-sample2.jpeg'
-    ]
-
-    file_paths.each do |file_path|
-      File.open(Rails.root + file_path, 'r') do |file|
-        entity.add_and_ingest_files([file])
-      end
-    end
   end
 
   def seed_all_rdf_annotations
