@@ -33,6 +33,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Move Logic from SearchController into ItemSearch Concern [#932](https://github.com/ualbertalib/jupiter/issues/932)
 - Feature Image on Item show page need to be centered align within column [#1405](https://github.com/ualbertalib/jupiter/issues/1405)
 - Centralize Abstraction for Thumbnail Generation [#1343](https://github.com/ualbertalib/jupiter/issues/1343)
+- Finalize Item AIP data [#1557](https://github.com/ualbertalib/jupiter/issues/1557)
 
 ### Fixed
 - failing tests [#1376](https://github.com/ualbertalib/jupiter/issues/1376)
