@@ -71,7 +71,6 @@ class Aip::V1::EntitiesController < ApplicationController
 
     rdf_graph_creator.replace_predicate_with_sorted_rdf_list(self_subject, ::TERMS[:acl].embargo_history)
 
-    # binding.pry
     render plain: rdf_graph_creator.to_n3, status: :ok
   end
 
@@ -92,9 +91,9 @@ class Aip::V1::EntitiesController < ApplicationController
   end
 
   def file_set
-    # # Prefixes provided by the metadata team
-    # # The fedora prefixes will be replaced at a later point from another
-    # # ontology, for now these remain as placeholders.
+    # Prefixes provided by the metadata team
+    # The fedora prefixes will be replaced at a later point from another
+    # ontology, for now these remain as placeholders.
     prefixes = [
       RDF::Vocab::DC,
       ::TERMS[:ual].schema,
@@ -161,8 +160,6 @@ class Aip::V1::EntitiesController < ApplicationController
     ]
 
     ActsAsRdfable.add_annotation_bindings!(@file.blob)
-
-    # add fixity service url
 
     rdf_graph_creator = RdfGraphCreationService.new(@file.blob, prefixes, self_subject)
     rdf_graph_creator.insert(RDF::Statement(subject: self_subject, predicate: RDF.type, object: RDF::Vocab::PCDM.File))
