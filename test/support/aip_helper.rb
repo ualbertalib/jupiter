@@ -107,13 +107,24 @@ module AipHelper
     end
   end
 
-  def load_rendered_graph(entity, postfix)
+  def load_radioactive_n3_graph(entity, postfix)
     # n3_template repalces the 2 fileset uuids because they will change everytime the test is run and the files are added
-    fileset_0_uuid = entity.files[0].fileset_uuid
-    fileset_1_uuid = entity.files[1].fileset_uuid
+    variables = {
+      fileset_0_uuid: entity.files[0].fileset_uuid,
+      fileset_1_uuid: entity.files[1].fileset_uuid
+    }
 
-    n3_template = ERB.new(file_fixture("n3/#{entity.id}-#{postfix}.n3").read)
-    generate_graph_from_n3(n3_template.result(binding))
+    load_n3_graph(file_fixture("n3/#{entity.id}-#{postfix}.n3"), variables)
+  end
+
+  def load_n3_graph(path, variables = nil)
+    b = binding
+    variables&.each do |key, value|
+      b.local_variable_set(key, value)
+    end
+
+    n3_template = ERB.new(path.read)
+    generate_graph_from_n3(n3_template.result(b))
   end
 
   def seed_active_storage_blobs_rdf_annotations

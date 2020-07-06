@@ -31,6 +31,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
     )
 
     # Load just the RDF annotations we need for these tests
+    seed_active_storage_blobs_rdf_annotations
     seed_item_rdf_annotations
   end
 
@@ -81,7 +82,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     graph = generate_graph_from_n3(response.body)
-    rendered_graph = load_rendered_graph(radioactive_item, 'base')
+    rendered_graph = load_radioactive_n3_graph(radioactive_item, 'base')
 
     assert_equal true, rendered_graph.isomorphic_with?(graph)
   end
@@ -105,7 +106,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     graph = generate_graph_from_n3(response.body)
-    rendered_graph = load_rendered_graph(radioactive_item, 'embargoed')
+    rendered_graph = load_radioactive_n3_graph(radioactive_item, 'embargoed')
 
     assert_equal true, rendered_graph.isomorphic_with?(graph)
   end
@@ -136,7 +137,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     graph = generate_graph_from_n3(response.body)
-    rendered_graph = load_rendered_graph(radioactive_item, 'prev-embargoed')
+    rendered_graph = load_radioactive_n3_graph(radioactive_item, 'prev-embargoed')
 
     assert_equal true, rendered_graph.isomorphic_with?(graph)
   end
@@ -159,7 +160,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     graph = generate_graph_from_n3(response.body)
-    rendered_graph = load_rendered_graph(radioactive_item, 'rights')
+    rendered_graph = load_radioactive_n3_graph(radioactive_item, 'rights')
 
     assert_equal true, rendered_graph.isomorphic_with?(graph)
   end
@@ -181,7 +182,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     graph = generate_graph_from_n3(response.body)
-    rendered_graph = load_rendered_graph(radioactive_item, 'published-status')
+    rendered_graph = load_radioactive_n3_graph(radioactive_item, 'published-status')
 
     assert_equal true, rendered_graph.isomorphic_with?(graph)
   end
@@ -232,6 +233,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     graph = generate_graph_from_n3(response.body)
+    # TODO: Improve this test checking for a valid graph output
     assert_equal true, graph.graph?
   end
 
@@ -245,7 +247,16 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
 
     graph = get_n3_graph(url)
     assert_response :success
-    assert_equal true, graph.graph?
+
+    variables = {
+      entity_id: @public_item.id,
+      fileset_id: @public_item.files.first.fileset_uuid,
+      checksum: @public_item.files.first.blob.checksum,
+      byte_size: @public_item.files.first.blob.byte_size
+    }
+    rendered_graph = load_n3_graph(file_fixture('n3/fixity.n3'), variables)
+
+    assert_equal true, rendered_graph.isomorphic_with?(graph)
   end
 
   test 'should get item original file metadata graph with n3 serialization' do
@@ -258,6 +269,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
 
     graph = get_n3_graph(url)
     assert_response :success
+    # TODO: Improve this test checking for a valid graph output
     assert_equal true, graph.graph?
   end
 
