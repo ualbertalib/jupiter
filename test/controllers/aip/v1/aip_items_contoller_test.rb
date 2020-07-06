@@ -35,10 +35,6 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
     seed_item_rdf_annotations
   end
 
-  def teardown
-    RdfAnnotation.destroy_all
-  end
-
   test 'should be able to show a visible item to admin' do
     sign_in_as_system_user
     get aip_v1_entity_url(
