@@ -1,2 +1,6 @@
 english:
   name: 'english'
+french:
+  name: 'french'
+no_linguistic_content:
+  name: 'no_linguistic_content'
