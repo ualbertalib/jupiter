@@ -74,7 +74,7 @@ class ItemEditHistoryTest < ApplicationSystemTestCase
       assert_selector 'dt', text: I18n.t('edited_by')
       assert_selector 'dd', text: 'Administrator - administrator@example.com'
       assert_selector 'dt', text: 'Title'
-      assert_selector 'dd', text: 'AdminNew Itemtitle'
+      assert_selector 'dd', text: 'dcterms:title1$ Some Title for Item'
       assert_selector 'dt', text: 'Member Of Paths'
       assert_selector 'dd', text: 'Fancy Community/FancyFancier Collection'
 
