@@ -61,7 +61,11 @@ class ItemEditHistoryTest < ApplicationSystemTestCase
       visit item_path item
       click_on I18n.t('edit')
 
+      # Clear text field so we can add a new title and don't mix it with the
+      # previous value
+      find('#draft_item_title').native.clear
       fill_in 'draft_item_title', with: 'New title'
+
       select('Fancier Collection', from: 'draft_item_collection_id_')
 
       click_on I18n.t('items.draft.save_and_continue')
@@ -74,7 +78,7 @@ class ItemEditHistoryTest < ApplicationSystemTestCase
       assert_selector 'dt', text: I18n.t('edited_by')
       assert_selector 'dd', text: 'Administrator - administrator@example.com'
       assert_selector 'dt', text: 'Title'
-      assert_selector 'dd', text: 'dcterms:title1$ SomeNew Title for Itemtitle'
+      assert_selector 'dd', text: 'New title'
       assert_selector 'dt', text: 'Member Of Paths'
       assert_selector 'dd', text: 'Fancy Community/FancyFancier Collection'
 
