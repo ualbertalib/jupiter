@@ -20,7 +20,7 @@
     "dc:subject1$ Some subject heading";
   dc:accessRights "http://terms.library.ualberta.ca/public";
   dc:alternative "dcterms:alternative1$ Some Alternative Title";
-  dc:created "1000-01-01";
+  dc:created "2000-01-01";
   dc:description "dcterms:description1$ Arabic ناتيومرلبسفأعدقحكهجشطصزخضغذثئةظؤىءآإ Greek αβγδεζηθικλμνξοπρςστυφχψω ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ Cyrillic абвгдеёжзийклмнопрстуфхцчшщъыьэюя АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ Lao ກ-ໝ Thai ก-๎ Burmese က-ၙ Khmer ក-៹ Korean 가-힣 Bengali অ-ৱ // Spanish áéíóúüñ French àâçèéêëîïôùûü Portuguese àáâãçéêíóôõú Hindi ऄ-ॿ Pujabi ਅ-ੴ Mandarin 海萵苣白菜冬瓜韭菜竹筍生菜大頭菜豆薯銀甜菜莧菜豌豆蒲公英蔥豌豆苗亞羅婆羅門參西葫蘆。小豆辣根土豆 Japanese アオサメロンキャベツニラ竹シュートレタスルタバガのクズイモ銀ビートアマランスエンドウタンポポねぎ";
   dc:isVersionOf "dcterms:isVersionOf2$ Another version",
     "dcterms:isVersionOf1$ Sydorenko, Dmytro & Rankin, Robert. (2013). Simulation of O+ upflows created by electron precipitation and Alfvén waves in the ionosphere. Journal of Geophysical Research: Space Physics, 118(9), 5562-5578. http://doi.org/10.1002/jgra.50531";
@@ -44,7 +44,7 @@
   <http://terms.library.ualberta.ca/hydraNoid> "cgq67jr26k";
   <http://terms.library.ualberta.ca/ingestBatch> "9019s326c";
   <http://terms.library.ualberta.ca/path> "f0755e45-0aef-537a-98ce-6c8ed1165b92/929c81d5-d15e-570e-83c4-ec41755c879d";
-  <http://terms.library.ualberta.ca/recordCreatedInJupiter> "1000-01-01T00:00:00.007Z"^^xsd:dateTime;
-  <http://terms.library.ualberta.ca/sortYear> 1000;
-  ebucore:dateIngested "1000-01-01T00:00:00.007Z"^^xsd:dateTime;
+  <http://terms.library.ualberta.ca/recordCreatedInJupiter> "2000-01-01T00:00:00.007Z"^^xsd:dateTime;
+  <http://terms.library.ualberta.ca/sortYear> 2000;
+  ebucore:dateIngested "2000-01-01T00:00:00.007Z"^^xsd:dateTime;
   <info:fedora/fedora-system:def/model#hasModel> "IRItem" .

@@ -416,8 +416,8 @@ if Rails.env.development? || Rails.env.uat?
     creators: ['dc:creator1$ Doe, Jane', 'dc:creator2$ Doe, John'],
     contributors: ['dc:contributor1$ Perez, Juan', 'dc:contributor2$ Perez, Maria'],
     subject: ['dc:subject1$ Some subject heading', 'dc:subject2$ Some subject heading'],
-    created: '1000-01-01',
-    sort_year: '1000',
+    created: '2000-01-01',
+    sort_year: '2000',
     description: 'dcterms:description1$ Arabic ناتيومرلبسفأعدقحكهجشطصزخضغذثئةظؤىءآإ Greek αβγδεζηθικλμνξοπρςστυφχψω ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ Cyrillic абвгдеёжзийклмнопрстуфхцчшщъыьэюя АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ Lao ກ-ໝ Thai ก-๎ Burmese က-ၙ Khmer ក-៹ Korean 가-힣 Bengali অ-ৱ // Spanish áéíóúüñ French àâçèéêëîïôùûü Portuguese àáâãçéêíóôõú Hindi ऄ-ॿ Pujabi ਅ-ੴ Mandarin 海萵苣白菜冬瓜韭菜竹筍生菜大頭菜豆薯銀甜菜莧菜豌豆蒲公英蔥豌豆苗亞羅婆羅門參西葫蘆。小豆辣根土豆 Japanese アオサメロンキャベツニラ竹シュートレタスルタバガのクズイモ銀ビートアマランスエンドウタンポポねぎ',
     is_version_of: ['dcterms:isVersionOf1$ Sydorenko, Dmytro & Rankin, Robert. (2013). Simulation of O+ upflows created by electron precipitation and Alfvén waves in the ionosphere. Journal of Geophysical Research: Space Physics, 118(9), 5562-5578. http://doi.org/10.1002/jgra.50531', 'dcterms:isVersionOf2$ Another version'],
     languages: [CONTROLLED_VOCABULARIES[:language].no_linguistic_content, CONTROLLED_VOCABULARIES[:language].french],
@@ -434,8 +434,8 @@ if Rails.env.development? || Rails.env.uat?
     fedora3_handle: 'http://hdl.handle.net/10402/era.33419',
     hydra_noid: 'cgq67jr26k',
     ingest_batch: '9019s326c',
-    date_ingested: '1000-01-01T00:00:00.007Z',
-    record_created_at: '1000-01-01T00:00:00.007Z',
+    date_ingested: '2000-01-01T00:00:00.007Z',
+    record_created_at: '2000-01-01T00:00:00.007Z',
     member_of_paths: ["#{community_with_collection.id}/#{community_with_collection.collections[0].id}"]
   }
 
