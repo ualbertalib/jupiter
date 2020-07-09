@@ -18,14 +18,14 @@ gem 'simple_form'
 
 # RDF stuff
 gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', ref: '37915a9581713524f95f28425a10fdfee4335d06'
-gem 'rdf', '~> 3.1.3'
+gem 'rdf', '~> 3.1.4'
 gem 'rdf-n3'
 gem 'rdf-vocab', '~> 3.1.5'
 
 # Database stuff
 gem 'connection_pool'
 gem 'pg', '~> 1.2.3'
-gem 'redis', '~> 4.2'
+gem 'redis', '~> 4.1'
 gem 'rsolr'
 
 # Authentication
