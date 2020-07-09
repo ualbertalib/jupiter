@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_30_205827) do
+ActiveRecord::Schema.define(version: 2020_05_01_205100) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -211,7 +211,6 @@ ActiveRecord::Schema.define(version: 2020_04_30_205827) do
     t.json "embargo_history", array: true
     t.json "is_version_of", array: true
     t.json "member_of_paths", array: true
-    t.json "subject", array: true
     t.json "creators", array: true
     t.json "contributors", array: true
     t.string "created"
@@ -229,7 +228,7 @@ ActiveRecord::Schema.define(version: 2020_04_30_205827) do
     t.string "aasm_state"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.json "deconcatenated_subject", array: true
+    t.json "subject", array: true
     t.index ["logo_id"], name: "index_items_on_logo_id"
     t.index ["owner_id"], name: "index_items_on_owner_id"
   end
@@ -270,7 +269,6 @@ ActiveRecord::Schema.define(version: 2020_04_30_205827) do
     t.json "embargo_history", array: true
     t.json "is_version_of", array: true
     t.json "member_of_paths", array: true
-    t.json "subject", array: true
     t.text "abstract"
     t.string "language"
     t.datetime "date_accepted"
@@ -290,7 +288,7 @@ ActiveRecord::Schema.define(version: 2020_04_30_205827) do
     t.string "aasm_state"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.json "deconcatenated_subject", array: true
+    t.json "subject", array: true
     t.index ["logo_id"], name: "index_theses_on_logo_id"
     t.index ["owner_id"], name: "index_theses_on_owner_id"
   end
