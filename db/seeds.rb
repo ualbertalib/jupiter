@@ -408,7 +408,7 @@ if Rails.env.development? || Rails.env.uat?
   community_with_collection = Community.joins(:collections).first
   radioactive_example_file_paths = ['test/fixtures/files/image-sample.jpeg', 'test/fixtures/files/image-sample2.jpeg']
 
-  base_radioactive_values = {
+  base_radioactive_item_values = {
     # Set model id on each new Item so we can find it easily when testing
     owner_id: admin.id,
     doi: 'doi:10.7939/xxxxxxxxx',
@@ -440,7 +440,7 @@ if Rails.env.development? || Rails.env.uat?
   }
 
   Item.new(
-    base_radioactive_values.merge(id: 'e2ec88e3-3266-4e95-8575-8b04fac2a679')
+    base_radioactive_item_values.merge(id: 'e2ec88e3-3266-4e95-8575-8b04fac2a679')
   ).tap do |item|
     # Attach files
 
@@ -457,7 +457,7 @@ if Rails.env.development? || Rails.env.uat?
 
   # Add Item with rigts value and no license
   Item.new(
-    base_radioactive_values.merge(
+    base_radioactive_item_values.merge(
       # Values for both license and rights cannot be set at the same time
       id: 'c795337f-075f-429a-bb18-16b56d9b750f',
       license: '',
@@ -479,7 +479,7 @@ if Rails.env.development? || Rails.env.uat?
 
   # Add Item with that is currently embargoed
   Item.new(
-    base_radioactive_values.merge(
+    base_radioactive_item_values.merge(
       id: '3bb26070-0d25-4f0e-b44f-e9879da333ec',
       # In order to set embargo values the visibility value needs to be set to
       visibility: Item::VISIBILITY_EMBARGO,
@@ -489,7 +489,7 @@ if Rails.env.development? || Rails.env.uat?
     )
   ).tap do |item|
     # Attach files
-   
+
     radioactive_example_file_paths.each do |file_path|
       File.open(Rails.root + file_path, 'r') do |file|
         item.add_and_ingest_files([file])
@@ -503,7 +503,7 @@ if Rails.env.development? || Rails.env.uat?
 
   # Add Item that was previously embargoed
   Item.new(
-    base_radioactive_values.merge(
+    base_radioactive_item_values.merge(
       id: '2107bfb6-2670-4ffc-94a1-aeb4f8c1fd81',
       # In order to set embargo values the visibility value needs to be set to
       visibility: Item::VISIBILITY_EMBARGO,
@@ -531,7 +531,7 @@ if Rails.env.development? || Rails.env.uat?
   # Add Item with article type and publication status
 
   Item.new(
-    base_radioactive_values.merge(
+    base_radioactive_item_values.merge(
       id: '93126aae-4b9d-4db2-98f1-4e04b40778cf',
       # The value for publication_status published only appears for article item type
       item_type: CONTROLLED_VOCABULARIES[:item_type].article,
@@ -551,6 +551,113 @@ if Rails.env.development? || Rails.env.uat?
     item.save!
   end
 
+end
+
+base_radioactive_thesis_values = {
+  visibility: JupiterCore::VISIBILITY_PUBLIC,
+  owner_id: admin.id,
+  record_created_at: '2018-03-13T16:52:49.818Z',
+  hydra_noid: 'c6108vb30p',
+  date_ingested: '2018-03-13T16:52:49.818Z',
+  title: 'dcterms:title1$ Some Thesis Title',
+  fedora3_uuid: 'uuid:a4701510-ef9b-45cf-a7d0-2d2f16e00787',
+  depositor: 'lisboa@ualberta.ca',
+  alternative_title: 'dcterms:alternative1$ Some Alternative Title',
+  doi: 'doi:10.7939/R3V980074',
+  fedora3_handle: 'http://hdl.handle.net/10402/era.40349',
+  ingest_batch: '6395w734s',
+  # northern_north_america_filename: 
+  # :northern_north_america_item_id:
+  rights: 'dc:rights1$ Some license terms',
+  sort_year: '2015',
+  is_version_of: ['dcterms:isVersionOf1$ Lartey, S., Cummings, G. G., & Profetto-McGrath, J. (2013). Interventions that promote retention of experienced registered nurses in health care settings: A systematic review. Journal of Nursing Management. doi: 10.1111/jonm.12105'],
+  member_of_paths: ["#{community_with_collection.id}/#{community_with_collection.collections[0].id}"],
+  subject: ['dc:subject1$ Some subject heading' , 'dc:subject2$ Some subject heading' , 'dc:subject3$ Some subject heading' ],
+  abstract: 'dcterms:abstract1$ Arabic ناتيومرلبسفأعدقحكهجشطصزخضغذثئةظؤىءآإ Greek αβγδεζηθικλμνξοπρςστυφχψω ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ Cyrillic абвгдеёжзийклмнопрстуфхцчшщъыьэюя АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ Lao ກ-ໝ Thai ก-๎ Burmese က-ၙ Khmer ក-៹ Korean 가-힣 Bengali অ-ৱ // Spanish áéíóúüñ French àâçèéêëîïôùûü Portuguese àáâãçéêíóôõú Hindi ऄ-ॿ Pujabi ਅ-ੴ Mandarin 海萵苣白菜冬瓜韭菜竹筍生菜大頭菜豆薯銀甜菜莧菜豌豆蒲公英蔥豌豆苗亞羅婆羅門參西葫蘆。小豆辣根土豆 Japanese アオサメロンキャベツニラ竹シュートレタスルタバガのクズイモ銀ビートアマランスエンドウタンポポねぎ',
+  language: CONTROLLED_VOCABULARIES[:language].english,
+  date_accepted: '2014-12-23T15:33:25Z',
+  date_submitted: '2014-12-23T14:50:01Z',
+  degree: 'bibo:degree1$ Doctor of Philosophy',
+  institution: 'http://id.loc.gov/authorities/names/n79058482',
+  dissertant: 'ual:dissertant$1 Lisboa, Luiz',
+  graduation_date: '2015-06',
+  thesis_level: 'ual:thesisLevel1$ Doctoral',
+  proquest: 'NN88234',
+  unicorn: '2133190',
+  specialization: 'ual:specialization1$ Experimental Medicine',
+  departments: ['ual:department1$ Department of Medicine', 'ual:department2$ Department of Something', 'ual:department3$ Another Department'],
+  supervisors: ['ual:supervisor1$ Humar, Atul (Medicine)', 'ual:supervisor2$ Kumar, Deepali (Medicine)', 'ual:supervisor3$ Tyrrell, D. Lorne (Medicine)'],
+  committee_members: ['ual:commiteeMember1$ Hemmings, Denise (Obstetrics & Gynecology)' , 'ual:commiteeMember2$ Humar, Atul (Medicine)' , 'ual:commiteeMember3$ McMurtry, M. Sean (Medicine)'],
+  # embargo_history: ['hydra:embargoHistory1$ An expired embargo was deactivated on 2016-06-15T18:00:15.651Z.  Its release date was 2016-06-15T06:00:00.000Z.  Visibility during embargo was restricted and intended visibility after embargo was open'],
+  # embargo_end_date: '2080-01-01T00:00:00.000Z',
+  # visibility_after_embargo: JupiterCore::VISIBILITY_PUBLIC
+  # t.references :logo, foreign_key: {to_table: :active_storage_attachments, column: :id, on_delete: :nullify}
+  aasm_state: 'available'
+}
+
+# Add base radioactive Thesis
+Thesis.new(
+  base_radioactive_thesis_values.merge(id: '8e18f37c-dc60-41bb-9459-990586176730')
+).tap do |thesis|
+  # Attach files
+
+  radioactive_example_file_paths.each do |file_path|
+    File.open(Rails.root + file_path, 'r') do |file|
+      thesis.add_and_ingest_files([file])
+    end
+  end
+
+  thesis.set_thumbnail(thesis.files.first) if thesis.files.first.present?
+
+  thesis.save!
+end
+
+# Add Thesis that is currently embargoed
+Thesis.new(
+  base_radioactive_thesis_values.merge(
+    id: 'b3cc2224-9303-47be-8b54-e6556a486be8',
+    visibility: Thesis::VISIBILITY_EMBARGO,
+    embargo_history: ['acl:embargoHistory1$ Thesis currently embargoed'],
+    embargo_end_date: '2080-01-01T00:00:00.000Z',
+    visibility_after_embargo: CONTROLLED_VOCABULARIES[:visibility].public
+  )
+).tap do |thesis|
+  # Attach files
+
+  radioactive_example_file_paths.each do |file_path|
+    File.open(Rails.root + file_path, 'r') do |file|
+      thesis.add_and_ingest_files([file])
+    end
+  end
+
+  thesis.set_thumbnail(thesis.files.first) if thesis.files.first.present?
+
+  thesis.save!
+end
+
+
+# Add Thesis that was previously embargoed
+Thesis.new(
+  base_radioactive_thesis_values.merge(
+    id: '9d7c12f0-b396-4511-ba0e-c012ec028e8a',
+    # In order to set embargo values the visibility value needs to be set to
+    visibility: Thesis::VISIBILITY_EMBARGO,
+    embargo_end_date: '2000-01-01T00:00:00.000Z',
+    embargo_history: ['hydra:embargoHistory1$ An expired embargo was deactivated on 2016-06-15T18:00:15.651Z.  Its release date was 2016-06-15T06:00:00.000Z.  Visibility during embargo was restricted and intended visibility after embargo was open'],
+    visibility_after_embargo: CONTROLLED_VOCABULARIES[:visibility].public
+  )
+).tap do |thesis|
+  # Attach files
+
+  radioactive_example_file_paths.each do |file_path|
+    File.open(Rails.root + file_path, 'r') do |file|
+      thesis.add_and_ingest_files([file])
+    end
+  end
+
+  thesis.set_thumbnail(thesis.files.first) if thesis.files.first.present?
+
+  thesis.save!
 end
 
 # Types
