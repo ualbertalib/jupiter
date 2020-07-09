@@ -4,7 +4,11 @@ class DeconcatenateSubjectInItemAndThesis < ActiveRecord::Migration[6.0]
     add_column :items, :deconcatenated_subject, :json, array: true
     add_column :theses, :deconcatenated_subject, :json, array: true
 
-    @concatenated_subject_ids = File.readlines(Rails.root.join('ERA_subject_issue.txt')).collect(&:strip)
+    @concatenated_subject_ids = if File.exist?(Rails.root.join('ERA_subject_issue.txt'))
+      File.readlines(Rails.root.join('ERA_subject_issue.txt')).collect(&:strip)
+    else
+      []
+    end
     @report = Logger.new(Rails.root.join('log/concatenated_subjects.log'))
 
     Item.find_each {|item| item.update_columns deconcatenated_subject: deconcatenated_subject(item) }
