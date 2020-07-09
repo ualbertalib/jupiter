@@ -458,7 +458,7 @@ GEM
     tzinfo (1.2.7)
       thread_safe (~> 0.1)
     unicode-display_width (1.7.0)
-    uuidtools (2.1.5)
+    uuidtools (2.2.0)
     vcr (5.0.0)
     voight_kampff (1.1.4)
       rack (>= 1.4, < 3.0)
