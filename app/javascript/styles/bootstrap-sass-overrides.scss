@@ -9,10 +9,10 @@ $theme-colors: (
 $primary: darken($jupiter-primary, 40%);
 
 // Improve navbar color contrast ratio so it passes WCAG accessibility
-$navbar-light-color: rgba($black, .7);
-$navbar-light-hover-color: rgba($black, .9);
+$navbar-light-color: rgba($black, 0.7);
+$navbar-light-hover-color: rgba($black, 0.9);
 $navbar-light-active-color: $black;
-$navbar-light-disabled-color: rgba($black, .5);
+$navbar-light-disabled-color: rgba($black, 0.5);
 
 // Improve breadcrumbs color contrast ratio so it passes WCAG accessibility
 $breadcrumb-bg: $gray-100;

@@ -38,13 +38,14 @@ body {
 
 .j-footer {
   // needed for sticky footer
-  bottom: 0px;
+  bottom: 0;
   position: absolute;
   width: 100%;
 }
 
 .j-jumbotron-banner {
-  background-image: linear-gradient(
+  background-image:
+    linear-gradient(
       to right,
       rgba($white, 0.8),
       rgba($white, 0.4),
