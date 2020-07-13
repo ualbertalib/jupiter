@@ -462,7 +462,7 @@ GEM
     vcr (5.0.0)
     voight_kampff (1.1.4)
       rack (>= 1.4, < 3.0)
-    web-console (4.0.3)
+    web-console (4.0.4)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
       bindex (>= 0.4.0)
@@ -487,7 +487,7 @@ GEM
       railties (>= 3.0.7)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.3.0)
+    zeitwerk (2.3.1)
 
 PLATFORMS
   ruby
