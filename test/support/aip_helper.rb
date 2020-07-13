@@ -114,7 +114,7 @@ module AipHelper
       fileset_1_uuid: entity.files[1].fileset_uuid
     }
 
-    load_n3_graph(file_fixture("n3/#{entity.id}-#{postfix}.n3"), variables)
+    load_n3_graph(file_fixture("n3/#{entity.class.table_name}/#{entity.id}-#{postfix}.n3"), variables)
   end
 
   def load_n3_graph(path, variables = nil)

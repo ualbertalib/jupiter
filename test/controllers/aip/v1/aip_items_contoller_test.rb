@@ -250,7 +250,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
       checksum: @public_item.files.first.blob.checksum,
       byte_size: @public_item.files.first.blob.byte_size
     }
-    rendered_graph = load_n3_graph(file_fixture('n3/fixity.n3'), variables)
+    rendered_graph = load_n3_graph(file_fixture('n3/items/fixity.n3'), variables)
 
     assert_equal true, rendered_graph.isomorphic_with?(graph)
   end

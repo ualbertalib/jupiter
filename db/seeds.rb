@@ -56,7 +56,7 @@ if Rails.env.development? || Rails.env.uat?
   end
 
   # Lets pick 10 prolific creators, 10 contributors
-  creators = 10.times.map { "#{Faker::Creature::Cat.unique.name} #{Faker::Creature::Cat.unique.breed.gsub(/[ ,]+/, '-')}" }
+  creators = 10.times.map { "#{Faker::Creature::Cat.unique.name} #{Faker::Creature::Cat.unique.breed.gsub(/[,]+/, '-')}" }
   contributors = 10.times.map { Faker::FunnyName.unique.name_with_initial }
 
   institutions = [CONTROLLED_VOCABULARIES[:institution].uofa, CONTROLLED_VOCABULARIES[:institution].st_stephens]
@@ -566,13 +566,11 @@ base_radioactive_thesis_values = {
   doi: 'doi:10.7939/R3V980074',
   fedora3_handle: 'http://hdl.handle.net/10402/era.40349',
   ingest_batch: '6395w734s',
-  # northern_north_america_filename: 
-  # :northern_north_america_item_id:
   rights: 'dc:rights1$ Some license terms',
   sort_year: '2015',
   is_version_of: ['dcterms:isVersionOf1$ Lartey, S., Cummings, G. G., & Profetto-McGrath, J. (2013). Interventions that promote retention of experienced registered nurses in health care settings: A systematic review. Journal of Nursing Management. doi: 10.1111/jonm.12105'],
   member_of_paths: ["#{community_with_collection.id}/#{community_with_collection.collections[0].id}"],
-  subject: ['dc:subject1$ Some subject heading' , 'dc:subject2$ Some subject heading' , 'dc:subject3$ Some subject heading' ],
+  subject: ['dc:subject1$ Some subject heading', 'dc:subject2$ Some subject heading', 'dc:subject3$ Some subject heading'],
   abstract: 'dcterms:abstract1$ Arabic ناتيومرلبسفأعدقحكهجشطصزخضغذثئةظؤىءآإ Greek αβγδεζηθικλμνξοπρςστυφχψω ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ Cyrillic абвгдеёжзийклмнопрстуфхцчшщъыьэюя АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ Lao ກ-ໝ Thai ก-๎ Burmese က-ၙ Khmer ក-៹ Korean 가-힣 Bengali অ-ৱ // Spanish áéíóúüñ French àâçèéêëîïôùûü Portuguese àáâãçéêíóôõú Hindi ऄ-ॿ Pujabi ਅ-ੴ Mandarin 海萵苣白菜冬瓜韭菜竹筍生菜大頭菜豆薯銀甜菜莧菜豌豆蒲公英蔥豌豆苗亞羅婆羅門參西葫蘆。小豆辣根土豆 Japanese アオサメロンキャベツニラ竹シュートレタスルタバガのクズイモ銀ビートアマランスエンドウタンポポねぎ',
   language: CONTROLLED_VOCABULARIES[:language].english,
   date_accepted: '2014-12-23T15:33:25Z',
@@ -587,7 +585,7 @@ base_radioactive_thesis_values = {
   specialization: 'ual:specialization1$ Experimental Medicine',
   departments: ['ual:department1$ Department of Medicine', 'ual:department2$ Department of Something', 'ual:department3$ Another Department'],
   supervisors: ['ual:supervisor1$ Humar, Atul (Medicine)', 'ual:supervisor2$ Kumar, Deepali (Medicine)', 'ual:supervisor3$ Tyrrell, D. Lorne (Medicine)'],
-  committee_members: ['ual:commiteeMember1$ Hemmings, Denise (Obstetrics & Gynecology)' , 'ual:commiteeMember2$ Humar, Atul (Medicine)' , 'ual:commiteeMember3$ McMurtry, M. Sean (Medicine)'],
+  committee_members: ['ual:commiteeMember1$ Hemmings, Denise (Obstetrics & Gynecology)', 'ual:commiteeMember2$ Humar, Atul (Medicine)', 'ual:commiteeMember3$ McMurtry, M. Sean (Medicine)'],
   # embargo_history: ['hydra:embargoHistory1$ An expired embargo was deactivated on 2016-06-15T18:00:15.651Z.  Its release date was 2016-06-15T06:00:00.000Z.  Visibility during embargo was restricted and intended visibility after embargo was open'],
   # embargo_end_date: '2080-01-01T00:00:00.000Z',
   # visibility_after_embargo: JupiterCore::VISIBILITY_PUBLIC
