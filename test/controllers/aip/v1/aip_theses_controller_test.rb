@@ -163,7 +163,7 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
 
   # Basic tests checking if response has n3 serialization.
   # This should be changed to verify the response content is correct.
-
+  # TODO: Improve this test checking for a valid graph output
   test 'should get thesis file set metadata graph with n3 serialization' do
     sign_in_as_system_user
     get aip_v1_entity_file_set_url(
@@ -188,9 +188,19 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
 
     graph = get_n3_graph(url)
     assert_response :success
-    assert_equal true, graph.graph?
+
+    variables = {
+      entity_id: @public_thesis.id,
+      fileset_id: @public_thesis.files.first.fileset_uuid,
+      checksum: @public_thesis.files.first.blob.checksum,
+      byte_size: @public_thesis.files.first.blob.byte_size
+    }
+    rendered_graph = load_n3_graph(file_fixture('n3/theses/fixity.n3'), variables)
+
+    assert_equal true, rendered_graph.isomorphic_with?(graph)
   end
 
+  # TODO: Improve this test checking for a valid graph output
   test 'should get thesis original file metadata graph with n3 serialization' do
     sign_in_as_system_user
 

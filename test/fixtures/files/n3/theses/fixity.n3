@@ -1,0 +1,11 @@
+@prefix premis: <http://www.loc.gov/premis/rdf/v1#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://localhost/aip/v1/theses/<%= entity_id %>/filesets/<%= fileset_id %>> premis:hasFixity <http://localhost/aip/v1/theses/<%= entity_id %>/filesets/<%= fileset_id %>/fixity>;
+  premis:hasMessageDigest "<%= checksum %>";
+  premis:hasSize <%= byte_size %> .
+<http://localhost/aip/v1/theses/<%= entity_id %>/filesets/<%= fileset_id %>/fixity> a premis:EventOutcomeDetail,
+    premis:Fixity;
+  premis:hasEventOutcome "SUCCESS";
+  premis:hasMessageDigestAlgorithm "md5" .
