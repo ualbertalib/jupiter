@@ -586,10 +586,6 @@ base_radioactive_thesis_values = {
   departments: ['ual:department1$ Department of Medicine', 'ual:department2$ Department of Something', 'ual:department3$ Another Department'],
   supervisors: ['ual:supervisor1$ Humar, Atul (Medicine)', 'ual:supervisor2$ Kumar, Deepali (Medicine)', 'ual:supervisor3$ Tyrrell, D. Lorne (Medicine)'],
   committee_members: ['ual:commiteeMember1$ Hemmings, Denise (Obstetrics & Gynecology)', 'ual:commiteeMember2$ Humar, Atul (Medicine)', 'ual:commiteeMember3$ McMurtry, M. Sean (Medicine)'],
-  # embargo_history: ['hydra:embargoHistory1$ An expired embargo was deactivated on 2016-06-15T18:00:15.651Z.  Its release date was 2016-06-15T06:00:00.000Z.  Visibility during embargo was restricted and intended visibility after embargo was open'],
-  # embargo_end_date: '2080-01-01T00:00:00.000Z',
-  # visibility_after_embargo: JupiterCore::VISIBILITY_PUBLIC
-  # t.references :logo, foreign_key: {to_table: :active_storage_attachments, column: :id, on_delete: :nullify}
   aasm_state: 'available'
 }
 
@@ -641,7 +637,7 @@ Thesis.new(
     # In order to set embargo values the visibility value needs to be set to
     visibility: Thesis::VISIBILITY_EMBARGO,
     embargo_end_date: '2000-01-01T00:00:00.000Z',
-    embargo_history: ['hydra:embargoHistory1$ An expired embargo was deactivated on 2016-06-15T18:00:15.651Z.  Its release date was 2016-06-15T06:00:00.000Z.  Visibility during embargo was restricted and intended visibility after embargo was open'],
+    embargo_history: ['acl:embargoHistory1$ An expired embargo was deactivated on 2016-06-15T18:00:15.651Z.  Its release date was 2016-06-15T06:00:00.000Z.  Visibility during embargo was restricted and intended visibility after embargo was open'],
     visibility_after_embargo: CONTROLLED_VOCABULARIES[:visibility].public
   )
 ).tap do |thesis|

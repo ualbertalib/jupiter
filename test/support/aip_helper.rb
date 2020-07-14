@@ -108,7 +108,8 @@ module AipHelper
   end
 
   def load_radioactive_n3_graph(entity, postfix)
-    # n3_template repalces the 2 fileset uuids because they will change everytime the test is run and the files are added
+    # n3_template in load_n3_graph method repalces the 2 fileset uuids because they will change everytime the test is
+    # run and the files are added
     variables = {
       fileset_0_uuid: entity.files[0].fileset_uuid,
       fileset_1_uuid: entity.files[1].fileset_uuid
@@ -249,7 +250,7 @@ module AipHelper
                                     predicate: RDF::Vocab::DC.dateSubmitted)
     RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'degree', predicate: RDF::Vocab::BIBO.degree)
     RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'departments',
-                                    predicate: TERMS[:ual].department_list)
+                                    predicate: TERMS[:ual].department)
     RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'depositor', predicate: TERMS[:ual].depositor)
     RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'dissertant', predicate: TERMS[:ual].dissertant)
     RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'doi', predicate: TERMS[:prism].doi)
@@ -285,7 +286,7 @@ module AipHelper
                                     predicate: TERMS[:ual].specialization)
     RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'subject', predicate: RDF::Vocab::DC11.subject)
     RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'supervisors',
-                                    predicate: TERMS[:ual].supervisor_list)
+                                    predicate: TERMS[:ual].supervisor)
     RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'thesis_level',
                                     predicate: TERMS[:ual].thesis_level)
     RdfAnnotation.create_or_find_by(table: thesis_table_name, column: 'title', predicate: RDF::Vocab::DC.title)

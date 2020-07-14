@@ -24,6 +24,10 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
         file_fixture('text-sample.txt')
       ]
     )
+
+    # Don't forget to load your rdf annotations!
+    seed_active_storage_blobs_rdf_annotations
+    seed_theses_rdf_annotations
   end
 
   test 'should be able to show a visible thesis to admin' do
@@ -53,16 +57,76 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
     assert_response :redirect
   end
 
-  # Basic test checking if response has n3 serialization.
-  test 'should get thesis metadata graph with n3 serialization' do
+  test 'should get thesis metadata graph with n3 serialization for base example' do
+    radioactive_thesis = thesis(:admin)
+    radioactive_thesis.id = '8e18f37c-dc60-41bb-9459-990586176730'.freeze
+    ingest_files_for_entity(radioactive_thesis)
+    radioactive_thesis.save!
+    radioactive_thesis.reload
+
     sign_in_as_system_user
     get aip_v1_entity_url(
       entity: @entity,
-      id: @public_thesis
+      id: radioactive_thesis.id
     )
     assert_response :success
+
     graph = generate_graph_from_n3(response.body)
-    assert_equal true, graph.graph?
+    rendered_graph = load_radioactive_n3_graph(radioactive_thesis, 'base')
+
+    assert_equal true, rendered_graph.isomorphic_with?(graph)
+  end
+
+  test 'should get thesis metadata graph with n3 serialization for embargo example' do
+    radioactive_thesis = thesis(:admin)
+    radioactive_thesis.id = 'b3cc2224-9303-47be-8b54-e6556a486be8'.freeze
+    radioactive_thesis.visibility = Thesis::VISIBILITY_EMBARGO
+    radioactive_thesis.embargo_history = ['acl:embargoHistory1$ Thesis currently embargoed']
+    radioactive_thesis.embargo_end_date = '2080-01-01T00:00:00.000Z'
+    radioactive_thesis.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].public
+    ingest_files_for_entity(radioactive_thesis)
+    radioactive_thesis.save!
+    radioactive_thesis.reload
+
+    sign_in_as_system_user
+    get aip_v1_entity_url(
+      entity: @entity,
+      id: radioactive_thesis.id
+    )
+    assert_response :success
+
+    graph = generate_graph_from_n3(response.body)
+    rendered_graph = load_radioactive_n3_graph(radioactive_thesis, 'embargoed')
+
+    assert_equal true, rendered_graph.isomorphic_with?(graph)
+  end
+
+  test 'should get thesis metadata graph with n3 serialization for previously embargo example' do
+    radioactive_thesis = thesis(:admin)
+    radioactive_thesis.id = '9d7c12f0-b396-4511-ba0e-c012ec028e8a'
+    radioactive_thesis.visibility = Thesis::VISIBILITY_EMBARGO
+    radioactive_thesis.embargo_end_date = '2000-01-01T00:00:00.000Z'
+    radioactive_thesis.embargo_history = [
+      'acl:embargoHistory1$ An expired embargo was deactivated on 2016-06-15T18:00:15.651Z.  Its release date was ' \
+      '2016-06-15T06:00:00.000Z.  Visibility during embargo was restricted and intended visibility after embargo was ' \
+      'open'
+    ]
+    radioactive_thesis.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].public
+    ingest_files_for_entity(radioactive_thesis)
+    radioactive_thesis.save!
+    radioactive_thesis.reload
+
+    sign_in_as_system_user
+    get aip_v1_entity_url(
+      entity: @entity,
+      id: radioactive_thesis.id
+    )
+    assert_response :success
+
+    graph = generate_graph_from_n3(response.body)
+    rendered_graph = load_radioactive_n3_graph(radioactive_thesis, 'prev-embargoed')
+
+    assert_equal true, rendered_graph.isomorphic_with?(graph)
   end
 
   # Basic test checking if response has xml format.

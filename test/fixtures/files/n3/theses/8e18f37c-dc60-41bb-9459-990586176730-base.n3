@@ -1,0 +1,56 @@
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+@prefix dc: <http://purl.org/dc/terms/> .
+@prefix dc11: <http://purl.org/dc/elements/1.1/> .
+@prefix ebucore: <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#> .
+@prefix pcdm: <http://pcdm.org/models#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://localhost/aip/v1/theses/8e18f37c-dc60-41bb-9459-990586176730> a pcdm:Object,
+    bibo:Thesis;
+  dc:title "dcterms:title1$ Some Thesis Title";
+  <http://ontoware.org/swrc/ontology#institution> "http://id.loc.gov/authorities/names/n79058482";
+  pcdm:hasMember <http://localhost/aip/v1/theses/8e18f37c-dc60-41bb-9459-990586176730/filesets/<%= fileset_0_uuid %>>,
+    <http://localhost/aip/v1/theses/8e18f37c-dc60-41bb-9459-990586176730/filesets/<%= fileset_1_uuid %>>;
+  pcdm:memberOf <http://localhost/aip/v1/collections/472b4390-6732-5def-b19c-363886143aab>;
+  <http://prismstandard.org/namespaces/basic/3.0/doi> "doi:10.7939/R3V980074";
+  dc11:rights "dc:rights1$ Some license terms";
+  dc11:subject "dc:subject2$ Some subject heading",
+    "dc:subject1$ Some subject heading",
+    "dc:subject3$ Some subject heading";
+  dc:abstract "dcterms:abstract1$ Arabic ناتيومرلبسفأعدقحكهجشطصزخضغذثئةظؤىءآإ Greek αβγδεζηθικλμνξοπρςστυφχψω ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ Cyrillic абвгдеёжзийклмнопрстуфхцчшщъыьэюя АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ Lao ກ-ໝ Thai ก-๎ Burmese က-ၙ Khmer ក-៹ Korean 가-힣 Bengali অ-ৱ // Spanish áéíóúüñ French àâçèéêëîïôùûü Portuguese àáâãçéêíóôõú Hindi ऄ-ॿ Pujabi ਅ-ੴ Mandarin 海萵苣白菜冬瓜韭菜竹筍生菜大頭菜豆薯銀甜菜莧菜豌豆蒲公英蔥豌豆苗亞羅婆羅門參西葫蘆。小豆辣根土豆 Japanese アオサメロンキャベツニラ竹シュートレタスルタバガのクズイモ銀ビートアマランスエンドウタンポポねぎ";
+  dc:accessRights "http://terms.library.ualberta.ca/public";
+  dc:alternative "dcterms:alternative1$ Some Alternative Title";
+  dc:dateAccepted "2014-12-23T15:33:25Z"^^xsd:dateTime;
+  dc:dateSubmitted "2014-12-23T14:50:01Z"^^xsd:dateTime;
+  dc:isVersionOf "dcterms:isVersionOf1$ Lartey, S., Cummings, G. G., & Profetto-McGrath, J. (2013). Interventions that promote retention of experienced registered nurses in health care settings: A systematic review. Journal of Nursing Management. doi: 10.1111/jonm.12105";
+  dc:language "http://id.loc.gov/vocabulary/iso639-2/eng";
+  bibo:degree "bibo:degree1$ Doctor of Philosophy";
+  bibo:owner "administrator@example.com";
+  <http://terms.library.ualberta.ca/commiteeMember> "ual:commiteeMember3$ McMurtry, M. Sean (Medicine)",
+    "ual:commiteeMember1$ Hemmings, Denise (Obstetrics & Gynecology)",
+    "ual:commiteeMember2$ Humar, Atul (Medicine)";
+  <http://terms.library.ualberta.ca/department> "ual:department3$ Another Department",
+    "ual:department1$ Department of Medicine",
+    "ual:department2$ Department of Something";
+  <http://terms.library.ualberta.ca/departmentList> ("ual:department1$ Department of Medicine" "ual:department2$ Department of Something" "ual:department3$ Another Department");
+  <http://terms.library.ualberta.ca/depositor> "lisboa@ualberta.ca";
+  <http://terms.library.ualberta.ca/dissertant> "ual:dissertant$1 Lisboa, Luiz";
+  <http://terms.library.ualberta.ca/fedora3Handle> "http://hdl.handle.net/10402/era.40349";
+  <http://terms.library.ualberta.ca/fedora3UUID> "uuid:a4701510-ef9b-45cf-a7d0-2d2f16e00787";
+  <http://terms.library.ualberta.ca/graduationDate> "2015-06";
+  <http://terms.library.ualberta.ca/hydraNoid> "c6108vb30p";
+  <http://terms.library.ualberta.ca/ingestBatch> "6395w734s";
+  <http://terms.library.ualberta.ca/path> "472b4390-6732-5def-b19c-363886143aab/472b4390-6732-5def-b19c-363886143aab";
+  <http://terms.library.ualberta.ca/proquest> "NN88234";
+  <http://terms.library.ualberta.ca/recordCreatedInJupiter> "2018-03-13T16:52:49.818Z"^^xsd:dateTime;
+  <http://terms.library.ualberta.ca/sortYear> 2015;
+  <http://terms.library.ualberta.ca/specialization> "ual:specialization1$ Experimental Medicine";
+  <http://terms.library.ualberta.ca/supervisor> "ual:supervisor1$ Humar, Atul (Medicine)",
+    "ual:supervisor3$ Tyrrell, D. Lorne (Medicine)",
+    "ual:supervisor2$ Kumar, Deepali (Medicine)";
+  <http://terms.library.ualberta.ca/supervisorList> ("ual:supervisor1$ Humar, Atul (Medicine)" "ual:supervisor2$ Kumar, Deepali (Medicine)" "ual:supervisor3$ Tyrrell, D. Lorne (Medicine)");
+  <http://terms.library.ualberta.ca/thesisLevel> "ual:thesisLevel1$ Doctoral";
+  <http://terms.library.ualberta.ca/unicorn> "2133190";
+  ebucore:dateIngested "2018-03-13T16:52:49.818Z"^^xsd:dateTime;
+  <info:fedora/fedora-system:def/model#hasModel> "IRThesis" .
