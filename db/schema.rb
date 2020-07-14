@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_28_061736) do
+ActiveRecord::Schema.define(version: 2020_04_30_205827) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -229,6 +229,7 @@ ActiveRecord::Schema.define(version: 2020_04_28_061736) do
     t.string "aasm_state"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.json "deconcatenated_subject", array: true
     t.index ["logo_id"], name: "index_items_on_logo_id"
     t.index ["owner_id"], name: "index_items_on_owner_id"
   end
@@ -289,6 +290,7 @@ ActiveRecord::Schema.define(version: 2020_04_28_061736) do
     t.string "aasm_state"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.json "deconcatenated_subject", array: true
     t.index ["logo_id"], name: "index_theses_on_logo_id"
     t.index ["owner_id"], name: "index_theses_on_owner_id"
   end
