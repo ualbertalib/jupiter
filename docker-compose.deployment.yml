@@ -51,7 +51,7 @@ services:
   # Sidekiq
   worker: &rails
     restart: always
-    image: ualbertalib/jupiter:deployment
+    image: ualbertalib/jupiter:2.0.0.pre
     volumes:
       - file-storage:/app/storage/
     command: bundle exec sidekiq

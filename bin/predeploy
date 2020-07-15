@@ -10,7 +10,7 @@ set -o nounset
 [[ -n "${TRACE:-}" ]] && set -o xtrace
 
 
-readonly branch_name="master"
+readonly branch_name="integration_migration_phase1"
 readonly install_directory="/home/deploy/jupiter"
 
 mkdir -p "${install_directory}"

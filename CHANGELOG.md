@@ -6,6 +6,9 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+### Fixed
+- docker image can be built and deployed
+
 ## [2.0.0.pre2.5] 2020-07-03
 
 ### Fixed
