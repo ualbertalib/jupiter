@@ -212,7 +212,17 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
 
     graph = get_n3_graph(url)
     assert_response :success
-    assert_equal true, graph.graph?
+
+    variables = {
+      entity_id: @public_thesis.id,
+      fileset_id: @public_thesis.files.first.fileset_uuid,
+      checksum: @public_thesis.files.first.blob.checksum,
+      byte_size: @public_thesis.files.first.blob.byte_size,
+      filename: @public_thesis.files.first.blob.filename
+    }
+    rendered_graph = load_n3_graph(file_fixture('n3/theses/original_file.n3'), variables)
+
+    assert_equal true, rendered_graph.isomorphic_with?(graph)
   end
 
 end

@@ -143,17 +143,15 @@ class Aip::V1::EntitiesController < ApplicationController
       @file.blob, prefixes, subject
     )
 
-    statement_definitions = [
-      { subject: subject, predicate: RDF::Vocab::PREMIS.hasFixity, object: self_subject },
-      { subject: self_subject, predicate: RDF::Vocab::PREMIS.hasEventOutcome, object: 'SUCCESS' },
-      { subject: self_subject, predicate: RDF::Vocab::PREMIS.hasMessageDigestAlgorithm, object: 'md5' },
-      { subject: self_subject, predicate: RDF.type, object: RDF::Vocab::PREMIS.EventOutcomeDetail },
-      { subject: self_subject, predicate: RDF.type, object: RDF::Vocab::PREMIS.Fixity }
+    statements = [
+      RDF::Statement(subject: subject, predicate: RDF::Vocab::PREMIS.hasFixity, object: self_subject),
+      RDF::Statement(subject: self_subject, predicate: RDF::Vocab::PREMIS.hasEventOutcome, object: 'SUCCESS'),
+      RDF::Statement(subject: self_subject, predicate: RDF::Vocab::PREMIS.hasMessageDigestAlgorithm, object: 'md5'),
+      RDF::Statement(subject: self_subject, predicate: RDF.type, object: RDF::Vocab::PREMIS.EventOutcomeDetail),
+      RDF::Statement(subject: self_subject, predicate: RDF.type, object: RDF::Vocab::PREMIS.Fixity)
     ]
 
-    statement_definitions.each do |statement_definition|
-      rdf_graph_creator.insert(RDF::Statement(statement_definition))
-    end
+    rdf_graph_creator.insert(*statements)
 
     render plain: rdf_graph_creator.to_n3, status: :ok
   end
@@ -174,7 +172,26 @@ class Aip::V1::EntitiesController < ApplicationController
     ActsAsRdfable.add_annotation_bindings!(@file.blob)
 
     rdf_graph_creator = RdfGraphCreationService.new(@file.blob, prefixes, self_subject)
-    rdf_graph_creator.insert(RDF::Statement(subject: self_subject, predicate: RDF.type, object: RDF::Vocab::PCDM.File))
+    insert_nodes = [
+      RDF::Statement(subject: self_subject, predicate: RDF.type, object: RDF::Vocab::PCDM.File),
+      RDF::Statement(
+        subject: self_subject,
+        predicate: RDF::Vocab::Fcrepo4.hasFixityService,
+        object: self_subject.parent / 'fixity'
+      ),
+      # We need to change the value for the predicate RDF::Vocab::PREMIS.hasMessageDigest so that it includes the
+      # uniform resource name with the algorightm used to create the checksum. In this case, we know that Active storage
+      # uses MD5
+      RDF::Statement(
+        subject: self_subject,
+        predicate: RDF::Vocab::PREMIS.hasMessageDigest,
+        object: RDF::URI.new('urn:md5') / @file.blob.checksum
+      )
+    ]
+
+    rdf_graph_creator.delete_insert(
+      rdf_graph_creator.query(predicate: RDF::Vocab::PREMIS.hasMessageDigest), insert_nodes
+    )
 
     render plain: rdf_graph_creator.to_n3, status: :ok
   end

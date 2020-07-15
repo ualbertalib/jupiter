@@ -11,6 +11,18 @@ class RdfGraphCreationService
     @graph.insert(*nodes)
   end
 
+  def delete(*nodes)
+    @graph.insert(*nodes)
+  end
+
+  def delete_insert(deletes, inserts)
+    @graph.delete_insert(deletes, inserts)
+  end
+
+  def query(pattern, **options)
+    @graph.query(pattern, **options)
+  end
+
   def to_n3
     @graph.to_n3
   end
