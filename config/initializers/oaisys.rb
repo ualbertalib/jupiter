@@ -11,5 +11,5 @@ Rails.application.config.after_initialize do
   Oaisys::Engine.config.top_level_sets_model = Community
   Oaisys::Engine.config.set_model = Collection
   Oaisys::Engine.config.redis_url = Rails.application.secrets.redis_url
-  Oaisys::Engine.config.redis = Oaisys::RedisConnection.new
+  Oaisys::Engine.config.redis = Oaisys::RedisConnection.new unless ENV['RAILS_ENV'] == 'uat'
 end

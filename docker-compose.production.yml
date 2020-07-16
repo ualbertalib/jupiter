@@ -55,7 +55,7 @@ services:
   web:
     <<: *rails
     volumes:
-      - assets:/app/public/assets/
+      - assets:/app/public/packs/
       - file-storage:/app/storage/
     command: bundle exec puma -e uat
 
@@ -67,6 +67,6 @@ services:
     env_file: .env_deployment
     volumes:
       - ./config/nginx.conf:/etc/nginx/conf.d/default.conf
-      - assets:/app/public/assets/
+      - assets:/app/public/packs/
     ports:
       - "80:80"
