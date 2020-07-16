@@ -6,7 +6,7 @@ class AddArCollection < ActiveRecord::Migration[5.2]
       t.datetime :record_created_at
       t.string :hydra_noid
       t.datetime :date_ingested
-      t.string :title
+      t.string :title, null: false
       t.string :fedora3_uuid
       t.string :depositor
       t.uuid :community_id
