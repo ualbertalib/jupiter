@@ -221,16 +221,34 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should get item file set metadata graph with n3 serialization' do
     sign_in_as_system_user
+
+    radioactive_item = items(:admin)
+    radioactive_item.id = 'e2ec88e3-3266-4e95-8575-8b04fac2a679'.freeze
+    ingest_files_for_entity(radioactive_item)
+    radioactive_item.save!
+    radioactive_item.reload
+
     get aip_v1_entity_file_set_url(
       entity: @entity,
-      id: @public_item,
-      file_set_id: @public_item.files.first.fileset_uuid
+      id: radioactive_item,
+      file_set_id: radioactive_item.files.first.fileset_uuid
     )
     assert_response :success
 
     graph = generate_graph_from_n3(response.body)
-    # TODO: Improve this test checking for a valid graph output
-    assert_equal true, graph.graph?
+
+    variables = {
+      entity_id: radioactive_item.id,
+      fileset_id: radioactive_item.files.first.fileset_uuid,
+      collection_id: radioactive_item.member_of_paths.first.split('/')[1],
+      checksum: radioactive_item.files.first.blob.checksum,
+      byte_size: radioactive_item.files.first.blob.byte_size,
+      filename: radioactive_item.files.first.blob.filename,
+      content_type: radioactive_item.files.first.blob.content_type
+    }
+    rendered_graph = load_n3_graph(file_fixture('n3/items/file_set.n3'), variables)
+
+    assert_equal true, rendered_graph.isomorphic_with?(graph)
   end
 
   test 'should get item fixity metadata graph with n3 serialization' do

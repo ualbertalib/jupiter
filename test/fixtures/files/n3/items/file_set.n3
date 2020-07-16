@@ -1,0 +1,22 @@
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+@prefix dc: <http://purl.org/dc/terms/> .
+@prefix ebucore: <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#> .
+@prefix fcrepo4: <http://fedora.info/definitions/v4/repository#> .
+@prefix pcdm: <http://pcdm.org/models#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://localhost/aip/v1/items/<%= entity_id %>/filesets/<%= fileset_id %>> a fcrepo4:Container,
+    fcrepo4:Resource,
+    pcdm:Object;
+  fcrepo4:hasParent <http://localhost/aip/v1/items/<%= entity_id %>/filesets/>;
+  pcdm:hasFile <http://localhost/aip/v1/items/<%= entity_id %>/filesets/<%= fileset_id %>/original_file>;
+  pcdm:memberOf <http://localhost/aip/v1/items/<%= entity_id %>/collections/<%= collection_id %>>;
+  dc:accessRights "http://terms.library.ualberta.ca/public";
+  bibo:owner "administrator@example.com";
+  <http://terms.library.ualberta.ca/recordCreatedInJupiter> "2000-01-01T00:00:00.007Z"^^xsd:dateTime;
+  <http://terms.library.ualberta.ca/sitemapLink> <rs:ln href="/items/<%= entity_id %>/view/<%= fileset_id %>/<%= filename %>" rel="content" hash="md5:<%= checksum %>" length="<%= byte_size %>" type="<%= content_type %>">;
+  ebucore:dateIngested "2000-01-01T00:00:00.007Z"^^xsd:dateTime;
+  ebucore:hasMimeType "image/jpeg";
+  ebucore:resourceFilename "image-sample.jpeg";
+  <info:fedora/fedora-system:def/model#hasModel> "IRFileSet" .

@@ -4,9 +4,10 @@ class Aip::V1::EntitiesController < ApplicationController
   THESIS_CLASS_NAME = Thesis.name.freeze
   ITEM_INSTITUTIONAL_REPOSITORY_NAME = 'IRItem'.freeze
   THESIS_INSTITUTIONAL_REPOSITORY_NAME = 'IRThesis'.freeze
+  FILESET_INSTITUTIONAL_REPOSITORY_NAME = 'IRFileSet'.freeze
   ENTITY_INSTITUTIONAL_REPOSITORY_NAME = 'IREntity'.freeze
 
-  before_action :load_entity, only: [:show, :file_sets, :file_paths]
+  before_action :load_entity, only: [:show, :file_sets, :file_paths, :file_set]
   before_action :load_file, only: [:file_set, :fixity_file, :original_file]
   before_action :ensure_access
 
@@ -124,9 +125,48 @@ class Aip::V1::EntitiesController < ApplicationController
     ActsAsRdfable.add_annotation_bindings!(@file.blob)
 
     rdf_graph_creator = RdfGraphCreationService.new(@file.blob, prefixes, self_subject)
-    rdf_graph_creator.insert(
-      RDF::Statement(subject: self_subject, predicate: RDF.type, object: RDF::Vocab::PCDM.Object)
+
+    file_view_uri = RDF::URI(
+      file_view_item_url(
+        id: @entity.id,
+        file_set_id: @file.fileset_uuid,
+        file_name: @file.filename.to_s
+      )
     )
+
+    statements = [
+      owner_email_statement,
+      *entity_member_of_statements,
+      RDF::Statement(subject: self_subject, predicate: RDF.type, object: RDF::Vocab::PCDM.Object),
+      RDF::Statement(subject: self_subject, predicate: RDF.type, object: RDF::Vocab::Fcrepo4.Resource),
+      RDF::Statement(subject: self_subject, predicate: RDF.type, object: RDF::Vocab::Fcrepo4.Container),
+      RDF::Statement(subject: self_subject, predicate: RDF::Vocab::DC.accessRights, object: @entity.visibility),
+      RDF::Statement(subject: self_subject, predicate: RDF::Vocab::EBUCore.dateIngested, object: @entity.date_ingested),
+      RDF::Statement(subject: self_subject, predicate: RDF::Vocab::Fcrepo4.hasParent, object: self_subject.parent),
+      RDF::Statement(
+        subject: self_subject,
+        predicate: RDF::Vocab::PCDM.hasFile,
+        object: self_subject / 'original_file'
+      ),
+      RDF::Statement(
+        subject: self_subject,
+        predicate: TERMS[:ual].record_created_in_jupiter,
+        object: @entity.record_created_at
+      ),
+      RDF::Statement(
+        subject: self_subject,
+        predicate: ::TERMS[:fedora].has_model,
+        object: FILESET_INSTITUTIONAL_REPOSITORY_NAME
+      ),
+      RDF::Statement(
+        subject: self_subject,
+        predicate: ::TERMS[:ual].sitemap_link,
+        object: RDF::URI('rs:ln') + " href=\"#{file_view_uri.path}\" rel=\"content\" hash=\"md5:#{@file.checksum}\" " \
+                "length=\"#{@file.byte_size}\" type=\"#{@file.content_type}\""
+      )
+    ]
+
+    rdf_graph_creator.insert(*statements)
 
     render plain: rdf_graph_creator.to_n3, status: :ok
   end
@@ -186,6 +226,11 @@ class Aip::V1::EntitiesController < ApplicationController
         subject: self_subject,
         predicate: RDF::Vocab::PREMIS.hasMessageDigest,
         object: RDF::URI.new('urn:md5') / @file.blob.checksum
+      ),
+      RDF::Statement(
+        subject: self_subject,
+        predicate: RDF::Vocab::Fcrepo4.hasParent,
+        object: self_subject.parent
       )
     ]
 

@@ -556,8 +556,8 @@ end
 base_radioactive_thesis_values = {
   visibility: JupiterCore::VISIBILITY_PUBLIC,
   owner_id: admin.id,
-  record_created_at: '2018-03-13T16:52:49.818Z',
   hydra_noid: 'c6108vb30p',
+  record_created_at: '2018-03-13T16:52:49.818Z',
   date_ingested: '2018-03-13T16:52:49.818Z',
   title: 'dcterms:title1$ Some Thesis Title',
   fedora3_uuid: 'uuid:a4701510-ef9b-45cf-a7d0-2d2f16e00787',

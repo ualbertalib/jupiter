@@ -166,15 +166,34 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
   # TODO: Improve this test checking for a valid graph output
   test 'should get thesis file set metadata graph with n3 serialization' do
     sign_in_as_system_user
+
+    radioactive_thesis = thesis(:admin)
+    radioactive_thesis.id = '8e18f37c-dc60-41bb-9459-990586176730'.freeze
+    ingest_files_for_entity(radioactive_thesis)
+    radioactive_thesis.save!
+    radioactive_thesis.reload
+
     get aip_v1_entity_file_set_url(
       entity: @entity,
-      id: @public_thesis,
-      file_set_id: @public_thesis.files.first.fileset_uuid
+      id: radioactive_thesis,
+      file_set_id: radioactive_thesis.files.first.fileset_uuid
     )
     assert_response :success
 
     graph = generate_graph_from_n3(response.body)
-    assert_equal true, graph.graph?
+
+    variables = {
+      entity_id: radioactive_thesis.id,
+      fileset_id: radioactive_thesis.files.first.fileset_uuid,
+      collection_id: radioactive_thesis.member_of_paths.first.split('/')[1],
+      checksum: radioactive_thesis.files.first.blob.checksum,
+      byte_size: radioactive_thesis.files.first.blob.byte_size,
+      filename: radioactive_thesis.files.first.blob.filename,
+      content_type: radioactive_thesis.files.first.blob.content_type
+    }
+    rendered_graph = load_n3_graph(file_fixture('n3/theses/file_set.n3'), variables)
+
+    assert_equal true, rendered_graph.isomorphic_with?(graph)
   end
 
   test 'should get thesis fixity metadata graph with n3 serialization' do

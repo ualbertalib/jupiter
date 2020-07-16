@@ -7,6 +7,7 @@
 
 <http://localhost/aip/v1/theses/<%= entity_id %>/filesets/<%= fileset_id %>/original_file> a pcdm:File;
   fcrepo4:hasFixityService <http://localhost/aip/v1/theses/<%= entity_id %>/filesets/<%= fileset_id %>/fixity>;
+  fcrepo4:hasParent <http://localhost/aip/v1/theses/<%= entity_id %>/filesets/<%= fileset_id %>/>;
   ebucore:hasMimeType "image/jpeg";
   ebucore:resourceFilename "<%= filename %>";
   premis:hasMessageDigest <urn:md5:<%= checksum %>>;
