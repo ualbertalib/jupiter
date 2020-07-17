@@ -65,7 +65,7 @@ class Aip::V1::EntitiesController < ApplicationController
       RDF::Vocab::BIBO.contributorList
     )
 
-    # Thesis
+    # Thesis predicates that need to be added as sorted lists
     rdf_graph_creator.copy_predicate_to_sorted_rdf_list(
       self_subject,
       TERMS[:ual].department,
@@ -77,10 +77,9 @@ class Aip::V1::EntitiesController < ApplicationController
       TERMS[:ual].supervisor_list
     )
 
-    # Handle special case where predicate http://projecthydra.org/ns/auth/acl#embargoHistory
-    # needs to maintain the order in which it was entered. The original nodes
-    # the predicate are removed and a new rdf list is inserted instead with the
-    # predicate
+    # Handle special case where predicate http://projecthydra.org/ns/auth/acl#embargoHistory needs to maintain the order
+    # in which it was entered. The original nodes the predicate are removed and a new rdf list is inserted instead with
+    # the predicate
 
     rdf_graph_creator.replace_predicate_with_sorted_rdf_list(self_subject, ::TERMS[:acl].embargo_history)
 
