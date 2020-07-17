@@ -110,6 +110,7 @@ group :test do
 
   gem 'json-schema', '~> 2.8.1'
   gem 'launchy'
+  gem 'rdf-isomorphic', '~> 3.1.0'
   gem 'vcr', '5.0', require: false
   gem 'webdrivers', '~> 4.4'
   gem 'webmock', require: false

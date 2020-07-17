@@ -38,6 +38,17 @@ if Rails.env.development? || Rails.env.uat?
   bad_user = User.create(name: 'Jill Bad-user', email: 'bad_user@ualberta.ca', admin: false, suspended: true)
   bad_user.identities.create(provider: 'developer', uid: 'bad_user@ualberta.ca')
 
+  # Seed system user for API requests
+  User.create(
+    email: 'ditech@ualberta.ca',
+    name: 'System user',
+    admin: false,
+    api_key_digest: BCrypt::Password.create(
+      Rails.application.secrets.system_user_api_key
+    ),
+    system: true
+  )
+
   # A bunch of non-identity users for to manipulate in the admin interface
   100.times do
     name = Faker::TvShows::GameOfThrones.unique.character
@@ -382,13 +393,162 @@ if Rails.env.development? || Rails.env.uat?
   )
 
   EXTRA_THINGS.each do |thing|
-    collection = Collection.create!(
+    Collection.create!(
       owner_id: admin.id,
       title: "Articles about the relationship between #{thing.pluralize} and non-#{thing.pluralize}",
       community_id: community.id,
       restricted: true,
       description: "A restricted collection"
     )
+  end
+
+  # Radioactive entities
+  # TODO: Add our own radioactive community and collection
+
+  community_with_collection = Community.joins(:collections).first
+  radioactive_example_file_paths = ['test/fixtures/files/image-sample.jpeg', 'test/fixtures/files/image-sample2.jpeg']
+
+  base_radioactive_values = {
+    # Set model id on each new Item so we can find it easily when testing
+    owner_id: admin.id,
+    doi: 'doi:10.7939/xxxxxxxxx',
+    visibility: JupiterCore::VISIBILITY_PUBLIC,
+    creators: ['dc:creator1$ Doe, Jane', 'dc:creator2$ Doe, John'],
+    contributors: ['dc:contributor1$ Perez, Juan', 'dc:contributor2$ Perez, Maria'],
+    subject: ['dc:subject1$ Some subject heading', 'dc:subject2$ Some subject heading'],
+    created: '2000-01-01',
+    sort_year: '2000',
+    description: 'dcterms:description1$ Arabic ناتيومرلبسفأعدقحكهجشطصزخضغذثئةظؤىءآإ Greek αβγδεζηθικλμνξοπρςστυφχψω ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ Cyrillic абвгдеёжзийклмнопрстуфхцчшщъыьэюя АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ Lao ກ-ໝ Thai ก-๎ Burmese က-ၙ Khmer ក-៹ Korean 가-힣 Bengali অ-ৱ // Spanish áéíóúüñ French àâçèéêëîïôùûü Portuguese àáâãçéêíóôõú Hindi ऄ-ॿ Pujabi ਅ-ੴ Mandarin 海萵苣白菜冬瓜韭菜竹筍生菜大頭菜豆薯銀甜菜莧菜豌豆蒲公英蔥豌豆苗亞羅婆羅門參西葫蘆。小豆辣根土豆 Japanese アオサメロンキャベツニラ竹シュートレタスルタバガのクズイモ銀ビートアマランスエンドウタンポポねぎ',
+    is_version_of: ['dcterms:isVersionOf1$ Sydorenko, Dmytro & Rankin, Robert. (2013). Simulation of O+ upflows created by electron precipitation and Alfvén waves in the ionosphere. Journal of Geophysical Research: Space Physics, 118(9), 5562-5578. http://doi.org/10.1002/jgra.50531', 'dcterms:isVersionOf2$ Another version'],
+    languages: [CONTROLLED_VOCABULARIES[:language].no_linguistic_content, CONTROLLED_VOCABULARIES[:language].french],
+    related_link: 'dcterms:relation1$ http://doi.org/10.1007/xxxxxx-xxx-xxxx-x',
+    source: 'dcterms:source1$ Some source',
+    spatial_subjects: ['dcterms:spatial1$ Canada', 'dcterms:spatial2$ Nicaragua'],
+    temporal_subjects: ['dcterms:temporal1$ Holocene', 'dcterms:temporal2$ Holocene'],
+    title: 'dcterms:title1$ Some Title for Item',
+    alternative_title: 'dcterms:alternative1$ Some Alternative Title',
+    item_type: CONTROLLED_VOCABULARIES[:item_type].image,
+    depositor: 'eraadmi@ualberta.ca',
+    license: CONTROLLED_VOCABULARIES[:license].attribution_sharealike_4_0_international,
+    fedora3_uuid: 'uuid:97b1a8e2-a4b9-4941-b6ed-c4730f0a2a61',
+    fedora3_handle: 'http://hdl.handle.net/10402/era.33419',
+    hydra_noid: 'cgq67jr26k',
+    ingest_batch: '9019s326c',
+    date_ingested: '2000-01-01T00:00:00.007Z',
+    record_created_at: '2000-01-01T00:00:00.007Z',
+    member_of_paths: ["#{community_with_collection.id}/#{community_with_collection.collections[0].id}"]
+  }
+
+  Item.new(
+    base_radioactive_values.merge(id: 'e2ec88e3-3266-4e95-8575-8b04fac2a679')
+  ).tap do |item|
+    # Attach files
+
+    radioactive_example_file_paths.each do |file_path|
+      File.open(Rails.root + file_path, 'r') do |file|
+        item.add_and_ingest_files([file])
+      end
+    end
+
+    item.set_thumbnail(item.files.first) if item.files.first.present?
+
+    item.save!
+  end
+
+  # Add Item with rigts value and no license
+  Item.new(
+    base_radioactive_values.merge(
+      # Values for both license and rights cannot be set at the same time
+      id: 'c795337f-075f-429a-bb18-16b56d9b750f',
+      license: '',
+      rights: '© The Author(s) 2015. Published by Oxford University Press on behalf of the Society for Molecular Biology and Evolution.'
+    )
+  ).tap do |item|
+    # Attach files
+
+    radioactive_example_file_paths.each do |file_path|
+      File.open(Rails.root + file_path, 'r') do |file|
+        item.add_and_ingest_files([file])
+      end
+    end
+
+    item.set_thumbnail(item.files.first) if item.files.first.present?
+
+    item.save!
+  end
+
+  # Add Item with that is currently embargoed
+  Item.new(
+    base_radioactive_values.merge(
+      id: '3bb26070-0d25-4f0e-b44f-e9879da333ec',
+      # In order to set embargo values the visibility value needs to be set to
+      visibility: Item::VISIBILITY_EMBARGO,
+      embargo_history: ['acl:embargoHistory1$ Item currently embargoed'],
+      embargo_end_date: '2080-01-01T00:00:00.000Z',
+      visibility_after_embargo: CONTROLLED_VOCABULARIES[:visibility].public
+    )
+  ).tap do |item|
+    # Attach files
+   
+    radioactive_example_file_paths.each do |file_path|
+      File.open(Rails.root + file_path, 'r') do |file|
+        item.add_and_ingest_files([file])
+      end
+    end
+
+    item.set_thumbnail(item.files.first) if item.files.first.present?
+
+    item.save!
+  end
+
+  # Add Item that was previously embargoed
+  Item.new(
+    base_radioactive_values.merge(
+      id: '2107bfb6-2670-4ffc-94a1-aeb4f8c1fd81',
+      # In order to set embargo values the visibility value needs to be set to
+      visibility: Item::VISIBILITY_EMBARGO,
+      embargo_end_date: '2000-01-01T00:00:00.000Z',
+      embargo_history: [
+        'acl:embargoHistory1$ An expired embargo was deactivated on 2000-01-01T00:00:00.000Z.  Its release date was 2000-01-01T00:00:00.000Z.  Visibility during embargo was restricted and intended visibility after embargo was open', 
+        'acl:embargoHistory2$ An expired embargo was deactivated on 2000-01-01T00:00:00.000Z.  Its release date was 2000-01-01T00:00:00.000Z.  Visibility during embargo was restricted and intended visibility after embargo was open'
+      ],
+      visibility_after_embargo: CONTROLLED_VOCABULARIES[:visibility].public
+    )
+  ).tap do |item|
+    # Attach files
+
+    radioactive_example_file_paths.each do |file_path|
+      File.open(Rails.root + file_path, 'r') do |file|
+        item.add_and_ingest_files([file])
+      end
+    end
+
+    item.set_thumbnail(item.files.first) if item.files.first.present?
+
+    item.save!
+  end
+
+  # Add Item with article type and publication status
+
+  Item.new(
+    base_radioactive_values.merge(
+      id: '93126aae-4b9d-4db2-98f1-4e04b40778cf',
+      # The value for publication_status published only appears for article item type
+      item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+      publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published]
+    )
+  ).tap do |item|
+    # Attach files
+    
+    radioactive_example_file_paths.each do |file_path|
+      File.open(Rails.root + file_path, 'r') do |file|
+        item.add_and_ingest_files([file])
+      end
+    end
+
+    item.set_thumbnail(item.files.first) if item.files.first.present?
+
+    item.save!
   end
 
 end
