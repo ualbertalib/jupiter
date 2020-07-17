@@ -161,9 +161,6 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  # Basic tests checking if response has n3 serialization.
-  # This should be changed to verify the response content is correct.
-  # TODO: Improve this test checking for a valid graph output
   test 'should get thesis file set metadata graph with n3 serialization' do
     sign_in_as_system_user
 
@@ -219,7 +216,6 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
     assert_equal true, rendered_graph.isomorphic_with?(graph)
   end
 
-  # TODO: Improve this test checking for a valid graph output
   test 'should get thesis original file metadata graph with n3 serialization' do
     sign_in_as_system_user
 
