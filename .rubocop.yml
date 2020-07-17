@@ -17,6 +17,7 @@ AllCops:
     - 'Dangerfile'
     - 'node_modules/**/*'
   ExtraDetails: true
+  NewCops: enable
   TargetRubyVersion: 2.5
 
 # readability is Actually Good
@@ -35,15 +36,6 @@ Layout/LineLength:
 # readability is Actually Good
 Layout/RescueEnsureAlignment:
   Enabled: false
-
-Layout/SpaceAroundMethodCallOperator:
-  Enabled: true
-
-Lint/RaiseException:
-  Enabled: true
-
-Lint/StructNewOverride:
-  Enabled: true
 
 # A calculated magnitude based on number of assignments,
 # branches, and conditions.
@@ -105,9 +97,6 @@ Rails/FindEach:
 Rails/UnknownEnv:
   Enabled: false
 
-Rails/ContentTag:
-  Enabled: true
-
 Style/AsciiComments:
   Enabled: false
 
@@ -127,24 +116,12 @@ Style/ClassVars:
 Style/Documentation:
   Enabled: false
 
-Style/ExponentialNotation:
-  Enabled: true
-
 Style/FormatStringToken:
   Enabled: false
 
 # Checks if there is a magic comment to enforce string literals
 Style/FrozenStringLiteralComment:
   Enabled: false
-
-Style/HashEachMethods:
-  Enabled: true
-
-Style/HashTransformKeys:
-  Enabled: true
-
-Style/HashTransformValues:
-  Enabled: true
 
 Style/NumericPredicate:
   EnforcedStyle: comparison
@@ -177,21 +154,3 @@ Style/WordArray:
 
 Performance/TimesMap:
   Enabled: false
-
-Layout/EmptyLinesAroundAttributeAccessor:
-  Enabled: true
-
-Style/SlicingWithRange:
-  Enabled: true
-
-Lint/DeprecatedOpenSSLConstant:
-  Enabled: true
-
-Lint/MixedRegexpCaptureTypes:
-  Enabled: true
-
-Style/RedundantRegexpCharacterClass:
-  Enabled: true
-
-Style/RedundantRegexpEscape:
-  Enabled: true

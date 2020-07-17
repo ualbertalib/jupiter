@@ -18,6 +18,8 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Bring in ERBLint [PR#1646](https://github.com/ualbertalib/jupiter/pull/1646)
 - Thesis ingest rewrite [PR#1670](https://github.com/ualbertalib/jupiter/pull/1670)
 - Rails 6 sidekiq queues
+- Add stylelint to Jupiter [#1120](https://github.com/ualbertalib/jupiter/issues/1430
+- migration to fix concatenated subjects (part 1) [#1449](https://github.com/ualbertalib/jupiter/issues/1449)
 
 ### Changed
 - bump rubocop-rails to 2.4.1 Rails/FilePath default changed to slashes [PR#1398](https://github.com/ualbertalib/jupiter/pull/1398)
@@ -33,6 +35,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Move Logic from SearchController into ItemSearch Concern [#932](https://github.com/ualbertalib/jupiter/issues/932)
 - Feature Image on Item show page need to be centered align within column [#1405](https://github.com/ualbertalib/jupiter/issues/1405)
 - Centralize Abstraction for Thumbnail Generation [#1343](https://github.com/ualbertalib/jupiter/issues/1343)
+- Beefed up AR migrations by stating that certain attributes cannot be null [PR#1704](https://github.com/ualbertalib/jupiter/pull/1704)
 - Finalize Item AIP data [#1557](https://github.com/ualbertalib/jupiter/issues/1557)
 
 ### Fixed

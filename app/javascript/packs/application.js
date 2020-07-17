@@ -19,6 +19,9 @@ import 'jquery-multidownload/jquery-multidownload';
 import '../styles/application.scss';
 import '../src/application';
 
+// Expose jquery so RJS (e.g: js.erb templates) works properly
+window.$ = $;
+
 require.context('../images', true);
 
 ActiveStorage.start();

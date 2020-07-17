@@ -3,7 +3,7 @@ $image-with-text-opacity: 0.8;
 
 // Adapted from https://codepen.io/luisintosh/pen/gPGXOp
 .j-image-with-text {
-  padding: 0px;
+  padding: 0;
   position: relative;
   text-align: center;
   width: 100%;
@@ -12,7 +12,6 @@ $image-with-text-opacity: 0.8;
     min-height: 100%;
     object-fit: cover;
     width: 100%;
-
   }
 
   &:hover img {
@@ -26,9 +25,9 @@ $image-with-text-opacity: 0.8;
 
   h3 {
     background-color: $image-with-text-bg;
-    bottom: 0px;
+    bottom: 0;
     color: $black;
-    left: 0px;
+    left: 0;
     margin-bottom: inherit;
     opacity: $image-with-text-opacity;
     padding: 5px;
