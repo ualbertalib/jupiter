@@ -34,8 +34,9 @@ class Thesis < JupiterCore::Doiable
   validates :visibility_after_embargo, presence: true, if: ->(item) { item.visibility == VISIBILITY_EMBARGO }
   validates :visibility_after_embargo, absence: true, if: ->(item) { item.visibility != VISIBILITY_EMBARGO }
   validates :member_of_paths, presence: true
-  validate :communities_and_collections_must_exist
-  validate :visibility_after_embargo_must_be_valid
+  validates :member_of_paths, community_collection: true
+  validates :visibility_after_embargo,
+            after_embargo_visibility: { visibilities_after_embargo: VISIBILITIES_AFTER_EMBARGO }
 
   # Present a consistent interface with Item#item_type_with_status_code
   def item_type_with_status_code
