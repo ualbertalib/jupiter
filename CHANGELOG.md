@@ -4,10 +4,11 @@ All notable changes to Jupiter project will be documented in this file. Jupiter 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and releases in Jupiter project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.0.0.pre2.6] 2020-07-20
 
 ### Fixed
-- docker image can be built and deployed
+- docker image can be built and deployed [PR#1757](https://github.com/ualbertalib/jupiter/pull/1757)
+- Skip broken item causing fedora migration rake task to fail [PR#1766](https://github.com/ualbertalib/jupiter/pull/1766)
 
 ## [2.0.0.pre2.5] 2020-07-03
 

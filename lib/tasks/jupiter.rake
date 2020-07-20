@@ -100,7 +100,8 @@ namespace :jupiter do
     puts 'Migrating Items...'
 
     Item.all.each do |item|
-      ArItem.from_item(item)
+      # Skip broken item.
+      ArItem.from_item(item) unless item.id == '4b3e0c51-33f7-4de9-97ad-d8bd298a8e92'
       print '.'
     end
 
