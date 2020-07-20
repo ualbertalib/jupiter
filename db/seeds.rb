@@ -56,7 +56,7 @@ if Rails.env.development? || Rails.env.uat?
   end
 
   # Lets pick 10 prolific creators, 10 contributors
-  creators = 10.times.map { "#{Faker::Creature::Cat.unique.name} #{Faker::Creature::Cat.unique.breed.gsub(/[,]+/, '-')}" }
+  creators = 10.times.map { "#{Faker::Creature::Cat.unique.name} #{Faker::Creature::Cat.unique.breed.gsub(/[ ,]+/, '-')}" }
   contributors = 10.times.map { Faker::FunnyName.unique.name_with_initial }
 
   institutions = [CONTROLLED_VOCABULARIES[:institution].uofa, CONTROLLED_VOCABULARIES[:institution].st_stephens]
