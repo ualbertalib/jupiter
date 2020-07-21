@@ -134,13 +134,6 @@ class JupiterCore::Depositable < ApplicationRecord
     self.date_ingested = record_created_at
   end
 
-  def visibility_after_embargo_must_be_valid
-    return if visibility_after_embargo.nil?
-    return if VISIBILITIES_AFTER_EMBARGO.include?(visibility_after_embargo)
-
-    errors.add(:visibility_after_embargo, :not_recognized)
-  end
-
   # utility methods for checking for certain visibility transitions
   def transitioned_to_private?
     return true if changes['visibility'].present? &&
