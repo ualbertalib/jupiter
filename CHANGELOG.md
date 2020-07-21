@@ -6,19 +6,21 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+## [1.3.0] - 2020-07-21
+
 ### Added
-- Mounted Oaisys engine
-- Added tests surrounding Oaisys ListSets response
-- Version 1 of AIP API
-- Added and set up papertrail gem
-- Set up papertrail admin view
-- Added Draper and re-organized facet presenters
-- Metadata Presenters for OAI:DC & OAI:ETDMS
-- Local system accounts authentication
+- Mounted Oaisys engine [PR#1361](https://github.com/ualbertalib/jupiter/pull/1361)
+- Added tests surrounding Oaisys ListSets response [PR#1609](https://github.com/ualbertalib/jupiter/pull/1609)
+- Version 1 of AIP API [PR#1441](https://github.com/ualbertalib/jupiter/pull/1441)
+- Added and set up papertrail gem [PR#1437](https://github.com/ualbertalib/jupiter/pull/1437)
+- Set up papertrail admin view [PR#1562](https://github.com/ualbertalib/jupiter/pull/1562)
+- Added Draper and re-organized facet presenters [PR#1446](https://github.com/ualbertalib/jupiter/pull/1446)
+- Metadata Presenters for OAI:DC & OAI:ETDMS [PR#1460](https://github.com/ualbertalib/jupiter/pull/1460)
+- Local system accounts authentication [PR#1522](https://github.com/ualbertalib/jupiter/pull/1522)
 - Bring in ERBLint [PR#1646](https://github.com/ualbertalib/jupiter/pull/1646)
 - Thesis ingest rewrite [PR#1670](https://github.com/ualbertalib/jupiter/pull/1670)
-- Rails 6 sidekiq queues
-- Add stylelint to Jupiter [#1120](https://github.com/ualbertalib/jupiter/issues/1430
+- Rails 6 sidekiq queues [PR#1663](https://github.com/ualbertalib/jupiter/pull/1663)
+- Add stylelint to Jupiter [#1120](https://github.com/ualbertalib/jupiter/issues/1120)
 - migration to fix concatenated subjects (part 1) [#1449](https://github.com/ualbertalib/jupiter/issues/1449)
 
 ### Changed
@@ -40,7 +42,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ### Fixed
 - failing tests [#1376](https://github.com/ualbertalib/jupiter/issues/1376)
-- Fix Sprockets v4.0.0 upgrade problem with how Sass Variables were being defined
+- Fix Sprockets v4.0.0 upgrade problem with how Sass Variables were being defined [#1406](https://github.com/ualbertalib/jupiter/issues/1406)
 - Fix bug for page_image_url helper which was double rendering urls for default image [PR#1512](https://github.com/ualbertalib/jupiter/pull/1512)
 - Thumbnail choice no longer resets between saves [#1435](https://github.com/ualbertalib/jupiter/issues/1435)
 - Fix three-state logic problems on DraftItem and DraftThesis models where boolean attribute is_published_in_era was nullable [#1408](https://github.com/ualbertalib/jupiter/issues/1408)
