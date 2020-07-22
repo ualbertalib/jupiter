@@ -6,7 +6,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
-## [1.3.0] - 2020-07-21
+## [2.0.1.pre1] - 2020-07-22
 
 ### Added
 - Mounted Oaisys engine [PR#1361](https://github.com/ualbertalib/jupiter/pull/1361)
