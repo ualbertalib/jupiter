@@ -1,4 +1,4 @@
-class CommunityValidator < ActiveModel::EachValidator
+class CommunityExistenceValidator < ActiveModel::EachValidator
 
   def validate_each(record, attr, value)
     return if value.blank?

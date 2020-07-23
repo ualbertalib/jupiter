@@ -8,7 +8,7 @@ class JupiterCore::Depositable < ApplicationRecord
                                 CONTROLLED_VOCABULARIES[:visibility].draft,
                                 CONTROLLED_VOCABULARIES[:visibility].public].freeze
 
-  validates :visibility, visibility: true
+  validates :visibility, known_visibility: true
 
   validates :owner_id, presence: true
   validates :record_created_at, presence: true

@@ -35,20 +35,22 @@ class Item < JupiterCore::Doiable
                                  if: ->(item) { item.item_type == CONTROLLED_VOCABULARIES[:item_type].article }
   validates :publication_status, absence: { message: :must_be_absent_for_non_articles },
                                  if: ->(item) { item.item_type != CONTROLLED_VOCABULARIES[:item_type].article }
-  validates :publication_status, compound_uri: true, if: lambda { |item|
+  validates :publication_status, compound_uri: { compounds: [
+    [CONTROLLED_VOCABULARIES[:publication_status].published],
+    [CONTROLLED_VOCABULARIES[:publication_status].draft, CONTROLLED_VOCABULARIES[:publication_status].submitted]
+  ] }, if: lambda { |item|
     item.item_type == CONTROLLED_VOCABULARIES[:item_type].article && item.publication_status.present?
   }
 
-  validates_with LicenseXorRightsValidator
+  validates_with LicenseXorRightsPresenceValidator
 
   validates :embargo_end_date, presence: true, if: ->(item) { item.visibility == VISIBILITY_EMBARGO }
   validates :embargo_end_date, absence: true, if: ->(item) { item.visibility != VISIBILITY_EMBARGO }
   validates :visibility_after_embargo, presence: true, if: ->(item) { item.visibility == VISIBILITY_EMBARGO }
   validates :visibility_after_embargo, absence: true, if: ->(item) { item.visibility != VISIBILITY_EMBARGO }
   validates :member_of_paths, presence: true
-  validates :member_of_paths, community_collection: true
-  validates :visibility_after_embargo,
-            after_embargo_visibility: { visibilities_after_embargo: VISIBILITIES_AFTER_EMBARGO }
+  validates :member_of_paths, community_and_collection_existence: true
+  validates :visibility_after_embargo, known_visibility: { only: VISIBILITIES_AFTER_EMBARGO }
 
   def self.from_draft(draft_item)
     item = Item.find(draft_item.uuid) if draft_item.uuid.present?

@@ -9,7 +9,7 @@ class Collection < JupiterCore::Depositable
 
   validates :title, presence: true
   validates :community_id, presence: true
-  validates :community_id, community: true
+  validates :community_id, community_existence: true
 
   before_destroy :can_be_destroyed?
 

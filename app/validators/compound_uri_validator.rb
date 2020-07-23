@@ -3,10 +3,14 @@ class CompoundURIValidator < ActiveModel::EachValidator
   def validate_each(record, attr, value)
     return if value.blank?
 
-    ps_vocab = CONTROLLED_VOCABULARIES[:publication_status]
+    compounds = options[:compounds]
+
+    raise ArgumentError, "#{attr} must specify the list of compounds to check against!" if compounds.empty?
+
+    compounds = [compounds] unless value.is_a?(Array)
     value = [value] unless value.is_a?(Array)
-    statuses = value.sort
-    return unless statuses != [ps_vocab.published] && statuses != [ps_vocab.draft, ps_vocab.submitted]
+
+    return if compounds.map(&:sort).include?(value.sort)
 
     record.errors.add(attr, :not_recognized)
   end

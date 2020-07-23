@@ -1,4 +1,4 @@
-class LicenseXorRightsValidator < ActiveModel::Validator
+class LicenseXorRightsPresenceValidator < ActiveModel::Validator
 
   def validate(record)
     # Must have one of license or rights, not both
