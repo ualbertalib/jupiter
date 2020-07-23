@@ -10,12 +10,12 @@ set -o nounset
 [[ -n "${TRACE:-}" ]] && set -o xtrace
 
 
-readonly branch_name="master"
+readonly branch_name="integration_postmigration"
 readonly install_directory="/home/deploy/jupiter"
 
 mkdir -p "${install_directory}"
 curl -o "${install_directory}/deploy" "https://raw.githubusercontent.com/ualbertalib/jupiter/${branch_name}/bin/deploy"
-curl -o "${install_directory}/docker-compose.yml" "https://raw.githubusercontent.com/ualbertalib/jupiter/${branch_name}/docker-compose.deployment.yml"
+curl -o "${install_directory}/docker-compose.yml" "https://raw.githubusercontent.com/ualbertalib/jupiter/${branch_name}/docker-compose.production.yml"
 
 mkdir -p "${install_directory}/config"
 curl -o "${install_directory}/config/nginx.conf" "https://raw.githubusercontent.com/ualbertalib/jupiter/${branch_name}/config/nginx.conf"
