@@ -56,7 +56,7 @@ class UserSearchService
         f[facet] = []
       end
     end
-    params.permit(:community_id, :id, :tab, :page, :search, :sort, :direction, { facets: f }, ranges: r)
+    params.permit(:community_id, :id, :tab, :page, :search, :sort, :direction, :subdomain, { facets: f }, ranges: r)
   end
 
   def validate_range(range)

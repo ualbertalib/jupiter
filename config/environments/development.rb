@@ -67,4 +67,6 @@ Rails.application.configure do
 
   # Action on unpermitted parameters
   config.action_controller.action_on_unpermitted_parameters = :raise
+
+  config.hosts << 'era.lvh.me'
 end

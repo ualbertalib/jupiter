@@ -5,6 +5,10 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
 
   Capybara.default_max_wait_time = 5
 
+  setup do
+    host! 'http://era.lvh.me'
+  end
+
   if ENV['CAPYBARA_NO_HEADLESS']
     driven_by :selenium, using: :chrome, screen_size: [1400, 1400]
   else

@@ -61,7 +61,7 @@ class ActiveSupport::TestCase
         OmniAuth::AuthHash.new(provider: identity.provider,
                                uid: identity.uid)
 
-    post "/auth/#{identity.provider}/callback"
+    post login_url(provider: identity.provider)
   end
 
   def sign_in_as_system_user
@@ -77,5 +77,14 @@ class ActiveSupport::TestCase
 
   # turn on test mode for omniauth
   OmniAuth.config.test_mode = true
+
+end
+
+class ActionDispatch::IntegrationTest
+
+  def setup
+    host! 'era.lvh.me'
+    default_url_options[:host] = 'era.lvh.me'
+  end
 
 end
