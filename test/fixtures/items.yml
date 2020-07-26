@@ -6,6 +6,7 @@ fancy:
   created: 'Fall 2017'
   record_created_at: <%= 5.day.ago.to_s(:db) %>
   updated_at: <%= 5.day.ago.to_s(:db) %>
+  date_ingested: <%= 5.day.ago %>
   languages: <%= [CONTROLLED_VOCABULARIES[:language].english] %>
   license: <%= CONTROLLED_VOCABULARIES[:license].attribution_4_0_international %>
   item_type: <%= CONTROLLED_VOCABULARIES[:item_type].article %>
@@ -27,7 +28,7 @@ admin:
   sort_year: '2000'
   description: 'dcterms:description1$ Arabic ناتيومرلبسفأعدقحكهجشطصزخضغذثئةظؤىءآإ Greek αβγδεζηθικλμνξοπρςστυφχψω ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ Cyrillic абвгдеёжзийклмнопрстуфхцчшщъыьэюя АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ Lao ກ-ໝ Thai ก-๎ Burmese က-ၙ Khmer ក-៹ Korean 가-힣 Bengali অ-ৱ // Spanish áéíóúüñ French àâçèéêëîïôùûü Portuguese àáâãçéêíóôõú Hindi ऄ-ॿ Pujabi ਅ-ੴ Mandarin 海萵苣白菜冬瓜韭菜竹筍生菜大頭菜豆薯銀甜菜莧菜豌豆蒲公英蔥豌豆苗亞羅婆羅門參西葫蘆。小豆辣根土豆 Japanese アオサメロンキャベツニラ竹シュートレタスルタバガのクズイモ銀ビートアマランスエンドウタンポポねぎ'
   is_version_of: ['dcterms:isVersionOf1$ Sydorenko, Dmytro & Rankin, Robert. (2013). Simulation of O+ upflows created by electron precipitation and Alfvén waves in the ionosphere. Journal of Geophysical Research: Space Physics, 118(9), 5562-5578. http://doi.org/10.1002/jgra.50531', 'dcterms:isVersionOf2$ Another version']
-  languages: <%= [CONTROLLED_VOCABULARIES[:language].no_linguistic_content, CONTROLLED_VOCABULARIES[:language].french] %> 
+  languages: <%= [CONTROLLED_VOCABULARIES[:language].no_linguistic_content, CONTROLLED_VOCABULARIES[:language].french] %>
   related_link: 'dcterms:relation1$ http://doi.org/10.1007/xxxxxx-xxx-xxxx-x'
   source: 'dcterms:source1$ Some source'
   spatial_subjects: ['dcterms:spatial1$ Canada', 'dcterms:spatial2$ Nicaragua']
@@ -45,13 +46,14 @@ admin:
   date_ingested: '2000-01-01T00:00:00.007Z'
   record_created_at: '2000-01-01T00:00:00.007Z'
   updated_at: <%= 5.day.from_now.to_s(:db) %>
-  
+
 private_item:
   visibility: <%= JupiterCore::VISIBILITY_PRIVATE %>
   owner: admin
   title: 'Private Item'
   creators: ['Joe Blow']
   created: 'Fall 2017'
+  date_ingested: <%= 5.day.ago %>
   record_created_at: <%= 5.day.ago.to_s(:db) %>
   languages: <%= [CONTROLLED_VOCABULARIES[:language].english] %>
   license: <%= CONTROLLED_VOCABULARIES[:license].attribution_4_0_international %>
@@ -66,6 +68,7 @@ old_license:
   title: 'Admin Item'
   creators: ['Joe Blow']
   created: 'Winter 2017'
+  date_ingested: <%= 5.day.ago %>
   record_created_at: <%= 5.day.ago.to_s(:db) %>
   languages: <%= [CONTROLLED_VOCABULARIES[:language].english] %>
   license: <%= CONTROLLED_VOCABULARIES[:old_license].attribution_3_0_international %>
@@ -79,6 +82,7 @@ authenticated_item:
   title: 'Authenticated Item'
   creators: ['Joe Blow']
   created: 'Fall 2017'
+  date_ingested: <%= 5.day.ago %>
   record_created_at: <%= 5.day.ago.to_s(:db) %>
   languages: <%= [CONTROLLED_VOCABULARIES[:language].english] %>
   license: <%= CONTROLLED_VOCABULARIES[:license].attribution_4_0_international %>
