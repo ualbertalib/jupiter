@@ -6,7 +6,7 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   Capybara.default_max_wait_time = 5
 
   setup do
-    host! 'http://era.lvh.me'
+    host! Jupiter::TEST_URL
   end
 
   if ENV['CAPYBARA_NO_HEADLESS']

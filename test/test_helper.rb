@@ -83,8 +83,8 @@ end
 class ActionDispatch::IntegrationTest
 
   def setup
-    host! 'era.lvh.me'
-    default_url_options[:host] = 'era.lvh.me'
+    host! Jupiter::TEST_DOMAIN
+    default_url_options[:host] = Jupiter::TEST_DOMAIN
   end
 
 end
