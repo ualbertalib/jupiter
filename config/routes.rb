@@ -155,6 +155,5 @@ Rails.application.routes.draw do
             constraints: EntityConstraint.new
       end
     end
-
   end
 end
