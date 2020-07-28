@@ -8,7 +8,8 @@ class JupiterCore::Depositable < ApplicationRecord
                                 CONTROLLED_VOCABULARIES[:visibility].draft,
                                 CONTROLLED_VOCABULARIES[:visibility].public].freeze
 
-  validate :visibility_must_be_known
+  validates :visibility, known_visibility: true
+
   validates :owner_id, presence: true
   validates :record_created_at, presence: true
   validates :date_ingested, presence: true
@@ -131,31 +132,6 @@ class JupiterCore::Depositable < ApplicationRecord
     return if date_ingested.present?
 
     self.date_ingested = record_created_at
-  end
-
-  def visibility_must_be_known
-    return true if visibility.present? && self.class.valid_visibilities.include?(visibility)
-
-    errors.add(:visibility, I18n.t('locked_ldp_object.errors.invalid_visibility', visibility: visibility))
-  end
-
-  def communities_and_collections_must_exist
-    return if member_of_paths.blank?
-
-    member_of_paths.each do |path|
-      community_id, collection_id = path.split('/')
-      community = Community.find_by(id: community_id)
-      errors.add(:member_of_paths, :community_not_found, id: community_id) if community.blank?
-      collection = Collection.find_by(id: collection_id)
-      errors.add(:member_of_paths, :collection_not_found, id: collection_id) if collection.blank?
-    end
-  end
-
-  def visibility_after_embargo_must_be_valid
-    return if visibility_after_embargo.nil?
-    return if VISIBILITIES_AFTER_EMBARGO.include?(visibility_after_embargo)
-
-    errors.add(:visibility_after_embargo, :not_recognized)
   end
 
   # utility methods for checking for certain visibility transitions

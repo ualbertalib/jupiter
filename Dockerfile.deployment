@@ -1,4 +1,4 @@
-FROM ruby:2.5.0
+FROM ruby:2.6
 LABEL maintainer="University of Alberta Library"
 
 # Need to add jessie-backports repo so we can get FFMPEG, doesn't come with jessie debian by default
@@ -38,10 +38,14 @@ ENV APP_ROOT /app
 RUN mkdir -p $APP_ROOT
 WORKDIR $APP_ROOT
 
-# Preinstall gems in an earlier layer so we don't reinstall every time any file changes.
-COPY Gemfile  $APP_ROOT
-COPY Gemfile.lock $APP_ROOT
-RUN bundle install --without development test --jobs=3 --retry=3
+# Update bundler
+RUN gem update --system
+RUN gem install bundler:2.1.4
+
+# Install standard gems
+COPY Gemfile* /app/
+RUN bundle config --global frozen 1 && \
+    bundle install -j4 --retry 3
 
 # *NOW* we copy the codebase in
 COPY . $APP_ROOT
