@@ -273,27 +273,4 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
     assert_equal true, rendered_graph.isomorphic_with?(graph)
   end
 
-  test 'should get item original file metadata graph with n3 serialization' do
-    sign_in_as_system_user
-    url = aip_v1_entity_fileset_original_file_url(
-      entity: @entity,
-      id: @public_item,
-      file_set_id: @public_item.files.first.fileset_uuid
-    )
-
-    graph = get_n3_graph(url)
-    assert_response :success
-
-    variables = {
-      entity_id: @public_item.id,
-      fileset_id: @public_item.files.first.fileset_uuid,
-      checksum: @public_item.files.first.blob.checksum,
-      byte_size: @public_item.files.first.blob.byte_size,
-      filename: @public_item.files.first.blob.filename
-    }
-    rendered_graph = load_n3_graph(file_fixture('n3/items/original_file.n3'), variables)
-
-    assert_equal true, rendered_graph.isomorphic_with?(graph)
-  end
-
 end
