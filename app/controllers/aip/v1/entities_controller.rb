@@ -160,8 +160,8 @@ class Aip::V1::EntitiesController < ApplicationController
       RDF::Statement(
         subject: self_subject,
         predicate: ::TERMS[:ual].sitemap_link,
-        object: RDF::URI('rs:ln') + " href=\"#{file_view_uri.path}\" rel=\"content\" hash=\"md5:#{@file.checksum}\" " \
-                "length=\"#{@file.byte_size}\" type=\"#{@file.content_type}\""
+        object: RDF::URI('rs:ln') + %Q( href="#{file_view_uri.path}" rel="content" hash="md5:#{@file.checksum}" ) +
+                %Q(length="#{@file.byte_size}" type="#{@file.content_type}")
       )
     ]
 
