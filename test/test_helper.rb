@@ -82,9 +82,10 @@ end
 
 class ActionDispatch::IntegrationTest
 
-  def setup
-    host! Jupiter::TEST_DOMAIN
-    default_url_options[:host] = Jupiter::TEST_DOMAIN
+  setup do
+    host = URI(Jupiter::TEST_URL).host
+    host! host
+    default_url_options[:host] = host
   end
 
 end

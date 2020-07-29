@@ -1,11 +1,11 @@
 require 'test_helper'
-require Rails.root.join('test/support/aip_helper')
+require 'support/aip_helper'
 
 class Aip::V1::CollectionsControllerTest < ActionDispatch::IntegrationTest
 
   include AipHelper
 
-  def setup
+  setup do
     @regular_user = users(:regular)
     @collection = collections(:fancy_collection)
   end

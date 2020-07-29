@@ -1,5 +1,5 @@
 require 'test_helper'
-require Rails.root.join('test/support/aip_helper')
+require 'support/aip_helper'
 
 class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
 
