@@ -154,21 +154,8 @@ class JupiterCore::Depositable < ApplicationRecord
     self.embargo_history << embargo_history_item
   end
 
-  def push_item_id_for_preservation
-    if preserve == false
-      Rails.logger.warn("Could not preserve #{id}")
-      Rollbar.error("Could not preserve #{id}")
-    end
-
-    true
-  rescue StandardError => e
-    # we trap errors in writing to the Redis queue in order to avoid crashing the save process for the user.
-    Rollbar.error("Error occured in push_item_id_for_preservation, Could not preserve #{id}", e)
-    true
-  end
-
   # rubocop:disable Style/GlobalVars
-  def preserve
+  def push_item_id_for_preservation
     queue_name = Rails.application.secrets.preservation_queue_name
 
     $queue ||= ConnectionPool.new(size: 1, timeout: 5) { Redis.current }
@@ -177,9 +164,11 @@ class JupiterCore::Depositable < ApplicationRecord
       connection.zadd queue_name, Time.now.to_f, id
     end
 
-  # rescue all preservation errors so that the user can continue to use the application normally
+    true
   rescue StandardError => e
-    Rollbar.error("Could not preserve #{id}", e)
+    # we trap errors in writing to the Redis queue in order to avoid crashing the save process for the user.
+    Rollbar.error("Error occurred in push_item_id_for_preservation, Could not preserve #{id}", e)
+    true
   end
   # rubocop:enable Style/GlobalVars
 
