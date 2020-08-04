@@ -21,10 +21,10 @@ class Aip::V1::CollectionsController < ApplicationController
     ]
 
     statement_definitions.each do |statement_definition|
-      rdf_graph_creator.insert(RDF::Statement(statement_definition))
+      rdf_graph_creator.graph.insert(RDF::Statement(statement_definition))
     end
 
-    render plain: rdf_graph_creator.to_n3, status: :ok
+    render plain: rdf_graph_creator.graph.to_n3, status: :ok
   end
 
   protected

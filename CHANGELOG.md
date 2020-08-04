@@ -43,6 +43,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Centralize Abstraction for Thumbnail Generation [#1343](https://github.com/ualbertalib/jupiter/issues/1343)
 - Beefed up AR migrations by stating that certain attributes cannot be null [PR#1704](https://github.com/ualbertalib/jupiter/pull/1704)
 - Finalize Item AIP data [#1557](https://github.com/ualbertalib/jupiter/issues/1557)
+- Finalize Thesis AIP data [#1557](https://github.com/ualbertalib/jupiter/issues/1557)
 - Change validations defined in models in favor of reusable validators
 
 ### Fixed

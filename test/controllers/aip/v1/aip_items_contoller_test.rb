@@ -64,7 +64,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should get item metadata graph with n3 serialization for base example including hasMember predicates' do
     radioactive_item = items(:admin)
-    radioactive_item.id = 'e2ec88e3-3266-4e95-8575-8b04fac2a679'.freeze
+    radioactive_item.id = 'e2ec88e3-3266-4e95-8575-8b04fac2a679'
     ingest_files_for_entity(radioactive_item)
     radioactive_item.save!
     radioactive_item.reload
@@ -85,10 +85,10 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should get item metadata graph with n3 serialization for embargo example' do
     radioactive_item = items(:admin)
-    radioactive_item.id = '3bb26070-0d25-4f0e-b44f-e9879da333ec'.freeze
+    radioactive_item.id = '3bb26070-0d25-4f0e-b44f-e9879da333ec'
     radioactive_item.visibility = Item::VISIBILITY_EMBARGO
-    radioactive_item.embargo_history = ['acl:embargoHistory1$ Item currently embargoed'.freeze]
-    radioactive_item.embargo_end_date = '2080-01-01T00:00:00.000Z'.freeze
+    radioactive_item.embargo_history = ['acl:embargoHistory1$ Item currently embargoed']
+    radioactive_item.embargo_end_date = '2080-01-01T00:00:00.000Z'
     radioactive_item.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].public
     ingest_files_for_entity(radioactive_item)
     radioactive_item.save!
@@ -109,16 +109,16 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should get item metadata graph with n3 serialization for previously embargoed example' do
     radioactive_item = items(:admin)
-    radioactive_item.id = '2107bfb6-2670-4ffc-94a1-aeb4f8c1fd81'.freeze
+    radioactive_item.id = '2107bfb6-2670-4ffc-94a1-aeb4f8c1fd81'
     radioactive_item.visibility = Item::VISIBILITY_EMBARGO
     radioactive_item.embargo_end_date = '2000-01-01T00:00:00.000Z'
     radioactive_item.embargo_history = [
       'acl:embargoHistory1$ An expired embargo was deactivated on 2000-01-01T00:00:00.000Z.  Its release date was ' \
       '2000-01-01T00:00:00.000Z.  Visibility during embargo was restricted and intended visibility after embargo was ' \
-      'open'.freeze,
+      'open',
       'acl:embargoHistory2$ An expired embargo was deactivated on 2000-01-01T00:00:00.000Z.  Its release date was ' \
       '2000-01-01T00:00:00.000Z.  Visibility during embargo was restricted and intended visibility after embargo was ' \
-      'open'.freeze
+      'open'
     ]
     radioactive_item.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].public
     ingest_files_for_entity(radioactive_item)
@@ -140,10 +140,10 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should get item metadata graph with n3 serialization for rights example' do
     radioactive_item = items(:admin)
-    radioactive_item.id = 'c795337f-075f-429a-bb18-16b56d9b750f'.freeze
+    radioactive_item.id = 'c795337f-075f-429a-bb18-16b56d9b750f'
     radioactive_item.license = ''
     radioactive_item.rights = '© The Author(s) 2015. Published by Oxford University Press on behalf of the Society ' \
-                              'for Molecular Biology and Evolution.'.freeze
+                              'for Molecular Biology and Evolution.'
     ingest_files_for_entity(radioactive_item)
     radioactive_item.save!
     radioactive_item.reload
@@ -163,7 +163,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should get item metadata graph with n3 serialization for published status example' do
     radioactive_item = items(:admin)
-    radioactive_item.id = '93126aae-4b9d-4db2-98f1-4e04b40778cf'.freeze
+    radioactive_item.id = '93126aae-4b9d-4db2-98f1-4e04b40778cf'
     radioactive_item.item_type = CONTROLLED_VOCABULARIES[:item_type].article
     radioactive_item.publication_status = [CONTROLLED_VOCABULARIES[:publication_status].published]
     ingest_files_for_entity(radioactive_item)
@@ -221,16 +221,34 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should get item file set metadata graph with n3 serialization' do
     sign_in_as_system_user
+
+    radioactive_item = items(:admin)
+    radioactive_item.id = 'e2ec88e3-3266-4e95-8575-8b04fac2a679'
+    ingest_files_for_entity(radioactive_item)
+    radioactive_item.save!
+    radioactive_item.reload
+
     get aip_v1_entity_file_set_url(
       entity: @entity,
-      id: @public_item,
-      file_set_id: @public_item.files.first.fileset_uuid
+      id: radioactive_item,
+      file_set_id: radioactive_item.files.first.fileset_uuid
     )
     assert_response :success
 
     graph = generate_graph_from_n3(response.body)
-    # TODO: Improve this test checking for a valid graph output
-    assert_equal true, graph.graph?
+
+    variables = {
+      entity_id: radioactive_item.id,
+      fileset_id: radioactive_item.files.first.fileset_uuid,
+      collection_id: radioactive_item.member_of_paths.first.split('/')[1],
+      checksum: radioactive_item.files.first.blob.checksum,
+      byte_size: radioactive_item.files.first.blob.byte_size,
+      filename: radioactive_item.files.first.blob.filename,
+      content_type: radioactive_item.files.first.blob.content_type
+    }
+    rendered_graph = load_n3_graph(file_fixture('n3/items/file_set.n3'), variables)
+
+    assert_equal true, rendered_graph.isomorphic_with?(graph)
   end
 
   test 'should get item fixity metadata graph with n3 serialization' do
@@ -250,7 +268,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
       checksum: @public_item.files.first.blob.checksum,
       byte_size: @public_item.files.first.blob.byte_size
     }
-    rendered_graph = load_n3_graph(file_fixture('n3/fixity.n3'), variables)
+    rendered_graph = load_n3_graph(file_fixture('n3/items/fixity.n3'), variables)
 
     assert_equal true, rendered_graph.isomorphic_with?(graph)
   end
@@ -265,8 +283,17 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
 
     graph = get_n3_graph(url)
     assert_response :success
-    # TODO: Improve this test checking for a valid graph output
-    assert_equal true, graph.graph?
+
+    variables = {
+      entity_id: @public_item.id,
+      fileset_id: @public_item.files.first.fileset_uuid,
+      checksum: @public_item.files.first.blob.checksum,
+      byte_size: @public_item.files.first.blob.byte_size,
+      filename: @public_item.files.first.blob.filename
+    }
+    rendered_graph = load_n3_graph(file_fixture('n3/items/original_file.n3'), variables)
+
+    assert_equal true, rendered_graph.isomorphic_with?(graph)
   end
 
 end

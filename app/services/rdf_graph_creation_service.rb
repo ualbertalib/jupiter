@@ -1,18 +1,12 @@
 class RdfGraphCreationService
 
+  attr_reader :graph
+
   def initialize(rdfable_entity, prefixes, subject)
     @rdfable_entity = rdfable_entity
     @annotations = get_prefixed_predicates(prefixes)
     @subject = subject
-    @graph = create_graph
-  end
-
-  def insert(*nodes)
-    @graph.insert(*nodes)
-  end
-
-  def to_n3
-    @graph.to_n3
+    create_graph
   end
 
   def copy_predicate_to_sorted_rdf_list(subject, rdf_original_predicate, rdf_list_predicate)
@@ -31,7 +25,7 @@ class RdfGraphCreationService
   private
 
   def create_graph
-    graph = RDF::Graph.new
+    @graph = RDF::Graph.new
     @annotations.each do |rdf_annotation|
       column = rdf_annotation.column
 
@@ -46,15 +40,13 @@ class RdfGraphCreationService
       values.each do |value|
         next if value.blank?
 
-        graph << RDF::Statement(
+        @graph << RDF::Statement(
           subject: @subject,
           predicate: RDF::Vocabulary::Term.new(rdf_annotation.predicate),
           object: value
         )
       end
     end
-
-    graph
   end
 
   def get_prefixed_predicates(prefixes)
