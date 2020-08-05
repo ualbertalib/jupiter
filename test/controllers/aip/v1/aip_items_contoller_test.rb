@@ -87,8 +87,8 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
     radioactive_item = items(:admin)
     radioactive_item.id = '3bb26070-0d25-4f0e-b44f-e9879da333ec'
     radioactive_item.visibility = Item::VISIBILITY_EMBARGO
-    radioactive_item.embargo_history = ['acl:embargoHistory1$ Item currently embargoed'.freeze]
-    radioactive_item.embargo_end_date = '2080-01-01T00:00:00.000Z'.freeze
+    radioactive_item.embargo_history = ['acl:embargoHistory1$ Item currently embargoed']
+    radioactive_item.embargo_end_date = '2080-01-01T00:00:00.000Z'
     radioactive_item.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].public
     ingest_files_for_entity(radioactive_item)
     radioactive_item.save!
@@ -115,10 +115,10 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
     radioactive_item.embargo_history = [
       'acl:embargoHistory1$ An expired embargo was deactivated on 2000-01-01T00:00:00.000Z.  Its release date was ' \
       '2000-01-01T00:00:00.000Z.  Visibility during embargo was restricted and intended visibility after embargo was ' \
-      'open'.freeze,
+      'open',
       'acl:embargoHistory2$ An expired embargo was deactivated on 2000-01-01T00:00:00.000Z.  Its release date was ' \
       '2000-01-01T00:00:00.000Z.  Visibility during embargo was restricted and intended visibility after embargo was ' \
-      'open'.freeze
+      'open'
     ]
     radioactive_item.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].public
     ingest_files_for_entity(radioactive_item)
@@ -143,7 +143,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
     radioactive_item.id = 'c795337f-075f-429a-bb18-16b56d9b750f'
     radioactive_item.license = ''
     radioactive_item.rights = '© The Author(s) 2015. Published by Oxford University Press on behalf of the Society ' \
-                              'for Molecular Biology and Evolution.'.freeze
+                              'for Molecular Biology and Evolution.'
     ingest_files_for_entity(radioactive_item)
     radioactive_item.save!
     radioactive_item.reload

@@ -144,7 +144,6 @@ class Aip::V1::EntitiesController < ApplicationController
     )
 
     statements = [
-      # file_set
       owner_email_statement,
       *entity_member_of_statements,
       RDF::Statement(subject: self_subject, predicate: RDF.type, object: RDF::Vocab::PCDM.Object),
@@ -178,7 +177,6 @@ class Aip::V1::EntitiesController < ApplicationController
         object: RDF::URI('rs:ln') + %Q( href="#{file_view_uri.path}" rel="content" hash="md5:#{@file.checksum}" ) +
                 %Q(length="#{@file.byte_size}" type="#{@file.content_type}")
       ),
-      # original_file
       RDF::Statement(subject: self_subject, predicate: RDF.type, object: RDF::Vocab::PCDM.File),
       RDF::Statement(
         subject: self_subject,
@@ -197,74 +195,6 @@ class Aip::V1::EntitiesController < ApplicationController
 
     render plain: rdf_graph_creator.graph.to_n3, status: :ok
   end
-
-  # def file_set_old
-  #   # Prefixes provided by the metadata team
-  #   # The fedora prefixes will be replaced at a later point from another
-  #   # ontology, for now these remain as placeholders.
-  #   prefixes = [
-  #     RDF::Vocab::DC,
-  #     ::TERMS[:ual].schema,
-  #     RDF::Vocab::PCDM,
-  #     RDF::Vocab::BIBO,
-  #     RDF::Vocab::EBUCore,
-  #     # The following prefixes need to be reevaluated and replaced
-  #     ::TERMS[:fedora].schema + ::TERMS[:fedora].has_model,
-  #     RDF::Vocab::Fcrepo4.created,
-  #     RDF::Vocab::Fcrepo4.createdBy,
-  #     RDF::Vocab::Fcrepo4.lastModified,
-  #     RDF::Vocab::Fcrepo4.lastModifiedBy,
-  #     RDF::Vocab::Fcrepo4.writable
-  #   ]
-
-  #   ActsAsRdfable.add_annotation_bindings!(@file.blob)
-
-  #   rdf_graph_creator = RdfGraphCreationService.new(@file.blob, prefixes, self_subject)
-
-  #   file_view_uri = RDF::URI(
-  #     file_view_item_url(
-  #       id: @entity.id,
-  #       file_set_id: @file.fileset_uuid,
-  #       file_name: @file.filename.to_s
-  #     )
-  #   )
-
-  #   statements = [
-  #     owner_email_statement,
-  #     *entity_member_of_statements,
-  #     RDF::Statement(subject: self_subject, predicate: RDF.type, object: RDF::Vocab::PCDM.Object),
-  #     RDF::Statement(subject: self_subject, predicate: RDF.type, object: RDF::Vocab::Fcrepo4.Resource),
-  #     RDF::Statement(subject: self_subject, predicate: RDF.type, object: RDF::Vocab::Fcrepo4.Container),
-  #     RDF::Statement(subject: self_subject, predicate: RDF::Vocab::DC.accessRights, object: @entity.visibility),
-  #     RDF::Statement(subject: self_subject, predicate: RDF::Vocab::EBUCore.dateIngested, object: @entity.date_ingested),
-  #     RDF::Statement(subject: self_subject, predicate: RDF::Vocab::Fcrepo4.hasParent, object: self_subject.parent),
-  #     RDF::Statement(
-  #       subject: self_subject,
-  #       predicate: RDF::Vocab::PCDM.hasFile,
-  #       object: self_subject / 'original_file'
-  #     ),
-  #     RDF::Statement(
-  #       subject: self_subject,
-  #       predicate: TERMS[:ual].record_created_in_jupiter,
-  #       object: @entity.record_created_at
-  #     ),
-  #     RDF::Statement(
-  #       subject: self_subject,
-  #       predicate: ::TERMS[:fedora].has_model,
-  #       object: FILESET_INSTITUTIONAL_REPOSITORY_NAME
-  #     ),
-  #     RDF::Statement(
-  #       subject: self_subject,
-  #       predicate: ::TERMS[:ual].sitemap_link,
-  #       object: RDF::URI('rs:ln') + " href=\"#{file_view_uri.path}\" rel=\"content\" hash=\"md5:#{@file.checksum}\" " \
-  #               "length=\"#{@file.byte_size}\" type=\"#{@file.content_type}\""
-  #     )
-  #   ]
-
-  #   rdf_graph_creator.insert(*statements)
-
-  #   render plain: rdf_graph_creator.to_n3, status: :ok
-  # end
 
   def fixity_file
     # Prefix provided by the metadata team
