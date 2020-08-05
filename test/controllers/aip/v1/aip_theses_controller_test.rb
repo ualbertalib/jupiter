@@ -180,13 +180,8 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
     graph = generate_graph_from_n3(response.body)
 
     variables = {
-      entity_id: radioactive_thesis.id,
       fileset_id: radioactive_thesis.files.first.fileset_uuid,
       collection_id: radioactive_thesis.member_of_paths.first.split('/')[1],
-      checksum: radioactive_thesis.files.first.blob.checksum,
-      byte_size: radioactive_thesis.files.first.blob.byte_size,
-      filename: radioactive_thesis.files.first.blob.filename,
-      content_type: radioactive_thesis.files.first.blob.content_type
     }
     rendered_graph = load_n3_graph(file_fixture('n3/theses/file_set.n3'), variables)
 
