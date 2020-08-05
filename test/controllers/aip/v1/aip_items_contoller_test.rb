@@ -64,7 +64,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should get item metadata graph with n3 serialization for base example including hasMember predicates' do
     radioactive_item = items(:admin)
-    radioactive_item.id = 'e2ec88e3-3266-4e95-8575-8b04fac2a679'.freeze
+    radioactive_item.id = 'e2ec88e3-3266-4e95-8575-8b04fac2a679'
     ingest_files_for_entity(radioactive_item)
     radioactive_item.save!
     radioactive_item.reload
@@ -85,7 +85,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should get item metadata graph with n3 serialization for embargo example' do
     radioactive_item = items(:admin)
-    radioactive_item.id = '3bb26070-0d25-4f0e-b44f-e9879da333ec'.freeze
+    radioactive_item.id = '3bb26070-0d25-4f0e-b44f-e9879da333ec'
     radioactive_item.visibility = Item::VISIBILITY_EMBARGO
     radioactive_item.embargo_history = ['acl:embargoHistory1$ Item currently embargoed'.freeze]
     radioactive_item.embargo_end_date = '2080-01-01T00:00:00.000Z'.freeze
@@ -109,7 +109,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should get item metadata graph with n3 serialization for previously embargoed example' do
     radioactive_item = items(:admin)
-    radioactive_item.id = '2107bfb6-2670-4ffc-94a1-aeb4f8c1fd81'.freeze
+    radioactive_item.id = '2107bfb6-2670-4ffc-94a1-aeb4f8c1fd81'
     radioactive_item.visibility = Item::VISIBILITY_EMBARGO
     radioactive_item.embargo_end_date = '2000-01-01T00:00:00.000Z'
     radioactive_item.embargo_history = [
@@ -140,7 +140,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should get item metadata graph with n3 serialization for rights example' do
     radioactive_item = items(:admin)
-    radioactive_item.id = 'c795337f-075f-429a-bb18-16b56d9b750f'.freeze
+    radioactive_item.id = 'c795337f-075f-429a-bb18-16b56d9b750f'
     radioactive_item.license = ''
     radioactive_item.rights = '© The Author(s) 2015. Published by Oxford University Press on behalf of the Society ' \
                               'for Molecular Biology and Evolution.'.freeze
@@ -163,7 +163,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should get item metadata graph with n3 serialization for published status example' do
     radioactive_item = items(:admin)
-    radioactive_item.id = '93126aae-4b9d-4db2-98f1-4e04b40778cf'.freeze
+    radioactive_item.id = '93126aae-4b9d-4db2-98f1-4e04b40778cf'
     radioactive_item.item_type = CONTROLLED_VOCABULARIES[:item_type].article
     radioactive_item.publication_status = [CONTROLLED_VOCABULARIES[:publication_status].published]
     ingest_files_for_entity(radioactive_item)
@@ -220,13 +220,10 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
   # This should be changed to verify the response content is correct.
 
   test 'should get item file set metadata graph with n3 serialization' do
-    # skip 'The value for predicate http://terms.library.ualberta.ca/recordCreatedInJupiter is not the same as was ' \
-    #      'entered in the database, insted it shows the value when it was created'
-
     sign_in_as_system_user
 
     radioactive_item = items(:admin)
-    radioactive_item.id = 'e2ec88e3-3266-4e95-8575-8b04fac2a679'.freeze
+    radioactive_item.id = 'e2ec88e3-3266-4e95-8575-8b04fac2a679'
     ingest_files_for_entity(radioactive_item)
     radioactive_item.save!
     radioactive_item.reload
