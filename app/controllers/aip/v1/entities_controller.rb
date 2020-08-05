@@ -7,8 +7,8 @@ class Aip::V1::EntitiesController < ApplicationController
   FILESET_INSTITUTIONAL_REPOSITORY_NAME = 'IRFileSet'.freeze
   ENTITY_INSTITUTIONAL_REPOSITORY_NAME = 'IREntity'.freeze
 
-  before_action :load_entity, only: [:show, :file_sets, :file_paths, :file_set, :file]
-  before_action :load_file, only: [:file_set, :fixity_file, :original_file, :file]
+  before_action :load_entity, only: [:show, :file_sets, :file_paths, :file_set]
+  before_action :load_file, only: [:file_set, :fixity_file]
   before_action :ensure_access
 
   def show
@@ -192,7 +192,8 @@ class Aip::V1::EntitiesController < ApplicationController
       )
     ]
 
-    rdf_graph_creator.graph.delete_insert(rdf_graph_creator.graph.query(predicate: RDF::Vocab::PREMIS.hasMessageDigest), statements)
+    rdf_graph_creator.graph.delete_insert(rdf_graph_creator.graph.query(predicate: RDF::Vocab::PREMIS.hasMessageDigest),
+                                          statements)
 
     render plain: rdf_graph_creator.graph.to_n3, status: :ok
   end
@@ -289,51 +290,6 @@ class Aip::V1::EntitiesController < ApplicationController
 
     render plain: rdf_graph_creator.graph.to_n3, status: :ok
   end
-
-  # def original_file
-  #   prefixes = [
-  #     RDF::Vocab::EBUCore,
-  #     RDF::Vocab::PREMIS,
-  #     RDF::Vocab::DC11,
-  #     RDF::Vocab::PCDM,
-  #     # The following prefixes need to be reevaluated and replaced
-  #     RDF::Vocab::Fcrepo4,
-  #     ::TERMS[:fits].schema,
-  #     ::TERMS[:odf].schema,
-  #     ::TERMS[:semantic].schema
-  #   ]
-
-  #   ActsAsRdfable.add_annotation_bindings!(@file.blob)
-
-  #   rdf_graph_creator = RdfGraphCreationService.new(@file.blob, prefixes, self_subject)
-  #   insert_nodes = [
-  #     RDF::Statement(subject: self_subject, predicate: RDF.type, object: RDF::Vocab::PCDM.File),
-  #     RDF::Statement(
-  #       subject: self_subject,
-  #       predicate: RDF::Vocab::Fcrepo4.hasFixityService,
-  #       object: self_subject.parent / 'fixity'
-  #     ),
-  #     # We need to change the value for the predicate RDF::Vocab::PREMIS.hasMessageDigest so that it includes the
-  #     # uniform resource name with the algorightm used to create the checksum. In this case, we know that Active storage
-  #     # uses MD5
-  #     RDF::Statement(
-  #       subject: self_subject,
-  #       predicate: RDF::Vocab::PREMIS.hasMessageDigest,
-  #       object: RDF::URI.new('urn:md5') / @file.blob.checksum
-  #     ),
-  #     RDF::Statement(
-  #       subject: self_subject,
-  #       predicate: RDF::Vocab::Fcrepo4.hasParent,
-  #       object: self_subject.parent
-  #     )
-  #   ]
-
-  #   rdf_graph_creator.delete_insert(
-  #     rdf_graph_creator.query(predicate: RDF::Vocab::PREMIS.hasMessageDigest), insert_nodes
-  #   )
-
-  #   render plain: rdf_graph_creator.to_n3, status: :ok
-  # end
 
   def file_paths
     result = { files: [] }
