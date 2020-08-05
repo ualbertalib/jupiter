@@ -181,7 +181,7 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
 
     variables = {
       fileset_id: radioactive_thesis.files.first.fileset_uuid,
-      collection_id: radioactive_thesis.member_of_paths.first.split('/')[1],
+      collection_id: radioactive_thesis.member_of_paths.first.split('/')[1]
     }
     rendered_graph = load_n3_graph(file_fixture('n3/theses/file_set.n3'), variables)
 
