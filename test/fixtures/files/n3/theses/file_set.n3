@@ -3,20 +3,24 @@
 @prefix ebucore: <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#> .
 @prefix fcrepo4: <http://fedora.info/definitions/v4/repository#> .
 @prefix pcdm: <http://pcdm.org/models#> .
+@prefix premis: <http://www.loc.gov/premis/rdf/v1#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<http://localhost/aip/v1/theses/<%= entity_id %>/filesets/<%= fileset_id %>> a fcrepo4:Container,
+<http://localhost/aip/v1/theses/9d7c12f0-b396-4511-ba0e-c012ec028e8a/filesets/<%= fileset_id %>> a pcdm:Object,
+    pcdm:File,
     fcrepo4:Resource,
-    pcdm:Object;
-  fcrepo4:hasParent <http://localhost/aip/v1/theses/<%= entity_id %>/filesets/>;
-  pcdm:hasFile <http://localhost/aip/v1/theses/<%= entity_id %>/filesets/<%= fileset_id %>/original_file>;
-  pcdm:memberOf <http://localhost/aip/v1/theses/<%= entity_id %>/collections/<%= collection_id %>>;
-  dc:accessRights "http://terms.library.ualberta.ca/public";
-  bibo:owner "administrator@example.com";
+    fcrepo4:Container;
+  fcrepo4:hasFixityService <http://localhost/aip/v1/theses/9d7c12f0-b396-4511-ba0e-c012ec028e8a/filesets/fixity>;
+  fcrepo4:hasParent <http://localhost/aip/v1/theses/9d7c12f0-b396-4511-ba0e-c012ec028e8a/filesets/>;
+  pcdm:memberOf <http://localhost/aip/v1/theses/9d7c12f0-b396-4511-ba0e-c012ec028e8a/collections/<%= collection_id %>>;
+  dc:accessRights "http://terms.library.ualberta.ca/embargo";
+  bibo:owner "administrator@ualberta.ca";
   <http://terms.library.ualberta.ca/recordCreatedInJupiter> "2018-03-13T16:52:49.818Z"^^xsd:dateTime;
-  <http://terms.library.ualberta.ca/sitemapLink> <rs:ln href="/items/<%= entity_id %>/view/<%= fileset_id %>/<%= filename %>" rel="content" hash="md5:<%= checksum %>" length="<%= byte_size %>" type="<%= content_type %>">;
+  <http://terms.library.ualberta.ca/sitemapLink> <rs:ln href="/items/9d7c12f0-b396-4511-ba0e-c012ec028e8a/view/<%= fileset_id %>/image-sample.jpeg" rel="content" hash="md5:GxpIjJsC4KnRoBKNjWnkJA==" length="12086" type="image/jpeg">;
   ebucore:dateIngested "2018-03-13T16:52:49.818Z"^^xsd:dateTime;
   ebucore:hasMimeType "image/jpeg";
   ebucore:resourceFilename "image-sample.jpeg";
+  premis:hasMessageDigest <urn:md5:GxpIjJsC4KnRoBKNjWnkJA==>;
+  premis:hasSize 12086;
   <info:fedora/fedora-system:def/model#hasModel> "IRFileSet" .
