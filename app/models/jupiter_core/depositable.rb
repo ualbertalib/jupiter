@@ -125,6 +125,8 @@ class JupiterCore::Depositable < ApplicationRecord
   end
 
   def set_record_created_at
+    return if record_created_at.present?
+
     self.record_created_at = Time.current.utc.iso8601(3)
   end
 
