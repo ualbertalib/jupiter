@@ -42,7 +42,7 @@ class Aip::V1::EntitiesController < ApplicationController
     # but are not directly referenced by a predicate in the system because they
     # require some level of processing to obtain.
 
-    rdf_graph_creator.insert(
+    rdf_graph_creator.graph.insert(
       owner_email_statement,
       entity_model_statement,
       *entity_type_statements,
@@ -83,7 +83,7 @@ class Aip::V1::EntitiesController < ApplicationController
 
     rdf_graph_creator.replace_predicate_with_sorted_rdf_list(self_subject, ::TERMS[:acl].embargo_history)
 
-    render plain: rdf_graph_creator.to_n3, status: :ok
+    render plain: rdf_graph_creator.graph.to_n3, status: :ok
   end
 
   def file_sets
@@ -175,8 +175,8 @@ class Aip::V1::EntitiesController < ApplicationController
       RDF::Statement(
         subject: self_subject,
         predicate: ::TERMS[:ual].sitemap_link,
-        object: RDF::URI('rs:ln') + " href=\"#{file_view_uri.path}\" rel=\"content\" hash=\"md5:#{@file.checksum}\" " \
-                "length=\"#{@file.byte_size}\" type=\"#{@file.content_type}\""
+        object: RDF::URI('rs:ln') + %Q( href="#{file_view_uri.path}" rel="content" hash="md5:#{@file.checksum}" ) +
+                %Q(length="#{@file.byte_size}" type="#{@file.content_type}")
       ),
       # original_file
       RDF::Statement(subject: self_subject, predicate: RDF.type, object: RDF::Vocab::PCDM.File),
@@ -192,9 +192,9 @@ class Aip::V1::EntitiesController < ApplicationController
       )
     ]
 
-    rdf_graph_creator.delete_insert(rdf_graph_creator.query(predicate: RDF::Vocab::PREMIS.hasMessageDigest), statements)
+    rdf_graph_creator.graph.delete_insert(rdf_graph_creator.graph.query(predicate: RDF::Vocab::PREMIS.hasMessageDigest), statements)
 
-    render plain: rdf_graph_creator.to_n3, status: :ok
+    render plain: rdf_graph_creator.graph.to_n3, status: :ok
   end
 
   # def file_set_old
@@ -285,9 +285,9 @@ class Aip::V1::EntitiesController < ApplicationController
       RDF::Statement(subject: self_subject, predicate: RDF.type, object: RDF::Vocab::PREMIS.Fixity)
     ]
 
-    rdf_graph_creator.insert(*statements)
+    rdf_graph_creator.graph.insert(*statements)
 
-    render plain: rdf_graph_creator.to_n3, status: :ok
+    render plain: rdf_graph_creator.graph.to_n3, status: :ok
   end
 
   # def original_file

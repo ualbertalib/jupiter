@@ -9,7 +9,7 @@ class Collection < JupiterCore::Depositable
 
   validates :title, presence: true
   validates :community_id, presence: true
-  validate :community_validations
+  validates :community_id, community_existence: true
 
   before_destroy :can_be_destroyed?
 
@@ -48,13 +48,6 @@ class Collection < JupiterCore::Depositable
     errors.add(:member_objects, :must_be_empty,
                list_of_objects: member_objects.map(&:title).join(', '))
     throw(:abort)
-  end
-
-  def community_validations
-    return unless community_id
-
-    community = Community.find_by(id: community_id)
-    errors.add(:community_id, :community_not_found, id: community_id) if community.blank?
   end
 
 end

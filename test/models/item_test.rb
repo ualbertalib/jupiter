@@ -126,7 +126,7 @@ class ItemTest < ActiveSupport::TestCase
 
     assert_not item.valid?
     assert item.errors[:visibility_after_embargo].present?
-    assert_includes item.errors[:visibility_after_embargo], 'is not recognized'
+    assert_includes item.errors[:visibility_after_embargo], 'whatever is not a known visibility'
     assert_not item.errors[:visibility].present?
   end
 

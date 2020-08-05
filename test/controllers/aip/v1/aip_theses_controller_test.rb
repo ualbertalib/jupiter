@@ -59,7 +59,7 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
 
   test 'should get thesis metadata graph with n3 serialization for base example' do
     radioactive_thesis = thesis(:admin)
-    radioactive_thesis.id = '8e18f37c-dc60-41bb-9459-990586176730'.freeze
+    radioactive_thesis.id = '8e18f37c-dc60-41bb-9459-990586176730'
     ingest_files_for_entity(radioactive_thesis)
     radioactive_thesis.save!
     radioactive_thesis.reload
@@ -79,7 +79,7 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
 
   test 'should get thesis metadata graph with n3 serialization for embargo example' do
     radioactive_thesis = thesis(:admin)
-    radioactive_thesis.id = 'b3cc2224-9303-47be-8b54-e6556a486be8'.freeze
+    radioactive_thesis.id = 'b3cc2224-9303-47be-8b54-e6556a486be8'
     radioactive_thesis.visibility = Thesis::VISIBILITY_EMBARGO
     radioactive_thesis.embargo_history = ['acl:embargoHistory1$ Thesis currently embargoed']
     radioactive_thesis.embargo_end_date = '2080-01-01T00:00:00.000Z'
@@ -165,7 +165,7 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
     sign_in_as_system_user
 
     radioactive_thesis = thesis(:admin)
-    radioactive_thesis.id = '8e18f37c-dc60-41bb-9459-990586176730'.freeze
+    radioactive_thesis.id = '8e18f37c-dc60-41bb-9459-990586176730'
     ingest_files_for_entity(radioactive_thesis)
     radioactive_thesis.save!
     radioactive_thesis.reload

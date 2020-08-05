@@ -3,6 +3,7 @@
 *.md
 
 tmp
+tmp/cache
 !tmp/pids/.keep
 log
 coverage/

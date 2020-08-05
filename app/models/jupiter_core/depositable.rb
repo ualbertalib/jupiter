@@ -8,7 +8,8 @@ class JupiterCore::Depositable < ApplicationRecord
                                 CONTROLLED_VOCABULARIES[:visibility].draft,
                                 CONTROLLED_VOCABULARIES[:visibility].public].freeze
 
-  validate :visibility_must_be_known
+  validates :visibility, known_visibility: true
+
   validates :owner_id, presence: true
   validates :record_created_at, presence: true
   validates :date_ingested, presence: true
@@ -133,31 +134,6 @@ class JupiterCore::Depositable < ApplicationRecord
     self.date_ingested = record_created_at
   end
 
-  def visibility_must_be_known
-    return true if visibility.present? && self.class.valid_visibilities.include?(visibility)
-
-    errors.add(:visibility, I18n.t('locked_ldp_object.errors.invalid_visibility', visibility: visibility))
-  end
-
-  def communities_and_collections_must_exist
-    return if member_of_paths.blank?
-
-    member_of_paths.each do |path|
-      community_id, collection_id = path.split('/')
-      community = Community.find_by(id: community_id)
-      errors.add(:member_of_paths, :community_not_found, id: community_id) if community.blank?
-      collection = Collection.find_by(id: collection_id)
-      errors.add(:member_of_paths, :collection_not_found, id: collection_id) if collection.blank?
-    end
-  end
-
-  def visibility_after_embargo_must_be_valid
-    return if visibility_after_embargo.nil?
-    return if VISIBILITIES_AFTER_EMBARGO.include?(visibility_after_embargo)
-
-    errors.add(:visibility_after_embargo, :not_recognized)
-  end
-
   # utility methods for checking for certain visibility transitions
   def transitioned_to_private?
     return true if changes['visibility'].present? &&
@@ -178,21 +154,8 @@ class JupiterCore::Depositable < ApplicationRecord
     self.embargo_history << embargo_history_item
   end
 
-  def push_item_id_for_preservation
-    if preserve == false
-      Rails.logger.warn("Could not preserve #{id}")
-      Rollbar.error("Could not preserve #{id}")
-    end
-
-    true
-  rescue StandardError => e
-    # we trap errors in writing to the Redis queue in order to avoid crashing the save process for the user.
-    Rollbar.error("Error occured in push_item_id_for_preservation, Could not preserve #{id}", e)
-    true
-  end
-
   # rubocop:disable Style/GlobalVars
-  def preserve
+  def push_item_id_for_preservation
     queue_name = Rails.application.secrets.preservation_queue_name
 
     $queue ||= ConnectionPool.new(size: 1, timeout: 5) { Redis.current }
@@ -201,9 +164,11 @@ class JupiterCore::Depositable < ApplicationRecord
       connection.zadd queue_name, Time.now.to_f, id
     end
 
-  # rescue all preservation errors so that the user can continue to use the application normally
+    true
   rescue StandardError => e
-    Rollbar.error("Could not preserve #{id}", e)
+    # we trap errors in writing to the Redis queue in order to avoid crashing the save process for the user.
+    Rollbar.error("Error occurred in push_item_id_for_preservation, Could not preserve #{id}", e)
+    true
   end
   # rubocop:enable Style/GlobalVars
 
