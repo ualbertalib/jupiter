@@ -29,11 +29,7 @@ class Aip::V1::EntitiesController < ApplicationController
       ::TERMS[:acl].schema,
       RDF::Vocab::EBUCore,
       # The following prefixes need to be reevaluated and replaced
-      ::TERMS[:fedora].schema,
-      RDF::Vocab::Fcrepo4.created,
-      RDF::Vocab::Fcrepo4.createdBy,
-      RDF::Vocab::Fcrepo4.lastModified,
-      RDF::Vocab::Fcrepo4.lastModifiedBy
+      RDF::Vocab::Fcrepo4
     ]
 
     rdf_graph_creator = RdfGraphCreationService.new(@entity, prefixes, self_subject)
@@ -103,34 +99,20 @@ class Aip::V1::EntitiesController < ApplicationController
   end
 
   def file_set
-    file_set_prefixes = [
+    prefixes = [
       RDF::Vocab::DC,
       ::TERMS[:ual].schema,
       RDF::Vocab::PCDM,
       RDF::Vocab::BIBO,
       RDF::Vocab::EBUCore,
-      # The following prefixes need to be reevaluated and replaced
-      ::TERMS[:fedora].schema + ::TERMS[:fedora].has_model,
-      RDF::Vocab::Fcrepo4.created,
-      RDF::Vocab::Fcrepo4.createdBy,
-      RDF::Vocab::Fcrepo4.lastModified,
-      RDF::Vocab::Fcrepo4.lastModifiedBy,
-      RDF::Vocab::Fcrepo4.writable
-    ]
-
-    original_file_prefixes = [
-      RDF::Vocab::EBUCore,
       RDF::Vocab::PREMIS,
       RDF::Vocab::DC11,
-      RDF::Vocab::PCDM,
-      # The following prefixes need to be reevaluated and replaced
-      RDF::Vocab::Fcrepo4,
       ::TERMS[:fits].schema,
       ::TERMS[:odf].schema,
-      ::TERMS[:semantic].schema
+      ::TERMS[:semantic].schema,
+      # The following prefixes need to be reevaluated and replaced
+      RDF::Vocab::Fcrepo4
     ]
-
-    prefixes = file_set_prefixes + original_file_prefixes
 
     ActsAsRdfable.add_annotation_bindings!(@file.blob)
     rdf_graph_creator = RdfGraphCreationService.new(@file.blob, prefixes, self_subject)
@@ -152,7 +134,6 @@ class Aip::V1::EntitiesController < ApplicationController
       RDF::Statement(subject: self_subject, predicate: RDF::Vocab::DC.accessRights, object: @entity.visibility),
       RDF::Statement(subject: self_subject, predicate: RDF::Vocab::EBUCore.dateIngested, object: @entity.date_ingested),
       RDF::Statement(subject: self_subject, predicate: RDF::Vocab::Fcrepo4.hasParent, object: self_subject.parent),
-      # RDF::Statement(subject: self_subject, predicate: RDF::Vocab::PREMIS.hasMessageDigestAlgorithm, object: 'md5'),
       # We need to change the value for the predicate RDF::Vocab::PREMIS.hasMessageDigest so that it includes the
       # uniform resource name with the algorightm used to create the checksum. In this case, we know that Active storage
       # uses MD5
