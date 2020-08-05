@@ -41,5 +41,6 @@ module Jupiter
 
     config.redis_key_prefix = "jupiter.#{Rails.env}."
 
+    config.action_dispatch.tld_length = Integer(Rails.application.secrets.tld_length)
   end
 end

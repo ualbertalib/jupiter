@@ -60,6 +60,17 @@ behaviour, please set the enviroment variable `SKIP_DOWNLOAD_COMMUNITY_LOGOS`.
 
 `$ bundle exec rake rerdoc`
 
+# Subdomains
+
+Jupiter runs under subdomains. So you will need to configure your local environment accordingly. As an example you can set up the following entries in your `/etc/hosts` file:
+
+```
+127.0.0.1       era.demo.com
+```
+Once this is done, you can navigate to `era.demo.com:3000` to access your development environment.
+
+Some alternatives is you may also use the `localhost` top level domain (e.g: you can just navigate to `era.ualberta.localhost:3000` to access your development environment without configuring `/etc/hosts` ). Another alternative is you can use services like `lvh.me` (e.g: navigate to `era.lvh.me:3000` to access your development environment).
+
 # UAT Environment
 
 The UAT server is accessible on all library staff workstation, and through VPN on any external IP address.  More details regarding access and deployment can be found:
@@ -128,7 +139,7 @@ Now everything should be up and running!
 ## Step 4: Open and view Jupiter!
 Now everything is ready, you can go and view Jupiter! Just open your favorite browser and go to the following url:
 
-  - Development environment: [localhost:3000](http://localhost:3000)
+  - Development environment: [era.ualberta.localhost:3000](http://era.ualberta.localhost:3000)
 
 
 ## Docker compose demo edition
@@ -159,7 +170,7 @@ Now everything should be up and running!
 ## Step 3: Open and view Jupiter!
 Now everything is ready, you can go and view Jupiter! Just open your favorite browser and go to the following url:
 
-[localhost:3000](http://localhost:3000)
+[era.ualberta.localhost:3000](http://era.ualberta.localhost:3000)
 
 (Note: ip address may be different if you are using `docker-machine`)
 
@@ -211,7 +222,7 @@ modifying the config files, set the environment variable `RUN_FITS_CHARACTERIZAT
 
 * Update `secrets.yml` (and maybe `omniauth.rb`) for the SAML implementation (you may need to generate a certificate/key for certain environments)
 * Give IST's Identity Provider (uat-login or login) the metadata for our service provider
-  * Quick way to view this metadata is to the start the Rails server and navigate to `http://localhost:3000/auth/saml/metadata` (feel free to edit this metadata accordingly for example adding Organization and ContactPerson metadata)
+  * Quick way to view this metadata is to the start the Rails server and navigate to `http://era.ualberta.localhost:3000/auth/saml/metadata` (feel free to edit this metadata accordingly for example adding Organization and ContactPerson metadata)
 * Once this is complete, login via SAML should be working successfully. Try it out!
 
 (TODO: Provide an alternatives to IST IdP for non production environments?)
