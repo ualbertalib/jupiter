@@ -186,7 +186,8 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
       checksum: radioactive_thesis.files.first.blob.checksum,
       byte_size: radioactive_thesis.files.first.blob.byte_size,
       filename: radioactive_thesis.files.first.blob.filename,
-      content_type: radioactive_thesis.files.first.blob.content_type
+      content_type: radioactive_thesis.files.first.blob.content_type,
+      url: Jupiter::TEST_URL
     }
     rendered_graph = load_n3_graph(file_fixture('n3/theses/file_set.n3'), variables)
 
@@ -209,7 +210,8 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
       entity_id: @public_thesis.id,
       fileset_id: @public_thesis.files.first.fileset_uuid,
       checksum: @public_thesis.files.first.blob.checksum,
-      byte_size: @public_thesis.files.first.blob.byte_size
+      byte_size: @public_thesis.files.first.blob.byte_size,
+      url: Jupiter::TEST_URL
     }
     rendered_graph = load_n3_graph(file_fixture('n3/theses/fixity.n3'), variables)
 
@@ -233,7 +235,8 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
       fileset_id: @public_thesis.files.first.fileset_uuid,
       checksum: @public_thesis.files.first.blob.checksum,
       byte_size: @public_thesis.files.first.blob.byte_size,
-      filename: @public_thesis.files.first.blob.filename
+      filename: @public_thesis.files.first.blob.filename,
+      url: Jupiter::TEST_URL
     }
     rendered_graph = load_n3_graph(file_fixture('n3/theses/original_file.n3'), variables)
 

@@ -6,13 +6,13 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<http://localhost/aip/v1/theses/b3cc2224-9303-47be-8b54-e6556a486be8> a pcdm:Object,
+<<%= url %>/aip/v1/theses/b3cc2224-9303-47be-8b54-e6556a486be8> a pcdm:Object,
     bibo:Thesis;
   dc:title "dcterms:title1$ Some Thesis Title";
   <http://ontoware.org/swrc/ontology#institution> "http://id.loc.gov/authorities/names/n79058482";
-  pcdm:hasMember <http://localhost/aip/v1/theses/b3cc2224-9303-47be-8b54-e6556a486be8/filesets/<%= fileset_0_uuid %>>,
-    <http://localhost/aip/v1/theses/b3cc2224-9303-47be-8b54-e6556a486be8/filesets/<%= fileset_1_uuid %>>;
-  pcdm:memberOf <http://localhost/aip/v1/collections/472b4390-6732-5def-b19c-363886143aab>;
+  pcdm:hasMember <<%= url %>/aip/v1/theses/b3cc2224-9303-47be-8b54-e6556a486be8/filesets/<%= fileset_0_uuid %>>,
+    <<%= url %>/aip/v1/theses/b3cc2224-9303-47be-8b54-e6556a486be8/filesets/<%= fileset_1_uuid %>>;
+  pcdm:memberOf <<%= url %>/aip/v1/collections/472b4390-6732-5def-b19c-363886143aab>;
   <http://prismstandard.org/namespaces/basic/3.0/doi> "doi:10.7939/R3V980074";
   <http://projecthydra.org/ns/auth/acl#embargoHistory> ("acl:embargoHistory1$ Thesis currently embargoed");
   <http://projecthydra.org/ns/auth/acl#visibilityAfterEmbargo> "http://terms.library.ualberta.ca/public";

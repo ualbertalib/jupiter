@@ -244,7 +244,8 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
       checksum: radioactive_item.files.first.blob.checksum,
       byte_size: radioactive_item.files.first.blob.byte_size,
       filename: radioactive_item.files.first.blob.filename,
-      content_type: radioactive_item.files.first.blob.content_type
+      content_type: radioactive_item.files.first.blob.content_type,
+      url: Jupiter::TEST_URL
     }
     rendered_graph = load_n3_graph(file_fixture('n3/items/file_set.n3'), variables)
 
@@ -290,7 +291,8 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
       fileset_id: @public_item.files.first.fileset_uuid,
       checksum: @public_item.files.first.blob.checksum,
       byte_size: @public_item.files.first.blob.byte_size,
-      filename: @public_item.files.first.blob.filename
+      filename: @public_item.files.first.blob.filename,
+      url: Jupiter::TEST_URL
     }
     rendered_graph = load_n3_graph(file_fixture('n3/items/original_file.n3'), variables)
 
