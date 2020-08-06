@@ -13,6 +13,8 @@ set -o nounset
 readonly branch_name="integration_postmigration"
 readonly install_directory="/home/deploy/jupiter"
 
+curl -o "watchtower" "https://raw.githubusercontent.com/ualbertalib/jupiter/${branch_name}/bin/watchtower"
+
 mkdir -p "${install_directory}"
 curl -o "${install_directory}/deploy" "https://raw.githubusercontent.com/ualbertalib/jupiter/${branch_name}/bin/deploy"
 curl -o "${install_directory}/docker-compose.yml" "https://raw.githubusercontent.com/ualbertalib/jupiter/${branch_name}/docker-compose.production.yml"

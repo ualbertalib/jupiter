@@ -8,6 +8,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ### Added
 - tmp/cache to docker ignore [#1680](https://github.com/ualbertalib/jupiter/issues/1680)
+- script to launch watchtower [#1722](https://github.com/ualbertalib/jupiter/issues/1722)
 
 ## [2.0.1.pre1] - 2020-07-22
 

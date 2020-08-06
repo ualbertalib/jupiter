@@ -1,0 +1,12 @@
+## this file comes from the Jupiter project  "https://raw.githubusercontent.com/ualbertalib/jupiter/${branch_name}/bin/watchtower"
+## it will start the watchtower container which polls docker hub for the latest image of the running docker containers
+## to review watchtower activity use `docker logs watchtower`
+
+docker stop watchtower && docker rm watchtower
+
+docker run -d \
+    --name watchtower \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    containrrr/watchtower \
+    --interval 30 \
+    --cleanup
