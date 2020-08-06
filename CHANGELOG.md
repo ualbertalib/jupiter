@@ -9,6 +9,9 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 ### Added
 - tmp/cache to docker ignore [#1680](https://github.com/ualbertalib/jupiter/issues/1680)
 
+### Changed
+- Merge file_set and original_file AIP API entry points [#1557](https://github.com/ualbertalib/jupiter/issues/1557)
+
 ## [2.0.1.pre1] - 2020-07-22
 
 ### Added
@@ -44,7 +47,6 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Beefed up AR migrations by stating that certain attributes cannot be null [PR#1704](https://github.com/ualbertalib/jupiter/pull/1704)
 - Finalize Item AIP data [#1557](https://github.com/ualbertalib/jupiter/issues/1557)
 - Finalize Thesis AIP data [#1557](https://github.com/ualbertalib/jupiter/issues/1557)
-- Merge file_set and original_file AIP API entry points [#1557](https://github.com/ualbertalib/jupiter/issues/1557)
 - Change validations defined in models in favor of reusable validators
 
 ### Fixed
