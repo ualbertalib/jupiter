@@ -140,6 +140,8 @@ class Aip::V1::EntitiesController < ApplicationController
       RDF::Statement(
         subject: self_subject,
         predicate: RDF::Vocab::PREMIS.hasMessageDigest,
+        # RDF::URI Overrides the #/ operator to be used as a smart separator when building URIs.
+        # More information here: https://www.rubydoc.info/github/ruby-rdf/rdf/RDF/URI#%2F-instance_method
         object: RDF::URI.new('urn:md5') / @file.blob.checksum
       ),
       RDF::Statement(
@@ -162,6 +164,8 @@ class Aip::V1::EntitiesController < ApplicationController
       RDF::Statement(
         subject: self_subject,
         predicate: RDF::Vocab::Fcrepo4.hasFixityService,
+        # RDF::URI Overrides the #/ operator to be used as a smart separator when building URIs.
+        # More information here: https://www.rubydoc.info/github/ruby-rdf/rdf/RDF/URI#%2F-instance_method
         object: self_subject.parent / 'fixity'
       ),
       RDF::Statement(
@@ -270,7 +274,9 @@ class Aip::V1::EntitiesController < ApplicationController
       file_statements << RDF::Statement(
         subject: self_subject,
         predicate: RDF::Vocab::PCDM.hasMember,
-        object: RDF::URI.new("#{request.original_url}/filesets/#{file.fileset_uuid}")
+        # RDF::URI Overrides the #/ operator to be used as a smart separator when building URIs.
+        # More information here: https://www.rubydoc.info/github/ruby-rdf/rdf/RDF/URI#%2F-instance_method
+        object: RDF::URI.new(request.original_url) / 'filesets' / file.fileset_uuid
       )
     end
 
