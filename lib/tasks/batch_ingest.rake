@@ -201,7 +201,7 @@ def thesis_ingest(thesis_data, index, csv_directory, checksums)
       graduation_term_string = graduation_term_array[0]
       graduation_term = '11' if graduation_term_string == 'Fall'
       graduation_term = '06' if graduation_term_string == 'Spring'
-      unlocked_obj.graduation_date = graduation_year + '-' + graduation_term
+      unlocked_obj.graduation_date = "#{graduation_year}-#{graduation_term}"
     end
     unlocked_obj.abstract = thesis_data[:abstract]
 
@@ -284,7 +284,7 @@ end
 def generate_checksums(csv_directory)
   require 'digest/md5'
   checksums = {}
-  Dir.glob(csv_directory + '/*.pdf').each do |f|
+  Dir.glob("#{csv_directory}/*.pdf").each do |f|
     checksum = Digest::MD5.hexdigest(File.read(f))
     checksums[checksum] = File.basename(f)
   end

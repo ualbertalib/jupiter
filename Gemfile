@@ -79,13 +79,13 @@ group :development, :test do
   gem 'nokogiri'
   gem 'selenium-webdriver', require: false
 
-  gem 'erb_lint', '>= 0.0.32', require: false
+  gem 'erb_lint', '>= 0.0.35', require: false
 
   gem 'pry'
   gem 'pry-byebug'
   gem 'pry-rails'
 
-  gem 'rubocop', '~> 0.86.0', require: false
+  gem 'rubocop', '~> 0.89.0', require: false
   gem 'rubocop-performance'
   gem 'rubocop-rails'
 end

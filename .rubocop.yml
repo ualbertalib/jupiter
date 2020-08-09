@@ -93,8 +93,17 @@ Rails:
 Rails/FindEach:
   Enabled: false
 
+Rails/SkipsModelValidations:
+  Exclude:
+    - app/controllers/aip/v1/collections_controller.rb
+    - app/controllers/aip/v1/entities_controller.rb
+    - app/services/rdf_graph_creation_service.rb
+
 # There comes a point where I question Rubocop's maintainer's sanity
 Rails/UnknownEnv:
+  Enabled: false
+
+Style/ArrayCoercion:
   Enabled: false
 
 Style/AsciiComments:
