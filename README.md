@@ -92,7 +92,7 @@ This project comes with a docker setup to easily setup your own local developmen
 - If you are on Mac, check out [Docker for Mac](https://docs.docker.com/docker-for-mac/)
 - If you are on Windows, check out [Docker for Windows](https://docs.docker.com/docker-for-windows/)
 
-These will install `docker`, `docker-compose`, and `docker-machine` on your machine.
+These will install `docker`, `docker-compose`, and `Docker Desktop` on your machine.
 
 #### Linux
 
@@ -171,8 +171,6 @@ Now everything should be up and running!
 Now everything is ready, you can go and view Jupiter! Just open your favorite browser and go to the following url:
 
 [era.ualberta.localhost:3000](http://era.ualberta.localhost:3000)
-
-(Note: ip address may be different if you are using `docker-machine`)
 
 ## For production deployment (on UAT environment)
 To setup the environment variables needed for deployment, modify the sample .env_deployment file with variable values needed for the deployment:
