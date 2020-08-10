@@ -1,5 +1,7 @@
 class ArCollection < ApplicationRecord
 
+  has_solr_exporter Exporters::Solr::ArCollectionExporter
+
   acts_as_rdfable do |config|
     config.community_id has_predicate: ::TERMS[:ual].path
     config.description has_predicate: ::RDF::Vocab::DC.description

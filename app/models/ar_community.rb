@@ -1,5 +1,7 @@
 class ArCommunity < ApplicationRecord
 
+  has_solr_exporter Exporters::Solr::ArCommunityExporter
+
   acts_as_rdfable do |config|
     config.description has_predicate: ::RDF::Vocab::DC.description
     config.creators has_predicate: ::RDF::Vocab::DC.creator
