@@ -340,7 +340,7 @@ GEM
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     rchardet (1.8.0)
-    rdf (3.1.4)
+    rdf (3.1.5)
       hamster (~> 3.0)
       link_header (~> 0.0, >= 0.0.8)
     rdf-aggregate-repo (3.1.0)
@@ -536,7 +536,7 @@ DEPENDENCIES
   pundit (= 1.1.0)
   rails (~> 6.0.3)
   ransack
-  rdf (~> 3.1.4)
+  rdf (~> 3.1.5)
   rdf-isomorphic (~> 3.1.0)
   rdf-n3
   rdf-vocab (~> 3.1.7)
