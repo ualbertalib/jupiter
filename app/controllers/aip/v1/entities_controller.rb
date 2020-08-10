@@ -12,11 +12,7 @@ class Aip::V1::EntitiesController < ApplicationController
   before_action :ensure_access
 
   def show
-    # These are the prefixes defined as required by the metadata team. The
-    # hardcoded strings need to be replaced. The namespaces could be added to
-    # the rdf-vocab gem.
-    # The fedora prefixes will be replaced at a later point from another
-    # ontology, for now these remain as placeholders.
+    # These are the prefixes defined as required by the metadata team.
 
     prefixes = [
       RDF::Vocab::DC,
@@ -34,9 +30,8 @@ class Aip::V1::EntitiesController < ApplicationController
 
     rdf_graph_creator = RdfGraphCreationService.new(@entity, prefixes, self_subject)
 
-    # The following nodes are statements/lists that are required for entitites
-    # but are not directly referenced by a predicate in the system because they
-    # require some level of processing to obtain.
+    # The following nodes are statements/lists that are required for entitites but are not directly referenced by a
+    # predicate in the system because they require some level of processing to obtain.
 
     rdf_graph_creator.graph.insert(
       owner_email_statement,
@@ -86,10 +81,9 @@ class Aip::V1::EntitiesController < ApplicationController
     builder = Nokogiri::XML::Builder.new do |xml|
       xml.file_order do
         @entity.files.each do |file|
-          # The underscore for xml.uuid_ is intentional. Nokogiri builder makes
-          # use of method_missing to create its xml model. There could be
-          # problems with preexisting methods so we play it safe and add an
-          # underscore to avoid unintended behaviuor. You can find more info here:
+          # The underscore for xml.uuid_ is intentional. Nokogiri builder makes use of method_missing to create its xml
+          # model. There could be problems with preexisting methods so we play it safe and add an underscore to avoid
+          # unintended behaviuor. You can find more info here:
           # https://www.rubydoc.info/github/sparklemotion/nokogiri/Nokogiri/XML/Builder
           xml.uuid_ file.fileset_uuid
         end
@@ -243,9 +237,8 @@ class Aip::V1::EntitiesController < ApplicationController
 
   def load_entity
     case params[:entity]
-    # There is a routing constraint specifying which models are available
-    # through the url. We need to update the routing constraint whenever a new
-    # entity is made available
+    # There is a routing constraint specifying which models are available through the url. We need to update the routing
+    # constraint whenever a new entity is made available
     when Item.table_name
       @entity = Item.find(params[:id])
     when Thesis.table_name
@@ -284,9 +277,8 @@ class Aip::V1::EntitiesController < ApplicationController
   end
 
   def entity_member_of_statements
-    # To set the value for the predicate http://pcdm.org/models#memberOf we use
-    # the data from column member_of_paths, strip the collection id, and
-    # concatenate the url for the collection.
+    # To set the value for the predicate http://pcdm.org/models#memberOf we use the data from column member_of_paths,
+    # strip the collection id, and concatenate the url for the collection.
 
     statements = []
     @entity.member_of_paths.each do |community_collection|
