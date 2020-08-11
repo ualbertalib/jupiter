@@ -18,7 +18,7 @@ gem 'simple_form'
 
 # RDF stuff
 gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', ref: '37915a9581713524f95f28425a10fdfee4335d06'
-gem 'rdf', '~> 3.1.4'
+gem 'rdf', '~> 3.1.5'
 gem 'rdf-n3'
 gem 'rdf-vocab', '~> 3.1.7'
 
@@ -79,13 +79,13 @@ group :development, :test do
   gem 'nokogiri'
   gem 'selenium-webdriver', require: false
 
-  gem 'erb_lint', '>= 0.0.32', require: false
+  gem 'erb_lint', '>= 0.0.35', require: false
 
   gem 'pry'
   gem 'pry-byebug'
   gem 'pry-rails'
 
-  gem 'rubocop', '~> 0.86.0', require: false
+  gem 'rubocop', '~> 0.89.0', require: false
   gem 'rubocop-performance'
   gem 'rubocop-rails'
 end
