@@ -9,6 +9,9 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 ### Added
 - Added solr exporters for ar community and ar collection [#1782](https://github.com/ualbertalib/jupiter/issues/1782)
 
+### Fixed
+- Fixed failing migrations due to missing blobs [#1781](https://github.com/ualbertalib/jupiter/issues/1781)
+
 ## [2.0.0.pre2.6] 2020-07-20
 
 ### Fixed

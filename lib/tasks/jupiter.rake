@@ -54,6 +54,15 @@ namespace :jupiter do
   desc 'sayonara ActiveFedora'
   task get_me_off_of_fedora: :environment do
     puts
+    puts 'Preparing Attachments ...'
+
+    ActiveStorage::Attachment.all.each do |attachment|
+      blob = ActiveStorage::Blob.find_by(id: attachment.blob_id)
+      attachment.purge unless blob.present?
+      print '.'
+    end
+
+    puts
     puts 'Preparing Draft Item ...'
 
     DraftItem.all.each do |draft_item|
