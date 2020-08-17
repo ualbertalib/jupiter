@@ -11,7 +11,7 @@
     "@rails/actiontext": "^6.0.3",
     "@rails/activestorage": "^6.0.3",
     "@rails/ujs": "^6.0.3",
-    "@rails/webpacker": "^5.1.1",
+    "@rails/webpacker": "^5.2.1",
     "bootstrap": "^4.5.2",
     "core-js": "^3.6.5",
     "dropzone": "^5.7.2",
