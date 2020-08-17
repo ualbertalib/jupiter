@@ -9,6 +9,9 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 ### Added
 - tmp/cache to docker ignore [#1680](https://github.com/ualbertalib/jupiter/issues/1680)
 
+### Changed
+- Merge file_set and original_file AIP API entry points [#1557](https://github.com/ualbertalib/jupiter/issues/1557)
+
 ### Fixed
 - Upgrade Rubocop/Erblint and fix cop violations [#1803](https://github.com/ualbertalib/jupiter/pull/1803)
 
