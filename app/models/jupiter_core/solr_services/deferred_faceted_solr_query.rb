@@ -59,6 +59,8 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
                             else
                               solr_exporter.default_sort_direction
                             end
+
+    add_tie_breaker(solr_exporter)
     self
   end
 
@@ -213,6 +215,22 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
 
   def raw_model_to_model(raw_model)
     raw_model
+  end
+
+  def add_tie_breaker(solr_exporter)
+
+    # We are assuming that all queryable items will have a title we can use as a tie breaker for sortable queries
+    sort_by_title_attr = solr_exporter.solr_name_for(:title, role: :sort)
+    return if criteria[:sort].first == sort_by_title_attr
+
+    criteria[:sort] << sort_by_title_attr
+
+    criteria[:sort_order] << if criteria[:sort].first != :score
+                              criteria[:sort_order].first
+                            else
+                              (criteria[:sort_order].first == :desc ? :asc : :desc)
+                            end
+
   end
 
 end
