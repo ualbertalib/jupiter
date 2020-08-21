@@ -32,35 +32,43 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
     self
   end
 
-  def sort(attr, order = nil)
+  def sort(attributes, order = nil)
     solr_exporter = raw_model_to_model(criteria[:restrict_to_model].first).solr_exporter_class
 
-    if attr.present?
-      attr = attr.to_sym
-      solr_name = begin
-                    if attr == :relevance
-                      :score
-                    else
-                      solr_exporter.solr_name_for(attr, role: :sort)
-                    end
-                  rescue ArgumentError
-                    nil
-                  end
-      criteria[:sort] = [solr_name] if solr_name.present?
+    # Assuming we are passing a list of attributes to sort by
+    criteria[:sort] = []
+    attributes = [attributes] unless attributes.kind_of?(Array)
+    if attributes.present? 
+      attributes.each do |attr|
+        if attr.present?
+          attr = attr.to_sym
+
+          solr_name = if attr == :relevance
+                        :score
+                      else
+                        solr_exporter.solr_name_for(attr, role: :sort)
+                      end
+
+          criteria[:sort] << solr_name
+        end
+      end
     end
+    
     criteria[:sort] = solr_exporter.default_sort_indexes if criteria[:sort].blank?
 
-    # Note the elsif: if no explicit order was passed from the user, and we're ordering by score, we default
-    # to sorting scores descending rather than ascending, as is otherwise used when eg) title is the default sort field
-    criteria[:sort_order] = if order.present? && [:asc, :desc].include?(order.to_sym)
-                              [order]
-                            elsif criteria[:sort] == [:score]
-                              [:desc]
+    order = [order] unless order.kind_of?(Array)
+    # order can only have values on :asc or :desc, the substraction of arrays let us know this
+    criteria[:sort_order] = if order.present? && ([:asc, :desc] - order).empty?
+                              order
+                            elsif criteria[:sort].include?(:score)
+                              # When we order by score we need to sort in descending fashion to show the highest scores
+                              # first
+                              order[criteria[:sort].index(:score)] = :desc
+                              order
                             else
                               solr_exporter.default_sort_direction
                             end
 
-    add_tie_breaker(solr_exporter)
     self
   end
 

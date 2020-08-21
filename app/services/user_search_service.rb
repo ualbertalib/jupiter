@@ -28,12 +28,22 @@ class UserSearchService
     search_options = { q: query, models: search_models, as: @current_user,
                        facets: facets, ranges: @search_params[:ranges] }
 
-    # sort by relelvance if a search term is present and no explicit sort field has been chosen
-    sort_field = @search_params[:sort]
-    sort_field ||= :relevance if query.present?
+    # Sort by relevance if a search term is present and no explicit sort field has been chosen
+    sort_fields = [@search_params[:sort]]
+    sort_fields ||= [:relevance] if query.present?
+
+    # Handle default sort order as ascending
+    sort_orders = @search_params[:direction] ? [@search_params[:direction]] : [:asc] 
+
+    # Add sort by title for breaking ties in results    
+    unless sort_fields.include?('title')
+      sort_fields << :title
+      # We want to perform the tie breaker in the same sort order as the original query
+      sort_orders << sort_orders.first
+    end
 
     JupiterCore::Search.faceted_search(search_options)
-                       .sort(sort_field, @search_params[:direction])
+                       .sort(sort_fields, sort_orders)
                        .page(@search_params[:page])
   end
 
