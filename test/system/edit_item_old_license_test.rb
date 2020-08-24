@@ -3,7 +3,6 @@ require 'application_system_test_case'
 class EditItemOldLicenseTest < ApplicationSystemTestCase
 
   test 'can edit and save an item with an old license' do
-    skip 'ignore'
     admin = users(:admin)
     item = items(:old_license)
     item.save
