@@ -10,9 +10,9 @@ class CommunityPolicyTest < ActiveSupport::TestCase
     assert CommunityPolicy.new(current_user, community).create?
     assert CommunityPolicy.new(current_user, community).new?
     assert CommunityPolicy.new(current_user, community).show?
-    assert CommunityPolicy.new(current_user, community).edit?
-    assert CommunityPolicy.new(current_user, community).update?
-    assert CommunityPolicy.new(current_user, community).destroy?
+    assert_not CommunityPolicy.new(current_user, community).edit?
+    assert_not CommunityPolicy.new(current_user, community).update?
+    assert_not CommunityPolicy.new(current_user, community).destroy?
   end
 
   test 'general user should only be able to see index and show of communities' do
