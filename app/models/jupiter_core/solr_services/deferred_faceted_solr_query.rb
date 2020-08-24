@@ -37,26 +37,24 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
 
     # Assuming we are passing a list of attributes to sort by
     criteria[:sort] = []
-    attributes = [attributes] unless attributes.kind_of?(Array)
-    if attributes.present? 
+    attributes = [attributes] unless attributes.is_a?(Array)
+    if attributes.present?
       attributes.each do |attr|
-        if attr.present?
-          attr = attr.to_sym
+        attr = attr.to_sym
 
-          solr_name = if attr == :relevance
-                        :score
-                      else
-                        solr_exporter.solr_name_for(attr, role: :sort)
-                      end
+        solr_name = if attr == :relevance
+                      :score
+                    else
+                      solr_exporter.solr_name_for(attr, role: :sort)
+                    end
 
-          criteria[:sort] << solr_name
-        end
+        criteria[:sort] << solr_name
       end
     end
-    
+
     criteria[:sort] = solr_exporter.default_sort_indexes if criteria[:sort].blank?
 
-    order = [order] unless order.kind_of?(Array)
+    order = [order] unless order.is_a?(Array)
     # order can only have values on :asc or :desc, the substraction of arrays let us know this
     criteria[:sort_order] = if order.present? && ([:asc, :desc] - order).empty?
                               order
@@ -223,20 +221,6 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
 
   def raw_model_to_model(raw_model)
     raw_model
-  end
-
-  def add_tie_breaker(solr_exporter)
-    # We are assuming that all queryable items will have a title we can use as a tie breaker for sortable queries
-    sort_by_title_attr = solr_exporter.solr_name_for(:title, role: :sort)
-    return if criteria[:sort].first == sort_by_title_attr
-
-    criteria[:sort] << sort_by_title_attr
-
-    criteria[:sort_order] << if criteria[:sort].first != :score
-                               criteria[:sort_order].first
-                             else
-                               (criteria[:sort_order].first == :desc ? :asc : :desc)
-                             end
   end
 
 end

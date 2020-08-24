@@ -33,9 +33,9 @@ class UserSearchService
     sort_fields ||= [:relevance] if query.present?
 
     # Handle default sort order as ascending
-    sort_orders = @search_params[:direction] ? [@search_params[:direction]] : [:asc] 
+    sort_orders = @search_params[:direction] ? [@search_params[:direction]] : [:asc]
 
-    # Add sort by title for breaking ties in results    
+    # Add sort by title for breaking ties in results
     unless sort_fields.include?('title')
       sort_fields << :title
       # We want to perform the tie breaker in the same sort order as the original query
