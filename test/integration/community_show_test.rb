@@ -40,15 +40,6 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
     assert_select 'img.img-thumbnail', count: 1
     assert_select 'div.img-thumbnail i.fa', count: 0
 
-    # Community delete, edit and create new collection buttons should be shown
-    assert_select 'a[href=?]',
-                  admin_community_path(@community1),
-                  text: I18n.t('delete')
-
-    assert_select 'a[href=?]',
-                  edit_admin_community_path(@community1),
-                  text: I18n.t('edit')
-
     assert_select 'a[href=?]',
                   new_admin_community_collection_path(@community1),
                   text: I18n.t('communities.show.create_collection')
@@ -80,10 +71,6 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
     # Community delete, edit and create new collection buttons should not be shown
     assert_select 'a[href=?]',
                   admin_community_path(@community1),
-                  false
-
-    assert_select 'a[href=?]',
-                  edit_admin_community_path(@community1),
                   false
 
     assert_select 'a[href=?]',

@@ -59,17 +59,6 @@ class Collection < JupiterCore::LockedLdpObject
       self.visibility = JupiterCore::VISIBILITY_PUBLIC
     end
 
-    before_save do
-      if community_id_changed?
-        # This adds the `pcdm::memberOf` predicate, pointing to the community
-        self.member_of_collections = []
-        # TODO: can this be streamlined so that a fetch from Fedora isn't needed?
-        community.unlock_and_fetch_ldp_object do |unlocked_community|
-          self.member_of_collections += [unlocked_community]
-        end
-      end
-    end
-
     def can_be_destroyed?
       return true if member_objects.count == 0
 

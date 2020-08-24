@@ -41,19 +41,4 @@ class CollectionTest < ActiveSupport::TestCase
                            id: community_id)
   end
 
-  test 'member_of gets set on save' do
-    community_uri = nil
-    community = Community.new_locked_ldp_object(title: 'Community', owner: 1).unlock_and_fetch_ldp_object do |uo|
-      uo.save!
-      community_uri = uo.uri
-    end
-    Collection.new_locked_ldp_object(title: 'foo', owner: users(:regular).id,
-                                     community_id: community.id).unlock_and_fetch_ldp_object do |uo|
-      uo.save!
-      uo.reload
-      # Make sure the triple has the right predicate and object
-      assert_match(/#{::Hydra::PCDM::Vocab::PCDMTerms.memberOf}.*#{community_uri}/, uo.resource.dump(:ntriples))
-    end
-  end
-
 end
