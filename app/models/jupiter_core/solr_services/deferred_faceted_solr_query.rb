@@ -40,6 +40,8 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
     attributes = [attributes] unless attributes.is_a?(Array)
     if attributes.present?
       attributes.each do |attr|
+        next if attr.blank?
+
         attr = attr.to_sym
 
         solr_name = if attr == :relevance
