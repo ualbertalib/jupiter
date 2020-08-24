@@ -34,7 +34,6 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
 
   def sort(attributes, order = nil)
     solr_exporter = raw_model_to_model(criteria[:restrict_to_model].first).solr_exporter_class
-
     # Assuming we are passing a list of attributes to sort by
     criteria[:sort] = []
     attributes = [attributes] unless attributes.is_a?(Array)
@@ -57,16 +56,16 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
     criteria[:sort] = solr_exporter.default_sort_indexes if criteria[:sort].blank?
 
     order = [order] unless order.is_a?(Array)
+    order.map! { |x| x ? x.to_sym : nil }
+
     # order can only have values on :asc or :desc, the substraction of arrays let us know this
-    criteria[:sort_order] = if order.present? && ([:asc, :desc] - order).empty?
-                              order
-                            elsif criteria[:sort].include?(:score)
-                              # When we order by score we need to sort in descending fashion to show the highest scores
+    criteria[:sort_order] = if (order - [:asc, :desc]).empty?
+                              # When we order by score we need to sort in descending order to show the highest scores
                               # first
-                              order[criteria[:sort].index(:score)] = :desc
+                              order[criteria[:sort].index(:score)] = :desc if criteria[:sort].include?(:score)
                               order
                             else
-                              solr_exporter.default_sort_direction
+                              Array.new(criteria[:sort].length, solr_exporter.default_sort_direction)
                             end
 
     self
