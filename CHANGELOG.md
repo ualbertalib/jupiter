@@ -4,7 +4,8 @@ All notable changes to Jupiter project will be documented in this file. Jupiter 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and releases in Jupiter project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.2.22] – 2020-08-24
+- disable Collection usage of Communities for a PCDM triple in order to work around data corruption in Prod
 
 ## [1.2.21] – 2020–05-28
 - bump kaminari from 1.1.1 to 1.2.1 [CVE-2020-11082](https://github.com/advisories/GHSA-r5jw-62xg-j433)
