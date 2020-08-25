@@ -1,4 +1,4 @@
-Rails.application.routes.default_url_options = { host: 'uat.library.ualberta.ca', port: 80, protocol: 'http' }
+Rails.application.routes.default_url_options = { host: 'uat.library.ualberta.ca', port: 443, protocol: 'https' }
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.

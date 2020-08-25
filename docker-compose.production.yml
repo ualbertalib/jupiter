@@ -71,3 +71,4 @@ services:
       - assets:/app/public/
     ports:
       - "80:80"
+      - "443:443"
