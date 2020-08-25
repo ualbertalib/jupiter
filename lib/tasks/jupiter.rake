@@ -68,7 +68,7 @@ namespace :jupiter do
     DraftItem.all.each do |draft_item|
       draft_item.files_attachments.each do |attachment|
         attachment.upcoming_record_id = draft_item.upcoming_id
-        attachment.save!
+        attachment.save!(validate: false)
       end
 
       draft_item.draft_items_languages.each do |join_record|

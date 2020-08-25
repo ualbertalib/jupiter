@@ -6,6 +6,11 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+## [2.0.0.pre2.8] 2020-08-26
+
+### Fixed
+- Destroy attachments and call save without validations in fedora migration rake task [#1685](https://github.com/ualbertalib/jupiter/issues/1685)
+
 ## [2.0.0.pre2.7] 2020-08-13
 
 ### Added
