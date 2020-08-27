@@ -11,8 +11,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ### Fixed
 - Upgrade Rubocop/Erblint and fix cop violations [#1803](https://github.com/ualbertalib/jupiter/pull/1803)
-
-## [2.0.1.pre1] - 2020-07-22
+- Fixed Oaisys testing issues by modifying and adding decorators [#1816](https://github.com/ualbertalib/jupiter/issues/1816)
 
 ### Added
 - Mounted Oaisys engine [PR#1361](https://github.com/ualbertalib/jupiter/pull/1361)
