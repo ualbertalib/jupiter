@@ -17,7 +17,6 @@ gem 'active_link_to'
 gem 'simple_form'
 
 # RDF stuff
-# TODO: Run a bundle install on this once tagged.
 gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', tag: 'v0.2.4'
 gem 'rdf', '~> 3.1.5'
 gem 'rdf-n3'
@@ -66,7 +65,6 @@ gem 'rollbar'
 
 # OAI-PMH
 gem 'builder_deferred_tagging', github: 'ualbertalib/builder_deferred_tagging', tag: 'v0.01'
-# TODO: Run a bundle install on this once tagged.
 gem 'oaisys', github: 'ualbertalib/oaisys', tag: 'v1.0.0'
 
 # Seeds
