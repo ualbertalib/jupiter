@@ -61,4 +61,5 @@ class Metadata::OaiEtdms::ThesisDecorator < ApplicationDecorator
     # TODO: Replace Unknown with appropriate tag from metadata team
     object.institution.present? ? h.humanize_uri(:institution, object.institution) : 'Unknown'
   end
+
 end
