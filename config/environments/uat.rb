@@ -1,4 +1,4 @@
-Rails.application.routes.default_url_options = { host: 'uat.library.ualberta.ca', port: 80, protocol: 'http' }
+Rails.application.routes.default_url_options = { host: 'uat.library.ualberta.ca', port: 443, protocol: 'https' }
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -38,7 +38,7 @@ Rails.application.configure do
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  # config.force_ssl = true
+  config.force_ssl = true
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
