@@ -16,6 +16,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
  
 ### Fixed
 - Upgrade Rubocop/Erblint and fix cop violations [#1803](https://github.com/ualbertalib/jupiter/pull/1803)
+- UAT nginx port 80 redirect []()
 
 ## [2.0.1.pre1] - 2020-07-22
 
