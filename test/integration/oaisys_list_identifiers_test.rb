@@ -16,6 +16,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
   end
 
   test 'list identifers items xml' do
+    skip('Skipping until bug regarding path helper is fixed. https://github.com/rails/rails/issues/40078')
     get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_dc'), headers: { 'Accept' => 'application/xml' }
     assert_response :success
 

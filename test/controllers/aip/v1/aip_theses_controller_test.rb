@@ -180,13 +180,8 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
     graph = generate_graph_from_n3(response.body)
 
     variables = {
-      entity_id: radioactive_thesis.id,
       fileset_id: radioactive_thesis.files.first.fileset_uuid,
-      collection_id: radioactive_thesis.member_of_paths.first.split('/')[1],
-      checksum: radioactive_thesis.files.first.blob.checksum,
-      byte_size: radioactive_thesis.files.first.blob.byte_size,
-      filename: radioactive_thesis.files.first.blob.filename,
-      content_type: radioactive_thesis.files.first.blob.content_type
+      collection_id: radioactive_thesis.member_of_paths.first.split('/')[1]
     }
     rendered_graph = load_n3_graph(file_fixture('n3/theses/file_set.n3'), variables)
 
@@ -212,30 +207,6 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
       byte_size: @public_thesis.files.first.blob.byte_size
     }
     rendered_graph = load_n3_graph(file_fixture('n3/theses/fixity.n3'), variables)
-
-    assert_equal true, rendered_graph.isomorphic_with?(graph)
-  end
-
-  test 'should get thesis original file metadata graph with n3 serialization' do
-    sign_in_as_system_user
-
-    url = aip_v1_entity_fileset_original_file_url(
-      entity: @entity,
-      id: @public_thesis,
-      file_set_id: @public_thesis.files.first.fileset_uuid
-    )
-
-    graph = get_n3_graph(url)
-    assert_response :success
-
-    variables = {
-      entity_id: @public_thesis.id,
-      fileset_id: @public_thesis.files.first.fileset_uuid,
-      checksum: @public_thesis.files.first.blob.checksum,
-      byte_size: @public_thesis.files.first.blob.byte_size,
-      filename: @public_thesis.files.first.blob.filename
-    }
-    rendered_graph = load_n3_graph(file_fixture('n3/theses/original_file.n3'), variables)
 
     assert_equal true, rendered_graph.isomorphic_with?(graph)
   end

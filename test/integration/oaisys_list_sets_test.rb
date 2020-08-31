@@ -10,6 +10,7 @@ class OaisysListSetsTest < ActionDispatch::IntegrationTest
   end
 
   test 'test_list_sets_resumption_token_xml' do
+    skip('Skipping until bug regarding path helper is fixed. https://github.com/rails/rails/issues/40078')
     get oaisys_path(verb: 'ListSets'), headers: { 'Accept' => 'application/xml' }
     assert_response :success
 

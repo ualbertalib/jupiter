@@ -146,10 +146,6 @@ Rails.application.routes.draw do
           to: 'entities#fixity_file',
           as: 'entity_fileset_fixity',
           constraints: EntityConstraint.new
-      get '/:entity/:id/filesets/:file_set_id/original_file',
-          to: 'entities#original_file',
-          as: 'entity_fileset_original_file',
-          constraints: EntityConstraint.new
     end
   end
 end
