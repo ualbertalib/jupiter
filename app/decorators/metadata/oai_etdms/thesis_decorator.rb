@@ -49,7 +49,7 @@ class Metadata::OaiEtdms::ThesisDecorator < ApplicationDecorator
 
   def institution
     # TODO: Replace Unknown with appropriate tag from metadata team
-    object.institution.present? ? h.humanize_uri(:institution, object.institution) : 'Unknown'
+    h.humanize_uri(:institution, object.institution) || 'Unknown'
   end
 
   def degree_name
@@ -59,7 +59,7 @@ class Metadata::OaiEtdms::ThesisDecorator < ApplicationDecorator
 
   def publisher
     # TODO: Replace Unknown with appropriate tag from metadata team
-    object.institution.present? ? h.humanize_uri(:institution, object.institution) : 'Unknown'
+    h.humanize_uri(:institution, object.institution) || 'Unknown'
   end
 
 end
