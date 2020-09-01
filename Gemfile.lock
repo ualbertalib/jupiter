@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/ualbertalib/acts_as_rdfable.git
-  revision: 37915a9581713524f95f28425a10fdfee4335d06
-  ref: 37915a9581713524f95f28425a10fdfee4335d06
+  revision: 6b224060a90743ff20ab924510d3c9dd53149280
+  tag: v0.2.4
   specs:
     acts_as_rdfable (0.2.1)
       rails (>= 5.2.3)
@@ -17,8 +17,8 @@ GIT
 
 GIT
   remote: https://github.com/ualbertalib/oaisys.git
-  revision: 68affbf4ca98bd81928b4650a85d0b5230f3d47e
-  ref: 68affbf4ca98bd81928b4650a85d0b5230f3d47e
+  revision: 09d0a11fb2071f095a147491674c4167d6107126
+  tag: v1.0.0
   specs:
     oaisys (0.1.0)
       builder (~> 3.0)

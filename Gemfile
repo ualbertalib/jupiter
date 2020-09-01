@@ -17,7 +17,7 @@ gem 'active_link_to'
 gem 'simple_form'
 
 # RDF stuff
-gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', ref: '37915a9581713524f95f28425a10fdfee4335d06'
+gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', tag: 'v0.2.4'
 gem 'rdf', '~> 3.1.5'
 gem 'rdf-n3'
 gem 'rdf-vocab', '~> 3.1.7'
@@ -65,7 +65,7 @@ gem 'rollbar'
 
 # OAI-PMH
 gem 'builder_deferred_tagging', github: 'ualbertalib/builder_deferred_tagging', tag: 'v0.01'
-gem 'oaisys', github: 'ualbertalib/oaisys', ref: '68affbf4ca98bd81928b4650a85d0b5230f3d47e'
+gem 'oaisys', github: 'ualbertalib/oaisys', tag: 'v1.0.0'
 
 # Seeds
 group :development, :test, :uat do
