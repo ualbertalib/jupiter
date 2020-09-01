@@ -6,6 +6,8 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+## [2.0.1.pre2] - 2020-09-01
+
 ### Added
 - tmp/cache to docker ignore [#1680](https://github.com/ualbertalib/jupiter/issues/1680)
 

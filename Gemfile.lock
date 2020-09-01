@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/ualbertalib/acts_as_rdfable.git
-  revision: 6020ba89d9f29992e85463078bc397092e487871
+  revision: 6b224060a90743ff20ab924510d3c9dd53149280
   tag: v0.2.4
   specs:
     acts_as_rdfable (0.2.1)
@@ -17,7 +17,7 @@ GIT
 
 GIT
   remote: https://github.com/ualbertalib/oaisys.git
-  revision: e537601aacf6638a2d76d1762202600f4cea53a5
+  revision: 09d0a11fb2071f095a147491674c4167d6107126
   tag: v1.0.0
   specs:
     oaisys (0.1.0)
