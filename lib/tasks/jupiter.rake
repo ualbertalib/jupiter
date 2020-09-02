@@ -58,7 +58,7 @@ namespace :jupiter do
 
     ActiveStorage::Attachment.all.each do |attachment|
       blob = ActiveStorage::Blob.find_by(id: attachment.blob_id)
-      attachment.purge unless blob.present?
+      attachment.destroy unless blob.present?
       print '.'
     end
 
@@ -68,12 +68,12 @@ namespace :jupiter do
     DraftItem.all.each do |draft_item|
       draft_item.files_attachments.each do |attachment|
         attachment.upcoming_record_id = draft_item.upcoming_id
-        attachment.save!
+        attachment.save!(validate: false)
       end
 
       draft_item.draft_items_languages.each do |join_record|
         join_record.upcoming_draft_item_id = draft_item.upcoming_id
-        join_record.save!
+        join_record.save!(validate: false)
       end
       print '.'
     end
