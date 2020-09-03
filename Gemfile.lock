@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/ualbertalib/acts_as_rdfable.git
-  revision: 37915a9581713524f95f28425a10fdfee4335d06
-  ref: 37915a9581713524f95f28425a10fdfee4335d06
+  revision: 6b224060a90743ff20ab924510d3c9dd53149280
+  tag: v0.2.4
   specs:
     acts_as_rdfable (0.2.1)
       rails (>= 5.2.3)
@@ -17,8 +17,8 @@ GIT
 
 GIT
   remote: https://github.com/ualbertalib/oaisys.git
-  revision: af2a1ce48502daa914933f6597de6ef8290c4e85
-  ref: af2a1ce
+  revision: 09d0a11fb2071f095a147491674c4167d6107126
+  tag: v1.0.0
   specs:
     oaisys (0.1.0)
       builder (~> 3.0)
@@ -33,7 +33,7 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    aasm (5.1.0)
+    aasm (5.1.1)
       concurrent-ruby (~> 1.0)
     actioncable (6.0.3.2)
       actionpack (= 6.0.3.2)
@@ -116,12 +116,12 @@ GEM
     bindex (0.8.1)
     binding_of_caller (0.8.0)
       debug_inspector (>= 0.0.1)
-    bootsnap (1.4.7)
+    bootsnap (1.4.8)
       msgpack (~> 1.0)
-    brakeman (4.8.2)
+    brakeman (4.9.0)
     builder (3.2.4)
     bump (0.9.0)
-    byebug (11.1.1)
+    byebug (11.1.3)
     capybara (3.33.0)
       addressable
       mini_mime (>= 0.1.3)
@@ -137,16 +137,16 @@ GEM
       nap
       open4 (~> 1.3)
     clamby (1.6.6)
-    coderay (1.1.2)
+    coderay (1.1.3)
     colored2 (3.1.2)
-    concurrent-ruby (1.1.6)
+    concurrent-ruby (1.1.7)
     connection_pool (2.2.3)
     cork (0.3.0)
       colored2 (~> 3.1)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
     crass (1.0.6)
-    danger (8.0.4)
+    danger (8.0.5)
       claide (~> 1.0)
       claide-plugins (>= 0.9.2)
       colored2 (~> 3.1)
@@ -154,7 +154,7 @@ GEM
       faraday (>= 0.9.0, < 2.0)
       faraday-http-cache (~> 2.0)
       git (~> 1.7)
-      kramdown (~> 2.0)
+      kramdown (~> 2.3)
       kramdown-parser-gfm (~> 1.0)
       no_proxy_fix
       octokit (~> 4.7)
@@ -168,13 +168,16 @@ GEM
       activemodel-serializers-xml (>= 1.0)
       activesupport (>= 5.0)
       request_store (>= 1.0)
-    ebnf (1.2.0)
+    ebnf (2.1.1)
+      htmlentities (~> 4.3)
       rdf (~> 3.1)
+      scanf (~> 1.0)
       sxp (~> 1.1)
-    erb_lint (0.0.34)
+    erb_lint (0.0.35)
       activesupport
       better_html (~> 1.0.7)
       html_tokenizer
+      parser (>= 2.7.1.4)
       rainbow
       rubocop (~> 0.79)
       smart_properties
@@ -190,10 +193,10 @@ GEM
       multipart-post (>= 1.2, < 3)
     faraday-http-cache (2.2.0)
       faraday (>= 0.8)
-    ffi (1.12.2)
-    fugit (1.3.4)
+    ffi (1.13.1)
+    fugit (1.3.8)
       et-orbi (~> 1.1, >= 1.1.8)
-      raabro (~> 1.1)
+      raabro (~> 1.3)
     git (1.7.0)
       rchardet (~> 1.8)
     globalid (0.4.2)
@@ -204,7 +207,8 @@ GEM
     hashdiff (1.0.1)
     hashie (3.6.0)
     html_tokenizer (0.0.7)
-    i18n (1.8.3)
+    htmlentities (4.3.4)
+    i18n (1.8.5)
       concurrent-ruby (~> 1.0)
     image_processing (1.11.0)
       mini_magick (>= 4.9.5, < 5)
@@ -273,8 +277,8 @@ GEM
       omniauth (~> 1.3, >= 1.3.2)
       ruby-saml (~> 1.9)
     open4 (1.3.4)
-    paper_trail (10.3.1)
-      activerecord (>= 4.2)
+    paper_trail (11.0.0)
+      activerecord (>= 5.2)
       request_store (~> 1.1)
     parallel (1.19.2)
     parser (2.7.1.4)
@@ -290,12 +294,12 @@ GEM
       pry (~> 0.13.0)
     pry-rails (0.3.9)
       pry (>= 0.10.4)
-    public_suffix (4.0.5)
+    public_suffix (4.0.6)
     puma (4.3.5)
       nio4r (~> 2.0)
     pundit (1.1.0)
       activesupport (>= 3.0.0)
-    raabro (1.1.6)
+    raabro (1.3.1)
     rack (2.2.3)
     rack-protection (2.0.8.1)
       rack
@@ -336,11 +340,11 @@ GEM
       activesupport (>= 5.2.1)
       i18n
       polyamorous (= 2.3.2)
-    rb-fsevent (0.10.3)
+    rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     rchardet (1.8.0)
-    rdf (3.1.4)
+    rdf (3.1.5)
       hamster (~> 3.0)
       link_header (~> 0.0, >= 0.0.8)
     rdf-aggregate-repo (3.1.0)
@@ -361,27 +365,27 @@ GEM
     request_store (1.5.0)
       rack (>= 1.4)
     rexml (3.2.4)
-    rollbar (2.27.0)
+    rollbar (3.0.0)
     rsolr (2.3.0)
       builder (>= 2.1.2)
       faraday (>= 0.9.0)
-    rubocop (0.86.0)
+    rubocop (0.89.1)
       parallel (~> 1.10)
-      parser (>= 2.7.0.1)
+      parser (>= 2.7.1.1)
       rainbow (>= 2.2.2, < 4.0)
       regexp_parser (>= 1.7)
       rexml
-      rubocop-ast (>= 0.0.3, < 1.0)
+      rubocop-ast (>= 0.3.0, < 1.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 2.0)
-    rubocop-ast (0.2.0)
-      parser (>= 2.7.0.1)
+    rubocop-ast (0.3.0)
+      parser (>= 2.7.1.4)
     rubocop-performance (1.7.1)
       rubocop (>= 0.82.0)
-    rubocop-rails (2.6.0)
+    rubocop-rails (2.7.1)
       activesupport (>= 4.2.0)
       rack (>= 1.1)
-      rubocop (>= 0.82.0)
+      rubocop (>= 0.87.0)
     ruby-progressbar (1.10.1)
     ruby-saml (1.11.0)
       nokogiri (>= 1.5.10)
@@ -395,13 +399,14 @@ GEM
     sawyer (0.8.2)
       addressable (>= 2.3.5)
       faraday (> 0.8, < 2.0)
+    scanf (1.0.0)
     sdoc (1.1.0)
       rdoc (>= 5.0)
     selenium-webdriver (3.142.7)
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
     semantic_range (2.3.0)
-    shoulda-matchers (4.3.0)
+    shoulda-matchers (4.4.1)
       activesupport (>= 4.2.0)
     sidekiq (5.2.9)
       connection_pool (~> 2.2, >= 2.2.2)
@@ -418,7 +423,7 @@ GEM
     simple_form (5.0.2)
       actionpack (>= 5.0)
       activemodel (>= 5.0)
-    simplecov (0.18.5)
+    simplecov (0.19.0)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
     simplecov-html (0.12.2)
@@ -432,10 +437,10 @@ GEM
     skylight-core (4.3.1)
       activesupport (>= 4.2.0)
     smart_properties (1.15.0)
-    sparql (3.1.0)
+    sparql (3.1.2)
       builder (~> 3.2)
-      ebnf (~> 1.2)
-      rdf (~> 3.1)
+      ebnf (>= 1.1)
+      rdf (~> 3.1, >= 3.1.2)
       rdf-aggregate-repo (~> 3.1)
       rdf-xsd (~> 3.1)
       sparql-client (~> 3.1)
@@ -477,19 +482,19 @@ GEM
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
-    webpacker (5.1.1)
+    webpacker (5.2.1)
       activesupport (>= 5.2)
       rack-proxy (>= 0.6.1)
       railties (>= 5.2)
       semantic_range (>= 2.3.0)
-    websocket-driver (0.7.2)
+    websocket-driver (0.7.3)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
     wicked (1.3.4)
       railties (>= 3.0.7)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.3.1)
+    zeitwerk (2.4.0)
 
 PLATFORMS
   ruby
@@ -512,7 +517,7 @@ DEPENDENCIES
   danger (~> 8.0)
   differ
   draper
-  erb_lint (>= 0.0.32)
+  erb_lint (>= 0.0.35)
   ezid-client (~> 1.8.0)
   faker
   haikunator
@@ -536,20 +541,20 @@ DEPENDENCIES
   pundit (= 1.1.0)
   rails (~> 6.0.3)
   ransack
-  rdf (~> 3.1.4)
+  rdf (~> 3.1.5)
   rdf-isomorphic (~> 3.1.0)
   rdf-n3
   rdf-vocab (~> 3.1.7)
   redis (~> 4.1)
   rollbar
   rsolr
-  rubocop (~> 0.86.0)
+  rubocop (~> 0.89.1)
   rubocop-performance
   rubocop-rails
   rufus-scheduler (= 3.6.0)
   sdoc
   selenium-webdriver
-  shoulda-matchers (~> 4.3)
+  shoulda-matchers (~> 4.4)
   sidekiq (~> 5.2)
   sidekiq-cron
   sidekiq-unique-jobs
@@ -563,7 +568,7 @@ DEPENDENCIES
   web-console (>= 3.3.0)
   webdrivers (~> 4.4)
   webmock
-  webpacker (~> 5.1)
+  webpacker (~> 5.2)
   wicked
 
 BUNDLED WITH

@@ -7,7 +7,7 @@ gem 'puma', '~> 4.3'
 gem 'rails', '~> 6.0.3'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem 'webpacker', '~> 5.1'
+gem 'webpacker', '~> 5.2'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
@@ -17,8 +17,8 @@ gem 'active_link_to'
 gem 'simple_form'
 
 # RDF stuff
-gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', ref: '37915a9581713524f95f28425a10fdfee4335d06'
-gem 'rdf', '~> 3.1.4'
+gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', tag: 'v0.2.4'
+gem 'rdf', '~> 3.1.5'
 gem 'rdf-n3'
 gem 'rdf-vocab', '~> 3.1.7'
 
@@ -65,7 +65,7 @@ gem 'rollbar'
 
 # OAI-PMH
 gem 'builder_deferred_tagging', github: 'ualbertalib/builder_deferred_tagging', tag: 'v0.01'
-gem 'oaisys', github: 'ualbertalib/oaisys', ref: 'af2a1ce'
+gem 'oaisys', github: 'ualbertalib/oaisys', tag: 'v1.0.0'
 
 # Seeds
 group :development, :test, :uat do
@@ -79,13 +79,13 @@ group :development, :test do
   gem 'nokogiri'
   gem 'selenium-webdriver', require: false
 
-  gem 'erb_lint', '>= 0.0.32', require: false
+  gem 'erb_lint', '>= 0.0.35', require: false
 
   gem 'pry'
   gem 'pry-byebug'
   gem 'pry-rails'
 
-  gem 'rubocop', '~> 0.86.0', require: false
+  gem 'rubocop', '~> 0.89.1', require: false
   gem 'rubocop-performance'
   gem 'rubocop-rails'
 end
@@ -106,7 +106,7 @@ group :test do
   gem 'simplecov'
   # Faker added 0.5 seconds to the test suite per call. Haikunator seems much faster for faking strings
   gem 'haikunator'
-  gem 'shoulda-matchers', '~> 4.3'
+  gem 'shoulda-matchers', '~> 4.4'
 
   gem 'json-schema', '~> 2.8.1'
   gem 'launchy'

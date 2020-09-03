@@ -3,20 +3,24 @@
 @prefix ebucore: <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#> .
 @prefix fcrepo4: <http://fedora.info/definitions/v4/repository#> .
 @prefix pcdm: <http://pcdm.org/models#> .
+@prefix premis: <http://www.loc.gov/premis/rdf/v1#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<<%= url %>/aip/v1/items/<%= entity_id %>/filesets/<%= fileset_id %>> a fcrepo4:Container,
-    fcrepo4:Resource,
-    pcdm:Object;
-  fcrepo4:hasParent <<%= url %>/aip/v1/items/<%= entity_id %>/filesets/>;
-  pcdm:hasFile <<%= url %>/aip/v1/items/<%= entity_id %>/filesets/<%= fileset_id %>/original_file>;
-  pcdm:memberOf <<%= url %>/aip/v1/items/<%= entity_id %>/collections/<%= collection_id %>>;
+<<%= url %>/aip/v1/items/e2ec88e3-3266-4e95-8575-8b04fac2a679/filesets/<%= fileset_id %>> a fcrepo4:Resource,
+    pcdm:Object,
+    pcdm:File,
+    fcrepo4:Container;
+  fcrepo4:hasFixityService <<%= url %>/aip/v1/items/e2ec88e3-3266-4e95-8575-8b04fac2a679/filesets/fixity>;
+  fcrepo4:hasParent <<%= url %>/aip/v1/items/e2ec88e3-3266-4e95-8575-8b04fac2a679/filesets/>;
+  pcdm:memberOf <<%= url %>/aip/v1/items/e2ec88e3-3266-4e95-8575-8b04fac2a679/collections/<%= collection_id %>>;
   dc:accessRights "http://terms.library.ualberta.ca/public";
   bibo:owner "administrator@example.com";
   <http://terms.library.ualberta.ca/recordCreatedInJupiter> "2000-01-01T00:00:00.007Z"^^xsd:dateTime;
-  <http://terms.library.ualberta.ca/sitemapLink> <rs:ln href="/items/<%= entity_id %>/view/<%= fileset_id %>/<%= filename %>" rel="content" hash="md5:<%= checksum %>" length="<%= byte_size %>" type="<%= content_type %>">;
+  <http://terms.library.ualberta.ca/sitemapLink> <rs:ln href="/items/e2ec88e3-3266-4e95-8575-8b04fac2a679/view/<%= fileset_id %>/image-sample.jpeg" rel="content" hash="md5:GxpIjJsC4KnRoBKNjWnkJA==" length="12086" type="image/jpeg">;
   ebucore:dateIngested "2000-01-01T00:00:00.007Z"^^xsd:dateTime;
   ebucore:hasMimeType "image/jpeg";
   ebucore:resourceFilename "image-sample.jpeg";
+  premis:hasMessageDigest <urn:md5:GxpIjJsC4KnRoBKNjWnkJA==>;
+  premis:hasSize 12086;
   <info:fedora/fedora-system:def/model#hasModel> "IRFileSet" .

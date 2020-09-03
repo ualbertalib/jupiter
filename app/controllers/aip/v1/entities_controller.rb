@@ -8,15 +8,11 @@ class Aip::V1::EntitiesController < ApplicationController
   ENTITY_INSTITUTIONAL_REPOSITORY_NAME = 'IREntity'.freeze
 
   before_action :load_entity, only: [:show, :file_sets, :file_paths, :file_set]
-  before_action :load_file, only: [:file_set, :fixity_file, :original_file]
+  before_action :load_file, only: [:file_set, :fixity_file]
   before_action :ensure_access
 
   def show
-    # These are the prefixes defined as required by the metadata team. The
-    # hardcoded strings need to be replaced. The namespaces could be added to
-    # the rdf-vocab gem.
-    # The fedora prefixes will be replaced at a later point from another
-    # ontology, for now these remain as placeholders.
+    # These are the prefixes defined as required by the metadata team.
 
     prefixes = [
       RDF::Vocab::DC,
@@ -29,18 +25,13 @@ class Aip::V1::EntitiesController < ApplicationController
       ::TERMS[:acl].schema,
       RDF::Vocab::EBUCore,
       # The following prefixes need to be reevaluated and replaced
-      ::TERMS[:fedora].schema,
-      RDF::Vocab::Fcrepo4.created,
-      RDF::Vocab::Fcrepo4.createdBy,
-      RDF::Vocab::Fcrepo4.lastModified,
-      RDF::Vocab::Fcrepo4.lastModifiedBy
+      RDF::Vocab::Fcrepo4
     ]
 
     rdf_graph_creator = RdfGraphCreationService.new(@entity, prefixes, self_subject)
 
-    # The following nodes are statements/lists that are required for entitites
-    # but are not directly referenced by a predicate in the system because they
-    # require some level of processing to obtain.
+    # The following nodes are statements/lists that are required for entitites but are not directly referenced by a
+    # predicate in the system because they require some level of processing to obtain.
 
     rdf_graph_creator.graph.insert(
       owner_email_statement,
@@ -90,10 +81,9 @@ class Aip::V1::EntitiesController < ApplicationController
     builder = Nokogiri::XML::Builder.new do |xml|
       xml.file_order do
         @entity.files.each do |file|
-          # The underscore for xml.uuid_ is intentional. Nokogiri builder makes
-          # use of method_missing to create its xml model. There could be
-          # problems with preexisting methods so we play it safe and add an
-          # underscore to avoid unintended behaviuor. You can find more info here:
+          # The underscore for xml.uuid_ is intentional. Nokogiri builder makes use of method_missing to create its xml
+          # model. There could be problems with preexisting methods so we play it safe and add an underscore to avoid
+          # unintended behaviuor. You can find more info here:
           # https://www.rubydoc.info/github/sparklemotion/nokogiri/Nokogiri/XML/Builder
           xml.uuid_ file.fileset_uuid
         end
@@ -103,26 +93,22 @@ class Aip::V1::EntitiesController < ApplicationController
   end
 
   def file_set
-    # Prefixes provided by the metadata team
-    # The fedora prefixes will be replaced at a later point from another
-    # ontology, for now these remain as placeholders.
     prefixes = [
       RDF::Vocab::DC,
       ::TERMS[:ual].schema,
       RDF::Vocab::PCDM,
       RDF::Vocab::BIBO,
       RDF::Vocab::EBUCore,
+      RDF::Vocab::PREMIS,
+      RDF::Vocab::DC11,
+      ::TERMS[:fits].schema,
+      ::TERMS[:odf].schema,
+      ::TERMS[:semantic].schema,
       # The following prefixes need to be reevaluated and replaced
-      ::TERMS[:fedora].schema + ::TERMS[:fedora].has_model,
-      RDF::Vocab::Fcrepo4.created,
-      RDF::Vocab::Fcrepo4.createdBy,
-      RDF::Vocab::Fcrepo4.lastModified,
-      RDF::Vocab::Fcrepo4.lastModifiedBy,
-      RDF::Vocab::Fcrepo4.writable
+      RDF::Vocab::Fcrepo4
     ]
 
     ActsAsRdfable.add_annotation_bindings!(@file.blob)
-
     rdf_graph_creator = RdfGraphCreationService.new(@file.blob, prefixes, self_subject)
 
     file_view_uri = RDF::URI(
@@ -142,10 +128,15 @@ class Aip::V1::EntitiesController < ApplicationController
       RDF::Statement(subject: self_subject, predicate: RDF::Vocab::DC.accessRights, object: @entity.visibility),
       RDF::Statement(subject: self_subject, predicate: RDF::Vocab::EBUCore.dateIngested, object: @entity.date_ingested),
       RDF::Statement(subject: self_subject, predicate: RDF::Vocab::Fcrepo4.hasParent, object: self_subject.parent),
+      # We need to change the value for the predicate RDF::Vocab::PREMIS.hasMessageDigest so that it includes the
+      # uniform resource name with the algorightm used to create the checksum. In this case, we know that Active storage
+      # uses MD5
       RDF::Statement(
         subject: self_subject,
-        predicate: RDF::Vocab::PCDM.hasFile,
-        object: self_subject / 'original_file'
+        predicate: RDF::Vocab::PREMIS.hasMessageDigest,
+        # RDF::URI Overrides the #/ operator to be used as a smart separator when building URIs.
+        # More information here: https://www.rubydoc.info/github/ruby-rdf/rdf/RDF/URI#%2F-instance_method
+        object: RDF::URI.new('urn:md5') / @file.blob.checksum
       ),
       RDF::Statement(
         subject: self_subject,
@@ -162,10 +153,24 @@ class Aip::V1::EntitiesController < ApplicationController
         predicate: ::TERMS[:ual].sitemap_link,
         object: RDF::URI('rs:ln') + %Q( href="#{file_view_uri.path}" rel="content" hash="md5:#{@file.checksum}" ) +
                 %Q(length="#{@file.byte_size}" type="#{@file.content_type}")
+      ),
+      RDF::Statement(subject: self_subject, predicate: RDF.type, object: RDF::Vocab::PCDM.File),
+      RDF::Statement(
+        subject: self_subject,
+        predicate: RDF::Vocab::Fcrepo4.hasFixityService,
+        # RDF::URI Overrides the #/ operator to be used as a smart separator when building URIs.
+        # More information here: https://www.rubydoc.info/github/ruby-rdf/rdf/RDF/URI#%2F-instance_method
+        object: self_subject.parent / 'fixity'
+      ),
+      RDF::Statement(
+        subject: self_subject,
+        predicate: RDF::Vocab::Fcrepo4.hasParent,
+        object: self_subject.parent
       )
     ]
 
-    rdf_graph_creator.graph.insert(*statements)
+    rdf_graph_creator.graph.delete_insert(rdf_graph_creator.graph.query(predicate: RDF::Vocab::PREMIS.hasMessageDigest),
+                                          statements)
 
     render plain: rdf_graph_creator.graph.to_n3, status: :ok
   end
@@ -191,51 +196,6 @@ class Aip::V1::EntitiesController < ApplicationController
     ]
 
     rdf_graph_creator.graph.insert(*statements)
-
-    render plain: rdf_graph_creator.graph.to_n3, status: :ok
-  end
-
-  def original_file
-    prefixes = [
-      RDF::Vocab::EBUCore,
-      RDF::Vocab::PREMIS,
-      RDF::Vocab::DC11,
-      RDF::Vocab::PCDM,
-      # The following prefixes need to be reevaluated and replaced
-      RDF::Vocab::Fcrepo4,
-      ::TERMS[:fits].schema,
-      ::TERMS[:odf].schema,
-      ::TERMS[:semantic].schema
-    ]
-
-    ActsAsRdfable.add_annotation_bindings!(@file.blob)
-
-    rdf_graph_creator = RdfGraphCreationService.new(@file.blob, prefixes, self_subject)
-    insert_nodes = [
-      RDF::Statement(subject: self_subject, predicate: RDF.type, object: RDF::Vocab::PCDM.File),
-      RDF::Statement(
-        subject: self_subject,
-        predicate: RDF::Vocab::Fcrepo4.hasFixityService,
-        object: self_subject.parent / 'fixity'
-      ),
-      # We need to change the value for the predicate RDF::Vocab::PREMIS.hasMessageDigest so that it includes the
-      # uniform resource name with the algorightm used to create the checksum. In this case, we know that Active storage
-      # uses MD5
-      RDF::Statement(
-        subject: self_subject,
-        predicate: RDF::Vocab::PREMIS.hasMessageDigest,
-        object: RDF::URI.new('urn:md5') / @file.blob.checksum
-      ),
-      RDF::Statement(
-        subject: self_subject,
-        predicate: RDF::Vocab::Fcrepo4.hasParent,
-        object: self_subject.parent
-      )
-    ]
-
-    rdf_graph_creator.graph.delete_insert(
-      rdf_graph_creator.graph.query(predicate: RDF::Vocab::PREMIS.hasMessageDigest), insert_nodes
-    )
 
     render plain: rdf_graph_creator.graph.to_n3, status: :ok
   end
@@ -277,9 +237,8 @@ class Aip::V1::EntitiesController < ApplicationController
 
   def load_entity
     case params[:entity]
-    # There is a routing constraint specifying which models are available
-    # through the url. We need to update the routing constraint whenever a new
-    # entity is made available
+    # There is a routing constraint specifying which models are available through the url. We need to update the routing
+    # constraint whenever a new entity is made available
     when Item.table_name
       @entity = Item.find(params[:id])
     when Thesis.table_name
@@ -308,7 +267,9 @@ class Aip::V1::EntitiesController < ApplicationController
       file_statements << RDF::Statement(
         subject: self_subject,
         predicate: RDF::Vocab::PCDM.hasMember,
-        object: RDF::URI.new("#{request.original_url}/filesets/#{file.fileset_uuid}")
+        # RDF::URI Overrides the #/ operator to be used as a smart separator when building URIs.
+        # More information here: https://www.rubydoc.info/github/ruby-rdf/rdf/RDF/URI#%2F-instance_method
+        object: RDF::URI.new(request.original_url) / 'filesets' / file.fileset_uuid
       )
     end
 
@@ -316,9 +277,8 @@ class Aip::V1::EntitiesController < ApplicationController
   end
 
   def entity_member_of_statements
-    # To set the value for the predicate http://pcdm.org/models#memberOf we use
-    # the data from column member_of_paths, strip the collection id, and
-    # concatenate the url for the collection.
+    # To set the value for the predicate http://pcdm.org/models#memberOf we use the data from column member_of_paths,
+    # strip the collection id, and concatenate the url for the collection.
 
     statements = []
     @entity.member_of_paths.each do |community_collection|

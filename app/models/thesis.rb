@@ -20,8 +20,8 @@ class Thesis < JupiterCore::Doiable
   scope :updated_on_or_after, ->(date) { where('updated_at >= ?', date) }
   scope :updated_on_or_before, ->(date) { where('updated_at <= ?', date) }
 
-  after_save :push_item_id_for_preservation
   before_validation :populate_sort_year
+  after_save :push_item_id_for_preservation
 
   validates :dissertant, presence: true
   validates :graduation_date, presence: true
