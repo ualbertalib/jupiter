@@ -198,7 +198,7 @@ class Exporters::Solr::BaseExporter
     # attribute but instead is determined by a given lambda
     #
     # Sorry rubocop, but you index something *AS* something. It's communicative.
-    def custom_index(attr, type: :string, role:, as:) # rubocop:disable Naming/MethodParameterName
+    def custom_index(attr, role:, as:, type: :string) # rubocop:disable Naming/MethodParameterName
       role = [role] unless role.is_a? Array
 
       if role.count { |r| !JupiterCore::SolrServices.valid_solr_role?(r) } > 0
