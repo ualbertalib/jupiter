@@ -32,41 +32,53 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
     self
   end
 
-  def sort(attributes, order = nil)
+  def sort(attributes, orders = nil)
     solr_exporter = raw_model_to_model(criteria[:restrict_to_model].first).solr_exporter_class
     # Assuming we are passing a list of attributes to sort by
     criteria[:sort] = []
     attributes = [attributes] unless attributes.is_a?(Array)
-    if attributes.present?
-      attributes.each do |attr|
-        next if attr.blank?
+    orders = [orders] unless orders.is_a?(Array)
 
-        attr = attr.to_sym
+    criteria[:sort] = []
+    criteria[:sort_order] = []
 
-        solr_name = if attr == :relevance
-                      :score
-                    else
-                      solr_exporter.solr_name_for(attr, role: :sort)
-                    end
+    attributes.each_with_index do |attr, idx|
+      next if attr.blank?
 
-        criteria[:sort] << solr_name
-      end
+      attr = attr.to_sym
+      criteria[:sort] << begin
+                        if attr == :relevance
+                          # We change the sort attribute name because Solr uses score when sorting by relevance.
+                          :score
+                        else
+                          solr_exporter.solr_name_for(attr, role: :sort)
+                        end
+                      # Ignore current sort attribute if we could not find its solr name. It is safe to ignore the
+                      # pairing sort order
+                      rescue ArgumentError, JupiterCore::SolrServices::NameManglingError
+                        next
+                      end
+
+      order = orders[idx]&.to_sym
+
+      criteria[:sort_order] << if criteria[:sort].last == :score
+                                 # When sorting by score it only makes sense to use :desc order from the user
+                                 # perspective so we ignore the order if one is given.
+                                 :desc
+                               elsif order.present? && [:asc, :desc].include?(order)
+                                 order
+                               else
+                                 # We could not find the order so we switch to default sort direction
+                                 sort_direction_index = solr_exporter.default_sort_indexes.index(criteria[:sort].last)
+                                 solr_exporter.default_sort_direction[sort_direction_index]
+                               end
     end
 
-    criteria[:sort] = solr_exporter.default_sort_indexes if criteria[:sort].blank?
-
-    order = [order] unless order.is_a?(Array)
-    order.map! { |x| x ? x.to_sym : nil }
-
-    # order can only have values on :asc or :desc, the substraction of arrays let us know this
-    criteria[:sort_order] = if (order - [:asc, :desc]).empty?
-                              # When we order by score we need to sort in descending order to show the highest scores
-                              # first
-                              order[criteria[:sort].index(:score)] = :desc if criteria[:sort].include?(:score)
-                              order
-                            else
-                              Array.new(criteria[:sort].length, solr_exporter.default_sort_direction)
-                            end
+    # If no sort properties are set we resort to the default sort attributes
+    if criteria[:sort].blank?
+      criteria[:sort] = solr_exporter.default_sort_indexes
+      criteria[:sort_order] = solr_exporter.default_sort_direction
+    end
 
     self
   end
