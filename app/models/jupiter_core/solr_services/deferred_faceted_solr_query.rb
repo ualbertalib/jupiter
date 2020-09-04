@@ -55,7 +55,7 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
                         end
                       # Ignore current sort attribute if we could not find its solr name. It is safe to ignore the
                       # pairing sort order
-                      rescue ArgumentError, JupiterCore::SolrServices::NameManglingError
+                      rescue ArgumentError, NameManglingError
                         next
                       end
 
