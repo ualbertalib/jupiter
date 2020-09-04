@@ -46,22 +46,25 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
       next if attr.blank?
 
       attr = attr.to_sym
-      criteria[:sort] << begin
+      sort_attribute = begin
                         if attr == :relevance
                           # We change the sort attribute name because Solr uses score when sorting by relevance.
                           :score
                         else
                           solr_exporter.solr_name_for(attr, role: :sort)
                         end
-                      # Ignore current sort attribute if we could not find its solr name. It is safe to ignore the
-                      # pairing sort order
                       rescue ArgumentError, NameManglingError
-                        next
+                        nil
                       end
+
+      # Ignore current sort attribute if we could not find its solr name. It is safe to ignore the pairing sort order
+      next if sort_attribute.nil?
+
+      criteria[:sort] << sort_attribute
 
       order = orders[idx]&.to_sym
 
-      criteria[:sort_order] << if criteria[:sort].last == :score
+      criteria[:sort_order] << if sort_attribute == :score
                                  # When sorting by score it only makes sense to use :desc order from the user
                                  # perspective so we ignore the order if one is given.
                                  :desc
@@ -69,7 +72,7 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
                                  order
                                else
                                  # We could not find the order so we switch to default sort direction
-                                 sort_direction_index = solr_exporter.default_sort_indexes.index(criteria[:sort].last)
+                                 sort_direction_index = solr_exporter.default_sort_indexes.index(sort_attribute)
                                  solr_exporter.default_sort_direction[sort_direction_index]
                                end
     end
