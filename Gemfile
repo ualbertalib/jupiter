@@ -18,7 +18,7 @@ gem 'simple_form'
 
 # RDF stuff
 gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', tag: 'v0.2.4'
-gem 'rdf', '~> 3.1.5'
+gem 'rdf', '~> 3.1.6'
 gem 'rdf-n3'
 gem 'rdf-vocab', '~> 3.1.7'
 
