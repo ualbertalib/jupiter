@@ -6,8 +6,8 @@ class UserSearchService
 
   attr_reader :search_models
 
-  def initialize(base_restriction_key: nil, value: nil,
-                 search_models: [Item, Thesis], params: nil, current_user:)
+  def initialize(current_user:, base_restriction_key: nil, value: nil,
+                 search_models: [Item, Thesis], params: nil)
     raise ArgumentError, 'Must supply both a key and value' if @base_restriction_key.present? && @value.blank?
 
     @base_restriction_key = base_restriction_key

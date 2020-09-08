@@ -6,6 +6,9 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+### Fixed
+- bump rubocop and fix cop violations [PR#1845](https://github.com/ualbertalib/jupiter/pull/1845)
+
 ## [2.0.1.pre2] - 2020-09-01
 
 ### Added
