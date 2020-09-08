@@ -70,5 +70,5 @@ services:
       - ../UALcert:/etc/nginx/certs
       - assets:/app/public/
     ports:
-      - "80:80"
-      - "443:443"
+      - "80"
+      - "443"
