@@ -14,7 +14,7 @@ class SearchTest < ApplicationSystemTestCase
     @items = 10.times.map do |i|
       if i < 5
         Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                 owner_id: admin.id, title: "#{['Fancy', 'Nice'][i % 2]} Item #{i}",
+                 owner_id: admin.id, title: "#{random_title(i)} Item #{i}",
                  creators: ['Joe Blow'],
                  created: "19#{50 + i}-11-11",
                  languages: [CONTROLLED_VOCABULARIES[:language].english],
@@ -28,7 +28,7 @@ class SearchTest < ApplicationSystemTestCase
         end
       else
         Thesis.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                   owner_id: admin.id, title: "#{['Fancy', 'Nice'][i % 2]} Item #{i}",
+                   owner_id: admin.id, title: "#{random_title(i)} Item #{i}",
                    dissertant: 'Joe Blow',
                    language: CONTROLLED_VOCABULARIES[:language].english,
                    graduation_date: "19#{50 + i}-11-11")
@@ -63,7 +63,7 @@ class SearchTest < ApplicationSystemTestCase
     @items += 10.times.map do |i|
       if i < 5
         Item.new(visibility: JupiterCore::VISIBILITY_PRIVATE,
-                 owner_id: admin.id, title: "#{['Fancy', 'Nice'][i % 2]} Private Item #{i + 10}",
+                 owner_id: admin.id, title: "#{random_title(i)} Private Item #{i + 10}",
                  creators: ['Joe Blow'],
                  created: "19#{70 + i}-11-11",
                  languages: [CONTROLLED_VOCABULARIES[:language].english],
@@ -77,7 +77,7 @@ class SearchTest < ApplicationSystemTestCase
         end
       else
         Thesis.new(visibility: JupiterCore::VISIBILITY_PRIVATE,
-                   owner_id: admin.id, title: "#{['Fancy', 'Nice'][i % 2]} Private Item #{i + 10}",
+                   owner_id: admin.id, title: "#{random_title(i)} Private Item #{i + 10}",
                    dissertant: 'Joe Blow',
                    language: CONTROLLED_VOCABULARIES[:language].english,
                    graduation_date: "19#{70 + i}-11-11")

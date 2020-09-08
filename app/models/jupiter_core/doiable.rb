@@ -76,9 +76,10 @@ class JupiterCore::Doiable < JupiterCore::Depositable
     DOIRemoveJob.perform_later(doi) if doi.present?
   end
 
+  DOI_FIELDS = ['title', 'creator', 'dissertant', 'item_type', 'publication_status'].freeze
   def doi_fields_changed?
     changed.any? do |changed_field|
-      ['title', 'creator', 'dissertant', 'item_type', 'publication_status'].include? changed_field
+      DOI_FIELDS.include? changed_field
     end
   end
 
