@@ -96,4 +96,18 @@ namespace :jupiter do
     puts
     puts 'Finished!'
   end
+
+  desc 'enable read only mode'
+  task enable_read_only_mode: :environment do
+    puts 'Enabling read only mode...'
+    ReadOnlyMode.enable
+    puts 'Done!'
+  end
+
+  desc 'disable read only mode'
+  task disable_read_only_mode: :environment do
+    puts 'Disabling read only mode...'
+    ReadOnlyMode.disable
+    puts 'Done!'
+  end
 end

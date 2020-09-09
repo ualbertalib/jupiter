@@ -94,7 +94,7 @@
           </li>
         <% else %>
           <li role="presentation" class="nav-item">
-            <%= link_to t('.links.login'), '/auth/saml', class: 'nav-item nav-link text-nowrap', method: :post %>
+            <%= link_to t('.links.login'), '/auth/saml', class: 'nav-item nav-link text-nowrap', method: :post if ReadOnlyMode.disabled? %>
           </li>
           <% if Rails.env.development? || Rails.env.uat? %>
             <%# TODO: Temporary login form for local development or UAT %>

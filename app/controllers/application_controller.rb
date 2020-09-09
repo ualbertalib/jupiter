@@ -31,6 +31,8 @@ class ApplicationController < ActionController::Base
 
   # Returns the current logged-in user (if any).
   def current_user
+    return nil if ReadOnlyMode.enabled?
+
     return @current_user if @current_user.present?
 
     @current_user = User.find_by(id: session[:user_id])
@@ -51,6 +53,8 @@ class ApplicationController < ActionController::Base
 
   # Signs in the given user.
   def sign_in(user)
+    return if ReadOnlyMode.enabled?
+
     @current_user = user
     session[:user_id] = user.try(:id)
 
