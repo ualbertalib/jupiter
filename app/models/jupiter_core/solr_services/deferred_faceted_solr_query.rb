@@ -41,7 +41,7 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
 
     criteria[:sort] = []
     criteria[:sort_order] = []
-    possible_sort_orders = %i[asc desc]
+    possible_sort_orders = [:asc, :desc]
 
     attributes.each_with_index do |attr, idx|
       next if attr.blank?
