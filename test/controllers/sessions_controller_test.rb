@@ -173,6 +173,15 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_not logged_in?
   end
 
+  test 'should not log in from a saml account that is system' do
+    user = users(:system_user)
+    sign_in_as user
+
+    assert_redirected_to root_path
+    assert_equal I18n.t('login.error'), flash[:alert]
+    assert_not logged_in?
+  end
+
   test 'should not log in if api_key is incorrect' do
     post auth_system_url, params: {
       email: 'ditech@ualberta.ca',

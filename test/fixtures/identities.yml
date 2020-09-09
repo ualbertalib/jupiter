@@ -24,7 +24,7 @@ regular_two_saml:
   uid: regular_two_ccid@ualberta.ca
   provider: saml
 
-new_system_user_saml:
-  user: new_system_user
-  uid: sandor_clegane@example.com
+system_user_saml:
+  user: system_user
+  uid: ditech@ualberta.ca
   provider: saml

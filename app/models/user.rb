@@ -40,9 +40,7 @@ class User < ApplicationRecord
             if: -> { !system && api_key_digest.present? }
 
   # Ensure only one system user exists
-  # rubocop:disable Rails/Validation
-  validates_uniqueness_of :system, if: :system
-  # rubocop:enable Rails/Validation
+  validates :system, if: :system, uniqueness: true
 
   def update_activity!(now, remote_ip, sign_in: false)
     raise ArgumentError, :remote_ip if remote_ip.blank?

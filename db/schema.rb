@@ -249,7 +249,7 @@ ActiveRecord::Schema.define(version: 2020_08_31_182732) do
   end
 
   create_table "read_only_modes", force: :cascade do |t|
-    t.boolean "enabled"
+    t.boolean "enabled", default: false, null: false
   end
 
   create_table "theses", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|

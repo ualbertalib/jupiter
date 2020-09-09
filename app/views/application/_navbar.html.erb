@@ -99,7 +99,7 @@
           <% if Rails.env.development? || Rails.env.uat? %>
             <%# TODO: Temporary login form for local development or UAT %>
             <li role="presentation" class="nav-item">
-              <%= link_to t('.links.login_as_dev'), '/auth/developer', class: 'nav-item nav-link text-nowrap', method: :post %>
+              <%= link_to t('.links.login_as_dev'), '/auth/developer', class: 'nav-item nav-link text-nowrap', method: :post if ReadOnlyMode.disabled? %>
             </li>
           <% end %>
         <% end %>

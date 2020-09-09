@@ -1,6 +1,7 @@
 class ReadOnlyMode < ApplicationRecord
 
   validate :only_one_record_exists, on: :create
+  validates :enabled, inclusion: { in: [true, false] }
 
   def self.enabled?
     Rails.cache.fetch('read_only_mode.first.enabled', expires_in: 1.minute) do
