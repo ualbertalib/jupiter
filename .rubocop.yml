@@ -152,7 +152,8 @@ Style/SingleLineMethods:
   Enabled: false
 
 Style/SymbolArray:
-  Enabled: false
+  Enabled: true
+  EnforcedStyle: brackets
 
 Style/TrailingUnderscoreVariable:
   Enabled: false
