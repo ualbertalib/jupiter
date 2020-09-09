@@ -41,6 +41,7 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
 
     criteria[:sort] = []
     criteria[:sort_order] = []
+    possible_sort_orders = %i[asc desc]
 
     attributes.each_with_index do |attr, idx|
       next if attr.blank?
@@ -68,7 +69,7 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
                                  # When sorting by score it only makes sense to use :desc order from the user
                                  # perspective so we ignore the order if one is given.
                                  :desc
-                               elsif order.present? && [:asc, :desc].include?(order)
+                               elsif order.present? && possible_sort_orders.include?(order)
                                  order
                                else
                                  # We could not find the order so we switch to default sort direction
