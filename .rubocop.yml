@@ -160,8 +160,7 @@ Style/TrailingUnderscoreVariable:
 
 # Use %w or %W for arrays of words.
 Style/WordArray:
-  Enabled: true
-  EnforcedStyle: brackets
-  
+  Enabled: false
+
 Performance/TimesMap:
   Enabled: false
