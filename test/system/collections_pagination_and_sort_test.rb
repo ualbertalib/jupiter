@@ -7,7 +7,7 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
     @community = communities(:community_with_no_collections)
     # For sorting, creation order is 'Fancy Collection 00', 'Nice Collection 01', 'Fancy Collection 02', etc. ...
     (0..10).each do |i|
-      Collection.create!(title: format("#{['Fancy', 'Nice'][i % 2]} Collection %02i", i), owner_id: admin.id,
+      Collection.create!(title: format("#{random_title(i)} Collection %02i", i), owner_id: admin.id,
                          community_id: @community.id)
     end
   end

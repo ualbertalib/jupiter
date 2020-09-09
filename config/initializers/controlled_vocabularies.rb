@@ -3,12 +3,14 @@ controlled_vocabularies = {}
 
 config_files = Dir.glob(Rails.root.join('config/controlled_vocabularies/*.yml'))
 
+# this loop sets up the controlled_vocabularies
 config_files.each do |file|
   config = YAML.safe_load(File.open(file)).deep_symbolize_keys.freeze
   controlled_vocabularies.merge!(config)
 end
 
-config_files.each do |file|
+# this loop consumes the controlled_vocabularies
+config_files.each do |file| # rubocop:disable Style/CombinableLoops
   config = YAML.safe_load(File.open(file)).deep_symbolize_keys.freeze
   raise VocabularyInvalidError, 'There should be only one top-level vocabulary name key' unless config.keys.count == 1
 

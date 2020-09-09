@@ -44,11 +44,22 @@ class Metadata::OaiEtdms::ThesisDecorator < ApplicationDecorator
   end
 
   def discipline
-    object.departments.first
+    object.departments&.first
   end
 
   def institution
-    h.humanize_uri(:institution, object.institution)
+    # TODO: Replace Unknown with appropriate tag from metadata team
+    h.humanize_uri(:institution, object.institution) || 'Unknown'
+  end
+
+  def degree_name
+    # TODO: Replace Unknown with appropriate tag from metadata team
+    object.degree.presence || 'Unknown'
+  end
+
+  def publisher
+    # TODO: Replace Unknown with appropriate tag from metadata team
+    h.humanize_uri(:institution, object.institution) || 'Unknown'
   end
 
 end
