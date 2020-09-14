@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   before_action :store_user_location!, if: :storable_location?
   after_action :verify_authorized, except: [:service_unavailable]
 
-  helper_method :current_announcements, :current_user
+  helper_method :current_announcements, :current_user, :read_only_mode_enabled?, :read_only_mode_disabled?
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
@@ -31,7 +31,7 @@ class ApplicationController < ActionController::Base
 
   # Returns the current logged-in user (if any).
   def current_user
-    return nil if ReadOnlyMode.enabled?
+    return nil if read_only_mode_enabled?
 
     return @current_user if @current_user.present?
 
@@ -53,7 +53,7 @@ class ApplicationController < ActionController::Base
 
   # Signs in the given user.
   def sign_in(user)
-    return if ReadOnlyMode.enabled?
+    return if read_only_mode_enabled?
 
     @current_user = user
     session[:user_id] = user.try(:id)
@@ -109,6 +109,16 @@ class ApplicationController < ActionController::Base
 
   def current_announcements
     Announcement.current
+  end
+
+  def read_only_mode_enabled?
+    Rails.cache.fetch('read_only_mode.first.enabled', expires_in: 1.minute) do
+      ReadOnlyMode.first.enabled
+    end
+  end
+
+  def read_only_mode_disabled?
+    !read_only_mode_enabled?
   end
 
 end
