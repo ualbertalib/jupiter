@@ -41,6 +41,10 @@ if Rails.env.development? || Rails.env.uat?
   bad_user = User.create(name: 'Jill Bad-user', email: 'bad_user@ualberta.ca', admin: false, suspended: true)
   bad_user.identities.create(provider: 'developer', uid: 'bad_user@ualberta.ca')
 
+  # Seed a system user with email ditech@ualberta.ca.
+  system_user = User.create(name: 'System User', email: 'ditech@ualberta.ca', admin: true)
+  system_user.identities.create(provider: 'developer', uid: 'ditech@ualberta.ca')
+
   # A bunch of non-identity users for to manipulate in the admin interface
   100.times do
     name = Faker::TvShows::GameOfThrones.unique.character

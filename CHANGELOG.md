@@ -6,6 +6,9 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+### Added
+- Added read only mode feature [#1838](https://github.com/ualbertalib/jupiter/issues/1838)
+
 ## [1.2.22] – 2020-08-24
 - disable Collection usage of Communities for a PCDM triple in order to work around data corruption in Prod
 

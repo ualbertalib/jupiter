@@ -5,6 +5,8 @@ class User < ApplicationRecord
   has_many :draft_items, dependent: :destroy
   has_many :draft_theses, dependent: :destroy
 
+  scope :system_user, -> { find_by(email: 'ditech@ualberta.ca') }
+
   # We don't need to validate the format of an email address here,
   # as emails are supplied from SAML (so assuming...hopefully they are valid)
   validates :email, presence: true,

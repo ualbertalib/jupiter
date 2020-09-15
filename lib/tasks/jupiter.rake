@@ -1,3 +1,5 @@
+require Rails.root.join('app', 'services', 'read_only_service')
+
 namespace :jupiter do
   # Wizard has potential of leaving stale inactive draft items around,
   # For example if someone goes to the deposit screen and then leaves
@@ -118,5 +120,21 @@ namespace :jupiter do
     puts "error migrating #{item.class}: #{item.id} -- reported error was '#{e.message}'"
     puts 'moving on to next item'
     puts
+  end
+
+  desc 'enable read only mode'
+  task enable_read_only_mode: :environment do
+    read_only_mode = ReadOnlyService.new
+    puts 'Enabling read only mode...'
+    read_only_mode.enable
+    puts 'Done!'
+  end
+
+  desc 'disable read only mode'
+  task disable_read_only_mode: :environment do
+    read_only_mode = ReadOnlyService.new
+    puts 'Disabling read only mode...'
+    read_only_mode.disable
+    puts 'Done!'
   end
 end
