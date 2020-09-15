@@ -4,6 +4,10 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
   include Kaminari::PageScopeMethods
   include Kaminari::ConfigurationMethods::ClassMethods
 
+  POSSIBLE_SORT_ORDERS = [:asc, :desc].freeze
+
+  private_constant :POSSIBLE_SORT_ORDERS
+
   def initialize(q:, qf:, fq:, facet_map:, facet_fields:, ranges:, restrict_to_model:)
     criteria[:q] = q
     criteria[:qf] = qf # Query Fields
@@ -68,7 +72,7 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
                                  # When sorting by score it only makes sense to use :desc order from the user
                                  # perspective so we ignore the order if one is given.
                                  :desc
-                               elsif order.present? && [:asc, :desc].include?(order)
+                               elsif order.present? && POSSIBLE_SORT_ORDERS.include?(order)
                                  order
                                else
                                  # We could not find the order so we switch to default sort direction
