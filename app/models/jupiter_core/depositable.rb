@@ -205,7 +205,7 @@ class JupiterCore::Depositable < ApplicationRecord
   # any new model would silently be an N+1 on attachments until somebody noticed the missing implementation. Better
   # to fail fast and noisly during development when we've forgotten to be efficient.
   def self.eager_attachment_scope
-    raise MissingImplementationError, 'Depositable models must implement <Class>.with_eagerly_loaded_attachments'
+    raise MissingImplementationError, 'Depositable models must implement <Class>.eager_attachment_scope'
   end
 
   # We intend +eager_attachment_scope+ to be the protected method inheritors implement, while the public interface
