@@ -52,6 +52,40 @@ class Item < JupiterCore::Doiable
   validates :member_of_paths, community_and_collection_existence: true
   validates :visibility_after_embargo, known_visibility: { only: VISIBILITIES_AFTER_EMBARGO }
 
+  # This is stored in solr: combination of item_type and publication_status
+  def item_type_with_status_code
+    return nil if item_type.blank?
+
+    # Return the item type code unless it's an article, then append publication status code
+    item_type_code = CONTROLLED_VOCABULARIES[:item_type].from_uri(item_type)
+    return item_type_code unless item_type_code == :article
+    return nil if publication_status.blank?
+
+    publication_status_code = CONTROLLED_VOCABULARIES[:publication_status].from_uri(publication_status.first)
+    # Next line of code means that 'article_submitted' exists, but 'article_draft' doesn't ("There can be only one!")
+    publication_status_code = :submitted if publication_status_code == :draft
+    "#{item_type_code}_#{publication_status_code}".to_sym
+  rescue ArgumentError
+    nil
+  end
+
+  def all_subjects
+    subject + temporal_subjects.to_a + spatial_subjects.to_a
+  end
+
+  def populate_sort_year
+    self.sort_year = Date.parse(created).year.to_i if created.present?
+  rescue ArgumentError
+    # date was un-parsable, try to pull out the first 4 digit number as a year
+    capture = created.scan(/\d{4}/)
+    self.sort_year = capture[0].to_i if capture.present?
+  end
+
+  def add_to_path(community_id, collection_id)
+    self.member_of_paths ||= []
+    self.member_of_paths += ["#{community_id}/#{collection_id}"]
+  end
+
   def self.from_draft(draft_item)
     item = Item.find(draft_item.uuid) if draft_item.uuid.present?
     item ||= Item.new(id: draft_item.uuid)
@@ -124,42 +158,12 @@ class Item < JupiterCore::Doiable
     item
   end
 
-  # This is stored in solr: combination of item_type and publication_status
-  def item_type_with_status_code
-    return nil if item_type.blank?
-
-    # Return the item type code unless it's an article, then append publication status code
-    item_type_code = CONTROLLED_VOCABULARIES[:item_type].from_uri(item_type)
-    return item_type_code unless item_type_code == :article
-    return nil if publication_status.blank?
-
-    publication_status_code = CONTROLLED_VOCABULARIES[:publication_status].from_uri(publication_status.first)
-    # Next line of code means that 'article_submitted' exists, but 'article_draft' doesn't ("There can be only one!")
-    publication_status_code = :submitted if publication_status_code == :draft
-    "#{item_type_code}_#{publication_status_code}".to_sym
-  rescue ArgumentError
-    nil
-  end
-
-  def all_subjects
-    subject + temporal_subjects.to_a + spatial_subjects.to_a
-  end
-
-  def populate_sort_year
-    self.sort_year = Date.parse(created).year.to_i if created.present?
-  rescue ArgumentError
-    # date was un-parsable, try to pull out the first 4 digit number as a year
-    capture = created.scan(/\d{4}/)
-    self.sort_year = capture[0].to_i if capture.present?
-  end
-
-  def add_to_path(community_id, collection_id)
-    self.member_of_paths ||= []
-    self.member_of_paths += ["#{community_id}/#{collection_id}"]
-  end
-
   def self.valid_visibilities
     super + [VISIBILITY_EMBARGO]
+  end
+
+  def self.eager_attachment_scope
+    with_attached_files
   end
 
 end

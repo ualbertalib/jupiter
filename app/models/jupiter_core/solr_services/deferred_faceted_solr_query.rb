@@ -118,7 +118,7 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
               #
               # TODO: This is inefficient and we should look at batching up IDs
               arclass = res['has_model_ssim'].first.sub(/^Ar/, '').constantize
-              arclass.find(res['id'])
+              arclass.with_eagerly_loaded_attachments.find(res['id'])
             rescue ActiveRecord::RecordNotFound
               # This _should_ only crop up in tests, where truncation of tables is bypassing callbacks that clean up
               # solr. BUT, I want to track this just in case.
