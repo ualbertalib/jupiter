@@ -42,6 +42,19 @@ class Thesis < JupiterCore::Doiable
     :thesis
   end
 
+  def populate_sort_year
+    self.sort_year = Date.parse(graduation_date).year.to_i if graduation_date.present?
+    rescue ArgumentError
+      # date was unparsable, try to pull out the first 4 digit number as a year
+      capture = graduation_date.scan(/\d{4}/)
+      self.sort_year = capture[0].to_i if capture.present?
+  end
+
+  def add_to_path(community_id, collection_id)
+    self.member_of_paths ||= []
+    self.member_of_paths += ["#{community_id}/#{collection_id}"]
+  end
+
   def self.from_draft(draft_thesis)
     thesis = Thesis.find(draft_thesis.uuid) if draft_thesis.uuid.present?
     thesis ||= Thesis.new
@@ -117,21 +130,12 @@ class Thesis < JupiterCore::Doiable
     thesis
   end
 
-  def populate_sort_year
-    self.sort_year = Date.parse(graduation_date).year.to_i if graduation_date.present?
-    rescue ArgumentError
-      # date was unparsable, try to pull out the first 4 digit number as a year
-      capture = graduation_date.scan(/\d{4}/)
-      self.sort_year = capture[0].to_i if capture.present?
-  end
-
-  def add_to_path(community_id, collection_id)
-    self.member_of_paths ||= []
-    self.member_of_paths += ["#{community_id}/#{collection_id}"]
-  end
-
   def self.valid_visibilities
     super + [VISIBILITY_EMBARGO]
+  end
+
+  def self.eager_attachment_scope
+    with_attached_files
   end
 
 end
