@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
 
-  helper_method :current_announcements, :current_user, :read_only_mode_enabled?, :read_only_mode_disabled?
+  helper_method :current_announcements, :current_user, :read_only_mode_enabled?, :logins_enabled?
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
@@ -117,7 +117,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def read_only_mode_disabled?
+  def logins_enabled?
     !read_only_mode_enabled?
   end
 
