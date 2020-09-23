@@ -126,23 +126,6 @@ module ItemProperties
         errors.add(:visibility_after_embargo, :not_recognized)
       end
 
-      before_save do
-        if member_of_paths_changed?
-          # This adds the `pcdm::memberOf` predicates, pointing to each collection
-          self.member_of_collections = []
-          member_of_paths.each do |path|
-            _community_id, collection_id = path.split('/')
-            collection = Collection.find_by(collection_id)
-
-            # This sets `memberOf`
-            # TODO: can this be streamlined so that a fetch from Fedora isn't needed?
-            collection.unlock_and_fetch_ldp_object do |unlocked_collection|
-              self.member_of_collections += [unlocked_collection]
-            end
-          end
-        end
-      end
-
       def handle_doi_states
         # this should be disabled during migration runs and enabled for production
         return unless Rails.application.secrets.doi_minting_enabled
@@ -206,12 +189,9 @@ module ItemProperties
 
       def purge_filesets
         FileSet.where(item: id).each do |fs|
-          fs.unlock_and_fetch_ldp_object do |fileset|
-            ordered_members.delete(fs) # delete the list node
-            members.delete(fs) # delete the indirect container proxy
-            fileset.delete # delete the fileset
-          end
+          fs.unlock_and_fetch_ldp_object(&:delete)
         end
+        self.ordered_members = []
 
         save
       end
