@@ -22,16 +22,6 @@ class ThesisTest < ActiveSupport::TestCase
     thesis.unlock_and_fetch_ldp_object do |unlocked_thesis|
       unlocked_thesis.add_to_path(community.id, collection.id)
       unlocked_thesis.save!
-      # Reload needed for dump below
-      unlocked_thesis.reload
-
-      # Dump some triples for sanity checks
-      triples = unlocked_thesis.resource.dump(:ntriples)
-      # Ensure correct type triple was saved
-      assert_match('<http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/ontology/bibo/Thesis>',
-                   triples)
-      # Ensure `memberOf` was set correctly to collection ID:
-      assert_match("<http://pcdm.org/models#memberOf> <#{collection_uri}>", triples)
     end
     assert thesis.valid?
     assert_not_equal 0, Thesis.public.count
