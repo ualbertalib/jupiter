@@ -816,4 +816,4 @@ en:
       next: "<span class='d-none d-md-inline'>Next</span> &rsaquo;"
       truncate: "..."
   announcement_templates:
-    read_only_mode: 'Logins are currently disabled due to system maintenance, please try again later.'
+    read_only_mode: 'Logins are currently disabled.'
