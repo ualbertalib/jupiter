@@ -1,3 +1,3 @@
 module Jupiter
-  VERSION = '1.2.20'.freeze
+  VERSION = '1.2.23'.freeze
 end

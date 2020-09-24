@@ -30,8 +30,6 @@ class ThesisTest < ActiveSupport::TestCase
       # Ensure correct type triple was saved
       assert_match('<http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/ontology/bibo/Thesis>',
                    triples)
-      # Ensure `memberOf` was set correctly to collection ID:
-      assert_match("<http://pcdm.org/models#memberOf> <#{collection_uri}>", triples)
     end
     assert thesis.valid?
     assert_not_equal 0, Thesis.public.count
