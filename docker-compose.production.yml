@@ -1,4 +1,4 @@
-version: '3'
+version: '3.3'
 
 volumes:
   postgres:
@@ -60,6 +60,8 @@ services:
       - assets:/app/public/
       - file-storage:/app/storage/
     command: bundle exec puma -e uat
+    labels:
+      com.centurylinklabs.watchtower.lifecycle.post-update: "watchtower-post-update.sh"
 
   nginx:
     restart: always
