@@ -54,4 +54,12 @@ module ItemsHelper
     6 => I18n.t('items.thesis.graduation_terms.spring'),
     11 => I18n.t('items.thesis.graduation_terms.fall')
   }.freeze
+
+  def display_admin_sidebar(item)
+    aasm_not_available = item.aasm_state == 'not_available'
+    doi_blank = item.doi.blank?
+    item_doi_initialized = item.created_at < Time.zone.now - 1.minute
+
+    item_doi_initialized && (aasm_not_available || doi_blank)
+  end
 end

@@ -78,6 +78,7 @@ Rails.application.routes.draw do
   match '/auth/failure', to: 'sessions#failure', via: [:get, :post]
   match '/logout', to: 'sessions#destroy', via: [:get, :post]
   post '/auth/system', to: 'sessions#system_login'
+  get '/admin/reset_doi/:id', to: 'admin/doiable#reset_doi', as: '/admin/reset_doi'
 
   # Sidekiq panel
   if Rails.env.development?
