@@ -10,6 +10,9 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Enable Skylight in the Staging environment and remove it from the UAT environment (where it was unused, and the performance of the Docker environment is less likely to be similar to Production)
 - uat configuration to accept proxy from upstream nginx-proxy [#1724](https://github.com/ualbertalib/jupiter/issues/1724)
 
+### Added
+- script for watchtower to run from post-update hook [PR#1892](https://github.com/ualbertalib/jupiter/pull/1892)
+
 ### Fixed
 - bump rubocop and fix cop violations [PR#1845](https://github.com/ualbertalib/jupiter/pull/1845)
 - bump rubocop-performance and fix cop violations [PR#1850](https://github.com/ualbertalib/jupiter/pull/1850)
