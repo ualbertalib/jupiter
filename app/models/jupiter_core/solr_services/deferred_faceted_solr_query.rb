@@ -8,7 +8,7 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
 
   private_constant :POSSIBLE_SORT_ORDERS
 
-  def initialize(q:, qf:, fq:, facet_map:, facet_fields:, ranges:, restrict_to_model:)
+  def initialize(q:, qf:, fq:, facet_map:, facet_fields:, ranges:, restrict_to_model:, highlight_fields:)
     criteria[:q] = q
     criteria[:qf] = qf # Query Fields
     criteria[:fq] = fq # Facet Query
@@ -18,6 +18,7 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
     criteria[:restrict_to_model] = restrict_to_model
     criteria[:sort] = []
     criteria[:sort_order] = []
+    criteria[:highlight_fields] = highlight_fields
   end
 
   def criteria
@@ -109,6 +110,11 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
     end
   end
 
+  def highlights
+    reify_result_set
+    @highlights || {}
+  end
+
   def each
     reify_result_set.map do |res|
       obj = begin
@@ -154,7 +160,7 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
 
   def total_count
     @total_count_cache ||= begin
-      results_count, _ = JupiterCore::Search.perform_solr_query(search_args_with_limit(0))
+      results_count, _, _, _ = JupiterCore::Search.perform_solr_query(search_args_with_limit(0))
       results_count
     end
   end
@@ -194,7 +200,7 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
     model_has_sort_year = model.solr_exporter_class.indexed_attributes.include?(:sort_year)
     sort_year_facet = model.solr_exporter_class.solr_name_for(:sort_year, role: :range_facet) if model_has_sort_year
 
-    @count_cache, @results, facet_data = JupiterCore::Search.perform_solr_query(
+    @count_cache, @results, facet_data, @highlights = JupiterCore::Search.perform_solr_query(
       search_args_with_limit(criteria[:limit])
     )
 
@@ -236,7 +242,8 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
       restrict_to_model: criteria[:restrict_to_model],
       rows: limit,
       start: criteria[:offset],
-      sort: sort_clause }
+      sort: sort_clause,
+      highlight_fields: criteria[:highlight_fields] }
   end
 
   def raw_model_to_model(raw_model)

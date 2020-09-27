@@ -19,7 +19,11 @@ class SearchController < ApplicationController
     search_query_index = UserSearchService.new(
       search_models: models,
       params: params,
-      current_user: current_user
+      current_user: current_user,
+      highlight_fields: [
+        Item.solr_exporter_class.solr_name_for(:description, role: :search),
+        Thesis.solr_exporter_class.solr_name_for(:abstract, role: :search)
+      ]
     )
     @results = search_query_index.results
     @search_models = search_query_index.search_models

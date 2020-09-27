@@ -113,4 +113,15 @@ module SearchHelper
     last = results.offset_value + results.count
     t('search.page_range', first: first, last: last, total: results.total_count)
   end
+
+  def highlight_matches(object:, field:, highlights:)
+    return [] if highlights.blank?
+
+    field_solr_name = object.solr_exporter_class.solr_name_for(field.to_sym, role: :search).to_s
+    id = object.id.to_s
+
+    return [] unless highlights[id].key?(field_solr_name)
+
+    highlights[id][field_solr_name]
+  end
 end
