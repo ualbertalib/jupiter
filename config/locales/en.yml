@@ -566,6 +566,7 @@ en:
     admin_sidebar:
       admin: 'Admin'
       reset_doi: 'Reset DOI'
+      doi_reset_confirmation: 'Are you sure you want to reset the DOI for this item?'
     new:
       header: 'Deposit Item'
     create:

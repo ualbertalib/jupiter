@@ -7,7 +7,9 @@
       <div class="d-flex justify-content-center">
         <div class="p-1">
           <%= link_to(t('.reset_doi'), admin_reset_doi_path(@item),
-                      class: 'btn btn-outline-primary') %>
+                      class: 'btn btn-outline-primary',
+                      data: { confirm: t('.doi_reset_confirmation') },
+                      method: :patch) %>
         </div>
       </div>
     </ul>

@@ -71,6 +71,8 @@ Rails.application.routes.draw do
     end
 
     resources :announcements, only: [:index, :destroy, :create]
+
+    patch '/reset_doi/:id', to: 'items#reset_doi', as: '/reset_doi'
   end
 
   post '/logout_as_user', to: 'sessions#logout_as_user'
@@ -78,7 +80,6 @@ Rails.application.routes.draw do
   match '/auth/failure', to: 'sessions#failure', via: [:get, :post]
   match '/logout', to: 'sessions#destroy', via: [:get, :post]
   post '/auth/system', to: 'sessions#system_login'
-  get '/admin/reset_doi/:id', to: 'admin/doiable#reset_doi', as: '/admin/reset_doi'
 
   # Sidekiq panel
   if Rails.env.development?
