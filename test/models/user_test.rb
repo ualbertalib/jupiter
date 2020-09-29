@@ -101,10 +101,11 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'should validate if it has an api key and it is a system account' do
+    User.system_user.delete
     user = User.new(
-      name: 'User name',
-      email: 'valid@example.com',
-      api_key: '70d800e9-5fe8-49e4-86ed-eefc11ebfa52',
+      name: 'System user',
+      email: 'ditech@ualberta.ca',
+      api_key_digest: BCrypt::Password.create('3eeb395e-63b7-11ea-bc55-0242ac130003'),
       system: true
     )
 

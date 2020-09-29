@@ -1,3 +1,5 @@
+require Rails.root.join('app/services/read_only_service')
+
 namespace :jupiter do
   desc 'fetch and unlock every object then save'
   task :reindex, [:batch_size] => :environment do |_, args|
@@ -95,5 +97,21 @@ namespace :jupiter do
 
     puts
     puts 'Finished!'
+  end
+
+  desc 'enable read only mode'
+  task enable_read_only_mode: :environment do
+    read_only_mode = ReadOnlyService.new
+    puts 'Enabling read only mode...'
+    read_only_mode.enable
+    puts 'Done!'
+  end
+
+  desc 'disable read only mode'
+  task disable_read_only_mode: :environment do
+    read_only_mode = ReadOnlyService.new
+    puts 'Disabling read only mode...'
+    read_only_mode.disable
+    puts 'Done!'
   end
 end
