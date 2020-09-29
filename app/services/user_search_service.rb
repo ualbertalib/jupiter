@@ -6,8 +6,8 @@ class UserSearchService
 
   attr_reader :search_models
 
-  def initialize(base_restriction_key: nil, value: nil,
-                 search_models: [Item, Thesis], params: nil, current_user:)
+  def initialize(current_user:, base_restriction_key: nil, value: nil,
+                 search_models: [Item, Thesis], params: nil)
     raise ArgumentError, 'Must supply both a key and value' if @base_restriction_key.present? && @value.blank?
 
     @base_restriction_key = base_restriction_key
@@ -28,12 +28,13 @@ class UserSearchService
     search_options = { q: query, models: search_models, as: @current_user,
                        facets: facets, ranges: @search_params[:ranges] }
 
-    # sort by relelvance if a search term is present and no explicit sort field has been chosen
-    sort_field = @search_params[:sort]
-    sort_field ||= :relevance if query.present?
+    # Sort by relevance if a search term is present and no explicit sort field has been chosen
+    sort_fields = @search_params[:sort]
+    sort_fields ||= [:relevance, :title] if query.present?
+    sort_orders = @search_params[:direction]
 
     JupiterCore::Search.faceted_search(search_options)
-                       .sort(sort_field, @search_params[:direction])
+                       .sort(sort_fields, sort_orders)
                        .page(@search_params[:page])
   end
 

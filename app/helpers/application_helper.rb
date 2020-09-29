@@ -41,12 +41,13 @@ module ApplicationHelper
   def search_link_for(object, attribute, value: nil, facet: :facet, display: nil)
     value ||= object.send(attribute)
     display ||= value
-    if facet == :range_facet
+    case facet
+    when :range_facet
       link_to(display, search_path(ranges: object.solr_exporter_class.facet_term_for(attribute,
                                                                                      value,
                                                                                      role: :range_facet)),
               rel: 'nofollow')
-    elsif facet == :facet
+    when :facet
       link_to(display, search_path(facets: object.solr_exporter_class.facet_term_for(attribute, value)),
               rel: 'nofollow')
     else

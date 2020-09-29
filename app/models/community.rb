@@ -22,12 +22,8 @@ class Community < JupiterCore::Depositable
     self.visibility = JupiterCore::VISIBILITY_PUBLIC
   end
 
-  acts_as_rdfable do |config|
-    config.title has_predicate: ::RDF::Vocab::DC.title
-    config.fedora3_uuid has_predicate: ::TERMS[:ual].fedora3_uuid
-    config.depositor has_predicate: ::TERMS[:ual].depositor
-    config.description has_predicate: ::RDF::Vocab::DC.description
-    config.creators has_predicate: ::RDF::Vocab::DC.creator
+  def self.eager_attachment_scope
+    with_attached_logo
   end
 
   # this method can be used on the SolrCached object OR the ActiveFedora object

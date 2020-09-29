@@ -173,8 +173,8 @@ class AdminUsersShowTest < ApplicationSystemTestCase
     assert_selector 'div.jupiter-results-list li.list-group-item .media-body a', text: 'Nice Item', count: 1
 
     # Should not be able to find the item owned by admin
-    refute_selector 'div.jupiter-results-list li.list-group-item .media-body a', text: 'Admin Item'
-
+    refute_selector 'div.jupiter-results-list li.list-group-item .media-body a',
+                    text: 'dcterms:title1$ Some Title for Item'
     # Search items
     fill_in id: 'search_bar', with: 'Fancy'
     click_button 'Search Items'

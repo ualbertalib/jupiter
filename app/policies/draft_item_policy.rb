@@ -42,8 +42,8 @@ class DraftItemPolicy < ApplicationPolicy
      :source, :related_item,
      :license, :license_text_area, :visibility, :embargo_end_date,
      :status, :wizard_step,
-     language_ids: [], creators: [], subjects: [],
-     contributors: [], places: [], time_periods: [], citations: []]
+     { language_ids: [], creators: [], subjects: [],
+       contributors: [], places: [], time_periods: [], citations: [] }]
   end
 
 end

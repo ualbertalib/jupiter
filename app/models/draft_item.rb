@@ -222,9 +222,10 @@ class DraftItem < ApplicationRecord
 
   # silly stuff needed for handling multivalued publication status attribute when Item type is `Article`
   def publication_status_as_uri
-    if type.name == 'journal_article_draft'
+    case type.name
+    when 'journal_article_draft'
       [CONTROLLED_VOCABULARIES[:publication_status].draft, CONTROLLED_VOCABULARIES[:publication_status].submitted]
-    elsif type.name == 'journal_article_published'
+    when 'journal_article_published'
       [CONTROLLED_VOCABULARIES[:publication_status].published]
     end
   end

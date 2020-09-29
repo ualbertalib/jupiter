@@ -9,7 +9,7 @@ class CommunitiesPaginationAndSortTest < ApplicationSystemTestCase
 
     admin = users(:admin)
     (0..10).each do |i|
-      Community.new(title: format("#{['Fancy', 'Nice'][i % 2]} Community %02i", i), owner_id: admin.id).save!
+      Community.new(title: format("#{random_title(i)} Community %02i", i), owner_id: admin.id).save!
     end
   end
 

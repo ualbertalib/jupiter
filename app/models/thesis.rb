@@ -20,8 +20,8 @@ class Thesis < JupiterCore::Doiable
   scope :updated_on_or_after, ->(date) { where('updated_at >= ?', date) }
   scope :updated_on_or_before, ->(date) { where('updated_at <= ?', date) }
 
-  after_save :push_item_id_for_preservation
   before_validation :populate_sort_year
+  after_save :push_item_id_for_preservation
 
   validates :dissertant, presence: true
   validates :graduation_date, presence: true
@@ -34,12 +34,25 @@ class Thesis < JupiterCore::Doiable
   validates :visibility_after_embargo, presence: true, if: ->(item) { item.visibility == VISIBILITY_EMBARGO }
   validates :visibility_after_embargo, absence: true, if: ->(item) { item.visibility != VISIBILITY_EMBARGO }
   validates :member_of_paths, presence: true
-  validate :communities_and_collections_must_exist
-  validate :visibility_after_embargo_must_be_valid
+  validates :member_of_paths, community_and_collection_existence: true
+  validates :visibility_after_embargo, known_visibility: { only: VISIBILITIES_AFTER_EMBARGO }
 
   # Present a consistent interface with Item#item_type_with_status_code
   def item_type_with_status_code
     :thesis
+  end
+
+  def populate_sort_year
+    self.sort_year = Date.parse(graduation_date).year.to_i if graduation_date.present?
+    rescue ArgumentError
+      # date was unparsable, try to pull out the first 4 digit number as a year
+      capture = graduation_date.scan(/\d{4}/)
+      self.sort_year = capture[0].to_i if capture.present?
+  end
+
+  def add_to_path(community_id, collection_id)
+    self.member_of_paths ||= []
+    self.member_of_paths += ["#{community_id}/#{collection_id}"]
   end
 
   def self.from_draft(draft_thesis)
@@ -117,21 +130,12 @@ class Thesis < JupiterCore::Doiable
     thesis
   end
 
-  def populate_sort_year
-    self.sort_year = Date.parse(graduation_date).year.to_i if graduation_date.present?
-    rescue ArgumentError
-      # date was unparsable, try to pull out the first 4 digit number as a year
-      capture = graduation_date.scan(/\d{4}/)
-      self.sort_year = capture[0].to_i if capture.present?
-  end
-
-  def add_to_path(community_id, collection_id)
-    self.member_of_paths ||= []
-    self.member_of_paths += ["#{community_id}/#{collection_id}"]
-  end
-
   def self.valid_visibilities
     super + [VISIBILITY_EMBARGO]
+  end
+
+  def self.eager_attachment_scope
+    with_attached_files
   end
 
 end

@@ -4,6 +4,10 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
   include Kaminari::PageScopeMethods
   include Kaminari::ConfigurationMethods::ClassMethods
 
+  POSSIBLE_SORT_ORDERS = [:asc, :desc].freeze
+
+  private_constant :POSSIBLE_SORT_ORDERS
+
   def initialize(q:, qf:, fq:, facet_map:, facet_fields:, ranges:, restrict_to_model:)
     criteria[:q] = q
     criteria[:qf] = qf # Query Fields
@@ -32,33 +36,57 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
     self
   end
 
-  def sort(attr, order = nil)
+  def sort(attributes, orders = nil)
     solr_exporter = raw_model_to_model(criteria[:restrict_to_model].first).solr_exporter_class
+    # Assuming we are passing a list of attributes to sort by
+    criteria[:sort] = []
+    attributes = [attributes] unless attributes.is_a?(Array)
+    orders = [orders] unless orders.is_a?(Array)
 
-    if attr.present?
+    criteria[:sort] = []
+    criteria[:sort_order] = []
+
+    attributes.each_with_index do |attr, idx|
+      next if attr.blank?
+
       attr = attr.to_sym
-      solr_name = begin
-                    if attr == :relevance
-                      :score
-                    else
-                      solr_exporter.solr_name_for(attr, role: :sort)
-                    end
-                  rescue ArgumentError
-                    nil
-                  end
-      criteria[:sort] = [solr_name] if solr_name.present?
-    end
-    criteria[:sort] = solr_exporter.default_sort_indexes if criteria[:sort].blank?
+      sort_attribute = begin
+                        if attr == :relevance
+                          # We change the sort attribute name because Solr uses score when sorting by relevance.
+                          :score
+                        else
+                          solr_exporter.solr_name_for(attr, role: :sort)
+                        end
+                      rescue ArgumentError, NameManglingError
+                        nil
+                      end
 
-    # Note the elsif: if no explicit order was passed from the user, and we're ordering by score, we default
-    # to sorting scores descending rather than ascending, as is otherwise used when eg) title is the default sort field
-    criteria[:sort_order] = if order.present? && [:asc, :desc].include?(order.to_sym)
-                              [order]
-                            elsif criteria[:sort] == [:score]
-                              [:desc]
-                            else
-                              solr_exporter.default_sort_direction
-                            end
+      # Ignore current sort attribute if we could not find its solr name. It is safe to ignore the pairing sort order
+      next if sort_attribute.nil?
+
+      criteria[:sort] << sort_attribute
+
+      order = orders[idx]&.to_sym
+
+      criteria[:sort_order] << if sort_attribute == :score
+                                 # When sorting by score it only makes sense to use :desc order from the user
+                                 # perspective so we ignore the order if one is given.
+                                 :desc
+                               elsif order.present? && POSSIBLE_SORT_ORDERS.include?(order)
+                                 order
+                               else
+                                 # We could not find the order so we switch to default sort direction
+                                 sort_direction_index = solr_exporter.default_sort_indexes.index(sort_attribute)
+                                 solr_exporter.default_sort_direction[sort_direction_index]
+                               end
+    end
+
+    # If no sort properties are set we resort to the default sort attributes
+    if criteria[:sort].blank?
+      criteria[:sort] = solr_exporter.default_sort_indexes
+      criteria[:sort_order] = solr_exporter.default_sort_direction
+    end
+
     self
   end
 
@@ -90,7 +118,7 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
               #
               # TODO: This is inefficient and we should look at batching up IDs
               arclass = res['has_model_ssim'].first.sub(/^Ar/, '').constantize
-              arclass.find(res['id'])
+              arclass.with_eagerly_loaded_attachments.find(res['id'])
             rescue ActiveRecord::RecordNotFound
               # This _should_ only crop up in tests, where truncation of tables is bypassing callbacks that clean up
               # solr. BUT, I want to track this just in case.

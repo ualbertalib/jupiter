@@ -9,7 +9,7 @@ class Collection < JupiterCore::Depositable
 
   validates :title, presence: true
   validates :community_id, presence: true
-  validate :community_validations
+  validates :community_id, community_existence: true
 
   before_destroy :can_be_destroyed?
 
@@ -17,15 +17,8 @@ class Collection < JupiterCore::Depositable
     self.visibility = JupiterCore::VISIBILITY_PUBLIC
   end
 
-  acts_as_rdfable do |config|
-    config.title has_predicate: ::RDF::Vocab::DC.title
-    config.fedora3_uuid has_predicate: ::TERMS[:ual].fedora3_uuid
-    config.depositor has_predicate: ::TERMS[:ual].depositor
-    config.community_id has_predicate: ::TERMS[:ual].path
-    config.description has_predicate: ::RDF::Vocab::DC.description
-    config.restricted has_predicate: ::TERMS[:ual].restricted_collection
-    config.creators has_predicate: ::RDF::Vocab::DC.creator
-  end
+  # We have no attachments, so the scope is just the class itself.
+  def self.eager_attachment_scope; self; end
 
   def path
     "#{community_id}/#{id}"
@@ -58,13 +51,6 @@ class Collection < JupiterCore::Depositable
     errors.add(:member_objects, :must_be_empty,
                list_of_objects: member_objects.map(&:title).join(', '))
     throw(:abort)
-  end
-
-  def community_validations
-    return unless community_id
-
-    community = Community.find_by(id: community_id)
-    errors.add(:community_id, :community_not_found, id: community_id) if community.blank?
   end
 
 end

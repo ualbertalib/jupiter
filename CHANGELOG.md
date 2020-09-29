@@ -6,21 +6,52 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+### Changed
+- Enable Skylight in the Staging environment and remove it from the UAT environment (where it was unused, and the performance of the Docker environment is less likely to be similar to Production)
+- uat configuration to accept proxy from upstream nginx-proxy [#1724](https://github.com/ualbertalib/jupiter/issues/1724)
+
 ### Added
-- Mounted Oaisys engine
-- Added tests surrounding Oaisys ListSets response
-- Version 1 of AIP API
-- Added and set up papertrail gem
-- Set up papertrail admin view
-- Added Draper and re-organized facet presenters
-- Metadata Presenters for OAI:DC & OAI:ETDMS
-- Local system accounts authentication
+- script for watchtower to run from post-update hook [PR#1892](https://github.com/ualbertalib/jupiter/pull/1892)
+- Added DOI reset feature for admins [#1739](https://github.com/ualbertalib/jupiter/issues/1739)
+
+### Fixed
+- bump rubocop and fix cop violations [PR#1845](https://github.com/ualbertalib/jupiter/pull/1845)
+- bump rubocop-performance and fix cop violations [PR#1850](https://github.com/ualbertalib/jupiter/pull/1850)
+- N+1 query issue with attachments to models in search results [PR#1881](https://github.com/ualbertalib/jupiter/pull/1881)
+
+## [2.0.1.pre2] - 2020-09-01
+
+### Added
+- tmp/cache to docker ignore [#1680](https://github.com/ualbertalib/jupiter/issues/1680)
+- Tie breaker for solr query results to make them deterministic [#1689](https://github.com/ualbertalib/jupiter/issues/1689)
+
+### Changed
+- Merge file_set and original_file AIP API entry points [#1557](https://github.com/ualbertalib/jupiter/issues/1557)
+- Skipped failing Oaisys tests [#1817](https://github.com/ualbertalib/jupiter/issues/1817)
+- webpacker resolved_paths to additional paths [#1836](https://github.com/ualbertalib/jupiter/issues/1836)
+ 
+### Fixed
+- Upgrade Rubocop/Erblint and fix cop violations [#1803](https://github.com/ualbertalib/jupiter/pull/1803)
+- Fixed Oaisys testing issues by modifying and adding decorators [#1816](https://github.com/ualbertalib/jupiter/issues/1816)
+- UAT nginx port 80 redirect [PR#1893](https://github.com/ualbertalib/jupiter/pull/1839)
+
+## [2.0.1.pre1] - 2020-07-22
+
+### Added
+- Mounted Oaisys engine [PR#1361](https://github.com/ualbertalib/jupiter/pull/1361)
+- Added tests surrounding Oaisys ListSets response [PR#1609](https://github.com/ualbertalib/jupiter/pull/1609)
+- Version 1 of AIP API [PR#1441](https://github.com/ualbertalib/jupiter/pull/1441)
+- Added and set up papertrail gem [PR#1437](https://github.com/ualbertalib/jupiter/pull/1437)
+- Set up papertrail admin view [PR#1562](https://github.com/ualbertalib/jupiter/pull/1562)
+- Added Draper and re-organized facet presenters [PR#1446](https://github.com/ualbertalib/jupiter/pull/1446)
+- Metadata Presenters for OAI:DC & OAI:ETDMS [PR#1460](https://github.com/ualbertalib/jupiter/pull/1460)
+- Local system accounts authentication [PR#1522](https://github.com/ualbertalib/jupiter/pull/1522)
 - Bring in ERBLint [PR#1646](https://github.com/ualbertalib/jupiter/pull/1646)
 - Thesis ingest rewrite [PR#1670](https://github.com/ualbertalib/jupiter/pull/1670)
-- Rails 6 sidekiq queues
-- Add stylelint to Jupiter [#1120](https://github.com/ualbertalib/jupiter/issues/1430
+- Rails 6 sidekiq queues [PR#1663](https://github.com/ualbertalib/jupiter/pull/1663)
+- Add stylelint to Jupiter [#1120](https://github.com/ualbertalib/jupiter/issues/1120)
 - migration to fix concatenated subjects (part 1) [#1449](https://github.com/ualbertalib/jupiter/issues/1449)
-- Added DOI reset feature for admins [#1739](https://github.com/ualbertalib/jupiter/issues/1739))
+- fix bad logic on preservation errors
 
 ### Changed
 - bump rubocop-rails to 2.4.1 Rails/FilePath default changed to slashes [PR#1398](https://github.com/ualbertalib/jupiter/pull/1398)
@@ -37,10 +68,13 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Feature Image on Item show page need to be centered align within column [#1405](https://github.com/ualbertalib/jupiter/issues/1405)
 - Centralize Abstraction for Thumbnail Generation [#1343](https://github.com/ualbertalib/jupiter/issues/1343)
 - Beefed up AR migrations by stating that certain attributes cannot be null [PR#1704](https://github.com/ualbertalib/jupiter/pull/1704)
+- Finalize Item AIP data [#1557](https://github.com/ualbertalib/jupiter/issues/1557)
+- Finalize Thesis AIP data [#1557](https://github.com/ualbertalib/jupiter/issues/1557)
+- Change validations defined in models in favor of reusable validators
 
 ### Fixed
 - failing tests [#1376](https://github.com/ualbertalib/jupiter/issues/1376)
-- Fix Sprockets v4.0.0 upgrade problem with how Sass Variables were being defined
+- Fix Sprockets v4.0.0 upgrade problem with how Sass Variables were being defined [#1406](https://github.com/ualbertalib/jupiter/issues/1406)
 - Fix bug for page_image_url helper which was double rendering urls for default image [PR#1512](https://github.com/ualbertalib/jupiter/pull/1512)
 - Thumbnail choice no longer resets between saves [#1435](https://github.com/ualbertalib/jupiter/issues/1435)
 - Fix three-state logic problems on DraftItem and DraftThesis models where boolean attribute is_published_in_era was nullable [#1408](https://github.com/ualbertalib/jupiter/issues/1408)
@@ -51,6 +85,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Fix "This file is processing and will be available shortly [#1669](https://github.com/ualbertalib/jupiter/issues/1669)
 - The tag method is used replacing the content_tag method which is now deprecated [#1706](https://github.com/ualbertalib/jupiter/issues/1706)
 - Use #resize_to_limit instead of #resize for thumbnail/images in Jupiter [#1698](https://github.com/ualbertalib/jupiter/issues/1698)
+- docker image can be built and deployed on UAT [#1680](https://github.com/ualbertalib/jupiter/issues/1680)
 
 ### Security
 - add `noopener noreferrer` when opening a link in a new tab [PR#1344](https://github.com/ualbertalib/jupiter/pull/1344)

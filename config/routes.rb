@@ -120,32 +120,34 @@ Rails.application.routes.draw do
 
   get '/rails/blobs/:key', to: redirect('/rails/active_storage/blobs/%{key}/thumbnail.jpg')
 
-  match '/oai/(*all)', to: 'application#service_unavailable', via: [:get, :post]
-
   # AIP API v1
 
   namespace :aip,
-            constraints: EntityConstraint.new,
             defaults: { format: :n3 } do
     namespace :v1 do
+      get '/collections/:id',
+          to: 'collections#show',
+          as: 'collection'
       get '/:entity/:id',
-          to: 'aip#show_entity',
-          as: 'entity'
+          to: 'entities#show',
+          as: 'entity',
+          constraints: EntityConstraint.new
       get '/:entity/:id/filesets',
-          to: 'aip#file_sets',
-          as: 'entity_filesets'
+          to: 'entities#file_sets',
+          as: 'entity_filesets',
+          constraints: EntityConstraint.new
       get '/:entity/:id/file_paths',
-          to: 'aip#file_paths',
-          as: 'entity_file_paths'
+          to: 'entities#file_paths',
+          as: 'entity_file_paths',
+          constraints: EntityConstraint.new
       get '/:entity/:id/filesets/:file_set_id',
-          to: 'aip#file_set',
-          as: 'entity_file_set'
+          to: 'entities#file_set',
+          as: 'entity_file_set',
+          constraints: EntityConstraint.new
       get '/:entity/:id/filesets/:file_set_id/fixity',
-          to: 'aip#fixity_file',
-          as: 'entity_fileset_fixity'
-      get '/:entity/:id/filesets/:file_set_id/original_file',
-          to: 'aip#original_file',
-          as: 'entity_fileset_original_file'
+          to: 'entities#fixity_file',
+          as: 'entity_fileset_fixity',
+          constraints: EntityConstraint.new
     end
   end
 end

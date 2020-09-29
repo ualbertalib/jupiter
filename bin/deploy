@@ -4,7 +4,7 @@ docker rmi $(docker images -f "dangling=true" -q)
 
 docker-compose pull web
 
-docker-compose up -d
+docker-compose up -d --remove-orphans
 
 docker-compose run --rm web rake db:migrate
 docker-compose run --rm web rake assets:precompile

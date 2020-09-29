@@ -1,3 +1,5 @@
+class MissingImplementationError < StandardError; end
+
 class JupiterCore::Depositable < ApplicationRecord
 
   self.abstract_class = true
@@ -8,7 +10,8 @@ class JupiterCore::Depositable < ApplicationRecord
                                 CONTROLLED_VOCABULARIES[:visibility].draft,
                                 CONTROLLED_VOCABULARIES[:visibility].public].freeze
 
-  validate :visibility_must_be_known
+  validates :visibility, known_visibility: true
+
   validates :owner_id, presence: true
   validates :record_created_at, presence: true
   validates :date_ingested, presence: true
@@ -124,6 +127,8 @@ class JupiterCore::Depositable < ApplicationRecord
   end
 
   def set_record_created_at
+    return if record_created_at.present?
+
     self.record_created_at = Time.current.utc.iso8601(3)
   end
 
@@ -131,31 +136,6 @@ class JupiterCore::Depositable < ApplicationRecord
     return if date_ingested.present?
 
     self.date_ingested = record_created_at
-  end
-
-  def visibility_must_be_known
-    return true if visibility.present? && self.class.valid_visibilities.include?(visibility)
-
-    errors.add(:visibility, I18n.t('locked_ldp_object.errors.invalid_visibility', visibility: visibility))
-  end
-
-  def communities_and_collections_must_exist
-    return if member_of_paths.blank?
-
-    member_of_paths.each do |path|
-      community_id, collection_id = path.split('/')
-      community = Community.find_by(id: community_id)
-      errors.add(:member_of_paths, :community_not_found, id: community_id) if community.blank?
-      collection = Collection.find_by(id: collection_id)
-      errors.add(:member_of_paths, :collection_not_found, id: collection_id) if collection.blank?
-    end
-  end
-
-  def visibility_after_embargo_must_be_valid
-    return if visibility_after_embargo.nil?
-    return if VISIBILITIES_AFTER_EMBARGO.include?(visibility_after_embargo)
-
-    errors.add(:visibility_after_embargo, :not_recognized)
   end
 
   # utility methods for checking for certain visibility transitions
@@ -178,21 +158,8 @@ class JupiterCore::Depositable < ApplicationRecord
     self.embargo_history << embargo_history_item
   end
 
-  def push_item_id_for_preservation
-    if preserve == false
-      Rails.logger.warn("Could not preserve #{id}")
-      Rollbar.error("Could not preserve #{id}")
-    end
-
-    true
-  rescue StandardError => e
-    # we trap errors in writing to the Redis queue in order to avoid crashing the save process for the user.
-    Rollbar.error("Error occured in push_item_id_for_preservation, Could not preserve #{id}", e)
-    true
-  end
-
   # rubocop:disable Style/GlobalVars
-  def preserve
+  def push_item_id_for_preservation
     queue_name = Rails.application.secrets.preservation_queue_name
 
     $queue ||= ConnectionPool.new(size: 1, timeout: 5) { Redis.current }
@@ -201,9 +168,11 @@ class JupiterCore::Depositable < ApplicationRecord
       connection.zadd queue_name, Time.now.to_f, id
     end
 
-  # rescue all preservation errors so that the user can continue to use the application normally
+    true
   rescue StandardError => e
-    Rollbar.error("Could not preserve #{id}", e)
+    # we trap errors in writing to the Redis queue in order to avoid crashing the save process for the user.
+    Rollbar.error("Error occurred in push_item_id_for_preservation, Could not preserve #{id}", e)
+    true
   end
   # rubocop:enable Style/GlobalVars
 
@@ -222,5 +191,26 @@ class JupiterCore::Depositable < ApplicationRecord
   def self.safe_attributes
     attribute_names.map(&:to_sym) - [:id]
   end
+
+  # Since we need a generic way to specify the scope by which a model will eagerly fetch attachments,
+  # and since the ActiveStorage auto-generated scopes "bake-in" the name of the eager-loading method
+  # (eg, for +class Foo; has_one_attached :document; end+, the eager-loading method is Foo.with_attached_document),
+  # we introduce a shim method that all inheritors must implement that the search infrastructure can
+  # rely upon. This also gives us the nice ability to refine the eager-load scope in the future if it makes sense,
+  # eg) we might return something like +self.with_attached_files.where(front_page: true)+ to only eagerly load
+  # the logo attachment for a record with a very large number of attachments like a newspaper, where we are only
+  # rendering a search result.
+  #
+  # Depositables with no attachments should simply choose to return +self+. This is not made the default, else
+  # any new model would silently be an N+1 on attachments until somebody noticed the missing implementation. Better
+  # to fail fast and noisly during development when we've forgotten to be efficient.
+  def self.eager_attachment_scope
+    raise MissingImplementationError, 'Depositable models must implement <Class>.eager_attachment_scope'
+  end
+
+  # We intend +eager_attachment_scope+ to be the protected method inheritors implement, while the public interface
+  # for consumers (primarily the search infrastructure) is +with_eagerly_loaded_attachments+
+  class << self; self; end.send :protected, :eager_attachment_scope
+  def self.with_eagerly_loaded_attachments; eager_attachment_scope; end
 
 end

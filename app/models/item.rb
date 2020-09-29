@@ -31,21 +31,60 @@ class Item < JupiterCore::Doiable
   validates :creators, presence: true
   validates :license, uri: { in_vocabularies: [:license, :old_license] }
   validates :publication_status, uri: { in_vocabulary: :publication_status }
-  validate :publication_status_presence,
-           if: ->(item) { item.item_type == CONTROLLED_VOCABULARIES[:item_type].article }
-  validate :publication_status_absence, if: ->(item) { item.item_type != CONTROLLED_VOCABULARIES[:item_type].article }
-  validate :publication_status_compound_uri, if: lambda { |item|
+  validates :publication_status, presence: { message: :required_for_article },
+                                 if: ->(item) { item.item_type == CONTROLLED_VOCABULARIES[:item_type].article }
+  validates :publication_status, absence: { message: :must_be_absent_for_non_articles },
+                                 if: ->(item) { item.item_type != CONTROLLED_VOCABULARIES[:item_type].article }
+  validates :publication_status, compound_uri: { compounds: [
+    [CONTROLLED_VOCABULARIES[:publication_status].published],
+    [CONTROLLED_VOCABULARIES[:publication_status].draft, CONTROLLED_VOCABULARIES[:publication_status].submitted]
+  ] }, if: lambda { |item|
     item.item_type == CONTROLLED_VOCABULARIES[:item_type].article && item.publication_status.present?
   }
-  validate :license_xor_rights_must_be_present
+
+  validates_with LicenseXorRightsPresenceValidator
 
   validates :embargo_end_date, presence: true, if: ->(item) { item.visibility == VISIBILITY_EMBARGO }
   validates :embargo_end_date, absence: true, if: ->(item) { item.visibility != VISIBILITY_EMBARGO }
   validates :visibility_after_embargo, presence: true, if: ->(item) { item.visibility == VISIBILITY_EMBARGO }
   validates :visibility_after_embargo, absence: true, if: ->(item) { item.visibility != VISIBILITY_EMBARGO }
   validates :member_of_paths, presence: true
-  validate :communities_and_collections_must_exist
-  validate :visibility_after_embargo_must_be_valid
+  validates :member_of_paths, community_and_collection_existence: true
+  validates :visibility_after_embargo, known_visibility: { only: VISIBILITIES_AFTER_EMBARGO }
+
+  # This is stored in solr: combination of item_type and publication_status
+  def item_type_with_status_code
+    return nil if item_type.blank?
+
+    # Return the item type code unless it's an article, then append publication status code
+    item_type_code = CONTROLLED_VOCABULARIES[:item_type].from_uri(item_type)
+    return item_type_code unless item_type_code == :article
+    return nil if publication_status.blank?
+
+    publication_status_code = CONTROLLED_VOCABULARIES[:publication_status].from_uri(publication_status.first)
+    # Next line of code means that 'article_submitted' exists, but 'article_draft' doesn't ("There can be only one!")
+    publication_status_code = :submitted if publication_status_code == :draft
+    "#{item_type_code}_#{publication_status_code}".to_sym
+  rescue ArgumentError
+    nil
+  end
+
+  def all_subjects
+    subject + temporal_subjects.to_a + spatial_subjects.to_a
+  end
+
+  def populate_sort_year
+    self.sort_year = Date.parse(created).year.to_i if created.present?
+  rescue ArgumentError
+    # date was un-parsable, try to pull out the first 4 digit number as a year
+    capture = created.scan(/\d{4}/)
+    self.sort_year = capture[0].to_i if capture.present?
+  end
+
+  def add_to_path(community_id, collection_id)
+    self.member_of_paths ||= []
+    self.member_of_paths += ["#{community_id}/#{collection_id}"]
+  end
 
   def self.from_draft(draft_item)
     item = Item.find(draft_item.uuid) if draft_item.uuid.present?
@@ -119,67 +158,12 @@ class Item < JupiterCore::Doiable
     item
   end
 
-  # This is stored in solr: combination of item_type and publication_status
-  def item_type_with_status_code
-    return nil if item_type.blank?
-
-    # Return the item type code unless it's an article, then append publication status code
-    item_type_code = CONTROLLED_VOCABULARIES[:item_type].from_uri(item_type)
-    return item_type_code unless item_type_code == :article
-    return nil if publication_status.blank?
-
-    publication_status_code = CONTROLLED_VOCABULARIES[:publication_status].from_uri(publication_status.first)
-    # Next line of code means that 'article_submitted' exists, but 'article_draft' doesn't ("There can be only one!")
-    publication_status_code = :submitted if publication_status_code == :draft
-    "#{item_type_code}_#{publication_status_code}".to_sym
-  rescue ArgumentError
-    nil
-  end
-
-  def all_subjects
-    subject + temporal_subjects.to_a + spatial_subjects.to_a
-  end
-
-  def populate_sort_year
-    self.sort_year = Date.parse(created).year.to_i if created.present?
-  rescue ArgumentError
-    # date was un-parsable, try to pull out the first 4 digit number as a year
-    capture = created.scan(/\d{4}/)
-    self.sort_year = capture[0].to_i if capture.present?
-  end
-
-  def license_xor_rights_must_be_present
-    # Must have one of license or rights, not both
-    if license.blank?
-      errors.add(:base, :need_either_license_or_rights) if rights.blank?
-    elsif rights.present?
-      errors.add(:base, :not_both_license_and_rights)
-    end
-  end
-
-  def publication_status_presence
-    errors.add(:publication_status, :required_for_article) if publication_status.blank?
-  end
-
-  def publication_status_absence
-    errors.add(:publication_status, :must_be_absent_for_non_articles) if publication_status.present?
-  end
-
-  def publication_status_compound_uri
-    ps_vocab = CONTROLLED_VOCABULARIES[:publication_status]
-    statuses = publication_status.sort
-    return unless statuses != [ps_vocab.published] && statuses != [ps_vocab.draft, ps_vocab.submitted]
-
-    errors.add(:publication_status, :not_recognized)
-  end
-
-  def add_to_path(community_id, collection_id)
-    self.member_of_paths ||= []
-    self.member_of_paths += ["#{community_id}/#{collection_id}"]
-  end
-
   def self.valid_visibilities
     super + [VISIBILITY_EMBARGO]
+  end
+
+  def self.eager_attachment_scope
+    with_attached_files
   end
 
 end

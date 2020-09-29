@@ -114,7 +114,7 @@ class ThesisTest < ActiveSupport::TestCase
 
     assert_not thesis.valid?
     assert thesis.errors[:visibility_after_embargo].present?
-    assert_includes thesis.errors[:visibility_after_embargo], 'is not recognized'
+    assert_includes thesis.errors[:visibility_after_embargo], 'whatever is not a known visibility'
     assert_not thesis.errors[:visibility].present?
   end
 

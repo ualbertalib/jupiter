@@ -15,7 +15,7 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
     get search_url, as: :json, params: { search: '' }
     assert_response :success
     results = JSON.parse(response.body).map { |result| result['id'] }
-    assert_equal([@item2.id, @item3.id, @item1.id], results)
+    assert_equal([@item3.id, @item2.id, @item1.id], results)
     assert_not_equal([@item4.id], results)
   end
 
@@ -24,7 +24,7 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
     get search_url, as: :json, params: { search: '' }
     assert_response :success
     results = JSON.parse(response.body).map { |result| result['id'] }
-    assert_equal([@item2.id, @item3.id, @item1.id, @item4.id], results)
+    assert_equal([@item3.id, @item2.id, @item1.id, @item4.id], results)
   end
 
   test 'should get results in relevance order when a query is present' do

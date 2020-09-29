@@ -22,7 +22,8 @@ class AdminItemsIndexTest < ApplicationSystemTestCase
     assert_selector 'div.jupiter-results-list li.list-group-item', count: 3
     assert_selector 'div.jupiter-results-list li.list-group-item .media-body a', text: 'Fancy Item', count: 1
     assert_selector 'div.jupiter-results-list li.list-group-item .media-body a', text: 'Nice Item', count: 1
-    assert_selector 'div.jupiter-results-list li.list-group-item .media-body a', text: 'Admin Item', count: 1
+    assert_selector 'div.jupiter-results-list li.list-group-item .media-body a',
+                    text: 'dcterms:title1$ Some Title for Item', count: 1
 
     # Search items
     fill_in id: 'search_bar', with: 'Fancy'
@@ -30,7 +31,8 @@ class AdminItemsIndexTest < ApplicationSystemTestCase
     assert_selector 'div.jupiter-results-list li.list-group-item', count: 1
     assert_selector 'div.jupiter-results-list li.list-group-item .media-body a', text: 'Fancy Item', count: 1
     refute_selector 'div.jupiter-results-list li.list-group-item .media-body a', text: 'Nice Item'
-    refute_selector 'div.jupiter-results-list li.list-group-item .media-body a', text: 'Admin Item'
+    refute_selector 'div.jupiter-results-list li.list-group-item .media-body a',
+                    text: 'dcterms:title1$ Some Title for Item', count: 1
 
     logout_user
   end

@@ -7,7 +7,7 @@ class Facets::MemberOfPaths < Facets::DefaultFacetDecorator
     community_id, collection_id = @value.split('/')
     community_title = Community.find(community_id).title
     collection_title = if collection_id
-                         '/' + Collection.find(collection_id).title
+                         "/#{Collection.find(collection_id).title}"
                        else
                          ''
                        end

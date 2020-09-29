@@ -16,6 +16,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
   end
 
   test 'list identifers items xml' do
+    skip('Skipping until bug regarding path helper is fixed. https://github.com/rails/rails/issues/40078')
     get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_dc'), headers: { 'Accept' => 'application/xml' }
     assert_response :success
 
@@ -32,7 +33,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
       assert_select 'ListIdentifiers' do
         item_identifiers.each do |identifier, date, sets|
           assert_select 'header' do
-            assert_select 'identifier', 'oai:era.library.ualberta.ca:' + identifier
+            assert_select 'identifier', "oai:era.library.ualberta.ca:#{identifier}"
             assert_select 'datestamp', date.utc.xmlschema
             sets.each do |set|
               assert_select 'setSpec', set.tr('/', ':')
@@ -65,7 +66,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
       assert_select 'ListIdentifiers' do
         item_identifiers.each do |identifier, date, sets|
           assert_select 'header' do
-            assert_select 'identifier', 'oai:era.library.ualberta.ca:' + identifier
+            assert_select 'identifier', "oai:era.library.ualberta.ca:#{identifier}"
             assert_select 'datestamp', date.utc.xmlschema
             sets.each do |set|
               assert_select 'setSpec', set.tr('/', ':')
@@ -123,7 +124,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
       assert_select 'ListIdentifiers' do
         thesis_identifiers.each do |identifier, date, sets|
           assert_select 'header' do
-            assert_select 'identifier', 'oai:era.library.ualberta.ca:' + identifier
+            assert_select 'identifier', "oai:era.library.ualberta.ca:#{identifier}"
             assert_select 'datestamp', date.utc.xmlschema
             sets.each do |set|
               assert_select 'setSpec', set.tr('/', ':')
@@ -152,7 +153,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
       assert_select 'ListIdentifiers' do
         item_identifiers.each do |identifier, date, sets|
           assert_select 'header' do
-            assert_select 'identifier', 'oai:era.library.ualberta.ca:' + identifier
+            assert_select 'identifier', "oai:era.library.ualberta.ca:#{identifier}"
             assert_select 'datestamp', date.utc.xmlschema
             sets.each do |set|
               assert_select 'setSpec', set.tr('/', ':')
@@ -181,7 +182,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
       assert_select 'ListIdentifiers' do
         thesis_identifiers.each do |identifier, date, sets|
           assert_select 'header' do
-            assert_select 'identifier', 'oai:era.library.ualberta.ca:' + identifier
+            assert_select 'identifier', "oai:era.library.ualberta.ca:#{identifier}"
             assert_select 'datestamp', date.utc.xmlschema
             sets.each do |set|
               assert_select 'setSpec', set.tr('/', ':')
@@ -225,7 +226,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
       assert_select 'ListIdentifiers' do
         item_identifiers.each do |identifier, date, sets|
           assert_select 'header' do
-            assert_select 'identifier', 'oai:era.library.ualberta.ca:' + identifier
+            assert_select 'identifier', "oai:era.library.ualberta.ca:#{identifier}"
             assert_select 'datestamp', date.utc.xmlschema
             sets.each do |set|
               assert_select 'setSpec', set.tr('/', ':')
@@ -256,7 +257,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
       assert_select 'ListIdentifiers' do
         thesis_identifiers.each do |identifier, date, sets|
           assert_select 'header' do
-            assert_select 'identifier', 'oai:era.library.ualberta.ca:' + identifier
+            assert_select 'identifier', "oai:era.library.ualberta.ca:#{identifier}"
             assert_select 'datestamp', date.utc.xmlschema
             sets.each do |set|
               assert_select 'setSpec', set.tr('/', ':')
@@ -319,7 +320,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
       assert_select 'request'
       assert_select 'ListIdentifiers' do
         assert_select 'header' do
-          assert_select 'identifier', 'oai:era.library.ualberta.ca:' + item[:id]
+          assert_select 'identifier', "oai:era.library.ualberta.ca:#{item[:id]}"
           assert_select 'datestamp', item_creation_time
           item[:member_of_paths].each do |set|
             assert_select 'setSpec', set.tr('/', ':')
@@ -347,7 +348,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
       assert_select 'request'
       assert_select 'ListIdentifiers' do
         assert_select 'header' do
-          assert_select 'identifier', 'oai:era.library.ualberta.ca:' + thesis[:id]
+          assert_select 'identifier', "oai:era.library.ualberta.ca:#{thesis[:id]}"
           assert_select 'datestamp', thesis_creation_time
           thesis[:member_of_paths].each do |set|
             assert_select 'setSpec', set.tr('/', ':')

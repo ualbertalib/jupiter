@@ -10,7 +10,7 @@ class DraftThesisPolicy < ApplicationPolicy
      :rights, :visibility, :embargo_end_date,
      :status, :wizard_step, :date_accepted, :date_submitted,
      :degree, :degree_level, :institution_id, :specialization,
-     subjects: [], supervisors: [], departments: [], committee_members: []]
+     { subjects: [], supervisors: [], departments: [], committee_members: [] }]
   end
 
 end
