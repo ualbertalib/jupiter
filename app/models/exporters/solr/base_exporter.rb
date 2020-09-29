@@ -126,6 +126,18 @@ class Exporters::Solr::BaseExporter
     @indexed_model_name
   end
 
+  def self.fulltext_searchable_field
+    fulltext_searchable_name
+  end
+
+  def self.fulltext_searchable_mangled_solr_name
+    solr_name_for(fulltext_searchable_field, role: :search)
+  end
+
+  def self.fulltext_searchable?(name)
+    name == fulltext_searchable_field
+  end
+
   protected
 
   # provide a consistent representation of values in Solr, based on what we were doing previously with solrizer
@@ -167,7 +179,8 @@ class Exporters::Solr::BaseExporter
 
     attr_accessor :reverse_solr_name_map, :name_to_type_map, :name_to_roles_map,
                   :name_to_solr_name_map, :name_to_custom_lambda_map, :indexed_attributes, :searched_solr_names,
-                  :facets, :ranges, :default_sort_direction, :default_sort_indexes, :default_ar_sort_args
+                  :facets, :ranges, :default_sort_direction, :default_sort_indexes, :default_ar_sort_args, 
+                  :fulltext_searchable_name
 
     protected
 
@@ -219,6 +232,14 @@ class Exporters::Solr::BaseExporter
       direction = [direction] unless direction.is_a?(Array)
       self.default_sort_indexes = index.map { |idx| solr_name_for(idx, role: :sort) }
       self.default_sort_direction = direction
+    end
+
+    # Declare a particular attribute as being searchable on fulltext and therefore providing fulltext highlighted result hits
+    # attr must already be declared text and indexed for :search
+    def fulltext_searchable(attr)
+      raise ArgumentError, "#{attr} must be indexed for :search" unless self.name_to_roles_map[attr].include?(:search)
+      raise ArgumentError, "#{attr} must be of type :text" unless self.name_to_type_map[attr] == :text
+      self.fulltext_searchable_name = attr
     end
 
     def record_type(name, type)
