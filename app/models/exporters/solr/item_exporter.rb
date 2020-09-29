@@ -64,4 +64,5 @@ class Exporters::Solr::ItemExporter < Exporters::Solr::BaseExporter
 
   default_sort index: :title, direction: :asc
   fulltext_searchable :description
+
 end
