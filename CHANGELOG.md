@@ -6,6 +6,9 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+### Added
+- Added read only mode feature [#1838](https://github.com/ualbertalib/jupiter/issues/1838)
+
 ## [1.2.23] – 2020-09-23
 - disable Item/Thesis PCDM structure manipulation that appears to be continuing to cause problems in Prod
 

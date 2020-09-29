@@ -88,7 +88,7 @@
             </div>
 
           </li>
-        <% else %>
+        <% elsif logins_enabled? %>
           <li role="presentation" class="nav-item">
             <%= link_to t('.links.login'), '/auth/saml', class: 'nav-item nav-link text-nowrap', method: :post %>
           </li>

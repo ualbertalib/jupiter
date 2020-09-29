@@ -160,6 +160,10 @@ en:
               collection_restricted: "Deposit is restricted for this collection"
             files:
               infected: '%{filename} is infected with a virus'
+        read_only_mode:
+          attributes:
+            enabled:
+              only_one_record_exists: 'Only one ReadOnlyMode record may exist'
 
   application:
     navbar:
@@ -811,3 +815,5 @@ en:
       previous: "&lsaquo; <span class='d-none d-md-inline'>Prev</span>"
       next: "<span class='d-none d-md-inline'>Next</span> &rsaquo;"
       truncate: "..."
+  announcement_templates:
+    read_only_mode: 'Logins are currently disabled.'

@@ -48,4 +48,7 @@ Rails.application.configure do
 
   # FITS characterization
   config.run_fits_characterization = false
+
+  # Disable caching
+  config.cache_store = :null_store
 end
