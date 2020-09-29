@@ -217,7 +217,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     schema = Nokogiri::XML::Schema(File.open(file_fixture('OAI-PMH.xsd')))
     document = Nokogiri::XML(@response.body)
     assert_empty schema.validate(document)
-    item_identifiers = Oaisys::Engine.config.oai_dc_model.public_items.updated_on_or_before(just_after_current_time)
+    item_identifiers = Oaisys::Engine.config.oai_dc_model.public_items.updated_before(just_after_current_time)
                                      .limit(Oaisys::Engine.config.items_per_request)
                                      .belongs_to_path(@community.id).pluck(:id, :updated_at, :member_of_paths)
     assert_select 'OAI-PMH' do
@@ -247,7 +247,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     document = Nokogiri::XML(@response.body)
     assert_empty schema.validate(document)
     thesis_identifiers = Oaisys::Engine.config.oai_etdms_model
-                                       .public_items.updated_on_or_before(just_after_current_time)
+                                       .public_items.updated_before(just_after_current_time)
                                        .belongs_to_path(@thesis_collection.id)
                                        .limit(Oaisys::Engine.config.items_per_request)
                                        .pluck(:id, :updated_at, :member_of_paths)
