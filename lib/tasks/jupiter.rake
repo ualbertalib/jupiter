@@ -58,7 +58,13 @@ namespace :jupiter do
 
     ActiveStorage::Attachment.all.each do |attachment|
       blob = ActiveStorage::Blob.find_by(id: attachment.blob_id)
-      attachment.destroy unless blob.present?
+
+      if blob.present?
+        attachment.update_columns(upcoming_blob_id: blob.upcoming_id)
+      else
+        attachment.destroy
+      end
+
       print '.'
     end
 
@@ -75,6 +81,9 @@ namespace :jupiter do
         join_record.upcoming_draft_item_id = draft_item.upcoming_id
         join_record.save!(validate: false)
       end
+
+      draft_item.update_columns(upcoming_thumbnail_id: draft_item.thumbnail&.blob&.upcoming_id)
+
       print '.'
     end
 
@@ -86,6 +95,9 @@ namespace :jupiter do
         attachment.upcoming_record_id = draft_thesis.upcoming_id
         attachment.save!
       end
+
+      draft_thesis.update_columns(upcoming_thumbnail_id: draft_thesis.thumbnail&.blob&.upcoming_id)
+
       print '.'
     end
 
