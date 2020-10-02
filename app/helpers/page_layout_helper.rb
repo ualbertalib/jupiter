@@ -46,6 +46,7 @@ module PageLayoutHelper
 
   def thumbnail_path(logo, args = { resize_to_limit: [100, 100], auto_orient: true })
     return nil if logo.blank?
+
     Rails.application.routes.url_helpers.rails_representation_path(logo.representation(args).processed)
   rescue StandardError => e
     logger.warn("#{logo.record_type} with id: #{logo.record_id} and thumbnail #{logo.name} threw an error.")

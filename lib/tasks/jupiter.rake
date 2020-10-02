@@ -33,6 +33,8 @@ namespace :jupiter do
     puts 'done!'
   end
 
+  # rubocop:disable Rails/SkipsModelValidations
+  # what if, Rubocop, skipping validations were the entire point?
   desc 'sayonara ActiveFedora'
   task :get_me_off_of_fedora, [:batch_size] => :environment do |_, args|
     desired_batch_size = args.batch_size.to_i ||= 1000
@@ -58,7 +60,7 @@ namespace :jupiter do
       end
 
       draft_item.update_columns(upcoming_thumbnail_id: draft_item.thumbnail&.blob&.upcoming_id)
-      
+
       print '.'
     end
 
@@ -111,6 +113,7 @@ namespace :jupiter do
     puts
     puts 'Finished!'
   end
+  # rubocop:enable Rails/SkipsModelValidations
 
   desc 'enable read only mode'
   task enable_read_only_mode: :environment do
