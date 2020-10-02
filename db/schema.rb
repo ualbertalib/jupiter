@@ -19,15 +19,14 @@ ActiveRecord::Schema.define(version: 2020_08_31_182732) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name"
-    t.bigint "blob_id", null: false
     t.datetime "created_at"
     t.string "record_type"
     t.uuid "fileset_uuid"
     t.uuid "record_id"
-    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.uuid "blob_id", null: false
   end
 
-  create_table "active_storage_blobs", force: :cascade do |t|
+  create_table "active_storage_blobs", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string "key"
     t.string "filename"
     t.string "content_type"
@@ -93,7 +92,6 @@ ActiveRecord::Schema.define(version: 2020_08_31_182732) do
     t.uuid "uuid"
     t.integer "status", default: 0, null: false
     t.integer "wizard_step", default: 0, null: false
-    t.integer "thumbnail_id"
     t.string "title"
     t.string "alternate_title"
     t.date "date_created"
@@ -116,6 +114,7 @@ ActiveRecord::Schema.define(version: 2020_08_31_182732) do
     t.json "citations", array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "thumbnail_id"
     t.index ["id"], name: "index_draft_items_on_id", unique: true
     t.index ["type_id"], name: "index_draft_items_on_type_id"
     t.index ["user_id"], name: "index_draft_items_on_user_id"
@@ -135,7 +134,6 @@ ActiveRecord::Schema.define(version: 2020_08_31_182732) do
     t.integer "status", default: 0, null: false
     t.integer "wizard_step", default: 0, null: false
     t.bigint "user_id", null: false
-    t.integer "thumbnail_id"
     t.string "title"
     t.string "alternate_title"
     t.string "creator"
@@ -159,6 +157,7 @@ ActiveRecord::Schema.define(version: 2020_08_31_182732) do
     t.json "committee_members", array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "thumbnail_id"
     t.index ["id"], name: "index_draft_theses_on_id", unique: true
     t.index ["institution_id"], name: "index_draft_theses_on_institution_id"
     t.index ["language_id"], name: "index_draft_theses_on_language_id"
