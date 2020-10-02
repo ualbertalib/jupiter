@@ -7,7 +7,7 @@ class UserSearchService
   attr_reader :search_models
 
   def initialize(current_user:, params:, base_restriction_key: nil, value: nil, # rubocop:disable Metrics/ParameterLists
-                 search_models: [Item, Thesis], highlight_fields: [])
+                 search_models: [Item, Thesis], fulltext: false)
     if base_restriction_key.present? && value.blank?
       raise ArgumentError, 'Must supply both a base_restriction_key and a value'
     end
@@ -17,7 +17,7 @@ class UserSearchService
     @search_models = search_models
     @search_params = search_params(params)
     @current_user = current_user
-    @highlight_fields = highlight_fields
+    @fulltext = fulltext
   end
 
   def results
@@ -30,7 +30,7 @@ class UserSearchService
 
     search_options = { q: query, models: search_models, as: @current_user,
                        facets: facets, ranges: @search_params[:ranges],
-                       highlight_fields: @highlight_fields }
+                       fulltext: @fulltext }
 
     # Sort by relevance if a search term is present and no explicit sort field has been chosen
     sort_fields = @search_params[:sort]

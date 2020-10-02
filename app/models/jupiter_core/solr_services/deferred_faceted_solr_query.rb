@@ -8,7 +8,7 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
 
   private_constant :POSSIBLE_SORT_ORDERS
 
-  def initialize(q:, qf:, fq:, facet_map:, facet_fields:, ranges:, restrict_to_model:, highlight_fields:)
+  def initialize(q:, qf:, fq:, facet_map:, facet_fields:, ranges:, restrict_to_model:, fulltext_fields:)
     criteria[:q] = q
     criteria[:qf] = qf # Query Fields
     criteria[:fq] = fq # Facet Query
@@ -18,7 +18,7 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
     criteria[:restrict_to_model] = restrict_to_model
     criteria[:sort] = []
     criteria[:sort_order] = []
-    criteria[:highlight_fields] = highlight_fields
+    criteria[:fulltext_fields] = fulltext_fields
   end
 
   def criteria
@@ -243,7 +243,7 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
       rows: limit,
       start: criteria[:offset],
       sort: sort_clause,
-      highlight_fields: criteria[:highlight_fields] }
+      fulltext_fields: criteria[:fulltext_fields] }
   end
 
   def raw_model_to_model(raw_model)

@@ -9,10 +9,7 @@ class CollectionsController < ApplicationController
       value: @collection.path,
       params: params,
       current_user: current_user,
-      highlight_fields: [
-        Item.solr_exporter_class.solr_name_for(:description, role: :search),
-        Thesis.solr_exporter_class.solr_name_for(:abstract, role: :search)
-      ]
+      fulltext: true
     )
     @results = search_query_index.results
     @search_models = search_query_index.search_models

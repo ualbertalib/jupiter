@@ -63,6 +63,7 @@ class Exporters::Solr::ItemExporter < Exporters::Solr::BaseExporter
   custom_index :all_subjects, role: :facet, as: ->(item) { item.all_subjects }
 
   default_sort index: :title, direction: :asc
+
   fulltext_searchable :description
 
 end

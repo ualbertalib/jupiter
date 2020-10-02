@@ -76,21 +76,21 @@ class UserSearchServiceTest < ActiveSupport::TestCase
   test 'should return search results with highlights' do
     current_user = users(:regular)
     params = ActionController::Parameters.new(search: 'French')
-    highlight_field = Item.solr_exporter_class.solr_name_for(:description, role: :search)
 
     search = UserSearchService.new(
       current_user: current_user,
       params: params,
-      highlight_fields: [
-        highlight_field
-      ]
+      fulltext: true
     )
 
     # Only Admin item has "French" in its description
     assert_equal search.results.count, 1
     assert_equal search.results.highlights.count, 1
     assert_equal search.results.first.id, @admin_item.id
-    assert_match(/<mark>French<\/mark>/, search.results.highlights[@admin_item.id][highlight_field].first)
+    assert_match(
+      /<mark>French<\/mark>/,
+      search.results.highlights[@admin_item.id][Item.solr_exporter_class.fulltext_searchable_mangled_solr_name].first
+    )
   end
 
 end
