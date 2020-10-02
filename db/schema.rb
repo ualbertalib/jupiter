@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_26_221814) do
+ActiveRecord::Schema.define(version: 2020_08_31_182732) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 2019_08_26_221814) do
     t.string "record_type"
     t.uuid "fileset_uuid"
     t.uuid "upcoming_record_id"
+    t.uuid "upcoming_blob_id"
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "unique_active_storage_attachment", unique: true
   end
@@ -37,6 +38,7 @@ ActiveRecord::Schema.define(version: 2019_08_26_221814) do
     t.integer "byte_size"
     t.string "checksum"
     t.datetime "created_at"
+    t.uuid "upcoming_id", default: -> { "uuid_generate_v4()" }, null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
@@ -210,6 +212,7 @@ ActiveRecord::Schema.define(version: 2019_08_26_221814) do
     t.datetime "updated_at", null: false
     t.boolean "is_published_in_era", default: false
     t.uuid "upcoming_id", default: -> { "uuid_generate_v4()" }, null: false
+    t.uuid "upcoming_thumbnail_id"
     t.index ["type_id"], name: "index_draft_items_on_type_id"
     t.index ["upcoming_id"], name: "index_draft_items_on_upcoming_id", unique: true
     t.index ["user_id"], name: "index_draft_items_on_user_id"
@@ -257,6 +260,7 @@ ActiveRecord::Schema.define(version: 2019_08_26_221814) do
     t.datetime "updated_at", null: false
     t.boolean "is_published_in_era", default: false
     t.uuid "upcoming_id", default: -> { "uuid_generate_v4()" }, null: false
+    t.uuid "upcoming_thumbnail_id"
     t.index ["institution_id"], name: "index_draft_theses_on_institution_id"
     t.index ["language_id"], name: "index_draft_theses_on_language_id"
     t.index ["upcoming_id"], name: "index_draft_theses_on_upcoming_id", unique: true
@@ -298,6 +302,10 @@ ActiveRecord::Schema.define(version: 2019_08_26_221814) do
     t.string "predicate"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "read_only_modes", force: :cascade do |t|
+    t.boolean "enabled", default: false, null: false
   end
 
   create_table "types", force: :cascade do |t|

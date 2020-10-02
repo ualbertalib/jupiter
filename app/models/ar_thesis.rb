@@ -114,7 +114,8 @@ class ArThesis < ApplicationRecord
     # add an association between the same underlying blobs the Thesis uses and the new ActiveRecord version
     thesis.files_attachments.each do |attachment|
       new_attachment = ActiveStorage::Attachment.create(record: ar_thesis, blob: attachment.blob, name: :files,
-                                                        fileset_uuid: attachment.fileset_uuid)
+                                                        fileset_uuid: attachment.fileset_uuid,
+                                                        upcoming_blob_id: attachment.blob.upcoming_id)
       # because of the uuid id column, the record_id on new_attachment (currently of type integer), is broken
       # but that's ok. we're going to fix that with this data
       new_attachment.upcoming_record_id = ar_thesis.id
