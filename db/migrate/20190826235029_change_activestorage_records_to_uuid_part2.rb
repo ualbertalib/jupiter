@@ -33,5 +33,6 @@ class ChangeActivestorageRecordsToUuidPart2 < ActiveRecord::Migration[5.2]
 
     change_column_null :active_storage_attachments, :blob_id, false
     add_foreign_key :active_storage_attachments, :active_storage_blobs, column: :blob_id
+    add_index :active_storage_attachments, :blob_id
   end
 end

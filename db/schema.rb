@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 2020_08_31_182732) do
     t.uuid "fileset_uuid"
     t.uuid "record_id"
     t.uuid "blob_id", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
   end
 
   create_table "active_storage_blobs", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
