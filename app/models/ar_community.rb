@@ -31,7 +31,8 @@ class ArCommunity < ApplicationRecord
       new_attachment = ActiveStorage::Attachment.create(record: ar_community,
                                                         blob: community.logo_attachment.blob,
                                                         name: :logo,
-                                                        fileset_uuid: community.logo_attachment.fileset_uuid)
+                                                        fileset_uuid: community.logo_attachment.fileset_uuid, 
+                                                        upcoming_blob_id: community.logo_attachment.blob.upcoming_id)
       # because of the uuid id column, the record_id on new_attachment (currently of type integer), is broken
       # but that's ok. we're going to fix that with this data
       new_attachment.upcoming_record_id = ar_community.id
