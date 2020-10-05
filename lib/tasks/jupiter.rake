@@ -33,10 +33,19 @@ namespace :jupiter do
     puts 'done!'
   end
 
+  # rubocop:disable Rails/SkipsModelValidations
+  # what if, Rubocop, skipping validations were the entire point?
   desc 'sayonara ActiveFedora'
   task :get_me_off_of_fedora, [:batch_size] => :environment do |_, args|
     desired_batch_size = args.batch_size.to_i ||= 1000
     puts
+    puts 'Preparing Attachments'
+    ActiveStorage::Attachment.find_each(batch_size: desired_batch_size) do |attachment|
+      attachment.update_columns(upcoming_blob_id: attachment.blob&.upcoming_id)
+
+      print '.'
+    end
+
     puts 'Preparing Draft Item ...'
 
     DraftItem.find_each(batch_size: desired_batch_size) do |draft_item|
@@ -49,6 +58,9 @@ namespace :jupiter do
         join_record.upcoming_draft_item_id = draft_item.upcoming_id
         join_record.save!
       end
+
+      draft_item.update_columns(upcoming_thumbnail_id: draft_item.thumbnail&.blob&.upcoming_id)
+
       print '.'
     end
 
@@ -60,6 +72,9 @@ namespace :jupiter do
         attachment.upcoming_record_id = draft_thesis.upcoming_id
         attachment.save!
       end
+
+      draft_thesis.update_columns(upcoming_thumbnail_id: draft_thesis.thumbnail&.blob&.upcoming_id)
+
       print '.'
     end
 
@@ -98,6 +113,7 @@ namespace :jupiter do
     puts
     puts 'Finished!'
   end
+  # rubocop:enable Rails/SkipsModelValidations
 
   desc 'enable read only mode'
   task enable_read_only_mode: :environment do

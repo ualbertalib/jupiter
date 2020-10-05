@@ -2,4 +2,4 @@ logo:
   name: 'files'
   record_type: 'Item'
   record_id: <%= ActiveRecord::FixtureSet.identify(:fancy) %>
-  blob_id: <%= ActiveRecord::FixtureSet.identify(:jpeg) %>
+  blob_id: 'e34bbd2e-c819-491b-9f60-e0b1c9b7b2ee'
