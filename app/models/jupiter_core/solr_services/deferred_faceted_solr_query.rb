@@ -114,12 +114,12 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
     each do |object|
       fulltext_hits = []
 
-      if @highlights.any? && object.solr_exporter_class.fulltext_searchable_field.present?
+      if @highlights&.any? && object.solr_exporter_class.fulltext_searchable_field.present?
         fulltext_solr_field = object.solr_exporter_class.fulltext_searchable_mangled_solr_name
 
         if @highlights[object.id].key?(fulltext_solr_field)
-          fulltext_hits = @highlights[object.id][fulltext_solr_field].map do |hit|
-            JupiterCore::SolrServices::FulltextResult.new(highlight_text: hit)
+          fulltext_hits = @highlights[object.id][fulltext_solr_field].map do |fulltext_hit|
+            JupiterCore::SolrServices::FulltextResult.new(highlight_text: fulltext_hit)
           end
         end
       end

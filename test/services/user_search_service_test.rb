@@ -85,12 +85,15 @@ class UserSearchServiceTest < ActiveSupport::TestCase
 
     # Only Admin item has "French" in its description
     assert_equal search.results.count, 1
-    assert_equal search.results.highlights.count, 1
-    assert_equal search.results.first.id, @admin_item.id
-    assert_match(
-      /<mark>French<\/mark>/,
-      search.results.highlights[@admin_item.id][Item.solr_exporter_class.fulltext_searchable_mangled_solr_name].first
-    )
+
+    search.results.each_with_fulltext_results do |result, fulltext_hits|
+      assert_equal result.id, @admin_item.id
+      assert_equal fulltext_hits.count, 1
+      assert_match(
+        /<mark>French<\/mark>/,
+        fulltext_hits.first.highlight_text
+      )
+    end
   end
 
 end
