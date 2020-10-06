@@ -110,9 +110,22 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
     end
   end
 
-  def highlights
-    reify_result_set
-    @highlights || {}
+  def each_with_fulltext_results
+    each do |object|
+      fulltext_hits = []
+
+      if @highlights.any? && object.solr_exporter_class.fulltext_searchable_field.present?
+        fulltext_solr_field = object.solr_exporter_class.fulltext_searchable_mangled_solr_name
+
+        if @highlights[object.id].key?(fulltext_solr_field)
+          fulltext_hits = @highlights[object.id][fulltext_solr_field].map do |hit|
+            JupiterCore::SolrServices::FulltextResult.new(highlight_text: hit)
+          end
+        end
+      end
+
+      yield object, fulltext_hits
+    end
   end
 
   def each

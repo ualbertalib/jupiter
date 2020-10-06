@@ -47,16 +47,9 @@
     </p>
 
     <% if item.description.present? %>
-      <% highlight_matches = highlight_matches(object: item, field: :description, highlights: local_assigns[:highlights]) %>
-      <% if highlight_matches.empty? %>
-        <p>
-          <%= jupiter_truncate item.description %>
-        </p>
-      <% else %>
-        <% highlight_matches.each do |match| %>
-          <p><%= match.html_safe %></p>
-        <% end %>
-      <% end %>
+      <p>
+        <%= render(highlights) || jupiter_truncate(item.description) %>
+      </p>
     <% end %>
   </div>
 </div>
