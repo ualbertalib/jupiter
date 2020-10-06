@@ -23,6 +23,9 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - bump rubocop-performance and fix cop violations [PR#1850](https://github.com/ualbertalib/jupiter/pull/1850)
 - N+1 query issue with attachments to models in search results [PR#1881](https://github.com/ualbertalib/jupiter/pull/1881)
 
+### Security
+- bump selfsigned CVE-2020-7720 
+
 ## [2.0.1.pre2] - 2020-09-01
 
 ### Added
