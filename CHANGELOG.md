@@ -8,6 +8,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ### Added
 - Added read only mode feature [#1838](https://github.com/ualbertalib/jupiter/issues/1838)
+- Added highlighting of terms within search results descriptions [#1800](https://github.com/ualbertalib/jupiter/issues/1800)
 
 ### Changed
 - Enable Skylight in the Staging environment and remove it from the UAT environment (where it was unused, and the performance of the Docker environment is less likely to be similar to Production)
@@ -33,7 +34,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Merge file_set and original_file AIP API entry points [#1557](https://github.com/ualbertalib/jupiter/issues/1557)
 - Skipped failing Oaisys tests [#1817](https://github.com/ualbertalib/jupiter/issues/1817)
 - webpacker resolved_paths to additional paths [#1836](https://github.com/ualbertalib/jupiter/issues/1836)
- 
+
 ### Fixed
 - Upgrade Rubocop/Erblint and fix cop violations [#1803](https://github.com/ualbertalib/jupiter/pull/1803)
 - Fixed Oaisys testing issues by modifying and adding decorators [#1816](https://github.com/ualbertalib/jupiter/issues/1816)
