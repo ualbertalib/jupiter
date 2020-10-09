@@ -11,7 +11,7 @@ class ProfileController < ApplicationController
       value: @user.id,
       params: params,
       current_user: @user,
-      fulltext: true
+      fulltext: false
     )
     @results = search_query_index.results
     @search_models = search_query_index.search_models
