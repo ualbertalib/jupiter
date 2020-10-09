@@ -22,6 +22,10 @@ class Community < JupiterCore::Depositable
     self.visibility = JupiterCore::VISIBILITY_PUBLIC
   end
 
+  def self.eager_attachment_scope
+    with_attached_logo
+  end
+
   # this method can be used on the SolrCached object OR the ActiveFedora object
   def member_collections
     collections

@@ -15,6 +15,12 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     driven_by :selenium, using: :headless_chrome, screen_size: [1400, 1400]
   end
 
+  RANDOM_TITLE = ['Fancy', 'Nice'].freeze
+
+  def random_title(seed)
+    RANDOM_TITLE[seed % 2]
+  end
+
   # Logs in a test user. Used for system tests.
   def login_user(user)
     identity = user.identities.first

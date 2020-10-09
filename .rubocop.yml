@@ -37,6 +37,9 @@ Layout/LineLength:
 Layout/RescueEnsureAlignment:
   Enabled: false
 
+Layout/BeginEndAlignment:
+  Enabled: false
+
 # A calculated magnitude based on number of assignments,
 # branches, and conditions.
 Metrics/AbcSize:
@@ -152,7 +155,8 @@ Style/SingleLineMethods:
   Enabled: false
 
 Style/SymbolArray:
-  Enabled: false
+  Enabled: true
+  EnforcedStyle: brackets
 
 Style/TrailingUnderscoreVariable:
   Enabled: false

@@ -1,3 +1,5 @@
+class MissingImplementationError < StandardError; end
+
 class JupiterCore::Depositable < ApplicationRecord
 
   self.abstract_class = true
@@ -189,5 +191,26 @@ class JupiterCore::Depositable < ApplicationRecord
   def self.safe_attributes
     attribute_names.map(&:to_sym) - [:id]
   end
+
+  # Since we need a generic way to specify the scope by which a model will eagerly fetch attachments,
+  # and since the ActiveStorage auto-generated scopes "bake-in" the name of the eager-loading method
+  # (eg, for +class Foo; has_one_attached :document; end+, the eager-loading method is Foo.with_attached_document),
+  # we introduce a shim method that all inheritors must implement that the search infrastructure can
+  # rely upon. This also gives us the nice ability to refine the eager-load scope in the future if it makes sense,
+  # eg) we might return something like +self.with_attached_files.where(front_page: true)+ to only eagerly load
+  # the logo attachment for a record with a very large number of attachments like a newspaper, where we are only
+  # rendering a search result.
+  #
+  # Depositables with no attachments should simply choose to return +self+. This is not made the default, else
+  # any new model would silently be an N+1 on attachments until somebody noticed the missing implementation. Better
+  # to fail fast and noisly during development when we've forgotten to be efficient.
+  def self.eager_attachment_scope
+    raise MissingImplementationError, 'Depositable models must implement <Class>.eager_attachment_scope'
+  end
+
+  # We intend +eager_attachment_scope+ to be the protected method inheritors implement, while the public interface
+  # for consumers (primarily the search infrastructure) is +with_eagerly_loaded_attachments+
+  class << self; self; end.send :protected, :eager_attachment_scope
+  def self.with_eagerly_loaded_attachments; eager_attachment_scope; end
 
 end

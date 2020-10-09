@@ -17,6 +17,9 @@ class Collection < JupiterCore::Depositable
     self.visibility = JupiterCore::VISIBILITY_PUBLIC
   end
 
+  # We have no attachments, so the scope is just the class itself.
+  def self.eager_attachment_scope; self; end
+
   def path
     "#{community_id}/#{id}"
   end

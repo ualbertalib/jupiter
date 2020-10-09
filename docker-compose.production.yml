@@ -1,4 +1,4 @@
-version: '3'
+version: '3.3'
 
 volumes:
   postgres:
@@ -21,8 +21,10 @@ services:
   solr:
     restart: always
     image: solr:6.6
+    environment:
+      - VIRTUAL_HOST=solr.era.uat.library.ualberta.ca
     ports:
-      - "8983:8983"
+      - "8983"
     volumes:
       - solr:/opt/solr/server/solr/mycores
       - ./solr/config:/config
@@ -58,6 +60,8 @@ services:
       - assets:/app/public/
       - file-storage:/app/storage/
     command: bundle exec puma -e uat
+    labels:
+      com.centurylinklabs.watchtower.lifecycle.post-update: "watchtower-post-update.sh"
 
   nginx:
     restart: always
@@ -70,5 +74,5 @@ services:
       - ../UALcert:/etc/nginx/certs
       - assets:/app/public/
     ports:
-      - "80:80"
-      - "443:443"
+      - "80"
+      - "443"

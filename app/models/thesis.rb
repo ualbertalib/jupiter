@@ -18,7 +18,7 @@ class Thesis < JupiterCore::Doiable
   # with an upgraded version of Postgresql this could be done more cleanly and performanetly
   scope :belongs_to_path, ->(path) { where('member_of_paths::text LIKE ?', "%#{path}%") }
   scope :updated_on_or_after, ->(date) { where('updated_at >= ?', date) }
-  scope :updated_on_or_before, ->(date) { where('updated_at <= ?', date) }
+  scope :updated_before, ->(date) { where('updated_at < ?', date) }
 
   before_validation :populate_sort_year
   after_save :push_item_id_for_preservation
@@ -40,6 +40,19 @@ class Thesis < JupiterCore::Doiable
   # Present a consistent interface with Item#item_type_with_status_code
   def item_type_with_status_code
     :thesis
+  end
+
+  def populate_sort_year
+    self.sort_year = Date.parse(graduation_date).year.to_i if graduation_date.present?
+    rescue ArgumentError
+      # date was unparsable, try to pull out the first 4 digit number as a year
+      capture = graduation_date.scan(/\d{4}/)
+      self.sort_year = capture[0].to_i if capture.present?
+  end
+
+  def add_to_path(community_id, collection_id)
+    self.member_of_paths ||= []
+    self.member_of_paths += ["#{community_id}/#{collection_id}"]
   end
 
   def self.from_draft(draft_thesis)
@@ -117,21 +130,12 @@ class Thesis < JupiterCore::Doiable
     thesis
   end
 
-  def populate_sort_year
-    self.sort_year = Date.parse(graduation_date).year.to_i if graduation_date.present?
-    rescue ArgumentError
-      # date was unparsable, try to pull out the first 4 digit number as a year
-      capture = graduation_date.scan(/\d{4}/)
-      self.sort_year = capture[0].to_i if capture.present?
-  end
-
-  def add_to_path(community_id, collection_id)
-    self.member_of_paths ||= []
-    self.member_of_paths += ["#{community_id}/#{collection_id}"]
-  end
-
   def self.valid_visibilities
     super + [VISIBILITY_EMBARGO]
+  end
+
+  def self.eager_attachment_scope
+    with_attached_files
   end
 
 end

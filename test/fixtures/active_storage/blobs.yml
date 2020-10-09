@@ -1,4 +1,5 @@
 jpeg:
+  id: 'e34bbd2e-c819-491b-9f60-e0b1c9b7b2ee'
   key: '12345'
   filename: 'image-sample.jpeg'
   content_type: 'image/jpeg'

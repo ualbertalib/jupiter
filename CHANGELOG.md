@@ -6,11 +6,33 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+### Added
+- Added read only mode feature [#1838](https://github.com/ualbertalib/jupiter/issues/1838)
+
+### Changed
+- Enable Skylight in the Staging environment and remove it from the UAT environment (where it was unused, and the performance of the Docker environment is less likely to be similar to Production)
+- uat configuration to accept proxy from upstream nginx-proxy [#1724](https://github.com/ualbertalib/jupiter/issues/1724)
+- Changed oaisys' updated until scope [#1816](https://github.com/ualbertalib/jupiter/issues/1816)
+- ActiveStorage::Blob now uses UUID for ids. You will need to recreate, remigrate, and reseed your DB.
+- predeploy script to reference this branch
+
+### Added
+- script for watchtower to run from post-update hook [PR#1892](https://github.com/ualbertalib/jupiter/pull/1892)
+
+### Fixed
+- bump rubocop and fix cop violations [PR#1845](https://github.com/ualbertalib/jupiter/pull/1845)
+- bump rubocop-performance and fix cop violations [PR#1850](https://github.com/ualbertalib/jupiter/pull/1850)
+- N+1 query issue with attachments to models in search results [PR#1881](https://github.com/ualbertalib/jupiter/pull/1881)
+
+### Security
+- bump selfsigned CVE-2020-7720 
+
 ## [2.0.1.pre2] - 2020-09-01
 
 ### Added
 - tmp/cache to docker ignore [#1680](https://github.com/ualbertalib/jupiter/issues/1680)
 - Add 'era' subdomain and foundation for future frontdoors [#1786](https://github.com/ualbertalib/jupiter/pull/1786)
+- Tie breaker for solr query results to make them deterministic [#1689](https://github.com/ualbertalib/jupiter/issues/1689)
 
 ### Changed
 - Merge file_set and original_file AIP API entry points [#1557](https://github.com/ualbertalib/jupiter/issues/1557)

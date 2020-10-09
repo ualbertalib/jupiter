@@ -14,7 +14,7 @@ class SearchTest < ApplicationSystemTestCase
     @items = 10.times.map do |i|
       if i < 5
         Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                 owner_id: admin.id, title: "#{['Fancy', 'Nice'][i % 2]} Item #{i}",
+                 owner_id: admin.id, title: "#{random_title(i)} Item #{i}",
                  creators: ['Joe Blow'],
                  created: "19#{50 + i}-11-11",
                  languages: [CONTROLLED_VOCABULARIES[:language].english],
@@ -28,7 +28,7 @@ class SearchTest < ApplicationSystemTestCase
         end
       else
         Thesis.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                   owner_id: admin.id, title: "#{['Fancy', 'Nice'][i % 2]} Item #{i}",
+                   owner_id: admin.id, title: "#{random_title(i)} Item #{i}",
                    dissertant: 'Joe Blow',
                    language: CONTROLLED_VOCABULARIES[:language].english,
                    graduation_date: "19#{50 + i}-11-11")
@@ -63,7 +63,7 @@ class SearchTest < ApplicationSystemTestCase
     @items += 10.times.map do |i|
       if i < 5
         Item.new(visibility: JupiterCore::VISIBILITY_PRIVATE,
-                 owner_id: admin.id, title: "#{['Fancy', 'Nice'][i % 2]} Private Item #{i + 10}",
+                 owner_id: admin.id, title: "#{random_title(i)} Private Item #{i + 10}",
                  creators: ['Joe Blow'],
                  created: "19#{70 + i}-11-11",
                  languages: [CONTROLLED_VOCABULARIES[:language].english],
@@ -77,7 +77,7 @@ class SearchTest < ApplicationSystemTestCase
         end
       else
         Thesis.new(visibility: JupiterCore::VISIBILITY_PRIVATE,
-                   owner_id: admin.id, title: "#{['Fancy', 'Nice'][i % 2]} Private Item #{i + 10}",
+                   owner_id: admin.id, title: "#{random_title(i)} Private Item #{i + 10}",
                    dissertant: 'Joe Blow',
                    language: CONTROLLED_VOCABULARIES[:language].english,
                    graduation_date: "19#{70 + i}-11-11")
@@ -236,8 +236,6 @@ class SearchTest < ApplicationSystemTestCase
   end
 
   test 'anybody should only see some facet results by default, with a "show more" button' do
-    skip 'This test continues to flap on CI that should be investigated ASAP' if ENV['CI']
-
     visit root_path
     fill_in name: 'search', with: 'Extra'
     click_button 'Search'
@@ -266,8 +264,6 @@ class SearchTest < ApplicationSystemTestCase
   end
 
   test 'anybody should be able to sort results' do
-    skip 'This test continues to flap on CI that should be investigated ASAP' if ENV['CI']
-
     visit root_path
     fill_in name: 'search', with: 'Fancy'
     click_button 'Search'
@@ -276,7 +272,7 @@ class SearchTest < ApplicationSystemTestCase
     # Default sort is by relevance
     # TODO this test has flapped in the past because the score of each document is equal
     # TODO could go through this section and add the Fancy CCID Item, regex allows tests to pass without this change
-    assert_match(/Fancy Item 0.*Fancy Item 2.*Fancy Item 4.*Fancy Item 6.*Fancy Item 8/m, page.text)
+    assert_match(/Fancy CCID Item.*Fancy Item 0.*Fancy Item 2.*Fancy Item 4.*Fancy Item 6.*Fancy Item 8/m, page.text)
 
     # Sort sort links
     click_button 'Sort by'
@@ -290,14 +286,14 @@ class SearchTest < ApplicationSystemTestCase
     click_link 'Title (Z-A)'
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy', sort: 'title', direction: 'desc')
     assert_selector 'button', text: 'Title (Z-A)'
-    assert_match(/Fancy Item 8.*Fancy Item 6.*Fancy Item 4.*Fancy Item 2.*Fancy Item 0/m, page.text)
+    assert_match(/Fancy Item 8.*Fancy Item 6.*Fancy Item 4.*Fancy Item 2.*Fancy Item 0.*Fancy CCID Item/m, page.text)
 
     # Sort the other way again
     click_button 'Title (Z-A)'
     click_link 'Title (A-Z)'
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy', sort: 'title', direction: 'asc')
     assert_selector 'button', text: 'Title (A-Z)'
-    assert_match(/Fancy Item 0.*Fancy Item 2.*Fancy Item 4.*Fancy Item 6.*Fancy Item 8/m, page.text)
+    assert_match(/Fancy CCID Item.*Fancy Item 0.*Fancy Item 2.*Fancy Item 4.*Fancy Item 6.*Fancy Item 8/m, page.text)
 
     # Sort with newest first
     click_button 'Title (A-Z)'

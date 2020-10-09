@@ -11,6 +11,8 @@ class User < ApplicationRecord
   has_many :collections, foreign_key: :owner_id, inverse_of: :owner, dependent: :restrict_with_error
   has_many :communities, foreign_key: :owner_id, inverse_of: :owner, dependent: :restrict_with_error
 
+  scope :system_user, -> { find_by(system: true) }
+
   # We don't need to validate the format of an email address here,
   # as emails are supplied from SAML (so assuming...hopefully they are valid)
   validates :email, presence: true,
@@ -36,6 +38,9 @@ class User < ApplicationRecord
   validates :api_key_digest,
             absence: { message: :blank_if_system_false },
             if: -> { !system && api_key_digest.present? }
+
+  # Ensure only one system user exists
+  validates :system, if: :system, uniqueness: true
 
   def update_activity!(now, remote_ip, sign_in: false)
     raise ArgumentError, :remote_ip if remote_ip.blank?
