@@ -167,3 +167,10 @@ Style/WordArray:
 
 Performance/TimesMap:
   Enabled: false
+
+Style/ClassEqualityComparison:
+  Enabled: true
+
+Style/RedundantBegin:
+  Enabled: true
+  
