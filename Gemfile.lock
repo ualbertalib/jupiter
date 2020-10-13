@@ -360,7 +360,7 @@ GEM
       rdf (~> 3.1)
     rdoc (6.2.1)
     redis (4.1.4)
-    regexp_parser (1.8.1)
+    regexp_parser (1.8.2)
     request_store (1.5.0)
       rack (>= 1.4)
     rexml (3.2.4)
@@ -368,7 +368,7 @@ GEM
     rsolr (2.3.0)
       builder (>= 2.1.2)
       faraday (>= 0.9.0)
-    rubocop (0.93.0)
+    rubocop (0.93.1)
       parallel (~> 1.10)
       parser (>= 2.7.1.5)
       rainbow (>= 2.2.2, < 4.0)
@@ -377,7 +377,7 @@ GEM
       rubocop-ast (>= 0.6.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 2.0)
-    rubocop-ast (0.7.1)
+    rubocop-ast (0.8.0)
       parser (>= 2.7.1.5)
     rubocop-performance (1.8.1)
       rubocop (>= 0.87.0)
@@ -551,7 +551,7 @@ DEPENDENCIES
   redis (~> 4.1)
   rollbar
   rsolr
-  rubocop (~> 0.93.0)
+  rubocop (~> 0.93.1)
   rubocop-performance
   rubocop-rails
   rufus-scheduler (= 3.6.0)
