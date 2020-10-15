@@ -225,12 +225,14 @@ namespace :jupiter do
     error_message_log.error(e.message)
     error_backtrace_log.error(e.backtrace.join("\n"))
 
-    error_message_log.error("=====================n\n\n\n\n=====================")
-    error_backtrace_log.error("=====================n\n\n\n\n=====================")
+    error_message_log.error("=====================\n\n\n\n=====================")
+    error_backtrace_log.error("=====================\n\n\n\n=====================")
   end
+
   def error_message_log
     @error_message_log ||= Logger.new(Rails.root.join('log', "fedora-migration-error-message-#{Time.now.xmlschema}-#{Rails.env.to_s}.log"))
   end
+
   def error_backtrace_log
     @error_backtrace_log ||= Logger.new(Rails.root.join('log', "fedora-migration-error-backtrace-#{Time.now.xmlschema}-#{Rails.env.to_s}.log"))
   end
