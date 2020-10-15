@@ -1,5 +1,5 @@
 require 'test_helper'
-require Rails.root.join('test/support/aip_helper')
+require 'support/aip_helper'
 
 class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
 
@@ -181,7 +181,8 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
 
     variables = {
       fileset_id: radioactive_thesis.files.first.fileset_uuid,
-      collection_id: radioactive_thesis.member_of_paths.first.split('/')[1]
+      collection_id: radioactive_thesis.member_of_paths.first.split('/')[1],
+      url: Jupiter::TEST_URL
     }
     rendered_graph = load_n3_graph(file_fixture('n3/theses/file_set.n3'), variables)
 
@@ -204,7 +205,8 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
       entity_id: @public_thesis.id,
       fileset_id: @public_thesis.files.first.fileset_uuid,
       checksum: @public_thesis.files.first.blob.checksum,
-      byte_size: @public_thesis.files.first.blob.byte_size
+      byte_size: @public_thesis.files.first.blob.byte_size,
+      url: Jupiter::TEST_URL
     }
     rendered_graph = load_n3_graph(file_fixture('n3/theses/fixity.n3'), variables)
 

@@ -6,11 +6,11 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<http://localhost/aip/v1/items/e2ec88e3-3266-4e95-8575-8b04fac2a679> a pcdm:Object;
+<<%= url %>/aip/v1/items/e2ec88e3-3266-4e95-8575-8b04fac2a679> a pcdm:Object;
   dc:title "dcterms:title1$ Some Title for Item";
-  pcdm:hasMember <http://localhost/aip/v1/items/e2ec88e3-3266-4e95-8575-8b04fac2a679/filesets/<%= fileset_0_uuid %>>,
-    <http://localhost/aip/v1/items/e2ec88e3-3266-4e95-8575-8b04fac2a679/filesets/<%= fileset_1_uuid %>>;
-  pcdm:memberOf <http://localhost/aip/v1/collections/929c81d5-d15e-570e-83c4-ec41755c879d>;
+  pcdm:hasMember <<%= url %>/aip/v1/items/e2ec88e3-3266-4e95-8575-8b04fac2a679/filesets/<%= fileset_0_uuid %>>,
+    <<%= url %>/aip/v1/items/e2ec88e3-3266-4e95-8575-8b04fac2a679/filesets/<%= fileset_1_uuid %>>;
+  pcdm:memberOf <<%= url %>/aip/v1/collections/929c81d5-d15e-570e-83c4-ec41755c879d>;
   <http://prismstandard.org/namespaces/basic/3.0/doi> "doi:10.7939/xxxxxxxxx";
   dc11:contributor "dc:contributor1$ Perez, Juan",
     "dc:contributor2$ Perez, Maria";
