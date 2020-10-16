@@ -57,81 +57,109 @@ namespace :jupiter do
     puts 'Preparing Attachments ...'
 
     ActiveStorage::Attachment.all.each do |attachment|
-      blob = ActiveStorage::Blob.find_by(id: attachment.blob_id)
+      begin
+        blob = ActiveStorage::Blob.find_by(id: attachment.blob_id)
 
-      if blob.present?
-        attachment.update_columns(upcoming_blob_id: blob.upcoming_id)
-      else
-        attachment.destroy
+        if blob.present?
+          attachment.update_columns(upcoming_blob_id: blob.upcoming_id)
+        else
+          attachment.destroy
+        end
+
+        print '.'
+      rescue => e
+        log_error(e, attachment.id, 'Attachment')
       end
-
-      print '.'
     end
 
     puts
     puts 'Preparing Draft Item ...'
 
     DraftItem.all.each do |draft_item|
-      draft_item.files_attachments.each do |attachment|
-        attachment.upcoming_record_id = draft_item.upcoming_id
-        attachment.save!(validate: false)
+      begin
+        draft_item.files_attachments.each do |attachment|
+          attachment.upcoming_record_id = draft_item.upcoming_id
+          attachment.save!(validate: false)
+        end
+
+        draft_item.draft_items_languages.each do |join_record|
+          join_record.upcoming_draft_item_id = draft_item.upcoming_id
+          join_record.save!(validate: false)
+        end
+
+        draft_item.update_columns(upcoming_thumbnail_id: draft_item.thumbnail&.blob&.upcoming_id)
+
+        print '.'
+      rescue => e
+        log_error(e, draft_item.id, 'Draft Item')
       end
-
-      draft_item.draft_items_languages.each do |join_record|
-        join_record.upcoming_draft_item_id = draft_item.upcoming_id
-        join_record.save!(validate: false)
-      end
-
-      draft_item.update_columns(upcoming_thumbnail_id: draft_item.thumbnail&.blob&.upcoming_id)
-
-      print '.'
     end
 
     puts
     puts 'Preparing Draft Thesis ...'
 
     DraftThesis.all.each do |draft_thesis|
-      draft_thesis.files_attachments.each do |attachment|
-        attachment.upcoming_record_id = draft_thesis.upcoming_id
-        attachment.save!
+      begin
+        draft_thesis.files_attachments.each do |attachment|
+          attachment.upcoming_record_id = draft_thesis.upcoming_id
+          attachment.save!
+        end
+
+        draft_thesis.update_columns(upcoming_thumbnail_id: draft_thesis.thumbnail&.blob&.upcoming_id)
+
+        print '.'
+      rescue => e
+        log_error(e, draft_thesis.id, 'Draft Thesis')
       end
-
-      draft_thesis.update_columns(upcoming_thumbnail_id: draft_thesis.thumbnail&.blob&.upcoming_id)
-
-      print '.'
     end
 
     puts
     puts 'Migrating Communities...'
 
     Community.all.each do |community|
-      ArCommunity.from_community(community)
-      print '.'
+      begin
+        ArCommunity.from_community(community)
+        print '.'
+      rescue => e
+        log_error(e, community.id, 'Community')
+      end
     end
 
     puts
     puts 'Migrating Collections...'
 
     Collection.all.each do |collection|
-      ArCollection.from_collection(collection)
-      print '.'
+      begin
+        ArCollection.from_collection(collection)
+        print '.'
+      rescue => e
+        log_error(e, collection.id, 'Collection')
+      end
     end
 
     puts
     puts 'Migrating Items...'
 
     Item.all.each do |item|
-      # Skip broken item.
-      ArItem.from_item(item) unless item.id == '4b3e0c51-33f7-4de9-97ad-d8bd298a8e92'
-      print '.'
+      begin
+        # Skip broken item.
+        ArItem.from_item(item) unless item.id == '4b3e0c51-33f7-4de9-97ad-d8bd298a8e92'
+        print '.'
+      rescue => e
+        log_error(e, item.id, 'Item')
+      end
     end
 
     puts
     puts 'Migrating Theses...'
 
     Thesis.all.each do |thesis|
-      ArThesis.from_thesis(thesis)
-      print '.'
+      begin
+        ArThesis.from_thesis(thesis)
+        print '.'
+      rescue => e
+        log_error(e, thesis.id, 'Thesis')
+      end
     end
 
     puts
@@ -185,5 +213,27 @@ namespace :jupiter do
     puts "error migrating #{item.class}: #{item.id} -- reported error was '#{e.message}'"
     puts 'moving on to next item'
     puts
+  end
+
+  def log_error(e, id, type)
+    error_message_log.error("Type: #{type}")
+    error_backtrace_log.error("Type: #{type}")
+
+    error_message_log.error("ID: #{id}")
+    error_backtrace_log.error("ID: #{id}")
+
+    error_message_log.error(e.message)
+    error_backtrace_log.error(e.backtrace.join("\n"))
+
+    error_message_log.error("=====================\n\n\n\n=====================")
+    error_backtrace_log.error("=====================\n\n\n\n=====================")
+  end
+
+  def error_message_log
+    @error_message_log ||= Logger.new(Rails.root.join('log', "fedora-migration-error-message-#{Time.now.xmlschema}-#{Rails.env.to_s}.log"))
+  end
+
+  def error_backtrace_log
+    @error_backtrace_log ||= Logger.new(Rails.root.join('log', "fedora-migration-error-backtrace-#{Time.now.xmlschema}-#{Rails.env.to_s}.log"))
   end
 end
