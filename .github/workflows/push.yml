@@ -66,6 +66,12 @@ jobs:
       - name: Run ERBLint
         run: bundle exec erblint .
 
+      - name: Run brakeman with reviewdog
+        uses: reviewdog/action-brakeman@v1
+        with:
+          brakeman_version: gemfile
+          github_token: ${{ secrets.github_token }}
+
       - name: Run Tests
         env:
           RAILS_ENV: test
