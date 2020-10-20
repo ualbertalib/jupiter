@@ -72,6 +72,7 @@ jobs:
           brakeman_version: gemfile
           github_token: ${{ secrets.github_token }}
 
+          
       - name: Run Tests
         env:
           RAILS_ENV: test
