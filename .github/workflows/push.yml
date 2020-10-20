@@ -58,6 +58,12 @@ jobs:
       - name: Lint with Stylelint
         run: yarn run lint-css
 
+      - name: Run brakeman with reviewdog
+        uses: reviewdog/action-brakeman@v1
+        with:
+          brakeman_version: gemfile
+          github_token: ${{ secrets.github_token }}
+
       - name: Run Danger
         env:
           DANGER_GITHUB_API_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
@@ -66,13 +72,6 @@ jobs:
       - name: Run ERBLint
         run: bundle exec erblint .
 
-      - name: Run brakeman with reviewdog
-        uses: reviewdog/action-brakeman@v1
-        with:
-          brakeman_version: gemfile
-          github_token: ${{ secrets.github_token }}
-
-          
       - name: Run Tests
         env:
           RAILS_ENV: test
