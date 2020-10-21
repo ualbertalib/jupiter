@@ -62,4 +62,12 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
     assert_no_match(/<a href="\/items\/#{@item4.id}">/, response.body)
   end
 
+  # NOTE: We do not want to highlight results until Digitization work
+  test 'should NOT render highlights on search result page' do
+    get search_url, params: { search: 'French' }
+    assert_response :success
+
+    assert_no_match(/<mark>French<\/mark>/, response.body)
+  end
+
 end

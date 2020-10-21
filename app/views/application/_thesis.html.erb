@@ -46,9 +46,10 @@
       <%# TODO: the search path may need to be revisited %>
       <%= search_link_for(thesis, :all_contributors, value: thesis.dissertant) %>
     </p>
+
     <% if thesis.abstract.present? %>
       <p>
-        <%= jupiter_truncate thesis.abstract %>
+        <%= render(highlights) || jupiter_truncate(thesis.abstract) %>
       </p>
     <% end %>
   </div>

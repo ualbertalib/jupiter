@@ -19,7 +19,8 @@ class SearchController < ApplicationController
     search_query_index = UserSearchService.new(
       search_models: models,
       params: params,
-      current_user: current_user
+      current_user: current_user,
+      fulltext: false
     )
     @results = search_query_index.results
     @search_models = search_query_index.search_models

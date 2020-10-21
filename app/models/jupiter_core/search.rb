@@ -15,7 +15,7 @@ class JupiterCore::Search
   # TODO: probably someone will request not showing some of the default facets in some context,
   # so one potential path forward would be to add a facet exclusions param and subtract it out of the facet_fields
   # when creating the DeferredFacetedSolrQuery
-  def self.faceted_search(q: '', facets: [], ranges: [], models: [], as: nil)
+  def self.faceted_search(q: '', facets: [], ranges: [], models: [], as: nil, fulltext: false)
     raise ArgumentError, 'as: must specify a user!' if as.present? && !as.is_a?(User)
     raise ArgumentError, 'must provide at least one model to search for!' if models.blank?
 
@@ -45,6 +45,8 @@ class JupiterCore::Search
       fq << "#{key}:[#{value[:begin]} TO #{value[:end]}]"
     end
 
+    fulltext_fields = construct_fulltext_fields(models) if fulltext
+
     # queried fields, by default, are all of the fields marked as :search (see calculate_queried_fields).
     # We can revist if we need to customize this more granularly
     JupiterCore::SolrServices::DeferredFacetedSolrQuery.new(q: base_query,
@@ -53,7 +55,8 @@ class JupiterCore::Search
                                                             facet_map: construct_facet_map(models),
                                                             facet_fields: construct_facet_fields(models, user: as),
                                                             ranges: ranges,
-                                                            restrict_to_model: models)
+                                                            restrict_to_model: models,
+                                                            fulltext_fields: fulltext_fields)
   end
 
   # derive additional restriction or broadening of the visibilitily query on top of the default
@@ -74,9 +77,10 @@ class JupiterCore::Search
   end
 
   def self.perform_solr_query(q:, qf: '', fq: '', facet: false, facet_fields: [], facet_max: MAX_FACETS_RETURNED,
-                              restrict_to_model: nil, rows: MAX_RESULTS, start: nil, sort: nil)
+                              restrict_to_model: nil, rows: MAX_RESULTS, start: nil, sort: nil, fulltext_fields: [])
     params = prepare_solr_query(q: q, qf: qf, fq: fq, facet: facet, facet_fields: facet_fields, facet_max: facet_max,
-                                restrict_to_model: restrict_to_model, rows: rows, start: start, sort: sort)
+                                restrict_to_model: restrict_to_model, rows: rows,
+                                start: start, sort: sort, fulltext_fields: fulltext_fields)
 
     response = ActiveSupport::Notifications.instrument(JUPITER_SOLR_NOTIFICATION,
                                                        name: 'solr select',
@@ -86,11 +90,11 @@ class JupiterCore::Search
 
     raise SearchFailed unless response['responseHeader']['status'] == 0
 
-    [response['response']['numFound'], response['response']['docs'], response['facet_counts']]
+    [response['response']['numFound'], response['response']['docs'], response['facet_counts'], response['highlighting']]
   end
 
   def self.prepare_solr_query(q:, qf: '', fq: '', facet: false, facet_fields: [], facet_max: MAX_FACETS_RETURNED,
-                              restrict_to_model: nil, rows: MAX_RESULTS, start: nil, sort: nil)
+                              restrict_to_model: nil, rows: MAX_RESULTS, start: nil, sort: nil, fulltext_fields: [])
     query = []
     restrict_to_model = [restrict_to_model] unless restrict_to_model.is_a?(Array)
 
@@ -115,6 +119,17 @@ class JupiterCore::Search
       'facet.field': facet_fields,
       'facet.limit': facet_max
     }
+
+    if fulltext_fields.present?
+      params.merge!({
+                      hl: true,
+                      'hl.fl': fulltext_fields,
+                      'hl.snippets': 3,
+                      'hl.fragsize': 300,
+                      'hl.simple.pre': '<mark>',
+                      'hl.simple.post': '</mark>'
+                    })
+    end
 
     params[:start] = start if start.present?
     params[:sort] = sort if sort.present?
@@ -151,6 +166,14 @@ class JupiterCore::Search
         model.solr_exporter_class.facets
       end.flatten.uniq
       user&.admin? ? facets : facets.reject { |f| f == visibility_facet }
+    end
+
+    def construct_fulltext_fields(models)
+      models.map do |model|
+        next if model.solr_exporter_class.fulltext_searchable_field.blank?
+
+        model.solr_exporter_class.fulltext_searchable_mangled_solr_name
+      end.uniq
     end
 
     def model_to_name(model)
