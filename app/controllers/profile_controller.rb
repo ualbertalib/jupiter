@@ -11,7 +11,7 @@ class ProfileController < ApplicationController
       value: @user.id,
       params: params,
       current_user: @user,
-      fulltext: Flipper.enabled?(:fulltext_search)
+      fulltext: Flipper.enabled?(:fulltext_search, current_user)
     )
     @results = search_query_index.results
     @search_models = search_query_index.search_models
