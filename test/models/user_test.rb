@@ -18,6 +18,11 @@ class UserTest < ActiveSupport::TestCase
     assert validate_presence_of(:name)
   end
 
+  test '#flipper_id' do
+    user = users(:regular)
+    assert_equal "User:#{user.id}", user.flipper_id
+  end
+
   test 'should update the activity columns when not signing-in' do
     user = users(:regular)
     assert user.last_seen_at.blank?

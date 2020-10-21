@@ -80,11 +80,15 @@ Rails.application.routes.draw do
     match '/logout', to: 'sessions#destroy', via: [:get, :post]
     post '/auth/system', to: 'sessions#system_login'
 
-    # Sidekiq panel
+    # Sidekiq & Flipper UI
     if Rails.env.development?
       mount Sidekiq::Web => '/sidekiq'
+      mount Flipper::UI.app(Flipper) => '/flipper', as: 'flipper'
     else
-      mount Sidekiq::Web => '/sidekiq', constraints: AdminConstraint.new
+      constraints AdminConstraint.new do
+        mount Sidekiq::Web => '/sidekiq'
+        mount Flipper::UI.app(Flipper) => '/flipper', as: 'flipper'
+      end
     end
 
     get 'sitemap.xml', to: 'sitemap#index', defaults: { format: :xml }, as: :sitemapindex

@@ -63,4 +63,8 @@ class User < ApplicationRecord
     Digest::SHA2.hexdigest("#{Rails.application.secrets.secret_key_base}_#{id}")
   end
 
+  def flipper_id
+    "User:#{id}"
+  end
+
 end

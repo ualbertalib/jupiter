@@ -203,6 +203,10 @@ en:
     range_facet_result:
       to: 'to'
 
+  layouts:
+    admin:
+      feature_flags: 'Feature Flags'
+
   locked_ldp_object:
     errors:
       invalid_visibility: "%{visibility} is not a known visibility"
@@ -288,12 +292,6 @@ en:
         posted: 'Announcement was successfully posted!'
       destroy:
         removed: 'Announcement was successfully removed!'
-    pages:
-      index:
-        header: 'Static Pages'
-    analytics:
-      index:
-        header: 'Analytics'
     items:
       index:
         header: 'Items'
