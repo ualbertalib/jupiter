@@ -9,6 +9,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 ### Added
 - Added read only mode feature [#1838](https://github.com/ualbertalib/jupiter/issues/1838)
 - Added highlighting of terms within search results descriptions [#1800](https://github.com/ualbertalib/jupiter/issues/1800)
+- Added feature flags to Jupiter [#1897](https://github.com/ualbertalib/jupiter/issues/1897)
 
 ### Changed
 - Enable Skylight in the Staging environment and remove it from the UAT environment (where it was unused, and the performance of the Docker environment is less likely to be similar to Production)
@@ -26,7 +27,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - N+1 query issue with attachments to models in search results [PR#1881](https://github.com/ualbertalib/jupiter/pull/1881)
 
 ### Security
-- bump selfsigned CVE-2020-7720 
+- bump selfsigned CVE-2020-7720
 
 ## [2.0.1.pre2] - 2020-09-01
 
