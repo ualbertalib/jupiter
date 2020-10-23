@@ -21,7 +21,7 @@ class ItemTest < ActiveSupport::TestCase
       end
     end
     assert item.valid?
-    assert Item.public_items.map(&:id).include?(item.id)
+    assert_includes Item.public_items.map(&:id), item.id
 
     assert_difference -> { Item.public_items.count }, -1 do
       item.tap do |unlocked_item|
@@ -309,7 +309,7 @@ class ItemTest < ActiveSupport::TestCase
     item = Item.new(created: 'Fall 2015')
     item.valid?
     assert_not item.errors[:sort_year].present?
-    assert_equal item.sort_year, 2015
+    assert_equal(2015, item.sort_year)
   end
 
   # Preservation queue handling

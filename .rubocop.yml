@@ -4,6 +4,7 @@
 # https://github.com/bbatsov/rubocop/blob/master/config/enabled.yml
 
 require:
+  - rubocop-minitest
   - rubocop-performance
   - rubocop-rails
 

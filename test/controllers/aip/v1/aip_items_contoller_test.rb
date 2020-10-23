@@ -80,7 +80,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
     graph = generate_graph_from_n3(response.body)
     rendered_graph = load_radioactive_n3_graph(radioactive_item, 'base')
 
-    assert_equal true, rendered_graph.isomorphic_with?(graph)
+    assert rendered_graph.isomorphic_with?(graph)
   end
 
   test 'should get item metadata graph with n3 serialization for embargo example' do
@@ -104,7 +104,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
     graph = generate_graph_from_n3(response.body)
     rendered_graph = load_radioactive_n3_graph(radioactive_item, 'embargoed')
 
-    assert_equal true, rendered_graph.isomorphic_with?(graph)
+    assert rendered_graph.isomorphic_with?(graph)
   end
 
   test 'should get item metadata graph with n3 serialization for previously embargoed example' do
@@ -135,7 +135,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
     graph = generate_graph_from_n3(response.body)
     rendered_graph = load_radioactive_n3_graph(radioactive_item, 'prev-embargoed')
 
-    assert_equal true, rendered_graph.isomorphic_with?(graph)
+    assert rendered_graph.isomorphic_with?(graph)
   end
 
   test 'should get item metadata graph with n3 serialization for rights example' do
@@ -158,7 +158,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
     graph = generate_graph_from_n3(response.body)
     rendered_graph = load_radioactive_n3_graph(radioactive_item, 'rights')
 
-    assert_equal true, rendered_graph.isomorphic_with?(graph)
+    assert rendered_graph.isomorphic_with?(graph)
   end
 
   test 'should get item metadata graph with n3 serialization for published status example' do
@@ -180,7 +180,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
     graph = generate_graph_from_n3(response.body)
     rendered_graph = load_radioactive_n3_graph(radioactive_item, 'published-status')
 
-    assert_equal true, rendered_graph.isomorphic_with?(graph)
+    assert rendered_graph.isomorphic_with?(graph)
   end
 
   # Basic test checking if response has xml format.
@@ -193,7 +193,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
 
-    assert_equal true, check_file_order_xml(response.body)
+    assert check_file_order_xml(response.body)
   end
 
   test 'should get item file paths' do
@@ -204,7 +204,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
     )
     assert_response :success
     json_string = response.body
-    assert_equal true, JSON::Validator.validate(
+    assert JSON::Validator.validate(
       file_paths_json_schema,
       json_string
     )
@@ -212,7 +212,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
 
     # Check that all files actually exist
     json_response['files'].map do |file_path|
-      assert_equal true, File.file?(file_path['file_path'])
+      assert File.file?(file_path['file_path'])
     end
   end
 
@@ -244,7 +244,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
     }
     rendered_graph = load_n3_graph(file_fixture('n3/items/file_set.n3'), variables)
 
-    assert_equal true, rendered_graph.isomorphic_with?(graph)
+    assert rendered_graph.isomorphic_with?(graph)
   end
 
   test 'should get item fixity metadata graph with n3 serialization' do
@@ -267,7 +267,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
     }
     rendered_graph = load_n3_graph(file_fixture('n3/items/fixity.n3'), variables)
 
-    assert_equal true, rendered_graph.isomorphic_with?(graph)
+    assert rendered_graph.isomorphic_with?(graph)
   end
 
 end
