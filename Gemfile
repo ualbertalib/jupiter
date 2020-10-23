@@ -85,7 +85,7 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
 
-  gem 'rubocop', '~> 0.92.0', require: false
+  gem 'rubocop', '~> 0.93.1', require: false
   gem 'rubocop-minitest', '~> 0.10', require: false
   gem 'rubocop-performance', '~> 1.8', require: false
   gem 'rubocop-rails', '~> 2.8', require: false
@@ -98,12 +98,16 @@ group :development do
   gem 'binding_of_caller'
 
   gem 'brakeman'
+
   gem 'listen', '>= 3.0.5', '< 3.3'
+  gem 'spring'
+  gem 'spring-watcher-listen', '~> 2.0.0'
+
   gem 'web-console', '>= 3.3.0'
 end
 
 group :test do
-  gem 'danger', '~> 8.0', require: false # Pull Request etiquette enforcement
+  gem 'danger', '~> 8.1', require: false # Pull Request etiquette enforcement
   gem 'simplecov'
   # Faker added 0.5 seconds to the test suite per call. Haikunator seems much faster for faking strings
   gem 'haikunator'
