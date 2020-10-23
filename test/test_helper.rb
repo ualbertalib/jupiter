@@ -33,6 +33,11 @@ end
 # just push all jobs to an array for verification
 Sidekiq::Testing.fake!
 
+# Stub out EZID logger to silence noise in test runner
+Ezid::Client.configure do |config|
+  config.logger = Logger.new(File::NULL)
+end
+
 class ActiveSupport::TestCase
 
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
