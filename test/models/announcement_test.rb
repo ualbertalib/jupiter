@@ -13,12 +13,12 @@ class AnnouncementTest < ActiveSupport::TestCase
   end
 
   test 'current announcements scope' do
-    assert Announcement.current.count == 1
+    assert_equal(1, Announcement.current.count)
     assert_includes Announcement.current, announcements(:current_announcement)
   end
 
   test 'past announcements scope' do
-    assert Announcement.past.count == 2
+    assert_equal(2, Announcement.past.count)
     assert_includes Announcement.past, announcements(:past_announcement)
     assert_includes Announcement.past, announcements(:another_past_announcement)
   end

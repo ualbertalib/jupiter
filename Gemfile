@@ -86,8 +86,9 @@ group :development, :test do
   gem 'pry-rails'
 
   gem 'rubocop', '~> 0.92.0', require: false
-  gem 'rubocop-performance'
-  gem 'rubocop-rails'
+  gem 'rubocop-minitest', '~> 0.10', require: false
+  gem 'rubocop-performance', '~> 1.8', require: false
+  gem 'rubocop-rails', '~> 2.8', require: false
 end
 
 group :development do

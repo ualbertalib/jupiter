@@ -40,7 +40,7 @@ class UserSearchServiceTest < ActiveSupport::TestCase
     )
 
     assert_instance_of JupiterCore::SolrServices::DeferredFacetedSolrQuery, search.results
-    assert_equal search.results.count, 3
+    assert_equal(3, search.results.count)
   end
 
   test 'should filter search results by visibility of current_user' do
@@ -52,7 +52,7 @@ class UserSearchServiceTest < ActiveSupport::TestCase
       params: params
     )
 
-    assert_equal search.results.count, 2
+    assert_equal(2, search.results.count)
     assert_not_includes search.results, @admin_private_item
   end
 
@@ -69,7 +69,7 @@ class UserSearchServiceTest < ActiveSupport::TestCase
     )
 
     # Only Fancy item is owned by regular user
-    assert_equal search.results.count, 1
+    assert_equal(1, search.results.count)
     assert_equal search.results.first.id, @regular_user_item.id
   end
 
@@ -84,11 +84,11 @@ class UserSearchServiceTest < ActiveSupport::TestCase
     )
 
     # Only Admin item has "French" in its description
-    assert_equal search.results.count, 1
+    assert_equal(1, search.results.count)
 
     search.results.each_with_fulltext_results do |result, fulltext_hits|
       assert_equal result.id, @admin_item.id
-      assert_equal fulltext_hits.count, 1
+      assert_equal(1, fulltext_hits.count)
       assert_match(
         /<mark>French<\/mark>/,
         fulltext_hits.first.highlight_text

@@ -19,7 +19,7 @@ class UserActivityTest < ActionDispatch::IntegrationTest
       end
       user.reload
       assert_equal user.last_seen_at.to_s, now1
-      assert_equal user.last_seen_ip, '127.0.0.1'
+      assert_equal('127.0.0.1', user.last_seen_ip)
       assert_equal user.last_sign_in_at.to_s, now1
     end
 
@@ -34,7 +34,7 @@ class UserActivityTest < ActionDispatch::IntegrationTest
       end
       user.reload
       assert_equal user.last_seen_at.to_s, now2
-      assert_equal user.last_seen_ip, '127.0.0.1'
+      assert_equal('127.0.0.1', user.last_seen_ip)
       assert_equal user.last_sign_in_at.to_s, now2
       assert_equal user.previous_sign_in_at, now1
     end
