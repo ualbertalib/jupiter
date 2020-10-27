@@ -16,6 +16,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Changed oaisys' updated until scope [#1816](https://github.com/ualbertalib/jupiter/issues/1816)
 - ActiveStorage::Blob now uses UUID for ids. You will need to recreate, remigrate, and reseed your DB.
 - predeploy script to reference this branch
+- UAT VIRTUAL_HOSTS configuration on just the containers that need it
 
 ### Added
 - script for watchtower to run from post-update hook [PR#1892](https://github.com/ualbertalib/jupiter/pull/1892)
