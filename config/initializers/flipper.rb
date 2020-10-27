@@ -22,3 +22,8 @@ Flipper::UI.configure do |config|
   # When no feature flags, turn off random video
   config.fun = false
 end
+
+unless Rails.env.test?
+  require 'flipper/middleware/memoizer'
+  Rails.application.config.middleware.use Flipper::Middleware::Memoizer
+end
