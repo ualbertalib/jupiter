@@ -12,4 +12,9 @@ class Digitization::RedirectController < ApplicationController
         redirect_to digitization_book_url(@book), status: :moved_permanently
     end
 
+    def peel_newspaper
+        @newspaper = Digitization::Newspaper.find_by(publication_code: params[:publication_code], year: params[:year], month: params[:month], day: params[:day])
+        redirect_to digitization_newspaper_url(@newspaper), status: :moved_permanently
+    end
+
 end

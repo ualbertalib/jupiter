@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_30_205050) do
+ActiveRecord::Schema.define(version: 2020_11_04_211328) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -94,6 +94,16 @@ ActiveRecord::Schema.define(version: 2020_10_30_205050) do
     t.integer "peel_id"
     t.integer "run"
     t.integer "part_number"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "digitization_newspapers", force: :cascade do |t|
+    t.uuid "newspaper_id"
+    t.string "publication_code"
+    t.integer "year"
+    t.string "month"
+    t.string "day"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

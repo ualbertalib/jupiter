@@ -154,17 +154,18 @@ Rails.application.routes.draw do
       end
     end
   end
-
   constraints(subdomain: 'digitization') do
 
     namespace :digitization, only: [:index, :show] do
-      resources :books
+      resources :books, :newspapers
     end
     
-    ## HydraNorth URL redirects
+    ## Peel URL redirects
     get '/bibliography/:peel_id/:run/:part_number', to: 'digitization/redirect#peel_book'
     get '/bibliography/:peel_id/:part_number', to: 'digitization/redirect#peel_book'
     get '/bibliography/:peel_id', to: 'digitization/redirect#peel_book'
+
+    get '/newspapers/:publication_code/:year/:month/:day', to: 'digitization/redirect#peel_newspaper'
         
   end
 end
