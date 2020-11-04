@@ -17,4 +17,9 @@ class Digitization::RedirectController < ApplicationController
         redirect_to digitization_newspaper_url(@newspaper), status: :moved_permanently
     end
 
+    def peel_image
+        @image = Digitization::Image.find_by(peel_image_id: params[:peel_image_id])
+        redirect_to digitization_image_url(@image), status: :moved_permanently
+    end
+
 end

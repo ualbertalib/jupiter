@@ -40,4 +40,18 @@ class Digitization::RedirectControllerTest < ActionDispatch::IntegrationTest
         assert_response :moved_permanently
         assert_redirected_to digitization_newspaper_url(digitization_newspapers(:la_survivance))
     end
+
+    test 'should redirect Peel Magee Photograph' do
+        # Action: redirect#peel_image
+        get '/magee/MGNGBG0001'
+        assert_response :moved_permanently
+        assert_redirected_to digitization_image_url(digitization_images(:magee))
+    end
+
+    test 'should redirect Peel Prairie Postcard' do
+        # Action: redirect#peel_image
+        get '/postcards/PC004600'
+        assert_response :moved_permanently
+        assert_redirected_to digitization_image_url(digitization_images(:postcard))
+    end
 end

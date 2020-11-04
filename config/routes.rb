@@ -157,7 +157,7 @@ Rails.application.routes.draw do
   constraints(subdomain: 'digitization') do
 
     namespace :digitization, only: [:index, :show] do
-      resources :books, :newspapers
+      resources :books, :newspapers, :images
     end
     
     ## Peel URL redirects
@@ -166,6 +166,9 @@ Rails.application.routes.draw do
     get '/bibliography/:peel_id', to: 'digitization/redirect#peel_book'
 
     get '/newspapers/:publication_code/:year/:month/:day', to: 'digitization/redirect#peel_newspaper'
+
+    get '/magee/:peel_image_id', to: 'digitization/redirect#peel_image'
+    get '/postcards/:peel_image_id', to: 'digitization/redirect#peel_image'
         
   end
 end
