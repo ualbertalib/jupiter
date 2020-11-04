@@ -9,7 +9,7 @@ class CollectionsController < ApplicationController
       value: @collection.path,
       params: params,
       current_user: current_user,
-      fulltext: false
+      fulltext: Flipper.enabled?(:fulltext_search, current_user)
     )
     @results = search_query_index.results
     @search_models = search_query_index.search_models

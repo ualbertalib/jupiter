@@ -33,13 +33,14 @@ gem 'bcrypt', '>= 3.1.13'
 gem 'omniauth'
 gem 'omniauth-rails_csrf_protection' # Remove after https://github.com/omniauth/omniauth/pull/809 will be resolved
 gem 'omniauth-saml'
+
 # Authorization
 gem 'pundit', '1.1.0'
 
 # Background tasks
 gem 'sidekiq', '~> 5.2'
 gem 'sidekiq-unique-jobs'
-gem 'sinatra', '~> 2.1.0' # used by sidekiq/web
+gem 'sinatra', '~> 2.0.8.1' # used by sidekiq/web
 # Sidekiq cron jobs
 gem 'rufus-scheduler', '3.6.0' # https://github.com/ondrejbartas/sidekiq-cron/issues/199
 gem 'sidekiq-cron'
@@ -50,6 +51,9 @@ gem 'addressable', '~> 2.7.0' # Replacement for the standard URI implementation
 gem 'differ' # Used to diff two strings
 gem 'draper'
 gem 'ezid-client', '~> 1.8.0'
+gem 'flipper', '~> 0.19.0' # Feature flags for Ruby
+gem 'flipper-active_record', '~> 0.19.0' # Store feature flags in ActiveRecord
+gem 'flipper-ui', '~> 0.19.0' # UI for feature flags
 gem 'jbuilder' # generate JSON objects
 gem 'kaminari' # Pagination
 gem 'paper_trail' # Track object changes
