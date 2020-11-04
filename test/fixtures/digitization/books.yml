@@ -1,0 +1,18 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+peel_monograph:
+  peel_id: 4062
+
+henderson:
+  peel_id: 3178
+  run: 1
+  part_number: 1
+
+folk_fest:
+  peel_id: 10572
+  part_number: 1
+
+government_document:
+  peel_id: 10571
+  part_number: 2
+

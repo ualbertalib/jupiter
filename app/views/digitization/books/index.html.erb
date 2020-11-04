@@ -1,0 +1,27 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Digitization Books</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Peel</th>
+      <th>Run</th>
+      <th>Part number</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @digitization_books.each do |digitization_book| %>
+      <tr>
+        <td><%= digitization_book.peel_id %></td>
+        <td><%= digitization_book.run %></td>
+        <td><%= digitization_book.part_number %></td>
+        <td><%= link_to 'Show', digitization_book %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>

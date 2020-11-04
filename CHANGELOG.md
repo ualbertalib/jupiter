@@ -10,6 +10,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Added read only mode feature [#1838](https://github.com/ualbertalib/jupiter/issues/1838)
 - Added highlighting of terms within search results descriptions [#1800](https://github.com/ualbertalib/jupiter/issues/1800)
 - Added feature flags to Jupiter [#1897](https://github.com/ualbertalib/jupiter/issues/1897)
+- peel redirects [#1769](https://github.com/ualbertalib/jupiter/issues/1769)
 
 ### Changed
 - Enable Skylight in the Staging environment and remove it from the UAT environment (where it was unused, and the performance of the Docker environment is less likely to be similar to Production)
