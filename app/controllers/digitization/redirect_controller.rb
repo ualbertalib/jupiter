@@ -22,4 +22,9 @@ class Digitization::RedirectController < ApplicationController
         redirect_to digitization_image_url(@image), status: :moved_permanently
     end
 
+    def peel_map
+        @map = Digitization::Map.find_by(peel_map_id: params[:peel_map_id])
+        redirect_to digitization_map_url(@map), status: :moved_permanently
+    end
+
 end
