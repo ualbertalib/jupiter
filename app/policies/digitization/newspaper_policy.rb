@@ -1,6 +1,7 @@
 class Digitization::NewspaperPolicy < ApplicationPolicy
-     
-      def show?
-        true
-      end
+
+  def show?
+    true
+  end
+
 end

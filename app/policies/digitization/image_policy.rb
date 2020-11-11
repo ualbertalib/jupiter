@@ -1,6 +1,7 @@
 class Digitization::ImagePolicy < ApplicationPolicy
-     
-      def show?
-        true
-      end
+
+  def show?
+    true
+  end
+
 end
