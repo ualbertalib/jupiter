@@ -161,11 +161,11 @@ Rails.application.routes.draw do
     end
     
     ## Peel URL redirects
-    get '/bibliography/:peel_id/:run/:part_number', to: 'digitization/redirect#peel_book'
-    get '/bibliography/:peel_id/:part_number', to: 'digitization/redirect#peel_book'
-    get '/bibliography/:peel_id', to: 'digitization/redirect#peel_book'
+    get '/bibliography/:peel_id.:run.:part_number(/*page)', to: 'digitization/redirect#peel_book'
+    get '/bibliography/:peel_id.:part_number(/*page)', to: 'digitization/redirect#peel_book'
+    get '/bibliography/:peel_id(/*page)', to: 'digitization/redirect#peel_book'
 
-    get '/newspapers/:publication_code/:year/:month/:day', to: 'digitization/redirect#peel_newspaper'
+    get '/newspapers/:publication_code/:year/:month/:day(/*page)', to: 'digitization/redirect#peel_newspaper'
 
     get '/magee/:peel_image_id', to: 'digitization/redirect#peel_image'
     get '/postcards/:peel_image_id', to: 'digitization/redirect#peel_image'
