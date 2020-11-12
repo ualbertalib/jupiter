@@ -455,6 +455,17 @@ en:
           please_review_thesis: 'Please review your thesis before depositing into ERA'
           legal_disclaimer_html: 'By depositing this thesis into ERA you agree to the <a href="/policies">ERA Deposit Policy agreements</a>'
 
+  digitization:
+    books: 'Digitization Books'
+    peel: 'Peel'
+    run: 'Run'
+    part_number: 'Part Number'
+    image: 'Peel image'
+    map: 'Map'
+    publication_code: 'Publication code'
+    year: 'Year'
+    month: 'Month'
+    day: 'Day'
 
   profile:
     index:
