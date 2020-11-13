@@ -1,2 +1,0 @@
-module Digitization::NewspapersHelper
-end
