@@ -7,7 +7,7 @@ class Digitization::MapsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should show digitization_map' do
-    get digitization_map_url(@digitization_map)
+    get map_url(@digitization_map)
     assert_response :success
   end
 

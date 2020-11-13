@@ -7,7 +7,7 @@ class Digitization::BooksControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should show digitization_book' do
-    get digitization_book_url(@digitization_book)
+    get book_url(@digitization_book)
     assert_response :success
   end
 

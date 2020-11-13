@@ -7,7 +7,7 @@ class Digitization::ImagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should show digitization_image' do
-    get digitization_image_url(@digitization_image)
+    get image_url(@digitization_image)
     assert_response :success
   end
 

@@ -155,10 +155,6 @@ Rails.application.routes.draw do
     end
   end
   constraints(subdomain: 'digitization') do
-    namespace :digitization, only: [:index, :show] do
-      resources :books, :newspapers, :images, :maps
-    end
-
     ## Peel URL redirects
     get '/bibliography/:peel_id.:run.:part_number(/*page)', to: 'digitization/redirect#peel_book'
     get '/bibliography/:peel_id.:part_number(/*page)', to: 'digitization/redirect#peel_book'
@@ -169,6 +165,11 @@ Rails.application.routes.draw do
     get '/magee/:peel_image_id', to: 'digitization/redirect#peel_image'
     get '/postcards/:peel_image_id', to: 'digitization/redirect#peel_image'
 
-    get '/maps/:peel_map_id', to: 'digitization/redirect#peel_map'
+    # this pattern is shared with jupiter maps so must be before the other inorder to correctly redirect
+    get '/maps/:peel_map_id', to: 'digitization/redirect#peel_map', peel_map_id: /M[0-9]{6}/
+
+    scope module: 'digitization', only: [:index, :show] do
+      resources :books, :newspapers, :images, :maps
+    end
   end
 end
