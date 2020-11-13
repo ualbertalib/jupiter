@@ -69,4 +69,5 @@ Rails.application.configure do
   config.action_controller.action_on_unpermitted_parameters = :raise
 
   config.hosts << 'era.lvh.me'
+  config.hosts << 'digitization.lvh.me'
 end
