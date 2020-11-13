@@ -1,23 +1,21 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong><% t('digitization.publication_code') %>:</strong>
+  <strong><%= t('digitization.publication_code') %>:</strong>
   <%= @digitization_newspaper.publication_code %>
 </p>
 
 <p>
-  <strong><% t('digitization.year') %>:</strong>
+  <strong><%= t('digitization.year') %>:</strong>
   <%= @digitization_newspaper.year %>
 </p>
 
 <p>
-  <strong><% t('digitization.month') %>:</strong>
+  <strong><%= t('digitization.month') %>:</strong>
   <%= @digitization_newspaper.month %>
 </p>
 
 <p>
-  <strong><% t('digitization.day') %>:</strong>
+  <strong><%= t('digitization.day') %>:</strong>
   <%= @digitization_newspaper.day %>
 </p>
-
-<%= link_to 'Back', digitization_newspapers_path %>

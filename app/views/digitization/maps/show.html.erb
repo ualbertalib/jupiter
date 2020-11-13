@@ -1,8 +1,6 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong><% t('digitization.map') %>:</strong>
+  <strong><%= t('digitization.peel_map_id') %>:</strong>
   <%= @digitization_map.peel_map_id %>
 </p>
-
-<%= link_to 'Back', digitization_maps_path %>

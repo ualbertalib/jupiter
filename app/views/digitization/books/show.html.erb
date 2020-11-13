@@ -1,18 +1,16 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong><% t('digitization.peel') %>:</strong>
+  <strong><%= t('digitization.peel_id') %>:</strong>
   <%= @digitization_book.peel_id %>
 </p>
 
 <p>
-  <strong><% t('digitization.run') %>:</strong>
+  <strong><%= t('digitization.run') %>:</strong>
   <%= @digitization_book.run %>
 </p>
 
 <p>
-  <strong><% t('digitization.part_number') %>:</strong>
+  <strong><%= t('digitization.part_number') %>:</strong>
   <%= @digitization_book.part_number %>
 </p>
-
-<%= link_to 'Back', digitization_books_path %>
