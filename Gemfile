@@ -18,7 +18,7 @@ gem 'simple_form'
 
 # RDF stuff
 gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', tag: 'v0.2.4'
-gem 'rdf', '~> 3.1.6'
+gem 'rdf', '~> 3.1.7'
 gem 'rdf-n3'
 gem 'rdf-vocab', '~> 3.1.8'
 
@@ -85,7 +85,7 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
 
-  gem 'rubocop', '~> 0.92.0', require: false
+  gem 'rubocop', '~> 0.93.1', require: false
   gem 'rubocop-performance'
   gem 'rubocop-rails'
 end
@@ -97,12 +97,16 @@ group :development do
   gem 'binding_of_caller'
 
   gem 'brakeman'
-  gem 'listen', '>= 3.0.5', '< 3.3'
+
+  gem 'listen', '>= 3.0.5', '< 3.4'
+  gem 'spring'
+  gem 'spring-watcher-listen', '~> 2.0.0'
+
   gem 'web-console', '>= 3.3.0'
 end
 
 group :test do
-  gem 'danger', '~> 8.0', require: false # Pull Request etiquette enforcement
+  gem 'danger', '~> 8.2', require: false # Pull Request etiquette enforcement
   gem 'simplecov'
   # Faker added 0.5 seconds to the test suite per call. Haikunator seems much faster for faking strings
   gem 'haikunator'
