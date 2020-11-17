@@ -7,7 +7,7 @@ class Digitization::NewspapersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should show digitization_newspaper' do
-    get newspaper_url(@digitization_newspaper)
+    get digitization_newspaper_url(@digitization_newspaper)
     assert_response :success
   end
 

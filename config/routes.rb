@@ -168,7 +168,7 @@ Rails.application.routes.draw do
     # this pattern is shared with jupiter maps so must be before the other inorder to correctly redirect
     get '/maps/:peel_map_id', to: 'digitization/redirect#peel_map', peel_map_id: /M[0-9]{6}/
 
-    scope module: 'digitization', only: [:index, :show] do
+    scope module: 'digitization', as: 'digitization', only: [:index, :show] do
       resources :books, :newspapers, :images, :maps
     end
   end

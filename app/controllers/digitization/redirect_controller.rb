@@ -19,7 +19,7 @@ class Digitization::RedirectController < ApplicationController
             else
               Digitization::Book.find_by(peel_id: params[:peel_id])
             end
-    redirect_to book_url(@book), status: :moved_permanently
+    redirect_to digitization_book_url(@book), status: :moved_permanently
   end
 
   def peel_newspaper
@@ -29,17 +29,17 @@ class Digitization::RedirectController < ApplicationController
       month: params[:month],
       day: params[:day]
     )
-    redirect_to newspaper_url(@newspaper), status: :moved_permanently
+    redirect_to digitization_newspaper_url(@newspaper), status: :moved_permanently
   end
 
   def peel_image
     @image = Digitization::Image.find_by(peel_image_id: params[:peel_image_id])
-    redirect_to image_url(@image), status: :moved_permanently
+    redirect_to digitization_image_url(@image), status: :moved_permanently
   end
 
   def peel_map
     @map = Digitization::Map.find_by(peel_map_id: params[:peel_map_id])
-    redirect_to map_url(@map), status: :moved_permanently
+    redirect_to digitization_map_url(@map), status: :moved_permanently
   end
 
 end
