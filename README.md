@@ -6,6 +6,8 @@
 
 ![Jupiter Architecture Diagram](docs/jupiter_architecture.png)
 
+[ERD Diagram (November 17th, 2020)](docs/erd-17-11-2020.pdf)
+
 **Requirements:**
 
 - **Ruby** 2.5+
