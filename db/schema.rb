@@ -89,37 +89,37 @@ ActiveRecord::Schema.define(version: 2020_11_05_001725) do
     t.index ["owner_id"], name: "index_communities_on_owner_id"
   end
 
-  create_table "digitization_books", force: :cascade do |t|
-    t.uuid "book_id"
+  create_table "digitization_books", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.integer "peel_id"
     t.integer "run"
     t.integer "part_number"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["peel_id", "run", "part_number"], name: "unique_peel_book", unique: true
   end
 
-  create_table "digitization_images", force: :cascade do |t|
-    t.uuid "image_id"
+  create_table "digitization_images", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "peel_image_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["peel_image_id"], name: "unique_peel_image", unique: true
   end
 
-  create_table "digitization_maps", force: :cascade do |t|
-    t.uuid "map_id"
+  create_table "digitization_maps", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "peel_map_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["peel_map_id"], name: "unique_peel_map", unique: true
   end
 
-  create_table "digitization_newspapers", force: :cascade do |t|
-    t.uuid "newspaper_id"
+  create_table "digitization_newspapers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "publication_code"
-    t.integer "year"
+    t.string "year"
     t.string "month"
     t.string "day"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["publication_code", "year", "month", "day"], name: "unique_peel_newspaper", unique: true
   end
 
   create_table "draft_items", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
