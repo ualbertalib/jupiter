@@ -1,21 +1,22 @@
-<p id="notice"><%= notice %></p>
+<dl>
+<% if @digitization_newspaper.publication_code.present? %>
+  <dt><%= t('digitization.publication_code') %></dt>
+  <dd><%= @digitization_newspaper.publication_code %></dd>
+<% end %>
 
-<p>
-  <strong><%= t('digitization.publication_code') %>:</strong>
-  <%= @digitization_newspaper.publication_code %>
-</p>
+<% if @digitization_newspaper.year.present? %>
+  <dt><%= t('digitization.year') %></dt>
+  <dd><%= @digitization_newspaper.year %></dd>
+<% end %>
 
-<p>
-  <strong><%= t('digitization.year') %>:</strong>
-  <%= @digitization_newspaper.year %>
-</p>
+<% if @digitization_newspaper.month.present? %>
+  <dt><%= t('digitization.month') %></dt>
+  <dd><%= @digitization_newspaper.month %></dd>
+<% end %>
 
-<p>
-  <strong><%= t('digitization.month') %>:</strong>
-  <%= @digitization_newspaper.month %>
-</p>
+<% if @digitization_newspaper.day.present? %>
+  <dt><%= t('digitization.day') %></dt>
+  <dd><%= @digitization_newspaper.day %></dd>
+<% end %>
 
-<p>
-  <strong><%= t('digitization.day') %>:</strong>
-  <%= @digitization_newspaper.day %>
-</p>
+</dl>

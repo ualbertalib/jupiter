@@ -1,16 +1,16 @@
-<p id="notice"><%= notice %></p>
+<dl>
+<% if @digitization_book.peel_id.present? %>
+  <dt><%= t('digitization.peel_id') %></dt>
+  <dd><%= @digitization_book.peel_id %></dd>
+<% end %>
 
-<p>
-  <strong><%= t('digitization.peel_id') %>:</strong>
-  <%= @digitization_book.peel_id %>
-</p>
+<% if @digitization_book.run.present? %>
+  <dt><%= t('digitization.run') %></dt>
+  <dd><%= @digitization_book.run %></dd>
+<% end %>
 
-<p>
-  <strong><%= t('digitization.run') %>:</strong>
-  <%= @digitization_book.run %>
-</p>
-
-<p>
-  <strong><%= t('digitization.part_number') %>:</strong>
-  <%= @digitization_book.part_number %>
-</p>
+<% if @digitization_book.part_number.present? %>
+  <dt><%= t('digitization.part_number') %></dt>
+  <dd><%= @digitization_book.part_number %></dd>
+<% end %>
+</dl>

@@ -1,6 +1,6 @@
-<p id="notice"><%= notice %></p>
-
-<p>
-  <strong><%= t('digitization.peel_image_id') %>:</strong>
-  <%= @digitization_image.peel_image_id %>
-</p>
+<dl>
+<% if @digitization_image.peel_image_id.present? %>
+  <dt><%= t('digitization.peel_image_id') %></dt>
+  <dd><%= @digitization_image.peel_image_id %></dd>
+<% end %>
+</dl>

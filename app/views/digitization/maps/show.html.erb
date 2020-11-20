@@ -1,6 +1,6 @@
-<p id="notice"><%= notice %></p>
-
-<p>
-  <strong><%= t('digitization.peel_map_id') %>:</strong>
-  <%= @digitization_map.peel_map_id %>
-</p>
+<dl>
+<% if @digitization_map.peel_map_id.present? %>
+  <dt><%= t('digitization.peel_map_id') %></dt>
+  <dd><%= @digitization_map.peel_map_id %></dd>
+<% end %>
+</dl>
