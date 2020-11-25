@@ -6,6 +6,32 @@ class Digitization::RedirectControllerTest < ActionDispatch::IntegrationTest
     host! URI('http://digitization.ualberta.localhost').host
   end
 
+
+  test 'should not find the requested book' do
+    get '/bibliography/0.html'
+    assert_response :missing
+  end
+
+  test 'should not find the requested newspaper' do
+    get '/newspapers/NAN/0000/00/00'
+    assert_response :missing
+  end
+
+  test 'should not find the requested magee image' do
+    get '/magee/0.html'
+    assert_response :missing
+  end
+
+  test 'should not find the requested postcard' do
+    get '/postcards/0.html'
+    assert_response :missing
+  end
+
+  test 'should not find the requested map' do
+    get '/maps/0.html'
+    assert_response :missing
+  end
+
   test 'should redirect Peel monograph' do
     # Action: redirect#peel_book
     get '/bibliography/4062.html'
