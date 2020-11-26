@@ -4,6 +4,10 @@ Rails.application.load_tasks
 
 class ReadOnlyModeIntegrationTest < ActionDispatch::IntegrationTest
 
+  setup do
+    Announcement.destroy_all
+  end
+
   test 'read only mode logs out' do
     sign_in_as users(:regular)
     get root_path
