@@ -6,7 +6,6 @@ class Digitization::RedirectControllerTest < ActionDispatch::IntegrationTest
     host! URI('http://digitization.ualberta.localhost').host
   end
 
-
   test 'should not find the requested book' do
     get '/bibliography/0.html'
     assert_response :missing
