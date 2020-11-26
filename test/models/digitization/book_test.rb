@@ -16,6 +16,12 @@ class Digitization::BookTest < ActiveSupport::TestCase
     assert_equal('has already been taken', book.errors[:peel_id].first)
   end
 
+  test 'invalid Peel book without peel id' do
+    @document.assign_attributes(peel_id: nil, run: nil, part_number: '1')
+    assert_not @document.valid?
+    assert_equal("can't be blank", @document.errors[:peel_id].first)
+  end
+
   test 'invalid Peel book from a run' do
     book = Digitization::Book.create(peel_id: '4242', run: '1')
     assert_not book.valid?
