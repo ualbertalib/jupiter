@@ -7,6 +7,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 100
 
       - name: Build the docker-compose stack
         run: docker-compose up -d
