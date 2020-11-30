@@ -6,6 +6,11 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+## [1.2.25] – 2020-11-30
+
+### Fixed
+- Fixed read only mode feature by adding system account if needed [PR#2005](https://github.com/ualbertalib/jupiter/pull/2005)
+
 ## [1.2.24] – 2020-10-13
 
 ### Added
