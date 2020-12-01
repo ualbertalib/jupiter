@@ -1,0 +1,16 @@
+<dl>
+<% if @digitization_book.peel_id.present? %>
+  <dt><%= t('digitization.peel_id') %></dt>
+  <dd><%= @digitization_book.peel_id %></dd>
+<% end %>
+
+<% if @digitization_book.run.present? %>
+  <dt><%= t('digitization.run') %></dt>
+  <dd><%= @digitization_book.run %></dd>
+<% end %>
+
+<% if @digitization_book.part_number.present? %>
+  <dt><%= t('digitization.part_number') %></dt>
+  <dd><%= @digitization_book.part_number %></dd>
+<% end %>
+</dl>

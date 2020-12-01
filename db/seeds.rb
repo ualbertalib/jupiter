@@ -716,4 +716,13 @@ end
   Institution.create(name: institution_name)
 end
 
+Digitization::Book.create(peel_id: '4062') # monograph
+Digitization::Book.create(peel_id: '10572', part_number: '1') # Folk Fest
+Digitization::Book.create(peel_id: '10571', part_number: '2') # Government Document
+Digitization::Book.create(peel_id: '3178', run: '2', part_number: '12') # Henderson
+Digitization::Newspaper.create(publication_code: 'LSV', year: '1967', month: '03', day: '29')
+Digitization::Image.create(peel_image_id: 'MGNGBG0464') # Magee
+Digitization::Image.create(peel_image_id: 'PC006393') # Postcard
+Digitization::Map.create(peel_map_id: 'M000230')
+
 puts 'Database seeded successfully!'

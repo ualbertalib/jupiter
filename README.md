@@ -66,10 +66,11 @@ Jupiter runs under subdomains. So you will need to configure your local environm
 
 ```
 127.0.0.1       era.demo.com
+127.0.0.1       digitization.demo.com
 ```
-Once this is done, you can navigate to `era.demo.com:3000` to access your development environment.
+Once this is done, you can navigate to `era.demo.com:3000` or `digitization.demo.com:3000` to access your development environment.
 
-Some alternatives is you may also use the `localhost` top level domain (e.g: you can just navigate to `era.ualberta.localhost:3000` to access your development environment without configuring `/etc/hosts` ). Another alternative is you can use services like `lvh.me` (e.g: navigate to `era.lvh.me:3000` to access your development environment).
+Some alternatives is you may also use the `localhost` top level domain (e.g: you can just navigate to `era.ualberta.localhost:3000` or `digitization.ualberta.localhost:3000` to access your development environment without configuring `/etc/hosts` ). Another alternative is you can use services like `lvh.me` (e.g: navigate to `era.lvh.me:3000` or `digitization.lvh.me:3000` to access your development environment).
 
 # UAT Environment
 
