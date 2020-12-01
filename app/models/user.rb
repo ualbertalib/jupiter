@@ -1,6 +1,8 @@
 class User < ApplicationRecord
 
   has_secure_password :api_key, validations: false
+
+  has_many :batch_ingests, dependent: :destroy
   has_many :identities, dependent: :destroy
   has_many :announcements, dependent: :destroy
   has_many :draft_items, dependent: :destroy

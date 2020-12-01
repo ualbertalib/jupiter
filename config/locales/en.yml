@@ -454,6 +454,20 @@ en:
           header_icon: 'check-square'
           please_review_thesis: 'Please review your thesis before depositing into ERA'
           legal_disclaimer_html: 'By depositing this thesis into ERA you agree to the <a href="/policies">ERA Deposit Policy agreements</a>'
+    batch_ingests:
+      index:
+        header: 'Batch Ingests'
+      form:
+        title: 'Title'
+        title_placeholder: 'Title goes here...'
+        create_batch_ingest: 'Create batch ingest'
+        update_batch_ingest: 'Update batch ingest'
+        saving_html: "<i class='fas fa-spinner fa-pulse mr-2'></i>Saving..."
+      show:
+        status: 'Status'
+        created_by: 'Created by'
+      new:
+        header: Create Batch Ingest
 
   digitization:
     peel_id: 'Peel number'

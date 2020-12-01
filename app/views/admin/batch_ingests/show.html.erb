@@ -1,0 +1,11 @@
+<% page_title(@batch_ingest.title) %>
+
+<ol class="breadcrumb mb-1">
+  <li class="breadcrumb-item"><%= link_to t('admin.header'), admin_root_path %></li>
+  <li class="breadcrumb-item"><%= link_to t('admin.batch_ingests.index.header'), admin_batch_ingests_path %></li>
+  <li class="breadcrumb-item active"><%= @batch_ingest.title %></li>
+</ol>
+
+<h1 class="mt-3"><%= @batch_ingest.title %></h1>
+<p><%= t('.status') %>: <%= @batch_ingest.status %></p>
+<p><%= t('.created_by') %>: <%= @batch_ingest.user.name %></p>

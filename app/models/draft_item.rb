@@ -77,6 +77,8 @@ class DraftItem < ApplicationRecord
 
   # Rails 5 turns presence check on by default for belongs_to relationships
   belongs_to :type, optional: true
+  belongs_to :batch_ingest, optional: true
+
 
   has_many :draft_items_languages, dependent: :destroy
   has_many :languages, through: :draft_items_languages

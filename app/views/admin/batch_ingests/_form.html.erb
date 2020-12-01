@@ -1,0 +1,13 @@
+<%= simple_form_for([:admin, @batch_ingest]) do |f| %>
+  <%= f.error_notification %>
+
+  <%= f.input :title, label: t('.title'), placeholder: t('.title_placeholder') %>
+
+ <div class="form-group text-right">
+    <%= f.button :button,
+                 type: :submit,
+                 label: f.object.new_record? ? t('.create_batch_ingest') : t('.update_batch_ingest'),
+                 class: 'btn btn-primary',
+                 data: { disable_with: t('.saving_html') } %>
+  </div>
+<% end %>

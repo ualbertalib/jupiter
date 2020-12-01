@@ -55,6 +55,15 @@ ActiveRecord::Schema.define(version: 2020_11_05_001725) do
     t.bigint "logo_id"
   end
 
+  create_table "batch_ingests", force: :cascade do |t|
+    t.string "title", null: false
+    t.integer "status", default: 0, null: false
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_batch_ingests_on_user_id"
+  end
+
   create_table "collections", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string "visibility"
     t.bigint "owner_id", null: false
@@ -149,6 +158,8 @@ ActiveRecord::Schema.define(version: 2020_11_05_001725) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "thumbnail_id"
+    t.bigint "batch_ingest_id"
+    t.index ["batch_ingest_id"], name: "index_draft_items_on_batch_ingest_id"
     t.index ["id"], name: "index_draft_items_on_id", unique: true
     t.index ["type_id"], name: "index_draft_items_on_type_id"
     t.index ["user_id"], name: "index_draft_items_on_user_id"
@@ -384,8 +395,10 @@ ActiveRecord::Schema.define(version: 2020_11_05_001725) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "announcements", "users"
+  add_foreign_key "batch_ingests", "users"
   add_foreign_key "collections", "users", column: "owner_id"
   add_foreign_key "communities", "users", column: "owner_id"
+  add_foreign_key "draft_items", "batch_ingests"
   add_foreign_key "draft_items", "users"
   add_foreign_key "draft_theses", "institutions"
   add_foreign_key "draft_theses", "languages"
