@@ -3,7 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 # Core Rails stuff
 gem 'image_processing' # for ActiveStorage Variants
-gem 'puma', '~> 5.0'
+gem 'puma', '~> 5.1'
 gem 'rails', '~> 6.0.3'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
