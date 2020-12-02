@@ -79,7 +79,6 @@ class DraftItem < ApplicationRecord
   belongs_to :type, optional: true
   belongs_to :batch_ingest, optional: true
 
-
   has_many :draft_items_languages, dependent: :destroy
   has_many :languages, through: :draft_items_languages
 

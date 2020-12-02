@@ -61,6 +61,7 @@ ActiveRecord::Schema.define(version: 2020_11_05_001725) do
     t.bigint "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["title"], name: "index_batch_ingests_on_title", unique: true
     t.index ["user_id"], name: "index_batch_ingests_on_user_id"
   end
 

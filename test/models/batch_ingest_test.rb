@@ -1,6 +1,7 @@
 require 'test_helper'
 
 class BatchIngestTest < ActiveSupport::TestCase
+
   def setup
     @batch_ingest = batch_ingests(:one)
   end
@@ -26,4 +27,5 @@ class BatchIngestTest < ActiveSupport::TestCase
     assert_not @batch_ingest.valid?
     assert_equal('must exist', @batch_ingest.errors[:user].first)
   end
+
 end

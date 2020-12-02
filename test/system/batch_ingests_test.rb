@@ -20,4 +20,5 @@ class BatchIngestsTest < ApplicationSystemTestCase
     assert_text 'Batch ingest was successfully created'
     click_on 'Back'
   end
+
 end

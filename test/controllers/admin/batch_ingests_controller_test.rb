@@ -19,7 +19,7 @@ class Admin::BatchIngestsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should create batch_ingest' do
     assert_difference('BatchIngest.count') do
-      post admin_batch_ingests_url, params: { batch_ingest: { title: 'Random Batch Name'} }
+      post admin_batch_ingests_url, params: { batch_ingest: { title: 'Random Batch Name' } }
     end
 
     assert_redirected_to admin_batch_ingest_url(BatchIngest.last)
@@ -29,4 +29,5 @@ class Admin::BatchIngestsControllerTest < ActionDispatch::IntegrationTest
     get admin_batch_ingest_url(@batch_ingest)
     assert_response :success
   end
+
 end

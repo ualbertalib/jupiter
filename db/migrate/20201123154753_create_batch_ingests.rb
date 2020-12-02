@@ -8,5 +8,7 @@ class CreateBatchIngests < ActiveRecord::Migration[6.0]
 
       t.timestamps
     end
+
+    add_index :batch_ingests, :title, unique: true
   end
 end
