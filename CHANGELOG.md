@@ -6,6 +6,9 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+- Ensure Thesis Department and supervisor are indexed for faceting (they were in Fedora, missed in initial
+ work to port to Postgres)
+
 ### Added
 - Added read only mode feature [#1838](https://github.com/ualbertalib/jupiter/issues/1838)
 
