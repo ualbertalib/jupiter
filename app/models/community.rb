@@ -26,6 +26,10 @@ class Community < JupiterCore::Depositable
     with_attached_logo
   end
 
+  def self.safe_attributes
+    super + [:logo, :remove_logo]
+  end
+
   # this method can be used on the SolrCached object OR the ActiveFedora object
   def member_collections
     collections
