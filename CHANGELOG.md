@@ -23,6 +23,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - bump rubocop-performance and fix cop violations [PR#1850](https://github.com/ualbertalib/jupiter/pull/1850)
 - N+1 query issue with attachments to models in search results [PR#1881](https://github.com/ualbertalib/jupiter/pull/1881)
 - Fixed flapping announcement tests [#1915](https://github.com/ualbertalib/jupiter/issues/1915)
+- Fixed not being able to clear a community logo [#2009](https://github.com/ualbertalib/jupiter/issues/2009)
 
 ### Security
 - bump selfsigned CVE-2020-7720 
