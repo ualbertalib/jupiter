@@ -6,49 +6,6 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
-- Ensure Thesis Department and supervisor are indexed for faceting (they were in Fedora, missed in initial
- work to port to Postgres)
-
-### Added
-- Added read only mode feature [#1838](https://github.com/ualbertalib/jupiter/issues/1838)
-
-### Changed
-- Enable Skylight in the Staging environment and remove it from the UAT environment (where it was unused, and the performance of the Docker environment is less likely to be similar to Production)
-- uat configuration to accept proxy from upstream nginx-proxy [#1724](https://github.com/ualbertalib/jupiter/issues/1724)
-- Changed oaisys' updated until scope [#1816](https://github.com/ualbertalib/jupiter/issues/1816)
-- ActiveStorage::Blob now uses UUID for ids. You will need to recreate, remigrate, and reseed your DB.
-
-### Added
-- script for watchtower to run from post-update hook [PR#1892](https://github.com/ualbertalib/jupiter/pull/1892)
-
-### Fixed
-- bump rubocop and fix cop violations [PR#1845](https://github.com/ualbertalib/jupiter/pull/1845)
-- bump rubocop-performance and fix cop violations [PR#1850](https://github.com/ualbertalib/jupiter/pull/1850)
-- N+1 query issue with attachments to models in search results [PR#1881](https://github.com/ualbertalib/jupiter/pull/1881)
-- Fixed flapping announcement tests [#1915](https://github.com/ualbertalib/jupiter/issues/1915)
-- Fixed not being able to clear a community logo [#2009](https://github.com/ualbertalib/jupiter/issues/2009)
-
-### Security
-- bump selfsigned CVE-2020-7720 
-
-## [2.0.1.pre2] - 2020-09-01
-
-### Added
-- tmp/cache to docker ignore [#1680](https://github.com/ualbertalib/jupiter/issues/1680)
-- Tie breaker for solr query results to make them deterministic [#1689](https://github.com/ualbertalib/jupiter/issues/1689)
-
-### Changed
-- Merge file_set and original_file AIP API entry points [#1557](https://github.com/ualbertalib/jupiter/issues/1557)
-- Skipped failing Oaisys tests [#1817](https://github.com/ualbertalib/jupiter/issues/1817)
-- webpacker resolved_paths to additional paths [#1836](https://github.com/ualbertalib/jupiter/issues/1836)
- 
-### Fixed
-- Upgrade Rubocop/Erblint and fix cop violations [#1803](https://github.com/ualbertalib/jupiter/pull/1803)
-- Fixed Oaisys testing issues by modifying and adding decorators [#1816](https://github.com/ualbertalib/jupiter/issues/1816)
-- UAT nginx port 80 redirect [PR#1893](https://github.com/ualbertalib/jupiter/pull/1839)
-
-## [2.0.1.pre1] - 2020-07-22
-
 ### Added
 - Mounted Oaisys engine [PR#1361](https://github.com/ualbertalib/jupiter/pull/1361)
 - Added tests surrounding Oaisys ListSets response [PR#1609](https://github.com/ualbertalib/jupiter/pull/1609)
@@ -64,6 +21,10 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Add stylelint to Jupiter [#1120](https://github.com/ualbertalib/jupiter/issues/1120)
 - migration to fix concatenated subjects (part 1) [#1449](https://github.com/ualbertalib/jupiter/issues/1449)
 - fix bad logic on preservation errors
+- tmp/cache to docker ignore [#1680](https://github.com/ualbertalib/jupiter/issues/1680)
+- Tie breaker for solr query results to make them deterministic [#1689](https://github.com/ualbertalib/jupiter/issues/1689)
+- script for watchtower to run from post-update hook [PR#1892](https://github.com/ualbertalib/jupiter/pull/1892)
+- Added read only mode feature [#1838](https://github.com/ualbertalib/jupiter/issues/1838)
 
 ### Changed
 - bump rubocop-rails to 2.4.1 Rails/FilePath default changed to slashes [PR#1398](https://github.com/ualbertalib/jupiter/pull/1398)
@@ -83,7 +44,16 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Finalize Item AIP data [#1557](https://github.com/ualbertalib/jupiter/issues/1557)
 - Finalize Thesis AIP data [#1557](https://github.com/ualbertalib/jupiter/issues/1557)
 - Change validations defined in models in favor of reusable validators
-
+- Merge file_set and original_file AIP API entry points [#1557](https://github.com/ualbertalib/jupiter/issues/1557)
+- Skipped failing Oaisys tests [#1817](https://github.com/ualbertalib/jupiter/issues/1817)
+- webpacker resolved_paths to additional paths [#1836](https://github.com/ualbertalib/jupiter/issues/1836)
+- Enable Skylight in the Staging environment and remove it from the UAT environment (where it was unused, and the performance of the Docker environment is less likely to be similar to Production)
+- uat configuration to accept proxy from upstream nginx-proxy [#1724](https://github.com/ualbertalib/jupiter/issues/1724)
+- Changed oaisys' updated until scope [#1816](https://github.com/ualbertalib/jupiter/issues/1816)
+- ActiveStorage::Blob now uses UUID for ids. You will need to recreate, remigrate, and reseed your DB.
+- Ensure Thesis Department and supervisor are indexed for faceting (they were in Fedora, missed in initial
+  work to port to Postgres)
+  
 ### Fixed
 - failing tests [#1376](https://github.com/ualbertalib/jupiter/issues/1376)
 - Fix Sprockets v4.0.0 upgrade problem with how Sass Variables were being defined [#1406](https://github.com/ualbertalib/jupiter/issues/1406)
@@ -98,9 +68,19 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - The tag method is used replacing the content_tag method which is now deprecated [#1706](https://github.com/ualbertalib/jupiter/issues/1706)
 - Use #resize_to_limit instead of #resize for thumbnail/images in Jupiter [#1698](https://github.com/ualbertalib/jupiter/issues/1698)
 - docker image can be built and deployed on UAT [#1680](https://github.com/ualbertalib/jupiter/issues/1680)
+- Upgrade Rubocop/Erblint and fix cop violations [#1803](https://github.com/ualbertalib/jupiter/pull/1803)
+- Fixed Oaisys testing issues by modifying and adding decorators [#1816](https://github.com/ualbertalib/jupiter/issues/1816)
+- UAT nginx port 80 redirect [PR#1893](https://github.com/ualbertalib/jupiter/pull/1839)
+- bump rubocop and fix cop violations [PR#1845](https://github.com/ualbertalib/jupiter/pull/1845)
+- bump rubocop-performance and fix cop violations [PR#1850](https://github.com/ualbertalib/jupiter/pull/1850)
+- N+1 query issue with attachments to models in search results [PR#1881](https://github.com/ualbertalib/jupiter/pull/1881)
+- Fixed flapping announcement tests [#1915](https://github.com/ualbertalib/jupiter/issues/1915)
+- Fixed not being able to clear a community logo [#2009](https://github.com/ualbertalib/jupiter/issues/2009)
+- Fixed getting an error when deleting an item [#2009](https://github.com/ualbertalib/jupiter/issues/2009)
 
 ### Security
 - add `noopener noreferrer` when opening a link in a new tab [PR#1344](https://github.com/ualbertalib/jupiter/pull/1344)
+- bump selfsigned CVE-2020-7720
 
 ### Removed
 - Removed Matomo analytic tracking [#1493](https://github.com/ualbertalib/jupiter/issues/1493)
