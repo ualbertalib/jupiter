@@ -5,8 +5,22 @@ namespace :jupiter do
   task :reindex, [:batch_size] => :environment do |_, args|
     desired_batch_size = args.batch_size.to_i ||= 1000
     puts 'Reindexing all Items and Theses...'
-    Item.find_each(batch_size: desired_batch_size, &:save!)
-    Thesis.find_each(batch_size: desired_batch_size, &:save!)
+
+    count = 0
+    Item.find_each(batch_size: desired_batch_size) do |item|
+      item.update_solr
+      count += 1
+      print '.' if count % 20 == 0
+    end
+    puts "Reindexed #{count} Items. Moving on to Theses..."
+
+    count = 0
+    Thesis.find_each(batch_size: desired_batch_size) do |thesis|
+      thesis.update_solr
+      count += 1
+      print '.' if count % 20 == 0
+    end
+
     puts 'Reindex completed!'
   end
 
