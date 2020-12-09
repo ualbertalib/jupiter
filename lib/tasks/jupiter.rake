@@ -12,7 +12,10 @@ namespace :jupiter do
       count += 1
       print '.' if count % 20 == 0
     end
+
+    puts
     puts "Reindexed #{count} Items. Moving on to Theses..."
+    puts
 
     count = 0
     Thesis.find_each(batch_size: desired_batch_size) do |thesis|
@@ -20,7 +23,7 @@ namespace :jupiter do
       count += 1
       print '.' if count % 20 == 0
     end
-
+    puts "Reindexed #{count} Theses."
     puts 'Reindex completed!'
   end
 
