@@ -15,6 +15,7 @@ class Admin::ItemsController < Admin::AdminController
     end
 
     begin
+      @item.logo_id = nil
       @item.destroy!
       flash[:notice] = t('.deleted')
     rescue StandardError => e
