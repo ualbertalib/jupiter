@@ -6,6 +6,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 - Make reindex rake task actually reindex all of the objects into Solr, instead of acting as a no-op
+– Fix a mis-named error rescue that resulted in a crash when the sort field wasn't known for a model
 
 ### Added
 - Mounted Oaisys engine [PR#1361](https://github.com/ualbertalib/jupiter/pull/1361)
