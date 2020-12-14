@@ -65,7 +65,6 @@ class UserSearchService
     finish = range[:end]
     return true if start.match?(/\A\d{1,4}\z/) && finish.match?(/\A\d{1,4}\z/) && (start.to_i <= finish.to_i)
 
-    flash[:alert] = "#{start} to #{finish} is not a valid range"
     false
   end
 
