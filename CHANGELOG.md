@@ -77,6 +77,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Fixed flapping announcement tests [#1915](https://github.com/ualbertalib/jupiter/issues/1915)
 - Fixed not being able to clear a community logo [#2009](https://github.com/ualbertalib/jupiter/issues/2009)
 - Fixed getting an error when deleting an item [#2009](https://github.com/ualbertalib/jupiter/issues/2009)
+- No longer 500s when entering in illogical date facet ranges [#2009](https://github.com/ualbertalib/jupiter/issues/2009)
 
 ### Security
 - add `noopener noreferrer` when opening a link in a new tab [PR#1344](https://github.com/ualbertalib/jupiter/pull/1344)
