@@ -8,6 +8,8 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Make reindex rake task actually reindex all of the objects into Solr, instead of acting as a no-op
 – Fix a mis-named error rescue that resulted in a crash when the sort field wasn't known for a model
 
+## [2.0.1] - 2020-12-14
+
 ### Added
 - Mounted Oaisys engine [PR#1361](https://github.com/ualbertalib/jupiter/pull/1361)
 - Added tests surrounding Oaisys ListSets response [PR#1609](https://github.com/ualbertalib/jupiter/pull/1609)
@@ -79,6 +81,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Fixed flapping announcement tests [#1915](https://github.com/ualbertalib/jupiter/issues/1915)
 - Fixed not being able to clear a community logo [#2009](https://github.com/ualbertalib/jupiter/issues/2009)
 - Fixed getting an error when deleting an item [#2009](https://github.com/ualbertalib/jupiter/issues/2009)
+- No longer 500s when entering in illogical date facet ranges [#2009](https://github.com/ualbertalib/jupiter/issues/2009)
 - bump rubocop and fix cop violations [PR#2019](https://github.com/ualbertalib/jupiter/pull/2019)
 
 ### Security
