@@ -22,7 +22,7 @@ module DraftProperties
     validates :files, presence: true, if: :validate_upload_files?
     validate :files_are_virus_free, if: :validate_upload_files?
 
-    scope :unpublished, -> { where(status: :active).where('uuid IS NULL') }
+    scope :unpublished, -> { where(status: :active).where(uuid: nil) }
 
     def communities
       return unless member_of_paths.present? && member_of_paths['community_id']
