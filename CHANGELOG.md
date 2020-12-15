@@ -6,6 +6,8 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+## [2.0.1] - 2020-12-14
+
 ### Added
 - Mounted Oaisys engine [PR#1361](https://github.com/ualbertalib/jupiter/pull/1361)
 - Added tests surrounding Oaisys ListSets response [PR#1609](https://github.com/ualbertalib/jupiter/pull/1609)
