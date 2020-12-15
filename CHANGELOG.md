@@ -6,41 +6,18 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
-## [2.0.0.pre2.8] 2020-08-26
-
-### Fixed
-- Destroy attachments and call save without validations in fedora migration rake task [#1685](https://github.com/ualbertalib/jupiter/issues/1685)
-
-## [2.0.0.pre2.7] 2020-08-13
-
-### Added
-- Added solr exporters for ar community and ar collection [#1782](https://github.com/ualbertalib/jupiter/issues/1782)
-
-### Fixed
-- Fixed failing migrations due to missing blobs [#1781](https://github.com/ualbertalib/jupiter/issues/1781)
-
-## [2.0.0.pre2.6] 2020-07-20
-
-### Fixed
-- docker image can be built and deployed [PR#1757](https://github.com/ualbertalib/jupiter/pull/1757)
-- Skip broken item causing fedora migration rake task to fail [PR#1766](https://github.com/ualbertalib/jupiter/pull/1766)
-
-## [2.0.0.pre2.5] 2020-07-03
-
-### Fixed
-- Now catching and ignoring ArgumentError in coerce_value [PR#1742](https://github.com/ualbertalib/jupiter/pull/1742)
-
-## [2.0.0.pre2.4] 2020-06-29
+## [2.0.0] 2020-12-14
 
 ### Fixed
 - Bumped sidekiq-unique-jobs as our version was yanked [PR#1738](https://github.com/ualbertalib/jupiter/pull/1738)
-
-## [2.0.0.pre2.3] 2020-06-26
-
-### Fixed
+- docker image can be built and deployed [PR#1757](https://github.com/ualbertalib/jupiter/pull/1757)
+- Skip broken item causing fedora migration rake task to fail [PR#1766](https://github.com/ualbertalib/jupiter/pull/1766)
+- Fixed failing migrations due to missing blobs [#1781](https://github.com/ualbertalib/jupiter/issues/1781)
+- Destroy attachments and call save without validations in fedora migration rake task [#1685](https://github.com/ualbertalib/jupiter/issues/1685)
 - Now ignoring strings of length 4 for dates in coerce_value [PR#1700](https://github.com/ualbertalib/jupiter/pull/1700)
 
-## [2.0.0.pre2.2] 2020-06-22
+### Added
+- Added solr exporters for ar community and ar collection [#1782](https://github.com/ualbertalib/jupiter/issues/1782)
 
 ### Changed
 - Beefed up AR migrations by stating that certain attributes cannot be null [PR#1704](https://github.com/ualbertalib/jupiter/pull/1704)
