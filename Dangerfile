@@ -19,6 +19,9 @@ warn('This PR is too big! Consider breaking it down into smaller PRs.') if git.l
 # Let people say that this isn't worth a CHANGELOG entry in the PR if they choose
 declared_trivial = (github.pr_title + github.pr_body).include?("#trivial") || !has_app_changes
 
+if !git.modified_files.include?("CHANGELOG.md") && !declared_trivial
+  fail("Please include a CHANGELOG entry. \nYou can find it at [CHANGELOG.md](https://github.com/ualbertalib/jupiter/blob/master/CHANGELOG.md).", sticky: false)
+
 # Ensure link to PR/issue is present in all CHANGELOG entries for this release
 cl = File.read("CHANGELOG.md")
 
