@@ -6,6 +6,9 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+### Added
+- Automate changelog link verification through danger [#1996](https://github.com/ualbertalib/jupiter/issues/1966)
+
 ## [2.0.1] - 2020-12-14
 
 ### Added
