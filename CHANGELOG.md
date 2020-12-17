@@ -6,6 +6,8 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+– Remove entirely unnecessary config file.
+
 ## [2.0.2] - 2020-12-17
 
 – Fix issue where we improperly 500'd when a file download URL referenced a non-existent fileset UUID, instead of 404ing
