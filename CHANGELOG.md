@@ -8,7 +8,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 – Fix issue where we improperly 500'd when a file download URL referenced a non-existent fileset UUID, instead of 404ing
 - Make reindex rake task actually reindex all of the objects into Solr, instead of acting as a no-op
 – Fix a mis-named error rescue that resulted in a crash when the sort field wasn't known for a model
-- Fix nil start or end faceting dates error
+- Fix nil start or end faceting dates error [PR#2041](https://github.com/ualbertalib/jupiter/pull/2041)
 
 ## [2.0.1] - 2020-12-14
 
