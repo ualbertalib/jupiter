@@ -7,6 +7,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 ## [Unreleased]
 - Make reindex rake task actually reindex all of the objects into Solr, instead of acting as a no-op
 – Fix a mis-named error rescue that resulted in a crash when the sort field wasn't known for a model
+– Try to better handle the logo deletion circular constraint (next step: dropping it entirely)
 
 ## [2.0.1] - 2020-12-14
 
