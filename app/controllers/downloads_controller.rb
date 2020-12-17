@@ -36,7 +36,7 @@ class DownloadsController < ApplicationController
 
   def load_and_authorize_file
     @file = ActiveStorage::Attachment.find_by(fileset_uuid: params[:file_set_id])
-    raise JupiterCore::ObjectNotFound unless @file.record_id == params[:id]
+    raise JupiterCore::ObjectNotFound unless (@file.present? && (@file.record_id == params[:id]))
 
     authorize @file.record, :download?
   end
