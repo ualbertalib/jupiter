@@ -10,6 +10,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 – Fix issue where we improperly 500'd when a file download URL referenced a non-existent fileset UUID, instead of 404ing [PR#2037](https://github.com/ualbertalib/jupiter/pull/2037)
 - Make reindex rake task actually reindex all of the objects into Solr, instead of acting as a no-op [PR#2018](https://github.com/ualbertalib/jupiter/pull/2018)
 – Fix a mis-named error rescue that resulted in a crash when the sort field wasn't known for a model [PR#2025](https://github.com/ualbertalib/jupiter/pull/2025)
+– Try to better handle the logo deletion circular constraint (next step: dropping it entirely) [PR#2038](https://github.com/ualbertalib/jupiter/pull/2038)
 
 ### Added
 - Automate changelog link verification through danger [#1996](https://github.com/ualbertalib/jupiter/issues/1966)
