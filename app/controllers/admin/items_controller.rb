@@ -16,7 +16,7 @@ class Admin::ItemsController < Admin::AdminController
 
     begin
       # rubocop:disable Rails/SkipsModelValidations
-      # HACK: bit of a silly hack (write a nil directly to the colum) to get around this hack where destroying
+      # HACK: bit of a silly hack (write a nil directly to the column) to get around this hack where destroying
       # the item tries to destroy the attachments, which then errors out because the attachment id is
       # still referenced by the item that's about to be destroyed.
       #
