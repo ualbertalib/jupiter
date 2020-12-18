@@ -6,14 +6,17 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
-### Fixed
-– Fix issue where we improperly 500'd when a file download URL referenced a non-existent fileset UUID, instead of 404ing [PR#2037](https://github.com/ualbertalib/jupiter/pull/2037)
-- Make reindex rake task actually reindex all of the objects into Solr, instead of acting as a no-op [PR#2018](https://github.com/ualbertalib/jupiter/pull/2018)
-– Fix a mis-named error rescue that resulted in a crash when the sort field wasn't known for a model [PR#2025](https://github.com/ualbertalib/jupiter/pull/2025)
-– Try to better handle the logo deletion circular constraint (next step: dropping it entirely) [PR#2038](https://github.com/ualbertalib/jupiter/pull/2038)
-
-### Added
 - Automate changelog link verification through danger [#1996](https://github.com/ualbertalib/jupiter/issues/1966)
+– Remove entirely unnecessary config file.
+– Turn off reporting things like "this excel spreadsheet isn't thumbnailable" as warnings to Rollbar
+
+## [2.0.2] - 2020-12-17
+
+– Fix issue where we improperly 500'd when a file download URL referenced a non-existent fileset UUID, instead of 404ing
+- Make reindex rake task actually reindex all of the objects into Solr, instead of acting as a no-op
+– Fix a mis-named error rescue that resulted in a crash when the sort field wasn't known for a model
+- Fix nil start or end faceting dates error [PR#2041](https://github.com/ualbertalib/jupiter/pull/2041)
+– Try to better handle the logo deletion circular constraint (next step: dropping it entirely)
 
 ## [2.0.1] - 2020-12-14
 
