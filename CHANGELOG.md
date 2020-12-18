@@ -8,6 +8,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 – Remove entirely unnecessary config file.
 – Turn off reporting things like "this excel spreadsheet isn't thumbnailable" as warnings to Rollbar
+– Completely disable logging of warnings around the "excel spreadsheet" issue
 
 ## [2.0.2] - 2020-12-17
 

@@ -49,8 +49,6 @@ module PageLayoutHelper
 
     Rails.application.routes.url_helpers.rails_representation_path(logo.representation(args).processed)
   rescue StandardError => e
-    logger.warn("#{logo.record_type} with id: #{logo.record_id} and thumbnail #{logo.name} threw an error.")
-    Rollbar.warn("#{logo.record_type} with id: #{logo.record_id} and thumbnail #{logo.name} threw an error.", e)
     nil
   end
 
