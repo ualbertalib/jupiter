@@ -31,6 +31,9 @@ Rollbar.configure do |config|
   # You can also specify a callable, which will be called with the exception instance.
   # config.exception_level_filters.merge!('MyCriticalException' => lambda { |e| 'critical' })
 
+  config.exception_level_filters['ActionController::RoutingError'] = 'ignore'
+  config.exception_level_filters['ActiveStorage::UnrepresentableError'] = 'ignore'
+
   # Enable asynchronous reporting (uses girl_friday or Threading if girl_friday
   # is not installed)
   # config.use_async = true
@@ -38,8 +41,6 @@ Rollbar.configure do |config|
   # config.async_handler = Proc.new { |payload|
   #  Thread.new { Rollbar.process_from_async_handler(payload) }
   # }
-
-  config.exception_level_filters['ActionController::RoutingError'] = 'ignore'
 
   # Enable asynchronous reporting (using sucker_punch)
   # config.use_sucker_punch
