@@ -98,8 +98,6 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Fixed getting an error when deleting an item [#2009](https://github.com/ualbertalib/jupiter/issues/2009)
 - No longer 500s when entering in illogical date facet ranges [#2009](https://github.com/ualbertalib/jupiter/issues/2009)
 - bump rubocop and fix cop violations [PR#2019](https://github.com/ualbertalib/jupiter/pull/2019)
-- Make reindex rake task actually reindex all of the objects into Solr, instead of acting as a no-op
-– Fix a mis-named error rescue that resulted in a crash when the sort field wasn't known for a model
   
 ### Security
 - add `noopener noreferrer` when opening a link in a new tab [PR#1344](https://github.com/ualbertalib/jupiter/pull/1344)
