@@ -58,7 +58,7 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
                         else
                           solr_exporter.solr_name_for(attr, role: :sort)
                         end
-                      rescue ArgumentError, NameManglingError
+                      rescue ArgumentError, JupiterCore::SolrServices::NameManglingError
                         nil
                       end
 
