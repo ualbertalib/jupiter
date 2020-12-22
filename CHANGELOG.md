@@ -6,8 +6,9 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
-– Remove entirely unnecessary config file.
-– Turn off reporting things like "this excel spreadsheet isn't thumbnailable" as warnings to Rollbar
+- Automate changelog link verification through danger [#1996](https://github.com/ualbertalib/jupiter/issues/1966)
+– Remove entirely unnecessary config file. [PR#2044](https://github.com/ualbertalib/jupiter/pull/2044)
+– Turn off reporting things like "this excel spreadsheet isn't thumbnailable" as warnings to Rollbar [PR#2046](https://github.com/ualbertalib/jupiter/pull/2046)
 
 ## [2.0.2] - 2020-12-17
 
