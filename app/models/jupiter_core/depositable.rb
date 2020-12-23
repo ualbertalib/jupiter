@@ -60,6 +60,10 @@ class JupiterCore::Depositable < ApplicationRecord
     JupiterCore::SolrServices::Client.instance.remove_document(id)
   end
 
+  def self.solr_query
+    JupiterCore::SolrServices::DeferredSimpleSolrQuery.new(self)
+  end
+
   def self.valid_visibilities
     [JupiterCore::VISIBILITY_PUBLIC, JupiterCore::VISIBILITY_PRIVATE, JupiterCore::VISIBILITY_AUTHENTICATED]
   end
