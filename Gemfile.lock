@@ -194,7 +194,7 @@ GEM
       ruby2_keywords
     faraday-http-cache (2.2.0)
       faraday (>= 0.8)
-    ffi (1.13.1)
+    ffi (1.14.2)
     fugit (1.4.1)
       et-orbi (~> 1.1, >= 1.1.8)
       raabro (~> 1.4)
@@ -237,7 +237,7 @@ GEM
     launchy (2.5.0)
       addressable (~> 2.7)
     link_header (0.0.8)
-    listen (3.3.3)
+    listen (3.4.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     loofah (2.7.0)
@@ -530,7 +530,7 @@ DEPENDENCIES
   json-schema (~> 2.8.1)
   kaminari
   launchy
-  listen (>= 3.0.5, < 3.4)
+  listen (>= 3.0.5, < 3.5)
   nokogiri
   oaisys!
   omniauth
