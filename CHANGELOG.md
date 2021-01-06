@@ -96,6 +96,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 ### Security
 - add `noopener noreferrer` when opening a link in a new tab [PR#1344](https://github.com/ualbertalib/jupiter/pull/1344)
 - bump selfsigned CVE-2020-7720
+- bump nokogiri and adapt to changing initializer [PR#2062](https://github.com/ualbertalib/jupiter/pull/2062)
 
 ### Removed
 - Removed Matomo analytic tracking [#1493](https://github.com/ualbertalib/jupiter/issues/1493)
