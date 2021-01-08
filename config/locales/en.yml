@@ -160,6 +160,16 @@ en:
               collection_restricted: "Deposit is restricted for this collection"
             files:
               infected: '%{filename} is infected with a virus'
+        digitization/book:
+            attributes:
+              resource_type:
+                not_recognized: 'is not recognized'
+              genre:
+                not_recognized: 'is not recognized'
+              language:
+                not_recognized: 'is not recognized'
+              rights:
+                not_recognized: 'is not recognized'
         user:
           attributes:
             api_key_digest:

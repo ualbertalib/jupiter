@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_05_001725) do
+ActiveRecord::Schema.define(version: 2020_12_04_210653) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -95,6 +95,20 @@ ActiveRecord::Schema.define(version: 2020_11_05_001725) do
     t.integer "part_number"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.json "date_issued", array: true
+    t.json "temporal_subject", array: true
+    t.string "title", null: false
+    t.json "alt_title", array: true
+    t.string "resource_type", null: false
+    t.json "genre", null: false, array: true
+    t.json "language", null: false, array: true
+    t.json "publisher", array: true
+    t.json "place_of_publication", array: true
+    t.string "extent"
+    t.json "note", array: true
+    t.json "geographic_subject", array: true
+    t.string "rights"
+    t.json "topical_subject", array: true
     t.index ["peel_id", "run", "part_number"], name: "unique_peel_book", unique: true
   end
 
