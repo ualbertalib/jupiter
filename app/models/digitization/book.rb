@@ -11,6 +11,9 @@ class Digitization::Book < ApplicationRecord
   validates :resource_type, presence: true, uri: { in_vocabulary: :digitization_resource_type }
   validates :genre, presence: true, uri: { in_vocabulary: :digitization_genre }
   validates :language, presence: true, uri: { in_vocabulary: :digitization_language }
-  validates :rights, presence: true, uri: { in_vocabulary: :digitization_rights } 
+  validates :rights, presence: true, uri: { in_vocabulary: :digitization_rights }
+
+  validates :date_issued, edtf: true
+  validates :temporal_subject, edtf: true
 
 end

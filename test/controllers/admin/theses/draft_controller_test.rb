@@ -93,7 +93,7 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
     draft_thesis.reload
     assert_equal 'Open to everyone!', draft_thesis.rights
     assert_equal 'embargo', draft_thesis.visibility
-    assert_equal Date.current + 1.year, draft_thesis.embargo_end_date
+    assert_equal (Date.current + 1.year).to_datetime, draft_thesis.embargo_end_date
     assert_equal 'choose_license_and_visibility', draft_thesis.wizard_step
     assert_equal 'active', draft_thesis.status
   end
