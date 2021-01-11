@@ -56,10 +56,7 @@ module ItemsHelper
   }.freeze
 
   def display_admin_sidebar(item)
-    aasm_not_available = item.not_available?
-    doi_blank = item.doi.blank?
-    item_doi_initialized = item.created_at < Time.zone.now - 1.minute
-
-    item_doi_initialized && (aasm_not_available || doi_blank)
+    item_doi_initialized = item.created_at < 1.minute.ago
+    item_doi_initialized && (item.not_available? || item.doi.blank?)
   end
 end

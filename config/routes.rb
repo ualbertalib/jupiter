@@ -53,7 +53,11 @@ Rails.application.routes.draw do
       resources :collections, except: [:index]
     end
 
-    resources :items, only: [:index, :destroy]
+    resources :items, only: [:index, :destroy] do
+      member do
+        patch :reset_doi
+      end
+    end
 
     resources :theses, only: [] do
       collection do
@@ -71,8 +75,6 @@ Rails.application.routes.draw do
     end
 
     resources :announcements, only: [:index, :destroy, :create]
-
-    patch '/reset_doi/:id', to: 'items#reset_doi', as: '/reset_doi'
   end
 
   post '/logout_as_user', to: 'sessions#logout_as_user'
