@@ -29,8 +29,9 @@ class Admin::ItemsControllerTest < ActionDispatch::IntegrationTest
   test 'reset DOI should queue job' do
     assert_no_enqueued_jobs only: DOIRemoveJob
     patch reset_doi_admin_item_url(@item)
-    assert_enqueued_jobs 1, only: DOICreateJob
     assert_response :redirect
+    assert_redirected_to root_url
+    assert_enqueued_jobs 1, only: DOICreateJob
 
     clear_enqueued_jobs
   end
