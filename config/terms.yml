@@ -64,11 +64,6 @@
   terms:
     institution: institution
 
-- vocabulary: rdau
-  schema: 'http://rdaregistry.info/Elements/u/'
-  terms:
-    extent_en: extent.en
-
 # The following ontologies will be replaced and for now are just
 # placeholders
 - vocabulary: fits
