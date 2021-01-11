@@ -23,7 +23,7 @@ class SitemapTest < ActionDispatch::IntegrationTest
   test 'sitemap index should be valid sitemapindex xml' do
     get sitemapindex_url
 
-    schema = Nokogiri::XML::Schema(File.open(file_fixture('siteindex.xsd')))
+    schema = Nokogiri::XML::Schema(File.open(file_fixture('siteindex.xsd')), Nokogiri::XML::ParseOptions.new.nononet)
     document = Nokogiri::XML(@response.body)
     assert_empty schema.validate(document)
 
@@ -37,7 +37,7 @@ class SitemapTest < ActionDispatch::IntegrationTest
   test 'items sitemap should be valid sitemap xml' do
     get items_sitemap_url
 
-    schema = Nokogiri::XML::Schema(File.open(file_fixture('sitemap.xsd')))
+    schema = Nokogiri::XML::Schema(File.open(file_fixture('sitemap.xsd')), Nokogiri::XML::ParseOptions.new.nononet)
     document = Nokogiri::XML(@response.body)
     assert_empty schema.validate(document)
 
@@ -59,7 +59,7 @@ class SitemapTest < ActionDispatch::IntegrationTest
   test 'collections sitemap should be valid sitemap xml' do
     get collections_sitemap_url
 
-    schema = Nokogiri::XML::Schema(File.open(file_fixture('sitemap.xsd')))
+    schema = Nokogiri::XML::Schema(File.open(file_fixture('sitemap.xsd')), Nokogiri::XML::ParseOptions.new.nononet)
     document = Nokogiri::XML(@response.body)
     assert_empty schema.validate(document)
 
@@ -79,7 +79,7 @@ class SitemapTest < ActionDispatch::IntegrationTest
   test 'communities sitemap should be valid sitemap xml' do
     get communities_sitemap_url
 
-    schema = Nokogiri::XML::Schema(File.open(file_fixture('sitemap.xsd')))
+    schema = Nokogiri::XML::Schema(File.open(file_fixture('sitemap.xsd')), Nokogiri::XML::ParseOptions.new.nononet)
     document = Nokogiri::XML(@response.body)
     assert_empty schema.validate(document)
 

@@ -1,10 +1,29 @@
+require Rails.root.join('app/services/read_only_service')
+
 namespace :jupiter do
   desc 'fetch and unlock every object then save'
   task :reindex, [:batch_size] => :environment do |_, args|
     desired_batch_size = args.batch_size.to_i ||= 1000
     puts 'Reindexing all Items and Theses...'
-    Item.find_each(batch_size: desired_batch_size, &:save!)
-    Thesis.find_each(batch_size: desired_batch_size, &:save!)
+
+    count = 0
+    Item.find_each(batch_size: desired_batch_size) do |item|
+      item.update_solr
+      count += 1
+      print '.' if count % 20 == 0
+    end
+
+    puts
+    puts "Reindexed #{count} Items. Moving on to Theses..."
+    puts
+
+    count = 0
+    Thesis.find_each(batch_size: desired_batch_size) do |thesis|
+      thesis.update_solr
+      count += 1
+      print '.' if count % 20 == 0
+    end
+    puts "Reindexed #{count} Theses."
     puts 'Reindex completed!'
   end
 
@@ -31,10 +50,19 @@ namespace :jupiter do
     puts 'done!'
   end
 
+  # rubocop:disable Rails/SkipsModelValidations
+  # what if, Rubocop, skipping validations were the entire point?
   desc 'sayonara ActiveFedora'
   task :get_me_off_of_fedora, [:batch_size] => :environment do |_, args|
     desired_batch_size = args.batch_size.to_i ||= 1000
     puts
+    puts 'Preparing Attachments'
+    ActiveStorage::Attachment.find_each(batch_size: desired_batch_size) do |attachment|
+      attachment.update_columns(upcoming_blob_id: attachment.blob&.upcoming_id)
+
+      print '.'
+    end
+
     puts 'Preparing Draft Item ...'
 
     DraftItem.find_each(batch_size: desired_batch_size) do |draft_item|
@@ -47,6 +75,9 @@ namespace :jupiter do
         join_record.upcoming_draft_item_id = draft_item.upcoming_id
         join_record.save!
       end
+
+      draft_item.update_columns(upcoming_thumbnail_id: draft_item.thumbnail&.blob&.upcoming_id)
+
       print '.'
     end
 
@@ -58,6 +89,9 @@ namespace :jupiter do
         attachment.upcoming_record_id = draft_thesis.upcoming_id
         attachment.save!
       end
+
+      draft_thesis.update_columns(upcoming_thumbnail_id: draft_thesis.thumbnail&.blob&.upcoming_id)
+
       print '.'
     end
 
@@ -95,5 +129,22 @@ namespace :jupiter do
 
     puts
     puts 'Finished!'
+  end
+  # rubocop:enable Rails/SkipsModelValidations
+
+  desc 'enable read only mode'
+  task enable_read_only_mode: :environment do
+    read_only_mode = ReadOnlyService.new
+    puts 'Enabling read only mode...'
+    read_only_mode.enable
+    puts 'Done!'
+  end
+
+  desc 'disable read only mode'
+  task disable_read_only_mode: :environment do
+    read_only_mode = ReadOnlyService.new
+    puts 'Disabling read only mode...'
+    read_only_mode.disable
+    puts 'Done!'
   end
 end

@@ -166,6 +166,11 @@ en:
               present_if_system_true: 'must be present if System value is true'
               blank_if_system_false: 'must be blank if System value is false'
 
+        read_only_mode:
+          attributes:
+            enabled:
+              only_one_record_exists: 'Only one ReadOnlyMode record may exist'
+
   application:
     navbar:
       era_logo_alt: 'ERA - Education and Research Archive'
@@ -839,3 +844,6 @@ en:
       previous: "&lsaquo; <span class='d-none d-md-inline'>Prev</span>"
       next: "<span class='d-none d-md-inline'>Next</span> &rsaquo;"
       truncate: "..."
+
+  announcement_templates:
+    read_only_mode: 'Logins are currently disabled.'

@@ -3,7 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 # Core Rails stuff
 gem 'image_processing' # for ActiveStorage Variants
-gem 'puma', '~> 5.0'
+gem 'puma', '~> 5.1'
 gem 'rails', '~> 6.0.3'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
@@ -18,9 +18,9 @@ gem 'simple_form'
 
 # RDF stuff
 gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', tag: 'v0.2.4'
-gem 'rdf', '~> 3.1.6'
+gem 'rdf', '~> 3.1.9'
 gem 'rdf-n3'
-gem 'rdf-vocab', '~> 3.1.7'
+gem 'rdf-vocab', '~> 3.1.10'
 
 # Database stuff
 gem 'connection_pool'
@@ -41,7 +41,7 @@ gem 'sidekiq', '~> 5.2'
 gem 'sidekiq-unique-jobs'
 gem 'sinatra', '~> 2.1.0' # used by sidekiq/web
 # Sidekiq cron jobs
-gem 'rufus-scheduler', '3.6.0' # https://github.com/ondrejbartas/sidekiq-cron/issues/199
+gem 'rufus-scheduler', '3.7.0' # https://github.com/ondrejbartas/sidekiq-cron/issues/199
 gem 'sidekiq-cron'
 
 # Misc Utilities
@@ -65,7 +65,7 @@ gem 'rollbar'
 
 # OAI-PMH
 gem 'builder_deferred_tagging', github: 'ualbertalib/builder_deferred_tagging', tag: 'v0.01'
-gem 'oaisys', github: 'ualbertalib/oaisys', tag: 'v1.0.0'
+gem 'oaisys', github: 'ualbertalib/oaisys', tag: 'v1.0.2'
 
 # Seeds
 group :development, :test, :uat do
@@ -85,7 +85,7 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
 
-  gem 'rubocop', '~> 0.92.0', require: false
+  gem 'rubocop', '~> 0.93.1', require: false
   gem 'rubocop-performance'
   gem 'rubocop-rails'
 end
@@ -97,12 +97,16 @@ group :development do
   gem 'binding_of_caller'
 
   gem 'brakeman'
-  gem 'listen', '>= 3.0.5', '< 3.3'
+
+  gem 'listen', '>= 3.0.5', '< 3.5'
+  gem 'spring'
+  gem 'spring-watcher-listen', '~> 2.0.0'
+
   gem 'web-console', '>= 3.3.0'
 end
 
 group :test do
-  gem 'danger', '~> 8.0', require: false # Pull Request etiquette enforcement
+  gem 'danger', '~> 8.2', require: false # Pull Request etiquette enforcement
   gem 'simplecov'
   # Faker added 0.5 seconds to the test suite per call. Haikunator seems much faster for faking strings
   gem 'haikunator'

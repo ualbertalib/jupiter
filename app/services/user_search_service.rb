@@ -63,9 +63,10 @@ class UserSearchService
   def validate_range(range)
     start = range[:begin]
     finish = range[:end]
+
+    return false unless start.present? && finish.present?
     return true if start.match?(/\A\d{1,4}\z/) && finish.match?(/\A\d{1,4}\z/) && (start.to_i <= finish.to_i)
 
-    flash[:alert] = "#{start} to #{finish} is not a valid range"
     false
   end
 

@@ -143,10 +143,6 @@ Style/MixinUsage:
     - bin/setup
     - bin/update
 
-Style/RedundantBegin:
-  Exclude:
-    - bin/yarn
-
 # Perfer to use // but %r can be better in certain scenarios
 Style/RegexpLiteral:
   Enabled: false
@@ -167,3 +163,11 @@ Style/WordArray:
 
 Performance/TimesMap:
   Enabled: false
+
+Style/ClassEqualityComparison:
+  Enabled: true
+
+Style/RedundantBegin:
+  Enabled: true
+  Exclude:
+    - bin/yarn
