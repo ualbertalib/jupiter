@@ -28,12 +28,15 @@ class Admin::ItemsControllerTest < ActionDispatch::IntegrationTest
 
   test 'reset DOI should queue job' do
     assert_no_enqueued_jobs only: DOIRemoveJob
+    Rails.application.secrets.doi_minting_enabled = true
+
     patch reset_doi_admin_item_url(@item)
     assert_response :redirect
     assert_redirected_to root_url
     assert_enqueued_jobs 1, only: DOICreateJob
 
     clear_enqueued_jobs
+    Rails.application.secrets.doi_minting_enabled = false
   end
 
 end
