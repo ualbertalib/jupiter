@@ -82,6 +82,10 @@ class JupiterCore::Search
                                                        name: 'solr select',
                                                        query: params) do
       JupiterCore::SolrServices::Client.instance.connection.get('select', params: params)
+      rescue RSolr::Error::Http => e
+        raise JupiterCore::SolrBadRequestError if e.response[:status] == 400
+
+        raise
     end
 
     raise SearchFailed unless response['responseHeader']['status'] == 0

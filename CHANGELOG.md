@@ -14,6 +14,8 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ### Fixed
 - bump rubocop and fix cop violations [PR#2072](https://github.com/ualbertalib/jupiter/pull/2072)
+- Give proper response when solr 400s [#2086](https://github.com/ualbertalib/jupiter/issues/2086)
+
 ## [2.0.2] - 2020-12-17
 
 – Fix issue where we improperly 500'd when a file download URL referenced a non-existent fileset UUID, instead of 404ing
