@@ -719,7 +719,26 @@ end
 end
 
 Digitization::Book.create(peel_id: '4062') # monograph
-Digitization::Book.create(peel_id: '10572', part_number: '1') # Folk Fest
+
+11.times do |i|
+  Digitization::Book.create(peel_id: rand(1..3400), part_number: rand(1..100),
+    date_issued: [rand(1900..2020).to_s],
+    title: "#{Faker::Company.name} #{Faker::WorldCup.city} Music Festival",
+    alt_title: ["#{Faker::Hipster.sentence}"],
+    resource_type: CONTROLLED_VOCABULARIES[:digitization_resource_type].txt,
+    genre: [CONTROLLED_VOCABULARIES[:digitization_genre].programs],
+    language: [CONTROLLED_VOCABULARIES[:digitization_language].english],
+    publisher: [CONTROLLED_VOCABULARIES[:digitization_publisher].edmonton_folk_music_festival],
+    place_of_publication: [CONTROLLED_VOCABULARIES[:digitization_place_of_publication].edmonton],
+    extent: 'v. : ill. ; 22-27 cm.',
+    note: ['Souvenir program of the festival, including biographical notes on and portraits and discographies of the performers, articles, etc.', "#{Faker::Hipster.sentence}"],
+    temporal_subject: ['1981'], 
+    geographic_subject: [CONTROLLED_VOCABULARIES[:digitization_subject].edmonton],
+    topical_subject: [CONTROLLED_VOCABULARIES[:digitization_subject].folk_music_festivals],
+    rights: CONTROLLED_VOCABULARIES[:digitization_rights].in_copyright
+  ) # Folk Fest
+end
+
 Digitization::Book.create(peel_id: '10571', part_number: '2') # Government Document
 Digitization::Book.create(peel_id: '3178', run: '2', part_number: '12') # Henderson
 Digitization::Newspaper.create(publication_code: 'LSV', year: '1967', month: '03', day: '29')
