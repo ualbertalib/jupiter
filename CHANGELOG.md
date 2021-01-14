@@ -6,9 +6,14 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
-- Automate changelog link verification through danger [#1996](https://github.com/ualbertalib/jupiter/issues/1966)
+### Removed
 – Remove entirely unnecessary config file. [PR#2044](https://github.com/ualbertalib/jupiter/pull/2044)
+
+### Changed
 – Turn off reporting things like "this excel spreadsheet isn't thumbnailable" as warnings to Rollbar [PR#2046](https://github.com/ualbertalib/jupiter/pull/2046)
+
+### Fixed
+- bump rubocop and fix cop violations [PR#2072](https://github.com/ualbertalib/jupiter/pull/2072)
 
 ## [2.0.2] - 2020-12-17
 
@@ -97,6 +102,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 ### Security
 - add `noopener noreferrer` when opening a link in a new tab [PR#1344](https://github.com/ualbertalib/jupiter/pull/1344)
 - bump selfsigned CVE-2020-7720
+- bump nokogiri and adapt to changing initializer [PR#2062](https://github.com/ualbertalib/jupiter/pull/2062)
 
 ### Removed
 - Removed Matomo analytic tracking [#1493](https://github.com/ualbertalib/jupiter/issues/1493)
