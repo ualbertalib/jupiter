@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
               ActiveRecord::RecordNotFound,
               ActionController::RoutingError, with: :render_404
 
-  rescue_from JupiterCore::SolrBadRequestError, with: :render_400
+  rescue_from JupiterCore::SolrBadRequestError, with: :render_solr_bad_request
 
   before_action :set_paper_trail_whodunnit
 
@@ -105,12 +105,12 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def render_400(exception = nil)
+  def render_solr_bad_request(exception = nil)
     raise exception if exception && Rails.env.development?
 
     respond_to do |format|
       format.html do
-        render file: Rails.root.join('public/400.html'), layout: false, status: :bad_request
+        render file: Rails.root.join('public/solr_bad_request.html'), layout: false, status: :bad_request
       end
       format.js { render json: '', status: :bad_request, content_type: 'application/json' }
       format.any { head :bad_request }
