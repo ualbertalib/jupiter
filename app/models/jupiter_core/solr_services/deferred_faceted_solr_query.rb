@@ -77,6 +77,7 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
                                else
                                  # We could not find the order so we switch to default sort direction
                                  sort_direction_index = solr_exporter.default_sort_indexes.index(sort_attribute)
+                                 sort_direction_index = 0 if sort_direction_index.blank?
                                  solr_exporter.default_sort_direction[sort_direction_index]
                                end
     end

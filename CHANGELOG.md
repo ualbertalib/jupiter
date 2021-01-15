@@ -14,6 +14,8 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ### Fixed
 - bump rubocop and fix cop violations [PR#2072](https://github.com/ualbertalib/jupiter/pull/2072)
+- Search with sort without default sort direction no longer errors [#2077](https://github.com/ualbertalib/jupiter/issues/2077)
+
 ## [2.0.2] - 2020-12-17
 
 – Fix issue where we improperly 500'd when a file download URL referenced a non-existent fileset UUID, instead of 404ing
