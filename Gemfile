@@ -30,9 +30,9 @@ gem 'rsolr'
 
 # Authentication
 gem 'bcrypt', '>= 3.1.13'
-gem 'omniauth'
-gem 'omniauth-rails_csrf_protection' # Remove after https://github.com/omniauth/omniauth/pull/809 will be resolved
-gem 'omniauth-saml'
+gem 'omniauth', '~> 2.0', '>= 2.0.1'
+gem 'omniauth-rails_csrf_protection', '~> 1.0'
+gem 'omniauth-saml', '~> 2.0'
 # Authorization
 gem 'pundit', '1.1.0'
 
