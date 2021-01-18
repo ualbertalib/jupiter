@@ -273,9 +273,9 @@ GEM
       hashie (>= 3.4.6)
       rack (>= 1.6.2, < 3)
       rack-protection
-    omniauth-rails_csrf_protection (0.1.2)
+    omniauth-rails_csrf_protection (1.0.0)
       actionpack (>= 4.2)
-      omniauth (>= 1.3.1)
+      omniauth (~> 2.0)
     omniauth-saml (2.0.0)
       omniauth (~> 2.0)
       ruby-saml (~> 1.9)
@@ -536,9 +536,9 @@ DEPENDENCIES
   listen (>= 3.0.5, < 3.5)
   nokogiri
   oaisys!
-  omniauth
-  omniauth-rails_csrf_protection
-  omniauth-saml
+  omniauth (~> 2.0, >= 2.0.1)
+  omniauth-rails_csrf_protection (~> 1.0)
+  omniauth-saml (~> 2.0)
   paper_trail
   pg (~> 1.2.3)
   pry
