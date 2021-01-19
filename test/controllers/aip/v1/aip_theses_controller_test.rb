@@ -74,7 +74,7 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
     graph = generate_graph_from_n3(response.body)
     rendered_graph = load_radioactive_n3_graph(radioactive_thesis, 'base')
 
-    assert_equal true, rendered_graph.isomorphic_with?(graph)
+    assert_equal rendered_graph, graph
   end
 
   test 'should get thesis metadata graph with n3 serialization for embargo example' do
@@ -98,7 +98,7 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
     graph = generate_graph_from_n3(response.body)
     rendered_graph = load_radioactive_n3_graph(radioactive_thesis, 'embargoed')
 
-    assert_equal true, rendered_graph.isomorphic_with?(graph)
+    assert_equal rendered_graph, graph
   end
 
   test 'should get thesis metadata graph with n3 serialization for previously embargo example' do
@@ -126,7 +126,7 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
     graph = generate_graph_from_n3(response.body)
     rendered_graph = load_radioactive_n3_graph(radioactive_thesis, 'prev-embargoed')
 
-    assert_equal true, rendered_graph.isomorphic_with?(graph)
+    assert_equal rendered_graph, graph
   end
 
   # Basic test checking if response has xml format.
@@ -185,7 +185,7 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
     }
     rendered_graph = load_n3_graph(file_fixture('n3/theses/file_set.n3'), variables)
 
-    assert_equal true, rendered_graph.isomorphic_with?(graph)
+    assert_equal rendered_graph, graph
   end
 
   test 'should get thesis fixity metadata graph with n3 serialization' do
@@ -208,7 +208,7 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
     }
     rendered_graph = load_n3_graph(file_fixture('n3/theses/fixity.n3'), variables)
 
-    assert_equal true, rendered_graph.isomorphic_with?(graph)
+    assert_equal rendered_graph, graph
   end
 
 end
