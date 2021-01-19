@@ -12,10 +12,12 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 ### Changed
 - Added DOI reset feature for admins [#1739](https://github.com/ualbertalib/jupiter/issues/1739)
 – Turn off reporting things like "this excel spreadsheet isn't thumbnailable" as warnings to Rollbar [PR#2046](https://github.com/ualbertalib/jupiter/pull/2046)
+- migration to fix concatenated subjects (part 2) [#1449](https://github.com/ualbertalib/jupiter/issues/1449)
 
 ### Fixed
 - bump rubocop and fix cop violations [PR#2072](https://github.com/ualbertalib/jupiter/pull/2072)
 - bump omniauth-rails_csrf_protection gem for omniauth compatibility [PR#2096](https://github.com/ualbertalib/jupiter/pull/2096)
+- bump rdf-n3 and fix isomorphic_with? regression [PR#2070](https://github.com/ualbertalib/jupiter/pull/2070)
 
 ## [2.0.2] - 2020-12-17
 
