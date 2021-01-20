@@ -116,7 +116,7 @@ group :test do
   gem 'launchy'
   gem 'rdf-isomorphic', '~> 3.1.0'
   gem 'vcr', '5.0', require: false
-  gem 'webdrivers', '~> 4.4'
+  gem 'webdrivers', '~> 4.5'
   gem 'webmock', require: false
 end
 
