@@ -18,6 +18,8 @@ if Rails.env.development? || Rails.env.uat?
 
   puts 'Starting seeding of dev database...'
 
+  ReadOnlyMode.create(enabled: false)
+
   # start fresh
   [Announcement, ActiveStorage::Blob, ActiveStorage::Attachment,
    Identity, User, Type, Language, Institution].each(&:destroy_all)
