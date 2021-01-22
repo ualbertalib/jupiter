@@ -172,3 +172,6 @@ Style/RedundantBegin:
   Enabled: true
   Exclude:
     - bin/yarn
+
+Naming/VariableNumber:
+  Enabled: false

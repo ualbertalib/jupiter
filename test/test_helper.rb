@@ -38,6 +38,11 @@ Ezid::Client.configure do |config|
   config.logger = Logger.new(File::NULL)
 end
 
+# was removed from rdf-n3 in 3.1.2, restoring here
+module RDF::Isomorphic
+  alias == isomorphic_with?
+end
+
 class ActiveSupport::TestCase
 
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.

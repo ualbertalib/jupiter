@@ -149,7 +149,7 @@ class AdminUsersShowTest < ApplicationSystemTestCase
   end
 
   test 'should be able to view items/theses owned by user' do
-    # Note: searching and faceting is covered more extensively in tests elsewhere
+    # NOTE: searching and faceting is covered more extensively in tests elsewhere
     user = users(:regular)
     admin = users(:admin)
 
