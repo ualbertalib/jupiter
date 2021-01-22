@@ -243,7 +243,7 @@ class SearchTest < ApplicationSystemTestCase
 
     # Facets and counts. 20 should match, expect only 6 to be shown
     assert_selector 'div.card-header', text: 'Collections'
-    # Note: collection facets also include community name
+    # NOTE: collection facets also include community name
     assert_selector 'li a', text: /Extra Community/, count: 6
 
     # Should be a 'Show more' button to see the rest

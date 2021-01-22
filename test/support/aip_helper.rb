@@ -15,7 +15,7 @@ module AipHelper
   end
 
   def check_file_order_xml(data)
-    xsd = Nokogiri::XML::Schema(File.open(file_fixture('file-order.xsd')))
+    xsd = Nokogiri::XML::Schema(File.open(file_fixture('file-order.xsd')), Nokogiri::XML::ParseOptions.new.nononet)
     doc = Nokogiri::XML(data)
     xsd.valid?(doc)
   end

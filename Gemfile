@@ -18,9 +18,9 @@ gem 'simple_form'
 
 # RDF stuff
 gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', tag: 'v0.2.4'
-gem 'rdf', '~> 3.1.7'
+gem 'rdf', '~> 3.1.9'
 gem 'rdf-n3'
-gem 'rdf-vocab', '~> 3.1.9'
+gem 'rdf-vocab', '~> 3.1.10'
 
 # Database stuff
 gem 'connection_pool'
@@ -30,9 +30,9 @@ gem 'rsolr'
 
 # Authentication
 gem 'bcrypt', '>= 3.1.13'
-gem 'omniauth'
-gem 'omniauth-rails_csrf_protection' # Remove after https://github.com/omniauth/omniauth/pull/809 will be resolved
-gem 'omniauth-saml'
+gem 'omniauth', '~> 2.0', '>= 2.0.1'
+gem 'omniauth-rails_csrf_protection', '~> 1.0'
+gem 'omniauth-saml', '~> 2.0'
 
 # Authorization
 gem 'pundit', '1.1.0'
@@ -42,7 +42,7 @@ gem 'sidekiq', '~> 5.2'
 gem 'sidekiq-unique-jobs'
 gem 'sinatra', '~> 2.0.8.1' # used by sidekiq/web
 # Sidekiq cron jobs
-gem 'rufus-scheduler', '3.6.0' # https://github.com/ondrejbartas/sidekiq-cron/issues/199
+gem 'rufus-scheduler', '3.7.0' # https://github.com/ondrejbartas/sidekiq-cron/issues/199
 gem 'sidekiq-cron'
 
 # Misc Utilities
@@ -89,10 +89,10 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
 
-  gem 'rubocop', '~> 0.93.1', require: false
-  gem 'rubocop-minitest', '~> 0.10', require: false
-  gem 'rubocop-performance', '~> 1.8', require: false
-  gem 'rubocop-rails', '~> 2.8', require: false
+  gem 'rubocop', '~> 1.8.1', require: false
+  gem 'rubocop-minitest', require: false
+  gem 'rubocop-performance', require: false
+  gem 'rubocop-rails', require: false
 end
 
 group :development do
@@ -103,7 +103,7 @@ group :development do
 
   gem 'brakeman'
 
-  gem 'listen', '>= 3.0.5', '< 3.4'
+  gem 'listen', '>= 3.0.5', '< 3.5'
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
 
@@ -115,13 +115,13 @@ group :test do
   gem 'simplecov'
   # Faker added 0.5 seconds to the test suite per call. Haikunator seems much faster for faking strings
   gem 'haikunator'
-  gem 'shoulda-matchers', '~> 4.4'
+  gem 'shoulda-matchers', '~> 4.5'
 
   gem 'json-schema', '~> 2.8.1'
   gem 'launchy'
   gem 'rdf-isomorphic', '~> 3.1.0'
   gem 'vcr', '5.0', require: false
-  gem 'webdrivers', '~> 4.4'
+  gem 'webdrivers', '~> 4.5'
   gem 'webmock', require: false
 end
 

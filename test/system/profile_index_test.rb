@@ -53,7 +53,7 @@ class ProfileIndexTest < ApplicationSystemTestCase
   end
 
   test 'should view items owned by logged in user' do
-    # Note: searching and faceting is covered more extensively in tests elsewhere
+    # NOTE: searching and faceting is covered more extensively in tests elsewhere
     user = users(:regular)
 
     # creating the index from the fixtures requires a save

@@ -69,6 +69,11 @@
           </ul>
         </div>
       </div>
+
+      <%# ADMIN SIDEBAR %>
+      <% if current_user&.admin? && display_admin_sidebar(@item) %>
+        <%= render partial: 'admin_sidebar' %>
+      <% end %>
     </div>
 
     <%# MAIN CONTENT %>

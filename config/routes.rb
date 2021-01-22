@@ -54,7 +54,11 @@ Rails.application.routes.draw do
         resources :collections, except: [:index]
       end
 
-      resources :items, only: [:index, :destroy]
+      resources :items, only: [:index, :destroy] do
+        member do
+          patch :reset_doi
+        end
+      end
 
       resources :theses, only: [] do
         collection do

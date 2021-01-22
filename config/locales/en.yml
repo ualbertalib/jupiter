@@ -576,6 +576,10 @@ en:
       header: 'Files'
       ccid_restricted_item: Item Restricted to University of Alberta Users
       login_with_ccid_to_view: Log In with CCID to View Item
+    admin_sidebar:
+      admin: 'Admin'
+      reset_doi: 'Reset DOI'
+      doi_reset_confirmation: 'Are you sure you want to reset the DOI for this item?'
     new:
       header: 'Deposit Item'
     create:
