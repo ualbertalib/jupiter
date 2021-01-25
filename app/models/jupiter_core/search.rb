@@ -37,9 +37,7 @@ class JupiterCore::Search
 
     base_query << q if q.present?
     facets.each do |key, values|
-      values.each do |value|
-        fq << %Q(#{key}: "#{value}")
-      end
+      fq << %Q(#{key}:\(#{values.collect { |value| "\"#{value}\"" }.join(' ')}\))
     end
     ranges.each do |key, value|
       fq << "#{key}:[#{value[:begin]} TO #{value[:end]}]"
