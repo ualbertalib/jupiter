@@ -54,6 +54,17 @@ class ActiveSupport::TestCase
     JupiterCore::SolrServices::Client.instance.truncate_index
   end
 
+  # fixtures don't get indexed by Solr because they don't go through a normal ActiveRecord save cycle.
+  # this isn't important for most tests, so there's no reason to add this slowdown globally. Use this
+  # to load fixtures into Solr when tests require that
+  def load_fixtures_into_solr_index
+    [Item, Thesis].each do |model|
+      model.all.each do |i|
+        i.update_solr
+      end
+    end
+  end
+
   # Add more helper methods to be used by all tests here...
 
   # Logs in a test user. Used for integration tests.

@@ -182,7 +182,6 @@ class JupiterCore::SolrServices::DeferredSimpleSolrQuery
   end
 
   def reified_result_set
-    puts search_args_with_limit(criteria[:limit])
     _, results, _, _ = JupiterCore::Search.perform_solr_query(search_args_with_limit(criteria[:limit]))
     results
   end
@@ -211,32 +210,42 @@ class JupiterCore::SolrServices::DeferredSimpleSolrQuery
 
   def where_clause
     solr_exporter = model.solr_exporter_class
-    query = []
+    fquery = []
+    idquery = ''
 
-    query << %Q(_query_:"{!raw f=has_model_ssim}#{solr_exporter.indexed_has_model_name}") if criteria[:model].present?
+    fquery << %Q(_query_:"{!raw f=has_model_ssim}#{solr_exporter.indexed_has_model_name}") if criteria[:model].present?
 
     if children.present?
       child_queries = []
       children.each do |child|
-        child_queries << "(#{child.where_clause})"
+        # HACK: note that we just drop child query q: queries, which are just for ID, because the id support is a bit
+        # of a hack at the moment
+        child_queries << "(#{child.where_clause[:fq]})"
       end
-      query << "(#{child_queries.join(' OR ')})"
+      fquery << "(#{child_queries.join(' OR ')})"
     end
 
     if criteria[:where].present?
       common_attr_queries = []
-      common_attr_queries << criteria[:where].map do |k, v|
-        solr_key = k == :id ? k : solr_exporter.solr_names_for(k).first
+      where = criteria[:where].select {|k,v| k != :id}
+      common_attr_queries << where.map do |k, v|
+        solr_key = solr_exporter.solr_names_for(k).first
         %Q(#{solr_key}:"#{v}")
       end
-      query << common_attr_queries.join(' AND ')
+      fquery << common_attr_queries.join(' AND ')
+      idquery = %Q({!term f=id}#{criteria[:where][:id]}) if criteria[:where].key?(:id)
     end
-    query.join(' AND ')
+    {
+      q: idquery,
+      fq: fquery.reject(&:empty?).join(' AND ')
+    }
   end
 
   def search_args_with_limit(limit)
-    { q: '',
-      fq: where_clause,
+    query = where_clause
+
+    { q: query[:q],
+      fq: query[:fq],
       rows: limit,
       start: criteria[:offset],
       sort: sort_clause }

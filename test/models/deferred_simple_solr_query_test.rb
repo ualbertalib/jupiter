@@ -2,9 +2,13 @@ require 'test_helper'
 
 class DeferredSimpleSolrQueryTest < ActiveSupport::TestCase
 
+  setup do
+    load_fixtures_into_solr_index
+  end
+
   test 'check item and thesis' do
-    deferred_item_query = Item.solr_query.where({})
-    deferred_thesis_query = Thesis.solr_query.where({})
+    deferred_item_query = Item.solr_query
+    deferred_thesis_query = Thesis.solr_query
     deferred_query = deferred_item_query + deferred_thesis_query
     assert_equal Item.count, deferred_item_query.total_count
     assert_equal Thesis.count, deferred_thesis_query.total_count
@@ -50,6 +54,7 @@ class DeferredSimpleSolrQueryTest < ActiveSupport::TestCase
     member_items = collection.member_items
     member_theses = collection.member_theses
     member_objects = collection.member_objects
+    
     assert_equal member_items.count, deferred_item_query.total_count
     assert_equal member_theses.count, deferred_thesis_query.total_count
     assert_equal member_objects.count, deferred_query.total_count
@@ -131,6 +136,7 @@ class DeferredSimpleSolrQueryTest < ActiveSupport::TestCase
   test 'check item and thesis with collection/community for a user' do
     user = User.first
     item = Item.first
+    
     path = item.member_of_paths.first
 
     deferred_item_query = Item.solr_query.where(member_of_paths: path)
@@ -187,8 +193,8 @@ class DeferredSimpleSolrQueryTest < ActiveSupport::TestCase
     item = Item.where(owner_id: user.id).first
     path = item.member_of_paths.first
 
-    deferred_item_query = Item.solr_query.where({})
-    deferred_thesis_query = Thesis.solr_query.where({})
+    deferred_item_query = Item.solr_query
+    deferred_thesis_query = Thesis.solr_query
     deferred_query_with_path = (deferred_item_query + deferred_thesis_query).where(member_of_paths: path)
     deferred_query = deferred_query_with_path.where(owner: user.id)
 
@@ -216,22 +222,22 @@ class DeferredSimpleSolrQueryTest < ActiveSupport::TestCase
     user1 = User.first
     user2 = User.second
 
-    deferred_query1 = Item.solr_query.where(owner_id: user1.id)
-    deferred_query2 = Item.solr_query.where(owner_id: user2.id)
+    deferred_query1 = Item.solr_query.where(owner: user1.id)
+    deferred_query2 = Item.solr_query.where(owner: user2.id)
     deferred_query = deferred_query1 + deferred_query2
 
     items_by_users = Item.where('owner_id = ? OR owner_id = ?', user1.id, user2.id)
 
     # This fails. deferred_query.total_count gives: undefined method `first' for nil:NilClass
-    # assert_equal items_owned.count, deferred_query.total_count
+    assert_equal items_owned.count, deferred_query.total_count
 
     # This (deferred_query.each) also fails for the same reason as above.
-    # deferred_results = []
-    # deferred_query.each do |obj|
-    #   deferred_results << obj
-    # end
+    deferred_results = []
+    deferred_query.each do |obj|
+      deferred_results << obj
+    end
     # Ensure results match.
-    # assert (items_by_users - items_owned).blank? and (items_owned - items_by_users).blank?
+    assert (items_by_users - items_owned).blank? and (items_owned - items_by_users).blank?
   end
 
 end

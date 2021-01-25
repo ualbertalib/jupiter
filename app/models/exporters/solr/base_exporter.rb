@@ -74,7 +74,7 @@ class Exporters::Solr::BaseExporter
   end
 
   def self.solr_names_for(name)
-    name_to_solr_name_map[name]
+    name_to_solr_name_map[name] || (raise Exporters::Solr::UnknownAttributeError, "no such attribute #{name}")
   end
 
   def self.solr_name_for(name, role:)
