@@ -63,7 +63,7 @@ class Admin::CommunitiesController < Admin::AdminController
 
   def update
     if params[:community][:logo].present?
-      # Note: monkey patch to ActiveStorage removes any previous versions
+      # NOTE: monkey patch to ActiveStorage removes any previous versions
       @community.logo.attach(params[:community][:logo])
     end
 

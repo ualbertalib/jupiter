@@ -505,7 +505,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
   def assert_valid_against_schema
     assert_response :success
 
-    schema = Nokogiri::XML::Schema(File.open(file_fixture('OAI-PMH.xsd')))
+    schema = Nokogiri::XML::Schema(File.open(file_fixture('OAI-PMH.xsd')), Nokogiri::XML::ParseOptions.new.nononet)
     document = Nokogiri::XML(@response.body)
     assert_empty schema.validate(document)
   end

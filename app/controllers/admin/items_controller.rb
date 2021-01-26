@@ -15,6 +15,20 @@ class Admin::ItemsController < Admin::AdminController
     end
 
     begin
+      # rubocop:disable Rails/SkipsModelValidations
+      # HACK: bit of a silly hack (write a nil directly to the column) to get around this hack where destroying
+      # the item tries to destroy the attachments, which then errors out because the attachment id is
+      # still referenced by the item that's about to be destroyed.
+      #
+      # TODO: investigate further why this happens (seems inconsistent with the settings for
+      # the constraint:
+      #  +add_foreign_key "items", "active_storage_attachments", column: "logo_id", on_delete: :nullify+
+      # which should allow this to work?) and consider dropping the constraint
+      # entirely if this is unreliable on PostgreSQL
+
+      @item.update_columns(logo_id: nil)
+
+      # rubocop:enable Rails/SkipsModelValidations
       @item.destroy!
       flash[:notice] = t('.deleted')
     rescue StandardError => e
@@ -23,6 +37,17 @@ class Admin::ItemsController < Admin::AdminController
     end
 
     redirect_back(fallback_location: root_path)
+  end
+
+  def reset_doi
+    item = begin
+      Item.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      Thesis.find(params[:id])
+    end
+
+    item.handle_doi_states
+    redirect_back(fallback_location: :root)
   end
 
 end

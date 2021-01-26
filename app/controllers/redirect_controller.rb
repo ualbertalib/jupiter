@@ -3,7 +3,7 @@ class RedirectController < ApplicationController
   skip_after_action :verify_authorized
 
   def hydra_north_item
-    # Note: sometimes '?file=filename' can happen in query string
+    # NOTE: sometimes '?file=filename' can happen in query string
     return hydra_north_file if params[:file]
 
     item = find_item_by_noid(noid)
