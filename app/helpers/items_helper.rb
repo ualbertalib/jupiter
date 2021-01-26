@@ -54,4 +54,9 @@ module ItemsHelper
     6 => I18n.t('items.thesis.graduation_terms.spring'),
     11 => I18n.t('items.thesis.graduation_terms.fall')
   }.freeze
+
+  def display_admin_sidebar(item)
+    item_doi_initialized = item.created_at < 1.minute.ago
+    item_doi_initialized && (item.not_available? || item.doi.blank?)
+  end
 end
