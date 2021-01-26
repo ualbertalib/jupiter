@@ -8,7 +8,7 @@ class EDTFValidator < ActiveModel::EachValidator
     value.each do |date|
       next if date.blank?
 
-      next if Date.edtf(date)
+      next unless Date.edtf(date).nil?
 
       record.errors.add(attribute, (
         options[:message] || 'does not conform to the Extended Date/Time Format standard'
