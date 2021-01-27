@@ -30,9 +30,9 @@ gem 'rsolr'
 
 # Authentication
 gem 'bcrypt', '>= 3.1.13'
-gem 'omniauth'
-gem 'omniauth-rails_csrf_protection' # Remove after https://github.com/omniauth/omniauth/pull/809 will be resolved
-gem 'omniauth-saml'
+gem 'omniauth', '~> 2.0', '>= 2.0.1'
+gem 'omniauth-rails_csrf_protection', '~> 1.0'
+gem 'omniauth-saml', '~> 2.0'
 # Authorization
 gem 'pundit', '1.1.0'
 
@@ -85,7 +85,7 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
 
-  gem 'rubocop', '~> 1.8.0', require: false
+  gem 'rubocop', '~> 1.8.1', require: false
   gem 'rubocop-performance'
   gem 'rubocop-rails'
 end
@@ -110,13 +110,13 @@ group :test do
   gem 'simplecov'
   # Faker added 0.5 seconds to the test suite per call. Haikunator seems much faster for faking strings
   gem 'haikunator'
-  gem 'shoulda-matchers', '~> 4.4'
+  gem 'shoulda-matchers', '~> 4.5'
 
   gem 'json-schema', '~> 2.8.1'
   gem 'launchy'
   gem 'rdf-isomorphic', '~> 3.1.0'
   gem 'vcr', '5.0', require: false
-  gem 'webdrivers', '~> 4.4'
+  gem 'webdrivers', '~> 4.5'
   gem 'webmock', require: false
 end
 
