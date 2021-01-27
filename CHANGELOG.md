@@ -13,6 +13,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - peel redirects [#1769](https://github.com/ualbertalib/jupiter/issues/1769)
 - Updated Architecture diagrams [PR#2135](https://github.com/ualbertalib/jupiter/pull/2135)
 - Namespaces for the Controlled Vocabularies [#2118](https://github.com/ualbertalib/jupiter/issues/2118)
+- Labels for active facet badges [#1261](https://github.com/ualbertalib/jupiter/issues/1261)
 
 ### Removed
 – Remove entirely unnecessary config file. [PR#2044](https://github.com/ualbertalib/jupiter/pull/2044)

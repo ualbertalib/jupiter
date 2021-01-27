@@ -113,4 +113,8 @@ module SearchHelper
     last = results.offset_value + results.count
     t('search.page_range', first: first, last: last, total: results.total_count)
   end
+
+  def short_category_name(category_name)
+    category_name.split(' /').first
+  end
 end
