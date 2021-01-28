@@ -845,6 +845,9 @@ en:
     all_contributors: 'Author / Creator / Contributor'
     all_subjects: 'Subject / Keyword'
     sort_year: 'Year'
+    short:
+      all_contributors: 'Author'
+      all_subjects: 'Subject'
 
   views:
     pagination:

@@ -4,7 +4,7 @@ class JupiterCore::SolrServices::FacetResult
   FacetValue = Struct.new(:attribute_name, :solr_index, :value, :count)
   # rubocop:enable Lint/StructNewOverride
 
-  attr_accessor :category_name, :attribute_name, :values, :solr_index
+  attr_accessor :category_name, :short_category_name, :attribute_name, :values, :solr_index
 
   def initialize(facet_map, solr_index, values)
     self.solr_index = solr_index
@@ -17,6 +17,11 @@ class JupiterCore::SolrServices::FacetResult
                          else
                            attribute_name.to_s.titleize
                          end
+    self.short_category_name = if I18n.exists?("facets.short.#{attribute_name}")
+                                 I18n.t("facets.short.#{attribute_name}")
+                               else
+                                 category_name
+                               end
 
     # values are just a key => value hash of facet text to count
     # we have to filter out all of the useless "" facets Solr sends back for non-required fields

@@ -1,6 +1,6 @@
 class JupiterCore::SolrServices::RangeFacetResult
 
-  attr_reader :solr_index, :category_name, :range
+  attr_reader :solr_index, :category_name, :short_category_name, :range
 
   def initialize(facet_map, solr_index, range)
     @solr_index = solr_index
@@ -13,6 +13,11 @@ class JupiterCore::SolrServices::RangeFacetResult
                      else
                        attribute_name.to_s.titleize
                      end
+    @short_category_name = if I18n.exists?("facets.short.#{attribute_name}")
+                             I18n.t("facets.short.#{attribute_name}")
+                           else
+                             @category_name
+                           end
 
     @range = Range.new(range[:begin], range[:end])
   end
