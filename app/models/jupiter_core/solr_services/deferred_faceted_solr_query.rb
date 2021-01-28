@@ -74,12 +74,13 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
                                  :desc
                                elsif order.present? && POSSIBLE_SORT_ORDERS.include?(order)
                                  order
+                               elsif (index = solr_exporter.default_sort_indexes.index(sort_attribute)).present?
+                                 solr_exporter.default_sort_direction[index]
                                else
-                                 # We could not find the order so we switch to default sort direction
-                                 sort_direction_index = solr_exporter.default_sort_indexes.index(sort_attribute)
-                                 # If we cant find the default sort_direction_index for this sort_attribute default it.
-                                 sort_direction_index = 0 if sort_direction_index.blank?
-                                 solr_exporter.default_sort_direction[sort_direction_index]
+                                 # if we have been passed a sort attribute that isn't actually set up for sorting
+                                 # (somebody manually messing around with the query parameters, say), we'll
+                                 # just fall back to the first thing we have on hand
+                                 solr_exporter.default_sort_direction.first
                                end
     end
 
