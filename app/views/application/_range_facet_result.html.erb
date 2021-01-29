@@ -25,7 +25,11 @@
   <% content_for :facet_badges do %>
     <%= link_to query_params_without_range_value(range_facet_result.solr_index) do %>
       <span class="badge badge-secondary p-2 mt-2">
-          <%= "#{range_facet_result.short_category_name}: #{range_facet_result.humanized_range}" %>
+          <% if Flipper.enabled?(:facet_badge_category_name) %>
+            <%= "#{range_facet_result.short_category_name}: #{range_facet_result.humanized_range}" %>
+          <% else %>
+            <%= range_facet_result.humanized_range %>
+          <% end %>
         <%= icon('fas', 'times-circle') %>
       </span>
     <% end %>

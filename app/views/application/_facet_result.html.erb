@@ -11,7 +11,11 @@
         <% content_for :facet_badges do %>
           <%= link_to query_params_without_facet_value(facet_value.solr_index, facet_value.value) do %>
             <span class="badge badge-secondary p-2 mt-2">
-              <%= "#{facet_result.short_category_name}: #{present(facet_value).display}" %>
+              <% if Flipper.enabled?(:facet_badge_category_name) %>
+                <%= "#{facet_result.short_category_name}: #{present(facet_value).display}" %>
+              <% else %>
+                <%= present(facet_value).display %>
+              <% end %>
               <%= icon('fas', 'times-circle') %>
             </span>
           <% end %>
