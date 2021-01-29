@@ -37,7 +37,13 @@ class JupiterCore::Search
 
     base_query << q if q.present?
     facets.each do |key, values|
-      fq << %Q(#{key}:\(#{values.collect { |value| "\"#{value}\"" }.join(' ')}\))
+      if Flipper.enabled?(:or_facets)
+        fq << %Q(#{key}:\(#{values.collect { |value| "\"#{value}\"" }.join(' ')}\))
+      else
+        values.each do |value|
+          fq << %Q(#{key}: "#{value}")
+        end
+      end
     end
     ranges.each do |key, value|
       fq << "#{key}:[#{value[:begin]} TO #{value[:end]}]"
