@@ -77,7 +77,7 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
     sign_in_as @admin
 
     draft_thesis = draft_theses(:completed_describe_thesis_step)
-    draft_thesis.member_of_paths = { 'community_id': [@community.id], 'collection_id': [@collection.id] }
+    draft_thesis.member_of_paths = { community_id: [@community.id], collection_id: [@collection.id] }
     draft_thesis.save!
 
     patch admin_thesis_draft_url(id: :choose_license_and_visibility, thesis_id: draft_thesis.id), params: {
@@ -103,7 +103,7 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
     sign_in_as @admin
 
     draft_thesis = draft_theses(:completed_choose_license_and_visibility_step)
-    draft_thesis.member_of_paths = { 'community_id': [@community.id], 'collection_id': [@collection.id] }
+    draft_thesis.member_of_paths = { community_id: [@community.id], collection_id: [@collection.id] }
     draft_thesis.save!
 
     file_fixture = fixture_file_upload('/files/image-sample.jpeg', 'image/jpeg')
@@ -147,7 +147,7 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
     sign_in_as @admin
 
     draft_thesis = draft_theses(:completed_choose_license_and_visibility_step)
-    draft_thesis.member_of_paths = { 'community_id': [@community.id], 'collection_id': [@collection.id] }
+    draft_thesis.member_of_paths = { community_id: [@community.id], collection_id: [@collection.id] }
 
     file_fixture = fixture_file_upload('/files/image-sample.jpeg', 'image/jpeg')
     image_file = ActiveStorage::Blob.create_after_upload!(
@@ -176,7 +176,7 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
     sign_in_as @admin
 
     draft_thesis = draft_theses(:completed_choose_license_and_visibility_step)
-    draft_thesis.member_of_paths = { 'community_id': [@community.id], 'collection_id': [@collection.id] }
+    draft_thesis.member_of_paths = { community_id: [@community.id], collection_id: [@collection.id] }
 
     file_fixture = fixture_file_upload('/files/image-sample.jpeg', 'image/jpeg')
     image_file = ActiveStorage::Blob.create_after_upload!(

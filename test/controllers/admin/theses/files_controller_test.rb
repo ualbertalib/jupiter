@@ -10,7 +10,7 @@ class Admin::Theses::FilesControllerTest < ActionDispatch::IntegrationTest
     sign_in_as @admin
 
     @draft_thesis = draft_theses(:completed_choose_license_and_visibility_step)
-    @draft_thesis.member_of_paths = { 'community_id': [@community.id], 'collection_id': [@collection.id] }
+    @draft_thesis.member_of_paths = { community_id: [@community.id], collection_id: [@collection.id] }
     @draft_thesis.save!
 
     pdf_file = ActiveStorage::Blob.create_after_upload!(
