@@ -79,7 +79,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
     sign_in_as @user
 
     draft_item = draft_items(:completed_describe_item_step)
-    draft_item.member_of_paths = { 'community_id': [@community.id], 'collection_id': [@collection.id] }
+    draft_item.member_of_paths = { community_id: [@community.id], collection_id: [@collection.id] }
     draft_item.save!
 
     patch item_draft_url(id: :choose_license_and_visibility, item_id: draft_item.id), params: {
@@ -105,7 +105,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
     sign_in_as @user
 
     draft_item = draft_items(:completed_choose_license_and_visibility_step)
-    draft_item.member_of_paths = { 'community_id': [@community.id], 'collection_id': [@collection.id] }
+    draft_item.member_of_paths = { community_id: [@community.id], collection_id: [@collection.id] }
     draft_item.save!
 
     file_fixture = fixture_file_upload('/files/image-sample.jpeg', 'image/jpeg')
@@ -150,7 +150,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
     sign_in_as @user
 
     draft_item = draft_items(:completed_choose_license_and_visibility_step)
-    draft_item.member_of_paths = { 'community_id': [@community.id], 'collection_id': [@collection.id] }
+    draft_item.member_of_paths = { community_id: [@community.id], collection_id: [@collection.id] }
 
     file_fixture = fixture_file_upload('/files/image-sample.jpeg', 'image/jpeg')
     image_file = ActiveStorage::Blob.create_after_upload!(
@@ -184,7 +184,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
     sign_in_as @user
 
     draft_item = draft_items(:completed_choose_license_and_visibility_step)
-    draft_item.member_of_paths = { 'community_id': [@community.id], 'collection_id': [@collection.id] }
+    draft_item.member_of_paths = { community_id: [@community.id], collection_id: [@collection.id] }
 
     file_fixture = fixture_file_upload('/files/image-sample.jpeg', 'image/jpeg')
     image_file = ActiveStorage::Blob.create_after_upload!(

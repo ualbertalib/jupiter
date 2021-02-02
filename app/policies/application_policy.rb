@@ -45,7 +45,7 @@ class ApplicationPolicy
   end
 
   def logged_in?
-    # Note: `ApplicationController#current_user` ensures user isn't suspended
+    # NOTE: `ApplicationController#current_user` ensures user isn't suspended
     user.present?
   end
 

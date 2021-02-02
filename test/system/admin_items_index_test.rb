@@ -3,7 +3,7 @@ require 'application_system_test_case'
 class AdminItemsIndexTest < ApplicationSystemTestCase
 
   test 'should be able to view all items/theses owned by anybody' do
-    # Note: searching and faceting is covered more extensively in tests elsewhere
+    # NOTE: searching and faceting is covered more extensively in tests elsewhere
     admin = users(:admin)
 
     # creating the index from the fixtures requires a save

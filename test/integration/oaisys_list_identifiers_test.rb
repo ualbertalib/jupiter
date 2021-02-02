@@ -20,7 +20,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_dc'), headers: { 'Accept' => 'application/xml' }
     assert_response :success
 
-    schema = Nokogiri::XML::Schema(File.open(file_fixture('OAI-PMH.xsd')))
+    schema = Nokogiri::XML::Schema(File.open(file_fixture('OAI-PMH.xsd')), Nokogiri::XML::ParseOptions.new.nononet)
     document = Nokogiri::XML(@response.body)
     assert_empty schema.validate(document)
 
@@ -112,7 +112,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_etdms'), headers: { 'Accept' => 'application/xml' }
     assert_response :success
 
-    schema = Nokogiri::XML::Schema(File.open(file_fixture('OAI-PMH.xsd')))
+    schema = Nokogiri::XML::Schema(File.open(file_fixture('OAI-PMH.xsd')), Nokogiri::XML::ParseOptions.new.nononet)
     document = Nokogiri::XML(@response.body)
     assert_empty schema.validate(document)
     thesis_identifiers = Oaisys::Engine.config.oai_etdms_model.public_items
@@ -140,7 +140,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
         headers: { 'Accept' => 'application/xml' }
     assert_response :success
 
-    schema = Nokogiri::XML::Schema(File.open(file_fixture('OAI-PMH.xsd')))
+    schema = Nokogiri::XML::Schema(File.open(file_fixture('OAI-PMH.xsd')), Nokogiri::XML::ParseOptions.new.nononet)
     document = Nokogiri::XML(@response.body)
     assert_empty schema.validate(document)
 
@@ -169,7 +169,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
         headers: { 'Accept' => 'application/xml' }
     assert_response :success
 
-    schema = Nokogiri::XML::Schema(File.open(file_fixture('OAI-PMH.xsd')))
+    schema = Nokogiri::XML::Schema(File.open(file_fixture('OAI-PMH.xsd')), Nokogiri::XML::ParseOptions.new.nononet)
     document = Nokogiri::XML(@response.body)
     assert_empty schema.validate(document)
 
@@ -198,7 +198,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
         headers: { 'Accept' => 'application/xml' }
     assert_response :success
 
-    schema = Nokogiri::XML::Schema(File.open(file_fixture('OAI-PMH.xsd')))
+    schema = Nokogiri::XML::Schema(File.open(file_fixture('OAI-PMH.xsd')), Nokogiri::XML::ParseOptions.new.nononet)
     document = Nokogiri::XML(@response.body)
     assert_empty schema.validate(document)
     assert_select 'OAI-PMH' do
@@ -214,7 +214,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
                     until: just_after_current_time), headers: { 'Accept' => 'application/xml' }
     assert_response :success
 
-    schema = Nokogiri::XML::Schema(File.open(file_fixture('OAI-PMH.xsd')))
+    schema = Nokogiri::XML::Schema(File.open(file_fixture('OAI-PMH.xsd')), Nokogiri::XML::ParseOptions.new.nononet)
     document = Nokogiri::XML(@response.body)
     assert_empty schema.validate(document)
     item_identifiers = Oaisys::Engine.config.oai_dc_model.public_items.updated_before(just_after_current_time)
@@ -243,7 +243,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
                     until: just_after_current_time), headers: { 'Accept' => 'application/xml' }
     assert_response :success
 
-    schema = Nokogiri::XML::Schema(File.open(file_fixture('OAI-PMH.xsd')))
+    schema = Nokogiri::XML::Schema(File.open(file_fixture('OAI-PMH.xsd')), Nokogiri::XML::ParseOptions.new.nononet)
     document = Nokogiri::XML(@response.body)
     assert_empty schema.validate(document)
     thesis_identifiers = Oaisys::Engine.config.oai_etdms_model
@@ -274,7 +274,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
                     from: six_days_from_now), headers: { 'Accept' => 'application/xml' }
     assert_response :success
 
-    schema = Nokogiri::XML::Schema(File.open(file_fixture('OAI-PMH.xsd')))
+    schema = Nokogiri::XML::Schema(File.open(file_fixture('OAI-PMH.xsd')), Nokogiri::XML::ParseOptions.new.nononet)
     document = Nokogiri::XML(@response.body)
     assert_empty schema.validate(document)
 
@@ -291,7 +291,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
                     from: six_days_from_now), headers: { 'Accept' => 'application/xml' }
     assert_response :success
 
-    schema = Nokogiri::XML::Schema(File.open(file_fixture('OAI-PMH.xsd')))
+    schema = Nokogiri::XML::Schema(File.open(file_fixture('OAI-PMH.xsd')), Nokogiri::XML::ParseOptions.new.nononet)
     document = Nokogiri::XML(@response.body)
     assert_empty schema.validate(document)
 
@@ -311,7 +311,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
         headers: { 'Accept' => 'application/xml' }
     assert_response :success
 
-    schema = Nokogiri::XML::Schema(File.open(file_fixture('OAI-PMH.xsd')))
+    schema = Nokogiri::XML::Schema(File.open(file_fixture('OAI-PMH.xsd')), Nokogiri::XML::ParseOptions.new.nononet)
     document = Nokogiri::XML(@response.body)
     assert_empty schema.validate(document)
 
@@ -339,7 +339,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
         headers: { 'Accept' => 'application/xml' }
     assert_response :success
 
-    schema = Nokogiri::XML::Schema(File.open(file_fixture('OAI-PMH.xsd')))
+    schema = Nokogiri::XML::Schema(File.open(file_fixture('OAI-PMH.xsd')), Nokogiri::XML::ParseOptions.new.nononet)
     document = Nokogiri::XML(@response.body)
     assert_empty schema.validate(document)
 
