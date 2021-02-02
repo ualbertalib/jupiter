@@ -5,15 +5,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and releases in Jupiter project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-– Remove entirely unnecessary config file.
-– Turn off reporting things like "this excel spreadsheet isn't thumbnailable" as warnings to Rollbar
-– Completely disable logging of warnings around the "excel spreadsheet" issue
 
 ### Added
 - Initialize disabled ReadOnlyMode [#2100](https://github.com/ualbertalib/jupiter/issues/2100)
+- Updated Architecture diagrams
 
 ### Removed
 – Remove entirely unnecessary config file. [PR#2044](https://github.com/ualbertalib/jupiter/pull/2044)
+– Completely disable logging of warnings around the "excel spreadsheet" issue
 
 ### Changed
 - Added DOI reset feature for admins [#1739](https://github.com/ualbertalib/jupiter/issues/1739)
