@@ -48,7 +48,7 @@ module PageLayoutHelper
     return nil if logo.blank?
 
     Rails.application.routes.url_helpers.rails_representation_path(logo.representation(args).processed)
-  rescue StandardError => e
+  rescue StandardError
     nil
   end
 

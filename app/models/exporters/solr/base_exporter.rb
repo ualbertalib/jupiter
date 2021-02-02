@@ -1,5 +1,6 @@
 # Some useful errors
 class Exporters::Solr::IndexRoleInvalidError < StandardError; end
+
 class Exporters::Solr::UnknownAttributeError < StandardError; end
 
 # This is the base class for all other Solr Export classes. Handles
