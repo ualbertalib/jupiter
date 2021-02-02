@@ -12,8 +12,7 @@ SimpleForm.setup do |config|
     b.optional :min_max
     b.optional :readonly
 
-    b.use :label, class: 'col-form-label' do
-    end
+    b.use :label, class: 'col-form-label'
     b.use :input, class: 'form-control'
     b.use :error, wrap_with: { tag: 'span', class: 'invalid-feedback' }
     b.use :hint, wrap_with: { tag: 'small', class: 'form-text text-muted' }
