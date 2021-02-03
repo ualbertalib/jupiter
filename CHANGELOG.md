@@ -8,11 +8,11 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ### Added
 - Initialize disabled ReadOnlyMode [#2100](https://github.com/ualbertalib/jupiter/issues/2100)
-- Updated Architecture diagrams
+- Updated Architecture diagrams [PR#2135](https://github.com/ualbertalib/jupiter/pull/2135)
 
 ### Removed
 – Remove entirely unnecessary config file. [PR#2044](https://github.com/ualbertalib/jupiter/pull/2044)
-– Completely disable logging of warnings around the "excel spreadsheet" issue
+– Completely disable logging of warnings around the "excel spreadsheet" issue [PR#2049](https://github.com/ualbertalib/jupiter/pull/2049)
 
 ### Changed
 - Added DOI reset feature for admins [#1739](https://github.com/ualbertalib/jupiter/issues/1739)
