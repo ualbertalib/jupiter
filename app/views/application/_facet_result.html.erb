@@ -11,7 +11,7 @@
         <% content_for :facet_badges do %>
           <%= link_to query_params_without_facet_value(facet_value.solr_index, facet_value.value) do %>
             <span class="badge badge-secondary p-2 mt-2">
-              <%= present(facet_value).display_facet_badge %>
+              <%= present(facet_value).display %>
               <%= icon('fas', 'times-circle') %>
             </span>
           <% end %>
