@@ -8,16 +8,8 @@ class JupiterCore::SolrServices::RangeFacetResult
 
     # Allows the user to override the presentation name for the facet category by customizing the
     # facets.<attribute_name> in the locale file.
-    @category_name = if I18n.exists?("facets.#{attribute_name}")
-                       I18n.t("facets.#{attribute_name}")
-                     else
-                       attribute_name.to_s.titleize
-                     end
-    @short_category_name = if I18n.exists?("facets.short.#{attribute_name}")
-                             I18n.t("facets.short.#{attribute_name}")
-                           else
-                             @category_name
-                           end
+    @category_name = I18n.t("facets.#{attribute_name}", default: attribute_name.to_s.titleize)
+    @short_category_name = I18n.t("facets.short.#{attribute_name}", default: @category_name)
 
     @range = Range.new(range[:begin], range[:end])
   end

@@ -12,16 +12,8 @@ class JupiterCore::SolrServices::FacetResult
 
     # Allows the user to override the presentation name for the facet category by customizing the
     # facets.<attribute_name> in the locale file.
-    self.category_name = if I18n.exists?("facets.#{attribute_name}")
-                           I18n.t("facets.#{attribute_name}")
-                         else
-                           attribute_name.to_s.titleize
-                         end
-    self.short_category_name = if I18n.exists?("facets.short.#{attribute_name}")
-                                 I18n.t("facets.short.#{attribute_name}")
-                               else
-                                 category_name
-                               end
+    self.category_name = I18n.t("facets.#{attribute_name}", default: attribute_name.to_s.titleize)
+    self.short_category_name = I18n.t("facets.short.#{attribute_name}", default: category_name)
 
     # values are just a key => value hash of facet text to count
     # we have to filter out all of the useless "" facets Solr sends back for non-required fields
