@@ -4,6 +4,7 @@ class Facets::DefaultFacetDecorator
 
   def initialize(view, active_facets, facet_value)
     @value = facet_value.value
+    @category_name = facet_value.short_category_name
     @count = facet_value.count
     @solr_index = facet_value.solr_index
     @active_facets = active_facets || {}
@@ -24,6 +25,14 @@ class Facets::DefaultFacetDecorator
         @view.concat(@view.icon('far', 'square', class: 'mr-2'))
         @view.concat(display)
       end
+    end
+  end
+
+  def display_facet_badge
+    if Flipper.enabled?(:facet_badge_category_name)
+      "#{@category_name}: #{display}"
+    else
+      display
     end
   end
 

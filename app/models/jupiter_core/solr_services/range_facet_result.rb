@@ -18,8 +18,12 @@ class JupiterCore::SolrServices::RangeFacetResult
     @range.to_s.gsub('..', ' to ')
   end
 
+  alias value humanized_range
+
   def to_partial_path
     'range_facet_result'
   end
+
+  def count; end
 
 end

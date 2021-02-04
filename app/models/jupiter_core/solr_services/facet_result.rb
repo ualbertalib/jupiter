@@ -1,7 +1,7 @@
 class JupiterCore::SolrServices::FacetResult
 
   # rubocop:disable Lint/StructNewOverride
-  FacetValue = Struct.new(:attribute_name, :solr_index, :value, :count)
+  FacetValue = Struct.new(:attribute_name, :solr_index, :value, :short_category_name, :count)
   # rubocop:enable Lint/StructNewOverride
 
   attr_accessor :category_name, :short_category_name, :attribute_name, :values, :solr_index
@@ -35,7 +35,7 @@ class JupiterCore::SolrServices::FacetResult
     keys = @values.keys.slice(range)
     keys.each do |raw_value|
       count = @values[raw_value]
-      yield FacetValue.new(attribute_name, solr_index, raw_value, count) if raw_value.present?
+      yield FacetValue.new(attribute_name, solr_index, raw_value, short_category_name, count) if raw_value.present?
     end
   end
 
