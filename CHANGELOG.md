@@ -19,6 +19,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Added DOI reset feature for admins [#1739](https://github.com/ualbertalib/jupiter/issues/1739)
 – Turn off reporting things like "this excel spreadsheet isn't thumbnailable" as warnings to Rollbar [PR#2046](https://github.com/ualbertalib/jupiter/pull/2046)
 - migration to fix concatenated subjects (part 2) [#1449](https://github.com/ualbertalib/jupiter/issues/1449)
+- Default behaviour within a facet to 'OR' [#1990](https://github.com/ualbertalib/jupiter/issues/1990)
 
 ### Fixed
 - bump rubocop and fix cop violations [PR#2072](https://github.com/ualbertalib/jupiter/pull/2072)
