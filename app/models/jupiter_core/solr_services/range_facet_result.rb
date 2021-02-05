@@ -14,11 +14,9 @@ class JupiterCore::SolrServices::RangeFacetResult
     @range = Range.new(range[:begin], range[:end])
   end
 
-  def humanized_range
+  def value
     @range.to_s.gsub('..', ' to ')
   end
-
-  alias value humanized_range
 
   def to_partial_path
     'range_facet_result'
