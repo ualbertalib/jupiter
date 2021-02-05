@@ -41,7 +41,7 @@ class JupiterCore::Search
         fq << %Q(#{key}:\(#{values.collect { |value| "\"#{value}\"" }.join(' OR ')}\))
       else
         values.each do |value|
-          fq << %Q(#{key}: "#{value}")
+          fq << %Q(#{key}:"#{value}")
         end
       end
     end
