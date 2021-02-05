@@ -6,5 +6,6 @@ class BatchIngest < ApplicationRecord
   has_many :draft_items, dependent: :nullify
 
   validates :title, presence: true, uniqueness: { case_sensitive: false }
+  validates :files, presence: true
 
 end

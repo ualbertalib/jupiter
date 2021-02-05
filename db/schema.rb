@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_05_001725) do
+ActiveRecord::Schema.define(version: 2020_12_01_042208) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -58,6 +58,8 @@ ActiveRecord::Schema.define(version: 2020_11_05_001725) do
   create_table "batch_ingests", force: :cascade do |t|
     t.string "title", null: false
     t.integer "status", default: 0, null: false
+    t.json "files", array: true
+    t.json "spreadsheet"
     t.bigint "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

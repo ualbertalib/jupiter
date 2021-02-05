@@ -3,7 +3,94 @@
 
   <%= f.input :title, label: t('.title'), placeholder: t('.title_placeholder') %>
 
- <div class="form-group text-right">
+ <h2>Spreadsheet</h2>
+  <div class="js-google-spreadsheet">
+    <% if @batch_ingest.spreadsheet.present? %>
+        <div>
+          <input type="checkbox" name='batch_ingest[spreadsheet_id]' value=<%= @batch_ingest.spreadsheet['id'] %> checked>
+          <input type="hidden" name='batch_ingest[spreadsheet_name]' value=<%= @batch_ingest.spreadsheet['name'] %>>
+          <label for="batch_ingest[spreadsheet_id]"><%= @batch_ingest.spreadsheet['name'] %></label>
+        </div>
+    <% end %>
+  </div>
+  <% if @list_spreadsheets.present? %>
+    <table class="table js-google-spreadsheets-table">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Size</th>
+          <th scope="col">Kind</th>
+          <th scope="col">Last Modified</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+      <% @list_spreadsheets.files.each do |file| %>
+          <% mime_folder = file.mime_type == 'application/vnd.google-apps.folder' %>
+
+          <tr>
+            <td scope="row"><a href="<%= file.web_content_link %>"><%= file.name %></a></td>
+            <td><%= number_to_human_size(file.size) %></td>
+            <td><%= icon('far', mime_folder ? 'folder' : file_icon(file.mime_type), class: 'fa-5x') %></td>
+            <td><%= file.modified_time.strftime('%F %R') %></td>
+            <td>
+              <%= button_tag 'Add file',
+                  type: 'button',
+                  class: 'btn btn-primary js-add-google-spreadsheet',
+                  data: { name: file.name, id: file.id }
+              %>
+            </td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+  <% end %>
+  <h2>Files</h2>
+  <div class="js-google-files-list">
+    <% if @batch_ingest.files.present? %>
+      <% @batch_ingest.files.each do |file| %>
+        <div>
+          <input type="checkbox" name='batch_ingest[file_ids][]' value=<%= file[:id] %> checked>
+          <input type="hidden" name='batch_ingest[file_names][]' value=<%= file[:name] %>>
+          <label for="batch_ingest[file_ids][]"><%= file[:name] %></label>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+  <% if @list_files.present? %>
+    <table class="table js-google-files-table">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Size</th>
+          <th scope="col">Kind</th>
+          <th scope="col">Last Modified</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+      <% @list_files.files.each do |file| %>
+          <% mime_folder = file.mime_type == 'application/vnd.google-apps.folder' %>
+
+          <tr>
+            <td scope="row"><a href="<%= file.web_content_link %>"><%= file.name %></a></td>
+            <td><%= number_to_human_size(file.size) %></td>
+            <td><%= icon('far', mime_folder ? 'folder' : file_icon(file.mime_type), class: 'fa-5x') %></td>
+            <td><%= file.modified_time.strftime('%F %R') %></td>
+            <td>
+              <%= button_tag 'Add file',
+                  type: 'button',
+                  class: 'btn btn-primary js-add-google-file',
+                  data: { name: file.name, id: file.id }
+              %>
+            </td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+  <% end %>
+
+   <div class="form-group text-right">
     <%= f.button :button,
                  type: :submit,
                  label: f.object.new_record? ? t('.create_batch_ingest') : t('.update_batch_ingest'),

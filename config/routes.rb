@@ -77,7 +77,11 @@ Rails.application.routes.draw do
 
       resources :announcements, only: [:index, :destroy, :create]
 
-      resources :batch_ingests, only: [:index, :show, :create, :new]
+      resources :batch_ingests, only: [:index, :show, :create, :new] do
+        collection do
+          get :google_callback
+        end
+      end
     end
 
     post '/logout_as_user', to: 'sessions#logout_as_user'

@@ -3,6 +3,8 @@ class CreateBatchIngests < ActiveRecord::Migration[6.0]
     create_table :batch_ingests do |t|
       t.string :title, null: false
       t.integer :status, default: 0, null: false
+      t.json :files, array: true
+      t.json :spreadsheet
 
       t.references :user, foreign_key: true
 

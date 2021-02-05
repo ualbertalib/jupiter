@@ -466,6 +466,10 @@ en:
       show:
         status: 'Status'
         created_by: 'Created by'
+        files: 'Files'
+        spreadsheet: 'Spreadsheet'
+        name: 'Name'
+        id: 'Id'
       new:
         header: Create Batch Ingest
 
