@@ -80,23 +80,4 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
     Flipper.disable(:fulltext_search)
   end
 
-  test 'should NOT show category name in facet badges by default' do
-    get search_url params: { facets: { member_of_paths_dpsim: @item1.member_of_paths } }
-    assert_response :success
-
-    assert_match(/<span class="badge badge-secondary p-2 mt-2">\s+Fancy Community\/Fancy Collection/, response.body)
-  end
-
-  test 'should show category name in facet badges when feature flag is on' do
-    Flipper.enable(:facet_badge_category_name)
-
-    get search_url params: { facets: { member_of_paths_dpsim: @item1.member_of_paths } }
-    assert_response :success
-
-    assert_match(/<span class="badge badge-secondary p-2 mt-2">\s+Collections: Fancy Community\/Fancy Collection/,
-                 response.body)
-
-    Flipper.disable(:facet_badge_category_name)
-  end
-
 end
