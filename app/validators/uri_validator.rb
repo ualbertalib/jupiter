@@ -9,7 +9,7 @@ class URIValidator < ActiveModel::EachValidator
     value = [value] unless value.is_a?(Array)
 
     value.each do |v|
-      unless vocabs.any? { |vocab| ::CONTROLLED_VOCABULARIES[vocab].from_uri(v).present? }
+      unless vocabs.any? { |vocab| ::CONTROLLED_VOCABULARIES[:era][vocab].from_uri(v).present? }
         record.errors.add(attr, :not_recognized)
       end
     end

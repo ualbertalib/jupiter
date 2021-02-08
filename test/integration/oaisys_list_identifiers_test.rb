@@ -87,11 +87,11 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
                      owner_id: users(:admin).id, title: 'Fancy Item 1',
                      creators: ['Joe Blow'],
                      created: '1938-01-02',
-                     languages: [CONTROLLED_VOCABULARIES[:language].english],
-                     item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+                     languages: [CONTROLLED_VOCABULARIES[:era][:language].english],
+                     item_type: CONTROLLED_VOCABULARIES[:era][:item_type].article,
                      publication_status:
-                       [CONTROLLED_VOCABULARIES[:publication_status].published],
-                     license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                       [CONTROLLED_VOCABULARIES[:era][:publication_status].published],
+                     license: CONTROLLED_VOCABULARIES[:era][:license].attribution_4_0_international,
                      subject: ['Items']).tap do |uo|
       uo.add_to_path(@community.id, @collection.id)
       uo.save!

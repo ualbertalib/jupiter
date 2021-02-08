@@ -17,10 +17,10 @@ class SearchTest < ApplicationSystemTestCase
                  owner_id: admin.id, title: "#{random_title(i)} Item #{i}",
                  creators: ['Joe Blow'],
                  created: "19#{50 + i}-11-11",
-                 languages: [CONTROLLED_VOCABULARIES[:language].english],
-                 item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                 publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                 languages: [CONTROLLED_VOCABULARIES[:era][:language].english],
+                 item_type: CONTROLLED_VOCABULARIES[:era][:item_type].article,
+                 publication_status: [CONTROLLED_VOCABULARIES[:era][:publication_status].published],
+                 license: CONTROLLED_VOCABULARIES[:era][:license].attribution_4_0_international,
                  subject: ['Items'])
             .tap do |uo|
           uo.add_to_path(@community.id, @collections[0].id)
@@ -30,7 +30,7 @@ class SearchTest < ApplicationSystemTestCase
         Thesis.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
                    owner_id: admin.id, title: "#{random_title(i)} Item #{i}",
                    dissertant: 'Joe Blow',
-                   language: CONTROLLED_VOCABULARIES[:language].english,
+                   language: CONTROLLED_VOCABULARIES[:era][:language].english,
                    graduation_date: "19#{50 + i}-11-11")
               .tap do |uo|
           uo.add_to_path(@community.id, @collections[1].id)
@@ -43,10 +43,10 @@ class SearchTest < ApplicationSystemTestCase
                     owner_id: admin.id, title: 'Fancy CCID Item',
                     creators: ['Joe Blow'],
                     created: '1950-11-11',
-                    languages: [CONTROLLED_VOCABULARIES[:language].english],
-                    item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                    publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-                    license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                    languages: [CONTROLLED_VOCABULARIES[:era][:language].english],
+                    item_type: CONTROLLED_VOCABULARIES[:era][:item_type].article,
+                    publication_status: [CONTROLLED_VOCABULARIES[:era][:publication_status].published],
+                    license: CONTROLLED_VOCABULARIES[:era][:license].attribution_4_0_international,
                     subject: ['Items'])
                .tap do |uo|
       uo.add_to_path(@community.id, @collections[0].id)
@@ -66,10 +66,10 @@ class SearchTest < ApplicationSystemTestCase
                  owner_id: admin.id, title: "#{random_title(i)} Private Item #{i + 10}",
                  creators: ['Joe Blow'],
                  created: "19#{70 + i}-11-11",
-                 languages: [CONTROLLED_VOCABULARIES[:language].english],
-                 item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                 publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                 languages: [CONTROLLED_VOCABULARIES[:era][:language].english],
+                 item_type: CONTROLLED_VOCABULARIES[:era][:item_type].article,
+                 publication_status: [CONTROLLED_VOCABULARIES[:era][:publication_status].published],
+                 license: CONTROLLED_VOCABULARIES[:era][:license].attribution_4_0_international,
                  subject: ['Items'])
             .tap do |uo|
           uo.add_to_path(@community.id, @collections[0].id)
@@ -79,7 +79,7 @@ class SearchTest < ApplicationSystemTestCase
         Thesis.new(visibility: JupiterCore::VISIBILITY_PRIVATE,
                    owner_id: admin.id, title: "#{random_title(i)} Private Item #{i + 10}",
                    dissertant: 'Joe Blow',
-                   language: CONTROLLED_VOCABULARIES[:language].english,
+                   language: CONTROLLED_VOCABULARIES[:era][:language].english,
                    graduation_date: "19#{70 + i}-11-11")
               .tap do |uo|
           uo.add_to_path(@community.id, @collections[1].id)
@@ -97,10 +97,10 @@ class SearchTest < ApplicationSystemTestCase
                owner_id: admin.id, title: "Extra Item #{i}",
                creators: ['Joe Blow'],
                created: "19#{90 + i}-11-11",
-               languages: [CONTROLLED_VOCABULARIES[:language].english],
-               item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-               publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-               license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+               languages: [CONTROLLED_VOCABULARIES[:era][:language].english],
+               item_type: CONTROLLED_VOCABULARIES[:era][:item_type].article,
+               publication_status: [CONTROLLED_VOCABULARIES[:era][:publication_status].published],
+               license: CONTROLLED_VOCABULARIES[:era][:license].attribution_4_0_international,
                subject: ['Items'])
           .tap do |uo|
         uo.add_to_path(community.id, collection.id)

@@ -782,61 +782,62 @@ en:
       thumbnail: 'Thumbnail'
 
   controlled_vocabularies:
-    item_type_with_status:
-      article_published: Article (Published)
-      article_submitted: Article (Draft / Submitted)
-      book: Book
-      chapter: Chapter
-      image: Image
-      report: Report
-      research_material: 'Research Material'
-      conference_workshop_presentation: 'Conference/Workshop Presentation'
-      conference_workshop_poster: 'Conference/Workshop Poster'
-      dataset: Dataset
-      review: Review
-      learning_object: 'Learning Object'
-      thesis: 'Thesis'
-    language:
-      ukrainian: Ukrainian
-      japanese: Japanese
-      german: German
-      other: 'Other language'
-      italian: Italian
-      russian: Russian
-      no_linguistic_content: 'No linguistic content'
-      english: English
-      french: French
-      chinese: Chinese
-      spanish: Spanish
-    license:
-      attribution_4_0_international: 'Attribution 4.0 International'
-      attribution_sharealike_4_0_international: 'Attribution-ShareAlike 4.0 International'
-      attribution_noncommercial_4_0_international: 'Attribution-NonCommercial 4.0 International'
-      attribution_noncommercial_noderivatives_4_0_international:
-        'Attribution-NonCommercial-NoDerivatives 4.0 International'
-      cc0_1_0_universal: 'CC0 1.0 Universal'
-      attribution_noderivatives_4_0_international: 'Attribution-NoDerivatives 4.0 International'
-      public_domain_mark_1_0: 'Public Domain Mark 1.0'
-      attribution_noncommercial_sharealike_4_0_international:
-        'Attribution-NonCommercial-ShareAlike 4.0 International'
-    old_license:
-      attribution_3_0_international: 'Attribution 3.0 International'
-      attribution_sharealike_3_0_international: 'Attribution-ShareAlike 3.0 International'
-      attribution_noncommercial_3_0_international: 'Attribution-NonCommercial 3.0 International'
-      attribution_noncommercial_noderivatives_3_0_international:
-        'Attribution-NonCommercial-NoDerivatives 3.0 International'
-      attribution_noncommercial_sharealike_2_5_canada:
-        'Attribution-NonCommercial-ShareAlike 2.5 Canada'
+    era:
+      item_type_with_status:
+        article_published: Article (Published)
+        article_submitted: Article (Draft / Submitted)
+        book: Book
+        chapter: Chapter
+        image: Image
+        report: Report
+        research_material: 'Research Material'
+        conference_workshop_presentation: 'Conference/Workshop Presentation'
+        conference_workshop_poster: 'Conference/Workshop Poster'
+        dataset: Dataset
+        review: Review
+        learning_object: 'Learning Object'
+        thesis: 'Thesis'
+      language:
+        ukrainian: Ukrainian
+        japanese: Japanese
+        german: German
+        other: 'Other language'
+        italian: Italian
+        russian: Russian
+        no_linguistic_content: 'No linguistic content'
+        english: English
+        french: French
+        chinese: Chinese
+        spanish: Spanish
+      license:
+        attribution_4_0_international: 'Attribution 4.0 International'
+        attribution_sharealike_4_0_international: 'Attribution-ShareAlike 4.0 International'
+        attribution_noncommercial_4_0_international: 'Attribution-NonCommercial 4.0 International'
+        attribution_noncommercial_noderivatives_4_0_international:
+          'Attribution-NonCommercial-NoDerivatives 4.0 International'
+        cc0_1_0_universal: 'CC0 1.0 Universal'
+        attribution_noderivatives_4_0_international: 'Attribution-NoDerivatives 4.0 International'
+        public_domain_mark_1_0: 'Public Domain Mark 1.0'
+        attribution_noncommercial_sharealike_4_0_international:
+          'Attribution-NonCommercial-ShareAlike 4.0 International'
+      old_license:
+        attribution_3_0_international: 'Attribution 3.0 International'
+        attribution_sharealike_3_0_international: 'Attribution-ShareAlike 3.0 International'
+        attribution_noncommercial_3_0_international: 'Attribution-NonCommercial 3.0 International'
+        attribution_noncommercial_noderivatives_3_0_international:
+          'Attribution-NonCommercial-NoDerivatives 3.0 International'
+        attribution_noncommercial_sharealike_2_5_canada:
+          'Attribution-NonCommercial-ShareAlike 2.5 Canada'
 
-    visibility:
-      authenticated: Authenticated
-      embargo: Embargo
-      draft: Draft
-      private: Private
-      public: Public
-    institution:
-      uofa: 'University of Alberta'
-      st_stephens: "St. Stephen's College"
+      visibility:
+        authenticated: Authenticated
+        embargo: Embargo
+        draft: Draft
+        private: Private
+        public: Public
+      institution:
+        uofa: 'University of Alberta'
+        st_stephens: "St. Stephen's College"
 
   facets:
     member_of_paths: 'Collections'
