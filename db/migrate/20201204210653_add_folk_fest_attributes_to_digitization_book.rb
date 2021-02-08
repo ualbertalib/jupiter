@@ -1,20 +1,20 @@
 class AddFolkFestAttributesToDigitizationBook < ActiveRecord::Migration[6.0]
   def change
     change_table :digitization_books do |t|
-      t.json :date_issued, array:true
-      t.json :temporal_subject, array:true
+      t.string :date_issued, array:true
+      t.string :temporal_subject, array:true
       t.string :title, null: false
-      t.json :alt_title, array: true
+      t.text :alt_title, array: true
       t.string :resource_type, null: false
-      t.json :genre, null: false, array: true
-      t.json :language, null: false, array: true
-      t.json :publisher, array: true
-      t.json :place_of_publication, array:true
+      t.string :genre, null: false, array: true
+      t.string :language, null: false, array: true
+      t.string :publisher, array: true
+      t.string :place_of_publication, array:true
       t.string :extent
-      t.json :note, array: true
-      t.json :geographic_subject, array: true
+      t.text :note, array: true
+      t.string :geographic_subject, array: true
       t.string :rights
-      t.json :topical_subject, array: true
+      t.string :topical_subject, array: true
     end
 
     add_rdf_table_annotations for_table: :digitization_books do |t|
