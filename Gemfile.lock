@@ -352,7 +352,7 @@ GEM
       link_header (~> 0.0, >= 0.0.8)
     rdf-aggregate-repo (3.1.0)
       rdf (~> 3.1)
-    rdf-isomorphic (3.1.0)
+    rdf-isomorphic (3.1.1)
       rdf (~> 3.1)
     rdf-n3 (3.1.2)
       ebnf (~> 2.1)
@@ -552,7 +552,7 @@ DEPENDENCIES
   rails (~> 6.0.3)
   ransack
   rdf (~> 3.1.10)
-  rdf-isomorphic (~> 3.1.0)
+  rdf-isomorphic (~> 3.1.1)
   rdf-n3
   rdf-vocab (~> 3.1.10)
   redis (~> 4.1)
