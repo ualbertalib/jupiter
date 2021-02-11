@@ -1080,10 +1080,10 @@
   dependencies:
     mkdirp "^1.0.4"
 
-"@rails/actiontext@^6.0.3":
-  version "6.0.3"
-  resolved "https://registry.yarnpkg.com/@rails/actiontext/-/actiontext-6.0.3.tgz#71dacd49df7c16a363e20aa89a53efcad8fcecde"
-  integrity sha512-z6NtXRd/Scoqkf8ZRThEZhAUPh/+Yk8knsLgqlGBRXqxth1LToEWubzSeac4b26TDNgVbbTTm7BtLE/R5R4wbA==
+"@rails/actiontext@^6.1.2":
+  version "6.1.2"
+  resolved "https://registry.yarnpkg.com/@rails/actiontext/-/actiontext-6.1.2.tgz#a58b008c604a8b221bc1c41a7cc806a373625863"
+  integrity sha512-6CK7E0mpsARpy2khor6bNUhziI5qAwJeKh5P/sYL3vN1kJ4Ma6+WC+jvsZI+uQ8hecbpFTGR9fuhV9OHCnLe6Q==
   dependencies:
     "@rails/activestorage" "^6.0.0-alpha"
 
