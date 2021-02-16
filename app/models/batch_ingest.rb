@@ -7,5 +7,6 @@ class BatchIngest < ApplicationRecord
 
   validates :title, presence: true, uniqueness: { case_sensitive: false }
   validates :files, presence: true
+  validates :spreadsheet, presence: true
 
 end

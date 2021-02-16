@@ -28,4 +28,16 @@ class BatchIngestTest < ActiveSupport::TestCase
     assert_equal('must exist', @batch_ingest.errors[:user].first)
   end
 
+  test 'invalid without files' do
+    @batch_ingest.files = nil
+    assert_not @batch_ingest.valid?
+    assert_equal("can't be blank", @batch_ingest.errors[:files].first)
+  end
+
+  test 'invalid without spreadsheet' do
+    @batch_ingest.spreadsheet = nil
+    assert_not @batch_ingest.valid?
+    assert_equal("can't be blank", @batch_ingest.errors[:spreadsheet].first)
+  end
+
 end

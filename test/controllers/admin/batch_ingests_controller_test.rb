@@ -13,13 +13,23 @@ class Admin::BatchIngestsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should get new' do
+    # TODO: Need to mock credentials or something?
+    session[:credentials] = 'RANDOM'
     get new_admin_batch_ingest_url
     assert_response :success
   end
 
   test 'should create batch_ingest' do
     assert_difference('BatchIngest.count') do
-      post admin_batch_ingests_url, params: { batch_ingest: { title: 'Random Batch Name' } }
+      post admin_batch_ingests_url, params: {
+        batch_ingest: {
+          title: 'Random Batch Name',
+          file_names: ['feature_image.jpg'],
+          file_ids: ['RANDOMSTRING'],
+          spreadsheet_name: 'google_spreadsheet',
+          spreadsheet_id: 'RANDOMSTRING'
+        }
+      }
     end
 
     assert_redirected_to admin_batch_ingest_url(BatchIngest.last)

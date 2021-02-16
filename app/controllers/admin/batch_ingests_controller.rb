@@ -17,60 +17,11 @@ class Admin::BatchIngestsController < Admin::AdminController
 
   # GET /batch_ingests/new
   def new
-    return redirect_to google_callback_admin_batch_ingests_path if drive.nil?
-
-    drive.list_files(
-      q: file_query,
-      order_by: 'modifiedTime desc,folder,name',
-      supports_team_drives: true,
-      include_team_drive_items: true,
-      corpora: 'user,allTeamDrives',
-      page_size: 10,
-      fields: 'files(name,id,size,mimeType,modifiedTime,parents,webContentLink),nextPageToken'
-    ) do |file_list, error|
-      # Raise an exception if there was an error Google API's
-      if error.present?
-        # In order to properly trigger reauthentication, the token must be cleared
-        # Additionally, the error is not automatically raised from the Google Client
-        session[:credentials] = nil
-        return redirect_to google_callback_admin_batch_ingests_path
-
-        # TODO: Needs better logic here? only redirect when its auth error
-        # Look into refresh token as well
-      end
-
-      @list_files = file_list
-
-      # request_params.page_token = file_list.next_page_token
+    if access_token.nil?
+      return redirect_to google_callback_admin_batch_ingests_path
     end
 
-    drive.list_files(
-      q: spreadsheet_query,
-      order_by: 'modifiedTime desc,folder,name',
-      supports_team_drives: true,
-      include_team_drive_items: true,
-      corpora: 'user,allTeamDrives',
-      page_size: 10,
-      fields: 'files(name,id,size,mimeType,modifiedTime,parents,webContentLink),nextPageToken'
-    ) do |spreadsheet_list, error|
-      # Raise an exception if there was an error Google API's
-      if error.present?
-        # In order to properly trigger reauthentication, the token must be cleared
-        # Additionally, the error is not automatically raised from the Google Client
-        session[:credentials] = nil
-        return redirect_to google_callback_admin_batch_ingests_path
-
-        # TODO: Needs better logic here? only redirect when its auth error
-        # Look into refresh token as well
-      end
-
-      @list_spreadsheets = spreadsheet_list
-
-      # request_params.page_token = spreadsheet_list.next_page_token
-    end
-
-    # @list_files += list_files(drive, request_params, path: path) if request_params.page_token.present?
-
+    @access_token = access_token
     @batch_ingest = BatchIngest.new
   end
 
@@ -81,6 +32,7 @@ class Admin::BatchIngestsController < Admin::AdminController
 
     @batch_ingest.files = []
     file_ids = params['batch_ingest'].delete :file_ids
+    file_ids = [] if file_ids.blank?
     file_ids.each_with_index do |file_id, index|
       next if file_id.blank?
 
@@ -93,11 +45,11 @@ class Admin::BatchIngestsController < Admin::AdminController
     spreadsheet_id = params['batch_ingest'].delete :spreadsheet_id
     spreadsheet_name = params['batch_ingest'].delete :spreadsheet_name
 
-    @batch_ingest.spreadsheet = { id: spreadsheet_id, name: spreadsheet_name}
+    @batch_ingest.spreadsheet = { id: spreadsheet_id, name: spreadsheet_name }
+
     # Should open up CSV, run validations against it (like is all files accounted for? is required fileds present? etc)
     # if good, then simply create batch ingest object and queue up a job
     # when job runs...it will open CSV, create batch ingest with download files
-
 
     # drive.get_file(id)
     # consume_spreadsheet(spreadsheet_id)
@@ -105,6 +57,7 @@ class Admin::BatchIngestsController < Admin::AdminController
     #   io: File.open('app/assets/images/news.jpg'),
     #   filename: 'nw.jpg'
     #   )
+
     @batch_ingest.assign_attributes(permitted_attributes(BatchIngest))
 
     respond_to do |format|
@@ -148,49 +101,18 @@ class Admin::BatchIngestsController < Admin::AdminController
 
   private
 
-  def drive
-    @drive ||= if session.key?(:credentials) && session[:credentials]
+  def access_token
+    return nil if !session.key?(:credentials) && !session[:credentials]
 
-                 client_opts = JSON.parse(session[:credentials])
-                 auth_client = Signet::OAuth2::Client.new(client_opts)
-                 drive = Google::Apis::DriveV3::DriveService.new
-                 drive.authorization = auth_client
+    @access_token ||= JSON.parse(session[:credentials])["access_token"]
 
-                 drive
-               end
-  end
+    # TODO: Need this code for downloading files/spreadsheets
+    #  client_opts = JSON.parse(session[:credentials])["access_token"]
+    #  auth_client = Signet::OAuth2::Client.new(client_opts)
+    #  drive = Google::Apis::DriveV3::DriveService.new
+    #  drive.authorization = auth_client
 
-  def spreadsheet_query
-    'mimeType = \'application/vnd.google-apps.spreadsheet\''
-  end
-
-  def file_query
-    field_queries = []
-    contraints.each_pair do |field, constraints|
-      field_constraint = constraints.join(" and #{field} ")
-      field_queries << "#{field} #{field_constraint}"
-    end
-    field_queries.join(' ')
-  end
-
-  def contraints
-    {
-      'mimeType' => [
-        '!= \'application/vnd.google-apps.audio\'',
-        '!= \'application/vnd.google-apps.document\'',
-        '!= \'application/vnd.google-apps.drawing\'',
-        '!= \'application/vnd.google-apps.form\'',
-        '!= \'application/vnd.google-apps.fusiontable\'',
-        '!= \'application/vnd.google-apps.map\'',
-        '!= \'application/vnd.google-apps.photo\'',
-        '!= \'application/vnd.google-apps.presentation\'',
-        '!= \'application/vnd.google-apps.script\'',
-        '!= \'application/vnd.google-apps.site\'',
-        '!= \'application/vnd.google-apps.spreadsheet\'',
-        '!= \'application/vnd.google-apps.video\'',
-        '!= \'application/vnd.google-apps.shortcut\''
-      ]
-    }
+    #  drive
   end
 
   def consume_spreadsheet(spreadsheet_id)
@@ -202,9 +124,8 @@ class Admin::BatchIngestsController < Admin::AdminController
     service.authorization = auth_client
 
     range = 'Data!A2:X'
-    response = service.get_spreadsheet_values(spreadsheet_id, range)
+    service.get_spreadsheet_values(spreadsheet_id, range)
 
-    response
     # Validate CSV?
     #
     # then Each row, go through columns, download file and create draft_items

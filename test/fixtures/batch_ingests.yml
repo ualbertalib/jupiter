@@ -7,7 +7,10 @@
 one:
   title: 'Cool Collection Batch'
   user: admin
-
+  files: [{ name: 'test', id: 'randomstring' }]
+  spreadsheet: { name: 'spreadsheet_ingest', id: 'randomstring' }
 two:
   title: 'Conference Batch'
   user: admin_two
+  files: [{ name: 'conference.pdf', id: 'randomstring' }, { name: 'conference_image.jpg', id: 'randomstring' }]
+  spreadsheet: { name: 'spreadsheet_ingest', id: 'randomstring' }
