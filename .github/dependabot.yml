@@ -1,0 +1,46 @@
+version: 2
+updates:
+- package-ecosystem: bundler
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "10:00"
+  open-pull-requests-limit: 10
+  target-branch: integration
+  ignore:
+  - dependency-name: hydra-derivatives
+    versions:
+    - "< 4"
+    - "> 3.3.2"
+  - dependency-name: hydra-works
+    versions:
+    - "> 0.17.0"
+  - dependency-name: pundit
+    versions:
+    - "> 1.1.0"
+  - dependency-name: rubocop
+    versions:
+    - "< 0.59.3"
+    - ">= 0.59.2.a"
+  - dependency-name: rubocop
+    versions:
+    - ">= 0.75.a"
+    - "< 0.76"
+  - dependency-name: sidekiq
+    versions:
+    - ">= 6.a"
+    - "< 7"
+  - dependency-name: vcr
+    versions:
+    - ">= 5.1.a"
+    - "< 5.2"
+  - dependency-name: vcr
+    versions:
+    - "> 6.0.0"
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "10:00"
+  open-pull-requests-limit: 10
+  target-branch: integration
