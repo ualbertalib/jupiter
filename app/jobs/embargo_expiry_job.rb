@@ -30,7 +30,13 @@ class EmbargoExpiryJob < ApplicationJob
       obj.visibility = obj.visibility_after_embargo
       obj.embargo_end_date = nil
       obj.visibility_after_embargo = nil
-      obj.save
+
+      begin
+        obj.save
+      rescue StandardError => e
+        Rollbar.error("Error taking item #{obj.id} out of embargo through embargo expiry job", e)
+        Rails.logger.info("Error taking item #{obj.id} out of embargo through embargo expiry job")
+      end
     end
 
     thesis_results.each do |result|
@@ -38,7 +44,13 @@ class EmbargoExpiryJob < ApplicationJob
       obj.visibility = obj.visibility_after_embargo
       obj.embargo_end_date = nil
       obj.visibility_after_embargo = nil
-      obj.save
+
+      begin
+        obj.save
+      rescue StandardError => e
+        Rollbar.error("Error taking thesis #{obj.id} out of embargo through embargo expiry job", e)
+        Rails.logger.info("Error taking thesis #{obj.id} out of embargo through embargo expiry job")
+      end
     end
 
     Rails.logger.info("Removed embargo expiry on #{item_results_count} items and #{thesis_results_count} theses")
