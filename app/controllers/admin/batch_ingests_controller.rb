@@ -17,9 +17,7 @@ class Admin::BatchIngestsController < Admin::AdminController
 
   # GET /batch_ingests/new
   def new
-    if access_token.nil?
-      return redirect_to google_callback_admin_batch_ingests_path
-    end
+    return redirect_to google_callback_admin_batch_ingests_path if access_token.nil?
 
     @access_token = access_token
     @batch_ingest = BatchIngest.new
@@ -104,7 +102,7 @@ class Admin::BatchIngestsController < Admin::AdminController
   def access_token
     return nil if !session.key?(:credentials) && !session[:credentials]
 
-    @access_token ||= JSON.parse(session[:credentials])["access_token"]
+    @access_token ||= JSON.parse(session[:credentials])['access_token']
 
     # TODO: Need this code for downloading files/spreadsheets
     #  client_opts = JSON.parse(session[:credentials])["access_token"]

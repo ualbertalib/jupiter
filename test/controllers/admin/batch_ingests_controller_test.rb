@@ -13,10 +13,22 @@ class Admin::BatchIngestsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should get new' do
-    # TODO: Need to mock credentials or something?
-    session[:credentials] = 'RANDOM'
+    get new_admin_batch_ingest_url
+    assert_response :redirect
+    assert_redirected_to google_callback_admin_batch_ingests_url
+  end
+
+  test 'should get new with credentials' do
+    controller.session[:credentials] = 'RANDOM'
     get new_admin_batch_ingest_url
     assert_response :success
+  end
+
+
+  test 'should get google_callback' do
+    get google_callback_admin_batch_ingests_url
+    assert_response :redirect
+    # assert_redirected_to root_url
   end
 
   test 'should create batch_ingest' do
