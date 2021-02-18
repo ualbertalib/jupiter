@@ -54,6 +54,7 @@ gem 'ezid-client', '~> 1.8.0'
 gem 'flipper', '~> 0.20.3' # Feature flags for Ruby
 gem 'flipper-active_record', '~> 0.20.3' # Store feature flags in ActiveRecord
 gem 'flipper-ui', '~> 0.20.3' # UI for feature flags
+gem 'i18n-active_record', '~> 0.4.0' # i18n ActiveRecord backend
 gem 'jbuilder' # generate JSON objects
 gem 'kaminari' # Pagination
 gem 'paper_trail' # Track object changes
