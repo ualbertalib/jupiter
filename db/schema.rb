@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_05_001725) do
+ActiveRecord::Schema.define(version: 2021_02_18_002349) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -95,6 +95,20 @@ ActiveRecord::Schema.define(version: 2020_11_05_001725) do
     t.integer "part_number"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "date_issued", array: true
+    t.string "temporal_subject", array: true
+    t.string "title", null: false
+    t.text "alt_title", array: true
+    t.string "resource_type", null: false
+    t.string "genre", null: false, array: true
+    t.string "language", null: false, array: true
+    t.string "publisher", array: true
+    t.string "place_of_publication", array: true
+    t.string "extent"
+    t.text "note", array: true
+    t.string "geographic_subject", array: true
+    t.string "rights"
+    t.string "topical_subject", array: true
     t.index ["peel_id", "run", "part_number"], name: "unique_peel_book", unique: true
   end
 
@@ -346,6 +360,16 @@ ActiveRecord::Schema.define(version: 2020_11_05_001725) do
     t.index ["owner_id"], name: "index_theses_on_owner_id"
   end
 
+  create_table "translations", force: :cascade do |t|
+    t.string "locale"
+    t.string "key"
+    t.text "value"
+    t.text "interpolations"
+    t.boolean "is_proc", default: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "types", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
@@ -380,6 +404,15 @@ ActiveRecord::Schema.define(version: 2020_11_05_001725) do
     t.datetime "created_at"
     t.text "object_changes"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
+  end
+
+  create_table "vocabularies", force: :cascade do |t|
+    t.string "namespace"
+    t.string "vocab"
+    t.string "uri"
+    t.string "code"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
