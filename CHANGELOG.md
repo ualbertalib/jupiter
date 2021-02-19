@@ -12,6 +12,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Added feature flags to Jupiter [#1897](https://github.com/ualbertalib/jupiter/issues/1897)
 - peel redirects [#1769](https://github.com/ualbertalib/jupiter/issues/1769)
 - Updated Architecture diagrams [PR#2135](https://github.com/ualbertalib/jupiter/pull/2135)
+- i18n ActiveRecord backend [#2119](https://github.com/ualbertalib/jupiter/issues/2119)
 
 ### Removed
 – Remove entirely unnecessary config file. [PR#2044](https://github.com/ualbertalib/jupiter/pull/2044)
