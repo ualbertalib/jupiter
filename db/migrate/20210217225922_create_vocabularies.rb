@@ -7,6 +7,9 @@ class CreateVocabularies < ActiveRecord::Migration[6.0]
       t.string :code
 
       t.timestamps
+
+      t.index [:uri, :vocab, :namespace], unique: true
+      t.index [:code, :vocab, :namespace], unique: true
     end
   end
 end

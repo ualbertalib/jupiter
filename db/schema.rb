@@ -95,20 +95,6 @@ ActiveRecord::Schema.define(version: 2021_02_18_002349) do
     t.integer "part_number"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "date_issued", array: true
-    t.string "temporal_subject", array: true
-    t.string "title", null: false
-    t.text "alt_title", array: true
-    t.string "resource_type", null: false
-    t.string "genre", null: false, array: true
-    t.string "language", null: false, array: true
-    t.string "publisher", array: true
-    t.string "place_of_publication", array: true
-    t.string "extent"
-    t.text "note", array: true
-    t.string "geographic_subject", array: true
-    t.string "rights"
-    t.string "topical_subject", array: true
     t.index ["peel_id", "run", "part_number"], name: "unique_peel_book", unique: true
   end
 
@@ -413,6 +399,8 @@ ActiveRecord::Schema.define(version: 2021_02_18_002349) do
     t.string "code"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["code", "vocab", "namespace"], name: "index_vocabularies_on_code_and_vocab_and_namespace", unique: true
+    t.index ["uri", "vocab", "namespace"], name: "index_vocabularies_on_uri_and_vocab_and_namespace", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
