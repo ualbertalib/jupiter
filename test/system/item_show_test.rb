@@ -13,10 +13,10 @@ class ItemShowTest < ApplicationSystemTestCase
                      owner_id: admin.id, title: 'Fancy Item',
                      creators: ['Joe Blow'],
                      created: '1938-01-02',
-                     languages: [CONTROLLED_VOCABULARIES[:language].english],
-                     license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                     item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                     publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
+                     languages: [CONTROLLED_VOCABULARIES[:era][:language].english],
+                     license: CONTROLLED_VOCABULARIES[:era][:license].attribution_4_0_international,
+                     item_type: CONTROLLED_VOCABULARIES[:era][:item_type].article,
+                     publication_status: [CONTROLLED_VOCABULARIES[:era][:publication_status].published],
                      subject: ['Items']).tap do |uo|
       uo.add_to_path(@community.id, @collection.id)
       uo.add_to_path(@community.id, @collection.id)
@@ -35,10 +35,10 @@ class ItemShowTest < ApplicationSystemTestCase
                       owner_id: @user.id, title: 'CCID Item',
                       creators: ['Joe Blow'],
                       created: '2011-11-11',
-                      languages: [CONTROLLED_VOCABULARIES[:language].english],
-                      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                      item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                      publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
+                      languages: [CONTROLLED_VOCABULARIES[:era][:language].english],
+                      license: CONTROLLED_VOCABULARIES[:era][:license].attribution_4_0_international,
+                      item_type: CONTROLLED_VOCABULARIES[:era][:item_type].article,
+                      publication_status: [CONTROLLED_VOCABULARIES[:era][:publication_status].published],
                       subject: ['Fancy things'])
                  .tap do |uo|
       uo.add_to_path(@community.id, @collection.id)
@@ -51,7 +51,7 @@ class ItemShowTest < ApplicationSystemTestCase
       graduation_date: 'Fall 1990',
       dissertant: 'Joe Blow',
       abstract: generate_random_string,
-      language: CONTROLLED_VOCABULARIES[:language].english,
+      language: CONTROLLED_VOCABULARIES[:era][:language].english,
       specialization: 'Failure Analysis',
       departments: ["Deparment of Makin' Computers Compute"],
       supervisors: ['Alan Turing (Department of Mathematics)'],
@@ -59,7 +59,7 @@ class ItemShowTest < ApplicationSystemTestCase
       rights: 'Share my stuff with everybody',
       thesis_level: 'Doctorate',
       degree: "Doctorate of Failin' Hard or Hardly Failin'",
-      institution: CONTROLLED_VOCABULARIES[:institution].uofa,
+      institution: CONTROLLED_VOCABULARIES[:era][:institution].uofa,
       visibility: JupiterCore::VISIBILITY_PUBLIC,
       owner_id: @user.id
     ).tap do |uo|

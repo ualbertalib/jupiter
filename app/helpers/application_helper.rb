@@ -1,15 +1,15 @@
 module ApplicationHelper
   TRUNCATE_CHARS_DEFAULT = 300
 
-  def humanize_uri_code(vocab, code)
-    t("controlled_vocabularies.#{vocab}.#{code}")
+  def humanize_uri_code(namespace, vocab, code)
+    t("controlled_vocabularies.#{namespace}.#{vocab}.#{code}")
   end
 
-  def humanize_uri(vocab, uri)
-    code = CONTROLLED_VOCABULARIES[vocab].from_uri(uri)
+  def humanize_uri(namespace, vocab, uri)
+    code = CONTROLLED_VOCABULARIES[namespace][vocab].from_uri(uri)
     return nil if code.nil?
 
-    humanize_uri_code(vocab, code)
+    humanize_uri_code(namespace, vocab, code)
   end
 
   def help_tooltip(text)

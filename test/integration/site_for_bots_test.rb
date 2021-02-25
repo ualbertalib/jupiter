@@ -15,11 +15,11 @@ class SiteForBotsTest < ActionDispatch::IntegrationTest
       uo.creators = ['Joe Blow', 'Smokey Chantilly-Tiffany', 'Céline Marie Claudette Dion']
       uo.visibility = JupiterCore::VISIBILITY_PUBLIC
       uo.created = '1999-09-09'
-      uo.languages = [CONTROLLED_VOCABULARIES[:language].english]
-      uo.license = CONTROLLED_VOCABULARIES[:license].attribution_4_0_international
-      uo.item_type = CONTROLLED_VOCABULARIES[:item_type].article
-      uo.publication_status = [CONTROLLED_VOCABULARIES[:publication_status].draft,
-                               CONTROLLED_VOCABULARIES[:publication_status].submitted]
+      uo.languages = [CONTROLLED_VOCABULARIES[:era][:language].english]
+      uo.license = CONTROLLED_VOCABULARIES[:era][:license].attribution_4_0_international
+      uo.item_type = CONTROLLED_VOCABULARIES[:era][:item_type].article
+      uo.publication_status = [CONTROLLED_VOCABULARIES[:era][:publication_status].draft,
+                               CONTROLLED_VOCABULARIES[:era][:publication_status].submitted]
       uo.subject = ['Items']
       uo.add_to_path(@community1.id, @collection1.id)
       uo.add_to_path(@community1.id, @collection2.id)

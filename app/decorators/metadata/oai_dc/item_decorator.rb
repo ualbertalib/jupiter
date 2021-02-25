@@ -23,11 +23,11 @@ class Metadata::OaiDc::ItemDecorator < ApplicationDecorator
   end
 
   def type
-    I18n.t("controlled_vocabularies.item_type_with_status.#{object.item_type_with_status_code}")
+    I18n.t("controlled_vocabularies.era.item_type_with_status.#{object.item_type_with_status_code}")
   end
 
   def languages
-    object.languages.map { |l| h.humanize_uri(:language, l) }
+    object.languages.map { |l| h.humanize_uri(:era, :language, l) }
   end
 
 end

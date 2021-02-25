@@ -15,9 +15,9 @@ module JupiterCore
 
   class VocabularyMissingError < StandardError; end
 
-  VISIBILITY_PUBLIC = CONTROLLED_VOCABULARIES[:visibility].public.freeze
-  VISIBILITY_PRIVATE = CONTROLLED_VOCABULARIES[:visibility].private.freeze
-  VISIBILITY_AUTHENTICATED = CONTROLLED_VOCABULARIES[:visibility].authenticated.freeze
+  VISIBILITY_PUBLIC = CONTROLLED_VOCABULARIES[:era][:visibility].public.freeze
+  VISIBILITY_PRIVATE = CONTROLLED_VOCABULARIES[:era][:visibility].private.freeze
+  VISIBILITY_AUTHENTICATED = CONTROLLED_VOCABULARIES[:era][:visibility].authenticated.freeze
 
   VISIBILITIES = [VISIBILITY_PUBLIC, VISIBILITY_PRIVATE, VISIBILITY_AUTHENTICATED].freeze
 end
