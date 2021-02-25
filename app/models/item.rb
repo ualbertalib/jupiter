@@ -25,12 +25,12 @@ class Item < JupiterCore::Doiable
 
   validates :created, presence: true
   validates :sort_year, presence: true
-  validates :languages, presence: true, uri: { in_vocabulary: :language }
-  validates :item_type, presence: true, uri: { in_vocabulary: :item_type }
+  validates :languages, presence: true, uri: { namespace: :era, in_vocabulary: :language }
+  validates :item_type, presence: true, uri: { namespace: :era, in_vocabulary: :item_type }
   validates :subject, presence: true
   validates :creators, presence: true
-  validates :license, uri: { in_vocabularies: [:license, :old_license] }
-  validates :publication_status, uri: { in_vocabulary: :publication_status }
+  validates :license, uri: { namespace: :era, in_vocabularies: [:license, :old_license] }
+  validates :publication_status, uri: { namespace: :era, in_vocabulary: :publication_status }
   validates :publication_status, presence: { message: :required_for_article },
                                  if: ->(item) { item.item_type == CONTROLLED_VOCABULARIES[:era][:item_type].article }
   validates :publication_status, absence: { message: :must_be_absent_for_non_articles },

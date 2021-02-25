@@ -26,8 +26,8 @@ class Thesis < JupiterCore::Doiable
   validates :dissertant, presence: true
   validates :graduation_date, presence: true
   validates :sort_year, presence: true
-  validates :language, uri: { in_vocabulary: :language }
-  validates :institution, uri: { in_vocabulary: :institution }
+  validates :language, uri: { namespace: :era, in_vocabulary: :language }
+  validates :institution, uri: { namespace: :era, in_vocabulary: :institution }
 
   validates :embargo_end_date, presence: true, if: ->(item) { item.visibility == VISIBILITY_EMBARGO }
   validates :embargo_end_date, absence: true, if: ->(item) { item.visibility != VISIBILITY_EMBARGO }
