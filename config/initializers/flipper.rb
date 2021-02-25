@@ -1,12 +1,7 @@
 Flipper.configure do |config|
   config.default do
-    if Rails.env.test?
-      require 'flipper/adapters/memory'
-      adapter = Flipper::Adapters::Memory.new
-    else
-      require 'flipper/adapters/active_record'
-      adapter = Flipper::Adapters::ActiveRecord.new
-    end
+    require 'flipper/adapters/active_record'
+    adapter = Flipper::Adapters::ActiveRecord.new
 
     # pass adapter to handy DSL instance
     Flipper.new(adapter)
@@ -23,7 +18,5 @@ Flipper::UI.configure do |config|
   config.fun = false
 end
 
-unless Rails.env.test?
-  require 'flipper/middleware/memoizer'
-  Rails.application.config.middleware.use Flipper::Middleware::Memoizer
-end
+require 'flipper/middleware/memoizer'
+Rails.application.config.middleware.use Flipper::Middleware::Memoizer

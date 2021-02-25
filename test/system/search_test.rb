@@ -194,6 +194,24 @@ class SearchTest < ApplicationSystemTestCase
     badge.assert_selector 'span.badge', text: 'Fancy Collection 1'
   end
 
+  test 'facet badge should have category when flipped' do
+    Flipper.enable(:facet_badge_category_name)
+    visit root_path
+    fill_in name: 'search', with: 'Fancy'
+    click_button 'Search'
+
+    # Click on facet
+    click_link 'Fancy Collection 1'
+
+    # A badge should be displayed for the enabled facet as a link that turns off facet
+    badges = find('div.jupiter-facet-badges')
+    badge = badges.find_link('a', text: 'Collections: Fancy Community/Fancy Collection 1',
+                                  href: search_path(search: 'Fancy'))
+    badge.assert_selector 'span.badge', text: 'Collections: Fancy Community/Fancy Collection 1'
+
+    Flipper.disable(:facet_badge_category_name)
+  end
+
   test 'anybody should be able to view community/collection hits via tabs' do
     visit root_path
     fill_in name: 'search', with: 'Fancy'
