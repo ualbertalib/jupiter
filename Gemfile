@@ -19,7 +19,7 @@ gem 'simple_form'
 # RDF stuff
 gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', tag: 'v0.2.4'
 gem 'rdf', '~> 3.1.12'
-gem 'rdf-n3'
+gem 'rdf-n3', '= 3.1.1'
 gem 'rdf-vocab', '~> 3.1.10'
 
 # Database stuff
@@ -57,7 +57,7 @@ gem 'flipper-ui', '~> 0.20.3' # UI for feature flags
 gem 'jbuilder' # generate JSON objects
 gem 'kaminari' # Pagination
 gem 'paper_trail' # Track object changes
-gem 'ransack' # ActiveRecord search/filter
+gem 'ransack', '= 2.4.1' # ActiveRecord search/filter
 gem 'uuidtools'
 gem 'voight_kampff' # bot detection
 gem 'wicked' # Multi-step wizard
