@@ -8,10 +8,10 @@ class Digitization::Book < ApplicationRecord
   validates :topical_subject, presence: true, unless: :temporal_subject? || :geographic_subject?
 
   validates :title, presence: true
-  validates :resource_type, presence: true, uri: { in_vocabulary: :digitization_resource_type }
-  validates :genre, presence: true, uri: { in_vocabulary: :digitization_genre }
-  validates :language, presence: true, uri: { in_vocabulary: :digitization_language }
-  validates :rights, presence: true, uri: { in_vocabulary: :digitization_rights }
+  validates :resource_type, presence: true, uri: { namespace: :digitization, in_vocabulary: :resource_type }
+  validates :genre, presence: true, uri: { namespace: :digitization, in_vocabulary: :genre }
+  validates :language, presence: true, uri: { namespace: :digitization, in_vocabulary: :language }
+  validates :rights, presence: true, uri: { namespace: :digitization, in_vocabulary: :rights }
 
   validates :date_issued, edtf: true
   validates :temporal_subject, edtf: true

@@ -4,9 +4,9 @@
 peel_monograph:
   peel_id: 4062
   title: 'Report on a rural survey of the agricultural, educational, social, and religious life'
-  resource_type: <%= CONTROLLED_VOCABULARIES[:digitization_resource_type].txt %>
-  genre: <%= [CONTROLLED_VOCABULARIES[:digitization_genre].programs] %>
-  language: <%= [CONTROLLED_VOCABULARIES[:digitization_language].english] %>
+  resource_type: <%= CONTROLLED_VOCABULARIES[:digitization][:resource_type].txt %>
+  genre: <%= [CONTROLLED_VOCABULARIES[:digitization][:genre].programs] %>
+  language: <%= [CONTROLLED_VOCABULARIES[:digitization][:language].english] %>
   temporal_subject: ['1914']
 
 # TODO: resource_type, genre, language, and a subject are required. These are placeholders.
@@ -15,11 +15,11 @@ henderson:
   run: 1
   part_number: 1
   title: "Henderson's Moose Jaw city directory for 1908"
-  resource_type: <%= CONTROLLED_VOCABULARIES[:digitization_resource_type].txt %>
-  genre: <%= [CONTROLLED_VOCABULARIES[:digitization_genre].programs] %>
-  language: <%= [CONTROLLED_VOCABULARIES[:digitization_language].english] %>
+  resource_type: <%= CONTROLLED_VOCABULARIES[:digitization][:resource_type].txt %>
+  genre: <%= [CONTROLLED_VOCABULARIES[:digitization][:genre].programs] %>
+  language: <%= [CONTROLLED_VOCABULARIES[:digitization][:language].english] %>
   temporal_subject: ['1908']
-  rights: <%= CONTROLLED_VOCABULARIES[:digitization_rights].in_copyright %>
+  rights: <%= CONTROLLED_VOCABULARIES[:digitization][:rights].in_copyright %>
 
 folk_fest:
   peel_id: 10572
@@ -28,9 +28,9 @@ folk_fest:
   alt_title: ['Annual Edmonton Folk Music Festival', 'Edmonton Folk Music Festival program book', 'Edmonton Folkfest', 'Edmonton Folk Fest', 'Edmonton Folk Festival']
   date_issued: ['1980']
   temporal_subject: ['1980']
-  resource_type: <%= CONTROLLED_VOCABULARIES[:digitization_resource_type].txt %>
-  genre: <%= [CONTROLLED_VOCABULARIES[:digitization_genre].programs] %>
-  language: <%= [CONTROLLED_VOCABULARIES[:digitization_language].english] %>
+  resource_type: <%= CONTROLLED_VOCABULARIES[:digitization][:resource_type].txt %>
+  genre: <%= [CONTROLLED_VOCABULARIES[:digitization][:genre].programs] %>
+  language: <%= [CONTROLLED_VOCABULARIES[:digitization][:language].english] %>
   publisher: ['http://viaf.org/viaf/148861489']
   place_of_publication: ['http://id.loc.gov/authorities/names/n79007225']
   extent: 'v. : ill. ; 22-27 cm.'
@@ -38,17 +38,17 @@ folk_fest:
   'Souvenir program of the festival, including biographical notes on and portraits and discographies of the performers, articles, etc.',
   'Thank you to Randy Reichardt and to the Edmonton Folk Music Festival for their generous contributions of print volumes of this title for digitization.'
   ]
-  geographic_subject: <%= [CONTROLLED_VOCABULARIES[:digitization_subject].edmonton] %>
-  rights: <%= CONTROLLED_VOCABULARIES[:digitization_rights].in_copyright %>
-  topical_subject: <%= [CONTROLLED_VOCABULARIES[:digitization_subject].edmonton_folk_music_festival, CONTROLLED_VOCABULARIES[:digitization_subject].folk_music_festivals] %>
+  geographic_subject: <%= [CONTROLLED_VOCABULARIES[:digitization][:subject].edmonton] %>
+  rights: <%= CONTROLLED_VOCABULARIES[:digitization][:rights].in_copyright %>
+  topical_subject: <%= [CONTROLLED_VOCABULARIES[:digitization][:subject].edmonton_folk_music_festival, CONTROLLED_VOCABULARIES[:digitization][:subject].folk_music_festivals] %>
 
 # TODO: resource_type, genre, language, and a subject are required. These are placeholders.
 government_document:
   peel_id: 10571
   part_number: 2
   title: 'The patrician'
-  resource_type: <%= CONTROLLED_VOCABULARIES[:digitization_resource_type].txt %>
-  genre: <%= [CONTROLLED_VOCABULARIES[:digitization_genre].programs] %>
-  language: <%= [CONTROLLED_VOCABULARIES[:digitization_language].english] %>
+  resource_type: <%= CONTROLLED_VOCABULARIES[:digitization][:resource_type].txt %>
+  genre: <%= [CONTROLLED_VOCABULARIES[:digitization][:genre].programs] %>
+  language: <%= [CONTROLLED_VOCABULARIES[:digitization][:language].english] %>
   temporal_subject: ['1914']
 
