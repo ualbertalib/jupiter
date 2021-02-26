@@ -57,7 +57,7 @@ gem 'flipper-ui', '~> 0.20.3' # UI for feature flags
 gem 'jbuilder' # generate JSON objects
 gem 'kaminari' # Pagination
 gem 'paper_trail' # Track object changes
-gem 'ransack', '= 2.4.1' # ActiveRecord search/filter
+gem 'ransack', '2.4.2' # ActiveRecord search/filter
 gem 'uuidtools'
 gem 'voight_kampff' # bot detection
 gem 'wicked' # Multi-step wizard
