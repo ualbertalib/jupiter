@@ -47,12 +47,10 @@ namespaces.each do |dir|
     vocab_items = vocab[vocab_name]
     raise VocabularyInvalidError, 'Vocab must contain key-value mappings' unless vocab_items.is_a?(Hash)
 
-    # vocabularies[vocab_name] = {
-    #   is_i18n: true,
-    #   data: nil
-    # }
-
-    vocabularies[vocab_name] = vocab_items
+    vocabularies[vocab_name] = {
+      is_i18n: true,
+      data: nil
+    }
     
     uri_mappings = vocab_items.invert
 
@@ -62,8 +60,7 @@ namespaces.each do |dir|
     # We additionally extend the object with a method for mapping URIs back to symbols, and extend `method_missing`
     # to provide better error messages.
 
-   # vocabularies[vocab_name][:data] = OpenStruct.new(vocab_items).tap do |vocab|
-   vocabularies[vocab_name] = OpenStruct.new(vocab_items).tap do |vocab|
+   vocabularies[vocab_name][:data] = OpenStruct.new(vocab_items).tap do |vocab|
       vocab.define_singleton_method(:from_uri) do |uri|
         uri_mappings[uri]
       end
@@ -72,14 +69,49 @@ namespaces.each do |dir|
       end
     end
   end
-  binding.pry
+
   controlled_vocabularies[namespace] = vocabularies
 end
-
-CONTROLLED_VOCABULARIES = controlled_vocabularies.freeze
-
+binding.pry
 
 ControlledVocabulary = Class.new do
-  def self.for(vocabularies, vocab)
+  binding.pry
+
+  CONTROLLED_VOCABULARIES = controlled_vocabularies.freeze
+
+  def self.lookup(namespace:, vocab:, symbol:)
+    raise ArgumentError, "Namespace not found: #{namespace}" unless CONTROLLED_VOCABULARIES.key?(namespace)
+    raise ArgumentError, "Vocabulary not found: #{vocab}" unless CONTROLLED_VOCABULARIES[namespace].key?(vocab)
+
+    CONTROLLED_VOCABULARIES.dig(namespace, vocab, :data, symbol)
+  end
+
+  def self.is_i18n?(namespace:, vocab:)
+    raise ArgumentError, "Namespace not found: #{namespace}" unless CONTROLLED_VOCABULARIES.key?(namespace)
+    raise ArgumentError, "Vocabulary not found: #{vocab}" unless CONTROLLED_VOCABULARIES[namespace].key?(vocab)
+   
+    CONTROLLED_VOCABULARIES.dig(namespace, vocab, :is_i18n)
+  end
+
+  CONTROLLED_VOCABULARIES.each do |namespace, vocabs|
+    # We create a simple responder that has methods for each vocabulary in the namespace
+    namespace_responder = Class.new do
+      vocabs.each do |vocab_name, values|
+        define_singleton_method vocab_name do
+          values[:data]
+        end
+      end
+    end
+
+    # And then we define a method on +ControlledVocabulary+ for each namespace.
+    # This gives us a nicer lookup DSL: +ControlledVocabulary.era.license.blah+ vs 
+    # +ControlledVocabulary.lookup(:era, :license).blah+. 
+    #
+    # This is also _faster_, because lookups
+    # that call the methods don't need to hash the keys once to check if they exist for error message purposes
+    # prior to hashing it again for the lookup.
+    define_singleton_method namespace do
+      namespace_responder
+    end
   end
 end
