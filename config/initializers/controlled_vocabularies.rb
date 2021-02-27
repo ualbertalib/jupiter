@@ -18,7 +18,7 @@
 # foo.raw.yml.
 #
 # All vocabularies are stored in filesystem paths of the form
-# +vocab/controlled_vocabularies/<vocabularies>/foo.{raw,i18n}.yml+, where foo becomes the vocabulary's name and
+# +config/controlled_vocabularies/<vocabularies>/foo.{raw,i18n}.yml+, where foo becomes the vocabulary's name and
 # <vocabularies> the vocabularies the vocab must be looked up in. All vocabularies are read into memory at application
 # boot, to avoid filesystem overhead during requests.
 #
@@ -49,8 +49,8 @@
 #        => "http://id.loc.gov/vocabulary/iso639-2/eng"
 #
 #
-# I can't believe rubocop is so dumb it doesn't know these are required args for any method_missing override. It
-# also gets CONSTANT scope definitions wrong in self.methods in Class.new position wrong, and doesn't get that
+# I can't believe rubocop is so dumb it doesn't know these are required args for any method_missing override, method OR block.
+# It also gets CONSTANT scope definitions wrong in self.methods in Class.new position wrong, and doesn't get that
 # you don't want respond_to_missing if you're just raising a more-specific error in method_missing, so I'm shutting all these off for
 # this file. Garbage effort, rubocop.
 #
