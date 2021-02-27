@@ -18,10 +18,10 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
         title: 'Item with files',
         creators: ['Joe Blow'],
         created: '1000000 BC',
-        languages: [CONTROLLED_VOCABULARIES[:era][:language].english],
-        item_type: CONTROLLED_VOCABULARIES[:era][:item_type].article,
-        publication_status: [CONTROLLED_VOCABULARIES[:era][:publication_status].published],
-        license: CONTROLLED_VOCABULARIES[:era][:license].attribution_4_0_international,
+        languages: [ControlledVocabulary.era.language.english],
+        item_type: ControlledVocabulary.era.item_type.article,
+        publication_status: [ControlledVocabulary.era.publication_status.published],
+        license: ControlledVocabulary.era.license.attribution_4_0_international,
         subject: ['Items']
       },
       files: [
@@ -89,7 +89,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
     radioactive_item.visibility = Item::VISIBILITY_EMBARGO
     radioactive_item.embargo_history = ['acl:embargoHistory1$ Item currently embargoed']
     radioactive_item.embargo_end_date = '2080-01-01T00:00:00.000Z'
-    radioactive_item.visibility_after_embargo = CONTROLLED_VOCABULARIES[:era][:visibility].public
+    radioactive_item.visibility_after_embargo = ControlledVocabulary.era.visibility.public
     ingest_files_for_entity(radioactive_item)
     radioactive_item.save!
     radioactive_item.reload
@@ -120,7 +120,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
       '2000-01-01T00:00:00.000Z.  Visibility during embargo was restricted and intended visibility after embargo was ' \
       'open'
     ]
-    radioactive_item.visibility_after_embargo = CONTROLLED_VOCABULARIES[:era][:visibility].public
+    radioactive_item.visibility_after_embargo = ControlledVocabulary.era.visibility.public
     ingest_files_for_entity(radioactive_item)
     radioactive_item.save!
     radioactive_item.reload
@@ -164,8 +164,8 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
   test 'should get item metadata graph with n3 serialization for published status example' do
     radioactive_item = items(:admin)
     radioactive_item.id = '93126aae-4b9d-4db2-98f1-4e04b40778cf'
-    radioactive_item.item_type = CONTROLLED_VOCABULARIES[:era][:item_type].article
-    radioactive_item.publication_status = [CONTROLLED_VOCABULARIES[:era][:publication_status].published]
+    radioactive_item.item_type = ControlledVocabulary.era.item_type.article
+    radioactive_item.publication_status = [ControlledVocabulary.era.publication_status.published]
     ingest_files_for_entity(radioactive_item)
     radioactive_item.save!
     radioactive_item.reload

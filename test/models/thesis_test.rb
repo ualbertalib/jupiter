@@ -93,7 +93,7 @@ class ThesisTest < ActiveSupport::TestCase
     thesis = Thesis.new
     thesis.tap do |unlocked_thesis|
       unlocked_thesis.visibility = JupiterCore::VISIBILITY_PUBLIC
-      unlocked_thesis.visibility_after_embargo = CONTROLLED_VOCABULARIES[:era][:visibility].draft
+      unlocked_thesis.visibility_after_embargo = ControlledVocabulary.era.visibility.draft
     end
 
     assert_not thesis.valid?

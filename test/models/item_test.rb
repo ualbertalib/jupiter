@@ -7,13 +7,13 @@ class ItemTest < ActiveSupport::TestCase
     collection = collections(:fantasy_books)
     item = Item.new(title: 'Item', owner_id: users(:admin).id, visibility: JupiterCore::VISIBILITY_PUBLIC,
                     created: '2017-02-02',
-                    languages: [CONTROLLED_VOCABULARIES[:era][:language].english],
+                    languages: [ControlledVocabulary.era.language.english],
                     creators: ['Joe Blow'],
                     subject: ['Things'],
-                    license: CONTROLLED_VOCABULARIES[:era][:license].attribution_4_0_international,
-                    item_type: CONTROLLED_VOCABULARIES[:era][:item_type].article,
-                    publication_status: [CONTROLLED_VOCABULARIES[:era][:publication_status].draft,
-                                         CONTROLLED_VOCABULARIES[:era][:publication_status].submitted])
+                    license: ControlledVocabulary.era.license.attribution_4_0_international,
+                    item_type: ControlledVocabulary.era.item_type.article,
+                    publication_status: [ControlledVocabulary.era.publication_status.draft,
+                                         ControlledVocabulary.era.publication_status.submitted])
     assert_difference -> { Item.public_items.count } do
       item.tap do |unlocked_item|
         unlocked_item.add_to_path(community.id, collection.id)
@@ -105,7 +105,7 @@ class ItemTest < ActiveSupport::TestCase
     item = Item.new
     item.tap do |unlocked_item|
       unlocked_item.visibility = JupiterCore::VISIBILITY_PUBLIC
-      unlocked_item.visibility_after_embargo = CONTROLLED_VOCABULARIES[:era][:visibility].draft
+      unlocked_item.visibility_after_embargo = ControlledVocabulary.era.visibility.draft
     end
 
     assert_not item.valid?
@@ -178,7 +178,7 @@ class ItemTest < ActiveSupport::TestCase
     assert_not item.valid?
     assert_includes item.errors[:languages], 'is not recognized'
 
-    item = Item.new(languages: [CONTROLLED_VOCABULARIES[:era][:language].english])
+    item = Item.new(languages: [ControlledVocabulary.era.language.english])
     assert_not item.valid?
     assert_not_includes item.errors.keys, :languages
   end
@@ -192,7 +192,7 @@ class ItemTest < ActiveSupport::TestCase
 
   test 'a rights statement must not be present if a license is present' do
     item = Item.new(rights: 'Share my work with everybody',
-                    license: CONTROLLED_VOCABULARIES[:era][:license].attribution_4_0_international)
+                    license: ControlledVocabulary.era.license.attribution_4_0_international)
 
     assert_not item.valid?
     assert_includes item.errors[:base], 'should not have both a license and a rights statement'
@@ -203,11 +203,11 @@ class ItemTest < ActiveSupport::TestCase
     assert_not item.valid?
     assert_includes item.errors[:license], 'is not recognized'
 
-    item = Item.new(license: CONTROLLED_VOCABULARIES[:era][:license].attribution_4_0_international)
+    item = Item.new(license: ControlledVocabulary.era.license.attribution_4_0_international)
     item.valid?
     assert_not_includes item.errors.keys, :license
 
-    item = Item.new(license: CONTROLLED_VOCABULARIES[:era][:old_license].attribution_3_0_international)
+    item = Item.new(license: ControlledVocabulary.era.old_license.attribution_3_0_international)
     item.valid?
     assert_not_includes item.errors.keys, :license
   end
@@ -225,59 +225,59 @@ class ItemTest < ActiveSupport::TestCase
   end
 
   test 'publication status is needed for articles' do
-    item = Item.new(item_type: CONTROLLED_VOCABULARIES[:era][:item_type].article)
+    item = Item.new(item_type: ControlledVocabulary.era.item_type.article)
     assert_not item.valid?
     assert_includes item.errors[:publication_status], 'is required for articles'
   end
 
   test 'publication status must come from controlled vocabulary' do
-    item = Item.new(item_type: CONTROLLED_VOCABULARIES[:era][:item_type].article,
+    item = Item.new(item_type: ControlledVocabulary.era.item_type.article,
                     publication_status: ['whatever'])
     assert_not item.valid?
     assert_includes item.errors[:publication_status], 'is not recognized'
   end
 
   test 'publication status must either be published or both draft/submitted' do
-    item = Item.new(item_type: CONTROLLED_VOCABULARIES[:era][:item_type].article,
-                    publication_status: [CONTROLLED_VOCABULARIES[:era][:publication_status].published])
+    item = Item.new(item_type: ControlledVocabulary.era.item_type.article,
+                    publication_status: [ControlledVocabulary.era.publication_status.published])
     item.valid?
     assert_not item.errors[:publication_status].present?
 
-    item = Item.new(item_type: CONTROLLED_VOCABULARIES[:era][:item_type].article,
-                    publication_status: [CONTROLLED_VOCABULARIES[:era][:publication_status].draft,
-                                         CONTROLLED_VOCABULARIES[:era][:publication_status].submitted])
+    item = Item.new(item_type: ControlledVocabulary.era.item_type.article,
+                    publication_status: [ControlledVocabulary.era.publication_status.draft,
+                                         ControlledVocabulary.era.publication_status.submitted])
     item.valid?
     assert_not item.errors[:publication_status].present?
 
-    item = Item.new(item_type: CONTROLLED_VOCABULARIES[:era][:item_type].article,
-                    publication_status: [CONTROLLED_VOCABULARIES[:era][:publication_status].draft])
+    item = Item.new(item_type: ControlledVocabulary.era.item_type.article,
+                    publication_status: [ControlledVocabulary.era.publication_status.draft])
     item.valid?
     assert_includes item.errors[:publication_status], 'is not recognized'
 
-    item = Item.new(item_type: CONTROLLED_VOCABULARIES[:era][:item_type].article,
-                    publication_status: [CONTROLLED_VOCABULARIES[:era][:publication_status].submitted])
+    item = Item.new(item_type: ControlledVocabulary.era.item_type.article,
+                    publication_status: [ControlledVocabulary.era.publication_status.submitted])
     item.valid?
     assert_includes item.errors[:publication_status], 'is not recognized'
   end
 
   test 'publication status must be absent for non-articles' do
-    item = Item.new(item_type: CONTROLLED_VOCABULARIES[:era][:item_type].book,
-                    publication_status: [CONTROLLED_VOCABULARIES[:era][:publication_status].published])
+    item = Item.new(item_type: ControlledVocabulary.era.item_type.book,
+                    publication_status: [ControlledVocabulary.era.publication_status.published])
     assert_not item.valid?
     assert_includes item.errors[:publication_status], 'must be absent for non-articles'
   end
 
   test 'item_type_with_status_code gets set correctly' do
-    item = Item.new(item_type: CONTROLLED_VOCABULARIES[:era][:item_type].article,
-                    publication_status: [CONTROLLED_VOCABULARIES[:era][:publication_status].published])
+    item = Item.new(item_type: ControlledVocabulary.era.item_type.article,
+                    publication_status: [ControlledVocabulary.era.publication_status.published])
     assert_equal :article_published, item.item_type_with_status_code
 
-    item = Item.new(item_type: CONTROLLED_VOCABULARIES[:era][:item_type].article,
-                    publication_status: [CONTROLLED_VOCABULARIES[:era][:publication_status].draft,
-                                         CONTROLLED_VOCABULARIES[:era][:publication_status].submitted])
+    item = Item.new(item_type: ControlledVocabulary.era.item_type.article,
+                    publication_status: [ControlledVocabulary.era.publication_status.draft,
+                                         ControlledVocabulary.era.publication_status.submitted])
     assert_equal :article_submitted, item.item_type_with_status_code
 
-    item = Item.new(item_type: CONTROLLED_VOCABULARIES[:era][:item_type].report)
+    item = Item.new(item_type: ControlledVocabulary.era.item_type.report)
     assert_equal :report, item.item_type_with_status_code
   end
 
@@ -325,9 +325,9 @@ class ItemTest < ActiveSupport::TestCase
                     visibility: JupiterCore::VISIBILITY_PUBLIC,
                     created: '1978-01-01',
                     owner_id: users(:admin).id,
-                    item_type: CONTROLLED_VOCABULARIES[:era][:item_type].report,
-                    languages: [CONTROLLED_VOCABULARIES[:era][:language].english],
-                    license: CONTROLLED_VOCABULARIES[:era][:license].attribution_4_0_international,
+                    item_type: ControlledVocabulary.era.item_type.report,
+                    languages: [ControlledVocabulary.era.language.english],
+                    license: ControlledVocabulary.era.license.attribution_4_0_international,
                     subject: ['Randomness'])
 
     freeze_time do
@@ -360,9 +360,9 @@ class ItemTest < ActiveSupport::TestCase
                     visibility: JupiterCore::VISIBILITY_PUBLIC,
                     created: '1978-01-01',
                     owner_id: users(:admin).id,
-                    item_type: CONTROLLED_VOCABULARIES[:era][:item_type].report,
-                    languages: [CONTROLLED_VOCABULARIES[:era][:language].english],
-                    license: CONTROLLED_VOCABULARIES[:era][:license].attribution_4_0_international,
+                    item_type: ControlledVocabulary.era.item_type.report,
+                    languages: [ControlledVocabulary.era.language.english],
+                    license: ControlledVocabulary.era.license.attribution_4_0_international,
                     subject: ['Randomness'])
 
     travel 1.minute do
@@ -407,9 +407,9 @@ class ItemTest < ActiveSupport::TestCase
                         visibility: JupiterCore::VISIBILITY_PUBLIC,
                         created: '1978-01-01',
                         owner_id: users(:admin).id,
-                        item_type: CONTROLLED_VOCABULARIES[:era][:item_type].report,
-                        languages: [CONTROLLED_VOCABULARIES[:era][:language].english],
-                        license: CONTROLLED_VOCABULARIES[:era][:license].attribution_4_0_international,
+                        item_type: ControlledVocabulary.era.item_type.report,
+                        languages: [ControlledVocabulary.era.language.english],
+                        license: ControlledVocabulary.era.license.attribution_4_0_international,
                         subject: ['Randomness'])
     end
 

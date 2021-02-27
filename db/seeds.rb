@@ -61,7 +61,7 @@ if Rails.env.development? || Rails.env.uat?
   creators = 10.times.map { "#{Faker::Creature::Cat.unique.name} #{Faker::Creature::Cat.unique.breed.gsub(/[ ,]+/, '-')}" }
   contributors = 10.times.map { Faker::FunnyName.unique.name_with_initial }
 
-  institutions = [CONTROLLED_VOCABULARIES[:era][:institution].uofa, CONTROLLED_VOCABULARIES[:era][:institution].st_stephens]
+  institutions = [ControlledVocabulary.era.institution.uofa, ControlledVocabulary.era.institution.st_stephens]
 
   THINGS.each_with_index do |thing, idx|
     if idx % 2 == 0
@@ -121,11 +121,11 @@ if Rails.env.development? || Rails.env.uat?
                     end
       # Probabilistically about 70% English, 20% French, 10% Ukrainian
       languages = if seed % 10 > 2
-                    [CONTROLLED_VOCABULARIES[:era][:language].english]
+                    [ControlledVocabulary.era.language.english]
                   elsif seed % 10 > 0
-                    [CONTROLLED_VOCABULARIES[:era][:language].french]
+                    [ControlledVocabulary.era.language.french]
                   else
-                    [CONTROLLED_VOCABULARIES[:era][:language].ukrainian]
+                    [ControlledVocabulary.era.language.ukrainian]
                   end
       licence_right = {}
 
@@ -142,30 +142,30 @@ if Rails.env.development? || Rails.env.uat?
       # Add the occasional double-author work
       item_attributes[:creators] << creators[(seed + 5) % 10] if i % 7 == 3
       if seed % 10 < 6
-        item_attributes[:license] = CONTROLLED_VOCABULARIES[:era][:license].attribution_4_0_international
+        item_attributes[:license] = ControlledVocabulary.era.license.attribution_4_0_international
       elsif seed % 10 < 7
-        item_attributes[:license] = CONTROLLED_VOCABULARIES[:era][:license].public_domain_mark_1_0
+        item_attributes[:license] = ControlledVocabulary.era.license.public_domain_mark_1_0
       elsif seed % 10 < 8
-        item_attributes[:license] = CONTROLLED_VOCABULARIES[:era][:old_license].attribution_3_0_international
+        item_attributes[:license] = ControlledVocabulary.era.old_license.attribution_3_0_international
       else
         item_attributes[:rights] = 'Share my stuff with everybody'
       end
       if idx % 3 == 0
-        item_attributes[:item_type] = CONTROLLED_VOCABULARIES[:era][:item_type].article
-        item_attributes[:publication_status] = [CONTROLLED_VOCABULARIES[:era][:publication_status].published]
+        item_attributes[:item_type] = ControlledVocabulary.era.item_type.article
+        item_attributes[:publication_status] = [ControlledVocabulary.era.publication_status.published]
       elsif idx % 3 == 1
-        item_attributes[:item_type] = CONTROLLED_VOCABULARIES[:era][:item_type].article
-        item_attributes[:publication_status] = [CONTROLLED_VOCABULARIES[:era][:publication_status].draft,
-                                           CONTROLLED_VOCABULARIES[:era][:publication_status].submitted]
+        item_attributes[:item_type] = ControlledVocabulary.era.item_type.article
+        item_attributes[:publication_status] = [ControlledVocabulary.era.publication_status.draft,
+                                           ControlledVocabulary.era.publication_status.submitted]
       else
-        item_attributes[:item_type] = CONTROLLED_VOCABULARIES[:era][:item_type].report
+        item_attributes[:item_type] = ControlledVocabulary.era.item_type.report
       end
 
       # Every once in a while, create a mondo-item with full, rich metadata to help view-related work
       if i == 8
         item_attributes[:title] = item_attributes[:title].gsub(/^The/, 'The complete')
         # Throw in a second language occasionally
-        item_attributes[:languages] << CONTROLLED_VOCABULARIES[:era][:language].other
+        item_attributes[:languages] << ControlledVocabulary.era.language.other
         # Why 3 and 7 below? Neither number shares a divisor with 10, ensuring a unique set
         item_attributes[:creators] += 4.times.map { |j| creators[(seed + 3 * j) % 10] }
         item_attributes[:contributors] += 3.times.map { |j| contributors[(seed2 + 7 * j) % 10] }
@@ -267,9 +267,9 @@ if Rails.env.development? || Rails.env.uat?
       created: rand(20_000).days.ago.to_s,
       title: "Private #{thing.pluralize}, public lives: a survey of social media trends",
       description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop,
-      languages: [CONTROLLED_VOCABULARIES[:era][:language].english],
-      license: CONTROLLED_VOCABULARIES[:era][:license].attribution_4_0_international,
-      item_type: CONTROLLED_VOCABULARIES[:era][:item_type].chapter,
+      languages: [ControlledVocabulary.era.language.english],
+      license: ControlledVocabulary.era.license.attribution_4_0_international,
+      item_type: ControlledVocabulary.era.item_type.chapter,
       subject: [thing.capitalize, 'Privacy'],
       doi: "doi:bogus-#{Time.current.utc.iso8601(3)}"
     ).tap do |uo|
@@ -285,9 +285,9 @@ if Rails.env.development? || Rails.env.uat?
       created: rand(20_000).days.ago.to_s,
       title: "Everything You Need To Know About: University of Alberta and #{thing.pluralize}!",
       description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop,
-      languages: [CONTROLLED_VOCABULARIES[:era][:language].english],
-      license: CONTROLLED_VOCABULARIES[:era][:license].attribution_4_0_international,
-      item_type: CONTROLLED_VOCABULARIES[:era][:item_type].report,
+      languages: [ControlledVocabulary.era.language.english],
+      license: ControlledVocabulary.era.license.attribution_4_0_international,
+      item_type: ControlledVocabulary.era.item_type.report,
       subject: [thing.capitalize, 'CCID'],
       doi: "doi:bogus-#{Time.current.utc.iso8601(3)}"
     ).tap do |uo|
@@ -303,15 +303,15 @@ if Rails.env.development? || Rails.env.uat?
       created: rand(20_000).days.ago.to_s,
       title: "Embargo and #{Faker::Address.country}: were the #{thing.pluralize} left behind?",
       description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop,
-      languages: [CONTROLLED_VOCABULARIES[:era][:language].english],
-      license: CONTROLLED_VOCABULARIES[:era][:license].attribution_4_0_international,
-      item_type: CONTROLLED_VOCABULARIES[:era][:item_type].conference_workshop_presentation,
+      languages: [ControlledVocabulary.era.language.english],
+      license: ControlledVocabulary.era.license.attribution_4_0_international,
+      item_type: ControlledVocabulary.era.item_type.conference_workshop_presentation,
       subject: [thing.capitalize, 'Embargoes'],
       doi: "doi:bogus-#{Time.current.utc.iso8601(3)}"
     ).tap do |uo|
       uo.add_to_path(community.id, item_collection.id)
       uo.embargo_end_date = 20.years.from_now.to_date
-      uo.visibility_after_embargo = CONTROLLED_VOCABULARIES[:era][:visibility].public
+      uo.visibility_after_embargo = ControlledVocabulary.era.visibility.public
       uo.save!
     end
 
@@ -323,15 +323,15 @@ if Rails.env.development? || Rails.env.uat?
       created: rand(20_000).days.ago.to_s,
       title: "Former embargo of #{Faker::Address.country}: the day the #{thing.pluralize} were free",
       description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop,
-      languages: [CONTROLLED_VOCABULARIES[:era][:language].english],
-      license: CONTROLLED_VOCABULARIES[:era][:license].attribution_4_0_international,
-      item_type: CONTROLLED_VOCABULARIES[:era][:item_type].dataset,
+      languages: [ControlledVocabulary.era.language.english],
+      license: ControlledVocabulary.era.license.attribution_4_0_international,
+      item_type: ControlledVocabulary.era.item_type.dataset,
       subject: [thing.capitalize, 'Freedom'],
       doi: "doi:bogus-#{Time.current.utc.iso8601(3)}"
     ).tap do |uo|
       uo.add_to_path(community.id, item_collection.id)
       uo.embargo_end_date = 2.days.ago.to_date
-      uo.visibility_after_embargo = CONTROLLED_VOCABULARIES[:era][:visibility].public
+      uo.visibility_after_embargo = ControlledVocabulary.era.visibility.public
       uo.save!
     end
 
@@ -343,9 +343,9 @@ if Rails.env.development? || Rails.env.uat?
       created: rand(20_000).days.ago.to_s,
       title: "Impact of non-admin users on #{thing.pluralize}",
       description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop,
-      languages: [CONTROLLED_VOCABULARIES[:era][:language].english],
-      license: CONTROLLED_VOCABULARIES[:era][:license].attribution_4_0_international,
-      item_type: CONTROLLED_VOCABULARIES[:era][:item_type].learning_object,
+      languages: [ControlledVocabulary.era.language.english],
+      license: ControlledVocabulary.era.license.attribution_4_0_international,
+      item_type: ControlledVocabulary.era.item_type.learning_object,
       subject: [thing.capitalize, 'Equality'],
       # Add a temporal subject
       temporal_subjects: ['The 1950s'],
@@ -364,9 +364,9 @@ if Rails.env.development? || Rails.env.uat?
       title: "Multi-collection random images of #{thing.pluralize}",
       description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop,
       # No linguistic content
-      languages: [CONTROLLED_VOCABULARIES[:era][:language].no_linguistic_content],
-      license: CONTROLLED_VOCABULARIES[:era][:license].attribution_4_0_international,
-      item_type: CONTROLLED_VOCABULARIES[:era][:item_type].image,
+      languages: [ControlledVocabulary.era.language.no_linguistic_content],
+      license: ControlledVocabulary.era.license.attribution_4_0_international,
+      item_type: ControlledVocabulary.era.item_type.image,
       subject: [thing.capitalize, 'Randomness', 'Pictures'],
       # Add a spacial subject
       spatial_subjects: ['Onoway'],
@@ -432,16 +432,16 @@ if Rails.env.development? || Rails.env.uat?
       '118(9), 5562-5578. http://doi.org/10.1002/jgra.50531',
       'dcterms:isVersionOf2$ Another version'
     ],
-    languages: [CONTROLLED_VOCABULARIES[:era][:language].no_linguistic_content, CONTROLLED_VOCABULARIES[:era][:language].french],
+    languages: [ControlledVocabulary.era.language.no_linguistic_content, ControlledVocabulary.era.language.french],
     related_link: 'dcterms:relation1$ http://doi.org/10.1007/xxxxxx-xxx-xxxx-x',
     source: 'dcterms:source1$ Some source',
     spatial_subjects: ['dcterms:spatial1$ Canada', 'dcterms:spatial2$ Nicaragua'],
     temporal_subjects: ['dcterms:temporal1$ Holocene', 'dcterms:temporal2$ Holocene'],
     title: 'dcterms:title1$ Some Title for Item',
     alternative_title: 'dcterms:alternative1$ Some Alternative Title',
-    item_type: CONTROLLED_VOCABULARIES[:era][:item_type].image,
+    item_type: ControlledVocabulary.era.item_type.image,
     depositor: 'eraadmi@ualberta.ca',
-    license: CONTROLLED_VOCABULARIES[:era][:license].attribution_sharealike_4_0_international,
+    license: ControlledVocabulary.era.license.attribution_sharealike_4_0_international,
     fedora3_uuid: 'uuid:97b1a8e2-a4b9-4941-b6ed-c4730f0a2a61',
     fedora3_handle: 'http://hdl.handle.net/10402/era.33419',
     hydra_noid: 'cgq67jr26k',
@@ -498,7 +498,7 @@ if Rails.env.development? || Rails.env.uat?
       visibility: Item::VISIBILITY_EMBARGO,
       embargo_history: ['acl:embargoHistory1$ Item currently embargoed'],
       embargo_end_date: '2080-01-01T00:00:00.000Z',
-      visibility_after_embargo: CONTROLLED_VOCABULARIES[:era][:visibility].public
+      visibility_after_embargo: ControlledVocabulary.era.visibility.public
     )
   ).tap do |item|
     # Attach files
@@ -529,7 +529,7 @@ if Rails.env.development? || Rails.env.uat?
         '2000-01-01T00:00:00.000Z.  Visibility during embargo was restricted and intended visibility after embargo '\
         'was open'
       ],
-      visibility_after_embargo: CONTROLLED_VOCABULARIES[:era][:visibility].public
+      visibility_after_embargo: ControlledVocabulary.era.visibility.public
     )
   ).tap do |item|
     # Attach files
@@ -551,8 +551,8 @@ if Rails.env.development? || Rails.env.uat?
     base_radioactive_item_values.merge(
       id: '93126aae-4b9d-4db2-98f1-4e04b40778cf',
       # The value for publication_status published only appears for article item type
-      item_type: CONTROLLED_VOCABULARIES[:era][:item_type].article,
-      publication_status: [CONTROLLED_VOCABULARIES[:era][:publication_status].published]
+      item_type: ControlledVocabulary.era.item_type.article,
+      publication_status: [ControlledVocabulary.era.publication_status.published]
     )
   ).tap do |item|
     # Attach files
@@ -601,7 +601,7 @@ base_radioactive_thesis_values = {
   'Thai ก-๎ Burmese က-ၙ Khmer ក-៹ Korean 가-힣 Bengali অ-ৱ // Spanish áéíóúüñ French àâçèéêëîïôùûü Portuguese ' \
   'àáâãçéêíóôõú Hindi ऄ-ॿ Pujabi ਅ-ੴ Mandarin 海萵苣白菜冬瓜韭菜竹筍生菜大頭菜豆薯銀甜菜莧菜豌豆蒲公英蔥豌豆苗亞羅婆羅門參西葫蘆 ' \
   '小豆辣根土豆 Japanese アオサメロンキャベツニラ竹シュートレタスルタバガのクズイモ銀ビートアマランスエンドウタンポポねぎ',
-  language: CONTROLLED_VOCABULARIES[:era][:language].english,
+  language: ControlledVocabulary.era.language.english,
   date_accepted: '2014-12-23T15:33:25Z',
   date_submitted: '2014-12-23T14:50:01Z',
   degree: 'bibo:degree1$ Doctor of Philosophy',
@@ -654,7 +654,7 @@ Thesis.new(
     visibility: Thesis::VISIBILITY_EMBARGO,
     embargo_history: ['acl:embargoHistory1$ Thesis currently embargoed'],
     embargo_end_date: '2080-01-01T00:00:00.000Z',
-    visibility_after_embargo: CONTROLLED_VOCABULARIES[:era][:visibility].public
+    visibility_after_embargo: ControlledVocabulary.era.visibility.public
   )
 ).tap do |thesis|
   # Attach files
@@ -682,7 +682,7 @@ Thesis.new(
       '2016-06-15T06:00:00.000Z.  Visibility during embargo was restricted and intended visibility after embargo ' \
       'was open'
     ],
-    visibility_after_embargo: CONTROLLED_VOCABULARIES[:era][:visibility].public
+    visibility_after_embargo: ControlledVocabulary.era.visibility.public
   )
 ).tap do |thesis|
   # Attach files

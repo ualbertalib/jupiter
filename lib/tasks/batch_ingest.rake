@@ -91,26 +91,26 @@ def item_ingest(item_data, index, csv_directory)
     unlocked_obj.alternative_title = item_data[:alternate_title]
 
     if item_data[:type].present?
-      unlocked_obj.item_type = CONTROLLED_VOCABULARIES[:era][:item_type].send(item_data[:type].to_sym)
+      unlocked_obj.item_type = ControlledVocabulary.era.item_type.send(item_data[:type].to_sym)
     end
 
     # If item type is an article, we need to add an array of statuses to the publication status field...
     if item_data[:type] == 'article' && ['draft', 'published'].include?(item_data[:publication_status])
       unlocked_obj.publication_status = if item_data[:publication_status] == 'draft'
                                           [
-                                            CONTROLLED_VOCABULARIES[:era][:publication_status].draft,
-                                            CONTROLLED_VOCABULARIES[:era][:publication_status].submitted
+                                            ControlledVocabulary.era.publication_status.draft,
+                                            ControlledVocabulary.era.publication_status.submitted
                                           ]
                                         else
                                           [
-                                            CONTROLLED_VOCABULARIES[:era][:publication_status].published
+                                            ControlledVocabulary.era.publication_status.published
                                           ]
                                         end
     end
 
     if item_data[:languages].present?
       unlocked_obj.languages = item_data[:languages].split('|').map do |language|
-        CONTROLLED_VOCABULARIES[:era][:language].send(language.to_sym) if language.present?
+        ControlledVocabulary.era.language.send(language.to_sym) if language.present?
       end
     end
 
@@ -121,12 +121,12 @@ def item_ingest(item_data, index, csv_directory)
 
     # Handle visibility and embargo logic
     if item_data[:visibility].present?
-      unlocked_obj.visibility = CONTROLLED_VOCABULARIES[:era][:visibility].send(item_data[:visibility].to_sym)
+      unlocked_obj.visibility = ControlledVocabulary.era.visibility.send(item_data[:visibility].to_sym)
     end
 
     if item_data[:visibility_after_embargo].present?
       unlocked_obj.visibility_after_embargo =
-        CONTROLLED_VOCABULARIES[:era][:visibility].send(item_data[:visibility_after_embargo].to_sym)
+        ControlledVocabulary.era.visibility.send(item_data[:visibility_after_embargo].to_sym)
     end
 
     unlocked_obj.embargo_end_date = item_data[:embargo_end_date].to_date if item_data[:embargo_end_date].present?
@@ -134,8 +134,8 @@ def item_ingest(item_data, index, csv_directory)
     # Handle license vs rights
     if item_data[:license].present?
       unlocked_obj.license =
-        CONTROLLED_VOCABULARIES[:era][:license].send(item_data[:license].to_sym) ||
-        CONTROLLED_VOCABULARIES[:era][:old_license].send(item_data[:license].to_sym)
+        ControlledVocabulary.era.license.send(item_data[:license].to_sym) ||
+        ControlledVocabulary.era.old_license.send(item_data[:license].to_sym)
     end
     unlocked_obj.rights = item_data[:license_text]
 
@@ -186,7 +186,7 @@ def thesis_ingest(thesis_data, index, csv_directory, checksums)
 
     if thesis_data[:language].present?
       unlocked_obj.language =
-        CONTROLLED_VOCABULARIES[:era][:language].send(thesis_data[:language].to_sym)
+        ControlledVocabulary.era.language.send(thesis_data[:language].to_sym)
     end
 
     unlocked_obj.dissertant = thesis_data[:author] if thesis_data[:author].present?
@@ -206,11 +206,11 @@ def thesis_ingest(thesis_data, index, csv_directory, checksums)
     unlocked_obj.abstract = thesis_data[:abstract]
 
     # Handle visibility and embargo logic
-    unlocked_obj.visibility = CONTROLLED_VOCABULARIES[:era][:visibility].send(:embargo)
+    unlocked_obj.visibility = ControlledVocabulary.era.visibility.send(:embargo)
 
     if thesis_data[:date_of_embargo].present?
       unlocked_obj.visibility_after_embargo =
-        CONTROLLED_VOCABULARIES[:era][:visibility].send(:public)
+        ControlledVocabulary.era.visibility.send(:public)
     end
 
     if thesis_data[:date_of_embargo].present?
@@ -235,7 +235,7 @@ def thesis_ingest(thesis_data, index, csv_directory, checksums)
 
     unlocked_obj.degree = thesis_data[:degree] if thesis_data[:degree].present?
     unlocked_obj.thesis_level = thesis_data[:degree_level] if thesis_data[:degree_level].present?
-    unlocked_obj.institution = CONTROLLED_VOCABULARIES[:era][:institution].send(:uofa)
+    unlocked_obj.institution = ControlledVocabulary.era.institution.send(:uofa)
     unlocked_obj.specialization = thesis_data[:specialization] if thesis_data[:specialization].present?
 
     unlocked_obj.subject = thesis_data[:keywords].split('|') if thesis_data[:keywords].present?

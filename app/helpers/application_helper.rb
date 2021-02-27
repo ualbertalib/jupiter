@@ -6,10 +6,12 @@ module ApplicationHelper
   end
 
   def humanize_uri(namespace, vocab, uri)
-    code = CONTROLLED_VOCABULARIES[namespace][vocab].from_uri(uri)
-    return nil if code.nil?
+    val, is_i18n = ControlledVocabulary.value_from_uri(namespace: namespace, vocab: vocab, uri: uri)
+    return nil if val.nil?
 
-    humanize_uri_code(namespace, vocab, code)
+    return val unless is_i18n
+
+    humanize_uri_code(namespace, vocab, val)
   end
 
   def help_tooltip(text)
