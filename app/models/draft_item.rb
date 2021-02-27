@@ -181,7 +181,7 @@ class DraftItem < ApplicationRecord
   # Maps Language names to ControlledVocabulary.era.language URIs
   def languages_as_uri
     languages.pluck(:name).map do |language|
-      ControlledVocabulary.era.language.send(language)
+      ControlledVocabulary.era.language.from_value(language)
     end
   end
 
@@ -205,9 +205,9 @@ class DraftItem < ApplicationRecord
     code = LICENSE_TO_URI_CODE.fetch(license.to_sym)
 
     begin
-      ControlledVocabulary.era.license.send(code)
+      ControlledVocabulary.era.license.from_value(code)
     rescue JupiterCore::VocabularyMissingError
-      ControlledVocabulary.era.old_license.send(code)
+      ControlledVocabulary.era.old_license.from_value(code)
     end
   end
 
@@ -235,7 +235,7 @@ class DraftItem < ApplicationRecord
   # Maps Type names to ControlledVocabulary.era.item_type
   def item_type_as_uri
     code = ITEM_TYPE_TO_URI_CODE.fetch(type.name.to_sym)
-    ControlledVocabulary.era.item_type.send(code)
+    ControlledVocabulary.era.item_type.from_value(code)
   end
 
   def item_type_for_uri(uri, status:)
@@ -264,7 +264,7 @@ class DraftItem < ApplicationRecord
   def visibility_as_uri
     # Can't have a private or draft visibilty so no mappings for this
     code = VISIBILITY_TO_URI_CODE.fetch(visibility.to_sym)
-    ControlledVocabulary.era.visibility.send(code)
+    ControlledVocabulary.era.visibility.from_value(code)
   end
 
   def visibility_for_uri(uri)
@@ -280,7 +280,7 @@ class DraftItem < ApplicationRecord
     return nil unless embargo?
 
     code = VISIBILITY_AFTER_EMBARGO_TO_URI_CODE.fetch(visibility_after_embargo.to_sym)
-    ControlledVocabulary.era.visibility.send(code)
+    ControlledVocabulary.era.visibility.from_value(code)
   end
 
   def visibility_after_embargo_for_uri(uri)

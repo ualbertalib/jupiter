@@ -6,6 +6,9 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+– Refactored Controlled Vocabulary support to allow for new, raw vocabs. 
+See config/initializers/controlled_vocabularies.rb for details of the new API.
+
 ### Added
 - Initialize disabled ReadOnlyMode [#2100](https://github.com/ualbertalib/jupiter/issues/2100)
 - Added highlighting of terms within search results descriptions [#1800](https://github.com/ualbertalib/jupiter/issues/1800)

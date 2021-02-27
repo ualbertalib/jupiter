@@ -94,7 +94,7 @@ namespaces.each do |dir|
         uri_mappings[uri]
       end
       vocab_responder.define_singleton_method(:from_value) do |value|
-        vocab_items[value]
+        vocab_items[value.to_sym]
       end
       vocab_responder.define_singleton_method(:method_missing) do |name, *args, &block|
         super(name, *args, &block) || (raise JupiterCore::VocabularyMissingError, "Unknown #{vocab_name} key: #{name}")

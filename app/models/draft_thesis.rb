@@ -138,7 +138,7 @@ class DraftThesis < ApplicationRecord
   def language_as_uri
     return nil if language&.name.blank?
 
-    ControlledVocabulary.era.language.send(language.name)
+    ControlledVocabulary.era.language.from_value(language.name)
   end
 
   def language_for_uri(uri)
@@ -157,7 +157,7 @@ class DraftThesis < ApplicationRecord
   def visibility_as_uri
     # Can't have a private or draft visibilty so no mappings for this
     code = VISIBILITY_TO_URI_CODE.fetch(visibility.to_sym)
-    ControlledVocabulary.era.visibility.send(code)
+    ControlledVocabulary.era.visibility.from_value(code)
   end
 
   def visibility_for_uri(uri)
@@ -172,7 +172,7 @@ class DraftThesis < ApplicationRecord
   def institution_as_uri
     return nil if institution&.name.blank?
 
-    ControlledVocabulary.era.institution.send(institution.name)
+    ControlledVocabulary.era.institution.from_value(institution.name)
   end
 
   def institution_for_uri(uri)
