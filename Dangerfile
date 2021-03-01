@@ -32,12 +32,12 @@ cl = cl.split("## [Unreleased]").last.split("## [").first
 # remove empty lines
 cl.gsub! /^$\n/, ''
 
-# remove headers
-cl.gsub! /^###.+\n*/, ''
+# look for possibly overly-short CHANGELOG entry at the top and warn reviewers to consider requesting more detail if it's present.
+# Not making this a hard fail, as this is easily tripped up by hyphens and unless we get really fussy about using
+# special marker characters to begin and end entries or disallow intra-entry linebreaks (which is anti-readability), I can't
+# see an easy way to make this foolproof
 
-# remove lines with a link
-cl.gsub! /^.+\]\(https:\/\/github.com\/ualbertalib\/jupiter\/.+\n*/, ''
-
-unless cl.empty?
-  fail("The following CHANGELOG entries are missing a link to a PR/issue:\n#{cl}", sticky: false)
+if cl.split(/[–-]/)[1].split.count < 10
+  warn("This CHANGELOG entry seems quite short. Reviewers, please check that it contains enough information, and request
+  expansion if it seems unreasonably brief.", sticky: false)
 end
