@@ -17,7 +17,7 @@ class AdminBatchIngestsTest < ApplicationSystemTestCase
     assert_selector 'h1', text: 'Batch Ingests'
   end
 
-  # TODO:
+  # TODO: Add tests later
   # test 'creating a Batch ingest' do
   #   visit admin_batch_ingests_url
   #   click_on 'New Batch Ingest'

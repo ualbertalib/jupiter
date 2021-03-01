@@ -22,7 +22,7 @@ class Admin::BatchIngestsControllerTest < ActionDispatch::IntegrationTest
     get google_callback_admin_batch_ingests_url
 
     assert_response :redirect
-    assert_redirected_to %r(\Ahttps://accounts.google.com/o/oauth2/auth)
+    assert_redirected_to %r{\Ahttps://accounts.google.com/o/oauth2/auth}
   end
 
   test 'should get new with credentials' do

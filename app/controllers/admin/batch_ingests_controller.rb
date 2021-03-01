@@ -21,7 +21,7 @@ class Admin::BatchIngestsController < Admin::AdminController
       @access_token = google_credentials.access_token
       @batch_ingest = BatchIngest.new
     else
-      return redirect_to google_callback_admin_batch_ingests_path
+      redirect_to google_callback_admin_batch_ingests_path
     end
   end
 
@@ -52,7 +52,6 @@ class Admin::BatchIngestsController < Admin::AdminController
     # when job runs...it will open CSV, create batch ingest with download files
 
     # consume_spreadsheet(spreadsheet_id)
-
 
     @batch_ingest.assign_attributes(permitted_attributes(BatchIngest))
 
@@ -93,9 +92,9 @@ class Admin::BatchIngestsController < Admin::AdminController
   def google_authorization
     client_secrets = Google::APIClient::ClientSecrets.new(
       {
-        'web': {
-          'client_id': Rails.application.secrets.google_client_id,
-          'client_secret': Rails.application.secrets.google_client_secret
+        web: {
+          client_id: Rails.application.secrets.google_client_id,
+          client_secret: Rails.application.secrets.google_client_secret
         }
       }
     )
@@ -110,21 +109,20 @@ class Admin::BatchIngestsController < Admin::AdminController
   end
 
   def google_credentials
-    if session[:google_credentials] && session[:google_credentials]['access_token']
-      @google_credentials ||= (
-        auth = google_authorization.dup
-        auth.update_token!(session[:google_credentials])
+    return nil unless session[:google_credentials] && session[:google_credentials]['access_token']
 
-        if auth.expired?
-          auth.refresh! if session[:google_credentials]['refresh_token']
-          nil
-        else
-          auth
-        end
-      )
+    @google_credentials ||= begin
+      auth = google_authorization.dup
+      auth.update_token!(session[:google_credentials])
+
+      if auth.expired?
+        auth.refresh! if session[:google_credentials]['refresh_token']
+        nil
+      else
+        auth
+      end
     end
   end
-
 
   def consume_file(file_id)
     # TODO: Need this code for downloading files/spreadsheets
@@ -142,8 +140,6 @@ class Admin::BatchIngestsController < Admin::AdminController
   end
 
   def consume_spreadsheet(spreadsheet_id)
-
-
     require 'google/apis/sheets_v4'
     service = Google::Apis::SheetsV4::SheetsService.new
 
