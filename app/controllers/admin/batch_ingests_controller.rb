@@ -17,10 +17,12 @@ class Admin::BatchIngestsController < Admin::AdminController
 
   # GET /batch_ingests/new
   def new
-    return redirect_to google_callback_admin_batch_ingests_path if access_token.nil?
-
-    @access_token = access_token
-    @batch_ingest = BatchIngest.new
+    if google_credentials
+      @access_token = google_credentials.access_token
+      @batch_ingest = BatchIngest.new
+    else
+      return redirect_to google_callback_admin_batch_ingests_path
+    end
   end
 
   # POST /batch_ingests
@@ -49,12 +51,8 @@ class Admin::BatchIngestsController < Admin::AdminController
     # if good, then simply create batch ingest object and queue up a job
     # when job runs...it will open CSV, create batch ingest with download files
 
-    # drive.get_file(id)
     # consume_spreadsheet(spreadsheet_id)
-    # article.image.attach(
-    #   io: File.open('app/assets/images/news.jpg'),
-    #   filename: 'nw.jpg'
-    #   )
+
 
     @batch_ingest.assign_attributes(permitted_attributes(BatchIngest))
 
@@ -70,6 +68,29 @@ class Admin::BatchIngestsController < Admin::AdminController
   end
 
   def google_callback
+    auth_client = google_authorization.dup
+
+    if params['code'].nil?
+      auth_uri = auth_client.authorization_uri.to_s
+      redirect_to auth_uri
+    else
+      auth_client.code = params['code']
+      auth_client.fetch_access_token!
+      auth_client.client_secret = nil
+
+      session[:google_credentials] = {}
+      session[:google_credentials]['access_token'] = auth_client.access_token
+      session[:google_credentials]['refresh_token'] = auth_client.refresh_token
+      session[:google_credentials]['expires_in'] = auth_client.expires_in
+      session[:google_credentials]['issued_at'] = auth_client.issued_at
+
+      redirect_to new_admin_batch_ingest_path
+    end
+  end
+
+  private
+
+  def google_authorization
     client_secrets = Google::APIClient::ClientSecrets.new(
       {
         'web': {
@@ -78,42 +99,51 @@ class Admin::BatchIngestsController < Admin::AdminController
         }
       }
     )
-    auth_client = client_secrets.to_authorization
+    google_authorization = client_secrets.to_authorization
     scope = Google::Apis::DriveV3::AUTH_DRIVE
-    auth_client.update!(
+    google_authorization.update!(
       scope: scope,
       redirect_uri: google_callback_admin_batch_ingests_url
     )
 
-    if request['code'].nil?
-      auth_uri = auth_client.authorization_uri.to_s
-      redirect_to auth_uri
-    else
-      auth_client.code = request['code']
-      auth_client.fetch_access_token!
-      auth_client.client_secret = nil
-      session[:credentials] = auth_client.to_json
-      redirect_to new_admin_batch_ingest_path
+    google_authorization
+  end
+
+  def google_credentials
+    if session[:google_credentials] && session[:google_credentials]['access_token']
+      @google_credentials ||= (
+        auth = google_authorization.dup
+        auth.update_token!(session[:google_credentials])
+
+        if auth.expired?
+          auth.refresh! if session[:google_credentials]['refresh_token']
+          nil
+        else
+          auth
+        end
+      )
     end
   end
 
-  private
 
-  def access_token
-    return nil if !session.key?(:credentials) && !session[:credentials]
-
-    @access_token ||= JSON.parse(session[:credentials])['access_token']
-
+  def consume_file(file_id)
     # TODO: Need this code for downloading files/spreadsheets
     #  client_opts = JSON.parse(session[:credentials])["access_token"]
     #  auth_client = Signet::OAuth2::Client.new(client_opts)
     #  drive = Google::Apis::DriveV3::DriveService.new
     #  drive.authorization = auth_client
-
     #  drive
+    # drive.get_file(id)
+
+    # item.files.attach(
+    #   io: File.open('app/assets/images/news.jpg'),
+    #   filename: 'nw.jpg'
+    #   )
   end
 
   def consume_spreadsheet(spreadsheet_id)
+
+
     require 'google/apis/sheets_v4'
     service = Google::Apis::SheetsV4::SheetsService.new
 

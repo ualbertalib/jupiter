@@ -18,17 +18,25 @@ class Admin::BatchIngestsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to google_callback_admin_batch_ingests_url
   end
 
-  test 'should get new with credentials' do
-    controller.session[:credentials] = 'RANDOM'
-    get new_admin_batch_ingest_url
-    assert_response :success
-  end
-
-
   test 'should get google_callback' do
     get google_callback_admin_batch_ingests_url
+
     assert_response :redirect
-    # assert_redirected_to root_url
+    assert_redirected_to %r(\Ahttps://accounts.google.com/o/oauth2/auth)
+  end
+
+  test 'should get new with credentials' do
+    VCR.use_cassette('google_fetch_access_token', record: :none) do
+      get google_callback_admin_batch_ingests_url, params: {
+        code: 'CODE12345'
+      }
+    end
+
+    assert_response :redirect
+    assert_redirected_to new_admin_batch_ingest_url
+
+    follow_redirect!
+    assert_response :success
   end
 
   test 'should create batch_ingest' do
