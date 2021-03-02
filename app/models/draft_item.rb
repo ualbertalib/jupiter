@@ -204,11 +204,7 @@ class DraftItem < ApplicationRecord
 
     code = LICENSE_TO_URI_CODE.fetch(license.to_sym)
 
-    begin
-      ControlledVocabulary.era.license.from_value(code)
-    rescue JupiterCore::VocabularyMissingError
-      ControlledVocabulary.era.old_license.from_value(code)
-    end
+    ControlledVocabulary.era.license.from_value(code) || ControlledVocabulary.era.old_license.from_value(code)
   end
 
   def license_for_uri(uri)
