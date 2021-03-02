@@ -91,7 +91,7 @@ def item_ingest(item_data, index, csv_directory)
     unlocked_obj.alternative_title = item_data[:alternate_title]
 
     if item_data[:type].present?
-      unlocked_obj.item_type = ControlledVocabulary.era.item_type.from_value(item_data[:type].to_sym)
+      unlocked_obj.item_type = ControlledVocabulary.era.item_type.from_value(item_data[:type])
     end
 
     # If item type is an article, we need to add an array of statuses to the publication status field...
@@ -110,7 +110,7 @@ def item_ingest(item_data, index, csv_directory)
 
     if item_data[:languages].present?
       unlocked_obj.languages = item_data[:languages].split('|').map do |language|
-        ControlledVocabulary.era.language.from_value(language.to_sym) if language.present?
+        ControlledVocabulary.era.language.from_value(language) if language.present?
       end
     end
 
@@ -121,12 +121,12 @@ def item_ingest(item_data, index, csv_directory)
 
     # Handle visibility and embargo logic
     if item_data[:visibility].present?
-      unlocked_obj.visibility = ControlledVocabulary.era.visibility.from_value(item_data[:visibility].to_sym)
+      unlocked_obj.visibility = ControlledVocabulary.era.visibility.from_value(item_data[:visibility])
     end
 
     if item_data[:visibility_after_embargo].present?
       unlocked_obj.visibility_after_embargo =
-        ControlledVocabulary.era.visibility.from_value(item_data[:visibility_after_embargo].to_sym)
+        ControlledVocabulary.era.visibility.from_value(item_data[:visibility_after_embargo])
     end
 
     unlocked_obj.embargo_end_date = item_data[:embargo_end_date].to_date if item_data[:embargo_end_date].present?
@@ -134,8 +134,8 @@ def item_ingest(item_data, index, csv_directory)
     # Handle license vs rights
     if item_data[:license].present?
       unlocked_obj.license =
-        ControlledVocabulary.era.license.from_value(item_data[:license].to_sym) ||
-        ControlledVocabulary.era.old_license.from_value(item_data[:license].to_sym)
+        ControlledVocabulary.era.license.from_value(item_data[:license]) ||
+        ControlledVocabulary.era.old_license.from_value(item_data[:license])
     end
     unlocked_obj.rights = item_data[:license_text]
 
@@ -186,7 +186,7 @@ def thesis_ingest(thesis_data, index, csv_directory, checksums)
 
     if thesis_data[:language].present?
       unlocked_obj.language =
-        ControlledVocabulary.era.language.from_value(thesis_data[:language].to_sym)
+        ControlledVocabulary.era.language.from_value(thesis_data[:language])
     end
 
     unlocked_obj.dissertant = thesis_data[:author] if thesis_data[:author].present?

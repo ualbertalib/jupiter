@@ -124,16 +124,12 @@ namespaces.each do |dir|
 
     # For raw vocabs there is no method lookup, only from_uri and from_value
     vocabularies[vocab_name][:data] = Class.new do
-      # Ruby does something slightly weird with scope here, easier to give these in-class constants
-      VOCAB_ITEMS = vocab_items
-      URI_MAPPINGS = uri_mappings
-
-      def self.from_uri(uri)
-        URI_MAPPINGS[uri]
+      define_singleton_method :from_uri do |uri|
+        uri_mappings[uri]
       end
 
-      def self.from_value(value)
-        VOCAB_ITEMS[value]
+      define_singleton_method :from_value do |value|
+        vocab_items[value]
       end
     end
   end
@@ -190,10 +186,6 @@ ControlledVocabulary = Class.new do
     # And then we define a method on +ControlledVocabulary+ for each namespace which returns the responder.
     # This gives us a nicer lookup DSL: +ControlledVocabulary.era.license.blah+ vs
     # +ControlledVocabulary.lookup_vocab(namespace: :era, vocab: :license).blah+.
-    #
-    # This is also _faster_, because lookups
-    # that call the methods don't need to hash the keys once to check if they exist for error message purposes
-    # prior to hashing it again for the lookup.
     define_singleton_method namespace do
       namespace_responder
     end
