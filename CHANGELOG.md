@@ -1,10 +1,35 @@
 # Changelog
 All notable changes to Jupiter project will be documented in this file. Jupiter is a University of Alberta Library-based initiative to create a sustainable and extensible digital asset management system. Currently it is for phase 1 (Institutional Repository). https://era.library.ualberta.ca/.
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
-and releases in Jupiter project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and inspired by [approaches like this](https://github.com/apple/swift/blob/main/CHANGELOG.md)
+and releases in Jupiter project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html). 
+
+New entries in this file should aim to provide a meaningful amount of information in order to allow people to understand the change purely by reading this file, without relying on links to possibly-impermanent sources like Pull Request descriptions or issues.
 
 ## [Unreleased]
+
+– Refactored Controlled Vocabulary support to allow for new, raw vocabs without i18n translations. The motivation here is that
+we have a bunch of URIs we want to machine-map to human readable values, and it doesn't make sense to introduce intermediate symbols we'd have to cobble together somehow, plus that would involve polluting the i18n file with hundreds of new entries. 
+
+API Examples:
+
+```ruby
+      ControlledVocabulary.value_from_uri(namespace: :digitization, vocab: :location, uri: "http://id.loc.gov/authorities/names/n79007225")
+       => ["Edmonton (Alta.)", false]
+      ControlledVocabulary.uri_from_value(namespace: :digitization, vocab: :location, value: "Edmonton (Alta.)")
+       => "http://id.loc.gov/authorities/names/n79007225"
+
+      uri = "http://id.loc.gov/authorities/names/n79007225"
+      ControlledVocabulary.digitization.location.from_uri(uri)
+       => "Edmonton (Alta.)"
+      ControlledVocabulary.digitization.location.from_value("Edmonton (Alta.)")
+       => "http://id.loc.gov/authorities/names/n79007225"
+      ControlledVocabulary.era.language.english
+       => "http://id.loc.gov/vocabulary/iso639-2/eng"
+```
+
+Further discussion of the context can be found at [#2119](https://github.com/ualbertalib/jupiter/issues/2119)
+
 
 ### Added
 - Initialize disabled ReadOnlyMode [#2100](https://github.com/ualbertalib/jupiter/issues/2100)

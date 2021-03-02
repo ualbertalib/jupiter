@@ -83,7 +83,7 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
     radioactive_thesis.visibility = Thesis::VISIBILITY_EMBARGO
     radioactive_thesis.embargo_history = ['acl:embargoHistory1$ Thesis currently embargoed']
     radioactive_thesis.embargo_end_date = '2080-01-01T00:00:00.000Z'
-    radioactive_thesis.visibility_after_embargo = CONTROLLED_VOCABULARIES[:era][:visibility].public
+    radioactive_thesis.visibility_after_embargo = ControlledVocabulary.era.visibility.public
     ingest_files_for_entity(radioactive_thesis)
     radioactive_thesis.save!
     radioactive_thesis.reload
@@ -111,7 +111,7 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
       '2016-06-15T06:00:00.000Z.  Visibility during embargo was restricted and intended visibility after embargo was ' \
       'open'
     ]
-    radioactive_thesis.visibility_after_embargo = CONTROLLED_VOCABULARIES[:era][:visibility].public
+    radioactive_thesis.visibility_after_embargo = ControlledVocabulary.era.visibility.public
     ingest_files_for_entity(radioactive_thesis)
     radioactive_thesis.save!
     radioactive_thesis.reload

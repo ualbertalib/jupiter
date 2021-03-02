@@ -213,7 +213,7 @@ class HumanizedChangeSet
       next [] if change_item.nil?
 
       change_item.map do |publication_status|
-        CONTROLLED_VOCABULARIES[:era][:publication_status].from_uri(publication_status)
+        ControlledVocabulary.era.publication_status.from_uri(publication_status)
       end
     end
 

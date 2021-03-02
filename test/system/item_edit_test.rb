@@ -11,13 +11,13 @@ class ItemEditTest < ApplicationSystemTestCase
     item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
                     title: 'Book of Random',
                     owner_id: user.id,
-                    item_type: CONTROLLED_VOCABULARIES[:era][:item_type].book,
-                    languages: [CONTROLLED_VOCABULARIES[:era][:language].english],
+                    item_type: ControlledVocabulary.era.item_type.book,
+                    languages: [ControlledVocabulary.era.language.english],
                     creators: ['Jane Doe', 'Bob Smith'],
                     subject: ['Best Seller', 'Adventure'],
                     created: '2018-10-24',
                     description: 'Really random description about this random book',
-                    license: CONTROLLED_VOCABULARIES[:era][:license].attribution_4_0_international,
+                    license: ControlledVocabulary.era.license.attribution_4_0_international,
                     contributors: ['Sue Flowers', 'Jonny Green'])
                .tap do |uo|
       uo.add_to_path(community.id, collection.id)

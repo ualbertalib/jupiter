@@ -23,11 +23,11 @@ class DoiServiceTest < ActiveSupport::TestCase
 
     item = Item.new(title: 'Test Title', owner_id: @admin.id, visibility: JupiterCore::VISIBILITY_PUBLIC,
                     created: '2017-02-02',
-                    languages: [CONTROLLED_VOCABULARIES[:era][:language].english],
+                    languages: [ControlledVocabulary.era.language.english],
                     creators: ['Joe Blow'],
                     subject: ['Things'],
-                    license: CONTROLLED_VOCABULARIES[:era][:license].attribution_4_0_international,
-                    item_type: CONTROLLED_VOCABULARIES[:era][:item_type].book)
+                    license: ControlledVocabulary.era.license.attribution_4_0_international,
+                    item_type: ControlledVocabulary.era.item_type.book)
     item.tap do |unlocked_item|
       unlocked_item.add_to_path(community.id, collection.id)
       unlocked_item.save!

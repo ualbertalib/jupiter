@@ -4,11 +4,11 @@ class JupiterCore::Depositable < ApplicationRecord
 
   self.abstract_class = true
 
-  VISIBILITY_EMBARGO = CONTROLLED_VOCABULARIES[:era][:visibility].embargo.freeze
+  VISIBILITY_EMBARGO = ControlledVocabulary.era.visibility.embargo.freeze
   VISIBILITIES = (JupiterCore::VISIBILITIES + [VISIBILITY_EMBARGO]).freeze
-  VISIBILITIES_AFTER_EMBARGO = [CONTROLLED_VOCABULARIES[:era][:visibility].authenticated,
-                                CONTROLLED_VOCABULARIES[:era][:visibility].draft,
-                                CONTROLLED_VOCABULARIES[:era][:visibility].public].freeze
+  VISIBILITIES_AFTER_EMBARGO = [ControlledVocabulary.era.visibility.authenticated,
+                                ControlledVocabulary.era.visibility.draft,
+                                ControlledVocabulary.era.visibility.public].freeze
 
   validates :visibility, known_visibility: true
 
