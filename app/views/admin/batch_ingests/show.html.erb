@@ -11,11 +11,11 @@
 <p><%= t('.created_by') %> <%= @batch_ingest.user.name %></p>
 
 <h2><%= t('.spreadsheet') %></h2>
-<p><%= t('.id') %> <%= @batch_ingest.spreadsheet["id"] %></p>
-<p><%= t('.name') %> <%= @batch_ingest.spreadsheet["name"] %></p>
+<p><%= t('.id') %> <%= @batch_ingest.spreadsheet['id'] %></p>
+<p><%= t('.name') %> <%= @batch_ingest.spreadsheet['name'] %></p>
 
 <h2><%= t('.files') %></h2>
 <% @batch_ingest.files.each do |file| %>
-  <p><%= t('.id') %> <%= file["id"] %></p>
-  <p><%= t('.name') %> <%= file["name"] %></p>
+  <p><%= t('.id') %> <%= file['id'] %></p>
+  <p><%= t('.name') %> <%= file['name'] %></p>
 <% end %>

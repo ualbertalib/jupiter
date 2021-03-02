@@ -14,7 +14,7 @@ class AdminBatchIngestsTest < ApplicationSystemTestCase
 
   test 'visiting the index' do
     visit admin_batch_ingests_url
-    assert_selector 'h1', text: 'Batch Ingests'
+    assert_selector 'h1', text: I18n.t('admin.batch_ingests.index.header')
   end
 
   # TODO: Add tests later

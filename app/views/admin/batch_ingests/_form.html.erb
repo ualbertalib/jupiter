@@ -3,7 +3,7 @@
 
   <%= f.input :title, label: t('.title'), placeholder: t('.title_placeholder') %>
 
- <h2>Spreadsheet</h2>
+ <h2 class="mt-3"><%= t('.spreadsheet') %></h2>
   <div class="js-google-spreadsheet">
     <% if @batch_ingest.spreadsheet.present? %>
         <div>
@@ -13,13 +13,12 @@
         </div>
     <% end %>
   </div>
-  <%= button_tag 'Add Spreadsheet',
-      type: "button",
-      class: "btn-spreadsheet",
-      data: { access_token: @access_token }
-  %>
+  <%= button_tag t('.add_spreadsheet'),
+                 type: 'button',
+                 class: 'btn-spreadsheet',
+                 data: { access_token: @access_token } %>
 
-  <h2>Files</h2>
+  <h2 class="mt-3"><%= t('.files') %></h2>
   <div class="js-google-files-list">
     <% if @batch_ingest.files.present? %>
       <% @batch_ingest.files.each do |file| %>
@@ -31,11 +30,10 @@
       <% end %>
     <% end %>
   </div>
-  <%= button_tag 'Add Files',
-      type: "button",
-      class: "btn-files",
-      data: { access_token: @access_token }
-  %>
+  <%= button_tag t('.add_files'),
+                 type: 'button',
+                 class: 'btn-files',
+                 data: { access_token: @access_token } %>
 
    <div class="form-group text-right">
     <%= f.button :button,
