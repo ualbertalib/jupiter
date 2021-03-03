@@ -314,7 +314,7 @@ GEM
     raabro (1.4.0)
     racc (1.5.2)
     rack (2.2.3)
-    rack-protection (2.0.8.1)
+    rack-protection (2.1.0)
       rack
     rack-proxy (0.6.5)
       rack
@@ -444,10 +444,10 @@ GEM
       simplecov_json_formatter (~> 0.1)
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.2)
-    sinatra (2.0.8.1)
+    sinatra (2.1.0)
       mustermann (~> 1.0)
-      rack (~> 2.0)
-      rack-protection (= 2.0.8.1)
+      rack (~> 2.2)
+      rack-protection (= 2.1.0)
       tilt (~> 2.0)
     skylight (4.3.2)
       skylight-core (= 4.3.2)
@@ -585,7 +585,7 @@ DEPENDENCIES
   sidekiq-unique-jobs
   simple_form
   simplecov
-  sinatra (~> 2.0.8.1)
+  sinatra (~> 2.1.0)
   skylight
   spring
   spring-watcher-listen (~> 2.0.0)
