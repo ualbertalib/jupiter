@@ -75,7 +75,8 @@ class Digitization::BookTest < ActiveSupport::TestCase
   test 'dates must conform to EDTF format' do
     @document.assign_attributes(date_issued: ['INVALID DATE'], temporal_subject: ['INVALID DATE'])
     assert_not @document.valid?
-    assert_equal('does not conform to the Extended Date/Time Format standard', @document.errors[:temporal_subject].first)
+    assert_equal('does not conform to the Extended Date/Time Format standard',
+                 @document.errors[:temporal_subject].first)
     assert_equal('does not conform to the Extended Date/Time Format standard', @document.errors[:date_issued].first)
   end
 
