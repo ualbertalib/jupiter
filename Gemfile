@@ -51,7 +51,7 @@ gem 'addressable', '~> 2.7.0' # Replacement for the standard URI implementation
 gem 'differ' # Used to diff two strings
 gem 'draper'
 gem 'ezid-client', '~> 1.8.0'
-gem 'flipper', '~> 0.20.3' # Feature flags for Ruby
+gem 'flipper', '~> 0.20.4' # Feature flags for Ruby
 gem 'flipper-active_record', '~> 0.20.3' # Store feature flags in ActiveRecord
 gem 'flipper-ui', '~> 0.20.3' # UI for feature flags
 gem 'jbuilder' # generate JSON objects
