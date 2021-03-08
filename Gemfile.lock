@@ -197,7 +197,7 @@ GEM
       faraday (>= 0.8)
     faraday-net_http (1.0.1)
     ffi (1.13.1)
-    flipper (0.20.3)
+    flipper (0.20.4)
     flipper-active_record (0.20.3)
       activerecord (>= 5.0, < 7)
       flipper (~> 0.20.3)
@@ -541,7 +541,7 @@ DEPENDENCIES
   erb_lint (>= 0.0.35)
   ezid-client (~> 1.8.0)
   faker
-  flipper (~> 0.20.3)
+  flipper (~> 0.20.4)
   flipper-active_record (~> 0.20.3)
   flipper-ui (~> 0.20.3)
   haikunator
