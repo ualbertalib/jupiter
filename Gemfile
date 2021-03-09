@@ -52,7 +52,7 @@ gem 'differ' # Used to diff two strings
 gem 'draper'
 gem 'ezid-client', '~> 1.8.0'
 gem 'flipper', '~> 0.20.4' # Feature flags for Ruby
-gem 'flipper-active_record', '~> 0.20.3' # Store feature flags in ActiveRecord
+gem 'flipper-active_record', '~> 0.20.4' # Store feature flags in ActiveRecord
 gem 'flipper-ui', '~> 0.20.4' # UI for feature flags
 gem 'jbuilder' # generate JSON objects
 gem 'kaminari' # Pagination
