@@ -59,6 +59,12 @@
     embargo_history: embargoHistory
     visibility_after_embargo: visibilityAfterEmbargo
 
+# Trying to make ::RDF::Vocab::RDAU.P60550 less opaque
+- vocabulary: rdau
+  schema: 'http://rdaregistry.info/Elements/u/'
+  terms:
+    extent: extent.en
+
 - vocabulary: swrc
   schema: 'http://ontoware.org/swrc/ontology#'
   terms:

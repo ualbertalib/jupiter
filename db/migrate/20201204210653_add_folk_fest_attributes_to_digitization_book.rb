@@ -27,7 +27,7 @@ class AddFolkFestAttributesToDigitizationBook < ActiveRecord::Migration[6.0]
       t.language has_predicate: ::RDF::Vocab::DC.language
       t.publisher has_predicate: ::RDF::Vocab::MARCRelators.pbl
       t.place_of_publication has_predicate: ::RDF::Vocab::MARCRelators.pup
-      t.extent has_predicate: ::RDF::Vocab::RDAU.P60550
+      t.extent has_predicate: ::TERMS[:rdau].extent
       t.note has_predicate: ::RDF::Vocab::SKOS.note
       t.geographic_subject has_predicate: ::RDF::Vocab::DC11.coverage
       t.rights has_predicate: ::RDF::Vocab::DC11.rights
