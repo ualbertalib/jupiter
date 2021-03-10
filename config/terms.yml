@@ -63,7 +63,7 @@
 - vocabulary: rdau
   schema: 'http://rdaregistry.info/Elements/u/'
   terms:
-    extent: extent.en
+    extent: P60550
 
 - vocabulary: swrc
   schema: 'http://ontoware.org/swrc/ontology#'
