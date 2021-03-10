@@ -718,8 +718,26 @@ end
   Institution.create(name: institution_name)
 end
 
+11.times do |i|
+  Digitization::Book.create(peel_id: rand(1..3400), part_number: rand(1..100),
+    date_issued: [rand(1900..2020).to_s],
+    title: "#{Faker::Company.name} #{Faker::WorldCup.city} Music Festival",
+    alt_title: ["#{Faker::Hipster.sentence}"],
+    resource_type: ControlledVocabulary.digitization.resource_type.from_value("Text"),
+    genre: [ControlledVocabulary.digitization.genre.from_value("Programs (Publications)")],
+    language: [ControlledVocabulary.digitization.language.from_value("English")],
+    publisher: [ControlledVocabulary.digitization.publisher.from_value("Edmonton Folk Music Festival")],
+    place_of_publication: [ControlledVocabulary.digitization.location.from_value("Edmonton (Alta.)")],
+    extent: 'v. : ill. ; 22-27 cm.',
+    note: ['Souvenir program of the festival, including biographical notes on and portraits and discographies of the performers, articles, etc.', "#{Faker::Hipster.sentence}"],
+    temporal_subject: ['1981'], 
+    geographic_subject: [ControlledVocabulary.digitization.location.from_value("Edmonton (Alta.)")],
+    topical_subject: [ControlledVocabulary.digitization.subject.from_value("Folk music festivals")],
+    rights: ControlledVocabulary.digitization.rights.from_value("In Copyright")
+  ) # Folk Fest
+end
+
 Digitization::Book.create(peel_id: '4062') # monograph
-Digitization::Book.create(peel_id: '10572', part_number: '1') # Folk Fest
 Digitization::Book.create(peel_id: '10571', part_number: '2') # Government Document
 Digitization::Book.create(peel_id: '3178', run: '2', part_number: '12') # Henderson
 Digitization::Newspaper.create(publication_code: 'LSV', year: '1967', month: '03', day: '29')

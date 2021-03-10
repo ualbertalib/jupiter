@@ -50,6 +50,7 @@ gem 'aasm' # state-machine management
 gem 'addressable', '~> 2.7.0' # Replacement for the standard URI implementation
 gem 'differ' # Used to diff two strings
 gem 'draper'
+gem 'edtf', '~> 3.0', '>= 3.0.6' # parsing Extended Date/Time Format
 gem 'ezid-client', '~> 1.8.0'
 gem 'flipper', '~> 0.20.4' # Feature flags for Ruby
 gem 'flipper-active_record', '~> 0.20.4' # Store feature flags in ActiveRecord
