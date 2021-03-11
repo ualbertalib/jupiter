@@ -82,7 +82,7 @@ if Rails.env.development? || Rails.env.uat?
         set = (thing == 'cat') ? 'set4' : 'set1'
         url = Faker::Avatar.image(slug: thing, size: "100x100", format: "png", set: set)
         File.open(filename, 'wb') do |fo|
-          fo.write open(url).read
+          fo.write URI.open(url).read
         end
       end
     end
@@ -726,11 +726,11 @@ end
     resource_type: ControlledVocabulary.digitization.resource_type.from_value("Text"),
     genre: [ControlledVocabulary.digitization.genre.from_value("Programs (Publications)")],
     language: [ControlledVocabulary.digitization.language.from_value("English")],
-    publisher: [ControlledVocabulary.digitization.publisher.from_value("Edmonton Folk Music Festival")],
+    publisher: [ControlledVocabulary.digitization.subject.from_value("Edmonton Folk Music Festival")],
     place_of_publication: [ControlledVocabulary.digitization.location.from_value("Edmonton (Alta.)")],
     extent: 'v. : ill. ; 22-27 cm.',
     note: ['Souvenir program of the festival, including biographical notes on and portraits and discographies of the performers, articles, etc.', "#{Faker::Hipster.sentence}"],
-    temporal_subject: ['1981'], 
+    temporal_subject: ['1981'],
     geographic_subject: [ControlledVocabulary.digitization.location.from_value("Edmonton (Alta.)")],
     topical_subject: [ControlledVocabulary.digitization.subject.from_value("Folk music festivals")],
     rights: ControlledVocabulary.digitization.rights.from_value("In Copyright")
