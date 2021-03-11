@@ -14,7 +14,7 @@
 
   <% if @item.abstract.present? %>
     <li class="list-unstyled list-group-item-action">
-      <p title="<%= t('.abstract') %>"><%= @item.abstract %></p>
+      <p title="<%= t('.abstract') %>"><%= markdown(@item.abstract) %></p>
     </li>
   <% end %>
 

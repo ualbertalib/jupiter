@@ -23,7 +23,7 @@
 
   <% if @item.description.present? %>
     <li class="list-unstyled list-group-item-action">
-      <p title="<%= t('.description') %>"><%= @item.description %></p>
+      <p title="<%= t('.description') %>"><%= markdown(@item.description) %></p>
     </li>
   <% end %>
 

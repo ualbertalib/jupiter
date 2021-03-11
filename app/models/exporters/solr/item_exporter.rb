@@ -35,7 +35,6 @@ class Exporters::Solr::ItemExporter < Exporters::Solr::BaseExporter
   index :temporal_subjects, role: :search
   index :spatial_subjects, role: :search
 
-  index :description, type: :text, role: :search
   index :publisher, role: [:search, :facet]
 
   index :languages, role: [:search, :facet]
@@ -61,6 +60,12 @@ class Exporters::Solr::ItemExporter < Exporters::Solr::BaseExporter
 
   # Combine all the subjects for faceting
   custom_index :all_subjects, role: :facet, as: ->(item) { item.all_subjects }
+
+  # Description may contain markdown which isn't particularly useful in a search context.
+  custom_index :description, type: :text, role: [:search],
+                             as: lambda { |item|
+                                   Jupiter::StripMarkdown.render(item.description)
+                                 }
 
   default_sort index: :title, direction: :asc
 

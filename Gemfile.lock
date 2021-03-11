@@ -373,6 +373,7 @@ GEM
       rdf (~> 3.1)
       rexml (~> 3.2)
     rdoc (6.3.0)
+    redcarpet (3.5.1)
     redis (4.1.4)
     regexp_parser (2.0.3)
     request_store (1.5.0)
@@ -569,6 +570,7 @@ DEPENDENCIES
   rdf-isomorphic (~> 3.1.1)
   rdf-n3 (= 3.1.1)
   rdf-vocab (~> 3.1.10)
+  redcarpet (~> 3.5, >= 3.5.1)
   redis (~> 4.1)
   rollbar
   rsolr

@@ -1,5 +1,5 @@
 <% page_title(@community.title) %>
-<% page_description(@community.description) %>
+<% markdown(page_description(@community.description)) %>
 
 <div class="container mt-3">
   <%= render partial: 'show_breadcrumbs' %>
@@ -31,7 +31,7 @@
   <div class="media p-3">
     <%= render partial: 'thumbnail', locals: { object: @community } %>
     <div class="media-body ml-3">
-      <p><%= @community.description %></p>
+      <p><%= markdown(@community.description) %></p>
     </div>
   </div>
 

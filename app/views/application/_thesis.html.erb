@@ -49,7 +49,7 @@
 
     <% if thesis.abstract.present? %>
       <p>
-        <%= render(highlights) || jupiter_truncate(thesis.abstract) %>
+        <%= render(highlights) || markdown(jupiter_truncate(thesis.abstract)) %>
       </p>
     <% end %>
   </div>

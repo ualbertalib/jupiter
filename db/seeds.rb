@@ -116,6 +116,8 @@ if Rails.env.development? || Rails.env.uat?
       # Add an occasional verbose description
       description = if i % 10 == 5
                       Faker::Lorem.sentence(word_count: 100, supplemental: false, random_words_to_add: 0).chop
+                    elsif i % 7 == 0
+                      Faker::Markdown.sandwich
                     else
                       Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop
                     end

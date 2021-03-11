@@ -27,7 +27,6 @@ class Exporters::Solr::ThesisExporter < Exporters::Solr::BaseExporter
   index :subject, role: :search
 
   # Dublin Core attributes
-  index :abstract, type: :text, role: :search
   # NOTE: language is single-valued for Thesis, but languages is multi-valued for Item
   # See below for faceting
   index :language, role: :search
@@ -72,6 +71,11 @@ class Exporters::Solr::ThesisExporter < Exporters::Solr::BaseExporter
   custom_index :doi_without_label, role: :exact_match,
                                    as: ->(thesis) { thesis.doi.gsub('doi:', '') if thesis.doi.present? }
 
+  # Abstract may contain markdown which isn't particularly useful in a search context. Let's strip it out.
+  custom_index :abstract, type: :text, role: [:search],
+                          as: lambda { |thesis|
+                                Jupiter::StripMarkdown.render(thesis.abstract)
+                              }
   default_sort index: :title, direction: :asc
 
   fulltext_searchable :abstract

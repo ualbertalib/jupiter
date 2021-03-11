@@ -6,7 +6,7 @@
     <%= render partial: 'thumbnail', locals: { object: community } %>
     <div class="media-body ml-3">
       <h3 class="mt-0"><%= community.title %></h3>
-      <p class="text-muted"><%= community.description %></p>
+      <p class="text-muted"><%= markdown(community.description) %></p>
     </div>
   <% end %>
 
