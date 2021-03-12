@@ -189,7 +189,7 @@ GEM
     ezid-client (1.8.0)
       hashie (~> 3.4, >= 3.4.3)
       nokogiri
-    faker (2.16.0)
+    faker (2.17.0)
       i18n (>= 1.6, < 2)
     faraday (1.3.0)
       faraday-net_http (~> 1.0)
