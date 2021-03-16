@@ -1,4 +1,4 @@
-class ThesisDecorator < Draper::Decorator
+class ThesisDecorator < ApplicationDecorator
 
   delegate_all
 
@@ -7,6 +7,10 @@ class ThesisDecorator < Draper::Decorator
       HumanizedChangeSet.new(h, version)
     end
     history.select { |humanized_change_set| humanized_change_set.html_diffs.present? }
+  end
+
+  def abstract
+    markdown(model.abstract)
   end
 
 end

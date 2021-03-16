@@ -80,7 +80,7 @@
         <ul class="list-group">
           <% results.each_with_fulltext_results do |result, fulltext_hits| %>
             <li class="list-group-item list-group-item-action">
-              <%= render result, highlights: fulltext_hits %>
+              <%= render result.decorate, highlights: fulltext_hits %>
             </li>
           <% end %>
         </ul>

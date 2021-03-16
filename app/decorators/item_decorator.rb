@@ -1,4 +1,4 @@
-class ItemDecorator < Draper::Decorator
+class ItemDecorator < ApplicationDecorator
 
   delegate_all
 
@@ -7,6 +7,10 @@ class ItemDecorator < Draper::Decorator
       HumanizedChangeSet.new(h, version)
     end
     history.select { |humanized_change_set| humanized_change_set.html_diffs.present? }
+  end
+
+  def description
+    markdown(model.description)
   end
 
 end

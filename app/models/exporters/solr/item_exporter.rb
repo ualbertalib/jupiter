@@ -35,7 +35,6 @@ class Exporters::Solr::ItemExporter < Exporters::Solr::BaseExporter
   index :temporal_subjects, role: :search
   index :spatial_subjects, role: :search
 
-  index :description, type: :text, role: :search
   index :publisher, role: [:search, :facet]
 
   index :languages, role: [:search, :facet]
@@ -46,6 +45,13 @@ class Exporters::Solr::ItemExporter < Exporters::Solr::BaseExporter
   index :source, role: :exact_match
   index :related_link, role: :exact_match
   index :publication_status, role: :exact_match
+
+  # Description may contain markdown which isn't particularly useful in a search context. Let's strip this out.
+  custom_index :description, type: :text, role: :search, as: lambda { |item|
+                                                               if item.description.present?
+                                                                 StripMarkdown.render(item.description)
+                                                               end
+                                                             }
 
   # Solr only
   custom_index :doi_without_label, role: :exact_match,

@@ -145,7 +145,7 @@ class Exporters::Solr::BaseExporter
   end
 
   def strip_markdown(text)
-    StripMarkdown.render(text).html_safe
+    StripMarkdown.render(text)
   end
 
   protected
