@@ -144,8 +144,8 @@ class Exporters::Solr::BaseExporter
     name == fulltext_searchable_field
   end
 
-  def strip_markdown(text)
-    StripMarkdown.render(text)
+  def self.strip_markdown(text)
+    StripMarkdown.render(text) if text.present?
   end
 
   protected

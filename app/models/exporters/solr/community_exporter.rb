@@ -12,9 +12,7 @@ class Exporters::Solr::CommunityExporter < Exporters::Solr::BaseExporter
 
   # Description may contain markdown which isn't particularly useful in a search context. Let's strip this out.
   custom_index :description, role: [:search],
-                             as: lambda { |community|
-                                   StripMarkdown.render(community.description) if community.description.present?
-                                 }
+                             as: ->(community) { strip_markdown(community.description) }
 
   default_sort index: :title, direction: :asc
 
