@@ -82,3 +82,28 @@ embargoed:
   record_created_at: <%= 5.day.ago.to_s(:db) %>
   abstract: 'This is my abstract'
   member_of_paths: <%= ["#{ActiveRecord::FixtureSet.identify(:thesis, :uuid)}/#{ActiveRecord::FixtureSet.identify(:embargoed_thesis, :uuid)}"] %>
+
+markdown:
+  visibility: <%= JupiterCore::VISIBILITY_PUBLIC %>
+  owner: regular
+  title: 'Markdown Thesis'
+  dissertant: 'Joe Blow'
+  graduation_date: '2019'
+  date_ingested: <%= 5.day.ago %>
+  record_created_at: <%= 5.day.ago.to_s(:db) %>
+  abstract: |
+    **Itaque _est_** ~~incidunt~~. Magnam *repellendus* id. Eos qui **voluptatem**.
+
+    Here's a line for us to start with.
+
+    This line is separated from the one above by two newlines, so it will be a *separate paragraph*.
+    
+    This line is also a separate paragraph, but...
+    This line is only separated by a single newline, so it's a separate line in the *same paragraph*.
+    
+    [I'm an inline-style link with title](https://www.google.com "Google's Homepage")
+    
+    URLs and URLs in angle brackets will automatically get turned into links.
+    http://www.example.com or <http://www.example.com> and sometimes
+    example.com (but not on Github, for example).
+  member_of_paths: <%= ["#{ActiveRecord::FixtureSet.identify(:thesis, :uuid)}/#{ActiveRecord::FixtureSet.identify(:thesis, :uuid)}"] %>

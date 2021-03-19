@@ -27,7 +27,6 @@ class Exporters::Solr::ThesisExporter < Exporters::Solr::BaseExporter
   index :subject, role: :search
 
   # Dublin Core attributes
-  index :abstract, type: :text, role: :search
   # NOTE: language is single-valued for Thesis, but languages is multi-valued for Item
   # See below for faceting
   index :language, role: :search
@@ -52,6 +51,9 @@ class Exporters::Solr::ThesisExporter < Exporters::Solr::BaseExporter
   index :departments, type: :json_array, role: [:search, :facet]
   index :supervisors, type: :json_array, role: [:search, :facet]
   index :committee_members, role: :exact_match
+
+  # Description may contain markdown which isn't particularly useful in a search context.
+  custom_index :abstract, type: :text, role: :search, as: ->(thesis) { strip_markdown(thesis.abstract) }
 
   # This gets mixed with the item types for `Item`
   custom_index :item_type_with_status,

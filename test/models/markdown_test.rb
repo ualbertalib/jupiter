@@ -40,4 +40,12 @@ class MarkdownTest < ActiveSupport::TestCase
     assert_equal [STRIPPED_MARKDOWN],
                  item.solr_exporter.export[Item.solr_exporter_class.solr_name_for(:description, role: :search)]
   end
+
+  test 'thesis abstract' do
+    thesis = thesis(:markdown)
+
+    assert_equal RENDERED_HTML, thesis.decorate.abstract
+    assert_equal [STRIPPED_MARKDOWN],
+                 thesis.solr_exporter.export[Thesis.solr_exporter_class.solr_name_for(:abstract, role: :search)]
+  end
 end
