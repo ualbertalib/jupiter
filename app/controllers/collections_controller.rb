@@ -1,7 +1,7 @@
 class CollectionsController < ApplicationController
 
-  before_action :fetch_and_authorize_community
-  before_action :fetch_and_authorize_collection
+  before_action :fetch_decorate_and_authorize_community
+  before_action :fetch_decorate_and_authorize_collection
 
   def show
     search_query_index = UserSearchService.new(
@@ -17,13 +17,13 @@ class CollectionsController < ApplicationController
 
   private
 
-  def fetch_and_authorize_community
-    @community = Community.find(params[:community_id])
+  def fetch_decorate_and_authorize_community
+    @community = Community.find(params[:community_id]).decorate
     authorize @community
   end
 
-  def fetch_and_authorize_collection
-    @collection = Collection.find(params[:id])
+  def fetch_decorate_and_authorize_collection
+    @collection = Collection.find(params[:id]).decorate
     authorize @collection
   end
 

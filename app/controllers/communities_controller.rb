@@ -24,7 +24,7 @@ class CommunitiesController < ApplicationController
   end
 
   def show
-    @community = Community.find(params[:id])
+    @community = Community.find(params[:id]).decorate
     authorize @community
 
     respond_to do |format|

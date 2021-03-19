@@ -48,4 +48,21 @@ class MarkdownTest < ActiveSupport::TestCase
     assert_equal [STRIPPED_MARKDOWN],
                  thesis.solr_exporter.export[Thesis.solr_exporter_class.solr_name_for(:abstract, role: :search)]
   end
+  test 'community description' do
+    community = communities(:markdown_community)
+
+    assert_equal RENDERED_HTML, community.decorate.description
+    assert_equal [STRIPPED_MARKDOWN],
+                 community.solr_exporter.export[Community.solr_exporter_class.solr_name_for(:description,
+                                                                                            role: :search)]
+  end
+  test 'collection description' do
+    collection = collections(:markdown_collection)
+
+    assert_equal RENDERED_HTML, collection.decorate.description
+    assert_equal [STRIPPED_MARKDOWN],
+                 collection.solr_exporter.export[Collection.solr_exporter_class.solr_name_for(:description,
+                                                                                              role: :search)]
+  end
+
 end
