@@ -1,3 +1,6 @@
+require 'redcarpet'
+require 'redcarpet/render_strip'
+
 # Some useful errors
 class Exporters::Solr::IndexRoleInvalidError < StandardError; end
 
@@ -12,6 +15,16 @@ class Exporters::Solr::BaseExporter
 
   SOLR_FACET_ROLES = [:facet, :range_facet, :pathing].freeze
   SINGULAR_ROLES = [:sort, :range_facet].freeze
+
+  extensions = {
+    lax_spacing: true,
+    strikethrough: true,
+    fenced_code_blocks: true,
+    tables: true,
+    autolink: true
+  }
+
+  StripMarkdown = Redcarpet::Markdown.new(Redcarpet::Render::StripDown, extensions)
 
   def initialize(object)
     @export_object = object
@@ -137,6 +150,10 @@ class Exporters::Solr::BaseExporter
 
   def self.fulltext_searchable?(name)
     name == fulltext_searchable_field
+  end
+
+  def self.strip_markdown(text)
+    StripMarkdown.render(text) if text.present?
   end
 
   protected
