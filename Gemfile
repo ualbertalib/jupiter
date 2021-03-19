@@ -59,6 +59,7 @@ gem 'jbuilder' # generate JSON objects
 gem 'kaminari' # Pagination
 gem 'paper_trail' # Track object changes
 gem 'ransack', '= 2.4.1' # ActiveRecord search/filter
+gem 'redcarpet', '~> 3.5', '>= 3.5.1' # Markdown to (X)HTML parser
 gem 'uuidtools'
 gem 'voight_kampff' # bot detection
 gem 'wicked' # Multi-step wizard
