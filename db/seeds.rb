@@ -74,7 +74,11 @@ if Rails.env.development? || Rails.env.uat?
     community = Community.create!(
       owner_id: admin.id,
       title: title,
-      description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop
+      description: if idx == THINGS.size-1
+                     Faker::Markdown.sandwich
+                   else
+                     Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop
+                   end
     )
 
     # Attach logos, if possible
@@ -94,7 +98,11 @@ if Rails.env.development? || Rails.env.uat?
       owner_id: admin.id,
       title: "The annals of '#{thing.capitalize} International'",
       community_id: community.id,
-      description: Faker::Lorem.sentence(word_count: 40, supplemental: false, random_words_to_add: 0).chop
+      description: if idx == THINGS.size-1
+                     Faker::Markdown.sandwich
+                   else
+                     Faker::Lorem.sentence(word_count: 40, supplemental: false, random_words_to_add: 0).chop
+                   end
     )
 
     thesis_collection = Collection.create!(
@@ -116,6 +124,8 @@ if Rails.env.development? || Rails.env.uat?
       # Add an occasional verbose description
       description = if i % 10 == 5
                       Faker::Lorem.sentence(word_count: 100, supplemental: false, random_words_to_add: 0).chop
+                    elsif i % 7 == 0
+                      Faker::Markdown.sandwich
                     else
                       Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop
                     end
