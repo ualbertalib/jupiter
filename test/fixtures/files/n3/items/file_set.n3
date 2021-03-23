@@ -17,7 +17,7 @@
   dc:accessRights "http://terms.library.ualberta.ca/public";
   bibo:owner "administrator@example.com";
   <http://terms.library.ualberta.ca/recordCreatedInJupiter> "2000-01-01T00:00:00.007Z"^^xsd:dateTime;
-  <http://terms.library.ualberta.ca/sitemapLink> <rs:ln href="/items/e2ec88e3-3266-4e95-8575-8b04fac2a679/view/<%= fileset_id %>/image-sample.jpeg" rel="content" hash="md5:GxpIjJsC4KnRoBKNjWnkJA==" length="12086" type="image/jpeg">;
+  <http://terms.library.ualberta.ca/sitemapLink> "<rs:ln href=\"/items/e2ec88e3-3266-4e95-8575-8b04fac2a679/view/<%= fileset_id %>/image-sample.jpeg\" rel=\"content\" hash=\"md5:GxpIjJsC4KnRoBKNjWnkJA==\" length=\"12086\" type=\"image/jpeg\">";
   ebucore:dateIngested "2000-01-01T00:00:00.007Z"^^xsd:dateTime;
   ebucore:hasMimeType "image/jpeg";
   ebucore:resourceFilename "image-sample.jpeg";
