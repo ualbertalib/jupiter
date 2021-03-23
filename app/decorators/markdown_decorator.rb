@@ -9,16 +9,8 @@ module MarkdownDecorator
     link_attributes: { rel: 'noopener noreferrer', target: '_blank' }
   }
 
-  extensions = {
-    lax_spacing: true,
-    strikethrough: true,
-    fenced_code_blocks: true,
-    tables: true,
-    autolink: true
-  }
-
   renderer = Redcarpet::Render::HTML.new(options)
-  RenderMarkdown = Redcarpet::Markdown.new(renderer, extensions)
+  RenderMarkdown = Redcarpet::Markdown.new(renderer, Rails.configuration.markdown_rendering_extensions)
 
   # We trust the redcarpet output which is why we think it's html_safe
   # rubocop:disable Rails/OutputSafety

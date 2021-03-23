@@ -43,5 +43,13 @@ module Jupiter
 
     config.action_dispatch.tld_length = Rails.application.secrets.tld_length.to_i
 
+    config.markdown_rendering_extensions = {
+      lax_spacing: true,
+      strikethrough: true,
+      fenced_code_blocks: true,
+      tables: true,
+      autolink: true
+    }
+
   end
 end

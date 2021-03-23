@@ -16,15 +16,8 @@ class Exporters::Solr::BaseExporter
   SOLR_FACET_ROLES = [:facet, :range_facet, :pathing].freeze
   SINGULAR_ROLES = [:sort, :range_facet].freeze
 
-  extensions = {
-    lax_spacing: true,
-    strikethrough: true,
-    fenced_code_blocks: true,
-    tables: true,
-    autolink: true
-  }
-
-  StripMarkdown = Redcarpet::Markdown.new(Redcarpet::Render::StripDown, extensions)
+  StripMarkdown = Redcarpet::Markdown.new(Redcarpet::Render::StripDown,
+                                          Rails.configuration.markdown_rendering_extensions)
 
   def initialize(object)
     @export_object = object
