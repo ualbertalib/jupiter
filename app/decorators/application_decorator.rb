@@ -1,4 +1,5 @@
 require 'redcarpet'
+require 'redcarpet/render_strip'
 class ApplicationDecorator < Draper::Decorator
 
   # see https://github.com/drapergem/draper/issues/859 for why we never want to NOT
