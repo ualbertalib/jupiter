@@ -8,21 +8,25 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ### Added
 - Initialize disabled ReadOnlyMode [#2100](https://github.com/ualbertalib/jupiter/issues/2100)
+- Updated Architecture diagrams [PR#2135](https://github.com/ualbertalib/jupiter/pull/2135)
 
 ### Removed
 – Remove entirely unnecessary config file. [PR#2044](https://github.com/ualbertalib/jupiter/pull/2044)
+– Completely disable logging of warnings around the "excel spreadsheet" issue [PR#2049](https://github.com/ualbertalib/jupiter/pull/2049)
 
 ### Changed
 - Added DOI reset feature for admins [#1739](https://github.com/ualbertalib/jupiter/issues/1739)
 – Turn off reporting things like "this excel spreadsheet isn't thumbnailable" as warnings to Rollbar [PR#2046](https://github.com/ualbertalib/jupiter/pull/2046)
 - migration to fix concatenated subjects (part 2) [#1449](https://github.com/ualbertalib/jupiter/issues/1449)
 - Catch and log embargo expiry job save errors [#1989](https://github.com/ualbertalib/jupiter/issues/1989)
+- Don't send failures to SessionController in development environment [PR#2121](https://github.com/ualbertalib/jupiter/pull/2121) 
 
 ### Fixed
 - bump rubocop and fix cop violations [PR#2072](https://github.com/ualbertalib/jupiter/pull/2072)
 - Give proper response when solr 400s [#2086](https://github.com/ualbertalib/jupiter/issues/2086)
 - bump omniauth-rails_csrf_protection gem for omniauth compatibility [PR#2096](https://github.com/ualbertalib/jupiter/pull/2096)
 - bump rdf-n3 and fix isomorphic_with? regression [PR#2070](https://github.com/ualbertalib/jupiter/pull/2070)
+- bump rubocop and fix more cop violations [PR#2132](https://github.com/ualbertalib/jupiter/pull/2132)
 
 ## [2.0.2] - 2020-12-17
 

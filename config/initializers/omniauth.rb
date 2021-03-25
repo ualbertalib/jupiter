@@ -19,7 +19,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
   # By default in development mode, omniauth raises an exception when authentication fails
   # comment this line if you want to see the stacktrace from the actual provider when in `development`
   # Uncomment the line below to turn this behavior off
-  on_failure { |env| SessionsController.action(:failure).call(env) }
+  on_failure { |env| SessionsController.action(:failure).call(env) } unless Rails.env.development?
 
   OmniAuth.config.allowed_request_methods = [:post]
   OmniAuth.config.logger = Rails.logger
