@@ -1,6 +1,4 @@
-class ThesisDecorator < Draper::Decorator
-
-  include MarkdownDecorator
+class ThesisDecorator < ApplicationDecorator
 
   delegate_all
 

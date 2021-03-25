@@ -1,6 +1,4 @@
-class ItemDecorator < Draper::Decorator
-
-  include MarkdownDecorator
+class ItemDecorator < ApplicationDecorator
 
   delegate_all
 

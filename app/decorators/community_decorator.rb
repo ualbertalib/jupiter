@@ -1,6 +1,4 @@
-class CommunityDecorator < Draper::Decorator
-
-  include MarkdownDecorator
+class CommunityDecorator < ApplicationDecorator
 
   delegate_all
 
