@@ -68,13 +68,16 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
 
       order = orders[idx]&.to_sym
 
-      criteria[:sort_order] << if sort_attribute == :score
+      # Empty case statement is more readable and natural here.
+      # rubocop:disable Style/EmptyCaseCondition
+      criteria[:sort_order] << case
+                               when sort_attribute == :score
                                  # When sorting by score it only makes sense to use :desc order from the user
                                  # perspective so we ignore the order if one is given.
                                  :desc
-                               elsif order.present? && POSSIBLE_SORT_ORDERS.include?(order)
+                               when order.present? && POSSIBLE_SORT_ORDERS.include?(order)
                                  order
-                               elsif (index = solr_exporter.default_sort_indexes.index(sort_attribute)).present?
+                               when (index = solr_exporter.default_sort_indexes.index(sort_attribute)).present?
                                  solr_exporter.default_sort_direction[index]
                                else
                                  # if we have been passed a sort attribute that isn't actually set up for sorting
@@ -82,6 +85,7 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
                                  # just fall back to the first thing we have on hand
                                  solr_exporter.default_sort_direction.first
                                end
+      # rubocop:enable Style/EmptyCaseCondition
     end
 
     # If no sort properties are set we resort to the default sort attributes
