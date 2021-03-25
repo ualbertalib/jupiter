@@ -21,6 +21,7 @@ module DraftActions
       redirect_to wizard_path(:upload_files, draft_id_param => @draft.id),
                   alert: t('.files_are_required_to_continue')
     else
+      @draft = @draft.decorate
       render_wizard
     end
   end
