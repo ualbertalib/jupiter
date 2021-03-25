@@ -18,7 +18,7 @@ gem 'simple_form'
 
 # RDF stuff
 gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', tag: 'v0.2.4'
-gem 'rdf', '~> 3.1.9'
+gem 'rdf', '~> 3.1.12'
 gem 'rdf-n3'
 gem 'rdf-vocab', '~> 3.1.10'
 
@@ -30,7 +30,7 @@ gem 'rsolr'
 
 # Authentication
 gem 'bcrypt', '>= 3.1.13'
-gem 'omniauth', '~> 2.0', '>= 2.0.1'
+gem 'omniauth', '~> 2.0'
 gem 'omniauth-rails_csrf_protection', '~> 1.0'
 gem 'omniauth-saml', '~> 2.0'
 # Authorization
@@ -85,7 +85,7 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
 
-  gem 'rubocop', '~> 1.8.1', require: false
+  gem 'rubocop', '~> 1.10.0', require: false
   gem 'rubocop-performance'
   gem 'rubocop-rails'
 end
@@ -114,7 +114,7 @@ group :test do
 
   gem 'json-schema', '~> 2.8.1'
   gem 'launchy'
-  gem 'rdf-isomorphic', '~> 3.1.0'
+  gem 'rdf-isomorphic', '~> 3.1.1'
   gem 'vcr', '5.0', require: false
   gem 'webdrivers', '~> 4.5'
   gem 'webmock', require: false
