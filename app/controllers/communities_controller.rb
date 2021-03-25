@@ -4,7 +4,7 @@ class CommunitiesController < ApplicationController
     authorize Community
     respond_to do |format|
       format.html do
-        @communities = Community.order(Community.sort_order(params)).page params[:page]
+        @communities = Community.order(Community.sort_order(params)).page(params[:page]).decorate
         @title = t('.header')
       end
       format.json do
