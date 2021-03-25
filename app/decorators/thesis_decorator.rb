@@ -13,4 +13,8 @@ class ThesisDecorator < ApplicationDecorator
     markdown(model.abstract)
   end
 
+  def plain_abstract
+    strip_markdown(model.abstract)
+  end
+
 end

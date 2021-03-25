@@ -48,7 +48,7 @@
 
     <% if item.description.present? %>
       <p>
-        <%= render(highlights) || jupiter_truncate(item.description) %>
+        <%= render(highlights) || jupiter_truncate(item.plain_description) %>
       </p>
     <% end %>
   </div>

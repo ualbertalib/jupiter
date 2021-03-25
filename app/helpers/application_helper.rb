@@ -59,6 +59,6 @@ module ApplicationHelper
   end
 
   def jupiter_truncate(text, length: TRUNCATE_CHARS_DEFAULT, separator: ' ', omission: '...')
-    truncate strip_tags(text), length: length, separator: separator, omission: omission
+    truncate text, length: length, separator: separator, omission: omission
   end
 end
