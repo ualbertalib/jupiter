@@ -10,7 +10,7 @@ class Items::FilesControllerTest < ActionDispatch::IntegrationTest
     sign_in_as @user
 
     @draft_item = draft_items(:completed_choose_license_and_visibility_step)
-    @draft_item.member_of_paths = { 'community_id': [@community.id], 'collection_id': [@collection.id] }
+    @draft_item.member_of_paths = { community_id: [@community.id], collection_id: [@collection.id] }
     @draft_item.save!
 
     pdf_file = ActiveStorage::Blob.create_after_upload!(
