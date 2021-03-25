@@ -24,23 +24,25 @@ class CommunitiesController < ApplicationController
   end
 
   def show
-    @community = Community.find(params[:id]).decorate
-    authorize @community
+    community = Community.find(params[:id])
+    authorize community
 
     respond_to do |format|
       format.html do
-        @collections = @community.collections.order(Collection.sort_order(params)).page params[:page]
+        @collections = community.collections.order(Collection.sort_order(params)).page params[:page]
+        @community = community.decorate
       end
       format.js do
         # Used for the collapsable dropdown to show member collections
         @collections = @community.collections.order(Collection.sort_order(params))
+        @community = community.decorate
       end
 
       format.json do
         # Used in item_draft.js
-        collections = @community.collections.order(title: :asc)
+        collections = community.collections.order(title: :asc)
         collections = collections.select { |c| c.restricted.blank? } unless current_user&.admin?
-        render json: @community.attributes.merge(collections: collections)
+        render json: community.attributes.merge(collections: collections)
       end
     end
   end
