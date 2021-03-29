@@ -26,6 +26,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - bump omniauth-rails_csrf_protection gem for omniauth compatibility [PR#2096](https://github.com/ualbertalib/jupiter/pull/2096)
 - bump rdf-n3 and fix isomorphic_with? regression [PR#2070](https://github.com/ualbertalib/jupiter/pull/2070)
 - bump rubocop and fix more cop violations [PR#2132](https://github.com/ualbertalib/jupiter/pull/2132)
+- Various fixes from lighthouse suggestions
 
 ## [2.0.2] - 2020-12-17
 
