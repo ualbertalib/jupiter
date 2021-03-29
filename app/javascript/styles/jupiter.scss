@@ -25,14 +25,6 @@ body {
   }
 }
 
-// Increase footer link spacing on mobile to improve usability and seo.
-@include media-breakpoint-down(xs) {
-  .j-footer .list-inline-item {
-    padding-top: 3px;
-    padding-bottom: 3px;
-  }
-}
-
 .required abbr {
   color: $red;
   cursor: inherit;
