@@ -40,12 +40,12 @@ class ApplicationDecorator < Draper::Decorator
 
   def html_renderer
     renderer = Redcarpet::Render::HTML.new(REDCARPET_OPTIONS)
-    @@html_renderer ||= Redcarpet::Markdown.new(renderer, Rails.configuration.markdown_rendering_extensions)
+    @html_renderer ||= Redcarpet::Markdown.new(renderer, Rails.configuration.markdown_rendering_extensions)
   end
 
   def strip_renderer
-    @@strip_renderer ||= Redcarpet::Markdown.new(Redcarpet::Render::StripDown,
-                                                 Rails.configuration.markdown_rendering_extensions)
+    @strip_renderer ||= Redcarpet::Markdown.new(Redcarpet::Render::StripDown,
+                                                Rails.configuration.markdown_rendering_extensions)
   end
 
 end

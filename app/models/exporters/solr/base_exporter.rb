@@ -318,8 +318,8 @@ class Exporters::Solr::BaseExporter
     # memoized method to initialize and reuse the renderer for stripping markdown
     # which is used to create plaintext for the exporter
     def plaintext_renderer
-      @@plaintext_renderer ||= Redcarpet::Markdown.new(Redcarpet::Render::StripDown,
-                                                       Rails.configuration.markdown_rendering_extensions)
+      @plaintext_renderer ||= Redcarpet::Markdown.new(Redcarpet::Render::StripDown,
+                                                      Rails.configuration.markdown_rendering_extensions)
     end
 
   end
