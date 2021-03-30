@@ -13,6 +13,10 @@ class ApplicationDecorator < Draper::Decorator
   # URL helpers, we can ensure the decorated methods behave consistently.
   include Rails.application.routes.url_helpers
 
+  def self.collection_decorator_class
+    PaginatingDecorator
+  end
+
   options = {
     filter_html: true,
     no_images: true,
