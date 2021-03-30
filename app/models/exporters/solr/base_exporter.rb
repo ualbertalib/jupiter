@@ -16,9 +16,6 @@ class Exporters::Solr::BaseExporter
   SOLR_FACET_ROLES = [:facet, :range_facet, :pathing].freeze
   SINGULAR_ROLES = [:sort, :range_facet].freeze
 
-  StripMarkdown = Redcarpet::Markdown.new(Redcarpet::Render::StripDown,
-                                          Rails.configuration.markdown_rendering_extensions)
-
   def initialize(object)
     @export_object = object
   end
@@ -147,6 +144,7 @@ class Exporters::Solr::BaseExporter
 
   def self.strip_markdown(text)
     StripMarkdown.render(text) if text.present?
+    plaintext_renderer.render(text) if text.present?
   end
 
   protected
@@ -316,6 +314,13 @@ class Exporters::Solr::BaseExporter
 
         index :date_ingested, type: :date, role: [:sort]
       end
+    end
+
+    # memoized method to initialize and reuse the renderer for stripping markdown
+    # which is used to create plaintext for the exporter
+    def plaintext_renderer
+      @@plaintext_renderer ||= Redcarpet::Markdown.new(Redcarpet::Render::StripDown,
+                                                       Rails.configuration.markdown_rendering_extensions)
     end
 
   end

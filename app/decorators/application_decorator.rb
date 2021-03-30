@@ -17,7 +17,20 @@ class ApplicationDecorator < Draper::Decorator
     PaginatingDecorator
   end
 
-  options = {
+  # We trust the redcarpet output which is why we think it's html_safe
+  # rubocop:disable Rails/OutputSafety
+  def markdown(text)
+    html_renderer.render(text).html_safe if text.present?
+  end
+  # rubocop:enable Rails/OutputSafety
+
+  def strip_markdown(text)
+    strip_renderer.render(text) if text.present?
+  end
+
+  private
+
+  REDCARPET_OPTIONS = {
     filter_html: true,
     no_images: true,
     no_styles: true,
@@ -25,21 +38,14 @@ class ApplicationDecorator < Draper::Decorator
     link_attributes: { rel: 'noopener noreferrer', target: '_blank' }
   }
 
-  renderer = Redcarpet::Render::HTML.new(options)
-  RenderMarkdown = Redcarpet::Markdown.new(renderer, Rails.configuration.markdown_rendering_extensions)
-
-  StripMarkdown = Redcarpet::Markdown.new(Redcarpet::Render::StripDown,
-                                          Rails.configuration.markdown_rendering_extensions)
-
-  # We trust the redcarpet output which is why we think it's html_safe
-  # rubocop:disable Rails/OutputSafety
-  def markdown(text)
-    RenderMarkdown.render(text).html_safe if text.present?
+  def html_renderer
+    renderer = Redcarpet::Render::HTML.new(REDCARPET_OPTIONS)
+    @@html_renderer ||= Redcarpet::Markdown.new(renderer, Rails.configuration.markdown_rendering_extensions)
   end
-  # rubocop:enable Rails/OutputSafety
 
-  def strip_markdown(text)
-    StripMarkdown.render(text) if text.present?
+  def strip_renderer
+    @@strip_renderer ||= Redcarpet::Markdown.new(Redcarpet::Render::StripDown,
+                                          Rails.configuration.markdown_rendering_extensions)
   end
 
 end
