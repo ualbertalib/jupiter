@@ -47,7 +47,7 @@ class Exporters::Solr::ItemExporter < Exporters::Solr::BaseExporter
   index :publication_status, role: :exact_match
 
   # Description may contain markdown which isn't particularly useful in a search context. Let's strip this out.
-  custom_index :description, type: :text, role: :search, as: ->(item) { strip_markdown(item.description) }
+  custom_index :description, type: :text, role: :search, as: ->(item) { unrender_markdown(item.description) }
 
   # Solr only
   custom_index :doi_without_label, role: :exact_match,

@@ -3,7 +3,7 @@ class CommunityDecorator < ApplicationDecorator
   delegate_all
 
   def description
-    markdown(model.description)
+    render_markdown(model.description)
   end
 
 end

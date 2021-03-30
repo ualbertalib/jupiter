@@ -19,12 +19,12 @@ class ApplicationDecorator < Draper::Decorator
 
   # We trust the redcarpet output which is why we think it's html_safe
   # rubocop:disable Rails/OutputSafety
-  def markdown(text)
+  def render_markdown(text)
     html_renderer.render(text).html_safe if text.present?
   end
   # rubocop:enable Rails/OutputSafety
 
-  def strip_markdown(text)
+  def unrender_markdown(text)
     strip_renderer.render(text) if text.present?
   end
 
@@ -36,7 +36,7 @@ class ApplicationDecorator < Draper::Decorator
     no_styles: true,
     hard_wrap: true,
     link_attributes: { rel: 'noopener noreferrer', target: '_blank' }
-  }
+  }.freeze
 
   def html_renderer
     renderer = Redcarpet::Render::HTML.new(REDCARPET_OPTIONS)
@@ -45,7 +45,7 @@ class ApplicationDecorator < Draper::Decorator
 
   def strip_renderer
     @@strip_renderer ||= Redcarpet::Markdown.new(Redcarpet::Render::StripDown,
-                                          Rails.configuration.markdown_rendering_extensions)
+                                                 Rails.configuration.markdown_rendering_extensions)
   end
 
 end

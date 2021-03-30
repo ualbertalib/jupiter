@@ -10,11 +10,11 @@ class ItemDecorator < ApplicationDecorator
   end
 
   def description
-    markdown(model.description)
+    render_markdown(model.description)
   end
 
-  def plain_description
-    strip_markdown(model.description)
+  def plaintext_description
+    unrender_markdown(model.description)
   end
 
 end

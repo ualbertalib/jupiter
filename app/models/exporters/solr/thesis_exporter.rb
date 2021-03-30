@@ -53,7 +53,7 @@ class Exporters::Solr::ThesisExporter < Exporters::Solr::BaseExporter
   index :committee_members, role: :exact_match
 
   # Description may contain markdown which isn't particularly useful in a search context.
-  custom_index :abstract, type: :text, role: :search, as: ->(thesis) { strip_markdown(thesis.abstract) }
+  custom_index :abstract, type: :text, role: :search, as: ->(thesis) { unrender_markdown(thesis.abstract) }
 
   # This gets mixed with the item types for `Item`
   custom_index :item_type_with_status,

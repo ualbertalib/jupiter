@@ -2,8 +2,8 @@ class DraftItemDecorator < ApplicationDecorator
 
   delegate_all
 
-  def preview_description
-    markdown(model.description)
+  def html_description
+    render_markdown(model.description)
   end
 
 end
