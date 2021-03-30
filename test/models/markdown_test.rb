@@ -52,7 +52,7 @@ class MarkdownTest < ActiveSupport::TestCase
     item.description = MARKDOWN
 
     assert_equal RENDERED_HTML, item.decorate.description
-    assert_equal STRIPPED_MARKDOWN, item.decorate.plain_description
+    assert_equal STRIPPED_MARKDOWN, item.decorate.plaintext_description
     assert_equal [STRIPPED_MARKDOWN],
                  item.solr_exporter.export[Item.solr_exporter_class.solr_name_for(:description, role: :search)]
   end
@@ -62,7 +62,7 @@ class MarkdownTest < ActiveSupport::TestCase
     thesis.abstract = MARKDOWN
 
     assert_equal RENDERED_HTML, thesis.decorate.abstract
-    assert_equal STRIPPED_MARKDOWN, thesis.decorate.plain_abstract
+    assert_equal STRIPPED_MARKDOWN, thesis.decorate.plaintext_abstract
     assert_equal [STRIPPED_MARKDOWN],
                  thesis.solr_exporter.export[Thesis.solr_exporter_class.solr_name_for(:abstract, role: :search)]
   end
@@ -71,7 +71,7 @@ class MarkdownTest < ActiveSupport::TestCase
     draft = draft_items(:completed_describe_item_step)
     draft.description = MARKDOWN
 
-    assert_equal RENDERED_HTML, draft.decorate.preview_description
+    assert_equal RENDERED_HTML, draft.decorate.html_description
     assert_equal MARKDOWN, draft.decorate.description
   end
 
