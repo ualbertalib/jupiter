@@ -123,15 +123,19 @@ docker-compose -f docker-compose.yml up -d
 bundle install
 ```
 
+## Step 5: Install project's external modules
 
-## Step 5: Setup Database
+```shell
+yarn
+```
+
+## Step 6: Setup Database
 
 ```shell
 bundle exec rails db:prepare
 ```
 
-
-## Step 6: Start the Rails server
+## Step 7: Start the Rails server
 
 ```shell
 bin/rails s
@@ -139,7 +143,7 @@ bin/rails s
 
 Now everything should be up and running!
 
-## Step 4: Open and view Jupiter!
+## Step 8: Open and view Jupiter!
 Now everything is ready, you can go and view Jupiter! Just open your favorite browser and go to the following url:
 
   - Development environment: [era.ualberta.localhost:3000](http://era.ualberta.localhost:3000)
