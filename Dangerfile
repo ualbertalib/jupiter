@@ -38,6 +38,6 @@ cl.gsub! /^$\n/, ''
 # see an easy way to make this foolproof
 
 if cl.split(/[–-]/)[1].split.count < 10
-  warn("This CHANGELOG entry seems quite short. Reviewers, please check that it contains enough information, and request
-  expansion if it seems unreasonably brief.", sticky: false)
+  warn('This CHANGELOG entry seems quite short. Reviewers, please check that it contains enough information, and ' \
+  'request expansion if it seems unreasonably brief.', sticky: false)
 end
