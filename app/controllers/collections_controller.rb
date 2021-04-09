@@ -20,7 +20,7 @@ class CollectionsController < ApplicationController
   private
 
   def fetch_and_authorize_community
-    @community = Community.find(params[:community_id]).decorate
+    @community = Community.find(params[:community_id])
     authorize @community
   end
 
