@@ -1,6 +1,3 @@
-require 'redcarpet'
-require 'redcarpet/render_strip'
-
 # Some useful errors
 class Exporters::Solr::IndexRoleInvalidError < StandardError; end
 
