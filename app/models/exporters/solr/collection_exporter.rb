@@ -26,7 +26,7 @@ class Exporters::Solr::CollectionExporter < Exporters::Solr::BaseExporter
                                      }
 
   # Description may contain markdown which isn't particularly useful in a search context.  Let's strip that out.
-  custom_index :description, role: [:search], as: ->(collection) { unrender_markdown(collection.description) }
+  custom_index :description, role: [:search], as: ->(collection) { strip_markdown(collection.description) }
 
   default_sort index: :title, direction: :asc
 

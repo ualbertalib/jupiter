@@ -24,7 +24,7 @@ class ApplicationDecorator < Draper::Decorator
   end
   # rubocop:enable Rails/OutputSafety
 
-  def unrender_markdown(text)
+  def strip_markdown(text)
     strip_renderer.render(text) if text.present?
   end
 

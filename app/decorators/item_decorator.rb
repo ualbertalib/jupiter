@@ -14,7 +14,7 @@ class ItemDecorator < ApplicationDecorator
   end
 
   def plaintext_description
-    unrender_markdown(model.description)
+    strip_markdown(model.description)
   end
 
 end

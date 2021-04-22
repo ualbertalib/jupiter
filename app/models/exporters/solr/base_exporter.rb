@@ -142,7 +142,7 @@ class Exporters::Solr::BaseExporter
     name == fulltext_searchable_field
   end
 
-  def self.unrender_markdown(text)
+  def self.strip_markdown(text)
     plaintext_renderer.render(text) if text.present?
   end
 
