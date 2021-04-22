@@ -12,5 +12,24 @@ class RenameColumnsInDigitizationBook < ActiveRecord::Migration[6.0]
       t.rename :geographic_subject, :geographic_subjects
       t.rename :topical_subject, :topical_subjects
     end
+
+    remove_rdf_table_annotations :digitization_books
+
+    add_rdf_table_annotations for_table: :digitization_books do |t|
+      t.dates_issued has_predicate: ::RDF::Vocab::DC.issued
+      t.temporal_subjects has_predicate: ::RDF::Vocab::SCHEMA.temporalCoverage
+      t.title has_predicate: ::RDF::Vocab::DC.title
+      t.alternative_title has_predicate: ::RDF::Vocab::DC.alternative
+      t.resource_type has_predicate: ::RDF::Vocab::DC.type
+      t.genres has_predicate: ::RDF::Vocab::EDM.hasType
+      t.languages has_predicate: ::RDF::Vocab::DC.language
+      t.publishers has_predicate: ::RDF::Vocab::MARCRelators.pbl
+      t.places_of_publication has_predicate: ::RDF::Vocab::MARCRelators.pup
+      t.extent has_predicate: ::TERMS[:rdau].extent
+      t.notes has_predicate: ::RDF::Vocab::SKOS.note
+      t.geographic_subjects has_predicate: ::RDF::Vocab::DC11.coverage
+      t.rights has_predicate: ::RDF::Vocab::DC11.rights
+      t.topical_subjects has_predicate: ::RDF::Vocab::DC11.subject
+    end
   end
 end
