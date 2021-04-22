@@ -699,19 +699,19 @@ if Rails.env.development? || Rails.env.uat?
 
   11.times do |_i|
     Digitization::Book.create(peel_id: rand(1..3400), part_number: rand(1..100),
-                              date_issued: [rand(1900..2020).to_s],
+                              dates_issued: [rand(1900..2020).to_s],
                               title: "#{Faker::Company.name} #{Faker::WorldCup.city} Music Festival",
-                              alt_title: [Faker::Hipster.sentence.to_s],
+                              alternative_titles: [Faker::Hipster.sentence.to_s],
                               resource_type: ControlledVocabulary.digitization.resource_type.from_value('Text'),
-                              genre: [ControlledVocabulary.digitization.genre.from_value('Programs (Publications)')],
-                              language: [ControlledVocabulary.digitization.language.from_value('English')],
-                              publisher: [ControlledVocabulary.digitization.subject.from_value('Edmonton Folk Music Festival')],
-                              place_of_publication: [ControlledVocabulary.digitization.location.from_value('Edmonton (Alta.)')],
+                              genres: [ControlledVocabulary.digitization.genre.from_value('Programs (Publications)')],
+                              languages: [ControlledVocabulary.digitization.language.from_value('English')],
+                              publishers: [ControlledVocabulary.digitization.subject.from_value('Edmonton Folk Music Festival')],
+                              places_of_publication: [ControlledVocabulary.digitization.location.from_value('Edmonton (Alta.)')],
                               extent: 'v. : ill. ; 22-27 cm.',
-                              note: ['Souvenir program of the festival, including biographical notes on and portraits and discographies of the performers, articles, etc.', Faker::Hipster.sentence.to_s],
-                              temporal_subject: ['1981'],
-                              geographic_subject: [ControlledVocabulary.digitization.location.from_value('Edmonton (Alta.)')],
-                              topical_subject: [ControlledVocabulary.digitization.subject.from_value('Folk music festivals')],
+                              notes: ['Souvenir program of the festival, including biographical notes on and portraits and discographies of the performers, articles, etc.', Faker::Hipster.sentence.to_s],
+                              temporal_subjects: ['1981'],
+                              geographic_subjects: [ControlledVocabulary.digitization.location.from_value('Edmonton (Alta.)')],
+                              topical_subjects: [ControlledVocabulary.digitization.subject.from_value('Folk music festivals')],
                               rights: ControlledVocabulary.digitization.rights.from_value('In Copyright')) # Folk Fest
   end
 

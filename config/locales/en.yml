@@ -164,9 +164,9 @@ en:
             attributes:
               resource_type:
                 not_recognized: 'is not recognized'
-              genre:
+              genres:
                 not_recognized: 'is not recognized'
-              language:
+              languages:
                 not_recognized: 'is not recognized'
               rights:
                 not_recognized: 'is not recognized'

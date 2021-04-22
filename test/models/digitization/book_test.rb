@@ -35,11 +35,11 @@ class Digitization::BookTest < ActiveSupport::TestCase
   end
 
   test 'should have at least one type of subject' do
-    @document.assign_attributes(temporal_subject: nil, geographic_subject: nil, topical_subject: nil)
+    @document.assign_attributes(temporal_subjects: nil, geographic_subjects: nil, topical_subjects: nil)
     assert_not @document.valid?
-    assert_equal("can't be blank", @document.errors[:temporal_subject].first)
-    assert_equal("can't be blank", @document.errors[:geographic_subject].first)
-    assert_equal("can't be blank", @document.errors[:topical_subject].first)
+    assert_equal("can't be blank", @document.errors[:temporal_subjects].first)
+    assert_equal("can't be blank", @document.errors[:geographic_subjects].first)
+    assert_equal("can't be blank", @document.errors[:topical_subjects].first)
   end
 
   test 'should have a title' do
@@ -54,16 +54,16 @@ class Digitization::BookTest < ActiveSupport::TestCase
     assert_includes @document.errors[:resource_type], 'is not recognized'
   end
 
-  test 'unknown genres are not valid' do
-    @document.assign_attributes(genre: ['some_fake_genre'])
+  test 'unknown genresss are not valid' do
+    @document.assign_attributes(genres: ['some_fake_genres'])
     assert_not @document.valid?
-    assert_includes @document.errors[:genre], 'is not recognized'
+    assert_includes @document.errors[:genres], 'is not recognized'
   end
 
   test 'unknown languages are not valid' do
-    @document.assign_attributes(language: ['some_fake_language'])
+    @document.assign_attributes(languages: ['some_fake_language'])
     assert_not @document.valid?
-    assert_includes @document.errors[:language], 'is not recognized'
+    assert_includes @document.errors[:languages], 'is not recognized'
   end
 
   test 'unknown rights are not valid' do
@@ -73,11 +73,11 @@ class Digitization::BookTest < ActiveSupport::TestCase
   end
 
   test 'dates must conform to EDTF format' do
-    @document.assign_attributes(date_issued: ['INVALID DATE'], temporal_subject: ['INVALID DATE'])
+    @document.assign_attributes(dates_issued: ['INVALID DATE'], temporal_subjects: ['INVALID DATE'])
     assert_not @document.valid?
     assert_equal('does not conform to the Extended Date/Time Format standard',
-                 @document.errors[:temporal_subject].first)
-    assert_equal('does not conform to the Extended Date/Time Format standard', @document.errors[:date_issued].first)
+                 @document.errors[:temporal_subjects].first)
+    assert_equal('does not conform to the Extended Date/Time Format standard', @document.errors[:dates_issued].first)
   end
 
 end
