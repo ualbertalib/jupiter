@@ -74,7 +74,7 @@ if Rails.env.development? || Rails.env.uat?
     community = Community.create!(
       owner_id: admin.id,
       title: title,
-      description: if idx == THINGS.size-1
+      description: if idx == THINGS.size - 1
                      Faker::Markdown.sandwich
                    else
                      Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop
@@ -98,7 +98,7 @@ if Rails.env.development? || Rails.env.uat?
       owner_id: admin.id,
       title: "The annals of '#{thing.capitalize} International'",
       community_id: community.id,
-      description: if idx == THINGS.size-1
+      description: if idx == THINGS.size - 1
                      Faker::Markdown.sandwich
                    else
                      Faker::Lorem.sentence(word_count: 40, supplemental: false, random_words_to_add: 0).chop
