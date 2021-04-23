@@ -7,6 +7,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 ## [Unreleased]
 
 ### Added
+- Added oaisys tests [#1888](https://github.com/ualbertalib/jupiter/issues/1888)
 - Initialize disabled ReadOnlyMode [#2100](https://github.com/ualbertalib/jupiter/issues/2100)
 - Updated Architecture diagrams [PR#2135](https://github.com/ualbertalib/jupiter/pull/2135)
 
