@@ -542,7 +542,7 @@ DEPENDENCIES
   draper
   edtf (~> 3.0, >= 3.0.6)
   erb_lint (>= 0.0.35)
-  ezid-client (~> 1.8.0)
+  ezid-client (< 1.9.0)
   faker
   flipper (~> 0.20.4)
   flipper-active_record (~> 0.20.4)
