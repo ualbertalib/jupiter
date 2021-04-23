@@ -10,7 +10,6 @@ class Exporters::Solr::CollectionExporter < Exporters::Solr::BaseExporter
 
   index :community_id, type: :path, role: :pathing
 
-  index :description, role: [:search]
   index :restricted, type: :boolean, role: :exact_match
   index :creators, role: :exact_match
 
@@ -25,6 +24,9 @@ class Exporters::Solr::CollectionExporter < Exporters::Solr::BaseExporter
                                  as: lambda { |collection|
                                        Community.find(collection.community_id).title if collection.community_id.present?
                                      }
+
+  # Description may contain markdown which isn't particularly useful in a search context.  Let's strip that out.
+  custom_index :description, role: [:search], as: ->(collection) { strip_markdown(collection.description) }
 
   default_sort index: :title, direction: :asc
 

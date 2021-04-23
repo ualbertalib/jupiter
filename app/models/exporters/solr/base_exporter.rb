@@ -139,6 +139,10 @@ class Exporters::Solr::BaseExporter
     name == fulltext_searchable_field
   end
 
+  def self.strip_markdown(text)
+    plaintext_renderer.render(text) if text.present?
+  end
+
   protected
 
   # provide a consistent representation of values in Solr, based on what we were doing previously with solrizer
@@ -306,6 +310,13 @@ class Exporters::Solr::BaseExporter
 
         index :date_ingested, type: :date, role: [:sort]
       end
+    end
+
+    # memoized method to initialize and reuse the renderer for stripping markdown
+    # which is used to create plaintext for the exporter
+    def plaintext_renderer
+      @plaintext_renderer ||= Redcarpet::Markdown.new(Redcarpet::Render::StripDown,
+                                                      Rails.configuration.markdown_rendering_extensions)
     end
 
   end

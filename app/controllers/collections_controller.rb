@@ -13,6 +13,8 @@ class CollectionsController < ApplicationController
     )
     @results = search_query_index.results
     @search_models = search_query_index.search_models
+    @collection = @collection.decorate
+    @community = @community.decorate
   end
 
   private
