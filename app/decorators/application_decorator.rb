@@ -28,16 +28,8 @@ class ApplicationDecorator < Draper::Decorator
 
   private
 
-  REDCARPET_OPTIONS = {
-    filter_html: true,
-    no_images: true,
-    no_styles: true,
-    hard_wrap: true,
-    link_attributes: { rel: 'noopener noreferrer', target: '_blank' }
-  }.freeze
-
   def html_renderer
-    renderer = Redcarpet::Render::HTML.new(REDCARPET_OPTIONS)
+    renderer = Redcarpet::Render::HTML.new(Rails.configuration.markdown_rendering_options)
     @html_renderer ||= Redcarpet::Markdown.new(renderer, Rails.configuration.markdown_rendering_extensions)
   end
 
