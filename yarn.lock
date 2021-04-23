@@ -3104,10 +3104,10 @@ dot-prop@^5.2.0:
   dependencies:
     is-obj "^2.0.0"
 
-dropzone@^5.8.0:
-  version "5.8.0"
-  resolved "https://registry.yarnpkg.com/dropzone/-/dropzone-5.8.0.tgz#8a3c27f4ac6d29e4e37bbe2522b5fc17821075f8"
-  integrity sha512-aJQ0VpHrhkm7TcAaeUgCgnyGP/7gNXjNBM6xxx+7HPlLiHfFUa2PkfRMU3wHgBNPyH+UcF/zpJWY3QCt4l61xQ==
+dropzone@^5.9.2:
+  version "5.9.2"
+  resolved "https://registry.yarnpkg.com/dropzone/-/dropzone-5.9.2.tgz#0a90ce3f6b011c3932484f368f4bf06223729450"
+  integrity sha512-5t2z51DzIsWDbTpwcJIvUlwxBbvcwdCApz0yb9ecKJwG155Xm92KMEZmHW1B0MzoXOKvFwdd0nPu5cpeVcvPHQ==
 
 duplexify@^3.4.2, duplexify@^3.6.0:
   version "3.7.1"
