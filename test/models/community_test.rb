@@ -5,20 +5,20 @@ class CommunityTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
 
   test 'visibility callback' do
-    community = Community.new(title: 'foo', owner_id: users(:admin).id)
+    community = Community.new(title: 'foo', owner_id: users(:user_admin).id)
     assert community.valid?
     assert_equal community.visibility, JupiterCore::VISIBILITY_PUBLIC
   end
 
   test 'needs title' do
-    community = Community.new(owner_id: users(:admin).id)
+    community = Community.new(owner_id: users(:user_admin).id)
     assert_not community.valid?
     assert_equal "Title can't be blank", community.errors.full_messages.first
   end
 
   test 'a logo can be attached' do
     # We need to create this LdpObject to get a GlobalID
-    community = communities(:books)
+    community = communities(:community_books)
     assert community.to_gid.present?
 
     community.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
@@ -38,7 +38,7 @@ class CommunityTest < ActiveSupport::TestCase
   end
 
   test 'an updated logo replaces the old one' do
-    community = communities(:books)
+    community = communities(:community_books)
     community.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
                           filename: 'sample1.jpeg', content_type: 'image/jpeg'
 

@@ -75,7 +75,7 @@ class ActiveSupport::TestCase
   end
 
   def sign_in_as_system_user
-    user = users(:system_user)
+    user = users(:user_system)
     api_key = '3eeb395e-63b7-11ea-bc55-0242ac130003'
     post auth_system_url, params: { email: user.email, api_key: api_key }
   end

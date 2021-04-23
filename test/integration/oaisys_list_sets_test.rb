@@ -88,8 +88,8 @@ class OaisysListSetsTest < ActionDispatch::IntegrationTest
         headers: { 'Accept' => 'application/xml' }
 
     # Test expiration of resumption token when results change.
-    Collection.create!(community_id: communities(:books).id,
-                       title: 'Fancy Collection 7', owner_id: users(:admin).id,
+    Collection.create!(community_id: communities(:community_books).id,
+                       title: 'Fancy Collection 7', owner_id: users(:user_admin).id,
                        description: '')
 
     get oaisys_path(verb: 'ListSets', resumptionToken: resumption_token),

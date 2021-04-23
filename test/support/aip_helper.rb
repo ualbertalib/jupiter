@@ -75,8 +75,8 @@ module AipHelper
     community: nil,
     collection: nil
   )
-    community ||= communities(:fancy_community)
-    collection ||= collections(:fancy_collection)
+    community ||= communities(:community_fancy)
+    collection ||= collections(:collection_fancy)
 
     entity = entity_class.new(parameters).tap do |current_entity|
       current_entity.add_to_path(community.id, collection.id)

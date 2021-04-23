@@ -1,36 +1,36 @@
-fantasy_books:
+collection_fantasy:
   title: 'Fantasy Books'
-  owner: admin
-  community: books
+  owner: user_admin
+  community: community_books
   record_created_at: <%= Time.zone.now - 1.hour %>
   date_ingested: <%= Time.zone.now - 1.hour %>
 
-thesis:
+collection_thesis:
   title: 'Thesis Collection'
   restricted: true
-  owner: admin
-  community: thesis
+  owner: user_admin
+  community: community_thesis
   record_created_at: <%= Time.zone.now - 1.hour %>
   date_ingested: <%= Time.zone.now - 1.hour %>
 
-embargoed_thesis:
+collection_embargoed:
   title: 'Theses in Emabargo Collection'
   restricted: true
-  owner: admin
-  community: thesis
+  owner: user_admin
+  community: community_thesis
   record_created_at: <%= Time.zone.now - 1.hour %>
   date_ingested: <%= Time.zone.now - 1.hour %>
 
-fancy_collection:
+collection_fancy:
   title: 'Fancy Collection'
-  owner: admin
-  community: fancy_community
+  owner: user_admin
+  community: community_fancy
   record_created_at: <%= Time.zone.now - 1.hour %>
   date_ingested: <%= Time.zone.now - 1.hour %>
 
-fancier_collection:
+collection_fancier:
   title: 'Fancier Collection'
-  owner: admin
-  community: fancy_community
+  owner: user_admin
+  community: community_fancy
   record_created_at: <%= Time.zone.now - 1.hour %>
   date_ingested: <%= Time.zone.now - 1.hour %>

@@ -3,7 +3,7 @@ require 'application_system_test_case'
 class ProfileIndexTest < ApplicationSystemTestCase
 
   test 'should show basic information about the logged in user' do
-    user = users(:regular)
+    user = users(:user_regular)
     login_user(user)
 
     click_link user.name # opens user dropdown which has the profile link
@@ -27,7 +27,7 @@ class ProfileIndexTest < ApplicationSystemTestCase
   end
 
   test 'should show draft theses if available' do
-    admin = users(:admin)
+    admin = users(:user_admin)
 
     login_user(admin)
 
@@ -54,13 +54,13 @@ class ProfileIndexTest < ApplicationSystemTestCase
 
   test 'should view items owned by logged in user' do
     # NOTE: searching and faceting is covered more extensively in tests elsewhere
-    user = users(:regular)
+    user = users(:user_regular)
 
     # creating the index from the fixtures requires a save
     # TODO: these would be good candidates for using factories instead.
-    items(:fancy).save
-    items(:admin).save
-    thesis(:nice).save
+    items(:item_fancy).save
+    items(:item_admin).save
+    thesis(:thesis_nice).save
 
     login_user(user)
 

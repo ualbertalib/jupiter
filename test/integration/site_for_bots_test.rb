@@ -4,14 +4,14 @@ class SiteForBotsTest < ActionDispatch::IntegrationTest
 
   setup do
     # A community with two collections
-    @community1 = Community.create!(title: 'Two collection community', owner_id: users(:admin).id)
+    @community1 = Community.create!(title: 'Two collection community', owner_id: users(:user_admin).id)
     @collection1 = Collection.create!(community_id: @community1.id,
-                                      title: 'Nice collection', owner_id: users(:admin).id)
+                                      title: 'Nice collection', owner_id: users(:user_admin).id)
     @collection2 = Collection.create!(community_id: @community1.id,
-                                      title: 'Another collection', owner_id: users(:admin).id)
+                                      title: 'Another collection', owner_id: users(:user_admin).id)
     @item = Item.new.tap do |uo|
       uo.title = 'Fantastic item'
-      uo.owner_id = users(:admin).id
+      uo.owner_id = users(:user_admin).id
       uo.creators = ['Joe Blow', 'Smokey Chantilly-Tiffany', 'Céline Marie Claudette Dion']
       uo.visibility = JupiterCore::VISIBILITY_PUBLIC
       uo.created = '1999-09-09'
@@ -33,7 +33,7 @@ class SiteForBotsTest < ActionDispatch::IntegrationTest
     end
     @thesis = Thesis.new.tap do |uo|
       uo.title = 'Fantasitc thesis'
-      uo.owner_id = users(:admin).id
+      uo.owner_id = users(:user_admin).id
       uo.dissertant = 'Joe Blow'
       uo.visibility = JupiterCore::VISIBILITY_PUBLIC
       uo.graduation_date = '2017-03-31'

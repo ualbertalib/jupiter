@@ -64,7 +64,7 @@ class AuthenticationTest < ApplicationSystemTestCase
   end
 
   test 'should get redirected to homepage then back to homepage again with error, if user is unauthorized' do
-    draft_item = draft_items(:completed_describe_item_step)
+    draft_item = draft_items(:draft_item_completed_describe_item_step)
     draft_item.save
     visit item_draft_path(item_id: draft_item.id, id: :describe_item)
 
