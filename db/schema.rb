@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_22_161911) do
+ActiveRecord::Schema.define(version: 2021_04_22_200517) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -109,6 +109,7 @@ ActiveRecord::Schema.define(version: 2021_04_22_161911) do
     t.string "geographic_subjects", array: true
     t.string "rights"
     t.string "topical_subjects", array: true
+    t.string "volume_label"
     t.index ["peel_id", "run", "part_number"], name: "unique_peel_book", unique: true
   end
 
