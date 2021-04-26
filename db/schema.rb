@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_04_210653) do
+ActiveRecord::Schema.define(version: 2021_04_22_161911) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -95,20 +95,20 @@ ActiveRecord::Schema.define(version: 2020_12_04_210653) do
     t.integer "part_number"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "date_issued", array: true
-    t.string "temporal_subject", array: true
+    t.string "dates_issued", array: true
+    t.string "temporal_subjects", array: true
     t.string "title", null: false
-    t.text "alt_title", array: true
+    t.text "alternative_titles", array: true
     t.string "resource_type", null: false
-    t.string "genre", null: false, array: true
-    t.string "language", null: false, array: true
-    t.string "publisher", array: true
-    t.string "place_of_publication", array: true
+    t.string "genres", null: false, array: true
+    t.string "languages", null: false, array: true
+    t.string "publishers", array: true
+    t.string "places_of_publication", array: true
     t.string "extent"
-    t.text "note", array: true
-    t.string "geographic_subject", array: true
+    t.text "notes", array: true
+    t.string "geographic_subjects", array: true
     t.string "rights"
-    t.string "topical_subject", array: true
+    t.string "topical_subjects", array: true
     t.index ["peel_id", "run", "part_number"], name: "unique_peel_book", unique: true
   end
 
