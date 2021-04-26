@@ -838,16 +838,16 @@ en:
           'Attribution-NonCommercial-NoDerivatives 3.0 International'
         attribution_noncommercial_sharealike_2_5_canada:
           'Attribution-NonCommercial-ShareAlike 2.5 Canada'
-
+      institution:
+        uofa: 'University of Alberta'
+        st_stephens: "St. Stephen's College"
+    jupiter_core:
       visibility:
         authenticated: Authenticated
         embargo: Embargo
         draft: Draft
         private: Private
         public: Public
-      institution:
-        uofa: 'University of Alberta'
-        st_stephens: "St. Stephen's College"
 
   facets:
     member_of_paths: 'Collections'

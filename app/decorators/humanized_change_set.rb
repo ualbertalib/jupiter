@@ -142,7 +142,7 @@ class HumanizedChangeSet
   end
 
   def humanize_visibility_attribute(attribute)
-    @changeset[attribute].map { |visibility| @h.humanize_uri(:era, :visibility, visibility) }
+    @changeset[attribute].map { |visibility| @h.humanize_uri(:jupiter_core, :visibility, visibility) }
   end
 
   def localize_date_to_timezone(attribute)

@@ -256,33 +256,33 @@ class DraftItem < ApplicationRecord
     type
   end
 
-  # Maps DraftItem.visibilities to ControlledVocabulary.era.visibility
+  # Maps DraftItem.visibilities to ControlledVocabulary.jupiter_core.visibility
   def visibility_as_uri
     # Can't have a private or draft visibilty so no mappings for this
     code = VISIBILITY_TO_URI_CODE.fetch(visibility.to_sym)
-    ControlledVocabulary.era.visibility.from_value(code)
+    ControlledVocabulary.jupiter_core.visibility.from_value(code)
   end
 
   def visibility_for_uri(uri)
-    code = ControlledVocabulary.era.visibility.from_uri(uri)
+    code = ControlledVocabulary.jupiter_core.visibility.from_uri(uri)
     visibility = URI_CODE_TO_VISIBILITY[code].to_s
     raise ArgumentError, "Unable to map DraftItem visbility from URI: #{uri}, code: #{code}" if visibility.blank?
 
     visibility
   end
 
-  # Maps DraftItem.visibility_after_embargo to ControlledVocabulary.era.visibility
+  # Maps DraftItem.visibility_after_embargo to ControlledVocabulary.jupiter_core.visibility
   def visibility_after_embargo_as_uri
     return nil unless embargo?
 
     code = VISIBILITY_AFTER_EMBARGO_TO_URI_CODE.fetch(visibility_after_embargo.to_sym)
-    ControlledVocabulary.era.visibility.from_value(code)
+    ControlledVocabulary.jupiter_core.visibility.from_value(code)
   end
 
   def visibility_after_embargo_for_uri(uri)
     return 0 if uri.blank?
 
-    code = ControlledVocabulary.era.visibility.from_uri(uri)
+    code = ControlledVocabulary.jupiter_core.visibility.from_uri(uri)
     visibility = URI_CODE_TO_VISIBILITY_AFTER_EMBARGO[code].to_s
     if visibility.blank?
       raise ArgumentError, "Unable to map DraftItem visbility_after_embargo from URI: #{uri}, code: #{code}"

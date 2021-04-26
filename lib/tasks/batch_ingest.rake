@@ -121,12 +121,12 @@ def item_ingest(item_data, index, csv_directory)
 
     # Handle visibility and embargo logic
     if item_data[:visibility].present?
-      unlocked_obj.visibility = ControlledVocabulary.era.visibility.from_value(item_data[:visibility])
+      unlocked_obj.visibility = ControlledVocabulary.jupiter_core.visibility.from_value(item_data[:visibility])
     end
 
     if item_data[:visibility_after_embargo].present?
       unlocked_obj.visibility_after_embargo =
-        ControlledVocabulary.era.visibility.from_value(item_data[:visibility_after_embargo])
+        ControlledVocabulary.jupiter_core.visibility.from_value(item_data[:visibility_after_embargo])
     end
 
     unlocked_obj.embargo_end_date = item_data[:embargo_end_date].to_date if item_data[:embargo_end_date].present?
@@ -206,11 +206,11 @@ def thesis_ingest(thesis_data, index, csv_directory, checksums)
     unlocked_obj.abstract = thesis_data[:abstract]
 
     # Handle visibility and embargo logic
-    unlocked_obj.visibility = ControlledVocabulary.era.visibility.from_value(:embargo)
+    unlocked_obj.visibility = ControlledVocabulary.jupiter_core.visibility.from_value(:embargo)
 
     if thesis_data[:date_of_embargo].present?
       unlocked_obj.visibility_after_embargo =
-        ControlledVocabulary.era.visibility.from_value(:public)
+        ControlledVocabulary.jupiter_core.visibility.from_value(:public)
     end
 
     if thesis_data[:date_of_embargo].present?
