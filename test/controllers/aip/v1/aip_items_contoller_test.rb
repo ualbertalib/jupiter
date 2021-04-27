@@ -89,7 +89,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
     radioactive_item.visibility = Item::VISIBILITY_EMBARGO
     radioactive_item.embargo_history = ['acl:embargoHistory1$ Item currently embargoed']
     radioactive_item.embargo_end_date = '2080-01-01T00:00:00.000Z'
-    radioactive_item.visibility_after_embargo = ControlledVocabulary.era.visibility.public
+    radioactive_item.visibility_after_embargo = ControlledVocabulary.jupiter_core.visibility.public
     ingest_files_for_entity(radioactive_item)
     radioactive_item.save!
     radioactive_item.reload
@@ -120,7 +120,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
       '2000-01-01T00:00:00.000Z.  Visibility during embargo was restricted and intended visibility after embargo was ' \
       'open'
     ]
-    radioactive_item.visibility_after_embargo = ControlledVocabulary.era.visibility.public
+    radioactive_item.visibility_after_embargo = ControlledVocabulary.jupiter_core.visibility.public
     ingest_files_for_entity(radioactive_item)
     radioactive_item.save!
     radioactive_item.reload

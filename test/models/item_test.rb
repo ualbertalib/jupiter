@@ -105,7 +105,7 @@ class ItemTest < ActiveSupport::TestCase
     item = Item.new
     item.tap do |unlocked_item|
       unlocked_item.visibility = JupiterCore::VISIBILITY_PUBLIC
-      unlocked_item.visibility_after_embargo = ControlledVocabulary.era.visibility.draft
+      unlocked_item.visibility_after_embargo = ControlledVocabulary.jupiter_core.visibility.draft
     end
 
     assert_not item.valid?

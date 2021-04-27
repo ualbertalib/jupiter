@@ -153,15 +153,15 @@ class DraftThesis < ApplicationRecord
     language
   end
 
-  # Maps DraftItem.visibilities to ControlledVocabulary.era.visibility
+  # Maps DraftItem.visibilities to ControlledVocabulary.jupiter_core.visibility
   def visibility_as_uri
     # Can't have a private or draft visibilty so no mappings for this
     code = VISIBILITY_TO_URI_CODE.fetch(visibility.to_sym)
-    ControlledVocabulary.era.visibility.from_value(code)
+    ControlledVocabulary.jupiter_core.visibility.from_value(code)
   end
 
   def visibility_for_uri(uri)
-    code = ControlledVocabulary.era.visibility.from_uri(uri)
+    code = ControlledVocabulary.jupiter_core.visibility.from_uri(uri)
     visibility = URI_CODE_TO_VISIBILITY[code].to_s
     raise ArgumentError, "Unable to map DraftItem visbility from URI: #{uri}, code: #{code}" if visibility.blank?
 

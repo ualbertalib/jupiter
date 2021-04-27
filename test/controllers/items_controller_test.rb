@@ -30,7 +30,7 @@ class ItemsControllerTest < ActionDispatch::IntegrationTest
       graduation_date: '2017-03-31',
       visibility: JupiterCore::Depositable::VISIBILITY_EMBARGO,
       embargo_end_date: 2.days.from_now.to_date,
-      visibility_after_embargo: ControlledVocabulary.era.visibility.public
+      visibility_after_embargo: ControlledVocabulary.jupiter_core.visibility.public
     ).tap do |unlocked_thesis|
       unlocked_thesis.add_to_path(@community.id, @collection.id)
       unlocked_thesis.save!

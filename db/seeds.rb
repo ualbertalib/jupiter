@@ -322,7 +322,7 @@ if Rails.env.development? || Rails.env.uat?
     ).tap do |uo|
       uo.add_to_path(community.id, item_collection.id)
       uo.embargo_end_date = 20.years.from_now.to_date
-      uo.visibility_after_embargo = ControlledVocabulary.era.visibility.public
+      uo.visibility_after_embargo = ControlledVocabulary.jupiter_core.visibility.public
       uo.save!
     end
 
@@ -342,7 +342,7 @@ if Rails.env.development? || Rails.env.uat?
     ).tap do |uo|
       uo.add_to_path(community.id, item_collection.id)
       uo.embargo_end_date = 2.days.ago.to_date
-      uo.visibility_after_embargo = ControlledVocabulary.era.visibility.public
+      uo.visibility_after_embargo = ControlledVocabulary.jupiter_core.visibility.public
       uo.save!
     end
 
@@ -509,7 +509,7 @@ if Rails.env.development? || Rails.env.uat?
       visibility: Item::VISIBILITY_EMBARGO,
       embargo_history: ['acl:embargoHistory1$ Item currently embargoed'],
       embargo_end_date: '2080-01-01T00:00:00.000Z',
-      visibility_after_embargo: ControlledVocabulary.era.visibility.public
+      visibility_after_embargo: ControlledVocabulary.jupiter_core.visibility.public
     )
   ).tap do |item|
     # Attach files
@@ -540,7 +540,7 @@ if Rails.env.development? || Rails.env.uat?
         '2000-01-01T00:00:00.000Z.  Visibility during embargo was restricted and intended visibility after embargo '\
         'was open'
       ],
-      visibility_after_embargo: ControlledVocabulary.era.visibility.public
+      visibility_after_embargo: ControlledVocabulary.jupiter_core.visibility.public
     )
   ).tap do |item|
     # Attach files
@@ -663,7 +663,7 @@ if Rails.env.development? || Rails.env.uat?
       visibility: Thesis::VISIBILITY_EMBARGO,
       embargo_history: ['acl:embargoHistory1$ Thesis currently embargoed'],
       embargo_end_date: '2080-01-01T00:00:00.000Z',
-      visibility_after_embargo: ControlledVocabulary.era.visibility.public
+      visibility_after_embargo: ControlledVocabulary.jupiter_core.visibility.public
     )
   ).tap do |thesis|
     # Attach files
@@ -691,7 +691,7 @@ if Rails.env.development? || Rails.env.uat?
         '2016-06-15T06:00:00.000Z.  Visibility during embargo was restricted and intended visibility after embargo ' \
         'was open'
       ],
-      visibility_after_embargo: ControlledVocabulary.era.visibility.public
+      visibility_after_embargo: ControlledVocabulary.jupiter_core.visibility.public
     )
   ).tap do |thesis|
     # Attach files
