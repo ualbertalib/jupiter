@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_27_201321) do
+ActiveRecord::Schema.define(version: 2021_04_27_212402) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -122,6 +122,12 @@ ActiveRecord::Schema.define(version: 2021_04_27_201321) do
     t.string "peel_image_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "date_ingested", null: false
+    t.datetime "record_created_at"
+    t.string "visibility"
+    t.bigint "owner_id", null: false
+    t.string "title", null: false
+    t.index ["owner_id"], name: "index_digitization_images_on_owner_id"
     t.index ["peel_image_id"], name: "unique_peel_image", unique: true
   end
 
@@ -413,6 +419,7 @@ ActiveRecord::Schema.define(version: 2021_04_27_201321) do
   add_foreign_key "collections", "users", column: "owner_id"
   add_foreign_key "communities", "users", column: "owner_id"
   add_foreign_key "digitization_books", "users", column: "owner_id"
+  add_foreign_key "digitization_images", "users", column: "owner_id"
   add_foreign_key "digitization_newspapers", "users", column: "owner_id"
   add_foreign_key "draft_items", "users"
   add_foreign_key "draft_theses", "institutions"
