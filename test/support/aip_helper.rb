@@ -108,11 +108,17 @@ module AipHelper
   end
 
   def load_radioactive_n3_graph(entity, postfix)
+    # We fetch the values for community and collections UUIDs because they are not hardcoded into the entity fixture,
+    # but instead they are identified from fixtures community_fancy and collection_fancy
+    community_uuid, collection_uuid = entity.member_of_paths.first.split('/')
+
     # n3_template in load_n3_graph method repalces the 2 fileset uuids because they will change everytime the test is
     # run and the files are added
     variables = {
       fileset_0_uuid: entity.files[0].fileset_uuid,
-      fileset_1_uuid: entity.files[1].fileset_uuid
+      fileset_1_uuid: entity.files[1].fileset_uuid,
+      community_uuid: community_uuid,
+      collection_uuid: collection_uuid
     }
 
     load_n3_graph(file_fixture("n3/#{entity.class.table_name}/#{entity.id}-#{postfix}.n3"), variables)

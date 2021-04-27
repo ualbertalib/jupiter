@@ -10,7 +10,7 @@
   dc:title "dcterms:title1$ Some Title for Item";
   pcdm:hasMember <http://localhost/aip/v1/items/e2ec88e3-3266-4e95-8575-8b04fac2a679/filesets/<%= fileset_0_uuid %>>,
     <http://localhost/aip/v1/items/e2ec88e3-3266-4e95-8575-8b04fac2a679/filesets/<%= fileset_1_uuid %>>;
-  pcdm:memberOf <http://localhost/aip/v1/collections/929c81d5-d15e-570e-83c4-ec41755c879d>;
+  pcdm:memberOf <http://localhost/aip/v1/collections/<%= collection_uuid %>>;
   <http://prismstandard.org/namespaces/basic/3.0/doi> "doi:10.7939/xxxxxxxxx";
   dc11:contributor "dc:contributor1$ Perez, Juan",
     "dc:contributor2$ Perez, Maria";
@@ -42,7 +42,7 @@
   <http://terms.library.ualberta.ca/fedora3UUID> "uuid:97b1a8e2-a4b9-4941-b6ed-c4730f0a2a61";
   <http://terms.library.ualberta.ca/hydraNoid> "cgq67jr26k";
   <http://terms.library.ualberta.ca/ingestBatch> "9019s326c";
-  <http://terms.library.ualberta.ca/path> "f0755e45-0aef-537a-98ce-6c8ed1165b92/929c81d5-d15e-570e-83c4-ec41755c879d";
+  <http://terms.library.ualberta.ca/path> "<%= community_uuid %>/<%= collection_uuid %>";
   <http://terms.library.ualberta.ca/recordCreatedInJupiter> "2000-01-01T00:00:00.007Z"^^xsd:dateTime;
   <http://terms.library.ualberta.ca/sortYear> 2000;
   ebucore:dateIngested "2000-01-01T00:00:00.007Z"^^xsd:dateTime;
