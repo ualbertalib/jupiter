@@ -59,6 +59,7 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 - Moved `visibility` vocabulary into a `jupiter_core` namespace
 - Move `doi_url` to `Doiable` class
 - Make `Digitization::Book` `Depositable`
+- Make `Digitization::Newspaper` `Depositable`
 
 ### Fixed
 - bump rubocop and fix cop violations [PR#2072](https://github.com/ualbertalib/jupiter/pull/2072)
