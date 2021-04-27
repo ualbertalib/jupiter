@@ -61,6 +61,7 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 - Make `Digitization::Book` `Depositable`
 - Make `Digitization::Newspaper` `Depositable`
 - Make `Digitization::Image` `Depositable`
+- Make `Digitization::Map` `Depositable`
 
 ### Fixed
 - bump rubocop and fix cop violations [PR#2072](https://github.com/ualbertalib/jupiter/pull/2072)
