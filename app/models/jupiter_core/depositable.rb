@@ -76,10 +76,6 @@ class JupiterCore::Depositable < ApplicationRecord
     visibility == JupiterCore::VISIBILITY_AUTHENTICATED
   end
 
-  def doi_url
-    "https://doi.org/#{doi.delete_prefix('doi:')}"
-  end
-
   def each_community_collection
     member_of_paths.each do |path|
       community_id, collection_id = path.split('/')
