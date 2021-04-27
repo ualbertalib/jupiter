@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_22_200517) do
+ActiveRecord::Schema.define(version: 2021_04_27_173040) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -110,6 +110,11 @@ ActiveRecord::Schema.define(version: 2021_04_22_200517) do
     t.string "rights"
     t.string "topical_subjects", array: true
     t.string "volume_label"
+    t.datetime "date_ingested", null: false
+    t.datetime "record_created_at"
+    t.string "visibility"
+    t.bigint "owner_id", null: false
+    t.index ["owner_id"], name: "index_digitization_books_on_owner_id"
     t.index ["peel_id", "run", "part_number"], name: "unique_peel_book", unique: true
   end
 
@@ -401,6 +406,7 @@ ActiveRecord::Schema.define(version: 2021_04_22_200517) do
   add_foreign_key "announcements", "users"
   add_foreign_key "collections", "users", column: "owner_id"
   add_foreign_key "communities", "users", column: "owner_id"
+  add_foreign_key "digitization_books", "users", column: "owner_id"
   add_foreign_key "draft_items", "users"
   add_foreign_key "draft_theses", "institutions"
   add_foreign_key "draft_theses", "languages"

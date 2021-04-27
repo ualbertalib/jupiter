@@ -1,4 +1,6 @@
-class Digitization::Book < ApplicationRecord
+class Digitization::Book < JupiterCore::Depositable
+
+  belongs_to :owner, class_name: 'User'
 
   validates :peel_id, uniqueness: { scope: [:run, :part_number] }, presence: true, if: :part_number?
   validates :part_number, presence: true, if: :run?
