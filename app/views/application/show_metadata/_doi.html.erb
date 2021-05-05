@@ -1,0 +1,8 @@
+<% if @item.doi.present? %>
+  <li class="list-unstyled list-group-item-action">
+    <dl>
+      <dt><%= t('items.show.doi_url') %></dt>
+      <dd><%= link_to @item.doi_url, @item.doi_url %></dd>
+    </dl>
+  </li>
+<% end %>

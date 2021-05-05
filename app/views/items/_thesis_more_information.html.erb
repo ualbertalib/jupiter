@@ -1,27 +1,7 @@
 <ul class="list-group">
-  <% if @item.language.present? %>
-    <li class="list-unstyled list-group-item-action">
-      <dl>
-        <dt><%= t('items.show.language') %></dt>
-        <dd><%= language_search_link(@item, @item.language) %></dd>
-      </dl>
-    </li>
-  <% end %>
+  <%= render partial: 'application/show_metadata/language' %>
 
-  <% if @item.is_version_of.present? %>
-    <li class="list-unstyled list-group-item-action">
-      <dl>
-        <dt><%= t('items.show.is_version_of') %></dt>
-        <dd>
-          <ul class="list-unstyled">
-            <% @item.is_version_of.each do |thing| %>
-              <li><%= thing %></li>
-            <% end %>
-          </ul>
-        </dd>
-      </dl>
-    </li>
-  <% end %>
+  <%= render partial: 'application/show_metadata/is_version_of' %>
 
   <% if @item.institution.present? %>
     <li class="list-unstyled list-group-item-action">

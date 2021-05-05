@@ -1,0 +1,5 @@
+<% if @item.alternative_title.present? %>
+  <li class="list-unstyled list-group-item-action">
+    <p title="<%= t('items.show.alternative_title') %>"><%= @item.alternative_title %></p>
+  </li>
+<% end %>

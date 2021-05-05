@@ -1,0 +1,14 @@
+<% if @item.is_version_of.present? %>
+  <li class="list-unstyled list-group-item-action">
+    <dl>
+      <dt><%= t('items.show.is_version_of') %></dt>
+      <dd>
+        <ul class="list-unstyled">
+          <% @item.is_version_of.each do |thing| %>
+            <li><%= thing %></li>
+          <% end %>
+        </ul>
+      </dd>
+    </dl>
+  </li>
+<% end %>

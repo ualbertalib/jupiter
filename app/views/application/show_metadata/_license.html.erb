@@ -1,0 +1,10 @@
+<li class="list-unstyled list-group-item-action">
+  <dl>
+    <dt><%= t('items.show.license') %></dt>
+    <% if @item.respond_to? :license || @item.license.present? %>
+      <dd><%= license_link(@item.license) %></dd>
+    <% else %>
+      <dd><%= @item.rights %></dd>
+    <% end %>
+  </dl>
+</li>

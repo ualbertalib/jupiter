@@ -1,9 +1,6 @@
+
 <ul class="list-group">
-  <% if @item.alternative_title.present? %>
-    <li class="list-unstyled list-group-item-action">
-      <p title="<%= t('items.show.alternative_title') %>"><%= @item.alternative_title %></p>
-    </li>
-  <% end %>
+  <%= render partial: 'application/show_metadata/title' %>
 
   <li class="list-unstyled list-group-item-action">
     <dl>
@@ -18,20 +15,7 @@
     </li>
   <% end %>
 
-  <% if @item.subject.present? %>
-    <li class="list-unstyled list-group-item-action">
-      <dl>
-        <dt><%= t('items.show.subject') %></dt>
-        <dd>
-          <ul class="list-unstyled">
-            <% @item.subject.each do |subject| %>
-              <li><%= search_link_for(@item, :all_subjects, value: subject) %></li>
-            <% end %>
-          </ul>
-        </dd>
-      </dl>
-    </li>
-  <% end %>
+  <%= render partial: 'application/show_metadata/subject' %>
 
   <% if @item.graduation_date.present? %>
     <li class="list-unstyled list-group-item-action">
@@ -42,12 +26,7 @@
     </li>
   <% end %>
 
-  <li class="list-unstyled list-group-item-action">
-    <dl>
-      <dt><%= t('items.show.item_type_with_status') %></dt>
-      <dd><%= item_type_search_link(@item) %></dd>
-    </dl>
-  </li>
+  <%= render partial: 'application/show_metadata/item_type_with_status' %>
 
   <% if @item.degree.present? %>
     <li class="list-unstyled list-group-item-action">
@@ -58,42 +37,12 @@
     </li>
   <% end %>
 
-  <% if @item.doi.present? %>
-    <li class="list-unstyled list-group-item-action">
-      <dl>
-        <dt><%= t('items.show.doi_url') %></dt>
-        <dd><%= link_to @item.doi_url, @item.doi_url %></dd>
-      </dl>
-    </li>
-  <% end %>
+  <%= render partial: 'application/show_metadata/doi' %>
 
-  <% if @item.rights.present? %>
-    <li class="list-unstyled list-group-item-action">
-      <dl>
-        <dt><%= t('items.show.license') %></dt>
-        <dd><%= @item.rights %></dd>
-      </dl>
-    </li>
-  <% end %>
+  <%= render partial: 'application/show_metadata/license' %>
 </ul>
 
-<%# ADDITIONAL INFORMATION %>
-<button type="button"
-        data-toggle="collapse"
-        data-target="#more-information-hidden"
-        aria-expanded="false"
-        aria-controls="more-information-hidden"
-        class="btn btn-outline-secondary mb-3 js-more-information-btn font-italic">
-    <span class="js-more-information-hidden">
-      <%= t(:more_information) %>
-      <%= icon('fas', 'chevron-down') %>
-    </span>
-
-    <span class="d-none js-more-information-shown">
-      <%= t(:show_less) %>
-      <%= icon('fas', 'chevron-up') %>
-    </span>
-</button>
+<%= render partial: 'application/show_metadata/additional_information' %>
 
 <div class="collapse" id='more-information-hidden'>
   <%= render partial: 'thesis_more_information' %>

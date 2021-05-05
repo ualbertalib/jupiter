@@ -17,4 +17,12 @@ class ThesisDecorator < ApplicationDecorator
     strip_markdown(model.abstract)
   end
 
+  def all_subjects
+    model.subject
+  end
+
+  def languages
+    [model.language]
+  end
+
 end

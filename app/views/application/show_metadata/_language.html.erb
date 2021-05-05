@@ -1,0 +1,14 @@
+<% if @item.languages.present? %>
+  <li class="list-unstyled list-group-item-action">
+    <dl>
+      <dt><%= t('items.show.language') %></dt>
+      <dd>
+        <ul class="list-unstyled">
+          <% @item.languages.each do |language| %>
+            <li><%= language_search_link(@item, language) %></li>
+          <% end %>
+        </ul>
+      </dd>
+    </dl>
+  </li>
+<% end %>

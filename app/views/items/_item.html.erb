@@ -1,10 +1,5 @@
-<%# TODO: Reduce duplication between this partial and thesis, pretty much exactly the same %>
 <ul class="list-group">
-  <% if @item.alternative_title.present? %>
-    <li class="list-unstyled list-group-item-action">
-      <p title="<%= t('items.show.alternative_title') %>"><%= @item.alternative_title %></p>
-    </li>
-  <% end %>
+  <%= render partial: 'application/show_metadata/title' %>
 
   <% if @item.creators.present? %>
     <li class="list-unstyled list-group-item-action">
@@ -41,66 +36,16 @@
     </li>
   <% end %>
 
-  <% if @item.subject.present? %>
-    <li class="list-unstyled list-group-item-action">
-      <dl>
-        <dt><%= t('items.show.subject') %></dt>
-        <dd>
-          <ul class="list-unstyled">
-            <% @item.all_subjects.each do |subject| %>
-              <li><%= search_link_for(@item, :all_subjects, value: subject) %></li>
-            <% end %>
-          </ul>
-        </dd>
-      </dl>
-    </li>
-  <% end %>
+  <%= render partial: 'application/show_metadata/subject' %>
 
-  <li class="list-unstyled list-group-item-action">
-    <dl>
-      <dt><%= t('items.show.item_type_with_status') %></dt>
-      <dd><%= item_type_search_link(@item) %></dd>
-    </dl>
-  </li>
+  <%= render partial: 'application/show_metadata/item_type_with_status' %>
 
-  <% if @item.doi.present? %>
-    <li class="list-unstyled list-group-item-action">
-      <dl>
-        <dt><%= t('items.show.doi_url') %></dt>
-        <dd><%= link_to @item.doi_url, @item.doi_url %></dd>
-      </dl>
-    </li>
-  <% end %>
+  <%= render partial: 'application/show_metadata/doi' %>
 
-  <li class="list-unstyled list-group-item-action">
-    <dl>
-      <dt><%= t('items.show.license') %></dt>
-      <% if @item.license.present? %>
-        <dd><%= license_link(@item.license) %></dd>
-      <% else %>
-        <dd><%= @item.rights %></dd>
-      <% end %>
-    </dl>
-  </li>
+  <%= render partial: 'application/show_metadata/license' %>
 </ul>
 
-<%# ADDITIONAL INFORMATION %>
-<button type="button"
-        data-toggle="collapse"
-        data-target="#more-information-hidden"
-        aria-expanded="false"
-        aria-controls="more-information-hidden"
-        class="btn btn-outline-secondary mb-3 js-more-information-btn font-italic">
-    <span class="js-more-information-hidden">
-      <%= t(:more_information) %>
-      <%= icon('fas', 'chevron-down') %>
-    </span>
-
-    <span class="d-none js-more-information-shown">
-      <%= t(:show_less) %>
-      <%= icon('fas', 'chevron-up') %>
-    </span>
-</button>
+<%= render partial: 'application/show_metadata/additional_information' %>
 
 <div class="collapse" id='more-information-hidden'>
   <%= render partial: 'item_more_information' %>

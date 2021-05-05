@@ -1,0 +1,14 @@
+<% if @item.subject.present? %>
+  <li class="list-unstyled list-group-item-action">
+    <dl>
+      <dt><%= t('items.show.subject') %></dt>
+      <dd>
+        <ul class="list-unstyled">
+          <% @item.all_subjects.each do |subject| %>
+            <li><%= search_link_for(@item, :all_subjects, value: subject) %></li>
+          <% end %>
+        </ul>
+      </dd>
+    </dl>
+  </li>
+<% end %>
