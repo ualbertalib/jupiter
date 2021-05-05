@@ -710,6 +710,7 @@ if Rails.env.development? || Rails.env.uat?
   11.times do |_i|
     Digitization::Book.create(peel_id: rand(1..3400), part_number: rand(1..100),
                               dates_issued: [rand(1900..2020).to_s],
+                              date_ingested: '2016-12-08T06:00:00.000Z',
                               title: "#{Faker::Company.name} #{Faker::WorldCup.city} Music Festival",
                               alternative_titles: [Faker::Hipster.sentence.to_s],
                               resource_type: ControlledVocabulary.digitization.resource_type.from_value('Text'),

@@ -2,6 +2,10 @@
 
 la_survivance:
   publication_code: 'LSV'
+  title: 'La Survivance March 29, 1967'
   year: '1967'
   month: '03'
   day: '29'
+  date_ingested: '2000-01-01T00:00:00.007Z'
+  record_created_at: '2000-01-01T00:00:00.007Z'
+  owner: admin
