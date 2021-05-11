@@ -3,15 +3,15 @@ require 'test_helper'
 class Items::DraftControllerTest < ActionDispatch::IntegrationTest
 
   setup do
-    @community = communities(:books)
-    @collection = collections(:fantasy_books)
-    @user = users(:regular)
+    @community = communities(:community_books)
+    @collection = collections(:collection_fantasy)
+    @user = users(:user_regular)
   end
 
   test 'should be able to get to show page for a draft item' do
     sign_in_as @user
 
-    draft_item = draft_items(:inactive)
+    draft_item = draft_items(:draft_item_inactive)
 
     get item_draft_url(id: draft_item.wizard_step, item_id: draft_item.id)
     assert_response :success
@@ -20,7 +20,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
   test 'should prevent user from skipping ahead with uncompleted steps' do
     sign_in_as @user
 
-    draft_item = draft_items(:inactive)
+    draft_item = draft_items(:draft_item_inactive)
 
     # skip ahead right to upload files step
     get item_draft_url(id: :upload_files, item_id: draft_item.id)
@@ -33,7 +33,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
   test 'should prevent going to review_and_deposit_item if draft_item has no files attached' do
     sign_in_as @user
 
-    draft_item = draft_items(:completed_choose_license_and_visibility_step)
+    draft_item = draft_items(:draft_item_completed_choose_license_and_visibility_step)
     # Make draft_item to be in the review step (although it has no files and skipped the upload files step)
     draft_item.update(wizard_step: :review_and_deposit_item)
 
@@ -48,13 +48,13 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
   # wizard_step: :describe_item
   test 'should be able to update a draft item properly when saving describe_item form' do
     sign_in_as @user
-    draft_item = draft_items(:inactive)
+    draft_item = draft_items(:draft_item_inactive)
 
     patch item_draft_url(id: :describe_item, item_id: draft_item.id), params: {
       draft_item: {
         title: 'Random Book',
-        type_id: types(:book).id,
-        language_ids: [languages(:english).id],
+        type_id: types(:type_book).id,
+        language_ids: [languages(:language_english).id],
         creators: ['Jane Doe', 'Bob Smith'],
         subjects: ['Best Seller', 'Adventure'],
         date_created: Date.current,
@@ -78,7 +78,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
   test 'should be able to update a draft item properly when saving choose_license_and_visibility form' do
     sign_in_as @user
 
-    draft_item = draft_items(:completed_describe_item_step)
+    draft_item = draft_items(:draft_item_completed_describe_item_step)
     draft_item.member_of_paths = { community_id: [@community.id], collection_id: [@collection.id] }
     draft_item.save!
 
@@ -104,7 +104,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
   test 'should be able to update a draft item properly when saving upload_files form that has file attachments' do
     sign_in_as @user
 
-    draft_item = draft_items(:completed_choose_license_and_visibility_step)
+    draft_item = draft_items(:draft_item_completed_choose_license_and_visibility_step)
     draft_item.member_of_paths = { community_id: [@community.id], collection_id: [@collection.id] }
     draft_item.save!
 
@@ -131,7 +131,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
   test 'should not be able to update a draft item when saving upload_files form that has no file attachments' do
     sign_in_as @user
 
-    draft_item = draft_items(:completed_choose_license_and_visibility_step)
+    draft_item = draft_items(:draft_item_completed_choose_license_and_visibility_step)
 
     # Here upload_files all it does is check if files been uploaded (via ajax and files_controller)
     # and if so, updated the wizard_step to upload_files and redirects to review_and_deposit_item
@@ -149,7 +149,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
   test 'should be able to review and deposit a draft item properly when saving review_and_deposit_item form' do
     sign_in_as @user
 
-    draft_item = draft_items(:completed_choose_license_and_visibility_step)
+    draft_item = draft_items(:draft_item_completed_choose_license_and_visibility_step)
     draft_item.member_of_paths = { community_id: [@community.id], collection_id: [@collection.id] }
 
     file_fixture = fixture_file_upload('/files/image-sample.jpeg', 'image/jpeg')
@@ -183,7 +183,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
   test 'should be able to update an old step without changing the current wizard_step of the draft item' do
     sign_in_as @user
 
-    draft_item = draft_items(:completed_choose_license_and_visibility_step)
+    draft_item = draft_items(:draft_item_completed_choose_license_and_visibility_step)
     draft_item.member_of_paths = { community_id: [@community.id], collection_id: [@collection.id] }
 
     file_fixture = fixture_file_upload('/files/image-sample.jpeg', 'image/jpeg')
@@ -228,9 +228,9 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should not be able to delete a draft item if you do not own the item' do
-    sign_in_as users(:regular_two)
+    sign_in_as users(:user_regular_two)
 
-    draft_item = draft_items(:completed_choose_license_and_visibility_step)
+    draft_item = draft_items(:draft_item_completed_choose_license_and_visibility_step)
 
     assert_no_difference('DraftItem.count') do
       delete item_delete_draft_url(item_id: draft_item.id)
@@ -243,7 +243,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
   test 'should be able to delete a draft item if logged in and you own the item' do
     sign_in_as @user
 
-    draft_item = draft_items(:completed_choose_license_and_visibility_step)
+    draft_item = draft_items(:draft_item_completed_choose_license_and_visibility_step)
 
     assert_difference('DraftItem.count', -1) do
       delete item_delete_draft_url(item_id: draft_item.id)

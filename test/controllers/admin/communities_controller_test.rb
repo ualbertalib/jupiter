@@ -3,9 +3,9 @@ require 'test_helper'
 class Admin::CommunitiesControllerTest < ActionDispatch::IntegrationTest
 
   setup do
-    @admin = users(:admin)
-    @community = communities(:books)
-    sign_in_as users(:admin)
+    @admin = users(:user_admin)
+    @community = communities(:community_books)
+    sign_in_as users(:user_admin)
   end
 
   test 'should get index' do

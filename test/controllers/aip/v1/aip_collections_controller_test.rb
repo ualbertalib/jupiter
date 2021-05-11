@@ -6,8 +6,8 @@ class Aip::V1::CollectionsControllerTest < ActionDispatch::IntegrationTest
   include AipHelper
 
   def setup
-    @regular_user = users(:regular)
-    @collection = collections(:fancy_collection)
+    @regular_user = users(:user_regular)
+    @collection = collections(:collection_fancy)
   end
 
   test 'should be able to show a visible collection to system user' do

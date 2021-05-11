@@ -1,24 +1,24 @@
-book:
+type_book:
   name: 'book'
-book_chapter:
+type_book_chapter:
   name: 'book_chapter'
-conference_workshop_poster:
+type_conference_workshop_poster:
   name: 'conference_workshop_poster'
-conference_workshop_presentation:
+type_conference_workshop_presentation:
   name: 'conference_workshop_presentation'
-dataset:
+type_dataset:
   name: 'dataset'
-image:
+type_image:
   name: 'image'
-journal_article_draft:
+type_journal_article_draft:
   name: 'journal_article_draft'
-journal_article_published:
+type_journal_article_published:
   name: 'journal_article_published'
-learning_object:
+type_learning_object:
   name: 'learning_object'
-report:
+type_report:
   name: 'report'
-research_material:
+type_research_material:
   name:  'research_material'
-review:
+type_review:
   name: 'review'

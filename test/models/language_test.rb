@@ -8,7 +8,7 @@ class LanguageTest < ActiveSupport::TestCase
   end
 
   test 'should give the translated version of the name' do
-    english_language = languages(:english)
+    english_language = languages(:language_english)
     assert_equal english_language.name, 'english'
     assert_equal english_language.translated_name, 'English'
   end

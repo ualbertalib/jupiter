@@ -21,6 +21,8 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - migration to fix concatenated subjects (part 2) [#1449](https://github.com/ualbertalib/jupiter/issues/1449)
 - Catch and log embargo expiry job save errors [#1989](https://github.com/ualbertalib/jupiter/issues/1989)
 - Don't send failures to SessionController in development environment [PR#2121](https://github.com/ualbertalib/jupiter/pull/2121) 
+– Rails upgraded to 6.0.3.6 to resolve certain issues with community dependencies
+- Fixture names have been modified to ensure their uniqueness [PR#2302](https://github.com/ualbertalib/jupiter/pull/2302) 
 – Rails upgraded to 6.0.3.7 to resolve security issues
 
 ### Fixed

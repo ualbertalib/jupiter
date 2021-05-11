@@ -8,11 +8,11 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     @routes = Oaisys::Engine.routes
     Oaisys::Engine.config.items_per_request = 2
 
-    @community = communities(:fancy_community)
-    @collection = collections(:fancy_collection)
+    @community = communities(:community_fancy)
+    @collection = collections(:collection_fancy)
 
-    @thesis_collection = collections(:thesis)
-    @embargoed_thesis_collection = collections(:embargoed_thesis)
+    @thesis_collection = collections(:collection_thesis)
+    @embargoed_thesis_collection = collections(:collection_embargoed)
   end
 
   test 'list identifers items xml' do
@@ -83,7 +83,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
 
     # Test expiration of resumption token when results change.
     @item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
-                     owner_id: users(:admin).id, title: 'Fancy Item 1',
+                     owner_id: users(:user_admin).id, title: 'Fancy Item 1',
                      creators: ['Joe Blow'],
                      created: '1938-01-02',
                      languages: [CONTROLLED_VOCABULARIES[:language].english],

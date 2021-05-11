@@ -4,16 +4,16 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-current_announcement:
+announcement_current:
   message: This is a test message!
-  user: admin
+  user: user_admin
 
-past_announcement:
+announcement_past:
   message: This is an expired message!
-  user: admin
+  user: user_admin
   removed_at: 2017-04-04T10:10:10Z
 
-another_past_announcement:
+announcement_past_two:
   message: This is another past message!
-  user: admin
+  user: user_admin
   removed_at: 2017-01-01T01:10:10Z

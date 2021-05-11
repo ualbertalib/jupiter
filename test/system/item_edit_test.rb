@@ -4,9 +4,9 @@ class ItemEditTest < ApplicationSystemTestCase
 
   test 'can edit item' do
     skip "this test is flapping like crazy, I think there's a timing issue with selectize_clear_all?"
-    user = users(:regular)
-    community = communities(:books)
-    collection = collections(:fantasy_books)
+    user = users(:user_regular)
+    community = communities(:community_books)
+    collection = collections(:collection_fantasy)
 
     item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
                     title: 'Book of Random',

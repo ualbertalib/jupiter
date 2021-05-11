@@ -1,6 +1,6 @@
-fancy:
+item_fancy:
   visibility: <%= JupiterCore::VISIBILITY_PUBLIC %>
-  owner: regular
+  owner: user_regular
   title: 'Fancy Item'
   creators: ['Joe Blow']
   created: 'Fall 2017'
@@ -12,13 +12,13 @@ fancy:
   item_type: <%= CONTROLLED_VOCABULARIES[:item_type].article %>
   publication_status: <%= [CONTROLLED_VOCABULARIES[:publication_status].published] %>
   subject: ['Fancy things']
-  member_of_paths: <%= ["#{ActiveRecord::FixtureSet.identify(:fancy_community, :uuid)}/#{ActiveRecord::FixtureSet.identify(:fancy_collection, :uuid)}"] %>
+  member_of_paths: <%= ["#{ActiveRecord::FixtureSet.identify(:community_fancy, :uuid)}/#{ActiveRecord::FixtureSet.identify(:collection_fancy, :uuid)}"] %>
 
 # The admin item contains a base item entry that contains one of the possible value combinations that pass all validations
 # This is a radioactive item
-admin:
+item_admin:
   id: 'e2ec88e3-3266-4e95-8575-8b04fac2a679'
-  owner: admin
+  owner: user_admin
   doi: 'doi:10.7939/xxxxxxxxx'
   visibility: <%= JupiterCore::VISIBILITY_PUBLIC %>
   creators: ['dc:creator1$ Doe, Jane', 'dc:creator2$ Doe, John']
@@ -38,7 +38,7 @@ admin:
   item_type: <%= CONTROLLED_VOCABULARIES[:item_type].image %>
   depositor: 'eraadmi@ualberta.ca'
   license: <%= CONTROLLED_VOCABULARIES[:license].attribution_sharealike_4_0_international %>
-  member_of_paths: <%= ["#{ActiveRecord::FixtureSet.identify(:fancy_community, :uuid)}/#{ActiveRecord::FixtureSet.identify(:fancy_collection, :uuid)}"] %>
+  member_of_paths: <%= ["#{ActiveRecord::FixtureSet.identify(:community_fancy, :uuid)}/#{ActiveRecord::FixtureSet.identify(:collection_fancy, :uuid)}"] %>
   fedora3_uuid: 'uuid:97b1a8e2-a4b9-4941-b6ed-c4730f0a2a61'
   fedora3_handle: 'http://hdl.handle.net/10402/era.33419'
   hydra_noid: 'cgq67jr26k'
@@ -47,9 +47,9 @@ admin:
   record_created_at: '2000-01-01T00:00:00.007Z'
   updated_at: <%= 5.day.from_now.to_s(:db) %>
 
-private_item:
+item_private:
   visibility: <%= JupiterCore::VISIBILITY_PRIVATE %>
-  owner: admin
+  owner: user_admin
   title: 'Private Item'
   creators: ['Joe Blow']
   created: 'Fall 2017'
@@ -60,11 +60,11 @@ private_item:
   item_type: <%= CONTROLLED_VOCABULARIES[:item_type].article %>
   publication_status: <%= [CONTROLLED_VOCABULARIES[:publication_status].published] %>
   subject: ['Fancy things']
-  member_of_paths: <%= ["#{ActiveRecord::FixtureSet.identify(:fancy_community, :uuid)}/#{ActiveRecord::FixtureSet.identify(:fancy_collection, :uuid)}"] %>
+  member_of_paths: <%= ["#{ActiveRecord::FixtureSet.identify(:community_fancy, :uuid)}/#{ActiveRecord::FixtureSet.identify(:collection_fancy, :uuid)}"] %>
 
-old_license:
+item_old_license:
   visibility: <%= JupiterCore::VISIBILITY_PUBLIC %>
-  owner: admin
+  owner: user_admin
   title: 'Admin Item'
   creators: ['Joe Blow']
   created: 'Winter 2017'
@@ -74,11 +74,11 @@ old_license:
   license: <%= CONTROLLED_VOCABULARIES[:old_license].attribution_3_0_international %>
   item_type: <%= CONTROLLED_VOCABULARIES[:item_type].book %>
   subject: ['Ownership']
-  member_of_paths: <%= ["#{ActiveRecord::FixtureSet.identify(:fancy_community, :uuid)}/#{ActiveRecord::FixtureSet.identify(:fancy_collection, :uuid)}"] %>
+  member_of_paths: <%= ["#{ActiveRecord::FixtureSet.identify(:community_fancy, :uuid)}/#{ActiveRecord::FixtureSet.identify(:collection_fancy, :uuid)}"] %>
 
-authenticated_item:
+item_authenticated:
   visibility: <%= JupiterCore::VISIBILITY_AUTHENTICATED %>
-  owner: admin
+  owner: user_admin
   title: 'Authenticated Item'
   creators: ['Joe Blow']
   created: 'Fall 2017'
@@ -89,4 +89,4 @@ authenticated_item:
   item_type: <%= CONTROLLED_VOCABULARIES[:item_type].article %>
   publication_status: <%= [CONTROLLED_VOCABULARIES[:publication_status].published] %>
   subject: ['Secret things']
-  member_of_paths: <%= ["#{ActiveRecord::FixtureSet.identify(:fancy_community, :uuid)}/#{ActiveRecord::FixtureSet.identify(:fancy_collection, :uuid)}"] %>
+  member_of_paths: <%= ["#{ActiveRecord::FixtureSet.identify(:community_fancy, :uuid)}/#{ActiveRecord::FixtureSet.identify(:collection_fancy, :uuid)}"] %>

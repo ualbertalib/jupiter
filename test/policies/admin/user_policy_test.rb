@@ -3,10 +3,10 @@ require 'test_helper'
 class Admin::UserPolicyTest < ActiveSupport::TestCase
 
   setup do
-    @current_user = users(:admin)
-    @user = users(:regular)
-    @suspended_user = users(:suspended)
-    @admin_user = users(:admin_two)
+    @current_user = users(:user_admin)
+    @user = users(:user_regular)
+    @suspended_user = users(:user_suspended)
+    @admin_user = users(:user_admin_two)
   end
 
   test 'should not be able to suspend a supended user' do

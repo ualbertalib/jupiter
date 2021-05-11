@@ -3,7 +3,7 @@ require 'application_system_test_case'
 class AdminUsersIndexTest < ApplicationSystemTestCase
 
   test 'should be able to sort columns' do
-    admin = users(:admin)
+    admin = users(:user_admin)
 
     login_user(admin)
 
@@ -28,7 +28,7 @@ class AdminUsersIndexTest < ApplicationSystemTestCase
   end
 
   test 'should be able to autocomplete by email' do
-    admin = users(:admin)
+    admin = users(:user_admin)
 
     login_user(admin)
     click_link admin.name # opens user dropdown which has the admin link
@@ -44,7 +44,7 @@ class AdminUsersIndexTest < ApplicationSystemTestCase
   end
 
   test 'should be able to autocomplete by name' do
-    admin = users(:admin)
+    admin = users(:user_admin)
 
     login_user(admin)
     click_link admin.name # opens user dropdown which has the admin link
@@ -60,8 +60,8 @@ class AdminUsersIndexTest < ApplicationSystemTestCase
   end
 
   test 'should be able to filter by status' do
-    admin = users(:admin)
-    suspended = users(:suspended)
+    admin = users(:user_admin)
+    suspended = users(:user_suspended)
 
     login_user(admin)
     click_link admin.name # opens user dropdown which has the admin link
@@ -77,9 +77,9 @@ class AdminUsersIndexTest < ApplicationSystemTestCase
   end
 
   test 'should be able to filter by role' do
-    admin = users(:admin)
-    regular_user = users(:regular)
-    second_user = users(:regular_two)
+    admin = users(:user_admin)
+    regular_user = users(:user_regular)
+    second_user = users(:user_regular_two)
 
     login_user(admin)
     click_link admin.name # opens user dropdown which has the admin link

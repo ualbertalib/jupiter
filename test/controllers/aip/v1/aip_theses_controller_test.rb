@@ -6,9 +6,9 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
   include AipHelper
 
   setup do
-    @system_user = users(:system_user)
-    @regular_user = users(:regular)
-    @private_thesis = thesis(:private)
+    @system_user = users(:user_system)
+    @regular_user = users(:user_regular)
+    @private_thesis = thesis(:thesis_private)
     @entity = Thesis.table_name
     @public_thesis = create_entity(
       entity_class: Thesis,
@@ -58,7 +58,7 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should get thesis metadata graph with n3 serialization for base example' do
-    radioactive_thesis = thesis(:admin)
+    radioactive_thesis = thesis(:thesis_admin)
     radioactive_thesis.id = '8e18f37c-dc60-41bb-9459-990586176730'
     ingest_files_for_entity(radioactive_thesis)
     radioactive_thesis.save!
@@ -78,7 +78,7 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should get thesis metadata graph with n3 serialization for embargo example' do
-    radioactive_thesis = thesis(:admin)
+    radioactive_thesis = thesis(:thesis_admin)
     radioactive_thesis.id = 'b3cc2224-9303-47be-8b54-e6556a486be8'
     radioactive_thesis.visibility = Thesis::VISIBILITY_EMBARGO
     radioactive_thesis.embargo_history = ['acl:embargoHistory1$ Thesis currently embargoed']
@@ -102,7 +102,7 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should get thesis metadata graph with n3 serialization for previously embargo example' do
-    radioactive_thesis = thesis(:admin)
+    radioactive_thesis = thesis(:thesis_admin)
     radioactive_thesis.id = '9d7c12f0-b396-4511-ba0e-c012ec028e8a'
     radioactive_thesis.visibility = Thesis::VISIBILITY_EMBARGO
     radioactive_thesis.embargo_end_date = '2000-01-01T00:00:00.000Z'
@@ -164,7 +164,7 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
   test 'should get thesis file set metadata graph with n3 serialization' do
     sign_in_as_system_user
 
-    radioactive_thesis = thesis(:admin)
+    radioactive_thesis = thesis(:thesis_admin)
     radioactive_thesis.id = '8e18f37c-dc60-41bb-9459-990586176730'
     ingest_files_for_entity(radioactive_thesis)
     radioactive_thesis.save!
