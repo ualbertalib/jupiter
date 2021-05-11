@@ -15,6 +15,8 @@ module JupiterCore
 
   class VocabularyMissingError < StandardError; end
 
+  class SolrBadRequestError < StandardError; end
+
   VISIBILITY_PUBLIC = CONTROLLED_VOCABULARIES[:visibility].public.freeze
   VISIBILITY_PRIVATE = CONTROLLED_VOCABULARIES[:visibility].private.freeze
   VISIBILITY_AUTHENTICATED = CONTROLLED_VOCABULARIES[:visibility].authenticated.freeze

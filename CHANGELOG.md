@@ -23,9 +23,11 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Don't send failures to SessionController in development environment [PR#2121](https://github.com/ualbertalib/jupiter/pull/2121) 
 – Rails upgraded to 6.0.3.6 to resolve certain issues with community dependencies
 - Fixture names have been modified to ensure their uniqueness [PR#2302](https://github.com/ualbertalib/jupiter/pull/2302) 
+– Rails upgraded to 6.0.3.7 to resolve security issues
 
 ### Fixed
 - bump rubocop and fix cop violations [PR#2072](https://github.com/ualbertalib/jupiter/pull/2072)
+- Give proper response when solr 400s [#2086](https://github.com/ualbertalib/jupiter/issues/2086)
 - Search with sort without default sort direction no longer errors [#2077](https://github.com/ualbertalib/jupiter/issues/2077)
 - bump omniauth-rails_csrf_protection gem for omniauth compatibility [PR#2096](https://github.com/ualbertalib/jupiter/pull/2096)
 - bump rdf-n3 and fix isomorphic_with? regression [PR#2070](https://github.com/ualbertalib/jupiter/pull/2070)
