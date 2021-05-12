@@ -1,31 +1,21 @@
 <ul class="list-group">
-  <% if @item.alternative_title.present? %>
-    <li class="list-unstyled list-group-item-action">
-      <p title="<%= t('items.show.alternative_title') %>"><%= @item.alternative_title %></p>
-    </li>
-  <% end %>
-
-  <li class="list-unstyled list-group-item-action">
-    <dl>
-      <dt><%= t('.dissertant') %></dt>
-      <dd><%= search_link_for(@item, :all_contributors, value: @item.dissertant) %></dd>
-    </dl>
-  </li>
-
-  <% if @item.abstract.present? %>
-    <li class="list-unstyled list-group-item-action">
-      <p title="<%= t('.abstract') %>"><%= @item.abstract %></p>
-    </li>
-  <% end %>
-
-  <% if @item.subject.present? %>
+  <% if @item.language.present? %>
     <li class="list-unstyled list-group-item-action">
       <dl>
-        <dt><%= t('items.show.subject') %></dt>
+        <dt><%= t('items.show.language') %></dt>
+        <dd><%= language_search_link(@item, @item.language) %></dd>
+      </dl>
+    </li>
+  <% end %>
+
+  <% if @item.is_version_of.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <dl>
+        <dt><%= t('items.show.is_version_of') %></dt>
         <dd>
           <ul class="list-unstyled">
-            <% @item.subject.each do |subject| %>
-              <li><%= search_link_for(@item, :all_subjects, value: subject) %></li>
+            <% @item.is_version_of.each do |thing| %>
+              <li><%= thing %></li>
             <% end %>
           </ul>
         </dd>
@@ -33,21 +23,14 @@
     </li>
   <% end %>
 
-  <% if @item.graduation_date.present? %>
+  <% if @item.institution.present? %>
     <li class="list-unstyled list-group-item-action">
       <dl>
-        <dt><%= t('.graduation_date') %></dt>
-        <dd><%= humanize_date(@item.graduation_date) %></dd>
+        <dt><%= t('.institution') %></dt>
+        <dd><%= humanize_uri(:era, :institution, @item.institution) %></dd>
       </dl>
     </li>
   <% end %>
-
-  <li class="list-unstyled list-group-item-action">
-    <dl>
-      <dt><%= t('items.show.item_type_with_status') %></dt>
-      <dd><%= item_type_search_link(@item) %></dd>
-    </dl>
-  </li>
 
   <% if @item.degree.present? %>
     <li class="list-unstyled list-group-item-action">
@@ -58,45 +41,71 @@
     </li>
   <% end %>
 
-  <% if @item.doi.present? %>
+  <% if @item.thesis_level.present? %>
     <li class="list-unstyled list-group-item-action">
       <dl>
-        <dt><%= t('items.show.doi_url') %></dt>
-        <dd><%= link_to @item.doi_url, @item.doi_url %></dd>
+        <dt><%= t('.thesis_level') %></dt>
+        <dd><%= @item.thesis_level %></dd>
       </dl>
     </li>
   <% end %>
 
-  <% if @item.rights.present? %>
+  <% if @item.departments.present? %>
     <li class="list-unstyled list-group-item-action">
       <dl>
-        <dt><%= t('items.show.license') %></dt>
-        <dd><%= @item.rights %></dd>
+        <dt><%= t('.departments') %></dt>
+        <dd>
+          <ul class="list-unstyled">
+            <% @item.departments.each do |department| %>
+              <li><%= search_link_for(@item, :departments, value: department) %></li>
+            <% end %>
+          </ul>
+        </dd>
       </dl>
     </li>
   <% end %>
+
+  <% if @item.specialization.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <dl>
+        <dt><%= t('.specialization') %></dt>
+        <dd>
+          <ul class="list-unstyled">
+            <li><%= @item.specialization %></li>
+          </ul>
+        </dd>
+      </dl>
+    </li>
+  <% end %>
+
+  <% if @item.supervisors.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <dl>
+        <dt><%= t('.supervisors') %></dt>
+        <dd>
+          <ul class="list-unstyled">
+            <% @item.supervisors.each do |supervisor| %>
+              <li><%= search_link_for(@item, :supervisors, value: supervisor) %></li>
+            <% end %>
+          </ul>
+        </dd>
+      </dl>
+    </li>
+  <% end %>
+
+  <% if @item.committee_members.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <dl>
+        <dt><%= t('.committee_members') %></dt>
+        <dd>
+          <ul class="list-unstyled">
+            <% @item.committee_members.each do |committee_member| %>
+              <li><%= committee_member %></li>
+            <% end %>
+          </ul>
+        </dd>
+      </dl>
+    </li>
+  <% end %>
+
 </ul>
-
-<%# ADDITIONAL INFORMATION %>
-<button type="button"
-        data-toggle="collapse"
-        data-target="#more-information-hidden"
-        aria-expanded="false"
-        aria-controls="more-information-hidden"
-        class="btn btn-outline-secondary mb-3 js-more-information-btn font-italic">
-    <span class="js-more-information-hidden">
-      <%= t(:more_information) %>
-      <%= icon('fas', 'chevron-down') %>
-    </span>
-
-    <span class="d-none js-more-information-shown">
-      <%= t(:show_less) %>
-      <%= icon('fas', 'chevron-up') %>
-    </span>
-</button>
-
-<div class="collapse" id='more-information-hidden'>
-  <%= render partial: 'thesis_more_information' %>
-</div>
-
-<%= render partial: 'edit_history' %>

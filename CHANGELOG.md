@@ -32,6 +32,17 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 
 - Many "description" or "abstract" fields (at the Item level as well as Communities and Collections) contain HTML tags. Because these are text fields, HTML is not rendered in the UI and text looks garbled and it's way less readable than ideal. Markdown should work really well for this since that's already used in many of the tools staff working in repositories are familiar with. Added `redcarpet` gem which renders markdown in our decorators and strips markdown in our Solr exporters [#1322](https://github.com/ualbertalib/jupiter/issues/1322)
 
+- Refactored Item and Thesis views into a Depositable view. We assume that Depositable items have
+  * title and alternative title
+  * creator(s)
+  * description
+  * creation date
+  * subjects
+  * item type
+  * doi
+  * license
+  and will implement `creators_label`, `created_label`, `description_label` in it's decorator.  Any other attributes can be displayed below the fold.
+
 
 ### Added
 - Added oaisys tests [#1888](https://github.com/ualbertalib/jupiter/issues/1888)

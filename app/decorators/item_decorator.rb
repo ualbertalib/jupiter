@@ -17,4 +17,16 @@ class ItemDecorator < ApplicationDecorator
     strip_markdown(model.description)
   end
 
+  def creators_label
+    I18n.t('items.item.creators')
+  end
+
+  def created_label
+    I18n.t('items.item.created')
+  end
+
+  def description_label
+    I18n.t('items.item.description')
+  end
+
 end

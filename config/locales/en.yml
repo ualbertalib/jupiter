@@ -570,7 +570,6 @@ en:
         spring: 'Spring'
         fall: 'Fall'
       degree: 'Degree'
-    thesis_more_information:
       thesis_level: 'Degree level'
       institution: 'Institution'
       departments: 'Department'

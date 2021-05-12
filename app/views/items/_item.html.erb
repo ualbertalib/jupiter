@@ -1,19 +1,12 @@
-<%# TODO: Reduce duplication between this partial and thesis, pretty much exactly the same %>
 <ul class="list-group">
-  <% if @item.alternative_title.present? %>
-    <li class="list-unstyled list-group-item-action">
-      <p title="<%= t('items.show.alternative_title') %>"><%= @item.alternative_title %></p>
-    </li>
-  <% end %>
-
-  <% if @item.creators.present? %>
+  <% if @item.languages.present? %>
     <li class="list-unstyled list-group-item-action">
       <dl>
-        <dt><%= t('.creators') %></dt>
+        <dt><%= t('items.show.language') %></dt>
         <dd>
           <ul class="list-unstyled">
-            <% @item.creators.each do |creator| %>
-              <li><%= search_link_for(@item, :all_contributors, value: creator) %></li>
+            <% @item.languages.each do |language| %>
+              <li><%= language_search_link(@item, language) %></li>
             <% end %>
           </ul>
         </dd>
@@ -21,34 +14,14 @@
     </li>
   <% end %>
 
-  <% if @item.description.present? %>
-    <li class="list-unstyled list-group-item-action">
-      <p title="<%= t('.description') %>"><%= @item.description %></p>
-    </li>
-  <% end %>
-
-  <% if @item.creation_date.present? %>
+  <% if @item.contributors.present? %>
     <li class="list-unstyled list-group-item-action">
       <dl>
-        <dt><%= t('.created') %></dt>
-        <% if @item.sort_year.present? %>
-          <%# Display the recorded date created, but link to searching on the facetable sort year if it is present %>
-          <dd><%= search_link_for(@item, :sort_year, display: humanize_date(@item.creation_date), facet: :range_facet) %></dd>
-        <% else %>
-          <dd><%= humanize_date(@item.creation_date) %></dd>
-        <% end %>
-      </dl>
-    </li>
-  <% end %>
-
-  <% if @item.subject.present? %>
-    <li class="list-unstyled list-group-item-action">
-      <dl>
-        <dt><%= t('items.show.subject') %></dt>
+        <dt><%= t('items.item.contributors') %></dt>
         <dd>
           <ul class="list-unstyled">
-            <% @item.all_subjects.each do |subject| %>
-              <li><%= search_link_for(@item, :all_subjects, value: subject) %></li>
+            <% @item.contributors.each do |contributor| %>
+              <li><%= search_link_for(@item, :all_contributors, value: contributor) %></li>
             <% end %>
           </ul>
         </dd>
@@ -56,54 +29,36 @@
     </li>
   <% end %>
 
-  <li class="list-unstyled list-group-item-action">
-    <dl>
-      <dt><%= t('items.show.item_type_with_status') %></dt>
-      <dd><%= item_type_search_link(@item) %></dd>
-    </dl>
-  </li>
-
-  <% if @item.doi.present? %>
+  <% if @item.is_version_of.present? %>
     <li class="list-unstyled list-group-item-action">
       <dl>
-        <dt><%= t('items.show.doi_url') %></dt>
-        <dd><%= link_to @item.doi_url, @item.doi_url %></dd>
+        <dt><%= t('items.show.is_version_of') %></dt>
+        <dd>
+          <ul class="list-unstyled">
+            <% @item.is_version_of.each do |thing| %>
+              <li><%= thing %></li>
+            <% end %>
+          </ul>
+        </dd>
       </dl>
     </li>
   <% end %>
 
-  <li class="list-unstyled list-group-item-action">
-    <dl>
-      <dt><%= t('items.show.license') %></dt>
-      <% if @item.license.present? %>
-        <dd><%= license_link(@item.license) %></dd>
-      <% else %>
-        <dd><%= @item.rights %></dd>
-      <% end %>
-    </dl>
-  </li>
+  <% if @item.source.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <dl>
+        <dt><%= t('items.item.source') %></dt>
+        <dd><%= @item.source %></dd>
+      </dl>
+    </li>
+  <% end %>
+
+  <% if @item.related_link.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <dl>
+        <dt><%= t('items.item.related_link') %></dt>
+        <dd><%= @item.related_link %></dd>
+      </dl>
+    </li>
+  <% end %>
 </ul>
-
-<%# ADDITIONAL INFORMATION %>
-<button type="button"
-        data-toggle="collapse"
-        data-target="#more-information-hidden"
-        aria-expanded="false"
-        aria-controls="more-information-hidden"
-        class="btn btn-outline-secondary mb-3 js-more-information-btn font-italic">
-    <span class="js-more-information-hidden">
-      <%= t(:more_information) %>
-      <%= icon('fas', 'chevron-down') %>
-    </span>
-
-    <span class="d-none js-more-information-shown">
-      <%= t(:show_less) %>
-      <%= icon('fas', 'chevron-up') %>
-    </span>
-</button>
-
-<div class="collapse" id='more-information-hidden'>
-  <%= render partial: 'item_more_information' %>
-</div>
-
-<%= render partial: 'edit_history' %>
