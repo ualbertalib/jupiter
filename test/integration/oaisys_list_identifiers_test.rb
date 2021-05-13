@@ -120,7 +120,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     list_identifiers_theses_xml
   end
 
-  def list_identifiers_theses_xml
+  def test_list_identifiers_theses_xml
     assert_valid_against_schema
 
     thesis_identifiers = Oaisys::Engine.config.oai_etdms_model.public_items
@@ -142,7 +142,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     list_identifiers_item_set_xml
   end
 
-  def list_identifiers_item_set_xml
+  def test_list_identifiers_item_set_xml
     assert_valid_against_schema
 
     item_identifiers = Oaisys::Engine.config.oai_dc_model.public_items.belongs_to_path(@collection.id)
@@ -165,7 +165,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     list_identifiers_thesis_set_xml
   end
 
-  def list_identifiers_thesis_set_xml
+  def test_list_identifiers_thesis_set_xml
     assert_valid_against_schema
 
     thesis_identifiers = Oaisys::Engine.config.oai_etdms_model.public_items.belongs_to_path(@thesis_collection.id)
@@ -482,7 +482,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     assert_bad_argument_response
   end
 
-  def assert_no_records_found_response
+  def test_assert_no_records_found_response
     assert_valid_against_schema
 
     assert_select 'OAI-PMH' do
@@ -492,7 +492,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     end
   end
 
-  def assert_bad_argument_response
+  def test_assert_bad_argument_response
     assert_valid_against_schema
 
     assert_select 'OAI-PMH' do
@@ -502,7 +502,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     end
   end
 
-  def assert_valid_against_schema
+  def test_assert_valid_against_schema
     assert_response :success
 
     schema = Nokogiri::XML::Schema(File.open(file_fixture('OAI-PMH.xsd')), Nokogiri::XML::ParseOptions.new.nononet)
