@@ -1,31 +1,50 @@
 version: 2
 updates:
-- package-ecosystem: bundler
-  directory: "/"
-  schedule:
-    interval: daily
-    time: "10:00"
-  open-pull-requests-limit: 10
-  target-branch: integration
-  ignore:
-  - dependency-name: pundit
-    versions:
-    - "> 1.1.0"
-  - dependency-name: sidekiq
-    versions:
-    - ">= 6.a"
-    - "< 7"
-  - dependency-name: vcr
-    versions:
-    - ">= 5.1.a"
-    - "< 5.2"
-  - dependency-name: vcr
-    versions:
-    - "> 6.0.0"
-- package-ecosystem: npm
-  directory: "/"
-  schedule:
-    interval: daily
-    time: "10:00"
-  open-pull-requests-limit: 10
-  target-branch: integration
+  - package-ecosystem: bundler
+    directory: "/"
+    schedule:
+      interval: daily
+      time: "10:00"
+      timezone: America/Edmonton
+    open-pull-requests-limit: 10
+    target-branch: integration
+    ignore:
+      - dependency-name: pundit
+        versions:
+          - "> 1.1.0"
+      - dependency-name: sidekiq
+        versions:
+          - ">= 6.a"
+          - "< 7"
+      - dependency-name: vcr
+        versions:
+          - ">= 5.1.a"
+          - "< 5.2"
+      - dependency-name: vcr
+        versions:
+          - "> 6.0.0"
+    labels:
+      - "dependencies"
+      - "ruby"
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: daily
+      time: "10:00"
+      timezone: America/Edmonton
+    open-pull-requests-limit: 10
+    target-branch: integration
+    labels:
+      - "dependencies"
+      - "ruby"
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: daily
+      time: "10:00"
+      timezone: America/Edmonton
+    open-pull-requests-limit: 10
+    target-branch: integration
+    labels:
+      - "dependencies"
+      - "actions"
