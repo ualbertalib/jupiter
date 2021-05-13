@@ -120,14 +120,6 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     list_identifiers_theses_xml
   end
 
-  def test_list_identifiers_theses_xml
-    assert_valid_against_schema
-
-    thesis_identifiers = Oaisys::Engine.config.oai_etdms_model.public_items
-                                       .limit(Oaisys::Engine.config.items_per_request)
-                                       .pluck(:id, :updated_at, :member_of_paths)
-    assert_identifiers_response(thesis_identifiers)
-  end
   test 'list identifers item set xml' do
     get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_dc', set: @collection.id),
         headers: { 'Accept' => 'application/xml' }
@@ -142,15 +134,6 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     list_identifiers_item_set_xml
   end
 
-  def test_list_identifiers_item_set_xml
-    assert_valid_against_schema
-
-    item_identifiers = Oaisys::Engine.config.oai_dc_model.public_items.belongs_to_path(@collection.id)
-                                     .limit(Oaisys::Engine.config.items_per_request)
-                                     .pluck(:id, :updated_at, :member_of_paths)
-    assert_identifiers_response(item_identifiers)
-  end
-
   test 'list identifers thesis set xml' do
     get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_etdms', set: @thesis_collection.id),
         headers: { 'Accept' => 'application/xml' }
@@ -163,16 +146,6 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
                       headers: { 'Accept' => 'application/xml' }
 
     list_identifiers_thesis_set_xml
-  end
-
-  def test_list_identifiers_thesis_set_xml
-    assert_valid_against_schema
-
-    thesis_identifiers = Oaisys::Engine.config.oai_etdms_model.public_items.belongs_to_path(@thesis_collection.id)
-                                       .limit(Oaisys::Engine.config.items_per_request)
-                                       .pluck(:id, :updated_at, :member_of_paths)
-
-    assert_identifiers_response(thesis_identifiers)
   end
 
   test 'list identifers embargo thesis xml' do
@@ -207,16 +180,6 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     list_identifiers_item_until_date_xml(just_after_current_time)
   end
 
-  def list_identifiers_item_until_date_xml(just_after_current_time)
-    assert_valid_against_schema
-
-    item_identifiers = Oaisys::Engine.config.oai_dc_model.public_items.updated_before(just_after_current_time)
-                                     .limit(Oaisys::Engine.config.items_per_request)
-                                     .belongs_to_path(@community.id).pluck(:id, :updated_at, :member_of_paths)
-
-    assert_identifiers_response(item_identifiers)
-  end
-
   test 'list identifers thesis until date xml' do
     just_after_current_time = (Time.current + 5).utc.xmlschema
     get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_etdms', set: @thesis_collection.id,
@@ -234,17 +197,6 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     list_identifiers_thesis_until_date_xml(just_after_current_time)
   end
 
-  def list_identifiers_thesis_until_date_xml(just_after_current_time)
-    assert_valid_against_schema
-
-    thesis_identifiers = Oaisys::Engine.config.oai_etdms_model
-                                       .public_items.updated_before(just_after_current_time)
-                                       .belongs_to_path(@thesis_collection.id)
-                                       .limit(Oaisys::Engine.config.items_per_request)
-                                       .pluck(:id, :updated_at, :member_of_paths)
-    assert_identifiers_response(thesis_identifiers)
-  end
-
   test 'list identifers thesis until date yyyy/mm/dd xml' do
     current_date = Time.current.strftime('%Y-%m-%d')
     get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_etdms', set: @thesis_collection.id,
@@ -260,18 +212,6 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
                                                                   'Content-Length' => 82 }
 
     list_identifiers_thesis_until_date_yyy_mm_dd_xml(current_date)
-  end
-
-  def list_identifiers_thesis_until_date_yyy_mm_dd_xml(current_date)
-    assert_valid_against_schema
-
-    thesis_identifiers = Oaisys::Engine.config.oai_etdms_model
-                                       .public_items.updated_before(current_date)
-                                       .belongs_to_path(@thesis_collection.id)
-                                       .limit(Oaisys::Engine.config.items_per_request)
-                                       .pluck(:id, :updated_at, :member_of_paths)
-
-    assert_identifiers_response(thesis_identifiers)
   end
 
   test 'list identifers item from date xml' do
@@ -345,24 +285,6 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
                       headers: { 'Accept' => 'application/xml' }
 
     assert_item_is_displayed(item, item_creation_time)
-  end
-
-  def assert_item_is_displayed(item, item_creation_time)
-    assert_valid_against_schema
-
-    assert_select 'OAI-PMH' do
-      assert_select 'responseDate'
-      assert_select 'request'
-      assert_select 'ListIdentifiers' do
-        assert_select 'header' do
-          assert_select 'identifier', "oai:era.library.ualberta.ca:#{item[:id]}"
-          assert_select 'datestamp', item_creation_time
-          item[:member_of_paths].each do |set|
-            assert_select 'setSpec', set.tr('/', ':')
-          end
-        end
-      end
-    end
   end
 
   test 'list identifers thesis from until date xml' do
@@ -482,7 +404,88 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     assert_bad_argument_response
   end
 
-  def test_assert_no_records_found_response
+  private
+
+  def list_identifiers_item_until_date_xml(just_after_current_time)
+    assert_valid_against_schema
+
+    item_identifiers = Oaisys::Engine.config.oai_dc_model.public_items.updated_before(just_after_current_time)
+                                     .limit(Oaisys::Engine.config.items_per_request)
+                                     .belongs_to_path(@community.id).pluck(:id, :updated_at, :member_of_paths)
+
+    assert_identifiers_response(item_identifiers)
+  end
+
+  def list_identifiers_thesis_set_xml
+    assert_valid_against_schema
+
+    thesis_identifiers = Oaisys::Engine.config.oai_etdms_model.public_items.belongs_to_path(@thesis_collection.id)
+                                       .limit(Oaisys::Engine.config.items_per_request)
+                                       .pluck(:id, :updated_at, :member_of_paths)
+
+    assert_identifiers_response(thesis_identifiers)
+  end
+
+  def list_identifiers_thesis_until_date_yyy_mm_dd_xml(current_date)
+    assert_valid_against_schema
+
+    thesis_identifiers = Oaisys::Engine.config.oai_etdms_model
+                                       .public_items.updated_before(current_date)
+                                       .belongs_to_path(@thesis_collection.id)
+                                       .limit(Oaisys::Engine.config.items_per_request)
+                                       .pluck(:id, :updated_at, :member_of_paths)
+
+    assert_identifiers_response(thesis_identifiers)
+  end
+
+  def assert_item_is_displayed(item, item_creation_time)
+    assert_valid_against_schema
+
+    assert_select 'OAI-PMH' do
+      assert_select 'responseDate'
+      assert_select 'request'
+      assert_select 'ListIdentifiers' do
+        assert_select 'header' do
+          assert_select 'identifier', "oai:era.library.ualberta.ca:#{item[:id]}"
+          assert_select 'datestamp', item_creation_time
+          item[:member_of_paths].each do |set|
+            assert_select 'setSpec', set.tr('/', ':')
+          end
+        end
+      end
+    end
+  end
+
+  def list_identifiers_thesis_until_date_xml(just_after_current_time)
+    assert_valid_against_schema
+
+    thesis_identifiers = Oaisys::Engine.config.oai_etdms_model
+                                       .public_items.updated_before(just_after_current_time)
+                                       .belongs_to_path(@thesis_collection.id)
+                                       .limit(Oaisys::Engine.config.items_per_request)
+                                       .pluck(:id, :updated_at, :member_of_paths)
+    assert_identifiers_response(thesis_identifiers)
+  end
+
+  def list_identifiers_theses_xml
+    assert_valid_against_schema
+
+    thesis_identifiers = Oaisys::Engine.config.oai_etdms_model.public_items
+                                       .limit(Oaisys::Engine.config.items_per_request)
+                                       .pluck(:id, :updated_at, :member_of_paths)
+    assert_identifiers_response(thesis_identifiers)
+  end
+
+  def list_identifiers_item_set_xml
+    assert_valid_against_schema
+
+    item_identifiers = Oaisys::Engine.config.oai_dc_model.public_items.belongs_to_path(@collection.id)
+                                     .limit(Oaisys::Engine.config.items_per_request)
+                                     .pluck(:id, :updated_at, :member_of_paths)
+    assert_identifiers_response(item_identifiers)
+  end
+
+  def assert_no_records_found_response
     assert_valid_against_schema
 
     assert_select 'OAI-PMH' do
@@ -492,7 +495,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     end
   end
 
-  def test_assert_bad_argument_response
+  def assert_bad_argument_response
     assert_valid_against_schema
 
     assert_select 'OAI-PMH' do
@@ -502,7 +505,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     end
   end
 
-  def test_assert_valid_against_schema
+  def assert_valid_against_schema
     assert_response :success
 
     schema = Nokogiri::XML::Schema(File.open(file_fixture('OAI-PMH.xsd')), Nokogiri::XML::ParseOptions.new.nononet)
