@@ -2,14 +2,14 @@
 All notable changes to Jupiter project will be documented in this file. Jupiter is a University of Alberta Library-based initiative to create a sustainable and extensible digital asset management system. Currently it is for phase 1 (Institutional Repository). https://era.library.ualberta.ca/.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and inspired by [approaches like this](https://github.com/apple/swift/blob/main/CHANGELOG.md)
-and releases in Jupiter project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html). 
+and releases in Jupiter project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 New entries in this file should aim to provide a meaningful amount of information in order to allow people to understand the change purely by reading this file, without relying on links to possibly-impermanent sources like Pull Request descriptions or issues.
 
 ## [Unreleased]
 
 – Refactored Controlled Vocabulary support to allow for new, raw vocabs without i18n translations. The motivation here is that
-we have a bunch of URIs we want to machine-map to human readable values, and it doesn't make sense to introduce intermediate symbols we'd have to cobble together somehow, plus that would involve polluting the i18n file with hundreds of new entries. 
+we have a bunch of URIs we want to machine-map to human readable values, and it doesn't make sense to introduce intermediate symbols we'd have to cobble together somehow, plus that would involve polluting the i18n file with hundreds of new entries.
 
 API Examples:
 
@@ -34,6 +34,7 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 
 
 ### Added
+- Added oaisys tests [#1888](https://github.com/ualbertalib/jupiter/issues/1888)
 - Initialize disabled ReadOnlyMode [#2100](https://github.com/ualbertalib/jupiter/issues/2100)
 - Added highlighting of terms within search results descriptions [#1800](https://github.com/ualbertalib/jupiter/issues/1800)
 - Added feature flags to Jupiter [#1897](https://github.com/ualbertalib/jupiter/issues/1897)
@@ -62,15 +63,20 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 - Make `Digitization::Newspaper` `Depositable`
 - Make `Digitization::Image` `Depositable`
 - Make `Digitization::Map` `Depositable`
+- Fixture names have been modified to ensure their uniqueness [PR#2302](https://github.com/ualbertalib/jupiter/pull/2302)
+– Rails upgraded to 6.0.3.7 to resolve security issues
 
 ### Fixed
 - bump rubocop and fix cop violations [PR#2072](https://github.com/ualbertalib/jupiter/pull/2072)
+- Give proper response when solr 400s [#2086](https://github.com/ualbertalib/jupiter/issues/2086)
+- Search with sort without default sort direction no longer errors [#2077](https://github.com/ualbertalib/jupiter/issues/2077)
 - bump omniauth-rails_csrf_protection gem for omniauth compatibility [PR#2096](https://github.com/ualbertalib/jupiter/pull/2096)
 - bump rdf-n3 and fix isomorphic_with? regression [PR#2070](https://github.com/ualbertalib/jupiter/pull/2070)
 - bump rubocop and fix more cop violations [PR#2132](https://github.com/ualbertalib/jupiter/pull/2132)
 - Fix error when parsing n3 files which include objects with elements as values.
 - Corrected missing pluralization in Digitization::Book attributes
 - Bump flipper-ui, flipper-active_record and flipper and remove redundant configuration
+- Various fixes from lighthouse suggestions [PR#2254](https://github.com/ualbertalib/jupiter/pull/2254)
 
 ## [2.0.2] - 2020-12-17
 - Enable Skylight in the Staging environment and remove it from the UAT environment (where it was unused, and the performance of the Docker environment is less likely to be similar to Production)

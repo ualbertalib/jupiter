@@ -1,23 +1,23 @@
-books:
+community_books:
   title: 'Books'
-  owner: admin
+  owner: user_admin
   record_created_at: <%= Time.zone.now - 1.hour %>
   date_ingested: <%= Time.zone.now - 1.hour %>
 
-thesis:
+community_thesis:
   title: 'Thesis'
-  owner: admin
+  owner: user_admin
   record_created_at: <%= Time.zone.now - 1.hour %>
   date_ingested: <%= Time.zone.now - 1.hour %>
 
-fancy_community:
+community_fancy:
   title: 'Fancy Community'
-  owner: admin
+  owner: user_admin
   record_created_at: <%= Time.zone.now - 1.hour %>
   date_ingested: <%= Time.zone.now - 1.hour %>
 
 community_with_no_collections:
     title: 'Community with no collections'
-    owner: admin
+    owner: user_admin
     record_created_at: <%= Time.zone.now - 1.hour %>
     date_ingested: <%= Time.zone.now - 1.hour %>

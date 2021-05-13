@@ -3,8 +3,8 @@ require 'test_helper'
 class Admin::ItemsControllerTest < ActionDispatch::IntegrationTest
 
   setup do
-    @item = items(:fancy)
-    @admin = users(:admin)
+    @item = items(:item_fancy)
+    @admin = users(:user_admin)
     sign_in_as @admin
 
     File.open(file_fixture('text-sample.txt'), 'r') do |file|

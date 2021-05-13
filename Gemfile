@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 # Core Rails stuff
 gem 'image_processing' # for ActiveStorage Variants
 gem 'puma', '~> 5.3'
-gem 'rails', '~> 6.0.3'
+gem 'rails', '~> 6.0.3.7'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 gem 'webpacker', '~> 5.3'
@@ -71,7 +71,7 @@ gem 'rollbar'
 
 # OAI-PMH
 gem 'builder_deferred_tagging', github: 'ualbertalib/builder_deferred_tagging', tag: 'v0.01'
-gem 'oaisys', github: 'ualbertalib/oaisys', tag: 'v1.0.2'
+gem 'oaisys', github: 'ualbertalib/oaisys', tag: 'v1.0.3'
 
 # Seeds
 group :development, :test, :uat do

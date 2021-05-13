@@ -7,7 +7,7 @@ class CommunitiesPaginationAndSortTest < ApplicationSystemTestCase
     # We need to assume the communities created here are the only ones!
     Community.delete_all
 
-    admin = users(:admin)
+    admin = users(:user_admin)
     (0..10).each do |i|
       Community.new(title: format("#{random_title(i)} Community %02i", i), owner_id: admin.id).save!
     end

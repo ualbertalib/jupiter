@@ -3,8 +3,8 @@ require 'test_helper'
 class DraftThesisTest < ActiveSupport::TestCase
 
   setup do
-    @community = communities(:thesis)
-    @collection = collections(:thesis)
+    @community = communities(:community_thesis)
+    @collection = collections(:collection_thesis)
   end
 
   test 'enums' do
@@ -26,13 +26,13 @@ class DraftThesisTest < ActiveSupport::TestCase
   end
 
   test 'should be able to create a draft thesis with user when on inactive status' do
-    user = users(:admin)
+    user = users(:user_admin)
     draft_thesis = DraftThesis.new(user: user)
     assert draft_thesis.valid?
   end
 
   test 'should run validations when on describe_item step' do
-    user = users(:admin)
+    user = users(:user_admin)
     draft_thesis = DraftThesis.new(user: user, status: DraftThesis.statuses[:active])
 
     assert_not draft_thesis.valid?
@@ -51,7 +51,7 @@ class DraftThesisTest < ActiveSupport::TestCase
   end
 
   test 'should run validations when on choose_license_and_visibility wizard step' do
-    user = users(:admin)
+    user = users(:user_admin)
 
     draft_thesis = DraftThesis.new(
       user: user,
@@ -79,10 +79,10 @@ class DraftThesisTest < ActiveSupport::TestCase
   end
 
   test 'should run validations when on file_uploads wizard step' do
-    user = users(:admin)
+    user = users(:user_admin)
 
     # Need to create an object for ActiveStorage because of global ID
-    draft_thesis = draft_theses(:inactive)
+    draft_thesis = draft_theses(:draft_thesis_inactive)
 
     draft_thesis.update(
       user: user,
@@ -112,7 +112,7 @@ class DraftThesisTest < ActiveSupport::TestCase
   end
 
   test 'should handle embargo end date visibility validations' do
-    user = users(:admin)
+    user = users(:user_admin)
 
     draft_thesis = DraftThesis.new(
       user: user,
@@ -139,7 +139,7 @@ class DraftThesisTest < ActiveSupport::TestCase
   end
 
   test 'should handle community/collection validations on member_of_paths' do
-    user = users(:admin)
+    user = users(:user_admin)
 
     draft_thesis = DraftThesis.new(
       user: user,
@@ -172,7 +172,7 @@ class DraftThesisTest < ActiveSupport::TestCase
   end
 
   test 'regular user cannot deposit' do
-    user = users(:regular)
+    user = users(:user_regular)
 
     draft_thesis = DraftThesis.new(
       user: user,
@@ -190,9 +190,9 @@ class DraftThesisTest < ActiveSupport::TestCase
   end
 
   test 'cannot deposit thesis into a non restricted collection' do
-    user = users(:admin)
+    user = users(:user_admin)
     non_restricted_collection = Collection.create!(title: 'Risque fantasy Books',
-                                                   owner_id: users(:admin).id,
+                                                   owner_id: users(:user_admin).id,
                                                    community_id: @community.id)
 
     draft_thesis = DraftThesis.new(
@@ -213,7 +213,7 @@ class DraftThesisTest < ActiveSupport::TestCase
   end
 
   test 'parse_graduation_term_from_fedora works correctly' do
-    user = users(:admin)
+    user = users(:user_admin)
     draft_thesis = DraftThesis.new(user: user)
 
     assert_equal '11', draft_thesis.send(:parse_graduation_term_from_fedora, '2018-11')
@@ -224,7 +224,7 @@ class DraftThesisTest < ActiveSupport::TestCase
   end
 
   test 'should handle thesis description validations' do
-    user = users(:admin)
+    user = users(:user_admin)
 
     draft_thesis = DraftThesis.new(
       user: user,

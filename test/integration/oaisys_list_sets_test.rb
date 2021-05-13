@@ -10,6 +10,7 @@ class OaisysListSetsTest < ActionDispatch::IntegrationTest
   end
 
   test 'test_list_sets_resumption_token_xml' do
+    # TODO: Add tests for this which uses post requests.
     skip('Skipping until bug regarding path helper is fixed. https://github.com/rails/rails/issues/40078')
     get oaisys_path(verb: 'ListSets'), headers: { 'Accept' => 'application/xml' }
     assert_response :success
@@ -88,8 +89,8 @@ class OaisysListSetsTest < ActionDispatch::IntegrationTest
         headers: { 'Accept' => 'application/xml' }
 
     # Test expiration of resumption token when results change.
-    Collection.create!(community_id: communities(:books).id,
-                       title: 'Fancy Collection 7', owner_id: users(:admin).id,
+    Collection.create!(community_id: communities(:community_books).id,
+                       title: 'Fancy Collection 7', owner_id: users(:user_admin).id,
                        description: '')
 
     get oaisys_path(verb: 'ListSets', resumptionToken: resumption_token),

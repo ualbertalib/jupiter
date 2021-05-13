@@ -1,15 +1,15 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 magee:
-  title: 'Man standing on large rock'
-  peel_image_id: 'MGNGBG0001'
-  date_ingested: '2000-01-01T00:00:00.007Z'
-  record_created_at: '2000-01-01T00:00:00.007Z'
-  owner: admin
+  title: "Man standing on large rock"
+  peel_image_id: "MGNGBG0001"
+  date_ingested: "2000-01-01T00:00:00.007Z"
+  record_created_at: "2000-01-01T00:00:00.007Z"
+  owner: user_admin
 
 postcard:
-  title: '24 snapshots of Dauphin as seen by the rubbernecks'
-  peel_image_id: 'PC015716'
-  date_ingested: '2000-01-01T00:00:00.007Z'
-  record_created_at: '2000-01-01T00:00:00.007Z'
-  owner: admin
+  title: "24 snapshots of Dauphin as seen by the rubbernecks"
+  peel_image_id: "PC015716"
+  date_ingested: "2000-01-01T00:00:00.007Z"
+  record_created_at: "2000-01-01T00:00:00.007Z"
+  owner: user_admin

@@ -1,8 +1,8 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 map:
-  title: 'Map shewing the townships surveyed in the Province of Manitoba and North-West Territory in the Dominion of Canada'
-  peel_map_id: 'M000230'
-  date_ingested: '2000-01-01T00:00:00.007Z'
-  record_created_at: '2000-01-01T00:00:00.007Z'
-  owner: admin
+  title: "Map shewing the townships surveyed in the Province of Manitoba and North-West Territory in the Dominion of Canada"
+  peel_map_id: "M000230"
+  date_ingested: "2000-01-01T00:00:00.007Z"
+  record_created_at: "2000-01-01T00:00:00.007Z"
+  owner: user_admin

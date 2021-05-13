@@ -4,8 +4,8 @@ class ItemEditHistoryTest < ApplicationSystemTestCase
 
   test 'can view thesis edit history' do
     with_versioning do
-      admin = users(:admin)
-      thesis = thesis(:nice)
+      admin = users(:user_admin)
+      thesis = thesis(:thesis_nice)
       thesis.save
 
       # Need to add file to thesis to be able to go through editing wizard.
@@ -48,8 +48,8 @@ class ItemEditHistoryTest < ApplicationSystemTestCase
 
   test 'can view item edit history' do
     with_versioning do
-      admin = users(:admin)
-      item = items(:admin)
+      admin = users(:user_admin)
+      item = items(:item_admin)
       item.save
 
       # Need to add file to item to be able to go through editing wizard.
