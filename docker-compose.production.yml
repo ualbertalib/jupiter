@@ -1,4 +1,4 @@
-version: '3.3'
+version: "3.3"
 
 volumes:
   postgres:
@@ -15,7 +15,7 @@ volumes:
 services:
   postgres:
     restart: always
-    image: postgres:9.6-alpine
+    image: postgres:12-alpine
     env_file: .env_deployment
 
   solr:

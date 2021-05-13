@@ -3,11 +3,11 @@
 # To use, you must pass in the `-f` flag to docker-compose
 # For example: docker-compose -f docker-compose.demo.yml up -d
 
-version: '3.4'
+version: "3.4"
 
 services:
   postgres:
-    image: postgres:11-alpine
+    image: postgres:12-alpine
     environment:
       - POSTGRES_PASSWORD=mysecretpassword
     volumes:
