@@ -3,8 +3,8 @@ require 'test_helper'
 class CollectionsControllerTest < ActionDispatch::IntegrationTest
 
   setup do
-    @community = communities(:books)
-    @collection = collections(:fantasy_books)
+    @community = communities(:community_books)
+    @collection = collections(:collection_fantasy)
   end
 
   test 'should show collection' do

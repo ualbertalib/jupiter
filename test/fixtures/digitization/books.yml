@@ -10,7 +10,7 @@ peel_monograph:
   temporal_subjects: ['1914']
   date_ingested: '2000-01-01T00:00:00.007Z'
   record_created_at: '2000-01-01T00:00:00.007Z'
-  owner: admin
+  owner: user_admin
 
 # TODO: resource_type, genres, languages, and a subject are required. These are placeholders.
 henderson:
@@ -25,7 +25,7 @@ henderson:
   rights: <%= ControlledVocabulary.digitization.rights.from_value("In Copyright") %>
   date_ingested: '2000-01-01T00:00:00.007Z'
   record_created_at: '2000-01-01T00:00:00.007Z'
-  owner: admin
+  owner: user_admin
 
 folk_fest:
   peel_id: 10572
@@ -49,7 +49,7 @@ folk_fest:
   topical_subjects: <%= [ControlledVocabulary.digitization.subject.from_value("Edmonton Folk Music Festival"), ControlledVocabulary.digitization.subject.from_value("Folk music festivals")] %>
   date_ingested: '2000-01-01T00:00:00.007Z'
   record_created_at: '2000-01-01T00:00:00.007Z'
-  owner: admin
+  owner: user_admin
 
 # TODO: resource_type, genres, languages, and a subject are required. These are placeholders.
 government_document:
@@ -62,5 +62,4 @@ government_document:
   temporal_subjects: ['1914']
   date_ingested: '2000-01-01T00:00:00.007Z'
   record_created_at: '2000-01-01T00:00:00.007Z'
-  owner: admin
-
+  owner: user_admin

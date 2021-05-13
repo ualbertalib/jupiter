@@ -3,9 +3,9 @@ require 'test_helper'
 class UserSearchServiceTest < ActiveSupport::TestCase
 
   setup do
-    @regular_user_item = items(:fancy)
-    @admin_item = items(:admin)
-    @admin_private_item = items(:private_item)
+    @regular_user_item = items(:item_fancy)
+    @admin_item = items(:item_admin)
+    @admin_private_item = items(:item_private)
 
     [@regular_user_item, @admin_item, @admin_private_item].each(&:update_solr)
   end
@@ -17,7 +17,7 @@ class UserSearchServiceTest < ActiveSupport::TestCase
   end
 
   test 'should raise ArgumentError if base_restriction_key is given with no value' do
-    current_user = users(:regular)
+    current_user = users(:user_regular)
     params = ActionController::Parameters.new(search: 'Item')
     base_restriction_key = Item.solr_exporter_class.solr_name_for(:owner, role: :exact_match)
 
@@ -31,7 +31,7 @@ class UserSearchServiceTest < ActiveSupport::TestCase
   end
 
   test 'should return search results when given correct arguments' do
-    current_user = users(:admin)
+    current_user = users(:user_admin)
     params = ActionController::Parameters.new(search: 'Item')
 
     search = UserSearchService.new(
@@ -44,7 +44,7 @@ class UserSearchServiceTest < ActiveSupport::TestCase
   end
 
   test 'should filter search results by visibility of current_user' do
-    current_user = users(:regular)
+    current_user = users(:user_regular)
     params = ActionController::Parameters.new(search: 'Item')
 
     search = UserSearchService.new(
@@ -57,7 +57,7 @@ class UserSearchServiceTest < ActiveSupport::TestCase
   end
 
   test 'should limit results by base_restriction_key and value' do
-    current_user = users(:regular)
+    current_user = users(:user_regular)
     params = ActionController::Parameters.new(search: 'Item')
     base_restriction_key = Item.solr_exporter_class.solr_name_for(:owner, role: :exact_match)
 
@@ -74,7 +74,7 @@ class UserSearchServiceTest < ActiveSupport::TestCase
   end
 
   test 'should return search results with highlights' do
-    current_user = users(:regular)
+    current_user = users(:user_regular)
     params = ActionController::Parameters.new(search: 'French')
 
     search = UserSearchService.new(

@@ -1,30 +1,30 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-admin_saml:
-  user: admin
+identity_admin_saml:
+  user: user_admin
   uid: adminccid
   provider: saml
 
-admin_two_saml:
-  user: admin_two
+identity_admin_two_saml:
+  user: user_admin_two
   uid: admintwoccid
   provider: saml
 
-user_saml:
-  user: regular
+identity_user_saml:
+  user: user_regular
   uid: userccid
   provider: saml
 
-user_facebook:
-  user: regular
+identity_user_facebook:
+  user: user_regular
   uid: abc012345
   provider: facebook
 
-regular_two_saml:
-  user: regular_two
+identity_regular_two_saml:
+  user: user_regular_two
   uid: regular_two_ccid@ualberta.ca
   provider: saml
 
-system_user_saml:
-  user: system_user
+identity_system_user_saml:
+  user: user_system
   uid: ditech@ualberta.ca
   provider: saml

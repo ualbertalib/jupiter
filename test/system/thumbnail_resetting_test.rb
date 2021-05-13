@@ -3,8 +3,8 @@ require 'application_system_test_case'
 class ThumbnailResettingTest < ApplicationSystemTestCase
 
   test "thumbnail choice doesn't reset between saves" do
-    admin = users(:admin)
-    item = items(:admin)
+    admin = users(:user_admin)
+    item = items(:item_admin)
 
     File.open(file_fixture('image-sample.jpeg'), 'r') do |file1|
       File.open(file_fixture('image-sample2.jpeg'), 'r') do |file2|

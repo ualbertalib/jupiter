@@ -1,6 +1,6 @@
-english:
+language_english:
   name: 'english'
-french:
+language_french:
   name: 'french'
-no_linguistic_content:
+language_no_linguistic_content:
   name: 'no_linguistic_content'

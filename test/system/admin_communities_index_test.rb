@@ -3,7 +3,7 @@ require 'application_system_test_case'
 class AdminCommunitiesIndexTest < ApplicationSystemTestCase
 
   setup do
-    admin = users(:admin)
+    admin = users(:user_admin)
     @community = Community.create!(title: 'Community', owner_id: admin.id)
     2.times do |i|
       Collection.new(title: "Fancy Collection #{i}", owner_id: admin.id,
@@ -14,7 +14,7 @@ class AdminCommunitiesIndexTest < ApplicationSystemTestCase
 
   # TODO: add more tests
   test 'should be able to expand the collection for a community in the list' do
-    admin = users(:admin)
+    admin = users(:user_admin)
 
     login_user(admin)
 

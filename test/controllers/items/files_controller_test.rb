@@ -3,13 +3,13 @@ require 'test_helper'
 class Items::FilesControllerTest < ActionDispatch::IntegrationTest
 
   setup do
-    @community = communities(:books)
-    @collection = collections(:fantasy_books)
+    @community = communities(:community_books)
+    @collection = collections(:collection_fantasy)
 
-    @user = users(:regular)
+    @user = users(:user_regular)
     sign_in_as @user
 
-    @draft_item = draft_items(:completed_choose_license_and_visibility_step)
+    @draft_item = draft_items(:draft_item_completed_choose_license_and_visibility_step)
     @draft_item.member_of_paths = { community_id: [@community.id], collection_id: [@collection.id] }
     @draft_item.save!
 

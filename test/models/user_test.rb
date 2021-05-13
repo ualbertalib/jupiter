@@ -19,12 +19,12 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test '#flipper_id' do
-    user = users(:regular)
+    user = users(:user_regular)
     assert_equal "User:#{user.id}", user.flipper_id
   end
 
   test 'should update the activity columns when not signing-in' do
-    user = users(:regular)
+    user = users(:user_regular)
     assert user.last_seen_at.blank?
     assert user.last_sign_in_at.blank?
     assert user.previous_sign_in_at.blank?
@@ -61,7 +61,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'should update the activity columns when signing-in' do
-    user = users(:regular)
+    user = users(:user_regular)
     assert user.last_seen_at.blank?
     assert user.last_sign_in_at.blank?
     assert user.previous_sign_in_at.blank?

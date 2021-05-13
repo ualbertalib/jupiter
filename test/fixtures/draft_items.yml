@@ -1,12 +1,12 @@
-inactive:
-  user: regular
+draft_item_inactive:
+  user: user_regular
 
-completed_describe_item_step:
-  user: regular
+draft_item_completed_describe_item_step:
+  user: user_regular
   status: <%= DraftItem.statuses[:active] %>
   wizard_step: <%= DraftItem.wizard_steps[:describe_item] %>
   title: 'A Game of Thrones'
-  type: book
+  type: type_book
   # languages: [english] - This is defined from the join table fixture, fixtures are a bit weird in this sense
   creators: ['George R. R. Martin']
   subjects: ['A Song of Ice and Fire', 'Fantasy']
@@ -18,12 +18,12 @@ completed_describe_item_step:
     romance, and adventure fill the pages of this magnificent saga, the first volume in an epic
     series sure to delight fantasy fans everywhere.'
 
-completed_choose_license_and_visibility_step:
-  user: regular
+draft_item_completed_choose_license_and_visibility_step:
+  user: user_regular
   status: <%= DraftItem.statuses[:active] %>
   wizard_step: <%= DraftItem.wizard_steps[:choose_license_and_visibility] %>
   title: 'A Clash of Kings'
-  type: book
+  type: type_book
   # languages: [english] - This is defined from the join table fixture, fixtures are a bit weird in this sense
   creators: ['George R. R. Martin']
   subjects: ['A Song of Ice and Fire', 'Fantasy']

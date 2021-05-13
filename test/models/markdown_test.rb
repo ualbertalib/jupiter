@@ -48,7 +48,7 @@ class MarkdownTest < ActiveSupport::TestCase
   STRIPPED
 
   test 'should render item description with markdown as html' do
-    item = items(:fancy)
+    item = items(:item_fancy)
     item.description = MARKDOWN
 
     assert_equal RENDERED_HTML, item.decorate.description
@@ -58,7 +58,7 @@ class MarkdownTest < ActiveSupport::TestCase
   end
 
   test 'should render thesis abstract with markdown as html' do
-    thesis = thesis(:fancy)
+    thesis = thesis(:thesis_fancy)
     thesis.abstract = MARKDOWN
 
     assert_equal RENDERED_HTML, thesis.decorate.abstract
@@ -68,7 +68,7 @@ class MarkdownTest < ActiveSupport::TestCase
   end
 
   test 'should render draft description with markdown as html' do
-    draft = draft_items(:completed_describe_item_step)
+    draft = draft_items(:draft_item_completed_describe_item_step)
     draft.description = MARKDOWN
 
     assert_equal RENDERED_HTML, draft.decorate.html_description
@@ -76,7 +76,7 @@ class MarkdownTest < ActiveSupport::TestCase
   end
 
   test 'should render community description with markdown as html' do
-    community = communities(:books)
+    community = communities(:community_books)
     community.description = MARKDOWN
 
     assert_equal RENDERED_HTML, community.decorate.description
@@ -86,7 +86,7 @@ class MarkdownTest < ActiveSupport::TestCase
   end
 
   test 'should render collection description with markdown as html' do
-    collection = collections(:fantasy_books)
+    collection = collections(:collection_fantasy)
     collection.description = MARKDOWN
 
     assert_equal RENDERED_HTML, collection.decorate.description

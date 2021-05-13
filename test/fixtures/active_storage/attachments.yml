@@ -1,5 +1,5 @@
-logo:
+attachment_logo:
   name: 'files'
   record_type: 'Item'
-  record_id: <%= ActiveRecord::FixtureSet.identify(:fancy) %>
+  record_id: <%= ActiveRecord::FixtureSet.identify(:item_fancy) %>
   blob_id: 'e34bbd2e-c819-491b-9f60-e0b1c9b7b2ee'

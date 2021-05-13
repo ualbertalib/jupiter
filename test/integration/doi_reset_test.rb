@@ -3,10 +3,10 @@ require 'test_helper'
 class DoiResetTest < ActionDispatch::IntegrationTest
 
   setup do
-    @admin = users(:admin)
-    @user = users(:regular)
+    @admin = users(:user_admin)
+    @user = users(:user_regular)
 
-    @item = items(:fancy)
+    @item = items(:item_fancy)
   end
 
   test 'reset button displays as needed' do

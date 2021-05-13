@@ -4,13 +4,13 @@ class AdminItemsIndexTest < ApplicationSystemTestCase
 
   test 'should be able to view all items/theses owned by anybody' do
     # NOTE: searching and faceting is covered more extensively in tests elsewhere
-    admin = users(:admin)
+    admin = users(:user_admin)
 
     # creating the index from the fixtures requires a save
     # TODO: these would be good candidates for using factories instead.
-    items(:fancy).save
-    items(:admin).save
-    thesis(:nice).save
+    items(:item_fancy).save
+    items(:item_admin).save
+    thesis(:thesis_nice).save
 
     login_user(admin)
 

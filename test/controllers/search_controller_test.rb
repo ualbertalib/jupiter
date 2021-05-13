@@ -3,10 +3,10 @@ require 'test_helper'
 class SearchControllerTest < ActionDispatch::IntegrationTest
 
   setup do
-    @item1 = items(:fancy)
-    @item2 = items(:admin)
-    @item3 = items(:authenticated_item)
-    @item4 = items(:private_item)
+    @item1 = items(:item_fancy)
+    @item2 = items(:item_admin)
+    @item3 = items(:item_authenticated)
+    @item4 = items(:item_private)
 
     [@item1, @item2, @item3, @item4].each(&:update_solr)
   end
@@ -20,7 +20,7 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should get all results in alphabetical order when no query present when signed in as admin' do
-    sign_in_as(users(:admin))
+    sign_in_as(users(:user_admin))
     get search_url, as: :json, params: { search: '' }
     assert_response :success
     results = JSON.parse(response.body).map { |result| result['id'] }

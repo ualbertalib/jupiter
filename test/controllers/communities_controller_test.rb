@@ -3,7 +3,7 @@ require 'test_helper'
 class CommunitiesControllerTest < ActionDispatch::IntegrationTest
 
   setup do
-    @community = communities(:books)
+    @community = communities(:community_books)
   end
 
   test 'should get index' do

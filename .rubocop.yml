@@ -12,11 +12,11 @@ AllCops:
   DisplayCopNames: true
   DisplayStyleGuide: true
   Exclude:
-    - 'db/**/*'
-    - 'tmp/**/*'
-    - 'vendor/**/*'
-    - 'Dangerfile'
-    - 'node_modules/**/*'
+    - "db/**/*"
+    - "tmp/**/*"
+    - "vendor/**/*"
+    - "Dangerfile"
+    - "node_modules/**/*"
   ExtraDetails: true
   NewCops: enable
   TargetRubyVersion: 2.5
@@ -30,9 +30,9 @@ Layout/IndentationConsistency:
   EnforcedStyle: normal
 
 Layout/LineLength:
-    Enabled: true
-    Max: 120 # default is 80
-    IgnoredPatterns: ['\A\s*#'] # tweak to ignore long comments, which often are examples or URLs that are not easily broken up
+  Enabled: true
+  Max: 120 # default is 80
+  IgnoredPatterns: ['\A\s*#'] # tweak to ignore long comments, which often are examples or URLs that are not easily broken up
 
 # readability is Actually Good
 Layout/RescueEnsureAlignment:
@@ -73,6 +73,8 @@ Metrics/ParameterLists:
     - app/models/jupiter_core/search.rb
     - app/models/jupiter_core/solr_services/deferred_faceted_solr_query.rb
 
+Minitest/MultipleAssertions:
+  Max: 5 # default 3
 
 Naming/FileName:
   Exclude:

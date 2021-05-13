@@ -6,15 +6,15 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
   include AipHelper
 
   setup do
-    @regular_user = users(:regular)
-    @private_item = items(:private_item)
+    @regular_user = users(:user_regular)
+    @private_item = items(:item_private)
     @entity = Item.table_name
 
     @public_item = create_entity(
       entity_class: Item,
       parameters: {
         visibility: JupiterCore::VISIBILITY_PUBLIC,
-        owner_id: users(:admin).id,
+        owner_id: users(:user_admin).id,
         title: 'Item with files',
         creators: ['Joe Blow'],
         created: '1000000 BC',
@@ -63,7 +63,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should get item metadata graph with n3 serialization for base example including hasMember predicates' do
-    radioactive_item = items(:admin)
+    radioactive_item = items(:item_admin)
     radioactive_item.id = 'e2ec88e3-3266-4e95-8575-8b04fac2a679'
     ingest_files_for_entity(radioactive_item)
     radioactive_item.save!
@@ -84,7 +84,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should get item metadata graph with n3 serialization for embargo example' do
-    radioactive_item = items(:admin)
+    radioactive_item = items(:item_admin)
     radioactive_item.id = '3bb26070-0d25-4f0e-b44f-e9879da333ec'
     radioactive_item.visibility = Item::VISIBILITY_EMBARGO
     radioactive_item.embargo_history = ['acl:embargoHistory1$ Item currently embargoed']
@@ -108,7 +108,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should get item metadata graph with n3 serialization for previously embargoed example' do
-    radioactive_item = items(:admin)
+    radioactive_item = items(:item_admin)
     radioactive_item.id = '2107bfb6-2670-4ffc-94a1-aeb4f8c1fd81'
     radioactive_item.visibility = Item::VISIBILITY_EMBARGO
     radioactive_item.embargo_end_date = '2000-01-01T00:00:00.000Z'
@@ -139,7 +139,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should get item metadata graph with n3 serialization for rights example' do
-    radioactive_item = items(:admin)
+    radioactive_item = items(:item_admin)
     radioactive_item.id = 'c795337f-075f-429a-bb18-16b56d9b750f'
     radioactive_item.license = ''
     radioactive_item.rights = '© The Author(s) 2015. Published by Oxford University Press on behalf of the Society ' \
@@ -162,7 +162,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should get item metadata graph with n3 serialization for published status example' do
-    radioactive_item = items(:admin)
+    radioactive_item = items(:item_admin)
     radioactive_item.id = '93126aae-4b9d-4db2-98f1-4e04b40778cf'
     radioactive_item.item_type = ControlledVocabulary.era.item_type.article
     radioactive_item.publication_status = [ControlledVocabulary.era.publication_status.published]
@@ -222,7 +222,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
   test 'should get item file set metadata graph with n3 serialization' do
     sign_in_as_system_user
 
-    radioactive_item = items(:admin)
+    radioactive_item = items(:item_admin)
     radioactive_item.id = 'e2ec88e3-3266-4e95-8575-8b04fac2a679'
     ingest_files_for_entity(radioactive_item)
     radioactive_item.save!

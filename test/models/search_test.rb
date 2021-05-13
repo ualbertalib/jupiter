@@ -18,8 +18,8 @@ class SearchTest < ActiveSupport::TestCase
 
   test 'default behaviour within a facet is OR and between facets is AND when feature flag is on' do
     Flipper.enable(:or_facets)
-    item1 = items(:fancy)
-    item2 = items(:practical)
+    item1 = items(:item_fancy)
+    item2 = items(:item_practical)
 
     [item1, item2].each(&:update_solr)
     results = JupiterCore::Search.faceted_search(models: [Item],
