@@ -41,7 +41,7 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
   * item type
   * doi
   * license
-  and will implement `creators_label`, `created_label`, `description_label` in it's decorator.  Any other attributes can be displayed below the fold.
+  and will implement `creators_label`, `created_label`, `description_label` in it's decorator.  Any other attributes can be displayed just above or below the fold.
 
 
 ### Added

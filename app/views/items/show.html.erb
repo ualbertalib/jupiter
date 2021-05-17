@@ -88,6 +88,7 @@
 
       <h1 title="<%= t('items.show.title') %>"><%= @item.title %></h1>
 
+      <% render @item %>
       <%= render partial: 'depositable', object: @item %>
     </div>
   </div>
