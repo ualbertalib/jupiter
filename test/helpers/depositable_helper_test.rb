@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ItemsHelperTest < ActionView::TestCase
+class DepositableHelperTest < ActionView::TestCase
 
   test 'should return human readable date' do
     assert_equal t('date_unknown'), humanize_date('')

@@ -74,6 +74,10 @@ class Item < JupiterCore::Doiable
     subject + temporal_subjects.to_a + spatial_subjects.to_a
   end
 
+  def namespace
+    :era
+  end
+
   def populate_sort_year
     self.sort_year = Date.parse(created).year.to_i if created.present?
   rescue ArgumentError
