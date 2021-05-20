@@ -6,7 +6,7 @@
         <dd>
           <ul class="list-unstyled">
             <% @item.languages.each do |language| %>
-              <li><%= language_search_link(@item, language) %></li>
+              <li><%= language_search_link(@item, language, :era) %></li>
             <% end %>
           </ul>
         </dd>
