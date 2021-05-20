@@ -79,6 +79,7 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 - Bump flipper-ui, flipper-active_record and flipper and remove redundant configuration
 - Various fixes from lighthouse suggestions [PR#2254](https://github.com/ualbertalib/jupiter/pull/2254)
 - Danger token in Github Actions [#2282](https://github.com/ualbertalib/jupiter/issues/2282)
+- Bump rubocop to 1.15.0 and Style/TrivialAccessors default changed [PR#2343](https://github.com/ualbertalib/jupiter/pull/2343)
 
 ## [2.0.2] - 2020-12-17
 - Enable Skylight in the Staging environment and remove it from the UAT environment (where it was unused, and the performance of the Docker environment is less likely to be similar to Production)
