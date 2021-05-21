@@ -28,8 +28,8 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should use existing identity if present' do
-    user = users(:regular)
-    identity = identities(:user_saml)
+    user = users(:user_regular)
+    identity = identities(:identity_user_saml)
 
     OmniAuth.config.mock_auth[:saml] = OmniAuth::AuthHash.new(
       provider: 'saml',
@@ -47,7 +47,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should create a new identity if not present' do
-    user = users(:regular)
+    user = users(:user_regular)
 
     Rails.application.env_config['omniauth.auth'] = OmniAuth::AuthHash.new(
       provider: 'twitter',
@@ -81,7 +81,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should give an error message and user is not logged in with a suspended user' do
-    user = users(:suspended)
+    user = users(:user_suspended)
 
     Rails.application.env_config['omniauth.auth'] = OmniAuth::AuthHash.new(
       provider: 'twitter',
@@ -103,7 +103,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should handle session destroying aka logout properly' do
-    user = users(:regular)
+    user = users(:user_regular)
 
     sign_in_as user
 
@@ -123,8 +123,8 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should logout as user, login as admin and redirect to user show page' do
-    user = users(:regular)
-    admin = users(:admin)
+    user = users(:user_regular)
+    admin = users(:user_admin)
 
     # login as user as admin
     sign_in_as admin
@@ -148,7 +148,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should log in as local system account' do
-    user = users(:system_user)
+    user = users(:user_system)
     post auth_system_url, params: {
       email: 'ditech@ualberta.ca',
       api_key: '3eeb395e-63b7-11ea-bc55-0242ac130003'
@@ -174,7 +174,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should not log in from a saml account that is system' do
-    user = users(:system_user)
+    user = users(:user_system)
     sign_in_as user
 
     assert_redirected_to root_path

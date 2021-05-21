@@ -5,13 +5,13 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
 
   setup do
     # A community with two collections and a logo
-    @community1 = Community.create!(title: 'Two collection community', owner_id: users(:admin).id)
+    @community1 = Community.create!(title: 'Two collection community', owner_id: users(:user_admin).id)
     @collection1 = Collection.create!(community_id: @community1.id,
-                                      title: 'Nice collection', owner_id: users(:admin).id)
+                                      title: 'Nice collection', owner_id: users(:user_admin).id)
     # A restricted (to deposit, not to view) collection
     @collection2 = Collection.create!(community_id: @community1.id,
                                       restricted: true,
-                                      title: 'Another collection', owner_id: users(:admin).id)
+                                      title: 'Another collection', owner_id: users(:user_admin).id)
     @community1.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
                             filename: 'image-sample.jpeg', content_type: 'image/jpeg'
 
@@ -20,7 +20,7 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
   end
 
   test 'visiting the show page for a community with two collections as an admin' do
-    admin = users(:admin)
+    admin = users(:user_admin)
     sign_in_as admin
     get community_url(@community1)
 
@@ -57,7 +57,7 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
 
   test 'visiting the show page for a community with two collections and a logo '\
        'as a regular user' do
-    user = users(:regular)
+    user = users(:user_regular)
     sign_in_as user
     get community_url(@community1)
 
@@ -93,7 +93,7 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
   end
 
   test 'visiting a community with no collections or logo' do
-    user = users(:regular)
+    user = users(:user_regular)
     sign_in_as user
     get community_url(@community2)
 
@@ -108,7 +108,7 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
   end
 
   test "JSON for collections (deposit form AJAX) as regular user doesn't include restricted collection" do
-    user = users(:regular)
+    user = users(:user_regular)
     sign_in_as user
     get community_url(@community1, format: :json)
     body = JSON.parse(response.body)
@@ -117,7 +117,7 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
   end
 
   test 'JSON for collections (deposit form AJAX) as admin includes all collections' do
-    user = users(:admin)
+    user = users(:user_admin)
     sign_in_as user
     get community_url(@community1, format: :json)
     body = JSON.parse(response.body)

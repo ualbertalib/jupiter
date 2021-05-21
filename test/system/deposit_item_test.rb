@@ -3,7 +3,7 @@ require 'application_system_test_case'
 class DepositItemTest < ApplicationSystemTestCase
 
   test 'be able to deposit and edit an item successfully' do
-    user = users(:regular)
+    user = users(:user_regular)
 
     login_user(user)
 
@@ -31,8 +31,8 @@ class DepositItemTest < ApplicationSystemTestCase
 
     fill_in I18n.t('items.draft.describe_item.description'), with: 'A Dance with Dragons Description Goes Here!!!'
 
-    select communities(:books).title, from: 'draft_item[community_id][]'
-    select collections(:fantasy_books).title, from: 'draft_item[collection_id][]'
+    select communities(:community_books).title, from: 'draft_item[community_id][]'
+    select collections(:collection_fantasy).title, from: 'draft_item[collection_id][]'
 
     click_on I18n.t('items.draft.save_and_continue')
 
@@ -111,10 +111,10 @@ class DepositItemTest < ApplicationSystemTestCase
   end
 
   test 'should populate community and collection when coming from collection page' do
-    community = communities(:books)
-    collection = collections(:fantasy_books)
+    community = communities(:community_books)
+    collection = collections(:collection_fantasy)
 
-    user = users(:regular)
+    user = users(:user_regular)
 
     login_user(user)
 

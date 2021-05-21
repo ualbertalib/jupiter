@@ -3,10 +3,10 @@ require 'application_system_test_case'
 class ItemShowTest < ApplicationSystemTestCase
 
   setup do
-    @user = users(:regular)
-    admin = users(:admin)
-    @community = communities(:books)
-    @collection = collections(:fantasy_books)
+    @user = users(:user_regular)
+    admin = users(:user_admin)
+    @community = communities(:community_books)
+    @collection = collections(:collection_fantasy)
 
     # Half items have 'Fancy' in title, others have 'Nice', distributed between the two collections
     @item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC,

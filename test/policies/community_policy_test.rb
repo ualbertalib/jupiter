@@ -3,7 +3,7 @@ require 'test_helper'
 class CommunityPolicyTest < ActiveSupport::TestCase
 
   test 'admin user should have proper authorization over communities' do
-    current_user = users(:admin)
+    current_user = users(:user_admin)
     community = Community.new
 
     assert CommunityPolicy.new(current_user, community).index?
@@ -16,7 +16,7 @@ class CommunityPolicyTest < ActiveSupport::TestCase
   end
 
   test 'general user should only be able to see index and show of communities' do
-    current_user = users(:regular)
+    current_user = users(:user_regular)
     community = Community.new
 
     assert CommunityPolicy.new(current_user, community).index?

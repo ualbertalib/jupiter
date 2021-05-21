@@ -3,9 +3,9 @@ require 'test_helper'
 class ItemShowTest < ActionDispatch::IntegrationTest
 
   setup do
-    @admin = users(:admin)
+    @admin = users(:user_admin)
     # A community with two collections
-    @community = communities(:books)
+    @community = communities(:community_books)
     @collection1 = Collection.create!(community_id: @community.id,
                                       title: 'Nice collection', owner_id: @admin.id)
     @collection2 = Collection.create!(community_id: @community.id,

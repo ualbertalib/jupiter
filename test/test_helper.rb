@@ -38,6 +38,11 @@ Ezid::Client.configure do |config|
   config.logger = Logger.new(File::NULL)
 end
 
+# was removed from rdf-n3 in 3.1.2, restoring here
+module RDF::Isomorphic
+  alias == isomorphic_with?
+end
+
 class ActiveSupport::TestCase
 
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
@@ -59,9 +64,7 @@ class ActiveSupport::TestCase
   # to load fixtures into Solr when tests require that
   def load_fixtures_into_solr_index
     [Item, Thesis].each do |model|
-      model.all.each do |i|
-        i.update_solr
-      end
+      model.all.each(&:update_solr)
     end
   end
 
@@ -81,7 +84,7 @@ class ActiveSupport::TestCase
   end
 
   def sign_in_as_system_user
-    user = users(:system_user)
+    user = users(:user_system)
     api_key = '3eeb395e-63b7-11ea-bc55-0242ac130003'
     post auth_system_url, params: { email: user.email, api_key: api_key }
   end

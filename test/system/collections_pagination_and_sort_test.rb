@@ -3,7 +3,7 @@ require 'application_system_test_case'
 class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
 
   setup do
-    admin = users(:admin)
+    admin = users(:user_admin)
     @community = communities(:community_with_no_collections)
     # For sorting, creation order is 'Fancy Collection 00', 'Nice Collection 01', 'Fancy Collection 02', etc. ...
     (0..10).each do |i|

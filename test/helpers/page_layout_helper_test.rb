@@ -81,13 +81,13 @@ class PageLayoutHelperTest < ActionView::TestCase
   end
 
   test 'page_image_url should return default image on community/item with no logo' do
-    @community = communities(:books)
+    @community = communities(:community_books)
 
     assert_equal asset_pack_url('media/images/era-logo.png'), page_image_url
   end
 
   test 'page_image_url should return community/item logo' do
-    @community = communities(:books)
+    @community = communities(:community_books)
 
     @community.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
                            filename: 'image-sample.jpeg', content_type: 'image/jpeg'
@@ -108,7 +108,7 @@ class PageLayoutHelperTest < ActionView::TestCase
   test 'thumbnail_path should return preview for pdf (Invariable but Previewable)' do
     skip 'this test requires the dependency MuPDF or Poppler to be installed' unless mupdf_exists? || poppler_exists?
 
-    item = items(:fancy)
+    item = items(:item_fancy)
     File.open(file_fixture('pdf-sample.pdf'), 'r') do |file|
       item.add_and_ingest_files([file])
     end
@@ -121,7 +121,7 @@ class PageLayoutHelperTest < ActionView::TestCase
   end
 
   test 'thumbnail_path should return preview for image (Variable)' do
-    item = items(:fancy)
+    item = items(:item_fancy)
     File.open(file_fixture('image-sample.jpeg'), 'r') do |file|
       item.add_and_ingest_files([file])
     end
@@ -134,7 +134,7 @@ class PageLayoutHelperTest < ActionView::TestCase
   end
 
   test 'thumbnail_path should provide nil if no thumbnail is possible (StandardError on variable)' do
-    logo = active_storage_attachments(:logo)
+    logo = active_storage_attachments(:attachment_logo)
     logo.define_singleton_method(:variant) { |_| throw StandardError }
 
     assert_nil thumbnail_path(logo)
@@ -142,7 +142,7 @@ class PageLayoutHelperTest < ActionView::TestCase
   end
 
   test 'thumbnail_path should return nil if both the variant and preview fail' do
-    logo = active_storage_attachments(:logo)
+    logo = active_storage_attachments(:attachment_logo)
     logo.define_singleton_method(:variant) { |_| throw ActiveStorage::InvariableError }
     logo.define_singleton_method(:preview) { |_| throw StandardError }
 

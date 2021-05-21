@@ -6,17 +6,17 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
   # TODO: add tests involving non-public items
 
   setup do
-    @community = communities(:fancy_community)
-    @collection = collections(:fancy_collection)
-    fancy_item = items(:fancy)
-    admin_item = items(:admin)
+    @community = communities(:community_fancy)
+    @collection = collections(:collection_fancy)
+    fancy_item = items(:item_fancy)
+    admin_item = items(:item_admin)
     @items = [fancy_item, admin_item]
 
     @items.each(&:update_solr)
   end
 
   test 'visiting the show page for a collection as an admin' do
-    admin = users(:admin)
+    admin = users(:user_admin)
     sign_in_as admin
     get community_collection_url(@community, @collection)
 
@@ -60,7 +60,7 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
   end
 
   test 'visiting the show page for a collection as a regular user' do
-    user = users(:regular_two)
+    user = users(:user_regular_two)
     sign_in_as user
     get community_collection_url(@community, @collection)
 
@@ -100,7 +100,7 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
 
   test 'searching within the collection as a regular user' do
     # TODO: should probably hook this up to a system test that submits the form
-    user = users(:regular)
+    user = users(:user_regular)
     sign_in_as user
     get community_collection_url(@community, @collection, search: 'Fancy')
 

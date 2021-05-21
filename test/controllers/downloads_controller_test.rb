@@ -3,7 +3,7 @@ require 'test_helper'
 class DownloadsControllerTest < ActionDispatch::IntegrationTest
 
   setup do
-    item = items(:fancy)
+    item = items(:item_fancy)
 
     File.open(file_fixture('text-sample.txt'), 'r') do |file|
       item.add_and_ingest_files([file])
@@ -11,7 +11,7 @@ class DownloadsControllerTest < ActionDispatch::IntegrationTest
 
     @file = item.reload.files.first
 
-    item_requiring_authentication = items(:authenticated_item)
+    item_requiring_authentication = items(:item_authenticated)
 
     File.open(file_fixture('text-sample.txt'), 'r') do |file|
       item_requiring_authentication.add_and_ingest_files([file])

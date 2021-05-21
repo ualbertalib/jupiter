@@ -1,6 +1,7 @@
-one:
-  language: english
-  draft_item: completed_describe_item_step
-two:
-  language: english
-  draft_item: completed_choose_license_and_visibility_step
+draft_item_language_one:
+  language: language_english
+  draft_item: draft_item_completed_describe_item_step
+
+draft_item_language_two:
+  language: language_english
+  draft_item: draft_item_completed_choose_license_and_visibility_step

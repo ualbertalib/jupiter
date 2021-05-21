@@ -229,8 +229,17 @@ class JupiterCore::SolrServices::DeferredSimpleSolrQuery
       common_attr_queries = []
       where = criteria[:where].select {|k,v| k != :id}
       common_attr_queries << where.map do |k, v|
-        solr_key = solr_exporter.solr_names_for(k).first
-        %Q(#{solr_key}:"#{v}")
+        case k
+        when :updated_on_or_after
+          "updated_at_dtsi:[#{v} TO NOW]"
+        when :updated_before
+          "updated_at_dtsi:[* TO #{v}}"
+        when :member_of_paths
+          %Q(member_of_paths_ngrams:"#{v}")
+        else
+          solr_key = solr_exporter.solr_names_for(k).first
+          %Q(#{solr_key}:"#{v}")
+        end
       end
       fquery << common_attr_queries.join(' AND ')
       idquery = %Q({!term f=id}#{criteria[:where][:id]}) if criteria[:where].key?(:id)

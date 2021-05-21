@@ -3,7 +3,7 @@ require 'test_helper'
 class CollectionPolicyTest < ActiveSupport::TestCase
 
   test 'admin user should have proper authorization over collections' do
-    current_user = users(:admin)
+    current_user = users(:user_admin)
     collection = Collection.new
 
     assert CollectionPolicy.new(current_user, collection).index?
@@ -16,7 +16,7 @@ class CollectionPolicyTest < ActiveSupport::TestCase
   end
 
   test 'general user should only be able to see index and show of collections' do
-    current_user = users(:regular)
+    current_user = users(:user_regular)
     collection = Collection.new
 
     assert CollectionPolicy.new(current_user, collection).index?

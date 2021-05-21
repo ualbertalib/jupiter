@@ -3,8 +3,8 @@ require 'application_system_test_case'
 class EditItemOldLicenseTest < ApplicationSystemTestCase
 
   test 'can edit and save an item with an old license' do
-    admin = users(:admin)
-    item = items(:old_license)
+    admin = users(:user_admin)
+    item = items(:item_old_license)
     item.save
 
     # Need to add file to item to be able to go through editing wizard.

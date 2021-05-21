@@ -1,5 +1,6 @@
 # Some useful errors
 class Exporters::Solr::IndexRoleInvalidError < StandardError; end
+
 class Exporters::Solr::UnknownAttributeError < StandardError; end
 
 # This is the base class for all other Solr Export classes. Handles
@@ -74,6 +75,8 @@ class Exporters::Solr::BaseExporter
   end
 
   def self.solr_names_for(name)
+    name = :updated_at if [:updated_on_or_after, :updated_before].include? name
+
     name_to_solr_name_map[name] || (raise Exporters::Solr::UnknownAttributeError, "no such attribute #{name}")
   end
 

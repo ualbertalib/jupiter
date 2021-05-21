@@ -3,10 +3,10 @@ require 'test_helper'
 class ItemsControllerTest < ActionDispatch::IntegrationTest
 
   setup do
-    @regular_user = users(:regular)
-    @admin = users(:admin)
-    @community = communities(:books)
-    @collection = collections(:fantasy_books)
+    @regular_user = users(:user_regular)
+    @admin = users(:user_admin)
+    @community = communities(:community_books)
+    @collection = collections(:collection_fantasy)
 
     @item = Item.new(
       title: 'item to edit',

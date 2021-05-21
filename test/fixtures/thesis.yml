@@ -1,6 +1,6 @@
-nice:
+thesis_nice:
   visibility: <%= JupiterCore::VISIBILITY_PUBLIC %>
-  owner: regular
+  owner: user_regular
   title: 'Nice Item'
   dissertant: 'Joe Blow'
   graduation_date: '2019'
@@ -8,12 +8,12 @@ nice:
   record_created_at: <%= 5.day.ago.to_s(:db) %>
   updated_at: <%= 5.day.ago.to_s(:db) %>
   abstract: 'This is my abstract'
-  member_of_paths: <%= ["#{ActiveRecord::FixtureSet.identify(:thesis, :uuid)}/#{ActiveRecord::FixtureSet.identify(:thesis, :uuid)}"] %>
+  member_of_paths: <%= ["#{ActiveRecord::FixtureSet.identify(:community_thesis, :uuid)}/#{ActiveRecord::FixtureSet.identify(:collection_thesis, :uuid)}"] %>
 
-admin:
+thesis_admin:
   id: '8e18f37c-dc60-41bb-9459-990586176730'
   visibility: <%= JupiterCore::VISIBILITY_PUBLIC %>
-  owner: admin
+  owner: user_admin
   hydra_noid: 'c6108vb30p'
   date_ingested: '2018-03-13T16:52:49.818Z'
   title: 'dcterms:title1$ Some Thesis Title'
@@ -26,7 +26,7 @@ admin:
   rights: 'dc:rights1$ Some license terms'
   sort_year: '2015'
   is_version_of: ['dcterms:isVersionOf1$ Lartey, S., Cummings, G. G., & Profetto-McGrath, J. (2013). Interventions that promote retention of experienced registered nurses in health care settings: A systematic review. Journal of Nursing Management. doi: 10.1111/jonm.12105']
-  member_of_paths: <%= ["#{ActiveRecord::FixtureSet.identify(:thesis, :uuid)}/#{ActiveRecord::FixtureSet.identify(:thesis, :uuid)}"] %>
+  member_of_paths: <%= ["#{ActiveRecord::FixtureSet.identify(:community_thesis, :uuid)}/#{ActiveRecord::FixtureSet.identify(:collection_thesis, :uuid)}"] %>
   subject: ['dc:subject1$ Some subject heading', 'dc:subject2$ Some subject heading', 'dc:subject3$ Some subject heading']
   abstract: 'dcterms:abstract1$ Arabic ناتيومرلبسفأعدقحكهجشطصزخضغذثئةظؤىءآإ Greek αβγδεζηθικλμνξοπρςστυφχψω ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ Cyrillic абвгдеёжзийклмнопрстуфхцчшщъыьэюя АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ Lao ກ-ໝ Thai ก-๎ Burmese က-ၙ Khmer ក-៹ Korean 가-힣 Bengali অ-ৱ // Spanish áéíóúüñ French àâçèéêëîïôùûü Portuguese àáâãçéêíóôõú Hindi ऄ-ॿ Pujabi ਅ-ੴ Mandarin 海萵苣白菜冬瓜韭菜竹筍生菜大頭菜豆薯銀甜菜莧菜豌豆蒲公英蔥豌豆苗亞羅婆羅門參西葫蘆。小豆辣根土豆 Japanese アオサメロンキャベツニラ竹シュートレタスルタバガのクズイモ銀ビートアマランスエンドウタンポポねぎ'
   language: <%= CONTROLLED_VOCABULARIES[:language].english %>
@@ -47,9 +47,9 @@ admin:
   record_created_at: '2018-03-13T16:52:49.818Z'
   updated_at: <%= 5.day.ago.to_s(:db) %>
 
-private:
+thesis_private:
   visibility: <%= JupiterCore::VISIBILITY_PRIVATE %>
-  owner: admin
+  owner: user_admin
   title: 'Private thesis'
   dissertant: 'Joe Blow'
   graduation_date: '2019'
@@ -57,28 +57,28 @@ private:
   record_created_at: <%= 5.day.ago.to_s(:db) %>
   updated_at: <%= 10.day.ago.to_s(:db) %>
   abstract: 'This is my abstract'
-  member_of_paths: <%= ["#{ActiveRecord::FixtureSet.identify(:thesis, :uuid)}/#{ActiveRecord::FixtureSet.identify(:thesis, :uuid)}"] %>
+  member_of_paths: <%= ["#{ActiveRecord::FixtureSet.identify(:community_thesis, :uuid)}/#{ActiveRecord::FixtureSet.identify(:collection_thesis, :uuid)}"] %>
 
-fancy:
+thesis_fancy:
   visibility: <%= JupiterCore::VISIBILITY_PUBLIC %>
-  owner: regular
+  owner: user_regular
   title: 'Fancy Item'
   dissertant: 'Joe Blow'
   graduation_date: '2019'
   date_ingested: <%= 5.day.ago %>
   record_created_at: <%= 5.day.ago.to_s(:db) %>
   abstract: 'This is my abstract'
-  member_of_paths: <%= ["#{ActiveRecord::FixtureSet.identify(:thesis, :uuid)}/#{ActiveRecord::FixtureSet.identify(:thesis, :uuid)}"] %>
+  member_of_paths: <%= ["#{ActiveRecord::FixtureSet.identify(:community_thesis, :uuid)}/#{ActiveRecord::FixtureSet.identify(:collection_thesis, :uuid)}"] %>
 
-embargoed:
+thesis_embargoed:
   visibility: <%= JupiterCore::Depositable::VISIBILITY_EMBARGO %>
   visibility_after_embargo: <%= JupiterCore::VISIBILITY_PUBLIC %>
   embargo_end_date: <%= 5.day.from_now.to_s(:db) %>
-  owner: admin
+  owner: user_admin
   title: 'Embargoed Item'
   dissertant: 'Joe Blow'
   graduation_date: '2019'
   date_ingested: <%= 5.day.ago %>
   record_created_at: <%= 5.day.ago.to_s(:db) %>
   abstract: 'This is my abstract'
-  member_of_paths: <%= ["#{ActiveRecord::FixtureSet.identify(:thesis, :uuid)}/#{ActiveRecord::FixtureSet.identify(:embargoed_thesis, :uuid)}"] %>
+  member_of_paths: <%= ["#{ActiveRecord::FixtureSet.identify(:community_thesis, :uuid)}/#{ActiveRecord::FixtureSet.identify(:collection_embargoed, :uuid)}"] %>

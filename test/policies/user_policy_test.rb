@@ -3,8 +3,8 @@ require 'test_helper'
 class UserPolicyTest < ActiveSupport::TestCase
 
   test 'admin user should have proper authorization over other users' do
-    current_user = users(:admin)
-    users_profile = users(:regular)
+    current_user = users(:user_admin)
+    users_profile = users(:user_regular)
 
     assert UserPolicy.new(current_user, users_profile).index?
 
@@ -18,7 +18,7 @@ class UserPolicyTest < ActiveSupport::TestCase
   end
 
   test 'should allow regular user access to yourself' do
-    current_user = users(:regular)
+    current_user = users(:user_regular)
     users_profile = current_user
 
     assert_not UserPolicy.new(current_user, users_profile).index?
@@ -33,8 +33,8 @@ class UserPolicyTest < ActiveSupport::TestCase
   end
 
   test 'should deny access to other regular users' do
-    current_user = users(:regular)
-    users_profile = users(:admin)
+    current_user = users(:user_regular)
+    users_profile = users(:user_admin)
 
     assert_not UserPolicy.new(current_user, users_profile).index?
 
@@ -49,7 +49,7 @@ class UserPolicyTest < ActiveSupport::TestCase
 
   test 'should deny access to other anonymous users' do
     current_user = nil
-    users_profile = users(:admin)
+    users_profile = users(:user_admin)
 
     assert_not UserPolicy.new(current_user, users_profile).index?
 

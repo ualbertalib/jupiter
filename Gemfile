@@ -17,7 +17,7 @@ gem 'active_link_to'
 gem 'simple_form'
 
 # RDF stuff
-gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', tag: 'v0.2.4'
+gem 'acts_as_rdfable', path: '../acts_as_rdfable'
 gem 'rdf', '~> 3.1.7'
 gem 'rdf-n3'
 gem 'rdf-vocab', '~> 3.1.9'
@@ -65,7 +65,10 @@ gem 'rollbar'
 
 # OAI-PMH
 gem 'builder_deferred_tagging', github: 'ualbertalib/builder_deferred_tagging', tag: 'v0.01'
-gem 'oaisys', github: 'ualbertalib/oaisys', tag: 'v1.0.2'
+gem 'oaisys', path: '../oaisys'
+
+# temporary hack to deal with mimemagic for local development, proper upstream change needed
+# gem 'mimemagic', github: 'mimemagicrb/mimemagic', ref: '01f92d86d15d85cfd0f20dabd025dcbd36a8a60f'
 
 # Seeds
 group :development, :test, :uat do

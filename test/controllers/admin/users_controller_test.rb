@@ -3,7 +3,7 @@ require 'test_helper'
 class Admin::UsersControllerTest < ActionDispatch::IntegrationTest
 
   setup do
-    @admin = users(:admin)
+    @admin = users(:user_admin)
     sign_in_as @admin
   end
 
@@ -18,7 +18,7 @@ class Admin::UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should be able to suspend a user' do
-    user = users(:regular)
+    user = users(:user_regular)
 
     patch suspend_admin_user_url(user)
 
@@ -30,7 +30,7 @@ class Admin::UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should be able to unsuspend a user' do
-    user = users(:suspended)
+    user = users(:user_suspended)
 
     patch unsuspend_admin_user_url(user)
 
@@ -42,7 +42,7 @@ class Admin::UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should be able to grant admin to a user' do
-    user = users(:regular)
+    user = users(:user_regular)
 
     patch grant_admin_admin_user_url(user)
     assert_redirected_to admin_user_url(user)
@@ -53,7 +53,7 @@ class Admin::UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should be able to revoke admin to an admin' do
-    user = users(:admin_two)
+    user = users(:user_admin_two)
 
     patch revoke_admin_admin_user_url(user)
 
@@ -65,7 +65,7 @@ class Admin::UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should be able to login as user' do
-    user = users(:regular)
+    user = users(:user_regular)
 
     post login_as_user_admin_user_url(user)
     assert_redirected_to root_url

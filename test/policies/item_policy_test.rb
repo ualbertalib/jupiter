@@ -3,7 +3,7 @@ require 'test_helper'
 class ItemPolicyTest < ActiveSupport::TestCase
 
   test 'admin should have proper authorization over items' do
-    current_user = users(:admin)
+    current_user = users(:user_admin)
     item = Item.new
 
     assert ItemPolicy.new(current_user, item).index?
@@ -18,7 +18,7 @@ class ItemPolicyTest < ActiveSupport::TestCase
   end
 
   test 'authenticated user should only be able to create, see and modify, but not delete, their own items' do
-    current_user = users(:regular)
+    current_user = users(:user_regular)
     item = Item.new(owner_id: current_user.id)
 
     assert ItemPolicy.new(current_user, item).index?
@@ -32,8 +32,8 @@ class ItemPolicyTest < ActiveSupport::TestCase
   end
 
   test 'authenticated user should not have edit access to public items' do
-    current_user = users(:regular)
-    another_user = users(:admin)
+    current_user = users(:user_regular)
+    another_user = users(:user_admin)
 
     item = Item.new(owner_id: another_user.id, visibility: JupiterCore::VISIBILITY_PUBLIC)
 
@@ -48,8 +48,8 @@ class ItemPolicyTest < ActiveSupport::TestCase
   end
 
   test 'authenticated user should not have edit access to authenticated items' do
-    current_user = users(:regular)
-    another_user = users(:admin)
+    current_user = users(:user_regular)
+    another_user = users(:user_admin)
 
     item = Item.new(owner_id: another_user.id, visibility: JupiterCore::VISIBILITY_AUTHENTICATED)
 

@@ -3,10 +3,10 @@ require 'test_helper'
 class ProfileControllerTest < ActionDispatch::IntegrationTest
 
   setup do
-    @item_collection = collections(:fantasy_books)
-    @theses_collection = collections(:thesis)
-    @admin = users(:admin)
-    @user = users(:regular)
+    @item_collection = collections(:collection_fantasy)
+    @theses_collection = collections(:collection_thesis)
+    @admin = users(:user_admin)
+    @user = users(:user_regular)
   end
 
   test 'should get profile index' do
@@ -18,13 +18,13 @@ class ProfileControllerTest < ActionDispatch::IntegrationTest
   test 'should view draft item in profile' do
     sign_in_as(@user)
 
-    draft_item = draft_items(:inactive)
+    draft_item = draft_items(:draft_item_inactive)
 
     patch item_draft_url(id: :describe_item, item_id: draft_item.id), params: {
       draft_item: {
         title: 'Random Book',
-        type_id: types(:book).id,
-        language_ids: [languages(:english).id],
+        type_id: types(:type_book).id,
+        language_ids: [languages(:language_english).id],
         creators: ['Jane Doe', 'Bob Smith'],
         subjects: ['Best Seller', 'Adventure'],
         date_created: Date.current,
@@ -41,7 +41,7 @@ class ProfileControllerTest < ActionDispatch::IntegrationTest
   test 'should view draft thesis in profile' do
     sign_in_as(@admin)
 
-    draft_thesis = draft_theses(:inactive)
+    draft_thesis = draft_theses(:draft_thesis_inactive)
     patch admin_thesis_draft_url(id: :describe_thesis, thesis_id: draft_thesis.id), params: {
       draft_thesis: {
         title: 'Random Thesis',

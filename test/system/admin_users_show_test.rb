@@ -3,7 +3,7 @@ require 'application_system_test_case'
 class AdminUsersShowTest < ApplicationSystemTestCase
 
   test 'should not be able to toggle suspended/admin or login as yourself' do
-    admin = users(:admin)
+    admin = users(:user_admin)
 
     login_user(admin)
 
@@ -32,8 +32,8 @@ class AdminUsersShowTest < ApplicationSystemTestCase
   end
 
   test 'should be able to toggle suspended/admin a regular user' do
-    admin = users(:admin)
-    user = users(:regular)
+    admin = users(:user_admin)
+    user = users(:user_regular)
 
     login_user(admin)
 
@@ -105,8 +105,8 @@ class AdminUsersShowTest < ApplicationSystemTestCase
   end
 
   test 'should be able to login as a regular user' do
-    admin = users(:admin)
-    user = users(:regular)
+    admin = users(:user_admin)
+    user = users(:user_regular)
 
     login_user(admin)
 
@@ -149,15 +149,15 @@ class AdminUsersShowTest < ApplicationSystemTestCase
   end
 
   test 'should be able to view items/theses owned by user' do
-    # Note: searching and faceting is covered more extensively in tests elsewhere
-    user = users(:regular)
-    admin = users(:admin)
+    # NOTE: searching and faceting is covered more extensively in tests elsewhere
+    user = users(:user_regular)
+    admin = users(:user_admin)
 
     # creating the index from the fixtures requires a save
     # TODO: these would be good candidates for using factories instead.
-    items(:fancy).save
-    items(:admin).save
-    thesis(:nice).save
+    items(:item_fancy).save
+    items(:item_admin).save
+    thesis(:thesis_nice).save
 
     login_user(admin)
 

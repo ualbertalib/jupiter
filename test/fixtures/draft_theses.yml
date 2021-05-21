@@ -1,8 +1,8 @@
-inactive:
-  user: admin
+draft_thesis_inactive:
+  user: user_admin
 
-completed_describe_thesis_step:
-  user: admin
+draft_thesis_completed_describe_thesis_step:
+  user: user_admin
   status: <%= DraftThesis.statuses[:active] %>
   wizard_step: <%= DraftThesis.wizard_steps[:describe_thesis] %>
   title: 'Thesis on Dogs'
@@ -14,8 +14,8 @@ completed_describe_thesis_step:
     such treat doggorino. Most angery pupper I have ever seen thicc long woofer much ruin
     diet borkf heckin corgo, fat boi heckin good boys and girls super chub heck.'
 
-completed_choose_license_and_visibility_step:
-  user: admin
+draft_thesis_completed_choose_license_and_visibility_step:
+  user: user_admin
   status: <%= DraftThesis.statuses[:active] %>
   wizard_step: <%= DraftThesis.wizard_steps[:choose_license_and_visibility] %>
   title: 'Thesis on Cats'

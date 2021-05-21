@@ -54,7 +54,7 @@ class DeferredSimpleSolrQueryTest < ActiveSupport::TestCase
     member_items = collection.member_items
     member_theses = collection.member_theses
     member_objects = collection.member_objects
-    
+
     assert_equal member_items.count, deferred_item_query.total_count
     assert_equal member_theses.count, deferred_thesis_query.total_count
     assert_equal member_objects.count, deferred_query.total_count
@@ -136,7 +136,7 @@ class DeferredSimpleSolrQueryTest < ActiveSupport::TestCase
   test 'check item and thesis with collection/community for a user' do
     user = User.first
     item = Item.first
-    
+
     path = item.member_of_paths.first
 
     deferred_item_query = Item.solr_query.where(member_of_paths: path)
@@ -229,7 +229,8 @@ class DeferredSimpleSolrQueryTest < ActiveSupport::TestCase
     items_by_users = Item.where('owner_id = ? OR owner_id = ?', user1.id, user2.id)
 
     # This fails. deferred_query.total_count gives: undefined method `first' for nil:NilClass
-    assert_equal items_owned.count, deferred_query.total_count
+    # binding.pry
+    assert_equal items_by_users.count, deferred_query.total_count
 
     # This (deferred_query.each) also fails for the same reason as above.
     deferred_results = []
@@ -237,7 +238,7 @@ class DeferredSimpleSolrQueryTest < ActiveSupport::TestCase
       deferred_results << obj
     end
     # Ensure results match.
-    assert (items_by_users - items_owned).blank? and (items_owned - items_by_users).blank?
+    assert (deferred_results - items_by_users).blank? and (deferred_results - items_by_users).blank?
   end
 
 end

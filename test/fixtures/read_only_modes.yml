@@ -1,4 +1,4 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+read_only_mode_disabled:
   enabled: false

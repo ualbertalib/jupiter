@@ -3,8 +3,8 @@ require 'test_helper'
 class DraftItemTest < ActiveSupport::TestCase
 
   setup do
-    @community = communities(:books)
-    @collection = collections(:fantasy_books)
+    @community = communities(:community_books)
+    @collection = collections(:collection_fantasy)
   end
 
   test 'enums' do
@@ -29,20 +29,20 @@ class DraftItemTest < ActiveSupport::TestCase
   end
 
   test 'should be able to create a draft item with user when on inactive status' do
-    user = users(:regular)
+    user = users(:user_regular)
     draft_item = DraftItem.new(user: user)
     assert draft_item.valid?
   end
 
   test 'should run validations when on describe_item step' do
-    user = users(:regular)
+    user = users(:user_regular)
     draft_item = DraftItem.new(user: user, status: DraftItem.statuses[:active])
     assert_not draft_item.valid?
 
     draft_item.assign_attributes(
       title: 'Book of Random',
-      type: types(:book),
-      languages: [languages(:english)],
+      type: types(:type_book),
+      languages: [languages(:language_english)],
       creators: ['Jane Doe', 'Bob Smith'],
       subjects: ['Best Seller', 'Adventure'],
       date_created: Date.current,
@@ -53,15 +53,15 @@ class DraftItemTest < ActiveSupport::TestCase
   end
 
   test 'should run validations when on choose_license_and_visibility wizard step' do
-    user = users(:regular)
+    user = users(:user_regular)
 
     draft_item = DraftItem.new(
       user: user,
       status: DraftItem.statuses[:active],
       wizard_step: DraftItem.wizard_steps[:choose_license_and_visibility],
       title: 'Book of Random',
-      type: types(:book),
-      languages: [languages(:english)],
+      type: types(:type_book),
+      languages: [languages(:language_english)],
       creators: ['Jane Doe', 'Bob Smith'],
       subjects: ['Best Seller', 'Adventure'],
       date_created: Date.current,
@@ -84,18 +84,18 @@ class DraftItemTest < ActiveSupport::TestCase
   end
 
   test 'should run validations when on file_uploads wizard step' do
-    user = users(:regular)
+    user = users(:user_regular)
 
     # Need to create an object for ActiveStorage because of global ID
-    draft_item = draft_items(:inactive)
+    draft_item = draft_items(:draft_item_inactive)
 
     draft_item.update(
       user: user,
       status: DraftItem.statuses[:active],
       wizard_step: DraftItem.wizard_steps[:upload_files],
       title: 'Book of Random',
-      type: types(:book),
-      languages: [languages(:english)],
+      type: types(:type_book),
+      languages: [languages(:language_english)],
       creators: ['Jane Doe', 'Bob Smith'],
       subjects: ['Best Seller', 'Adventure'],
       date_created: Date.current,
@@ -116,15 +116,15 @@ class DraftItemTest < ActiveSupport::TestCase
   end
 
   test 'should handle license text validations' do
-    user = users(:regular)
+    user = users(:user_regular)
 
     draft_item = DraftItem.new(
       user: user,
       status: DraftItem.statuses[:active],
       wizard_step: DraftItem.wizard_steps[:choose_license_and_visibility],
       title: 'Book of Random',
-      type: types(:book),
-      languages: [languages(:english)],
+      type: types(:type_book),
+      languages: [languages(:language_english)],
       creators: ['Jane Doe', 'Bob Smith'],
       subjects: ['Best Seller', 'Adventure'],
       date_created: Date.current,
@@ -142,15 +142,15 @@ class DraftItemTest < ActiveSupport::TestCase
   end
 
   test 'should handle embargo end date visibility validations' do
-    user = users(:regular)
+    user = users(:user_regular)
 
     draft_item = DraftItem.new(
       user: user,
       status: DraftItem.statuses[:active],
       wizard_step: DraftItem.wizard_steps[:choose_license_and_visibility],
       title: 'Book of Random',
-      type: types(:book),
-      languages: [languages(:english)],
+      type: types(:type_book),
+      languages: [languages(:language_english)],
       creators: ['Jane Doe', 'Bob Smith'],
       subjects: ['Best Seller', 'Adventure'],
       date_created: Date.current,
@@ -169,14 +169,14 @@ class DraftItemTest < ActiveSupport::TestCase
   end
 
   test 'should handle community/collection validations on member_of_paths' do
-    user = users(:regular)
+    user = users(:user_regular)
 
     draft_item = DraftItem.new(
       user: user,
       status: DraftItem.statuses[:active],
       title: 'Book of Random',
-      type: types(:book),
-      languages: [languages(:english)],
+      type: types(:type_book),
+      languages: [languages(:language_english)],
       creators: ['Jane Doe', 'Bob Smith'],
       subjects: ['Best Seller', 'Adventure'],
       date_created: Date.current,
@@ -214,8 +214,8 @@ class DraftItemTest < ActiveSupport::TestCase
     assert_equal ['Deposit is restricted for this collection'], draft_item.errors.messages[:member_of_paths]
 
     # Admin user can deposit to a restricted collection
-    admin = users(:admin)
-    draft_item.user = admin
+    user_admin = users(:user_admin)
+    draft_item.user = user_admin
     assert draft_item.valid?
 
     restricted_collection.destroy
@@ -223,14 +223,14 @@ class DraftItemTest < ActiveSupport::TestCase
 
   # should be able to delete additional contributors https://github.com/ualbertalib/jupiter/issues/830
   test '#strip_input_fields should strip empty strings from array fields' do
-    user = users(:regular)
+    user = users(:user_regular)
 
     draft_item = DraftItem.new(
       user: user,
       status: DraftItem.statuses[:active],
       title: 'Book of Random',
-      type: types(:book),
-      languages: [languages(:english)],
+      type: types(:type_book),
+      languages: [languages(:language_english)],
       creators: ['Jane Doe', 'Bob Smith'],
       subjects: ['Best Seller', 'Adventure'],
       date_created: Date.current,

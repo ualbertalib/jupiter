@@ -113,6 +113,19 @@
       </analyzer>
     </fieldType>
 
+    <fieldType name="ngrams" class="solr.TextField" omitNorms="false">
+      <analyzer type="index">
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+        // TODO: should minGramSize and maxGramSize be modified?
+        <filter class="solr.EdgeNGramFilterFactory" minGramSize="2" maxGramSize="15"/>
+      </analyzer>
+      <analyzer type="query">
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+      </analyzer>
+    </fieldType>
+
     <!-- A text field that only splits on whitespace for exact matching of words -->
     <fieldType name="text_ws" class="solr.TextField" positionIncrementGap="100">
       <analyzer>
@@ -194,6 +207,9 @@
 
     <field name="lat" type="tdouble" stored="true" indexed="true" multiValued="false"/>
     <field name="lng" type="tdouble" stored="true" indexed="true" multiValued="false"/>
+
+    <field name="member_of_paths_ngrams" type="ngrams" indexed="true" stored="false" multiValued="true"/>
+    <copyField source="member_of_paths_dpsim" dest="member_of_paths_ngrams"/>
 
     <!-- NOTE:  not all possible Solr field types are represented in the dynamic fields -->
 
@@ -339,6 +355,10 @@
 
 
   </fields>
+
+  <lst name="appends">
+    <str name="qf">member_of_paths_ngrams</str>
+  </lst>
 
  <!-- Field to use to determine and enforce document uniqueness.
       Unless this field is marked with required="false", it will be a required field

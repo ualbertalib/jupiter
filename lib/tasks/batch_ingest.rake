@@ -235,7 +235,7 @@ def thesis_ingest(thesis_data, index, csv_directory, checksums)
 
     unlocked_obj.degree = thesis_data[:degree] if thesis_data[:degree].present?
     unlocked_obj.thesis_level = thesis_data[:degree_level] if thesis_data[:degree_level].present?
-    unlocked_obj.institution = CONTROLLED_VOCABULARIES[:institution].send('uofa'.to_sym)
+    unlocked_obj.institution = CONTROLLED_VOCABULARIES[:institution].send(:uofa)
     unlocked_obj.specialization = thesis_data[:specialization] if thesis_data[:specialization].present?
 
     unlocked_obj.subject = thesis_data[:keywords].split('|') if thesis_data[:keywords].present?

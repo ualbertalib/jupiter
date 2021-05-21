@@ -7,7 +7,7 @@ class DoiServiceTest < ActiveSupport::TestCase
   EXAMPLE_DOI = 'doi:10.21967/fk2-ycs2-dd92'.freeze
 
   test 'DOI state transitions' do
-    @admin = users(:admin)
+    @admin = users(:user_admin)
 
     assert_no_enqueued_jobs only: DOIRemoveJob
     Rails.application.secrets.doi_minting_enabled = true

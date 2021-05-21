@@ -3,13 +3,13 @@ require 'test_helper'
 class EmbargoExpiryJobTest < ActiveJob::TestCase
 
   setup do
-    @community = communities(:books)
-    @collection = collections(:fantasy_books)
+    @community = communities(:community_books)
+    @collection = collections(:collection_fantasy)
   end
 
   test 'that job transitions only expired item embargos into proper state' do
     expired_item = Item.new(
-      owner_id: users(:admin).id,
+      owner_id: users(:user_admin).id,
       title: 'Fancy Item',
       creators: ['Joe Blow'],
       created: 'Fall 2017',
@@ -27,7 +27,7 @@ class EmbargoExpiryJobTest < ActiveJob::TestCase
     end
 
     not_expired_item = Item.new(
-      owner_id: users(:admin).id,
+      owner_id: users(:user_admin).id,
       title: 'Fancy Item',
       creators: ['Joe Blow'],
       created: 'Fall 2017',
@@ -61,7 +61,7 @@ class EmbargoExpiryJobTest < ActiveJob::TestCase
   test 'that job transitions expired thesis embargos into proper state' do
     expired_thesis = Thesis.new(
       title: 'thesis blocking deletion',
-      owner_id: users(:admin).id,
+      owner_id: users(:user_admin).id,
       dissertant: 'Joe Blow',
       graduation_date: '2017-03-31',
       visibility: JupiterCore::Depositable::VISIBILITY_EMBARGO,
@@ -74,7 +74,7 @@ class EmbargoExpiryJobTest < ActiveJob::TestCase
 
     not_expired_thesis = Thesis.new(
       title: 'thesis blocking deletion',
-      owner_id: users(:admin).id,
+      owner_id: users(:user_admin).id,
       dissertant: 'Joe Blow',
       graduation_date: '2017-03-31',
       visibility: JupiterCore::Depositable::VISIBILITY_EMBARGO,

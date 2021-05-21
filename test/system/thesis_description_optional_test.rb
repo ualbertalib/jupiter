@@ -3,8 +3,8 @@ require 'application_system_test_case'
 class ThesisDescriptionOptionalTest < ApplicationSystemTestCase
 
   test 'cannot go through wizard step without description on thesis after 2009' do
-    admin = users(:admin)
-    thesis = thesis(:nice)
+    admin = users(:user_admin)
+    thesis = thesis(:thesis_nice)
     login_user admin
 
     visit item_path thesis
@@ -19,8 +19,8 @@ class ThesisDescriptionOptionalTest < ApplicationSystemTestCase
   end
 
   test 'can go through wizard step without description on thesis before 2009' do
-    admin = users(:admin)
-    thesis = thesis(:nice)
+    admin = users(:user_admin)
+    thesis = thesis(:thesis_nice)
     login_user admin
 
     visit item_path thesis

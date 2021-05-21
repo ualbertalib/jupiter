@@ -1,12 +1,4 @@
 GIT
-  remote: https://github.com/ualbertalib/acts_as_rdfable.git
-  revision: 6b224060a90743ff20ab924510d3c9dd53149280
-  tag: v0.2.4
-  specs:
-    acts_as_rdfable (0.2.1)
-      rails (>= 5.2.3)
-
-GIT
   remote: https://github.com/ualbertalib/builder_deferred_tagging.git
   revision: 4c51f3e89c145aed34ac69182d2bae4f6bc088f3
   tag: v0.01
@@ -15,10 +7,14 @@ GIT
       builder
       request_store
 
-GIT
-  remote: https://github.com/ualbertalib/oaisys.git
-  revision: 63d5086ae790e3e45f78a1c7135a9c1069951dd8
-  tag: v1.0.2
+PATH
+  remote: ../acts_as_rdfable
+  specs:
+    acts_as_rdfable (0.2.1)
+      rails (>= 5.2.3)
+
+PATH
+  remote: ../oaisys
   specs:
     oaisys (0.1.0)
       builder (~> 3.0)
@@ -247,7 +243,9 @@ GEM
     marcel (0.3.3)
       mimemagic (~> 0.3.2)
     method_source (1.0.0)
-    mimemagic (0.3.5)
+    mimemagic (0.3.10)
+      nokogiri (~> 1)
+      rake
     mini_magick (4.11.0)
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
