@@ -718,11 +718,11 @@ if Rails.env.development? || Rails.env.uat?
                               genres: [ControlledVocabulary.digitization.genre.from_value('Programs (Publications)')],
                               languages: [ControlledVocabulary.digitization.language.from_value('English')],
                               publishers: [ControlledVocabulary.digitization.subject.from_value('Edmonton Folk Music Festival')],
-                              places_of_publication: [ControlledVocabulary.digitization.location.from_value('Edmonton (Alta.)')],
+                              places_of_publication: [ControlledVocabulary.digitization.subject.from_value('Edmonton (Alta.)')],
                               extent: 'v. : ill. ; 22-27 cm.',
                               notes: ['Souvenir program of the festival, including biographical notes on and portraits and discographies of the performers, articles, etc.', Faker::Hipster.sentence.to_s],
                               temporal_subjects: ['1981'],
-                              geographic_subjects: [ControlledVocabulary.digitization.location.from_value('Edmonton (Alta.)')],
+                              geographic_subjects: [ControlledVocabulary.digitization.subject.from_value('Edmonton (Alta.)')],
                               topical_subjects: [ControlledVocabulary.digitization.subject.from_value('Folk music festivals')],
                               rights: ControlledVocabulary.digitization.rights.from_value('In Copyright')
     ).tap do |book|

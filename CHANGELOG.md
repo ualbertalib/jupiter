@@ -14,15 +14,15 @@ we have a bunch of URIs we want to machine-map to human readable values, and it 
 API Examples:
 
 ```ruby
-      ControlledVocabulary.value_from_uri(namespace: :digitization, vocab: :location, uri: "http://id.loc.gov/authorities/names/n79007225")
+      ControlledVocabulary.value_from_uri(namespace: :digitization, vocab: :subject, uri: "http://id.loc.gov/authorities/names/n79007225")
        => ["Edmonton (Alta.)", false]
-      ControlledVocabulary.uri_from_value(namespace: :digitization, vocab: :location, value: "Edmonton (Alta.)")
+      ControlledVocabulary.uri_from_value(namespace: :digitization, vocab: :subject, value: "Edmonton (Alta.)")
        => "http://id.loc.gov/authorities/names/n79007225"
 
       uri = "http://id.loc.gov/authorities/names/n79007225"
-      ControlledVocabulary.digitization.location.from_uri(uri)
+      ControlledVocabulary.digitization.subject.from_uri(uri)
        => "Edmonton (Alta.)"
-      ControlledVocabulary.digitization.location.from_value("Edmonton (Alta.)")
+      ControlledVocabulary.digitization.subject.from_value("Edmonton (Alta.)")
        => "http://id.loc.gov/authorities/names/n79007225"
       ControlledVocabulary.era.language.english
        => "http://id.loc.gov/vocabulary/iso639-2/eng"
