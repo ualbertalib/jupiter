@@ -1,0 +1,118 @@
+<%# TODO: Reduce duplication between this partial and thesis, pretty much exactly the same %>
+<ul class="list-group">
+  <% if @digitization_book.alternative_title.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <p title="<%= t('items.show.alternative_title') %>"><%= @digitization_book.alternative_title %></p>
+    </li>
+  <% end %>
+
+  <% if @digitization_book.creators.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <dl>
+        <dt><%= t('.creators') %></dt>
+        <dd>
+          <ul class="list-unstyled">
+            <% @digitization_book.creators.each do |creator| %>
+              <li><%= creator_search_link(@digitization_book, creator) %></li>
+            <% end %>
+          </ul>
+        </dd>
+      </dl>
+    </li>
+  <% end %>
+
+  <% if @digitization_book.description.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <p title="<%= t('.description') %>"><%= @digitization_book.description %></p>
+    </li>
+  <% end %>
+
+  <% if @digitization_book.creation_date.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <dl>
+        <dt><%= t('.created') %></dt>
+        <% if @digitization_book.sort_year.present? %>
+          <%# Display the recorded date created, but link to searching on the facetable sort year if it is present %>
+          <dd><%= search_link_for(@digitization_book, :sort_year, display: humanize_date(@digitization_book.creation_date), facet: :range_facet) %></dd>
+        <% else %>
+          <dd><%= humanize_date(@digitization_book.creation_date) %></dd>
+        <% end %>
+      </dl>
+    </li>
+  <% end %>
+
+  <% if @digitization_book.volume_label.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <dl>
+        <dt><%= t('.volume_label') %></dt>
+        <dd><%= @digitization_book.volume_label %></dd>
+      </dl>
+    </li>
+  <% end%>
+
+  <% if @digitization_book.subject.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <dl>
+        <dt><%= t('items.show.subject') %></dt>
+        <dd>
+          <ul class="list-unstyled">
+            <% @digitization_book.all_subjects.each do |subject| %>
+              <li><%= subject_search_link(@digitization_book, subject) %></li>
+            <% end %>
+          </ul>
+        </dd>
+      </dl>
+    </li>
+  <% end %>
+
+ <% if @digitization_book.resource_type.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <dl>
+        <dt><%= t('.item_type') %></dt>
+        <dd><%= type_search_link(@digitization_book) %></dd>
+      </dl>
+    </li>
+  <% end%>
+
+  <% if @digitization_book.doi.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <dl>
+        <dt><%= t('items.show.doi_url') %></dt>
+        <dd><%= link_to @digitization_book.doi_url, @digitization_book.doi_url %></dd>
+      </dl>
+    </li>
+  <% end %>
+
+  <li class="list-unstyled list-group-item-action">
+    <dl>
+      <dt><%= t('items.show.license') %></dt>
+      <% if @digitization_book.rights.present? %>
+        <dd><%= rights_search_link(@digitization_book) %></dd>
+      <% end %>
+    </dl>
+  </li>
+</ul>
+
+<%# ADDITIONAL INFORMATION %>
+<button type="button"
+        data-toggle="collapse"
+        data-target="#more-information-hidden"
+        aria-expanded="false"
+        aria-controls="more-information-hidden"
+        class="btn btn-outline-secondary mb-3 js-more-information-btn font-italic">
+    <span class="js-more-information-hidden">
+      <%= t(:more_information) %>
+      <%= icon('fas', 'chevron-down') %>
+    </span>
+
+    <span class="d-none js-more-information-shown">
+      <%= t(:show_less) %>
+      <%= icon('fas', 'chevron-up') %>
+    </span>
+</button>
+
+<div class="collapse" id='more-information-hidden'>
+  <%= render partial: 'item_more_information' %>
+</div>
+
+<%= render partial: 'edit_history' %>
