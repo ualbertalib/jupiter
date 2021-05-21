@@ -14,13 +14,13 @@
     </li>
   <% end %>
 
-  <% if @digitization_book.genre.present? %>
+  <% if @digitization_book.genres.present? %>
     <li class="list-unstyled list-group-item-action">
       <dl>
         <dt><%= t('digitization.books.book.genre') %></dt>
         <dd>
           <ul class="list-unstyled">
-            <% @digitization_book.genre.each do |genre| %>
+            <% @digitization_book.genres.each do |genre| %>
               <li><%= genre_search_link(@digitization_book, genre) %></li>
             <% end %>
           </ul>
@@ -29,13 +29,13 @@
     </li>
   <% end %>
 
-  <% if @digitization_book.place_of_publication.present? %>
+  <% if @digitization_book.places_of_publication.present? %>
     <li class="list-unstyled list-group-item-action">
       <dl>
         <dt><%= t('digitization.books.book.place_of_publication') %></dt>
         <dd>
           <ul class="list-unstyled">
-            <% @digitization_book.place_of_publication.each do |place| %>
+            <% @digitization_book.places_of_publication.each do |place| %>
               <li><%= place_of_publication_search_link(@digitization_book, place) %></li>
             <% end %>
           </ul>
@@ -49,39 +49,6 @@
       <dl>
         <dt><%= t('digitization.books.book.extent') %></dt>
         <dd><%= @digitization_book.extent %></dd>
-      </dl>
-    </li>
-  <% end %>
-
-  <% if @digitization_book.is_version_of.present? %>
-    <li class="list-unstyled list-group-item-action">
-      <dl>
-        <dt><%= t('items.show.is_version_of') %></dt>
-        <dd>
-          <ul class="list-unstyled">
-            <% @digitization_book.is_version_of.each do |thing| %>
-              <li><%= thing %></li>
-            <% end %>
-          </ul>
-        </dd>
-      </dl>
-    </li>
-  <% end %>
-
-  <% if @digitization_book.source.present? %>
-    <li class="list-unstyled list-group-item-action">
-      <dl>
-        <dt><%= t('items.item.source') %></dt>
-        <dd><%= @digitization_book.source %></dd>
-      </dl>
-    </li>
-  <% end %>
-
-  <% if @digitization_book.related_link.present? %>
-    <li class="list-unstyled list-group-item-action">
-      <dl>
-        <dt><%= t('items.item.related_link') %></dt>
-        <dd><%= @digitization_book.related_link %></dd>
       </dl>
     </li>
   <% end %>

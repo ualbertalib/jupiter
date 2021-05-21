@@ -12,4 +12,5 @@ class Digitization::BookShowTest < ApplicationSystemTestCase
     assert_selector 'dt', text: 'Type of Item', count: 1
     assert_selector 'dd a', text: 'Text', count: 1
   end
+
 end

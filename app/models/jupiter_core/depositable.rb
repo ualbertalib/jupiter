@@ -173,7 +173,7 @@ class JupiterCore::Depositable < ApplicationRecord
   # rubocop:enable Style/GlobalVars
 
   def to_partial_path
-    self.class.to_s.downcase
+    self.class.name.demodulize.underscore
   end
 
   def self.sort_order(params)

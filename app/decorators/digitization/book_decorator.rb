@@ -3,15 +3,11 @@ class Digitization::BookDecorator < ApplicationDecorator
   delegate_all
 
   def subject
-    object.topical_subject
+    object.topical_subjects
   end
 
   def copyright
     object.rights
-  end
-
-  def files
-    nil
   end
 
   def each_community_collection
@@ -19,15 +15,17 @@ class Digitization::BookDecorator < ApplicationDecorator
   end
 
   def alternative_title
-    object.alt_title.join(' ')
+    object.alternative_titles.join(' ') if object.alternative_titles.present?
   end
 
   def creators
-    object.publisher.map {|contributor| h.humanize_uri(:digitization, :subject, contributor)}
+    return if object.publishers.blank?
+
+    object.publishers.map { |contributor| h.humanize_uri(:digitization, :subject, contributor) }
   end
 
   def description
-    object.note.join(' ')
+    object.notes.join(' ') if object.notes.present?
   end
 
   def solr_exporter_class
@@ -35,46 +33,29 @@ class Digitization::BookDecorator < ApplicationDecorator
   end
 
   def creation_date
-    object.date_issued.first
-  end
-
-  def sort_year
-    false
+    object.dates_issued.first if object.dates_issued.present?
   end
 
   def all_subjects
-    object.topical_subject + object.temporal_subject + object.geographic_subject
-  end
-
-  def item_type_with_status_code
-    false
-  end
-
-  def doi
-    false
+    object.topical_subjects + object.temporal_subjects + object.geographic_subjects
   end
 
   def languages
-    object.language.map {|language| h.humanize_uri(:digitization, :language, language)}
+    object.languages.map { |language| h.humanize_uri(:digitization, :language, language) }
   end
 
   def contributors
-    object.publisher.map {|contributor| h.humanize_uri(:digitization, :subject, contributor)}
+    object.publisher.map { |contributor| h.humanize_uri(:digitization, :subject, contributor) }
   end
 
-  def is_version_of
-    false
+  def sort_year
+    # TODO: remove when sort_year has been added
+    nil
   end
 
-  def source
-    false
+  def files
+    # TODO: remove when `has_many_attached :files, dependent: false` is added to the Book model
+    nil
   end
 
-  def related_link
-    false
-  end
-
-  def volume_label
-    'v. 2'
-  end
 end

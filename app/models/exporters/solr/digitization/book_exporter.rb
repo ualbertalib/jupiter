@@ -9,7 +9,7 @@ class Exporters::Solr::Digitization::BookExporter < Exporters::Solr::BaseExporte
   index :visibility_after_embargo, role: :exact_match
 
   # See `all_subjects` in including class for faceting
-  index :topical_subject, role: :search
+  index :topical_subjects, role: :search
 
   index :created, role: [:search, :sort]
 

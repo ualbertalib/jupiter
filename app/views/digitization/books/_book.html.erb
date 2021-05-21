@@ -48,7 +48,7 @@
         <dd><%= @digitization_book.volume_label %></dd>
       </dl>
     </li>
-  <% end%>
+  <% end %>
 
   <% if @digitization_book.subject.present? %>
     <li class="list-unstyled list-group-item-action">
@@ -70,15 +70,6 @@
       <dl>
         <dt><%= t('.item_type') %></dt>
         <dd><%= type_search_link(@digitization_book) %></dd>
-      </dl>
-    </li>
-  <% end%>
-
-  <% if @digitization_book.doi.present? %>
-    <li class="list-unstyled list-group-item-action">
-      <dl>
-        <dt><%= t('items.show.doi_url') %></dt>
-        <dd><%= link_to @digitization_book.doi_url, @digitization_book.doi_url %></dd>
       </dl>
     </li>
   <% end %>

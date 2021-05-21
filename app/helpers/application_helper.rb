@@ -17,6 +17,7 @@ module ApplicationHelper
   def humanize_uri_or_literal(namespace, vocab, uri_or_literal)
     literal_from_uri = humanize_uri(namespace, vocab, uri_or_literal)
     return literal_from_uri if literal_from_uri.present?
+
     uri_or_literal
   end
 
