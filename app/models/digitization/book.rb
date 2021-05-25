@@ -5,7 +5,13 @@ class Digitization::Book < JupiterCore::Depositable
   has_one :fulltext, dependent: :destroy, class_name: 'Digitization::Fulltext', inverse_of: :book,
                      foreign_key: :digitization_book_id
 
+  has_solr_exporter Exporters::Solr::Digitization::BookExporter
+
   belongs_to :owner, class_name: 'User'
+
+  has_many_attached :files, dependent: false
+
+  has_paper_trail
 
   validates :peel_id, uniqueness: { scope: [:run, :part_number] }, presence: true, if: :part_number?
   validates :part_number, presence: true, if: :run?
@@ -22,5 +28,13 @@ class Digitization::Book < JupiterCore::Depositable
 
   validates :dates_issued, edtf: true
   validates :temporal_subjects, edtf: true
+
+  def all_subjects
+    topical_subjects + temporal_subjects + geographic_subjects
+  end
+
+  def all_contributors
+    publishers
+  end
 
 end
