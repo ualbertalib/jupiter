@@ -1,6 +1,7 @@
 class Digitization::Book < JupiterCore::Depositable
 
   has_one_attached :historical_archive
+  has_one_attached :pdf, dependent: false
 
   belongs_to :owner, class_name: 'User'
 
