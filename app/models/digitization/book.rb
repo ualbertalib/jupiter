@@ -1,5 +1,7 @@
 class Digitization::Book < JupiterCore::Depositable
 
+  has_one_attached :historical_archive
+
   belongs_to :owner, class_name: 'User'
 
   validates :peel_id, uniqueness: { scope: [:run, :part_number] }, presence: true, if: :part_number?
