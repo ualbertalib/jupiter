@@ -709,6 +709,7 @@ if Rails.env.development? || Rails.env.uat?
 
   11.times do |_i|
     Digitization::Book.create(peel_id: rand(1..3400), part_number: rand(1..100),
+                              owner_id: admin.id,
                               dates_issued: [rand(1900..2020).to_s],
                               date_ingested: '2016-12-08T06:00:00.000Z',
                               title: "#{Faker::Company.name} #{Faker::WorldCup.city} Music Festival",
@@ -723,7 +724,11 @@ if Rails.env.development? || Rails.env.uat?
                               temporal_subjects: ['1981'],
                               geographic_subjects: [ControlledVocabulary.digitization.location.from_value('Edmonton (Alta.)')],
                               topical_subjects: [ControlledVocabulary.digitization.subject.from_value('Folk music festivals')],
-                              rights: ControlledVocabulary.digitization.rights.from_value('In Copyright')) # Folk Fest
+                              rights: ControlledVocabulary.digitization.rights.from_value('In Copyright')
+    ).tap do |book|
+      book.create_fulltext(text: Faker::Lorem.sentence(word_count: 250, supplemental: false, random_words_to_add: 0))
+      book.save!
+    end # Folk Fest
   end
 
   Digitization::Book.create(peel_id: '4062') # monograph

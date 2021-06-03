@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_05_004436) do
+ActiveRecord::Schema.define(version: 2021_05_26_215307) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -116,6 +116,14 @@ ActiveRecord::Schema.define(version: 2021_05_05_004436) do
     t.bigint "owner_id", null: false
     t.index ["owner_id"], name: "index_digitization_books_on_owner_id"
     t.index ["peel_id", "run", "part_number"], name: "unique_peel_book", unique: true
+  end
+
+  create_table "digitization_fulltexts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "digitization_book_id", null: false
+    t.text "text", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["digitization_book_id"], name: "index_digitization_fulltexts_on_digitization_book_id"
   end
 
   create_table "digitization_images", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -425,6 +433,7 @@ ActiveRecord::Schema.define(version: 2021_05_05_004436) do
   add_foreign_key "collections", "users", column: "owner_id"
   add_foreign_key "communities", "users", column: "owner_id"
   add_foreign_key "digitization_books", "users", column: "owner_id"
+  add_foreign_key "digitization_fulltexts", "digitization_books"
   add_foreign_key "digitization_images", "users", column: "owner_id"
   add_foreign_key "digitization_maps", "users", column: "owner_id"
   add_foreign_key "digitization_newspapers", "users", column: "owner_id"
