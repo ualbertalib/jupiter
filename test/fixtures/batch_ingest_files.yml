@@ -1,0 +1,14 @@
+batch_ingest_file_one:
+  google_file_id: "16fCERu9Wey9M-q89Vt7nUEUBsY0AdBJn"
+  google_file_name: "test.png"
+  batch_ingest: batch_ingest_with_one_file
+
+batch_ingest_file_two:
+  google_file_id: "19gX6kVrMFh6PT7UrrKKHx8sf7zWDTELx"
+  google_file_name: "conference.pdf"
+  batch_ingest: batch_ingest_with_two_files
+
+batch_ingest_file_three:
+  google_file_id: "1WAbJqbQzALwuZz2kVKyE3__680I8bsrC"
+  google_file_name: "conference_logo.png"
+  batch_ingest: batch_ingest_with_two_files

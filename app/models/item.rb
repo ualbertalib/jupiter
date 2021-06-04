@@ -4,6 +4,7 @@ class Item < JupiterCore::Doiable
 
   has_solr_exporter Exporters::Solr::ItemExporter
 
+  belongs_to :batch_ingest, optional: true
   belongs_to :owner, class_name: 'User'
 
   has_many_attached :files, dependent: false
