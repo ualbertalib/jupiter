@@ -708,7 +708,7 @@ if Rails.env.development? || Rails.env.uat?
   end
 
   11.times do |_i|
-    Digitization::Book.create(peel_id: rand(1..3400), part_number: rand(1..100),
+    Digitization::Book.new(peel_id: rand(1..3400), part_number: rand(1..100),
                               owner_id: admin.id,
                               dates_issued: [rand(1900..2020).to_s],
                               date_ingested: '2016-12-08T06:00:00.000Z',
