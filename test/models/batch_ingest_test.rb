@@ -2,7 +2,7 @@ require 'test_helper'
 
 class BatchIngestTest < ActiveSupport::TestCase
 
-  def setup
+  setup do
     @batch_ingest = batch_ingests(:batch_ingest_with_one_file)
   end
 
