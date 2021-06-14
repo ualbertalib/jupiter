@@ -31,6 +31,9 @@ jobs:
       - name: Lint with RuboCop
         run: bundle exec rubocop --parallel
 
+      - name: Run Brakeman
+        run: bundle exec brakeman -A --no-pager
+
       - name: Get yarn cache
         id: yarn-cache
         run: echo "::set-output name=dir::$(yarn cache dir)"

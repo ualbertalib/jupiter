@@ -46,6 +46,7 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 - Labels for active facet badges [#1261](https://github.com/ualbertalib/jupiter/issues/1261)
 - book metadata for folk fest digitization [#2010](https://github.com/ualbertalib/jupiter/issues/2010)
 - Volume and Issue label attribute to Digitization::Book
+- Brakeman linting to Github Actions workflow
 
 ### Removed
 – Remove entirely unnecessary config file. [PR#2044](https://github.com/ualbertalib/jupiter/pull/2044)
