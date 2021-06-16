@@ -10,7 +10,7 @@ module Digitization::BooksHelper
   end
 
   def creator_search_link(book, creator_uri)
-    search_link_for(book, :publisher, value: creator_uri, display: humanize_uri(:digitization, :subject, creator_uri))
+    search_link_for(book, :publishers, value: creator_uri, display: humanize_uri(:digitization, :subject, creator_uri))
   end
 
   def rights_search_link(book)
@@ -23,11 +23,11 @@ module Digitization::BooksHelper
   end
 
   def genre_search_link(book, genre_uri)
-    search_link_for(book, :genre, value: genre_uri, display: humanize_uri(:digitization, :genre, genre_uri))
+    search_link_for(book, :genres, value: genre_uri, display: humanize_uri(:digitization, :genre, genre_uri))
   end
 
   def place_of_publication_search_link(book, place_uri)
-    search_link_for(book, :place_of_publication, value: place_uri,
-                                                 display: humanize_uri(:digitization, :subject, place_uri))
+    search_link_for(book, :places_of_publication, value: place_uri,
+                                                  display: humanize_uri(:digitization, :subject, place_uri))
   end
 end

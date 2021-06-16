@@ -37,4 +37,9 @@ class Digitization::Book < JupiterCore::Depositable
     publishers
   end
 
+  def hydra_noid
+    # TODO: this is required by Exporters::Solr::BaseExporter but doesn't apply to digitization
+    nil
+  end
+
 end
