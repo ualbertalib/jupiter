@@ -45,6 +45,7 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 - book metadata for folk fest digitization [#2010](https://github.com/ualbertalib/jupiter/issues/2010)
 - Volume and Issue label attribute to Digitization::Book
 - Add new models (BatchIngest and BatchIngestFile) for improved batch ingest work [#1986](https://github.com/ualbertalib/jupiter/issues/1986)
+- Add new google drive client service to be able to retrieve files/spreadsheets from Google Drive [#1986](https://github.com/ualbertalib/jupiter/issues/1986)
 
 ### Removed
 – Remove entirely unnecessary config file. [PR#2044](https://github.com/ualbertalib/jupiter/pull/2044)
