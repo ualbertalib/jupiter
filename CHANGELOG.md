@@ -32,6 +32,8 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 
 - Many "description" or "abstract" fields (at the Item level as well as Communities and Collections) contain HTML tags. Because these are text fields, HTML is not rendered in the UI and text looks garbled and it's way less readable than ideal. Markdown should work really well for this since that's already used in many of the tools staff working in repositories are familiar with. Added `redcarpet` gem which renders markdown in our decorators and strips markdown in our Solr exporters [#1322](https://github.com/ualbertalib/jupiter/issues/1322)
 
+- Add Digitization::Book ingest artifacts to model [#2011](https://github.com/ualbertalib/jupiter/issues/2011)
+
 
 ### Added
 - Added oaisys tests [#1888](https://github.com/ualbertalib/jupiter/issues/1888)
@@ -45,6 +47,7 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 - book metadata for folk fest digitization [#2010](https://github.com/ualbertalib/jupiter/issues/2010)
 - Volume and Issue label attribute to Digitization::Book
 - Add new models (BatchIngest and BatchIngestFile) for improved batch ingest work [#1986](https://github.com/ualbertalib/jupiter/issues/1986)
+- Brakeman linting to Github Actions workflow
 
 ### Removed
 – Remove entirely unnecessary config file. [PR#2044](https://github.com/ualbertalib/jupiter/pull/2044)
