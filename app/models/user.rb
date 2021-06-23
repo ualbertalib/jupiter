@@ -1,10 +1,12 @@
 class User < ApplicationRecord
 
   has_secure_password :api_key, validations: false
-  has_many :identities, dependent: :destroy
+
   has_many :announcements, dependent: :destroy
+  has_many :batch_ingests, dependent: :destroy
   has_many :draft_items, dependent: :destroy
   has_many :draft_theses, dependent: :destroy
+  has_many :identities, dependent: :destroy
 
   has_many :items, foreign_key: :owner_id, inverse_of: :owner, dependent: :restrict_with_error
   has_many :theses, foreign_key: :owner_id, inverse_of: :owner, dependent: :restrict_with_error

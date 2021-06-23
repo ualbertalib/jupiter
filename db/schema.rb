@@ -10,8 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_26_215307) do
 
+ActiveRecord::Schema.define(version: 2021_06_01_042208) do
+  
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -53,6 +54,32 @@ ActiveRecord::Schema.define(version: 2021_05_26_215307) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "logo_id"
+  end
+
+  create_table "batch_ingest_files", force: :cascade do |t|
+    t.string "google_file_name", null: false
+    t.string "google_file_id", null: false
+    t.bigint "batch_ingest_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["batch_ingest_id"], name: "index_batch_ingest_files_on_batch_ingest_id"
+  end
+
+  create_table "batch_ingests", force: :cascade do |t|
+    t.string "title", null: false
+    t.integer "status", default: 0, null: false
+    t.string "access_token", null: false
+    t.string "refresh_token"
+    t.string "expires_in"
+    t.string "issued_at"
+    t.string "error_message"
+    t.string "google_spreadsheet_name", null: false
+    t.string "google_spreadsheet_id", null: false
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["title"], name: "index_batch_ingests_on_title", unique: true
+    t.index ["user_id"], name: "index_batch_ingests_on_user_id"
   end
 
   create_table "collections", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -324,6 +351,8 @@ ActiveRecord::Schema.define(version: 2021_05_26_215307) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.json "subject", array: true
+    t.bigint "batch_ingest_id"
+    t.index ["batch_ingest_id"], name: "index_items_on_batch_ingest_id"
     t.index ["logo_id"], name: "index_items_on_logo_id"
     t.index ["owner_id"], name: "index_items_on_owner_id"
   end
@@ -430,6 +459,8 @@ ActiveRecord::Schema.define(version: 2021_05_26_215307) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "announcements", "users"
+  add_foreign_key "batch_ingest_files", "batch_ingests"
+  add_foreign_key "batch_ingests", "users"
   add_foreign_key "collections", "users", column: "owner_id"
   add_foreign_key "communities", "users", column: "owner_id"
   add_foreign_key "digitization_books", "users", column: "owner_id"
@@ -441,6 +472,7 @@ ActiveRecord::Schema.define(version: 2021_05_26_215307) do
   add_foreign_key "draft_theses", "institutions"
   add_foreign_key "draft_theses", "languages"
   add_foreign_key "draft_theses", "users"
+  add_foreign_key "items", "batch_ingests"
   add_foreign_key "items", "users", column: "owner_id"
   add_foreign_key "theses", "users", column: "owner_id"
 end
