@@ -18,7 +18,7 @@ gem 'simple_form'
 
 # RDF stuff
 gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', tag: 'v0.2.4'
-gem 'rdf', '~> 3.1.13'
+gem 'rdf', '~> 3.1.15'
 gem 'rdf-n3', '~> 3.1.2'
 gem 'rdf-vocab', '~> 3.1.12'
 
@@ -95,7 +95,7 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
 
-  gem 'rubocop', '~> 1.16.0', require: false
+  gem 'rubocop', '~> 1.17.0', require: false
   gem 'rubocop-minitest', require: false
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false
