@@ -69,6 +69,10 @@ gem 'skylight', '~> 4.3'
 # resolve production errors in minutes
 gem 'rollbar'
 
+# Google Drive
+gem 'google-api-client',
+    require: ['google/api_client/client_secrets', 'google/apis/drive_v3', 'google/apis/sheets_v4', 'signet']
+
 # OAI-PMH
 gem 'builder_deferred_tagging', github: 'ualbertalib/builder_deferred_tagging', tag: 'v0.01'
 gem 'oaisys', github: 'ualbertalib/oaisys', tag: 'v1.0.3'

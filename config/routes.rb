@@ -76,6 +76,8 @@ Rails.application.routes.draw do
       end
 
       resources :announcements, only: [:index, :destroy, :create]
+
+      resources :google_sessions, only: [:new]
     end
 
     post '/logout_as_user', to: 'sessions#logout_as_user'
