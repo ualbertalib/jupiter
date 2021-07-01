@@ -485,7 +485,7 @@ GEM
     sidekiq-cron (1.2.0)
       fugit (~> 1.1)
       sidekiq (>= 4.2.1)
-    sidekiq-unique-jobs (7.0.12)
+    sidekiq-unique-jobs (7.1.1)
       brpoplpush-redis_script (> 0.1.1, <= 2.0.0)
       concurrent-ruby (~> 1.0, >= 1.0.5)
       sidekiq (>= 5.0, < 7.0)
@@ -649,7 +649,7 @@ DEPENDENCIES
   shoulda-matchers (~> 4.5)
   sidekiq (~> 5.2)
   sidekiq-cron
-  sidekiq-unique-jobs (~> 7.0)
+  sidekiq-unique-jobs (~> 7.1)
   simple_form
   simplecov
   sinatra (~> 2.1.0)
