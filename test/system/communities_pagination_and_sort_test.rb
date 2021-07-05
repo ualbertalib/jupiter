@@ -13,6 +13,8 @@ class CommunitiesPaginationAndSortTest < ApplicationSystemTestCase
     end
   end
 
+  # rubocop:disable Minitest/MultipleAssertions
+  # TODO: our tests are quite smelly.  This one needs work!
   # TODO: Slow test
   test 'anybody should be able to sort and paginate communities' do
     # for some runs/seeds (like SEED=1099), stale Communities are left over from other tests. We can't assume the
@@ -109,5 +111,6 @@ class CommunitiesPaginationAndSortTest < ApplicationSystemTestCase
     assert_selector 'div', text: '11 - 11 of 11'
     assert_selector 'li:first-child a', text: 'Fancy Community 10'
   end
+  # rubocop:enable Minitest/MultipleAssertions
 
 end

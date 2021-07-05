@@ -23,6 +23,8 @@ class UserTest < ActiveSupport::TestCase
     assert_equal "User:#{user.id}", user.flipper_id
   end
 
+  # rubocop:disable Minitest/MultipleAssertions
+  # TODO: our tests are quite smelly.  This one needs work!
   test 'should update the activity columns when not signing-in' do
     user = users(:user_regular)
     assert user.last_seen_at.blank?
@@ -59,7 +61,10 @@ class UserTest < ActiveSupport::TestCase
       assert user.previous_sign_in_ip.blank?
     end
   end
+  # rubocop:enable Minitest/MultipleAssertions
 
+  # rubocop:disable Minitest/MultipleAssertions
+  # TODO: our tests are quite smelly.  This one needs work!
   test 'should update the activity columns when signing-in' do
     user = users(:user_regular)
     assert user.last_seen_at.blank?
@@ -94,6 +99,7 @@ class UserTest < ActiveSupport::TestCase
       assert_equal user.previous_sign_in_ip, ip1
     end
   end
+  # rubocop:enable Minitest/MultipleAssertions
 
   test 'should validate if it does not have an api key and it is not a system account' do
     user = User.new(
