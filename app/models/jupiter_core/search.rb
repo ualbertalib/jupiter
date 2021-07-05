@@ -27,7 +27,7 @@ class JupiterCore::Search
     fq = []
     ownership_query = calculate_ownership_query(as)
 
-    # Our query permissions are white-list based. You only get public results unless the results of +calculate_ownership_query+
+    # Our query permissions are allowlist based. You only get public results unless the results of +calculate_ownership_query+
     # assign you additional permissions based on the user passed to it.
 
     # Why can't I split %Q() strings over multiple lines? Seems incorrect

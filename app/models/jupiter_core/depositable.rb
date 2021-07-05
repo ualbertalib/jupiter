@@ -150,7 +150,7 @@ class JupiterCore::Depositable < ApplicationRecord
   def add_to_embargo_history
     self.embargo_history ||= []
     embargo_history_item = "An embargo was deactivated on #{Time.now.getlocal('-06:00')}. Its release date was " \
-    "#{embargo_end_date}. Intended visibility after embargo was #{visibility_after_embargo}"
+                           "#{embargo_end_date}. Intended visibility after embargo was #{visibility_after_embargo}"
     self.embargo_history << embargo_history_item
   end
 
