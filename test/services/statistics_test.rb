@@ -10,6 +10,8 @@ class StatisticsTest < ActiveSupport::TestCase
     assert_equal [0, 0], Statistics.for(item_id: obj_id)
   end
 
+  # rubocop:disable Minitest/MultipleAssertions
+  # TODO: our tests are quite smelly.  This one needs work!
   test 'counts increment correctly' do
     obj_id = generate_random_string
     test_ip = '192.168.0.1'
@@ -63,5 +65,6 @@ class StatisticsTest < ActiveSupport::TestCase
       assert_equal [2, 2], Statistics.for(item_id: obj_id)
     end
   end
+  # rubocop:enable Minitest/MultipleAssertions
 
 end

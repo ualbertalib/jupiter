@@ -15,6 +15,8 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
     @embargoed_thesis_collection = collections(:collection_embargoed)
   end
 
+  # rubocop:disable Minitest/MultipleAssertions
+  # TODO: our tests are quite smelly.  This one needs work!
   test 'list identifers items xml' do
     # TODO: Add tests for this which uses post requests.
     skip('Skipping until bug regarding path helper is fixed. https://github.com/rails/rails/issues/40078')
@@ -106,6 +108,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
       assert_select 'error', I18n.t('error_messages.resumption_token_invalid')
     end
   end
+  # rubocop:enable Minitest/MultipleAssertions
 
   test 'list identifers theses xml' do
     get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_etdms'), headers: { 'Accept' => 'application/xml' }

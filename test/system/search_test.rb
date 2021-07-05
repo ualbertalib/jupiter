@@ -109,6 +109,8 @@ class SearchTest < ApplicationSystemTestCase
     end
   end
 
+  # rubocop:disable Minitest/MultipleAssertions
+  # TODO: our tests are quite smelly.  This one needs work!
   test 'anybody should be able to filter the public items' do
     visit root_path
     fill_in name: 'search', with: 'Fancy'
@@ -193,6 +195,7 @@ class SearchTest < ApplicationSystemTestCase
     badge = badges.find_link('a', text: 'Fancy Collection 1', href: search_path(search: 'Fancy'))
     badge.assert_selector 'span.badge', text: 'Fancy Collection 1'
   end
+  # rubocop:enable Minitest/MultipleAssertions
 
   test 'facet badge should have category when flipped' do
     Flipper.enable(:facet_badge_category_name)
@@ -212,6 +215,8 @@ class SearchTest < ApplicationSystemTestCase
     Flipper.disable(:facet_badge_category_name)
   end
 
+  # rubocop:disable Minitest/MultipleAssertions
+  # TODO: our tests are quite smelly.  This one needs work!
   test 'anybody should be able to view community/collection hits via tabs' do
     visit root_path
     fill_in name: 'search', with: 'Fancy'
@@ -252,6 +257,7 @@ class SearchTest < ApplicationSystemTestCase
     assert_selector 'div.jupiter-results-list a', text: 'Community', count: 0
     assert_selector 'div.jupiter-results-list a', text: 'Collection', count: 2
   end
+  # rubocop:enable Minitest/MultipleAssertions
 
   test 'anybody should only see some facet results by default, with a "show more" button' do
     visit root_path
@@ -281,6 +287,8 @@ class SearchTest < ApplicationSystemTestCase
     assert_selector 'li a', text: /Extra Community/, count: 6
   end
 
+  # rubocop:disable Minitest/MultipleAssertions
+  # TODO: our tests are quite smelly.  This one needs work!
   test 'anybody should be able to sort results' do
     visit root_path
     fill_in name: 'search', with: 'Fancy'
@@ -329,7 +337,10 @@ class SearchTest < ApplicationSystemTestCase
     assert_selector 'button', text: 'Date (oldest first)'
     assert_match(/Fancy Item 0.*Fancy Item 2.*Fancy Item 4.*Fancy Item 6.*Fancy Item 8/m, page.text)
   end
+  # rubocop:enable Minitest/MultipleAssertions
 
+  # rubocop:disable Minitest/MultipleAssertions
+  # TODO: our tests are quite smelly.  This one needs work!
   # TODO: Slow Test, consistently around ~8-9 seconds
   test 'admin should be able to filter the public and private items' do
     admin = users(:user_admin)
@@ -421,5 +432,6 @@ class SearchTest < ApplicationSystemTestCase
     badge = badges.find_link('a', text: 'Fancy Collection 1', href: search_path(search: 'Fancy'))
     badge.assert_selector 'span.badge', text: 'Fancy Collection 1'
   end
+  # rubocop:enable Minitest/MultipleAssertions
 
 end
