@@ -14,7 +14,6 @@ class Digitization::BookTest < ActiveSupport::TestCase
     book = Digitization::Book.create(peel_id: '10572', part_number: '1')
     assert_not book.valid?
     assert_equal('has already been taken', book.errors[:peel_id].first)
-    book.destroy
   end
 
   test 'invalid Peel book without peel id' do

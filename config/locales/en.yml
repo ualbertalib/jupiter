@@ -466,9 +466,23 @@ en:
           legal_disclaimer_html: 'By depositing this thesis into ERA you agree to the <a href="/policies">ERA Deposit Policy agreements</a>'
 
   digitization:
-    peel_id: 'Peel number'
-    run: 'Run'
-    part_number: 'Part number'
+    collection:
+      title: 'Collection'
+    books:
+      show:
+        usage: 'Usage'
+        views: 'Views'
+        downloads: 'Download'
+      book:
+        creators: 'Author / Creator'
+        description: 'Notes'
+        created: 'Date Created'
+        volume_label: 'Volume & Issue'
+        item_type: 'Type of Item'
+        genre: 'Genre'
+        language: 'Language'
+        place_of_publication: 'Place of Publication'
+        extent: 'Extent'
     peel_image_id: 'Peel Image Id'
     peel_map_id: 'Peel Map Id'
     publication_code: 'Publication code'

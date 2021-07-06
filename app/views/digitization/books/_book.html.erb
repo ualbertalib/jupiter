@@ -1,19 +1,19 @@
-<%# TODO: Reduce duplication between this partial and thesis, pretty much exactly the same %>
+<%# Be cautious of refactoring to decrease duplication with item and thesis.  Ordering attributes depending on context is highly desired. %>
 <ul class="list-group">
-  <% if @item.alternative_title.present? %>
+  <% if @digitization_book.alternative_title.present? %>
     <li class="list-unstyled list-group-item-action">
-      <p title="<%= t('items.show.alternative_title') %>"><%= @item.alternative_title %></p>
+      <p title="<%= t('items.show.alternative_title') %>"><%= @digitization_book.alternative_title %></p>
     </li>
   <% end %>
 
-  <% if @item.creators.present? %>
+  <% if @digitization_book.creators.present? %>
     <li class="list-unstyled list-group-item-action">
       <dl>
         <dt><%= t('.creators') %></dt>
         <dd>
           <ul class="list-unstyled">
-            <% @item.creators.each do |creator| %>
-              <li><%= search_link_for(@item, :all_contributors, value: creator) %></li>
+            <% @digitization_book.creators.each do |creator| %>
+              <li><%= creator_search_link(@digitization_book, creator) %></li>
             <% end %>
           </ul>
         </dd>
@@ -21,34 +21,43 @@
     </li>
   <% end %>
 
-  <% if @item.description.present? %>
+  <% if @digitization_book.description.present? %>
     <li class="list-unstyled list-group-item-action">
-      <p title="<%= t('.description') %>"><%= @item.description %></p>
+      <p title="<%= t('.description') %>"><%= @digitization_book.description %></p>
     </li>
   <% end %>
 
-  <% if @item.creation_date.present? %>
+  <% if @digitization_book.creation_date.present? %>
     <li class="list-unstyled list-group-item-action">
       <dl>
         <dt><%= t('.created') %></dt>
-        <% if @item.sort_year.present? %>
+        <% if @digitization_book.sort_year.present? %>
           <%# Display the recorded date created, but link to searching on the facetable sort year if it is present %>
-          <dd><%= search_link_for(@item, :sort_year, display: humanize_date(@item.creation_date), facet: :range_facet) %></dd>
+          <dd><%= search_link_for(@digitization_book, :sort_year, display: humanize_date(@digitization_book.creation_date), facet: :range_facet) %></dd>
         <% else %>
-          <dd><%= humanize_date(@item.creation_date) %></dd>
+          <dd><%= humanize_date(@digitization_book.creation_date) %></dd>
         <% end %>
       </dl>
     </li>
   <% end %>
 
-  <% if @item.subject.present? %>
+  <% if @digitization_book.volume_label.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <dl>
+        <dt><%= t('.volume_label') %></dt>
+        <dd><%= @digitization_book.volume_label %></dd>
+      </dl>
+    </li>
+  <% end %>
+
+  <% if @digitization_book.subject.present? %>
     <li class="list-unstyled list-group-item-action">
       <dl>
         <dt><%= t('items.show.subject') %></dt>
         <dd>
           <ul class="list-unstyled">
-            <% @item.all_subjects.each do |subject| %>
-              <li><%= search_link_for(@item, :all_subjects, value: subject) %></li>
+            <% @digitization_book.all_subjects.each do |subject| %>
+              <li><%= subject_search_link(@digitization_book, subject) %></li>
             <% end %>
           </ul>
         </dd>
@@ -56,18 +65,11 @@
     </li>
   <% end %>
 
-  <li class="list-unstyled list-group-item-action">
-    <dl>
-      <dt><%= t('items.show.item_type_with_status') %></dt>
-      <dd><%= item_type_search_link(@item) %></dd>
-    </dl>
-  </li>
-
-  <% if @item.doi.present? %>
+ <% if @digitization_book.resource_type.present? %>
     <li class="list-unstyled list-group-item-action">
       <dl>
-        <dt><%= t('items.show.doi_url') %></dt>
-        <dd><%= link_to @item.doi_url, @item.doi_url %></dd>
+        <dt><%= t('.item_type') %></dt>
+        <dd><%= type_search_link(@digitization_book) %></dd>
       </dl>
     </li>
   <% end %>
@@ -75,10 +77,8 @@
   <li class="list-unstyled list-group-item-action">
     <dl>
       <dt><%= t('items.show.license') %></dt>
-      <% if @item.license.present? %>
-        <dd><%= license_link(@item.license) %></dd>
-      <% else %>
-        <dd><%= @item.rights %></dd>
+      <% if @digitization_book.rights.present? %>
+        <dd><%= rights_search_link(@digitization_book) %></dd>
       <% end %>
     </dl>
   </li>
@@ -106,4 +106,4 @@
   <%= render partial: 'item_more_information' %>
 </div>
 
-<%= render partial: 'edit_history', locals: { item: @item } %>
+<%= render partial: 'edit_history', locals: { item: @digitization_book } %>

@@ -19,7 +19,8 @@
   </div>
 
   <div class="collapse" id='edit-history-hidden'>
-    <% @item.history.reverse_each do |changeset| %>
+    <ul>
+    <% item.history.reverse_each do |changeset| %>
       <li class="list-unstyled list-group-item-action">
         <h3><%= changeset.date %></h3>
         <dl>
@@ -32,5 +33,6 @@
         <% end %>
       </li>
     <% end %>
+    </ul>
   </div>
 <% end %>

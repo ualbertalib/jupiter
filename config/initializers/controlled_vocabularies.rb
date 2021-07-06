@@ -30,18 +30,18 @@
 #
 # 1. Dynamically. When looking up a URI this returns both the value it maps to and a boolean indicating whether or
 #    not the value returned is an i18n translatable symbol or not (if not, it's a raw value)
-#       ControlledVocabulary.value_from_uri(namespace: :digitization, vocab: :location, uri: "http://id.loc.gov/authorities/names/n79007225")
+#       ControlledVocabulary.value_from_uri(namespace: :digitization, vocab: :subject, uri: "http://id.loc.gov/authorities/names/n79007225")
 #        => ["Edmonton (Alta.)", false]
-#       ControlledVocabulary.uri_from_value(namespace: :digitization, vocab: :location, value: "Edmonton (Alta.)")
+#       ControlledVocabulary.uri_from_value(namespace: :digitization, vocab: :subject, value: "Edmonton (Alta.)")
 #        => "http://id.loc.gov/authorities/names/n79007225"
 #
 # 2. When you know the namespace and vocab at the time you're writing the code. This presumes that because you know
 #    the vocab you're working with, you already know whether or not it's an i18n vocabulary, and therefore it only
 #    returns the value or URI in question:
 #       uri = "http://id.loc.gov/authorities/names/n79007225"
-#       ControlledVocabulary.digitization.location.from_uri(uri)
+#       ControlledVocabulary.digitization.subject.from_uri(uri)
 #        => "Edmonton (Alta.)"
-#       ControlledVocabulary.digitization.location.from_value("Edmonton (Alta.)")
+#       ControlledVocabulary.digitization.subject.from_value("Edmonton (Alta.)")
 #        => "http://id.loc.gov/authorities/names/n79007225"
 #
 #   This also allows directly looking up URIs that map to i18n symbols by using the i18n symbol as a method, eg)
