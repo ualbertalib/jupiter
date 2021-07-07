@@ -1,0 +1,26 @@
+<% page_title(t('.header')) %>
+
+<div class="d-flex flex-wrap justify-content-between align-items-center my-3">
+  <h1 class="my-3"><%= t('.header') %></h1>
+  <%= link_to t('.new_batch_ingest'), new_admin_batch_ingest_path, class: 'btn btn-primary' %>
+</div>
+
+<%= search_form_for @search, url: admin_batch_ingests_path,
+                             html: { method: :get, class: 'js-autocomplete d-flex my-3 form-inline' } do |f| %>
+  <div class="form-group mr-auto">
+    <%= f.label :title_cont, t('search_label'), class: 'mr-sm-2' %>
+    <%= f.search_field :title_cont,
+                       placeholder: t('.search_placeholder'),
+                       class: 'form-control' %>
+  </div>
+
+  <div class="form-group p-2">
+    <%= f.label :status_eq, t('admin.batch_ingests.index.status'), class: 'mr-2' %>
+    <%= f.select :status_eq, options_for_select(BatchIngest.statuses.map { |k, v| [k.humanize.capitalize, v] },
+                                                @search), { include_blank: t('all') }, { class: 'form-control' } %>
+  </div>
+<% end %>
+
+<div id="js-ajax-table">
+  <%= render partial: 'batch_ingests' %>
+</div>

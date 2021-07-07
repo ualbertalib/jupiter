@@ -1,0 +1,4 @@
+$("#js-ajax-table").hide();
+$("#js-ajax-table")
+  .html("<%= escape_javascript(render("batch_ingests")) %>")
+  .fadeIn(500);

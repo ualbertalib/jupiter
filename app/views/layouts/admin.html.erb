@@ -23,6 +23,11 @@
       <li class="nav-item">
         <%= active_link_to t('.feature_flags'), flipper_path, class: 'nav-link' %>
       </li>
+      <% if Flipper.enabled?(:batch_ingest, current_user) %>
+        <li class="nav-item">
+          <%= active_link_to t('admin.batch_ingests.index.header'), admin_batch_ingests_path, class: 'nav-link', active: :exclusive %>
+        </li>
+      <% end %>
     </ul>
     <%= yield %>
   </div>

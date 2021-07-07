@@ -1,0 +1,81 @@
+<% page_title(@batch_ingest.title) %>
+
+<ol class="breadcrumb mb-1">
+  <li class="breadcrumb-item"><%= link_to t('admin.header'), admin_root_path %></li>
+  <li class="breadcrumb-item"><%= link_to t('admin.batch_ingests.index.header'), admin_batch_ingests_path %></li>
+  <li class="breadcrumb-item active"><%= @batch_ingest.title %></li>
+</ol>
+
+<h1 class="mt-3 d-flex justify-content-between">
+  <%= @batch_ingest.title %>
+  <% badge_color = if @batch_ingest.failed?
+                     'badge-danger'
+                   elsif @batch_ingest.completed?
+                     'badge-success'
+                   else
+                     'badge-secondary'
+                   end %>
+  <span class="badge <%= badge_color %>"><%= @batch_ingest.status %></span>
+</h1>
+
+<% if @batch_ingest.failed? && @batch_ingest.error_message.present? %>
+  <div class="alert alert-danger" role="alert">
+    <h4 class="alert-heading"><%= t('.batch_ingest_failed') %></h4>
+    <p><%= @batch_ingest.error_message %></p>
+    <hr>
+    <p class="mb-0"><%= t('.failure_hint') %></p>
+  </div>
+<% end %>
+
+<p><%= t('.created_by') %> <%= @batch_ingest.user.name %></p>
+
+<h2 class="mt-5"><%= t('.spreadsheet') %></h2>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col"><%= t('.name') %></th>
+      <th scope="col"><%= t('.id') %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row"><%= @batch_ingest.google_spreadsheet_name %></th>
+      <td><%= @batch_ingest.google_spreadsheet_id %></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 class="mt-5"><%= t('.files') %></h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col"><%= t('.name') %></th>
+      <th scope="col"><%= t('.id') %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @batch_ingest.batch_ingest_files.each do |file| %>
+      <tr>
+        <th scope="row"><%= file.google_file_name %></th>
+        <td><%= file.google_file_id %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<h2 class="mt-5"><%= t('.ingested_items') %></h2>
+
+<ul class="list-group">
+  <% if @batch_ingest.items.present? %>
+    <% @batch_ingest.items.each do |item| %>
+      <li class="list-group-item list-group-item-action">
+        <%= render partial: 'item', locals: { item: item } %>
+     </li>
+    <% end %>
+<% else %>
+  <li class="list-group-item">
+    <%= t('.no_items_found') %>
+  </li>
+<% end %>
+</ul>

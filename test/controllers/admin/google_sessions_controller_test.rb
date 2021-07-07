@@ -21,9 +21,7 @@ class Admin::GoogleSessionsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :redirect
-    # TODO: will eventually go here:
-    # assert_redirected_to new_admin_batch_ingest_url
-    assert_redirected_to admin_root_url
+    assert_redirected_to new_admin_batch_ingest_url
 
     follow_redirect!
     assert_response :success

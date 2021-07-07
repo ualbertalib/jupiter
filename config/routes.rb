@@ -78,6 +78,8 @@ Rails.application.routes.draw do
       resources :announcements, only: [:index, :destroy, :create]
 
       resources :google_sessions, only: [:new]
+
+      resources :batch_ingests, only: [:index, :show, :create, :new]
     end
 
     post '/logout_as_user', to: 'sessions#logout_as_user'
