@@ -496,9 +496,11 @@ en:
         status: 'Status'
         created_by: 'Created by'
         files: 'Files'
+        google_file_name: 'Google file name'
+        google_file_id: 'Google file id'
         spreadsheet: 'Spreadsheet'
-        name: 'Name'
-        id: 'Id'
+        google_spreadsheet_name: 'Google spreadsheet name'
+        google_spreadsheet_id: 'Google spreadsheet id'
         ingested_items: Ingested items
         title: 'Title'
         no_items_found: 'No items found'
