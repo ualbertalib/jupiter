@@ -8,8 +8,7 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
-– Refactored Controlled Vocabulary support to allow for new, raw vocabs without i18n translations. The motivation here is that
-we have a bunch of URIs we want to machine-map to human readable values, and it doesn't make sense to introduce intermediate symbols we'd have to cobble together somehow, plus that would involve polluting the i18n file with hundreds of new entries.
+- Refactored Controlled Vocabulary support to allow for new, raw vocabs without i18n translations. The motivation here is that we have a bunch of URIs we want to machine-map to human readable values, and it doesn't make sense to introduce intermediate symbols we'd have to cobble together somehow, plus that would involve polluting the i18n file with hundreds of new entries.
 
 API Examples:
 
@@ -51,18 +50,18 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 - Brakeman linting to Github Actions workflow
 
 ### Removed
-– Remove entirely unnecessary config file. [PR#2044](https://github.com/ualbertalib/jupiter/pull/2044)
-– Completely disable logging of warnings around the "excel spreadsheet" issue [PR#2049](https://github.com/ualbertalib/jupiter/pull/2049)
+- Remove entirely unnecessary config file. [PR#2044](https://github.com/ualbertalib/jupiter/pull/2044)
+- Completely disable logging of warnings around the "excel spreadsheet" issue [PR#2049](https://github.com/ualbertalib/jupiter/pull/2049)
 - Remove logo_id foreign key on item/thesis which was causing issues with deletions
 
 ### Changed
 - Added DOI reset feature for admins [#1739](https://github.com/ualbertalib/jupiter/issues/1739)
-– Turn off reporting things like "this excel spreadsheet isn't thumbnailable" as warnings to Rollbar [PR#2046](https://github.com/ualbertalib/jupiter/pull/2046)
+- Turn off reporting things like "this excel spreadsheet isn't thumbnailable" as warnings to Rollbar [PR#2046](https://github.com/ualbertalib/jupiter/pull/2046)
 - migration to fix concatenated subjects (part 2) [#1449](https://github.com/ualbertalib/jupiter/issues/1449)
 - Default behaviour within a facet to 'OR' [#1990](https://github.com/ualbertalib/jupiter/issues/1990)
 - Catch and log embargo expiry job save errors [#1989](https://github.com/ualbertalib/jupiter/issues/1989)
 - Don't send failures to SessionController in development environment [PR#2121](https://github.com/ualbertalib/jupiter/pull/2121)
-– Rails upgraded to 6.0.3.6 to resolve certain issues with community dependencies
+- Rails upgraded to 6.0.3.6 to resolve certain issues with community dependencies
 - Moved `visibility` vocabulary into a `jupiter_core` namespace
 - Move `doi_url` to `Doiable` class
 - Make `Digitization::Book` `Depositable`
@@ -70,7 +69,7 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 - Make `Digitization::Image` `Depositable`
 - Make `Digitization::Map` `Depositable`
 - Fixture names have been modified to ensure their uniqueness [PR#2302](https://github.com/ualbertalib/jupiter/pull/2302)
-– Rails upgraded to 6.0.3.7 to resolve security issues
+- Rails upgraded to 6.0.3.7 to resolve security issues
 
 ### Fixed
 - bump rubocop and fix cop violations [PR#2072](https://github.com/ualbertalib/jupiter/pull/2072)
@@ -96,11 +95,11 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 - predeploy script to reference this branch
 - UAT VIRTUAL_HOSTS configuration on just the containers that need it
 
-– Fix issue where we improperly 500'd when a file download URL referenced a non-existent fileset UUID, instead of 404ing
+- Fix issue where we improperly 500'd when a file download URL referenced a non-existent fileset UUID, instead of 404ing
 - Make reindex rake task actually reindex all of the objects into Solr, instead of acting as a no-op
-– Fix a mis-named error rescue that resulted in a crash when the sort field wasn't known for a model
+- Fix a mis-named error rescue that resulted in a crash when the sort field wasn't known for a model
 - Fix nil start or end faceting dates error [PR#2041](https://github.com/ualbertalib/jupiter/pull/2041)
-– Try to better handle the logo deletion circular constraint (next step: dropping it entirely)
+- Try to better handle the logo deletion circular constraint (next step: dropping it entirely)
 
 ### Fixed
 - bump rubocop and fix cop violations [PR#1845](https://github.com/ualbertalib/jupiter/pull/1845)
