@@ -49,6 +49,7 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 - Add new models (BatchIngest and BatchIngestFile) for improved batch ingest work [#1986](https://github.com/ualbertalib/jupiter/issues/1986)
 - Add new google drive client service to be able to retrieve files/spreadsheets from Google Drive [#1986](https://github.com/ualbertalib/jupiter/issues/1986)
 - Brakeman linting to Github Actions workflow
+- Add batch ingest controller and views for CRUDing batch ingests [#1986](https://github.com/ualbertalib/jupiter/issues/1986)
 
 ### Removed
 – Remove entirely unnecessary config file. [PR#2044](https://github.com/ualbertalib/jupiter/pull/2044)

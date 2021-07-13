@@ -23,7 +23,7 @@
 <p><%= t('.created_by') %> <%= @batch_ingest.user.name %></p>
 
 <h2 class="mt-5"><%= t('.spreadsheet') %></h2>
-<table class="table">
+<table class="table table-bordered">
   <thead>
     <tr>
       <th scope="col"><%= t('.google_spreadsheet_name') %></th>
@@ -40,7 +40,7 @@
 
 <h2 class="mt-5"><%= t('.files') %></h2>
 
-<table class="table">
+<table class="table table-bordered">
   <thead>
     <tr>
       <th scope="col"><%= t('.google_file_name') %></th>
@@ -63,7 +63,7 @@
   <% if @batch_ingest.items.present? %>
     <% @batch_ingest.items.each do |item| %>
       <li class="list-group-item list-group-item-action">
-        <%= render partial: 'item', locals: { item: item } %>
+        <%= render partial: 'item', locals: { item: item.decorate, highlights: [] } %>
      </li>
     <% end %>
 <% else %>
