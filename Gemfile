@@ -46,7 +46,7 @@ gem 'sidekiq-cron'
 
 # Misc Utilities
 gem 'aasm' # state-machine management
-gem 'addressable', '~> 2.7.0' # Replacement for the standard URI implementation
+gem 'addressable', '~> 2.8.0' # Replacement for the standard URI implementation
 gem 'differ' # Used to diff two strings
 gem 'draper'
 gem 'ezid-client', '~> 1.8.0'
