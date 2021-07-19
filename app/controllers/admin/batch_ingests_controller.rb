@@ -12,8 +12,7 @@ class Admin::BatchIngestsController < Admin::AdminController
   end
 
   def new
-    @access_token = fetch_access_token
-    if @access_token
+    if access_token
       @developer_key = Rails.application.secrets.google_developer_key
       @batch_ingest = BatchIngest.new
     else
@@ -36,27 +35,24 @@ class Admin::BatchIngestsController < Admin::AdminController
       # BatchIngestionJob.perform_later(@batch_ingest.id)
 
       redirect_to [:admin, @batch_ingest], notice: t('.created')
-    else
-      @access_token = fetch_access_token
-      if @access_token
-        @developer_key = Rails.application.secrets.google_developer_key
-        render :new
-      end
+    elsif access_token
+      @developer_key = Rails.application.secrets.google_developer_key
+      render :new
     end
   end
 
   private
 
-  def fetch_access_token
-    if session[:google_credentials] &&
-       session[:google_credentials]['access_token']
-      GoogleDriveClientService.new(
-        access_token: session[:google_credentials]['access_token'],
-        refresh_token: session[:google_credentials]['refresh_token'],
-        expires_in: session[:google_credentials]['expires_in'],
-        issued_at: session[:google_credentials]['issued_at']
-      ).access_token
-    end
+  def access_token
+    @access_token ||= if session[:google_credentials] &&
+                         session[:google_credentials]['access_token']
+                        GoogleDriveClientService.new(
+                          access_token: session[:google_credentials]['access_token'],
+                          refresh_token: session[:google_credentials]['refresh_token'],
+                          expires_in: session[:google_credentials]['expires_in'],
+                          issued_at: session[:google_credentials]['issued_at']
+                        ).access_token
+                      end
   end
 
 end
