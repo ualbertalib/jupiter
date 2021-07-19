@@ -52,4 +52,30 @@ class BatchIngestTest < ActiveSupport::TestCase
     assert_equal('must exist', @batch_ingest.errors[:user].first)
   end
 
+  test 'invalid unless spreadsheet has required data' do
+    VCR.use_cassette('google_fetch_access_token', record: :none) do
+      VCR.use_cassette('google_fetch_spreadsheet', record: :none,
+                                                   erb: { community_id: 'BADID',
+                                                          collection_id: 'BADID',
+                                                          owner_id: 'BADID' }) do
+        batch_ingest = BatchIngest.new(
+          title: @batch_ingest.title,
+          user_id: @batch_ingest.user_id,
+          batch_ingest_files: @batch_ingest.batch_ingest_files,
+          google_spreadsheet_id: @batch_ingest.google_spreadsheet_id,
+          google_spreadsheet_name: @batch_ingest.google_spreadsheet_name,
+          access_token: @batch_ingest.access_token
+        )
+
+        assert_not batch_ingest.valid?
+        assert_equal('community_id does not exist in ERA for row 1 of spreadsheet',
+                     batch_ingest.errors[:spreadsheet].first)
+        assert_equal('collection_id does not exist in ERA for row 1 of spreadsheet',
+                     batch_ingest.errors[:spreadsheet].second)
+        assert_equal('owner_id does not exist in ERA for row 1 of spreadsheet',
+                     batch_ingest.errors[:spreadsheet].third)
+      end
+    end
+  end
+
 end
