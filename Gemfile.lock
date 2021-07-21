@@ -467,8 +467,6 @@ GEM
       ffi (~> 1.12)
     ruby2_keywords (0.0.4)
     rubyzip (2.3.0)
-    rufus-scheduler (3.7.0)
-      fugit (~> 1.1, >= 1.1.6)
     sawyer (0.8.2)
       addressable (>= 2.3.5)
       faraday (> 0.8, < 2.0)
@@ -647,7 +645,6 @@ DEPENDENCIES
   rubocop-minitest
   rubocop-performance
   rubocop-rails
-  rufus-scheduler (= 3.7.0)
   sdoc
   selenium-webdriver
   shoulda-matchers (~> 5.0)
