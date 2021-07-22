@@ -117,6 +117,8 @@ bundle install
 yarn
 ```
 
+Note: This step failed on CentOS 7 with node version 16. Have to downgrade node from v16 to 14. (2021/07/11)
+
 ## Step 6: Setup Database
 
 ```shell
