@@ -42,7 +42,6 @@ gem 'sidekiq', '~> 5.2'
 gem 'sidekiq-unique-jobs', '~> 7.0'
 gem 'sinatra', '~> 2.1.0' # used by sidekiq/web
 # Sidekiq cron jobs
-gem 'rufus-scheduler', '3.7.0' # https://github.com/ondrejbartas/sidekiq-cron/issues/199
 gem 'sidekiq-cron'
 
 # Misc Utilities

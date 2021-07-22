@@ -53,6 +53,7 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 - Remove entirely unnecessary config file. [PR#2044](https://github.com/ualbertalib/jupiter/pull/2044)
 - Completely disable logging of warnings around the "excel spreadsheet" issue [PR#2049](https://github.com/ualbertalib/jupiter/pull/2049)
 - Remove logo_id foreign key on item/thesis which was causing issues with deletions
+- Removed `rufus-scheduler` -- it's an unused dependency [PR#2434](https://github.com/ualbertalib/jupiter/pull/2434)
 
 ### Changed
 - Added DOI reset feature for admins [#1739](https://github.com/ualbertalib/jupiter/issues/1739)
