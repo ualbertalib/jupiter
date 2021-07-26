@@ -1,0 +1,14 @@
+<% page_title(t('.header')) %>
+
+<ol class="breadcrumb mb-1">
+  <li class="breadcrumb-item">
+    <%= link_to(t('admin.header'), admin_root_path) %>
+  </li>
+  <li class="breadcrumb-item"><%= link_to(t('admin.batch_ingests.index.header'), admin_batch_ingests_path) %></li>
+  <li class="breadcrumb-item active"><%= t('.header') %></li>
+</ol>
+
+<h1 class="my-3"><%= t('.header') %></h1>
+
+<%# TODO: Add form for actually batch ingest creation %>
+<%#= render partial: 'form', locals: { batch_ingest: @batch_ingest } %>

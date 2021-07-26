@@ -17,9 +17,7 @@ class Admin::GoogleSessionsController < Admin::AdminController
       session[:google_credentials]['expires_in'] = auth_client.expires_in
       session[:google_credentials]['issued_at'] = auth_client.issued_at
 
-      # TODO: Will eventually go here:
-      # redirect_to new_admin_batch_ingest_path
-      redirect_to admin_root_path
+      redirect_to new_admin_batch_ingest_path
     end
   end
 

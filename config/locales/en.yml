@@ -464,6 +464,48 @@ en:
           header_icon: 'check-square'
           please_review_thesis: 'Please review your thesis before depositing into ERA'
           legal_disclaimer_html: 'By depositing this thesis into ERA you agree to the <a href="/policies">ERA Deposit Policy agreements</a>'
+    batch_ingests:
+      create:
+        created: 'Batch Ingest was successfully created!'
+      index:
+        header: 'Batch ingests'
+        search_placeholder: 'search title...'
+        status: 'Status'
+        new_batch_ingest: 'New batch ingest'
+      batch_ingests:
+        title: 'Title'
+        status: 'Status'
+        created: 'Created'
+        display_batch_ingests_count: "Displaying %{shown_batch_ingests_count} of %{matching_batch_ingests_count}
+        matching batch ingests (%{total_batch_ingests_count} total batch ingests)"
+        no_batch_ingests_found: 'No batch ingests found'
+      form:
+        title: 'Title'
+        spreadsheet: 'Spreadsheet'
+        add_spreadsheet: 'Add spreadsheet'
+        files: 'Files'
+        add_files: 'Add files'
+        title_placeholder: 'Enter title'
+        create_batch_ingest: 'Create batch ingest'
+        saving_html: "<i class='fas fa-spinner fa-pulse mr-2'></i>Saving..."
+      show:
+        batch_ingest_failed: 'Batch ingest has failed. The following error has occurred:'
+        failure_hint: 'Please fix the error above and try again by starting a new batch ingest.
+          Be cautious if any items have already been ingested when starting a new batch ingest, as this could lead to duplicated items being ingested!
+          If you stuck or need help, please ask a developer'
+        status: 'Status'
+        created_by: 'Created by'
+        files: 'Files'
+        google_file_name: 'Google file name'
+        google_file_id: 'Google file id'
+        spreadsheet: 'Spreadsheet'
+        google_spreadsheet_name: 'Google spreadsheet name'
+        google_spreadsheet_id: 'Google spreadsheet id'
+        ingested_items: Ingested items
+        title: 'Title'
+        no_items_found: 'No items found'
+      new:
+        header: Create batch ingest
 
   digitization:
     collection:
