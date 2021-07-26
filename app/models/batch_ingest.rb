@@ -69,6 +69,12 @@ class BatchIngest < ApplicationRecord
         errors.add(:spreadsheet,
                    "owner_id does not exist in ERA for row #{row_number} of spreadsheet")
       end
+
+      # Ensure that any file name in the spreadsheet has corresponding batch ingest file
+      unless batch_ingest_files.any? { |file| row['file_name'] == file.google_file_name }
+        errors.add(:spreadsheet,
+                   "file_name for row #{row_number} of spreadsheet does not match any of the selected files")
+      end
     end
   end
 

@@ -1,16 +1,18 @@
 /* eslint-disable no-undef */
 
 function addFileInput(id, name) {
-  const input = `<li class="list-group-item d-flex justify-content-between">
-      <input type="hidden" name="batch_ingest[batch_ingest_files_attributes][][google_file_name]" value="${name}">
-      <input type="hidden" name="batch_ingest[batch_ingest_files_attributes][][google_file_id]" value="${id}">
-      ${name}
-      <button type="button" class="btn btn-danger btn-sm js-btn-delete-file">
-        <i class="fa fa-trash-alt" aria-hidden="true"></i> Delete
-      </button>
-    </li>`;
+  if ($('.js-batch-ingest-files-list').find(`input[value='${id}']`).length === 0) {
+    const input = `<li class="list-group-item d-flex justify-content-between">
+        <input type="hidden" name="batch_ingest[batch_ingest_files_attributes][][google_file_name]" value="${name}">
+        <input type="hidden" name="batch_ingest[batch_ingest_files_attributes][][google_file_id]" value="${id}">
+        ${name}
+        <button type="button" class="btn btn-danger btn-sm js-btn-delete-file">
+          <i class="fa fa-trash-alt" aria-hidden="true"></i> Delete
+        </button>
+      </li>`;
 
-  $('.js-batch-ingest-files-list').append(input);
+    $('.js-batch-ingest-files-list').append(input);
+  }
 }
 
 function addSpreadsheetInput(id, name) {
@@ -24,6 +26,7 @@ function addSpreadsheetInput(id, name) {
     </li>`;
 
   $('.js-batch-ingest-spreadsheet').append(input);
+  $('.js-btn-spreadsheet').hide();
 }
 
 
@@ -31,9 +34,9 @@ function deleteFileFromFilesList() {
   $(this).closest('li').remove();
 }
 
-// TODO: Re-enable add spreadsheet button?
 function deleteSpreadsheet() {
   $(this).closest('li').remove();
+  $('.js-btn-spreadsheet').show();
 }
 
 
@@ -46,7 +49,6 @@ function pickerFilesCallback(data) {
   }
 }
 
-// TODO: Hide add spreadsheet button?
 function pickerSpreadsheetCallback(data) {
   if (data.action === google.picker.Action.PICKED) {
     addSpreadsheetInput(data.docs[0].id, data.docs[0].name);
@@ -71,10 +73,7 @@ function createFilesPicker() {
       + 'application/vnd.ms-excel',
     );
     view.setIncludeFolders(true);
-    view.setEnableDrives(true);
-    // view.setParent('root');
-    // TODO: Future? Have to break down folder into its files, or enhance backend job to consume a folder
-    // view.setSelectFolderEnabled(true);
+    view.setParent('root');
 
     const picker = new google.picker.PickerBuilder()
       .setTitle('Select a file(s)')
@@ -96,6 +95,7 @@ function createSpreadsheetPicker() {
   if (accessToken && developerKey) {
     const view = new google.picker.View(google.picker.ViewId.SPREADSHEETS);
     view.setMimeTypes('application/vnd.google-apps.spreadsheet');
+    view.setParent('root');
 
     const picker = new google.picker.PickerBuilder()
       .setTitle('Select a spreadsheet')
