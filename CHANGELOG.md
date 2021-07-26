@@ -24,6 +24,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 – Rails upgraded to 6.0.3.6 to resolve certain issues with community dependencies
 - Fixture names have been modified to ensure their uniqueness [PR#2302](https://github.com/ualbertalib/jupiter/pull/2302) 
 – Rails upgraded to 6.0.3.7 to resolve security issues
+- Added Collection and Community to reindex rake task [#2444](https://github.com/ualbertalib/jupiter/issues/2444)
 
 ### Fixed
 - bump rubocop and fix cop violations [PR#2072](https://github.com/ualbertalib/jupiter/pull/2072)
