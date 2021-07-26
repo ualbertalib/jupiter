@@ -1,9 +1,13 @@
 require Rails.root.join('app/services/read_only_service')
 
 namespace :jupiter do
-  desc 'fetch and unlock every object then save'
+  desc 'fetch every object then update solr'
   task :reindex, [:batch_size] => :environment do |_, args|
-    desired_batch_size = args.batch_size.to_i ||= 1000
+    desired_batch_size = if args.batch_size.present?
+                           args.batch_size.to_i
+                         else
+                           1000
+                         end
     puts 'Reindexing all Items and Theses...'
 
     count = 0
@@ -15,7 +19,6 @@ namespace :jupiter do
 
     puts
     puts "Reindexed #{count} Items. Moving on to Theses..."
-    puts
 
     count = 0
     Thesis.find_each(batch_size: desired_batch_size) do |thesis|
@@ -23,7 +26,31 @@ namespace :jupiter do
       count += 1
       print '.' if count % 20 == 0
     end
+    puts
     puts "Reindexed #{count} Theses."
+    puts
+
+    puts 'Reindexing all Communities and Collections...'
+    count = 0
+    Community.find_each(batch_size: desired_batch_size) do |community|
+      community.update_solr
+      count += 1
+      print '.' if count % 20 == 0
+    end
+
+    puts
+    puts "Reindexed #{count} Communities. Moving on to Collections..."
+
+    count = 0
+    Collection.find_each(batch_size: desired_batch_size) do |collection|
+      collection.update_solr
+      count += 1
+      print '.' if count % 20 == 0
+    end
+    puts
+    puts "Reindexed #{count} Collections."
+    puts
+
     puts 'Reindex completed!'
   end
 
@@ -39,7 +66,7 @@ namespace :jupiter do
   desc 'garbage collect any orphan attachment blobs on the filesystem'
   task gc_blobs: :environment do
     orphan_blobs = ActiveStorage::Blob.find_by_sql('SELECT * FROM active_storage_blobs asb WHERE asb.id NOT IN '\
-      '(SELECT distinct blob_id FROM active_storage_attachments)')
+                                                   '(SELECT distinct blob_id FROM active_storage_attachments)')
 
     puts "Found #{orphan_blobs.count} orphans. Purging..."
     orphan_blobs.each do |blob|
