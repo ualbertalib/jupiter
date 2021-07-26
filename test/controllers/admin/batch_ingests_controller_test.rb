@@ -55,8 +55,8 @@ class Admin::BatchIngestsControllerTest < ActionDispatch::IntegrationTest
             batch_ingest: {
               title: 'Random Batch Name',
               batch_ingest_files_attributes: [
-                { google_file_id: 'randomfileid', google_file_name: 'logo.png' },
-                { google_file_id: 'randomfileid', google_file_name: 'report.pdf' }
+                { google_file_id: 'randomfileid', google_file_name: 'conference_logo.png' },
+                { google_file_id: 'randomfileid', google_file_name: 'conference.pdf' }
               ],
               google_spreadsheet_name: 'Test - ERA Batch Ingest Template',
               google_spreadsheet_id: 'RANDOMSPREADSHEETID'
