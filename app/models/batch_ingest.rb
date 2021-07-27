@@ -17,7 +17,7 @@ class BatchIngest < ApplicationRecord
 
   validate :spreadsheet_has_required_data, on: :create
 
-  # TODO: Enhance validations? Check if File matches file selected? Move to validator class?
+  # TODO: Move to validator class?
   def spreadsheet_has_required_data
     return if google_spreadsheet_id.blank?
 

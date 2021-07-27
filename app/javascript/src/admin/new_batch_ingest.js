@@ -39,8 +39,6 @@ function deleteSpreadsheet() {
   $('.js-btn-spreadsheet').show();
 }
 
-
-// TODO: check for duplicates?
 function pickerFilesCallback(data) {
   if (data.action === google.picker.Action.PICKED) {
     data.docs.forEach((doc) => {
