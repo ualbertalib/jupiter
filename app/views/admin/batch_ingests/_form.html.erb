@@ -12,7 +12,7 @@
             <input type="hidden" name='batch_ingest[google_spreadsheet_id]' value="<%= @batch_ingest.google_spreadsheet_id %>">
             <input type="hidden" name='batch_ingest[google_spreadsheet_name]' value="<%= @batch_ingest.google_spreadsheet_name %>">
             <%= @batch_ingest.google_spreadsheet_name %>
-            <button type="button" class="btn btn-danger btn-sm js-btn-delete-file'">
+            <button type="button" class="btn btn-danger btn-sm js-btn-delete-file">
               <%= icon('fas', 'trash-alt') %>
               <%= t('delete') %>
             </button>
@@ -21,12 +21,12 @@
     </ul>
 
     <%= f.button :button,
-                 type: :button,
-                 class: 'js-btn-spreadsheet',
-                 data: {
-                   access_token: @access_token,
-                   developer_key: @developer_key
-                 } do %>
+                type: :button,
+                class: "js-btn-spreadsheet #{ 'd-none' if @batch_ingest.google_spreadsheet_id.present? }",
+                data: {
+                  access_token: @access_token,
+                  developer_key: @developer_key
+                } do %>
               <%= icon('fas', 'plus-circle') %>
               <%= t('.add_spreadsheet') %>
             <% end %>
@@ -45,7 +45,7 @@
                 <input type="hidden" name="batch_ingest[batch_ingest_files_attributes][][google_file_id]" value="<%= file.google_file_id %>">
                 <input type="hidden" name="batch_ingest[batch_ingest_files_attributes][][google_file_name]" value="<%= file.google_file_name %>">
                 <%= file.google_file_name %>
-                <button type="button" class="btn btn-danger btn-sm js-btn-delete-file'">
+                <button type="button" class="btn btn-danger btn-sm js-btn-delete-file">
                   <%= icon('fas', 'trash-alt') %>
                   <%= t('delete') %>
                 </button>

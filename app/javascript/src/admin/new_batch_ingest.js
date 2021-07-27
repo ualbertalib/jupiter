@@ -26,7 +26,7 @@ function addSpreadsheetInput(id, name) {
     </li>`;
 
   $('.js-batch-ingest-spreadsheet').append(input);
-  $('.js-btn-spreadsheet').hide();
+  $('.js-btn-spreadsheet').addClass('d-none');
 }
 
 
@@ -36,7 +36,7 @@ function deleteFileFromFilesList() {
 
 function deleteSpreadsheet() {
   $(this).closest('li').remove();
-  $('.js-btn-spreadsheet').show();
+  $('.js-btn-spreadsheet').removeClass('d-none');
 }
 
 function pickerFilesCallback(data) {
