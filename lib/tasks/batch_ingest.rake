@@ -109,7 +109,7 @@ def item_ingest(item_data, index, csv_directory)
     end
 
     if item_data[:languages].present?
-      unlocked_obj.languages = item_data[:languages].split('|').map do |language|
+      unlocked_obj.languages = item_data[:languages].downcase.split('|').map do |language|
         CONTROLLED_VOCABULARIES[:language].send(language.to_sym) if language.present?
       end
     end
