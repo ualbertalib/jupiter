@@ -40,8 +40,6 @@ class GoogleDriveClientService
 
     range = "'Data'!A:X"
 
-    # TODO: Add better error handling
-    #  E.g: handle bad request: Unable to parse range: 'Data'!A:X
     response = service.get_spreadsheet_values(spreadsheet_id, range)
 
     rows = response.values

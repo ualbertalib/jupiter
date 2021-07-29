@@ -180,7 +180,13 @@ en:
           attributes:
             enabled:
               only_one_record_exists: 'Only one ReadOnlyMode record may exist'
-
+        batch_ingest:
+          attributes:
+            google_spreadsheet_id:
+                missing_required_column: "%{column} is required and was not found for row %{row_number} of spreadsheet"
+                column_not_found: "%{column} does not exist in ERA for row %{row_number} of spreadsheet"
+                no_matching_files: "file_name for row %{row_number} of spreadsheet has no matching files below"
+                spreadsheet_could_not_be_read: "Spreadsheet could not be read. Please follow the template spreadsheet as an example"
   application:
     navbar:
       era_logo_alt: 'ERA - Education and Research Archive'

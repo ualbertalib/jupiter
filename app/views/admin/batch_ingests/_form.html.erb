@@ -30,11 +30,10 @@
               <%= icon('fas', 'plus-circle') %>
               <%= t('.add_spreadsheet') %>
             <% end %>
-    <%= f.error :spreadsheet %>
+    <%= f.error :google_spreadsheet_id %>
   </div>
 
   <div class="py-3">
-  <%# TODO: Error handling? batch_ingest_files label/error might need to be put outside of this fields_for %>
     <%= f.simple_fields_for :batch_ingest_files, BatchIngestFile.new do |f| %>
       <%= f.label :batch_ingest_files, label: t('.files'), required: true %>
 
@@ -64,8 +63,8 @@
                 <%= icon('fas', 'plus-circle') %>
                 <%= t('.add_files') %>
               <% end %>
-      <%= f.error :batch_ingest_files %>
     <% end %>
+    <%= f.error :batch_ingest_files %>
   </div>
 
    <div class="form-group text-right">
