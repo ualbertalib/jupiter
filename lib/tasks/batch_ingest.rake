@@ -98,13 +98,13 @@ def item_ingest(item_data, index, csv_directory)
     if item_data[:type] == "article" && ["draft", "published"].include?(item_data[:publication_status])
       unlocked_obj.publication_status = if item_data[:publication_status] == "draft"
           [
-                                            CONTROLLED_VOCABULARIES[:publication_status].draft,
-                                            CONTROLLED_VOCABULARIES[:publication_status].submitted,
-                                          ]
+            CONTROLLED_VOCABULARIES[:publication_status].draft,
+            CONTROLLED_VOCABULARIES[:publication_status].submitted,
+          ]
         else
           [
-                                            CONTROLLED_VOCABULARIES[:publication_status].published,
-                                          ]
+            CONTROLLED_VOCABULARIES[:publication_status].published,
+          ]
         end
     end
 
@@ -134,8 +134,8 @@ def item_ingest(item_data, index, csv_directory)
     # Handle license vs rights
     if item_data[:license].present?
       unlocked_obj.license =
-        CONTROLLED_VOCABULARIES[:license].send(item_data[:license].to_sym) ||
-        CONTROLLED_VOCABULARIES[:old_license].send(item_data[:license].to_sym)
+        CONTROLLED_VOCABULARIES[:license].send(item_data[:license].downcase.gsub("-", "_").to_sym) ||
+        CONTROLLED_VOCABULARIES[:old_license].send(item_data[:license].downcase.gsub("-", "_").to_sym)
     end
     unlocked_obj.rights = item_data[:license_text]
 
