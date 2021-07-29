@@ -69,11 +69,11 @@ class BatchIngestTest < ActiveSupport::TestCase
 
         assert_not batch_ingest.valid?
         assert_equal('community_id does not exist in ERA for row 1 of spreadsheet',
-                     batch_ingest.errors[:spreadsheet].first)
+                     batch_ingest.errors[:google_spreadsheet_id].first)
         assert_equal('collection_id does not exist in ERA for row 1 of spreadsheet',
-                     batch_ingest.errors[:spreadsheet].second)
+                     batch_ingest.errors[:google_spreadsheet_id].second)
         assert_equal('owner_id does not exist in ERA for row 1 of spreadsheet',
-                     batch_ingest.errors[:spreadsheet].third)
+                     batch_ingest.errors[:google_spreadsheet_id].third)
       end
     end
   end
