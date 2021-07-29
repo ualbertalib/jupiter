@@ -1,14 +1,14 @@
-INGEST_REPORTS_LOCATION = Rails.root.join('tmp/ingest_reports')
+INGEST_REPORTS_LOCATION = Rails.root.join("tmp/ingest_reports")
 INDEX_OFFSET = 1
 
 namespace :jupiter do
-  desc 'batch ingest for multiple items from a csv file - used by ERA Admin and ERA Assistants'
+  desc "batch ingest for multiple items from a csv file - used by ERA Admin and ERA Assistants"
   task :batch_ingest_items, [:csv_path] => :environment do |_t, args|
     csv_path = args.csv_path
     batch_ingest_csv(csv_path)
   end
 
-  desc 'batch ingest for theses from a csv file - used to batch ingest theses from Thesis Deposit'
+  desc "batch ingest for theses from a csv file - used to batch ingest theses from Thesis Deposit"
   task :batch_ingest_theses, [:csv_path] => :environment do |_t, args|
     csv_path = args.csv_path
     full_csv_path = File.expand_path(csv_path)
@@ -22,12 +22,12 @@ namespace :jupiter do
 end
 
 def batch_ingest_csv(csv_path)
-  require 'csv'
-  require 'fileutils'
-  log 'START: Batch ingest started...'
+  require "csv"
+  require "fileutils"
+  log "START: Batch ingest started..."
 
   if csv_path.blank?
-    log 'ERROR: CSV path must be present. Please specify a valid csv_path as an argument'
+    log "ERROR: CSV path must be present. Please specify a valid csv_path as an argument"
     exit 1
   end
 
@@ -41,16 +41,16 @@ def batch_ingest_csv(csv_path)
                 header_converters: :symbol,
                 converters: :all).with_index(INDEX_OFFSET) do |object_data, index|
       object = if block_given?
-                 yield(object_data, index)
-               else
-                 item_ingest(object_data, index, csv_directory)
-               end
+          yield(object_data, index)
+        else
+          item_ingest(object_data, index, csv_directory)
+        end
       successful_ingested << object
     end
 
     generate_ingest_report(successful_ingested)
 
-    log 'FINISH: Batch ingest completed!'
+    log "FINISH: Batch ingest completed!"
   else
     log "ERROR: Could not open file at `#{full_csv_path}`. Does the csv file exist at this location?"
     exit 1
@@ -58,26 +58,26 @@ def batch_ingest_csv(csv_path)
 end
 
 def log(message)
-  puts "[#{Time.current.strftime('%F %T')}] #{message}"
+  puts "[#{Time.current.strftime("%F %T")}] #{message}"
 end
 
 def generate_ingest_report(successful_ingested_items)
-  log 'REPORT: Generating ingest report...'
+  log "REPORT: Generating ingest report..."
 
   FileUtils.mkdir_p INGEST_REPORTS_LOCATION
 
-  file_name = Time.current.strftime('%Y_%m_%d_%H_%M_%S')
+  file_name = Time.current.strftime("%Y_%m_%d_%H_%M_%S")
   full_file_name = "#{INGEST_REPORTS_LOCATION}/#{file_name}.csv"
 
-  CSV.open(full_file_name, 'wb', headers: true) do |csv|
-    csv << ['id', 'url', 'title'] # Add headers
+  CSV.open(full_file_name, "wb", headers: true) do |csv|
+    csv << ["id", "url", "title"] # Add headers
 
     successful_ingested_items.each do |item|
       csv << [item.id, Rails.application.routes.url_helpers.item_url(item), item.title]
     end
   end
 
-  log 'REPORT: Ingest report successfully generated!'
+  log "REPORT: Ingest report successfully generated!"
   log "REPORT: You can view report here: #{full_file_name}"
 end
 
@@ -95,38 +95,38 @@ def item_ingest(item_data, index, csv_directory)
     end
 
     # If item type is an article, we need to add an array of statuses to the publication status field...
-    if item_data[:type] == 'article' && ['draft', 'published'].include?(item_data[:publication_status])
-      unlocked_obj.publication_status = if item_data[:publication_status] == 'draft'
-                                          [
+    if item_data[:type] == "article" && ["draft", "published"].include?(item_data[:publication_status])
+      unlocked_obj.publication_status = if item_data[:publication_status] == "draft"
+          [
                                             CONTROLLED_VOCABULARIES[:publication_status].draft,
-                                            CONTROLLED_VOCABULARIES[:publication_status].submitted
+                                            CONTROLLED_VOCABULARIES[:publication_status].submitted,
                                           ]
-                                        else
-                                          [
-                                            CONTROLLED_VOCABULARIES[:publication_status].published
+        else
+          [
+                                            CONTROLLED_VOCABULARIES[:publication_status].published,
                                           ]
-                                        end
+        end
     end
 
     if item_data[:languages].present?
-      unlocked_obj.languages = item_data[:languages].downcase.split('|').map do |language|
+      unlocked_obj.languages = item_data[:languages].downcase.split("|").map do |language|
         CONTROLLED_VOCABULARIES[:language].send(language.to_sym) if language.present?
       end
     end
 
-    unlocked_obj.creators = item_data[:creators].split('|') if item_data[:creators].present?
-    unlocked_obj.subject = item_data[:subjects].split('|') if item_data[:subjects].present?
+    unlocked_obj.creators = item_data[:creators].split("|") if item_data[:creators].present?
+    unlocked_obj.subject = item_data[:subjects].split("|") if item_data[:subjects].present?
     unlocked_obj.created = item_data[:date_created].to_s
     unlocked_obj.description = item_data[:description]
 
     # Handle visibility and embargo logic
     if item_data[:visibility].present?
-      unlocked_obj.visibility = CONTROLLED_VOCABULARIES[:visibility].send(item_data[:visibility].to_sym)
+      unlocked_obj.visibility = CONTROLLED_VOCABULARIES[:visibility].send(item_data[:visibility].downcase.to_sym)
     end
 
     if item_data[:visibility_after_embargo].present?
       unlocked_obj.visibility_after_embargo =
-        CONTROLLED_VOCABULARIES[:visibility].send(item_data[:visibility_after_embargo].to_sym)
+        CONTROLLED_VOCABULARIES[:visibility].send(item_data[:visibility_after_embargo].downcase.to_sym)
     end
 
     unlocked_obj.embargo_end_date = item_data[:embargo_end_date].to_date if item_data[:embargo_end_date].present?
@@ -140,10 +140,10 @@ def item_ingest(item_data, index, csv_directory)
     unlocked_obj.rights = item_data[:license_text]
 
     # Additional fields
-    unlocked_obj.contributors = item_data[:contributors].split('|') if item_data[:contributors].present?
-    unlocked_obj.spatial_subjects = item_data[:places].split('|') if item_data[:places].present?
-    unlocked_obj.temporal_subjects = item_data[:time_periods].split('|') if item_data[:time_periods].present?
-    unlocked_obj.is_version_of = item_data[:citations].split('|') if item_data[:citations].present?
+    unlocked_obj.contributors = item_data[:contributors].split("|") if item_data[:contributors].present?
+    unlocked_obj.spatial_subjects = item_data[:places].split("|") if item_data[:places].present?
+    unlocked_obj.temporal_subjects = item_data[:time_periods].split("|") if item_data[:time_periods].present?
+    unlocked_obj.is_version_of = item_data[:citations].split("|") if item_data[:citations].present?
     unlocked_obj.source = item_data[:source]
     unlocked_obj.related_link = item_data[:related_item]
 
@@ -157,7 +157,7 @@ def item_ingest(item_data, index, csv_directory)
   log "ITEM #{index}: Starting ingest of file for item..."
 
   # We only support for single file ingest, but this could easily be refactored for multiple files
-  File.open("#{csv_directory}/#{item_data[:file_name]}", 'r') do |file|
+  File.open("#{csv_directory}/#{item_data[:file_name]}", "r") do |file|
     item.add_and_ingest_files([file])
   end
 
@@ -169,10 +169,10 @@ def item_ingest(item_data, index, csv_directory)
 
   item
 rescue StandardError => e
-  log 'ERROR: Ingest of item failed! The following error occured:'
+  log "ERROR: Ingest of item failed! The following error occured:"
   log "EXCEPTION: #{e.message}"
-  log 'WARNING: Please be careful with rerunning batch ingest! Duplication of items may happen '\
-      'if previous items were successfully deposited.'
+  log "WARNING: Please be careful with rerunning batch ingest! Duplication of items may happen " \
+      "if previous items were successfully deposited."
   exit 1
 end
 
@@ -199,22 +199,22 @@ def thesis_ingest(thesis_data, index, csv_directory, checksums)
       graduation_year = graduation_year_array[0]
       graduation_term_array = thesis_data[:graduation_date]&.match(/Fall|Spring/)
       graduation_term_string = graduation_term_array[0]
-      graduation_term = '11' if graduation_term_string == 'Fall'
-      graduation_term = '06' if graduation_term_string == 'Spring'
+      graduation_term = "11" if graduation_term_string == "Fall"
+      graduation_term = "06" if graduation_term_string == "Spring"
       unlocked_obj.graduation_date = "#{graduation_year}-#{graduation_term}"
     end
     unlocked_obj.abstract = thesis_data[:abstract]
 
     # Handle visibility and embargo logic
-    unlocked_obj.visibility = CONTROLLED_VOCABULARIES[:visibility].send('embargo'.to_sym)
+    unlocked_obj.visibility = CONTROLLED_VOCABULARIES[:visibility].send("embargo".to_sym)
 
     if thesis_data[:date_of_embargo].present?
       unlocked_obj.visibility_after_embargo =
-        CONTROLLED_VOCABULARIES[:visibility].send('public'.to_sym)
+        CONTROLLED_VOCABULARIES[:visibility].send("public".to_sym)
     end
 
     if thesis_data[:date_of_embargo].present?
-      unlocked_obj.embargo_end_date = Date.strptime(thesis_data[:date_of_embargo], '%m/%d/%Y')
+      unlocked_obj.embargo_end_date = Date.strptime(thesis_data[:date_of_embargo], "%m/%d/%Y")
     end
 
     # Handle rights
@@ -223,28 +223,28 @@ def thesis_ingest(thesis_data, index, csv_directory, checksums)
     # Additional fields
     # Assumes the data received for approved_date and submitted_date follow the pattern of "D/M/Y".
     if thesis_data[:approved_date].present?
-      approved_date_array = thesis_data[:approved_date].to_s.split('/').map(&:to_i)
+      approved_date_array = thesis_data[:approved_date].to_s.split("/").map(&:to_i)
       unlocked_obj.date_accepted = Date.new(approved_date_array[2], approved_date_array[0], approved_date_array[1])
     end
 
     if thesis_data[:submitted_date].present?
-      submitted_date_array = thesis_data[:submitted_date].to_s.split('/').map(&:to_i)
+      submitted_date_array = thesis_data[:submitted_date].to_s.split("/").map(&:to_i)
       unlocked_obj.date_submitted = Date.new(submitted_date_array[2], submitted_date_array[0],
                                              submitted_date_array[1])
     end
 
     unlocked_obj.degree = thesis_data[:degree] if thesis_data[:degree].present?
     unlocked_obj.thesis_level = thesis_data[:degree_level] if thesis_data[:degree_level].present?
-    unlocked_obj.institution = CONTROLLED_VOCABULARIES[:institution].send('uofa'.to_sym)
+    unlocked_obj.institution = CONTROLLED_VOCABULARIES[:institution].send("uofa".to_sym)
     unlocked_obj.specialization = thesis_data[:specialization] if thesis_data[:specialization].present?
 
-    unlocked_obj.subject = thesis_data[:keywords].split('|') if thesis_data[:keywords].present?
-    unlocked_obj.supervisors = thesis_data[:supervisor_info].split('|') if thesis_data[:supervisor_info].present?
+    unlocked_obj.subject = thesis_data[:keywords].split("|") if thesis_data[:keywords].present?
+    unlocked_obj.supervisors = thesis_data[:supervisor_info].split("|") if thesis_data[:supervisor_info].present?
     unlocked_obj.departments = if thesis_data[:conjoint_departments].present?
-                                 [thesis_data[:department]] + thesis_data[:conjoint_departments].split('|')
-                               else
-                                 [thesis_data[:department]]
-                               end
+        [thesis_data[:department]] + thesis_data[:conjoint_departments].split("|")
+      else
+        [thesis_data[:department]]
+      end
     unlocked_obj.is_version_of = thesis_data[:citation] if thesis_data[:citation].present?
     unlocked_obj.depositor = thesis_data[:email] if thesis_data[:email]
 
@@ -262,7 +262,7 @@ def thesis_ingest(thesis_data, index, csv_directory, checksums)
   log "THESIS #{index}: Starting ingest of file for thesis..."
 
   # We only support for single file ingest, but this could easily be refactored for multiple files
-  File.open("#{csv_directory}/#{thesis_data[:file_name]}", 'r') do |file|
+  File.open("#{csv_directory}/#{thesis_data[:file_name]}", "r") do |file|
     thesis.add_and_ingest_files([file])
   end
 
@@ -276,13 +276,13 @@ def thesis_ingest(thesis_data, index, csv_directory, checksums)
 rescue StandardError => e
   log "ERROR: Ingest of thesis by #{thesis_data[:author]} failed! The following error occured:"
   log "EXCEPTION: #{e.message}"
-  log 'WARNING: Please be careful with rerunning batch ingest! Duplication of theses may happen '\
-      'if previous theses were successfully deposited.'
+  log "WARNING: Please be careful with rerunning batch ingest! Duplication of theses may happen " \
+      "if previous theses were successfully deposited."
   exit
 end
 
 def generate_checksums(csv_directory)
-  require 'digest/md5'
+  require "digest/md5"
   checksums = {}
   Dir.glob("#{csv_directory}/*.pdf").each do |f|
     checksum = Digest::MD5.hexdigest(File.read(f))
@@ -292,9 +292,9 @@ def generate_checksums(csv_directory)
 end
 
 def thesis_community_id
-  Community.where(title: 'Graduate Studies and Research, Faculty of').first.id
+  Community.where(title: "Graduate Studies and Research, Faculty of").first.id
 end
 
 def thesis_collection_id
-  Collection.where(title: 'Theses and Dissertations').first.id
+  Collection.where(title: "Theses and Dissertations").first.id
 end
