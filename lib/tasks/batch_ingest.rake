@@ -41,10 +41,10 @@ def batch_ingest_csv(csv_path)
                 header_converters: :symbol,
                 converters: :all).with_index(INDEX_OFFSET) do |object_data, index|
       object = if block_given?
-          yield(object_data, index)
-        else
-          item_ingest(object_data, index, csv_directory)
-        end
+                 yield(object_data, index)
+               else
+                 item_ingest(object_data, index, csv_directory)
+               end
       successful_ingested << object
     end
 
@@ -97,15 +97,15 @@ def item_ingest(item_data, index, csv_directory)
     # If item type is an article, we need to add an array of statuses to the publication status field...
     if item_data[:type] == "article" && ["draft", "published"].include?(item_data[:publication_status])
       unlocked_obj.publication_status = if item_data[:publication_status] == "draft"
-          [
-            CONTROLLED_VOCABULARIES[:publication_status].draft,
-            CONTROLLED_VOCABULARIES[:publication_status].submitted,
-          ]
-        else
-          [
-            CONTROLLED_VOCABULARIES[:publication_status].published,
-          ]
-        end
+                                          [
+                                            CONTROLLED_VOCABULARIES[:publication_status].draft,
+                                            CONTROLLED_VOCABULARIES[:publication_status].submitted,
+                                          ]
+                                        else
+                                          [
+                                            CONTROLLED_VOCABULARIES[:publication_status].published,
+                                          ]
+                                        end
     end
 
     if item_data[:languages].present?
@@ -134,8 +134,8 @@ def item_ingest(item_data, index, csv_directory)
     # Handle license vs rights
     if item_data[:license].present?
       unlocked_obj.license =
-        CONTROLLED_VOCABULARIES[:license].send(item_data[:license].downcase.to_sym) ||
-        CONTROLLED_VOCABULARIES[:old_license].send(item_data[:license].downcase.to_sym)
+        CONTROLLED_VOCABULARIES[:license].send(item_data[:license].to_sym) ||
+        CONTROLLED_VOCABULARIES[:old_license].send(item_data[:license].to_sym)
     end
     unlocked_obj.rights = item_data[:license_text]
 
@@ -241,10 +241,10 @@ def thesis_ingest(thesis_data, index, csv_directory, checksums)
     unlocked_obj.subject = thesis_data[:keywords].split("|") if thesis_data[:keywords].present?
     unlocked_obj.supervisors = thesis_data[:supervisor_info].split("|") if thesis_data[:supervisor_info].present?
     unlocked_obj.departments = if thesis_data[:conjoint_departments].present?
-        [thesis_data[:department]] + thesis_data[:conjoint_departments].split("|")
-      else
-        [thesis_data[:department]]
-      end
+                                 [thesis_data[:department]] + thesis_data[:conjoint_departments].split("|")
+                               else
+                                 [thesis_data[:department]]
+                               end
     unlocked_obj.is_version_of = thesis_data[:citation] if thesis_data[:citation].present?
     unlocked_obj.depositor = thesis_data[:email] if thesis_data[:email]
 
