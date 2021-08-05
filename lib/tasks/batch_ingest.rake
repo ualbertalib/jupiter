@@ -90,12 +90,12 @@ def item_ingest(item_data, index, csv_directory)
     unlocked_obj.title = item_data[:title]
     unlocked_obj.alternative_title = item_data[:alternate_title]
 
-    if item_data[:type].present?
-      unlocked_obj.item_type = CONTROLLED_VOCABULARIES[:item_type].send(item_data[:type].to_sym)
+    if item_data[:item_type].present?
+      unlocked_obj.item_type = CONTROLLED_VOCABULARIES[:item_type].send(item_data[:item_type].to_sym)
     end
 
     # If item type is an article, we need to add an array of statuses to the publication status field...
-    if item_data[:type] == "article" && ["draft", "published"].include?(item_data[:publication_status])
+    if item_data[:item_type] == "article" && ["draft", "published"].include?(item_data[:publication_status])
       unlocked_obj.publication_status = if item_data[:publication_status] == "draft"
                                           [
                                             CONTROLLED_VOCABULARIES[:publication_status].draft,
@@ -169,7 +169,7 @@ def item_ingest(item_data, index, csv_directory)
 
   item
 rescue StandardError => e
-  log "ERROR: Ingest of item failed! The following error occured:"
+  log "ERROR: Ingest of item failed! The following error occurred:"
   log "EXCEPTION: #{e.message}"
   log "WARNING: Please be careful with rerunning batch ingest! Duplication of items may happen " \
       "if previous items were successfully deposited."
@@ -274,7 +274,7 @@ def thesis_ingest(thesis_data, index, csv_directory, checksums)
 
   thesis
 rescue StandardError => e
-  log "ERROR: Ingest of thesis by #{thesis_data[:author]} failed! The following error occured:"
+  log "ERROR: Ingest of thesis by #{thesis_data[:author]} failed! The following error occurred:"
   log "EXCEPTION: #{e.message}"
   log "WARNING: Please be careful with rerunning batch ingest! Duplication of theses may happen " \
       "if previous theses were successfully deposited."
