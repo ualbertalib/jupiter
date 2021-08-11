@@ -255,23 +255,15 @@ def thesis_ingest(thesis_data, index, csv_directory, checksums)
     unlocked_obj.save!
   end
 
-  #log "THESIS #{index}: Identifying file by checksum ..."
-  #file_name = checksums[thesis_data[:md5]]
-  #puts file_name
-
   log "THESIS #{index}: Starting ingest of file for thesis..."
 
   # We only support for single file ingest, but this could easily be refactored for multiple files
   File.open("#{csv_directory}/#{thesis_data[:file_name]}", "r") do |file|
     thesis.add_and_ingest_files([file])
   end
-
   log "THESIS #{index}: Setting thumbnail for thesis..."
-
   thesis.set_thumbnail(thesis.files.first) if thesis.files.first.present?
-
   log "THESIS #{index}: Successfully ingested an thesis! Thesis ID: `#{thesis.id}`"
-
   thesis
 rescue StandardError => e
   log "ERROR: Ingest of thesis by #{thesis_data[:author]} failed! The following error occurred:"
