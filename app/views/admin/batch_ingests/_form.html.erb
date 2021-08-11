@@ -21,12 +21,12 @@
     </ul>
 
     <%= f.button :button,
-                type: :button,
-                class: "js-btn-spreadsheet #{ 'd-none' if @batch_ingest.google_spreadsheet_id.present? }",
-                data: {
-                  access_token: @access_token,
-                  developer_key: @developer_key
-                } do %>
+                 type: :button,
+                 class: "js-btn-spreadsheet #{'d-none' if @batch_ingest.google_spreadsheet_id.present?}",
+                 data: {
+                   access_token: @access_token,
+                   developer_key: @developer_key
+                 } do %>
               <%= icon('fas', 'plus-circle') %>
               <%= t('.add_spreadsheet') %>
             <% end %>
