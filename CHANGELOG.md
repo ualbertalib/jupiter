@@ -88,6 +88,8 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 - Bump rubocop to 1.15.0 and Style/TrivialAccessors default changed [PR#2343](https://github.com/ualbertalib/jupiter/pull/2343)
 - Bump rubocop to 1.18.2 and fix cop violations [PR#2415](https://github.com/ualbertalib/jupiter/pull/2415)
 - Bump rubocop-minitest to 0.14.0 and note really smelly tests [PR#2416](https://github.com/ualbertalib/jupiter/pull/2416)
+- Fixed a flaky test where the page hasn't finished loading [#2129](https://github.com/ualbertalib/jupiter/issues/2129)
+- Refactored one of our smelliest tests to use fixtures and reduce number of assertions per test [#2419](https://github.com/ualbertalib/jupiter/issues/2419)
 
 ## [2.0.2] - 2020-12-17
 - Enable Skylight in the Staging environment and remove it from the UAT environment (where it was unused, and the performance of the Docker environment is less likely to be similar to Production)
