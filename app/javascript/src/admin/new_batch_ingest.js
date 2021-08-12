@@ -1,7 +1,9 @@
 /* eslint-disable no-undef */
 
 function addFileInput(id, name) {
-  if ($('.js-batch-ingest-files-list').find(`input[value='${id}']`).length === 0) {
+  if (
+    $('.js-batch-ingest-files-list').find(`input[value='${id}']`).length === 0
+  ) {
     const input = `<li class="list-group-item d-flex justify-content-between">
         <input type="hidden" name="batch_ingest[batch_ingest_files_attributes][][google_file_name]" value="${name}">
         <input type="hidden" name="batch_ingest[batch_ingest_files_attributes][][google_file_id]" value="${id}">
@@ -28,7 +30,6 @@ function addSpreadsheetInput(id, name) {
   $('.js-batch-ingest-spreadsheet').append(input);
   $('.js-btn-spreadsheet').addClass('d-none');
 }
-
 
 function deleteFileFromFilesList() {
   $(this).closest('li').remove();
@@ -59,16 +60,78 @@ function createFilesPicker() {
   if (accessToken && developerKey) {
     const view = new google.picker.DocsView(google.picker.ViewId.DOCS);
     view.setMimeTypes(
-      'image/png,'
-      + 'image/jpeg,'
-      + 'image/jpg,'
-      + 'audio/mpeg,'
-      + 'video/mpeg,'
-      + 'application/zip,'
-      + 'text/plain,'
-      + 'application/pdf,'
-      + 'application/msword,'
-      + 'application/vnd.ms-excel',
+      'application/epub+zip,'
+        + 'application/excel,'
+        + 'application/gzip,'
+        + 'application/json,'
+        + 'application/mp4,'
+        + 'application/msword,'
+        + 'application/octet-stream,'
+        + 'application/pdf,'
+        + 'application/postscript,'
+        + 'application/rtf,'
+        + 'application/sql,'
+        + 'application/vnd.android.package-archive,'
+        + 'application/vnd.ms-access,'
+        + 'application/vnd.ms-asf,'
+        + 'application/vnd.ms-excel,'
+        + 'application/vnd.ms-excel.sheet.binary.macroenabled.12,'
+        + 'application/vnd.ms-excel.sheet.macroenabled.12,'
+        + 'application/vnd.ms-powerpoint,'
+        + 'application/vnd.oasis.opendocument.text,'
+        + 'application/vnd.openxmlformats-officedocument.presentationml.presentation,'
+        + 'application/vnd.openxmlformats-officedocument.presentationml.slideshow,'
+        + 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,'
+        + 'application/vnd.openxmlformats-officedocument.wordprocessingml.document,'
+        + 'application/vnd.openxmlformats-officedocument.wordprocessingml.template,'
+        + 'application/x-7z-compressed,'
+        + 'application/x-bibtex,'
+        + 'application/x-bibtex-text-file,'
+        + 'application/x-ole-storage,'
+        + 'application/x-rar,'
+        + 'application/x-rar-compressed,'
+        + 'application/x-spss-sav,'
+        + 'application/x-tar,'
+        + 'application/x-xz,'
+        + 'application/x-zip-compressed,'
+        + 'application/xml,'
+        + 'application/zip,'
+        + 'audio/mp4,'
+        + 'audio/mpeg,'
+        + 'audio/vnd.wave,'
+        + 'audio/wav,'
+        + 'audio/x-m4a,'
+        + 'audio/x-mpegurl,'
+        + 'audio/x-ms-asx,'
+        + 'audio/x-ms-wma,'
+        + 'audio/x-ms-wmv,'
+        + 'audio/x-wav,'
+        + 'audio/x-wave,'
+        + 'image/gif,'
+        + 'image/jpeg,'
+        + 'image/png,'
+        + 'image/svg+xml,'
+        + 'image/tiff,'
+        + 'inode/x-empty,'
+        + 'message/rfc822,'
+        + 'text/comma-separated-values,'
+        + 'text/csv,'
+        + 'text/html,'
+        + 'text/plain,'
+        + 'text/rtf,'
+        + 'text/x-bibtex,'
+        + 'text/x-csrc,'
+        + 'text/x-matlab,'
+        + 'text/x-objcsrc,'
+        + 'text/x-r-source,'
+        + 'text/x-r-sweave,'
+        + 'video/mp4,'
+        + 'video/mpeg,'
+        + 'video/quicktime,'
+        + 'video/x-flv,'
+        + 'video/x-m4v,'
+        + 'video/x-ms-wmv,'
+        + 'video/x-msvideo',
     );
     view.setIncludeFolders(true);
     view.setParent('root');
@@ -108,8 +171,12 @@ function createSpreadsheetPicker() {
 }
 
 function registerClickEvents() {
-  document.querySelector('.js-btn-spreadsheet').addEventListener('click', createSpreadsheetPicker);
-  document.querySelector('.js-btn-files').addEventListener('click', createFilesPicker);
+  document
+    .querySelector('.js-btn-spreadsheet')
+    .addEventListener('click', createSpreadsheetPicker);
+  document
+    .querySelector('.js-btn-files')
+    .addEventListener('click', createFilesPicker);
 }
 
 function loadAndInitGAPI() {
@@ -126,6 +193,14 @@ function loadAndInitGAPI() {
 
 document.addEventListener('turbolinks:load', () => {
   loadAndInitGAPI();
-  $('.js-batch-ingest-spreadsheet').on('click', '.js-btn-delete-file', deleteSpreadsheet);
-  $('.js-batch-ingest-files-list').on('click', '.js-btn-delete-file', deleteFileFromFilesList);
+  $('.js-batch-ingest-spreadsheet').on(
+    'click',
+    '.js-btn-delete-file',
+    deleteSpreadsheet,
+  );
+  $('.js-batch-ingest-files-list').on(
+    'click',
+    '.js-btn-delete-file',
+    deleteFileFromFilesList,
+  );
 });
