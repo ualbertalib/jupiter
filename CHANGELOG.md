@@ -74,6 +74,7 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 - Make `Digitization::Map` `Depositable`
 - Fixture names have been modified to ensure their uniqueness [PR#2302](https://github.com/ualbertalib/jupiter/pull/2302)
 - Rails upgraded to 6.0.3.7 to resolve security issues
+- Refactored item download/view behaviour in routes and views to be reusable in digitization namespace and application wide
 
 ### Fixed
 - bump rubocop and fix cop violations [PR#2072](https://github.com/ualbertalib/jupiter/pull/2072)

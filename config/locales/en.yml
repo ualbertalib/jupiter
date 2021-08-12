@@ -220,6 +220,11 @@ en:
       skip_to_results: 'Skip to Search Results'
     range_facet_result:
       to: 'to'
+    files_section_sidebar:
+      view: 'View'
+      download: 'Download'
+      download_all: 'Download All'
+      header: 'Files'
 
   layouts:
     admin:
