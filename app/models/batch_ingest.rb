@@ -11,6 +11,7 @@ class BatchIngest < ApplicationRecord
 
   validates :access_token, presence: true
   validates :google_spreadsheet_id, presence: true
+  validates :google_spreadsheet_id, batch_ingest_spreadsheet: true, on: :create
   validates :google_spreadsheet_name, presence: true
   validates :batch_ingest_files, presence: true
   validates :title, presence: true, uniqueness: { case_sensitive: false }

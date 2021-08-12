@@ -49,6 +49,7 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 - Add new google drive client service to be able to retrieve files/spreadsheets from Google Drive [#1986](https://github.com/ualbertalib/jupiter/issues/1986)
 - Brakeman linting to Github Actions workflow
 - Add batch ingest controller and views for CRUDing batch ingests [#1986](https://github.com/ualbertalib/jupiter/issues/1986)
+- Add batch ingest form with google file picker and spreadsheet validation [#1986](https://github.com/ualbertalib/jupiter/issues/1986)
 
 ### Removed
 - Remove entirely unnecessary config file. [PR#2044](https://github.com/ualbertalib/jupiter/pull/2044)
