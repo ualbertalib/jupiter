@@ -11,6 +11,7 @@ class RenameColumnsInDigitizationBook < ActiveRecord::Migration[6.0]
       t.rename :note, :notes
       t.rename :geographic_subject, :geographic_subjects
       t.rename :topical_subject, :topical_subjects
+      t.references :logo, foreign_key: {to_table: :active_storage_attachments, column: :id, on_delete: :nullify}
     end
 
     remove_rdf_table_annotations :digitization_books

@@ -135,11 +135,13 @@ ActiveRecord::Schema.define(version: 2021_06_01_042208) do
     t.string "geographic_subjects", array: true
     t.string "rights"
     t.string "topical_subjects", array: true
+    t.bigint "logo_id"
     t.string "volume_label"
     t.datetime "date_ingested", null: false
     t.datetime "record_created_at"
     t.string "visibility"
     t.bigint "owner_id", null: false
+    t.index ["logo_id"], name: "index_digitization_books_on_logo_id"
     t.index ["owner_id"], name: "index_digitization_books_on_owner_id"
     t.index ["peel_id", "run", "part_number"], name: "unique_peel_book", unique: true
   end
@@ -462,6 +464,7 @@ ActiveRecord::Schema.define(version: 2021_06_01_042208) do
   add_foreign_key "batch_ingests", "users"
   add_foreign_key "collections", "users", column: "owner_id"
   add_foreign_key "communities", "users", column: "owner_id"
+  add_foreign_key "digitization_books", "active_storage_attachments", column: "logo_id", on_delete: :nullify
   add_foreign_key "digitization_books", "users", column: "owner_id"
   add_foreign_key "digitization_fulltexts", "digitization_books"
   add_foreign_key "digitization_images", "users", column: "owner_id"

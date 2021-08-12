@@ -1,7 +1,9 @@
 class Digitization::Book < JupiterCore::Depositable
 
+  acts_as_rdfable
+
   has_one_attached :historical_archive
-  has_one_attached :pdf, dependent: false
+  has_many_attached :files, dependent: false
   has_one :fulltext, dependent: :destroy, class_name: 'Digitization::Fulltext', inverse_of: :book,
                      foreign_key: :digitization_book_id
 
@@ -30,7 +32,7 @@ class Digitization::Book < JupiterCore::Depositable
   validates :temporal_subjects, edtf: true
 
   def all_subjects
-    topical_subjects + temporal_subjects + geographic_subjects
+    topical_subjects + temporal_subjects.to_a + geographic_subjects.to_a
   end
 
   def all_contributors
