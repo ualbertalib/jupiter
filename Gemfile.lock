@@ -332,6 +332,7 @@ GEM
     mini_magick (4.11.0)
     mini_mime (1.1.2)
     mini_portile2 (2.6.1)
+    minitar (0.9)
     minitest (5.15.0)
     msgpack (1.4.2)
     multi_json (1.15.0)
@@ -650,6 +651,7 @@ DEPENDENCIES
   kaminari
   launchy
   listen (>= 3.0.5, < 3.8)
+  minitar
   nokogiri
   oaisys!
   omniauth (~> 2.0)
