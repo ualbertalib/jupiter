@@ -3,7 +3,6 @@ class Digitization::Book < JupiterCore::Depositable
   acts_as_rdfable
 
   has_one_attached :historical_archive
-  has_many_attached :files, dependent: false
   has_one :fulltext, dependent: :destroy, class_name: 'Digitization::Fulltext', inverse_of: :book,
                      foreign_key: :digitization_book_id
 
