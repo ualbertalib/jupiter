@@ -51,6 +51,7 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 - Add batch ingest controller and views for CRUDing batch ingests [#1986](https://github.com/ualbertalib/jupiter/issues/1986)
 - Add batch ingest form with google file picker and spreadsheet validation [#1986](https://github.com/ualbertalib/jupiter/issues/1986)
 - Add batch ingestion job for batch ingesting items into ERA [#1986](https://github.com/ualbertalib/jupiter/issues/1986)
+- Add task that will kick off job for batch ingestion of digitization metadata from a csv containing triples [#2011](https://github.com/ualbertalib/jupiter/issues/2011)
 
 ### Removed
 - Remove entirely unnecessary config file. [PR#2044](https://github.com/ualbertalib/jupiter/pull/2044)
