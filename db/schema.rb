@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_25_195251) do
+ActiveRecord::Schema.define(version: 2021_08_30_210845) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -162,6 +162,9 @@ ActiveRecord::Schema.define(version: 2021_08_25_195251) do
     t.uuid "digitization_batch_metadata_ingest_id"
     t.uuid "digitization_batch_artifact_setup_ingests_id"
     t.bigint "logo_id"
+    t.string "swift_noid"
+    t.string "swift_container"
+    t.string "preservation_storage"
     t.index ["digitization_batch_artifact_setup_ingests_id"], name: "index_digitization_books_on_batch_artifact_setup_ingest_id"
     t.index ["digitization_batch_metadata_ingest_id"], name: "index_digitization_books_on_batch_metadata_ingest_id"
     t.index ["logo_id"], name: "index_digitization_books_on_logo_id"
