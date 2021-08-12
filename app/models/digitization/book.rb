@@ -2,6 +2,8 @@ class Digitization::Book < JupiterCore::Depositable
 
   acts_as_rdfable
 
+  belongs_to :digitization_batch_metadata_ingest, optional: true
+
   has_one_attached :historical_archive
   has_one :fulltext, dependent: :destroy, class_name: 'Digitization::Fulltext', inverse_of: :book,
                      foreign_key: :digitization_book_id

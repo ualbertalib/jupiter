@@ -115,6 +115,15 @@ ActiveRecord::Schema.define(version: 2021_08_25_195251) do
     t.index ["owner_id"], name: "index_communities_on_owner_id"
   end
 
+  create_table "digitization_batch_metadata_ingests", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "status", default: 0, null: false
+    t.string "error_message"
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_digitization_batch_metadata_ingests_on_user_id"
+  end
+
   create_table "digitization_books", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.integer "peel_id"
     t.integer "run"
@@ -140,7 +149,9 @@ ActiveRecord::Schema.define(version: 2021_08_25_195251) do
     t.datetime "record_created_at"
     t.string "visibility"
     t.bigint "owner_id", null: false
+    t.uuid "digitization_batch_metadata_ingest_id"
     t.bigint "logo_id"
+    t.index ["digitization_batch_metadata_ingest_id"], name: "index_digitization_books_on_batch_metadata_ingest_id"
     t.index ["logo_id"], name: "index_digitization_books_on_logo_id"
     t.index ["owner_id"], name: "index_digitization_books_on_owner_id"
     t.index ["peel_id", "run", "part_number"], name: "unique_peel_book", unique: true
@@ -464,7 +475,9 @@ ActiveRecord::Schema.define(version: 2021_08_25_195251) do
   add_foreign_key "batch_ingests", "users"
   add_foreign_key "collections", "users", column: "owner_id"
   add_foreign_key "communities", "users", column: "owner_id"
+  add_foreign_key "digitization_batch_metadata_ingests", "users"
   add_foreign_key "digitization_books", "active_storage_attachments", column: "logo_id", on_delete: :nullify
+  add_foreign_key "digitization_books", "digitization_batch_metadata_ingests"
   add_foreign_key "digitization_books", "users", column: "owner_id"
   add_foreign_key "digitization_fulltexts", "digitization_books"
   add_foreign_key "digitization_images", "users", column: "owner_id"
