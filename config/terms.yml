@@ -59,6 +59,11 @@
     embargo_history: embargoHistory
     visibility_after_embargo: visibilityAfterEmbargo
 
+- vocabulary: premisrelationshipsubtype
+  schema: 'https://id.loc.gov/vocabulary/preservation/relationshipSubType/'
+  terms:
+    supersedes: sup
+
 # Trying to make ::RDF::Vocab::RDAU.P60550 less opaque
 - vocabulary: rdau
   schema: 'http://rdaregistry.info/Elements/u/'

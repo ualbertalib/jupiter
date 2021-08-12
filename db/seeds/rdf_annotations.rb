@@ -115,5 +115,7 @@ RdfAnnotation.create!([
   {table: "digitization_maps", column: "date_ingested", predicate: "http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#dateIngested"},
   {table: "digitization_maps", column: "record_created_at", predicate: "http://terms.library.ualberta.ca/recordCreatedInJupiter"},
   {table: "digitization_books", column: "alternative_titles", predicate: "http://purl.org/dc/terms/alternative"},
-  {table: "digitization_books", column: "rights", predicate: "http://www.europeana.eu/schemas/edm/rights"}
+  {table: "digitization_books", column: "rights", predicate: "http://www.europeana.eu/schemas/edm/rights"},
+  {table: "digitization_books", column: "swift_noid", predicate: "https://id.loc.gov/vocabulary/preservation/relationshipSubType/sup"},
+  {table: "digitization_books", column: "preservation_storage", predicate: "http://id.loc.gov/vocabulary/relators/rps"}
 ])
