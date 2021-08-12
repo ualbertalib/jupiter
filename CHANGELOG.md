@@ -53,6 +53,7 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 - Add batch ingestion job for batch ingesting items into ERA [#1986](https://github.com/ualbertalib/jupiter/issues/1986)
 - Add task that will kick off job for batch ingestion of digitization metadata from a csv containing triples [#2011](https://github.com/ualbertalib/jupiter/issues/2011)
 - Add task that will kick off setup job for attaching artifacts to digitization objects [#2011](https://github.com/ualbertalib/jupiter/issues/2011)
+- Add job that will attach artifacts (high resolution pdf, full text, and link to preservation storage) to digitization objects [#2011](https://github.com/ualbertalib/jupiter/issues/2011)
 
 ### Removed
 - Remove entirely unnecessary config file. [PR#2044](https://github.com/ualbertalib/jupiter/pull/2044)
