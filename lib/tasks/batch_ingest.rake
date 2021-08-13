@@ -19,6 +19,17 @@ namespace :jupiter do
       thesis_ingest(object_data, index, csv_directory, checksums)
     end
   end
+
+  desc "batch ingest for legacy theses from a csv file"
+  task :batch_ingest_legacy_theses, [:csv_path] => :environment do |_t, args|
+    csv_path = args.csv_path
+    full_csv_path = File.expand_path(csv_path)
+    csv_directory = File.dirname(full_csv_path)
+
+    batch_ingest_csv(csv_path) do |object_data, index|
+      legacy_thesis_ingest(object_data, index, csv_directory)
+    end
+  end
 end
 
 def batch_ingest_csv(csv_path)
@@ -247,6 +258,90 @@ def thesis_ingest(thesis_data, index, csv_directory, checksums)
                                end
     unlocked_obj.is_version_of = thesis_data[:citation] if thesis_data[:citation].present?
     unlocked_obj.depositor = thesis_data[:email] if thesis_data[:email]
+
+    # We only support single communities/collections pairs for time being,
+    # could accomodate multiple pairs without much work here
+    unlocked_obj.add_to_path(thesis_community_id, thesis_collection_id)
+
+    unlocked_obj.save!
+  end
+
+  log "THESIS #{index}: Starting ingest of file for thesis..."
+
+  # We only support for single file ingest, but this could easily be refactored for multiple files
+  File.open("#{csv_directory}/#{thesis_data[:file_name]}", "r") do |file|
+    thesis.add_and_ingest_files([file])
+  end
+  log "THESIS #{index}: Setting thumbnail for thesis..."
+  thesis.set_thumbnail(thesis.files.first) if thesis.files.first.present?
+  log "THESIS #{index}: Successfully ingested an thesis! Thesis ID: `#{thesis.id}`"
+  thesis
+rescue StandardError => e
+  log "ERROR: Ingest of thesis by #{thesis_data[:author]} failed! The following error occurred:"
+  log "EXCEPTION: #{e.message}"
+  log "WARNING: Please be careful with rerunning batch ingest! Duplication of theses may happen " \
+      "if previous theses were successfully deposited."
+  exit
+end
+
+def legacy_thesis_ingest(thesis_data, index, csv_directory)
+  log "THESIS #{index}: Starting ingest of a legacy thesis..."
+  thesis = Thesis.new
+  thesis.tap do |unlocked_obj|
+    unlocked_obj.owner_id = 1
+    unlocked_obj.title = thesis_data[:title]
+    unlocked_obj.alternative_title = thesis_data[:other_titles]
+    unlocked_obj.proquest = thesis_data[:proquest_id]
+
+    if thesis_data[:language].present?
+      unlocked_obj.language =
+        CONTROLLED_VOCABULARIES[:language].send(thesis_data[:language].downcase.to_sym)
+    end
+
+    unlocked_obj.dissertant = thesis_data[:author] if thesis_data[:author].present?
+
+    # Assumes the data received always have the graduation date follow the pattern of
+    # "Fall yyyy" or "Spring yyyy" also accept "yyyy"
+
+    if thesis_data[:graduation_date].present?
+      graduation_year_array = thesis_data[:graduation_date]&.match(/\d\d\d\d/)
+      graduation_year = graduation_year_array[0]
+      graduation_term_array = thesis_data[:graduation_date]&.match(/Fall|Spring/)
+      if graduation_term_array.length > 0
+        graduation_term_string = graduation_term_array[0]
+        graduation_term = "11" if graduation_term_string == "Fall"
+        graduation_term = "06" if graduation_term_string == "Spring"
+        unlocked_obj.graduation_date = "#{graduation_year}-#{graduation_term}"
+      else
+        unlocked_obj.graduation_date = "#{graduation_year}"
+      end
+    end
+    unlocked_obj.abstract = thesis_data[:abstract] if thesis_data[:abstract].present?
+
+    # Handle rights
+    unlocked_obj.rights = thesis_data[:license]
+
+    # Additional fields
+    # Assumes the data received for approved_date and submitted_date follow the pattern of "D/M/Y".
+    if thesis_data[:approved_date].present?
+      approved_date_array = thesis_data[:approved_date].to_s.split("/").map(&:to_i)
+      unlocked_obj.date_accepted = Date.new(approved_date_array[2], approved_date_array[0], approved_date_array[1])
+    end
+
+    if thesis_data[:submitted_date].present?
+      submitted_date_array = thesis_data[:submitted_date].to_s.split("/").map(&:to_i)
+      unlocked_obj.date_submitted = Date.new(submitted_date_array[2], submitted_date_array[0],
+                                             submitted_date_array[1])
+    end
+
+    unlocked_obj.degree = thesis_data[:degree] if thesis_data[:degree].present?
+    unlocked_obj.thesis_level = thesis_data[:degree_level] if thesis_data[:degree_level].present?
+    unlocked_obj.institution = CONTROLLED_VOCABULARIES[:institution].send("uofa".to_sym)
+    unlocked_obj.specialization = thesis_data[:specialization] if thesis_data[:specialization].present?
+
+    unlocked_obj.subject = thesis_data[:keywords].split("|") if thesis_data[:keywords].present?
+    unlocked_obj.is_version_of = thesis_data[:citation] if thesis_data[:citation].present?
+    unlocked_obj.depositor = "erahelp@ualberta.ca"
 
     # We only support single communities/collections pairs for time being,
     # could accomodate multiple pairs without much work here
