@@ -304,16 +304,16 @@ def legacy_thesis_ingest(thesis_data, index, csv_directory)
     # "Fall yyyy" or "Spring yyyy" also accept "yyyy"
 
     if thesis_data[:graduation_date].present?
-      graduation_year_array = thesis_data[:graduation_date]&.match(/\d\d\d\d/)
-      graduation_year = graduation_year_array[0]
-      graduation_term_array = thesis_data[:graduation_date]&.match(/Fall|Spring/)
-      if graduation_term_array.length > 0
+      if thesis_data[:graduation_date].is_a? Integer
+        unlocked_obj.graduation_date = "#{thesis_data[:graduation_date]}"
+      else
+        graduation_year_array = thesis_data[:graduation_date]&.match(/\d\d\d\d/)
+        graduation_year = graduation_year_array[0]
+        graduation_term_array = thesis_data[:graduation_date]&.match(/Fall|Spring/)
         graduation_term_string = graduation_term_array[0]
         graduation_term = "11" if graduation_term_string == "Fall"
         graduation_term = "06" if graduation_term_string == "Spring"
         unlocked_obj.graduation_date = "#{graduation_year}-#{graduation_term}"
-      else
-        unlocked_obj.graduation_date = "#{graduation_year}"
       end
     end
     unlocked_obj.abstract = thesis_data[:abstract] if thesis_data[:abstract].present?
