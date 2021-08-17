@@ -22,7 +22,6 @@ class BatchIngestionJob < ApplicationJob
       issued_at: batch_ingest.issued_at
     )
 
-    # TODO: verify this error
     raise GoogleAPIError if google_credentials.nil?
 
     spreadsheet = google_credentials.download_spreadsheet(batch_ingest.google_spreadsheet_id)

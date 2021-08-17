@@ -2,8 +2,7 @@ require 'test_helper'
 
 class BatchIngestionJobTest < ActiveJob::TestCase
 
-  # Files in batch don't match spreadsheet?!
-  test 'batch ingestion with inconsistent files' do
+  test 'batch ingestion with no matching files' do
     batch_ingest = batch_ingests(:batch_ingest_with_one_file)
 
     assert_no_difference('Item.count') do
@@ -19,15 +18,15 @@ class BatchIngestionJobTest < ActiveJob::TestCase
 
       batch_ingest.reload
       assert(batch_ingest.completed?)
+      assert_equal(0, batch_ingest.items.count)
     end
   end
 
-  # Test exception handling
   test 'batch ingestion job captures exceptions and updates batch ingest model' do
     batch_ingest = batch_ingests(:batch_ingest_with_one_file)
 
     def batch_ingest.processing!
-      raise StandardError, 'Testing! Error has happened!'
+      raise StandardError, 'An exception was raised!'
     end
 
     BatchIngest.stub :find, batch_ingest do
@@ -39,7 +38,7 @@ class BatchIngestionJobTest < ActiveJob::TestCase
 
       batch_ingest.reload
       assert(batch_ingest.failed?)
-      assert_equal('Testing! Error has happened!', batch_ingest.error_message)
+      assert_equal('An exception was raised!', batch_ingest.error_message)
     end
   end
 
