@@ -68,13 +68,13 @@ class BatchIngestionJob < ApplicationJob
       end
 
       if item_data['languages'].present?
-        unlocked_obj.languages = item_data['languages'].split('|').map do |language|
+        unlocked_obj.languages = item_data['languages'].split('|').map(&:strip).map do |language|
           ControlledVocabulary.era.language.send(language.to_sym) if language.present?
         end
       end
 
-      unlocked_obj.creators = item_data['creators'].split('|') if item_data['creators'].present?
-      unlocked_obj.subject = item_data['subjects'].split('|') if item_data['subjects'].present?
+      unlocked_obj.creators = item_data['creators'].split('|').map(&:strip) if item_data['creators'].present?
+      unlocked_obj.subject = item_data['subjects'].split('|').map(&:strip) if item_data['subjects'].present?
       unlocked_obj.created = item_data['date_created'].to_s
       unlocked_obj.description = item_data['description']
 
@@ -102,10 +102,14 @@ class BatchIngestionJob < ApplicationJob
       end
 
       # Additional fields
-      unlocked_obj.contributors = item_data['contributors'].split('|') if item_data['contributors'].present?
-      unlocked_obj.spatial_subjects = item_data['places'].split('|') if item_data['places'].present?
-      unlocked_obj.temporal_subjects = item_data['time_periods'].split('|') if item_data['time_periods'].present?
-      unlocked_obj.is_version_of = item_data['citations'].split('|') if item_data['citations'].present?
+      if item_data['contributors'].present?
+        unlocked_obj.contributors = item_data['contributors'].split('|').map(&:strip)
+      end
+      unlocked_obj.spatial_subjects = item_data['places'].split('|').map(&:strip) if item_data['places'].present?
+      if item_data['time_periods'].present?
+        unlocked_obj.temporal_subjects = item_data['time_periods'].split('|').map(&:strip)
+      end
+      unlocked_obj.is_version_of = item_data['citations'].split('|').map(&:strip) if item_data['citations'].present?
       unlocked_obj.source = item_data['source']
       unlocked_obj.related_link = item_data['related_item']
 
