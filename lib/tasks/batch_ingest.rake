@@ -84,7 +84,7 @@ def generate_ingest_report(successful_ingested_items)
     csv << ["id", "url", "title"] # Add headers
 
     successful_ingested_items.each do |item|
-      csv << [item.id, Rails.application.routes.url_helpers.item_url(item), item.title]
+      csv << [item.id, Rails.application.routes.url_helpers.item_url(item).gsub("era-test", ENV["HOSTNAME"].split(".")[0]), item.title]
     end
   end
 
@@ -353,7 +353,7 @@ def legacy_thesis_ingest(thesis_data, index, csv_directory)
   log "THESIS #{index}: Starting ingest of file for thesis..."
 
   # We only support for single file ingest, but this could easily be refactored for multiple files
-  File.open("#{csv_directory}/#{thesis_data[:file_name]}", "r") do |file|
+  File.open("#{csv_directory}/#{thesis_data[:file_name].gsub("'", "_")}", "r") do |file|
     thesis.add_and_ingest_files([file])
   end
   log "THESIS #{index}: Setting thumbnail for thesis..."
