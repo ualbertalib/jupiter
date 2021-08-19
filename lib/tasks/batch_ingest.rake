@@ -84,7 +84,7 @@ def generate_ingest_report(successful_ingested_items)
     csv << ["id", "url", "title"] # Add headers
 
     successful_ingested_items.each do |item|
-      csv << [item.id, Rails.application.routes.url_helpers.item_url(item).gsub("era-test", ENV["HOSTNAME"].split(".")[0]), item.title]
+      csv << [item.id, Rails.application.routes.url_helpers.item_url(item), item.title]
     end
   end
 
