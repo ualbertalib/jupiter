@@ -92,11 +92,14 @@ class BatchIngestionJob < ApplicationJob
 
       # Handle license vs rights
       if item_data['license'].present?
-        unlocked_obj.license =
-          ControlledVocabulary.era.license.send(item_data['license'].to_sym) ||
-          ControlledVocabulary.era.old_license.send(item_data['license'].to_sym)
+        if item_data['license'] == 'license_text'
+          unlocked_obj.rights = item_data['license_text']
+        else
+          unlocked_obj.license =
+            ControlledVocabulary.era.license.send(item_data['license'].to_sym) ||
+            ControlledVocabulary.era.old_license.send(item_data['license'].to_sym)
+        end
       end
-      unlocked_obj.rights = item_data['license_text']
 
       # Additional fields
       unlocked_obj.contributors = item_data['contributors'].split('|') if item_data['contributors'].present?
