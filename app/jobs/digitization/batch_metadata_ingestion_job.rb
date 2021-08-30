@@ -25,6 +25,9 @@ class Digitization::BatchMetadataIngestionJob < ApplicationJob
 
   private
 
+  # Here we read the graph from the csv file
+  # the graph is made up of subject, predicate, object triples where subjects and objects are nodes in the graph and predicates are edges
+  # See here for more about [RDF](https://www.w3.org/TR/rdf11-concepts/)
   def metadata_graph(csv_path)
     graph = RDF::Graph.new
     CSV.foreach(csv_path, headers: true) do |row|
@@ -42,17 +45,23 @@ class Digitization::BatchMetadataIngestionJob < ApplicationJob
   end
 
   URI_CODE_TO_TRANSFORM_METHOD = {
+    # There isn't a single local identifier attribute in our model so we will need to parse this value
+    # RDF::Vocab::Identifiers.local
     'http://id.loc.gov/vocabulary/identifiers/local': :parse_identifier
   }.freeze
 
+  # For more information about the query patterns used see here https://rubydoc.info/github/ruby-rdf/rdf/RDF/Query
   def create_items_from_graph(graph, batch_ingest)
+    # First we need to locate all the discrete items we will be ingesting
     query_for_local_identifiers = RDF::Query.new do
-      pattern [:collection, RDF::URI.new('http://rdaregistry.info/Elements/u/P60249'), :item_identifier]
+      pattern [:collection, ::TERMS[:rdau].part, :item_identifier]
     end
 
     graph.query(query_for_local_identifiers) do |statement|
+      # Each of the discrete items will become its own object
       book = batch_ingest.books.new(owner_id: batch_ingest.user_id)
 
+      # Now we want know all about each item
       query_for_this_items_attributes = RDF::Query.new do
         pattern [statement.item_identifier, :predicate, :term]
         pattern [:term, RDF::Vocab::SKOS.prefLabel, :label], optional: true
@@ -68,6 +77,10 @@ class Digitization::BatchMetadataIngestionJob < ApplicationJob
     end
   end
 
+  # Most of the time we can directly assign the value to the matching attribute on the model but occasionally we'll need
+  # to do some parsing or preprocessing of this content
+  # use: delegate_transform(book, OpenStruct.new(predicate: 'http://id.loc.gov/vocabulary/identifiers/local', term: 'P010572.1'))
+  # delegates to: parse_identifier(book, 'P010572.1')
   def delegate_transform(book, attributes)
     return if attributes.predicate.to_s.blank?
 
@@ -76,12 +89,17 @@ class Digitization::BatchMetadataIngestionJob < ApplicationJob
     send(URI_CODE_TO_TRANSFORM_METHOD[attributes.predicate.to_s.to_sym], book, attributes.term.to_s)
   end
 
+  # use: parse_identifier(book, 'P010572.1')
+  # result: book.peel_id = 10572, book.part_number = 1
   def parse_identifier(book, term)
     matches = term.match PEEL_ID_REGEX
     book.peel_id = matches[1]
     book.part_number = matches[2]
   end
 
+  # Use a bit of metaprogramming here to simplify the assignments of attributes
+  # use: assign_attribute(book, 'dates_issued', '1991')
+  # result: book.dates_issued = ['1991']
   def assign_attribute(book, attribute, term)
     return if attribute.blank?
 
