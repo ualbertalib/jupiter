@@ -30,6 +30,17 @@ class BatchIngestSpreadsheetValidator < ActiveModel::EachValidator
         end
       end
 
+      # Check if "type" is article, then it must have a "publication_status"
+      if row['type'] == 'article' && row['publication_status'].blank?
+        record.errors.add(attribute, :publication_status_required_for_articles, row_number: row_number)
+      end
+
+      # check if "status" is embargo, then it must have "embargo_end_date" and "visibility_after_embargo"
+      if row['visibility'] == 'embargo' &&
+         (row['embargo_end_date'].blank? || row['visibility_after_embargo'].blank?)
+        record.errors.add(attribute, :embargo_missing_required_data, row_number: row_number)
+      end
+
       # Check if given owner/community/collection ids actually exists?
       unless Community.exists?(row['community_id'])
         record.errors.add(attribute, :column_not_found, column: 'community_id', row_number: row_number)

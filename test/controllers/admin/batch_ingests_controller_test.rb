@@ -33,8 +33,7 @@ class Admin::BatchIngestsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should create batch_ingest' do
-    # TODO: Add checks for job being queued up on creation
-    # assert_no_enqueued_jobs only: BatchIngestionJob
+    assert_no_enqueued_jobs only: BatchIngestionJob
 
     VCR.use_cassette('google_fetch_access_token', record: :none) do
       get new_admin_google_session_url, params: {
@@ -65,10 +64,10 @@ class Admin::BatchIngestsControllerTest < ActionDispatch::IntegrationTest
         end
       end
     end
-    # assert_enqueued_jobs 1, only: BatchIngestionJob
+    assert_enqueued_jobs 1, only: BatchIngestionJob
     assert_redirected_to admin_batch_ingest_url(BatchIngest.last)
 
-    # clear_enqueued_jobs
+    clear_enqueued_jobs
   end
 
   test 'should show batch_ingest' do
