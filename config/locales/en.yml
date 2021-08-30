@@ -225,6 +225,8 @@ en:
       download: 'Download'
       download_all: 'Download All'
       header: 'Files'
+      ccid_restricted_item: Item Restricted to University of Alberta Users
+      login_with_ccid_to_view: Log In with CCID to View Item
 
   layouts:
     admin:
@@ -648,13 +650,6 @@ en:
       committee_members: 'Examining committee members and their departments'
     thumbnail:
       thumbnail: 'thumbnail'
-    files_section_sidebar:
-      view: 'View'
-      download: 'Download'
-      download_all: 'Download All'
-      header: 'Files'
-      ccid_restricted_item: Item Restricted to University of Alberta Users
-      login_with_ccid_to_view: Log In with CCID to View Item
     admin_sidebar:
       admin: 'Admin'
       reset_doi: 'Reset DOI'
