@@ -4,12 +4,27 @@ namespace :digitization do
     log 'START: Digitization Batch ingest from triples started...'
 
     user = User.find_by(email: args.user)
-    batch_ingest = user.digitization_metadata_ingests.new
-    batch_ingest.csvfile.attach(io: File.open(args.csv_path.to_s), filename: 'metadata_graph.csv')
+    if user.blank?
+      log 'ERROR: Valid user must be selected. Please specify a valid email address as an argument'
+      exit 1
+    end
 
-    Digitization::BatchMetadataIngestionJob.perform_later(batch_ingest) if batch_ingest.save!
+    if args.csv_path.blank?
+      log 'ERROR: CSV path must be present. Please specify a valid csv_path as an argument'
+      exit 1
+    end
 
-    log 'FINISH: Batch ingest completed!'
+    if File.exist?(args.csv_path)
+      batch_ingest = user.digitization_metadata_ingests.new
+      batch_ingest.csvfile.attach(io: File.open(args.csv_path.to_s), filename: 'metadata_graph.csv')
+
+      Digitization::BatchMetadataIngestionJob.perform_later(batch_ingest) if batch_ingest.save!
+    else
+      log "ERROR: Could not open file at `#{args.csv_path}`. Does the csv file exist at this location?"
+      exit 1
+    end
+
+    log 'FINISH: Batch ingest enqueued!'
   end
 
   def log(message)
