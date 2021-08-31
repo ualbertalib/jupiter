@@ -164,7 +164,7 @@ Rails.application.routes.draw do
       end
     end
   end
-  constraints(subdomain: 'digitization') do
+  constraints(subdomain: 'digitalcollections') do
     ## Peel URL redirects
     get '/bibliography/:peel_id(/*page)', to: 'digitization/redirect#peel_book'
     get '/bibliography/:peel_id.:part_number(/*page)', to: 'digitization/redirect#peel_book'
