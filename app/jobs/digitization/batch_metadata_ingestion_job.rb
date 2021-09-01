@@ -44,12 +44,6 @@ class Digitization::BatchMetadataIngestionJob < ApplicationJob
     graph
   end
 
-  URI_CODE_TO_TRANSFORM_METHOD = {
-    # There isn't a single local identifier attribute in our model so we will need to parse this value
-    # RDF::Vocab::Identifiers.local
-    'http://id.loc.gov/vocabulary/identifiers/local': :parse_identifier
-  }.freeze
-
   # For more information about the query patterns used see here https://rubydoc.info/github/ruby-rdf/rdf/RDF/Query
   def create_items_from_graph(graph, batch_ingest)
     # First we need to locate all the discrete items we will be ingesting
@@ -67,26 +61,16 @@ class Digitization::BatchMetadataIngestionJob < ApplicationJob
         pattern [:term, RDF::Vocab::SKOS.prefLabel, :label], optional: true
       end
       graph.query(query_for_this_items_attributes) do |attributes|
-        delegate_transform(book, attributes)
-
-        assign_attribute(book, book.attribute_for_rdf_annotation(attributes.predicate.to_s)&.first&.column,
-                         attributes.term.to_s)
+        if RDF::Vocab::Identifiers.local == attributes.predicate
+          # There isn't a single local identifier attribute in our model so we will need to parse this value
+          parse_identifier(book, attributes.term.to_s)
+        else
+          assign_attribute(book, book.attribute_for_rdf_annotation(attributes.predicate.to_s)&.first&.column,
+                           attributes.term.to_s)
+        end
       end
-
       book.save!
     end
-  end
-
-  # Most of the time we can directly assign the value to the matching attribute on the model but occasionally we'll need
-  # to do some parsing or preprocessing of this content
-  # use: delegate_transform(book, OpenStruct.new(predicate: 'http://id.loc.gov/vocabulary/identifiers/local', term: 'P010572.1'))
-  # delegates to: parse_identifier(book, 'P010572.1')
-  def delegate_transform(book, attributes)
-    return if attributes.predicate.to_s.blank?
-
-    return if URI_CODE_TO_TRANSFORM_METHOD[attributes.predicate.to_s.to_sym].blank?
-
-    send(URI_CODE_TO_TRANSFORM_METHOD[attributes.predicate.to_s.to_sym], book, attributes.term.to_s)
   end
 
   # use: parse_identifier(book, 'P010572.1')
@@ -103,14 +87,11 @@ class Digitization::BatchMetadataIngestionJob < ApplicationJob
   def assign_attribute(book, attribute, term)
     return if attribute.blank?
 
-    if book.send(attribute.to_s).is_a? Array
+    if book.class.columns_hash[attribute.to_s].array?
+      book.send("#{attribute}=", []) if book.send(attribute.to_s).blank?
       book.send(attribute.to_s).push(term)
     else
       book.send("#{attribute}=", term)
-
-      # Don't know in advance if this will be an array or a literal
-      # if the first attempt made it an array (from nil) it's an array
-      book.send(attribute.to_s).push(term) if book.send(attribute.to_s).is_a? Array
     end
   end
 
