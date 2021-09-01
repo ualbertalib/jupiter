@@ -46,14 +46,8 @@ def batch_ingest_csv(csv_path)
   csv_directory = File.dirname(full_csv_path)
 
   if File.exist?(full_csv_path)
-
-    # write ingest_errors.csv header
-    headers = CSV.read(full_csv_path, headers: true).headers
-    CSV.open("#{INGEST_REPORTS_LOCATION}/ingest_errors.csv", "w") do |csv|
-      csv << headers
-    end
-
     successful_ingested = []
+    ingest_errors = []
     CSV.foreach(full_csv_path,
                 headers: true,
                 header_converters: :symbol,
@@ -63,11 +57,15 @@ def batch_ingest_csv(csv_path)
                else
                  item_ingest(object_data, index, csv_directory)
                end
-      successful_ingested << object
+      if object.is_a? Thesis
+        successful_ingested << object
+      else
+        ingest_errors << object
+      end
     end
-
     generate_ingest_report(successful_ingested)
-
+    headers = CSV.read(full_csv_path, headers: true).headers
+    generate_ingest_errors(ingest_errors, headers)
     log "FINISH: Batch ingest completed!"
   else
     log "ERROR: Could not open file at `#{full_csv_path}`. Does the csv file exist at this location?"
@@ -80,12 +78,12 @@ def log(message)
 end
 
 def generate_ingest_report(successful_ingested_items)
-  log "REPORT: Generating ingest report..."
+  log "REPORT: Generating ingest success report..."
 
   FileUtils.mkdir_p INGEST_REPORTS_LOCATION
 
   file_name = Time.current.strftime("%Y_%m_%d_%H_%M_%S")
-  full_file_name = "#{INGEST_REPORTS_LOCATION}/#{file_name}.csv"
+  full_file_name = "#{INGEST_REPORTS_LOCATION}/#{file_name}_ingest_successes.csv"
 
   CSV.open(full_file_name, "wb", headers: true) do |csv|
     csv << ["id", "url", "title"] # Add headers
@@ -94,8 +92,21 @@ def generate_ingest_report(successful_ingested_items)
       csv << [item.id, Rails.application.routes.url_helpers.item_url(item).gsub("era-test", ENV["HOSTNAME"].split(".")[0]), item.title]
     end
   end
+  log "REPORT: Ingest success report generated!"
+  log "REPORT: You can view report here: #{full_file_name}"
+end
 
-  log "REPORT: Ingest report successfully generated!"
+def generate_ingest_errors(ingest_errors, headers)
+  log "REPORT: Generating ingest error report..."
+  file_name = Time.current.strftime("%Y_%m_%d_%H_%M_%S")
+  full_file_name = "#{INGEST_REPORTS_LOCATION}/#{file_name}_ingest_errors.csv"
+  CSV.open(full_file_name, "wb", headers: true) do |csv|
+    csv << headers
+    ingest_errors.each do |item|
+      csv << item
+    end
+  end
+  log "REPORT: Ingest error report generated!"
   log "REPORT: You can view report here: #{full_file_name}"
 end
 
@@ -360,9 +371,7 @@ rescue StandardError => e
   log "BACKTRACE: #{(e.backtrace or []).join("\n")}"
   log "WARNING: Please be careful with rerunning batch ingest! Duplication of theses may happen " \
       "if previous theses were successfully deposited."
-  CSV.open("#{INGEST_REPORTS_LOCATION}/ingest_errors.csv", "a") do |csv|
-    csv << thesis_data
-  end
+  thesis_data
 end
 
 def generate_checksums(csv_directory)
