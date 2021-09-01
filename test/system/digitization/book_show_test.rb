@@ -3,7 +3,7 @@ require 'application_system_test_case'
 class Digitization::BookShowTest < ApplicationSystemTestCase
 
   setup do
-    host! 'http://digitization.ualberta.localhost'
+    host! 'http://digitalcollections.ualberta.localhost'
   end
   test 'Books are working correctly' do
     visit digitization_book_url(digitization_books(:folk_fest))
