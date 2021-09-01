@@ -325,19 +325,15 @@ def legacy_thesis_ingest(thesis_data, index, csv_directory)
       graduation_year_array = thesis_data[:graduation_date]&.match(/\d\d\d\d/)
       graduation_year = graduation_year_array[0]
       graduation_term_array = thesis_data[:graduation_date]&.match(/Fall|Spring/)
-      if graduation_term_array.nil?
-        unlocked_obj.graduation_date = "#{graduation_year}"
-      else
-        graduation_term_string = graduation_term_array[0]
-        graduation_term = "11" if graduation_term_string == "Fall"
-        graduation_term = "06" if graduation_term_string == "Spring"
-        unlocked_obj.graduation_date = "#{graduation_year}-#{graduation_term}"
-      end
+      graduation_term_string = graduation_term_array[0]
+      graduation_term = "11" if graduation_term_string == "Fall"
+      graduation_term = "06" if graduation_term_string == "Spring"
+      unlocked_obj.graduation_date = "#{graduation_year}-#{graduation_term}"
     end
     unlocked_obj.supervisors = thesis_data[:supervisors].split("|") if thesis_data[:supervisors].present?
     unlocked_obj.committee_members = thesis_data[:committee_members] if thesis_data[:committee_members].present?
     unlocked_obj.rights = thesis_data[:rights]
-    unlocked_obj.date_submitted = Date.strptime(thesis_data[:date_submitted], "%Y-%m-%d") if thesis_data[:date_submitted].present?
+    unlocked_obj.date_submitted = Date.strptime(thesis_data[:date_submitted].to_s, "%Y-%m-%d") if thesis_data[:date_submitted].present?
     unlocked_obj.date_accepted = Date.strptime(thesis_data[:date_accepted].to_s, "%Y-%m-%d") if thesis_data[:date_accepted].present?
     unlocked_obj.embargo_end_date = Date.strptime(thesis_data[:embargo_end_date].to_s, "%Y-%m-%d") if thesis_data[:embargo_end_date].present?
     unlocked_obj.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].send(thesis_data[:visibility_after_embargo].to_sym) if thesis_data[:visibility_after_embargo].present?
