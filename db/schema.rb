@@ -116,6 +116,7 @@ ActiveRecord::Schema.define(version: 2021_08_25_195251) do
   end
 
   create_table "digitization_batch_metadata_ingests", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "title", null: false
     t.integer "status", default: 0, null: false
     t.string "error_message"
     t.bigint "user_id"

@@ -1,11 +1,16 @@
 namespace :digitization do
   desc 'batch ingest for multiple items metadata from a csv file - used by Admin and Assistants'
-  task :batch_ingest_metadata, [:user, :csv_path] => :environment do |_t, args|
+  task :batch_ingest_metadata, [:user, :title, :csv_path] => :environment do |_t, args|
     log 'START: Digitization Batch ingest from triples started...'
 
     user = User.find_by(email: args.user)
     if user.blank?
       log 'ERROR: Valid user must be selected. Please specify a valid email address as an argument'
+      exit 1
+    end
+
+    if args.title.blank?
+      log 'ERROR: Title must be present. Please specify a title as an argument'
       exit 1
     end
 
@@ -15,7 +20,7 @@ namespace :digitization do
     end
 
     if File.exist?(args.csv_path)
-      batch_ingest = user.digitization_metadata_ingests.new
+      batch_ingest = user.digitization_metadata_ingests.new(title: args.title)
       batch_ingest.csvfile.attach(io: File.open(args.csv_path.to_s), filename: 'metadata_graph.csv')
 
       Digitization::BatchMetadataIngestionJob.perform_later(batch_ingest) if batch_ingest.save!
