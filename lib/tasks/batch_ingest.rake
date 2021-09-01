@@ -49,7 +49,6 @@ def batch_ingest_csv(csv_path)
 
     # write ingest_errors.csv header
     headers = CSV.read(full_csv_path, headers: true).headers
-    log "headers: #{headers}"
     CSV.open("#{INGEST_REPORTS_LOCATION}/ingest_errors.csv", "w") do |csv|
       csv << headers
     end
@@ -365,10 +364,9 @@ rescue StandardError => e
   log "BACKTRACE: #{(e.backtrace or []).join("\n")}"
   log "WARNING: Please be careful with rerunning batch ingest! Duplication of theses may happen " \
       "if previous theses were successfully deposited."
-  #CSV.open("#{INGEST_REPORTS_LOCATION}/ingest_errors.csv", "a") do |csv|
-  #  csv << thesis_data
-  #end
-  #exit
+  CSV.open("#{INGEST_REPORTS_LOCATION}/ingest_errors.csv", "a") do |csv|
+    csv << thesis_data
+  end
 end
 
 def generate_checksums(csv_directory)
