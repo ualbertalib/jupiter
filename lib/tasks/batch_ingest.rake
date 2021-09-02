@@ -52,19 +52,23 @@ def batch_ingest_csv(csv_path)
                 headers: true,
                 header_converters: :symbol,
                 converters: :all).with_index(INDEX_OFFSET) do |object_data, index|
-      object = if block_given?
-                 yield(object_data, index)
-               else
-                 item_ingest(object_data, index, csv_directory)
-               end
+      object, e = if block_given?
+                    yield(object_data, index)
+                  else
+                    item_ingest(object_data, index, csv_directory)
+                  end
       if object.is_a? Thesis
         successful_ingested << object
       else
+        object[:error_message] = e.message
+        object[:backtrace] = (e.backtrace or []).join("\n")
         ingest_errors << object
       end
     end
     generate_ingest_report(successful_ingested)
     headers = CSV.read(full_csv_path, headers: true).headers
+    headers << "error_message"
+    headers << "backtrace"
     generate_ingest_errors(ingest_errors, headers)
     log "FINISH: Batch ingest completed!"
   else
@@ -371,7 +375,7 @@ rescue StandardError => e
   log "BACKTRACE: #{(e.backtrace or []).join("\n")}"
   log "WARNING: Please be careful with rerunning batch ingest! Duplication of theses may happen " \
       "if previous theses were successfully deposited."
-  thesis_data
+  return thesis_data, e
 end
 
 def generate_checksums(csv_directory)
