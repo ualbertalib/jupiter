@@ -313,7 +313,7 @@ def legacy_thesis_ingest(thesis_data, index, csv_directory)
     unlocked_obj.institution = CONTROLLED_VOCABULARIES[:institution].send("uofa".to_sym)
 
     # legacy thesis template fields
-    unlocked_obj.proquest = thesis_data[:proquest]
+    unlocked_obj.proquest = thesis_data[:proquest] if thesis_data[:proquest].present?
     unlocked_obj.dissertant = thesis_data[:dissertant]
     unlocked_obj.title = thesis_data[:title]
     unlocked_obj.alternative_title = thesis_data[:alternative_title] if thesis_data[:alternative_title].present?
