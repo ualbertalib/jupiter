@@ -61,7 +61,7 @@ def batch_ingest_csv(csv_path)
         successful_ingested << object
       else
         object[:error_message] = e.message
-        object[:backtrace] = (e.backtrace or []).join("\n")
+        object[:backtrace] = e.backtrace.take(10).join("\n")
         ingest_errors << object
       end
     end
@@ -372,9 +372,7 @@ def legacy_thesis_ingest(thesis_data, index, csv_directory)
 rescue StandardError => e
   log "ERROR: Ingest of legacy thesis by #{thesis_data[:dissertant]} failed! The following error occurred:"
   log "EXCEPTION: #{e.message}"
-  log "BACKTRACE: #{(e.backtrace or []).join("\n")}"
-  log "WARNING: Please be careful with rerunning batch ingest! Duplication of theses may happen " \
-      "if previous theses were successfully deposited."
+  log "BACKTRACE: #{e.backtrace.take(3).join("\n")}"
   return thesis_data, e
 end
 
