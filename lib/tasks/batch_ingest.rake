@@ -372,7 +372,7 @@ def legacy_thesis_ingest(thesis_data, index, csv_directory)
 rescue StandardError => e
   log "ERROR: Ingest of legacy thesis by #{thesis_data[:dissertant]} failed! The following error occurred:"
   log "EXCEPTION: #{e.message}"
-  log "BACKTRACE: #{e.backtrace.take(3).join("\n")}"
+  log "BACKTRACE: #{e.backtrace.take(1).join("\n")}"
   return thesis_data, e
 end
 
