@@ -17,6 +17,12 @@ class Digitization::BatchMetadataIngestTest < ActiveSupport::TestCase
     assert_equal("can't be blank", @batch_ingest.errors[:csvfile].first)
   end
 
+  test 'invalid without title' do
+    @batch_ingest.title = nil
+    assert_not @batch_ingest.valid?
+    assert_equal("can't be blank", @batch_ingest.errors[:title].first)
+  end
+
   test 'invalid without expected headings' do
     csv_content = Tempfile.new('test_invalid_without_expected_headings')
     csv_content.puts 'Date,Amount,Account,User,'

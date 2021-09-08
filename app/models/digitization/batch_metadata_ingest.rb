@@ -10,6 +10,7 @@ class Digitization::BatchMetadataIngest < ApplicationRecord
   has_one_attached :csvfile
 
   validates :csvfile, presence: true
+  validates :title, presence: true
   validate :spreadsheet_has_required_data
 
   def spreadsheet_has_required_data
