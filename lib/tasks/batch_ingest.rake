@@ -307,73 +307,75 @@ rescue StandardError => e
 end
 
 def legacy_thesis_ingest(thesis_data, index, csv_directory)
-  log "THESIS #{index}: Starting ingest of a legacy thesis..."
-  thesis = Thesis.new
-  thesis.tap do |unlocked_obj|
+  begin
+    log "THESIS #{index}: Starting ingest of a legacy thesis..."
+    thesis = Thesis.new
+    thesis.tap do |unlocked_obj|
 
-    # constant fields
-    unlocked_obj.owner_id = 1
-    unlocked_obj.depositor = "erahelp@ualberta.ca"
-    unlocked_obj.institution = CONTROLLED_VOCABULARIES[:institution].send("uofa".to_sym)
+      # constant fields
+      unlocked_obj.owner_id = 1
+      unlocked_obj.depositor = "erahelp@ualberta.ca"
+      unlocked_obj.institution = CONTROLLED_VOCABULARIES[:institution].send("uofa".to_sym)
 
-    # legacy thesis template fields
-    unlocked_obj.proquest = thesis_data[:proquest] if thesis_data[:proquest].present?
-    unlocked_obj.dissertant = thesis_data[:dissertant]
-    unlocked_obj.title = thesis_data[:title]
-    unlocked_obj.alternative_title = thesis_data[:alternative_title] if thesis_data[:alternative_title].present?
-    if thesis_data[:language].present?
-      unlocked_obj.language =
-        CONTROLLED_VOCABULARIES[:language].send(thesis_data[:language].downcase.to_sym)
+      # legacy thesis template fields
+      unlocked_obj.proquest = thesis_data[:proquest] if thesis_data[:proquest].present?
+      unlocked_obj.dissertant = thesis_data[:dissertant]
+      unlocked_obj.title = thesis_data[:title]
+      unlocked_obj.alternative_title = thesis_data[:alternative_title] if thesis_data[:alternative_title].present?
+      if thesis_data[:language].present?
+        unlocked_obj.language =
+          CONTROLLED_VOCABULARIES[:language].send(thesis_data[:language].downcase.to_sym)
+      end
+      unlocked_obj.subject = thesis_data[:subject].split("|")
+      unlocked_obj.abstract = thesis_data[:abstract] if thesis_data[:abstract].present?
+      unlocked_obj.thesis_level = thesis_data[:thesis_level]
+      unlocked_obj.degree = thesis_data[:degree]
+      unlocked_obj.departments = thesis_data[:departments]
+      unlocked_obj.specialization = thesis_data[:specialization] if thesis_data[:specialization].present?
+
+      # Assumes the data received always have the graduation date follow the pattern of
+      # "Fall yyyy" -> yyyy-11 or "Spring yyyy" -> yyyy-06 also accept "yyyy"
+      if thesis_data[:graduation_date].is_a? Integer
+        unlocked_obj.graduation_date = thesis_data[:graduation_date].to_s
+      else
+        graduation_year_array = thesis_data[:graduation_date]&.match(/\d\d\d\d/)
+        graduation_year = graduation_year_array[0]
+        graduation_term_array = thesis_data[:graduation_date]&.match(/Fall|Spring/)
+        graduation_term_string = graduation_term_array[0]
+        graduation_term = "11" if graduation_term_string == "Fall"
+        graduation_term = "06" if graduation_term_string == "Spring"
+        unlocked_obj.graduation_date = "#{graduation_year}-#{graduation_term}"
+      end
+      unlocked_obj.supervisors = thesis_data[:supervisors].split("|") if thesis_data[:supervisors].present?
+      unlocked_obj.committee_members = thesis_data[:committee_members] if thesis_data[:committee_members].present?
+      unlocked_obj.rights = thesis_data[:rights]
+      unlocked_obj.date_submitted = Date.strptime(thesis_data[:date_submitted].to_s, "%Y-%m-%d") if thesis_data[:date_submitted].present?
+      unlocked_obj.date_accepted = Date.strptime(thesis_data[:date_accepted].to_s, "%Y-%m-%d") if thesis_data[:date_accepted].present?
+      unlocked_obj.embargo_end_date = Date.strptime(thesis_data[:embargo_end_date].to_s, "%Y-%m-%d") if thesis_data[:embargo_end_date].present?
+      unlocked_obj.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].send(thesis_data[:visibility_after_embargo].to_sym) if thesis_data[:visibility_after_embargo].present?
+      unlocked_obj.visibility = CONTROLLED_VOCABULARIES[:visibility].send(thesis_data[:visibility].to_sym)
+      unlocked_obj.add_to_path(thesis_community_id, thesis_collection_id)
+
+      # save thesis object
+      unlocked_obj.save!
     end
-    unlocked_obj.subject = thesis_data[:subject].split("|")
-    unlocked_obj.abstract = thesis_data[:abstract] if thesis_data[:abstract].present?
-    unlocked_obj.thesis_level = thesis_data[:thesis_level]
-    unlocked_obj.degree = thesis_data[:degree]
-    unlocked_obj.departments = thesis_data[:departments]
-    unlocked_obj.specialization = thesis_data[:specialization] if thesis_data[:specialization].present?
 
-    # Assumes the data received always have the graduation date follow the pattern of
-    # "Fall yyyy" -> yyyy-11 or "Spring yyyy" -> yyyy-06 also accept "yyyy"
-    if thesis_data[:graduation_date].is_a? Integer
-      unlocked_obj.graduation_date = thesis_data[:graduation_date].to_s
-    else
-      graduation_year_array = thesis_data[:graduation_date]&.match(/\d\d\d\d/)
-      graduation_year = graduation_year_array[0]
-      graduation_term_array = thesis_data[:graduation_date]&.match(/Fall|Spring/)
-      graduation_term_string = graduation_term_array[0]
-      graduation_term = "11" if graduation_term_string == "Fall"
-      graduation_term = "06" if graduation_term_string == "Spring"
-      unlocked_obj.graduation_date = "#{graduation_year}-#{graduation_term}"
+    log "THESIS #{index}: Starting ingest of file for legacy thesis..."
+
+    # We only support for single file ingest, but this could easily be refactored for multiple files
+    File.open("#{csv_directory}/#{thesis_data[:file_name]}", "r") do |file|
+      thesis.add_and_ingest_files([file])
     end
-    unlocked_obj.supervisors = thesis_data[:supervisors].split("|") if thesis_data[:supervisors].present?
-    unlocked_obj.committee_members = thesis_data[:committee_members] if thesis_data[:committee_members].present?
-    unlocked_obj.rights = thesis_data[:rights]
-    unlocked_obj.date_submitted = Date.strptime(thesis_data[:date_submitted].to_s, "%Y-%m-%d") if thesis_data[:date_submitted].present?
-    unlocked_obj.date_accepted = Date.strptime(thesis_data[:date_accepted].to_s, "%Y-%m-%d") if thesis_data[:date_accepted].present?
-    unlocked_obj.embargo_end_date = Date.strptime(thesis_data[:embargo_end_date].to_s, "%Y-%m-%d") if thesis_data[:embargo_end_date].present?
-    unlocked_obj.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].send(thesis_data[:visibility_after_embargo].to_sym) if thesis_data[:visibility_after_embargo].present?
-    unlocked_obj.visibility = CONTROLLED_VOCABULARIES[:visibility].send(thesis_data[:visibility].to_sym)
-    unlocked_obj.add_to_path(thesis_community_id, thesis_collection_id)
-
-    # save thesis object
-    unlocked_obj.save!
+    log "THESIS #{index}: Setting thumbnail for legacy thesis..."
+    thesis.set_thumbnail(thesis.files.first) if thesis.files.first.present?
+    log "THESIS #{index}: Successfully ingested an legacy thesis! Thesis ID: `#{thesis.id}`"
+    thesis
+  rescue StandardError => e
+    log "ERROR: Ingest of legacy thesis by #{thesis_data[:dissertant]} failed! The following error occurred:"
+    log "EXCEPTION: #{e.message}"
+    log "BACKTRACE: #{e.backtrace.take(1).join("\n")}"
+    return thesis_data, e
   end
-
-  log "THESIS #{index}: Starting ingest of file for legacy thesis..."
-
-  # We only support for single file ingest, but this could easily be refactored for multiple files
-  File.open("#{csv_directory}/#{thesis_data[:file_name]}", "r") do |file|
-    thesis.add_and_ingest_files([file])
-  end
-  log "THESIS #{index}: Setting thumbnail for legacy thesis..."
-  thesis.set_thumbnail(thesis.files.first) if thesis.files.first.present?
-  log "THESIS #{index}: Successfully ingested an legacy thesis! Thesis ID: `#{thesis.id}`"
-  thesis
-rescue StandardError => e
-  log "ERROR: Ingest of legacy thesis by #{thesis_data[:dissertant]} failed! The following error occurred:"
-  log "EXCEPTION: #{e.message}"
-  log "BACKTRACE: #{e.backtrace.take(1).join("\n")}"
-  return thesis_data, e
 end
 
 def generate_checksums(csv_directory)
