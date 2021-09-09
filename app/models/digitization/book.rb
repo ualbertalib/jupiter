@@ -32,6 +32,10 @@ class Digitization::Book < JupiterCore::Depositable
   validates :dates_issued, edtf: true
   validates :temporal_subjects, edtf: true
 
+  before_validation do
+    self.visibility = JupiterCore::VISIBILITY_PUBLIC
+  end
+
   def all_subjects
     topical_subjects + temporal_subjects.to_a + geographic_subjects.to_a
   end
@@ -43,6 +47,10 @@ class Digitization::Book < JupiterCore::Depositable
   def hydra_noid
     # TODO: this is required by Exporters::Solr::BaseExporter but doesn't apply to digitization
     nil
+  end
+
+  def self.eager_attachment_scope
+    with_attached_files
   end
 
 end

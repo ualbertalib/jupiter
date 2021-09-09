@@ -1,6 +1,6 @@
 class Exporters::Solr::Digitization::BookExporter < Exporters::Solr::BaseExporter
 
-  indexed_model_name 'DigBook'
+  indexed_model_name 'ArDigitization::Book'
 
   index :title, role: [:search, :sort]
 
