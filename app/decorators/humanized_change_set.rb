@@ -175,8 +175,8 @@ class HumanizedChangeSet
 
       change_item.map do |path|
         community_id, collection_id = path.split('/')
-        community_title = Community.find(community_id).title
-        collection_title = Collection.find(collection_id).title
+        community_title = Community.find_by(id: community_id)&.title || community_id.to_s
+        collection_title = Collection.find_by(id: collection_id)&.title || collection_id.to_s
         "#{community_title}/#{collection_title}"
       end
     end
