@@ -180,5 +180,7 @@ Rails.application.routes.draw do
     scope module: 'digitization', as: 'digitization', only: [:index, :show] do
       resources :books, :newspapers, :images, :maps, concerns: :downloadable
     end
+
+    get 'search', to: 'digitization/search#index'
   end
 end

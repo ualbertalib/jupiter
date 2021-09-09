@@ -1,0 +1,55 @@
+<%# TODO: Reduce duplication between this partial and thesis, pretty much exactly the same %>
+<div class="media mb-3">
+  <%= link_to item_path(book) do %>
+    <%= render partial: 'thumbnail', locals: { object: book } %>
+  <% end %>
+  <div class="media-body ml-3">
+    <div class="d-flex flex-wrap flex-lg-nowrap align-books-start">
+      <h3 class="mt-0 h5 mr-auto"><%= link_to book.title, item_path(book) %></h3>
+      <% if policy(book).download? %>
+        <% primary_file = book.files.first %>
+        <% if primary_file.present? && primary_file.fileset_uuid.present? %>
+          <%= link_to file_download_book_url(id: primary_file.record.id,
+                                             file_set_id: primary_file.fileset_uuid),
+                      class: 'btn btn-secondary mr-2 mb-2 mb-md-0',
+                      rel: 'nofollow',
+                      download: primary_file.filename.to_s do %>
+            <%= icon('fas', 'cloud-download-alt') %>
+            <%= t('download') %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <% if policy(book).update? || policy(book).destroy? %>
+        <div class="btn-group">
+          <% if policy(book).update? %>
+            <%= link_to edit_book_path(book), class: 'btn btn-outline-secondary'  do %>
+              <%= icon('fas', 'edit') %>
+              <%= t('edit') %>
+            <% end %>
+          <% end %>
+          <% if policy(book).destroy? %>
+            <%= link_to admin_book_path(book), method: :delete, class: 'btn btn-outline-secondary',
+                                               data: { confirm: t('collections.show.book_delete_confirm', title: book.title) } do %>
+              <%= icon('fas', 'trash-alt') %>
+              <%= t('delete') %>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <p>
+      <%= humanize_date(book.creation_date) %>
+    </p>
+    <p>
+      <%# TODO: the search path may need to be revisited %>
+      <%= safe_join(book.creators&.map { |creator| search_link_for(book, :all_contributors, value: creator) }, ', ') %>
+    </p>
+
+    <% if book.description.present? %>
+      <p>
+        <%= render(highlights) || jupiter_truncate(book.plaintext_description) %>
+      </p>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,16 @@
+<% page_title(t('.header')) %>
+<% content_for :head do %>
+  <meta name="robots" content="noindex">
+<% end %>
+
+<div class="container mt-3">
+  <h1><%= t('.header') %></h1>
+
+  <ul class="nav nav-tabs">
+    <% [Digitization::Book].each do |model| %>
+      <%= results_model_tab_link(model) %>
+    <% end %>
+  </ul>
+
+    <%= render partial: 'results', locals: { results: @results } %>
+</div>

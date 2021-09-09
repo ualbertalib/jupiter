@@ -80,7 +80,7 @@ module SearchHelper
   def results_model_tab_link(model)
     # Create bootstrap nav-item, make it a link if there are results for the model
     classes = 'nav-link'
-    name = model.name.downcase.to_sym
+    name = model.name.demodulize.downcase.to_sym
     if @search_models.include? model
       count = @results.total_count
       text = tag.h2(t("search.tab_header_#{name}_with_count", count: count), class: 'h5')

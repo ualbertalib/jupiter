@@ -43,4 +43,8 @@ class Digitization::BookDecorator < ApplicationDecorator
     nil
   end
 
+  def plaintext_description
+    strip_markdown(object.notes&.join(' '))
+  end
+
 end

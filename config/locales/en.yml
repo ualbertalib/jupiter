@@ -553,6 +553,43 @@ en:
     year: 'Year'
     month: 'Month'
     day: 'Day'
+    search:
+      filter: 'Filter'
+      filter_results: 'Filter results'
+      hide_last_count: 'Hide last %{count}'
+      page_range: '%{first} - %{last} of %{total}'
+      results_for: 'Results for "%{search}"'
+      show_count_more: 'Show %{count} more ...'
+      sort_by: 'Sort by'
+      sort_record_created_at_asc: 'Date (oldest first)'
+      sort_record_created_at_desc: 'Date (newest first)'
+      sort_sort_year_asc: 'Date (oldest first)'
+      sort_sort_year_desc: 'Date (newest first)'
+      sort_title_asc: 'Title (A-Z)'
+      sort_title_desc: 'Title (Z-A)'
+      sort_relevance_desc: 'Relevance'
+      sort_relevance_asc: 'Least Relevant First'
+      tab_header_item_with_count: 'Items (%{count})'
+      tab_header_collection_with_count: 'Collections (%{count})'
+      tab_header_community_with_count: 'Communities (%{count})'
+      tab_header_item: 'Items'
+      tab_header_collection: 'Collections'
+      tab_header_community: 'Communities'
+      range_begin: 'Range Begin'
+      range_end: 'Range End'
+      range_limit: 'Limit'
+
+      index:
+        header: 'Search'
+        no_results_found: No results found
+      file_label: 'File'
+      add_another_file: 'Add another file'
+      files_section_sidebar:
+        header: 'Files'
+        view: 'View'
+        download: 'Download'
+      thumbnail:
+        thumbnail: 'Thumbnail'
 
   profile:
     index:
@@ -843,9 +880,11 @@ en:
     tab_header_item_with_count: 'Items (%{count})'
     tab_header_collection_with_count: 'Collections (%{count})'
     tab_header_community_with_count: 'Communities (%{count})'
+    tab_header_book_with_count: 'Books (%{count})'
     tab_header_item: 'Items'
     tab_header_collection: 'Collections'
     tab_header_community: 'Communities'
+    tab_header_book: 'Books'
     range_begin: 'Range Begin'
     range_end: 'Range End'
     range_limit: 'Limit'
