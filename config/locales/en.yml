@@ -551,6 +551,8 @@ en:
       graduation_terms:
         spring: 'Spring'
         fall: 'Fall'
+        spring_num: '06'
+        fall_num: '11'
       degree: 'Degree'
     thesis_more_information:
       thesis_level: 'Degree level'
