@@ -10,7 +10,14 @@ Rails.application.routes.draw do
 
     root to: 'welcome#index'
 
-    resources :items, only: [:show, :edit] do
+    concern :downloadable do
+      member do
+        get 'download/:file_set_id', to: DownloadsController.action(:download), format: false, as: 'file_download'
+        get 'view/:file_set_id/*file_name', to: DownloadsController.action(:view), format: false, as: 'file_view'
+      end
+    end
+
+    resources :items, only: [:show, :edit], concerns: :downloadable do
       collection do
         post :create_draft, controller: 'items/draft', action: :create
       end
@@ -22,11 +29,6 @@ Rails.application.routes.draw do
         member do
           patch :set_thumbnail
         end
-      end
-
-      member do
-        get 'download/:file_set_id', to: 'downloads#download', format: false, as: 'file_download'
-        get 'view/:file_set_id/*file_name', to: 'downloads#view', format: false, as: 'file_view'
       end
     end
 
@@ -162,7 +164,7 @@ Rails.application.routes.draw do
       end
     end
   end
-  constraints(subdomain: 'digitization') do
+  constraints(subdomain: 'digitalcollections') do
     ## Peel URL redirects
     get '/bibliography/:peel_id(/*page)', to: 'digitization/redirect#peel_book'
     get '/bibliography/:peel_id.:part_number(/*page)', to: 'digitization/redirect#peel_book'
@@ -177,7 +179,7 @@ Rails.application.routes.draw do
     get '/maps/:peel_map_id', to: 'digitization/redirect#peel_map', peel_map_id: /M[0-9]{6}/
 
     scope module: 'digitization', as: 'digitization', only: [:index, :show] do
-      resources :books, :newspapers, :images, :maps
+      resources :books, :newspapers, :images, :maps, concerns: :downloadable
     end
   end
 end

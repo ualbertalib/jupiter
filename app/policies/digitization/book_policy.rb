@@ -4,4 +4,12 @@ class Digitization::BookPolicy < ApplicationPolicy
     true
   end
 
+  def thumbnail?
+    true
+  end
+
+  def download?
+    true
+  end
+
 end

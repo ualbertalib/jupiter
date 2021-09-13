@@ -36,7 +36,7 @@
     <div class="col-md-4 mt-5">
       <%# FILES SIDEBAR %>
       <% if @digitization_book.files.present? %>
-        <%= render partial: 'files_section_sidebar' %>
+        <%= render partial: 'files_section_sidebar', locals: { item: @digitization_book } %>
       <% end %>
 
       <%# COMMUNITY/COLLECTION PATHS %>

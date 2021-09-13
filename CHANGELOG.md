@@ -51,6 +51,7 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 - Add batch ingest controller and views for CRUDing batch ingests [#1986](https://github.com/ualbertalib/jupiter/issues/1986)
 - Add batch ingest form with google file picker and spreadsheet validation [#1986](https://github.com/ualbertalib/jupiter/issues/1986)
 - Add batch ingestion job for batch ingesting items into ERA [#1986](https://github.com/ualbertalib/jupiter/issues/1986)
+- Add 'digitalcollections' subdomain for future front door
 - Add various fixes and improvements to batch ingestion work
 
 ### Removed
@@ -75,6 +76,7 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 - Make `Digitization::Map` `Depositable`
 - Fixture names have been modified to ensure their uniqueness [PR#2302](https://github.com/ualbertalib/jupiter/pull/2302)
 - Rails upgraded to 6.0.3.7 to resolve security issues
+- Refactored item download/view behaviour in routes and views to be reusable in digitization namespace and application wide
 
 ### Fixed
 - bump rubocop and fix cop violations [PR#2072](https://github.com/ualbertalib/jupiter/pull/2072)
@@ -93,6 +95,7 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 - Bump rubocop-minitest to 0.14.0 and note really smelly tests [PR#2416](https://github.com/ualbertalib/jupiter/pull/2416)
 - Fixed a flaky test where the page hasn't finished loading [#2129](https://github.com/ualbertalib/jupiter/issues/2129)
 - Refactored one of our smelliest tests to use fixtures and reduce number of assertions per test [#2419](https://github.com/ualbertalib/jupiter/issues/2419)
+- Make Digitization::Book more like other items and other small fixes
 
 ## [2.0.2] - 2020-12-17
 - Enable Skylight in the Staging environment and remove it from the UAT environment (where it was unused, and the performance of the Docker environment is less likely to be similar to Production)

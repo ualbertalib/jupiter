@@ -3,7 +3,7 @@ require 'test_helper'
 class Digitization::RedirectControllerTest < ActionDispatch::IntegrationTest
 
   setup do
-    host! URI('http://digitization.ualberta.localhost').host
+    host! URI('http://digitalcollections.ualberta.localhost').host
   end
 
   test 'should not find the requested book' do
