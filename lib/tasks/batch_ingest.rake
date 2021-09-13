@@ -330,7 +330,7 @@ def legacy_thesis_ingest(thesis_data, index, csv_directory)
       unlocked_obj.abstract = thesis_data[:abstract] if thesis_data[:abstract].present?
       unlocked_obj.thesis_level = thesis_data[:thesis_level]
       unlocked_obj.degree = thesis_data[:degree]
-      unlocked_obj.departments = thesis_data[:departments]
+      unlocked_obj.departments = thesis_data[:departments].split("|")
       unlocked_obj.specialization = thesis_data[:specialization] if thesis_data[:specialization].present?
 
       # Assumes the data received always have the graduation date follow the pattern of
