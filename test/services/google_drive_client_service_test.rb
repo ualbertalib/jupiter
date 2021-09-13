@@ -77,7 +77,10 @@ class GoogleDriveClientServiceTest < ActiveSupport::TestCase
 
     VCR.use_cassette('google_fetch_file', record: :none) do
       file = google_drive_client.download_file('RANDOMFILEID', 'logo.png')
-      assert_match('logo.png', file.path)
+      # Tempfile will use a unique indentifer in the name,
+      # but it should start with logo and end with correct extension
+      assert_match(/logo.*\.png/, File.basename(file.path))
+      assert_equal('logo.png', file.original_filename)
     end
   end
 

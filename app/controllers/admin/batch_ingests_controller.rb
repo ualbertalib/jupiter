@@ -31,7 +31,7 @@ class Admin::BatchIngestsController < Admin::AdminController
     @batch_ingest.assign_attributes(permitted_attributes(BatchIngest))
 
     if @batch_ingest.save
-      BatchIngestionJob.perform_later(@batch_ingest.id)
+      BatchIngestionJob.perform_later(@batch_ingest)
 
       redirect_to [:admin, @batch_ingest], notice: t('.created')
     elsif access_token
