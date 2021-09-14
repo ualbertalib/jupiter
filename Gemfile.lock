@@ -183,7 +183,7 @@ GEM
       unicode-types (~> 1.6)
     edtf (3.0.6)
       activesupport (>= 3.0, < 7.0)
-    erb_lint (0.0.37)
+    erb_lint (0.1.1)
       activesupport
       better_html (~> 1.0.7)
       html_tokenizer
@@ -514,7 +514,7 @@ GEM
       skylight-core (= 4.3.2)
     skylight-core (4.3.2)
       activesupport (>= 4.2.0)
-    smart_properties (1.15.0)
+    smart_properties (1.16.2)
     sparql (3.1.6)
       builder (~> 3.2)
       ebnf (~> 2.1)
