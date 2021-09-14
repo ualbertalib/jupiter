@@ -113,9 +113,6 @@ Rails/UnknownEnv:
 Style/ArrayCoercion:
   Enabled: false
 
-Style/AsciiComments:
-  Enabled: false
-
 Style/BarePercentLiterals:
   Enabled: false
 
