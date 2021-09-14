@@ -1,7 +1,5 @@
 class Digitization::BatchArtifactsSetupIngestionJob < ApplicationJob
 
-  PEEL_ID_REGEX = /P0*(\d+).(\d*)/.freeze
-
   queue_as :default
 
   rescue_from(StandardError) do |exception|
@@ -13,7 +11,7 @@ class Digitization::BatchArtifactsSetupIngestionJob < ApplicationJob
   def perform(batch_ingest)
     batch_ingest.csvfile.open do |file|
       CSV.foreach(file.path, headers: true) do |row|
-        peel_number = row['Code'].match PEEL_ID_REGEX
+        peel_number = row['Code'].match Digitization::PEEL_ID_REGEX
         peel_id = peel_number[1]
         part_number = peel_number[2]
 
