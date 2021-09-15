@@ -57,7 +57,7 @@ def batch_ingest_csv(csv_path)
                   else
                     item_ingest(object_data, index, csv_directory)
                   end
-      if object.is_a? Thesis
+      if object.is_a? Item or object.is_a? Thesis
         successful_ingested << object
       else
         object[:error_message] = e.message
@@ -72,7 +72,7 @@ def batch_ingest_csv(csv_path)
     generate_ingest_errors(ingest_errors, headers)
     log "FINISH: Batch ingest completed!"
   else
-    log "ERROR: Could not open file at `#{full_csv_path}`. Does the csv file exist at this location?"
+    log "ERROR: Could not open file at '#{full_csv_path}'. Does the csv file exist at this location?"
     exit 1
   end
 end
@@ -115,195 +115,194 @@ def generate_ingest_errors(ingest_errors, headers)
 end
 
 def item_ingest(item_data, index, csv_directory)
-  log "ITEM #{index}: Starting ingest of an item..."
+  begin
+    log "ITEM #{index}: Starting ingest of an item..."
+    item = Item.new
+    item.tap do |unlocked_obj|
+      unlocked_obj.owner_id = item_data[:owner_id]
+      unlocked_obj.title = item_data[:title]
+      unlocked_obj.alternative_title = item_data[:alternate_title]
 
-  item = Item.new
-  item.tap do |unlocked_obj|
-    unlocked_obj.owner_id = item_data[:owner_id]
-    unlocked_obj.title = item_data[:title]
-    unlocked_obj.alternative_title = item_data[:alternate_title]
-
-    if item_data[:item_type].present?
-      unlocked_obj.item_type = CONTROLLED_VOCABULARIES[:item_type].send(item_data[:item_type].to_sym)
-    end
-
-    # If item type is an article, we need to add an array of statuses to the publication status field...
-    if item_data[:item_type] == "article" && ["draft", "published"].include?(item_data[:publication_status])
-      unlocked_obj.publication_status = if item_data[:publication_status] == "draft"
-                                          [
-                                            CONTROLLED_VOCABULARIES[:publication_status].draft,
-                                            CONTROLLED_VOCABULARIES[:publication_status].submitted,
-                                          ]
-                                        else
-                                          [
-                                            CONTROLLED_VOCABULARIES[:publication_status].published,
-                                          ]
-                                        end
-    end
-
-    if item_data[:languages].present?
-      unlocked_obj.languages = item_data[:languages].downcase.split("|").map do |language|
-        CONTROLLED_VOCABULARIES[:language].send(language.to_sym) if language.present?
+      if item_data[:item_type].present?
+        unlocked_obj.item_type = CONTROLLED_VOCABULARIES[:item_type].send(item_data[:item_type].to_sym)
       end
+
+      # If item type is an article, we need to add an array of statuses to the publication status field...
+      if item_data[:item_type] == "article" && ["draft", "published"].include?(item_data[:publication_status])
+        unlocked_obj.publication_status = if item_data[:publication_status] == "draft"
+                                            [
+                                              CONTROLLED_VOCABULARIES[:publication_status].draft,
+                                              CONTROLLED_VOCABULARIES[:publication_status].submitted,
+                                            ]
+                                          else
+                                            [
+                                              CONTROLLED_VOCABULARIES[:publication_status].published,
+                                            ]
+                                          end
+      end
+
+      if item_data[:languages].present?
+        unlocked_obj.languages = item_data[:languages].downcase.split("|").map do |language|
+          CONTROLLED_VOCABULARIES[:language].send(language.to_sym) if language.present?
+        end
+      end
+
+      unlocked_obj.creators = item_data[:creators].split("|") if item_data[:creators].present?
+      unlocked_obj.subject = item_data[:subjects].split("|") if item_data[:subjects].present?
+      unlocked_obj.created = item_data[:date_created].to_s
+      unlocked_obj.description = item_data[:description]
+
+      # Handle visibility and embargo logic
+      if item_data[:visibility].present?
+        unlocked_obj.visibility = CONTROLLED_VOCABULARIES[:visibility].send(item_data[:visibility].downcase.to_sym)
+      end
+
+      if item_data[:visibility_after_embargo].present?
+        unlocked_obj.visibility_after_embargo =
+          CONTROLLED_VOCABULARIES[:visibility].send(item_data[:visibility_after_embargo].downcase.to_sym)
+      end
+
+      unlocked_obj.embargo_end_date = item_data[:embargo_end_date].to_date if item_data[:embargo_end_date].present?
+
+      # Handle license vs rights
+      if item_data[:license].present?
+        unlocked_obj.license =
+          CONTROLLED_VOCABULARIES[:license].send(item_data[:license].to_sym) ||
+          CONTROLLED_VOCABULARIES[:old_license].send(item_data[:license].to_sym)
+      end
+      unlocked_obj.rights = item_data[:license_text]
+
+      # Additional fields
+      unlocked_obj.contributors = item_data[:contributors].split("|") if item_data[:contributors].present?
+      unlocked_obj.spatial_subjects = item_data[:places].split("|") if item_data[:places].present?
+      unlocked_obj.temporal_subjects = item_data[:time_periods].split("|") if item_data[:time_periods].present?
+      unlocked_obj.is_version_of = item_data[:citations].split("|") if item_data[:citations].present?
+      unlocked_obj.source = item_data[:source]
+      unlocked_obj.related_link = item_data[:related_item]
+
+      # We only support single communities/collections pairs for time being,
+      # could accomodate multiple pairs without much work here
+      unlocked_obj.add_to_path(item_data[:community_id], item_data[:collection_id])
+
+      unlocked_obj.save!
     end
 
-    unlocked_obj.creators = item_data[:creators].split("|") if item_data[:creators].present?
-    unlocked_obj.subject = item_data[:subjects].split("|") if item_data[:subjects].present?
-    unlocked_obj.created = item_data[:date_created].to_s
-    unlocked_obj.description = item_data[:description]
+    log "ITEM #{index}: Starting ingest of file for item..."
 
-    # Handle visibility and embargo logic
-    if item_data[:visibility].present?
-      unlocked_obj.visibility = CONTROLLED_VOCABULARIES[:visibility].send(item_data[:visibility].downcase.to_sym)
+    # We only support for single file ingest, but this could easily be refactored for multiple files
+    File.open("#{csv_directory}/#{item_data[:file_name]}", "r") do |file|
+      item.add_and_ingest_files([file])
     end
 
-    if item_data[:visibility_after_embargo].present?
-      unlocked_obj.visibility_after_embargo =
-        CONTROLLED_VOCABULARIES[:visibility].send(item_data[:visibility_after_embargo].downcase.to_sym)
-    end
+    log "ITEM #{index}: Setting thumbnail for item..."
+    item.set_thumbnail(item.files.first) if item.files.first.present?
 
-    unlocked_obj.embargo_end_date = item_data[:embargo_end_date].to_date if item_data[:embargo_end_date].present?
-
-    # Handle license vs rights
-    if item_data[:license].present?
-      unlocked_obj.license =
-        CONTROLLED_VOCABULARIES[:license].send(item_data[:license].to_sym) ||
-        CONTROLLED_VOCABULARIES[:old_license].send(item_data[:license].to_sym)
-    end
-    unlocked_obj.rights = item_data[:license_text]
-
-    # Additional fields
-    unlocked_obj.contributors = item_data[:contributors].split("|") if item_data[:contributors].present?
-    unlocked_obj.spatial_subjects = item_data[:places].split("|") if item_data[:places].present?
-    unlocked_obj.temporal_subjects = item_data[:time_periods].split("|") if item_data[:time_periods].present?
-    unlocked_obj.is_version_of = item_data[:citations].split("|") if item_data[:citations].present?
-    unlocked_obj.source = item_data[:source]
-    unlocked_obj.related_link = item_data[:related_item]
-
-    # We only support single communities/collections pairs for time being,
-    # could accomodate multiple pairs without much work here
-    unlocked_obj.add_to_path(item_data[:community_id], item_data[:collection_id])
-
-    unlocked_obj.save!
+    log "ITEM #{index}: Successfully ingested an item! Item ID: '#{item.id}', #{item.title}"
+    item
+  rescue StandardError => e
+    log "ERROR: Ingest of item by #{item_data[:title]} failed! The following error occurred:"
+    log "EXCEPTION: #{e.message}"
+    log "BACKTRACE: #{e.backtrace.take(1).join("\n")}"
+    return item_data, e
   end
-
-  log "ITEM #{index}: Starting ingest of file for item..."
-
-  # We only support for single file ingest, but this could easily be refactored for multiple files
-  File.open("#{csv_directory}/#{item_data[:file_name]}", "r") do |file|
-    item.add_and_ingest_files([file])
-  end
-
-  log "ITEM #{index}: Setting thumbnail for item..."
-
-  item.set_thumbnail(item.files.first) if item.files.first.present?
-
-  log "ITEM #{index}: Successfully ingested an item! Item ID: `#{item.id}`"
-
-  item
-rescue StandardError => e
-  log "ERROR: Ingest of item failed! The following error occurred:"
-  log "EXCEPTION: #{e.message}"
-  log "WARNING: Please be careful with rerunning batch ingest! Duplication of items may happen " \
-      "if previous items were successfully deposited."
-  exit 1
 end
 
 def thesis_ingest(thesis_data, index, csv_directory, checksums)
-  log "THESIS #{index}: Starting ingest of a thesis..."
-  thesis = Thesis.new
-  thesis.tap do |unlocked_obj|
-    unlocked_obj.owner_id = 1
-    unlocked_obj.title = thesis_data[:title]
-    unlocked_obj.alternative_title = thesis_data[:other_titles]
+  begin
+    log "THESIS #{index}: Starting ingest of a thesis..."
+    thesis = Thesis.new
+    thesis.tap do |unlocked_obj|
+      unlocked_obj.owner_id = 1
+      unlocked_obj.title = thesis_data[:title]
+      unlocked_obj.alternative_title = thesis_data[:other_titles]
 
-    if thesis_data[:language].present?
-      unlocked_obj.language =
-        CONTROLLED_VOCABULARIES[:language].send(thesis_data[:language].to_sym)
+      if thesis_data[:language].present?
+        unlocked_obj.language =
+          CONTROLLED_VOCABULARIES[:language].send(thesis_data[:language].to_sym)
+      end
+
+      unlocked_obj.dissertant = thesis_data[:author] if thesis_data[:author].present?
+
+      # Assumes the data received always have the graduation date follow the pattern of
+      # "Fall yyyy" or "Spring yyyy"
+
+      if thesis_data[:graduation_date].present?
+        graduation_year_array = thesis_data[:graduation_date]&.match(/\d\d\d\d/)
+        graduation_year = graduation_year_array[0]
+        graduation_term_array = thesis_data[:graduation_date]&.match(/Fall|Spring/)
+        graduation_term_string = graduation_term_array[0]
+        graduation_term = "11" if graduation_term_string == "Fall"
+        graduation_term = "06" if graduation_term_string == "Spring"
+        unlocked_obj.graduation_date = "#{graduation_year}-#{graduation_term}"
+      end
+      unlocked_obj.abstract = thesis_data[:abstract]
+
+      # Handle visibility and embargo logic
+      unlocked_obj.visibility = CONTROLLED_VOCABULARIES[:visibility].send("embargo".to_sym)
+
+      if thesis_data[:date_of_embargo].present?
+        unlocked_obj.visibility_after_embargo =
+          CONTROLLED_VOCABULARIES[:visibility].send("public".to_sym)
+      end
+
+      if thesis_data[:date_of_embargo].present?
+        unlocked_obj.embargo_end_date = Date.strptime(thesis_data[:date_of_embargo], "%m/%d/%Y")
+      end
+
+      # Handle rights
+      unlocked_obj.rights = thesis_data[:license]
+
+      # Additional fields
+      # Assumes the data received for approved_date and submitted_date follow the pattern of "D/M/Y".
+      if thesis_data[:approved_date].present?
+        approved_date_array = thesis_data[:approved_date].to_s.split("/").map(&:to_i)
+        unlocked_obj.date_accepted = Date.new(approved_date_array[2], approved_date_array[0], approved_date_array[1])
+      end
+
+      if thesis_data[:submitted_date].present?
+        submitted_date_array = thesis_data[:submitted_date].to_s.split("/").map(&:to_i)
+        unlocked_obj.date_submitted = Date.new(submitted_date_array[2], submitted_date_array[0],
+                                               submitted_date_array[1])
+      end
+
+      unlocked_obj.degree = thesis_data[:degree] if thesis_data[:degree].present?
+      unlocked_obj.thesis_level = thesis_data[:degree_level] if thesis_data[:degree_level].present?
+      unlocked_obj.institution = CONTROLLED_VOCABULARIES[:institution].send("uofa".to_sym)
+      unlocked_obj.specialization = thesis_data[:specialization] if thesis_data[:specialization].present?
+
+      unlocked_obj.subject = thesis_data[:keywords].split("|") if thesis_data[:keywords].present?
+      unlocked_obj.supervisors = thesis_data[:supervisor_info].split("|") if thesis_data[:supervisor_info].present?
+      unlocked_obj.departments = if thesis_data[:conjoint_departments].present?
+                                   [thesis_data[:department]] + thesis_data[:conjoint_departments].split("|")
+                                 else
+                                   [thesis_data[:department]]
+                                 end
+      unlocked_obj.is_version_of = thesis_data[:citation] if thesis_data[:citation].present?
+      unlocked_obj.depositor = thesis_data[:email] if thesis_data[:email]
+
+      # We only support single communities/collections pairs for time being,
+      # could accomodate multiple pairs without much work here
+      unlocked_obj.add_to_path(thesis_community_id, thesis_collection_id)
+
+      unlocked_obj.save!
     end
 
-    unlocked_obj.dissertant = thesis_data[:author] if thesis_data[:author].present?
+    log "THESIS #{index}: Starting ingest of file for thesis..."
 
-    # Assumes the data received always have the graduation date follow the pattern of
-    # "Fall yyyy" or "Spring yyyy"
-
-    if thesis_data[:graduation_date].present?
-      graduation_year_array = thesis_data[:graduation_date]&.match(/\d\d\d\d/)
-      graduation_year = graduation_year_array[0]
-      graduation_term_array = thesis_data[:graduation_date]&.match(/Fall|Spring/)
-      graduation_term_string = graduation_term_array[0]
-      graduation_term = "11" if graduation_term_string == "Fall"
-      graduation_term = "06" if graduation_term_string == "Spring"
-      unlocked_obj.graduation_date = "#{graduation_year}-#{graduation_term}"
+    # We only support for single file ingest, but this could easily be refactored for multiple files
+    File.open("#{csv_directory}/#{thesis_data[:file_name]}", "r") do |file|
+      thesis.add_and_ingest_files([file])
     end
-    unlocked_obj.abstract = thesis_data[:abstract]
-
-    # Handle visibility and embargo logic
-    unlocked_obj.visibility = CONTROLLED_VOCABULARIES[:visibility].send("embargo".to_sym)
-
-    if thesis_data[:date_of_embargo].present?
-      unlocked_obj.visibility_after_embargo =
-        CONTROLLED_VOCABULARIES[:visibility].send("public".to_sym)
-    end
-
-    if thesis_data[:date_of_embargo].present?
-      unlocked_obj.embargo_end_date = Date.strptime(thesis_data[:date_of_embargo], "%m/%d/%Y")
-    end
-
-    # Handle rights
-    unlocked_obj.rights = thesis_data[:license]
-
-    # Additional fields
-    # Assumes the data received for approved_date and submitted_date follow the pattern of "D/M/Y".
-    if thesis_data[:approved_date].present?
-      approved_date_array = thesis_data[:approved_date].to_s.split("/").map(&:to_i)
-      unlocked_obj.date_accepted = Date.new(approved_date_array[2], approved_date_array[0], approved_date_array[1])
-    end
-
-    if thesis_data[:submitted_date].present?
-      submitted_date_array = thesis_data[:submitted_date].to_s.split("/").map(&:to_i)
-      unlocked_obj.date_submitted = Date.new(submitted_date_array[2], submitted_date_array[0],
-                                             submitted_date_array[1])
-    end
-
-    unlocked_obj.degree = thesis_data[:degree] if thesis_data[:degree].present?
-    unlocked_obj.thesis_level = thesis_data[:degree_level] if thesis_data[:degree_level].present?
-    unlocked_obj.institution = CONTROLLED_VOCABULARIES[:institution].send("uofa".to_sym)
-    unlocked_obj.specialization = thesis_data[:specialization] if thesis_data[:specialization].present?
-
-    unlocked_obj.subject = thesis_data[:keywords].split("|") if thesis_data[:keywords].present?
-    unlocked_obj.supervisors = thesis_data[:supervisor_info].split("|") if thesis_data[:supervisor_info].present?
-    unlocked_obj.departments = if thesis_data[:conjoint_departments].present?
-                                 [thesis_data[:department]] + thesis_data[:conjoint_departments].split("|")
-                               else
-                                 [thesis_data[:department]]
-                               end
-    unlocked_obj.is_version_of = thesis_data[:citation] if thesis_data[:citation].present?
-    unlocked_obj.depositor = thesis_data[:email] if thesis_data[:email]
-
-    # We only support single communities/collections pairs for time being,
-    # could accomodate multiple pairs without much work here
-    unlocked_obj.add_to_path(thesis_community_id, thesis_collection_id)
-
-    unlocked_obj.save!
+    log "THESIS #{index}: Setting thumbnail for thesis..."
+    thesis.set_thumbnail(thesis.files.first) if thesis.files.first.present?
+    log "THESIS #{index}: Successfully ingested an thesis! Thesis ID: '#{thesis.id}', #{thesis.title}"
+    thesis
+  rescue StandardError => e
+    log "ERROR: Ingest of thesis #{thesis_data[:title]} failed! The following error occurred:"
+    log "EXCEPTION: #{e.message}"
+    log "BACKTRACE: #{e.backtrace.take(1).join("\n")}"
+    return thesis_data, e
   end
-
-  log "THESIS #{index}: Starting ingest of file for thesis..."
-
-  # We only support for single file ingest, but this could easily be refactored for multiple files
-  File.open("#{csv_directory}/#{thesis_data[:file_name]}", "r") do |file|
-    thesis.add_and_ingest_files([file])
-  end
-  log "THESIS #{index}: Setting thumbnail for thesis..."
-  thesis.set_thumbnail(thesis.files.first) if thesis.files.first.present?
-  log "THESIS #{index}: Successfully ingested an thesis! Thesis ID: `#{thesis.id}`"
-  thesis
-rescue StandardError => e
-  log "ERROR: Ingest of thesis by #{thesis_data[:author]} failed! The following error occurred:"
-  log "EXCEPTION: #{e.message}"
-  log "WARNING: Please be careful with rerunning batch ingest! Duplication of theses may happen " \
-      "if previous theses were successfully deposited."
-  exit
 end
 
 def legacy_thesis_ingest(thesis_data, index, csv_directory)
@@ -368,10 +367,10 @@ def legacy_thesis_ingest(thesis_data, index, csv_directory)
     end
     log "THESIS #{index}: Setting thumbnail for legacy thesis..."
     thesis.set_thumbnail(thesis.files.first) if thesis.files.first.present?
-    log "THESIS #{index}: Successfully ingested an legacy thesis! Thesis ID: `#{thesis.id}`"
+    log "THESIS #{index}: Successfully ingested an legacy thesis! Thesis ID: '#{thesis.id}', #{thesis.title}"
     thesis
   rescue StandardError => e
-    log "ERROR: Ingest of legacy thesis by #{thesis_data[:dissertant]} failed! The following error occurred:"
+    log "ERROR: Ingest of legacy thesis #{thesis_data[:title]} failed! The following error occurred:"
     log "EXCEPTION: #{e.message}"
     log "BACKTRACE: #{e.backtrace.take(1).join("\n")}"
     return thesis_data, e
