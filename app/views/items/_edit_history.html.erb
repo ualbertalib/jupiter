@@ -30,8 +30,10 @@
           <dd><%= changeset.user_info %></dd>
         </dl>
         <% changeset.html_diffs.each do |html_diff| %>
-          <dt><%= html_diff[:attribute] %></dt>
-          <dd><%= html_diff[:html] %></dd>
+          <dl>
+            <dt><%= html_diff[:attribute] %></dt>
+            <dd><%= html_diff[:html] %></dd>
+          </dl>
         <% end %>
       </li>
     <% end %>
