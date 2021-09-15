@@ -15,8 +15,12 @@ class HumanizedChangeSet
 
   def user_info
     if @whodunnit.present?
-      user = User.find(@whodunnit)
-      user_info = "#{user.name} - #{user.email}"
+      user = User.find_by(id: @whodunnit)
+      user_info = if user.present?
+                    "#{user.name} - #{user.email}"
+                  else
+                    @whodunnit
+                  end
     else
       user_info = 'Unknown'
     end
