@@ -52,6 +52,8 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 - Add batch ingest form with google file picker and spreadsheet validation [#1986](https://github.com/ualbertalib/jupiter/issues/1986)
 - Add batch ingestion job for batch ingesting items into ERA [#1986](https://github.com/ualbertalib/jupiter/issues/1986)
 - Add 'digitalcollections' subdomain for future front door
+- Add task that will kick off job for batch ingestion of digitization metadata from a csv containing triples [#2011](https://github.com/ualbertalib/jupiter/issues/2011)
+- Make autocomplete explicit [PR#2449](https://github.com/ualbertalib/jupiter/pull/2449)
 - Add various fixes and improvements to batch ingestion work
 
 ### Removed

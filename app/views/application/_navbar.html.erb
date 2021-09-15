@@ -30,7 +30,7 @@
         <li role="presentation" class="nav-item mr-3">
           <form class="d-inline" action="<%= search_path %>">
             <div class="input-group">
-              <%= search_field_tag 'search', nil, placeholder: t('.search.placeholder'),
+              <%= search_field_tag 'search', nil, placeholder: t('.search.placeholder'), autocomplete: 'on',
                                                   value: params[:search], id: 'navbar-search-lg', 'aria-label': t('.search.placeholder'), class: 'form-control' %>
               <div class="input-group-btn">
                 <button type="submit" class="btn btn-secondary">
@@ -110,7 +110,7 @@
   <div class="d-md-none my-3 w-100">
     <form action="<%= search_path %>">
       <div class="input-group container px-0">
-        <%= search_field_tag 'search', nil, placeholder: t('.search.placeholder'),
+        <%= search_field_tag 'search', nil, placeholder: t('.search.placeholder'), autocomplete: 'on',
                                             value: params[:search], id: 'navbar-search-sm', 'aria-label': t('.search.placeholder'), class: 'form-control' %>
         <div class="input-group-btn">
           <button type="submit" class="btn btn-secondary" title="<%= t('.search.button_text') %>">
