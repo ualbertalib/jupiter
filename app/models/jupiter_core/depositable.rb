@@ -112,7 +112,8 @@ class JupiterCore::Depositable < ApplicationRecord
     raise 'Item not yet saved!' if id.nil?
 
     file_handles.each do |fileio|
-      attached = files.attach(io: fileio, filename: File.basename(fileio.path))
+      file_name = fileio.try(:original_filename) || File.basename(fileio.path)
+      attached = files.attach(io: fileio, filename: file_name)
       # TODO: Do something smarter here if not attached
       next unless attached
 

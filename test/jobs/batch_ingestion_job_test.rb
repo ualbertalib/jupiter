@@ -13,7 +13,7 @@ class BatchIngestionJobTest < ActiveJob::TestCase
                          community_id: communities(:community_books).id,
                          owner_id: users(:user_admin).id
                        }) do
-        BatchIngestionJob.perform_now(batch_ingest.id)
+        BatchIngestionJob.perform_now(batch_ingest)
       end
 
       batch_ingest.reload
@@ -32,7 +32,7 @@ class BatchIngestionJobTest < ActiveJob::TestCase
     BatchIngest.stub :find, batch_ingest do
       assert_raises StandardError do
         assert_no_difference('Item.count') do
-          BatchIngestionJob.perform_now(batch_ingest.id)
+          BatchIngestionJob.perform_now(batch_ingest)
         end
       end
 
@@ -56,7 +56,7 @@ class BatchIngestionJobTest < ActiveJob::TestCase
         VCR.use_cassette('google_fetch_file',
                          record: :none,
                          allow_playback_repeats: true) do
-          BatchIngestionJob.perform_now(batch_ingest.id)
+          BatchIngestionJob.perform_now(batch_ingest)
         end
       end
 

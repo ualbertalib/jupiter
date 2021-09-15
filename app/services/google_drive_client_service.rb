@@ -55,9 +55,16 @@ class GoogleDriveClientService
   def download_file(file_id, file_name)
     service = Google::Apis::DriveV3::DriveService.new
     service.authorization = google_credentials
-    file = service.get_file(file_id, download_dest: Tempfile.new(file_name, binmode: true))
+
+    base_name = File.basename(file_name, '.*')
+    extension_name = File.extname(file_name)
+    file = service.get_file(file_id, download_dest: Tempfile.new([base_name, extension_name], binmode: true))
     file.rewind
-    file
+
+    # When you create a Tempfile object, it will create a temporary file with a unique filename.
+    # However we want to keep the original name that the user provide to us.
+    # To do this, we can create an UploadedFile with the original name and the tempfile
+    ActionDispatch::Http::UploadedFile.new(filename: file_name, tempfile: file)
   end
 
   private

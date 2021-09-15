@@ -22,6 +22,18 @@ class BatchIngestTest < ActiveSupport::TestCase
     assert_equal("can't be blank", @batch_ingest.errors[:batch_ingest_files].first)
   end
 
+  test 'invalid when files exceed maximum length' do
+    51.times do |i|
+      @batch_ingest.batch_ingest_files.new(google_file_id: "file id #{i}", google_file_name: "file name #{i}")
+    end
+
+    assert_not @batch_ingest.valid?
+    assert_equal(
+      'too many files added (maximum is 50 files). If you need more files, try submitting multiple batch ingests',
+      @batch_ingest.errors[:batch_ingest_files].first
+    )
+  end
+
   test 'invalid without google spreadsheet id' do
     @batch_ingest.google_spreadsheet_id = nil
     assert_not @batch_ingest.valid?

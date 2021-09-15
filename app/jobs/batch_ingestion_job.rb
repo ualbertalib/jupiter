@@ -5,14 +5,12 @@ class BatchIngestionJob < ApplicationJob
   queue_as :default
 
   rescue_from(StandardError) do |exception|
-    batch_ingest = BatchIngest.find(arguments.first)
+    batch_ingest = arguments.first
     batch_ingest.update(error_message: exception.message, status: :failed)
     raise exception
   end
 
-  def perform(id)
-    batch_ingest = BatchIngest.find(id)
-
+  def perform(batch_ingest)
     batch_ingest.processing!
 
     google_credentials = GoogleDriveClientService.new(

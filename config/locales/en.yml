@@ -182,6 +182,8 @@ en:
               only_one_record_exists: 'Only one ReadOnlyMode record may exist'
         batch_ingest:
           attributes:
+            batch_ingest_files:
+              too_long: "too many files added (maximum is %{count} files). If you need more files, try submitting multiple batch ingests"
             google_spreadsheet_id:
                 missing_required_column: "%{column} is required and was not found for row %{row_number} of spreadsheet"
                 publication_status_required_for_articles: 'Publication status is required for articles and was not found for row %{row_number} of spreadsheet'
