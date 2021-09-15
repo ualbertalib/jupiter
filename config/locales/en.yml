@@ -44,6 +44,18 @@ en:
   edit: 'Edit'
   edited_by: 'Edited by'
   edit_history: 'Edit history ...'
+  edit_history_explainer_html: |
+    <h2 class='h4'>Note about how changes are shown</h2>
+    <ul>
+      <li>
+        <p>We use these styles for each change: </p>
+        <p>Unchanged<del class="differ">Old</del><ins class="differ">New</ins></p>
+      </li>
+      <li>
+        <p>When part of the history has been deleted we will show only the id:</p>
+        <p>e.g. 00000000-0000-0000-0000-000000000000</p>
+      </li>
+    </ul>
   filter_by: 'Filter by'
   home: 'Home'
   hide_edit_history: 'Hide edit history ...'
