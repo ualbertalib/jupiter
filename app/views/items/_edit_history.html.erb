@@ -20,7 +20,17 @@
 
   <div class="collapse" id='edit-history-hidden'>
     <div id='edit-history-explainer' class="bg-light p-3 border border-primary rounded list-group my-3  ">
-      <%= t(:edit_history_explainer_html) %>
+      <h2 class='h4'><%= t(:edit_history_explainer_title) %></h2>
+      <ul>
+        <li>
+          <p><%= t(:edit_history_explainer_styles_title) %></p>
+          <p><%= t(:edit_history_explainer_styles_content_html) %></p>
+        </li>
+        <li>
+          <p><%= t(:edit_history_explainer_deleted_title) %></p>
+          <p><%= t(:edit_history_explainer_deleted_content) %></p>
+        </li>
+      </ul>
     </div>
     <% @item.history.reverse_each do |changeset| %>
       <li class="list-unstyled list-group-item-action">
