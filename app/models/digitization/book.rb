@@ -45,4 +45,12 @@ class Digitization::Book < JupiterCore::Depositable
     nil
   end
 
+  def peel_number
+    peel_number = "P0#{peel_id}"
+    peel_number += ".#{part_number}" if part_number.present?
+    peel_number += ".#{run}" if run.present?
+
+    peel_number
+  end
+
 end

@@ -1,3 +1,4 @@
 digitization_batch_ingest_with_two_items:
   user: user_admin
   title: 'Digitization Batch Ingest with two items'
+  archival_information_package_path: <%= File.join(Rails.root, "test/fixtures/files/") %>

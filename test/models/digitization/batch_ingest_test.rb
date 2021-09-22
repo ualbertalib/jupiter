@@ -8,13 +8,16 @@ class Digitization::BatchIngestTest < ActiveSupport::TestCase
 
   test 'valid batch ingest' do
     @batch_ingest.metadata_csv.attach(io: File.open(file_fixture('digitization_metadata_graph.csv')),
-                                 filename: 'folkfest.csv')
+                                      filename: 'folkfest.csv')
+    @batch_ingest.manifest_csv.attach(io: File.open(file_fixture('digitization_manifest.csv')),
+                                      filename: 'manifest.csv')
     assert @batch_ingest.valid?
   end
 
-  test 'invalid without metadata_csv' do
+  test 'invalid without metadata and manifest csv' do
     assert_not @batch_ingest.valid?
     assert_equal("can't be blank", @batch_ingest.errors[:metadata_csv].first)
+    assert_equal("can't be blank", @batch_ingest.errors[:manifest_csv].first)
   end
 
   test 'invalid without title' do
@@ -29,7 +32,7 @@ class Digitization::BatchIngestTest < ActiveSupport::TestCase
     csv_content.puts '2014-12-01,12.01,abcxyz,user1'
 
     @batch_ingest.metadata_csv.attach(io: csv_content,
-                                 filename: 'folkfest.csv', content_type: 'text/csv')
+                                      filename: 'folkfest.csv', content_type: 'text/csv')
 
     assert_not @batch_ingest.valid?
 
@@ -45,10 +48,32 @@ class Digitization::BatchIngestTest < ActiveSupport::TestCase
                      'http://purl.org/dc/terms/title,Edmonton Folk Music Festival'
 
     @batch_ingest.metadata_csv.attach(io: csv_content,
-                                 filename: 'folkfest.csv', content_type: 'text/csv')
+                                      filename: 'folkfest.csv', content_type: 'text/csv')
 
     assert_not @batch_ingest.valid?
     assert_equal(['Graph contains no local identifiers'], @batch_ingest.errors[:metadata_csv])
+  end
+
+  test 'manifest invalid without expected headings' do
+    csv_content = Tempfile.new('test_invalid_without_expected_headings')
+    csv_content.puts 'Date,Amount,Account,User,'
+    csv_content.puts '2014-12-01,12.01,abcxyz,user1'
+
+    @batch_ingest.manifest_csv.attach(io: csv_content,
+                                      filename: 'artifacts_manifest.csv', content_type: 'text/csv')
+
+    assert_not @batch_ingest.valid?
+
+    errors = ['Local Identifier (Code) not found for row 1 of spreadsheet', 'Noid not found for row 1 of spreadsheet']
+    assert_equal(errors, @batch_ingest.errors[:manifest_csv])
+  end
+
+  test 'extracts fulltext' do
+    assert_match "Welcome to the Ist Annual Edmonton Folk Music Festival!", @batch_ingest.fulltext('dig439b')
+  end
+
+  test 'returns pdf path' do
+    assert_match "fixtures/files/dig439b/pdf/1.pdf", @batch_ingest.pdf_path('dig439b')
   end
 
 end

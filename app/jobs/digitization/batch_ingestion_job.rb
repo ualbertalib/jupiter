@@ -5,22 +5,25 @@ class Digitization::BatchIngestionJob < ApplicationJob
   queue_as :default
 
   rescue_from(StandardError) do |exception|
-    batch_ingest = arguments.first
-    batch_ingest.update(error_message: exception.message, status: :failed)
+    digitization_batch_ingest = arguments.first
+    digitization_batch_ingest.update(error_message: exception.message, status: :failed)
     raise exception
   end
-
-  def perform(batch_ingest)
-    batch_ingest.processing!
+  
+  def perform(digitization_batch_ingest)
+    digitization_batch_ingest.processing!
 
     ActiveRecord::Base.transaction do
-      batch_ingest.metadata_csv.open do |file|
-        graph = metadata_graph(file.path)
-        create_items_from_graph(graph, batch_ingest)
+      digitization_batch_ingest.metadata_csv.open do |metadata_file|
+        graph = metadata_graph(metadata_file.path)
+        create_items(graph, digitization_batch_ingest)
+      end
+      digitization_batch_ingest.manifest_csv.open do |manifest_file|
+        update_items(manifest_file.path, digitization_batch_ingest)
       end
     end
 
-    batch_ingest.completed!
+    digitization_batch_ingest.completed!
   end
 
   private
@@ -45,7 +48,7 @@ class Digitization::BatchIngestionJob < ApplicationJob
   end
 
   # For more information about the query patterns used see here https://rubydoc.info/github/ruby-rdf/rdf/RDF/Query
-  def create_items_from_graph(graph, batch_ingest)
+  def create_items(graph, digitization_batch_ingest)
     # First we need to locate all the discrete items we will be ingesting
     query_for_local_identifiers = RDF::Query.new do
       pattern [:collection, ::TERMS[:rdau].part, :item_identifier]
@@ -53,7 +56,7 @@ class Digitization::BatchIngestionJob < ApplicationJob
 
     graph.query(query_for_local_identifiers) do |statement|
       # Each of the discrete items will become its own object
-      book = batch_ingest.books.new(owner_id: batch_ingest.user_id)
+      book = digitization_batch_ingest.books.new(owner_id: digitization_batch_ingest.user_id)
 
       # Now we want know all about each item
       query_for_this_items_attributes = RDF::Query.new do
@@ -69,6 +72,31 @@ class Digitization::BatchIngestionJob < ApplicationJob
                            attributes.term.to_s)
         end
       end
+      book.save!
+    end
+  end
+
+  def update_items(csv_path, digitization_batch_ingest)
+    CSV.foreach(csv_path, headers: true) do |row|
+      peel_number = row['Code'].match PEEL_ID_REGEX
+      peel_id = peel_number[1]
+      part_number = peel_number[2]
+      book = Digitization::Book.find_by!(peel_id: peel_id, part_number: part_number)
+
+      noid = row['Noid']
+      
+
+      book.preservation_storage = 'OpenStack/Swift'
+      book.swift_container = 'peel'
+      book.swift_noid = noid
+      
+      File.open(digitization_batch_ingest.pdf_path(noid), 'r') do |high_res_pdf|
+        book.add_and_ingest_files([high_res_pdf])
+      end
+      book.set_thumbnail(book.files.first) if book.files.first.present?
+        
+      book.create_fulltext!(text: digitization_batch_ingest.fulltext(noid))
+
       book.save!
     end
   end

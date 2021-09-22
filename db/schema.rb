@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_17_201913) do
+ActiveRecord::Schema.define(version: 2021_09_20_214246) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -122,6 +122,7 @@ ActiveRecord::Schema.define(version: 2021_09_17_201913) do
     t.bigint "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "archival_information_package_path"
     t.index ["user_id"], name: "index_digitization_batch_ingests_on_user_id"
   end
 
@@ -150,8 +151,11 @@ ActiveRecord::Schema.define(version: 2021_09_17_201913) do
     t.datetime "record_created_at"
     t.string "visibility"
     t.bigint "owner_id", null: false
-    t.bigint "logo_id"
     t.uuid "digitization_batch_metadata_ingest_id"
+    t.bigint "logo_id"
+    t.string "swift_noid"
+    t.string "swift_container"
+    t.string "preservation_storage"
     t.index ["digitization_batch_metadata_ingest_id"], name: "index_digitization_books_on_batch_metadata_ingest_id"
     t.index ["logo_id"], name: "index_digitization_books_on_logo_id"
     t.index ["owner_id"], name: "index_digitization_books_on_owner_id"

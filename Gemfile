@@ -56,6 +56,7 @@ gem 'flipper-active_record', '~> 0.22.1' # Store feature flags in ActiveRecord
 gem 'flipper-ui', '~> 0.22.1' # UI for feature flags
 gem 'jbuilder' # generate JSON objects
 gem 'kaminari' # Pagination
+gem 'minitar' # Unpack tar for ingest tasks
 gem 'paper_trail' # Track object changes
 gem 'ransack', '= 2.4.1' # ActiveRecord search/filter
 gem 'redcarpet', '~> 3.5', '>= 3.5.1', require: ['redcarpet', 'redcarpet/render_strip'] # Markdown to (X)HTML parser

@@ -8,6 +8,7 @@ class Digitization::BookTest < ActiveSupport::TestCase
 
   test 'valid Peel book' do
     assert @document.valid?
+    assert_equal 'P010572.1', @document.peel_number
   end
 
   test 'unique Peel book' do
@@ -31,6 +32,7 @@ class Digitization::BookTest < ActiveSupport::TestCase
   test 'valid Peel book from a run' do
     book = digitization_books(:henderson)
     assert book.valid?
+    assert_equal 'P03178.1.1', book.peel_number
   end
 
   test 'should have at least one type of subject' do
