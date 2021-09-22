@@ -159,19 +159,21 @@ class JupiterCore::Depositable < ApplicationRecord
   end
 
   # rubocop:disable Style/GlobalVars
-  def push_item_id_for_preservation
+
+  def push_entity_for_preservation
     queue_name = Rails.application.secrets.preservation_queue_name
 
     $queue ||= ConnectionPool.new(size: 1, timeout: 5) { Redis.current }
 
     $queue.with do |connection|
-      connection.zadd queue_name, Time.now.to_f, id
+      entity = { uuid: id, type: self.class.table_name }
+      connection.zadd queue_name, Time.now.to_f, entity.to_json
     end
 
     true
   rescue StandardError => e
     # we trap errors in writing to the Redis queue in order to avoid crashing the save process for the user.
-    Rollbar.error("Error occurred in push_item_id_for_preservation, Could not preserve #{id}", e)
+    Rollbar.error("Error occurred in push_entity_for_preservation, Could not preserve #{id}", e)
     true
   end
   # rubocop:enable Style/GlobalVars
