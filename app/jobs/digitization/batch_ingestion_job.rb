@@ -1,4 +1,4 @@
-class Digitization::BatchMetadataIngestionJob < ApplicationJob
+class Digitization::BatchIngestionJob < ApplicationJob
 
   PEEL_ID_REGEX = /P0*(\d+).(\d*)/.freeze
 
@@ -14,7 +14,7 @@ class Digitization::BatchMetadataIngestionJob < ApplicationJob
     batch_ingest.processing!
 
     ActiveRecord::Base.transaction do
-      batch_ingest.csvfile.open do |file|
+      batch_ingest.metadata_csv.open do |file|
         graph = metadata_graph(file.path)
         create_items_from_graph(graph, batch_ingest)
       end

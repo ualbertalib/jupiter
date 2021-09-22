@@ -1,9 +1,9 @@
 require 'test_helper'
 
-class Digitization::BatchMetadataIngestionJobTest < ActiveJob::TestCase
+class Digitization::BatchIngestionJobTest < ActiveJob::TestCase
 
   test 'batch ingestion job captures exceptions and updates batch ingest model' do
-    batch_ingest = digitization_batch_metadata_ingests(:digitization_batch_ingest_with_two_items)
+    batch_ingest = digitization_batch_ingests(:digitization_batch_ingest_with_two_items)
 
     def batch_ingest.processing!
       raise StandardError, 'Testing! Error has happened!'
@@ -11,7 +11,7 @@ class Digitization::BatchMetadataIngestionJobTest < ActiveJob::TestCase
 
     assert_raises StandardError do
       assert_no_difference('::Digitization::Book.count') do
-        Digitization::BatchMetadataIngestionJob.perform_now(batch_ingest)
+        Digitization::BatchIngestionJob.perform_now(batch_ingest)
       end
     end
 
@@ -20,12 +20,12 @@ class Digitization::BatchMetadataIngestionJobTest < ActiveJob::TestCase
   end
 
   test 'successful batch ingestion' do
-    batch_ingest = digitization_batch_metadata_ingests(:digitization_batch_ingest_with_two_items)
-    batch_ingest.csvfile.attach(io: File.open(file_fixture('digitization_metadata_graph.csv')),
+    batch_ingest = digitization_batch_ingests(:digitization_batch_ingest_with_two_items)
+    batch_ingest.metadata_csv.attach(io: File.open(file_fixture('digitization_metadata_graph.csv')),
                                 filename: 'folkfest.csv')
 
     assert_difference('::Digitization::Book.count', +2) do
-      Digitization::BatchMetadataIngestionJob.perform_now(batch_ingest)
+      Digitization::BatchIngestionJob.perform_now(batch_ingest)
     end
 
     batch_ingest.reload

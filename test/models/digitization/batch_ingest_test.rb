@@ -1,20 +1,20 @@
 require 'test_helper'
 
-class Digitization::BatchMetadataIngestTest < ActiveSupport::TestCase
+class Digitization::BatchIngestTest < ActiveSupport::TestCase
 
   setup do
-    @batch_ingest = digitization_batch_metadata_ingests(:digitization_batch_ingest_with_two_items)
+    @batch_ingest = digitization_batch_ingests(:digitization_batch_ingest_with_two_items)
   end
 
   test 'valid batch ingest' do
-    @batch_ingest.csvfile.attach(io: File.open(file_fixture('digitization_metadata_graph.csv')),
+    @batch_ingest.metadata_csv.attach(io: File.open(file_fixture('digitization_metadata_graph.csv')),
                                  filename: 'folkfest.csv')
     assert @batch_ingest.valid?
   end
 
-  test 'invalid without csvfile' do
+  test 'invalid without metadata_csv' do
     assert_not @batch_ingest.valid?
-    assert_equal("can't be blank", @batch_ingest.errors[:csvfile].first)
+    assert_equal("can't be blank", @batch_ingest.errors[:metadata_csv].first)
   end
 
   test 'invalid without title' do
@@ -23,19 +23,19 @@ class Digitization::BatchMetadataIngestTest < ActiveSupport::TestCase
     assert_equal("can't be blank", @batch_ingest.errors[:title].first)
   end
 
-  test 'invalid without expected headings' do
+  test 'metadata invalid without expected headings' do
     csv_content = Tempfile.new('test_invalid_without_expected_headings')
     csv_content.puts 'Date,Amount,Account,User,'
     csv_content.puts '2014-12-01,12.01,abcxyz,user1'
 
-    @batch_ingest.csvfile.attach(io: csv_content,
+    @batch_ingest.metadata_csv.attach(io: csv_content,
                                  filename: 'folkfest.csv', content_type: 'text/csv')
 
     assert_not @batch_ingest.valid?
 
     errors = ['Entity not found for row 1 of spreadsheet', 'Property not found for row 1 of spreadsheet',
               'Value not found for row 1 of spreadsheet', 'Graph contains no local identifiers']
-    assert_equal(errors, @batch_ingest.errors[:csvfile])
+    assert_equal(errors, @batch_ingest.errors[:metadata_csv])
   end
 
   test 'invalid without any local identifiers' do
@@ -44,11 +44,11 @@ class Digitization::BatchMetadataIngestTest < ActiveSupport::TestCase
     csv_content.puts 'https://digitalcollections.library.ualberta.ca/resource/UUID,'\
                      'http://purl.org/dc/terms/title,Edmonton Folk Music Festival'
 
-    @batch_ingest.csvfile.attach(io: csv_content,
+    @batch_ingest.metadata_csv.attach(io: csv_content,
                                  filename: 'folkfest.csv', content_type: 'text/csv')
 
     assert_not @batch_ingest.valid?
-    assert_equal(['Graph contains no local identifiers'], @batch_ingest.errors[:csvfile])
+    assert_equal(['Graph contains no local identifiers'], @batch_ingest.errors[:metadata_csv])
   end
 
 end

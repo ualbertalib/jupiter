@@ -1,4 +1,4 @@
-class Digitization::BatchMetadataIngest < ApplicationRecord
+class Digitization::BatchIngest < ApplicationRecord
 
   enum status: { created: 0, processing: 1, completed: 2, failed: 3 }
 
@@ -7,21 +7,21 @@ class Digitization::BatchMetadataIngest < ApplicationRecord
   has_many :books, dependent: :nullify, class_name: 'Digitization::Book',
                    foreign_key: :digitization_batch_metadata_ingest_id,
                    inverse_of: :digitization_batch_metadata_ingest
-  has_one_attached :csvfile
+  has_one_attached :metadata_csv
 
-  validates :csvfile, presence: true
+  validates :metadata_csv, presence: true
   validates :title, presence: true
-  validate :spreadsheet_has_required_data
+  validate :metadata_csv_has_required_data
 
-  def spreadsheet_has_required_data
-    return unless csvfile.attached? && attachment_changes['csvfile']
+  def metadata_csv_has_required_data
+    return unless metadata_csv.attached? && attachment_changes['metadata_csv']
 
     graph = RDF::Graph.new
-    CSV.foreach(attachment_changes['csvfile'].attachable[:io].path, headers: true) do |row|
+    CSV.foreach(attachment_changes['metadata_csv'].attachable[:io].path, headers: true) do |row|
       # Check if required fields are filled out
-      errors.add(:csvfile, "Entity not found for row #{$INPUT_LINE_NUMBER} of spreadsheet") if row['Entity'].blank?
-      errors.add(:csvfile, "Property not found for row #{$INPUT_LINE_NUMBER} of spreadsheet") if row['Property'].blank?
-      errors.add(:csvfile, "Value not found for row #{$INPUT_LINE_NUMBER} of spreadsheet") if row['Value'].blank?
+      errors.add(:metadata_csv, "Entity not found for row #{$INPUT_LINE_NUMBER} of spreadsheet") if row['Entity'].blank?
+      errors.add(:metadata_csv, "Property not found for row #{$INPUT_LINE_NUMBER} of spreadsheet") if row['Property'].blank?
+      errors.add(:metadata_csv, "Value not found for row #{$INPUT_LINE_NUMBER} of spreadsheet") if row['Value'].blank?
       next if errors.present?
 
       subject = RDF::URI.new(row['Entity'], validate: true)
@@ -38,7 +38,7 @@ class Digitization::BatchMetadataIngest < ApplicationRecord
       pattern [:collection, RDF::URI.new('http://rdaregistry.info/Elements/u/P60249'), :item_identifier]
     end
 
-    errors.add(:csvfile, 'Graph contains no local identifiers') if graph.query(query_for_local_identifiers).blank?
+    errors.add(:metadata_csv, 'Graph contains no local identifiers') if graph.query(query_for_local_identifiers).blank?
   end
 
 end

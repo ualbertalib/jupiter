@@ -4,7 +4,7 @@ class User < ApplicationRecord
 
   has_many :announcements, dependent: :destroy
   has_many :batch_ingests, dependent: :destroy
-  has_many :digitization_metadata_ingests, dependent: :destroy, class_name: 'Digitization::BatchMetadataIngest'
+  has_many :digitization_ingests, dependent: :destroy, class_name: 'Digitization::BatchIngest'
   has_many :draft_items, dependent: :destroy
   has_many :draft_theses, dependent: :destroy
   has_many :identities, dependent: :destroy

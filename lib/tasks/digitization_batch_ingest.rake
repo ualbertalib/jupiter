@@ -1,6 +1,6 @@
 namespace :digitization do
   desc 'batch ingest for multiple items metadata from a csv file - used by Admin and Assistants'
-  task :batch_ingest_metadata, [:user, :title, :csv_path] => :environment do |_t, args|
+  task :batch_ingest, [:user, :title, :metadata_csv] => :environment do |_t, args|
     log 'START: Digitization Batch ingest from triples started...'
 
     user = User.find_by(email: args.user)
@@ -14,22 +14,24 @@ namespace :digitization do
       exit 1
     end
 
-    if args.csv_path.blank?
-      log 'ERROR: CSV path must be present. Please specify a valid csv_path as an argument'
+    if args.metadata_csv.blank?
+      log 'ERROR: metadata triples CSV path must be present. Please specify a valid metadata_csv as an argument'
       exit 1
     end
 
-    if File.exist?(args.csv_path)
-      batch_ingest = user.digitization_metadata_ingests.new(title: args.title)
-      batch_ingest.csvfile.attach(io: File.open(args.csv_path.to_s), filename: 'metadata_graph.csv')
+    if File.exist?(args.metadata_csv)
+      batch_ingest = user.digitization_ingests.new(title: args.title)
+      batch_ingest.metadata_csv.attach(io: File.open(args.metadata_csv.to_s), filename: 'metadata_graph.csv')
 
-      Digitization::BatchMetadataIngestionJob.perform_later(batch_ingest) if batch_ingest.save!
+      Digitization::BatchIngestionJob.perform_later(batch_ingest) if batch_ingest.save!
+
+      log "FINISH: #{batch_ingest.title} [id: #{batch_ingest.id}] enqueued!"
     else
-      log "ERROR: Could not open file at `#{args.csv_path}`. Does the csv file exist at this location?"
+      unless File.exist?(args.metadata_csv)
+        log "ERROR: Could not open file at `#{args.metadata_csv}`. Does the csv file exist at this location?"
+      end
       exit 1
     end
-
-    log 'FINISH: Batch ingest enqueued!'
   end
 
   def log(message)
