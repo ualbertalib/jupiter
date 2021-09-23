@@ -195,9 +195,9 @@ class ThesisTest < ActiveSupport::TestCase
     Redis.current.del Rails.application.secrets.preservation_queue_name
 
     # Setup a thesis...
-    admin = users(:admin)
-    community = communities(:books)
-    collection = collections(:fantasy_books)
+    admin = users(:user_admin)
+    community = communities(:community_books)
+    collection = collections(:collection_fantasy)
 
     thesis = Thesis.new(title: 'Thesis',
                         owner_id: admin.id,
