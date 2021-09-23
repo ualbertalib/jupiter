@@ -3,9 +3,9 @@ require 'test_helper'
 class ThesisTest < ActiveSupport::TestCase
 
   test 'a valid item can be constructed' do
-    admin = users(:admin)
-    community = communities(:books)
-    collection = collections(:fantasy_books)
+    admin = users(:user_admin)
+    community = communities(:community_books)
+    collection = collections(:collection_fantasy)
     assert_difference('Thesis.count') do
       thesis = Thesis.new(title: 'Thesis', owner_id: admin.id, visibility: JupiterCore::VISIBILITY_PUBLIC,
                           dissertant: 'Joe Blow',

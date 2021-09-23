@@ -3,14 +3,14 @@ require 'test_helper'
 class Admin::Theses::FilesControllerTest < ActionDispatch::IntegrationTest
 
   setup do
-    @community = communities(:thesis)
-    @collection = collections(:thesis)
+    @community = communities(:community_thesis)
+    @collection = collections(:collection_thesis)
 
-    @admin = users(:admin)
+    @admin = users(:user_admin)
     sign_in_as @admin
 
-    @draft_thesis = draft_theses(:completed_choose_license_and_visibility_step)
-    @draft_thesis.member_of_paths = { 'community_id': [@community.id], 'collection_id': [@collection.id] }
+    @draft_thesis = draft_theses(:draft_thesis_completed_choose_license_and_visibility_step)
+    @draft_thesis.member_of_paths = { community_id: [@community.id], collection_id: [@collection.id] }
     @draft_thesis.save!
 
     pdf_file = ActiveStorage::Blob.create_after_upload!(

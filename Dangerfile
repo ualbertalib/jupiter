@@ -22,3 +22,22 @@ declared_trivial = (github.pr_title + github.pr_body).include?("#trivial") || !h
 if !git.modified_files.include?("CHANGELOG.md") && !declared_trivial
   fail("Please include a CHANGELOG entry. \nYou can find it at [CHANGELOG.md](https://github.com/ualbertalib/jupiter/blob/master/CHANGELOG.md).", sticky: false)
 end
+
+# Ensure link to PR/issue is present in all CHANGELOG entries for this release
+cl = File.read("CHANGELOG.md")
+
+# get relevant section of CL (between unreleased and next version header)
+cl = cl.split("## [Unreleased]").last.split("## [").first
+
+# remove empty lines
+cl.gsub! /^$\n/, ''
+
+# look for possibly overly-short CHANGELOG entry at the top and warn reviewers to consider requesting more detail if it's present.
+# Not making this a hard fail, as this is easily tripped up by hyphens and unless we get really fussy about using
+# special marker characters to begin and end entries or disallow intra-entry linebreaks (which is anti-readability), I can't
+# see an easy way to make this foolproof
+
+if cl.split(/[–-]/)[1].split.count < 10
+  warn('This CHANGELOG entry seems quite short. Reviewers, please check that it contains enough information, and ' \
+  'request expansion if it seems unreasonably brief.', sticky: false)
+end

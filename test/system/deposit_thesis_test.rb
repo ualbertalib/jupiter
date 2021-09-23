@@ -3,7 +3,7 @@ require 'application_system_test_case'
 class DepositThesisTest < ApplicationSystemTestCase
 
   test 'be able to deposit and edit a thesis successfully' do
-    admin = users(:admin)
+    admin = users(:user_admin)
 
     login_user(admin)
 
@@ -31,8 +31,8 @@ class DepositThesisTest < ApplicationSystemTestCase
     fill_in I18n.t('admin.theses.draft.describe_thesis.description'),
             with: 'A Dance with Dragons Description Goes Here!!!'
 
-    select communities(:thesis).title, from: 'draft_thesis[community_id][]'
-    select collections(:thesis).title, from: 'draft_thesis[collection_id][]'
+    select communities(:community_thesis).title, from: 'draft_thesis[community_id][]'
+    select collections(:collection_thesis).title, from: 'draft_thesis[collection_id][]'
 
     click_on I18n.t('admin.theses.draft.save_and_continue')
 
@@ -107,10 +107,10 @@ class DepositThesisTest < ApplicationSystemTestCase
   end
 
   test 'should populate community and collection when coming from a restricted collection page' do
-    community = communities(:thesis)
-    collection = collections(:thesis)
+    community = communities(:community_thesis)
+    collection = collections(:collection_thesis)
 
-    admin = users(:admin)
+    admin = users(:user_admin)
 
     login_user(admin)
 

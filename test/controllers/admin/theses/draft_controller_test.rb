@@ -3,16 +3,16 @@ require 'test_helper'
 class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
 
   setup do
-    @community = communities(:thesis)
-    @collection = collections(:thesis)
-    @admin = users(:admin)
+    @community = communities(:community_thesis)
+    @collection = collections(:collection_thesis)
+    @admin = users(:user_admin)
     Thesis.destroy_all
   end
 
   test 'should be able to get to show page for a draft thesis' do
     sign_in_as @admin
 
-    draft_thesis = draft_theses(:inactive)
+    draft_thesis = draft_theses(:draft_thesis_inactive)
 
     get admin_thesis_draft_url(id: draft_thesis.wizard_step, thesis_id: draft_thesis.id)
     assert_response :success
@@ -21,7 +21,7 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
   test 'should prevent user from skipping ahead with uncompleted steps' do
     sign_in_as @admin
 
-    draft_thesis = draft_theses(:inactive)
+    draft_thesis = draft_theses(:draft_thesis_inactive)
 
     # skip ahead right to upload files step
     get admin_thesis_draft_url(id: :upload_files, thesis_id: draft_thesis.id)
@@ -34,7 +34,7 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
   test 'should prevent going to review_and_deposit_thesis if draft_thesis has no files attached' do
     sign_in_as @admin
 
-    draft_thesis = draft_theses(:completed_choose_license_and_visibility_step)
+    draft_thesis = draft_theses(:draft_thesis_completed_choose_license_and_visibility_step)
     # Make draft_thesis to be in the review step (although it has no files and skipped the upload files step)
     draft_thesis.update(wizard_step: :review_and_deposit_thesis)
 
@@ -50,7 +50,7 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
   test 'should be able to update a draft thesis properly when saving describe_thesis form' do
     sign_in_as @admin
 
-    draft_thesis = draft_theses(:inactive)
+    draft_thesis = draft_theses(:draft_thesis_inactive)
 
     patch admin_thesis_draft_url(id: :describe_thesis, thesis_id: draft_thesis.id), params: {
       draft_thesis: {
@@ -76,8 +76,8 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
   test 'should be able to update a draft thesis properly when saving choose_license_and_visibility form' do
     sign_in_as @admin
 
-    draft_thesis = draft_theses(:completed_describe_thesis_step)
-    draft_thesis.member_of_paths = { 'community_id': [@community.id], 'collection_id': [@collection.id] }
+    draft_thesis = draft_theses(:draft_thesis_completed_describe_thesis_step)
+    draft_thesis.member_of_paths = { community_id: [@community.id], collection_id: [@collection.id] }
     draft_thesis.save!
 
     patch admin_thesis_draft_url(id: :choose_license_and_visibility, thesis_id: draft_thesis.id), params: {
@@ -102,8 +102,8 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
   test 'should be able to update a draft thesis properly when saving upload_files form that has file attachments' do
     sign_in_as @admin
 
-    draft_thesis = draft_theses(:completed_choose_license_and_visibility_step)
-    draft_thesis.member_of_paths = { 'community_id': [@community.id], 'collection_id': [@collection.id] }
+    draft_thesis = draft_theses(:draft_thesis_completed_choose_license_and_visibility_step)
+    draft_thesis.member_of_paths = { community_id: [@community.id], collection_id: [@collection.id] }
     draft_thesis.save!
 
     file_fixture = fixture_file_upload('/files/image-sample.jpeg', 'image/jpeg')
@@ -128,7 +128,7 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
   test 'should not be able to update a draft thesis when saving upload_files form that has no file attachments' do
     sign_in_as @admin
 
-    draft_thesis = draft_theses(:completed_choose_license_and_visibility_step)
+    draft_thesis = draft_theses(:draft_thesis_completed_choose_license_and_visibility_step)
 
     # Here upload_files all it does is check if files been uploaded (via ajax and files_controller)
     # and if so, updated the wizard_step to upload_files and redirects to review_and_deposit_thesis
@@ -146,8 +146,8 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
   test 'should be able to review and deposit a draft thesis properly when saving review_and_deposit_thesis form' do
     sign_in_as @admin
 
-    draft_thesis = draft_theses(:completed_choose_license_and_visibility_step)
-    draft_thesis.member_of_paths = { 'community_id': [@community.id], 'collection_id': [@collection.id] }
+    draft_thesis = draft_theses(:draft_thesis_completed_choose_license_and_visibility_step)
+    draft_thesis.member_of_paths = { community_id: [@community.id], collection_id: [@collection.id] }
 
     file_fixture = fixture_file_upload('/files/image-sample.jpeg', 'image/jpeg')
     image_file = ActiveStorage::Blob.create_after_upload!(
@@ -175,8 +175,8 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
   test 'should be able to update an old step without changing the current wizard_step of the draft thesis' do
     sign_in_as @admin
 
-    draft_thesis = draft_theses(:completed_choose_license_and_visibility_step)
-    draft_thesis.member_of_paths = { 'community_id': [@community.id], 'collection_id': [@collection.id] }
+    draft_thesis = draft_theses(:draft_thesis_completed_choose_license_and_visibility_step)
+    draft_thesis.member_of_paths = { community_id: [@community.id], collection_id: [@collection.id] }
 
     file_fixture = fixture_file_upload('/files/image-sample.jpeg', 'image/jpeg')
     image_file = ActiveStorage::Blob.create_after_upload!(
@@ -212,7 +212,7 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should not be able to create a draft thesis if not admin' do
-    sign_in_as users(:regular)
+    sign_in_as users(:user_regular)
 
     assert_no_difference('DraftThesis.count') do
       assert_raises ActionController::RoutingError do
@@ -233,9 +233,9 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'other admins should be able to delete a draft thesis even if they do not own the thesis' do
-    sign_in_as users(:admin_two)
+    sign_in_as users(:user_admin_two)
 
-    draft_thesis = draft_theses(:completed_choose_license_and_visibility_step)
+    draft_thesis = draft_theses(:draft_thesis_completed_choose_license_and_visibility_step)
 
     assert_difference('DraftThesis.count', -1) do
       delete admin_thesis_delete_draft_url(thesis_id: draft_thesis.id)
@@ -247,7 +247,7 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
   test 'should be able to delete a draft thesis if logged in and you own the thesis' do
     sign_in_as @admin
 
-    draft_thesis = draft_theses(:completed_choose_license_and_visibility_step)
+    draft_thesis = draft_theses(:draft_thesis_completed_choose_license_and_visibility_step)
 
     assert_difference('DraftThesis.count', -1) do
       delete admin_thesis_delete_draft_url(thesis_id: draft_thesis.id)

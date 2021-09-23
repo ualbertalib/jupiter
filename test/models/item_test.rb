@@ -3,9 +3,9 @@ require 'test_helper'
 class ItemTest < ActiveSupport::TestCase
 
   test 'a valid item can be constructed' do
-    community = communities(:books)
-    collection = collections(:fantasy_books)
-    item = Item.new(title: 'Item', owner_id: users(:admin).id, visibility: JupiterCore::VISIBILITY_PUBLIC,
+    community = communities(:community_books)
+    collection = collections(:collection_fantasy)
+    item = Item.new(title: 'Item', owner_id: users(:user_admin).id, visibility: JupiterCore::VISIBILITY_PUBLIC,
                     created: '2017-02-02',
                     languages: [CONTROLLED_VOCABULARIES[:language].english],
                     creators: ['Joe Blow'],
@@ -317,14 +317,14 @@ class ItemTest < ActiveSupport::TestCase
     Redis.current.del Rails.application.secrets.preservation_queue_name
 
     # Setup an item...
-    community = communities(:books)
-    collection = collections(:fantasy_books)
+    community = communities(:community_books)
+    collection = collections(:collection_fantasy)
 
     item = Item.new(title: generate_random_string,
                     creators: [generate_random_string],
                     visibility: JupiterCore::VISIBILITY_PUBLIC,
                     created: '1978-01-01',
-                    owner_id: users(:admin).id,
+                    owner_id: users(:user_admin).id,
                     item_type: CONTROLLED_VOCABULARIES[:item_type].report,
                     languages: [CONTROLLED_VOCABULARIES[:language].english],
                     license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
@@ -354,14 +354,14 @@ class ItemTest < ActiveSupport::TestCase
     Redis.current.del Rails.application.secrets.preservation_queue_name
 
     # Setup an item...
-    community = communities(:books)
-    collection = collections(:fantasy_books)
+    community = communities(:community_books)
+    collection = collections(:collection_fantasy)
 
     item = Item.new(title: generate_random_string,
                     creators: [generate_random_string],
                     visibility: JupiterCore::VISIBILITY_PUBLIC,
                     created: '1978-01-01',
-                    owner_id: users(:admin).id,
+                    owner_id: users(:user_admin).id,
                     item_type: CONTROLLED_VOCABULARIES[:item_type].report,
                     languages: [CONTROLLED_VOCABULARIES[:language].english],
                     license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
@@ -399,8 +399,8 @@ class ItemTest < ActiveSupport::TestCase
     Redis.current.del Rails.application.secrets.preservation_queue_name
 
     # Setup some items...
-    community = communities(:books)
-    collection = collections(:fantasy_books)
+    community = communities(:community_books)
+    collection = collections(:collection_fantasy)
 
     items = []
     3.times do
@@ -408,7 +408,7 @@ class ItemTest < ActiveSupport::TestCase
                         creators: [generate_random_string],
                         visibility: JupiterCore::VISIBILITY_PUBLIC,
                         created: '1978-01-01',
-                        owner_id: users(:admin).id,
+                        owner_id: users(:user_admin).id,
                         item_type: CONTROLLED_VOCABULARIES[:item_type].report,
                         languages: [CONTROLLED_VOCABULARIES[:language].english],
                         license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,

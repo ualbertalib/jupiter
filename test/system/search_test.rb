@@ -3,7 +3,7 @@ require 'application_system_test_case'
 class SearchTest < ApplicationSystemTestCase
 
   setup do
-    admin = users(:admin)
+    admin = users(:user_admin)
     @community = Community.create!(title: 'Fancy Community', owner_id: admin.id)
     @collections = 2.times.map do |i|
       Collection.create!(community_id: @community.id,
@@ -243,7 +243,7 @@ class SearchTest < ApplicationSystemTestCase
 
     # Facets and counts. 20 should match, expect only 6 to be shown
     assert_selector 'div.card-header', text: 'Collections'
-    # Note: collection facets also include community name
+    # NOTE: collection facets also include community name
     assert_selector 'li a', text: /Extra Community/, count: 6
 
     # Should be a 'Show more' button to see the rest
@@ -314,7 +314,7 @@ class SearchTest < ApplicationSystemTestCase
 
   # TODO: Slow Test, consistently around ~8-9 seconds
   test 'admin should be able to filter the public and private items' do
-    admin = users(:admin)
+    admin = users(:user_admin)
     login_user(admin)
 
     # Search box should be on any page we happen to be on

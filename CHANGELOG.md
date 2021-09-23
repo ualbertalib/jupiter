@@ -6,13 +6,48 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+### Added
+- Added oaisys tests [#1888](https://github.com/ualbertalib/jupiter/issues/1888)
+- Initialize disabled ReadOnlyMode [#2100](https://github.com/ualbertalib/jupiter/issues/2100)
+- Updated Architecture diagrams [PR#2135](https://github.com/ualbertalib/jupiter/pull/2135)
+
+### Removed
+- Remove entirely unnecessary config file. [PR#2044](https://github.com/ualbertalib/jupiter/pull/2044)
+- Completely disable logging of warnings around the "excel spreadsheet" issue [PR#2049](https://github.com/ualbertalib/jupiter/pull/2049)
+
+### Changed
+- Added DOI reset feature for admins [#1739](https://github.com/ualbertalib/jupiter/issues/1739)
+- Turn off reporting things like "this excel spreadsheet isn't thumbnailable" as warnings to Rollbar [PR#2046](https://github.com/ualbertalib/jupiter/pull/2046)
+- migration to fix concatenated subjects (part 2) [#1449](https://github.com/ualbertalib/jupiter/issues/1449)
+- Catch and log embargo expiry job save errors [#1989](https://github.com/ualbertalib/jupiter/issues/1989)
+- Don't send failures to SessionController in development environment [PR#2121](https://github.com/ualbertalib/jupiter/pull/2121) 
+- Rails upgraded to 6.0.3.6 to resolve certain issues with community dependencies
+- Fixture names have been modified to ensure their uniqueness [PR#2302](https://github.com/ualbertalib/jupiter/pull/2302) 
+- Rails upgraded to 6.0.3.7 to resolve security issues
+- Added Collection and Community to reindex rake task [#2444](https://github.com/ualbertalib/jupiter/issues/2444)
+
+### Fixed
+- bump rubocop and fix cop violations [PR#2072](https://github.com/ualbertalib/jupiter/pull/2072)
+- Give proper response when solr 400s [#2086](https://github.com/ualbertalib/jupiter/issues/2086)
+- Search with sort without default sort direction no longer errors [#2077](https://github.com/ualbertalib/jupiter/issues/2077)
+- bump omniauth-rails_csrf_protection gem for omniauth compatibility [PR#2096](https://github.com/ualbertalib/jupiter/pull/2096)
+- bump rdf-n3 and fix isomorphic_with? regression [PR#2070](https://github.com/ualbertalib/jupiter/pull/2070)
+- bump rubocop and fix more cop violations [PR#2132](https://github.com/ualbertalib/jupiter/pull/2132)
+- Various fixes from lighthouse suggestions [PR#2254](https://github.com/ualbertalib/jupiter/pull/2254)
+- Danger token in Github Actions [#2282](https://github.com/ualbertalib/jupiter/issues/2282)
+- Fix issue where we improperly 404'd when a deleted Collection is being displayed in the edit history [#2504](https://github.com/ualbertalib/jupiter/issues/2504)
+
+## [2.0.3] - 2021-05-05
+
+- Rails critical CVE fixes
+
 ## [2.0.2] - 2020-12-17
 
-– Fix issue where we improperly 500'd when a file download URL referenced a non-existent fileset UUID, instead of 404ing
+- Fix issue where we improperly 500'd when a file download URL referenced a non-existent fileset UUID, instead of 404ing
 - Make reindex rake task actually reindex all of the objects into Solr, instead of acting as a no-op
-– Fix a mis-named error rescue that resulted in a crash when the sort field wasn't known for a model
+- Fix a mis-named error rescue that resulted in a crash when the sort field wasn't known for a model
 - Fix nil start or end faceting dates error [PR#2041](https://github.com/ualbertalib/jupiter/pull/2041)
-– Try to better handle the logo deletion circular constraint (next step: dropping it entirely)
+- Try to better handle the logo deletion circular constraint (next step: dropping it entirely)
 
 ## [2.0.1] - 2020-12-14
 
@@ -93,6 +128,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 ### Security
 - add `noopener noreferrer` when opening a link in a new tab [PR#1344](https://github.com/ualbertalib/jupiter/pull/1344)
 - bump selfsigned CVE-2020-7720
+- bump nokogiri and adapt to changing initializer [PR#2062](https://github.com/ualbertalib/jupiter/pull/2062)
 
 ### Removed
 - Removed Matomo analytic tracking [#1493](https://github.com/ualbertalib/jupiter/issues/1493)
