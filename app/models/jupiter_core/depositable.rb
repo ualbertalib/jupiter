@@ -166,6 +166,7 @@ class JupiterCore::Depositable < ApplicationRecord
     $queue ||= ConnectionPool.new(size: 1, timeout: 5) { Redis.current }
 
     $queue.with do |connection|
+      # pushmi_pullyu requires both the id and type of the depositable
       entity = { uuid: id, type: self.class.table_name }
       connection.zadd queue_name, Time.now.to_f, entity.to_json
     end

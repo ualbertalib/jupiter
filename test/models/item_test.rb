@@ -313,7 +313,7 @@ class ItemTest < ActiveSupport::TestCase
   end
 
   # Preservation queue handling
-  test 'should add id with the correct score for a new item to preservation queue' do
+  test 'should add id and type with the correct score for a new item to preservation queue' do
     Redis.current.del Rails.application.secrets.preservation_queue_name
 
     # Setup an item...
