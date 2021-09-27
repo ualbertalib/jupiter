@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/ualbertalib/acts_as_rdfable.git
-  revision: 9616177cd564a2963d550ba533b40878b4067b11
+  revision: c39c7e5e5e4b9186d8ede6f1a907045007fc2e44
   branch: dump_rdf_annotations
   specs:
     acts_as_rdfable (0.2.1)
