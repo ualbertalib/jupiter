@@ -47,6 +47,7 @@ class ActiveSupport::TestCase
 
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
+  load('db/seeds/rdf_annotations.rb')
 
   # give this gibberish method a more semantically meaningful name for test-readers
   def generate_random_string

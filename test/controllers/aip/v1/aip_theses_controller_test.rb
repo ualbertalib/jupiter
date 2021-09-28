@@ -24,10 +24,6 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
         file_fixture('text-sample.txt')
       ]
     )
-
-    # Don't forget to load your rdf annotations!
-    seed_active_storage_blobs_rdf_annotations
-    seed_theses_rdf_annotations
   end
 
   test 'should be able to show a visible thesis to admin' do

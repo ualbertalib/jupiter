@@ -17,7 +17,7 @@ gem 'active_link_to'
 gem 'simple_form'
 
 # RDF stuff
-gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', tag: '0.3.0'
+gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', tag: '0.4.0'
 gem 'rdf', '~> 3.1.15'
 gem 'rdf-n3', '~> 3.1.2'
 gem 'rdf-vocab', '~> 3.1.14'
