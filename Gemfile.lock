@@ -1,10 +1,11 @@
 GIT
   remote: https://github.com/ualbertalib/acts_as_rdfable.git
-  revision: ad213eae97d8166a1a190702f3e0eb9a5014b808
-  tag: 0.3.0
+  revision: 1ea0065f78b500b1503460c8e0923dfa86472df8
+  tag: 0.4.0
   specs:
     acts_as_rdfable (0.2.1)
       rails (>= 5.2.3)
+      seed_dump (~> 3.3, >= 3.3.1)
 
 GIT
   remote: https://github.com/ualbertalib/builder_deferred_tagging.git
@@ -304,7 +305,7 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.7.1)
       mini_mime (>= 0.1.1)
-    marcel (1.0.1)
+    marcel (1.0.2)
     memoist (0.16.2)
     method_source (1.0.0)
     mini_magick (4.11.0)
@@ -472,6 +473,9 @@ GEM
     scanf (1.0.0)
     sdoc (2.2.0)
       rdoc (>= 5.0)
+    seed_dump (3.3.1)
+      activerecord (>= 4)
+      activesupport (>= 4)
     selenium-webdriver (3.142.7)
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
