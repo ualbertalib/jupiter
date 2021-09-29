@@ -190,4 +190,41 @@ class ThesisTest < ActiveSupport::TestCase
     assert_equal(2015, thesis.sort_year)
   end
 
+  # Preservation queue handling
+  test 'should add id and type with the correct score for a new thesis to preservation queue' do
+    Redis.current.del Rails.application.secrets.preservation_queue_name
+
+    # Setup a thesis...
+    admin = users(:user_admin)
+    community = communities(:community_books)
+    collection = collections(:collection_fantasy)
+
+    thesis = Thesis.new(title: 'Thesis',
+                        owner_id: admin.id,
+                        visibility: JupiterCore::VISIBILITY_PUBLIC,
+                        dissertant: 'Joe Blow',
+                        departments: ['Physics', 'Non-physics'],
+                        supervisors: ['Billy (Physics)', 'Sally (Non-physics)'],
+                        graduation_date: 'Fall 2013')
+
+    freeze_time do
+      thesis.tap do |unlocked_thesis|
+        unlocked_thesis.add_to_path(community.id, collection.id)
+        unlocked_thesis.save
+      end
+
+      thesis_output, score = Redis.current.zrange(Rails.application.secrets.preservation_queue_name,
+                                                  0,
+                                                  -1,
+                                                  with_scores: true)[0]
+      thesis_output = JSON.parse(thesis_output)
+
+      assert_equal thesis.id, thesis_output['uuid']
+      assert_equal 'theses', thesis_output['type']
+      assert_in_delta 0.5, score, Time.now.to_f
+    end
+
+    Redis.current.del Rails.application.secrets.preservation_queue_name
+  end
+
 end
