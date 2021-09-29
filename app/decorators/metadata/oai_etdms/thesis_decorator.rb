@@ -19,8 +19,7 @@ class Metadata::OaiEtdms::ThesisDecorator < ApplicationDecorator
   end
 
   def date
-    # TODO: need to talk to metadata about fallback if date accepted is not present, which it isn't for legacy theses
-    object.date_accepted || object.created_at
+    object.graduation_date
   end
 
   def identifiers

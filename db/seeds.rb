@@ -209,7 +209,7 @@ if Rails.env.development? || Rails.env.uat?
       thesis_attributes = base_attributes.merge({
         owner_id: admin.id,
         title: "Thesis about the effects of #{Faker::Beer.name} on #{thing.pluralize}",
-        graduation_date: "Fall #{rand(20_000).days.ago.year}",
+        graduation_date: "#{rand(20_000).days.ago.year}#{['-06','-11',''][i % 3]}",
         dissertant: creators[seed],
         abstract: description,
         language: languages.first,
