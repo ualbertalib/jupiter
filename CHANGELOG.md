@@ -27,6 +27,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Added Collection and Community to reindex rake task [#2444](https://github.com/ualbertalib/jupiter/issues/2444)
 
 ### Fixed
+- oaisys: change etdms date source to graduation date as per LAC spec [#2298](https://github.com/ualbertalib/jupiter/pull/2510)
 - bump rubocop and fix cop violations [PR#2072](https://github.com/ualbertalib/jupiter/pull/2072)
 - Give proper response when solr 400s [#2086](https://github.com/ualbertalib/jupiter/issues/2086)
 - Search with sort without default sort direction no longer errors [#2077](https://github.com/ualbertalib/jupiter/issues/2077)

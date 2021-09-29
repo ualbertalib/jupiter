@@ -19,35 +19,7 @@ class Metadata::OaiEtdms::ThesisDecorator < ApplicationDecorator
   end
 
   def date
-    # TODO: need to talk to metadata about fallback if date accepted is not present, which it isn't for legacy theses
-    object.date_accepted || object.created_at
-  end
-
-  def date_etdms
-    # use graduation date which is a required property with formats `YYYY`, `Fall YYYY`, `Spring YYYY`, or `YYYY-MM`
-    # convert to LAC etdms format `YYYY` or `YYYY-MM`: https://www.bac-lac.gc.ca/eng/services/theses/Pages/universities.aspx
-    regex = /
-              (?<season>
-                #{I18n.t('items.thesis.graduation_terms.fall')}
-                |
-                #{I18n.t('items.thesis.graduation_terms.spring')}
-              )? # capture fall or spring, e.g., Fall 2010
-              [ ]?
-              (?<year>\d{4})(?<mm_dd>-\d{2})? # capture YYYY and numeric month, if present
-            /x
-
-    capture = object.graduation_date.match(regex)
-
-    throw ArgumentError() if capture.nil? || capture[:year].nil?
-
-    case capture[:season]
-    when I18n.t('items.thesis.graduation_terms.fall')
-      "#{capture[:year]}-#{I18n.t('items.thesis.graduation_terms.fall_num')}"
-    when I18n.t('items.thesis.graduation_terms.spring')
-      "#{capture[:year]}-#{I18n.t('items.thesis.graduation_terms.spring_num')}"
-    else
-      "#{capture[:year]}#{capture[:mm_dd]}"
-    end
+    object.graduation_date
   end
 
   def identifiers

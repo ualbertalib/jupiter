@@ -12,6 +12,7 @@ class ThesisTest < ActiveSupport::TestCase
                           departments: ['Physics', 'Non-physics'],
                           supervisors: ['Billy (Physics)', 'Sally (Non-physics)'],
                           graduation_date: 'Fall 2013')
+
       thesis.tap do |unlocked_thesis|
         unlocked_thesis.add_to_path(community.id, collection.id)
         unlocked_thesis.save!
