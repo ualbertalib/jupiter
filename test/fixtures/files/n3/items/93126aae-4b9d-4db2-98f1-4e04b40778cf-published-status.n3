@@ -8,9 +8,15 @@
 
 <<%= url %>/aip/v1/items/93126aae-4b9d-4db2-98f1-4e04b40778cf> a pcdm:Object;
   dc:title "dcterms:title1$ Some Title for Item";
+  pcdm:hasMember <<%= url %>/aip/v1/items/93126aae-4b9d-4db2-98f1-4e04b40778cf/filesets/<%= fileset_0_uuid %>>,
     <<%= url %>/aip/v1/items/93126aae-4b9d-4db2-98f1-4e04b40778cf/filesets/<%= fileset_1_uuid %>>;
   pcdm:memberOf <<%= url %>/aip/v1/collections/<%= collection_uuid %>>;
   <http://prismstandard.org/namespaces/basic/3.0/doi> "doi:10.7939/xxxxxxxxx";
+  dc11:contributor "dc:contributor1$ Perez, Juan",
+    "dc:contributor2$ Perez, Maria";
+  dc11:creator "dc:creator1$ Doe, Jane",
+    "dc:creator2$ Doe, John";
+  dc11:subject "dc:subject2$ Some subject heading",
     "dc:subject1$ Some subject heading";
   dc:accessRights "http://terms.library.ualberta.ca/public";
   dc:alternative "dcterms:alternative1$ Some Alternative Title";
