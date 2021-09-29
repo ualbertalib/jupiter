@@ -313,7 +313,7 @@ class ItemTest < ActiveSupport::TestCase
   end
 
   # Preservation queue handling
-  test 'should add id with the correct score for a new item to preservation queue' do
+  test 'should add id and type with the correct score for a new item to preservation queue' do
     Redis.current.del Rails.application.secrets.preservation_queue_name
 
     # Setup an item...
@@ -336,12 +336,14 @@ class ItemTest < ActiveSupport::TestCase
         unlocked_item.save
       end
 
-      item_id, score = Redis.current.zrange(Rails.application.secrets.preservation_queue_name,
-                                            0,
-                                            -1,
-                                            with_scores: true)[0]
+      item_output, score = Redis.current.zrange(Rails.application.secrets.preservation_queue_name,
+                                                0,
+                                                -1,
+                                                with_scores: true)[0]
+      item_output = JSON.parse(item_output)
 
-      assert_equal item.id, item_id
+      assert_equal item.id, item_output['uuid']
+      assert_equal 'items', item_output['type']
       assert_in_delta 0.5, score, Time.now.to_f
     end
 
@@ -381,12 +383,12 @@ class ItemTest < ActiveSupport::TestCase
 
       assert_equal 1, Redis.current.zcard(Rails.application.secrets.preservation_queue_name)
 
-      item_id, score = Redis.current.zrange(Rails.application.secrets.preservation_queue_name,
-                                            0,
-                                            -1,
-                                            with_scores: true)[0]
-
-      assert_equal item.id, item_id
+      item_output, score = Redis.current.zrange(Rails.application.secrets.preservation_queue_name,
+                                                0,
+                                                -1,
+                                                with_scores: true)[0]
+      item_output = JSON.parse(item_output)
+      assert_equal item.id, item_output['uuid']
       assert_in_delta 0.5, score, 3.minutes.from_now.to_f
     end
 
@@ -438,9 +440,9 @@ class ItemTest < ActiveSupport::TestCase
     end
 
     save_order = [items[1], items[0], items[2]]
-
     queue = Redis.current.zrange(Rails.application.secrets.preservation_queue_name, 0, -1, with_scores: false)
-    assert_equal save_order.map(&:id), queue
+
+    assert_equal save_order.map(&:id), (queue.map { |x| JSON.parse(x)['uuid'] })
 
     Redis.current.del Rails.application.secrets.preservation_queue_name
   end

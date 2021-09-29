@@ -12,18 +12,18 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Updated Architecture diagrams [PR#2135](https://github.com/ualbertalib/jupiter/pull/2135)
 
 ### Removed
-– Remove entirely unnecessary config file. [PR#2044](https://github.com/ualbertalib/jupiter/pull/2044)
-– Completely disable logging of warnings around the "excel spreadsheet" issue [PR#2049](https://github.com/ualbertalib/jupiter/pull/2049)
+- Remove entirely unnecessary config file. [PR#2044](https://github.com/ualbertalib/jupiter/pull/2044)
+- Completely disable logging of warnings around the "excel spreadsheet" issue [PR#2049](https://github.com/ualbertalib/jupiter/pull/2049)
 
 ### Changed
 - Added DOI reset feature for admins [#1739](https://github.com/ualbertalib/jupiter/issues/1739)
-– Turn off reporting things like "this excel spreadsheet isn't thumbnailable" as warnings to Rollbar [PR#2046](https://github.com/ualbertalib/jupiter/pull/2046)
+- Turn off reporting things like "this excel spreadsheet isn't thumbnailable" as warnings to Rollbar [PR#2046](https://github.com/ualbertalib/jupiter/pull/2046)
 - migration to fix concatenated subjects (part 2) [#1449](https://github.com/ualbertalib/jupiter/issues/1449)
 - Catch and log embargo expiry job save errors [#1989](https://github.com/ualbertalib/jupiter/issues/1989)
 - Don't send failures to SessionController in development environment [PR#2121](https://github.com/ualbertalib/jupiter/pull/2121) 
-– Rails upgraded to 6.0.3.6 to resolve certain issues with community dependencies
+- Rails upgraded to 6.0.3.6 to resolve certain issues with community dependencies
 - Fixture names have been modified to ensure their uniqueness [PR#2302](https://github.com/ualbertalib/jupiter/pull/2302) 
-– Rails upgraded to 6.0.3.7 to resolve security issues
+- Rails upgraded to 6.0.3.7 to resolve security issues
 - Added Collection and Community to reindex rake task [#2444](https://github.com/ualbertalib/jupiter/issues/2444)
 
 ### Fixed
@@ -36,14 +36,20 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - bump rubocop and fix more cop violations [PR#2132](https://github.com/ualbertalib/jupiter/pull/2132)
 - Various fixes from lighthouse suggestions [PR#2254](https://github.com/ualbertalib/jupiter/pull/2254)
 - Danger token in Github Actions [#2282](https://github.com/ualbertalib/jupiter/issues/2282)
+- Fix issue where we improperly 404'd when a deleted Collection is being displayed in the edit history [#2504](https://github.com/ualbertalib/jupiter/issues/2504)
+- Fix communication with [pushmi_pullyu](https://github.com/ualbertalib/pushmi_pullyu) by changing the format for entries in redis queue [#2527](https://github.com/ualbertalib/jupiter/issues/2527)
+
+## [2.0.3] - 2021-05-05
+
+- Rails critical CVE fixes
 
 ## [2.0.2] - 2020-12-17
 
-– Fix issue where we improperly 500'd when a file download URL referenced a non-existent fileset UUID, instead of 404ing
+- Fix issue where we improperly 500'd when a file download URL referenced a non-existent fileset UUID, instead of 404ing
 - Make reindex rake task actually reindex all of the objects into Solr, instead of acting as a no-op
-– Fix a mis-named error rescue that resulted in a crash when the sort field wasn't known for a model
+- Fix a mis-named error rescue that resulted in a crash when the sort field wasn't known for a model
 - Fix nil start or end faceting dates error [PR#2041](https://github.com/ualbertalib/jupiter/pull/2041)
-– Try to better handle the logo deletion circular constraint (next step: dropping it entirely)
+- Try to better handle the logo deletion circular constraint (next step: dropping it entirely)
 
 ## [2.0.1] - 2020-12-14
 
