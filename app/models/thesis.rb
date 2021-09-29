@@ -21,7 +21,7 @@ class Thesis < JupiterCore::Doiable
   scope :updated_before, ->(date) { where('updated_at < ?', date) }
 
   before_validation :populate_sort_year
-  after_save :push_item_id_for_preservation
+  after_save :push_entity_for_preservation
 
   validates :dissertant, presence: true
   validates :graduation_date, presence: true

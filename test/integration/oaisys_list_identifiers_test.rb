@@ -122,7 +122,6 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
 
     list_identifiers_theses_xml
   end
-
   test 'list identifers item set xml' do
     get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_dc', set: @collection.id),
         headers: { 'Accept' => 'application/xml' }
