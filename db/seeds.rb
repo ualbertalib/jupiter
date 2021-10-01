@@ -739,6 +739,9 @@ if Rails.env.development? || Rails.env.uat?
 
 end
 
+# Rdf Annotations
+load('db/seeds/rdf_annotations.rb')
+
 # Types
 [:book, :book_chapter, :conference_workshop_poster,
  :conference_workshop_presentation, :dataset,

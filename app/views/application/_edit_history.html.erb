@@ -19,20 +19,35 @@
   </div>
 
   <div class="collapse" id='edit-history-hidden'>
+    <div id='edit-history-explainer' class="bg-light p-3 border border-primary rounded list-group my-3  ">
+      <h2 class='h4'><%= t(:edit_history_explainer_title) %></h2>
+      <ul>
+        <li>
+          <p><%= t(:edit_history_explainer_styles_title) %></p>
+          <p><%= t(:edit_history_explainer_styles_content_html) %></p>
+        </li>
+        <li>
+          <p><%= t(:edit_history_explainer_deleted_title) %></p>
+          <p><%= t(:edit_history_explainer_deleted_content) %></p>
+        </li>
+      </ul>
+    </div>
     <ul>
-    <% item.history.reverse_each do |changeset| %>
-      <li class="list-unstyled list-group-item-action">
-        <h3><%= changeset.date %></h3>
-        <dl>
-          <dt><%= t(:edited_by) %></dt>
-          <dd><%= changeset.user_info %></dd>
-        </dl>
-        <% changeset.html_diffs.each do |html_diff| %>
-          <dt><%= html_diff[:attribute] %></dt>
-          <dd><%= html_diff[:html] %></dd>
-        <% end %>
-      </li>
-    <% end %>
+      <% @item.history.reverse_each do |changeset| %>
+        <li class="list-unstyled list-group-item-action">
+          <h2 class='h3'><%= changeset.date %></h3>
+          <dl>
+            <dt><%= t(:edited_by) %></dt>
+            <dd><%= changeset.user_info %></dd>
+          </dl>
+          <% changeset.html_diffs.each do |html_diff| %>
+            <dl>
+              <dt><%= html_diff[:attribute] %></dt>
+              <dd><%= html_diff[:html] %></dd>
+            </dl>
+          <% end %>
+        </li>
+      <% end %>
     </ul>
   </div>
 <% end %>

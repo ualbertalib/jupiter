@@ -44,6 +44,7 @@ For javascript files:
 `$ bundle exec rails test`
 
 # Run system tests
+
 By default, `rails test` will not run the system tests. To run them use:
 
 `$ bundle exec rails test:system`
@@ -56,7 +57,7 @@ Please note that by default the seeding process will download community logos
 from the web. If you are not on a network, or otherwise wish to prevent this
 behaviour, please set the enviroment variable `SKIP_DOWNLOAD_COMMUNITY_LOGOS`.
 
-***Note***: You may need chromedriver and perhaps a few other dependencies installed to run these system tests in selenium.
+**_Note_**: You may need chromedriver and perhaps a few other dependencies installed to run these system tests in selenium.
 
 # REGenerate Documentation
 
@@ -70,6 +71,7 @@ Jupiter runs under subdomains. So you will need to configure your local environm
 127.0.0.1       era.demo.com
 127.0.0.1       digitalcollections.demo.com
 ```
+
 Once this is done, you can navigate to `era.demo.com:3000` or `digitalcollections.demo.com:3000` to access your development environment.
 
 Some alternatives is you may also use the `localhost` top level domain (e.g: you can just navigate to `era.ualberta.localhost:3000` or `digitalcollections.ualberta.localhost:3000` to access your development environment without configuring `/etc/hosts` ). Another alternative is you can use services like `lvh.me` (e.g: navigate to `era.lvh.me:3000` or `digitalcollections.lvh.me:3000` to access your development environment).
@@ -80,9 +82,10 @@ The UAT server is accessible on all library staff workstation, and through VPN o
 [Jupiter UAT Setup](https://github.com/ualbertalib/di_internal/blob/master/System-Adminstration/UAT/UAT-Environment.md)
 
 # Docker
+
 This project comes with a docker setup to easily setup your own local development environment for jupiter in just a few steps.
 
-## Step 1: Make sure you have docker, docker-compose, git and Ruby  installed:
+## Step 1: Make sure you have docker, docker-compose, git and Ruby installed:
 
 1. [Install Docker](https://docs.docker.com/engine/installation/) (Requires version 1.13.0+)
 2. [Install Docker Compose](https://docs.docker.com/compose/install/) (Requires version 1.10.0+)
@@ -92,6 +95,7 @@ This project comes with a docker setup to easily setup your own local developmen
 ### Still need more help? Check out the following
 
 #### OSX / Windows
+
 - If you are on Mac, check out [Docker for Mac](https://docs.docker.com/docker-for-mac/)
 - If you are on Windows, check out [Docker for Windows](https://docs.docker.com/docker-for-windows/)
 
@@ -102,7 +106,9 @@ These will install `docker`, `docker-compose`, and `Docker Desktop` on your mach
 Use your distribution's package manager to install `docker` and `docker-compose`.
 
 ## Step 2: Get Jupiter source code
+
 Clone the Jupiter repository from github:
+
 ```shell
 git clone git@github.com:ualbertalib/jupiter.git
 cd jupiter
@@ -113,6 +119,7 @@ cd jupiter
 We use docker for provisioning all of our datastores we require for jupiter (solr/postgres/redis)
 
 To start and setup your docker containers simply
+
 ```shell
 docker-compose -f docker-compose.yml up -d
 ```
@@ -129,6 +136,8 @@ bundle install
 yarn
 ```
 
+Note: This step failed on CentOS 7 with node version 16. Have to downgrade node from v16 to 14. (2021/07/11)
+
 ## Step 6: Setup Database
 
 ```shell
@@ -144,18 +153,19 @@ bin/rails s
 Now everything should be up and running!
 
 ## Step 8: Open and view Jupiter!
+
 Now everything is ready, you can go and view Jupiter! Just open your favorite browser and go to the following url:
 
-  - Development environment: [era.ualberta.localhost:3000](http://era.ualberta.localhost:3000)
-
+- Development environment: [era.ualberta.localhost:3000](http://era.ualberta.localhost:3000)
 
 ## Docker compose demo edition
 
 Want to quickly try out and explore Jupiter? This project comes with a demo docker setup to easily setup your own local development environment for jupiter in just a few steps.
 
-
 ## Step 1: Get Jupiter source code
+
 Clone the Jupiter repository from github:
+
 ```shell
 git clone git@github.com:ualbertalib/jupiter.git
 cd jupiter
@@ -164,6 +174,7 @@ cd jupiter
 ## Step 2: Start docker and docker compose
 
 To build, create, start and setup your docker containers simply run:
+
 ```shell
 docker-compose -f docker-compose.demo.yml build
 ```
@@ -175,27 +186,34 @@ docker-compose -f docker-compose.demo.yml up -d
 Now everything should be up and running!
 
 ## Step 3: Open and view Jupiter!
+
 Now everything is ready, you can go and view Jupiter! Just open your favorite browser and go to the following url:
 
 [era.ualberta.localhost:3000](http://era.ualberta.localhost:3000)
 
 ## For production deployment (on UAT environment)
+
 To setup the environment variables needed for deployment, modify the sample .env_deployment file with variable values needed for the deployment:
+
 ```shell
 cp .env_deployment_sample .env_deployment
 vi .env_deployment
 ```
+
 To build, create, start and setup your docker containers simply run:
+
 ```shell
 docker-compose -f docker-compose.production.yml up -d
 ```
 
 For the first time of the deployment, set up the database:
+
 ```shell
 docker-compose -f docker-compose.production.yml run web rails db:setup
 ```
 
 ## Common gotchas for docker?
+
 - If your having issues, logs are the best place to first look at what went wrong.
 
   To check all container logs:
@@ -209,6 +227,7 @@ docker-compose -f docker-compose.production.yml run web rails db:setup
   ```shell
   docker-compose logs web
   ```
+
 - If your switching between docker-compose and local development on your machine, you may encounter in weird permissions on files that docker has created (/tmp/pids/, etc.). Simply just `sudo rm` them.
 
 - If you would like to run Postgres in a container, but docker-compose reports that port 3306 is already in use, you likely have a Postgres instance already running on the host. You will need to shutdown Postgres before you can start the container. On Ubuntu, `sudo service postgresql stop` on the host will do the trick. Another option is to configure docker and the rails app to look for Postgres using a different port.
@@ -225,13 +244,12 @@ modifying the config files, set the environment variable `RUN_FITS_CHARACTERIZAT
 
 # Configuring SAML
 
-* Update `secrets.yml` (and maybe `omniauth.rb`) for the SAML implementation (you may need to generate a certificate/key for certain environments)
-* Give IST's Identity Provider (uat-login or login) the metadata for our service provider
-  * Quick way to view this metadata is to the start the Rails server and navigate to `http://era.ualberta.localhost:3000/auth/saml/metadata` (feel free to edit this metadata accordingly for example adding Organization and ContactPerson metadata)
-* Once this is complete, login via SAML should be working successfully. Try it out!
+- Update `secrets.yml` (and maybe `omniauth.rb`) for the SAML implementation (you may need to generate a certificate/key for certain environments)
+- Give IST's Identity Provider (uat-login or login) the metadata for our service provider
+  - Quick way to view this metadata is to the start the Rails server and navigate to `http://era.ualberta.localhost:3000/auth/saml/metadata` (feel free to edit this metadata accordingly for example adding Organization and ContactPerson metadata)
+- Once this is complete, login via SAML should be working successfully. Try it out!
 
 (TODO: Provide an alternatives to IST IdP for non production environments?)
-
 
 # Batch Ingest
 

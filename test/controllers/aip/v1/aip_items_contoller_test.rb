@@ -29,10 +29,6 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
         file_fixture('text-sample.txt')
       ]
     )
-
-    # Load just the RDF annotations we need for these tests
-    seed_active_storage_blobs_rdf_annotations
-    seed_item_rdf_annotations
   end
 
   test 'should be able to show a visible item to admin' do

@@ -3,7 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 # Core Rails stuff
 gem 'image_processing' # for ActiveStorage Variants
-gem 'puma', '~> 5.4'
+gem 'puma', '~> 5.5'
 gem 'rails', '~> 6.0.4.1'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
@@ -17,7 +17,7 @@ gem 'active_link_to'
 gem 'simple_form'
 
 # RDF stuff
-gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', tag: '0.3.0'
+gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', tag: '0.4.0'
 gem 'rdf', '~> 3.1.15'
 gem 'rdf-n3', '~> 3.1.2'
 gem 'rdf-vocab', '~> 3.1.14'
@@ -94,7 +94,7 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
 
-  gem 'rubocop', '~> 1.21.0', require: false
+  gem 'rubocop', '~> 1.22.0', require: false
   gem 'rubocop-minitest', require: false
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false
@@ -116,7 +116,7 @@ group :development do
 end
 
 group :test do
-  gem 'danger', '~> 8.3', require: false # Pull Request etiquette enforcement
+  gem 'danger', '~> 8.4', require: false # Pull Request etiquette enforcement
   gem 'simplecov'
   # Faker added 0.5 seconds to the test suite per call. Haikunator seems much faster for faking strings
   gem 'haikunator'
