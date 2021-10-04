@@ -447,7 +447,7 @@ GEM
     rsolr (2.3.0)
       builder (>= 2.1.2)
       faraday (>= 0.9.0)
-    rubocop (1.22.0)
+    rubocop (1.22.1)
       parallel (~> 1.10)
       parser (>= 3.0.0.0)
       rainbow (>= 2.2.2, < 4.0)
@@ -653,7 +653,7 @@ DEPENDENCIES
   redis (~> 4.1)
   rollbar
   rsolr
-  rubocop (~> 1.22.0)
+  rubocop (~> 1.22.1)
   rubocop-minitest
   rubocop-performance
   rubocop-rails
