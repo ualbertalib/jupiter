@@ -1,4 +1,5 @@
-Rails.application.routes.default_url_options = { host: Rails.application.secrets.era_host, port: 443, protocol: 'https' }
+Rails.application.routes.default_url_options = { host: Rails.application.secrets.era_host, port: 443,
+                                                 protocol: 'https' }
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
