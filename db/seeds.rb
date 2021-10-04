@@ -218,21 +218,21 @@ if Rails.env.development? || Rails.env.uat?
       field = Faker::Job.field
       level = ["Master's", 'Doctorate'][i % 2]
       thesis_attributes = base_attributes.merge({
-                                                  owner_id: admin.id,
-                                                  title: "Thesis about the effects of #{Faker::Beer.name} on #{thing.pluralize}",
-                                                  graduation_date: "Fall #{rand(20_000).days.ago.year}",
-                                                  dissertant: creators[seed],
-                                                  abstract: description,
-                                                  language: languages.first,
-                                                  specialization: field,
-                                                  departments: ["Deparment of #{field}"],
-                                                  supervisors: ["#{contributors[seed]} (#{field})"],
-                                                  committee_members: ["#{contributors[seed2]} (#{field})"],
-                                                  rights: 'Share my stuff with everybody',
-                                                  thesis_level: level,
-                                                  degree: "#{level} of #{field}",
-                                                  institution: institutions[(i / 10) % 2]
-                                                })
+        owner_id: admin.id,
+        title: "Thesis about the effects of #{Faker::Beer.name} on #{thing.pluralize}",
+        graduation_date: "#{rand(20_000).days.ago.year}#{['-06','-11',''][i % 3]}",
+        dissertant: creators[seed],
+        abstract: description,
+        language: languages.first,
+        specialization: field,
+        departments: ["Deparment of #{field}"],
+        supervisors: ["#{contributors[seed]} (#{field})"],
+        committee_members: ["#{contributors[seed2]} (#{field})"],
+        rights: 'Share my stuff with everybody',
+        thesis_level: level,
+        degree: "#{level} of #{field}",
+        institution: institutions[(i / 10) % 2]
+      })
 
       # Every once in a while, create a mondo-thesis with full, rich metadata to help view-related work
       if i == 8

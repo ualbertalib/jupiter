@@ -101,6 +101,7 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 
 ### Fixed
 
+- oaisys: change etdms date source to graduation date as per LAC spec [#2298](https://github.com/ualbertalib/jupiter/pull/2510)
 - Give proper response when solr 400s [#2086](https://github.com/ualbertalib/jupiter/issues/2086)
 - Search with sort without default sort direction no longer errors [#2077](https://github.com/ualbertalib/jupiter/issues/2077)
 - Various fixes from lighthouse suggestions [PR#2254](https://github.com/ualbertalib/jupiter/pull/2254)
