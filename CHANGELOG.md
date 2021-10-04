@@ -32,32 +32,50 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 
 - Many "description" or "abstract" fields (at the Item level as well as Communities and Collections) contain HTML tags. Because these are text fields, HTML is not rendered in the UI and text looks garbled and it's way less readable than ideal. Markdown should work really well for this since that's already used in many of the tools staff working in repositories are familiar with. Added `redcarpet` gem which renders markdown in our decorators and strips markdown in our Solr exporters [#1322](https://github.com/ualbertalib/jupiter/issues/1322)
 
-- Add Digitization::Book ingest artifacts to model [#2011](https://github.com/ualbertalib/jupiter/issues/2011)
+- Added DOI reset feature for admins [#1739](https://github.com/ualbertalib/jupiter/issues/1739)
 
+- Added feature flags to Jupiter.  The motivation for this change is so that we can continuously deploy and turn on or off features as needed. Admins can enable features through the admin panel. [#1897](https://github.com/ualbertalib/jupiter/issues/1897)
+
+- Jupiter II work is underway to incorporate Digitized materials into Jupiter in the `digitalcollections` namespace.  We've begun by modelling, developing the user interface, and tasks for ingest of FolkFest Programs.
+  - Peel redirects [#1769](https://github.com/ualbertalib/jupiter/issues/1769)
+  - Make `Digitization::Book` `Depositable`
+  - Make `Digitization::Newspaper` `Depositable`
+  - Make `Digitization::Image` `Depositable`
+  - Make `Digitization::Map` `Depositable`
+  - Volume and Issue label attribute to Digitization::Book
+  - Corrected missing pluralization in `Digitization::Book` attributes
+  - Make Digitization::Book more like other items and other small fixes
+  - book metadata for folk fest digitization [#2010](https://github.com/ualbertalib/jupiter/issues/2010)
+  - Add `Digitization::Book` ingest artifacts to model [#2011](https://github.com/ualbertalib/jupiter/issues/2011)
+  - Add task that will kick off job for batch ingestion of digitization metadata from a csv containing triples [#2011](https://github.com/ualbertalib/jupiter/issues/2011)
+
+- Improve batch ingest workflow by using Google Drive for staging and a user interface for creating and reviewing batches. Requires new secrets to be configured and `batch_ingest` feature flag. Further context can be found [#1986](https://github.com/ualbertalib/jupiter/issues/1986)
+  - Add new models (BatchIngest and BatchIngestFile) for improved batch ingest work 
+  - Add new google drive client service to be able to retrieve files/spreadsheets from Google Drive
+  - Add batch ingest controller and views for CRUDing batch ingests
+  - Add batch ingest form with google file picker and spreadsheet validation
+  - Add batch ingestion job for batch ingesting items into ERA
+  - Add various fixes and improvements to batch ingestion work
+
+- Subdomains being used for front doors to the application. `era` and `digitalcollections` are the ones in use so far.  This requires that the host subdomain match these exactly, and new secrets to be configured.  Further context can be found [#1707](https://github.com/ualbertalib/jupiter/issues/1707)
+  - Add 'era' subdomain and foundation for future frontdoors [#1786](https://github.com/ualbertalib/jupiter/pull/1786)
+  - Add 'digitalcollections' subdomain for future front door
+  - Refactored item download/view behaviour in routes and views to be reusable in digitization namespace and application wide
+
+- Added highlighting of terms within search results descriptions. Requires `fulltext_search` feature flag. [#1800](https://github.com/ualbertalib/jupiter/issues/1800)
+
+- Added category labels for active facet badges. Requires `facet_badge_category_name` feature flag. [#1261](https://github.com/ualbertalib/jupiter/issues/1261)
+
+- Changes default behaviour within a facet to 'OR'. Requires `or_facets` feature flag. [#1990](https://github.com/ualbertalib/jupiter/issues/1990)
 ### Added
 
 - Added oaisys tests [#1888](https://github.com/ualbertalib/jupiter/issues/1888)
 - Initialize disabled ReadOnlyMode [#2100](https://github.com/ualbertalib/jupiter/issues/2100)
-- Added highlighting of terms within search results descriptions [#1800](https://github.com/ualbertalib/jupiter/issues/1800)
-- Added feature flags to Jupiter [#1897](https://github.com/ualbertalib/jupiter/issues/1897)
-- peel redirects [#1769](https://github.com/ualbertalib/jupiter/issues/1769)
 - Updated Architecture diagrams [PR#2135](https://github.com/ualbertalib/jupiter/pull/2135)
 - Namespaces for the Controlled Vocabularies [#2118](https://github.com/ualbertalib/jupiter/issues/2118)
-- Labels for active facet badges [#1261](https://github.com/ualbertalib/jupiter/issues/1261)
-- book metadata for folk fest digitization [#2010](https://github.com/ualbertalib/jupiter/issues/2010)
-- Volume and Issue label attribute to Digitization::Book
-- Add new models (BatchIngest and BatchIngestFile) for improved batch ingest work [#1986](https://github.com/ualbertalib/jupiter/issues/1986)
-- Add new google drive client service to be able to retrieve files/spreadsheets from Google Drive [#1986](https://github.com/ualbertalib/jupiter/issues/1986)
 - Brakeman linting to Github Actions workflow
-- Add batch ingest controller and views for CRUDing batch ingests [#1986](https://github.com/ualbertalib/jupiter/issues/1986)
-- Add batch ingest form with google file picker and spreadsheet validation [#1986](https://github.com/ualbertalib/jupiter/issues/1986)
-- Add batch ingestion job for batch ingesting items into ERA [#1986](https://github.com/ualbertalib/jupiter/issues/1986)
-- Add 'digitalcollections' subdomain for future front door
-- Add task that will kick off job for batch ingestion of digitization metadata from a csv containing triples [#2011](https://github.com/ualbertalib/jupiter/issues/2011)
 - Make autocomplete explicit [PR#2449](https://github.com/ualbertalib/jupiter/pull/2449)
-- Add various fixes and improvements to batch ingestion work
 - RdfAnnotation changes will be output to a file to facilitate testing and database setup [acts_as_rdfable#12](https://github.com/ualbertalib/acts_as_rdfable/issues/12)
-- Updated Architecture diagrams [PR#2135](https://github.com/ualbertalib/jupiter/pull/2135)
 
 ### Removed
 
@@ -68,45 +86,38 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 
 ### Changed
 
-- Added DOI reset feature for admins [#1739](https://github.com/ualbertalib/jupiter/issues/1739)
 - Turn off reporting things like "this excel spreadsheet isn't thumbnailable" as warnings to Rollbar [PR#2046](https://github.com/ualbertalib/jupiter/pull/2046)
 - migration to fix concatenated subjects (part 2) [#1449](https://github.com/ualbertalib/jupiter/issues/1449)
-- Default behaviour within a facet to 'OR' [#1990](https://github.com/ualbertalib/jupiter/issues/1990)
 - Catch and log embargo expiry job save errors [#1989](https://github.com/ualbertalib/jupiter/issues/1989)
 - Don't send failures to SessionController in development environment [PR#2121](https://github.com/ualbertalib/jupiter/pull/2121)
 - Rails upgraded to 6.0.3.6 to resolve certain issues with community dependencies
 - Moved `visibility` vocabulary into a `jupiter_core` namespace
 - Move `doi_url` to `Doiable` class
-- Make `Digitization::Book` `Depositable`
-- Make `Digitization::Newspaper` `Depositable`
-- Make `Digitization::Image` `Depositable`
-- Make `Digitization::Map` `Depositable`
-- Refactored item download/view behaviour in routes and views to be reusable in digitization namespace and application wide
 - Fixture names have been modified to ensure their uniqueness [PR#2302](https://github.com/ualbertalib/jupiter/pull/2302)
 - Rails upgraded to 6.0.3.7 to resolve security issues
 - Added Collection and Community to reindex rake task [#2444](https://github.com/ualbertalib/jupiter/issues/2444)
+- predeploy script to reference this branch
+- UAT VIRTUAL_HOSTS configuration on just the containers that need it
 
 ### Fixed
 
-- bump rubocop and fix cop violations [PR#2072](https://github.com/ualbertalib/jupiter/pull/2072)
 - Give proper response when solr 400s [#2086](https://github.com/ualbertalib/jupiter/issues/2086)
 - Search with sort without default sort direction no longer errors [#2077](https://github.com/ualbertalib/jupiter/issues/2077)
+- Various fixes from lighthouse suggestions [PR#2254](https://github.com/ualbertalib/jupiter/pull/2254)
+- Fix issue where we improperly 404'd when a deleted Collection is being displayed in the edit history [#2504](https://github.com/ualbertalib/jupiter/issues/2504)
+- Fix communication with [pushmi_pullyu](https://github.com/ualbertalib/pushmi_pullyu) by changing the format for entries in redis queue [#2527](https://github.com/ualbertalib/jupiter/issues/2527)
+- bump rubocop and fix cop violations [PR#2072](https://github.com/ualbertalib/jupiter/pull/2072)
 - bump omniauth-rails_csrf_protection gem for omniauth compatibility [PR#2096](https://github.com/ualbertalib/jupiter/pull/2096)
 - bump rdf-n3 and fix isomorphic_with? regression [PR#2070](https://github.com/ualbertalib/jupiter/pull/2070)
 - bump rubocop and fix more cop violations [PR#2132](https://github.com/ualbertalib/jupiter/pull/2132)
 - Fix error when parsing n3 files which include objects with elements as values.
-- Corrected missing pluralization in Digitization::Book attributes
 - Bump flipper-ui, flipper-active_record and flipper and remove redundant configuration
-- Various fixes from lighthouse suggestions [PR#2254](https://github.com/ualbertalib/jupiter/pull/2254)
 - Danger token in Github Actions [#2282](https://github.com/ualbertalib/jupiter/issues/2282)
 - Bump rubocop to 1.15.0 and Style/TrivialAccessors default changed [PR#2343](https://github.com/ualbertalib/jupiter/pull/2343)
 - Bump rubocop to 1.18.2 and fix cop violations [PR#2415](https://github.com/ualbertalib/jupiter/pull/2415)
 - Bump rubocop-minitest to 0.14.0 and note really smelly tests [PR#2416](https://github.com/ualbertalib/jupiter/pull/2416)
 - Fixed a flaky test where the page hasn't finished loading [#2129](https://github.com/ualbertalib/jupiter/issues/2129)
 - Refactored one of our smelliest tests to use fixtures and reduce number of assertions per test [#2419](https://github.com/ualbertalib/jupiter/issues/2419)
-- Make Digitization::Book more like other items and other small fixes
-- Fix issue where we improperly 404'd when a deleted Collection is being displayed in the edit history [#2504](https://github.com/ualbertalib/jupiter/issues/2504)
-- Fix communication with [pushmi_pullyu](https://github.com/ualbertalib/pushmi_pullyu) by changing the format for entries in redis queue [#2527](https://github.com/ualbertalib/jupiter/issues/2527)
 
 ## [2.0.3] - 2021-05-05
 
@@ -118,9 +129,6 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 - uat configuration to accept proxy from upstream nginx-proxy [#1724](https://github.com/ualbertalib/jupiter/issues/1724)
 - Changed oaisys' updated until scope [#1816](https://github.com/ualbertalib/jupiter/issues/1816)
 - ActiveStorage::Blob now uses UUID for ids. You will need to recreate, remigrate, and reseed your DB.
-- predeploy script to reference this branch
-- UAT VIRTUAL_HOSTS configuration on just the containers that need it
-
 - Fix issue where we improperly 500'd when a file download URL referenced a non-existent fileset UUID, instead of 404ing
 - Make reindex rake task actually reindex all of the objects into Solr, instead of acting as a no-op
 - Fix a mis-named error rescue that resulted in a crash when the sort field wasn't known for a model
@@ -142,7 +150,6 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 ### Added
 
 - tmp/cache to docker ignore [#1680](https://github.com/ualbertalib/jupiter/issues/1680)
-- Add 'era' subdomain and foundation for future frontdoors [#1786](https://github.com/ualbertalib/jupiter/pull/1786)
 - Tie breaker for solr query results to make them deterministic [#1689](https://github.com/ualbertalib/jupiter/issues/1689)
 
 ### Changed

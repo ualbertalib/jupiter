@@ -1,4 +1,4 @@
-Rails.application.routes.default_url_options = { host: 'era.uat.library.ualberta.ca', protocol: 'https' }
+Rails.application.routes.default_url_options = { host: Rails.application.secrets.era_host, protocol: 'https' }
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -90,4 +90,7 @@ Rails.application.configure do
 
   # Action on unpermitted parameters
   config.action_controller.action_on_unpermitted_parameters = false
+
+  config.hosts << Rails.application.secrets.era_host
+  config.hosts << Rails.application.secrets.digitization_host
 end
