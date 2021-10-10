@@ -78,8 +78,8 @@ Some alternatives is you may also use the `localhost` top level domain (e.g: you
 
 # UAT Environment
 
-The UAT server is accessible on all library staff workstation, and through VPN on any external IP address. More details regarding access and deployment can be found:
-[Jupiter UAT Setup](https://github.com/ualbertalib/di_internal/blob/master/System-Adminstration/UAT-Environment.md)
+The UAT server is accessible on all library staff workstation, and through VPN on any external IP address.  More details regarding access and deployment can be found:
+[Jupiter UAT Setup](https://github.com/ualbertalib/di_internal/blob/master/System-Adminstration/UAT/UAT-Environment.md)
 
 # Docker
 
@@ -253,7 +253,7 @@ modifying the config files, set the environment variable `RUN_FITS_CHARACTERIZAT
 
 # Batch Ingest
 
-Jupiter comes with a handy rake task for batch ingesting items.
+Jupiter comes with a handy rake task for batch ingesting items/theses.
 
 - First you need to provide a csv file which outlines all the items metadata you wish to ingest. An example template for what an expected csv file might look like can can be found [here](https://docs.google.com/spreadsheets/d/178o_-ZEV3Ii-IzJ0AcJQTQqFsH3Ew2WCgyj2aZw99iY/). You can make a copy of this template, fill it out with your items metadata, and then download the first sheet as a CSV file (File > Download as > Comma-seperated values (.csv, current sheet)).
 
@@ -272,3 +272,8 @@ Jupiter comes with a handy rake task for batch ingesting items.
   ```
 
   After running the above command, you should have just successfully batch ingested your items into jupiter!
+
+## Items Batch Ingest via Google Drive for Admins
+Batch ingest for items can now also be done via the admin dashboard. There is a new tab called "Batch ingest" where you can create a new batch ingest by providing a manifest file and files from Google Drive.
+
+For more info about this admin batch ingest screen and how to configure it, [please see the documentation in DI internal](https://github.com/ualbertalib/di_internal/blob/master/Applications/Jupiter/Batch_Ingest/README.md)
