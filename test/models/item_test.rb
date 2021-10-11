@@ -180,7 +180,7 @@ class ItemTest < ActiveSupport::TestCase
 
     item = Item.new(languages: [ControlledVocabulary.era.language.english])
     assert_not item.valid?
-    assert_not_includes item.errors.keys, :languages
+    assert_not_includes item.errors.attribute_names, :languages
   end
 
   test 'a license or rights statement must be present' do
@@ -205,11 +205,11 @@ class ItemTest < ActiveSupport::TestCase
 
     item = Item.new(license: ControlledVocabulary.era.license.attribution_4_0_international)
     item.valid?
-    assert_not_includes item.errors.keys, :license
+    assert_not_includes item.errors.attribute_names, :license
 
     item = Item.new(license: ControlledVocabulary.era.old_license.attribution_3_0_international)
     item.valid?
-    assert_not_includes item.errors.keys, :license
+    assert_not_includes item.errors.attribute_names, :license
   end
 
   test 'an item type is required' do
