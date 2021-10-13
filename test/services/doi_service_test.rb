@@ -46,7 +46,7 @@ class DoiServiceTest < ActiveSupport::TestCase
       ezid_identifer = DOIService.new(item).create
       assert_not_nil ezid_identifer
       assert_equal EXAMPLE_DOI, ezid_identifer.id
-      assert_equal 'University of Alberta Libraries', ezid_identifer.datacite_publisher
+      assert_equal 'University of Alberta Library', ezid_identifer.datacite_publisher
       assert_equal 'Test Title', ezid_identifer.datacite_title
       assert_equal 'Text/Book', ezid_identifer.datacite_resourcetype
       assert_equal '2017', ezid_identifer.datacite_publicationyear

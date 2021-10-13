@@ -1,6 +1,6 @@
 class DOIService
 
-  PUBLISHER = 'University of Alberta Libraries'.freeze
+  PUBLISHER = 'University of Alberta Library'.freeze
   DATACITE_METADATA_SCHEME = {
     article_published: 'Text/Published Journal Article',
     article_submitted: 'Text/Submitted Journal Article',

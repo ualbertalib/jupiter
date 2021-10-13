@@ -7,7 +7,7 @@ http_interactions:
       encoding: UTF-8
       string: |-
         datacite.creator: Joe Blow
-        datacite.publisher: University of Alberta Libraries
+        datacite.publisher: University of Alberta Library
         datacite.publicationyear: 2017
         datacite.resourcetype: Text/Book
         datacite.resourcetypegeneral: Text
@@ -52,7 +52,7 @@ http_interactions:
       string: |-
         success: doi:10.21967/fk2-ycs2-dd92
         _target: http://localhost/items/7d4ef627-70cf-4378-b237-844e9a7b4539
-        datacite: <?xml version="1.0" encoding="UTF-8"?>%0A<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://datacite.org/schema/kernel-4" xsi:schemaLocation="http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4/metadata.xsd">%0A  <identifier identifierType="DOI">10.21967/FK2-YCS2-DD92</identifier>%0A  <creators>%0A    <creator>%0A      <creatorName>Joe Blow</creatorName>%0A    </creator>%0A  </creators>%0A  <titles>%0A    <title>Different Title</title>%0A  </titles>%0A  <publisher>University of Alberta Libraries</publisher>%0A  <publicationYear>2017</publicationYear>%0A  <resourceType resourceTypeGeneral="Text">Book</resourceType>%0A  <dates>%0A    <date dateType="Issued">2017</date>%0A  </dates>%0A  <version/>%0A  <descriptions>%0A    <description descriptionType="Abstract"/>%0A  </descriptions>%0A</resource>%0A
+        datacite: <?xml version="1.0" encoding="UTF-8"?>%0A<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://datacite.org/schema/kernel-4" xsi:schemaLocation="http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4/metadata.xsd">%0A  <identifier identifierType="DOI">10.21967/FK2-YCS2-DD92</identifier>%0A  <creators>%0A    <creator>%0A      <creatorName>Joe Blow</creatorName>%0A    </creator>%0A  </creators>%0A  <titles>%0A    <title>Different Title</title>%0A  </titles>%0A  <publisher>University of Alberta Library</publisher>%0A  <publicationYear>2017</publicationYear>%0A  <resourceType resourceTypeGeneral="Text">Book</resourceType>%0A  <dates>%0A    <date dateType="Issued">2017</date>%0A  </dates>%0A  <version/>%0A  <descriptions>%0A    <description descriptionType="Abstract"/>%0A  </descriptions>%0A</resource>%0A
         _profile: datacite
         _datacenter: CISTI.UAL
         _export: no
@@ -106,7 +106,7 @@ http_interactions:
       string: |-
         success: doi:10.21967/fk2-ycs2-dd92
         _target: http://localhost/items/7d4ef627-70cf-4378-b237-844e9a7b4539
-        datacite: <?xml version="1.0" encoding="UTF-8"?>%0A<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://datacite.org/schema/kernel-4" xsi:schemaLocation="http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4/metadata.xsd">%0A  <identifier identifierType="DOI">10.21967/FK2-YCS2-DD92</identifier>%0A  <creators>%0A    <creator>%0A      <creatorName>Joe Blow</creatorName>%0A    </creator>%0A  </creators>%0A  <titles>%0A    <title>Different Title</title>%0A  </titles>%0A  <publisher>University of Alberta Libraries</publisher>%0A  <publicationYear>2017</publicationYear>%0A  <resourceType resourceTypeGeneral="Text">Book</resourceType>%0A  <dates>%0A    <date dateType="Issued">2017</date>%0A  </dates>%0A  <version/>%0A  <descriptions>%0A    <description descriptionType="Abstract"/>%0A  </descriptions>%0A</resource>%0A
+        datacite: <?xml version="1.0" encoding="UTF-8"?>%0A<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://datacite.org/schema/kernel-4" xsi:schemaLocation="http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4/metadata.xsd">%0A  <identifier identifierType="DOI">10.21967/FK2-YCS2-DD92</identifier>%0A  <creators>%0A    <creator>%0A      <creatorName>Joe Blow</creatorName>%0A    </creator>%0A  </creators>%0A  <titles>%0A    <title>Different Title</title>%0A  </titles>%0A  <publisher>University of Alberta Library</publisher>%0A  <publicationYear>2017</publicationYear>%0A  <resourceType resourceTypeGeneral="Text">Book</resourceType>%0A  <dates>%0A    <date dateType="Issued">2017</date>%0A  </dates>%0A  <version/>%0A  <descriptions>%0A    <description descriptionType="Abstract"/>%0A  </descriptions>%0A</resource>%0A
         _profile: datacite
         _datacenter: CISTI.UAL
         _export: no
