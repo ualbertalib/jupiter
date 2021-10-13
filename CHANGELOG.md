@@ -76,6 +76,7 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 - Brakeman linting to Github Actions workflow
 - Make autocomplete explicit [PR#2449](https://github.com/ualbertalib/jupiter/pull/2449)
 - RdfAnnotation changes will be output to a file to facilitate testing and database setup [acts_as_rdfable#12](https://github.com/ualbertalib/acts_as_rdfable/issues/12)
+- Bring back illogical date range faceting flash message [#2030](https://github.com/ualbertalib/jupiter/issues/2030)
 
 ### Removed
 
