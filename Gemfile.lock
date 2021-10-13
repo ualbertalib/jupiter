@@ -1,4 +1,11 @@
 GIT
+  remote: https://github.com/pgwillia/datacite-client.git
+  revision: 6ba928007d28c51825da9aaa5467c6c70ed22921
+  branch: main
+  specs:
+    datacite-client (0.1.0)
+
+GIT
   remote: https://github.com/ualbertalib/acts_as_rdfable.git
   revision: 1ea0065f78b500b1503460c8e0923dfa86472df8
   tag: 0.4.0
@@ -614,6 +621,7 @@ DEPENDENCIES
   clamby
   connection_pool
   danger (~> 8.4)
+  datacite-client!
   differ
   draper
   edtf (~> 3.0, >= 3.0.6)

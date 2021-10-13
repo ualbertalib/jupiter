@@ -1,0 +1,50 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.test.datacite.org/dois
+    body:
+      encoding: UTF-8
+      string: '{"data":{"attributes":{"creators":[{"name":"Joe Blow"}],"titles":[{"title":"Test
+        Title"}],"descriptions":[{"description":null}],"publisher":"University of
+        Alberta Library","publicationYear":2017,"types":{"resourceType":"Text/Book","resourceTypeGeneral":"Text"},"url":"http://era.ualberta.localhost/items/0f8bceab-1a04-4533-abd4-d52e1db45178","schemaVersion":"http://datacite.org/schema/kernel-4","event":"publish","prefix":"10.80243"}}}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - api.test.datacite.org
+      Content-Type:
+      - application/vnd.api+json
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Date:
+      - Tue, 12 Oct 2021 16:33:07 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Status:
+      - 201 Created
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Vary:
+      - Accept-Encoding
+      Server:
+      - nginx/1.14.0 + Phusion Passenger(R) 6.0.10
+    body:
+      encoding: ASCII-8BIT
+      string: '{"data":{"id":"10.80243/wvg2-0805","type":"dois","attributes":{"doi":"10.80243/wvg2-0805","prefix":"10.80243","suffix":"wvg2-0805","identifiers":[],"alternateIdentifiers":[],"creators":[{"name":"Joe
+        Blow","affiliation":[],"nameIdentifiers":[]}],"titles":[{"title":"Test Title"}],"publisher":"University
+        of Alberta Library","container":{},"publicationYear":2017,"subjects":[],"contributors":[],"dates":[],"language":null,"types":{"schemaOrg":"ScholarlyArticle","citeproc":"article-journal","bibtex":"article","ris":"RPRT","resourceTypeGeneral":"Text","resourceType":"Text/Book"},"relatedIdentifiers":[],"sizes":[],"formats":[],"version":null,"rightsList":[],"descriptions":[{"description":null}],"geoLocations":[],"fundingReferences":[],"xml":"PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHJlc291cmNlIHhtbG5zOnhzaT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhtbG5zPSJodHRwOi8vZGF0YWNpdGUub3JnL3NjaGVtYS9rZXJuZWwtNCIgeHNpOnNjaGVtYUxvY2F0aW9uPSJodHRwOi8vZGF0YWNpdGUub3JnL3NjaGVtYS9rZXJuZWwtNCBodHRwOi8vc2NoZW1hLmRhdGFjaXRlLm9yZy9tZXRhL2tlcm5lbC00L21ldGFkYXRhLnhzZCI+CiAgPGlkZW50aWZpZXIgaWRlbnRpZmllclR5cGU9IkRPSSI+MTAuODAyNDMvV1ZHMi0wODA1PC9pZGVudGlmaWVyPgogIDxjcmVhdG9ycz4KICAgIDxjcmVhdG9yPgogICAgICA8Y3JlYXRvck5hbWU+Sm9lIEJsb3c8L2NyZWF0b3JOYW1lPgogICAgPC9jcmVhdG9yPgogIDwvY3JlYXRvcnM+CiAgPHRpdGxlcz4KICAgIDx0aXRsZT5UZXN0IFRpdGxlPC90aXRsZT4KICA8L3RpdGxlcz4KICA8cHVibGlzaGVyPlVuaXZlcnNpdHkgb2YgQWxiZXJ0YSBMaWJyYXJ5PC9wdWJsaXNoZXI+CiAgPHB1YmxpY2F0aW9uWWVhcj4yMDE3PC9wdWJsaWNhdGlvblllYXI+CiAgPHJlc291cmNlVHlwZSByZXNvdXJjZVR5cGVHZW5lcmFsPSJUZXh0Ij5UZXh0L0Jvb2s8L3Jlc291cmNlVHlwZT4KICA8c2l6ZXMvPgogIDxmb3JtYXRzLz4KICA8dmVyc2lvbi8+CiAgPGRlc2NyaXB0aW9ucz4KICAgIDxkZXNjcmlwdGlvbiBkZXNjcmlwdGlvblR5cGU9IkFic3RyYWN0Ii8+CiAgPC9kZXNjcmlwdGlvbnM+CjwvcmVzb3VyY2U+Cg==","url":"http://era.ualberta.localhost/items/0f8bceab-1a04-4533-abd4-d52e1db45178","contentUrl":null,"metadataVersion":0,"schemaVersion":"http://datacite.org/schema/kernel-4","source":"api","isActive":true,"state":"findable","reason":null,"landingPage":null,"viewCount":0,"viewsOverTime":[],"downloadCount":0,"downloadsOverTime":[],"referenceCount":0,"citationCount":0,"citationsOverTime":[],"partCount":0,"partOfCount":0,"versionCount":0,"versionOfCount":0,"created":"2021-10-12T16:33:06.000Z","registered":"2021-10-12T16:33:06.000Z","published":"2017","updated":"2021-10-12T16:33:06.000Z"},"relationships":{"client":{"data":{"id":"ualberta.library","type":"clients"}},"provider":{"data":{"id":"ualberta","type":"providers"}},"media":{"data":{"id":"10.80243/wvg2-0805","type":"media"}},"references":{"data":[]},"citations":{"data":[]},"parts":{"data":[]},"partOf":{"data":[]},"versions":{"data":[]},"versionOf":{"data":[]}}}}'
+    http_version: 
+  recorded_at: Tue, 12 Oct 2021 16:33:07 GMT
+recorded_with: VCR 5.0.0

@@ -16,7 +16,7 @@ class DOIService
     review: 'Text/Review',
     thesis: 'Text/Thesis'
   }.freeze
-  UNAVAILABLE_MESSAGE = "#{Ezid::Status::UNAVAILABLE} | not publicly released".freeze
+  UNAVAILABLE_MESSAGE = 'unavailable| not publicly released'.freeze
 
   attr_reader :item
 
@@ -27,14 +27,20 @@ class DOIService
   def create
     return unless @item.unminted? && !@item.private?
 
-    ezid_identifer = Ezid::Identifier.mint(Ezid::Client.config.default_shoulder, ezid_metadata)
-    if ezid_identifer.present?
+    response, id = if Flipper.enabled?(:datacite_api)
+                     response = Datacite::Client.mint(datacite_attributes)
+                     [response, response.doi]
+                   else
+                     response = Ezid::Identifier.mint(Ezid::Client.config.default_shoulder, ezid_metadata)
+                     [response, response.id]
+                   end
+    if response.present?
       @item.tap do |uo|
-        uo.doi = ezid_identifer.id
+        uo.doi = id
         uo.save!
       end
       @item.synced!
-      ezid_identifer
+      response
     end
   rescue StandardError => e
     # Skip the next handle_doi_states after_save callback and roll back
@@ -51,15 +57,27 @@ class DOIService
   def update
     return unless @item.awaiting_update?
 
-    ezid_identifer = Ezid::Identifier.modify(@item.doi, ezid_metadata)
-    return if ezid_identifer.blank?
+    response = if Flipper.enabled?(:datacite_api)
+                 if @item.private?
+                   event = Datacite::Event::HIDE
+                   reason = UNAVAILABLE_MESSAGE
+                 else
+                   event = Datacite::Event::PUBLISH
+                 end
+
+                 Datacite::Client.modify(@item.doi, datacite_attributes, event: event, reason: reason)
+               else
+                 Ezid::Identifier.modify(@item.doi, ezid_metadata)
+               end
+
+    return if response.blank?
 
     if @item.private?
       @item.unpublish!
     else
       @item.synced!
     end
-    ezid_identifer
+    response
   rescue StandardError => e
     # Skip the next handle_doi_states after_save callback and roll back
     # the state to it's previous value. By skipping the callback we can prevent
@@ -76,7 +94,11 @@ class DOIService
   end
 
   def self.remove(doi)
-    Ezid::Identifier.modify(doi, status: "#{Ezid::Status::UNAVAILABLE} | withdrawn", export: 'no')
+    if Flipper.enabled?(:datacite_api)
+      Datacite::Client.modify(doi, { reason: 'unavailable | withdrawn', event: Datacite::Event::HIDE })
+    else
+      Ezid::Identifier.modify(doi, status: "#{Ezid::Status::UNAVAILABLE} | withdrawn", export: 'no')
+    end
   end
 
   private
@@ -93,6 +115,26 @@ class DOIService
       # Can only set status if been minted previously, else its public
       status: @item.private? && @item.doi.present? ? UNAVAILABLE_MESSAGE : Ezid::Status::PUBLIC,
       export: @item.private? ? 'no' : 'yes'
+    }
+  end
+
+  def datacite_attributes
+    {
+      creators: @item.authors.map { |author| { name: author } },
+      titles: [{
+        title: @item.title
+      }],
+      descriptions: [{
+        description: @item.description
+      }],
+      publisher: PUBLISHER,
+      publicationYear: @item.sort_year.presence || '(:unav)',
+      types: {
+        resourceType: DATACITE_METADATA_SCHEME[@item.item_type_with_status_code],
+        resourceTypeGeneral: DATACITE_METADATA_SCHEME[@item.item_type_with_status_code].split('/').first
+      },
+      url: Rails.application.routes.url_helpers.item_url(id: @item.id),
+      schemaVersion: 'http://datacite.org/schema/kernel-4'
     }
   end
 

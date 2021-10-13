@@ -67,6 +67,8 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 - Added category labels for active facet badges. Requires `facet_badge_category_name` feature flag. [#1261](https://github.com/ualbertalib/jupiter/issues/1261)
 
 - Changes default behaviour within a facet to 'OR'. Requires `or_facets` feature flag. [#1990](https://github.com/ualbertalib/jupiter/issues/1990)
+
+- The EZID Compatibility API is sunsetting at the end of this year, per https://blog.datacite.org/sunsetting-of-the-ez-api/.  [datacite-client](https://github.com/pgwillia/datacite-client) is a ruby gem that wraps the [Datacite API](https://support.datacite.org/reference/introduction) for our use.  The main changes are the format of metadata attributes, and the event mechanism for publishing/hiding the metadata from the public. Requires `datacite_api` feature flag and new secrets for our datacite credentials. [#2268](https://github.com/ualbertalib/jupiter/issues/2268)
 ### Added
 
 - Added oaisys tests [#1888](https://github.com/ualbertalib/jupiter/issues/1888)
