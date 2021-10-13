@@ -849,6 +849,7 @@ en:
     range_begin: 'Range Begin'
     range_end: 'Range End'
     range_limit: 'Limit'
+    invalid_date_range_flash: 'Your selected date filters are not a valid range'
 
     index:
       header: 'Search'
