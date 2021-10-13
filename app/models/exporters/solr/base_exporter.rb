@@ -189,9 +189,11 @@ class Exporters::Solr::BaseExporter
 
     protected
 
+    # rubocop:disable Style/TrivialAccessors
     def indexed_model_name(name)
       @indexed_model_name = name
     end
+    # rubocop:enable Style/TrivialAccessors
 
     # the basic DSL for declaring Solr indexes who will take their contents from attributes
     # declared on the objects we will export
