@@ -99,6 +99,7 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 - Added oaisys tests [#1888](https://github.com/ualbertalib/jupiter/issues/1888)
 - Initialize disabled ReadOnlyMode [#2100](https://github.com/ualbertalib/jupiter/issues/2100)
 - Updated Architecture diagrams [PR#2135](https://github.com/ualbertalib/jupiter/pull/2135)
+- Upgrade Rails to version 6.1 [#2079](https://github.com/ualbertalib/jupiter/issues/2079)
 
 ### Removed
 - Remove entirely unnecessary config file. [PR#2044](https://github.com/ualbertalib/jupiter/pull/2044)

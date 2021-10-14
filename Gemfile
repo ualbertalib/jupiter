@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '>= 2.6'
+ruby '>= 2.6', '< 2.8'
 
 # Core Rails stuff
 gem 'image_processing' # for ActiveStorage Variants
