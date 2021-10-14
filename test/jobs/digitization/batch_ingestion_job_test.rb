@@ -35,6 +35,9 @@ class Digitization::BatchIngestionJobTest < ActiveJob::TestCase
     assert_equal(2, batch_ingest.books.count)
     assert(batch_ingest.books.first.valid?)
     assert(batch_ingest.books.first.files.attached?)
+    assert_nothing_raised do
+      ActiveStorage::Blob.find(batch_ingest.books.first.files.first.blob_id).download
+    end
   end
 
 end
