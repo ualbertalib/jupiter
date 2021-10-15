@@ -16,8 +16,6 @@ class ItemEditHistoryTest < ApplicationSystemTestCase
 
       visit item_path thesis
       click_on I18n.t('edit')
-      fill_in 'draft_thesis_title', with: 'New title'
-
       click_on I18n.t('admin.theses.draft.save_and_continue')
 
       choose 'draft_thesis_visibility_embargo'
@@ -33,8 +31,6 @@ class ItemEditHistoryTest < ApplicationSystemTestCase
       click_on I18n.t('edit_history')
       assert_selector 'dt', text: I18n.t('edited_by')
       assert_selector 'dd', text: 'Administrator - administrator@example.com'
-      assert_selector 'dt', text: 'Title'
-      assert_selector 'dd', text: 'NiceNew Itemtitle'
       assert_selector 'dt', text: 'Visibility'
       assert_selector 'dd', text: 'PublicEmbargo'
       assert_selector 'dt', text: 'Embargo End Date'

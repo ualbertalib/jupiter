@@ -23,13 +23,9 @@ class UserTest < ActiveSupport::TestCase
     assert_equal "User:#{user.id}", user.flipper_id
   end
 
-  # rubocop:disable Minitest/MultipleAssertions
-  # TODO: our tests are quite smelly.  This one needs work!
   test 'should update the activity columns when not signing-in' do
     user = users(:user_regular)
-    assert user.last_seen_at.blank?
-    assert user.last_sign_in_at.blank?
-    assert user.previous_sign_in_at.blank?
+    assert [user.last_seen_at, user.last_sign_in_at, user.previous_sign_in_at].all?(&:blank?)
 
     ip1 = '4.26.50.50'
     now1 = Time.now.utc.to_s
@@ -41,35 +37,25 @@ class UserTest < ActiveSupport::TestCase
     assert_equal user.last_seen_at.to_s, now1
     assert_equal user.last_seen_ip, ip1
     # Does not change sign-in information
-    assert user.last_sign_in_at.blank?
-    assert user.last_sign_in_ip.blank?
-    assert user.previous_sign_in_at.blank?
-    assert user.previous_sign_in_ip.blank?
+    assert [user.last_sign_in_at, user.last_sign_in_ip,
+            user.previous_sign_in_at, user.previous_sign_in_ip].all?(&:blank?)
 
     travel 1.hour do
       ip2 = '4.73.73.73'
       now2 = Time.now.utc.to_s
-      assert_not_equal now2, now1
       UpdateUserActivityJob.perform_now(user.id, now2, ip2)
       user.reload
       assert_equal user.last_seen_at.to_s, now2
       assert_equal user.last_seen_ip, ip2
       # Still does not change sign-in information
-      assert user.last_sign_in_at.blank?
-      assert user.last_sign_in_ip.blank?
-      assert user.previous_sign_in_at.blank?
-      assert user.previous_sign_in_ip.blank?
+      assert [user.last_sign_in_at, user.last_sign_in_ip,
+              user.previous_sign_in_at, user.previous_sign_in_ip].all?(&:blank?)
     end
   end
-  # rubocop:enable Minitest/MultipleAssertions
 
-  # rubocop:disable Minitest/MultipleAssertions
-  # TODO: our tests are quite smelly.  This one needs work!
   test 'should update the activity columns when signing-in' do
     user = users(:user_regular)
-    assert user.last_seen_at.blank?
-    assert user.last_sign_in_at.blank?
-    assert user.previous_sign_in_at.blank?
+    assert [user.last_seen_at, user.last_sign_in_at, user.previous_sign_in_at].all?(&:blank?)
 
     ip1 = '4.26.50.50'
     now1 = Time.now.utc.to_s
@@ -77,12 +63,10 @@ class UserTest < ActiveSupport::TestCase
     user.update_activity!(now1, ip1, sign_in: true)
     user.reload
     assert user.last_seen_at.present?
-    assert_equal user.last_seen_at.to_s, now1
-    assert_equal user.last_seen_ip, ip1
-    assert_equal user.last_sign_in_at.to_s, now1
-    assert_equal user.last_sign_in_ip, ip1
-    assert user.previous_sign_in_at.blank?
-    assert user.previous_sign_in_ip.blank?
+    assert [user.last_seen_at.to_s, user.last_sign_in_at.to_s].all? now1
+    assert [user.last_seen_ip, user.last_sign_in_ip].all? ip1
+
+    assert [user.previous_sign_in_at, user.previous_sign_in_ip].all?(&:blank?)
 
     travel 1.hour do
       ip2 = '4.73.73.73'
@@ -91,15 +75,12 @@ class UserTest < ActiveSupport::TestCase
 
       user.update_activity!(now2, ip2, sign_in: true)
       user.reload
-      assert_equal user.last_seen_at.to_s, now2
-      assert_equal user.last_seen_ip, ip2
-      assert_equal user.last_sign_in_at.to_s, now2
-      assert_equal user.last_sign_in_ip, ip2
+      assert [user.last_seen_at.to_s, user.last_sign_in_at.to_s].all? now2
+      assert [user.last_seen_ip, user.last_sign_in_ip].all? ip2
       assert_equal user.previous_sign_in_at, now1
       assert_equal user.previous_sign_in_ip, ip1
     end
   end
-  # rubocop:enable Minitest/MultipleAssertions
 
   test 'should validate if it does not have an api key and it is not a system account' do
     user = User.new(

@@ -98,6 +98,7 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 - Added Collection and Community to reindex rake task [#2444](https://github.com/ualbertalib/jupiter/issues/2444)
 - predeploy script to reference this branch
 - UAT VIRTUAL_HOSTS configuration on just the containers that need it
+- Reduced number of assertions per test and brought Minitest/MultipleAssertions down to 10
 
 ### Fixed
 

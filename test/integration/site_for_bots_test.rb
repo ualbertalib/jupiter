@@ -111,7 +111,7 @@ class SiteForBotsTest < ActionDispatch::IntegrationTest
     assert_select "a[rel='nofollow']", text: @item.subject.first
   end
 
-  test 'structured data for google scholar' do
+  test 'structured thesis data for google scholar' do
     # TODO: can be a lot more complicated see https://scholar.google.com/intl/en/scholar/inclusion.html#indexing
     get item_path @thesis
     assert_select "meta[name='citation_title'][content='#{@thesis.title}']"
@@ -125,7 +125,9 @@ class SiteForBotsTest < ActionDispatch::IntegrationTest
                          ))
     assert_select "meta[name='dc.identifier'][content='#{@item.doi}']"
     assert_select "meta[name='citation_doi'][content='#{@item.doi}']"
+  end
 
+  test 'structured item data for google scholar' do
     get item_path @item
     assert_select "meta[name='citation_title'][content='#{@item.title}']"
     @item.creators.each do |author|

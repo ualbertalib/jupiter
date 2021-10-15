@@ -75,7 +75,7 @@ Metrics/ParameterLists:
 
 # TODO: our tests are quite smelly.  We should be working to get this lower!
 Minitest/MultipleAssertions:
-  Max: 15 # default 3
+  Max: 10 # default 3
 
 Naming/FileName:
   Exclude:

@@ -13,10 +13,6 @@ class DepositThesisTest < ApplicationSystemTestCase
     click_link I18n.t('admin.items.index.deposit_thesis')
 
     # 1. Describe Thesis Form
-
-    assert_selector 'h1', text: I18n.t('admin.theses.draft.header')
-    assert_selector 'h2', text: I18n.t('admin.theses.draft.describe_thesis.header')
-
     fill_in I18n.t('admin.theses.draft.describe_thesis.title'),
             # Need to narrow down by placeholder since capybara can't differentiate from title and alternate title labels
             placeholder: I18n.t('admin.theses.draft.describe_thesis.title_placeholder'),
@@ -38,8 +34,6 @@ class DepositThesisTest < ApplicationSystemTestCase
 
     # 2. Choose License and Visibility Form
 
-    assert_selector 'h2', text: I18n.t('admin.theses.draft.choose_license_and_visibility.header')
-
     fill_in 'draft_thesis_rights',
             with: 'Open for everyone!'
 
@@ -50,16 +44,12 @@ class DepositThesisTest < ApplicationSystemTestCase
 
     # 3. Upload File Form
 
-    assert_selector 'h2', text: I18n.t('admin.theses.draft.upload_files.header')
-
     attach_file_in_dropzone(file_fixture('image-sample.jpeg'))
     has_css? '.j-thumbnail'
 
     click_on I18n.t('admin.theses.draft.save_and_continue'), wait: 5
 
     # 4. Review and Deposit Form
-
-    assert_selector 'h2', text: I18n.t('admin.theses.draft.review_and_deposit_thesis.header')
 
     click_on I18n.t('admin.theses.draft.header')
 
@@ -77,7 +67,6 @@ class DepositThesisTest < ApplicationSystemTestCase
     # verify editing
 
     click_on I18n.t('edit')
-    assert_selector 'h1', text: I18n.t('admin.theses.draft.header_edit')
 
     # edit title
     fill_in I18n.t('admin.theses.draft.describe_thesis.title'),
@@ -96,7 +85,6 @@ class DepositThesisTest < ApplicationSystemTestCase
 
     # go back to editing to ensure visibility stuck
     click_on I18n.t('edit')
-    assert_selector 'h1', text: I18n.t('admin.theses.draft.header_edit')
     click_on I18n.t('admin.theses.draft.save_and_continue')
     assert_selector '#draft_thesis_visibility_open_access:checked'
 

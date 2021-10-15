@@ -110,8 +110,7 @@ class SearchTest < ApplicationSystemTestCase
   end
 
   # rubocop:disable Minitest/MultipleAssertions
-  # TODO: our tests are quite smelly.  This one needs work!
-  test 'anybody should be able to filter the public items' do
+  test 'anybody should be able to view search results' do
     visit root_path
     fill_in name: 'search', with: 'Fancy'
     click_button 'Search'
@@ -151,6 +150,12 @@ class SearchTest < ApplicationSystemTestCase
     within '.list-group-item', text: 'Fancy CCID Item' do
       refute_selector 'a', text: 'Download'
     end
+  end
+
+  test 'anybody should be able to filter the public items by collection' do
+    visit root_path
+    fill_in name: 'search', with: 'Fancy'
+    click_button 'Search'
 
     # A checkbox for the facet should be unchecked, and link should turn on facet
     within 'div.jupiter-filters a', text: 'Fancy Collection 1' do
@@ -215,8 +220,6 @@ class SearchTest < ApplicationSystemTestCase
     Flipper.disable(:facet_badge_category_name)
   end
 
-  # rubocop:disable Minitest/MultipleAssertions
-  # TODO: our tests are quite smelly.  This one needs work!
   test 'anybody should be able to view community/collection hits via tabs' do
     visit root_path
     fill_in name: 'search', with: 'Fancy'
@@ -232,6 +235,13 @@ class SearchTest < ApplicationSystemTestCase
     assert_selector 'div.jupiter-results-list h3 a', text: 'Item', count: 6
     assert_selector 'div.jupiter-results-list a', text: 'Community', count: 0
     assert_selector 'div.jupiter-results-list a', text: 'Collection', count: 0
+  end
+
+  test 'anybody should be able to view community hits via tabs' do
+    visit root_path
+    fill_in name: 'search', with: 'Fancy'
+    click_button 'Search'
+    assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy')
 
     # Visit community tab
     click_link 'Communities'
@@ -243,6 +253,13 @@ class SearchTest < ApplicationSystemTestCase
     assert_selector 'div.jupiter-results-list h3 a', text: 'Item', count: 0
     assert_selector 'div.jupiter-results-list a', text: 'Community', count: 1
     assert_selector 'div.jupiter-results-list a', text: 'Collection', count: 0
+  end
+
+  test 'anybody should be able to view collection hits via tabs' do
+    visit root_path
+    fill_in name: 'search', with: 'Fancy'
+    click_button 'Search'
+    assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy')
 
     # Visit collection tab
     within('.nav-tabs') do
@@ -257,7 +274,6 @@ class SearchTest < ApplicationSystemTestCase
     assert_selector 'div.jupiter-results-list a', text: 'Community', count: 0
     assert_selector 'div.jupiter-results-list a', text: 'Collection', count: 2
   end
-  # rubocop:enable Minitest/MultipleAssertions
 
   test 'anybody should only see some facet results by default, with a "show more" button' do
     visit root_path
@@ -287,9 +303,7 @@ class SearchTest < ApplicationSystemTestCase
     assert_selector 'li a', text: /Extra Community/, count: 6
   end
 
-  # rubocop:disable Minitest/MultipleAssertions
-  # TODO: our tests are quite smelly.  This one needs work!
-  test 'anybody should be able to sort results' do
+  test 'anybody should be able to view sort options and view items in default order (ascending alphabetical)' do
     visit root_path
     fill_in name: 'search', with: 'Fancy'
     click_button 'Search'
@@ -301,48 +315,75 @@ class SearchTest < ApplicationSystemTestCase
     assert_match(/Fancy CCID Item.*Fancy Item 0.*Fancy Item 2.*Fancy Item 4.*Fancy Item 6.*Fancy Item 8/m, page.text)
 
     # Sort sort links
-    click_button 'Sort by'
+    find('#search-sort-button').click
     assert_selector 'a', text: 'Title (A-Z)'
     assert_selector 'a', text: 'Title (Z-A)'
     assert_selector 'a', text: 'Date (newest first)'
     assert_selector 'a', text: 'Date (oldest first)'
     assert_selector 'a', text: 'Relevance'
+  end
+
+  test 'anybody should be able to sort results in descending alphabetical order' do
+    visit root_path
+    fill_in name: 'search', with: 'Fancy'
+    click_button 'Search'
+    assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy')
 
     # Reverse sort
+    find('#search-sort-button').click
     click_link 'Title (Z-A)'
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy', sort: 'title', direction: 'desc')
     assert_selector 'button', text: 'Title (Z-A)'
     assert_match(/Fancy Item 8.*Fancy Item 6.*Fancy Item 4.*Fancy Item 2.*Fancy Item 0.*Fancy CCID Item/m, page.text)
+  end
+
+  test 'anybody should be able to sort results in ascending alphabetical order' do
+    visit root_path
+    fill_in name: 'search', with: 'Fancy'
+    click_button 'Search'
+    assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy')
 
     # Sort the other way again
-    click_button 'Title (Z-A)'
+    find('#search-sort-button').click
     click_link 'Title (A-Z)'
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy', sort: 'title', direction: 'asc')
     assert_selector 'button', text: 'Title (A-Z)'
     assert_match(/Fancy CCID Item.*Fancy Item 0.*Fancy Item 2.*Fancy Item 4.*Fancy Item 6.*Fancy Item 8/m, page.text)
+  end
+
+  test 'anybody should be able to sort results by newest first' do
+    visit root_path
+    fill_in name: 'search', with: 'Fancy'
+    click_button 'Search'
+    assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy')
 
     # Sort with newest first
-    click_button 'Title (A-Z)'
+    find('#search-sort-button').click
     click_link 'Date (newest first)'
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy',
                                                                  sort: 'sort_year', direction: 'desc')
     assert_selector 'button', text: 'Date (newest first)'
     assert_match(/Fancy Item 8.*Fancy Item 6.*Fancy Item 4.*Fancy Item 2.*Fancy Item 0/m, page.text)
+  end
+
+  test 'anybody should be able to sort results by oldest first' do
+    visit root_path
+    fill_in name: 'search', with: 'Fancy'
+    click_button 'Search'
+    assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy')
 
     # Sort with oldest first
-    click_button 'Date (newest first)'
+    find('#search-sort-button').click
     click_link 'Date (oldest first)'
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy',
                                                                  sort: 'sort_year', direction: 'asc')
     assert_selector 'button', text: 'Date (oldest first)'
     assert_match(/Fancy Item 0.*Fancy Item 2.*Fancy Item 4.*Fancy Item 6.*Fancy Item 8/m, page.text)
   end
-  # rubocop:enable Minitest/MultipleAssertions
 
   # rubocop:disable Minitest/MultipleAssertions
-  # TODO: our tests are quite smelly.  This one needs work!
-  # TODO: Slow Test, consistently around ~8-9 seconds
-  test 'admin should be able to filter the public and private items' do
+  # TODO: Slow Tests, next two consistently around ~8-9 seconds
+  test 'admin should be able to view public and private items' do
     admin = users(:user_admin)
     login_user(admin)
 
@@ -394,6 +435,16 @@ class SearchTest < ApplicationSystemTestCase
     within 'div.jupiter-filters a', text: 'Fancy Collection 1' do
       assert_selector 'i.far.fa-square', count: 1
     end
+  end
+
+  test 'admin should be able to filter the public and private items' do
+    admin = users(:user_admin)
+    login_user(admin)
+
+    # Search box should be on any page we happen to be on
+    fill_in name: 'search', with: 'Fancy'
+    click_button 'Search'
+    assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy')
 
     # Click on facet
     click_link 'Fancy Collection 1'

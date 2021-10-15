@@ -10,12 +10,10 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
       Collection.create!(title: format("#{random_title(i)} Collection %02i", i), owner_id: admin.id,
                          community_id: @community.id)
     end
+    visit community_path(@community)
   end
 
-  # rubocop:disable Minitest/MultipleAssertions
-  # TODO: our tests are quite smelly.  This one needs work!
   test 'anybody should be able to sort and paginate collections' do
-    visit community_path(@community)
     assert_selector 'div', text: '1 - 10 of 11'
     # Default sort is by title. First 6 say 'Fancy', last 4 say 'Nice'
     assert_selector 'ul.list-group li:first-child a', text: 'Fancy Collection 00'
@@ -30,13 +28,10 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
     assert_equal URI.parse(current_url).request_uri, community_path(@community, page: '2')
     assert_selector 'div', text: '11 - 11 of 11'
     assert_selector 'ul.list-group li:first-child a', text: 'Nice Collection 09'
+  end
 
-    # Sort links
-    click_button 'Sort by'
-    assert_selector 'a', text: 'Title (A-Z)'
-    assert_selector 'a', text: 'Title (Z-A)'
-    assert_selector 'a', text: 'Date (newest first)'
-    assert_selector 'a', text: 'Date (oldest first)'
+  test 'sort by descending alphabetical order and paginate collections' do
+    find('#sort-button').click
 
     # Reverse sort
     click_link 'Title (Z-A)'
@@ -45,7 +40,6 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
     assert_selector 'button', text: 'Title (Z-A)'
     assert_selector 'ul.list-group li:first-child a', text: 'Nice Collection 09'
     assert_selector 'ul.list-group li:nth-child(2) a', text: 'Nice Collection 07'
-    assert_selector 'ul.list-group li:nth-child(9) a', text: 'Fancy Collection 04'
     assert_selector 'ul.list-group li:nth-child(10) a', text: 'Fancy Collection 02'
 
     # The first 'Fancy' collection should be on next page
@@ -55,21 +49,11 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
                                                                                 page: '2')
     assert_selector 'div', text: '11 - 11 of 11'
     assert_selector 'ul.list-group li:first-child a', text: 'Fancy Collection 00'
+  end
 
-    # Sort the other way again
-    click_button 'Title (Z-A)'
-    click_link 'Title (A-Z)'
-    assert_equal URI.parse(current_url).request_uri, community_path(@community, sort: 'title', direction: 'asc')
-    assert_selector 'button', text: 'Title (A-Z)'
-    assert_selector 'div', text: '1 - 10 of 11'
-    # First 6 say 'Fancy', last 4 say 'Nice'
-    assert_selector 'ul.list-group li:first-child a', text: 'Fancy Collection 00'
-    assert_selector 'ul.list-group li:nth-child(2) a', text: 'Fancy Collection 02'
-    assert_selector 'ul.list-group li:nth-child(9) a', text: 'Nice Collection 05'
-    assert_selector 'ul.list-group li:nth-child(10) a', text: 'Nice Collection 07'
-
+  test 'sort by newest and paginate collections' do
     # Sort with newest first
-    click_button 'Title (A-Z)'
+    find('#sort-button').click
     click_link 'Date (newest first)'
     assert_equal URI.parse(current_url).request_uri, community_path(@community, sort: 'record_created_at',
                                                                                 direction: 'desc')
@@ -77,7 +61,6 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
     assert_selector 'div', text: '1 - 10 of 11'
     assert_selector 'ul.list-group li:first-child a', text: 'Fancy Collection 10'
     assert_selector 'ul.list-group li:nth-child(2) a', text: 'Nice Collection 09'
-    assert_selector 'ul.list-group li:nth-child(9) a', text: 'Fancy Collection 02'
     assert_selector 'ul.list-group li:nth-child(10) a', text: 'Nice Collection 01'
     # The first 'Fancy' collection should be on next page
     refute_selector 'a', text: 'Fancy Collection 00'
@@ -87,9 +70,25 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
                                                                                 direction: 'desc', page: '2')
     assert_selector 'div', text: '11 - 11 of 11'
     assert_selector 'ul.list-group li:first-child a', text: 'Fancy Collection 00'
+  end
 
+  test 'sort by ascending alphabetical order and paginate collections' do
+    # Sort the other way again
+    find('#sort-button').click
+    click_link 'Title (A-Z)'
+    assert_equal URI.parse(current_url).request_uri, community_path(@community, sort: 'title', direction: 'asc')
+    assert_selector 'button', text: 'Title (A-Z)'
+    assert_selector 'div', text: '1 - 10 of 11'
+    # First 6 say 'Fancy', last 4 say 'Nice'
+    assert_selector 'ul.list-group li:first-child a', text: 'Fancy Collection 00'
+    assert_selector 'ul.list-group li:nth-child(2) a', text: 'Fancy Collection 02'
+    assert_selector 'ul.list-group li:nth-child(9) a', text: 'Nice Collection 05'
+    assert_selector 'ul.list-group li:nth-child(10) a', text: 'Nice Collection 07'
+  end
+
+  test 'sort by oldest and paginate collections' do
     # Sort with oldest first
-    click_button 'Date (newest first)'
+    find('#sort-button').click
     click_link 'Date (oldest first)'
     assert_equal URI.parse(current_url).request_uri, community_path(@community, sort: 'record_created_at',
                                                                                 direction: 'asc')
@@ -97,7 +96,6 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
     assert_selector 'div', text: '1 - 10 of 11'
     assert_selector 'ul.list-group li:first-child a', text: 'Fancy Collection 00'
     assert_selector 'ul.list-group li:nth-child(2) a', text: 'Nice Collection 01'
-    assert_selector 'ul.list-group li:nth-child(9) a', text: 'Fancy Collection 08'
     assert_selector 'ul.list-group li:nth-child(10) a', text: 'Nice Collection 09'
     # The Last 'Nice' collection should be on next page
     refute_selector 'a', text: 'Fancy Collection 10'
@@ -107,6 +105,5 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
     assert_selector 'div', text: '11 - 11 of 11'
     assert_selector 'ul.list-group li:first-child a', text: 'Fancy Collection 10'
   end
-  # rubocop:enable Minitest/MultipleAssertions
 
 end

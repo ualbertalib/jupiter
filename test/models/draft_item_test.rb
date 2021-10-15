@@ -168,6 +168,7 @@ class DraftItemTest < ActiveSupport::TestCase
     assert draft_item.valid?
   end
 
+  # rubocop:disable Minitest/MultipleAssertions
   test 'should handle community/collection validations on member_of_paths' do
     user = users(:user_regular)
 
@@ -220,6 +221,7 @@ class DraftItemTest < ActiveSupport::TestCase
 
     restricted_collection.destroy
   end
+  # rubocop:enable Minitest/MultipleAssertions
 
   # should be able to delete additional contributors https://github.com/ualbertalib/jupiter/issues/830
   test '#strip_input_fields should strip empty strings from array fields' do

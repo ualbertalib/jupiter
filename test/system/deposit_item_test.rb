@@ -10,10 +10,6 @@ class DepositItemTest < ApplicationSystemTestCase
     click_link I18n.t('application.navbar.links.new_item')
 
     # 1. Describe Item Form
-
-    assert_selector 'h1', text: I18n.t('items.draft.header')
-    assert_selector 'h2', text: I18n.t('items.draft.describe_item.header')
-
     fill_in I18n.t('items.draft.describe_item.title'),
             # Need to narrow down by placeholder since capybara can't differentiate from title and alternate title labels
             placeholder: I18n.t('items.draft.describe_item.title_placeholder'),
@@ -37,9 +33,6 @@ class DepositItemTest < ApplicationSystemTestCase
     click_on I18n.t('items.draft.save_and_continue')
 
     # 2. Choose License and Visibility Form
-
-    assert_selector 'h2', text: I18n.t('items.draft.choose_license_and_visibility.header')
-
     # Open accordion
     click_on I18n.t('items.draft.choose_license_and_visibility.license.link_to_another_license')
 
@@ -53,16 +46,12 @@ class DepositItemTest < ApplicationSystemTestCase
 
     # 3. Upload File Form
 
-    assert_selector 'h2', text: I18n.t('items.draft.upload_files.header')
-
     attach_file_in_dropzone(file_fixture('image-sample.jpeg'))
     has_css? '.j-thumbnail'
 
     click_on I18n.t('items.draft.save_and_continue'), wait: 5
 
     # 4. Review and Deposit Form
-
-    assert_selector 'h2', text: I18n.t('items.draft.review_and_deposit_item.header')
 
     click_on I18n.t('items.draft.header')
 
@@ -80,7 +69,6 @@ class DepositItemTest < ApplicationSystemTestCase
     # verify editing
 
     click_on I18n.t('edit')
-    assert_selector 'h1', text: I18n.t('items.draft.header_edit')
 
     # edit title
     fill_in I18n.t('items.draft.describe_item.title'),
@@ -99,7 +87,6 @@ class DepositItemTest < ApplicationSystemTestCase
 
     # go back to editing to ensure visibility stuck
     click_on I18n.t('edit')
-    assert_selector 'h1', text: I18n.t('items.draft.header_edit')
     click_on I18n.t('items.draft.save_and_continue')
     assert_selector '#draft_item_visibility_open_access:checked'
 
