@@ -315,7 +315,7 @@ class SearchTest < ApplicationSystemTestCase
     assert_match(/Fancy CCID Item.*Fancy Item 0.*Fancy Item 2.*Fancy Item 4.*Fancy Item 6.*Fancy Item 8/m, page.text)
 
     # Sort sort links
-    find('#search-sort-button').click
+    click_button 'Sort by'
     assert_selector 'a', text: 'Title (A-Z)'
     assert_selector 'a', text: 'Title (Z-A)'
     assert_selector 'a', text: 'Date (newest first)'
@@ -330,7 +330,7 @@ class SearchTest < ApplicationSystemTestCase
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy')
 
     # Reverse sort
-    find('#search-sort-button').click
+    click_button 'Sort by'
     click_link 'Title (Z-A)'
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy', sort: 'title', direction: 'desc')
     assert_selector 'button', text: 'Title (Z-A)'
@@ -344,7 +344,7 @@ class SearchTest < ApplicationSystemTestCase
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy')
 
     # Sort the other way again
-    find('#search-sort-button').click
+    click_button 'Sort by'
     click_link 'Title (A-Z)'
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy', sort: 'title', direction: 'asc')
     assert_selector 'button', text: 'Title (A-Z)'
@@ -358,7 +358,7 @@ class SearchTest < ApplicationSystemTestCase
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy')
 
     # Sort with newest first
-    find('#search-sort-button').click
+    click_button 'Sort by'
     click_link 'Date (newest first)'
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy',
                                                                  sort: 'sort_year', direction: 'desc')
@@ -373,7 +373,7 @@ class SearchTest < ApplicationSystemTestCase
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy')
 
     # Sort with oldest first
-    find('#search-sort-button').click
+    click_button 'Sort by'
     click_link 'Date (oldest first)'
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy',
                                                                  sort: 'sort_year', direction: 'asc')

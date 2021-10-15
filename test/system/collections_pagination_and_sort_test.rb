@@ -31,7 +31,7 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
   end
 
   test 'sort by descending alphabetical order and paginate collections' do
-    find('#sort-button').click
+    click_button 'Sort by'
 
     # Reverse sort
     click_link 'Title (Z-A)'
@@ -53,7 +53,7 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
 
   test 'sort by newest and paginate collections' do
     # Sort with newest first
-    find('#sort-button').click
+    click_button 'Sort by'
     click_link 'Date (newest first)'
     assert_equal URI.parse(current_url).request_uri, community_path(@community, sort: 'record_created_at',
                                                                                 direction: 'desc')
@@ -74,7 +74,7 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
 
   test 'sort by ascending alphabetical order and paginate collections' do
     # Sort the other way again
-    find('#sort-button').click
+    click_button 'Sort by'
     click_link 'Title (A-Z)'
     assert_equal URI.parse(current_url).request_uri, community_path(@community, sort: 'title', direction: 'asc')
     assert_selector 'button', text: 'Title (A-Z)'
@@ -88,7 +88,7 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
 
   test 'sort by oldest and paginate collections' do
     # Sort with oldest first
-    find('#sort-button').click
+    click_button 'Sort by'
     click_link 'Date (oldest first)'
     assert_equal URI.parse(current_url).request_uri, community_path(@community, sort: 'record_created_at',
                                                                                 direction: 'asc')

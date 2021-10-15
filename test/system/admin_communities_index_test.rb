@@ -21,7 +21,7 @@ class AdminCommunitiesIndexTest < ApplicationSystemTestCase
   end
 
   # TODO: add more tests
-  test 'should be able to expand the collection for a community in the list' do
+  test 'ensure collections are not shown on community page' do
     assert_selector 'h1', text: I18n.t('admin.communities.index.header')
 
     # Initially, collections aren't shown
