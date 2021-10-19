@@ -1,11 +1,4 @@
 GIT
-  remote: https://github.com/pgwillia/datacite-client.git
-  revision: 6ba928007d28c51825da9aaa5467c6c70ed22921
-  branch: main
-  specs:
-    datacite-client (0.1.0)
-
-GIT
   remote: https://github.com/ualbertalib/acts_as_rdfable.git
   revision: 1ea0065f78b500b1503460c8e0923dfa86472df8
   tag: 0.4.0
@@ -22,6 +15,13 @@ GIT
     builder_deferred_tagging (0.1.0)
       builder
       request_store
+
+GIT
+  remote: https://github.com/ualbertalib/datacite-client.git
+  revision: 985fafc859f109bf2a7e6e4c6511484bd0e8c80d
+  tag: v0.1.0
+  specs:
+    datacite-client (0.1.0)
 
 GIT
   remote: https://github.com/ualbertalib/oaisys.git
