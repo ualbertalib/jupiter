@@ -119,7 +119,7 @@ def item_ingest(item_data, index, csv_directory)
     log "ITEM #{index}: Starting ingest of an item..."
     item = Item.new
     item.tap do |unlocked_obj|
-      unlocked_obj.owner_id = item_data[:owner_id]
+      unlocked_obj.owner_id = 1
       unlocked_obj.title = item_data[:title]
       unlocked_obj.alternative_title = item_data[:alternate_title]
 
@@ -148,8 +148,8 @@ def item_ingest(item_data, index, csv_directory)
       end
 
       unlocked_obj.creators = item_data[:creators].split("|") if item_data[:creators].present?
-      unlocked_obj.subject = item_data[:subjects].split("|") if item_data[:subjects].present?
-      unlocked_obj.created = item_data[:date_created].to_s
+      unlocked_obj.subject = item_data[:subject].split("|") if item_data[:subject].present?
+      unlocked_obj.created = item_data[:created].to_s
       unlocked_obj.description = item_data[:description]
 
       # Handle visibility and embargo logic
