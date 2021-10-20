@@ -56,12 +56,17 @@ namespace :jupiter do
 
   desc 'queue all items and theses in the system for preservation'
   task :preserve_all_items_and_theses, [:batch_size] => :environment do |_, args|
-    desired_batch_size = args.batch_size.to_i ||= 1000
+    desired_batch_size = if args.batch_size.present?
+      args.batch_size.to_i
+    else
+      1000
+    end
     puts 'Adding all Items and Theses to preservation queue...'
-    Item.find_each(batch_size: desired_batch_size) { |item| item.tap(&:preserve) }
-    Thesis.find_each(batch_size: desired_batch_size) { |item| item.tap(&:preserve) }
+    Item.find_each(batch_size: desired_batch_size) { |item| item.push_entity_for_preservation }
+    Thesis.find_each(batch_size: desired_batch_size) { |item| item.push_entity_for_preservation }
     puts 'All Items and Theses have been added to preservation queue!'
   end
+
 
   desc 'garbage collect any orphan attachment blobs on the filesystem'
   task gc_blobs: :environment do
