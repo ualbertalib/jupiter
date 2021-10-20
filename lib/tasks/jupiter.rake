@@ -57,30 +57,30 @@ namespace :jupiter do
   desc 'queue all items and theses in the system for preservation'
   task :preserve_all_items_and_theses, [:batch_size] => :environment do |_, args|
     desired_batch_size = if args.batch_size.present?
-      args.batch_size.to_i
-    else
-      1000
-    end
+                           args.batch_size.to_i
+                         else
+                           1000
+                         end
     puts 'Adding all Items and Theses to preservation queue...'
-    Item.find_each(batch_size: desired_batch_size) { |item| item.push_entity_for_preservation }
-    Thesis.find_each(batch_size: desired_batch_size) { |item| item.push_entity_for_preservation }
+    Item.find_each(batch_size: desired_batch_size, &:push_entity_for_preservation)
+    Thesis.find_each(batch_size: desired_batch_size, &:push_entity_for_preservation)
     puts 'All Items and Theses have been added to preservation queue!'
   end
 
   desc 'clear the preservation queue'
-  task :clear_preservation_queue => :environment do
+  task clear_preservation_queue: :environment do
     queue_name = Rails.application.secrets.preservation_queue_name
 
-    $queue ||= ConnectionPool.new(size: 1, timeout: 5) { Redis.current }
-    success = $queue.with {|connection| connection.del queue_name }
+    queue = ConnectionPool.new(size: 1, timeout: 5) { Redis.current }
+    success = queue.with { |connection| connection.del queue_name }
     puts case success
-      when 1 
-        "#{queue_name} deleted"
-      when 0
-        "nothing happened to #{queue_name}"
-      else
-        "Well this is unexpected!"
-      end
+         when 1
+           "#{queue_name} deleted"
+         when 0
+           "nothing happened to #{queue_name}"
+         else
+           'Well this is unexpected!'
+         end
   end
 
   desc 'garbage collect any orphan attachment blobs on the filesystem'
