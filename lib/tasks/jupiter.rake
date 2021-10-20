@@ -67,6 +67,21 @@ namespace :jupiter do
     puts 'All Items and Theses have been added to preservation queue!'
   end
 
+  desc 'clear the preservation queue'
+  task :clear_preservation_queue => :environment do
+    queue_name = Rails.application.secrets.preservation_queue_name
+
+    $queue ||= ConnectionPool.new(size: 1, timeout: 5) { Redis.current }
+    success = $queue.with {|connection| connection.del queue_name }
+    puts case success
+      when 1 
+        "#{queue_name} deleted"
+      when 0
+        "nothing happened to #{queue_name}"
+      else
+        "Well this is unexpected!"
+      end
+  end
 
   desc 'garbage collect any orphan attachment blobs on the filesystem'
   task gc_blobs: :environment do
