@@ -55,12 +55,49 @@ namespace :jupiter do
   end
 
   desc 'queue all items and theses in the system for preservation'
-  task :preserve_all_items_and_theses, [:batch_size] => :environment do |_, args|
-    desired_batch_size = args.batch_size.to_i ||= 1000
-    puts 'Adding all Items and Theses to preservation queue...'
-    Item.find_each(batch_size: desired_batch_size) { |item| item.tap(&:preserve) }
-    Thesis.find_each(batch_size: desired_batch_size) { |item| item.tap(&:preserve) }
-    puts 'All Items and Theses have been added to preservation queue!'
+  task :preserve_all_items_and_theses, [:before_date, :batch_size] => :environment do |_, args|
+    desired_batch_size = if args.batch_size.present?
+                           args.batch_size.to_i
+                         else
+                           1000
+                         end
+
+    begin
+      before_date = Date.parse(args.before_date) if args.before_date.present?
+    rescue ArgumentError
+      puts "#{args.before_date} is not a valid date"
+      exit 1
+    end
+
+    if before_date.present?
+      puts "Adding Items and Theses on or after #{before_date} to preservation queue..."
+      items = Item.updated_on_or_after(before_date)
+      items.find_each(batch_size: desired_batch_size, &:push_entity_for_preservation)
+      theses = Thesis.updated_on_or_after(before_date)
+      theses.find_each(batch_size: desired_batch_size, &:push_entity_for_preservation)
+      puts "#{items.count} Items and #{theses.count} Theses have been added to preservation queue!"
+    else
+      puts 'Adding all Items and Theses to preservation queue...'
+      Item.find_each(batch_size: desired_batch_size, &:push_entity_for_preservation)
+      Thesis.find_each(batch_size: desired_batch_size, &:push_entity_for_preservation)
+      puts 'All Items and Theses have been added to preservation queue!'
+    end
+  end
+
+  desc 'clear the preservation queue'
+  task clear_preservation_queue: :environment do
+    queue_name = Rails.application.secrets.preservation_queue_name
+
+    queue = ConnectionPool.new(size: 1, timeout: 5) { Redis.current }
+    success = queue.with { |connection| connection.del queue_name }
+    puts case success
+         when 1
+           "#{queue_name} deleted"
+         when 0
+           "#{queue_name} doesn't exist"
+         else
+           'Well this is unexpected!'
+         end
   end
 
   desc 'garbage collect any orphan attachment blobs on the filesystem'
