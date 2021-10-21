@@ -6,7 +6,10 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+## [2.1.0] - 2021-10-21
+
 ### Added
+- Added DOI reset feature for admins [#1739](https://github.com/ualbertalib/jupiter/issues/1739)
 - Added oaisys tests [#1888](https://github.com/ualbertalib/jupiter/issues/1888)
 - Initialize disabled ReadOnlyMode [#2100](https://github.com/ualbertalib/jupiter/issues/2100)
 - Updated Architecture diagrams [PR#2135](https://github.com/ualbertalib/jupiter/pull/2135)
@@ -16,7 +19,6 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Completely disable logging of warnings around the "excel spreadsheet" issue [PR#2049](https://github.com/ualbertalib/jupiter/pull/2049)
 
 ### Changed
-- Added DOI reset feature for admins [#1739](https://github.com/ualbertalib/jupiter/issues/1739)
 - Turn off reporting things like "this excel spreadsheet isn't thumbnailable" as warnings to Rollbar [PR#2046](https://github.com/ualbertalib/jupiter/pull/2046)
 - migration to fix concatenated subjects (part 2) [#1449](https://github.com/ualbertalib/jupiter/issues/1449)
 - Catch and log embargo expiry job save errors [#1989](https://github.com/ualbertalib/jupiter/issues/1989)
