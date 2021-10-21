@@ -55,16 +55,33 @@ namespace :jupiter do
   end
 
   desc 'queue all items and theses in the system for preservation'
-  task :preserve_all_items_and_theses, [:batch_size] => :environment do |_, args|
+  task :preserve_all_items_and_theses, [:before_date, :batch_size] => :environment do |_, args|
     desired_batch_size = if args.batch_size.present?
                            args.batch_size.to_i
                          else
                            1000
                          end
-    puts 'Adding all Items and Theses to preservation queue...'
-    Item.find_each(batch_size: desired_batch_size, &:push_entity_for_preservation)
-    Thesis.find_each(batch_size: desired_batch_size, &:push_entity_for_preservation)
-    puts 'All Items and Theses have been added to preservation queue!'
+
+    begin
+      before_date = Date.parse(args.before_date) if args.before_date.present?
+    rescue ArgumentError
+      puts "#{args.before_date} is not a valid date"
+      exit 1
+    end
+
+    if before_date.present?
+      puts "Adding Items and Theses on or after #{before_date} to preservation queue..."
+      items = Item.updated_on_or_after(before_date)
+      items.find_each(batch_size: desired_batch_size, &:push_entity_for_preservation)
+      theses = Thesis.updated_on_or_after(before_date)
+      theses.find_each(batch_size: desired_batch_size, &:push_entity_for_preservation)
+      puts "#{items.count} Items and #{theses.count} Theses have been added to preservation queue!"
+    else
+      puts 'Adding all Items and Theses to preservation queue...'
+      Item.find_each(batch_size: desired_batch_size, &:push_entity_for_preservation)
+      Thesis.find_each(batch_size: desired_batch_size, &:push_entity_for_preservation)
+      puts 'All Items and Theses have been added to preservation queue!'
+    end
   end
 
   desc 'clear the preservation queue'
@@ -77,7 +94,7 @@ namespace :jupiter do
          when 1
            "#{queue_name} deleted"
          when 0
-           "nothing happened to #{queue_name}"
+           "#{queue_name} doesn't exist"
          else
            'Well this is unexpected!'
          end
