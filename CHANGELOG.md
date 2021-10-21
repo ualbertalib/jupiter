@@ -40,6 +40,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 - Danger token in Github Actions [#2282](https://github.com/ualbertalib/jupiter/issues/2282)
 - Fix issue where we improperly 404'd when a deleted Collection is being displayed in the edit history [#2504](https://github.com/ualbertalib/jupiter/issues/2504)
 - Fix communication with [pushmi_pullyu](https://github.com/ualbertalib/pushmi_pullyu) by changing the format for entries in redis queue [#2527](https://github.com/ualbertalib/jupiter/issues/2527)
+- Fix preservation task [#2566](https://github.com/ualbertalib/jupiter/issues/2566)
 
 ## [2.0.3] - 2021-05-05
 
