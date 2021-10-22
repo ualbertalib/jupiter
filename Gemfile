@@ -50,7 +50,7 @@ gem 'addressable', '~> 2.8.0' # Replacement for the standard URI implementation
 gem 'differ' # Used to diff two strings
 gem 'draper'
 gem 'edtf', '~> 3.0', '>= 3.0.6' # parsing Extended Date/Time Format
-gem 'ezid-client', '< 1.9.0'
+gem 'ezid-client', '< 1.10.0'
 gem 'flipper', '~> 0.22.2' # Feature flags for Ruby
 gem 'flipper-active_record', '~> 0.22.1' # Store feature flags in ActiveRecord
 gem 'flipper-ui', '~> 0.22.1' # UI for feature flags

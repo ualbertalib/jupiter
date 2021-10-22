@@ -195,7 +195,7 @@ GEM
     erubi (1.10.0)
     et-orbi (1.2.4)
       tzinfo
-    ezid-client (1.8.0)
+    ezid-client (1.9.1)
       hashie (~> 3.4, >= 3.4.3)
       nokogiri
     faker (2.19.0)
@@ -370,7 +370,7 @@ GEM
     pundit (1.1.0)
       activesupport (>= 3.0.0)
     raabro (1.4.0)
-    racc (1.5.2)
+    racc (1.6.0)
     rack (2.2.3)
     rack-protection (2.1.0)
       rack
@@ -618,7 +618,7 @@ DEPENDENCIES
   draper
   edtf (~> 3.0, >= 3.0.6)
   erb_lint (>= 0.0.35)
-  ezid-client (< 1.9.0)
+  ezid-client (< 1.10.0)
   faker
   flipper (~> 0.22.2)
   flipper-active_record (~> 0.22.1)
