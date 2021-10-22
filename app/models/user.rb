@@ -1,10 +1,13 @@
 class User < ApplicationRecord
 
   has_secure_password :api_key, validations: false
-  has_many :identities, dependent: :destroy
+
   has_many :announcements, dependent: :destroy
+  has_many :batch_ingests, dependent: :destroy
+  has_many :digitization_metadata_ingests, dependent: :destroy, class_name: 'Digitization::BatchMetadataIngest'
   has_many :draft_items, dependent: :destroy
   has_many :draft_theses, dependent: :destroy
+  has_many :identities, dependent: :destroy
 
   has_many :items, foreign_key: :owner_id, inverse_of: :owner, dependent: :restrict_with_error
   has_many :theses, foreign_key: :owner_id, inverse_of: :owner, dependent: :restrict_with_error
@@ -61,6 +64,10 @@ class User < ApplicationRecord
   # For masking the ID that we send to rollbar
   def id_as_hash
     Digest::SHA2.hexdigest("#{Rails.application.secrets.secret_key_base}_#{id}")
+  end
+
+  def flipper_id
+    "User:#{id}"
   end
 
 end

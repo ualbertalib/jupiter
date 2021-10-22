@@ -12,6 +12,8 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
     end
   end
 
+  # rubocop:disable Minitest/MultipleAssertions
+  # TODO: our tests are quite smelly.  This one needs work!
   test 'anybody should be able to sort and paginate collections' do
     visit community_path(@community)
     assert_selector 'div', text: '1 - 10 of 11'
@@ -105,5 +107,6 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
     assert_selector 'div', text: '11 - 11 of 11'
     assert_selector 'ul.list-group li:first-child a', text: 'Fancy Collection 10'
   end
+  # rubocop:enable Minitest/MultipleAssertions
 
 end

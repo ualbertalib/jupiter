@@ -4,11 +4,11 @@ class JupiterCore::Depositable < ApplicationRecord
 
   self.abstract_class = true
 
-  VISIBILITY_EMBARGO = CONTROLLED_VOCABULARIES[:visibility].embargo.freeze
+  VISIBILITY_EMBARGO = ControlledVocabulary.jupiter_core.visibility.embargo.freeze
   VISIBILITIES = (JupiterCore::VISIBILITIES + [VISIBILITY_EMBARGO]).freeze
-  VISIBILITIES_AFTER_EMBARGO = [CONTROLLED_VOCABULARIES[:visibility].authenticated,
-                                CONTROLLED_VOCABULARIES[:visibility].draft,
-                                CONTROLLED_VOCABULARIES[:visibility].public].freeze
+  VISIBILITIES_AFTER_EMBARGO = [ControlledVocabulary.jupiter_core.visibility.authenticated,
+                                ControlledVocabulary.jupiter_core.visibility.draft,
+                                ControlledVocabulary.jupiter_core.visibility.public].freeze
 
   validates :visibility, known_visibility: true
 
@@ -76,10 +76,6 @@ class JupiterCore::Depositable < ApplicationRecord
     visibility == JupiterCore::VISIBILITY_AUTHENTICATED
   end
 
-  def doi_url
-    "https://doi.org/#{doi.delete_prefix('doi:')}"
-  end
-
   def each_community_collection
     member_of_paths.each do |path|
       community_id, collection_id = path.split('/')
@@ -116,7 +112,8 @@ class JupiterCore::Depositable < ApplicationRecord
     raise 'Item not yet saved!' if id.nil?
 
     file_handles.each do |fileio|
-      attached = files.attach(io: fileio, filename: File.basename(fileio.path))
+      file_name = fileio.try(:original_filename) || File.basename(fileio.path)
+      attached = files.attach(io: fileio, filename: file_name)
       # TODO: Do something smarter here if not attached
       next unless attached
 
@@ -154,7 +151,7 @@ class JupiterCore::Depositable < ApplicationRecord
   def add_to_embargo_history
     self.embargo_history ||= []
     embargo_history_item = "An embargo was deactivated on #{Time.now.getlocal('-06:00')}. Its release date was " \
-    "#{embargo_end_date}. Intended visibility after embargo was #{visibility_after_embargo}"
+                           "#{embargo_end_date}. Intended visibility after embargo was #{visibility_after_embargo}"
     self.embargo_history << embargo_history_item
   end
 
@@ -180,7 +177,7 @@ class JupiterCore::Depositable < ApplicationRecord
   # rubocop:enable Style/GlobalVars
 
   def to_partial_path
-    self.class.to_s.downcase
+    self.class.name.demodulize.underscore
   end
 
   def self.sort_order(params)

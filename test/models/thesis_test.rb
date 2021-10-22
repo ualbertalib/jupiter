@@ -94,7 +94,7 @@ class ThesisTest < ActiveSupport::TestCase
     thesis = Thesis.new
     thesis.tap do |unlocked_thesis|
       unlocked_thesis.visibility = JupiterCore::VISIBILITY_PUBLIC
-      unlocked_thesis.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].draft
+      unlocked_thesis.visibility_after_embargo = ControlledVocabulary.jupiter_core.visibility.draft
     end
 
     assert_not thesis.valid?
@@ -157,7 +157,7 @@ class ThesisTest < ActiveSupport::TestCase
 
   test 'item_type_with_status_code gets set correctly' do
     thesis = Thesis.new
-    assert_equal thesis.item_type_with_status_code, :thesis
+    assert_equal(:thesis, thesis.item_type_with_status_code)
   end
 
   test 'a title is required' do
@@ -188,7 +188,7 @@ class ThesisTest < ActiveSupport::TestCase
     thesis = Thesis.new(graduation_date: 'Fall 2015')
     thesis.valid?
     assert_not thesis.errors[:sort_year].present?
-    assert_equal thesis.sort_year, 2015
+    assert_equal(2015, thesis.sort_year)
   end
 
   # Preservation queue handling

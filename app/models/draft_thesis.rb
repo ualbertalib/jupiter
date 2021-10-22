@@ -134,17 +134,17 @@ class DraftThesis < ApplicationRecord
 
   # Control Vocab Conversions
 
-  # Maps Language name to CONTROLLED_VOCABULARIES[:language] URI
+  # Maps Language name to ControlledVocabulary.era.language URI
   def language_as_uri
     return nil if language&.name.blank?
 
-    CONTROLLED_VOCABULARIES[:language].send(language.name)
+    ControlledVocabulary.era.language.from_value(language.name)
   end
 
   def language_for_uri(uri)
     return nil if uri.blank?
 
-    code = CONTROLLED_VOCABULARIES[:language].from_uri(uri)
+    code = ControlledVocabulary.era.language.from_uri(uri)
     raise ArgumentError, "No known code for language uri: #{uri}" if code.blank?
 
     language = Language.find_by(name: code)
@@ -153,32 +153,32 @@ class DraftThesis < ApplicationRecord
     language
   end
 
-  # Maps DraftItem.visibilities to CONTROLLED_VOCABULARIES[:visibility]
+  # Maps DraftItem.visibilities to ControlledVocabulary.jupiter_core.visibility
   def visibility_as_uri
     # Can't have a private or draft visibilty so no mappings for this
     code = VISIBILITY_TO_URI_CODE.fetch(visibility.to_sym)
-    CONTROLLED_VOCABULARIES[:visibility].send(code)
+    ControlledVocabulary.jupiter_core.visibility.from_value(code)
   end
 
   def visibility_for_uri(uri)
-    code = CONTROLLED_VOCABULARIES[:visibility].from_uri(uri)
+    code = ControlledVocabulary.jupiter_core.visibility.from_uri(uri)
     visibility = URI_CODE_TO_VISIBILITY[code].to_s
     raise ArgumentError, "Unable to map DraftItem visbility from URI: #{uri}, code: #{code}" if visibility.blank?
 
     visibility
   end
 
-  # Maps institution names to CONTROLLED_VOCABULARIES[:institution]
+  # Maps institution names to ControlledVocabulary.era.institution
   def institution_as_uri
     return nil if institution&.name.blank?
 
-    CONTROLLED_VOCABULARIES[:institution].send(institution.name)
+    ControlledVocabulary.era.institution.from_value(institution.name)
   end
 
   def institution_for_uri(uri)
     return nil if uri.blank?
 
-    code = CONTROLLED_VOCABULARIES[:institution].from_uri(uri)
+    code = ControlledVocabulary.era.institution.from_uri(uri)
     raise ArgumentError, "No known code for institution uri: #{uri}" if code.blank?
 
     institution = Institution.find_by(name: code)

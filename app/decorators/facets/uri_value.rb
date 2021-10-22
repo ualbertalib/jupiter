@@ -2,11 +2,10 @@ class Facets::URIValue < Facets::DefaultFacetDecorator
 
   protected
 
-  def translate_uri(vocab, uri)
+  def translate_uri(namespace, vocab, uri)
     raise ArgumentError unless vocab.is_a? Symbol
-    raise ArgumentError, "Vocabulary not found: #{vocab}" unless CONTROLLED_VOCABULARIES.key?(vocab)
 
-    @view.humanize_uri(vocab, uri)
+    @view.humanize_uri(namespace, vocab, uri)
   end
 
 end

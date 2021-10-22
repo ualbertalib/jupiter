@@ -1,9 +1,7 @@
 <% page_title(t('admin.header')) %>
-
 <% content_for(:head) do %>
   <%= javascript_pack_tag 'admin' %>
 <% end %>
-
 <% content_for(:content) do %>
   <div class="container mt-3">
     <ul class="nav nav-tabs my-3">
@@ -23,14 +21,15 @@
         <%= active_link_to t('admin.items.index.header'), admin_items_path, class: 'nav-link', active: :exclusive %>
       </li>
       <li class="nav-item">
-        <%= active_link_to "(TODO) #{t('admin.pages.index.header')}", '#', class: 'nav-link', active: :exclusive %>
+        <%= link_to t('.feature_flags'), flipper_path, class: 'nav-link' %>
       </li>
-      <li class="nav-item">
-        <%= active_link_to "(TODO) #{t('admin.analytics.index.header')}", '#', class: 'nav-link', active: :exclusive %>
-      </li>
+      <% if Flipper.enabled?(:batch_ingest, current_user) %>
+        <li class="nav-item">
+          <%= active_link_to t('admin.batch_ingests.index.header'), admin_batch_ingests_path, class: 'nav-link', active: :exclusive %>
+        </li>
+      <% end %>
     </ul>
     <%= yield %>
   </div>
 <% end %>
-
 <%= render template: 'layouts/application' %>

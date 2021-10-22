@@ -31,6 +31,8 @@ class AdminUsersShowTest < ApplicationSystemTestCase
     logout_user
   end
 
+  # rubocop:disable Minitest/MultipleAssertions
+  # TODO: our tests are quite smelly.  This one needs work!
   test 'should be able to toggle suspended/admin a regular user' do
     admin = users(:user_admin)
     user = users(:user_regular)
@@ -103,6 +105,7 @@ class AdminUsersShowTest < ApplicationSystemTestCase
 
     logout_user
   end
+  # rubocop:enable Minitest/MultipleAssertions
 
   test 'should be able to login as a regular user' do
     admin = users(:user_admin)

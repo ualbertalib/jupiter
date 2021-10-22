@@ -13,10 +13,10 @@ class ItemsControllerTest < ActionDispatch::IntegrationTest
       owner_id: @admin.id,
       creators: ['Joe Blow'],
       created: '1972-08-08',
-      languages: [CONTROLLED_VOCABULARIES[:language].english],
-      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+      languages: [ControlledVocabulary.era.language.english],
+      license: ControlledVocabulary.era.license.attribution_4_0_international,
       visibility: JupiterCore::VISIBILITY_PUBLIC,
-      item_type: CONTROLLED_VOCABULARIES[:item_type].book,
+      item_type: ControlledVocabulary.era.item_type.book,
       subject: ['Edit']
     ).tap do |unlocked_item|
       unlocked_item.add_to_path(@community.id, @collection.id)
@@ -30,7 +30,7 @@ class ItemsControllerTest < ActionDispatch::IntegrationTest
       graduation_date: '2017-03-31',
       visibility: JupiterCore::Depositable::VISIBILITY_EMBARGO,
       embargo_end_date: 2.days.from_now.to_date,
-      visibility_after_embargo: CONTROLLED_VOCABULARIES[:visibility].public
+      visibility_after_embargo: ControlledVocabulary.jupiter_core.visibility.public
     ).tap do |unlocked_thesis|
       unlocked_thesis.add_to_path(@community.id, @collection.id)
       unlocked_thesis.save!

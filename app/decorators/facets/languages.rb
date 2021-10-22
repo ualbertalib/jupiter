@@ -1,7 +1,7 @@
 class Facets::Languages < Facets::URIValue
 
-  def display
-    translate_uri(:language, @value)
+  def display_value
+    translate_uri(:era, :language, @value)
   end
 
 end

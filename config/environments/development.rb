@@ -1,4 +1,4 @@
-Rails.application.routes.default_url_options = { host: 'localhost' }
+Rails.application.routes.default_url_options = { host: 'era.ualberta.localhost' }
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -67,4 +67,7 @@ Rails.application.configure do
 
   # Action on unpermitted parameters
   config.action_controller.action_on_unpermitted_parameters = :raise
+
+  config.hosts << 'era.lvh.me'
+  config.hosts << 'digitalcollections.lvh.me'
 end

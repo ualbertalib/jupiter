@@ -95,7 +95,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
     draft_item.reload
     assert_equal 'public_domain_mark', draft_item.license
     assert_equal 'embargo', draft_item.visibility
-    assert_equal Date.current + 1.year, draft_item.embargo_end_date
+    assert_equal (Date.current + 1.year).to_datetime, draft_item.embargo_end_date
     assert_equal 'choose_license_and_visibility', draft_item.wizard_step
     assert_equal 'active', draft_item.status
   end

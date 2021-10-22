@@ -1,0 +1,65 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# TODO: resource_type, genres, languages and a subject are required. These are placeholders.
+peel_monograph:
+  peel_id: 4062
+  title: 'Report on a rural survey of the agricultural, educational, social, and religious life'
+  resource_type: <%= ControlledVocabulary.digitization.resource_type.from_value("Text") %>
+  genres: <%= [ControlledVocabulary.digitization.genre.from_value("Programs (Publications)")] %>
+  languages: <%= [ControlledVocabulary.digitization.language.from_value("English")] %>
+  temporal_subjects: ['1914']
+  date_ingested: '2000-01-01T00:00:00.007Z'
+  record_created_at: '2000-01-01T00:00:00.007Z'
+  owner: user_admin
+
+# TODO: resource_type, genres, languages, and a subject are required. These are placeholders.
+henderson:
+  peel_id: 3178
+  run: 1
+  part_number: 1
+  title: "Henderson's Moose Jaw city directory for 1908"
+  resource_type: <%= ControlledVocabulary.digitization.resource_type.from_value("Text") %>
+  genres: <%= [ControlledVocabulary.digitization.genre.from_value("Programs (Publications)")] %>
+  languages: <%= [ControlledVocabulary.digitization.language.from_value("English")] %>
+  temporal_subjects: ['1908']
+  rights: <%= ControlledVocabulary.digitization.rights.from_value("In Copyright") %>
+  date_ingested: '2000-01-01T00:00:00.007Z'
+  record_created_at: '2000-01-01T00:00:00.007Z'
+  owner: user_admin
+
+folk_fest:
+  peel_id: 10572
+  part_number: 1
+  title: 'Edmonton Folk Music Festival'
+  alternative_titles: ['Annual Edmonton Folk Music Festival', 'Edmonton Folk Music Festival program book', 'Edmonton Folkfest', 'Edmonton Folk Fest', 'Edmonton Folk Festival']
+  dates_issued: ['1980']
+  temporal_subjects: ['1980']
+  resource_type: <%= ControlledVocabulary.digitization.resource_type.from_value("Text") %>
+  genres: <%= [ControlledVocabulary.digitization.genre.from_value("Programs (Publications)")] %>
+  languages: <%= [ControlledVocabulary.digitization.language.from_value("English")] %>
+  publishers: <%= [ControlledVocabulary.digitization.subject.from_value("Edmonton Folk Music Festival")] %>
+  places_of_publication: <%= [ControlledVocabulary.digitization.subject.from_value("Edmonton (Alta.)")] %>
+  extent: 'v. : ill. ; 22-27 cm.'
+  notes: ['Statement of responsibility: [Holger Petersen, editor ; contributors, Silvio Dobri ... [et al.].',
+  'Souvenir program of the festival, including biographical notess on and portraits and discographies of the performers, articles, etc.',
+  'Thank you to Randy Reichardt and to the Edmonton Folk Music Festival for their generous contributions of print volumes of this title for digitization.'
+  ]
+  geographic_subjects: <%= [ControlledVocabulary.digitization.subject.from_value("Edmonton (Alta.)")] %>
+  rights: <%= ControlledVocabulary.digitization.rights.from_value("In Copyright") %>
+  topical_subjects: <%= [ControlledVocabulary.digitization.subject.from_value("Edmonton Folk Music Festival"), ControlledVocabulary.digitization.subject.from_value("Folk music festivals")] %>
+  date_ingested: '2000-01-01T00:00:00.007Z'
+  record_created_at: '2000-01-01T00:00:00.007Z'
+  owner: user_admin
+
+# TODO: resource_type, genres, languages, and a subject are required. These are placeholders.
+government_document:
+  peel_id: 10571
+  part_number: 2
+  title: 'The patrician'
+  resource_type: <%= ControlledVocabulary.digitization.resource_type.from_value("Text") %>
+  genres: <%= [ControlledVocabulary.digitization.genre.from_value("Programs (Publications)")] %>
+  languages: <%= [ControlledVocabulary.digitization.language.from_value("English")] %>
+  temporal_subjects: ['1914']
+  date_ingested: '2000-01-01T00:00:00.007Z'
+  record_created_at: '2000-01-01T00:00:00.007Z'
+  owner: user_admin

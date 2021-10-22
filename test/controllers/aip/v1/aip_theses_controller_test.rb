@@ -1,5 +1,5 @@
 require 'test_helper'
-require Rails.root.join('test/support/aip_helper')
+require 'support/aip_helper'
 
 class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
 
@@ -24,10 +24,6 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
         file_fixture('text-sample.txt')
       ]
     )
-
-    # Don't forget to load your rdf annotations!
-    seed_active_storage_blobs_rdf_annotations
-    seed_theses_rdf_annotations
   end
 
   test 'should be able to show a visible thesis to admin' do
@@ -83,7 +79,7 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
     radioactive_thesis.visibility = Thesis::VISIBILITY_EMBARGO
     radioactive_thesis.embargo_history = ['acl:embargoHistory1$ Thesis currently embargoed']
     radioactive_thesis.embargo_end_date = '2080-01-01T00:00:00.000Z'
-    radioactive_thesis.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].public
+    radioactive_thesis.visibility_after_embargo = ControlledVocabulary.jupiter_core.visibility.public
     ingest_files_for_entity(radioactive_thesis)
     radioactive_thesis.save!
     radioactive_thesis.reload
@@ -111,7 +107,7 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
       '2016-06-15T06:00:00.000Z.  Visibility during embargo was restricted and intended visibility after embargo was ' \
       'open'
     ]
-    radioactive_thesis.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].public
+    radioactive_thesis.visibility_after_embargo = ControlledVocabulary.jupiter_core.visibility.public
     ingest_files_for_entity(radioactive_thesis)
     radioactive_thesis.save!
     radioactive_thesis.reload
@@ -138,7 +134,7 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
     )
 
     assert_response :success
-    assert_equal true, check_file_order_xml(response.body)
+    assert check_file_order_xml(response.body)
   end
 
   test 'should get thesis file paths' do
@@ -149,7 +145,7 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
     )
     assert_response :success
     json_string = response.body
-    assert_equal true, JSON::Validator.validate(
+    assert JSON::Validator.validate(
       file_paths_json_schema,
       json_string
     )
@@ -157,7 +153,7 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
 
     # Check that all files actually exist
     json_response['files'].map do |file|
-      assert_equal true, File.file?(file['file_path'])
+      assert File.file?(file['file_path'])
     end
   end
 
@@ -181,7 +177,8 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
 
     variables = {
       fileset_id: radioactive_thesis.files.first.fileset_uuid,
-      collection_id: radioactive_thesis.member_of_paths.first.split('/')[1]
+      collection_id: radioactive_thesis.member_of_paths.first.split('/')[1],
+      url: Jupiter::TEST_URL
     }
     rendered_graph = load_n3_graph(file_fixture('n3/theses/file_set.n3'), variables)
 
@@ -204,7 +201,8 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
       entity_id: @public_thesis.id,
       fileset_id: @public_thesis.files.first.fileset_uuid,
       checksum: @public_thesis.files.first.blob.checksum,
-      byte_size: @public_thesis.files.first.blob.byte_size
+      byte_size: @public_thesis.files.first.blob.byte_size,
+      url: Jupiter::TEST_URL
     }
     rendered_graph = load_n3_graph(file_fixture('n3/theses/fixity.n3'), variables)
 

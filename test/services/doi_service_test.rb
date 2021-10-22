@@ -6,6 +6,8 @@ class DoiServiceTest < ActiveSupport::TestCase
 
   EXAMPLE_DOI = 'doi:10.21967/fk2-ycs2-dd92'.freeze
 
+  # rubocop:disable Minitest/MultipleAssertions
+  # TODO: our tests are quite smelly.  This one needs work!
   test 'DOI state transitions' do
     @admin = users(:user_admin)
 
@@ -23,11 +25,11 @@ class DoiServiceTest < ActiveSupport::TestCase
 
     item = Item.new(title: 'Test Title', owner_id: @admin.id, visibility: JupiterCore::VISIBILITY_PUBLIC,
                     created: '2017-02-02',
-                    languages: [CONTROLLED_VOCABULARIES[:language].english],
+                    languages: [ControlledVocabulary.era.language.english],
                     creators: ['Joe Blow'],
                     subject: ['Things'],
-                    license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                    item_type: CONTROLLED_VOCABULARIES[:item_type].book)
+                    license: ControlledVocabulary.era.license.attribution_4_0_international,
+                    item_type: ControlledVocabulary.era.item_type.book)
     item.tap do |unlocked_item|
       unlocked_item.add_to_path(community.id, collection.id)
       unlocked_item.save!
@@ -109,5 +111,6 @@ class DoiServiceTest < ActiveSupport::TestCase
 
     Rails.application.secrets.doi_minting_enabled = false
   end
+  # rubocop:enable Minitest/MultipleAssertions
 
 end

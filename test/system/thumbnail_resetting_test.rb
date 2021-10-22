@@ -51,9 +51,9 @@ class ThumbnailResettingTest < ApplicationSystemTestCase
     assert_text I18n.t('items.draft.successful_deposit')
 
     # Assert that statements in above comments are true.
-    assert first_thumbnail_id != second_thumbnail_id
-    assert first_thumbnail_id != third_thumbnail_id
-    assert second_thumbnail_id == third_thumbnail_id
+    assert_not_equal first_thumbnail_id, second_thumbnail_id
+    assert_not_equal first_thumbnail_id, third_thumbnail_id
+    assert_equal second_thumbnail_id, third_thumbnail_id
 
     logout_user
   end

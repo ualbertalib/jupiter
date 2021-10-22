@@ -32,20 +32,22 @@
         </li>
       </ul>
     </div>
-    <% @item.history.reverse_each do |changeset| %>
-      <li class="list-unstyled list-group-item-action">
-        <h2 class='h3'><%= changeset.date %></h3>
-        <dl>
-          <dt><%= t(:edited_by) %></dt>
-          <dd><%= changeset.user_info %></dd>
-        </dl>
-        <% changeset.html_diffs.each do |html_diff| %>
+    <ul>
+      <% @item.history.reverse_each do |changeset| %>
+        <li class="list-unstyled list-group-item-action">
+          <h2 class='h3'><%= changeset.date %></h3>
           <dl>
-            <dt><%= html_diff[:attribute] %></dt>
-            <dd><%= html_diff[:html] %></dd>
+            <dt><%= t(:edited_by) %></dt>
+            <dd><%= changeset.user_info %></dd>
           </dl>
-        <% end %>
-      </li>
-    <% end %>
+          <% changeset.html_diffs.each do |html_diff| %>
+            <dl>
+              <dt><%= html_diff[:attribute] %></dt>
+              <dd><%= html_diff[:html] %></dd>
+            </dl>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
   </div>
 <% end %>

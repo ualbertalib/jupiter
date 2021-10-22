@@ -1,0 +1,55 @@
+<ul class="list-group">
+  <% if @digitization_book.languages.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <dl>
+        <dt><%= t('digitization.books.book.language') %></dt>
+        <dd>
+          <ul class="list-unstyled">
+            <% @digitization_book.languages.each do |language| %>
+              <li><%= language_search_link(@digitization_book, language) %></li>
+            <% end %>
+          </ul>
+        </dd>
+      </dl>
+    </li>
+  <% end %>
+
+  <% if @digitization_book.genres.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <dl>
+        <dt><%= t('digitization.books.book.genre') %></dt>
+        <dd>
+          <ul class="list-unstyled">
+            <% @digitization_book.genres.each do |genre| %>
+              <li><%= genre_search_link(@digitization_book, genre) %></li>
+            <% end %>
+          </ul>
+        </dd>
+      </dl>
+    </li>
+  <% end %>
+
+  <% if @digitization_book.places_of_publication.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <dl>
+        <dt><%= t('digitization.books.book.place_of_publication') %></dt>
+        <dd>
+          <ul class="list-unstyled">
+            <% @digitization_book.places_of_publication.each do |place| %>
+              <li><%= place_of_publication_search_link(@digitization_book, place) %></li>
+            <% end %>
+          </ul>
+        </dd>
+      </dl>
+    </li>
+  <% end %>
+
+  <% if @digitization_book.extent.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <dl>
+        <dt><%= t('digitization.books.book.extent') %></dt>
+        <dd><%= @digitization_book.extent %></dd>
+      </dl>
+    </li>
+  <% end %>
+</ul>

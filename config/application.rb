@@ -41,5 +41,23 @@ module Jupiter
 
     config.redis_key_prefix = "jupiter.#{Rails.env}."
 
+    config.action_dispatch.tld_length = Rails.application.secrets.tld_length.to_i
+
+    # Set Redcarpet markdown options and extensions
+    config.markdown_rendering_extensions = {
+      lax_spacing: true,
+      strikethrough: true,
+      fenced_code_blocks: true,
+      tables: true,
+      autolink: true
+    }
+    config.markdown_rendering_options = {
+      filter_html: true,
+      no_images: true,
+      no_styles: true,
+      hard_wrap: true,
+      link_attributes: { rel: 'noopener noreferrer', target: '_blank' }
+    }
+
   end
 end

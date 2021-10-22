@@ -1,0 +1,13 @@
+batch_ingest_with_one_file:
+  title: "Test Batch"
+  user: user_admin
+  google_spreadsheet_id: "RANDOMSPREADSHEETID"
+  google_spreadsheet_name: "Test Batch Ingest"
+  access_token: "ACCESSTOKEN"
+
+batch_ingest_with_two_files:
+  title: "Conference Batch"
+  user: user_admin_two
+  google_spreadsheet_id: "RANDOMSPREADSHEETID"
+  google_spreadsheet_name: "Conference Batch Ingest"
+  access_token: "ACCESSTOKEN"

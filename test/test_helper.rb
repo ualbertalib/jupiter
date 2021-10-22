@@ -47,6 +47,7 @@ class ActiveSupport::TestCase
 
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
+  load('db/seeds/rdf_annotations.rb')
 
   # give this gibberish method a more semantically meaningful name for test-readers
   def generate_random_string
@@ -71,7 +72,7 @@ class ActiveSupport::TestCase
         OmniAuth::AuthHash.new(provider: identity.provider,
                                uid: identity.uid)
 
-    post "/auth/#{identity.provider}/callback"
+    post login_url(provider: identity.provider)
   end
 
   def sign_in_as_system_user
@@ -87,5 +88,13 @@ class ActiveSupport::TestCase
 
   # turn on test mode for omniauth
   OmniAuth.config.test_mode = true
+
+end
+
+class ActionDispatch::IntegrationTest
+
+  setup do
+    host! URI(Jupiter::TEST_URL).host
+  end
 
 end

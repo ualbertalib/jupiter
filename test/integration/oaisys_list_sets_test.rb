@@ -9,6 +9,8 @@ class OaisysListSetsTest < ActionDispatch::IntegrationTest
     Oaisys::Engine.config.items_per_request = 3
   end
 
+  # rubocop:disable Minitest/MultipleAssertions
+  # TODO: our tests are quite smelly.  This one needs work!
   test 'test_list_sets_resumption_token_xml' do
     # TODO: Add tests for this which uses post requests.
     skip('Skipping until bug regarding path helper is fixed. https://github.com/rails/rails/issues/40078')
@@ -103,5 +105,6 @@ class OaisysListSetsTest < ActionDispatch::IntegrationTest
       assert_select 'error', I18n.t('error_messages.resumption_token_invalid')
     end
   end
+  # rubocop:enable Minitest/MultipleAssertions
 
 end

@@ -59,6 +59,19 @@
     embargo_history: embargoHistory
     visibility_after_embargo: visibilityAfterEmbargo
 
+# Trying to make ::RDF::Vocab::RDAU.P60550 less opaque
+- vocabulary: rdau
+  schema: 'http://rdaregistry.info/Elements/u/'
+  terms:
+    extent: P60550
+    part: P60249
+
+# RDF::RDFS.label is version 1.0 while we want 1.1
+- vocabulary: rdfs
+  schema: 'https://www.w3.org/TR/rdf-schema/#'
+  terms:
+    ch_label: ch_label
+
 - vocabulary: swrc
   schema: 'http://ontoware.org/swrc/ontology#'
   terms:
@@ -70,7 +83,7 @@
   schema: 'http://projecthydra.org/ns/fits/'
   terms:
     palceholder: palceholder
-    
+
 - vocabulary: odf
   schema: 'http://projecthydra.org/ns/odf/'
   terms:
