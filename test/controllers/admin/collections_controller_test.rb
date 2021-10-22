@@ -87,11 +87,11 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
       owner_id: @admin.id,
       creators: ['Joe Blow'],
       created: '1972-08-08',
-      languages: [CONTROLLED_VOCABULARIES[:language].english],
-      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+      languages: [ControlledVocabulary.era.language.english],
+      license: ControlledVocabulary.era.license.attribution_4_0_international,
       visibility: JupiterCore::VISIBILITY_PRIVATE,
-      item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-      publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
+      item_type: ControlledVocabulary.era.item_type.article,
+      publication_status: [ControlledVocabulary.era.publication_status.published],
       subject: ['Invincibility']
     ).tap do |unlocked_item|
       unlocked_item.add_to_path(@community.id, collection.id)

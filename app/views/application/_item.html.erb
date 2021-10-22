@@ -45,9 +45,10 @@
       <%# TODO: the search path may need to be revisited %>
       <%= safe_join(item.creators&.map { |creator| search_link_for(item, :all_contributors, value: creator) }, ', ') %>
     </p>
+
     <% if item.description.present? %>
       <p>
-        <%= jupiter_truncate item.description %>
+        <%= render(highlights) || jupiter_truncate(item.plaintext_description) %>
       </p>
     <% end %>
   </div>

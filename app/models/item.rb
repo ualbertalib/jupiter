@@ -4,6 +4,7 @@ class Item < JupiterCore::Doiable
 
   has_solr_exporter Exporters::Solr::ItemExporter
 
+  belongs_to :batch_ingest, optional: true
   belongs_to :owner, class_name: 'User'
 
   has_many_attached :files, dependent: false
@@ -25,21 +26,22 @@ class Item < JupiterCore::Doiable
 
   validates :created, presence: true
   validates :sort_year, presence: true
-  validates :languages, presence: true, uri: { in_vocabulary: :language }
-  validates :item_type, presence: true, uri: { in_vocabulary: :item_type }
+  validates :languages, presence: true, uri: { namespace: :era, in_vocabulary: :language }
+  validates :item_type, presence: true, uri: { namespace: :era, in_vocabulary: :item_type }
   validates :subject, presence: true
   validates :creators, presence: true
-  validates :license, uri: { in_vocabularies: [:license, :old_license] }
-  validates :publication_status, uri: { in_vocabulary: :publication_status }
+  validates :license, uri: { namespace: :era, in_vocabularies: [:license, :old_license] }
+  validates :publication_status, uri: { namespace: :era, in_vocabulary: :publication_status }
   validates :publication_status, presence: { message: :required_for_article },
-                                 if: ->(item) { item.item_type == CONTROLLED_VOCABULARIES[:item_type].article }
+                                 if: ->(item) { item.item_type == ControlledVocabulary.era.item_type.article }
   validates :publication_status, absence: { message: :must_be_absent_for_non_articles },
-                                 if: ->(item) { item.item_type != CONTROLLED_VOCABULARIES[:item_type].article }
+                                 if: ->(item) { item.item_type != ControlledVocabulary.era.item_type.article }
   validates :publication_status, compound_uri: { compounds: [
-    [CONTROLLED_VOCABULARIES[:publication_status].published],
-    [CONTROLLED_VOCABULARIES[:publication_status].draft, CONTROLLED_VOCABULARIES[:publication_status].submitted]
+    [ControlledVocabulary.era.publication_status.published],
+    [ControlledVocabulary.era.publication_status.draft,
+     ControlledVocabulary.era.publication_status.submitted]
   ] }, if: lambda { |item|
-    item.item_type == CONTROLLED_VOCABULARIES[:item_type].article && item.publication_status.present?
+    item.item_type == ControlledVocabulary.era.item_type.article && item.publication_status.present?
   }
 
   validates_with LicenseXorRightsPresenceValidator
@@ -57,11 +59,11 @@ class Item < JupiterCore::Doiable
     return nil if item_type.blank?
 
     # Return the item type code unless it's an article, then append publication status code
-    item_type_code = CONTROLLED_VOCABULARIES[:item_type].from_uri(item_type)
+    item_type_code = ControlledVocabulary.era.item_type.from_uri(item_type)
     return item_type_code unless item_type_code == :article
     return nil if publication_status.blank?
 
-    publication_status_code = CONTROLLED_VOCABULARIES[:publication_status].from_uri(publication_status.first)
+    publication_status_code = ControlledVocabulary.era.publication_status.from_uri(publication_status.first)
     # Next line of code means that 'article_submitted' exists, but 'article_draft' doesn't ("There can be only one!")
     publication_status_code = :submitted if publication_status_code == :draft
     "#{item_type_code}_#{publication_status_code}".to_sym
@@ -104,12 +106,12 @@ class Item < JupiterCore::Doiable
     item.description = draft_item.description
 
     # Handle visibility plus embargo logic
-    if draft_item.visibility_as_uri == CONTROLLED_VOCABULARIES[:visibility].embargo
+    if draft_item.visibility_as_uri == ControlledVocabulary.jupiter_core.visibility.embargo
       item.visibility_after_embargo = draft_item.visibility_after_embargo_as_uri
       item.embargo_end_date = draft_item.embargo_end_date
     else
       # If visibility was previously embargo but not anymore
-      item.add_to_embargo_history if item.visibility == CONTROLLED_VOCABULARIES[:visibility].embargo
+      item.add_to_embargo_history if item.visibility == ControlledVocabulary.jupiter_core.visibility.embargo
       item.visibility_after_embargo = nil
       item.embargo_end_date = nil
     end

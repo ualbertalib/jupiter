@@ -1,7 +1,7 @@
 class Facets::License < Facets::URIValue
 
-  def display
-    translate_uri(:license, @value)
+  def display_value
+    translate_uri(:era, :license, @value)
   end
 
 end

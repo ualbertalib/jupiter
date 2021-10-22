@@ -1,0 +1,77 @@
+<%= simple_form_for([:admin, @batch_ingest]) do |f| %>
+  <%= f.error_notification %>
+
+  <%= f.input :title, label: t('.title'), placeholder: t('.title_placeholder') %>
+
+  <div class="py-3">
+    <%= f.label :spreadsheet, label: t('.spreadsheet'), required: true %>
+
+    <ul class="list-group js-batch-ingest-spreadsheet mb-3">
+      <% if @batch_ingest.google_spreadsheet_id.present? && @batch_ingest.google_spreadsheet_name.present? %>
+          <li class="list-group-item d-flex justify-content-between">
+            <input type="hidden" name='batch_ingest[google_spreadsheet_id]' value="<%= @batch_ingest.google_spreadsheet_id %>">
+            <input type="hidden" name='batch_ingest[google_spreadsheet_name]' value="<%= @batch_ingest.google_spreadsheet_name %>">
+            <%= @batch_ingest.google_spreadsheet_name %>
+            <button type="button" class="btn btn-danger btn-sm js-btn-delete-file">
+              <%= icon('fas', 'trash-alt') %>
+              <%= t('delete') %>
+            </button>
+          </li>
+      <% end %>
+    </ul>
+
+    <%= f.button :button,
+                 type: :button,
+                 class: "js-btn-spreadsheet #{'d-none' if @batch_ingest.google_spreadsheet_id.present?}",
+                 data: {
+                   access_token: @access_token,
+                   developer_key: @developer_key
+                 } do %>
+              <%= icon('fas', 'plus-circle') %>
+              <%= t('.add_spreadsheet') %>
+            <% end %>
+    <%= f.error :google_spreadsheet_id %>
+  </div>
+
+  <div class="py-3">
+    <%= f.simple_fields_for :batch_ingest_files, BatchIngestFile.new do |f| %>
+      <%= f.label :batch_ingest_files, label: t('.files'), required: true %>
+
+      <ul class="list-group js-batch-ingest-files-list mb-3">
+        <% if @batch_ingest.batch_ingest_files.present? %>
+            <% @batch_ingest.batch_ingest_files.each do |file| %>
+              <li class="list-group-item d-flex justify-content-between">
+                <input type="hidden" name="batch_ingest[batch_ingest_files_attributes][][google_file_id]" value="<%= file.google_file_id %>">
+                <input type="hidden" name="batch_ingest[batch_ingest_files_attributes][][google_file_name]" value="<%= file.google_file_name %>">
+                <%= file.google_file_name %>
+                <button type="button" class="btn btn-danger btn-sm js-btn-delete-file">
+                  <%= icon('fas', 'trash-alt') %>
+                  <%= t('delete') %>
+                </button>
+              </li>
+            <% end %>
+        <% end %>
+      </ul>
+
+      <%= f.button :button,
+                   type: :button,
+                   class: 'js-btn-files',
+                   data: {
+                     access_token: @access_token,
+                     developer_key: @developer_key
+                   } do %>
+                <%= icon('fas', 'plus-circle') %>
+                <%= t('.add_files') %>
+              <% end %>
+    <% end %>
+    <%= f.error :batch_ingest_files %>
+  </div>
+
+   <div class="form-group text-right">
+    <%= f.button :button,
+                 t('.create_batch_ingest'),
+                 type: :submit,
+                 class: 'btn btn-primary',
+                 data: { disable_with: t('.saving_html') } %>
+  </div>
+<% end %>

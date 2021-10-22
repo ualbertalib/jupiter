@@ -25,16 +25,16 @@ class CommunityTest < ActiveSupport::TestCase
                           filename: 'image-sample.jpeg', content_type: 'image/jpeg'
 
     assert community.logo.is_a?(ActiveStorage::Attached::One)
-    assert_equal community.logo.filename, 'image-sample.jpeg'
-    assert_equal community.logo.blob.content_type, 'image/jpeg'
-    assert_equal community.logo.blob.byte_size, 12_086
+    assert_equal('image-sample.jpeg', community.logo.filename.to_s)
+    assert_equal('image/jpeg', community.logo.blob.content_type)
+    assert_equal(12_086, community.logo.blob.byte_size)
 
     # Find file on disk
     key = community.logo.blob.key
     assert key.is_a?(String)
     file_path = ActiveStorage::Blob.service.root + "/#{key[0..1]}/#{key[2..3]}/#{key}"
-    assert File.exist?(file_path)
-    assert_equal community.logo.blob.checksum, 'GxpIjJsC4KnRoBKNjWnkJA=='
+    assert_path_exists(file_path)
+    assert_equal('GxpIjJsC4KnRoBKNjWnkJA==', community.logo.blob.checksum)
   end
 
   test 'an updated logo replaces the old one' do
@@ -42,11 +42,11 @@ class CommunityTest < ActiveSupport::TestCase
     community.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
                           filename: 'sample1.jpeg', content_type: 'image/jpeg'
 
-    assert_equal community.logo.filename, 'sample1.jpeg'
+    assert_equal('sample1.jpeg', community.logo.filename.to_s)
 
     community.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
                           filename: 'sample2.jpeg', content_type: 'image/jpeg'
-    assert_equal community.logo.filename, 'sample2.jpeg'
+    assert_equal('sample2.jpeg', community.logo.filename.to_s)
   end
 
 end

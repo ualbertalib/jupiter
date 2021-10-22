@@ -26,8 +26,8 @@ class Thesis < JupiterCore::Doiable
   validates :dissertant, presence: true
   validates :graduation_date, presence: true
   validates :sort_year, presence: true
-  validates :language, uri: { in_vocabulary: :language }
-  validates :institution, uri: { in_vocabulary: :institution }
+  validates :language, uri: { namespace: :era, in_vocabulary: :language }
+  validates :institution, uri: { namespace: :era, in_vocabulary: :institution }
 
   validates :embargo_end_date, presence: true, if: ->(item) { item.visibility == VISIBILITY_EMBARGO }
   validates :embargo_end_date, absence: true, if: ->(item) { item.visibility != VISIBILITY_EMBARGO }
@@ -74,12 +74,12 @@ class Thesis < JupiterCore::Doiable
                              end
 
     # Handle visibility plus embargo logic
-    if draft_thesis.visibility_as_uri == CONTROLLED_VOCABULARIES[:visibility].embargo
-      thesis.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].public
+    if draft_thesis.visibility_as_uri == ControlledVocabulary.jupiter_core.visibility.embargo
+      thesis.visibility_after_embargo = ControlledVocabulary.jupiter_core.visibility.public
       thesis.embargo_end_date = draft_thesis.embargo_end_date
     else
       # If visibility was previously embargo but not anymore
-      thesis.add_to_embargo_history if thesis.visibility == CONTROLLED_VOCABULARIES[:visibility].embargo
+      thesis.add_to_embargo_history if thesis.visibility == ControlledVocabulary.jupiter_core.visibility.embargo
       thesis.visibility_after_embargo = nil
       thesis.embargo_end_date = nil
     end

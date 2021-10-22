@@ -97,16 +97,11 @@ class PageLayoutHelperTest < ActionView::TestCase
 
   # thumbnail_path
 
-  def mupdf_exists?
-    ActiveStorage::Previewer::MuPDFPreviewer.mutool_exists?
-  end
-
-  def poppler_exists?
-    ActiveStorage::Previewer::PopplerPDFPreviewer.pdftoppm_exists?
-  end
-
   test 'thumbnail_path should return preview for pdf (Invariable but Previewable)' do
-    skip 'this test requires the dependency MuPDF or Poppler to be installed' unless mupdf_exists? || poppler_exists?
+    unless ActiveStorage::Previewer::PopplerPDFPreviewer.pdftoppm_exists? ||
+           ActiveStorage::Previewer::MuPDFPreviewer.mutool_exists?
+      skip 'this test requires the dependency MuPDF or Poppler to be installed'
+    end
 
     item = items(:item_fancy)
     File.open(file_fixture('pdf-sample.pdf'), 'r') do |file|

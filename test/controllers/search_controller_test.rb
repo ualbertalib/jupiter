@@ -62,4 +62,22 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
     assert_no_match(/<a href="\/items\/#{@item4.id}">/, response.body)
   end
 
+  test 'should NOT render highlights on search result page by default' do
+    get search_url, params: { search: 'French' }
+    assert_response :success
+
+    assert_no_match(/<mark>French<\/mark>/, response.body)
+  end
+
+  test 'should render highlights on search result page when feature flag is on' do
+    Flipper.enable(:fulltext_search)
+
+    get search_url, params: { search: 'French' }
+    assert_response :success
+
+    assert_match(/<mark>French<\/mark>/, response.body)
+
+    Flipper.disable(:fulltext_search)
+  end
+
 end

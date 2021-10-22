@@ -112,7 +112,7 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
     sign_in_as user
     get community_url(@community1, format: :json)
     body = JSON.parse(response.body)
-    assert_equal body['collections'].count, 1
+    assert_equal(1, body['collections'].count)
     assert_includes body['collections'].map { |c| c['id'] }, @collection1.id
   end
 
@@ -121,7 +121,7 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
     sign_in_as user
     get community_url(@community1, format: :json)
     body = JSON.parse(response.body)
-    assert_equal body['collections'].count, 2
+    assert_equal(2, body['collections'].count)
     assert_includes body['collections'].map { |c| c['id'] }, @collection1.id
     assert_includes body['collections'].map { |c| c['id'] }, @collection2.id
   end

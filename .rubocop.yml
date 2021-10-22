@@ -4,6 +4,7 @@
 # https://github.com/bbatsov/rubocop/blob/master/config/enabled.yml
 
 require:
+  - rubocop-minitest
   - rubocop-performance
   - rubocop-rails
 
@@ -11,11 +12,11 @@ AllCops:
   DisplayCopNames: true
   DisplayStyleGuide: true
   Exclude:
-    - 'db/**/*'
-    - 'tmp/**/*'
-    - 'vendor/**/*'
-    - 'Dangerfile'
-    - 'node_modules/**/*'
+    - "db/**/*"
+    - "tmp/**/*"
+    - "vendor/**/*"
+    - "Dangerfile"
+    - "node_modules/**/*"
   ExtraDetails: true
   NewCops: enable
   TargetRubyVersion: 2.5
@@ -29,9 +30,9 @@ Layout/IndentationConsistency:
   EnforcedStyle: normal
 
 Layout/LineLength:
-    Enabled: true
-    Max: 120 # default is 80
-    IgnoredPatterns: ['\A\s*#'] # tweak to ignore long comments, which often are examples or URLs that are not easily broken up
+  Enabled: true
+  Max: 120 # default is 80
+  IgnoredPatterns: ['\A\s*#'] # tweak to ignore long comments, which often are examples or URLs that are not easily broken up
 
 # readability is Actually Good
 Layout/RescueEnsureAlignment:
@@ -72,6 +73,9 @@ Metrics/ParameterLists:
     - app/models/jupiter_core/search.rb
     - app/models/jupiter_core/solr_services/deferred_faceted_solr_query.rb
 
+# TODO: our tests are quite smelly.  We should be working to get this lower!
+Minitest/MultipleAssertions:
+  Max: 15 # default 3
 
 Naming/FileName:
   Exclude:
@@ -92,10 +96,6 @@ Naming/MethodParameterName:
 Rails:
   Enabled: true
 
-# Autocorrecting this actively breaks code
-Rails/FindEach:
-  Enabled: false
-
 Rails/SkipsModelValidations:
   Exclude:
     - app/controllers/aip/v1/collections_controller.rb
@@ -107,9 +107,6 @@ Rails/UnknownEnv:
   Enabled: false
 
 Style/ArrayCoercion:
-  Enabled: false
-
-Style/AsciiComments:
   Enabled: false
 
 Style/BarePercentLiterals:

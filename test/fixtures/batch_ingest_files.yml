@@ -1,0 +1,14 @@
+batch_ingest_file_one:
+  google_file_id: "RANDOMFILEID"
+  google_file_name: "test.png"
+  batch_ingest: batch_ingest_with_one_file
+
+batch_ingest_file_two:
+  google_file_id: "RANDOMFILEID"
+  google_file_name: "conference.pdf"
+  batch_ingest: batch_ingest_with_two_files
+
+batch_ingest_file_three:
+  google_file_id: "RANDOMFILEID"
+  google_file_name: "conference_logo.png"
+  batch_ingest: batch_ingest_with_two_files

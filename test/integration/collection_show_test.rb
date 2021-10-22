@@ -32,8 +32,8 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
 
     # Delete collection link
     delete = css_select "a[href='#{admin_community_collection_path(@community, @collection)}']"
-    assert_equal delete.count, 1
-    assert_equal delete.first.attributes['data-method'].to_s, 'delete'
+    assert_equal(1, delete.count)
+    assert_equal('delete', delete.first.attributes['data-method'].to_s)
 
     # Items are shown
     assert_select '.jupiter-results ul.list-group .list-group-item', count: 2
@@ -43,7 +43,7 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
       item_links = css_select ".jupiter-results ul.list-group .list-group-item a[href='#{item_path(item)}']"
 
       # Thumbnail, text link, and delete link
-      assert_equal item_links.count, 2
+      assert_equal(2, item_links.count)
       # Thumbnail link to item
       assert_includes item_links.first.inner_html, 'img-thumbnail'
       # Text link to item
@@ -52,7 +52,7 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
       # Link to delete item
       delete_link = css_select ".jupiter-results ul.list-group .list-group-item a[href='#{admin_item_path(item)}']"
       assert_match 'Delete', delete_link.last.text
-      assert_equal delete_link.last.attributes['data-method'].to_s, 'delete'
+      assert_equal('delete', delete_link.last.attributes['data-method'].to_s)
 
       # Link to edit item
       assert_select "ul.list-group .list-group-item a[href='#{edit_item_path(item)}']", text: 'Edit'
@@ -85,7 +85,7 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
     @items.each do |item|
       item_links = css_select ".jupiter-results ul.list-group .list-group-item a[href='#{item_path(item)}']"
       # Only thumbnail and text link expected
-      assert_equal item_links.count, 2
+      assert_equal(2, item_links.count)
       # Thumbnail link to item
       assert_includes item_links.first.inner_html, 'img-thumbnail'
       # Link to item

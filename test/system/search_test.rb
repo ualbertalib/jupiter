@@ -17,10 +17,10 @@ class SearchTest < ApplicationSystemTestCase
                  owner_id: admin.id, title: "#{random_title(i)} Item #{i}",
                  creators: ['Joe Blow'],
                  created: "19#{50 + i}-11-11",
-                 languages: [CONTROLLED_VOCABULARIES[:language].english],
-                 item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                 publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                 languages: [ControlledVocabulary.era.language.english],
+                 item_type: ControlledVocabulary.era.item_type.article,
+                 publication_status: [ControlledVocabulary.era.publication_status.published],
+                 license: ControlledVocabulary.era.license.attribution_4_0_international,
                  subject: ['Items'])
             .tap do |uo|
           uo.add_to_path(@community.id, @collections[0].id)
@@ -30,7 +30,7 @@ class SearchTest < ApplicationSystemTestCase
         Thesis.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
                    owner_id: admin.id, title: "#{random_title(i)} Item #{i}",
                    dissertant: 'Joe Blow',
-                   language: CONTROLLED_VOCABULARIES[:language].english,
+                   language: ControlledVocabulary.era.language.english,
                    graduation_date: "19#{50 + i}-11-11")
               .tap do |uo|
           uo.add_to_path(@community.id, @collections[1].id)
@@ -43,10 +43,10 @@ class SearchTest < ApplicationSystemTestCase
                     owner_id: admin.id, title: 'Fancy CCID Item',
                     creators: ['Joe Blow'],
                     created: '1950-11-11',
-                    languages: [CONTROLLED_VOCABULARIES[:language].english],
-                    item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                    publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-                    license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                    languages: [ControlledVocabulary.era.language.english],
+                    item_type: ControlledVocabulary.era.item_type.article,
+                    publication_status: [ControlledVocabulary.era.publication_status.published],
+                    license: ControlledVocabulary.era.license.attribution_4_0_international,
                     subject: ['Items'])
                .tap do |uo|
       uo.add_to_path(@community.id, @collections[0].id)
@@ -66,10 +66,10 @@ class SearchTest < ApplicationSystemTestCase
                  owner_id: admin.id, title: "#{random_title(i)} Private Item #{i + 10}",
                  creators: ['Joe Blow'],
                  created: "19#{70 + i}-11-11",
-                 languages: [CONTROLLED_VOCABULARIES[:language].english],
-                 item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                 publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                 languages: [ControlledVocabulary.era.language.english],
+                 item_type: ControlledVocabulary.era.item_type.article,
+                 publication_status: [ControlledVocabulary.era.publication_status.published],
+                 license: ControlledVocabulary.era.license.attribution_4_0_international,
                  subject: ['Items'])
             .tap do |uo|
           uo.add_to_path(@community.id, @collections[0].id)
@@ -79,7 +79,7 @@ class SearchTest < ApplicationSystemTestCase
         Thesis.new(visibility: JupiterCore::VISIBILITY_PRIVATE,
                    owner_id: admin.id, title: "#{random_title(i)} Private Item #{i + 10}",
                    dissertant: 'Joe Blow',
-                   language: CONTROLLED_VOCABULARIES[:language].english,
+                   language: ControlledVocabulary.era.language.english,
                    graduation_date: "19#{70 + i}-11-11")
               .tap do |uo|
           uo.add_to_path(@community.id, @collections[1].id)
@@ -97,10 +97,10 @@ class SearchTest < ApplicationSystemTestCase
                owner_id: admin.id, title: "Extra Item #{i}",
                creators: ['Joe Blow'],
                created: "19#{90 + i}-11-11",
-               languages: [CONTROLLED_VOCABULARIES[:language].english],
-               item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-               publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-               license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+               languages: [ControlledVocabulary.era.language.english],
+               item_type: ControlledVocabulary.era.item_type.article,
+               publication_status: [ControlledVocabulary.era.publication_status.published],
+               license: ControlledVocabulary.era.license.attribution_4_0_international,
                subject: ['Items'])
           .tap do |uo|
         uo.add_to_path(community.id, collection.id)
@@ -109,6 +109,8 @@ class SearchTest < ApplicationSystemTestCase
     end
   end
 
+  # rubocop:disable Minitest/MultipleAssertions
+  # TODO: our tests are quite smelly.  This one needs work!
   test 'anybody should be able to filter the public items' do
     visit root_path
     fill_in name: 'search', with: 'Fancy'
@@ -193,7 +195,28 @@ class SearchTest < ApplicationSystemTestCase
     badge = badges.find_link('a', text: 'Fancy Collection 1', href: search_path(search: 'Fancy'))
     badge.assert_selector 'span.badge', text: 'Fancy Collection 1'
   end
+  # rubocop:enable Minitest/MultipleAssertions
 
+  test 'facet badge should have category when flipped' do
+    Flipper.enable(:facet_badge_category_name)
+    visit root_path
+    fill_in name: 'search', with: 'Fancy'
+    click_button 'Search'
+
+    # Click on facet
+    click_link 'Fancy Collection 1'
+
+    # A badge should be displayed for the enabled facet as a link that turns off facet
+    badges = find('div.jupiter-facet-badges')
+    badge = badges.find_link('a', text: 'Collections: Fancy Community/Fancy Collection 1',
+                                  href: search_path(search: 'Fancy'))
+    badge.assert_selector 'span.badge', text: 'Collections: Fancy Community/Fancy Collection 1'
+
+    Flipper.disable(:facet_badge_category_name)
+  end
+
+  # rubocop:disable Minitest/MultipleAssertions
+  # TODO: our tests are quite smelly.  This one needs work!
   test 'anybody should be able to view community/collection hits via tabs' do
     visit root_path
     fill_in name: 'search', with: 'Fancy'
@@ -234,6 +257,7 @@ class SearchTest < ApplicationSystemTestCase
     assert_selector 'div.jupiter-results-list a', text: 'Community', count: 0
     assert_selector 'div.jupiter-results-list a', text: 'Collection', count: 2
   end
+  # rubocop:enable Minitest/MultipleAssertions
 
   test 'anybody should only see some facet results by default, with a "show more" button' do
     visit root_path
@@ -263,6 +287,8 @@ class SearchTest < ApplicationSystemTestCase
     assert_selector 'li a', text: /Extra Community/, count: 6
   end
 
+  # rubocop:disable Minitest/MultipleAssertions
+  # TODO: our tests are quite smelly.  This one needs work!
   test 'anybody should be able to sort results' do
     visit root_path
     fill_in name: 'search', with: 'Fancy'
@@ -311,7 +337,10 @@ class SearchTest < ApplicationSystemTestCase
     assert_selector 'button', text: 'Date (oldest first)'
     assert_match(/Fancy Item 0.*Fancy Item 2.*Fancy Item 4.*Fancy Item 6.*Fancy Item 8/m, page.text)
   end
+  # rubocop:enable Minitest/MultipleAssertions
 
+  # rubocop:disable Minitest/MultipleAssertions
+  # TODO: our tests are quite smelly.  This one needs work!
   # TODO: Slow Test, consistently around ~8-9 seconds
   test 'admin should be able to filter the public and private items' do
     admin = users(:user_admin)
@@ -403,5 +432,6 @@ class SearchTest < ApplicationSystemTestCase
     badge = badges.find_link('a', text: 'Fancy Collection 1', href: search_path(search: 'Fancy'))
     badge.assert_selector 'span.badge', text: 'Fancy Collection 1'
   end
+  # rubocop:enable Minitest/MultipleAssertions
 
 end

@@ -1,4 +1,4 @@
-version: '3.3'
+version: "3.3"
 
 volumes:
   postgres:
@@ -15,7 +15,7 @@ volumes:
 services:
   postgres:
     restart: always
-    image: postgres:9.6-alpine
+    image: postgres:12-alpine
     env_file: .env_deployment
 
   solr:
@@ -23,6 +23,7 @@ services:
     image: solr:6.6
     environment:
       - VIRTUAL_HOST=solr.era.uat.library.ualberta.ca
+      - HTTPS_METHOD=nohttps
     ports:
       - "8983"
     volumes:
@@ -69,10 +70,14 @@ services:
     depends_on:
       - web
     env_file: .env_deployment
+    environment:
+      - VIRTUAL_HOST=era.uat.library.ualberta.ca
+      - VIRTUAL_PROTO=https
+      - VIRTUAL_PORT=443
+      - HTTPS_METHOD=noredirect
     volumes:
       - ./config/nginx.conf:/etc/nginx/conf.d/default.conf
-      - ../UALcert:/etc/nginx/certs
+      - ../UATcert:/etc/nginx/certs
       - assets:/app/public/
     ports:
-      - "80"
       - "443"

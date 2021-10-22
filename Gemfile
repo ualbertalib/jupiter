@@ -3,11 +3,11 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 # Core Rails stuff
 gem 'image_processing' # for ActiveStorage Variants
-gem 'puma', '~> 5.3'
-gem 'rails', '~> 6.0.3.7'
+gem 'puma', '~> 5.5'
+gem 'rails', '~> 6.0.4.1'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem 'webpacker', '~> 5.2'
+gem 'webpacker', '~> 5.4'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
@@ -17,10 +17,10 @@ gem 'active_link_to'
 gem 'simple_form'
 
 # RDF stuff
-gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', tag: 'v0.2.4'
-gem 'rdf', '~> 3.1.10'
-gem 'rdf-n3', '= 3.1.1'
-gem 'rdf-vocab', '~> 3.1.10'
+gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', tag: '0.4.0'
+gem 'rdf', '~> 3.1.15'
+gem 'rdf-n3', '~> 3.1.2'
+gem 'rdf-vocab', '~> 3.1.14'
 
 # Database stuff
 gem 'connection_pool'
@@ -33,15 +33,15 @@ gem 'bcrypt', '>= 3.1.13'
 gem 'omniauth', '~> 2.0'
 gem 'omniauth-rails_csrf_protection', '~> 1.0'
 gem 'omniauth-saml', '~> 2.0'
+
 # Authorization
 gem 'pundit', '1.1.0'
 
 # Background tasks
 gem 'sidekiq', '~> 5.2'
-gem 'sidekiq-unique-jobs'
+gem 'sidekiq-unique-jobs', '~> 7.0'
 gem 'sinatra', '~> 2.1.0' # used by sidekiq/web
 # Sidekiq cron jobs
-gem 'rufus-scheduler', '3.7.0' # https://github.com/ondrejbartas/sidekiq-cron/issues/199
 gem 'sidekiq-cron'
 
 # Misc Utilities
@@ -49,19 +49,28 @@ gem 'aasm' # state-machine management
 gem 'addressable', '~> 2.8.0' # Replacement for the standard URI implementation
 gem 'differ' # Used to diff two strings
 gem 'draper'
-gem 'ezid-client', '~> 1.8.0'
+gem 'edtf', '~> 3.0', '>= 3.0.6' # parsing Extended Date/Time Format
+gem 'ezid-client', '< 1.9.0'
+gem 'flipper', '~> 0.22.2' # Feature flags for Ruby
+gem 'flipper-active_record', '~> 0.22.1' # Store feature flags in ActiveRecord
+gem 'flipper-ui', '~> 0.22.1' # UI for feature flags
 gem 'jbuilder' # generate JSON objects
 gem 'kaminari' # Pagination
 gem 'paper_trail' # Track object changes
-gem 'ransack' # ActiveRecord search/filter
+gem 'ransack', '= 2.4.1' # ActiveRecord search/filter
+gem 'redcarpet', '~> 3.5', '>= 3.5.1', require: ['redcarpet', 'redcarpet/render_strip'] # Markdown to (X)HTML parser
 gem 'uuidtools'
 gem 'voight_kampff' # bot detection
 gem 'wicked' # Multi-step wizard
 
 # Performance monitoring
-gem 'skylight'
+gem 'skylight', '~> 4.3'
 # resolve production errors in minutes
 gem 'rollbar'
+
+# Google Drive
+gem 'google-api-client',
+    require: ['google/api_client/client_secrets', 'google/apis/drive_v3', 'google/apis/sheets_v4', 'signet']
 
 # OAI-PMH
 gem 'builder_deferred_tagging', github: 'ualbertalib/builder_deferred_tagging', tag: 'v0.01'
@@ -85,9 +94,10 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
 
-  gem 'rubocop', '~> 1.10.0', require: false
-  gem 'rubocop-performance'
-  gem 'rubocop-rails'
+  gem 'rubocop', '~> 1.22.1', require: false
+  gem 'rubocop-minitest', require: false
+  gem 'rubocop-performance', require: false
+  gem 'rubocop-rails', require: false
 end
 
 group :development do
@@ -98,7 +108,7 @@ group :development do
 
   gem 'brakeman'
 
-  gem 'listen', '>= 3.0.5', '< 3.5'
+  gem 'listen', '>= 3.0.5', '< 3.8'
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
 
@@ -106,17 +116,17 @@ group :development do
 end
 
 group :test do
-  gem 'danger', '~> 8.2', require: false # Pull Request etiquette enforcement
+  gem 'danger', '~> 8.4', require: false # Pull Request etiquette enforcement
   gem 'simplecov'
   # Faker added 0.5 seconds to the test suite per call. Haikunator seems much faster for faking strings
   gem 'haikunator'
-  gem 'shoulda-matchers', '~> 4.5'
+  gem 'shoulda-matchers', '~> 5.0'
 
   gem 'json-schema', '~> 2.8.1'
   gem 'launchy'
   gem 'rdf-isomorphic', '~> 3.1.1'
   gem 'vcr', '5.0', require: false
-  gem 'webdrivers', '~> 4.5'
+  gem 'webdrivers', '~> 4.6'
   gem 'webmock', require: false
 end
 

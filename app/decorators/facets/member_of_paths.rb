@@ -1,6 +1,6 @@
 class Facets::MemberOfPaths < Facets::DefaultFacetDecorator
 
-  def display
+  def display_value
     # This would be the seam where we may want to introduce a more efficient cache for mapping
     # community_id/collection_id paths to titles, as this is going to get hit a lot on facet results
     # If names were unique, we wouldn't have to do this translation, but c'est la vie

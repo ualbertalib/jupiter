@@ -1,5 +1,5 @@
 require 'test_helper'
-require Rails.root.join('test/support/aip_helper')
+require 'support/aip_helper'
 
 class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
 
@@ -18,10 +18,10 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
         title: 'Item with files',
         creators: ['Joe Blow'],
         created: '1000000 BC',
-        languages: [CONTROLLED_VOCABULARIES[:language].english],
-        item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-        publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-        license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+        languages: [ControlledVocabulary.era.language.english],
+        item_type: ControlledVocabulary.era.item_type.article,
+        publication_status: [ControlledVocabulary.era.publication_status.published],
+        license: ControlledVocabulary.era.license.attribution_4_0_international,
         subject: ['Items']
       },
       files: [
@@ -29,10 +29,6 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
         file_fixture('text-sample.txt')
       ]
     )
-
-    # Load just the RDF annotations we need for these tests
-    seed_active_storage_blobs_rdf_annotations
-    seed_item_rdf_annotations
   end
 
   test 'should be able to show a visible item to admin' do
@@ -89,7 +85,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
     radioactive_item.visibility = Item::VISIBILITY_EMBARGO
     radioactive_item.embargo_history = ['acl:embargoHistory1$ Item currently embargoed']
     radioactive_item.embargo_end_date = '2080-01-01T00:00:00.000Z'
-    radioactive_item.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].public
+    radioactive_item.visibility_after_embargo = ControlledVocabulary.jupiter_core.visibility.public
     ingest_files_for_entity(radioactive_item)
     radioactive_item.save!
     radioactive_item.reload
@@ -120,7 +116,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
       '2000-01-01T00:00:00.000Z.  Visibility during embargo was restricted and intended visibility after embargo was ' \
       'open'
     ]
-    radioactive_item.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].public
+    radioactive_item.visibility_after_embargo = ControlledVocabulary.jupiter_core.visibility.public
     ingest_files_for_entity(radioactive_item)
     radioactive_item.save!
     radioactive_item.reload
@@ -164,8 +160,8 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
   test 'should get item metadata graph with n3 serialization for published status example' do
     radioactive_item = items(:item_admin)
     radioactive_item.id = '93126aae-4b9d-4db2-98f1-4e04b40778cf'
-    radioactive_item.item_type = CONTROLLED_VOCABULARIES[:item_type].article
-    radioactive_item.publication_status = [CONTROLLED_VOCABULARIES[:publication_status].published]
+    radioactive_item.item_type = ControlledVocabulary.era.item_type.article
+    radioactive_item.publication_status = [ControlledVocabulary.era.publication_status.published]
     ingest_files_for_entity(radioactive_item)
     radioactive_item.save!
     radioactive_item.reload
@@ -193,7 +189,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
 
-    assert_equal true, check_file_order_xml(response.body)
+    assert check_file_order_xml(response.body)
   end
 
   test 'should get item file paths' do
@@ -204,7 +200,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
     )
     assert_response :success
     json_string = response.body
-    assert_equal true, JSON::Validator.validate(
+    assert JSON::Validator.validate(
       file_paths_json_schema,
       json_string
     )
@@ -212,7 +208,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
 
     # Check that all files actually exist
     json_response['files'].map do |file_path|
-      assert_equal true, File.file?(file_path['file_path'])
+      assert File.file?(file_path['file_path'])
     end
   end
 
@@ -239,7 +235,8 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
 
     variables = {
       fileset_id: radioactive_item.files.first.fileset_uuid,
-      collection_id: radioactive_item.member_of_paths.first.split('/')[1]
+      collection_id: radioactive_item.member_of_paths.first.split('/')[1],
+      url: Jupiter::TEST_URL
     }
     rendered_graph = load_n3_graph(file_fixture('n3/items/file_set.n3'), variables)
 
@@ -261,7 +258,8 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
       entity_id: @public_item.id,
       fileset_id: @public_item.files.first.fileset_uuid,
       checksum: @public_item.files.first.blob.checksum,
-      byte_size: @public_item.files.first.blob.byte_size
+      byte_size: @public_item.files.first.blob.byte_size,
+      url: Jupiter::TEST_URL
     }
     rendered_graph = load_n3_graph(file_fixture('n3/items/fixity.n3'), variables)
 
