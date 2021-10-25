@@ -31,6 +31,7 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
   end
 
   test 'sort by descending alphabetical order and paginate collections' do
+    visit community_path(@community)
     click_button 'Sort by'
     assert_selector 'a', text: 'Title (A-Z)'
     assert_selector 'a', text: 'Title (Z-A)'
@@ -57,6 +58,7 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
   end
 
   test 'sort by newest and paginate collections' do
+    visit community_path(@community)
     # Sort with newest first
     click_button 'Sort by'
     click_link 'Date (newest first)'
@@ -78,6 +80,7 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
   end
 
   test 'sort by ascending alphabetical order and paginate collections' do
+    visit community_path(@community)
     # Sort the other way again
     click_button 'Sort by'
     click_link 'Title (A-Z)'
@@ -92,6 +95,7 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
   end
 
   test 'sort by oldest and paginate collections' do
+    visit community_path(@community)
     # Sort with oldest first
     click_button 'Sort by'
     click_link 'Date (oldest first)'
