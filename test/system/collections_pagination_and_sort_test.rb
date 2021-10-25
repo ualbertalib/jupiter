@@ -10,10 +10,10 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
       Collection.create!(title: format("#{random_title(i)} Collection %02i", i), owner_id: admin.id,
                          community_id: @community.id)
     end
-    visit community_path(@community)
   end
 
   test 'anybody should be able to sort and paginate collections' do
+    visit community_path(@community)
     assert_selector 'div', text: '1 - 10 of 11'
     # Default sort is by title. First 6 say 'Fancy', last 4 say 'Nice'
     assert_selector 'ul.list-group li:first-child a', text: 'Fancy Collection 00'
@@ -32,6 +32,10 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
 
   test 'sort by descending alphabetical order and paginate collections' do
     click_button 'Sort by'
+    assert_selector 'a', text: 'Title (A-Z)'
+    assert_selector 'a', text: 'Title (Z-A)'
+    assert_selector 'a', text: 'Date (newest first)'
+    assert_selector 'a', text: 'Date (oldest first)'
 
     # Reverse sort
     click_link 'Title (Z-A)'
@@ -40,6 +44,7 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
     assert_selector 'button', text: 'Title (Z-A)'
     assert_selector 'ul.list-group li:first-child a', text: 'Nice Collection 09'
     assert_selector 'ul.list-group li:nth-child(2) a', text: 'Nice Collection 07'
+    assert_selector 'ul.list-group li:nth-child(9) a', text: 'Fancy Collection 04'
     assert_selector 'ul.list-group li:nth-child(10) a', text: 'Fancy Collection 02'
 
     # The first 'Fancy' collection should be on next page

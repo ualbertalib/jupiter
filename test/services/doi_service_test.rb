@@ -6,8 +6,6 @@ class DoiServiceTest < ActiveSupport::TestCase
 
   EXAMPLE_DOI = 'doi:10.21967/fk2-ycs2-dd92'.freeze
 
-  # rubocop:disable Minitest/MultipleAssertions
-  # TODO: our tests are quite smelly.  This one needs work!
   test 'DOI state transitions' do
     @admin = users(:user_admin)
 
@@ -111,6 +109,5 @@ class DoiServiceTest < ActiveSupport::TestCase
 
     Rails.application.secrets.doi_minting_enabled = false
   end
-  # rubocop:enable Minitest/MultipleAssertions
 
 end

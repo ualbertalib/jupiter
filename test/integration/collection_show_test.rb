@@ -15,7 +15,6 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
     @items.each(&:update_solr)
   end
 
-  # rubocop:disable Minitest/MultipleAssertions
   test 'visiting the show page for a collection as an admin' do
     admin = users(:user_admin)
     sign_in_as admin
@@ -98,7 +97,6 @@ class CollectionShowTest < ActionDispatch::IntegrationTest
       assert_select "ul.list-group .list-group-item a[href='#{edit_item_path(item)}']", count: 0
     end
   end
-  # rubocop:enable Minitest/MultipleAssertions
 
   test 'searching within the collection as a regular user' do
     # TODO: should probably hook this up to a system test that submits the form
