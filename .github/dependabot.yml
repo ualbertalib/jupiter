@@ -7,7 +7,7 @@ updates:
       time: "10:00"
       timezone: America/Edmonton
     open-pull-requests-limit: 10
-    target-branch: integration
+    target-branch: master
     ignore:
       - dependency-name: pundit
         versions:
@@ -33,7 +33,7 @@ updates:
       time: "10:00"
       timezone: America/Edmonton
     open-pull-requests-limit: 10
-    target-branch: integration
+    target-branch: master
     labels:
       - "dependencies"
       - "ruby"
@@ -44,7 +44,7 @@ updates:
       time: "10:00"
       timezone: America/Edmonton
     open-pull-requests-limit: 10
-    target-branch: integration
+    target-branch: master
     labels:
       - "dependencies"
       - "actions"

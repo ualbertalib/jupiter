@@ -96,10 +96,6 @@ Naming/MethodParameterName:
 Rails:
   Enabled: true
 
-# Autocorrecting this actively breaks code
-Rails/FindEach:
-  Enabled: false
-
 Rails/SkipsModelValidations:
   Exclude:
     - app/controllers/aip/v1/collections_controller.rb

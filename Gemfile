@@ -39,7 +39,7 @@ gem 'pundit', '1.1.0'
 
 # Background tasks
 gem 'sidekiq', '~> 5.2'
-gem 'sidekiq-unique-jobs', '~> 7.0'
+gem 'sidekiq-unique-jobs', '~> 7.1'
 gem 'sinatra', '~> 2.1.0' # used by sidekiq/web
 # Sidekiq cron jobs
 gem 'sidekiq-cron'
@@ -52,13 +52,13 @@ gem 'differ' # Used to diff two strings
 gem 'draper'
 gem 'edtf', '~> 3.0', '>= 3.0.6' # parsing Extended Date/Time Format
 gem 'ezid-client', '< 1.9.0'
-gem 'flipper', '~> 0.22.1' # Feature flags for Ruby
-gem 'flipper-active_record', '~> 0.22.1' # Store feature flags in ActiveRecord
-gem 'flipper-ui', '~> 0.22.1' # UI for feature flags
+gem 'flipper', '~> 0.22.2' # Feature flags for Ruby
+gem 'flipper-active_record', '~> 0.22.2' # Store feature flags in ActiveRecord
+gem 'flipper-ui', '~> 0.22.2' # UI for feature flags
 gem 'jbuilder' # generate JSON objects
 gem 'kaminari' # Pagination
 gem 'paper_trail' # Track object changes
-gem 'ransack', '= 2.4.1' # ActiveRecord search/filter
+gem 'ransack', '2.4.2' # ActiveRecord search/filter
 gem 'redcarpet', '~> 3.5', '>= 3.5.1', require: ['redcarpet', 'redcarpet/render_strip'] # Markdown to (X)HTML parser
 gem 'uuidtools'
 gem 'voight_kampff' # bot detection
@@ -95,7 +95,7 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
 
-  gem 'rubocop', '~> 1.22.1', require: false
+  gem 'rubocop', '~> 1.22.2', require: false
   gem 'rubocop-minitest', require: false
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false
@@ -127,7 +127,7 @@ group :test do
   gem 'launchy'
   gem 'rdf-isomorphic', '~> 3.1.1'
   gem 'vcr', '5.0', require: false
-  gem 'webdrivers', '~> 4.6'
+  gem 'webdrivers', '~> 4.7'
   gem 'webmock', require: false
 end
 
