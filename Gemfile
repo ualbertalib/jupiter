@@ -57,7 +57,7 @@ gem 'flipper-ui', '~> 0.22.1' # UI for feature flags
 gem 'jbuilder' # generate JSON objects
 gem 'kaminari' # Pagination
 gem 'paper_trail' # Track object changes
-gem 'ransack', '= 2.4.1' # ActiveRecord search/filter
+gem 'ransack', '2.4.2' # ActiveRecord search/filter
 gem 'redcarpet', '~> 3.5', '>= 3.5.1', require: ['redcarpet', 'redcarpet/render_strip'] # Markdown to (X)HTML parser
 gem 'uuidtools'
 gem 'voight_kampff' # bot detection
