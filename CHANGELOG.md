@@ -9,6 +9,8 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+## [2.2.0] - 2021-10-21
+
 - Refactored Controlled Vocabulary support to allow for new, raw vocabs without i18n translations. The motivation here is that we have a bunch of URIs we want to machine-map to human readable values, and it doesn't make sense to introduce intermediate symbols we'd have to cobble together somehow, plus that would involve polluting the i18n file with hundreds of new entries.
 
 API Examples:
@@ -31,8 +33,6 @@ API Examples:
 Further discussion of the context can be found at [#2119](https://github.com/ualbertalib/jupiter/issues/2119)
 
 - Many "description" or "abstract" fields (at the Item level as well as Communities and Collections) contain HTML tags. Because these are text fields, HTML is not rendered in the UI and text looks garbled and it's way less readable than ideal. Markdown should work really well for this since that's already used in many of the tools staff working in repositories are familiar with. Added `redcarpet` gem which renders markdown in our decorators and strips markdown in our Solr exporters [#1322](https://github.com/ualbertalib/jupiter/issues/1322)
-
-- Added DOI reset feature for admins [#1739](https://github.com/ualbertalib/jupiter/issues/1739)
 
 - Added feature flags to Jupiter.  The motivation for this change is so that we can continuously deploy and turn on or off features as needed. Admins can enable features through the admin panel. [#1897](https://github.com/ualbertalib/jupiter/issues/1897)
 
@@ -67,11 +67,8 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 - Added category labels for active facet badges. Requires `facet_badge_category_name` feature flag. [#1261](https://github.com/ualbertalib/jupiter/issues/1261)
 
 - Changes default behaviour within a facet to 'OR'. Requires `or_facets` feature flag. [#1990](https://github.com/ualbertalib/jupiter/issues/1990)
-### Added
 
-- Added oaisys tests [#1888](https://github.com/ualbertalib/jupiter/issues/1888)
-- Initialize disabled ReadOnlyMode [#2100](https://github.com/ualbertalib/jupiter/issues/2100)
-- Updated Architecture diagrams [PR#2135](https://github.com/ualbertalib/jupiter/pull/2135)
+### Added
 - Namespaces for the Controlled Vocabularies [#2118](https://github.com/ualbertalib/jupiter/issues/2118)
 - Brakeman linting to Github Actions workflow
 - Make autocomplete explicit [PR#2449](https://github.com/ualbertalib/jupiter/pull/2449)
@@ -79,47 +76,58 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 - Bring back illogical date range faceting flash message [#2030](https://github.com/ualbertalib/jupiter/issues/2030)
 
 ### Removed
-
-- Remove entirely unnecessary config file. [PR#2044](https://github.com/ualbertalib/jupiter/pull/2044)
-- Completely disable logging of warnings around the "excel spreadsheet" issue [PR#2049](https://github.com/ualbertalib/jupiter/pull/2049)
 - Remove logo_id foreign key on item/thesis which was causing issues with deletions
 - Removed `rufus-scheduler` -- it's an unused dependency [PR#2434](https://github.com/ualbertalib/jupiter/pull/2434)
 
 ### Changed
-
-- Turn off reporting things like "this excel spreadsheet isn't thumbnailable" as warnings to Rollbar [PR#2046](https://github.com/ualbertalib/jupiter/pull/2046)
-- migration to fix concatenated subjects (part 2) [#1449](https://github.com/ualbertalib/jupiter/issues/1449)
-- Catch and log embargo expiry job save errors [#1989](https://github.com/ualbertalib/jupiter/issues/1989)
-- Don't send failures to SessionController in development environment [PR#2121](https://github.com/ualbertalib/jupiter/pull/2121)
-- Rails upgraded to 6.0.3.6 to resolve certain issues with community dependencies
 - Moved `visibility` vocabulary into a `jupiter_core` namespace
 - Move `doi_url` to `Doiable` class
-- Fixture names have been modified to ensure their uniqueness [PR#2302](https://github.com/ualbertalib/jupiter/pull/2302)
-- Rails upgraded to 6.0.3.7 to resolve security issues
-- Added Collection and Community to reindex rake task [#2444](https://github.com/ualbertalib/jupiter/issues/2444)
-- predeploy script to reference this branch
 - UAT VIRTUAL_HOSTS configuration on just the containers that need it
 
 ### Fixed
-
-- oaisys: change etdms date source to graduation date as per LAC spec [#2298](https://github.com/ualbertalib/jupiter/pull/2510)
-- Give proper response when solr 400s [#2086](https://github.com/ualbertalib/jupiter/issues/2086)
-- Search with sort without default sort direction no longer errors [#2077](https://github.com/ualbertalib/jupiter/issues/2077)
-- Various fixes from lighthouse suggestions [PR#2254](https://github.com/ualbertalib/jupiter/pull/2254)
-- Fix issue where we improperly 404'd when a deleted Collection is being displayed in the edit history [#2504](https://github.com/ualbertalib/jupiter/issues/2504)
-- Fix communication with [pushmi_pullyu](https://github.com/ualbertalib/pushmi_pullyu) by changing the format for entries in redis queue [#2527](https://github.com/ualbertalib/jupiter/issues/2527)
-- bump rubocop and fix cop violations [PR#2072](https://github.com/ualbertalib/jupiter/pull/2072)
-- bump omniauth-rails_csrf_protection gem for omniauth compatibility [PR#2096](https://github.com/ualbertalib/jupiter/pull/2096)
-- bump rdf-n3 and fix isomorphic_with? regression [PR#2070](https://github.com/ualbertalib/jupiter/pull/2070)
-- bump rubocop and fix more cop violations [PR#2132](https://github.com/ualbertalib/jupiter/pull/2132)
 - Fix error when parsing n3 files which include objects with elements as values.
 - Bump flipper-ui, flipper-active_record and flipper and remove redundant configuration
-- Danger token in Github Actions [#2282](https://github.com/ualbertalib/jupiter/issues/2282)
 - Bump rubocop to 1.15.0 and Style/TrivialAccessors default changed [PR#2343](https://github.com/ualbertalib/jupiter/pull/2343)
 - Bump rubocop to 1.18.2 and fix cop violations [PR#2415](https://github.com/ualbertalib/jupiter/pull/2415)
 - Bump rubocop-minitest to 0.14.0 and note really smelly tests [PR#2416](https://github.com/ualbertalib/jupiter/pull/2416)
 - Fixed a flaky test where the page hasn't finished loading [#2129](https://github.com/ualbertalib/jupiter/issues/2129)
 - Refactored one of our smelliest tests to use fixtures and reduce number of assertions per test [#2419](https://github.com/ualbertalib/jupiter/issues/2419)
+
+## [2.1.0] - 2021-10-21
+
+### Added
+- Added DOI reset feature for admins [#1739](https://github.com/ualbertalib/jupiter/issues/1739)
+- Added oaisys tests [#1888](https://github.com/ualbertalib/jupiter/issues/1888)
+- Initialize disabled ReadOnlyMode [#2100](https://github.com/ualbertalib/jupiter/issues/2100)
+- Updated Architecture diagrams [PR#2135](https://github.com/ualbertalib/jupiter/pull/2135)
+
+### Removed
+- Remove entirely unnecessary config file. [PR#2044](https://github.com/ualbertalib/jupiter/pull/2044)
+- Completely disable logging of warnings around the "excel spreadsheet" issue [PR#2049](https://github.com/ualbertalib/jupiter/pull/2049)
+
+### Changed
+- Turn off reporting things like "this excel spreadsheet isn't thumbnailable" as warnings to Rollbar [PR#2046](https://github.com/ualbertalib/jupiter/pull/2046)
+- migration to fix concatenated subjects (part 2) [#1449](https://github.com/ualbertalib/jupiter/issues/1449)
+- Catch and log embargo expiry job save errors [#1989](https://github.com/ualbertalib/jupiter/issues/1989)
+- Don't send failures to SessionController in development environment [PR#2121](https://github.com/ualbertalib/jupiter/pull/2121) 
+- Rails upgraded to 6.0.3.6 to resolve certain issues with community dependencies
+- Fixture names have been modified to ensure their uniqueness [PR#2302](https://github.com/ualbertalib/jupiter/pull/2302) 
+- Rails upgraded to 6.0.3.7 to resolve security issues
+- Added Collection and Community to reindex rake task [#2444](https://github.com/ualbertalib/jupiter/issues/2444)
+
+### Fixed
+- oaisys: change etdms date source to graduation date as per LAC spec [#2298](https://github.com/ualbertalib/jupiter/pull/2510)
+- bump rubocop and fix cop violations [PR#2072](https://github.com/ualbertalib/jupiter/pull/2072)
+- Give proper response when solr 400s [#2086](https://github.com/ualbertalib/jupiter/issues/2086)
+- Search with sort without default sort direction no longer errors [#2077](https://github.com/ualbertalib/jupiter/issues/2077)
+- bump omniauth-rails_csrf_protection gem for omniauth compatibility [PR#2096](https://github.com/ualbertalib/jupiter/pull/2096)
+- bump rdf-n3 and fix isomorphic_with? regression [PR#2070](https://github.com/ualbertalib/jupiter/pull/2070)
+- bump rubocop and fix more cop violations [PR#2132](https://github.com/ualbertalib/jupiter/pull/2132)
+- Various fixes from lighthouse suggestions [PR#2254](https://github.com/ualbertalib/jupiter/pull/2254)
+- Danger token in Github Actions [#2282](https://github.com/ualbertalib/jupiter/issues/2282)
+- Fix issue where we improperly 404'd when a deleted Collection is being displayed in the edit history [#2504](https://github.com/ualbertalib/jupiter/issues/2504)
+- Fix communication with [pushmi_pullyu](https://github.com/ualbertalib/pushmi_pullyu) by changing the format for entries in redis queue [#2527](https://github.com/ualbertalib/jupiter/issues/2527)
+- Fix preservation task [#2566](https://github.com/ualbertalib/jupiter/issues/2566)
 
 ## [2.0.3] - 2021-05-05
 
