@@ -6,12 +6,6 @@ class DataciteDoiServiceTest < ActiveSupport::TestCase
 
   EXAMPLE_DOI = '10.80243/wvg2-0805'.freeze
 
-  setup do
-    Datacite.configure do |config|
-      config.password = ENV['DATACITE_PASSWORD']
-    end
-  end
-
   # rubocop:disable Minitest/MultipleAssertions
   # TODO: our tests are quite smelly.  This one needs work!
   test 'DOI state transitions' do
