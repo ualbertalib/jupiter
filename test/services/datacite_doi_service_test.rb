@@ -23,8 +23,7 @@ class DataciteDoiServiceTest < ActiveSupport::TestCase
   test 'a. mint DOI' do
     VCR.use_cassette('datacite_minting', erb: { id: @item.id }, record: :once) do
       assert_no_enqueued_jobs
-      @item.doi = nil
-      @item.save!
+      @item.update(doi: nil)
       assert_enqueued_jobs 1, only: DOICreateJob
       clear_enqueued_jobs
 
@@ -48,11 +47,7 @@ class DataciteDoiServiceTest < ActiveSupport::TestCase
   test 'b. update DOI' do
     VCR.use_cassette('datacite_updating', erb: { id: @item.id }, record: :once) do
       assert_no_enqueued_jobs
-      @item.tap do |uo|
-        uo.title = 'Different Title'
-        uo.aasm_state = :available
-        uo.save!
-      end
+      @item.update(title: 'Different Title', aasm_state: :available)
 
       assert_enqueued_jobs 1, only: DOIUpdateJob
       clear_enqueued_jobs
@@ -70,12 +65,7 @@ class DataciteDoiServiceTest < ActiveSupport::TestCase
     VCR.use_cassette('datacite_updating_unavailable', erb: { id: @item.id }, record: :once) do
       assert_no_enqueued_jobs
 
-      @item.tap do |uo|
-        uo.queue_create_job
-        uo.aasm_state = :available
-        uo.visibility = JupiterCore::VISIBILITY_PRIVATE
-        uo.save!
-      end
+      @item.update(aasm_state: :available, visibility: JupiterCore::VISIBILITY_PRIVATE)
 
       assert_enqueued_jobs 1, only: DOIUpdateJob
       clear_enqueued_jobs
@@ -93,7 +83,7 @@ class DataciteDoiServiceTest < ActiveSupport::TestCase
     VCR.use_cassette('datacite_removal', erb: { id: @item.id }, record: :once, allow_unused_http_interactions: false) do
       assert_no_enqueued_jobs
 
-      @item.tap(&:destroy)
+      @item.destroy
 
       assert_enqueued_jobs 1, only: DOIRemoveJob
       clear_enqueued_jobs
