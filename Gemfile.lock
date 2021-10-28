@@ -17,6 +17,13 @@ GIT
       request_store
 
 GIT
+  remote: https://github.com/ualbertalib/datacite-client.git
+  revision: 985fafc859f109bf2a7e6e4c6511484bd0e8c80d
+  tag: v0.1.0
+  specs:
+    datacite-client (0.1.0)
+
+GIT
   remote: https://github.com/ualbertalib/oaisys.git
   revision: 66a9374e42c8994a100f47d220ea9dc7b725203e
   tag: v1.0.3
@@ -616,6 +623,7 @@ DEPENDENCIES
   clamby
   connection_pool
   danger (~> 8.4)
+  datacite-client!
   differ
   draper
   edtf (~> 3.0, >= 3.0.6)
