@@ -41,7 +41,7 @@ gem 'pundit', '1.1.0'
 
 # Background tasks
 gem 'sidekiq', '~> 5.2'
-gem 'sidekiq-unique-jobs', '~> 7.0'
+gem 'sidekiq-unique-jobs', '~> 7.1'
 gem 'sinatra', '~> 2.1.0' # used by sidekiq/web
 # Sidekiq cron jobs
 gem 'sidekiq-cron'
@@ -49,6 +49,7 @@ gem 'sidekiq-cron'
 # Misc Utilities
 gem 'aasm' # state-machine management
 gem 'addressable', '~> 2.8.0' # Replacement for the standard URI implementation
+gem 'datacite-client', github: 'ualbertalib/datacite-client', tag: 'v0.1.0', require: 'datacite'
 gem 'differ' # Used to diff two strings
 gem 'draper'
 gem 'edtf', '~> 3.0', '>= 3.0.6' # parsing Extended Date/Time Format

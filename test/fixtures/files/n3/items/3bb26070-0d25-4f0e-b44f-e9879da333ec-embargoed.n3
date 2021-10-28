@@ -11,7 +11,7 @@
   pcdm:hasMember <<%= url %>/aip/v1/items/3bb26070-0d25-4f0e-b44f-e9879da333ec/filesets/<%= fileset_0_uuid %>>,
     <<%= url %>/aip/v1/items/3bb26070-0d25-4f0e-b44f-e9879da333ec/filesets/<%= fileset_1_uuid %>>;
   pcdm:memberOf <<%= url %>/aip/v1/collections/<%= collection_uuid %>>;
-  <http://prismstandard.org/namespaces/basic/3.0/doi> "doi:10.7939/xxxxxxxxx";
+  <http://prismstandard.org/namespaces/basic/3.0/doi> "10.80243/99dh-v584";
   <http://projecthydra.org/ns/auth/acl#embargoHistory> ("acl:embargoHistory1$ Item currently embargoed");
   <http://projecthydra.org/ns/auth/acl#visibilityAfterEmbargo> "http://terms.library.ualberta.ca/public";
   dc11:contributor "dc:contributor2$ Perez, Maria",
