@@ -131,8 +131,6 @@ Rails.application.routes.draw do
     get '/public/view/collection/:uuid', to: 'redirect#fedora3_collection'
     get '/public/view/community/:uuid', to: 'redirect#fedora3_community'
 
-    get '/rails/blobs/:key', to: redirect('/rails/active_storage/blobs/%{key}/thumbnail.jpg')
-
     # AIP API v1
 
     namespace :aip,
@@ -164,6 +162,7 @@ Rails.application.routes.draw do
       end
     end
   end
+
   constraints(subdomain: 'digitalcollections') do
     ## Peel URL redirects
     get '/bibliography/:peel_id(/*page)', to: 'digitization/redirect#peel_book'

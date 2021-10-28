@@ -1,16 +1,18 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
+ruby '>= 2.6', '< 2.8'
+
 # Core Rails stuff
 gem 'image_processing' # for ActiveStorage Variants
 gem 'puma', '~> 5.5'
-gem 'rails', '~> 6.0.4.1'
+gem 'rails', '~> 6.1.4', '>= 6.1.4.1'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 gem 'webpacker', '~> 5.4'
 
 # Reduces boot times through caching; required in config/boot.rb
-gem 'bootsnap', '>= 1.4.2', require: false
+gem 'bootsnap', '>= 1.4.4', require: false
 
 # View stuff
 gem 'active_link_to'
@@ -85,7 +87,7 @@ end
 group :development, :test do
   gem 'sdoc', require: false
 
-  gem 'capybara', '>= 2.15', '< 4.0'
+  gem 'capybara', '>= 3.26', '< 4.0'
   gem 'nokogiri'
   gem 'selenium-webdriver', require: false
 
@@ -113,7 +115,7 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
 
-  gem 'web-console', '>= 3.3.0'
+  gem 'web-console', '>= 4.1.0'
 end
 
 group :test do

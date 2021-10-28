@@ -8,9 +8,9 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.4",
-    "@rails/actiontext": "^6.0.3",
-    "@rails/activestorage": "^6.0.3",
-    "@rails/ujs": "^6.0.3",
+    "@rails/actiontext": "^6.1.4-1",
+    "@rails/activestorage": "^6.1.4-1",
+    "@rails/ujs": "^6.1.4-1",
     "@rails/webpacker": "^5.4.3",
     "bootstrap": "^4.6.0",
     "core-js": "^3.19.0",
