@@ -29,7 +29,7 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 - Jupiter II work is continuing to incorporate Digitized materials into Jupiter in the digitalcollections namespace.
   - Add task that will kick off setup job for attaching artifacts to digitization objects [#2011](https://github.com/ualbertalib/jupiter/issues/2011)
-  
+  - Add job that will attach artifacts (high resolution pdf, full text, and link to preservation storage) to digitization objects [#2011](https://github.com/ualbertalib/jupiter/issues/2011)
 ### Chores
 - bump sidekiq-unique-jobs from 7.0.12 to 7.1.8 and fix a long missed deprecation
 - fixed deprecation warning on tests [#2604](https://github.com/ualbertalib/jupiter/issues/2604)
