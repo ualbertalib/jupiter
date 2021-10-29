@@ -9,6 +9,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+- Jupiter II work is continuing to incorporate Digitized materials into Jupiter in the digitalcollections namespace.
+  - batch ingest reports
+
 ### Fixed
 - nil Class error when viewing Collections drop down on Communities page [#2655](https://github.com/ualbertalib/jupiter/issues/2655)
 - Render markdown when viewing Communities as an administrator [#1322](https://github.com/ualbertalib/jupiter/issues/1322)
