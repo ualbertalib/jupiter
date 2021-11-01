@@ -34,7 +34,7 @@ services:
       - DB_PASSWORD=mysecretpassword
       - SOLR_URL=http://solr:8983/solr/development
       - SOLR_TEST_URL=http://solr:8983/solr/test
-      - REDIS_URL='redis://redis/1'
+      - REDIS_URL=redis://redis/1
     ports:
       - "3000:3000"
     links:
