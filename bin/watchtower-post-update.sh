@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-rake db:migrate
-rake assets:precompile
+bundle exec rake db:migrate
+bundle exec rake assets:precompile
