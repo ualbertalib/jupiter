@@ -15,6 +15,7 @@ New entries in this file should aim to provide a meaningful amount of informatio
 - bump sidekiq-unique-jobs from 7.0.12 to 7.1.8 and fix a long missed deprecation
 - fixed deprecation warning on tests [#2604](https://github.com/ualbertalib/jupiter/issues/2604)
 - revise uat deploy configuration and watchtower script [#1985](https://github.com/ualbertalib/jupiter/issues/1985)
+- fixes: Docker demo Redis bad URI error [#2610](https://github.com/ualbertalib/jupiter/issues/2610)
 
 ## [2.2.0] - 2021-10-21
 
