@@ -34,8 +34,8 @@ namespace :digitization do
 
   desc 'report on batch_ingest progress - used by Admin and Assistants'
   task :batch_ingest_report, [:id, :limit] => :environment do |_t, args|
-    limit = args.limit.blank? ? 10 : args.limit
-    if args.id.blank? 
+    limit = args.limit.presence || 10
+    if args.id.blank?
       puts "id,\ttitle,\tstatus,\tsize"
       Digitization::BatchMetadataIngest.order(created_at: :desc).limit(limit).each do |batch_ingest|
         puts "#{batch_ingest.id},\t#{batch_ingest.title},\t#{batch_ingest.status},\t#{batch_ingest.books.count}"
@@ -44,12 +44,10 @@ namespace :digitization do
       batch_ingest = Digitization::BatchMetadataIngest.find(args.id)
       puts "#{batch_ingest.title} [#{batch_ingest.id}]"
       puts batch_ingest.status
-      if batch_ingest.failed?
-        puts batch_ingest.errors
-      else
-        batch_ingest.books.each do |book|
-          puts "#{book.id}, #{Rails.application.routes.url_helpers.digitization_book_url(book)}, #{book.title}"
-        end
+      puts batch_ingest.error_message if batch_ingest.failed?
+      batch_ingest.books.each do |book|
+        puts "#{book.id},\t#{book.peel_number},\t" \
+             "#{Rails.application.routes.url_helpers.digitization_book_url(book)},\t#{book.title}"
       end
     end
   end
