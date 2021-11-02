@@ -3,7 +3,7 @@ require 'test_helper'
 class Digitization::BatchMetadataIngestTest < ActiveSupport::TestCase
 
   setup do
-    @batch_ingest = digitization_batch_metadata_ingests(:digitization_batch_ingest_with_two_items)
+    @batch_ingest = digitization_batch_ingests(:digitization_batch_ingest_with_two_items)
   end
 
   test 'valid batch ingest' do

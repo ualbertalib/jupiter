@@ -3,7 +3,7 @@ require 'test_helper'
 class Digitization::BatchMetadataIngestionJobTest < ActiveJob::TestCase
 
   test 'batch ingestion job captures exceptions and updates batch ingest model' do
-    batch_ingest = digitization_batch_metadata_ingests(:digitization_batch_ingest_with_two_items)
+    batch_ingest = digitization_batch_ingests(:digitization_batch_ingest_with_two_items)
 
     def batch_ingest.processing!
       raise StandardError, 'Testing! Error has happened!'
@@ -20,7 +20,7 @@ class Digitization::BatchMetadataIngestionJobTest < ActiveJob::TestCase
   end
 
   test 'successful batch ingestion' do
-    batch_ingest = digitization_batch_metadata_ingests(:digitization_batch_ingest_with_two_items)
+    batch_ingest = digitization_batch_ingests(:digitization_batch_ingest_with_two_items)
     batch_ingest.csvfile.attach(io: File.open(file_fixture('digitization_metadata_graph.csv')),
                                 filename: 'folkfest.csv')
 
