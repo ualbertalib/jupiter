@@ -35,7 +35,7 @@ item_practical:
 item_admin:
   id: "e2ec88e3-3266-4e95-8575-8b04fac2a679"
   owner: user_admin
-  doi: "10.80243/99dh-v584"
+  doi: "doi:10.80243/99dh-v584"
   visibility: <%= JupiterCore::VISIBILITY_PUBLIC %>
   creators: ["dc:creator1$ Doe, Jane", "dc:creator2$ Doe, John"]
   contributors:

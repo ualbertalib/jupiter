@@ -11,7 +11,7 @@
   pcdm:hasMember <<%= url %>/aip/v1/items/c795337f-075f-429a-bb18-16b56d9b750f/filesets/<%= fileset_0_uuid %>>,
     <<%= url %>/aip/v1/items/c795337f-075f-429a-bb18-16b56d9b750f/filesets/<%= fileset_1_uuid %>>;
   pcdm:memberOf <<%= url %>/aip/v1/collections/<%= collection_uuid %>>;
-  <http://prismstandard.org/namespaces/basic/3.0/doi> "10.80243/99dh-v584";
+  <http://prismstandard.org/namespaces/basic/3.0/doi> "doi:10.80243/99dh-v584";
   dc11:contributor "dc:contributor2$ Perez, Maria",
     "dc:contributor1$ Perez, Juan";
   dc11:creator "dc:creator2$ Doe, John",

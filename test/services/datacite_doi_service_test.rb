@@ -4,8 +4,7 @@ class DataciteDoiServiceTest < ActiveSupport::TestCase
 
   include ActiveJob::TestHelper
 
-  # If you need to re-record the vcr cassettes uncomment this line so you get them in order
-  # ActiveSupport::TestCase.test_order = :sorted
+  # If you need to re-record the vcr cassettes use SEED=20 to record the tests in order
 
   setup do
     Flipper.enable(:datacite_api)
@@ -20,7 +19,7 @@ class DataciteDoiServiceTest < ActiveSupport::TestCase
     Flipper.disable(:datacite_api)
   end
 
-  test 'a. mint DOI' do
+  test 'mint DOI' do
     VCR.use_cassette('datacite_minting', erb: { id: @item.id }, record: :once) do
       assert_no_enqueued_jobs
       @item.update(doi: nil)
@@ -31,7 +30,7 @@ class DataciteDoiServiceTest < ActiveSupport::TestCase
 
       datacite_identifer = DOIService.new(@item).create
       assert_not_nil datacite_identifer
-      assert_equal @item.doi, datacite_identifer.doi
+      assert_equal @item.doi.delete_prefix('doi:'), datacite_identifer.doi
       assert_equal 'University of Alberta Library', datacite_identifer.publisher
       assert_equal @item.title, datacite_identifer.titles.first[:title]
       assert_equal @item.description, datacite_identifer.descriptions.first[:description]
@@ -44,7 +43,7 @@ class DataciteDoiServiceTest < ActiveSupport::TestCase
     end
   end
 
-  test 'b. update DOI' do
+  test 'update DOI' do
     VCR.use_cassette('datacite_updating', erb: { id: @item.id }, record: :once) do
       assert_no_enqueued_jobs
       @item.update(title: 'Different Title', aasm_state: :available)
@@ -54,14 +53,14 @@ class DataciteDoiServiceTest < ActiveSupport::TestCase
 
       datacite_identifer = DOIService.new(@item).update
       assert_not_nil datacite_identifer
-      assert_equal @item.doi, datacite_identifer.doi
+      assert_equal @item.doi.delete_prefix('doi:'), datacite_identifer.doi
       assert_equal Datacite::State::FINDABLE, datacite_identifer.state
       assert_equal 'Different Title', datacite_identifer.titles.first[:title]
       assert_equal 'available', @item.aasm_state
     end
   end
 
-  test 'c. unavailable DOI' do
+  test 'unavailable DOI' do
     VCR.use_cassette('datacite_updating_unavailable', erb: { id: @item.id }, record: :once) do
       assert_no_enqueued_jobs
 
@@ -72,14 +71,14 @@ class DataciteDoiServiceTest < ActiveSupport::TestCase
 
       datacite_identifer = DOIService.new(@item).update
       assert_not_nil datacite_identifer
-      assert_equal @item.doi, datacite_identifer.doi
+      assert_equal @item.doi.delete_prefix('doi:'), datacite_identifer.doi
       assert_equal Datacite::State::REGISTERED, datacite_identifer.state
       assert_equal 'unavailable| not publicly released', datacite_identifer.reason
       assert_equal 'not_available', @item.aasm_state
     end
   end
 
-  test 'd. remove DOI' do
+  test 'remove DOI' do
     VCR.use_cassette('datacite_removal', erb: { id: @item.id }, record: :once, allow_unused_http_interactions: false) do
       assert_no_enqueued_jobs
 
@@ -90,7 +89,7 @@ class DataciteDoiServiceTest < ActiveSupport::TestCase
 
       datacite_identifer = DOIService.remove(@item.doi)
       assert_not_nil datacite_identifer
-      assert_equal @item.doi, datacite_identifer.doi
+      assert_equal @item.doi.delete_prefix('doi:'), datacite_identifer.doi
       assert_equal Datacite::State::REGISTERED, datacite_identifer.state
       assert_equal 'unavailable | withdrawn', datacite_identifer.reason
     end
