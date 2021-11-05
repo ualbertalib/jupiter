@@ -65,7 +65,8 @@ class DOIService
                    event = Datacite::Event::PUBLISH
                  end
 
-                 Datacite::Client.modify(@item.doi.delete_prefix('doi:'), datacite_attributes, event: event, reason: reason)
+                 Datacite::Client.modify(@item.doi.delete_prefix('doi:'), datacite_attributes, event: event,
+                                                                                               reason: reason)
                else
                  Ezid::Identifier.modify(@item.doi, ezid_metadata)
                end
@@ -95,7 +96,8 @@ class DOIService
 
   def self.remove(doi)
     if Flipper.enabled?(:datacite_api)
-      Datacite::Client.modify(doi.delete_prefix('doi:'), { reason: 'unavailable | withdrawn', event: Datacite::Event::HIDE })
+      Datacite::Client.modify(doi.delete_prefix('doi:'),
+                              { reason: 'unavailable | withdrawn', event: Datacite::Event::HIDE })
     else
       Ezid::Identifier.modify(doi, status: "#{Ezid::Status::UNAVAILABLE} | withdrawn", export: 'no')
     end
