@@ -36,9 +36,10 @@ namespace :digitization do
   task :batch_ingest_report, [:id, :limit] => :environment do |_t, args|
     limit = args.limit.presence || 10
     if args.id.blank?
-      puts "id,\ttitle,\tstatus,\tsize"
+      puts format '%38s,%80s,%12s,%7s', 'id', 'title', 'status', 'size'
       Digitization::BatchMetadataIngest.order(created_at: :desc).limit(limit).each do |batch_ingest|
-        puts "#{batch_ingest.id},\t#{batch_ingest.title},\t#{batch_ingest.status},\t#{batch_ingest.books.count}"
+        puts format '%38s,%80s,%12s,%7d', batch_ingest.id, batch_ingest.title, batch_ingest.status,
+                    batch_ingest.books.count
       end
     else
       batch_ingest = Digitization::BatchMetadataIngest.find(args.id)
