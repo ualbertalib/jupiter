@@ -167,6 +167,8 @@ en:
               infected: '%{filename} is infected with a virus'
         digitization/book:
             attributes:
+              peel_number:
+                taken: "number %{peel_number} has already been taken"
               resource_type:
                 not_recognized: 'is not recognized'
               genres:

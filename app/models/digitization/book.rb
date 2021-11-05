@@ -20,7 +20,8 @@ class Digitization::Book < JupiterCore::Depositable
             uniqueness: {
               scope: [:run, :part_number],
               message: lambda do |object, _data|
-                "number #{object.peel_number} has already been taken"
+                I18n.t('activerecord.errors.models.digitization/book.attributes.peel_number.taken',
+                       peel_number: object.peel_number)
               end
             }, presence: true, if: :part_number?
   validates :part_number, presence: true, if: :run?
