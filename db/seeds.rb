@@ -424,7 +424,7 @@ if Rails.env.development? || Rails.env.uat?
   base_radioactive_item_values = {
     # Set model id on each new Item so we can find it easily when testing
     owner_id: admin.id,
-    doi: '10.80243/99dh-v584',
+    doi: 'doi:10.80243/99dh-v584',
     visibility: JupiterCore::VISIBILITY_PUBLIC,
     creators: ['dc:creator1$ Doe, Jane', 'dc:creator2$ Doe, John'],
     contributors: ['dc:contributor1$ Perez, Juan', 'dc:contributor2$ Perez, Maria'],

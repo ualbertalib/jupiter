@@ -31,7 +31,7 @@ class DataciteDoiServiceTest < ActiveSupport::TestCase
 
       datacite_identifer = DOIService.new(@item).create
       assert_not_nil datacite_identifer
-      assert_equal @item.doi, datacite_identifer.doi
+      assert_equal @item.doi.delete_prefix('doi:'), datacite_identifer.doi
       assert_equal 'University of Alberta Library', datacite_identifer.publisher
       assert_equal @item.title, datacite_identifer.titles.first[:title]
       assert_equal @item.description, datacite_identifer.descriptions.first[:description]
@@ -54,7 +54,7 @@ class DataciteDoiServiceTest < ActiveSupport::TestCase
 
       datacite_identifer = DOIService.new(@item).update
       assert_not_nil datacite_identifer
-      assert_equal @item.doi, datacite_identifer.doi
+      assert_equal @item.doi.delete_prefix('doi:'), datacite_identifer.doi
       assert_equal Datacite::State::FINDABLE, datacite_identifer.state
       assert_equal 'Different Title', datacite_identifer.titles.first[:title]
       assert_equal 'available', @item.aasm_state
@@ -72,7 +72,7 @@ class DataciteDoiServiceTest < ActiveSupport::TestCase
 
       datacite_identifer = DOIService.new(@item).update
       assert_not_nil datacite_identifer
-      assert_equal @item.doi, datacite_identifer.doi
+      assert_equal @item.doi.delete_prefix('doi:'), datacite_identifer.doi
       assert_equal Datacite::State::REGISTERED, datacite_identifer.state
       assert_equal 'unavailable| not publicly released', datacite_identifer.reason
       assert_equal 'not_available', @item.aasm_state
@@ -90,7 +90,7 @@ class DataciteDoiServiceTest < ActiveSupport::TestCase
 
       datacite_identifer = DOIService.remove(@item.doi)
       assert_not_nil datacite_identifer
-      assert_equal @item.doi, datacite_identifer.doi
+      assert_equal @item.doi.delete_prefix('doi:'), datacite_identifer.doi
       assert_equal Datacite::State::REGISTERED, datacite_identifer.state
       assert_equal 'unavailable | withdrawn', datacite_identifer.reason
     end
