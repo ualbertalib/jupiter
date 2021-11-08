@@ -36,6 +36,11 @@ namespace :digitization do
   task :batch_ingest_report, [:id, :limit] => :environment do |_t, args|
     limit = args.limit.presence || 10
     if args.id.blank?
+      # Use `Kernel#format` to ensure that the columns line up with enough space for the expected values.
+      # - The `id`s will be exactly 38 characters.
+      # - Give `title` 80 characters of space.
+      # - `processing` should be the longest `status`
+      # - batch `size` should be pretty small to ensure that the jobs can finish in a timely manner
       puts format '%38s,%80s,%12s,%7s', 'id', 'title', 'status', 'size'
       Digitization::BatchMetadataIngest.order(created_at: :desc).limit(limit).each do |batch_ingest|
         puts format '%38s,%80s,%12s,%7d', batch_ingest.id, batch_ingest.title, batch_ingest.status,
