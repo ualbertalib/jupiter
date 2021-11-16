@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_10_225918) do
+ActiveRecord::Schema.define(version: 2021_11_10_162254) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(version: 2021_10_10_225918) do
     t.string "filename"
     t.string "content_type"
     t.text "metadata"
-    t.integer "byte_size"
+    t.bigint "byte_size"
     t.string "checksum"
     t.datetime "created_at"
     t.string "service_name", null: false
