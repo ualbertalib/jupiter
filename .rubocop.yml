@@ -171,3 +171,7 @@ Style/RedundantBegin:
 
 Naming/VariableNumber:
   Enabled: false
+
+Style/OpenStructUse:
+  Exclude: 
+    - config/initializers/controlled_vocabularies.rb
