@@ -564,6 +564,8 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
+    strong_migrations (0.7.8)
+      activerecord (>= 5)
     sxp (1.1.0)
       rdf (~> 3.1)
     terminal-table (3.0.2)
@@ -683,6 +685,7 @@ DEPENDENCIES
   skylight (~> 4.3)
   spring
   spring-watcher-listen (~> 2.0.0)
+  strong_migrations (~> 0.7.8)
   uuidtools
   vcr (= 5.0)
   voight_kampff
