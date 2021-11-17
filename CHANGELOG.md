@@ -18,6 +18,7 @@ New entries in this file should aim to provide a meaningful amount of informatio
 - fixed deprecation warning on tests [#2604](https://github.com/ualbertalib/jupiter/issues/2604)
 - revise uat deploy configuration and watchtower script [#1985](https://github.com/ualbertalib/jupiter/issues/1985)
 - fixes: Docker demo Redis bad URI error [#2610](https://github.com/ualbertalib/jupiter/issues/2610)
+- add `strong_migrations` to catch unsafe migrations in development [#2621](https://github.com/ualbertalib/jupiter/issues/2621)
 
 ## [2.2.0] - 2021-10-21
 

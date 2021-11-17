@@ -101,6 +101,8 @@ group :development, :test do
   gem 'rubocop-minitest', require: false
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false
+
+  gem 'strong_migrations', '~> 0.7.8'
 end
 
 group :development do

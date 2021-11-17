@@ -175,3 +175,8 @@ Naming/VariableNumber:
 Style/OpenStructUse:
   Exclude: 
     - config/initializers/controlled_vocabularies.rb
+
+# Migrations are YYYYMMDDHHMMSS rather than a numeric
+Style/NumericLiterals:
+  Exclude:
+    - config/initializers/strong_migrations.rb
