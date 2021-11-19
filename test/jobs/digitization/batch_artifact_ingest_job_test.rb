@@ -11,7 +11,6 @@ class Digitization::BatchArtifactIngestJobTest < ActiveJob::TestCase
     book.fulltext.destroy
     book.reload
 
-    assert(batch_ingest.created?)
     assert_not(book.swift_noid.present?)
     assert_not(book.files.attached?)
     assert_not(book.fulltext.present?)
@@ -47,7 +46,7 @@ class Digitization::BatchArtifactIngestJobTest < ActiveJob::TestCase
                                 filename: 'artifacts_manifest.csv')
     book = digitization_books(:folk_fest)
 
-    def batch_ingest.processing!(_book)
+    def batch_ingest.archival_information_package_path
       raise StandardError, 'Testing! Error has happened!'
     end
 

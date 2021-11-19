@@ -13,8 +13,6 @@ class Digitization::BatchArtifactSetupIngestionJobTest < ActiveJob::TestCase
 
     assert_performed_jobs 1
     assert_enqueued_jobs 1, only: Digitization::BatchArtifactIngestJob
-
-    assert(batch_ingest.created?)
   end
 
   test 'captures exceptions and updates batch ingest model' do

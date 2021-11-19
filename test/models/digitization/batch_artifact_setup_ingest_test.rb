@@ -31,43 +31,4 @@ class Digitization::BatchArtifactSetupIngestTest < ActiveSupport::TestCase
     assert_equal(errors, @batch_ingest.errors[:csvfile])
   end
 
-  test 'processing and completed status' do
-    folk_fest = digitization_books(:folk_fest)
-    book = digitization_books(:peel_monograph)
-    assert @batch_ingest.created?
-
-    @batch_ingest.processing! folk_fest
-    @batch_ingest.processing! book
-    assert @batch_ingest.processing?
-
-    # only one is completed
-    @batch_ingest.completed! folk_fest
-    assert_not @batch_ingest.completed?
-    assert @batch_ingest.processing?
-
-    # now both are completed
-    @batch_ingest.completed! book
-    assert @batch_ingest.completed?
-  end
-
-  test 'falure status' do
-    folk_fest = digitization_books(:folk_fest)
-    book = digitization_books(:peel_monograph)
-    assert @batch_ingest.created?
-
-    @batch_ingest.processing! folk_fest
-    assert @batch_ingest.processing?
-
-    @batch_ingest.failed! folk_fest
-    assert @batch_ingest.failed?
-
-    # another processing doesn't change the failure status
-    @batch_ingest.processing! book
-    assert @batch_ingest.failed?
-
-    # another completed doesn't change the failure status
-    @batch_ingest.completed! book
-    assert @batch_ingest.failed?
-  end
-
 end

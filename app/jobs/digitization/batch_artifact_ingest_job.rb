@@ -4,17 +4,17 @@ class Digitization::BatchArtifactIngestJob < ApplicationJob
 
   rescue_from(StandardError) do |exception|
     batch_ingest = arguments.first
-    batch_ingest.update(error_message: exception.message, status: :failed)
+    batch_ingest.update(error_message: exception.message)
 
     book = Digitization::Book.find_by(peel_id: arguments[1], part_number: arguments[2])
-    batch_ingest.failed!(book) if book.present?
+    book.failed! if book.present?
 
     raise exception
   end
 
   def perform(batch_ingest, peel_id, part_number, noid)
     book = Digitization::Book.find_by!(peel_id: peel_id, part_number: part_number)
-    batch_ingest.processing!(book)
+    book.processing!
 
     add_link_to_preservation_storage(book, noid)
 
@@ -22,7 +22,7 @@ class Digitization::BatchArtifactIngestJob < ApplicationJob
 
     add_fulltext(batch_ingest, book, noid)
 
-    batch_ingest.completed!(book) if book.save!
+    book.completed! if book.save!
   end
 
   private

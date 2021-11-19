@@ -2,6 +2,8 @@ class Digitization::Book < JupiterCore::Depositable
 
   acts_as_rdfable
 
+  enum batch_ingest_status: { created: 0, processing: 1, completed: 2, failed: 3 }
+
   belongs_to :digitization_batch_metadata_ingest, optional: true
 
   has_one_attached :historical_archive

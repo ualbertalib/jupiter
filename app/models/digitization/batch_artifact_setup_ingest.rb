@@ -1,18 +1,16 @@
 class Digitization::BatchArtifactSetupIngest < ApplicationRecord
 
-  enum status: { created: 0, processing: 1, completed: 2, failed: 3 }
-
   belongs_to :user
 
-  has_many :processing, dependent: :nullify, class_name: 'Digitization::Book',
-                        foreign_key: :digitization_batch_artifact_setup_ingests_id,
-                        inverse_of: false
-  has_many :completed, dependent: :nullify, class_name: 'Digitization::Book',
+  has_many :processing_books, -> { where(batch_ingest_status: :processing) } , dependent: :nullify, class_name: 'Digitization::Book',
                        foreign_key: :digitization_batch_artifact_setup_ingests_id,
                        inverse_of: false
-  has_many :failed, dependent: :nullify, class_name: 'Digitization::Book',
-                    foreign_key: :digitization_batch_artifact_setup_ingests_id,
-                    inverse_of: false
+  has_many :completed_books, -> {  where(batch_ingest_status: :completed) } , dependent: :nullify, class_name: 'Digitization::Book',
+                       foreign_key: :digitization_batch_artifact_setup_ingests_id,
+                       inverse_of: false
+  has_many :failed_books, -> {  where(batch_ingest_status: :failed) } , dependent: :nullify, class_name: 'Digitization::Book',
+                       foreign_key: :digitization_batch_artifact_setup_ingests_id,
+                       inverse_of: false
 
   has_one_attached :csvfile
 
@@ -32,21 +30,11 @@ class Digitization::BatchArtifactSetupIngest < ApplicationRecord
     end
   end
 
-  def processing!(book)
-    update(status: :processing) if failed.blank?
-    processing << book
+  def completed?
+    processing_books.count == 0 && failed_books.count == 0
   end
 
-  def completed!(book)
-    processing.delete book
-    completed << book
-    update(status: :completed) if processing.empty? && failed.empty?
+  def failed?
+    failed_books.count
   end
-
-  def failed!(book)
-    update(status: :failed)
-    processing.delete book
-    failed << book
-  end
-
 end
