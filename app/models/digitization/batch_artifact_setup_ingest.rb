@@ -2,15 +2,18 @@ class Digitization::BatchArtifactSetupIngest < ApplicationRecord
 
   belongs_to :user
 
-  has_many :processing_books, -> { where(batch_ingest_status: :processing) } , dependent: :nullify, class_name: 'Digitization::Book',
-                       foreign_key: :digitization_batch_artifact_setup_ingests_id,
-                       inverse_of: false
-  has_many :completed_books, -> {  where(batch_ingest_status: :completed) } , dependent: :nullify, class_name: 'Digitization::Book',
-                       foreign_key: :digitization_batch_artifact_setup_ingests_id,
-                       inverse_of: false
-  has_many :failed_books, -> {  where(batch_ingest_status: :failed) } , dependent: :nullify, class_name: 'Digitization::Book',
-                       foreign_key: :digitization_batch_artifact_setup_ingests_id,
-                       inverse_of: false
+  has_many :processing_books, -> { where(batch_ingest_status: :processing) },
+           dependent: :nullify, class_name: 'Digitization::Book',
+           foreign_key: :digitization_batch_artifact_ingests_id,
+           inverse_of: false
+  has_many :completed_books, -> { where(batch_ingest_status: :completed) },
+           dependent: :nullify, class_name: 'Digitization::Book',
+           foreign_key: :digitization_batch_artifact_ingests_id,
+           inverse_of: false
+  has_many :failed_books, -> { where(batch_ingest_status: :failed) },
+           dependent: :nullify, class_name: 'Digitization::Book',
+           foreign_key: :digitization_batch_artifact_ingests_id,
+           inverse_of: false
 
   has_one_attached :csvfile
 
@@ -37,4 +40,5 @@ class Digitization::BatchArtifactSetupIngest < ApplicationRecord
   def failed?
     failed_books.count
   end
+
 end
