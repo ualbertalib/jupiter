@@ -6,6 +6,12 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 ## [Unreleased]
 
+
+## [2.1.1] - 2021-11-24
+
+## Fixed
+- bump `ruby-saml` to resolve compatability issue with `rexml` [#2636](https://github.com/ualbertalib/jupiter/issues/2636)
+
 ## [2.1.0] - 2021-10-21
 
 ### Added

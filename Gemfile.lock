@@ -390,8 +390,9 @@ GEM
       rack (>= 1.1)
       rubocop (>= 0.90.0, < 2.0)
     ruby-progressbar (1.11.0)
-    ruby-saml (1.11.0)
-      nokogiri (>= 1.5.10)
+    ruby-saml (1.12.2)
+      nokogiri (>= 1.10.5)
+      rexml
     ruby-vips (2.0.17)
       ffi (~> 1.9)
     ruby2_keywords (0.0.4)
@@ -582,4 +583,4 @@ DEPENDENCIES
   wicked
 
 BUNDLED WITH
-   2.1.4
+   2.2.32
