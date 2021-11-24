@@ -5,13 +5,13 @@ class Digitization::BatchArtifactsSetupIngestionJob < ApplicationJob
   queue_as :default
 
   rescue_from(StandardError) do |exception|
-    batch_artifact_setup_ingest = arguments.first
-    batch_artifact_setup_ingest.update(error_message: exception.message, status: :failed)
+    batch_artifact_ingest = arguments.first
+    batch_artifact_ingest.update(error_message: exception.message, status: :failed)
     raise exception
   end
 
-  def perform(batch_artifact_setup_ingest)
-    batch_artifact_setup_ingest.csvfile.open do |file|
+  def perform(batch_artifact_ingest)
+    batch_artifact_ingest.csvfile.open do |file|
       CSV.foreach(file.path, headers: true) do |row|
         peel_number = row['Code'].match PEEL_ID_REGEX
         peel_id = peel_number[1]
@@ -19,7 +19,7 @@ class Digitization::BatchArtifactsSetupIngestionJob < ApplicationJob
 
         noid = row['Noid']
 
-        Digitization::BatchArtifactIngestJob.perform_later(batch_artifact_setup_ingest, peel_id, part_number, noid)
+        Digitization::BatchArtifactIngestJob.perform_later(batch_artifact_ingest, peel_id, part_number, noid)
       end
     end
   end

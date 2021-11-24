@@ -122,14 +122,14 @@ ActiveRecord::Schema.define(version: 2021_11_18_234306) do
     t.index ["owner_id"], name: "index_communities_on_owner_id"
   end
 
-  create_table "digitization_batch_artifact_setup_ingests", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "digitization_batch_artifact_ingests", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.integer "status", default: 0, null: false
     t.string "error_message"
     t.string "archival_information_package_path"
     t.bigint "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["user_id"], name: "index_digitization_batch_artifact_setup_ingests_on_user_id"
+    t.index ["user_id"], name: "index_digitization_batch_artifact_ingests_on_user_id"
   end
 
   create_table "digitization_batch_metadata_ingests", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -168,13 +168,13 @@ ActiveRecord::Schema.define(version: 2021_11_18_234306) do
     t.string "visibility"
     t.bigint "owner_id", null: false
     t.uuid "digitization_batch_metadata_ingest_id"
-    t.uuid "digitization_batch_artifact_setup_ingests_id"
+    t.uuid "digitization_batch_artifact_ingests_id"
     t.bigint "logo_id"
     t.string "swift_noid"
     t.string "swift_container"
     t.string "preservation_storage"
     t.integer "batch_ingest_status", default: 0, null: false
-    t.index ["digitization_batch_artifact_setup_ingests_id"], name: "index_digitization_books_on_batch_artifact_setup_ingest_id"
+    t.index ["digitization_batch_artifact_ingests_id"], name: "index_digitization_books_on_batch_artifact_ingest_id"
     t.index ["digitization_batch_metadata_ingest_id"], name: "index_digitization_books_on_batch_metadata_ingest_id"
     t.index ["logo_id"], name: "index_digitization_books_on_logo_id"
     t.index ["owner_id"], name: "index_digitization_books_on_owner_id"
@@ -500,10 +500,10 @@ ActiveRecord::Schema.define(version: 2021_11_18_234306) do
   add_foreign_key "batch_ingests", "users"
   add_foreign_key "collections", "users", column: "owner_id"
   add_foreign_key "communities", "users", column: "owner_id"
-  add_foreign_key "digitization_batch_artifact_setup_ingests", "users"
+  add_foreign_key "digitization_batch_artifact_ingests", "users"
   add_foreign_key "digitization_batch_metadata_ingests", "users"
   add_foreign_key "digitization_books", "active_storage_attachments", column: "logo_id", on_delete: :nullify
-  add_foreign_key "digitization_books", "digitization_batch_artifact_setup_ingests", column: "digitization_batch_artifact_setup_ingests_id"
+  add_foreign_key "digitization_books", "digitization_batch_artifact_ingests", column: "digitization_batch_artifact_ingests_id"
   add_foreign_key "digitization_books", "digitization_batch_metadata_ingests"
   add_foreign_key "digitization_books", "users", column: "owner_id"
   add_foreign_key "digitization_fulltexts", "digitization_books"

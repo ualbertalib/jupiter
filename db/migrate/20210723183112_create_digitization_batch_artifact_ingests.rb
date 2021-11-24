@@ -1,6 +1,6 @@
-class CreateDigitizationBatchArtifactSetupIngests < ActiveRecord::Migration[6.0]
+class CreateDigitizationBatchArtifactIngests < ActiveRecord::Migration[6.0]
   def change
-    create_table :digitization_batch_artifact_setup_ingests, id: :uuid do |t|
+    create_table :digitization_batch_artifact_ingests, id: :uuid do |t|
 
       t.integer :status, default: 0, null: false
       t.string :error_message

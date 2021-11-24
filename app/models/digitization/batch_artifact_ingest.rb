@@ -1,4 +1,4 @@
-class Digitization::BatchArtifactSetupIngest < ApplicationRecord
+class Digitization::BatchArtifactIngest < ApplicationRecord
 
   belongs_to :user
 
