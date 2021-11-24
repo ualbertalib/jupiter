@@ -5,22 +5,22 @@ class Digitization::BatchMetadataIngestionJob < ApplicationJob
   queue_as :default
 
   rescue_from(StandardError) do |exception|
-    batch_ingest = arguments.first
-    batch_ingest.update(error_message: exception.message, status: :failed)
+    batch_metadata_ingest = arguments.first
+    batch_metadata_ingest.update(error_message: exception.message, status: :failed)
     raise exception
   end
 
-  def perform(batch_ingest)
-    batch_ingest.processing!
+  def perform(batch_metadata_ingest)
+    batch_metadata_ingest.processing!
 
     ActiveRecord::Base.transaction do
-      batch_ingest.csvfile.open do |file|
+      batch_metadata_ingest.csvfile.open do |file|
         graph = metadata_graph(file.path)
-        create_items_from_graph(graph, batch_ingest)
+        create_items_from_graph(graph, batch_metadata_ingest)
       end
     end
 
-    batch_ingest.completed!
+    batch_metadata_ingest.completed!
   end
 
   private
@@ -45,7 +45,7 @@ class Digitization::BatchMetadataIngestionJob < ApplicationJob
   end
 
   # For more information about the query patterns used see here https://rubydoc.info/github/ruby-rdf/rdf/RDF/Query
-  def create_items_from_graph(graph, batch_ingest)
+  def create_items_from_graph(graph, batch_metadata_ingest)
     # First we need to locate all the discrete items we will be ingesting
     query_for_local_identifiers = RDF::Query.new do
       pattern [:collection, ::TERMS[:rdau].part, :item_identifier]
@@ -53,7 +53,7 @@ class Digitization::BatchMetadataIngestionJob < ApplicationJob
 
     graph.query(query_for_local_identifiers) do |statement|
       # Each of the discrete items will become its own object
-      book = batch_ingest.books.new(owner_id: batch_ingest.user_id)
+      book = batch_metadata_ingest.books.new(owner_id: batch_metadata_ingest.user_id)
 
       # Now we want know all about each item
       query_for_this_items_attributes = RDF::Query.new do

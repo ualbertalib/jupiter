@@ -3,8 +3,8 @@ class Digitization::BatchArtifactIngestJob < ApplicationJob
   queue_as :default
 
   rescue_from(StandardError) do |exception|
-    batch_ingest = arguments.first
-    batch_ingest.update(error_message: exception.message)
+    batch_artifact_setup_ingest = arguments.first
+    batch_artifact_setup_ingest.update(error_message: exception.message)
 
     book = Digitization::Book.find_by(peel_id: arguments[1], part_number: arguments[2])
     book.failed! if book.present?
@@ -12,15 +12,15 @@ class Digitization::BatchArtifactIngestJob < ApplicationJob
     raise exception
   end
 
-  def perform(batch_ingest, peel_id, part_number, noid)
+  def perform(batch_artifact_setup_ingest, peel_id, part_number, noid)
     book = Digitization::Book.find_by!(peel_id: peel_id, part_number: part_number)
     book.processing!
 
     add_link_to_preservation_storage(book, noid)
 
-    add_pdf(batch_ingest, book, noid)
+    add_pdf(batch_artifact_setup_ingest, book, noid)
 
-    add_fulltext(batch_ingest, book, noid)
+    add_fulltext(batch_artifact_setup_ingest, book, noid)
 
     book.completed! if book.save!
   end
@@ -33,15 +33,16 @@ class Digitization::BatchArtifactIngestJob < ApplicationJob
     book.swift_noid = noid
   end
 
-  def add_pdf(batch_ingest, book, noid)
-    File.open("#{batch_ingest.archival_information_package_path}#{noid}/pdf/1.pdf", 'r') do |high_res_pdf|
+  def add_pdf(batch_artifact_setup_ingest, book, noid)
+    File.open("#{batch_artifact_setup_ingest.archival_information_package_path}#{noid}/pdf/1.pdf",
+              'r') do |high_res_pdf|
       book.add_and_ingest_files([high_res_pdf])
     end
     book.set_thumbnail(book.files.first) if book.files.first.present?
   end
 
-  def add_fulltext(batch_ingest, book, noid)
-    path_to_ocr_xml = "#{batch_ingest.archival_information_package_path}#{noid}/alto"
+  def add_fulltext(batch_artifact_setup_ingest, book, noid)
+    path_to_ocr_xml = "#{batch_artifact_setup_ingest.archival_information_package_path}#{noid}/alto"
     fulltext = extract_alto_fulltext(path_to_ocr_xml)
     book.create_fulltext!(text: fulltext)
   end

@@ -53,12 +53,14 @@ namespace :digitization do
     end
 
     if File.exist?(args.csv_path) && File.exist?(args.archival_information_package_path)
-      batch_ingest = user.digitization_artifact_setup_ingests.new
-      batch_ingest.csvfile.attach(io: File.open(args.csv_path.to_s),
-                                  filename: 'batch_manifest.csv')
-      batch_ingest.archival_information_package_path = args.archival_information_package_path
+      batch_artifact_setup_ingest = user.digitization_artifact_setup_ingests.new
+      batch_artifact_setup_ingest.csvfile.attach(io: File.open(args.csv_path.to_s),
+                                                 filename: 'batch_manifest.csv')
+      batch_artifact_setup_ingest.archival_information_package_path = args.archival_information_package_path
 
-      Digitization::BatchArtifactsSetupIngestionJob.perform_later(batch_ingest) if batch_ingest.save
+      if batch_artifact_setup_ingest.save
+        Digitization::BatchArtifactsSetupIngestionJob.perform_later(batch_artifact_setup_ingest)
+      end
     else
       unless File.exist?(args.csv_path)
         log "ERROR: Could not open file at `#{args.csv_path}`. Does the csv file exist at this location?"
