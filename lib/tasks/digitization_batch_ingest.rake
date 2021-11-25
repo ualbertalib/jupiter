@@ -29,7 +29,7 @@ namespace :digitization do
       exit 1
     end
 
-    log 'FINISH: Batch ingest enqueued!'
+    log "FINISH: Batch metadata ingest #{batch_ingest.id} enqueued!"
   end
 
   desc 'batch ingest for multiple items artifacts'
@@ -70,7 +70,7 @@ namespace :digitization do
       exit 1
     end
 
-    log 'FINISH: Batch ingest completed!'
+    log 'FINISH: Batch artifact ingest #{batch_artifact_setup_ingest.id} enqueued!'
   end
 
   def log(message)

@@ -31,6 +31,7 @@ class Digitization::BatchArtifactIngestJob < ApplicationJob
     book.preservation_storage = 'OpenStack/Swift'
     book.swift_container = 'peel'
     book.swift_noid = noid
+    book.save!
   end
 
   def add_pdf(batch_artifact_ingest, book, noid)

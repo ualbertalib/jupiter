@@ -24,6 +24,7 @@ class Digitization::BatchArtifactIngestJobTest < ActiveJob::TestCase
     assert_equal('peel', book.swift_container)
     assert_equal('OpenStack/Swift', book.preservation_storage)
     assert(book.files.attached?)
+    assert(book.thumbnail_file.present?)
     assert(book.fulltext.present?)
     assert_nothing_raised do
       ActiveStorage::Blob.find(book.files.first.blob_id).download
