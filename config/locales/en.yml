@@ -195,7 +195,16 @@ en:
                 embargo_missing_required_data: 'Embargo end date and visibility after embargo is required for embargo items. Missing data was not found for row %{row_number} of spreadsheet'
                 column_not_found: "%{column} does not exist in ERA for row %{row_number} of spreadsheet"
                 no_matching_files: "file_name for row %{row_number} of spreadsheet has no matching files below"
-                spreadsheet_could_not_be_read: "Spreadsheet could not be read. Please follow the template spreadsheet as an example"
+                spreadsheet_could_not_be_read: "Spreadsheet could not be read. Please follow the template spreadsheet as an example"  
+        digitization/batch_artifact_ingest:
+          attributes:
+            csvfile:
+              missing_required_column: "%{column} is required and was not found for row %{row_number} of spreadsheet"
+        digitization/batch_metadata_ingest:
+          attributes:
+            csvfile:
+              missing_required_column: "%{column} is required and was not found for row %{row_number} of spreadsheet"
+              missing_local_identifiers: 'Graph contains no local identifiers'
   application:
     navbar:
       era_logo_alt: 'ERA - Education and Research Archive'

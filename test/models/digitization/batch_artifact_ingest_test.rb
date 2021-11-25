@@ -27,7 +27,8 @@ class Digitization::BatchArtifactIngestTest < ActiveSupport::TestCase
 
     assert_not @batch_artifact_ingest.valid?
 
-    errors = ['Local Identifier (Code) not found for row 1 of spreadsheet', 'Noid not found for row 1 of spreadsheet']
+    errors = ['Code is required and was not found for row 1 of spreadsheet',
+              'Noid is required and was not found for row 1 of spreadsheet']
     assert_equal(errors, @batch_artifact_ingest.errors[:csvfile])
   end
 

@@ -19,9 +19,12 @@ class Digitization::BatchMetadataIngest < ApplicationRecord
     graph = RDF::Graph.new
     CSV.foreach(attachment_changes['csvfile'].attachable[:io].path, headers: true) do |row|
       # Check if required fields are filled out
-      errors.add(:csvfile, "Entity not found for row #{$INPUT_LINE_NUMBER} of spreadsheet") if row['Entity'].blank?
-      errors.add(:csvfile, "Property not found for row #{$INPUT_LINE_NUMBER} of spreadsheet") if row['Property'].blank?
-      errors.add(:csvfile, "Value not found for row #{$INPUT_LINE_NUMBER} of spreadsheet") if row['Value'].blank?
+      ['Entity', 'Property', 'Value'].each do |required_column|
+        if row[required_column].blank?
+          errors.add(:csvfile, :missing_required_column, column: required_column,
+                                                         row_number: $INPUT_LINE_NUMBER)
+        end
+      end
       next if errors.present?
 
       subject = RDF::URI.new(row['Entity'], validate: true)
@@ -38,7 +41,7 @@ class Digitization::BatchMetadataIngest < ApplicationRecord
       pattern [:collection, RDF::URI.new('http://rdaregistry.info/Elements/u/P60249'), :item_identifier]
     end
 
-    errors.add(:csvfile, 'Graph contains no local identifiers') if graph.query(query_for_local_identifiers).blank?
+    errors.add(:csvfile, :missing_local_identifiers) if graph.query(query_for_local_identifiers).blank?
   end
 
 end

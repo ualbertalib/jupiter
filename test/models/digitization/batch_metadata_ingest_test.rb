@@ -33,8 +33,10 @@ class Digitization::BatchMetadataIngestTest < ActiveSupport::TestCase
 
     assert_not @batch_ingest.valid?
 
-    errors = ['Entity not found for row 1 of spreadsheet', 'Property not found for row 1 of spreadsheet',
-              'Value not found for row 1 of spreadsheet', 'Graph contains no local identifiers']
+    errors = ['Entity is required and was not found for row 1 of spreadsheet',
+              'Property is required and was not found for row 1 of spreadsheet',
+              'Value is required and was not found for row 1 of spreadsheet',
+              'Graph contains no local identifiers']
     assert_equal(errors, @batch_ingest.errors[:csvfile])
   end
 

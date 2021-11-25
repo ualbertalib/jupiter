@@ -70,7 +70,7 @@ namespace :digitization do
       exit 1
     end
 
-    log 'FINISH: Batch artifact ingest #{batch_artifact_setup_ingest.id} enqueued!'
+    log "FINISH: Batch artifact ingest #{batch_artifact_setup_ingest.id} enqueued!"
   end
 
   def log(message)

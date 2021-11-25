@@ -25,11 +25,12 @@ class Digitization::BatchArtifactIngest < ApplicationRecord
 
     CSV.foreach(attachment_changes['csvfile'].attachable[:io].path, headers: true) do |row|
       # Check if required fields are filled out
-      if row['Code'].blank?
-        errors.add(:csvfile,
-                   "Local Identifier (Code) not found for row #{$INPUT_LINE_NUMBER} of spreadsheet")
+      ['Code', 'Noid'].each do |required_column|
+        if row[required_column].blank?
+          errors.add(:csvfile, :missing_required_column, column: required_column,
+                                                         row_number: $INPUT_LINE_NUMBER)
+        end
       end
-      errors.add(:csvfile, "Noid not found for row #{$INPUT_LINE_NUMBER} of spreadsheet") if row['Noid'].blank?
     end
   end
 
