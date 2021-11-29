@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class Digitization::BatchArtifactSetupIngestionJobTest < ActiveJob::TestCase
+class Digitization::BatchArtifactsSetupIngestionJobTest < ActiveJob::TestCase
 
   test 'successful batch setup' do
     batch_artifact_setup_ingest = digitization_batch_artifact_setup_ingests(:digitization_batch_ingest_with_one_item)
