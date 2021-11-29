@@ -1,7 +1,5 @@
 class Digitization::BatchMetadataIngestionJob < ApplicationJob
 
-  PEEL_ID_REGEX = /P0*(\d+).(\d*)/.freeze
-
   queue_as :default
 
   rescue_from(StandardError) do |exception|
@@ -76,7 +74,7 @@ class Digitization::BatchMetadataIngestionJob < ApplicationJob
   # use: parse_identifier(book, 'P010572.1')
   # result: book.peel_id = 10572, book.part_number = 1
   def parse_identifier(book, term)
-    matches = term.match PEEL_ID_REGEX
+    matches = term.match Digitization::PEEL_ID_REGEX
     book.peel_id = matches[1]
     book.part_number = matches[2]
   end
