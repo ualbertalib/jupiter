@@ -125,7 +125,7 @@ ActiveRecord::Schema.define(version: 2021_11_18_234306) do
   create_table "digitization_batch_artifact_ingests", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.integer "status", default: 0, null: false
     t.string "error_message"
-    t.string "archival_information_package_path"
+    t.string "archival_information_package_path", null: false
     t.bigint "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

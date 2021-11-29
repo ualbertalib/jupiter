@@ -4,7 +4,7 @@ class CreateDigitizationBatchArtifactIngests < ActiveRecord::Migration[6.0]
 
       t.integer :status, default: 0, null: false
       t.string :error_message
-      t.string :archival_information_package_path
+      t.string :archival_information_package_path, null: false
 
       t.references :user, foreign_key: {to_table: :users, column: :id}
 
