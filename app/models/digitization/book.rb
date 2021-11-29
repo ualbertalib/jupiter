@@ -5,6 +5,7 @@ class Digitization::Book < JupiterCore::Depositable
   enum batch_ingest_status: { created: 0, processing: 1, completed: 2, failed: 3 }
 
   belongs_to :digitization_batch_metadata_ingest, optional: true
+  belongs_to :digitization_batch_artifact_ingest, optional: true
 
   has_one_attached :historical_archive
   has_one :fulltext, dependent: :destroy, class_name: 'Digitization::Fulltext', inverse_of: :book,
