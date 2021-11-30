@@ -1,11 +1,11 @@
 <%# TODO: Reduce duplication between this partial and thesis, pretty much exactly the same %>
 <div class="media mb-3">
-  <%= link_to item_path(book) do %>
+  <%= link_to digitization_book_path(book) do %>
     <%= render partial: 'thumbnail', locals: { object: book } %>
   <% end %>
   <div class="media-body ml-3">
     <div class="d-flex flex-wrap flex-lg-nowrap align-books-start">
-      <h3 class="mt-0 h5 mr-auto"><%= link_to book.title, item_path(book) %></h3>
+      <h3 class="mt-0 h5 mr-auto"><%= link_to book.title, digitization_book_path(book) %></h3>
       <% if policy(book).download? %>
         <% primary_file = book.files.first %>
         <% if primary_file.present? && primary_file.fileset_uuid.present? %>
