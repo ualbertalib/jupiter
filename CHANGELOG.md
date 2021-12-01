@@ -9,6 +9,8 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+## [2.3.0] - 2021-12-01
+
 - The EZID Compatibility API is sunsetting at the end of this year, per https://blog.datacite.org/sunsetting-of-the-ez-api/.  [datacite-client](https://github.com/pgwillia/datacite-client) is a ruby gem that wraps the [Datacite API](https://support.datacite.org/reference/introduction) for our use.  The main changes are the DOI's no longer have the `doi:` prefix, the format of metadata attributes, and the event mechanism for publishing/hiding the metadata from the public. Requires `datacite_api` feature flag and new secrets for our datacite credentials. [#2268](https://github.com/ualbertalib/jupiter/issues/2268)
 
 - We had a request by a researcher to attach several 2.8 Gb zip files to an existing object.  We couldn't fulfill this request because of the way we were storing metadata about the file.  Using `Integer` put an artificial limitation of 2,147,483,647 (2^31-1) on the size of files we could attach.  We migrate the `byte_size` of blobs to use `BigInt`, 9,223,372,036,854,775,807 (2^63-1), instead.
@@ -19,6 +21,7 @@ New entries in this file should aim to provide a meaningful amount of informatio
 - revise uat deploy configuration and watchtower script [#1985](https://github.com/ualbertalib/jupiter/issues/1985)
 - fixes: Docker demo Redis bad URI error [#2610](https://github.com/ualbertalib/jupiter/issues/2610)
 - add `strong_migrations` to catch unsafe migrations in development [#2621](https://github.com/ualbertalib/jupiter/issues/2621)
+- Upgrade Rails to version 6.1 [#2079](https://github.com/ualbertalib/jupiter/issues/2079)
 
 ## [2.2.0] - 2021-10-21
 
@@ -110,7 +113,6 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 - Added oaisys tests [#1888](https://github.com/ualbertalib/jupiter/issues/1888)
 - Initialize disabled ReadOnlyMode [#2100](https://github.com/ualbertalib/jupiter/issues/2100)
 - Updated Architecture diagrams [PR#2135](https://github.com/ualbertalib/jupiter/pull/2135)
-- Upgrade Rails to version 6.1 [#2079](https://github.com/ualbertalib/jupiter/issues/2079)
 
 ### Removed
 - Remove entirely unnecessary config file. [PR#2044](https://github.com/ualbertalib/jupiter/pull/2044)
