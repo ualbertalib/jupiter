@@ -9,6 +9,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+- Jupiter II work is continuing to incorporate Digitized materials into Jupiter in the digitalcollections namespace.
+  - Add task that will kick off job for attaching artifacts (high resolution pdf, full text, and link to preservation storage) to digitization objects [#2011](https://github.com/ualbertalib/jupiter/issues/2011)
+
 ### Fixed
 - nil Class error when viewing Collections drop down on Communities page [#2655](https://github.com/ualbertalib/jupiter/issues/2655)
 - Render markdown when viewing Communities as an administrator [#1322](https://github.com/ualbertalib/jupiter/issues/1322)
@@ -26,9 +29,6 @@ New entries in this file should aim to provide a meaningful amount of informatio
 - The EZID Compatibility API is sunsetting at the end of this year, per https://blog.datacite.org/sunsetting-of-the-ez-api/.  [datacite-client](https://github.com/pgwillia/datacite-client) is a ruby gem that wraps the [Datacite API](https://support.datacite.org/reference/introduction) for our use.  The main changes are the DOI's no longer have the `doi:` prefix, the format of metadata attributes, and the event mechanism for publishing/hiding the metadata from the public. Requires `datacite_api` feature flag and new secrets for our datacite credentials. [#2268](https://github.com/ualbertalib/jupiter/issues/2268)
 
 - We had a request by a researcher to attach several 2.8 Gb zip files to an existing object.  We couldn't fulfill this request because of the way we were storing metadata about the file.  Using `Integer` put an artificial limitation of 2,147,483,647 (2^31-1) on the size of files we could attach.  We migrate the `byte_size` of blobs to use `BigInt`, 9,223,372,036,854,775,807 (2^63-1), instead.
-
-- Jupiter II work is continuing to incorporate Digitized materials into Jupiter in the digitalcollections namespace.
-  - Add task that will kick off job for attaching artifacts (high resolution pdf, full text, and link to preservation storage) to digitization objects [#2011](https://github.com/ualbertalib/jupiter/issues/2011)
 
 ### Chores
 - bump sidekiq-unique-jobs from 7.0.12 to 7.1.8 and fix a long missed deprecation
