@@ -1,11 +1,23 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-la_survivance:
-  publication_code: "LSV"
-  title: "La Survivance March 29, 1967"
-  year: "1967"
-  month: "03"
+central_alberta_news:
+  publication_code: "ACN"
+  title: "The advertiser and central Alberta news"
+  year: "1907"
+  month: "08"
   day: "29"
+  alternative_titles: ['Central Alberta news']
+  dates_issued: ['1907-08-29']
+  resource_type: <%= ControlledVocabulary.digitization.resource_type.from_value("Text") %>
+  genres: ['http://id.loc.gov/authorities/genreForms/gf2014026132']
+  languages: <%= [ControlledVocabulary.digitization.language.from_value("English")] %>
+  places_of_publication: ['http://id.loc.gov/authorities/names/n2002124886']
+  extent: 'v. : ill.'
+  notes: ['Weekly. Imprint varies. Published 1898 to 18 June 1908.']
+  geographic_subjects: ['http://id.loc.gov/authorities/names/n2002124886']
+  rights: 'https://creativecommons.org/share-your-work/public-domain/pdm/'
+  editions: ['1']
+  volume_label: 'v. 9 no. 10'
   date_ingested: "2000-01-01T00:00:00.007Z"
   record_created_at: "2000-01-01T00:00:00.007Z"
   owner: user_admin
