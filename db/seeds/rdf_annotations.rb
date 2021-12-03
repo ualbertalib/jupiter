@@ -115,5 +115,18 @@ RdfAnnotation.create!([
   {table: "digitization_maps", column: "date_ingested", predicate: "http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#dateIngested"},
   {table: "digitization_maps", column: "record_created_at", predicate: "http://terms.library.ualberta.ca/recordCreatedInJupiter"},
   {table: "digitization_books", column: "alternative_titles", predicate: "http://purl.org/dc/terms/alternative"},
-  {table: "digitization_books", column: "rights", predicate: "http://www.europeana.eu/schemas/edm/rights"}
+  {table: "digitization_books", column: "rights", predicate: "http://www.europeana.eu/schemas/edm/rights"},
+  {table: "digitization_newspapers", column: "dates_issued", predicate: "http://purl.org/dc/terms/issued"},
+  {table: "digitization_newspapers", column: "title", predicate: "http://purl.org/dc/terms/title"},
+  {table: "digitization_newspapers", column: "alternative_titles", predicate: "http://purl.org/dc/terms/alternative"},
+  {table: "digitization_newspapers", column: "resource_type", predicate: "http://purl.org/dc/terms/type"},
+  {table: "digitization_newspapers", column: "genres", predicate: "http://www.europeana.eu/schemas/edm/hasType"},
+  {table: "digitization_newspapers", column: "languages", predicate: "http://purl.org/dc/terms/language"},
+  {table: "digitization_newspapers", column: "places_of_publication", predicate: "http://id.loc.gov/vocabulary/relators/pup"},
+  {table: "digitization_newspapers", column: "extent", predicate: "http://rdaregistry.info/Elements/u/P60550"},
+  {table: "digitization_newspapers", column: "notes", predicate: "http://www.w3.org/2004/02/skos/core#note"},
+  {table: "digitization_newspapers", column: "geographic_subjects", predicate: "http://purl.org/dc/elements/1.1/coverage"},
+  {table: "digitization_newspapers", column: "rights", predicate: "http://www.europeana.eu/schemas/edm/rights"},
+  {table: "digitization_newspapers", column: "volume_label", predicate: "https://www.w3.org/TR/rdf-schema/#ch_label"},
+  {table: "digitization_newspapers", column: "editions", predicate: "http://id.loc.gov/ontologies/bibframe/editionStatement"}
 ])
