@@ -9,13 +9,13 @@ central_alberta_news:
   alternative_titles: ['Central Alberta news']
   dates_issued: ['1907-08-29']
   resource_type: <%= ControlledVocabulary.digitization.resource_type.from_value("Text") %>
-  genres: ['http://id.loc.gov/authorities/genreForms/gf2014026132']
+  genres: <%= [ControlledVocabulary.digitization.genre.from_value("Newspapers")] %>
   languages: <%= [ControlledVocabulary.digitization.language.from_value("English")] %>
-  places_of_publication: ['http://id.loc.gov/authorities/names/n2002124886']
+  places_of_publication: <%= [ControlledVocabulary.digitization.subject.from_value("Lacombe (Alta.)")] %>
   extent: 'v. : ill.'
   notes: ['Weekly. Imprint varies. Published 1898 to 18 June 1908.']
-  geographic_subjects: ['http://id.loc.gov/authorities/names/n2002124886']
-  rights: 'https://creativecommons.org/share-your-work/public-domain/pdm/'
+  geographic_subjects: <%= [ControlledVocabulary.digitization.subject.from_value("Lacombe (Alta.)")] %>
+  rights: <%= ControlledVocabulary.digitization.rights.from_value("No Known Copyright") %>
   editions: ['1']
   volume_label: 'v. 9 no. 10'
   date_ingested: "2000-01-01T00:00:00.007Z"
