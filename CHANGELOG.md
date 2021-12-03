@@ -9,10 +9,13 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+- Jupiter II work is continuing to incorporate Digitized materials into Jupiter in the digitalcollections namespace.
+  - newspaper metadata for ACN digitization [#2645](https://github.com/ualbertalib/jupiter/issues/2645)
+  
 ## [2.3.1] - 2021-12-07
 
 - Fix Gemfile so that `strong_migrations` is usesd in all environments
-
+  
 ## [2.3.0] - 2021-12-01
 
 - The EZID Compatibility API is sunsetting at the end of this year, per https://blog.datacite.org/sunsetting-of-the-ez-api/.  [datacite-client](https://github.com/pgwillia/datacite-client) is a ruby gem that wraps the [Datacite API](https://support.datacite.org/reference/introduction) for our use.  The main changes are the DOI's no longer have the `doi:` prefix, the format of metadata attributes, and the event mechanism for publishing/hiding the metadata from the public. Requires `datacite_api` feature flag and new secrets for our datacite credentials. [#2268](https://github.com/ualbertalib/jupiter/issues/2268)
