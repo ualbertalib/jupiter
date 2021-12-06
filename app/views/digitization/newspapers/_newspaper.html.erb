@@ -1,0 +1,94 @@
+<%# Be cautious of refactoring to decrease duplication with item and thesis.  Ordering attributes depending on context is highly desired. %>
+<ul class="list-group">
+  <% if @digitization_newspaper.alternative_title.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <p title="<%= t('items.show.alternative_title') %>"><%= @digitization_newspaper.alternative_title %></p>
+    </li>
+  <% end %>
+
+  <% if @digitization_newspaper.description.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <p title="<%= t('.description') %>"><%= @digitization_newspaper.description %></p>
+    </li>
+  <% end %>
+
+  <% if @digitization_newspaper.creation_date.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <dl>
+        <dt><%= t('.created') %></dt>
+        <% if @digitization_newspaper.sort_year.present? %>
+          <%# Display the recorded date created, but link to searching on the facetable sort year if it is present %>
+          <dd><%= search_link_for(@digitization_newspaper, :sort_year, display: humanize_date(@digitization_newspaper.creation_date), facet: :range_facet) %></dd>
+        <% else %>
+          <dd><%= humanize_date(@digitization_newspaper.creation_date) %></dd>
+        <% end %>
+      </dl>
+    </li>
+  <% end %>
+
+  <% if @digitization_newspaper.volume_label.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <dl>
+        <dt><%= t('.volume_label') %></dt>
+        <dd><%= @digitization_newspaper.volume_label %></dd>
+      </dl>
+    </li>
+  <% end %>
+
+  <% if @digitization_newspaper.all_subjects.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <dl>
+        <dt><%= t('items.show.subject') %></dt>
+        <dd>
+          <ul class="list-unstyled">
+            <% @digitization_newspaper.all_subjects.each do |subject| %>
+              <li><%= subject_search_link(@digitization_newspaper, subject) %></li>
+            <% end %>
+          </ul>
+        </dd>
+      </dl>
+    </li>
+  <% end %>
+
+ <% if @digitization_newspaper.resource_type.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <dl>
+        <dt><%= t('.item_type') %></dt>
+        <dd><%= type_search_link(@digitization_newspaper) %></dd>
+      </dl>
+    </li>
+  <% end %>
+
+  <li class="list-unstyled list-group-item-action">
+    <dl>
+      <dt><%= t('items.show.license') %></dt>
+      <% if @digitization_newspaper.rights.present? %>
+        <dd><%= rights_search_link(@digitization_newspaper) %></dd>
+      <% end %>
+    </dl>
+  </li>
+</ul>
+
+<%# ADDITIONAL INFORMATION %>
+<button type="button"
+        data-toggle="collapse"
+        data-target="#more-information-hidden"
+        aria-expanded="false"
+        aria-controls="more-information-hidden"
+        class="btn btn-outline-secondary mb-3 js-more-information-btn font-italic">
+    <span class="js-more-information-hidden">
+      <%= t(:more_information) %>
+      <%= icon('fas', 'chevron-down') %>
+    </span>
+
+    <span class="d-none js-more-information-shown">
+      <%= t(:show_less) %>
+      <%= icon('fas', 'chevron-up') %>
+    </span>
+</button>
+
+<div class="collapse" id='more-information-hidden'>
+  <%= render partial: 'item_more_information' %>
+</div>
+
+<%= render partial: 'edit_history', locals: { item: @digitization_newspaper } %>

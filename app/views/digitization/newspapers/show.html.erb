@@ -1,22 +1,85 @@
-<dl>
-<% if @digitization_newspaper.publication_code.present? %>
-  <dt><%= t('digitization.publication_code') %></dt>
-  <dd><%= @digitization_newspaper.publication_code %></dd>
+<%# TODO: Google Scholar Metadata %>
+
+<% content_for :extra_social_meta do %>
+
+  <% if @digitization_newspaper.copyright.present? %>
+    <meta name="twitter:label2" content="Rights">
+    <meta name="twitter:data2" content="<%= @digitization_newspaper.copyright %>">
+  <% end %>
 <% end %>
 
-<% if @digitization_newspaper.year.present? %>
-  <dt><%= t('digitization.year') %></dt>
-  <dd><%= @digitization_newspaper.year %></dd>
-<% end %>
+<% page_title(@digitization_newspaper.title) %>
+<% page_description(description(@digitization_newspaper)) %>
 
-<% if @digitization_newspaper.month.present? %>
-  <dt><%= t('digitization.month') %></dt>
-  <dd><%= @digitization_newspaper.month %></dd>
-<% end %>
+<div class="container mt-3">
 
-<% if @digitization_newspaper.day.present? %>
-  <dt><%= t('digitization.day') %></dt>
-  <dd><%= @digitization_newspaper.day %></dd>
-<% end %>
+  <%# Breadcrumbs here are for 'Home->Search->Item' %>
+  <%# Community/collection based links appear in own section below' %>
+  <div class="item-breadcrumb">
+    <ol class="breadcrumb mb-1">
+      <li class="breadcrumb-item">
+        <%= link_to(t(:home), root_path) %>
+      </li>
+      <li class="breadcrumb-item">
+        <%= link_to(t(:search_label), search_path) %>
+      </li>
+      <li class="breadcrumb-item active"><%= @digitization_newspaper.title %></li>
+    </ol>
+  </div>
 
-</dl>
+  <div class="row">
+    <%# LEFT SIDE %>
+    <div class="col-md-4 mt-5">
+      <%# FILES SIDEBAR %>
+
+      <%# COMMUNITY/COLLECTION PATHS %>
+      <div class="card">
+        <div class="card-header">
+          <%= t('digitization.collection.title') %>
+        </div>
+        <div class="card-body p-2">
+          <ul class="list-group">
+            <% @digitization_newspaper.each_community_collection do |community, collection| %>
+              <li class="list-group-item list-group-item-action">
+                <%= link_to(community.title, community_path(community)) %> /
+                <%= link_to(collection.title, community_collection_path(community, collection)) %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card mt-3">
+        <div class="card-header">
+          <%= t('.usage') %>
+        </div>
+        <div class="card-body p-2">
+          <ul class="list-group">
+            <li class="list-group-item"><%= t('.views', count: @views_count) %></li>
+            <li class="list-group-item"><%= t('.downloads', count: @downloads_count) %></li>
+          </ul>
+        </div>
+      </div>
+
+      <%# ADMIN SIDEBAR %>
+      <% if current_user&.admin? && display_admin_sidebar(@digitization_newspaper) %>
+        <%= render partial: 'admin_sidebar' %>
+      <% end %>
+    </div>
+
+    <%# MAIN CONTENT %>
+    <div class="col-md-8 pl-5 mt-5">
+      <% if policy(@digitization_newspaper).edit? %>
+        <%= link_to edit_item_path(@digitization_newspaper),
+                    class: 'btn btn-outline-secondary float-right' do %>
+            <%= icon('fas', 'edit') %>
+            <%= t('edit') %>
+        <% end %>
+      <% end %>
+
+      <h1 title="<%= t('items.show.title') %>"><%= @digitization_newspaper.title %></h1>
+
+      <%= render @digitization_newspaper %>
+    </div>
+  </div>
+</div>

@@ -557,6 +557,21 @@ en:
         language: 'Language'
         place_of_publication: 'Place of Publication'
         extent: 'Extent'
+    newspapers:
+      show:
+        usage: 'Usage'
+        views: 'Views'
+        downloads: 'Download'   
+      newspaper:
+        creators: 'Author / Creator'
+        description: 'Notes'
+        created: 'Date Created'
+        volume_label: 'Volume & Issue'
+        item_type: 'Type of Item'
+        genre: 'Genre'
+        language: 'Language'
+        place_of_publication: 'Place of Publication'
+        extent: 'Extent' 
     peel_image_id: 'Peel Image Id'
     peel_map_id: 'Peel Map Id'
     publication_code: 'Publication code'
