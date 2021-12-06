@@ -1,5 +1,7 @@
 class Digitization::Newspaper < JupiterCore::Depositable
 
+  acts_as_rdfable
+
   belongs_to :owner, class_name: 'User'
 
   validates :publication_code, uniqueness: { scope: [:year, :month, :day] }
