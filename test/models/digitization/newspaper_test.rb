@@ -17,7 +17,6 @@ class Digitization::NewspaperTest < ActiveSupport::TestCase
                                                day: '29')
     assert_not newspaper.valid?
     assert_equal('has already been taken', newspaper.errors[:publication_code].first)
-    newspaper.destroy
   end
 
   test 'invalid Peel newspaper' do

@@ -1,0 +1,79 @@
+<ul class="list-group">
+  <% if @digitization_newspaper.languages.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <dl>
+        <dt><%= t('digitization.newspapers.newspaper.language') %></dt>
+        <dd>
+          <ul class="list-unstyled">
+            <% @digitization_newspaper.languages.each do |language| %>
+              <li><%= language_search_link(@digitization_newspaper, language) %></li>
+            <% end %>
+          </ul>
+        </dd>
+      </dl>
+    </li>
+  <% end %>
+
+  <% if @digitization_newspaper.genres.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <dl>
+        <dt><%= t('digitization.newspapers.newspaper.genre') %></dt>
+        <dd>
+          <ul class="list-unstyled">
+            <% @digitization_newspaper.genres.each do |genre| %>
+              <li><%= genre_search_link(@digitization_newspaper, genre) %></li>
+            <% end %>
+          </ul>
+        </dd>
+      </dl>
+    </li>
+  <% end %>
+
+  <% if @digitization_newspaper.places_of_publication.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <dl>
+        <dt><%= t('digitization.newspapers.newspaper.place_of_publication') %></dt>
+        <dd>
+          <ul class="list-unstyled">
+            <% @digitization_newspaper.places_of_publication.each do |place| %>
+              <li><%= place_of_publication_search_link(@digitization_newspaper, place) %></li>
+            <% end %>
+          </ul>
+        </dd>
+      </dl>
+    </li>
+  <% end %>
+
+  <% if @digitization_newspaper.extent.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <dl>
+        <dt><%= t('digitization.newspapers.newspaper.extent') %></dt>
+        <dd><%= @digitization_newspaper.extent %></dd>
+      </dl>
+    </li>
+  <% end %>
+
+  <% if @digitization_newspaper.volume_label.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <dl>
+        <dt><%= t('digitization.newspapers.newspaper.extent') %></dt>
+        <dd><%= @digitization_newspaper.volume_label %></dd>
+      </dl>
+    </li>
+  <% end %>
+
+  <% if @digitization_newspaper.editions.present? %>
+    <li class="list-unstyled list-group-item-action">
+      <dl>
+        <dt><%= t('digitization.newspapers.newspaper.place_of_publication') %></dt>
+        <dd>
+          <ul class="list-unstyled">
+            <% @digitization_newspaper.editions.each do |edition| %>
+              <li><%= edition %></li>
+            <% end %>
+          </ul>
+        </dd>
+      </dl>
+    </li>
+  <% end %>
+</ul>

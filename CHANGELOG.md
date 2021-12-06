@@ -11,7 +11,8 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 - Jupiter II work is continuing to incorporate Digitized materials into Jupiter in the digitalcollections namespace.
   - newspaper metadata for ACN digitization [#2645](https://github.com/ualbertalib/jupiter/issues/2645)
-
+  - newspaper show page [#2649](https://github.com/ualbertalib/jupiter/issues/2649)
+  
 ### Fixed
 - nil Class error when viewing Collections drop down on Communities page [#2655](https://github.com/ualbertalib/jupiter/issues/2655)
 - Render markdown when viewing Communities as an administrator [#1322](https://github.com/ualbertalib/jupiter/issues/1322)
