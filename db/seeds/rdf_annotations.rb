@@ -127,6 +127,7 @@ RdfAnnotation.create!([
   {table: "digitization_newspapers", column: "notes", predicate: "http://www.w3.org/2004/02/skos/core#note"},
   {table: "digitization_newspapers", column: "geographic_subjects", predicate: "http://purl.org/dc/elements/1.1/coverage"},
   {table: "digitization_newspapers", column: "rights", predicate: "http://www.europeana.eu/schemas/edm/rights"},
-  {table: "digitization_newspapers", column: "volume_label", predicate: "https://www.w3.org/TR/rdf-schema/#ch_label"},
+  {table: "digitization_newspapers", column: "volume", predicate: "http://purl.org/ontology/bibo/volume"},
+  {table: "digitization_newspapers", column: "issue", predicate: "http://purl.org/ontology/bibo/issue"},
   {table: "digitization_newspapers", column: "editions", predicate: "http://id.loc.gov/ontologies/bibframe/editionStatement"}
 ])

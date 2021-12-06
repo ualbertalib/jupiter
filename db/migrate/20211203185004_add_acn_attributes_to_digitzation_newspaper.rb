@@ -12,7 +12,8 @@ class AddAcnAttributesToDigitzationNewspaper < ActiveRecord::Migration[6.1]
         t.text :notes, array: true
         t.string :geographic_subjects, array: true
         t.string :rights
-        t.string :volume_label
+        t.string :volume
+        t.string :issue
         t.string :editions, array: true
       end
     }
@@ -29,7 +30,8 @@ class AddAcnAttributesToDigitzationNewspaper < ActiveRecord::Migration[6.1]
       t.notes has_predicate: ::RDF::Vocab::SKOS.note
       t.geographic_subjects has_predicate: ::RDF::Vocab::DC11.coverage
       t.rights has_predicate: ::RDF::Vocab::EDM.rights
-      t.volume_label has_predicate: ::TERMS[:rdfs].ch_label
+      t.volume has_predicate: ::RDF::Vocab::BIBO.volume
+      t.issue has_predicate: ::RDF::Vocab::BIBO.issue
       t.editions has_predicate: ::RDF::Vocab::Bibframe.editionStatement
     end
   end
