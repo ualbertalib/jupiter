@@ -221,7 +221,8 @@ ActiveRecord::Schema.define(version: 2021_12_03_185004) do
     t.text "notes", array: true
     t.string "geographic_subjects", array: true
     t.string "rights"
-    t.string "volume_label"
+    t.string "volume"
+    t.string "issue"
     t.string "editions", array: true
     t.index ["owner_id"], name: "index_digitization_newspapers_on_owner_id"
     t.index ["publication_code", "year", "month", "day"], name: "unique_peel_newspaper", unique: true
