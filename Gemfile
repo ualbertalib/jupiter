@@ -29,6 +29,7 @@ gem 'connection_pool'
 gem 'pg', '~> 1.2.3'
 gem 'redis', '~> 4.1'
 gem 'rsolr'
+gem 'strong_migrations', '~> 0.7.8'
 
 # Authentication
 gem 'bcrypt', '>= 3.1.13'
@@ -101,8 +102,6 @@ group :development, :test do
   gem 'rubocop-minitest', require: false
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false
-
-  gem 'strong_migrations', '~> 0.7.8'
 end
 
 group :development do
