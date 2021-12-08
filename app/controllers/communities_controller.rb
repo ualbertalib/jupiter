@@ -34,7 +34,7 @@ class CommunitiesController < ApplicationController
       end
       format.js do
         # Used for the collapsable dropdown to show member collections
-        @collections = @community.collections.order(Collection.sort_order(params))
+        @collections = community.collections.order(Collection.sort_order(params))
         @community = community.decorate
       end
 

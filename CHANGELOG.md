@@ -9,6 +9,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+### Fixed
+- nil Class error when viewing Collections drop down on Communities page [#2655](https://github.com/ualbertalib/jupiter/issues/2655)
+
 ## [2.3.1] - 2021-12-07
 
 - Fix Gemfile so that `strong_migrations` is usesd in all environments
