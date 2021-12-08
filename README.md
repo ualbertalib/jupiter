@@ -253,7 +253,7 @@ modifying the config files, set the environment variable `RUN_FITS_CHARACTERIZAT
 
 # Batch Ingest
 
-Jupiter comes with a handy rake task for batch ingesting items/theses.
+## Jupiter comes with a handy rake task for batch ingesting items/theses.
 
 - First you need to provide a csv file which outlines all the items metadata you wish to ingest. An example template for what an expected csv file might look like can can be found [here](https://docs.google.com/spreadsheets/d/178o_-ZEV3Ii-IzJ0AcJQTQqFsH3Ew2WCgyj2aZw99iY/). You can make a copy of this template, fill it out with your items metadata, and then download the first sheet as a CSV file (File > Download as > Comma-seperated values (.csv, current sheet)).
 
@@ -272,6 +272,19 @@ Jupiter comes with a handy rake task for batch ingesting items/theses.
   ```
 
   After running the above command, you should have just successfully batch ingested your items into jupiter!
+
+## Jupiter also comes with a handy rake tasks for batch ingesting digitized books/newspapers.
+```shell
+rails digitization:batch_ingest_metadata -- -h
+Usage: rails digitization:batch_ingest_metadata -- [options]
+        --user EMAIL
+        --title TITLE
+        --csv FILE
+```
+So this can be used with a csv file containing triples
+```shell
+rails digitization:batch_ingest_metadata -- --user=<user name> --title=<descriptive title> --csv=<path to csvfile>
+```
 
 ## Items Batch Ingest via Google Drive for Admins
 Batch ingest for items can now also be done via the admin dashboard. There is a new tab called "Batch ingest" where you can create a new batch ingest by providing a manifest file and files from Google Drive.

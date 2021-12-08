@@ -1,34 +1,29 @@
 namespace :digitization do
   desc 'batch ingest for multiple items metadata from a csv file - used by Admin and Assistants'
-  task :batch_ingest_metadata, [:user, :title, :csv_path] => :environment do |_t, args|
+  task batch_ingest_metadata: :environment do
+    options = {}
+    parser = OptionParser.new
+    parser.accept(User) do |user_email|
+      User.find_by(email: user_email)
+    end
+    parser.accept(File) do |filename|
+      File.open(filename)
+    end
+    parser.banner = 'Usage: rails digitization:batch_ingest_metadata -- [options]'
+
+    parser.on('--user EMAIL', User) { |user| options[:user] = user }
+    parser.on('--title TITLE', String) { |title| options[:title] = title }
+    parser.on('--csv FILE', File) { |file| options[:csvfile] = file }
+
+    arguments = parser.order!(ARGV)
+    parser.parse!(arguments)
+
     log 'START: Digitization Batch ingest from triples started...'
 
-    user = User.find_by(email: args.user)
-    if user.blank?
-      log 'ERROR: Valid user must be selected. Please specify a valid email address as an argument'
-      exit 1
-    end
+    batch_ingest = options[:user].digitization_metadata_ingests.new(title: options[:title])
+    batch_ingest.csvfile.attach(io: options[:csvfile], filename: 'metadata_graph.csv')
 
-    if args.title.blank?
-      log 'ERROR: Title must be present. Please specify a title as an argument'
-      exit 1
-    end
-
-    if args.csv_path.blank?
-      log 'ERROR: CSV path must be present. Please specify a valid csv_path as an argument'
-      exit 1
-    end
-
-    if File.exist?(args.csv_path)
-      batch_ingest = user.digitization_metadata_ingests.new(title: args.title)
-      batch_ingest.csvfile.attach(io: File.open(args.csv_path.to_s), filename: 'metadata_graph.csv')
-
-      Digitization::BatchMetadataIngestionJob.perform_later(batch_ingest) if batch_ingest.save!
-    else
-      log "ERROR: Could not open file at `#{args.csv_path}`. Does the csv file exist at this location?"
-      exit 1
-    end
-
+    Digitization::BatchMetadataIngestionJob.perform_later(batch_ingest) if batch_ingest.save!
     log 'FINISH: Batch ingest enqueued!'
   end
 
