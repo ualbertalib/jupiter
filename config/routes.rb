@@ -181,4 +181,6 @@ Rails.application.routes.draw do
       resources :books, :newspapers, :images, :maps, concerns: :downloadable
     end
   end
+
+  get 'healthcheck', to: 'healthcheck#index'
 end
