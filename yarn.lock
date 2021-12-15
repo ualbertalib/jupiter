@@ -1235,10 +1235,10 @@
   dependencies:
     spark-md5 "^3.0.0"
 
-"@rails/ujs@^6.1.4-1":
-  version "6.1.4-1"
-  resolved "https://registry.yarnpkg.com/@rails/ujs/-/ujs-6.1.4-1.tgz#37507fe288a1c7c3a593602aa4dea42e5cb5797f"
-  integrity sha512-Fewm2wHk1n6Kf4E86dzzHDJOFg4EWcSHH3FsMEGs59bTdmf7099mjkOssOQtBqju4R39iaAOQNui7r8P+Q5Dgg==
+"@rails/ujs@^6.1.4-3":
+  version "6.1.4-3"
+  resolved "https://registry.yarnpkg.com/@rails/ujs/-/ujs-6.1.4-3.tgz#6f990e58cb734f39caa9c98c3369d37c06aeb94d"
+  integrity sha512-n8XvY6Zb76HaBGPmRQ8e6RUoFlqPzHx+teK18kxN5F24c3CSgUjOeMT9WBL5HfUZ+ONH0DPfTEh0Pl6RfKAJPA==
 
 "@rails/webpacker@^5.4.3":
   version "5.4.3"
