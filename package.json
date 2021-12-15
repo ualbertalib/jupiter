@@ -10,7 +10,7 @@
     "@fortawesome/fontawesome-free": "^5.15.4",
     "@rails/actiontext": "^6.1.4-1",
     "@rails/activestorage": "^6.1.4-3",
-    "@rails/ujs": "^6.1.4-1",
+    "@rails/ujs": "^6.1.4-3",
     "@rails/webpacker": "^5.4.3",
     "bootstrap": "^4.6.1",
     "core-js": "^3.19.2",
