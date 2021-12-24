@@ -503,7 +503,7 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2)
     semantic_range (3.0.0)
-    shoulda-matchers (5.0.0)
+    shoulda-matchers (5.1.0)
       activesupport (>= 5.2.0)
     sidekiq (5.2.9)
       connection_pool (~> 2.2, >= 2.2.2)
@@ -676,7 +676,7 @@ DEPENDENCIES
   rubocop-rails
   sdoc
   selenium-webdriver
-  shoulda-matchers (~> 5.0)
+  shoulda-matchers (~> 5.1)
   sidekiq (~> 5.2)
   sidekiq-cron
   sidekiq-unique-jobs (~> 7.1)
