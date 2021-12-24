@@ -55,9 +55,9 @@ gem 'differ' # Used to diff two strings
 gem 'draper'
 gem 'edtf', '~> 3.0', '>= 3.0.6' # parsing Extended Date/Time Format
 gem 'ezid-client', '< 1.9.0'
-gem 'flipper', '~> 0.22.2' # Feature flags for Ruby
-gem 'flipper-active_record', '~> 0.22.2' # Store feature flags in ActiveRecord
-gem 'flipper-ui', '~> 0.22.2' # UI for feature flags
+gem 'flipper', '~> 0.23.0' # Feature flags for Ruby
+gem 'flipper-active_record', '~> 0.23.0' # Store feature flags in ActiveRecord
+gem 'flipper-ui', '~> 0.23.0' # UI for feature flags
 gem 'jbuilder' # generate JSON objects
 gem 'kaminari' # Pagination
 gem 'paper_trail' # Track object changes
