@@ -324,7 +324,7 @@ class DraftItem < ApplicationRecord
     attributes.each do |key, value|
       next unless value.is_a?(Array)
 
-      self[key] = value.reject(&:blank?)
+      self[key] = value.compact_blank
       self[key] = nil if self[key].blank?
     end
   end
