@@ -421,7 +421,7 @@ GEM
       thor (~> 1.0)
     rainbow (3.0.0)
     rake (13.0.6)
-    ransack (2.4.2)
+    ransack (2.5.0)
       activerecord (>= 5.2.4)
       activesupport (>= 5.2.4)
       i18n
@@ -613,7 +613,7 @@ GEM
       railties (>= 3.0.7)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.5.1)
+    zeitwerk (2.5.3)
 
 PLATFORMS
   ruby
@@ -665,7 +665,7 @@ DEPENDENCIES
   puma (~> 5.5)
   pundit (= 1.1.0)
   rails (~> 6.1.4)
-  ransack (= 2.4.2)
+  ransack (= 2.5.0)
   rdf (~> 3.1.15)
   rdf-isomorphic (~> 3.1.1)
   rdf-n3 (~> 3.1.2)
