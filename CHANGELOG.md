@@ -12,7 +12,10 @@ New entries in this file should aim to provide a meaningful amount of informatio
 ### Fixed
 - nil Class error when viewing Collections drop down on Communities page [#2655](https://github.com/ualbertalib/jupiter/issues/2655)
 - Render markdown when viewing Communities as an administrator [#1322](https://github.com/ualbertalib/jupiter/issues/1322)
+
+### Chores
 - Bump rubocop-rails to 2.13.0 and fix cop violations [PR#2683](https://github.com/ualbertalib/jupiter/pull/2683)
+- Bump rdf-vocab to 3.2.0 [PR#2696](https://github.com/ualbertalib/jupiter/pull/2696)
 
 ## [2.3.1] - 2021-12-07
 
