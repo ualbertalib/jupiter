@@ -6,7 +6,7 @@ ruby '>= 2.6', '< 2.8'
 # Core Rails stuff
 gem 'image_processing' # for ActiveStorage Variants
 gem 'puma', '~> 5.5'
-gem 'rails', '~> 6.1.4'
+gem 'rails', '~> 7.0.0'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 gem 'webpacker', '~> 5.4'
