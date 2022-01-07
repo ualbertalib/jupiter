@@ -175,6 +175,16 @@ en:
                 not_recognized: 'is not recognized'
               rights:
                 not_recognized: 'is not recognized'
+        digitization/newspaper:
+            attributes:
+              resource_type:
+                not_recognized: 'is not recognized'
+              genres:
+                not_recognized: 'is not recognized'
+              languages:
+                not_recognized: 'is not recognized'
+              rights:
+                not_recognized: 'is not recognized'
         user:
           attributes:
             api_key_digest:

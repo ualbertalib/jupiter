@@ -729,6 +729,29 @@ if Rails.env.development? || Rails.env.uat?
     book.create_fulltext!(text: Faker::Lorem.sentence(word_count: 250, supplemental: false, random_words_to_add: 0))
   end
 
+  11.times do |_i|
+    date = Faker::Date.between(from: '1900-01-01', to: Date.today)
+    place = [ControlledVocabulary.digitization.subject.from_value('Edmonton (Alta.)'), ControlledVocabulary.digitization.subject.from_value('Lacombe (Alta.)')].sample
+    newspaper = Digitization::Newspaper.create!(publication_code: ['ACN', 'LSV', 'SDN'].sample, 
+                              year: date.year,
+                              month: date.month.to_s.rjust(2, "0"),
+                              day: date.mday.to_s.rjust(2, "0"),
+                              owner_id: admin.id,
+                              dates_issued: [date.edtf],
+                              date_ingested: '2016-12-08T06:00:00.000Z',
+                              title: "#{Faker::Address.city} #{Faker::Subscription.subscription_term}",
+                              alternative_titles: [Faker::Hipster.sentence.to_s],
+                              resource_type: ControlledVocabulary.digitization.resource_type.from_value('Text'),
+                              genres: [ControlledVocabulary.digitization.genre.from_value('Newspapers')],
+                              languages: [ControlledVocabulary.digitization.language.from_value('English')],
+                              places_of_publication: [place],
+                              extent: 'v. : ill.',
+                              notes: [Faker::Hipster.sentence.to_s],
+                              geographic_subjects: [place],
+                              rights: ControlledVocabulary.digitization.rights.from_value('No Known Copyright')
+    )
+  end
+
   Digitization::Book.create(peel_id: '4062') # monograph
   Digitization::Book.create(peel_id: '10571', part_number: '2') # Government Document
   Digitization::Book.create(peel_id: '3178', run: '2', part_number: '12') # Henderson
