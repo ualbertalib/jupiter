@@ -48,6 +48,7 @@ def batch_ingest_csv(csv_path)
   if File.exist?(full_csv_path)
     successful_ingested = []
     ingest_errors = []
+    ingested_data = []
     CSV.foreach(full_csv_path,
                 headers: true,
                 header_converters: :symbol,
@@ -59,6 +60,7 @@ def batch_ingest_csv(csv_path)
                   end
       if object.is_a?(Item) || object.is_a?(Thesis)
         successful_ingested << object
+        ingested_data << object_data
       else
         object[:error_message] = e.message
         object[:backtrace] = e.backtrace.take(10).join("\n")
@@ -67,6 +69,7 @@ def batch_ingest_csv(csv_path)
     end
     generate_ingest_report(successful_ingested)
     headers = CSV.read(full_csv_path, headers: true).headers
+    generate_ingest_production(ingested_data, headers)
     headers << 'error_message'
     headers << 'backtrace'
     generate_ingest_errors(ingest_errors, headers)
@@ -112,6 +115,20 @@ def generate_ingest_errors(ingest_errors, headers)
     end
   end
   log 'REPORT: Ingest error report generated!'
+  log "REPORT: You can view report here: #{full_file_name}"
+end
+
+def generate_ingest_production(ingested_data, headers)
+  log 'REPORT: Generating ingest production report...'
+  file_name = Time.current.strftime('%Y_%m_%d_%H_%M_%S')
+  full_file_name = "#{INGEST_REPORTS_LOCATION}/#{file_name}_ingest_production.csv"
+  CSV.open(full_file_name, 'wb', headers: true) do |csv|
+    csv << headers
+    ingested_data.each do |data|
+      csv << data
+    end
+  end
+  log 'REPORT: Ingest production report generated!'
   log "REPORT: You can view report here: #{full_file_name}"
 end
 
