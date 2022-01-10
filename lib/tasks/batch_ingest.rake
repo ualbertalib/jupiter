@@ -358,7 +358,7 @@ def legacy_thesis_ingest(thesis_data, index, csv_directory)
       unlocked_obj.graduation_date = "#{graduation_year}-#{graduation_term}"
     end
     unlocked_obj.supervisors = thesis_data[:supervisors].split('|') if thesis_data[:supervisors].present?
-    unlocked_obj.committee_members = thesis_data[:committee_members] if thesis_data[:committee_members].present?
+    unlocked_obj.committee_members = thesis_data[:committee_members].split('|') if thesis_data[:committee_members].present?
     unlocked_obj.rights = thesis_data[:rights]
     if thesis_data[:date_submitted].present?
       unlocked_obj.date_submitted = Date.strptime(thesis_data[:date_submitted].to_s,
