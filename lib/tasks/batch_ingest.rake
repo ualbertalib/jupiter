@@ -299,10 +299,6 @@ def thesis_ingest(thesis_data, index, csv_directory, _checksums)
     # could accomodate multiple pairs without much work here
     unlocked_obj.add_to_path(thesis_community_id, thesis_collection_id)
 
-    # Add extra field, fedora3_uuid for fedora3 thesis redirecting
-    # Ex: uuid:4cc160fc-a141-410f-a64d-d0119ad0b9fb
-    unlocked_obj.fedora3_uuid = thesis_data[:fedora3_uuid] if thesis_data[:fedora3_uuid].present?
-
     unlocked_obj.save!
   end
 
@@ -381,6 +377,10 @@ def legacy_thesis_ingest(thesis_data, index, csv_directory)
     end
     unlocked_obj.visibility = unlocked_obj.visibility = ControlledVocabulary.jupiter_core.visibility.from_value(thesis_data[:visibility])
     unlocked_obj.add_to_path(thesis_community_id, thesis_collection_id)
+
+    # Add extra field, fedora3_uuid for fedora3 thesis redirecting
+    # Ex: uuid:4cc160fc-a141-410f-a64d-d0119ad0b9fb
+    unlocked_obj.fedora3_uuid = thesis_data[:fedora3_uuid] if thesis_data[:fedora3_uuid].present?
 
     # save thesis object
     unlocked_obj.save!
