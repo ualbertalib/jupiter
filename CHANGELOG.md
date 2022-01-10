@@ -9,6 +9,8 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+## [2.3.2] - 2022-01-10
+
 - Jupiter II work is continuing to incorporate Digitized materials into Jupiter in the digitalcollections namespace.
   - newspaper metadata for ACN digitization [#2645](https://github.com/ualbertalib/jupiter/issues/2645)
 
