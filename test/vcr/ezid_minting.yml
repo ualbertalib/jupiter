@@ -10,7 +10,7 @@ http_interactions:
         _profile: datacite
         _target: http://localhost/items/7d4ef627-70cf-4378-b237-844e9a7b4539
         _export: yes
-        datacite: <?xml version="1.0" encoding="UTF-8"?><resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://datacite.org/schema/kernel-4" xsi:schemaLocation="http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4/metadata.xsd"><identifier identifierType="DOI"></identifier><creators><creator><creatorName>Joe Blow</creatorName></creator></creators><titles><title>Test Title</title></titles><publisher>University of Alberta Libraries</publisher><publicationYear>2017</publicationYear><resourceType resourceTypeGeneral="Text">Text/Book</resourceType><descriptions><description descriptionType="Abstract"></description></descriptions></resource>%0A
+        datacite: <?xml version="1.0" encoding="UTF-8"?><resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://datacite.org/schema/kernel-4" xsi:schemaLocation="http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4/metadata.xsd"><identifier identifierType="DOI"></identifier><creators><creator><creatorName>Joe Blow</creatorName></creator></creators><titles><title>Test Title</title></titles><publisher>University of Alberta Library</publisher><publicationYear>2017</publicationYear><resourceType resourceTypeGeneral="Text">Text/Book</resourceType><descriptions><description descriptionType="Abstract"></description></descriptions></resource>%0A
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
@@ -48,7 +48,7 @@ http_interactions:
       string: |-
         success: doi:10.21967/fk2-ycs2-dd92
         _target: http://localhost/items/7d4ef627-70cf-4378-b237-844e9a7b4539
-        datacite: <?xml version="1.0" encoding="UTF-8"?>%0A<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://datacite.org/schema/kernel-4" xsi:schemaLocation="http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4/metadata.xsd">%0A  <identifier identifierType="DOI">10.21967/FK2-YCS2-DD92</identifier>%0A  <creators>%0A    <creator>%0A      <creatorName>Joe Blow</creatorName>%0A    </creator>%0A  </creators>%0A  <titles>%0A    <title>Test Title</title>%0A  </titles>%0A  <publisher>University of Alberta Libraries</publisher>%0A  <publicationYear>2017</publicationYear>%0A  <resourceType resourceTypeGeneral="Text">Text/Book</resourceType>%0A  <descriptions>%0A    <description descriptionType="Abstract"/>%0A  </descriptions>%0A</resource>
+        datacite: <?xml version="1.0" encoding="UTF-8"?>%0A<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://datacite.org/schema/kernel-4" xsi:schemaLocation="http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4/metadata.xsd">%0A  <identifier identifierType="DOI">10.21967/FK2-YCS2-DD92</identifier>%0A  <creators>%0A    <creator>%0A      <creatorName>Joe Blow</creatorName>%0A    </creator>%0A  </creators>%0A  <titles>%0A    <title>Test Title</title>%0A  </titles>%0A  <publisher>University of Alberta Library</publisher>%0A  <publicationYear>2017</publicationYear>%0A  <resourceType resourceTypeGeneral="Text">Text/Book</resourceType>%0A  <descriptions>%0A    <description descriptionType="Abstract"/>%0A  </descriptions>%0A</resource>
         _profile: datacite
         _datacenter: CISTI.UAL
         _export: yes
@@ -102,7 +102,7 @@ http_interactions:
       string: |-
         success: doi:10.21967/fk2-ycs2-dd92
         _target: http://localhost/items/7d4ef627-70cf-4378-b237-844e9a7b4539
-        datacite: <?xml version="1.0" encoding="UTF-8"?>%0A<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://datacite.org/schema/kernel-4" xsi:schemaLocation="http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4/metadata.xsd">%0A  <identifier identifierType="DOI">10.21967/FK2-YCS2-DD92</identifier>%0A  <creators>%0A    <creator>%0A      <creatorName>Joe Blow</creatorName>%0A    </creator>%0A  </creators>%0A  <titles>%0A    <title>Test Title</title>%0A  </titles>%0A  <publisher>University of Alberta Libraries</publisher>%0A  <publicationYear>2017</publicationYear>%0A  <resourceType resourceTypeGeneral="Text">Text/Book</resourceType>%0A  <descriptions>%0A    <description descriptionType="Abstract"/>%0A  </descriptions>%0A</resource>
+        datacite: <?xml version="1.0" encoding="UTF-8"?>%0A<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://datacite.org/schema/kernel-4" xsi:schemaLocation="http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4/metadata.xsd">%0A  <identifier identifierType="DOI">10.21967/FK2-YCS2-DD92</identifier>%0A  <creators>%0A    <creator>%0A      <creatorName>Joe Blow</creatorName>%0A    </creator>%0A  </creators>%0A  <titles>%0A    <title>Test Title</title>%0A  </titles>%0A  <publisher>University of Alberta Library</publisher>%0A  <publicationYear>2017</publicationYear>%0A  <resourceType resourceTypeGeneral="Text">Text/Book</resourceType>%0A  <descriptions>%0A    <description descriptionType="Abstract"/>%0A  </descriptions>%0A</resource>
         _profile: datacite
         _datacenter: CISTI.UAL
         _export: yes

@@ -13,14 +13,14 @@ class Admin::Theses::FilesControllerTest < ActionDispatch::IntegrationTest
     @draft_thesis.member_of_paths = { community_id: [@community.id], collection_id: [@collection.id] }
     @draft_thesis.save!
 
-    pdf_file = ActiveStorage::Blob.create_after_upload!(
+    pdf_file = ActiveStorage::Blob.create_and_upload!(
       io: file_fixture('pdf-sample.pdf').open,
       filename: 'pdf-sample.pdf', content_type: 'application/pdf'
     )
 
     @draft_thesis.files.attach pdf_file
 
-    @file_attachment = fixture_file_upload('/files/image-sample.jpeg', 'image/jpeg')
+    @file_attachment = fixture_file_upload('/image-sample.jpeg', 'image/jpeg')
   end
 
   test 'should be able to attach files to a draft thesis' do
@@ -49,7 +49,7 @@ class Admin::Theses::FilesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should be able to toggle the selection of the draft theses thumbnail' do
-    image_file = ActiveStorage::Blob.create_after_upload!(
+    image_file = ActiveStorage::Blob.create_and_upload!(
       io: @file_attachment.open,
       filename: @file_attachment.original_filename, content_type: @file_attachment.content_type
     )

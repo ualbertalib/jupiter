@@ -11,6 +11,37 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 - Bring back illogical date range faceting flash message [#2030](https://github.com/ualbertalib/jupiter/issues/2030)
 
+## [2.3.2] - 2022-01-10
+
+- Jupiter II work is continuing to incorporate Digitized materials into Jupiter in the digitalcollections namespace.
+  - newspaper metadata for ACN digitization [#2645](https://github.com/ualbertalib/jupiter/issues/2645)
+
+### Fixed
+- nil Class error when viewing Collections drop down on Communities page [#2655](https://github.com/ualbertalib/jupiter/issues/2655)
+- Render markdown when viewing Communities as an administrator [#1322](https://github.com/ualbertalib/jupiter/issues/1322)
+
+### Chores
+- Bump rubocop-rails to 2.13.0 and fix cop violations [PR#2683](https://github.com/ualbertalib/jupiter/pull/2683)
+- Bump rdf-vocab to 3.2.0 [PR#2696](https://github.com/ualbertalib/jupiter/pull/2696)
+
+## [2.3.1] - 2021-12-07
+
+- Fix Gemfile so that `strong_migrations` is usesd in all environments
+  
+## [2.3.0] - 2021-12-01
+
+- The EZID Compatibility API is sunsetting at the end of this year, per https://blog.datacite.org/sunsetting-of-the-ez-api/.  [datacite-client](https://github.com/pgwillia/datacite-client) is a ruby gem that wraps the [Datacite API](https://support.datacite.org/reference/introduction) for our use.  The main changes are the DOI's no longer have the `doi:` prefix, the format of metadata attributes, and the event mechanism for publishing/hiding the metadata from the public. Requires `datacite_api` feature flag and new secrets for our datacite credentials. [#2268](https://github.com/ualbertalib/jupiter/issues/2268)
+
+- We had a request by a researcher to attach several 2.8 Gb zip files to an existing object.  We couldn't fulfill this request because of the way we were storing metadata about the file.  Using `Integer` put an artificial limitation of 2,147,483,647 (2^31-1) on the size of files we could attach.  We migrate the `byte_size` of blobs to use `BigInt`, 9,223,372,036,854,775,807 (2^63-1), instead.
+
+### Chores
+- bump sidekiq-unique-jobs from 7.0.12 to 7.1.8 and fix a long missed deprecation
+- fixed deprecation warning on tests [#2604](https://github.com/ualbertalib/jupiter/issues/2604)
+- revise uat deploy configuration and watchtower script [#1985](https://github.com/ualbertalib/jupiter/issues/1985)
+- fixes: Docker demo Redis bad URI error [#2610](https://github.com/ualbertalib/jupiter/issues/2610)
+- add `strong_migrations` to catch unsafe migrations in development [#2621](https://github.com/ualbertalib/jupiter/issues/2621)
+- Upgrade Rails to version 6.1 [#2079](https://github.com/ualbertalib/jupiter/issues/2079)
+
 ## [2.2.0] - 2021-10-21
 
 - Refactored Controlled Vocabulary support to allow for new, raw vocabs without i18n translations. The motivation here is that we have a bunch of URIs we want to machine-map to human readable values, and it doesn't make sense to introduce intermediate symbols we'd have to cobble together somehow, plus that would involve polluting the i18n file with hundreds of new entries.

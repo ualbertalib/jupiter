@@ -217,7 +217,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
   end
 
   test 'list identifers item from date xml' do
-    six_days_from_now = (Time.current + 6.days).strftime('%Y-%m-%d')
+    six_days_from_now = (6.days.from_now).strftime('%Y-%m-%d')
     get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_dc', set: @community.id,
                     from: six_days_from_now), headers: { 'Accept' => 'application/xml' }
 
@@ -225,7 +225,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
   end
 
   test 'list identifers item from date xml post' do
-    six_days_from_now = (Time.current + 6.days).strftime('%Y-%m-%d')
+    six_days_from_now = (6.days.from_now).strftime('%Y-%m-%d')
     post oaisys_path, params: { verb: 'ListIdentifiers', metadataPrefix: 'oai_dc', set: @community.id,
                                 from: six_days_from_now },
                       headers: { 'Content-Type' => 'application/x-www-form-urlencoded', 'Content-Length' => 82 }
@@ -234,7 +234,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
   end
 
   test 'list identifers item from date yyy_mm_dd xml' do
-    six_days_from_now = (Time.current + 6.days).utc.xmlschema
+    six_days_from_now = 6.days.from_now.utc.xmlschema
     get oaisys_path(verb: 'ListIdentifiers', metadataPrefix: 'oai_dc', set: @community.id,
                     from: six_days_from_now), headers: { 'Accept' => 'application/xml' }
 
@@ -242,7 +242,7 @@ class OaisysListIdentifiersTest < ActionDispatch::IntegrationTest
   end
 
   test 'list identifers item from date yyy_mm_dd xml post' do
-    six_days_from_now = (Time.current + 6.days).utc.xmlschema
+    six_days_from_now = 6.days.from_now.utc.xmlschema
     post oaisys_path, params: { verb: 'ListIdentifiers', metadataPrefix: 'oai_dc', set: @community.id,
                                 from: six_days_from_now },
                       headers: { 'Content-Type' => 'application/x-www-form-urlencoded', 'Content-Length' => 82 }

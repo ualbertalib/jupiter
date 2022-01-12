@@ -108,8 +108,8 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
     draft_item.member_of_paths = { community_id: [@community.id], collection_id: [@collection.id] }
     draft_item.save!
 
-    file_fixture = fixture_file_upload('/files/image-sample.jpeg', 'image/jpeg')
-    image_file = ActiveStorage::Blob.create_after_upload!(
+    file_fixture = fixture_file_upload('/image-sample.jpeg', 'image/jpeg')
+    image_file = ActiveStorage::Blob.create_and_upload!(
       io: file_fixture.open,
       filename: file_fixture.original_filename, content_type: file_fixture.content_type
     )
@@ -152,8 +152,8 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
     draft_item = draft_items(:draft_item_completed_choose_license_and_visibility_step)
     draft_item.member_of_paths = { community_id: [@community.id], collection_id: [@collection.id] }
 
-    file_fixture = fixture_file_upload('/files/image-sample.jpeg', 'image/jpeg')
-    image_file = ActiveStorage::Blob.create_after_upload!(
+    file_fixture = fixture_file_upload('/image-sample.jpeg', 'image/jpeg')
+    image_file = ActiveStorage::Blob.create_and_upload!(
       io: file_fixture.open,
       filename: file_fixture.original_filename, content_type: file_fixture.content_type
     )
@@ -186,8 +186,8 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
     draft_item = draft_items(:draft_item_completed_choose_license_and_visibility_step)
     draft_item.member_of_paths = { community_id: [@community.id], collection_id: [@collection.id] }
 
-    file_fixture = fixture_file_upload('/files/image-sample.jpeg', 'image/jpeg')
-    image_file = ActiveStorage::Blob.create_after_upload!(
+    file_fixture = fixture_file_upload('/image-sample.jpeg', 'image/jpeg')
+    image_file = ActiveStorage::Blob.create_and_upload!(
       io: file_fixture.open,
       filename: file_fixture.original_filename, content_type: file_fixture.content_type
     )

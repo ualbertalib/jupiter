@@ -100,7 +100,7 @@ class DraftThesisTest < ActiveSupport::TestCase
     assert_not draft_thesis.valid?
     assert_equal "Files can't be blank", draft_thesis.errors.full_messages.first
 
-    fake_file = ActiveStorage::Blob.create_after_upload!(
+    fake_file = ActiveStorage::Blob.create_and_upload!(
       io: StringIO.new('RandomData'),
       filename: 'book_cover.jpg',
       content_type: 'text/plain'

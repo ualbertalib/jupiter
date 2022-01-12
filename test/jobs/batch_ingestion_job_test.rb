@@ -30,8 +30,8 @@ class BatchIngestionJobTest < ActiveJob::TestCase
     end
 
     BatchIngest.stub :find, batch_ingest do
-      assert_raises StandardError do
-        assert_no_difference('Item.count') do
+      assert_no_difference('Item.count') do
+        assert_raises StandardError do
           BatchIngestionJob.perform_now(batch_ingest)
         end
       end

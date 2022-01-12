@@ -5,3 +5,4 @@ blob_jpeg:
   content_type: 'image/jpeg'
   byte_size: 12086
   checksum: "GxpIjJsC4KnRoBKNjWnkJA=="
+  service_name: local

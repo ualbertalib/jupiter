@@ -3,7 +3,7 @@ class GarbageCollectBlobsJob
   # Sidekiq Unique Jobs doesn't work with ActiveJob
   include Sidekiq::Worker
 
-  sidekiq_options unique: :until_executing, queue: 'default'
+  sidekiq_options lock: :until_executing, queue: 'default'
 
   # Since there is a many-many relationship between Items/DraftItems and blobs, we can't use a purge callback on deletion of an attachment.
   # Therefore we need a process for removing blobs that become orphaned over time as all of their associated attachments cease to exist.

@@ -104,7 +104,7 @@ class DraftItemTest < ActiveSupport::TestCase
     )
     assert_not draft_item.valid?
 
-    fake_file = ActiveStorage::Blob.create_after_upload!(
+    fake_file = ActiveStorage::Blob.create_and_upload!(
       io: StringIO.new('RandomData'),
       filename: 'book_cover.jpg',
       content_type: 'text/plain'
