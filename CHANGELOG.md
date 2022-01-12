@@ -9,6 +9,8 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+- Bring back illogical date range faceting flash message [#2030](https://github.com/ualbertalib/jupiter/issues/2030)
+
 ## [2.2.0] - 2021-10-21
 
 - Refactored Controlled Vocabulary support to allow for new, raw vocabs without i18n translations. The motivation here is that we have a bunch of URIs we want to machine-map to human readable values, and it doesn't make sense to introduce intermediate symbols we'd have to cobble together somehow, plus that would involve polluting the i18n file with hundreds of new entries.
@@ -73,7 +75,6 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 - Brakeman linting to Github Actions workflow
 - Make autocomplete explicit [PR#2449](https://github.com/ualbertalib/jupiter/pull/2449)
 - RdfAnnotation changes will be output to a file to facilitate testing and database setup [acts_as_rdfable#12](https://github.com/ualbertalib/acts_as_rdfable/issues/12)
-- Bring back illogical date range faceting flash message [#2030](https://github.com/ualbertalib/jupiter/issues/2030)
 
 ### Removed
 - Remove logo_id foreign key on item/thesis which was causing issues with deletions
