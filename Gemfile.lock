@@ -194,7 +194,7 @@ GEM
       scanf (~> 1.0)
       sxp (~> 1.2)
       unicode-types (~> 1.7)
-    edtf (3.0.7)
+    edtf (3.0.8)
       activesupport (>= 3.0, < 8.0)
     erb_lint (0.1.1)
       activesupport
