@@ -4,7 +4,7 @@ class UserSearchService
   # How many facets are shown before it says 'Show more ...'
   MAX_FACETS = 6
 
-  attr_reader :search_models
+  attr_reader :search_models, :invalid_date_range
 
   def initialize(current_user:, params:, base_restriction_key: nil, value: nil, # rubocop:disable Metrics/ParameterLists
                  search_models: [Item, Thesis], fulltext: false)
@@ -12,6 +12,7 @@ class UserSearchService
       raise ArgumentError, 'Must supply both a base_restriction_key and a value'
     end
 
+    @invalid_date_range = false
     @base_restriction_key = base_restriction_key
     @value = value
     @search_models = search_models
@@ -55,6 +56,7 @@ class UserSearchService
           r[range] = [:begin, :end]
         else
           params[:ranges].delete(range)
+          @invalid_date_range = true
         end
       end
       model.solr_exporter_class.facets.each do |facet|

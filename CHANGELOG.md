@@ -9,6 +9,8 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+- Bring back illogical date range faceting flash message [#2030](https://github.com/ualbertalib/jupiter/issues/2030)
+
 ## [2.3.2] - 2022-01-10
 
 - Jupiter II work is continuing to incorporate Digitized materials into Jupiter in the digitalcollections namespace.
