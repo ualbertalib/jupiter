@@ -3,26 +3,28 @@ INDEX_OFFSET = 1
 
 namespace :jupiter do
   desc 'batch ingest for multiple items from a csv file - used by ERA Admin and ERA Assistants'
-  task :batch_ingest_items, [:csv_path] => :environment do |_t, args|
+  task :batch_ingest_items, [:csv_path, :mode] => :environment do |_t, args|
     csv_path = args.csv_path
+    @mode = args.mode
     batch_ingest_csv(csv_path)
   end
 
   desc 'batch ingest for theses from a csv file - used to batch ingest theses from Thesis Deposit'
-  task :batch_ingest_theses, [:csv_path] => :environment do |_t, args|
+  task :batch_ingest_theses, [:csv_path, :mode] => :environment do |_t, args|
     csv_path = args.csv_path
+    @mode = args.mode
     full_csv_path = File.expand_path(csv_path)
     csv_directory = File.dirname(full_csv_path)
-    checksums = generate_checksums(csv_directory)
-
+  
     batch_ingest_csv(csv_path) do |object_data, index|
-      thesis_ingest(object_data, index, csv_directory, checksums)
+      thesis_ingest(object_data, index, csv_directory)
     end
   end
 
   desc 'batch ingest for legacy theses from a csv file'
-  task :batch_ingest_legacy_theses, [:csv_path] => :environment do |_t, args|
+  task :batch_ingest_legacy_theses, [:csv_path, :mode] => :environment do |_t, args|
     csv_path = args.csv_path
+    @mode = args.mode
     full_csv_path = File.expand_path(csv_path)
     csv_directory = File.dirname(full_csv_path)
 
@@ -36,7 +38,6 @@ def batch_ingest_csv(csv_path)
   require 'csv'
   require 'fileutils'
   log 'START: Batch ingest started...'
-
   if csv_path.blank?
     log 'ERROR: CSV path must be present. Please specify a valid csv_path as an argument'
     exit 1
@@ -67,7 +68,7 @@ def batch_ingest_csv(csv_path)
         ingest_errors << object
       end
     end
-    generate_ingest_report(successful_ingested)
+    generate_ingest_report(successful_ingested) if @mode != "test"
     headers = CSV.read(full_csv_path, headers: true).headers
     generate_ingest_production(ingested_data, headers)
     headers << 'error_message'
@@ -208,7 +209,7 @@ def item_ingest(item_data, index, csv_directory)
 
   # We only support for single file ingest, but this could easily be refactored for multiple files
   File.open("#{csv_directory}/#{item_data[:file_name]}", 'r') do |file|
-    item.add_and_ingest_files([file])
+    item.add_and_ingest_files([file]) if @mode != 'test'
   end
 
   log "ITEM #{index}: Setting thumbnail for item..."
@@ -223,7 +224,7 @@ rescue StandardError => e
   [item_data, e]
 end
 
-def thesis_ingest(thesis_data, index, csv_directory, _checksums)
+def thesis_ingest(thesis_data, index, csv_directory)
   log "THESIS #{index}: Starting ingest of a thesis..."
   thesis = Thesis.new
   thesis.tap do |unlocked_obj|
@@ -306,7 +307,7 @@ def thesis_ingest(thesis_data, index, csv_directory, _checksums)
 
   # We only support for single file ingest, but this could easily be refactored for multiple files
   File.open("#{csv_directory}/#{thesis_data[:file_name]}", 'r') do |file|
-    thesis.add_and_ingest_files([file])
+    thesis.add_and_ingest_files([file]) if mode != 'test'
   end
   log "THESIS #{index}: Setting thumbnail for thesis..."
   thesis.set_thumbnail(thesis.files.first) if thesis.files.first.present?
@@ -390,7 +391,7 @@ def legacy_thesis_ingest(thesis_data, index, csv_directory)
 
   # We only support for single file ingest, but this could easily be refactored for multiple files
   File.open("#{csv_directory}/#{thesis_data[:file_name]}", 'r') do |file|
-    thesis.add_and_ingest_files([file])
+    thesis.add_and_ingest_files([file]) if mode != 'test'
   end
   log "THESIS #{index}: Setting thumbnail for legacy thesis..."
   thesis.set_thumbnail(thesis.files.first) if thesis.files.first.present?
@@ -401,16 +402,6 @@ rescue StandardError => e
   log "EXCEPTION: #{e.message}"
   log "BACKTRACE: #{e.backtrace.take(1).join("\n")}"
   [thesis_data, e]
-end
-
-def generate_checksums(csv_directory)
-  require 'digest/md5'
-  checksums = {}
-  Dir.glob("#{csv_directory}/*.pdf").each do |f|
-    checksum = Digest::MD5.hexdigest(File.read(f))
-    checksums[checksum] = File.basename(f)
-  end
-  checksums
 end
 
 def thesis_community_id
