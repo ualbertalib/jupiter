@@ -3,16 +3,14 @@ INDEX_OFFSET = 1
 
 namespace :jupiter do
   desc 'batch ingest for multiple items from a csv file - used by ERA Admin and ERA Assistants'
-  task :batch_ingest_items, [:csv_path, :mode] => :environment do |_t, args|
+  task :batch_ingest_items, [:csv_path] => :environment do |_t, args|
     csv_path = args.csv_path
-    @mode = args.mode
     batch_ingest_csv(csv_path)
   end
 
   desc 'batch ingest for theses from a csv file - used to batch ingest theses from Thesis Deposit'
-  task :batch_ingest_theses, [:csv_path, :mode] => :environment do |_t, args|
+  task :batch_ingest_theses, [:csv_path] => :environment do |_t, args|
     csv_path = args.csv_path
-    @mode = args.mode
     full_csv_path = File.expand_path(csv_path)
     csv_directory = File.dirname(full_csv_path)
   
@@ -22,9 +20,8 @@ namespace :jupiter do
   end
 
   desc 'batch ingest for legacy theses from a csv file'
-  task :batch_ingest_legacy_theses, [:csv_path, :mode] => :environment do |_t, args|
+  task :batch_ingest_legacy_theses, [:csv_path] => :environment do |_t, args|
     csv_path = args.csv_path
-    @mode = args.mode
     full_csv_path = File.expand_path(csv_path)
     csv_directory = File.dirname(full_csv_path)
 
@@ -68,7 +65,7 @@ def batch_ingest_csv(csv_path)
         ingest_errors << object
       end
     end
-    generate_ingest_report(successful_ingested) if @mode != "test"
+    generate_ingest_report(successful_ingested)
     headers = CSV.read(full_csv_path, headers: true).headers
     generate_ingest_production(ingested_data, headers)
     headers << 'error_message'
@@ -209,7 +206,7 @@ def item_ingest(item_data, index, csv_directory)
 
   # We only support for single file ingest, but this could easily be refactored for multiple files
   File.open("#{csv_directory}/#{item_data[:file_name]}", 'r') do |file|
-    item.add_and_ingest_files([file]) if @mode != 'test'
+    item.add_and_ingest_files([file])
   end
 
   log "ITEM #{index}: Setting thumbnail for item..."
@@ -307,7 +304,7 @@ def thesis_ingest(thesis_data, index, csv_directory)
 
   # We only support for single file ingest, but this could easily be refactored for multiple files
   File.open("#{csv_directory}/#{thesis_data[:file_name]}", 'r') do |file|
-    thesis.add_and_ingest_files([file]) if mode != 'test'
+    thesis.add_and_ingest_files([file])
   end
   log "THESIS #{index}: Setting thumbnail for thesis..."
   thesis.set_thumbnail(thesis.files.first) if thesis.files.first.present?
@@ -391,7 +388,7 @@ def legacy_thesis_ingest(thesis_data, index, csv_directory)
 
   # We only support for single file ingest, but this could easily be refactored for multiple files
   File.open("#{csv_directory}/#{thesis_data[:file_name]}", 'r') do |file|
-    thesis.add_and_ingest_files([file]) if mode != 'test'
+    thesis.add_and_ingest_files([file])
   end
   log "THESIS #{index}: Setting thumbnail for legacy thesis..."
   thesis.set_thumbnail(thesis.files.first) if thesis.files.first.present?
