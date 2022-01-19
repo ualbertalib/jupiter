@@ -2,9 +2,10 @@ require 'application_system_test_case'
 
 class AdminCommunitiesIndexTest < ApplicationSystemTestCase
 
-  test 'should be able to see rendered markdown of a description for a community' do
+  test 'should be able to see rendered markdown of a description for a community and collection' do
     admin = users(:user_admin)
     community = communities(:community_fancy)
+    collection = collections(:collection_fancy)
 
     login_user(admin)
 
@@ -21,6 +22,12 @@ class AdminCommunitiesIndexTest < ApplicationSystemTestCase
 
     # Check for description as markdown
     assert_link('Markdown link', href: 'http://example.com')
+
+    click_link collection.title
+    assert_selector 'h1', text: collection.title
+
+    # Check for description as markdown
+    assert_link('Linked markdown', href: 'http://example.com')
 
     logout_user
   end

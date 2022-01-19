@@ -12,6 +12,7 @@ New entries in this file should aim to provide a meaningful amount of informatio
 ### Fixed
 - Bring back illogical date range faceting flash message [#2030](https://github.com/ualbertalib/jupiter/issues/2030)
 - Thesis not being assigned a DOI [#2707](https://github.com/ualbertalib/jupiter/issues/2707)
+- Render markdown when viewing Collections as an administrator [#2708](https://github.com/ualbertalib/jupiter/issues/2708)
 
 ## [2.3.2] - 2022-01-10
 
