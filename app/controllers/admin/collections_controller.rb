@@ -13,6 +13,7 @@ class Admin::CollectionsController < Admin::AdminController
 
     @results = search_query_index.results
     @search_models = search_query_index.search_models
+    @collection = @collection.decorate
 
     respond_to do |format|
       format.html { render template: 'collections/show' }
