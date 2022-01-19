@@ -9,6 +9,8 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+## [2.3.3] - 2022-01-19
+
 ### Fixed
 - Bring back illogical date range faceting flash message [#2030](https://github.com/ualbertalib/jupiter/issues/2030)
 - Thesis not being assigned a DOI [#2707](https://github.com/ualbertalib/jupiter/issues/2707)
