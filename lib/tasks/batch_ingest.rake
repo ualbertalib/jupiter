@@ -3,8 +3,10 @@ INDEX_OFFSET = 1
 
 namespace :jupiter do
   desc 'batch ingest for multiple items from a csv file - used by ERA Admin and ERA Assistants'
-  task :batch_ingest_items, [:csv_path] => :environment do |_t, args|
-    csv_path = args.csv_path
+  task :batch_ingest_items, [:csv_path, :upload] => :environment do |_t, args|
+    csv_path = args[:csv_path]
+    args.with_defaults(upload: true)
+    @upload = args[:upload]
     batch_ingest_csv(csv_path)
   end
 
@@ -13,7 +15,7 @@ namespace :jupiter do
     csv_path = args.csv_path
     full_csv_path = File.expand_path(csv_path)
     csv_directory = File.dirname(full_csv_path)
-  
+
     batch_ingest_csv(csv_path) do |object_data, index|
       thesis_ingest(object_data, index, csv_directory)
     end
@@ -204,9 +206,13 @@ def item_ingest(item_data, index, csv_directory)
 
   log "ITEM #{index}: Starting ingest of file for item..."
 
-  # We only support for single file ingest, but this could easily be refactored for multiple files
-  File.open("#{csv_directory}/#{item_data[:file_name]}", 'r') do |file|
-    item.add_and_ingest_files([file])
+  # Suport multiple file_name with '|' seperated
+  item_data[:file_name].tr('\\', '/').split('|').each do |file_name|
+    log "ITEM #{index}: Uploading file: #{file_name}..."
+    puts "upload: #{@upload}"
+    File.open("#{csv_directory}/#{file_name}", 'r') do |file|
+      item.add_and_ingest_files([file]) if @upload
+    end
   end
 
   log "ITEM #{index}: Setting thumbnail for item..."
@@ -356,7 +362,9 @@ def legacy_thesis_ingest(thesis_data, index, csv_directory)
       unlocked_obj.graduation_date = "#{graduation_year}-#{graduation_term}"
     end
     unlocked_obj.supervisors = thesis_data[:supervisors].split('|') if thesis_data[:supervisors].present?
-    unlocked_obj.committee_members = thesis_data[:committee_members].split('|') if thesis_data[:committee_members].present?
+    if thesis_data[:committee_members].present?
+      unlocked_obj.committee_members = thesis_data[:committee_members].split('|')
+    end
     unlocked_obj.rights = thesis_data[:rights]
     if thesis_data[:date_submitted].present?
       unlocked_obj.date_submitted = Date.strptime(thesis_data[:date_submitted].to_s,
