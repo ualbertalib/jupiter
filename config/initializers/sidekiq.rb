@@ -1,4 +1,4 @@
-SIDEKIQ_WILL_PROCESSES_JOBS_FILE = Rails.root.join('tmp/sidekiq_process_has_started_and_will_begin_processing_jobs').freeze
+SIDEKIQ_HAS_STARTED_FILE = Rails.root.join('tmp/sidekiq_process_has_started').freeze
 
 Sidekiq.configure_server do |config|
   config.redis = { url: Rails.application.secrets.redis_url }
@@ -12,11 +12,11 @@ Sidekiq.configure_server do |config|
   # Doing this gives us a better sense of when a process is actually
   # alive and healthy, rather than just beginning the boot process.
   config.on(:startup) do
-    FileUtils.touch(SIDEKIQ_WILL_PROCESSES_JOBS_FILE)
+    FileUtils.touch(SIDEKIQ_HAS_STARTED_FILE)
   end
 
   config.on(:shutdown) do
-    FileUtils.rm_f(SIDEKIQ_WILL_PROCESSES_JOBS_FILE)
+    FileUtils.rm_f(SIDEKIQ_HAS_STARTED_FILE)
   end
 end
 
