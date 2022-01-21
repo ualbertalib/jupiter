@@ -3,10 +3,8 @@ INDEX_OFFSET = 1
 
 namespace :jupiter do
   desc 'batch ingest for multiple items from a csv file - used by ERA Admin and ERA Assistants'
-  task :batch_ingest_items, [:csv_path, :upload] => :environment do |_t, args|
+  task :batch_ingest_items, [:csv_path] => :environment do |_t, args|
     csv_path = args[:csv_path]
-    args.with_defaults(upload: true)
-    @upload = args[:upload]
     batch_ingest_csv(csv_path)
   end
 
@@ -209,9 +207,8 @@ def item_ingest(item_data, index, csv_directory)
   # Suport multiple file_name with '|' seperated
   item_data[:file_name].tr('\\', '/').split('|').each do |file_name|
     log "ITEM #{index}: Uploading file: #{file_name}..."
-    puts "upload: #{@upload}"
     File.open("#{csv_directory}/#{file_name}", 'r') do |file|
-      item.add_and_ingest_files([file]) if @upload
+      item.add_and_ingest_files([file])
     end
   end
 
