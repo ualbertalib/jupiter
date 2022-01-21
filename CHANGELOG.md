@@ -9,6 +9,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+### Added
+- Add readiness healthchecks for Rails and Sidekiq [PR#2657](https://github.com/ualbertalib/jupiter/pull/2657)
+
 ## [2.3.3] - 2022-01-19
 
 ### Fixed
