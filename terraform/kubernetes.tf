@@ -26,7 +26,7 @@ resource "kubernetes_config_map" "config" {
   data = {
     RAILS_ENV = "uat"
     RAILS_LOG_TO_STDOUT = "true"
-    DATABASE_URL = "postgresql://${urlencode("${var.postgresql-admin-login}@${azurerm_postgresql_server.db.name}")}:${urlencode(var.postgresql-admin-password)}@${azurerm_postgresql_server.db.fqdn}:5432/"
+    DATABASE_URL = "postgresql://${urlencode("${var.postgresql-admin-login}@${azurerm_postgresql_server.db.name}")}:${urlencode(var.postgresql-admin-password)}@${azurerm_postgresql_server.db.fqdn}:5432/${azurerm_postgresql_database.postgresql-db.name}"
     SOLR_URL = "http://solr:8983/solr/jupiter-uat"
     REDIS_URL = "redis://:${urlencode(azurerm_redis_cache.redis.primary_access_key)}@${azurerm_redis_cache.redis.hostname}:${azurerm_redis_cache.redis.port}/0"
     SECRET_KEY_BASE = "${var.rails-secret-key}"
@@ -176,7 +176,7 @@ resource "kubernetes_deployment" "worker" {
 
           readiness_probe {
             exec {
-              command = [ "cat", "/app/tmp/sidekiq_process_has_started_and_will_begin_processing_jobs"]
+              command = [ "cat", "/app/tmp/sidekiq_process_has_started"]
             }
 
             failure_threshold = 10
