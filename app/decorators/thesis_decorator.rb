@@ -23,4 +23,8 @@ class ThesisDecorator < ApplicationDecorator
     Item.model_name
   end
 
+  def description
+    abstract
+  end
+
 end

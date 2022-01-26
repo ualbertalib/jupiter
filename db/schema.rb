@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_10_162254) do
+ActiveRecord::Schema.define(version: 2021_12_03_185004) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -211,6 +211,19 @@ ActiveRecord::Schema.define(version: 2021_11_10_162254) do
     t.string "visibility"
     t.bigint "owner_id", null: false
     t.string "title", null: false
+    t.string "dates_issued", array: true
+    t.text "alternative_titles", array: true
+    t.string "resource_type", null: false
+    t.string "genres", null: false, array: true
+    t.string "languages", null: false, array: true
+    t.string "places_of_publication", array: true
+    t.string "extent"
+    t.text "notes", array: true
+    t.string "geographic_subjects", array: true
+    t.string "rights"
+    t.string "volume"
+    t.string "issue"
+    t.string "editions", array: true
     t.index ["owner_id"], name: "index_digitization_newspapers_on_owner_id"
     t.index ["publication_code", "year", "month", "day"], name: "unique_peel_newspaper", unique: true
   end

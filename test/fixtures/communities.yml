@@ -14,6 +14,7 @@ community_thesis:
 
 community_fancy:
   title: "Fancy Community"
+  description: '[Markdown link](http://example.com)'
   owner: user_admin
   record_created_at: <%= Time.zone.now - 3.hour %>
   created_at: <%= Time.zone.now - 3.hour %>
