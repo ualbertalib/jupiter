@@ -45,3 +45,13 @@ variable "postgresql-admin-password" {
   type        = string
   description = "Password to authenticate to PostgreSQL Server"
 }
+
+
+#####################
+# Rails - Variables #
+#####################
+
+variable "rails-secret-key" {
+  type        = string
+  description = "Rails secret key base"
+}

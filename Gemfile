@@ -80,6 +80,10 @@ gem 'google-api-client',
 gem 'builder_deferred_tagging', github: 'ualbertalib/builder_deferred_tagging', tag: 'v0.01'
 gem 'oaisys', github: 'ualbertalib/oaisys', tag: 'v1.0.3'
 
+group :uat do
+  gem "azure-storage-blob", require: false
+end
+
 # Seeds
 group :development, :test, :uat do
   gem 'faker', require: false

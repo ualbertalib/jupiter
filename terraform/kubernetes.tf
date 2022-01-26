@@ -1,7 +1,3 @@
-data "local_file" "masterkey" {
-  filename = "../config/master.key"
-}
-
 resource "kubernetes_namespace" "namespace" {
   metadata {
     name = "${var.app-name}"
@@ -26,16 +22,26 @@ resource "kubernetes_config_map" "config" {
     namespace = "${var.app-name}"
   }
 
-  # TODO: Replace with Jupiter ENV VARs here
+#Rails application env variables
   data = {
-    RAILS_MASTER_KEY = data.local_file.masterkey.content
-    PORT = "3000"
+    RAILS_ENV = "uat"
     RAILS_LOG_TO_STDOUT = "true"
-    RAILS_ENV = "production"
-    DB_HOST = azurerm_postgresql_server.db.fqdn
-    DB_USER = "${var.postgresql-admin-login}@${azurerm_postgresql_server.db.name}"
-    DB_PASSWORD = var.postgresql-admin-password
+    DATABASE_URL = "postgresql://${urlencode("${var.postgresql-admin-login}@${azurerm_postgresql_server.db.name}")}:${urlencode(var.postgresql-admin-password)}@${azurerm_postgresql_server.db.fqdn}:5432/"
+    SOLR_URL = "http://solr:8983/solr/jupiter-uat"
     REDIS_URL = "redis://:${urlencode(azurerm_redis_cache.redis.primary_access_key)}@${azurerm_redis_cache.redis.hostname}:${azurerm_redis_cache.redis.port}/0"
+    SECRET_KEY_BASE = "${var.rails-secret-key}"
+    SAML_PRIVATE_KEY = ""
+    SAML_CERTIFICATE = ""
+    ROLLBAR_TOKEN = ""
+    GOOGLE_ANALYTICS_TOKEN = ""
+    TLD_LENGTH = "3"
+    GOOGLE_CLIENT_ID = ""
+    GOOGLE_CLIENT_SECRET = ""
+    GOOGLE_DEVELOPER_KEY = ""
+    ERA_HOST = "era.uat.library.ualberta.ca"
+    DIGITIZATION_HOST = "digitalcollections.uat.library.ualberta.ca"
+    SKYLIGHT_AUTHENTICATION = "secretauthenticationtoken"
+    ACTIVE_STORAGE_SERVICE = "microsoft"
     AZURE_STORAGE_ACCOUNT_NAME = azurerm_storage_account.blob_account.name
     AZURE_STORAGE_ACCESS_KEY = azurerm_storage_account.blob_account.primary_access_key
     AZURE_STORAGE_CONTAINER = azurerm_storage_container.storage_container.name
@@ -72,7 +78,7 @@ resource "kubernetes_deployment" "app" {
 
       spec {
         init_container {
-          image = "ualberta/jupiter:latest"
+          image = "murny/jupiter:latest"
           image_pull_policy = "Always"
           name = "${var.app-name}-init"
           command = ["rake", "db:migrate"]
@@ -83,7 +89,7 @@ resource "kubernetes_deployment" "app" {
           }
         }
         container {
-          image = "ualberta/jupiter:latest"
+          image = "murny/jupiter:latest"
           image_pull_policy = "Always"
           name = "${var.app-name}"
           port {
@@ -148,7 +154,7 @@ resource "kubernetes_deployment" "worker" {
       spec {
         container {
           name = "${var.app-name}-workers"
-          image = "ualberta/jupiter:latest"
+          image = "murny/jupiter:latest"
           image_pull_policy = "Always"
           command = ["bundle",  "exec", "sidekiq"]
 
