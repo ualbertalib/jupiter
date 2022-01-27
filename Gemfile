@@ -56,7 +56,7 @@ gem 'draper'
 gem 'edtf', '~> 3.0' # parsing Extended Date/Time Format
 gem 'ezid-client', '< 1.9.0'
 gem 'flipper', '~> 0.23.1' # Feature flags for Ruby
-gem 'flipper-active_record', '~> 0.23.0' # Store feature flags in ActiveRecord
+gem 'flipper-active_record', '~> 0.23.1' # Store feature flags in ActiveRecord
 gem 'flipper-ui', '~> 0.23.1' # UI for feature flags
 gem 'jbuilder' # generate JSON objects
 gem 'kaminari' # Pagination
