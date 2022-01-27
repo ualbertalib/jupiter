@@ -11,6 +11,12 @@ coverage/
 .ruby-version
 vendor/bundle
 
+/storage/*
+
+/public/packs
+/public/packs-test
+/node_modules
+
 .dockerignore
 docker-compose.yml
 docker-compose.lightweight.yml

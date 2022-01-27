@@ -22,7 +22,7 @@ resource "kubernetes_config_map" "config" {
     namespace = "${var.app-name}"
   }
 
-#Rails application env variables
+# Rails application env variables
   data = {
     RAILS_ENV = "uat"
     RAILS_LOG_TO_STDOUT = "true"
@@ -112,7 +112,7 @@ resource "kubernetes_deployment" "app" {
           resources {
             limits = {
               cpu    = "250m"
-              memory = "256Mi"
+              memory = "512Mi"
             }
             requests = {
               cpu    = "150m"
@@ -166,7 +166,7 @@ resource "kubernetes_deployment" "worker" {
           resources {
             limits = {
               cpu    = "250m"
-              memory = "256Mi"
+              memory = "512Mi"
             }
             requests = {
               cpu    = "150m"

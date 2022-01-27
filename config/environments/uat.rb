@@ -99,6 +99,9 @@ Rails.application.configure do
   # Action on unpermitted parameters
   config.action_controller.action_on_unpermitted_parameters = false
 
+  # Allow private ip addresses
+  config.hosts << /\A10\.\d+\.\d+\.\d+\z/
+
   config.hosts << Rails.application.secrets.era_host
   config.hosts << Rails.application.secrets.digitization_host
 end
