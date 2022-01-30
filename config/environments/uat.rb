@@ -99,10 +99,6 @@ Rails.application.configure do
   # Action on unpermitted parameters
   config.action_controller.action_on_unpermitted_parameters = false
 
-  config.host_configuration = {
-    exclude: ->(request) { request.path.include?('/healthcheck') }
-  }
-
   config.hosts << Rails.application.secrets.era_host
   config.hosts << Rails.application.secrets.digitization_host
 end
