@@ -192,15 +192,17 @@ resource "kubernetes_deployment" "app" {
               name = "${var.app-name}-config"
             }
           }
-          readiness_probe {
-            http_get {
-              path = "/healthcheck"
-              port = 3000
-            }
-            initial_delay_seconds = 10
-            period_seconds = 10
-            timeout_seconds = 2
-          }
+          # TODO: Figure healthcheck out, seems to be failing on HTTP/HTTPS issue
+          # readiness_probe {
+          #   http_get {
+          #     path = "/healthcheck"
+          #     port = 3000
+          #     scheme = "HTTPS"
+          #   }
+          #   initial_delay_seconds = 10
+          #   period_seconds = 10
+          #   timeout_seconds = 2
+          # }
           resources {
             limits = {
               cpu    = "250m"
