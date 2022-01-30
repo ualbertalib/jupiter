@@ -81,7 +81,7 @@ gem 'builder_deferred_tagging', github: 'ualbertalib/builder_deferred_tagging', 
 gem 'oaisys', github: 'ualbertalib/oaisys', tag: 'v1.0.3'
 
 group :uat do
-  gem "azure-storage-blob", require: false
+  gem 'azure-storage-blob', require: false
 end
 
 # Seeds
