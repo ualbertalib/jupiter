@@ -4,8 +4,6 @@ resource "kubernetes_namespace" "namespace" {
   }
 }
 
-# TODO: Add Helm Chart for Solr and configure accordingly
-
 resource "helm_release" "ingress-nginx" {
   depends_on = [local_file.kubeconfig, kubernetes_namespace.namespace]
   name       = "${var.app-name}-ingress-nginx"
@@ -26,8 +24,9 @@ resource "kubernetes_config_map" "config" {
   data = {
     RAILS_ENV = "uat"
     RAILS_LOG_TO_STDOUT = "true"
+    RAILS_SERVE_STATIC_FILES = "true"
     DATABASE_URL = "postgresql://${urlencode("${var.postgresql-admin-login}@${azurerm_postgresql_server.db.name}")}:${urlencode(var.postgresql-admin-password)}@${azurerm_postgresql_server.db.fqdn}:5432/${azurerm_postgresql_database.postgresql-db.name}"
-    SOLR_URL = "http://solr:8983/solr/jupiter-uat"
+    SOLR_URL = "http://${var.app-name}-solr:8983/solr/jupiter-uat"
     REDIS_URL = "redis://:${urlencode(azurerm_redis_cache.redis.primary_access_key)}@${azurerm_redis_cache.redis.hostname}:${azurerm_redis_cache.redis.port}/0"
     SECRET_KEY_BASE = "${var.rails-secret-key}"
     SAML_PRIVATE_KEY = ""
@@ -45,6 +44,99 @@ resource "kubernetes_config_map" "config" {
     AZURE_STORAGE_ACCOUNT_NAME = azurerm_storage_account.blob_account.name
     AZURE_STORAGE_ACCESS_KEY = azurerm_storage_account.blob_account.primary_access_key
     AZURE_STORAGE_CONTAINER = azurerm_storage_container.storage_container.name
+  }
+}
+
+
+resource "kubernetes_config_map" "solr-config" {
+  metadata {
+    name = "${var.app-name}-solr-config"
+    namespace = "${var.app-name}"
+  }
+
+  data = {
+    "schema.xml" = "${file("${path.module}/../solr/config/schema.xml")}"
+    "solrconfig.xml" = "${file("${path.module}/../solr/config/solrconfig.xml")}"
+  }
+}
+
+resource "kubernetes_deployment" "solr" {
+  metadata {
+    name = "${var.app-name}-solr"
+    labels = {
+      app = "${var.app-name}"
+    }
+    namespace = "${var.app-name}"
+  }
+
+  spec {
+    replicas = 1
+
+    selector {
+      match_labels = {
+        app = "${var.app-name}-solr"
+      }
+    }
+
+    template {
+      metadata {
+        name = "${var.app-name}-solr"
+        labels = {
+          app = "${var.app-name}-solr"
+        }
+      }
+
+      spec {
+        container {
+          image = "solr:6.6"
+          image_pull_policy = "Always"
+          name = "${var.app-name}-solr"
+          command = ["docker-entrypoint.sh",  "solr-precreate", "jupiter-uat", "/config"]
+          port {
+            container_port = 8983
+          }
+          volume_mount {
+            name = "solr-config"
+            mount_path = "/config"
+          }
+          resources {
+            limits = {
+              cpu    = "250m"
+              memory = "512Mi"
+            }
+            requests = {
+              cpu    = "150m"
+              memory = "128Mi"
+            }
+          }
+        }
+        volume {
+          name = "solr-config"
+          config_map {
+            name = "${var.app-name}-solr-config"
+          }
+        }
+        restart_policy = "Always"
+      }
+    }
+  }
+}
+
+resource "kubernetes_service" "solr-service" {
+  metadata {
+    name = "${var.app-name}-solr"
+    namespace = "${var.app-name}"
+  }
+
+  spec {
+    port {
+      port = 8983
+      target_port = 8983
+    }
+
+    selector = {
+      app = "${var.app-name}-solr"
+    }
   }
 }
 
@@ -219,13 +311,14 @@ resource "kubernetes_ingress" "ingress" {
     name = "${var.app-name}-ingress"
     annotations = {
       "kubernetes.io/ingress.class" = "nginx"
+      "nginx.ingress.kubernetes.io/proxy-body-size" = "16m"
     }
     namespace = "${var.app-name}"
   }
   spec {
     rule {
       # TODO: Figure out how we will use DNS/etc
-      # host = "uat.era.library.ualberta.ca"
+      host = "*.uat.library.ualberta.ca"
       http {
         path {
           path = "/"
