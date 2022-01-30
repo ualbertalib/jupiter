@@ -99,6 +99,8 @@ Rails.application.configure do
   # Action on unpermitted parameters
   config.action_controller.action_on_unpermitted_parameters = false
 
+  # Allow any private ip address
+  config.hosts << IPAddr.new('10.0.0.0/8')
   config.hosts << Rails.application.secrets.era_host
   config.hosts << Rails.application.secrets.digitization_host
 end

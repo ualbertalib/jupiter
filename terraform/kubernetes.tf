@@ -192,16 +192,15 @@ resource "kubernetes_deployment" "app" {
               name = "${var.app-name}-config"
             }
           }
-          # TODO: Figure out workaround with config.hosts
-          # readiness_probe {
-          #   http_get {
-          #     path = "/healthcheck"
-          #     port = 3000
-          #   }
-          #   initial_delay_seconds = 10
-          #   period_seconds = 10
-          #   timeout_seconds = 2
-          # }
+          readiness_probe {
+            http_get {
+              path = "/healthcheck"
+              port = 3000
+            }
+            initial_delay_seconds = 10
+            period_seconds = 10
+            timeout_seconds = 2
+          }
           resources {
             limits = {
               cpu    = "250m"
