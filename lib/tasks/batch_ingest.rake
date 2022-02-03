@@ -185,7 +185,7 @@ def item_ingest(item_data, index, csv_directory)
         ControlledVocabulary.era.license.from_value(item_data[:license]) ||
         ControlledVocabulary.era.old_license.from_value(item_data[:license])
     end
-    unlocked_obj.rights = item_data[:license_text]
+    unlocked_obj.rights = item_data[:rights]
 
     # Additional fields
     unlocked_obj.contributors = item_data[:contributors].split('|') if item_data[:contributors].present?
