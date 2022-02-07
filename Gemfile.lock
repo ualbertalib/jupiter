@@ -113,6 +113,14 @@ GEM
       public_suffix (>= 2.0.2, < 5.0)
     amazing_print (1.4.0)
     ast (2.4.2)
+    azure-storage-blob (2.0.3)
+      azure-storage-common (~> 2.0)
+      nokogiri (~> 1, >= 1.10.8)
+    azure-storage-common (2.0.4)
+      faraday (~> 1.0)
+      faraday_middleware (~> 1.0, >= 1.0.0.rc1)
+      net-http-persistent (~> 4.0)
+      nokogiri (~> 1, >= 1.10.8)
     bcrypt (3.1.16)
     better_errors (2.9.1)
       coderay (>= 1.0.0)
@@ -233,6 +241,8 @@ GEM
     faraday-net_http_persistent (1.2.0)
     faraday-patron (1.0.0)
     faraday-rack (1.0.0)
+    faraday_middleware (1.2.0)
+      faraday (~> 1.0)
     ffi (1.15.5)
     flipper (0.23.1)
     flipper-active_record (0.23.1)
@@ -620,6 +630,7 @@ DEPENDENCIES
   active_link_to
   acts_as_rdfable!
   addressable (~> 2.8.0)
+  azure-storage-blob
   bcrypt (>= 3.1.13)
   better_errors (>= 2.3.0)
   binding_of_caller

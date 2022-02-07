@@ -1,0 +1,24 @@
+####################
+# Common Variables #
+####################
+app-name = "jupiter"
+
+##################
+# Authentication #
+##################
+azure-subscription-id = ""
+azure-client-id       = ""
+azure-client-secret   = ""
+azure-tenant-id       = ""
+
+#####################
+# PostgreSQL Server #
+#####################
+postgresql-admin-login    = ""
+postgresql-admin-password = ""
+
+
+#########
+# Rails #
+#########
+rails-secret-key = ""
