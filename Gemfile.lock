@@ -507,7 +507,7 @@ GEM
     semantic_range (3.0.0)
     shoulda-matchers (5.1.0)
       activesupport (>= 5.2.0)
-    sidekiq (6.1.0)
+    sidekiq (6.2.2)
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
       redis (>= 4.2.0)
@@ -673,7 +673,7 @@ DEPENDENCIES
   sdoc
   selenium-webdriver
   shoulda-matchers (~> 5.1)
-  sidekiq (= 6.1)
+  sidekiq (~> 6.2.0)
   sidekiq-cron
   sidekiq-unique-jobs (~> 7.1)
   simple_form
