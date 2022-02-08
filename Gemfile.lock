@@ -205,7 +205,7 @@ GEM
       rubocop
       smart_properties
     erubi (1.10.0)
-    et-orbi (1.2.4)
+    et-orbi (1.2.6)
       tzinfo
     ezid-client (1.8.0)
       hashie (~> 3.4, >= 3.4.3)
@@ -248,7 +248,7 @@ GEM
       rack (>= 1.4, < 3)
       rack-protection (>= 1.5.3, < 2.2.0)
       sanitize (< 7)
-    fugit (1.4.5)
+    fugit (1.5.2)
       et-orbi (~> 1.1, >= 1.1.8)
       raabro (~> 1.4)
     gems (1.2.0)
@@ -507,7 +507,7 @@ GEM
     semantic_range (3.0.0)
     shoulda-matchers (5.1.0)
       activesupport (>= 5.2.0)
-    sidekiq (6.3.1)
+    sidekiq (6.4.1)
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
       redis (>= 4.2.0)
@@ -673,7 +673,7 @@ DEPENDENCIES
   sdoc
   selenium-webdriver
   shoulda-matchers (~> 5.1)
-  sidekiq (~> 6.3.0)
+  sidekiq (~> 6.4)
   sidekiq-cron
   sidekiq-unique-jobs (~> 7.1)
   simple_form
