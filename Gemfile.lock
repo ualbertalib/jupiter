@@ -507,11 +507,11 @@ GEM
     semantic_range (3.0.0)
     shoulda-matchers (5.1.0)
       activesupport (>= 5.2.0)
-    sidekiq (5.2.9)
-      connection_pool (~> 2.2, >= 2.2.2)
+    sidekiq (6.0.7)
+      connection_pool (>= 2.2.2)
       rack (~> 2.0)
-      rack-protection (>= 1.5.0)
-      redis (>= 3.3.5, < 4.2)
+      rack-protection (>= 2.0.0)
+      redis (>= 4.1.0)
     sidekiq-cron (1.2.0)
       fugit (~> 1.1)
       sidekiq (>= 4.2.1)
@@ -674,7 +674,7 @@ DEPENDENCIES
   sdoc
   selenium-webdriver
   shoulda-matchers (~> 5.1)
-  sidekiq (~> 5.2)
+  sidekiq (~> 6.0)
   sidekiq-cron
   sidekiq-unique-jobs (~> 7.1)
   simple_form
@@ -696,4 +696,4 @@ RUBY VERSION
    ruby 2.7.3p183
 
 BUNDLED WITH
-   2.1.4
+   2.3.6

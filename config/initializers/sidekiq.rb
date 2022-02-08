@@ -4,7 +4,14 @@ Sidekiq.configure_server do |config|
   config.redis = { url: Rails.application.secrets.redis_url }
 
   schedule_file = 'config/schedule.yml'
-  Sidekiq::Cron::Job.load_from_hash YAML.load_file(schedule_file) if File.exist?(schedule_file)
+  if File.exist?(schedule_file) && Sidekiq.server?
+    # use the after_initialze block to avoid deprecation warning triggered
+    # by zeitwerk
+    # see hhttps://github.com/ondrejbartas/sidekiq-cron/issues/249#issuecomment-988739428
+    Rails.application.config.after_initialize do
+      Sidekiq::Cron::Job.load_from_hash YAML.load_file(schedule_file)
+    end
+  end
 
   # We touch and destroy files in the Sidekiq lifecycle to provide a
   # signal to Kubernetes that we are ready to process jobs or not.
