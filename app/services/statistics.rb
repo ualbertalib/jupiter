@@ -9,11 +9,11 @@ class Statistics
   end
 
   def self.views_for(item_id:)
-    Redis.current.get(counter_key_for(:view, item_id)).to_i || 0
+    Cache.redis.get(counter_key_for(:view, item_id)).to_i || 0
   end
 
   def self.downloads_for(item_id:)
-    Redis.current.get(counter_key_for(:download, item_id)).to_i || 0
+    Cache.redis.get(counter_key_for(:download, item_id)).to_i || 0
   end
 
   # Conveinience method for fetching all counts for a given item. The expectation is that you probably want to
@@ -35,13 +35,13 @@ class Statistics
       # based on some experimentation, key sizes for pfadd seems slightly more space and time efficient
       # than a scored set approach, but if imprecision becomes an issue we could revisit that as an alternative
       # at the cost of some space if items get "hot"
-      is_new_visit = Redis.current.pfadd(uniques_filter_key, ip)
+      is_new_visit = Cache.redis.pfadd(uniques_filter_key, ip)
 
       # ip filters reset at the top of the hour, so if the key was freshly (re-)created we need to set its TTL
-      Redis.current.expireat(uniques_filter_key, Time.current.end_of_hour.to_i)
+      Cache.redis.expireat(uniques_filter_key, Time.current.end_of_hour.to_i)
       return unless is_new_visit
 
-      Redis.current.incr(counter_key)
+      Cache.redis.incr(counter_key)
     end
 
     def uniques_key_for(action, id)

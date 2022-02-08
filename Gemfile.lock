@@ -446,7 +446,7 @@ GEM
       rexml (~> 3.2)
     rdoc (6.3.3)
     redcarpet (3.5.1)
-    redis (4.1.4)
+    redis (4.6.0)
     regexp_parser (2.2.1)
     representable (3.1.1)
       declarative (< 0.1.0)
@@ -507,11 +507,10 @@ GEM
     semantic_range (3.0.0)
     shoulda-matchers (5.1.0)
       activesupport (>= 5.2.0)
-    sidekiq (6.0.7)
+    sidekiq (6.1.0)
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
-      rack-protection (>= 2.0.0)
-      redis (>= 4.1.0)
+      redis (>= 4.2.0)
     sidekiq-cron (1.2.0)
       fugit (~> 1.1)
       sidekiq (>= 4.2.1)
@@ -674,7 +673,7 @@ DEPENDENCIES
   sdoc
   selenium-webdriver
   shoulda-matchers (~> 5.1)
-  sidekiq (~> 6.0)
+  sidekiq (= 6.1)
   sidekiq-cron
   sidekiq-unique-jobs (~> 7.1)
   simple_form

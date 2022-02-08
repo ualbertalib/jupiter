@@ -3,6 +3,16 @@ SIDEKIQ_HAS_STARTED_FILE = Rails.root.join('tmp/sidekiq_process_has_started').fr
 Sidekiq.configure_server do |config|
   config.redis = { url: Rails.application.secrets.redis_url }
 
+  config.client_middleware do |chain|
+    chain.add SidekiqUniqueJobs::Middleware::Client
+  end
+
+  config.server_middleware do |chain|
+    chain.add SidekiqUniqueJobs::Middleware::Server
+  end
+
+  SidekiqUniqueJobs::Server.configure(config)
+
   schedule_file = 'config/schedule.yml'
   if File.exist?(schedule_file) && Sidekiq.server?
     # use the after_initialze block to avoid deprecation warning triggered
@@ -29,6 +39,10 @@ end
 
 Sidekiq.configure_client do |config|
   config.redis = { url: Rails.application.secrets.redis_url }
+
+  config.client_middleware do |chain|
+    chain.add SidekiqUniqueJobs::Middleware::Client
+  end
 end
 
 require 'sidekiq/web'
