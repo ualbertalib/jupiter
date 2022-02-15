@@ -314,7 +314,7 @@ class ItemTest < ActiveSupport::TestCase
 
   # Preservation queue handling
   test 'should add id and type with the correct score for a new item to preservation queue' do
-    Redis.current.del Rails.application.secrets.preservation_queue_name
+    RedisClient.current.del Rails.application.secrets.preservation_queue_name
 
     # Setup an item...
     community = communities(:community_books)
@@ -336,10 +336,10 @@ class ItemTest < ActiveSupport::TestCase
         unlocked_item.save
       end
 
-      item_output, score = Redis.current.zrange(Rails.application.secrets.preservation_queue_name,
-                                                0,
-                                                -1,
-                                                with_scores: true)[0]
+      item_output, score = RedisClient.current.zrange(Rails.application.secrets.preservation_queue_name,
+                                                      0,
+                                                      -1,
+                                                      with_scores: true)[0]
       item_output = JSON.parse(item_output)
 
       assert_equal item.id, item_output['uuid']
@@ -347,11 +347,11 @@ class ItemTest < ActiveSupport::TestCase
       assert_in_delta 0.5, score, Time.now.to_f
     end
 
-    Redis.current.del Rails.application.secrets.preservation_queue_name
+    RedisClient.current.del Rails.application.secrets.preservation_queue_name
   end
 
   test 'should end up with the queue only having an item id once after multiple saves of the same item' do
-    Redis.current.del Rails.application.secrets.preservation_queue_name
+    RedisClient.current.del Rails.application.secrets.preservation_queue_name
 
     # Setup an item...
     community = communities(:community_books)
@@ -381,22 +381,22 @@ class ItemTest < ActiveSupport::TestCase
         unlocked_item.save
       end
 
-      assert_equal 1, Redis.current.zcard(Rails.application.secrets.preservation_queue_name)
+      assert_equal 1, RedisClient.current.zcard(Rails.application.secrets.preservation_queue_name)
 
-      item_output, score = Redis.current.zrange(Rails.application.secrets.preservation_queue_name,
-                                                0,
-                                                -1,
-                                                with_scores: true)[0]
+      item_output, score = RedisClient.current.zrange(Rails.application.secrets.preservation_queue_name,
+                                                      0,
+                                                      -1,
+                                                      with_scores: true)[0]
       item_output = JSON.parse(item_output)
       assert_equal item.id, item_output['uuid']
       assert_in_delta 0.5, score, 3.minutes.from_now.to_f
     end
 
-    Redis.current.del Rails.application.secrets.preservation_queue_name
+    RedisClient.current.del Rails.application.secrets.preservation_queue_name
   end
 
   test 'should end up with item ids in the queue in the correct temporal order' do
-    Redis.current.del Rails.application.secrets.preservation_queue_name
+    RedisClient.current.del Rails.application.secrets.preservation_queue_name
 
     # Setup some items...
     community = communities(:community_books)
@@ -440,11 +440,11 @@ class ItemTest < ActiveSupport::TestCase
     end
 
     save_order = [items[1], items[0], items[2]]
-    queue = Redis.current.zrange(Rails.application.secrets.preservation_queue_name, 0, -1, with_scores: false)
+    queue = RedisClient.current.zrange(Rails.application.secrets.preservation_queue_name, 0, -1, with_scores: false)
 
     assert_equal save_order.map(&:id), (queue.map { |x| JSON.parse(x)['uuid'] })
 
-    Redis.current.del Rails.application.secrets.preservation_queue_name
+    RedisClient.current.del Rails.application.secrets.preservation_queue_name
   end
 
 end
