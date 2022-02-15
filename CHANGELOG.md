@@ -15,6 +15,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ### Security
 - Bump Sidekiq from 5.2.9 to 6.4.1 [#2189](https://github.com/ualbertalib/jupiter/issues/2189)
+- Bump follow-redirects
+- Bump puma
+- Bump actionpack 
 
 ## [2.3.3] - 2022-01-19
 
