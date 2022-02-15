@@ -40,11 +40,11 @@ class StatisticsTest < ActiveSupport::TestCase
       views_key = Statistics.send(:uniques_key_for, :view, obj_id)
       downloads_key = Statistics.send(:uniques_key_for, :download, obj_id)
       # clear current timeout
-      Cache.redis.persist views_key
-      Cache.redis.persist downloads_key
+      RedisClient.current.persist views_key
+      RedisClient.current.persist downloads_key
       # expire immediately
-      Cache.redis.pexpire views_key, -1
-      Cache.redis.pexpire downloads_key, -1
+      RedisClient.current.pexpire views_key, -1
+      RedisClient.current.pexpire downloads_key, -1
 
       # Susequent viewings outside the ip filter expiry period should now count
       Statistics.increment_view_count_for(item_id: obj_id, ip: test_ip)
