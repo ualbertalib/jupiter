@@ -1214,10 +1214,10 @@
   dependencies:
     mkdirp "^1.0.4"
 
-"@rails/actiontext@^6.1.4-3":
-  version "6.1.4-3"
-  resolved "https://registry.yarnpkg.com/@rails/actiontext/-/actiontext-6.1.4-3.tgz#d125e725d11ac220de4d0a13ff37c00bb7fed904"
-  integrity sha512-2NYSmFs6gFUUk35FKuV8g1S95oZucwozGimaBeI2FQgFh0Jg0n/qw11h/66c18hVvDxw8J43wGXvwXb5RXrucw==
+"@rails/actiontext@^6.1.5":
+  version "6.1.5"
+  resolved "https://registry.yarnpkg.com/@rails/actiontext/-/actiontext-6.1.5.tgz#29006cff520b72c6845f474540a9ea142eae6380"
+  integrity sha512-V88uyueaL4VeU0u0P3GiuM0vSBYW3pluYyI7jMmZKWfGZKCspmRLDaJE+30Bx4h3ZQJcRrOCFoTU8hK0cFmCsw==
   dependencies:
     "@rails/activestorage" "^6.0.0"
 
