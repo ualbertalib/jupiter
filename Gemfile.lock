@@ -163,7 +163,7 @@ GEM
     crack (0.4.5)
       rexml
     crass (1.0.6)
-    danger (8.4.5)
+    danger (8.5.0)
       claide (~> 1.0)
       claide-plugins (>= 0.9.2)
       colored2 (~> 3.1)
@@ -312,7 +312,7 @@ GEM
       activerecord
       kaminari-core (= 1.2.2)
     kaminari-core (1.2.2)
-    kramdown (2.3.1)
+    kramdown (2.3.2)
       rexml
     kramdown-parser-gfm (1.1.0)
       kramdown (~> 2.0)
@@ -625,7 +625,7 @@ DEPENDENCIES
   capybara (>= 3.26, < 4.0)
   clamby
   connection_pool
-  danger (~> 8.4)
+  danger (~> 8.5)
   datacite-client!
   differ
   draper
