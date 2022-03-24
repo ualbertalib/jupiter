@@ -118,7 +118,7 @@ group :development do
 end
 
 group :test do
-  gem 'danger', '~> 8.4', require: false # Pull Request etiquette enforcement
+  gem 'danger', '~> 8.5', require: false # Pull Request etiquette enforcement
   gem 'simplecov'
   # Faker added 0.5 seconds to the test suite per call. Haikunator seems much faster for faking strings
   gem 'haikunator'
