@@ -133,15 +133,28 @@ module DraftProperties
     end
 
     def file_path_for(file)
+      return file.tempfile.path if file.is_a? ActionDispatch::Http::UploadedFile
+
       ActiveStorage::Blob.service.send(:path_for, file.key)
     end
 
     def files_are_virus_free
       return unless defined?(Clamby)
 
-      files.each do |file|
-        path = file_path_for(file)
-        errors.add(:files, :infected, filename: file.filename.to_s) unless Clamby.safe?(path)
+      # Rails 6 changed the moment of uploading the file to storage to during the actual saving of the record
+      # callbacks before save cannot access the file the regular way
+      # `attachment_changes` is an undocumented api to gain access to the temp file
+      # which will be a ActionDispatch::Http::UploadedFile
+      if attachment_changes['files'].present?
+        attachment_changes['files'].attachables.each do |file|
+          path = file_path_for(file)
+          errors.add(:files, :infected, filename: file.filename.to_s) unless Clamby.safe?(path)
+        end
+      else
+        files.each do |file|
+          path = file_path_for(file)
+          errors.add(:files, :infected, filename: file.filename.to_s) unless Clamby.safe?(path)
+        end
       end
     end
   end
