@@ -145,16 +145,11 @@ module DraftProperties
       # callbacks before save cannot access the file the regular way
       # `attachment_changes` is an undocumented api to gain access to the temp file
       # which will be a ActionDispatch::Http::UploadedFile
-      if attachment_changes['files'].present?
-        attachment_changes['files'].attachables.each do |file|
-          path = file_path_for(file)
-          errors.add(:files, :infected, filename: file.filename.to_s) unless Clamby.safe?(path)
-        end
-      else
-        files.each do |file|
-          path = file_path_for(file)
-          errors.add(:files, :infected, filename: file.filename.to_s) unless Clamby.safe?(path)
-        end
+      return unless attachment_changes['files']
+
+      attachment_changes['files'].attachables.each do |file|
+        path = file_path_for(file)
+        errors.add(:files, :infected, filename: File.basename(path)) unless Clamby.safe?(path)
       end
     end
   end
