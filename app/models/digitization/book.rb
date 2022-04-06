@@ -30,7 +30,6 @@ class Digitization::Book < JupiterCore::Depositable
   validates :geographic_subjects, presence: true, unless: :temporal_subjects? || :topical_subjects?
   validates :topical_subjects, presence: true, unless: :temporal_subjects? || :geographic_subjects?
 
-  validates :title, presence: true
   validates :resource_type, presence: true, uri: { namespace: :digitization, in_vocabulary: :resource_type }
   validates :genres, presence: true, uri: { namespace: :digitization, in_vocabulary: :genre }
   validates :languages, presence: true, uri: { namespace: :digitization, in_vocabulary: :language }

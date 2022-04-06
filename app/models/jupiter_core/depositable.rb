@@ -160,7 +160,7 @@ class JupiterCore::Depositable < ApplicationRecord
   def push_entity_for_preservation
     queue_name = Rails.application.secrets.preservation_queue_name
 
-    $queue ||= ConnectionPool.new(size: 1, timeout: 5) { Redis.current }
+    $queue ||= ConnectionPool.new(size: 1, timeout: 5) { RedisClient.current }
 
     $queue.with do |connection|
       # pushmi_pullyu requires both the id and type of the depositable

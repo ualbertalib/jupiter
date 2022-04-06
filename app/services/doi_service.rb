@@ -21,7 +21,7 @@ class DOIService
   attr_reader :item
 
   def initialize(item)
-    @item = item
+    @item = item.decorate
   end
 
   def create

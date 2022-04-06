@@ -177,6 +177,16 @@ en:
                 not_recognized: 'is not recognized'
               rights:
                 not_recognized: 'is not recognized'
+        digitization/newspaper:
+            attributes:
+              resource_type:
+                not_recognized: 'is not recognized'
+              genres:
+                not_recognized: 'is not recognized'
+              languages:
+                not_recognized: 'is not recognized'
+              rights:
+                not_recognized: 'is not recognized'
         user:
           attributes:
             api_key_digest:
@@ -851,6 +861,7 @@ en:
     range_begin: 'Range Begin'
     range_end: 'Range End'
     range_limit: 'Limit'
+    invalid_date_range_flash: 'Your selected date filters are not a valid range'
 
     index:
       header: 'Search'

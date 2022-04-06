@@ -24,6 +24,7 @@ class SearchController < ApplicationController
     )
     @results = search_query_index.results
     @search_models = search_query_index.search_models
+    flash.now[:alert] = t('search.invalid_date_range_flash') if search_query_index.invalid_date_range
 
     respond_to do |format|
       format.html

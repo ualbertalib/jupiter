@@ -13,6 +13,31 @@ New entries in this file should aim to provide a meaningful amount of informatio
   - batch ingest reports
 
 ### Fixed
+- File Upload error
+
+## [2.3.4] - 2022-02-08
+### Added
+- Add readiness healthchecks for Rails and Sidekiq [PR#2657](https://github.com/ualbertalib/jupiter/pull/2657)
+
+### Security
+- Bump Sidekiq from 5.2.9 to 6.4.1 [#2189](https://github.com/ualbertalib/jupiter/issues/2189)
+- Bump follow-redirects
+- Bump puma
+- Bump actionpack 
+
+## [2.3.3] - 2022-01-19
+
+### Fixed
+- Bring back illogical date range faceting flash message [#2030](https://github.com/ualbertalib/jupiter/issues/2030)
+- Thesis not being assigned a DOI [#2707](https://github.com/ualbertalib/jupiter/issues/2707)
+- Render markdown when viewing Collections as an administrator [#2708](https://github.com/ualbertalib/jupiter/issues/2708)
+
+## [2.3.2] - 2022-01-10
+
+- Jupiter II work is continuing to incorporate Digitized materials into Jupiter in the digitalcollections namespace.
+  - newspaper metadata for ACN digitization [#2645](https://github.com/ualbertalib/jupiter/issues/2645)
+
+### Fixed
 - nil Class error when viewing Collections drop down on Communities page [#2655](https://github.com/ualbertalib/jupiter/issues/2655)
 - Render markdown when viewing Communities as an administrator [#1322](https://github.com/ualbertalib/jupiter/issues/1322)
 
@@ -23,7 +48,7 @@ New entries in this file should aim to provide a meaningful amount of informatio
 ## [2.3.1] - 2021-12-07
 
 - Fix Gemfile so that `strong_migrations` is usesd in all environments
-
+  
 ## [2.3.0] - 2021-12-01
 
 - The EZID Compatibility API is sunsetting at the end of this year, per https://blog.datacite.org/sunsetting-of-the-ez-api/.  [datacite-client](https://github.com/pgwillia/datacite-client) is a ruby gem that wraps the [Datacite API](https://support.datacite.org/reference/introduction) for our use.  The main changes are the DOI's no longer have the `doi:` prefix, the format of metadata attributes, and the event mechanism for publishing/hiding the metadata from the public. Requires `datacite_api` feature flag and new secrets for our datacite credentials. [#2268](https://github.com/ualbertalib/jupiter/issues/2268)
