@@ -9,13 +9,16 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+## [2.3.5] - 2022-04-06
+
 - Jupiter II work is continuing to incorporate Digitized materials into Jupiter in the digitalcollections namespace.
-  - batch ingest reports
+  - batch ingest reports [PR#2612](https://github.com/ualbertalib/jupiter/pull/2612)
 
 ### Fixed
-- File Upload error
+- File Upload error [PR#2798](https://github.com/ualbertalib/jupiter/pull/2798)
 
 ## [2.3.4] - 2022-02-08
+
 ### Added
 - Add readiness healthchecks for Rails and Sidekiq [PR#2657](https://github.com/ualbertalib/jupiter/pull/2657)
 
