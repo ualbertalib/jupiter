@@ -17,7 +17,7 @@ class BatchIngestionJobTest < ActiveJob::TestCase
       end
 
       batch_ingest.reload
-      assert(batch_ingest.completed?)
+      assert_predicate(batch_ingest, :completed?)
       assert_equal(0, batch_ingest.items.count)
     end
   end
@@ -37,7 +37,7 @@ class BatchIngestionJobTest < ActiveJob::TestCase
       end
 
       batch_ingest.reload
-      assert(batch_ingest.failed?)
+      assert_predicate(batch_ingest, :failed?)
       assert_equal('An exception was raised!', batch_ingest.error_message)
     end
   end
@@ -61,7 +61,7 @@ class BatchIngestionJobTest < ActiveJob::TestCase
       end
 
       batch_ingest.reload
-      assert(batch_ingest.completed?)
+      assert_predicate(batch_ingest, :completed?)
       assert_equal(2, batch_ingest.items.count)
     end
   end

@@ -6,7 +6,7 @@ class ReadOnlyServiceTest < ActiveSupport::TestCase
     read_only_service = ReadOnlyService.new
     assert_not ReadOnlyMode.first.enabled?
     read_only_service.enable
-    assert ReadOnlyMode.first.enabled?
+    assert_predicate ReadOnlyMode.first, :enabled?
     read_only_service.disable
     assert_not ReadOnlyMode.first.enabled?
   end

@@ -6,7 +6,7 @@ class CollectionTest < ActiveSupport::TestCase
     community = communities(:community_books)
     collection = Collection.new(title: 'foo', owner_id: users(:user_regular).id,
                                 community_id: community.id)
-    assert collection.valid?
+    assert_predicate collection, :valid?
   end
 
   test 'needs title' do

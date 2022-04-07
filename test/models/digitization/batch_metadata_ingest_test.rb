@@ -9,7 +9,7 @@ class Digitization::BatchMetadataIngestTest < ActiveSupport::TestCase
   test 'valid batch ingest' do
     @batch_ingest.csvfile.attach(io: File.open(file_fixture('digitization_metadata_graph.csv')),
                                  filename: 'folkfest.csv')
-    assert @batch_ingest.valid?
+    assert_predicate @batch_ingest, :valid?
   end
 
   test 'invalid without csvfile' do

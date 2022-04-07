@@ -7,7 +7,7 @@ class BatchIngestTest < ActiveSupport::TestCase
   end
 
   test 'valid batch ingest' do
-    assert @batch_ingest.valid?
+    assert_predicate @batch_ingest, :valid?
   end
 
   test 'invalid without access token' do
