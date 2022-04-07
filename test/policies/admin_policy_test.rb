@@ -9,7 +9,7 @@ class AdminPolicyTest < ActiveSupport::TestCase
 
   test 'should allow admin user' do
     current_user = users(:user_admin)
-    assert AdminPolicy.new(current_user, :admin).access?
+    assert_predicate AdminPolicy.new(current_user, :admin), :access?
   end
 
 end

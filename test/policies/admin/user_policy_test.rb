@@ -22,7 +22,7 @@ class Admin::UserPolicyTest < ActiveSupport::TestCase
   end
 
   test 'should be able to suspend a regular user' do
-    assert Admin::UserPolicy.new(@current_user, [:admin, @user]).suspend?
+    assert_predicate Admin::UserPolicy.new(@current_user, [:admin, @user]), :suspend?
   end
 
   test 'should not be able to unsuspend an unsupended user' do
@@ -30,7 +30,7 @@ class Admin::UserPolicyTest < ActiveSupport::TestCase
   end
 
   test 'should be able to unsuspend a regular suspended user' do
-    assert Admin::UserPolicy.new(@current_user, [:admin, @suspended_user]).unsuspend?
+    assert_predicate Admin::UserPolicy.new(@current_user, [:admin, @suspended_user]), :unsuspend?
   end
 
   test 'should not be able to grant admin to a supended user' do
@@ -46,7 +46,7 @@ class Admin::UserPolicyTest < ActiveSupport::TestCase
   end
 
   test 'should be able to grant admin to a regular user' do
-    assert Admin::UserPolicy.new(@current_user, [:admin, @user]).grant_admin?
+    assert_predicate Admin::UserPolicy.new(@current_user, [:admin, @user]), :grant_admin?
   end
 
   test 'should not be able to revoke admin to a suspended user' do
@@ -62,7 +62,7 @@ class Admin::UserPolicyTest < ActiveSupport::TestCase
   end
 
   test 'should be able to revoke_admin to an admin user' do
-    assert Admin::UserPolicy.new(@current_user, [:admin, @admin_user]).revoke_admin?
+    assert_predicate Admin::UserPolicy.new(@current_user, [:admin, @admin_user]), :revoke_admin?
   end
 
   test 'should not be able to login as a supended user' do
@@ -78,7 +78,7 @@ class Admin::UserPolicyTest < ActiveSupport::TestCase
   end
 
   test 'should be able to login as a regular user' do
-    assert Admin::UserPolicy.new(@current_user, [:admin, @user]).login_as_user?
+    assert_predicate Admin::UserPolicy.new(@current_user, [:admin, @user]), :login_as_user?
   end
 
 end

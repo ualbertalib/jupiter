@@ -7,7 +7,7 @@ class BatchIngestFileTest < ActiveSupport::TestCase
   end
 
   test 'valid batch ingest file' do
-    assert @batch_ingest_file.valid?
+    assert_predicate @batch_ingest_file, :valid?
   end
 
   test 'invalid without google file id' do

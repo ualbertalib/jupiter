@@ -6,7 +6,7 @@ class CommunityTest < ActiveSupport::TestCase
 
   test 'visibility callback' do
     community = Community.new(title: 'foo', owner_id: users(:user_admin).id)
-    assert community.valid?
+    assert_predicate community, :valid?
     assert_equal community.visibility, JupiterCore::VISIBILITY_PUBLIC
   end
 
@@ -19,7 +19,7 @@ class CommunityTest < ActiveSupport::TestCase
   test 'a logo can be attached' do
     # We need to create this LdpObject to get a GlobalID
     community = communities(:community_books)
-    assert community.to_gid.present?
+    assert_predicate community.to_gid, :present?
 
     community.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
                           filename: 'image-sample.jpeg', content_type: 'image/jpeg'

@@ -6,21 +6,21 @@ class CollectionPolicyTest < ActiveSupport::TestCase
     current_user = users(:user_admin)
     collection = Collection.new
 
-    assert CollectionPolicy.new(current_user, collection).index?
-    assert CollectionPolicy.new(current_user, collection).create?
-    assert CollectionPolicy.new(current_user, collection).new?
-    assert CollectionPolicy.new(current_user, collection).show?
-    assert CollectionPolicy.new(current_user, collection).edit?
-    assert CollectionPolicy.new(current_user, collection).update?
-    assert CollectionPolicy.new(current_user, collection).destroy?
+    assert_predicate CollectionPolicy.new(current_user, collection), :index?
+    assert_predicate CollectionPolicy.new(current_user, collection), :create?
+    assert_predicate CollectionPolicy.new(current_user, collection), :new?
+    assert_predicate CollectionPolicy.new(current_user, collection), :show?
+    assert_predicate CollectionPolicy.new(current_user, collection), :edit?
+    assert_predicate CollectionPolicy.new(current_user, collection), :update?
+    assert_predicate CollectionPolicy.new(current_user, collection), :destroy?
   end
 
   test 'general user should only be able to see index and show of collections' do
     current_user = users(:user_regular)
     collection = Collection.new
 
-    assert CollectionPolicy.new(current_user, collection).index?
-    assert CollectionPolicy.new(current_user, collection).show?
+    assert_predicate CollectionPolicy.new(current_user, collection), :index?
+    assert_predicate CollectionPolicy.new(current_user, collection), :show?
 
     assert_not CollectionPolicy.new(current_user, collection).create?
     assert_not CollectionPolicy.new(current_user, collection).new?
@@ -33,8 +33,8 @@ class CollectionPolicyTest < ActiveSupport::TestCase
     current_user = nil
     collection = Collection.new
 
-    assert CollectionPolicy.new(current_user, collection).index?
-    assert CollectionPolicy.new(current_user, collection).show?
+    assert_predicate CollectionPolicy.new(current_user, collection), :index?
+    assert_predicate CollectionPolicy.new(current_user, collection), :show?
 
     assert_not CollectionPolicy.new(current_user, collection).create?
     assert_not CollectionPolicy.new(current_user, collection).new?

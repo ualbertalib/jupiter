@@ -168,10 +168,10 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
 
     draft_item.reload
 
-    assert draft_item.uuid.present?
+    assert_predicate draft_item.uuid, :present?
 
     item = Item.find(draft_item.uuid)
-    assert item.present?
+    assert_predicate item, :present?
 
     assert_redirected_to item_url(item)
     assert_equal I18n.t('items.draft.successful_deposit'), flash[:notice]

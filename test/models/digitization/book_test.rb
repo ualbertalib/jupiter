@@ -7,7 +7,7 @@ class Digitization::BookTest < ActiveSupport::TestCase
   end
 
   test 'valid Peel book' do
-    assert @document.valid?
+    assert_predicate @document, :valid?
   end
 
   test 'unique Peel book' do
@@ -30,7 +30,7 @@ class Digitization::BookTest < ActiveSupport::TestCase
 
   test 'valid Peel book from a run' do
     book = digitization_books(:henderson)
-    assert book.valid?
+    assert_predicate book, :valid?
   end
 
   test 'should have at least one type of subject' do
