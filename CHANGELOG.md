@@ -9,6 +9,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+### Chores
+- bump omniauth-saml 2.0.0 to 2.1.0 [PR#2767](https://github.com/ualbertalib/jupiter/pull/2767)
+
 ## [2.3.5] - 2022-04-06
 
 - Jupiter II work is continuing to incorporate Digitized materials into Jupiter in the digitalcollections namespace.

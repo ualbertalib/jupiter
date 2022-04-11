@@ -35,7 +35,7 @@ gem 'strong_migrations', '~> 1.0.0'
 gem 'bcrypt', '>= 3.1.13'
 gem 'omniauth', '~> 2.0'
 gem 'omniauth-rails_csrf_protection', '~> 1.0'
-gem 'omniauth-saml', '~> 2.0'
+gem 'omniauth-saml', '~> 2.1'
 
 # Authorization
 gem 'pundit', '1.1.0'
