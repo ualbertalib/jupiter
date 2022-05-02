@@ -252,7 +252,7 @@ GEM
       et-orbi (~> 1.1, >= 1.1.8)
       raabro (~> 1.4)
     gems (1.2.0)
-    git (1.10.2)
+    git (1.11.0)
       rchardet (~> 1.8)
     globalid (1.0.0)
       activesupport (>= 5.0)
