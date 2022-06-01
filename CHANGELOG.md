@@ -9,8 +9,8 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
-### enhancement
-- remove link to ERA A+V [PR]()
+### changed 
+- remove link to ERA A+V [PR2863](https://github.com/ualbertalib/jupiter/pull/2863)
 
 ## [2.3.6] - 2022-04-28
 
