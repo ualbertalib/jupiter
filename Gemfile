@@ -33,7 +33,7 @@ gem 'strong_migrations', '~> 1.0.0'
 
 # Authentication
 gem 'bcrypt', '>= 3.1.13'
-gem 'omniauth', '~> 2.0'
+gem 'omniauth', '~> 2.1'
 gem 'omniauth-rails_csrf_protection', '~> 1.0'
 gem 'omniauth-saml', '~> 2.1'
 
