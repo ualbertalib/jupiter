@@ -9,6 +9,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+### enhancement
+- remove link to ERA A+V [PR]()
+
 ## [2.3.6] - 2022-04-28
 
 ### Security
