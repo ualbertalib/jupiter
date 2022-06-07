@@ -239,9 +239,9 @@ GEM
     faraday-retry (1.0.3)
     ffi (1.15.5)
     flipper (0.24.1)
-    flipper-active_record (0.24.0)
+    flipper-active_record (0.24.1)
       activerecord (>= 4.2, < 8)
-      flipper (~> 0.24.0)
+      flipper (~> 0.24.1)
     flipper-ui (0.24.0)
       erubi (>= 1.0.0, < 2.0.0)
       flipper (~> 0.24.0)
@@ -634,7 +634,7 @@ DEPENDENCIES
   ezid-client (< 1.9.0)
   faker
   flipper (~> 0.24.1)
-  flipper-active_record (~> 0.24.0)
+  flipper-active_record (~> 0.24.1)
   flipper-ui (~> 0.24.0)
   google-api-client
   haikunator
