@@ -242,11 +242,11 @@ GEM
     flipper-active_record (0.24.1)
       activerecord (>= 4.2, < 8)
       flipper (~> 0.24.1)
-    flipper-ui (0.24.0)
+    flipper-ui (0.24.1)
       erubi (>= 1.0.0, < 2.0.0)
-      flipper (~> 0.24.0)
+      flipper (~> 0.24.1)
       rack (>= 1.4, < 3)
-      rack-protection (>= 1.5.3, < 2.2.0)
+      rack-protection (>= 1.5.3, <= 2.2.0)
       sanitize (< 7)
     fugit (1.5.2)
       et-orbi (~> 1.1, >= 1.1.8)
@@ -386,7 +386,7 @@ GEM
     raabro (1.4.0)
     racc (1.6.0)
     rack (2.2.3.1)
-    rack-protection (2.1.0)
+    rack-protection (2.2.0)
       rack
     rack-proxy (0.7.0)
       rack
@@ -635,7 +635,7 @@ DEPENDENCIES
   faker
   flipper (~> 0.24.1)
   flipper-active_record (~> 0.24.1)
-  flipper-ui (~> 0.24.0)
+  flipper-ui (~> 0.24.1)
   google-api-client
   haikunator
   image_processing
