@@ -124,7 +124,7 @@ group :test do
   gem 'haikunator'
   gem 'shoulda-matchers', '~> 5.1'
 
-  gem 'json-schema', '~> 2.8.1'
+  gem 'json-schema', '~> 3.0.0'
   gem 'launchy'
   gem 'rdf-isomorphic', '~> 3.2.1'
   gem 'vcr', '5.0', require: false
