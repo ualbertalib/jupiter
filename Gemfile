@@ -20,7 +20,7 @@ gem 'simple_form'
 
 # RDF stuff
 gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', tag: '0.4.0'
-gem 'rdf', '~> 3.2.6'
+gem 'rdf', '~> 3.2.8'
 gem 'rdf-n3', '~> 3.2.1'
 gem 'rdf-vocab', '~> 3.2.1' # this gem changed predicate names without warning, be cautious and test with migrations
 
