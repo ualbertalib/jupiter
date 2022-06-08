@@ -27,13 +27,9 @@ class DOIService
   def create
     return unless @item.unminted? && !@item.private?
 
-    response, id = if Flipper.enabled?(:datacite_api)
-                     response = Datacite::Client.mint(datacite_attributes)
-                     [response, "doi:#{response.doi}"]
-                   else
-                     response = Ezid::Identifier.mint(Ezid::Client.config.default_shoulder, ezid_metadata)
-                     [response, response.id]
-                   end
+    response = Datacite::Client.mint(datacite_attributes)
+    id = "doi:#{response.doi}"
+
     if response.present?
       @item.tap do |uo|
         uo.doi = id
@@ -57,19 +53,15 @@ class DOIService
   def update
     return unless @item.awaiting_update?
 
-    response = if Flipper.enabled?(:datacite_api)
-                 if @item.private?
-                   event = Datacite::Event::HIDE
-                   reason = UNAVAILABLE_MESSAGE
-                 else
-                   event = Datacite::Event::PUBLISH
-                 end
+    if @item.private?
+      event = Datacite::Event::HIDE
+      reason = UNAVAILABLE_MESSAGE
+    else
+      event = Datacite::Event::PUBLISH
+    end
 
-                 Datacite::Client.modify(@item.doi.delete_prefix('doi:'), datacite_attributes, event: event,
-                                                                                               reason: reason)
-               else
-                 Ezid::Identifier.modify(@item.doi, ezid_metadata)
-               end
+    response = Datacite::Client.modify(@item.doi.delete_prefix('doi:'), datacite_attributes, event: event,
+                                                                                             reason: reason)
 
     return if response.blank?
 
@@ -95,30 +87,11 @@ class DOIService
   end
 
   def self.remove(doi)
-    if Flipper.enabled?(:datacite_api)
-      Datacite::Client.modify(doi.delete_prefix('doi:'),
-                              { reason: 'unavailable | withdrawn', event: Datacite::Event::HIDE })
-    else
-      Ezid::Identifier.modify(doi, status: "#{Ezid::Status::UNAVAILABLE} | withdrawn", export: 'no')
-    end
+    Datacite::Client.modify(doi.delete_prefix('doi:'),
+                            { reason: 'unavailable | withdrawn', event: Datacite::Event::HIDE })
   end
 
   private
-
-  def ezid_metadata
-    {
-      datacite_creator: @item.authors.join('; '),
-      datacite_publisher: PUBLISHER,
-      datacite_publicationyear: @item.sort_year.presence || '(:unav)',
-      datacite_resourcetype: DATACITE_METADATA_SCHEME[@item.item_type_with_status_code],
-      datacite_resourcetypegeneral: DATACITE_METADATA_SCHEME[@item.item_type_with_status_code].split('/').first,
-      datacite_title: @item.title,
-      target: Rails.application.routes.url_helpers.item_url(id: @item.id),
-      # Can only set status if been minted previously, else its public
-      status: @item.private? && @item.doi.present? ? UNAVAILABLE_MESSAGE : Ezid::Status::PUBLIC,
-      export: @item.private? ? 'no' : 'yes'
-    }
-  end
 
   def datacite_attributes
     {
