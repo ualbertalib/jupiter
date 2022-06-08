@@ -205,7 +205,7 @@ GEM
       rubocop
       smart_properties
     erubi (1.10.0)
-    et-orbi (1.2.6)
+    et-orbi (1.2.7)
       tzinfo
     ezid-client (1.8.0)
       hashie (~> 3.4, >= 3.4.3)
@@ -248,8 +248,8 @@ GEM
       rack (>= 1.4, < 3)
       rack-protection (>= 1.5.3, <= 2.2.0)
       sanitize (< 7)
-    fugit (1.5.2)
-      et-orbi (~> 1.1, >= 1.1.8)
+    fugit (1.5.3)
+      et-orbi (~> 1, >= 1.2.7)
       raabro (~> 1.4)
     gems (1.2.0)
     git (1.11.0)
@@ -511,8 +511,8 @@ GEM
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
       redis (>= 4.2.0)
-    sidekiq-cron (1.2.0)
-      fugit (~> 1.1)
+    sidekiq-cron (1.4.0)
+      fugit (~> 1)
       sidekiq (>= 4.2.1)
     sidekiq-unique-jobs (7.1.23)
       brpoplpush-redis_script (> 0.1.1, <= 2.0.0)
