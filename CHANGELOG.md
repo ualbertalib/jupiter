@@ -12,6 +12,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 ### Removed 
 - link to ERA A+V [#2765](https://github.com/ualbertalib/jupiter/issues/2765)
 
+### Chores
+- remove Ruby 2.6 [PR#2878](https://github.com/ualbertalib/jupiter/pull/2878)
+
 ## [2.3.6] - 2022-04-28
 
 ### Security
