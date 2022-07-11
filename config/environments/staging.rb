@@ -91,7 +91,7 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   # Which ActiveStorage service to use
-  config.active_storage.service = (ENV['ACTIVE_STORAGE_SERVICE'] || :local).to_sym
+  config.active_storage.service = (ENV.fetch('ACTIVE_STORAGE_SERVICE', nil) || :local).to_sym
 
   # FITS characterization
   config.run_fits_characterization = true

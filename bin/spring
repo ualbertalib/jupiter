@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-if !defined?(Spring) && [nil, 'development', 'test'].include?(ENV['RAILS_ENV'])
+if !defined?(Spring) && [nil, 'development', 'test'].include?(ENV.fetch('RAILS_ENV', nil))
   gem 'bundler'
   require 'bundler'
 

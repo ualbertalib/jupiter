@@ -39,7 +39,7 @@ pidfile ENV.fetch('PIDFILE') { 'tmp/pids/server.pid' }
 #
 # preload_app!
 
-if ENV['RAILS_ENV'] == 'uat'
+if ENV.fetch('RAILS_ENV', nil) == 'uat'
   workers ENV.fetch('WEB_CONCURRENCY', 3)
   preload_app!
   on_worker_boot do
