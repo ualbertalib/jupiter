@@ -81,22 +81,22 @@ class Digitization::BookTest < ActiveSupport::TestCase
 
   test 'retrieve fulltext' do
     assert_equal(
-      'Quia aliquam non nostrum ab ad distinctio consequuntur sunt dignissimos eum quia quia nobis et impedit ex '\
-      'deserunt facilis quidem sint quaerat id sit alias dolores consectetur ut officiis autem repudiandae ut '\
-      'reiciendis sed qui quia quisquam eos libero voluptatem mollitia temporibus optio est et aperiam nesciunt '\
-      'nostrum dignissimos sapiente quos non consequatur magni reprehenderit minus vero unde laborum tempora nihil '\
-      'provident qui ducimus excepturi minus et deleniti delectus itaque rerum vel error beatae praesentium nisi '\
-      'accusantium ut vel explicabo omnis minima cupiditate illo assumenda est sit aut necessitatibus est molestiae '\
-      'sed quisquam commodi sunt iusto voluptatem adipisci error molestias est voluptatem veniam deleniti '\
-      'reprehenderit dolor saepe voluptate autem culpa aut corrupti voluptas sit beatae sequi quasi aut qui quibusdam '\
-      'omnis dolore accusantium nam fugiat harum possimus cumque numquam modi qui ut cupiditate voluptas dolorum '\
-      'voluptas non eum ducimus repellendus quidem esse dolorem voluptatibus magni molestias ea sunt non veniam '\
-      'inventore placeat neque ea harum sed aut iste quod dolore id incidunt commodi fugit accusamus corporis '\
-      'voluptatem quia enim et molestiae blanditiis iure possimus illum et enim saepe consequatur cumque minima '\
-      'necessitatibus voluptas hic et omnis consectetur dolor et ullam facere iusto suscipit quod non laudantium '\
-      'asperiores eos at occaecati odit voluptates rerum aut ipsam cum animi amet voluptates pariatur qui et et '\
-      'numquam ipsum voluptatem in aperiam iste ut qui tenetur doloremque delectus magnam quam et natus sint enim sed '\
-      'exercitationem veritatis et est nulla fugit eaque labore voluptas placeat velit et dolores ratione dicta '\
+      'Quia aliquam non nostrum ab ad distinctio consequuntur sunt dignissimos eum quia quia nobis et impedit ex ' \
+      'deserunt facilis quidem sint quaerat id sit alias dolores consectetur ut officiis autem repudiandae ut ' \
+      'reiciendis sed qui quia quisquam eos libero voluptatem mollitia temporibus optio est et aperiam nesciunt ' \
+      'nostrum dignissimos sapiente quos non consequatur magni reprehenderit minus vero unde laborum tempora nihil ' \
+      'provident qui ducimus excepturi minus et deleniti delectus itaque rerum vel error beatae praesentium nisi ' \
+      'accusantium ut vel explicabo omnis minima cupiditate illo assumenda est sit aut necessitatibus est molestiae ' \
+      'sed quisquam commodi sunt iusto voluptatem adipisci error molestias est voluptatem veniam deleniti ' \
+      'reprehenderit dolor saepe voluptate autem culpa aut corrupti voluptas sit beatae sequi quasi aut qui ' \
+      'quibusdam omnis dolore accusantium nam fugiat harum possimus cumque numquam modi qui ut cupiditate voluptas ' \
+      'dolorum voluptas non eum ducimus repellendus quidem esse dolorem voluptatibus magni molestias ea sunt non ' \
+      'veniam inventore placeat neque ea harum sed aut iste quod dolore id incidunt commodi fugit accusamus corporis ' \
+      'voluptatem quia enim et molestiae blanditiis iure possimus illum et enim saepe consequatur cumque minima ' \
+      'necessitatibus voluptas hic et omnis consectetur dolor et ullam facere iusto suscipit quod non laudantium ' \
+      'asperiores eos at occaecati odit voluptates rerum aut ipsam cum animi amet voluptates pariatur qui et et ' \
+      'numquam ipsum voluptatem in aperiam iste ut qui tenetur doloremque delectus magnam quam et natus sint enim ' \
+      'sed exercitationem veritatis et est nulla fugit eaque labore voluptas placeat velit et dolores ratione dicta ' \
       'debitis aliquid aliquam quia.', @document.fulltext.text
     )
   end

@@ -55,7 +55,7 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
                   text: I18n.t('delete')
   end
 
-  test 'visiting the show page for a community with two collections and a logo '\
+  test 'visiting the show page for a community with two collections and a logo ' \
        'as a regular user' do
     user = users(:user_regular)
     sign_in_as user
