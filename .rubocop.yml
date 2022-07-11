@@ -32,7 +32,7 @@ Layout/IndentationConsistency:
 Layout/LineLength:
   Enabled: true
   Max: 120 # default is 80
-  IgnoredPatterns: ['\A\s*#'] # tweak to ignore long comments, which often are examples or URLs that are not easily broken up
+  AllowedPatterns: ['\A\s*#'] # tweak to ignore long comments, which often are examples or URLs that are not easily broken up
 
 # readability is Actually Good
 Layout/RescueEnsureAlignment:
