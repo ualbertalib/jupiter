@@ -196,7 +196,7 @@ GEM
       unicode-types (~> 1.7)
     edtf (3.0.8)
       activesupport (>= 3.0, < 8.0)
-    erb_lint (0.1.1)
+    erb_lint (0.1.3)
       activesupport
       better_html (~> 1.0.7)
       html_tokenizer
@@ -411,7 +411,7 @@ GEM
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
-    rails-html-sanitizer (1.4.2)
+    rails-html-sanitizer (1.4.3)
       loofah (~> 2.3)
     railties (6.1.6)
       actionpack (= 6.1.6)
@@ -540,7 +540,7 @@ GEM
       skylight-core (= 4.3.2)
     skylight-core (4.3.2)
       activesupport (>= 4.2.0)
-    smart_properties (1.16.2)
+    smart_properties (1.17.0)
     sparql (3.2.1)
       builder (~> 3.2)
       ebnf (~> 2.2)
