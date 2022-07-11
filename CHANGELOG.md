@@ -14,6 +14,7 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ### Chores
 - remove Ruby 2.6 [PR#2878](https://github.com/ualbertalib/jupiter/pull/2878)
+- bump rubocop and fix new nags [PR#2900](https://github.com/ualbertalib/jupiter/pull/2900)
 
 ## [2.3.6] - 2022-04-28
 
