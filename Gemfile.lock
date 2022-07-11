@@ -457,7 +457,7 @@ GEM
       rack (>= 1.4)
     retriable (3.1.2)
     rexml (3.2.5)
-    rollbar (3.3.0)
+    rollbar (3.3.1)
     rsolr (2.5.0)
       builder (>= 2.1.2)
       faraday (>= 0.9, < 3, != 2.0.0)
