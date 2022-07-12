@@ -21,6 +21,7 @@ New entries in this file should aim to provide a meaningful amount of informatio
 - remove Ruby 2.6 [PR#2878](https://github.com/ualbertalib/jupiter/pull/2878)
 - bump rubocop and fix new nags [PR#2900](https://github.com/ualbertalib/jupiter/pull/2900)
 - bump ruboocp-rails and fix new nags [PR#2899](https://github.com/ualbertalib/jupiter/pull/2899)
+- bump Ruby from 2.6 to 2.7 for UAT [PR#2909](https://github.com/ualbertalib/jupiter/pull/2909)
 
 ### Security
 - bump rails 6.1.6 to 6.1.6.1
