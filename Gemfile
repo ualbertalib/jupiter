@@ -51,7 +51,7 @@ gem 'addressable', '~> 2.8.0' # Replacement for the standard URI implementation
 gem 'datacite-client', github: 'ualbertalib/datacite-client', tag: 'v0.1.0', require: 'datacite'
 gem 'differ' # Used to diff two strings
 gem 'draper'
-gem 'edtf', '~> 3.0' # parsing Extended Date/Time Format
+gem 'edtf', '~> 3.1' # parsing Extended Date/Time Format
 gem 'ezid-client', '< 1.9.0'
 gem 'flipper', '~> 0.25.0' # Feature flags for Ruby
 gem 'flipper-active_record', '~> 0.25.0' # Store feature flags in ActiveRecord

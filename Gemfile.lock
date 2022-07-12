@@ -194,7 +194,7 @@ GEM
       scanf (~> 1.0)
       sxp (~> 1.2)
       unicode-types (~> 1.7)
-    edtf (3.0.8)
+    edtf (3.1.0)
       activesupport (>= 3.0, < 8.0)
     erb_lint (0.1.3)
       activesupport
@@ -633,7 +633,7 @@ DEPENDENCIES
   datacite-client!
   differ
   draper
-  edtf (~> 3.0)
+  edtf (~> 3.1)
   erb_lint (>= 0.0.35)
   ezid-client (< 1.9.0)
   faker
