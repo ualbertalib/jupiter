@@ -9,6 +9,8 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+## [2.3.7] - 2022-07-13
+
 ### Removed 
 - link to ERA A+V [#2765](https://github.com/ualbertalib/jupiter/issues/2765)
 
@@ -16,6 +18,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 - remove Ruby 2.6 [PR#2878](https://github.com/ualbertalib/jupiter/pull/2878)
 - bump rubocop and fix new nags [PR#2900](https://github.com/ualbertalib/jupiter/pull/2900)
 - bump ruboocp-rails and fix new nags [PR#2899](https://github.com/ualbertalib/jupiter/pull/2899)
+
+### Security
+- bump rails 6.1.6 to 6.1.6.1
 
 ## [2.3.6] - 2022-04-28
 
