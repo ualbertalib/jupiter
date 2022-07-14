@@ -9,6 +9,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+### Removed
+- references to EZID [#2671](https://github.com/ualbertalib/jupiter/issues/2671)
+
 ## [2.3.7] - 2022-07-13
 
 ### Removed 
