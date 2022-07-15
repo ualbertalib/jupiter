@@ -5,7 +5,7 @@ LABEL maintainer="University of Alberta Library"
 # RUN echo 'deb http://ftp.debian.org/debian jessie-backports main'  >> /etc/apt/sources.list
 
 # Autoprefixer doesn’t support Node v4.8.2. Update it.
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash -
 
 ## To install the Yarn package manager (rails assets:precompile complains if not installed), run:
 RUN curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
