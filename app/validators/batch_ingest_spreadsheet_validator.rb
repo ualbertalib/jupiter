@@ -54,9 +54,15 @@ class BatchIngestSpreadsheetValidator < ActiveModel::EachValidator
         record.errors.add(attribute, :column_not_found, column: 'owner_id', row_number: row_number)
       end
 
-      # Ensure that any file name in the spreadsheet has an corresponding file
-      unless record.batch_ingest_files.any? { |file| row['file_name'] == file.google_file_name }
-        record.errors.add(attribute, :no_matching_files, row_number: row_number)
+      # Ensure that all files name in the spreadsheet have a corresponding uploaded file
+      # XXX
+
+      file_names = row['file_name'].split('|').map(&:strip)
+      google_file_names = record.batch_ingest_files.map { |file| file.google_file_name}
+      missing_files = file_names - google_file_names
+
+      unless missing_files.empty?
+        record.errors.add(attribute, :no_matching_files, file_names: missing_files.join(','), row_number: row_number)
       end
     end
   rescue StandardError

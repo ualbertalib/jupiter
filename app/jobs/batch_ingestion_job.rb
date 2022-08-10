@@ -1,5 +1,6 @@
 class BatchIngestionJob < ApplicationJob
 
+  # XXX
   class GoogleAPIError < StandardError; end
 
   queue_as :default
@@ -26,12 +27,15 @@ class BatchIngestionJob < ApplicationJob
 
     ActiveRecord::Base.transaction do
       spreadsheet.each do |row|
-        item_file = batch_ingest.batch_ingest_files.find { |file| file.google_file_name == row['file_name'] }
+        row_file_names = row['file_name'].split('|').map(&:strip)
 
-        next if item_file.blank?
+        item_files = batch_ingest.batch_ingest_files.find_all { |file| row_file_names.include?(file.google_file_name) }
+
+        # This needs to be improved to chech that all files are accounted for
+        next if item_files.count != row_file_names.count
 
         item = item_ingest(batch_ingest, row)
-        file_ingest(item, item_file, google_credentials)
+        files_ingest(item, item_files, google_credentials)
       end
     end
 
@@ -121,9 +125,15 @@ class BatchIngestionJob < ApplicationJob
     item
   end
 
-  def file_ingest(item, item_file, google_credentials)
-    file = google_credentials.download_file(item_file.google_file_id, item_file.google_file_name)
-    item.add_and_ingest_files([file])
+  def files_ingest(item, item_files, google_credentials)
+    files = []
+    item_files.each do |item_file|
+      files << google_credentials.download_file(item_file.google_file_id, item_file.google_file_name)
+    end
+
+    return unless files.any?
+
+    item.add_and_ingest_files(files)
     item.set_thumbnail(item.files.first) if item.files.first.present?
   end
 
