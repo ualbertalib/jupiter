@@ -55,10 +55,9 @@ class BatchIngestSpreadsheetValidator < ActiveModel::EachValidator
       end
 
       # Ensure that all files name in the spreadsheet have a corresponding uploaded file
-      # XXX
 
       file_names = row['file_name'].split('|').map(&:strip)
-      google_file_names = record.batch_ingest_files.map { |file| file.google_file_name}
+      google_file_names = record.batch_ingest_files.map(&:google_file_name)
       missing_files = file_names - google_file_names
 
       unless missing_files.empty?

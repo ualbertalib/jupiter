@@ -21,7 +21,6 @@ class Admin::BatchIngestsController < Admin::AdminController
   end
 
   def create
-    # XXX
     @batch_ingest = current_user.batch_ingests.new(
       access_token: session[:google_credentials]['access_token'],
       refresh_token: session[:google_credentials]['refresh_token'],

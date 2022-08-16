@@ -12,3 +12,18 @@ batch_ingest_file_three:
   google_file_id: "RANDOMFILEID"
   google_file_name: "conference_logo.png"
   batch_ingest: batch_ingest_with_two_files
+
+batch_ingest_file_four:
+  google_file_id: "RANDOMFILEID1"
+  google_file_name: "Canastas_seri - By Alejandro Yanes - Own work, CC BY-SA 4.0.jpg"
+  batch_ingest: batch_ingest_with_three_files_in_one_item
+
+batch_ingest_file_five:
+  google_file_id: "RANDOMFILEID2"
+  google_file_name: "MAPElNorte049 - By AlejandroLinaresGarcia - Own work, CC BY-SA 4.0.jpeg"
+  batch_ingest: batch_ingest_with_three_files_in_one_item
+
+batch_ingest_file_six:
+  google_file_id: "RANDOMFILEID3"
+  google_file_name: "Tumacacori-Carmen-Tumacácori_Museum- By Marine 69-71 - Own work, CC BY-SA 4.0.jpg"
+  batch_ingest: batch_ingest_with_three_files_in_one_item

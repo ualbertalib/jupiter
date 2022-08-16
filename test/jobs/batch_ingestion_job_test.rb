@@ -66,4 +66,63 @@ class BatchIngestionJobTest < ActiveJob::TestCase
     end
   end
 
+  test 'batch ingestion with multiple files in one row' do
+    batch_ingest = batch_ingests(:batch_ingest_with_three_files_in_one_item)
+
+    # The VCR cassettes for this test where created using Net::HTTP calls
+    # seperatedly which are not used in the test any more as we are using the
+    # creted cassettes.
+
+    # The file cassettes where creted with code that looks like
+
+    # VCR.use_cassette('google_fetch_file_mayo') do
+    #   uri = URI('https://www.googleapis.com/drive/v3/files/FILEID?alt=media')
+    #   Net::HTTP.get(uri)
+    # end
+
+    # The VCR cassette was created in a similar way. However, the yaml serializer
+    # was adding the spreadsheet in binary format. The file required to be edited
+    # so we could modify it with ERB so the configuration for VCR in the
+    # test_helper.rb file was changed with
+
+    # cassette.response.body.force_encoding('UTF-8')
+
+    # VCR.use_cassette('google_fetch_spreadsheet_multiple_files_in_one_row') do
+    #   uri =  URI("https://sheets.googleapis.com/v4/spreadsheets/RANDOMSPREADSHEETID/values/'Data'!A:X?key=test-google-developer-key")
+    #   Net::HTTP.get(uri)
+    # end
+
+    assert_difference('Item.count', +3) do
+      assert_difference('ActiveStorage::Blob.count', +9) do
+        VCR.use_cassette('google_fetch_spreadsheet_multiple_files_in_one_row',
+                         record: :none,
+                         erb: {
+                           collection_id: collections(:collection_fantasy).id,
+                           community_id: communities(:community_books).id,
+                           owner_id: users(:user_admin).id
+                         }) do
+          VCR.use_cassette('google_fetch_file_seri',
+                           record: :none,
+                           allow_playback_repeats: true) do
+            VCR.use_cassette('google_fetch_file_mayo',
+                             record: :none,
+                             allow_playback_repeats: true) do
+              VCR.use_cassette('google_fetch_file_yaqui',
+                               record: :none,
+                               allow_playback_repeats: true) do
+                BatchIngestionJob.perform_now(batch_ingest)
+              end
+            end
+          end
+        end
+      end
+
+      batch_ingest.reload
+      assert(batch_ingest.completed?)
+      assert_equal(3, batch_ingest.items.count)
+      # Each item has 3 files associated with it
+      assert_equal([3, 3, 3], batch_ingest.items.map { |item| item.files.count })
+    end
+  end
+
 end

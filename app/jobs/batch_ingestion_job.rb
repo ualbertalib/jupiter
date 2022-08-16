@@ -1,6 +1,5 @@
 class BatchIngestionJob < ApplicationJob
 
-  # XXX
   class GoogleAPIError < StandardError; end
 
   queue_as :default
@@ -28,11 +27,11 @@ class BatchIngestionJob < ApplicationJob
     ActiveRecord::Base.transaction do
       spreadsheet.each do |row|
         row_file_names = row['file_name'].split('|').map(&:strip)
-
         item_files = batch_ingest.batch_ingest_files.find_all { |file| row_file_names.include?(file.google_file_name) }
 
-        # This needs to be improved to chech that all files are accounted for
-        next if item_files.count != row_file_names.count
+        # We need to make sure that all row_file_names are included in the list
+        # of files provided in the interface
+        next if (row_file_names - item_files.map(&:google_file_name)).any?
 
         item = item_ingest(batch_ingest, row)
         files_ingest(item, item_files, google_credentials)
