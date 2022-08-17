@@ -118,7 +118,7 @@ class BatchIngestionJobTest < ActiveJob::TestCase
       end
 
       batch_ingest.reload
-      assert(batch_ingest.completed?)
+      assert_predicate(batch_ingest, :completed?)
       assert_equal(3, batch_ingest.items.count)
       # Each item has 3 files associated with it
       assert_equal([3, 3, 3], batch_ingest.items.map { |item| item.files.count })
