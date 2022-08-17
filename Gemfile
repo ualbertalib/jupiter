@@ -1,12 +1,12 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '>= 2.6', '< 2.8'
+ruby '>= 2.7', '< 3.0'
 
 # Core Rails stuff
 gem 'image_processing' # for ActiveStorage Variants
 gem 'puma', '~> 5.6'
-gem 'rails', '~> 6.1.5'
+gem 'rails', '~> 6.1.6'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 gem 'webpacker', '~> 5.4'
@@ -20,22 +20,22 @@ gem 'simple_form'
 
 # RDF stuff
 gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', tag: '0.4.0'
-gem 'rdf', '~> 3.2.5'
+gem 'rdf', '~> 3.2.9'
 gem 'rdf-n3', '~> 3.2.1'
 gem 'rdf-vocab', '~> 3.2.1' # this gem changed predicate names without warning, be cautious and test with migrations
 
 # Database stuff
 gem 'connection_pool'
-gem 'pg', '~> 1.3.4'
-gem 'redis', '~> 4.1'
+gem 'pg', '~> 1.4.3'
+gem 'redis', '~> 4.7'
 gem 'rsolr'
 gem 'strong_migrations', '~> 1.0.0'
 
 # Authentication
 gem 'bcrypt', '>= 3.1.13'
-gem 'omniauth', '~> 2.0'
+gem 'omniauth', '~> 2.1'
 gem 'omniauth-rails_csrf_protection', '~> 1.0'
-gem 'omniauth-saml', '~> 2.0'
+gem 'omniauth-saml', '~> 2.1'
 
 # Authorization
 gem 'pundit', '1.1.0'
@@ -51,15 +51,14 @@ gem 'addressable', '~> 2.8.0' # Replacement for the standard URI implementation
 gem 'datacite-client', github: 'ualbertalib/datacite-client', tag: 'v0.1.0', require: 'datacite'
 gem 'differ' # Used to diff two strings
 gem 'draper'
-gem 'edtf', '~> 3.0' # parsing Extended Date/Time Format
-gem 'ezid-client', '< 1.9.0'
-gem 'flipper', '~> 0.24.0' # Feature flags for Ruby
-gem 'flipper-active_record', '~> 0.24.0' # Store feature flags in ActiveRecord
-gem 'flipper-ui', '~> 0.24.0' # UI for feature flags
+gem 'edtf', '~> 3.1' # parsing Extended Date/Time Format
+gem 'flipper', '~> 0.25.0' # Feature flags for Ruby
+gem 'flipper-active_record', '~> 0.25.0' # Store feature flags in ActiveRecord
+gem 'flipper-ui', '~> 0.25.0' # UI for feature flags
 gem 'jbuilder' # generate JSON objects
 gem 'kaminari' # Pagination
 gem 'paper_trail' # Track object changes
-gem 'ransack', '2.6.0' # ActiveRecord search/filter
+gem 'ransack', '3.2.1' # ActiveRecord search/filter
 gem 'redcarpet', '~> 3.5', '>= 3.5.1', require: ['redcarpet', 'redcarpet/render_strip'] # Markdown to (X)HTML parser
 gem 'uuidtools'
 gem 'voight_kampff' # bot detection
@@ -96,7 +95,7 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
 
-  gem 'rubocop', '~> 1.26.1', require: false
+  gem 'rubocop', '~> 1.34.1', require: false
   gem 'rubocop-minitest', require: false
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false
@@ -118,13 +117,13 @@ group :development do
 end
 
 group :test do
-  gem 'danger', '~> 8.5', require: false # Pull Request etiquette enforcement
+  gem 'danger', '~> 8.6', require: false # Pull Request etiquette enforcement
   gem 'simplecov'
   # Faker added 0.5 seconds to the test suite per call. Haikunator seems much faster for faking strings
   gem 'haikunator'
   gem 'shoulda-matchers', '~> 5.1'
 
-  gem 'json-schema', '~> 2.8.1'
+  gem 'json-schema', '~> 3.0.0'
   gem 'launchy'
   gem 'rdf-isomorphic', '~> 3.2.1'
   gem 'vcr', '5.0', require: false

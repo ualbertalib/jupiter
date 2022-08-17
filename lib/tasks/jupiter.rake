@@ -102,7 +102,7 @@ namespace :jupiter do
 
   desc 'garbage collect any orphan attachment blobs on the filesystem'
   task gc_blobs: :environment do
-    orphan_blobs = ActiveStorage::Blob.find_by_sql('SELECT * FROM active_storage_blobs asb WHERE asb.id NOT IN '\
+    orphan_blobs = ActiveStorage::Blob.find_by_sql('SELECT * FROM active_storage_blobs asb WHERE asb.id NOT IN ' \
                                                    '(SELECT distinct blob_id FROM active_storage_attachments)')
 
     puts "Found #{orphan_blobs.count} orphans. Purging..."

@@ -180,7 +180,7 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
 
   def total_count
     @total_count_cache ||= begin
-      results_count, _, _, _ = JupiterCore::Search.perform_solr_query(search_args_with_limit(0))
+      results_count, _, _, _ = JupiterCore::Search.perform_solr_query(**search_args_with_limit(0))
       results_count
     end
   end
@@ -221,10 +221,10 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
     sort_year_facet = model.solr_exporter_class.solr_name_for(:sort_year, role: :range_facet) if model_has_sort_year
 
     @count_cache, @results, facet_data, @highlights = JupiterCore::Search.perform_solr_query(
-      search_args_with_limit(criteria[:limit])
+      **search_args_with_limit(criteria[:limit])
     )
 
-    @facets = facet_data['facet_fields'].map do |k, v|
+    @facets = facet_data['facet_fields'].filter_map do |k, v|
       if model_has_sort_year && (k == sort_year_facet)
         JupiterCore::SolrServices::RangeFacetResult.new(criteria[:facet_map], k, criteria[:ranges]
           .fetch(k,
@@ -233,7 +233,7 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
       elsif v.present?
         JupiterCore::SolrServices::FacetResult.new(criteria[:facet_map], k, v)
       end
-    end.compact
+    end
 
     @results
   end

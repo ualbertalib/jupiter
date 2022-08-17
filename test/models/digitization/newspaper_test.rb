@@ -7,7 +7,7 @@ class Digitization::NewspaperTest < ActiveSupport::TestCase
   end
 
   test 'valid Peel newspaper' do
-    assert @newspaper.valid?
+    assert_predicate @newspaper, :valid?
   end
 
   test 'unique Peel newspaper' do

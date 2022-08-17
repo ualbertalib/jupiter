@@ -20,7 +20,7 @@ class ItemTest < ActiveSupport::TestCase
         unlocked_item.save!
       end
     end
-    assert item.valid?
+    assert_predicate item, :valid?
     assert_includes Item.public_items.map(&:id), item.id
 
     assert_difference -> { Item.public_items.count }, -1 do
@@ -29,7 +29,7 @@ class ItemTest < ActiveSupport::TestCase
         unlocked_item.save!
       end
     end
-    assert item.valid?
+    assert_predicate item, :valid?
     assert_not Item.public_items.map(&:id).include?(item.id)
   end
 
@@ -46,7 +46,7 @@ class ItemTest < ActiveSupport::TestCase
       unlocked_item.visibility = 'some_fake_visibility'
     end
     assert_not item.valid?
-    assert item.errors[:visibility].present?
+    assert_predicate item.errors[:visibility], :present?
     assert_includes item.errors[:visibility], 'some_fake_visibility is not a known visibility'
   end
 
@@ -72,7 +72,7 @@ class ItemTest < ActiveSupport::TestCase
     end
 
     assert_not item.valid?
-    assert item.errors[:embargo_end_date].present?
+    assert_predicate item.errors[:embargo_end_date], :present?
     assert_includes item.errors[:embargo_end_date], "can't be blank"
   end
 
@@ -84,7 +84,7 @@ class ItemTest < ActiveSupport::TestCase
     end
 
     assert_not item.valid?
-    assert item.errors[:embargo_end_date].present?
+    assert_predicate item.errors[:embargo_end_date], :present?
     assert_includes item.errors[:embargo_end_date], 'must be blank'
 
     assert_not item.errors[:visibility].present?
@@ -97,7 +97,7 @@ class ItemTest < ActiveSupport::TestCase
     end
 
     assert_not item.valid?
-    assert item.errors[:visibility_after_embargo].present?
+    assert_predicate item.errors[:visibility_after_embargo], :present?
     assert_includes item.errors[:visibility_after_embargo], "can't be blank"
   end
 
@@ -109,7 +109,7 @@ class ItemTest < ActiveSupport::TestCase
     end
 
     assert_not item.valid?
-    assert item.errors[:visibility_after_embargo].present?
+    assert_predicate item.errors[:visibility_after_embargo], :present?
     assert_includes item.errors[:visibility_after_embargo], 'must be blank'
     # Make sure no controlled vocabulary error
     assert_not_includes item.errors[:visibility_after_embargo], 'is not recognized'
@@ -125,7 +125,7 @@ class ItemTest < ActiveSupport::TestCase
     end
 
     assert_not item.valid?
-    assert item.errors[:visibility_after_embargo].present?
+    assert_predicate item.errors[:visibility_after_embargo], :present?
     assert_includes item.errors[:visibility_after_embargo], 'whatever is not a known visibility'
     assert_not item.errors[:visibility].present?
   end

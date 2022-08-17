@@ -167,6 +167,8 @@ en:
               infected: '%{filename} is infected with a virus'
         digitization/book:
             attributes:
+              peel_number:
+                taken: "number %{peel_number} has already been taken"
               resource_type:
                 not_recognized: 'is not recognized'
               genres:
@@ -613,8 +615,6 @@ en:
       images_of_research_attribution: 'Image: “Frozen Kaleidoscope” by Vincent McFarlane CC-BY 4.0'
       theses_collection: 'University of Alberta Theses and Dissertations'
       afns_collection: 'Department of Agriculture, Food and Nutritional Science Journal Articles'
-      era_av_header: 'Explore ERA Audio+Video'
-      era_av_text: "The University of Alberta Library's Media Streaming Service"
 
   items:
     index:

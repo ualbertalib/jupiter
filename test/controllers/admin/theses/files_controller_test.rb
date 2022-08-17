@@ -32,7 +32,7 @@ class Admin::Theses::FilesControllerTest < ActionDispatch::IntegrationTest
 
     @draft_thesis.reload
 
-    assert @draft_thesis.files.attached?
+    assert_predicate @draft_thesis.files, :attached?
     assert_equal 'pdf-sample.pdf', @draft_thesis.files.first.filename.to_s
     assert_equal 'image-sample.jpeg', @draft_thesis.files.last.filename.to_s
   end

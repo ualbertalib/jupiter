@@ -6,15 +6,15 @@ class UserPolicyTest < ActiveSupport::TestCase
     current_user = users(:user_admin)
     users_profile = users(:user_regular)
 
-    assert UserPolicy.new(current_user, users_profile).index?
+    assert_predicate UserPolicy.new(current_user, users_profile), :index?
 
     assert_not UserPolicy.new(current_user, users_profile).create?
     assert_not UserPolicy.new(current_user, users_profile).new?
 
-    assert UserPolicy.new(current_user, users_profile).show?
-    assert UserPolicy.new(current_user, users_profile).edit?
-    assert UserPolicy.new(current_user, users_profile).update?
-    assert UserPolicy.new(current_user, users_profile).destroy?
+    assert_predicate UserPolicy.new(current_user, users_profile), :show?
+    assert_predicate UserPolicy.new(current_user, users_profile), :edit?
+    assert_predicate UserPolicy.new(current_user, users_profile), :update?
+    assert_predicate UserPolicy.new(current_user, users_profile), :destroy?
   end
 
   test 'should allow regular user access to yourself' do
@@ -26,10 +26,10 @@ class UserPolicyTest < ActiveSupport::TestCase
     assert_not UserPolicy.new(current_user, users_profile).create?
     assert_not UserPolicy.new(current_user, users_profile).new?
 
-    assert UserPolicy.new(current_user, users_profile).show?
-    assert UserPolicy.new(current_user, users_profile).edit?
-    assert UserPolicy.new(current_user, users_profile).update?
-    assert UserPolicy.new(current_user, users_profile).destroy?
+    assert_predicate UserPolicy.new(current_user, users_profile), :show?
+    assert_predicate UserPolicy.new(current_user, users_profile), :edit?
+    assert_predicate UserPolicy.new(current_user, users_profile), :update?
+    assert_predicate UserPolicy.new(current_user, users_profile), :destroy?
   end
 
   test 'should deny access to other regular users' do

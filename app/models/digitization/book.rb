@@ -16,7 +16,14 @@ class Digitization::Book < JupiterCore::Depositable
 
   has_paper_trail
 
-  validates :peel_id, uniqueness: { scope: [:run, :part_number] }, presence: true, if: :part_number?
+  validates :peel_id,
+            uniqueness: {
+              scope: [:run, :part_number],
+              message: lambda do |object, _data|
+                I18n.t('activerecord.errors.models.digitization/book.attributes.peel_number.taken',
+                       peel_number: object.peel_number)
+              end
+            }, presence: true, if: :part_number?
   validates :part_number, presence: true, if: :run?
 
   validates :temporal_subjects, presence: true, unless: :geographic_subjects? || :topical_subjects?
@@ -37,6 +44,13 @@ class Digitization::Book < JupiterCore::Depositable
 
   def all_contributors
     publishers
+  end
+
+  def peel_number
+    peel_number = peel_id.to_s
+    peel_number << ".#{run}" if run?
+    peel_number << ".#{part_number}" if part_number?
+    peel_number
   end
 
   def hydra_noid

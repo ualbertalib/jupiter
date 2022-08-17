@@ -7,7 +7,7 @@ class Digitization::FulltextTest < ActiveSupport::TestCase
   end
 
   test 'valid fulltext' do
-    assert @fulltext.valid?
+    assert_predicate @fulltext, :valid?
   end
 
   test 'should have text' do

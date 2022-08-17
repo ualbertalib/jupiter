@@ -33,11 +33,6 @@ end
 # just push all jobs to an array for verification
 Sidekiq::Testing.fake!
 
-# Stub out EZID logger to silence noise in test runner
-Ezid::Client.configure do |config|
-  config.logger = Logger.new(File::NULL)
-end
-
 # was removed from rdf-n3 in 3.1.2, restoring here
 module RDF::Isomorphic
   alias == isomorphic_with?

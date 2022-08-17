@@ -11,7 +11,41 @@ New entries in this file should aim to provide a meaningful amount of informatio
 ### Added
 - Add multi-file upload per item on batch ingest workflow [#2943](https://github.com/ualbertalib/jupiter/issues/2943)
 
+### Removed
+- references to EZID [#2671](https://github.com/ualbertalib/jupiter/issues/2671)
+
+## [2.3.7] - 2022-07-13
+
+### Removed 
+- link to ERA A+V [#2765](https://github.com/ualbertalib/jupiter/issues/2765)
+
+### Chores
+- remove Ruby 2.6 [PR#2878](https://github.com/ualbertalib/jupiter/pull/2878)
+- bump rubocop and fix new nags [PR#2900](https://github.com/ualbertalib/jupiter/pull/2900)
+- bump ruboocp-rails and fix new nags [PR#2899](https://github.com/ualbertalib/jupiter/pull/2899)
+- bump Ruby from 2.6 to 2.7 for UAT [PR#2909](https://github.com/ualbertalib/jupiter/pull/2909)
+
+### Security
+- bump rails 6.1.6 to 6.1.6.1
+
+## [2.3.6] - 2022-04-28
+
+### Security
+- bump rails 6.1.5 to 6.1.5.1
+
+### Chores
+- bump omniauth-saml 2.0.0 to 2.1.0 [PR#2767](https://github.com/ualbertalib/jupiter/pull/2767)
+
+## [2.3.5] - 2022-04-06
+
+- Jupiter II work is continuing to incorporate Digitized materials into Jupiter in the digitalcollections namespace.
+  - batch ingest reports [PR#2612](https://github.com/ualbertalib/jupiter/pull/2612)
+
+### Fixed
+- File Upload error [PR#2798](https://github.com/ualbertalib/jupiter/pull/2798)
+
 ## [2.3.4] - 2022-02-08
+
 ### Added
 - Add readiness healthchecks for Rails and Sidekiq [PR#2657](https://github.com/ualbertalib/jupiter/pull/2657)
 

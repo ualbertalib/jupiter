@@ -7,7 +7,6 @@ class DataciteDoiServiceTest < ActiveSupport::TestCase
   # If you need to re-record the vcr cassettes use SEED=20 to record the tests in order
 
   setup do
-    Flipper.enable(:datacite_api)
     Rails.application.secrets.doi_minting_enabled = true
 
     @admin = users(:user_admin)
@@ -16,7 +15,6 @@ class DataciteDoiServiceTest < ActiveSupport::TestCase
 
   teardown do
     Rails.application.secrets.doi_minting_enabled = false
-    Flipper.disable(:datacite_api)
   end
 
   test 'mint DOI' do

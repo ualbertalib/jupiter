@@ -12,7 +12,7 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   # If you `snap install chromium` on Ubuntu, you might have tests that hang after a minute
   # https://github.com/titusfortner/webdrivers/issues/217
   if ENV['CHROMIUM_CHROMEDRIVER_PATH']
-    Selenium::WebDriver::Chrome::Service.driver_path = proc { ENV['CHROMIUM_CHROMEDRIVER_PATH'] }
+    Selenium::WebDriver::Chrome::Service.driver_path = proc { ENV.fetch('CHROMIUM_CHROMEDRIVER_PATH', nil) }
   end
   if ENV['CAPYBARA_NO_HEADLESS']
     driven_by :selenium, using: :chrome, screen_size: [1400, 1400]

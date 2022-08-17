@@ -53,7 +53,9 @@ class Digitization::BatchMetadataIngestionJob < ApplicationJob
 
     graph.query(query_for_local_identifiers) do |statement|
       # Each of the discrete items will become its own object
-      book = batch_ingest.books.new(owner_id: batch_ingest.user_id)
+      # prefer this to batch_ingest.books.new because if the book validation fails then the batch_ingest status cannot be updated
+      book = Digitization::Book.new(owner_id: batch_ingest.user_id,
+                                    digitization_batch_metadata_ingest_id: batch_ingest.id)
 
       # Now we want know all about each item
       query_for_this_items_attributes = RDF::Query.new do

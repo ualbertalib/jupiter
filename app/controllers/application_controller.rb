@@ -98,7 +98,7 @@ class ApplicationController < ActionController::Base
 
     respond_to do |format|
       format.html do
-        render file: Rails.root.join('public/404.html'), layout: false, status: :not_found
+        render file: Rails.public_path.join('404.html'), layout: false, status: :not_found
       end
       format.js { render json: '', status: :not_found, content_type: 'application/json' }
       format.any { head :not_found }
@@ -110,7 +110,7 @@ class ApplicationController < ActionController::Base
 
     respond_to do |format|
       format.html do
-        render file: Rails.root.join('public/400.html'), layout: false, status: :bad_request
+        render file: Rails.public_path.join('400.html'), layout: false, status: :bad_request
       end
       format.js { render json: '', status: :bad_request, content_type: 'application/json' }
       format.any { head :bad_request }

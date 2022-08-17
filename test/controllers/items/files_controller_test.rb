@@ -31,7 +31,7 @@ class Items::FilesControllerTest < ActionDispatch::IntegrationTest
 
     @draft_item.reload
 
-    assert @draft_item.files.attached?
+    assert_predicate @draft_item.files, :attached?
     assert_equal 'pdf-sample.pdf', @draft_item.files.first.filename.to_s
     assert_equal 'image-sample.jpeg', @draft_item.files.last.filename.to_s
   end

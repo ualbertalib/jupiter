@@ -9,7 +9,7 @@ class Digitization::BatchMetadataIngestTest < ActiveSupport::TestCase
   test 'valid batch ingest' do
     @batch_ingest.csvfile.attach(io: File.open(file_fixture('digitization_metadata_graph.csv')),
                                  filename: 'folkfest.csv')
-    assert @batch_ingest.valid?
+    assert_predicate @batch_ingest, :valid?
   end
 
   test 'invalid without csvfile' do
@@ -41,7 +41,7 @@ class Digitization::BatchMetadataIngestTest < ActiveSupport::TestCase
   test 'invalid without any local identifiers' do
     csv_content = Tempfile.new('test_invalid_without_any_local_identifiers')
     csv_content.puts 'Entity,Property,Value,'
-    csv_content.puts 'https://digitalcollections.library.ualberta.ca/resource/UUID,'\
+    csv_content.puts 'https://digitalcollections.library.ualberta.ca/resource/UUID,' \
                      'http://purl.org/dc/terms/title,Edmonton Folk Music Festival'
 
     @batch_ingest.csvfile.attach(io: csv_content,

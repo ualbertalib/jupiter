@@ -32,6 +32,32 @@ namespace :digitization do
     log 'FINISH: Batch ingest enqueued!'
   end
 
+  desc 'report on batch_ingest progress - used by Admin and Assistants'
+  task :batch_ingest_report, [:id, :limit] => :environment do |_t, args|
+    limit = args.limit.presence || 10
+    if args.id.blank?
+      # Use `Kernel#format` to ensure that the columns line up with enough space for the expected values.
+      # - The `id`s will be exactly 38 characters.
+      # - Give `title` 80 characters of space.
+      # - `processing` should be the longest `status`
+      # - batch `size` should be pretty small to ensure that the jobs can finish in a timely manner
+      puts format '%38s,%80s,%12s,%7s', 'id', 'title', 'status', 'size'
+      Digitization::BatchMetadataIngest.order(created_at: :desc).limit(limit).each do |batch_ingest|
+        puts format '%38s,%80s,%12s,%7d', batch_ingest.id, batch_ingest.title, batch_ingest.status,
+                    batch_ingest.books.count
+      end
+    else
+      batch_ingest = Digitization::BatchMetadataIngest.find(args.id)
+      puts "#{batch_ingest.title} [#{batch_ingest.id}]"
+      puts batch_ingest.status
+      puts batch_ingest.error_message if batch_ingest.failed?
+      batch_ingest.books.each do |book|
+        puts "#{book.id},\t#{book.peel_number},\t" \
+             "#{Rails.application.routes.url_helpers.digitization_book_url(book)},\t#{book.title}"
+      end
+    end
+  end
+
   def log(message)
     puts "[#{Time.current.strftime('%F %T')}] #{message}"
   end

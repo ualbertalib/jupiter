@@ -66,7 +66,7 @@ class DepositThesisTest < ApplicationSystemTestCase
     # Success! Deposit Successful
 
     assert_text I18n.t('admin.theses.draft.successful_deposit')
-    assert Thesis.find_by(title: 'A Dance with Dragons').present?
+    assert_predicate Thesis.find_by(title: 'A Dance with Dragons'), :present?
     assert_selector 'h1', text: 'A Dance with Dragons'
 
     # Check to make sure there isn't any embargo_history

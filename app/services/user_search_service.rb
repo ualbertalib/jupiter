@@ -38,7 +38,7 @@ class UserSearchService
     sort_fields ||= [:relevance, :title] if query.present?
     sort_orders = @search_params[:direction]
 
-    JupiterCore::Search.faceted_search(search_options)
+    JupiterCore::Search.faceted_search(**search_options)
                        .sort(sort_fields, sort_orders)
                        .page(@search_params[:page])
   end
