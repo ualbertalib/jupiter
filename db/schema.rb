@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_03_185004) do
+ActiveRecord::Schema.define(version: 2022_08_22_185049) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -234,7 +234,6 @@ ActiveRecord::Schema.define(version: 2021_12_03_185004) do
     t.integer "wizard_step", default: 0, null: false
     t.string "title"
     t.string "alternate_title"
-    t.date "date_created"
     t.text "description"
     t.string "source"
     t.string "related_item"
@@ -255,6 +254,7 @@ ActiveRecord::Schema.define(version: 2021_12_03_185004) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "thumbnail_id"
+    t.string "date_created"
     t.index ["id"], name: "index_draft_items_on_id", unique: true
     t.index ["type_id"], name: "index_draft_items_on_type_id"
     t.index ["user_id"], name: "index_draft_items_on_user_id"
