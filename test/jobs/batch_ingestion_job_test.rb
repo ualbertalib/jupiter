@@ -73,11 +73,18 @@ class BatchIngestionJobTest < ActiveJob::TestCase
     # seperatedly which are not used in the test any more as we are using the
     # created cassettes.
 
-    # The file cassettes were created with code that looks like
+    # The file cassette were created with code that looks like which downloded 3
+    # files in a single cassette
 
-    # VCR.use_cassette('google_fetch_file_mayo') do
-    #   uri = URI('https://www.googleapis.com/drive/v3/files/FILEID?alt=media')
-    #   Net::HTTP.get(uri)
+    # VCR.use_cassette('google_fetch_multiple_files_in_utf8_encoding') do
+    #   uris = [
+    #     URI('https://www.googleapis.com/drive/v3/files/RANDOMID1?alt=media'),
+    #     URI('https://www.googleapis.com/drive/v3/files/RANDOMID2?alt=media'),
+    #     URI('https://www.googleapis.com/drive/v3/files/RANDOMID3?alt=media')
+    #   ]
+    #   uris.each do |uri|
+    #     Net::HTTP.get(uri)
+    #   end
     # end
 
     # The VCR cassette was created in a similar way. However, the yaml serializer
@@ -101,28 +108,20 @@ class BatchIngestionJobTest < ActiveJob::TestCase
                            community_id: communities(:community_books).id,
                            owner_id: users(:user_admin).id
                          }) do
-          VCR.use_cassette('google_fetch_file_seri',
+          VCR.use_cassette('google_fetch_multiple_files_in_utf8_encoding',
                            record: :none,
                            allow_playback_repeats: true) do
-            VCR.use_cassette('google_fetch_file_mayo',
-                             record: :none,
-                             allow_playback_repeats: true) do
-              VCR.use_cassette('google_fetch_file_yaqui',
-                               record: :none,
-                               allow_playback_repeats: true) do
-                BatchIngestionJob.perform_now(batch_ingest)
-              end
-            end
-          end
+                             BatchIngestionJob.perform_now(batch_ingest)
+                           end
         end
       end
-
-      batch_ingest.reload
-      assert_predicate(batch_ingest, :completed?)
-      assert_equal(3, batch_ingest.items.count)
-      # Each item has 3 files associated with it
-      assert_equal([3, 3, 3], batch_ingest.items.map { |item| item.files.count })
     end
+
+    batch_ingest.reload
+    assert_predicate(batch_ingest, :completed?)
+    assert_equal(3, batch_ingest.items.count)
+    # Each item has 3 files associated with it
+    assert_equal([3, 3, 3], batch_ingest.items.map { |item| item.files.count })
   end
 
 end
