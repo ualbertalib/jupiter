@@ -19,9 +19,9 @@ class BatchIngestSpreadsheetValidator < ActiveModel::EachValidator
 
       # Check if required fields are filled out
       required_columns = [
-        'file_name', 'title', 'type', 'owner_id',
-        'languages', 'creators', 'subjects', 'date_created',
-        'community_id', 'collection_id', 'license', 'visibility'
+        'file_name', 'title', 'type', 'languages', 'creators',
+        'subjects', 'date_created', 'community_id', 'collection_id',
+        'license', 'visibility'
       ]
 
       required_columns.each do |column|
@@ -41,17 +41,13 @@ class BatchIngestSpreadsheetValidator < ActiveModel::EachValidator
         record.errors.add(attribute, :embargo_missing_required_data, row_number: row_number)
       end
 
-      # Check if given owner/community/collection ids actually exists?
+      # Check if given community/collection ids actually exists?
       unless Community.exists?(row['community_id'])
         record.errors.add(attribute, :column_not_found, column: 'community_id', row_number: row_number)
       end
 
       unless Collection.exists?(row['collection_id'])
         record.errors.add(attribute, :column_not_found, column: 'collection_id', row_number: row_number)
-      end
-
-      unless User.exists?(row['owner_id'])
-        record.errors.add(attribute, :column_not_found, column: 'owner_id', row_number: row_number)
       end
 
       # Ensure that any file name in the spreadsheet has an corresponding file

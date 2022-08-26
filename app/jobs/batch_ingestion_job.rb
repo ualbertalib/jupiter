@@ -43,16 +43,16 @@ class BatchIngestionJob < ApplicationJob
   def item_ingest(batch_ingest, item_data)
     item = batch_ingest.items.new
     item.tap do |unlocked_obj|
-      unlocked_obj.owner_id = item_data['owner_id']
+      unlocked_obj.owner = User.first
       unlocked_obj.title = item_data['title']
-      unlocked_obj.alternative_title = item_data['alternate_title']
+      unlocked_obj.alternative_title = item_data['alternative_title']
 
-      if item_data['type'].present?
-        unlocked_obj.item_type = ControlledVocabulary.era.item_type.send(item_data['type'].to_sym)
+      if item_data['item_type'].present?
+        unlocked_obj.item_type = ControlledVocabulary.era.item_type.send(item_data['item_type'].to_sym)
       end
 
       # If item type is an article, we need to add an array of statuses to the publication status field...
-      if item_data['type'] == 'article' && ['draft', 'published'].include?(item_data['publication_status'])
+      if item_data['item_type'] == 'article' && ['draft', 'published'].include?(item_data['publication_status'])
         unlocked_obj.publication_status = if item_data['publication_status'] == 'draft'
                                             [
                                               ControlledVocabulary.era.publication_status.draft,
@@ -72,8 +72,8 @@ class BatchIngestionJob < ApplicationJob
       end
 
       unlocked_obj.creators = item_data['creators'].split('|').map(&:strip) if item_data['creators'].present?
-      unlocked_obj.subject = item_data['subjects'].split('|').map(&:strip) if item_data['subjects'].present?
-      unlocked_obj.created = item_data['date_created'].to_s
+      unlocked_obj.subject = item_data['subject'].split('|').map(&:strip) if item_data['subject'].present?
+      unlocked_obj.created = item_data['created'].to_s
       unlocked_obj.description = item_data['description']
 
       # Handle visibility and embargo logic
@@ -90,8 +90,8 @@ class BatchIngestionJob < ApplicationJob
 
       # Handle license vs rights
       if item_data['license'].present?
-        if item_data['license'] == 'license_text'
-          unlocked_obj.rights = item_data['license_text']
+        if item_data['license'] == 'rights'
+          unlocked_obj.rights = item_data['rights']
         else
           unlocked_obj.license =
             ControlledVocabulary.era.license.send(item_data['license'].to_sym) ||
@@ -103,13 +103,17 @@ class BatchIngestionJob < ApplicationJob
       if item_data['contributors'].present?
         unlocked_obj.contributors = item_data['contributors'].split('|').map(&:strip)
       end
-      unlocked_obj.spatial_subjects = item_data['places'].split('|').map(&:strip) if item_data['places'].present?
-      if item_data['time_periods'].present?
-        unlocked_obj.temporal_subjects = item_data['time_periods'].split('|').map(&:strip)
+      if item_data['spatial_subjects'].present?
+        unlocked_obj.spatial_subjects = item_data['spatial_subjects'].split('|').map(&:strip)
       end
-      unlocked_obj.is_version_of = item_data['citations'].split('|').map(&:strip) if item_data['citations'].present?
+      if item_data['temporal_subjects'].present?
+        unlocked_obj.temporal_subjects = item_data['temporal_subjects'].split('|').map(&:strip)
+      end
+      if item_data['is_version_of'].present?
+        unlocked_obj.is_version_of = item_data['is_version_of'].split('|').map(&:strip)
+      end
       unlocked_obj.source = item_data['source']
-      unlocked_obj.related_link = item_data['related_item']
+      unlocked_obj.related_link = item_data['related_link']
 
       # We only support single communities/collections pairs for time being,
       # could accomodate multiple pairs without much work here

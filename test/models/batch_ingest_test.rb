@@ -68,8 +68,7 @@ class BatchIngestTest < ActiveSupport::TestCase
     VCR.use_cassette('google_fetch_access_token', record: :none) do
       VCR.use_cassette('google_fetch_spreadsheet', record: :none,
                                                    erb: { community_id: 'BADID',
-                                                          collection_id: 'BADID',
-                                                          owner_id: 'BADID' }) do
+                                                          collection_id: 'BADID' }) do
         batch_ingest = BatchIngest.new(
           title: @batch_ingest.title,
           user_id: @batch_ingest.user_id,
