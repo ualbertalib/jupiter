@@ -71,9 +71,9 @@ class BatchIngestionJobTest < ActiveJob::TestCase
 
     # The VCR cassettes for this test where created using Net::HTTP calls
     # seperatedly which are not used in the test any more as we are using the
-    # creted cassettes.
+    # created cassettes.
 
-    # The file cassettes where creted with code that looks like
+    # The file cassettes were created with code that looks like
 
     # VCR.use_cassette('google_fetch_file_mayo') do
     #   uri = URI('https://www.googleapis.com/drive/v3/files/FILEID?alt=media')
