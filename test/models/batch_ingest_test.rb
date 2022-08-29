@@ -77,14 +77,11 @@ class BatchIngestTest < ActiveSupport::TestCase
           google_spreadsheet_name: @batch_ingest.google_spreadsheet_name,
           access_token: @batch_ingest.access_token
         )
-
         assert_not batch_ingest.valid?
         assert_equal('community_id does not exist in ERA for row 1 of spreadsheet',
                      batch_ingest.errors[:google_spreadsheet_id].first)
         assert_equal('collection_id does not exist in ERA for row 1 of spreadsheet',
                      batch_ingest.errors[:google_spreadsheet_id].second)
-        assert_equal('owner_id does not exist in ERA for row 1 of spreadsheet',
-                     batch_ingest.errors[:google_spreadsheet_id].third)
       end
     end
   end
