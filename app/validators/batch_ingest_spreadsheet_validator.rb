@@ -30,8 +30,8 @@ class BatchIngestSpreadsheetValidator < ActiveModel::EachValidator
         end
       end
 
-      # Check if "type" is article, then it must have a "publication_status"
-      if row['type'] == 'article' && row['publication_status'].blank?
+      # Check if "item_type" is article, then it must have a "publication_status"
+      if row['item_type'] == 'article' && row['publication_status'].blank?
         record.errors.add(attribute, :publication_status_required_for_articles, row_number: row_number)
       end
 
