@@ -19,8 +19,8 @@ class BatchIngestSpreadsheetValidator < ActiveModel::EachValidator
 
       # Check if required fields are filled out
       required_columns = [
-        'file_name', 'title', 'type', 'languages', 'creators',
-        'subjects', 'date_created', 'community_id', 'collection_id',
+        'file_name', 'title', 'item_type', 'languages', 'creators',
+        'subject', 'created', 'community_id', 'collection_id',
         'license', 'visibility'
       ]
 
