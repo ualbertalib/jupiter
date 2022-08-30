@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://sheets.googleapis.com/v4/spreadsheets/RANDOMSPREADSHEETID/values/'Data'!A:X?key=test-google-developer-key
+    uri: https://sheets.googleapis.com/v4/spreadsheets/RANDOMSPREADSHEETID/values/'Data'!A:W?key=test-google-developer-key
     body:
       encoding: UTF-8
       string: ''
