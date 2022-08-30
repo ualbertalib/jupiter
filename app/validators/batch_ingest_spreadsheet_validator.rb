@@ -61,7 +61,7 @@ class BatchIngestSpreadsheetValidator < ActiveModel::EachValidator
       missing_files = file_names - google_file_names
 
       unless missing_files.empty?
-        record.errors.add(attribute, :no_matching_files, file_names: missing_files.join(','), row_number: row_number)
+        record.errors.add(attribute, :no_matching_files, file_names: missing_files.join(', '), row_number: row_number)
       end
     end
   rescue StandardError
