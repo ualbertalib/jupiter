@@ -55,7 +55,7 @@ http_interactions:
       encoding: UTF-8
       string: |
         {
-          "range": "Data!A1:X1004",
+          "range": "Data!A1:W1004",
           "majorDimension": "ROWS",
           "values": [
             [

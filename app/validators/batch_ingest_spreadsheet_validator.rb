@@ -57,8 +57,9 @@ class BatchIngestSpreadsheetValidator < ActiveModel::EachValidator
       missing_files = file_names - google_file_names
 
       unless missing_files.empty?
-        record.errors.add(attribute, :no_matching_files, file_names: missing_files.join(', '), row_number: row_number)      end
-      end
+        record.errors.add(attribute, :no_matching_files, file_names: missing_files.join(', '),
+                                                         row_number: row_number) end
+    end
   rescue StandardError
     # Most likely `download_spreadsheet` method threw an error as given spreadsheet doesn't match what we expected
     record.errors.add(attribute, :spreadsheet_could_not_be_read)

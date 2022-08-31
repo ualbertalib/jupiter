@@ -77,6 +77,7 @@ class BatchIngestTest < ActiveSupport::TestCase
           google_spreadsheet_name: @batch_ingest.google_spreadsheet_name,
           access_token: @batch_ingest.access_token
         )
+
         assert_not batch_ingest.valid?
         assert_equal('community_id does not exist in ERA for row 1 of spreadsheet',
                      batch_ingest.errors[:google_spreadsheet_id].first)
@@ -84,7 +85,7 @@ class BatchIngestTest < ActiveSupport::TestCase
                      batch_ingest.errors[:google_spreadsheet_id].second)
         # rubocop:disable Layout/LineLength
         assert_equal("File(s) 'conference_logo.png, conference.pdf' from row 1 of spreadsheet are not listed in the file list below",
-                     batch_ingest.errors[:google_spreadsheet_id].fourth)
+                     batch_ingest.errors[:google_spreadsheet_id].third)
         # rubocop:enable Layout/LineLength
       end
     end
