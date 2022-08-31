@@ -26,12 +26,15 @@ class BatchIngestionJob < ApplicationJob
 
     ActiveRecord::Base.transaction do
       spreadsheet.each do |row|
-        item_file = batch_ingest.batch_ingest_files.find { |file| file.google_file_name == row['file_name'] }
+        row_file_names = row['file_name'].split('|').map(&:strip)
+        item_files = batch_ingest.batch_ingest_files.find_all { |file| row_file_names.include?(file.google_file_name) }
 
-        next if item_file.blank?
+        # We need to make sure that all row_file_names are included in the list
+        # of files provided in the interface
+        next if (row_file_names - item_files.map(&:google_file_name)).any?
 
         item = item_ingest(batch_ingest, row)
-        file_ingest(item, item_file, google_credentials)
+        files_ingest(item, item_files, google_credentials)
       end
     end
 
@@ -125,9 +128,12 @@ class BatchIngestionJob < ApplicationJob
     item
   end
 
-  def file_ingest(item, item_file, google_credentials)
-    file = google_credentials.download_file(item_file.google_file_id, item_file.google_file_name)
-    item.add_and_ingest_files([file])
+  def files_ingest(item, item_files, google_credentials)
+    item_files.each do |item_file|
+      file = google_credentials.download_file(item_file.google_file_id, item_file.google_file_name)
+      item.add_and_ingest_files([file])
+    end
+
     item.set_thumbnail(item.files.first) if item.files.first.present?
   end
 
