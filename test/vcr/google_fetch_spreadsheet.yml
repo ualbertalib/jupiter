@@ -85,7 +85,7 @@ http_interactions:
               "visibility_after_embargo"
             ],
             [
-              "conference_logo.png",
+              "conference_logo.png | conference.pdf",
               "Conference logo",
               "",
               "image",
