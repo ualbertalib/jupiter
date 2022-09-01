@@ -55,6 +55,10 @@ class Thesis < JupiterCore::Doiable
     self.member_of_paths += ["#{community_id}/#{collection_id}"]
   end
 
+  def ordered_files
+    files.joins(:blob).order('active_storage_blobs.filename ASC')
+  end
+
   def self.from_draft(draft_thesis)
     thesis = Thesis.find(draft_thesis.uuid) if draft_thesis.uuid.present?
     thesis ||= Thesis.new

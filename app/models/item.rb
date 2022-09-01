@@ -88,6 +88,10 @@ class Item < JupiterCore::Doiable
     self.member_of_paths += ["#{community_id}/#{collection_id}"]
   end
 
+  def ordered_files
+    files.joins(:blob).order('active_storage_blobs.filename ASC')
+  end
+
   def self.from_draft(draft_item)
     item = Item.find(draft_item.uuid) if draft_item.uuid.present?
     item ||= Item.new(id: draft_item.uuid)

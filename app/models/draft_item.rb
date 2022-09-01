@@ -291,6 +291,10 @@ class DraftItem < ApplicationRecord
     visibility
   end
 
+  def ordered_files
+    files.joins(:blob).order('active_storage_blobs.filename ASC')
+  end
+
   private
 
   # Validations

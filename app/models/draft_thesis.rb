@@ -191,6 +191,10 @@ class DraftThesis < ApplicationRecord
     graduation_year.nil? || (graduation_year >= 2009)
   end
 
+  def ordered_files
+    files.joins(:blob).order('active_storage_blobs.filename ASC')
+  end
+
   private
 
   def parse_graduation_term_from_fedora(graduation_date)
