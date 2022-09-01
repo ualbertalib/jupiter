@@ -46,6 +46,9 @@ class BatchIngestionJob < ApplicationJob
   def item_ingest(batch_ingest, item_data)
     item = batch_ingest.items.new
     item.tap do |unlocked_obj|
+      # We are removing the owner_id column from the spreadsheet which was used
+      # to specify the owner of the item. Now we just use the first User from
+      # the system.
       unlocked_obj.owner = User.first
       unlocked_obj.title = item_data['title']
       unlocked_obj.alternative_title = item_data['alternative_title']
