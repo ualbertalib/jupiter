@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://sheets.googleapis.com/v4/spreadsheets/RANDOMSPREADSHEETID/values/'Data'!A:X?key=test-google-developer-key
+    uri: https://sheets.googleapis.com/v4/spreadsheets/RANDOMSPREADSHEETID/values/'Data'!A:W?key=test-google-developer-key
     body:
       encoding: US-ASCII
       string: ''
@@ -47,20 +47,19 @@ http_interactions:
       encoding: UTF-8
       string: |
         {
-          "range": "Data!A1:X1004",
+          "range": "Data!A1:W1004",
           "majorDimension": "ROWS",
           "values": [
             [
               "file_name",
               "title",
               "alternate_title",
-              "type",
+              "item_type",
               "publication_status",
-              "owner_id",
               "languages",
               "creators",
-              "subjects",
-              "date_created",
+              "subject",
+              "created",
               "description",
               "community_id",
               "collection_id",
@@ -82,7 +81,6 @@ http_interactions:
               "Alternate Title",
               "dataset",
               "published",
-              "<%= owner_id %>",
               "english|french|spanish",
               "creator $ 1|creator $ 2|creator $ 3",
               "subject $ 1|subject $ 2|subject $ 3",
@@ -106,7 +104,6 @@ http_interactions:
               "Alternate Title",
               "image",
               "published",
-              "<%= owner_id %>",
               "english|french|spanish",
               "creator $ 1|creator $ 2|creator $ 3",
               "subject $ 1|subject $ 2|subject $ 3",
@@ -130,7 +127,6 @@ http_interactions:
               "Alternate Title",
               "image",
               "published",
-              "<%= owner_id %>",
               "english|french|spanish",
               "creator $ 1|creator $ 2|creator $ 3",
               "subject $ 1|subject $ 2|subject $ 3",

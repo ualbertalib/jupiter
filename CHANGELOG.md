@@ -14,6 +14,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 ### Removed
 - references to EZID [#2671](https://github.com/ualbertalib/jupiter/issues/2671)
 
+### Changed
+- Column header names for batch ingestion spreadsheet [[#2941](https://github.com/ualbertalib/jupiter/issues/2941)]
+
 ## [2.3.7] - 2022-07-13
 
 ### Removed 
