@@ -11,3 +11,10 @@ batch_ingest_with_two_files:
   google_spreadsheet_id: "RANDOMSPREADSHEETID"
   google_spreadsheet_name: "Conference Batch Ingest"
   access_token: "ACCESSTOKEN"
+
+batch_ingest_with_three_files_in_one_item:
+  title: "Multi-file item Batch"
+  user: user_admin
+  google_spreadsheet_id: "RANDOMSPREADSHEETID"
+  google_spreadsheet_name: "ERA Item Batch Ingest Template - X Ray Test - Batch Ingest UI"
+  access_token: "ACCESSTOKEN"
