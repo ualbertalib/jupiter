@@ -55,6 +55,7 @@ class DepositItemTest < ApplicationSystemTestCase
 
     assert_selector 'h2', text: I18n.t('items.draft.upload_files.header')
 
+    attach_file_in_dropzone(file_fixture('pdf-sample.pdf'))
     attach_file_in_dropzone(file_fixture('image-sample.jpeg'))
     has_css? '.j-thumbnail'
 
@@ -128,6 +129,85 @@ class DepositItemTest < ApplicationSystemTestCase
 
     assert has_select?('draft_item[community_id][]', selected: community.title)
     assert has_select?('draft_item[collection_id][]', selected: collection.title)
+
+    logout_user
+  end
+
+  # This test follows a very similar behaviour to the successfully deposit an
+  # item to make sure all required fields are present
+  test 'files are alphabetically sorted when depositing an item' do
+    user = users(:user_regular)
+
+    login_user(user)
+
+    click_link I18n.t('application.navbar.links.new_item')
+
+    # 1. Describe Item Form
+
+    fill_in I18n.t('items.draft.describe_item.title'),
+            # Need to narrow down by placeholder since capybara can't differentiate from title and alternate title labels
+            placeholder: I18n.t('items.draft.describe_item.title_placeholder'),
+            with: 'A Dance with Dragons'
+
+    select 'Book', from: I18n.t('items.draft.describe_item.type_id')
+    selectize_option '.draft_item_languages', with: 'English'
+
+    selectize_set_text '.draft_item_creators', with: 'George R. R. Martin'
+
+    selectize_set_text '.draft_item_subjects', with: 'A Song of Ice and Fire'
+    selectize_set_text '.draft_item_subjects', with: 'Fantasy'
+
+    select_date '2011/07/12', field_id: 'draft_item_date_created'
+
+    fill_in I18n.t('items.draft.describe_item.description'), with: 'A Dance with Dragons Description Goes Here!!!'
+
+    select communities(:community_books).title, from: 'draft_item[community_id][]'
+    select collections(:collection_fantasy).title, from: 'draft_item[collection_id][]'
+
+    click_on I18n.t('items.draft.save_and_continue')
+
+    # 2. Choose License and Visibility Form
+
+    # Open accordion
+    click_on I18n.t('items.draft.choose_license_and_visibility.license.link_to_another_license')
+
+    choose I18n.t('items.draft.choose_license_and_visibility.license.license_text_html')
+    fill_in 'draft_item_license_text_area', with: 'License Text Goes Here!!!'
+
+    choose I18n.t('items.draft.choose_license_and_visibility.visibility.embargo')
+    select_date '2023/01/01', field_id: 'draft_item_embargo_end_date'
+
+    click_on I18n.t('items.draft.save_and_continue')
+
+    # 3. Upload File Form
+
+    attach_file_in_dropzone(file_fixture('pdf-sample.pdf'))
+    attach_file_in_dropzone(file_fixture('image-sample.jpeg'))
+    attach_file_in_dropzone(file_fixture('text-sample.txt'))
+    has_css? '.j-thumbnail'
+
+    assert_selector '#js-files-list ul li:nth-child(1) h5', text: 'image-sample.jpeg'
+    assert_selector '#js-files-list ul li:nth-child(2) h5', text: 'pdf-sample.pdf'
+    assert_selector '#js-files-list ul li:nth-child(3) h5', text: 'text-sample.txt'
+
+    click_on I18n.t('items.draft.save_and_continue'), wait: 5
+
+    assert_selector :xpath, "(.//li[contains(@class, 'item-filename')])", count: 3
+    # We are using regex in these assertions since the elements on the intreface
+    # include a badge with text showing the file size
+    assert_selector :xpath, "(.//li[contains(@class, 'item-filename')])[1]", text: /image-sample.jpeg/
+    assert_selector :xpath, "(.//li[contains(@class, 'item-filename')])[2]", text: /pdf-sample.pdf/
+    assert_selector :xpath, "(.//li[contains(@class, 'item-filename')])[3]", text: /text-sample.txt/
+
+    # 4. Review and Deposit Form
+
+    click_on I18n.t('items.draft.header')
+
+    # Success! Deposit Successful
+
+    assert_selector '.item-files > div:nth-child(1) .item-filename', text: 'image-sample.jpeg'
+    assert_selector '.item-files > div:nth-child(2) .item-filename', text: 'pdf-sample.pdf'
+    assert_selector '.item-files > div:nth-child(3) .item-filename', text: 'text-sample.txt'
 
     logout_user
   end

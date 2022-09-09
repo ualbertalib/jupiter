@@ -128,6 +128,9 @@ class DepositThesisTest < ApplicationSystemTestCase
     logout_user
   end
 
+  test 'files are alphabetically sorted when depositing an thesis' do
+  end
+
   # Helper methods for javascript fields (dropzone)
   # (could be moved and made as generic helpers if these are needed elsewhere)
   private
