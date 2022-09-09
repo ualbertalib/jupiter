@@ -184,8 +184,8 @@ class DepositItemTest < ApplicationSystemTestCase
     attach_file_in_dropzone(file_fixture('pdf-sample.pdf'))
     attach_file_in_dropzone(file_fixture('image-sample.jpeg'))
     attach_file_in_dropzone(file_fixture('text-sample.txt'))
-    has_css? '.j-thumbnail'
 
+    assert_selector '#js-files-list ul li', count: 3
     assert_selector '#js-files-list ul li:nth-child(1) h5', text: 'image-sample.jpeg'
     assert_selector '#js-files-list ul li:nth-child(2) h5', text: 'pdf-sample.pdf'
     assert_selector '#js-files-list ul li:nth-child(3) h5', text: 'text-sample.txt'
@@ -205,6 +205,7 @@ class DepositItemTest < ApplicationSystemTestCase
 
     # Success! Deposit Successful
 
+    assert_selector '.item-files > div', count: 3
     assert_selector '.item-files > div:nth-child(1) .item-filename', text: 'image-sample.jpeg'
     assert_selector '.item-files > div:nth-child(2) .item-filename', text: 'pdf-sample.pdf'
     assert_selector '.item-files > div:nth-child(3) .item-filename', text: 'text-sample.txt'
