@@ -13,6 +13,7 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ### Removed
 - references to EZID [#2671](https://github.com/ualbertalib/jupiter/issues/2671)
+- Unnecessary disabling of Naming/MethodParameterName cop [PR#2960](https://github.com/ualbertalib/jupiter/pull/2960)
 
 ### Changed
 - Column header names for batch ingestion spreadsheet [[#2941](https://github.com/ualbertalib/jupiter/issues/2941)]
