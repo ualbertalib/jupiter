@@ -96,6 +96,8 @@ class DraftItem < ApplicationRecord
   validates :license_text_area, presence: true, if: :validate_if_license_is_text?
   validate :license_not_unselected, if: :validate_choose_license_and_visibility?
 
+  validates :date_created, :partial_date, presence: true
+
   def update_from_fedora_item(item, for_user)
     # I suspect this will become some kind of string field, but for now, using UTC
     # HACK: temporarily falling back to a parsable date when editing unparsable data to fix a crasher in Prod,
