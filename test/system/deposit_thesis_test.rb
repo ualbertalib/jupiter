@@ -128,6 +128,8 @@ class DepositThesisTest < ApplicationSystemTestCase
     logout_user
   end
 
+  # This test follows a very similar behaviour to the successfully deposit a
+  # thesis making sure all required fields are present
   test 'files are alphabetically sorted when depositing an thesis' do
     admin = users(:user_admin)
 

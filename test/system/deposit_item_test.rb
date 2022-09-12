@@ -134,7 +134,7 @@ class DepositItemTest < ApplicationSystemTestCase
   end
 
   # This test follows a very similar behaviour to the successfully deposit an
-  # item to make sure all required fields are present
+  # item making sure all required fields are present
   test 'files are alphabetically sorted when depositing an item' do
     user = users(:user_regular)
 
