@@ -68,8 +68,7 @@ class BatchIngestTest < ActiveSupport::TestCase
     VCR.use_cassette('google_fetch_access_token', record: :none) do
       VCR.use_cassette('google_fetch_spreadsheet', record: :none,
                                                    erb: { community_id: 'BADID',
-                                                          collection_id: 'BADID',
-                                                          owner_id: 'BADID' }) do
+                                                          collection_id: 'BADID' }) do
         batch_ingest = BatchIngest.new(
           title: @batch_ingest.title,
           user_id: @batch_ingest.user_id,
@@ -84,11 +83,9 @@ class BatchIngestTest < ActiveSupport::TestCase
                      batch_ingest.errors[:google_spreadsheet_id].first)
         assert_equal('collection_id does not exist in ERA for row 1 of spreadsheet',
                      batch_ingest.errors[:google_spreadsheet_id].second)
-        assert_equal('owner_id does not exist in ERA for row 1 of spreadsheet',
-                     batch_ingest.errors[:google_spreadsheet_id].third)
         # rubocop:disable Layout/LineLength
         assert_equal("File(s) 'conference_logo.png, conference.pdf' from row 1 of spreadsheet are not listed in the file list below",
-                     batch_ingest.errors[:google_spreadsheet_id].fourth)
+                     batch_ingest.errors[:google_spreadsheet_id].third)
         # rubocop:enable Layout/LineLength
       end
     end

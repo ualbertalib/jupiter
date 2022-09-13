@@ -10,8 +10,7 @@ class BatchIngestionJobTest < ActiveJob::TestCase
                        record: :none,
                        erb: {
                          collection_id: collections(:collection_fantasy).id,
-                         community_id: communities(:community_books).id,
-                         owner_id: users(:user_admin).id
+                         community_id: communities(:community_books).id
                        }) do
         BatchIngestionJob.perform_now(batch_ingest)
       end
@@ -50,8 +49,7 @@ class BatchIngestionJobTest < ActiveJob::TestCase
                        record: :none,
                        erb: {
                          collection_id: collections(:collection_fantasy).id,
-                         community_id: communities(:community_books).id,
-                         owner_id: users(:user_admin).id
+                         community_id: communities(:community_books).id
                        }) do
         VCR.use_cassette('google_fetch_file',
                          record: :none,

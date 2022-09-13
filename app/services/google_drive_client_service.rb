@@ -38,7 +38,7 @@ class GoogleDriveClientService
     service.authorization = google_credentials
     service.key = Rails.application.secrets.google_developer_key
 
-    range = "'Data'!A:X"
+    range = "'Data'!A:W"
 
     response = service.get_spreadsheet_values(spreadsheet_id, range)
 

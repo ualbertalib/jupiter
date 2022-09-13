@@ -91,8 +91,7 @@ Naming/MethodParameterName:
   Exclude:
     - app/models/jupiter_core//solr_services/deferred_faceted_solr_query.rb
     - app/models/jupiter_core/search.rb
-    - app/services/statistics.rb
-
+    
 Rails:
   Enabled: true
 

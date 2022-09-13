@@ -19,9 +19,9 @@ class BatchIngestSpreadsheetValidator < ActiveModel::EachValidator
 
       # Check if required fields are filled out
       required_columns = [
-        'file_name', 'title', 'type', 'owner_id',
-        'languages', 'creators', 'subjects', 'date_created',
-        'community_id', 'collection_id', 'license', 'visibility'
+        'file_name', 'title', 'item_type', 'languages', 'creators',
+        'subject', 'created', 'community_id', 'collection_id',
+        'license', 'visibility'
       ]
 
       required_columns.each do |column|
@@ -30,8 +30,8 @@ class BatchIngestSpreadsheetValidator < ActiveModel::EachValidator
         end
       end
 
-      # Check if "type" is article, then it must have a "publication_status"
-      if row['type'] == 'article' && row['publication_status'].blank?
+      # Check if "item_type" is article, then it must have a "publication_status"
+      if row['item_type'] == 'article' && row['publication_status'].blank?
         record.errors.add(attribute, :publication_status_required_for_articles, row_number: row_number)
       end
 
@@ -41,17 +41,13 @@ class BatchIngestSpreadsheetValidator < ActiveModel::EachValidator
         record.errors.add(attribute, :embargo_missing_required_data, row_number: row_number)
       end
 
-      # Check if given owner/community/collection ids actually exists?
+      # Check if given community/collection ids actually exists?
       unless Community.exists?(row['community_id'])
         record.errors.add(attribute, :column_not_found, column: 'community_id', row_number: row_number)
       end
 
       unless Collection.exists?(row['collection_id'])
         record.errors.add(attribute, :column_not_found, column: 'collection_id', row_number: row_number)
-      end
-
-      unless User.exists?(row['owner_id'])
-        record.errors.add(attribute, :column_not_found, column: 'owner_id', row_number: row_number)
       end
 
       # Ensure that all files name in the spreadsheet have a corresponding uploaded file
@@ -61,8 +57,8 @@ class BatchIngestSpreadsheetValidator < ActiveModel::EachValidator
       missing_files = file_names - google_file_names
 
       unless missing_files.empty?
-        record.errors.add(attribute, :no_matching_files, file_names: missing_files.join(', '), row_number: row_number)
-      end
+        record.errors.add(attribute, :no_matching_files, file_names: missing_files.join(', '),
+                                                         row_number: row_number) end
     end
   rescue StandardError
     # Most likely `download_spreadsheet` method threw an error as given spreadsheet doesn't match what we expected

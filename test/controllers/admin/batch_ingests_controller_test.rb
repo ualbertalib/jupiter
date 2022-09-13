@@ -45,8 +45,7 @@ class Admin::BatchIngestsControllerTest < ActionDispatch::IntegrationTest
                      record: :none,
                      erb: {
                        collection_id: collections(:collection_fantasy).id,
-                       community_id: communities(:community_books).id,
-                       owner_id: users(:user_admin).id
+                       community_id: communities(:community_books).id
                      }) do
       assert_difference('BatchIngest.count') do
         assert_difference('BatchIngestFile.count', +2) do
