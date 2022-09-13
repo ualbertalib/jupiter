@@ -3,7 +3,7 @@ require 'selenium-webdriver'
 
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
 
-  Capybara.default_max_wait_time = 5
+  Capybara.default_max_wait_time = 10
 
   setup do
     Capybara.app_host = Jupiter::TEST_URL
