@@ -55,7 +55,7 @@ class DepositThesisTest < ApplicationSystemTestCase
     attach_file_in_dropzone(file_fixture('image-sample.jpeg'))
     has_css? '.j-thumbnail'
 
-    click_on I18n.t('admin.theses.draft.save_and_continue'), wait: 5
+    click_on I18n.t('admin.theses.draft.save_and_continue'), wait: 15
 
     # 4. Review and Deposit Form
 
