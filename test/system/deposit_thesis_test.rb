@@ -59,7 +59,7 @@ class DepositThesisTest < ApplicationSystemTestCase
 
     # 4. Review and Deposit Form
 
-    assert_selector 'h2', text: I18n.t('admin.theses.draft.review_and_deposit_thesis.header')
+    assert_selector 'h2', text: I18n.t('admin.theses.draft.review_and_deposit_thesis.header'), wait: 15
 
     click_on I18n.t('admin.theses.draft.header')
 
@@ -214,7 +214,7 @@ class DepositThesisTest < ApplicationSystemTestCase
 
   def attach_file_in_dropzone(file_path)
     # Attach the file to the hidden input selector
-    attach_file(nil, file_path, class: 'dz-hidden-input', visible: false, wait: 15)
+    attach_file(nil, file_path, class: 'dz-hidden-input', visible: false, wait: 20)
   end
 
   def select_date(date, field_id:)
