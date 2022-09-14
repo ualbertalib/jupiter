@@ -241,7 +241,7 @@ class DepositItemTest < ApplicationSystemTestCase
 
   def attach_file_in_dropzone(file_path)
     # Attach the file to the hidden input selector
-    attach_file(nil, file_path, class: 'dz-hidden-input', visible: false)
+    attach_file(nil, file_path, class: 'dz-hidden-input', visible: false, wait: 15)
   end
 
 end
