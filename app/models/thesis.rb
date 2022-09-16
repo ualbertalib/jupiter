@@ -56,7 +56,10 @@ class Thesis < JupiterCore::Doiable
   end
 
   def ordered_files
-    files.joins(:blob).order('active_storage_blobs.filename ASC')
+    # We are sorting with lowercase filenames so we get a list that would be
+    # more familiar to end users mixing upper and lower case in the final order
+    # like 0-9,a-z
+    files.joins(:blob).order('LOWER(active_storage_blobs.filename) ASC')
   end
 
   def self.from_draft(draft_thesis)
