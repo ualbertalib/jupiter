@@ -20,6 +20,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 - Column header names for batch ingestion spreadsheet [[#2941](https://github.com/ualbertalib/jupiter/issues/2941)]
 - Community links to exclude description [#2969](https://github.com/ualbertalib/jupiter/issues/2969)
 
+### Changed
+- files attached to items and thesis are now sorted alphabetically in their views [#2946](https://github.com/ualbertalib/jupiter/issues/2946)
+
 ## [2.3.7] - 2022-07-13
 
 ### Removed 

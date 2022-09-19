@@ -132,11 +132,6 @@ class DepositThesisTest < ApplicationSystemTestCase
   # (could be moved and made as generic helpers if these are needed elsewhere)
   private
 
-  def attach_file_in_dropzone(file_path)
-    # Attach the file to the hidden input selector
-    attach_file(nil, file_path, class: 'dz-hidden-input', visible: false)
-  end
-
   def select_date(date, field_id:)
     date = Date.parse(date)
 
