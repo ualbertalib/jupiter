@@ -159,9 +159,4 @@ class DepositItemTest < ApplicationSystemTestCase
     select date.day.to_s, from: "#{field_id}_3i"
   end
 
-  def attach_file_in_dropzone(file_path)
-    # Attach the file to the hidden input selector
-    attach_file(nil, file_path, class: 'dz-hidden-input', visible: false)
-  end
-
 end

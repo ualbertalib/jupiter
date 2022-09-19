@@ -1,20 +1,20 @@
 require 'application_system_test_case'
 
-class ItemListFilesTest < ApplicationSystemTestCase
+class ThesisListFilesTest < ApplicationSystemTestCase
 
   test 'files are alphabetically sorted when depositing an item' do
     admin = users(:user_admin)
-    item = items(:item_old_license)
-    item.save
+    thesis = thesis(:thesis_fancy)
+    thesis.save
 
     # Make sure the item already has a file attached to it
     File.open(file_fixture('pdf-sample.pdf'), 'r') do |file|
-      item.add_and_ingest_files([file])
+      thesis.add_and_ingest_files([file])
     end
 
     login_user admin
 
-    visit item_path item
+    visit item_path thesis
 
     click_on I18n.t('edit')
 
@@ -33,13 +33,13 @@ class ItemListFilesTest < ApplicationSystemTestCase
 
     click_on I18n.t('items.draft.save_and_continue'), wait: 10
 
-    assert_selector :xpath, "(.//li[contains(@class, 'item-filename')])", count: 4
+    assert_selector :xpath, "(.//li[contains(@class, 'thesis-filename')])", count: 4
     # We are using regex in these assertions since the elements on the intreface
     # include a badge with text showing the file size
-    assert_selector :xpath, "(.//li[contains(@class, 'item-filename')])[1]", text: /1234-text-sample.txt/
-    assert_selector :xpath, "(.//li[contains(@class, 'item-filename')])[2]", text: /image-sample.jpeg/
-    assert_selector :xpath, "(.//li[contains(@class, 'item-filename')])[3]", text: /Other-text-sample.txt/
-    assert_selector :xpath, "(.//li[contains(@class, 'item-filename')])[4]", text: /pdf-sample.pdf/
+    assert_selector :xpath, "(.//li[contains(@class, 'thesis-filename')])[1]", text: /1234-text-sample.txt/
+    assert_selector :xpath, "(.//li[contains(@class, 'thesis-filename')])[2]", text: /image-sample.jpeg/
+    assert_selector :xpath, "(.//li[contains(@class, 'thesis-filename')])[3]", text: /Other-text-sample.txt/
+    assert_selector :xpath, "(.//li[contains(@class, 'thesis-filename')])[4]", text: /pdf-sample.pdf/
 
     click_on I18n.t('items.draft.save_and_deposit_edits')
 
