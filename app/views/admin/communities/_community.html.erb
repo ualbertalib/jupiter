@@ -1,13 +1,15 @@
 <li class="list-group-item list-group-item-action">
 
   <div class="d-flex justify-content-between align-items-start mb-3">
-    <%= link_to admin_community_path(community), class: 'media text-decoration-none' do %>
-      <%= render partial: 'thumbnail', locals: { object: community } %>
+      <%= link_to admin_community_path(community), class: 'media text-decoration-none' do %>
+        <%= render partial: 'thumbnail', locals: { object: community } %>
+      <% end %>
       <div class="media-body ml-3">
-        <h4 class="mt-0"><%= community.title %></h4>
+        <%= link_to admin_community_path(community), class: 'media text-decoration-none' do %>
+          <h4 class="mt-0"><%= community.title %></h4>
+        <% end %>
         <p class="text-muted"><%= community.description %></p>
       </div>
-    <% end %>
 
     <div class="btn-group" role="group" aria-label="Community Actions">
       <% if policy(community).update? %>
