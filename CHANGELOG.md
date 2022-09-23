@@ -7,6 +7,11 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 New entries in this file should aim to provide a meaningful amount of information in order to allow people to understand the change purely by reading this file, without relying on links to possibly-impermanent sources like Pull Request descriptions or issues.
 
+## [Unreleased]
+
+### Chores
+- Bump webpack-dev-server from 4.11.0 to 4.11.1 
+
 ## [2.4.0] - 2022-09-20
 
 ### Added
@@ -20,6 +25,7 @@ New entries in this file should aim to provide a meaningful amount of informatio
 - Column header names for batch ingestion spreadsheet [#2941](https://github.com/ualbertalib/jupiter/issues/2941)
 - Community links to exclude description [#2969](https://github.com/ualbertalib/jupiter/issues/2969)
 - Files attached to items and thesis are now sorted alphabetically in their views [#2946](https://github.com/ualbertalib/jupiter/issues/2946)
+
 
 ## [2.3.7] - 2022-07-13
 
