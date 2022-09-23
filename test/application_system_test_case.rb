@@ -44,6 +44,11 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     visit logout_url
   end
 
+  def attach_file_in_dropzone(file_path)
+    # Attach the file to the hidden input selector
+    attach_file(nil, file_path, class: 'dz-hidden-input', visible: false)
+  end
+
   # Used to enable papertrail gem (disabled by default in tests).
   def with_versioning
     was_enabled = PaperTrail.enabled?

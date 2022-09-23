@@ -6,7 +6,7 @@
 <% if @item.creation_date.present? %>
   <meta name="citation_publication_date" content="<%= humanize_date(@item.creation_date) %>">
 <% end %>
-<% citation_file = @item.files.first %>
+<% citation_file = @item.ordered_files.first %>
 <% if citation_file.present? && citation_file.fileset_uuid.present? %>
   <%# TODO: limit to pdf mime-type if/when that gets stored %>
   <meta name="citation_pdf_url" content="<%= file_view_item_url(id: citation_file.record.id,

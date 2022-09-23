@@ -55,6 +55,7 @@ class DepositItemTest < ApplicationSystemTestCase
 
     assert_selector 'h2', text: I18n.t('items.draft.upload_files.header')
 
+    attach_file_in_dropzone(file_fixture('pdf-sample.pdf'))
     attach_file_in_dropzone(file_fixture('image-sample.jpeg'))
     has_css? '.j-thumbnail'
 
@@ -156,11 +157,6 @@ class DepositItemTest < ApplicationSystemTestCase
     select date.year.to_s, from: "#{field_id}_1i"
     select I18n.l(date, format: '%B'), from: "#{field_id}_2i"
     select date.day.to_s, from: "#{field_id}_3i"
-  end
-
-  def attach_file_in_dropzone(file_path)
-    # Attach the file to the hidden input selector
-    attach_file(nil, file_path, class: 'dz-hidden-input', visible: false)
   end
 
 end
