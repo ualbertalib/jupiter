@@ -10,7 +10,8 @@ New entries in this file should aim to provide a meaningful amount of informatio
 ## [Unreleased]
 
 ### Chores
-- Bump webpack-dev-server from 4.11.0 to 4.11.1 
+- Bump webpack-dev-server from 4.11.0 to 4.11.1
+- Bump webmock from 3.17.1 to 3.18.1
 
 ## [2.4.0] - 2022-09-20
 
