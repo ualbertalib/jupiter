@@ -191,6 +191,13 @@ class DraftThesis < ApplicationRecord
     graduation_year.nil? || (graduation_year >= 2009)
   end
 
+  def ordered_files
+    # We are sorting with lowercase filenames so we get a list that would be
+    # more familiar to end users mixing upper and lower case in the final order
+    # like 0-9,a-z
+    files.joins(:blob).order('LOWER(active_storage_blobs.filename) ASC')
+  end
+
   private
 
   def parse_graduation_term_from_fedora(graduation_date)
