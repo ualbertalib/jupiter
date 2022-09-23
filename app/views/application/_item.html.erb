@@ -7,7 +7,7 @@
     <div class="d-flex flex-wrap flex-lg-nowrap align-items-start">
       <h3 class="mt-0 h5 mr-auto"><%= link_to item.title, item_path(item) %></h3>
       <% if policy(item).download? %>
-        <% primary_file = item.files.first %>
+        <% primary_file = item.ordered_files.first %>
         <% if primary_file.present? && primary_file.fileset_uuid.present? %>
           <%= link_to file_download_item_url(id: primary_file.record.id,
                                              file_set_id: primary_file.fileset_uuid),
