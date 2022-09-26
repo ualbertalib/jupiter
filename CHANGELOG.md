@@ -12,6 +12,7 @@ New entries in this file should aim to provide a meaningful amount of informatio
 ### Chores
 - Bump webpack-dev-server from 4.11.0 to 4.11.1 
 - Bump webmock from 3.17.1 to 3.18.1
+- Bump rubocop-rails from 2.15.2 to 2.16.1
 
 ## [2.4.0] - 2022-09-20
 
