@@ -13,6 +13,8 @@ class BatchIngestSpreadsheetValidator < ActiveModel::EachValidator
     )
 
     google_spreadsheet = google_credentials.download_spreadsheet(value)
+    google_file_names = record.batch_ingest_files.map(&:google_file_name)
+    verified_google_file_names = {}
 
     google_spreadsheet.each_with_index do |row, index|
       row_number = index + 1
@@ -53,12 +55,23 @@ class BatchIngestSpreadsheetValidator < ActiveModel::EachValidator
       # Ensure that all files name in the spreadsheet have a corresponding uploaded file
 
       file_names = row['file_name'].split('|').map(&:strip)
-      google_file_names = record.batch_ingest_files.map(&:google_file_name)
       missing_files = file_names - google_file_names
 
       unless missing_files.empty?
         record.errors.add(attribute, :no_matching_files, file_names: missing_files.join(', '),
-                                                         row_number: row_number) end
+                                                         row_number: row_number)
+      end
+
+      # Keep a log of the files that have been listed for all items
+      file_names.each do |file_name|
+        verified_google_file_names[file_name] = [] unless verified_google_file_names.key?(file_name)
+        verified_google_file_names[file_name] << row_number
+      end
+    end
+
+    # Ensure files in spreadsheet are only used once for all uploaded files
+    verified_google_file_names.each do |file_name, rows|
+      record.errors.add(attribute, :duplicate_files, file_name: file_name, rows: rows.join(', ')) if rows.length > 1
     end
   rescue StandardError
     # Most likely `download_spreadsheet` method threw an error as given spreadsheet doesn't match what we expected
