@@ -9,6 +9,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+### Fix
+- Stop batch ingests where items have with duplicate files [#2980](https://github.com/ualbertalib/jupiter/issues/2980)
+
 ### Chores
 - Bump webpack-dev-server from 4.11.0 to 4.11.1 
 - Bump webmock from 3.17.1 to 3.18.1
