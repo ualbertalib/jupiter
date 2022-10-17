@@ -71,7 +71,7 @@ class BatchIngestSpreadsheetValidator < ActiveModel::EachValidator
 
     # Ensure files in spreadsheet are only used once for all uploaded files
     verified_google_file_names.each do |file_name, rows|
-      record.errors.add(attribute, :duplicate_files, file_name: file_name, rows: rows.join(', ')) if rows.length > 1
+      record.errors.add(attribute, :duplicate_files, file_name: file_name, rows: rows.join(', ')) if rows.many?
     end
   rescue StandardError
     # Most likely `download_spreadsheet` method threw an error as given spreadsheet doesn't match what we expected
