@@ -7,7 +7,7 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 New entries in this file should aim to provide a meaningful amount of information in order to allow people to understand the change purely by reading this file, without relying on links to possibly-impermanent sources like Pull Request descriptions or issues.
 
-## [Unreleased]
+## [2.4.1] - 2022-10-19
 
 ### Fix
 - Stop batch ingests where items have with duplicate files [#2980](https://github.com/ualbertalib/jupiter/issues/2980)
