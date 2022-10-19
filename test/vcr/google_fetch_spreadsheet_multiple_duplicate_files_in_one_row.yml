@@ -27,7 +27,7 @@ http_interactions:
       - Referer
       - X-Origin
       Date:
-      - Tue, 16 Aug 2022 18:09:47 GMT
+      - Tue, 04 Oct 2022 15:41:52 GMT
       Server:
       - ESF
       Cache-Control:
@@ -53,7 +53,7 @@ http_interactions:
             [
               "file_name",
               "title",
-              "alternate_title",
+              "alternative_title",
               "item_type",
               "publication_status",
               "languages",
@@ -64,19 +64,19 @@ http_interactions:
               "community_id",
               "collection_id",
               "contributors",
-              "places",
-              "time_periods",
-              "citations",
+              "spatial_subjects",
+              "temporal_subjects",
+              "is_version_of",
               "source",
-              "related_item",
+              "related_link",
               "license",
-              "license_text",
+              "rights",
               "visibility",
               "embargo_end_date",
               "visibility_after_embargo"
             ],
             [
-              "Canastas_seri - By Alejandro Yanes - Own work, CC BY-SA 4.0.jpg | MAPElNorte049 - By AlejandroLinaresGarcia - Own work, CC BY-SA 4.0.jpeg | Tumacacori-Carmen-Tumacácori_Museum- By Marine 69-71 - Own work, CC BY-SA 4.0.jpg",
+              "file_1.txt | file_2.txt | file_3.txt",
               "Test Resource Title 1",
               "Alternate Title",
               "dataset",
@@ -84,7 +84,7 @@ http_interactions:
               "english|french|spanish",
               "creator $ 1|creator $ 2|creator $ 3",
               "subject $ 1|subject $ 2|subject $ 3",
-              "2022-02-22",
+              "2022-02-02",
               "description $ Sea lettuce melon cabbage leek bamboo shoot lettuce rutabaga jícama silver beet amaranth pea dandelion scallion pea sprouts yarrow salsify bitterleaf courgette. Azuki bean horseradish potato kale welsh onion fennel green bean azuki bean chickweed aubergine bell pepper sea lettuce rutabaga cucumber grape. Radish grape rutabaga celery beetroot kombu spring onion cauliflower soybean.\nSea lettuce melon cabbage leek bamboo shoot lettuce rutabaga jícama silver beet amaranth pea dandelion scallion pea sprouts yarrow salsify bitterleaf courgette. Azuki bean horseradish potato kale welsh onion fennel green bean azuki bean chickweed aubergine bell pepper sea lettuce rutabaga cucumber grape. Radish grape rutabaga celery beetroot kombu spring onion cauliflower soybean.",
               "<%= community_id %>",
               "<%= collection_id %>",
@@ -99,7 +99,7 @@ http_interactions:
               "public"
             ],
             [
-              "Canastas_seri - By Alejandro Yanes - Own work, CC BY-SA 4.0.jpg | MAPElNorte049 - By AlejandroLinaresGarcia - Own work, CC BY-SA 4.0.jpeg | Tumacacori-Carmen-Tumacácori_Museum- By Marine 69-71 - Own work, CC BY-SA 4.0.jpg",
+              "file_1.txt | file_4.txt | file_5.txt",
               "Test Resource Title 2",
               "Alternate Title",
               "image",
@@ -122,7 +122,7 @@ http_interactions:
               "public"
             ],
             [
-              "Canastas_seri - By Alejandro Yanes - Own work, CC BY-SA 4.0.jpg | MAPElNorte049 - By AlejandroLinaresGarcia - Own work, CC BY-SA 4.0.jpeg | Tumacacori-Carmen-Tumacácori_Museum- By Marine 69-71 - Own work, CC BY-SA 4.0.jpg",
+              "file_6.txt",
               "Test Resource Title 3",
               "Alternate Title",
               "image",
@@ -147,5 +147,5 @@ http_interactions:
           ]
         }
     http_version: 
-  recorded_at: Tue, 16 Aug 2022 18:09:47 GMT
+  recorded_at: Tue, 04 Oct 2022 15:41:52 GMT
 recorded_with: VCR 5.0.0
