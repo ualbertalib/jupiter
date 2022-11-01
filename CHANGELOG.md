@@ -7,6 +7,18 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 New entries in this file should aim to provide a meaningful amount of information in order to allow people to understand the change purely by reading this file, without relying on links to possibly-impermanent sources like Pull Request descriptions or issues.
 
+## Unreleased
+
+## [2.4.2] - 2022-11-01
+
+### Fix
+- Make sure all files are copied when items are ingested with multiple files each [#2990](https://github.com/ualbertalib/jupiter/issues/2990)
+
+### Chores
+- Bump nokogiri from 1.13.7 to 1.13.9
+- Bump regenerator-runtime from 0.13.9 to 0.13.10
+- Bump webdrivers from 5.0.0 to 5.2.0
+
 ## [2.4.1] - 2022-10-19
 
 ### Fix
