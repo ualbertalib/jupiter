@@ -126,6 +126,10 @@ class BatchIngestionJobTest < ActiveJob::TestCase
     assert_equal(2, Item.find_by(title: 'Test Resource Title 1').files.count)
     assert_equal(3, Item.find_by(title: 'Test Resource Title 2').files.count)
     assert_equal(1, Item.find_by(title: 'Test Resource Title 3').files.count)
+
+    item = Item.find_by(title: 'Test Resource Title 1')
+    assert(File.file?(ActiveStorage::Blob.service.path_for(item.files[0].blob.key)))
+    assert(File.file?(ActiveStorage::Blob.service.path_for(item.files[1].blob.key)))
   end
 
 end
