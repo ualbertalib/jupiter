@@ -9,6 +9,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## Unreleased
 
+### Chores
+- Bump sidekiq from 6.4.1 to 6.5.8
+
 ## [2.4.2] - 2022-11-01
 
 ### Fix
