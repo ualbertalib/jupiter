@@ -340,7 +340,7 @@ GEM
       connection_pool (~> 2.2)
     nio4r (2.5.8)
     no_proxy_fix (0.1.2)
-    nokogiri (1.13.9)
+    nokogiri (1.13.10)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     octokit (4.25.0)
@@ -379,7 +379,7 @@ GEM
     pundit (1.1.0)
       activesupport (>= 3.0.0)
     raabro (1.4.0)
-    racc (1.6.0)
+    racc (1.6.1)
     rack (2.2.4)
     rack-protection (2.2.0)
       rack
