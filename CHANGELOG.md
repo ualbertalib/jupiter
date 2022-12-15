@@ -9,6 +9,15 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## Unreleased
 
+## [2.4.3] - 2022-12-14
+
+### Security
+- Bump rails-html-sanitizer from 1.4.3 to 1.4.4
+- Bump loofah from 2.19.0 to 2.19.1
+- Bump nokogiri from 1.13.9 to 1.13.10
+- Bump decode-uri-component from 0.2.0 to 0.2.2
+- Bump loader-utils from 1.4.1 to 1.4.2
+
 ### Chores
 - Bump sidekiq from 6.4.1 to 6.5.8
 
