@@ -19,7 +19,8 @@ class Aip::V1::CommunitiesController < ApplicationController
       RDF::Statement(subject: self_subject, predicate: RDF::Vocab::DC.description, object: @community.description),
       RDF::Statement(subject: self_subject, predicate: RDF::Vocab::DC.accessRights, object: @community.visibility),
       RDF::Statement(subject: self_subject, predicate: RDF::Vocab::DC.created, object: @community.created_at),
-      RDF::Statement(subject: self_subject, predicate: TERMS[:ual].record_created_in_jupiter, object: @community.record_created_at)
+      RDF::Statement(subject: self_subject, predicate: TERMS[:ual].record_created_in_jupiter,
+                     object: @community.record_created_at)
     ]
 
     rdf_graph_creator.graph.insert(*statements)

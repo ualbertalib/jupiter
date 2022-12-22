@@ -20,9 +20,11 @@ class Aip::V1::CollectionsController < ApplicationController
       RDF::Statement(subject: self_subject, predicate: RDF::Vocab::DC.title, object: @collection.title),
       RDF::Statement(subject: self_subject, predicate: RDF::Vocab::DC.description, object: @collection.description),
       RDF::Statement(subject: self_subject, predicate: RDF::Vocab::DC.accessRights, object: @collection.visibility),
-      RDF::Statement(subject: self_subject, predicate: TERMS[:ual].restricted_collection, object: @collection.restricted),
+      RDF::Statement(subject: self_subject, predicate: TERMS[:ual].restricted_collection,
+                     object: @collection.restricted),
       RDF::Statement(subject: self_subject, predicate: RDF::Vocab::DC.created, object: @collection.created_at),
-      RDF::Statement(subject: self_subject, predicate: TERMS[:ual].record_created_in_jupiter, object: @collection.record_created_at)
+      RDF::Statement(subject: self_subject, predicate: TERMS[:ual].record_created_in_jupiter,
+                     object: @collection.record_created_at)
     ]
 
     rdf_graph_creator.graph.insert(*statements)

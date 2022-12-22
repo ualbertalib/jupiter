@@ -1,0 +1,14 @@
+@prefix dc: <http://purl.org/dc/terms/> .
+@prefix pcdm: <http://pcdm.org/models#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://era.ualberta.localhost/aip/v1/collections/a93cbb63-4bb2-4deb-a952-c96c4c851c8c> a pcdm:Collection;
+    dc:title "AIP Collection";
+    dc:description "Collection description";
+    pcdm:memberOf "b644bf7f-d950-56bb-ba68-c4271a175491";
+    dc:accessRights "http://terms.library.ualberta.ca/public";
+    dc:created "2015-12-12T00:00:00Z"^^xsd:dateTime;
+    <http://terms.library.ualberta.ca/path> "b644bf7f-d950-56bb-ba68-c4271a175491";
+    <http://terms.library.ualberta.ca/recordCreatedInJupiter> "2015-12-12T00:00:00Z"^^xsd:dateTime;
+    <http://terms.library.ualberta.ca/restrictedCollection> false .
