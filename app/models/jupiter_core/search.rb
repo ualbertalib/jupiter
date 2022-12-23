@@ -86,7 +86,7 @@ class JupiterCore::Search
                                 restrict_to_model: restrict_to_model, rows: rows,
                                 start: start, sort: sort, fulltext_fields: fulltext_fields)
 
-    response = ActiveSupport::Notifications.instrument(JUPITER_SOLR_NOTIFICATION,
+    response = ActiveSupport::Notifications.instrument('jupiter.solr.query',
                                                        name: 'solr select',
                                                        query: params) do
       JupiterCore::SolrServices::Client.instance.connection.get('select', params: params)
