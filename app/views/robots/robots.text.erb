@@ -1,13 +1,13 @@
 # See http://www.robotstxt.org/robotstxt.html for documentation on how to use the robots.txt file
 
+<% if Rails.application.secrets.allow_crawlers %>
 # Once upon a time megaindex.com/crawler caused database use headaches
 # Let's suggest that crawlers that might not be as smart as Google chill a bit
 User-agent: *
 Crawl-delay: 5
-
-Sitemap: https://era.library.ualberta.ca/sitemap.xml
-
-<% unless Rails.application.secrets.allow_crawlers %>
+<% else %>
 User-agent: *
 Disallow: /
 <% end %>
+
+Sitemap: https://era.library.ualberta.ca/sitemap.xml
