@@ -64,8 +64,6 @@ gem 'uuidtools'
 gem 'voight_kampff' # bot detection
 gem 'wicked' # Multi-step wizard
 
-# Performance monitoring
-gem 'skylight', '~> 4.3'
 # resolve production errors in minutes
 gem 'rollbar'
 
