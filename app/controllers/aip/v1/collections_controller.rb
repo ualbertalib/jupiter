@@ -6,11 +6,10 @@ class Aip::V1::CollectionsController < ApplicationController
   before_action :ensure_access
 
   def show
-    # ::TERMS[:ual].schema doesn't seem to be added as a prefix and path is added
+    # ::TERMS[:ual].schema not here as it doesn't seem to be added as a prefix and path is added
     prefixes = [
       RDF::Vocab::DC,
-      RDF::Vocab::PCDM,
-      ::TERMS[:ual].schema
+      RDF::Vocab::PCDM
     ]
 
     rdf_graph_creator = RdfGraphCreationService.new(@collection, prefixes, self_subject)
