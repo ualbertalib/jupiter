@@ -7,11 +7,10 @@ Rails.application.load_tasks
 class AddToPreservationQueueTaskTest < ApplicationSystemTestCase
 
   setup do
-    Rake::Task['jupiter:preserve_all_collections_and_communities'].reenable
-    Rake::Task['jupiter:preserve_all_items_and_theses'].reenable
-    RedisClient.current.del Rails.application.secrets.preservation_queue_name
     @admin = users(:user_admin)
     login_user(@admin)
+
+    RedisClient.current.del Rails.application.secrets.preservation_queue_name
   end
 
   teardown do
@@ -19,7 +18,7 @@ class AddToPreservationQueueTaskTest < ApplicationSystemTestCase
   end
 
   test 'add all communities and collections to queue through task' do
-    Rake::Task['jupiter:preserve_all_collections_and_communities'].invoke
+    Rake::Task['jupiter:preserve_all_collections_and_communities'].execute
     collection_and_community_count = Community.count + Collection.count
     assert_equal collection_and_community_count,
                  RedisClient.current.zcard(Rails.application.secrets.preservation_queue_name)
@@ -29,20 +28,20 @@ class AddToPreservationQueueTaskTest < ApplicationSystemTestCase
     travel 1.week do
       Collection.first.save!
       Community.first.save!
-      Rake::Task['jupiter:preserve_all_collections_and_communities'].invoke(Date.current.to_s)
+      Rake::Task['jupiter:preserve_all_collections_and_communities'].execute(after_date_arguments)
       assert_equal 2, RedisClient.current.zcard(Rails.application.secrets.preservation_queue_name)
     end
   end
 
   test 'no communities and collections found to queue through task' do
     travel 1.week do
-      Rake::Task['jupiter:preserve_all_collections_and_communities'].invoke(Date.current.to_s)
+      Rake::Task['jupiter:preserve_all_collections_and_communities'].execute(after_date_arguments)
       assert_equal 0, RedisClient.current.zcard(Rails.application.secrets.preservation_queue_name)
     end
   end
 
   test 'add all items and theses to queue through task' do
-    Rake::Task['jupiter:preserve_all_items_and_theses'].invoke
+    Rake::Task['jupiter:preserve_all_items_and_theses'].execute
     item_and_thesis__count = Item.count + Thesis.count
     assert_equal item_and_thesis__count,
                  RedisClient.current.zcard(Rails.application.secrets.preservation_queue_name)
@@ -52,16 +51,22 @@ class AddToPreservationQueueTaskTest < ApplicationSystemTestCase
     travel 1.week do
       Item.first.save!
       Thesis.first.save!
-      Rake::Task['jupiter:preserve_all_items_and_theses'].invoke(Date.current.to_s)
+      Rake::Task['jupiter:preserve_all_items_and_theses'].execute(after_date_arguments)
       assert_equal 2, RedisClient.current.zcard(Rails.application.secrets.preservation_queue_name)
     end
   end
 
   test 'no items or theses found to queue through task' do
     travel 1.week do
-      Rake::Task['jupiter:preserve_all_items_and_theses'].invoke(Date.current.to_s)
+      Rake::Task['jupiter:preserve_all_items_and_theses'].execute(after_date_arguments)
       assert_equal 0, RedisClient.current.zcard(Rails.application.secrets.preservation_queue_name)
     end
+  end
+
+  private
+
+  def after_date_arguments
+    Rake::TaskArguments.new([:after_date], [Date.current.to_s])
   end
 
 end
