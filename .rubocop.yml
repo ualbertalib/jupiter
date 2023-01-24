@@ -91,13 +91,14 @@ Naming/MethodParameterName:
   Exclude:
     - app/models/jupiter_core//solr_services/deferred_faceted_solr_query.rb
     - app/models/jupiter_core/search.rb
-    
+
 Rails:
   Enabled: true
 
 Rails/SkipsModelValidations:
   Exclude:
     - app/controllers/aip/v1/collections_controller.rb
+    - app/controllers/aip/v1/communities_controller.rb
     - app/controllers/aip/v1/entities_controller.rb
     - app/services/rdf_graph_creation_service.rb
 
@@ -172,7 +173,7 @@ Naming/VariableNumber:
   Enabled: false
 
 Style/OpenStructUse:
-  Exclude: 
+  Exclude:
     - config/initializers/controlled_vocabularies.rb
 
 # Migrations are YYYYMMDDHHMMSS rather than a numeric
