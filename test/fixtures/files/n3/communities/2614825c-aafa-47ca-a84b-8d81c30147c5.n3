@@ -1,0 +1,10 @@
+@prefix dc: <http://purl.org/dc/terms/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://era.ualberta.localhost/aip/v1/communities/2614825c-aafa-47ca-a84b-8d81c30147c5> a <http://terms.library.ualberta.ca/Community>;
+    dc:title "AIP Community";
+    dc:description "Community description";
+    dc:accessRights "http://terms.library.ualberta.ca/public";
+    dc:created "2015-12-12T00:00:00Z"^^xsd:dateTime;
+    <http://terms.library.ualberta.ca/recordCreatedInJupiter> "2015-12-12T00:00:00Z"^^xsd:dateTime .
