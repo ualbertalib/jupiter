@@ -132,11 +132,11 @@ class BatchIngestionJob < ApplicationJob
   end
 
   def files_ingest(item, item_files, google_credentials)
-    item_files.each do |item_file|
-      file = google_credentials.download_file(item_file.google_file_id, item_file.google_file_name)
-      item.add_and_ingest_files([file])
+    files = item_files.map do |item_file|
+      google_credentials.download_file(item_file.google_file_id, item_file.google_file_name)
     end
 
+    item.add_and_ingest_files(files)
     item.set_thumbnail(item.files.first) if item.files.first.present?
   end
 

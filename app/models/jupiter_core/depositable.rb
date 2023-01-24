@@ -111,13 +111,16 @@ class JupiterCore::Depositable < ApplicationRecord
     return if file_handles.blank?
     raise 'Item not yet saved!' if id.nil?
 
-    file_handles.each do |fileio|
-      file_name = fileio.try(:original_filename) || File.basename(fileio.path)
-      attached = files.attach(io: fileio, filename: file_name)
-      # TODO: Do something smarter here if not attached
-      next unless attached
+    attachables = file_handles.map do |fileio|
+      filename = fileio.try(:original_filename) || File.basename(fileio.path)
+      { io: fileio, filename: filename }
+    end
 
-      attachment = files.attachments.last
+    # We need to attach all the files at the same time to make sure their
+    # callbacks are run when they are wrapped in a base transaction block
+    files.attach(attachables)
+
+    files.attachments.each do |attachment|
       attachment.fileset_uuid = UUIDTools::UUID.random_create
       attachment.save!
     end

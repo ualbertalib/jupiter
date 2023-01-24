@@ -1,12 +1,12 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '>= 2.7', '< 3.0'
+ruby '>= 2.7', '< 3.1'
 
 # Core Rails stuff
 gem 'image_processing' # for ActiveStorage Variants
 gem 'puma', '~> 5.6'
-gem 'rails', '~> 6.1.6'
+gem 'rails', '~> 6.1.7'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 gem 'webpacker', '~> 5.4'
@@ -27,9 +27,9 @@ gem 'rdf-vocab', '~> 3.2.1' # this gem changed predicate names without warning, 
 # Database stuff
 gem 'connection_pool'
 gem 'pg', '~> 1.4.3'
-gem 'redis', '~> 4.7'
+gem 'redis', '~> 4.8'
 gem 'rsolr'
-gem 'strong_migrations', '~> 1.0.0'
+gem 'strong_migrations', '~> 1.4.0'
 
 # Authentication
 gem 'bcrypt', '>= 3.1.13'
@@ -111,7 +111,7 @@ group :development do
 
   gem 'listen', '>= 3.0.5', '< 3.8'
   gem 'spring'
-  gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'spring-watcher-listen', '~> 2.1.0'
 
   gem 'web-console', '>= 4.1.0'
 end
@@ -127,7 +127,7 @@ group :test do
   gem 'launchy'
   gem 'rdf-isomorphic', '~> 3.2.1'
   gem 'vcr', '5.0', require: false
-  gem 'webdrivers', '~> 5.0'
+  gem 'webdrivers', '~> 5.2'
   gem 'webmock', require: false
 end
 
