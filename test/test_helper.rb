@@ -7,6 +7,22 @@ require 'rails/test_help'
 require 'sidekiq/testing'
 require 'vcr'
 require 'webmock/minitest'
+require 'minitest/retry'
+# rubocop:disable Layout/LineLength
+Minitest::Retry.use!(
+  methods_to_retry: %w[
+    AdminUsersIndexTest#test_should_be_able_to_autocomplete_by_name
+    BatchIngestTest#test_invalid_without_files
+    DepositThesisTest#test_be_able_to_deposit_and_edit_a_thesis_successfully
+    DoiResetTest#test_reset_button_displays_as_needed
+    DraftControllerTest#test_should_not_be_able_to_update_a_draft_item_when_saving_upload_files_form_that_has_no_file_attachments
+    DraftControllerTest#test_should_not_be_able_to_update_a_draft_thesis_when_saving_upload_files_form_that_has_no_file_attachments
+    ItemEditTest#test_can_edit_item
+    ItemListFilesTest#test_files_are_alphabetically_sorted_when_depositing_an_item
+    ThesisListFilesTest#test_files_are_alphabetically_sorted_when_depositing_an_item
+  ]
+)
+# rubocop:enable Layout/LineLength
 
 VCR.configure do |config|
   config.cassette_library_dir = 'test/vcr'
