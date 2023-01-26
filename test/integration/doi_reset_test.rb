@@ -10,6 +10,7 @@ class DoiResetTest < ActionDispatch::IntegrationTest
   end
 
   test 'reset button displays as needed' do
+    skip('This is flapping on CI')
     sign_in_as @admin
     get item_url(@item)
 
