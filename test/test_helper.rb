@@ -96,6 +96,11 @@ class ActiveSupport::TestCase
     session[:user_id].present?
   end
 
+  # Stub out `puts` and logger messages in our test suite as needed to avoid clutter.
+  def disable_output(&block)
+    $stdout.stub(:puts, nil, &block)
+  end
+
   # turn on test mode for omniauth
   OmniAuth.config.test_mode = true
 
