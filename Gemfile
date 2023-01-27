@@ -125,6 +125,7 @@ group :test do
 
   gem 'json-schema', '~> 3.0.0'
   gem 'launchy'
+  gem 'minitest-retry', require: false
   gem 'rdf-isomorphic', '~> 3.2.1'
   gem 'vcr', '5.0', require: false
   gem 'webdrivers', '~> 5.2'
