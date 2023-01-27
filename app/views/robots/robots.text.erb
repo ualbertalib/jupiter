@@ -3,7 +3,7 @@
 <% if Rails.application.secrets.allow_crawlers %>
 # Once upon a time megaindex.com/crawler caused database use headaches
 # Let's suggest that crawlers that might not be as smart as Google chill a bit
-User-agent: *
+User-agent: MegaIndex.ru
 Crawl-delay: 5
 <% else %>
 User-agent: *
