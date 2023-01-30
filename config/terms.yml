@@ -24,6 +24,7 @@
   terms:
     committee_member: commiteeMember
     community: Community # rdf:type for community objects, Zach has advised uppercase for class
+    collection: Collection # rdf:type for collection objects
     department: department
     department_list: departmentList
     depositor: depositor

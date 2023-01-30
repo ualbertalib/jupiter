@@ -20,6 +20,9 @@ class JupiterCore::Depositable < ApplicationRecord
   before_validation :set_record_created_at, on: :create
   before_validation :set_date_ingested
 
+  scope :updated_on_or_after, ->(date) { where('updated_at >= ?', date) }
+  scope :updated_before, ->(date) { where('updated_at < ?', date) }
+
   # this isn't a predicate name you daft thing
   # rubocop:disable Naming/PredicateName
   def self.has_solr_exporter(klass)

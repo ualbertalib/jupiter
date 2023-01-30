@@ -17,8 +17,6 @@ class Thesis < JupiterCore::Doiable
   #
   # with an upgraded version of Postgresql this could be done more cleanly and performanetly
   scope :belongs_to_path, ->(path) { where('member_of_paths::text LIKE ?', "%#{path}%") }
-  scope :updated_on_or_after, ->(date) { where('updated_at >= ?', date) }
-  scope :updated_before, ->(date) { where('updated_at < ?', date) }
 
   before_validation :populate_sort_year
   after_save :push_entity_for_preservation
