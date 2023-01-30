@@ -9,6 +9,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## Unreleased
 
+### Added
+- Add attempt count for entity ingestion on depositable model. Related to [pushmi_pullyu#297](https://github.com/ualbertalib/pushmi_pullyu/issues/297)
+
 ## [2.4.3] - 2022-12-14
 
 ### Security
