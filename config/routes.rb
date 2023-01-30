@@ -139,6 +139,9 @@ Rails.application.routes.draw do
         get '/collections/:id',
             to: 'collections#show',
             as: 'collection'
+        get '/communities/:id',
+            to: 'communities#show',
+            as: 'community'
         get '/:entity/:id',
             to: 'entities#show',
             as: 'entity',

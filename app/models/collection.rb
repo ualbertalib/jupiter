@@ -16,6 +16,8 @@ class Collection < JupiterCore::Depositable
     self.visibility = JupiterCore::VISIBILITY_PUBLIC
   end
 
+  after_save :push_entity_for_preservation
+
   # We have no attachments, so the scope is just the class itself.
   def self.eager_attachment_scope; self; end
 
