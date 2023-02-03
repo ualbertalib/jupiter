@@ -86,14 +86,12 @@ class JupiterCore::Search
                                 restrict_to_model: restrict_to_model, rows: rows,
                                 start: start, sort: sort, fulltext_fields: fulltext_fields)
 
-    response = ActiveSupport::Notifications.instrument(JUPITER_SOLR_NOTIFICATION,
-                                                       name: 'solr select',
-                                                       query: params) do
+    response = begin
       JupiterCore::SolrServices::Client.instance.connection.get('select', params: params)
-      rescue RSolr::Error::Http => e
-        raise JupiterCore::SolrBadRequestError if e.response[:status] == 400
+    rescue RSolr::Error::Http => e
+      raise JupiterCore::SolrBadRequestError if e.response[:status] == 400
 
-        raise
+      raise
     end
 
     raise SearchFailed unless response['responseHeader']['status'] == 0
