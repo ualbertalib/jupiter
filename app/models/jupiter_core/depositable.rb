@@ -170,8 +170,11 @@ class JupiterCore::Depositable < ApplicationRecord
 
     $queue.with do |connection|
       # pushmi_pullyu requires both the id and type of the depositable
-      entity = { uuid: id, type: self.class.table_name }
-      connection.zadd queue_name, Time.now.to_f, entity.to_json
+      connection.zadd(queue_name, Time.now.to_f, { uuid: id, type: self.class.table_name }.to_json)
+      # Add the attempt count as value 0 that pmpy will use to count the tries to ingest the depositable. If the key
+      # already exists, the value will be reset to 0. the ```connection.zadd``` method called before resets the score as
+      # well. These two pieces of information let PMPY know that the entity needs to be deposited ASAP
+      connection.set("#{Rails.application.secrets.attempt_ingest_prefix}#{id}", 0)
     end
 
     true
