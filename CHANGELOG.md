@@ -14,6 +14,7 @@ New entries in this file should aim to provide a meaningful amount of informatio
 - Added minitest-retry gem to retry flapping tests that are able to pass through retries [#3044](https://github.com/ualbertalib/jupiter/pull/3044)
 ### Removed
 - Skylight performance monitoring.  Will need to remove this secret from ansible playbook secrets as well. [#3023](https://github.com/ualbertalib/jupiter/issues/3023)
+- Remove brakeman's ruby EOL check [PR#3051](https://github.com/ualbertalib/jupiter/pull/3051)
 
 ## [2.4.3] - 2022-12-14
 
