@@ -22,6 +22,8 @@ class Community < JupiterCore::Depositable
     self.visibility = JupiterCore::VISIBILITY_PUBLIC
   end
 
+  after_save :push_entity_for_preservation
+
   def self.eager_attachment_scope
     with_attached_logo
   end

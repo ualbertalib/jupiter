@@ -212,9 +212,7 @@ class Exporters::Solr::BaseExporter
 
     # DSL for declaring custom indexes, where the value isn't taken from a pre-existing
     # attribute but instead is determined by a given lambda
-    #
-    # Sorry rubocop, but you index something *AS* something. It's communicative.
-    def custom_index(attr, role:, as:, type: :string) # rubocop:disable Naming/MethodParameterName
+    def custom_index(attr, role:, as:, type: :string)
       role = [role] unless role.is_a? Array
 
       if role.count { |r| !JupiterCore::SolrServices.valid_solr_role?(r) } > 0

@@ -1,0 +1,297 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://www.googleapis.com/drive/v3/files/FILE3ID?alt=media
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - www.googleapis.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Guploader-Uploadid:
+      - ADPycducXykwTiIGlbElqfDeO0VRVcZLZUtyGt-j-5auPNbN1Q06U20mWR4HtpW216ywHBLIBzjK8LWTXTFqYtYEBBszXyp8G6Fp
+      Content-Type:
+      - text/plain
+      Content-Disposition:
+      - attachment
+      Vary:
+      - Origin
+      - X-Origin
+      Expires:
+      - Tue, 04 Oct 2022 15:53:15 GMT
+      Date:
+      - Tue, 04 Oct 2022 15:53:15 GMT
+      Cache-Control:
+      - private, max-age=0, must-revalidate
+      Content-Length:
+      - '17'
+      X-Goog-Hash:
+      - crc32c=Bbo5rw==
+      Server:
+      - UploadServer
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000,h3-Q050=":443"; ma=2592000,h3-Q046=":443";
+        ma=2592000,h3-Q043=":443"; ma=2592000,quic=":443"; ma=2592000; v="46,43"
+    body:
+      encoding: UTF-8
+      string: Small text file 3
+    http_version: 
+  recorded_at: Tue, 04 Oct 2022 15:53:16 GMT
+- request:
+    method: get
+    uri: https://www.googleapis.com/drive/v3/files/FILE4ID?alt=media
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - www.googleapis.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Guploader-Uploadid:
+      - ADPycdu1X_vGQ37fbZU0AYbo5hijr5GyMJGs2Rz34bnQirijQuIJ0_vvgsKOEaBoanc5Qt88UJWRbKdh8MEdYlydEEZY25BZvU_D
+      Content-Type:
+      - text/plain
+      Content-Disposition:
+      - attachment
+      Vary:
+      - Origin
+      - X-Origin
+      Expires:
+      - Tue, 04 Oct 2022 15:53:16 GMT
+      Date:
+      - Tue, 04 Oct 2022 15:53:16 GMT
+      Cache-Control:
+      - private, max-age=0, must-revalidate
+      Content-Length:
+      - '17'
+      X-Goog-Hash:
+      - crc32c=0XBdRA==
+      Server:
+      - UploadServer
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000,h3-Q050=":443"; ma=2592000,h3-Q046=":443";
+        ma=2592000,h3-Q043=":443"; ma=2592000,quic=":443"; ma=2592000; v="46,43"
+    body:
+      encoding: UTF-8
+      string: Small text file 4
+    http_version: 
+  recorded_at: Tue, 04 Oct 2022 15:53:16 GMT
+- request:
+    method: get
+    uri: https://www.googleapis.com/drive/v3/files/FILE2ID?alt=media
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - www.googleapis.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Guploader-Uploadid:
+      - ADPycdt5s8P4GAp0wbqDcV37qEdRuYmCfEdgnKzTMozZHUjXoR_NqDjAZvF17rrfxYH7LHL932ofecUa1l_Yg7Ou3wI9QMNmL0zL
+      Content-Type:
+      - text/plain
+      Content-Disposition:
+      - attachment
+      Vary:
+      - Origin
+      - X-Origin
+      Expires:
+      - Tue, 04 Oct 2022 15:53:17 GMT
+      Date:
+      - Tue, 04 Oct 2022 15:53:17 GMT
+      Cache-Control:
+      - private, max-age=0, must-revalidate
+      Content-Length:
+      - '17'
+      X-Goog-Hash:
+      - crc32c=99G6rA==
+      Server:
+      - UploadServer
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000,h3-Q050=":443"; ma=2592000,h3-Q046=":443";
+        ma=2592000,h3-Q043=":443"; ma=2592000,quic=":443"; ma=2592000; v="46,43"
+    body:
+      encoding: UTF-8
+      string: Small text file 2
+    http_version: 
+  recorded_at: Tue, 04 Oct 2022 15:53:17 GMT
+- request:
+    method: get
+    uri: https://www.googleapis.com/drive/v3/files/FILE1ID?alt=media
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - www.googleapis.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Guploader-Uploadid:
+      - ADPycduEfT-OmJrzrEh69rFM6RCRXeyS_jJP6LYBhn-_pKX7Jd-N7PDPRujCMo7dyQ3D9HdzJ4y_zft_3rZ8jzQLyj4Bog
+      Content-Type:
+      - text/plain
+      Content-Disposition:
+      - attachment
+      Vary:
+      - Origin
+      - X-Origin
+      Expires:
+      - Tue, 04 Oct 2022 15:53:18 GMT
+      Date:
+      - Tue, 04 Oct 2022 15:53:18 GMT
+      Cache-Control:
+      - private, max-age=0, must-revalidate
+      Content-Length:
+      - '17'
+      X-Goog-Hash:
+      - crc32c=5IFJWA==
+      Server:
+      - UploadServer
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000,h3-Q050=":443"; ma=2592000,h3-Q046=":443";
+        ma=2592000,h3-Q043=":443"; ma=2592000,quic=":443"; ma=2592000; v="46,43"
+    body:
+      encoding: UTF-8
+      string: Small text file 1
+    http_version: 
+  recorded_at: Tue, 04 Oct 2022 15:53:18 GMT
+- request:
+    method: get
+    uri: https://www.googleapis.com/drive/v3/files/FILE5ID?alt=media
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - www.googleapis.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Guploader-Uploadid:
+      - ADPycdufBAB-3EVcq14sl1SbL8ryBrKLnNm7Cg12KpcuX7TSs4Vso2YfABVN6SwC3juq6pgFadh7OmAdawAwBYVdJ4Ayvw
+      Content-Type:
+      - text/plain
+      Content-Disposition:
+      - attachment
+      Vary:
+      - Origin
+      - X-Origin
+      Expires:
+      - Tue, 04 Oct 2022 15:53:18 GMT
+      Date:
+      - Tue, 04 Oct 2022 15:53:18 GMT
+      Cache-Control:
+      - private, max-age=0, must-revalidate
+      Content-Length:
+      - '17'
+      X-Goog-Hash:
+      - crc32c=IxveRw==
+      Server:
+      - UploadServer
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000,h3-Q050=":443"; ma=2592000,h3-Q046=":443";
+        ma=2592000,h3-Q043=":443"; ma=2592000,quic=":443"; ma=2592000; v="46,43"
+    body:
+      encoding: UTF-8
+      string: Small text file 5
+    http_version: 
+  recorded_at: Tue, 04 Oct 2022 15:53:18 GMT
+- request:
+    method: get
+    uri: https://www.googleapis.com/drive/v3/files/FILE6ID?alt=media
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - www.googleapis.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Guploader-Uploadid:
+      - ADPycdt1pZjXEHpiaAqlg-sbFMS_wIwEMAmI3tKIJ40cgOjZGmWdTpsts0jrUGrq6OkEwFpTdYFNDgO2NEixgcKe1YI4eg
+      Content-Type:
+      - text/plain
+      Content-Disposition:
+      - attachment
+      Vary:
+      - Origin
+      - X-Origin
+      Expires:
+      - Tue, 04 Oct 2022 15:53:19 GMT
+      Date:
+      - Tue, 04 Oct 2022 15:53:19 GMT
+      Cache-Control:
+      - private, max-age=0, must-revalidate
+      Content-Length:
+      - '17'
+      X-Goog-Hash:
+      - crc32c=MEstsw==
+      Server:
+      - UploadServer
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000,h3-Q050=":443"; ma=2592000,h3-Q046=":443";
+        ma=2592000,h3-Q043=":443"; ma=2592000,quic=":443"; ma=2592000; v="46,43"
+    body:
+      encoding: UTF-8
+      string: Small text file 6
+    http_version: 
+  recorded_at: Tue, 04 Oct 2022 15:53:19 GMT
+recorded_with: VCR 5.0.0

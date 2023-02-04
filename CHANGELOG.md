@@ -7,12 +7,64 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 New entries in this file should aim to provide a meaningful amount of information in order to allow people to understand the change purely by reading this file, without relying on links to possibly-impermanent sources like Pull Request descriptions or issues.
 
-## [Unreleased]
+## Unreleased
+
+### Added
+- Push collections and communities to preservation on save along with a rake task to do so [#255](https://github.com/ualbertalib/pushmi_pullyu/issues/255)
+- Added minitest-retry gem to retry flapping tests that are able to pass through retries [#3044](https://github.com/ualbertalib/jupiter/pull/3044)
+- Add attempt count for entity ingestion on depositable model. Related to [pushmi_pullyu#297](https://github.com/ualbertalib/pushmi_pullyu/issues/297)
+
+### Removed
+- Skylight performance monitoring.  Will need to remove this secret from ansible playbook secrets as well. [#3023](https://github.com/ualbertalib/jupiter/issues/3023)
+- Remove brakeman's ruby EOL check [PR#3051](https://github.com/ualbertalib/jupiter/pull/3051)
+
+## [2.4.3] - 2022-12-14
+
+### Security
+- Bump rails-html-sanitizer from 1.4.3 to 1.4.4
+- Bump loofah from 2.19.0 to 2.19.1
+- Bump nokogiri from 1.13.9 to 1.13.10
+- Bump decode-uri-component from 0.2.0 to 0.2.2
+- Bump loader-utils from 1.4.1 to 1.4.2
+
+### Chores
+- Bump sidekiq from 6.4.1 to 6.5.8
+
+## [2.4.2] - 2022-11-01
+
+### Fix
+- Make sure all files are copied when items are ingested with multiple files each [#2990](https://github.com/ualbertalib/jupiter/issues/2990)
+
+### Chores
+- Bump nokogiri from 1.13.7 to 1.13.9
+- Bump regenerator-runtime from 0.13.9 to 0.13.10
+- Bump webdrivers from 5.0.0 to 5.2.0
+
+## [2.4.1] - 2022-10-19
+
+### Fix
+- Stop batch ingests where items have with duplicate files [#2980](https://github.com/ualbertalib/jupiter/issues/2980)
+
+### Chores
+- Bump webpack-dev-server from 4.11.0 to 4.11.1 
+- Bump webmock from 3.17.1 to 3.18.1
+- Bump rubocop-rails from 2.15.2 to 2.16.1
+- add Ruby 3.0 [PR#2879](https://github.com/ualbertalib/jupiter/pull/2879)
+
+## [2.4.0] - 2022-09-20
+
 ### Added
 - Add multi-file upload per item on batch ingest workflow [#2943](https://github.com/ualbertalib/jupiter/issues/2943)
 
 ### Removed
 - references to EZID [#2671](https://github.com/ualbertalib/jupiter/issues/2671)
+- Unnecessary disabling of Naming/MethodParameterName cop [PR#2960](https://github.com/ualbertalib/jupiter/pull/2960)
+
+### Changed
+- Column header names for batch ingestion spreadsheet [#2941](https://github.com/ualbertalib/jupiter/issues/2941)
+- Community links to exclude description [#2969](https://github.com/ualbertalib/jupiter/issues/2969)
+- Files attached to items and thesis are now sorted alphabetically in their views [#2946](https://github.com/ualbertalib/jupiter/issues/2946)
+
 
 ## [2.3.7] - 2022-07-13
 

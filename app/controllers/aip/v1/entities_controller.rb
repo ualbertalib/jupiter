@@ -169,8 +169,10 @@ class Aip::V1::EntitiesController < ApplicationController
       )
     ]
 
-    rdf_graph_creator.graph.delete_insert(rdf_graph_creator.graph.query(predicate: RDF::Vocab::PREMIS.hasMessageDigest),
-                                          statements)
+    rdf_graph_creator.graph.delete_insert(
+      rdf_graph_creator.graph.query({ predicate: RDF::Vocab::PREMIS.hasMessageDigest }),
+      statements
+    )
 
     render plain: rdf_graph_creator.graph.to_n3, status: :ok
   end

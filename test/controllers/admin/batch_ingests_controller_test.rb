@@ -45,17 +45,17 @@ class Admin::BatchIngestsControllerTest < ActionDispatch::IntegrationTest
                      record: :none,
                      erb: {
                        collection_id: collections(:collection_fantasy).id,
-                       community_id: communities(:community_books).id,
-                       owner_id: users(:user_admin).id
+                       community_id: communities(:community_books).id
                      }) do
       assert_difference('BatchIngest.count') do
-        assert_difference('BatchIngestFile.count', +2) do
+        assert_difference('BatchIngestFile.count', +3) do
           post admin_batch_ingests_url, params: {
             batch_ingest: {
               title: 'Random Batch Name',
               batch_ingest_files_attributes: [
-                { google_file_id: 'randomfileid', google_file_name: 'conference_logo.png' },
-                { google_file_id: 'randomfileid', google_file_name: 'conference.pdf' }
+                { google_file_id: 'RANDOMFILEID', google_file_name: 'conference_logo.png' },
+                { google_file_id: 'RANDOMFILEID', google_file_name: 'conference.pdf' },
+                { google_file_id: 'RANDOMFILEID', google_file_name: 'conference_map.jpg' }
               ],
               google_spreadsheet_name: 'Test - ERA Batch Ingest Template',
               google_spreadsheet_id: 'RANDOMSPREADSHEETID'

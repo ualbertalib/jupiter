@@ -17,7 +17,7 @@ class RdfGraphCreationService
     return unless @graph.has_predicate?(rdf_original_predicate)
 
     @graph.delete_insert(
-      @graph.query(predicate: rdf_original_predicate),
+      @graph.query({ predicate: rdf_original_predicate }),
       derivate_list_values(subject, rdf_original_predicate)
     )
   end

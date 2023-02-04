@@ -66,10 +66,10 @@ class BatchIngestTest < ActiveSupport::TestCase
 
   test 'invalid unless spreadsheet has required data' do
     VCR.use_cassette('google_fetch_access_token', record: :none) do
-      VCR.use_cassette('google_fetch_spreadsheet', record: :none,
-                                                   erb: { community_id: 'BADID',
-                                                          collection_id: 'BADID',
-                                                          owner_id: 'BADID' }) do
+      VCR.use_cassette('google_fetch_spreadsheet_multiple_duplicate_files_in_one_row',
+                       record: :none,
+                       erb: { community_id: 'BADID',
+                              collection_id: 'BADID' }) do
         batch_ingest = BatchIngest.new(
           title: @batch_ingest.title,
           user_id: @batch_ingest.user_id,
@@ -84,11 +84,11 @@ class BatchIngestTest < ActiveSupport::TestCase
                      batch_ingest.errors[:google_spreadsheet_id].first)
         assert_equal('collection_id does not exist in ERA for row 1 of spreadsheet',
                      batch_ingest.errors[:google_spreadsheet_id].second)
-        assert_equal('owner_id does not exist in ERA for row 1 of spreadsheet',
-                     batch_ingest.errors[:google_spreadsheet_id].third)
         # rubocop:disable Layout/LineLength
-        assert_equal("File(s) 'conference_logo.png, conference.pdf' from row 1 of spreadsheet are not listed in the file list below",
-                     batch_ingest.errors[:google_spreadsheet_id].fourth)
+        assert_equal("File(s) 'file_1.txt, file_2.txt, file_3.txt' from row 1 of spreadsheet are not listed in the file list below",
+                     batch_ingest.errors[:google_spreadsheet_id].third)
+        assert_equal("File 'file_1.txt' is repeated in rows 1, 2 of the spreadsheet but should only appear in a single row",
+                     batch_ingest.errors[:google_spreadsheet_id][9])
         # rubocop:enable Layout/LineLength
       end
     end

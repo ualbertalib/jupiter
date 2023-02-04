@@ -1,6 +1,6 @@
 class Digitization::BatchMetadataIngestionJob < ApplicationJob
 
-  PEEL_ID_REGEX = /P0*(\d+).(\d*)/.freeze
+  PEEL_ID_REGEX = /P0*(\d+).(\d*)/
 
   queue_as :default
 

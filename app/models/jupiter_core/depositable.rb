@@ -20,6 +20,9 @@ class JupiterCore::Depositable < ApplicationRecord
   before_validation :set_record_created_at, on: :create
   before_validation :set_date_ingested
 
+  scope :updated_on_or_after, ->(date) { where('updated_at >= ?', date) }
+  scope :updated_before, ->(date) { where('updated_at < ?', date) }
+
   # this isn't a predicate name you daft thing
   # rubocop:disable Naming/PredicateName
   def self.has_solr_exporter(klass)
@@ -111,13 +114,16 @@ class JupiterCore::Depositable < ApplicationRecord
     return if file_handles.blank?
     raise 'Item not yet saved!' if id.nil?
 
-    file_handles.each do |fileio|
-      file_name = fileio.try(:original_filename) || File.basename(fileio.path)
-      attached = files.attach(io: fileio, filename: file_name)
-      # TODO: Do something smarter here if not attached
-      next unless attached
+    attachables = file_handles.map do |fileio|
+      filename = fileio.try(:original_filename) || File.basename(fileio.path)
+      { io: fileio, filename: filename }
+    end
 
-      attachment = files.attachments.last
+    # We need to attach all the files at the same time to make sure their
+    # callbacks are run when they are wrapped in a base transaction block
+    files.attach(attachables)
+
+    files.attachments.each do |attachment|
       attachment.fileset_uuid = UUIDTools::UUID.random_create
       attachment.save!
     end
@@ -164,8 +170,11 @@ class JupiterCore::Depositable < ApplicationRecord
 
     $queue.with do |connection|
       # pushmi_pullyu requires both the id and type of the depositable
-      entity = { uuid: id, type: self.class.table_name }
-      connection.zadd queue_name, Time.now.to_f, entity.to_json
+      connection.zadd(queue_name, Time.now.to_f, { uuid: id, type: self.class.table_name }.to_json)
+      # Add the attempt count as value 0 that pmpy will use to count the tries to ingest the depositable. If the key
+      # already exists, the value will be reset to 0. the ```connection.zadd``` method called before resets the score as
+      # well. These two pieces of information let PMPY know that the entity needs to be deposited ASAP
+      connection.set("#{Rails.application.secrets.attempt_ingest_prefix}#{id}", 0)
     end
 
     true

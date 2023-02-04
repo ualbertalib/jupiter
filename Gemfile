@@ -1,12 +1,12 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '>= 2.7', '< 3.0'
+ruby '>= 2.7', '< 3.1'
 
 # Core Rails stuff
 gem 'image_processing' # for ActiveStorage Variants
 gem 'puma', '~> 5.6'
-gem 'rails', '~> 6.1.6'
+gem 'rails', '~> 6.1.7'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 gem 'webpacker', '~> 5.4'
@@ -22,14 +22,14 @@ gem 'simple_form'
 gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', tag: '0.4.0'
 gem 'rdf', '~> 3.2.9'
 gem 'rdf-n3', '~> 3.2.1'
-gem 'rdf-vocab', '~> 3.2.1' # this gem changed predicate names without warning, be cautious and test with migrations
+gem 'rdf-vocab', '~> 3.2.3' # this gem changed predicate names without warning, be cautious and test with migrations
 
 # Database stuff
 gem 'connection_pool'
-gem 'pg', '~> 1.4.3'
-gem 'redis', '~> 4.7'
+gem 'pg', '~> 1.4.5'
+gem 'redis', '~> 4.8'
 gem 'rsolr'
-gem 'strong_migrations', '~> 1.0.0'
+gem 'strong_migrations', '~> 1.4.0'
 
 # Authentication
 gem 'bcrypt', '>= 3.1.13'
@@ -52,7 +52,7 @@ gem 'datacite-client', github: 'ualbertalib/datacite-client', tag: 'v0.1.0', req
 gem 'differ' # Used to diff two strings
 gem 'draper'
 gem 'edtf', '~> 3.1' # parsing Extended Date/Time Format
-gem 'flipper', '~> 0.25.0' # Feature flags for Ruby
+gem 'flipper', '~> 0.25.4' # Feature flags for Ruby
 gem 'flipper-active_record', '~> 0.25.0' # Store feature flags in ActiveRecord
 gem 'flipper-ui', '~> 0.25.0' # UI for feature flags
 gem 'jbuilder' # generate JSON objects
@@ -64,8 +64,6 @@ gem 'uuidtools'
 gem 'voight_kampff' # bot detection
 gem 'wicked' # Multi-step wizard
 
-# Performance monitoring
-gem 'skylight', '~> 4.3'
 # resolve production errors in minutes
 gem 'rollbar'
 
@@ -95,7 +93,7 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
 
-  gem 'rubocop', '~> 1.34.1', require: false
+  gem 'rubocop', '~> 1.36.0', require: false
   gem 'rubocop-minitest', require: false
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false
@@ -111,7 +109,7 @@ group :development do
 
   gem 'listen', '>= 3.0.5', '< 3.8'
   gem 'spring'
-  gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'spring-watcher-listen', '~> 2.1.0'
 
   gem 'web-console', '>= 4.1.0'
 end
@@ -125,9 +123,10 @@ group :test do
 
   gem 'json-schema', '~> 3.0.0'
   gem 'launchy'
+  gem 'minitest-retry', require: false
   gem 'rdf-isomorphic', '~> 3.2.1'
   gem 'vcr', '5.0', require: false
-  gem 'webdrivers', '~> 5.0'
+  gem 'webdrivers', '~> 5.2'
   gem 'webmock', require: false
 end
 

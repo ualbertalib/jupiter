@@ -58,7 +58,7 @@
 
 controlled_vocabularies = {}
 
-namespaces = Dir.glob(Rails.root.join('config/controlled_vocabularies/**'))
+namespaces = Rails.root.glob('config/controlled_vocabularies/**')
 
 namespaces.each do |dir|
   namespace = File.basename(dir).to_sym

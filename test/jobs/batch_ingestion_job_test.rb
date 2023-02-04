@@ -10,8 +10,7 @@ class BatchIngestionJobTest < ActiveJob::TestCase
                        record: :none,
                        erb: {
                          collection_id: collections(:collection_fantasy).id,
-                         community_id: communities(:community_books).id,
-                         owner_id: users(:user_admin).id
+                         community_id: communities(:community_books).id
                        }) do
         BatchIngestionJob.perform_now(batch_ingest)
       end
@@ -43,15 +42,14 @@ class BatchIngestionJobTest < ActiveJob::TestCase
   end
 
   test 'successful batch ingestion' do
-    batch_ingest = batch_ingests(:batch_ingest_with_two_files)
+    batch_ingest = batch_ingests(:batch_ingest_with_three_files)
 
     assert_difference('Item.count', +2) do
       VCR.use_cassette('google_fetch_spreadsheet',
                        record: :none,
                        erb: {
                          collection_id: collections(:collection_fantasy).id,
-                         community_id: communities(:community_books).id,
-                         owner_id: users(:user_admin).id
+                         community_id: communities(:community_books).id
                        }) do
         VCR.use_cassette('google_fetch_file',
                          record: :none,
@@ -67,20 +65,23 @@ class BatchIngestionJobTest < ActiveJob::TestCase
   end
 
   test 'batch ingestion with multiple files in one row' do
-    batch_ingest = batch_ingests(:batch_ingest_with_three_files_in_one_item)
+    batch_ingest = batch_ingests(:batch_ingest_with_multiple_files_in_one_item)
 
     # The VCR cassettes for this test where created using Net::HTTP calls
     # seperatedly which are not used in the test any more as we are using the
     # created cassettes.
 
-    # The file cassette were created with code that looks like which downloded 3
+    # The file cassette were created with code that looks like which downloded 6
     # files in a single cassette
 
-    # VCR.use_cassette('google_fetch_multiple_files_in_utf8_encoding') do
+    # VCR.use_cassette('google_fetch_multiple_text_files_in_utf8_encoding') do
     #   uris = [
-    #     URI('https://www.googleapis.com/drive/v3/files/RANDOMID1?alt=media'),
-    #     URI('https://www.googleapis.com/drive/v3/files/RANDOMID2?alt=media'),
-    #     URI('https://www.googleapis.com/drive/v3/files/RANDOMID3?alt=media')
+    #     URI('https://www.googleapis.com/drive/v3/files/FILE1ID?alt=media'),
+    #     URI('https://www.googleapis.com/drive/v3/files/FILE2ID?alt=media'),
+    #     URI('https://www.googleapis.com/drive/v3/files/FILE3ID?alt=media'),
+    #     URI('https://www.googleapis.com/drive/v3/files/FILE4ID?alt=media'),
+    #     URI('https://www.googleapis.com/drive/v3/files/FILE5ID?alt=media'),
+    #     URI('https://www.googleapis.com/drive/v3/files/FILE6ID?alt=media')
     #   ]
     #   uris.each do |uri|
     #     Net::HTTP.get(uri)
@@ -94,21 +95,20 @@ class BatchIngestionJobTest < ActiveJob::TestCase
 
     # cassette.response.body.force_encoding('UTF-8')
 
-    # VCR.use_cassette('google_fetch_spreadsheet_multiple_files_in_one_row') do
-    #   uri =  URI("https://sheets.googleapis.com/v4/spreadsheets/RANDOMSPREADSHEETID/values/'Data'!A:X?key=test-google-developer-key")
+    # VCR.use_cassette('google_fetch_spreadsheet_multiple_text_files_in_one_row') do
+    #   uri = URI("https://sheets.googleapis.com/v4/spreadsheets/SPREADSHEETID/'Data'!A:W?key=test-gooogle-developer-key")
     #   Net::HTTP.get(uri)
     # end
 
     assert_difference('Item.count', +3) do
-      assert_difference('ActiveStorage::Blob.count', +9) do
-        VCR.use_cassette('google_fetch_spreadsheet_multiple_files_in_one_row',
+      assert_difference('ActiveStorage::Blob.count', +6) do
+        VCR.use_cassette('google_fetch_spreadsheet_multiple_text_files_in_one_row',
                          record: :none,
                          erb: {
                            collection_id: collections(:collection_fantasy).id,
-                           community_id: communities(:community_books).id,
-                           owner_id: users(:user_admin).id
+                           community_id: communities(:community_books).id
                          }) do
-          VCR.use_cassette('google_fetch_multiple_files_in_utf8_encoding',
+          VCR.use_cassette('google_fetch_multiple_text_files_in_utf8_encoding',
                            record: :none,
                            allow_playback_repeats: true) do
                              BatchIngestionJob.perform_now(batch_ingest)
@@ -120,8 +120,16 @@ class BatchIngestionJobTest < ActiveJob::TestCase
     batch_ingest.reload
     assert_predicate(batch_ingest, :completed?)
     assert_equal(3, batch_ingest.items.count)
-    # Each item has 3 files associated with it
-    assert_equal([3, 3, 3], batch_ingest.items.map { |item| item.files.count })
+    # Check items have their multiple files attached. Order is not guaranteed so
+    # we need to look for the newly ingested items by name as defined in vcr
+    # cassette google_fetch_spreadsheet_multiple_text_files_in_one_row.yml
+    assert_equal(2, Item.find_by(title: 'Test Resource Title 1').files.count)
+    assert_equal(3, Item.find_by(title: 'Test Resource Title 2').files.count)
+    assert_equal(1, Item.find_by(title: 'Test Resource Title 3').files.count)
+
+    item = Item.find_by(title: 'Test Resource Title 1')
+    assert(File.file?(ActiveStorage::Blob.service.path_for(item.files[0].blob.key)))
+    assert(File.file?(ActiveStorage::Blob.service.path_for(item.files[1].blob.key)))
   end
 
 end

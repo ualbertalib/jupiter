@@ -39,9 +39,6 @@ module Jupiter
     # Set ActiveJob adapter
     config.active_job.queue_adapter = :sidekiq
 
-    # Run skylight in Staging for performance metric monitoring pre-launch
-    config.skylight.environments << 'staging'
-
     config.redis_key_prefix = "jupiter.#{Rails.env}."
 
     config.action_dispatch.tld_length = Rails.application.secrets.tld_length.to_i

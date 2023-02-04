@@ -6,24 +6,44 @@ batch_ingest_file_one:
 batch_ingest_file_two:
   google_file_id: "RANDOMFILEID"
   google_file_name: "conference.pdf"
-  batch_ingest: batch_ingest_with_two_files
+  batch_ingest: batch_ingest_with_three_files
 
 batch_ingest_file_three:
   google_file_id: "RANDOMFILEID"
   google_file_name: "conference_logo.png"
-  batch_ingest: batch_ingest_with_two_files
+  batch_ingest: batch_ingest_with_three_files
 
 batch_ingest_file_four:
-  google_file_id: "RANDOMFILEID1"
-  google_file_name: "Canastas_seri - By Alejandro Yanes - Own work, CC BY-SA 4.0.jpg"
-  batch_ingest: batch_ingest_with_three_files_in_one_item
+  google_file_id: "RANDOMFILEID"
+  google_file_name: "conference_map.jpg"
+  batch_ingest: batch_ingest_with_three_files
 
 batch_ingest_file_five:
-  google_file_id: "RANDOMFILEID2"
-  google_file_name: "MAPElNorte049 - By AlejandroLinaresGarcia - Own work, CC BY-SA 4.0.jpeg"
-  batch_ingest: batch_ingest_with_three_files_in_one_item
+  google_file_id: "FILE1ID"
+  google_file_name: "file_1.txt"
+  batch_ingest: batch_ingest_with_multiple_files_in_one_item
 
 batch_ingest_file_six:
-  google_file_id: "RANDOMFILEID3"
-  google_file_name: "Tumacacori-Carmen-Tumacácori_Museum- By Marine 69-71 - Own work, CC BY-SA 4.0.jpg"
-  batch_ingest: batch_ingest_with_three_files_in_one_item
+  google_file_id: "FILE2ID"
+  google_file_name: "file_2.txt"
+  batch_ingest: batch_ingest_with_multiple_files_in_one_item
+
+batch_ingest_file_seven:
+  google_file_id: "FILE3ID"
+  google_file_name: "file_3.txt"
+  batch_ingest: batch_ingest_with_multiple_files_in_one_item
+
+batch_ingest_file_eight:
+  google_file_id: "FILE4ID"
+  google_file_name: "file_4.txt"
+  batch_ingest: batch_ingest_with_multiple_files_in_one_item
+
+batch_ingest_file_nine:
+  google_file_id: "FILE5ID"
+  google_file_name: "file_5.txt"
+  batch_ingest: batch_ingest_with_multiple_files_in_one_item
+
+batch_ingest_file_ten:
+  google_file_id: "FILE6ID"
+  google_file_name: "file_6.txt"
+  batch_ingest: batch_ingest_with_multiple_files_in_one_item

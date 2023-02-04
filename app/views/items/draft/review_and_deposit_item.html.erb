@@ -19,9 +19,9 @@
           </div>
           <div class="card-body">
             <%= render partial: 'feature_image', locals: { object: @draft } %>
-            <ul class="list-group mt-3">
-              <% @draft.files.each do |file| %>
-                <li class="list-group-item">
+            <ul class="list-group mt-3 item-files">
+              <% @draft.ordered_files.each do |file| %>
+                <li class="list-group-item item-filename">
                   <%= icon('far', file_icon(file.content_type)) %>
                   <%= file.filename %>
                   <span class="badge badge-primary badge-pill float-right">
