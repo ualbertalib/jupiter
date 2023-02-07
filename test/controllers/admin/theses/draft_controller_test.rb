@@ -134,7 +134,7 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
     # and if so, updated the wizard_step to upload_files and redirects to review_and_deposit_thesis
     patch admin_thesis_draft_url(id: :upload_files, thesis_id: draft_thesis.id)
 
-    assert_response :success # silly but this is actually rerendering upload_files with errors
+    assert_response :unprocessable_entity
     assert_match 'Files can&#39;t be blank', @response.body
     draft_thesis.reload
 
