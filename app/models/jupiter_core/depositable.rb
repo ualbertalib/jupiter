@@ -32,10 +32,10 @@ class JupiterCore::Depositable < ApplicationRecord
 
     end
     define_method :solr_exporter do
-      return solr_exporter_class.new(self)
+      solr_exporter_class.new(self)
     end
     define_method :solr_exporter_class do
-      return self.class.solr_exporter_class
+      self.class.solr_exporter_class
     end
 
     self.solr_exporter_class = klass
