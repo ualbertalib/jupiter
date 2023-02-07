@@ -21,6 +21,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 ### Fixed 
 - Resolved new rubocop offenses [PR#3042](https://github.com/ualbertalib/jupiter/pull/3042)
 
+### Changed
+- Account for new status code given by wicked [PR#2978](https://github.com/ualbertalib/jupiter/pull/2978)
+
 ## [2.4.3] - 2022-12-14
 
 ### Security
