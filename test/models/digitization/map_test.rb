@@ -7,7 +7,7 @@ class Digitization::MapTest < ActiveSupport::TestCase
   end
 
   test 'valid Peel map' do
-    assert @map.valid?
+    assert_predicate @map, :valid?
   end
 
   test 'unique Peel map' do

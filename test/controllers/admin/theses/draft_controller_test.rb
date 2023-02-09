@@ -106,10 +106,10 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
     draft_thesis.member_of_paths = { community_id: [@community.id], collection_id: [@collection.id] }
     draft_thesis.save!
 
-    file_fixture = fixture_file_upload('/files/image-sample.jpeg', 'image/jpeg')
-    image_file = ActiveStorage::Blob.create_after_upload!(io: file_fixture.open,
-                                                          filename: file_fixture.original_filename,
-                                                          content_type: file_fixture.content_type)
+    file_fixture = fixture_file_upload('image-sample.jpeg', 'image/jpeg')
+    image_file = ActiveStorage::Blob.create_and_upload!(io: file_fixture.open,
+                                                        filename: file_fixture.original_filename,
+                                                        content_type: file_fixture.content_type)
 
     draft_thesis.files.attach image_file
 
@@ -149,8 +149,8 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
     draft_thesis = draft_theses(:draft_thesis_completed_choose_license_and_visibility_step)
     draft_thesis.member_of_paths = { community_id: [@community.id], collection_id: [@collection.id] }
 
-    file_fixture = fixture_file_upload('/files/image-sample.jpeg', 'image/jpeg')
-    image_file = ActiveStorage::Blob.create_after_upload!(
+    file_fixture = fixture_file_upload('/image-sample.jpeg', 'image/jpeg')
+    image_file = ActiveStorage::Blob.create_and_upload!(
       io: file_fixture.open,
       filename: file_fixture.original_filename, content_type: file_fixture.content_type
     )
@@ -178,8 +178,8 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
     draft_thesis = draft_theses(:draft_thesis_completed_choose_license_and_visibility_step)
     draft_thesis.member_of_paths = { community_id: [@community.id], collection_id: [@collection.id] }
 
-    file_fixture = fixture_file_upload('/files/image-sample.jpeg', 'image/jpeg')
-    image_file = ActiveStorage::Blob.create_after_upload!(
+    file_fixture = fixture_file_upload('/image-sample.jpeg', 'image/jpeg')
+    image_file = ActiveStorage::Blob.create_and_upload!(
       io: file_fixture.open,
       filename: file_fixture.original_filename, content_type: file_fixture.content_type
     )

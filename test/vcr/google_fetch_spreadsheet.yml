@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://sheets.googleapis.com/v4/spreadsheets/RANDOMSPREADSHEETID/values/'Data'!A:X?key=test-google-developer-key
+    uri: https://sheets.googleapis.com/v4/spreadsheets/RANDOMSPREADSHEETID/values/'Data'!A:W?key=test-google-developer-key
     body:
       encoding: UTF-8
       string: ''
@@ -55,42 +55,40 @@ http_interactions:
       encoding: UTF-8
       string: |
         {
-          "range": "Data!A1:X1004",
+          "range": "Data!A1:W1004",
           "majorDimension": "ROWS",
           "values": [
             [
               "file_name",
               "title",
-              "alternate_title",
-              "type",
+              "alternative_title",
+              "item_type",
               "publication_status",
-              "owner_id",
               "languages",
               "creators",
-              "subjects",
-              "date_created",
+              "subject",
+              "created",
               "description",
               "community_id",
               "collection_id",
               "contributors",
-              "places",
-              "time_periods",
-              "citations",
+              "spatial_subjects",
+              "temporal_subjects",
+              "is_version_of",
               "source",
-              "related_item",
+              "related_link",
               "license",
-              "license_text",
+              "rights",
               "visibility",
               "embargo_end_date",
               "visibility_after_embargo"
             ],
             [
-              "conference_logo.png",
+              "conference_logo.png | conference_map.jpg",
               "Conference logo",
               "",
               "image",
               "",
-              "<%= owner_id %>",
               "english",
               "Shane",
               "Conference, Image",
@@ -114,7 +112,6 @@ http_interactions:
               "",
               "report",
               "",
-              "<%= owner_id %>",
               "english",
               "Shane",
               "Conference, PDF",

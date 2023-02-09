@@ -18,7 +18,7 @@ class ThesisTest < ActiveSupport::TestCase
         unlocked_thesis.save!
       end
     end
-    assert thesis.valid?
+    assert_predicate thesis, :valid?
   end
 
   test 'there is no default visibility' do
@@ -35,7 +35,7 @@ class ThesisTest < ActiveSupport::TestCase
     end
 
     assert_not thesis.valid?
-    assert thesis.errors[:visibility].present?
+    assert_predicate thesis.errors[:visibility], :present?
     assert_includes thesis.errors[:visibility], 'some_fake_visibility is not a known visibility'
   end
 
@@ -61,7 +61,7 @@ class ThesisTest < ActiveSupport::TestCase
     end
 
     assert_not thesis.valid?
-    assert thesis.errors[:embargo_end_date].present?
+    assert_predicate thesis.errors[:embargo_end_date], :present?
     assert_includes thesis.errors[:embargo_end_date], "can't be blank"
   end
 
@@ -73,7 +73,7 @@ class ThesisTest < ActiveSupport::TestCase
     end
 
     assert_not thesis.valid?
-    assert thesis.errors[:embargo_end_date].present?
+    assert_predicate thesis.errors[:embargo_end_date], :present?
     assert_includes thesis.errors[:embargo_end_date], 'must be blank'
 
     assert_not thesis.errors[:visibility].present?
@@ -86,7 +86,7 @@ class ThesisTest < ActiveSupport::TestCase
     end
 
     assert_not thesis.valid?
-    assert thesis.errors[:visibility_after_embargo].present?
+    assert_predicate thesis.errors[:visibility_after_embargo], :present?
     assert_includes thesis.errors[:visibility_after_embargo], "can't be blank"
   end
 
@@ -98,7 +98,7 @@ class ThesisTest < ActiveSupport::TestCase
     end
 
     assert_not thesis.valid?
-    assert thesis.errors[:visibility_after_embargo].present?
+    assert_predicate thesis.errors[:visibility_after_embargo], :present?
     assert_includes thesis.errors[:visibility_after_embargo], 'must be blank'
     # Make sure no controlled vocabulary error
     assert_not_includes thesis.errors[:visibility_after_embargo], 'is not recognized'
@@ -114,7 +114,7 @@ class ThesisTest < ActiveSupport::TestCase
     end
 
     assert_not thesis.valid?
-    assert thesis.errors[:visibility_after_embargo].present?
+    assert_predicate thesis.errors[:visibility_after_embargo], :present?
     assert_includes thesis.errors[:visibility_after_embargo], 'whatever is not a known visibility'
     assert_not thesis.errors[:visibility].present?
   end
@@ -193,7 +193,7 @@ class ThesisTest < ActiveSupport::TestCase
 
   # Preservation queue handling
   test 'should add id and type with the correct score for a new thesis to preservation queue' do
-    Redis.current.del Rails.application.secrets.preservation_queue_name
+    RedisClient.current.del Rails.application.secrets.preservation_queue_name
 
     # Setup a thesis...
     admin = users(:user_admin)
@@ -214,10 +214,10 @@ class ThesisTest < ActiveSupport::TestCase
         unlocked_thesis.save
       end
 
-      thesis_output, score = Redis.current.zrange(Rails.application.secrets.preservation_queue_name,
-                                                  0,
-                                                  -1,
-                                                  with_scores: true)[0]
+      thesis_output, score = RedisClient.current.zrange(Rails.application.secrets.preservation_queue_name,
+                                                        0,
+                                                        -1,
+                                                        with_scores: true)[0]
       thesis_output = JSON.parse(thesis_output)
 
       assert_equal thesis.id, thesis_output['uuid']
@@ -225,7 +225,7 @@ class ThesisTest < ActiveSupport::TestCase
       assert_in_delta 0.5, score, Time.now.to_f
     end
 
-    Redis.current.del Rails.application.secrets.preservation_queue_name
+    RedisClient.current.del Rails.application.secrets.preservation_queue_name
   end
 
 end

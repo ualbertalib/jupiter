@@ -12,10 +12,6 @@ updates:
       - dependency-name: pundit
         versions:
           - "> 1.1.0"
-      - dependency-name: sidekiq
-        versions:
-          - ">= 6.a"
-          - "< 7"
       - dependency-name: vcr
         versions:
           - ">= 5.1.a"

@@ -171,7 +171,7 @@ def item_ingest(item_data, index, csv_directory)
 rescue StandardError => e
   log 'ERROR: Ingest of item failed! The following error occured:'
   log "EXCEPTION: #{e.message}"
-  log 'WARNING: Please be careful with rerunning batch ingest! Duplication of items may happen '\
+  log 'WARNING: Please be careful with rerunning batch ingest! Duplication of items may happen ' \
       'if previous items were successfully deposited.'
   exit 1
 end
@@ -276,7 +276,7 @@ def thesis_ingest(thesis_data, index, csv_directory, checksums)
 rescue StandardError => e
   log "ERROR: Ingest of thesis by #{thesis_data[:author]} failed! The following error occured:"
   log "EXCEPTION: #{e.message}"
-  log 'WARNING: Please be careful with rerunning batch ingest! Duplication of theses may happen '\
+  log 'WARNING: Please be careful with rerunning batch ingest! Duplication of theses may happen ' \
       'if previous theses were successfully deposited.'
   exit
 end

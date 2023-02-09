@@ -35,9 +35,9 @@ class StatisticsTest < ActiveSupport::TestCase
       # simulate expiring key at top of hour in order to test behaviour after ip filter rotation
       views_key = Statistics.send(:uniques_key_for, :view, @obj_id)
       # clear current timeout
-      Redis.current.persist views_key
+      RedisClient.current.persist views_key
       # expire immediately
-      Redis.current.pexpire views_key, -1
+      RedisClient.current.pexpire views_key, -1
 
       # Susequent viewings outside the ip filter expiry period should now count
       Statistics.increment_view_count_for(item_id: @obj_id, ip: @test_ip)
@@ -71,9 +71,9 @@ class StatisticsTest < ActiveSupport::TestCase
       # simulate expiring key at top of hour in order to test behaviour after ip filter rotation
       downloads_key = Statistics.send(:uniques_key_for, :download, @obj_id)
       # clear current timeout
-      Redis.current.persist downloads_key
+      RedisClient.current.persist downloads_key
       # expire immediately
-      Redis.current.pexpire downloads_key, -1
+      RedisClient.current.pexpire downloads_key, -1
 
       Statistics.increment_download_count_for(item_id: @obj_id, ip: @test_ip)
       downloads = Statistics.downloads_for(item_id: @obj_id)

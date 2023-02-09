@@ -90,7 +90,7 @@ This project comes with a docker setup to easily setup your own local developmen
 1. [Install Docker](https://docs.docker.com/engine/installation/) (Requires version 1.13.0+)
 2. [Install Docker Compose](https://docs.docker.com/compose/install/) (Requires version 1.10.0+)
 3. Install git
-4. Install Ruby (v2.6+)
+4. Install Ruby (v2.7+)
 
 ### Still need more help? Check out the following
 

@@ -75,16 +75,16 @@ class Digitization::RedirectControllerTest < ActionDispatch::IntegrationTest
 
   test 'should redirect Peel newspaper' do
     # Action: redirect#peel_newspaper
-    get '/newspapers/LSV/1967/03/29'
+    get '/newspapers/ACN/1907/08/29'
     assert_response :moved_permanently
-    assert_redirected_to digitization_newspaper_url(digitization_newspapers(:la_survivance))
+    assert_redirected_to digitization_newspaper_url(digitization_newspapers(:central_alberta_news))
   end
 
   test 'should redirect Peel newspaper article level to the issue level' do
     # Action: redirect#peel_newspaper
-    get '/newspapers/LSV/1967/03/29/5/Ar00501.html'
+    get '/newspapers/ACN/1907/08/29/5/Ad00501_14.html'
     assert_response :moved_permanently
-    assert_redirected_to digitization_newspaper_url(digitization_newspapers(:la_survivance))
+    assert_redirected_to digitization_newspaper_url(digitization_newspapers(:central_alberta_news))
   end
 
   test 'should redirect Peel Magee photograph' do

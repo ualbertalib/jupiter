@@ -1,0 +1,151 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://sheets.googleapis.com/v4/spreadsheets/RANDOMSPREADSHEETID/values/'Data'!A:W?key=test-google-developer-key
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - sheets.googleapis.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Vary:
+      - Origin
+      - Referer
+      - X-Origin
+      Date:
+      - Tue, 04 Oct 2022 15:41:52 GMT
+      Server:
+      - ESF
+      Cache-Control:
+      - private
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000,h3-Q050=":443"; ma=2592000,h3-Q046=":443";
+        ma=2592000,h3-Q043=":443"; ma=2592000,quic=":443"; ma=2592000; v="46,43"
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "range": "Data!A1:W1004",
+          "majorDimension": "ROWS",
+          "values": [
+            [
+              "file_name",
+              "title",
+              "alternative_title",
+              "item_type",
+              "publication_status",
+              "languages",
+              "creators",
+              "subject",
+              "created",
+              "description",
+              "community_id",
+              "collection_id",
+              "contributors",
+              "spatial_subjects",
+              "temporal_subjects",
+              "is_version_of",
+              "source",
+              "related_link",
+              "license",
+              "rights",
+              "visibility",
+              "embargo_end_date",
+              "visibility_after_embargo"
+            ],
+            [
+              "file_1.txt | file_2.txt | file_3.txt",
+              "Test Resource Title 1",
+              "Alternate Title",
+              "dataset",
+              "published",
+              "english|french|spanish",
+              "creator $ 1|creator $ 2|creator $ 3",
+              "subject $ 1|subject $ 2|subject $ 3",
+              "2022-02-02",
+              "description $ Sea lettuce melon cabbage leek bamboo shoot lettuce rutabaga jícama silver beet amaranth pea dandelion scallion pea sprouts yarrow salsify bitterleaf courgette. Azuki bean horseradish potato kale welsh onion fennel green bean azuki bean chickweed aubergine bell pepper sea lettuce rutabaga cucumber grape. Radish grape rutabaga celery beetroot kombu spring onion cauliflower soybean.\nSea lettuce melon cabbage leek bamboo shoot lettuce rutabaga jícama silver beet amaranth pea dandelion scallion pea sprouts yarrow salsify bitterleaf courgette. Azuki bean horseradish potato kale welsh onion fennel green bean azuki bean chickweed aubergine bell pepper sea lettuce rutabaga cucumber grape. Radish grape rutabaga celery beetroot kombu spring onion cauliflower soybean.",
+              "<%= community_id %>",
+              "<%= collection_id %>",
+              "contributor $ 1|contributor $ 2|contributor $ 3",
+              "spatial $ 1|spatial $ 2|spatial $ 3",
+              "temporal $ 1|temporal $ 2|temporal $ 3",
+              "isVersionOf $ Arabic ناتيومرلبسفأعدقحكهجشطصزخضغذثئةظؤىءآإ \nGreek αβγδεζηθικλμνξοπρςστυφχψω ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ \nCyrillic абвгдеёжзийклмнопрстуфхцчшщъыьэюя АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ \nLao ກ-ໝ Thai ก-๎ Burmese က-ၙ Khmer ក-៹ Korean 가-힣 Bengali অ-ৱ\n// Spanish áéíóúüñ French àâçèéêëîïôùûü Portuguese àáâãçéêíóôõú \nHindi ऄ-ॿ Punjabi ਅ-ੴ \nMandarin 海萵苣白菜冬瓜韭菜竹筍生菜大頭菜豆薯銀甜菜莧菜豌豆蒲公英蔥豌豆苗亞羅婆羅門參西葫蘆。小豆辣根土豆 Japanese アオサメロンキャベツニラ竹シュートレタスルタバガのクズイモ銀ビートアマランスエンドウタンポポねぎ \n// No, I did not kill Kitty. However, I am going to oblige and answer the nice officer’s questions because I am an honest man with no secrets to hide. He’ll want to use your yacht, and I don’t want this thing smelling like fish. No! I was ashamed to be SEEN with you. I like being with you. Get me a vodka rocks. And a piece of toast. Get me a vodka rocks. And a piece of toast.",
+              "source $ 1",
+              "relation $ 1",
+              "attribution_noncommercial_4_0_international",
+              "1",
+              "public"
+            ],
+            [
+              "file_1.txt | file_4.txt | file_5.txt",
+              "Test Resource Title 2",
+              "Alternate Title",
+              "image",
+              "published",
+              "english|french|spanish",
+              "creator $ 1|creator $ 2|creator $ 3",
+              "subject $ 1|subject $ 2|subject $ 3",
+              "2022-02",
+              "description $ Sea lettuce melon cabbage leek bamboo shoot lettuce rutabaga jícama silver beet amaranth pea dandelion scallion pea sprouts yarrow salsify bitterleaf courgette. Azuki bean horseradish potato kale welsh onion fennel green bean azuki bean chickweed aubergine bell pepper sea lettuce rutabaga cucumber grape. Radish grape rutabaga celery beetroot kombu spring onion cauliflower soybean.\nSea lettuce melon cabbage leek bamboo shoot lettuce rutabaga jícama silver beet amaranth pea dandelion scallion pea sprouts yarrow salsify bitterleaf courgette. Azuki bean horseradish potato kale welsh onion fennel green bean azuki bean chickweed aubergine bell pepper sea lettuce rutabaga cucumber grape. Radish grape rutabaga celery beetroot kombu spring onion cauliflower soybean.",
+              "<%= community_id %>",
+              "<%= collection_id %>",
+              "contributor $ 1|contributor $ 2|contributor $ 3",
+              "spatial $ 1|spatial $ 2|spatial $ 3",
+              "temporal $ 1|temporal $ 2|temporal $ 3",
+              "isVersionOf $ Arabic ناتيومرلبسفأعدقحكهجشطصزخضغذثئةظؤىءآإ \nGreek αβγδεζηθικλμνξοπρςστυφχψω ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ \nCyrillic абвгдеёжзийклмнопрстуфхцчшщъыьэюя АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ \nLao ກ-ໝ Thai ก-๎ Burmese က-ၙ Khmer ក-៹ Korean 가-힣 Bengali অ-ৱ\n// Spanish áéíóúüñ French àâçèéêëîïôùûü Portuguese àáâãçéêíóôõú \nHindi ऄ-ॿ Punjabi ਅ-ੴ \nMandarin 海萵苣白菜冬瓜韭菜竹筍生菜大頭菜豆薯銀甜菜莧菜豌豆蒲公英蔥豌豆苗亞羅婆羅門參西葫蘆。小豆辣根土豆 Japanese アオサメロンキャベツニラ竹シュートレタスルタバガのクズイモ銀ビートアマランスエンドウタンポポねぎ \n// No, I did not kill Kitty. However, I am going to oblige and answer the nice officer’s questions because I am an honest man with no secrets to hide. He’ll want to use your yacht, and I don’t want this thing smelling like fish. No! I was ashamed to be SEEN with you. I like being with you. Get me a vodka rocks. And a piece of toast. Get me a vodka rocks. And a piece of toast.",
+              "source $ 1",
+              "relation $ 1",
+              "attribution_noncommercial_sharealike_4_0_international",
+              "2",
+              "public"
+            ],
+            [
+              "file_6.txt",
+              "Test Resource Title 3",
+              "Alternate Title",
+              "image",
+              "published",
+              "english|french|spanish",
+              "creator $ 1|creator $ 2|creator $ 3",
+              "subject $ 1|subject $ 2|subject $ 3",
+              "2022",
+              "description $ Sea lettuce melon cabbage leek bamboo shoot lettuce rutabaga jícama silver beet amaranth pea dandelion scallion pea sprouts yarrow salsify bitterleaf courgette. Azuki bean horseradish potato kale welsh onion fennel green bean azuki bean chickweed aubergine bell pepper sea lettuce rutabaga cucumber grape. Radish grape rutabaga celery beetroot kombu spring onion cauliflower soybean.\nSea lettuce melon cabbage leek bamboo shoot lettuce rutabaga jícama silver beet amaranth pea dandelion scallion pea sprouts yarrow salsify bitterleaf courgette. Azuki bean horseradish potato kale welsh onion fennel green bean azuki bean chickweed aubergine bell pepper sea lettuce rutabaga cucumber grape. Radish grape rutabaga celery beetroot kombu spring onion cauliflower soybean.",
+              "<%= community_id %>",
+              "<%= collection_id %>",
+              "contributor $ 1|contributor $ 2|contributor $ 3",
+              "spatial $ 1|spatial $ 2|spatial $ 3",
+              "temporal $ 1|temporal $ 2|temporal $ 3",
+              "isVersionOf $ Arabic ناتيومرلبسفأعدقحكهجشطصزخضغذثئةظؤىءآإ \nGreek αβγδεζηθικλμνξοπρςστυφχψω ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ \nCyrillic абвгдеёжзийклмнопрстуфхцчшщъыьэюя АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ \nLao ກ-ໝ Thai ก-๎ Burmese က-ၙ Khmer ក-៹ Korean 가-힣 Bengali অ-ৱ\n// Spanish áéíóúüñ French àâçèéêëîïôùûü Portuguese àáâãçéêíóôõú \nHindi ऄ-ॿ Punjabi ਅ-ੴ \nMandarin 海萵苣白菜冬瓜韭菜竹筍生菜大頭菜豆薯銀甜菜莧菜豌豆蒲公英蔥豌豆苗亞羅婆羅門參西葫蘆。小豆辣根土豆 Japanese アオサメロンキャベツニラ竹シュートレタスルタバガのクズイモ銀ビートアマランスエンドウタンポポねぎ \n// No, I did not kill Kitty. However, I am going to oblige and answer the nice officer’s questions because I am an honest man with no secrets to hide. He’ll want to use your yacht, and I don’t want this thing smelling like fish. No! I was ashamed to be SEEN with you. I like being with you. Get me a vodka rocks. And a piece of toast. Get me a vodka rocks. And a piece of toast.",
+              "source $ 1",
+              "relation $ 1",
+              "attribution_noncommercial_sharealike_4_0_international",
+              "3",
+              "public"
+            ]
+          ]
+        }
+    http_version: 
+  recorded_at: Tue, 04 Oct 2022 15:41:52 GMT
+recorded_with: VCR 5.0.0

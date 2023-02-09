@@ -55,7 +55,7 @@ namespace :jupiter do
   end
 
   desc 'queue all items and theses in the system for preservation'
-  task :preserve_all_items_and_theses, [:before_date, :batch_size] => :environment do |_, args|
+  task :preserve_all_items_and_theses, [:after_date, :batch_size] => :environment do |_, args|
     desired_batch_size = if args.batch_size.present?
                            args.batch_size.to_i
                          else
@@ -63,17 +63,17 @@ namespace :jupiter do
                          end
 
     begin
-      before_date = Date.parse(args.before_date) if args.before_date.present?
+      after_date = Date.parse(args.after_date) if args.after_date.present?
     rescue ArgumentError
       puts "#{args.before_date} is not a valid date"
       exit 1
     end
 
-    if before_date.present?
-      puts "Adding Items and Theses on or after #{before_date} to preservation queue..."
-      items = Item.updated_on_or_after(before_date)
+    if after_date.present?
+      puts "Adding Items and Theses on or after #{after_date} to preservation queue..."
+      items = Item.updated_on_or_after(after_date)
       items.find_each(batch_size: desired_batch_size, &:push_entity_for_preservation)
-      theses = Thesis.updated_on_or_after(before_date)
+      theses = Thesis.updated_on_or_after(after_date)
       theses.find_each(batch_size: desired_batch_size, &:push_entity_for_preservation)
       puts "#{items.count} Items and #{theses.count} Theses have been added to preservation queue!"
     else
@@ -84,11 +84,42 @@ namespace :jupiter do
     end
   end
 
+  desc 'queue all collections and communities in the system for preservation'
+  task :preserve_all_collections_and_communities, [:after_date, :batch_size] => :environment do |_, args|
+    desired_batch_size = if args.batch_size.present?
+                           args.batch_size.to_i
+                         else
+                           1000
+                         end
+
+    begin
+      after_date = Date.parse(args.after_date) if args.after_date.present?
+    rescue ArgumentError
+      puts "#{args.after_date} is not a valid date"
+      exit 1
+    end
+
+    if after_date.present?
+      puts "Adding Collections and Communities on or after #{after_date} to preservation queue..."
+      collections = Collection.updated_on_or_after(after_date)
+      collections.find_each(batch_size: desired_batch_size, &:push_entity_for_preservation)
+      communities = Community.updated_on_or_after(after_date)
+      communities.find_each(batch_size: desired_batch_size, &:push_entity_for_preservation)
+      puts "#{collections.count} Collections and #{communities.count} " \
+           'Communities have been added to preservation queue!'
+    else
+      puts 'Adding all Collections and Communities to preservation queue...'
+      Collection.find_each(batch_size: desired_batch_size, &:push_entity_for_preservation)
+      Community.find_each(batch_size: desired_batch_size, &:push_entity_for_preservation)
+      puts 'All Collections and Communities have been added to preservation queue!'
+    end
+  end
+
   desc 'clear the preservation queue'
   task clear_preservation_queue: :environment do
     queue_name = Rails.application.secrets.preservation_queue_name
 
-    queue = ConnectionPool.new(size: 1, timeout: 5) { Redis.current }
+    queue = ConnectionPool.new(size: 1, timeout: 5) { RedisClient.current }
     success = queue.with { |connection| connection.del queue_name }
     puts case success
          when 1
@@ -102,7 +133,7 @@ namespace :jupiter do
 
   desc 'garbage collect any orphan attachment blobs on the filesystem'
   task gc_blobs: :environment do
-    orphan_blobs = ActiveStorage::Blob.find_by_sql('SELECT * FROM active_storage_blobs asb WHERE asb.id NOT IN '\
+    orphan_blobs = ActiveStorage::Blob.find_by_sql('SELECT * FROM active_storage_blobs asb WHERE asb.id NOT IN ' \
                                                    '(SELECT distinct blob_id FROM active_storage_attachments)')
 
     puts "Found #{orphan_blobs.count} orphans. Purging..."

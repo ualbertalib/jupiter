@@ -20,7 +20,7 @@ class ItemTest < ActiveSupport::TestCase
         unlocked_item.save!
       end
     end
-    assert item.valid?
+    assert_predicate item, :valid?
     assert_includes Item.public_items.map(&:id), item.id
 
     assert_difference -> { Item.public_items.count }, -1 do
@@ -29,7 +29,7 @@ class ItemTest < ActiveSupport::TestCase
         unlocked_item.save!
       end
     end
-    assert item.valid?
+    assert_predicate item, :valid?
     assert_not Item.public_items.map(&:id).include?(item.id)
   end
 
@@ -46,7 +46,7 @@ class ItemTest < ActiveSupport::TestCase
       unlocked_item.visibility = 'some_fake_visibility'
     end
     assert_not item.valid?
-    assert item.errors[:visibility].present?
+    assert_predicate item.errors[:visibility], :present?
     assert_includes item.errors[:visibility], 'some_fake_visibility is not a known visibility'
   end
 
@@ -72,7 +72,7 @@ class ItemTest < ActiveSupport::TestCase
     end
 
     assert_not item.valid?
-    assert item.errors[:embargo_end_date].present?
+    assert_predicate item.errors[:embargo_end_date], :present?
     assert_includes item.errors[:embargo_end_date], "can't be blank"
   end
 
@@ -84,7 +84,7 @@ class ItemTest < ActiveSupport::TestCase
     end
 
     assert_not item.valid?
-    assert item.errors[:embargo_end_date].present?
+    assert_predicate item.errors[:embargo_end_date], :present?
     assert_includes item.errors[:embargo_end_date], 'must be blank'
 
     assert_not item.errors[:visibility].present?
@@ -97,7 +97,7 @@ class ItemTest < ActiveSupport::TestCase
     end
 
     assert_not item.valid?
-    assert item.errors[:visibility_after_embargo].present?
+    assert_predicate item.errors[:visibility_after_embargo], :present?
     assert_includes item.errors[:visibility_after_embargo], "can't be blank"
   end
 
@@ -109,7 +109,7 @@ class ItemTest < ActiveSupport::TestCase
     end
 
     assert_not item.valid?
-    assert item.errors[:visibility_after_embargo].present?
+    assert_predicate item.errors[:visibility_after_embargo], :present?
     assert_includes item.errors[:visibility_after_embargo], 'must be blank'
     # Make sure no controlled vocabulary error
     assert_not_includes item.errors[:visibility_after_embargo], 'is not recognized'
@@ -125,7 +125,7 @@ class ItemTest < ActiveSupport::TestCase
     end
 
     assert_not item.valid?
-    assert item.errors[:visibility_after_embargo].present?
+    assert_predicate item.errors[:visibility_after_embargo], :present?
     assert_includes item.errors[:visibility_after_embargo], 'whatever is not a known visibility'
     assert_not item.errors[:visibility].present?
   end
@@ -180,7 +180,7 @@ class ItemTest < ActiveSupport::TestCase
 
     item = Item.new(languages: [ControlledVocabulary.era.language.english])
     assert_not item.valid?
-    assert_not_includes item.errors.keys, :languages
+    assert_not_includes item.errors.attribute_names, :languages
   end
 
   test 'a license or rights statement must be present' do
@@ -205,11 +205,11 @@ class ItemTest < ActiveSupport::TestCase
 
     item = Item.new(license: ControlledVocabulary.era.license.attribution_4_0_international)
     item.valid?
-    assert_not_includes item.errors.keys, :license
+    assert_not_includes item.errors.attribute_names, :license
 
     item = Item.new(license: ControlledVocabulary.era.old_license.attribution_3_0_international)
     item.valid?
-    assert_not_includes item.errors.keys, :license
+    assert_not_includes item.errors.attribute_names, :license
   end
 
   test 'an item type is required' do
@@ -314,7 +314,7 @@ class ItemTest < ActiveSupport::TestCase
 
   # Preservation queue handling
   test 'should add id and type with the correct score for a new item to preservation queue' do
-    Redis.current.del Rails.application.secrets.preservation_queue_name
+    RedisClient.current.del Rails.application.secrets.preservation_queue_name
 
     # Setup an item...
     community = communities(:community_books)
@@ -336,10 +336,10 @@ class ItemTest < ActiveSupport::TestCase
         unlocked_item.save
       end
 
-      item_output, score = Redis.current.zrange(Rails.application.secrets.preservation_queue_name,
-                                                0,
-                                                -1,
-                                                with_scores: true)[0]
+      item_output, score = RedisClient.current.zrange(Rails.application.secrets.preservation_queue_name,
+                                                      0,
+                                                      -1,
+                                                      with_scores: true)[0]
       item_output = JSON.parse(item_output)
 
       assert_equal item.id, item_output['uuid']
@@ -347,11 +347,11 @@ class ItemTest < ActiveSupport::TestCase
       assert_in_delta 0.5, score, Time.now.to_f
     end
 
-    Redis.current.del Rails.application.secrets.preservation_queue_name
+    RedisClient.current.del Rails.application.secrets.preservation_queue_name
   end
 
   test 'should end up with the queue only having an item id once after multiple saves of the same item' do
-    Redis.current.del Rails.application.secrets.preservation_queue_name
+    RedisClient.current.del Rails.application.secrets.preservation_queue_name
 
     # Setup an item...
     community = communities(:community_books)
@@ -381,22 +381,22 @@ class ItemTest < ActiveSupport::TestCase
         unlocked_item.save
       end
 
-      assert_equal 1, Redis.current.zcard(Rails.application.secrets.preservation_queue_name)
+      assert_equal 1, RedisClient.current.zcard(Rails.application.secrets.preservation_queue_name)
 
-      item_output, score = Redis.current.zrange(Rails.application.secrets.preservation_queue_name,
-                                                0,
-                                                -1,
-                                                with_scores: true)[0]
+      item_output, score = RedisClient.current.zrange(Rails.application.secrets.preservation_queue_name,
+                                                      0,
+                                                      -1,
+                                                      with_scores: true)[0]
       item_output = JSON.parse(item_output)
       assert_equal item.id, item_output['uuid']
       assert_in_delta 0.5, score, 3.minutes.from_now.to_f
     end
 
-    Redis.current.del Rails.application.secrets.preservation_queue_name
+    RedisClient.current.del Rails.application.secrets.preservation_queue_name
   end
 
   test 'should end up with item ids in the queue in the correct temporal order' do
-    Redis.current.del Rails.application.secrets.preservation_queue_name
+    RedisClient.current.del Rails.application.secrets.preservation_queue_name
 
     # Setup some items...
     community = communities(:community_books)
@@ -440,11 +440,11 @@ class ItemTest < ActiveSupport::TestCase
     end
 
     save_order = [items[1], items[0], items[2]]
-    queue = Redis.current.zrange(Rails.application.secrets.preservation_queue_name, 0, -1, with_scores: false)
+    queue = RedisClient.current.zrange(Rails.application.secrets.preservation_queue_name, 0, -1, with_scores: false)
 
     assert_equal save_order.map(&:id), (queue.map { |x| JSON.parse(x)['uuid'] })
 
-    Redis.current.del Rails.application.secrets.preservation_queue_name
+    RedisClient.current.del Rails.application.secrets.preservation_queue_name
   end
 
 end

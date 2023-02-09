@@ -1,5 +1,5 @@
 # This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
+# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
 #
 # Examples:
 #
@@ -424,7 +424,7 @@ if Rails.env.development? || Rails.env.uat?
   base_radioactive_item_values = {
     # Set model id on each new Item so we can find it easily when testing
     owner_id: admin.id,
-    doi: 'doi:10.7939/xxxxxxxxx',
+    doi: 'doi:10.80243/99dh-v584',
     visibility: JupiterCore::VISIBILITY_PUBLIC,
     creators: ['dc:creator1$ Doe, Jane', 'dc:creator2$ Doe, John'],
     contributors: ['dc:contributor1$ Perez, Juan', 'dc:contributor2$ Perez, Maria'],
@@ -727,6 +727,29 @@ if Rails.env.development? || Rails.env.uat?
                               rights: ControlledVocabulary.digitization.rights.from_value('In Copyright')
     )
     book.create_fulltext!(text: Faker::Lorem.sentence(word_count: 250, supplemental: false, random_words_to_add: 0))
+  end
+
+  11.times do |_i|
+    date = Faker::Date.between(from: '1900-01-01', to: Date.today)
+    place = [ControlledVocabulary.digitization.subject.from_value('Edmonton (Alta.)'), ControlledVocabulary.digitization.subject.from_value('Lacombe (Alta.)')].sample
+    newspaper = Digitization::Newspaper.create!(publication_code: ['ACN', 'LSV', 'SDN'].sample, 
+                              year: date.year,
+                              month: date.month.to_s.rjust(2, "0"),
+                              day: date.mday.to_s.rjust(2, "0"),
+                              owner_id: admin.id,
+                              dates_issued: [date.edtf],
+                              date_ingested: '2016-12-08T06:00:00.000Z',
+                              title: "#{Faker::Address.city} #{Faker::Subscription.subscription_term}",
+                              alternative_titles: [Faker::Hipster.sentence.to_s],
+                              resource_type: ControlledVocabulary.digitization.resource_type.from_value('Text'),
+                              genres: [ControlledVocabulary.digitization.genre.from_value('Newspapers')],
+                              languages: [ControlledVocabulary.digitization.language.from_value('English')],
+                              places_of_publication: [place],
+                              extent: 'v. : ill.',
+                              notes: [Faker::Hipster.sentence.to_s],
+                              geographic_subjects: [place],
+                              rights: ControlledVocabulary.digitization.rights.from_value('No Known Copyright')
+    )
   end
 
   Digitization::Book.create(peel_id: '4062') # monograph

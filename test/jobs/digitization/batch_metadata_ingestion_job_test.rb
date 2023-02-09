@@ -9,13 +9,13 @@ class Digitization::BatchMetadataIngestionJobTest < ActiveJob::TestCase
       raise StandardError, 'Testing! Error has happened!'
     end
 
-    assert_raises StandardError do
-      assert_no_difference('::Digitization::Book.count') do
+    assert_no_difference('::Digitization::Book.count') do
+      assert_raises StandardError do
         Digitization::BatchMetadataIngestionJob.perform_now(batch_ingest)
       end
     end
 
-    assert(batch_ingest.failed?)
+    assert_predicate(batch_ingest, :failed?)
     assert_equal('Testing! Error has happened!', batch_ingest.error_message)
   end
 
@@ -29,7 +29,7 @@ class Digitization::BatchMetadataIngestionJobTest < ActiveJob::TestCase
     end
 
     batch_ingest.reload
-    assert(batch_ingest.completed?)
+    assert_predicate(batch_ingest, :completed?)
     assert_equal(2, batch_ingest.books.count)
   end
 

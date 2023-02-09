@@ -26,7 +26,11 @@ class ItemShowTest < ApplicationSystemTestCase
       # Attach multiple files to the mondo-item
       File.open(file_fixture('image-sample.jpeg'), 'r') do |file1|
         File.open(file_fixture('pdf-sample.pdf'), 'r') do |file2|
-          @item.add_and_ingest_files([file1, file2])
+          File.open(file_fixture('text-sample.txt'), 'r') do |file3|
+            # Reversed file ingested order to test that ordered files are
+            # returned in alphabetical order
+            @item.add_and_ingest_files([file3, file2, file1])
+          end
         end
       end
     end
@@ -71,7 +75,7 @@ class ItemShowTest < ApplicationSystemTestCase
 
   test 'unauthed users should be able to download all files from a public item' do
     visit item_path @item
-    assert_selector '.js-download', count: 2
+    assert_selector '.js-download', count: 3
     assert_selector '.js-download-all'
     # TODO: test that the files are downloaded via js successfully without making the suite brittle
   end
@@ -80,6 +84,16 @@ class ItemShowTest < ApplicationSystemTestCase
     visit item_path @item
     click_link 'Joe Blow'
     assert_selector "a[href='/search?tab=item']", count: 1
+  end
+
+  test 'Check item files are listed alphabetically' do
+    visit item_path @item
+
+    assert_selector :xpath, "(.//div[contains(@class, 'item-filename')])", count: 3
+    # Item files have been sorted by its ordered_files method
+    assert_selector :xpath, "(.//div[contains(@class, 'item-filename')])[1]", text: 'image-sample.jpeg'
+    assert_selector :xpath, "(.//div[contains(@class, 'item-filename')])[2]", text: 'pdf-sample.pdf'
+    assert_selector :xpath, "(.//div[contains(@class, 'item-filename')])[3]", text: 'text-sample.txt'
   end
 
   test 'Visiting authenticated items as an unauthenticated user works' do

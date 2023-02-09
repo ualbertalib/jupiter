@@ -66,7 +66,7 @@ class DepositThesisTest < ApplicationSystemTestCase
     # Success! Deposit Successful
 
     assert_text I18n.t('admin.theses.draft.successful_deposit')
-    assert Thesis.find_by(title: 'A Dance with Dragons').present?
+    assert_predicate Thesis.find_by(title: 'A Dance with Dragons'), :present?
     assert_selector 'h1', text: 'A Dance with Dragons'
 
     # Check to make sure there isn't any embargo_history
@@ -131,11 +131,6 @@ class DepositThesisTest < ApplicationSystemTestCase
   # Helper methods for javascript fields (dropzone)
   # (could be moved and made as generic helpers if these are needed elsewhere)
   private
-
-  def attach_file_in_dropzone(file_path)
-    # Attach the file to the hidden input selector
-    attach_file(nil, file_path, class: 'dz-hidden-input', visible: false)
-  end
 
   def select_date(date, field_id:)
     date = Date.parse(date)

@@ -7,7 +7,140 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 New entries in this file should aim to provide a meaningful amount of information in order to allow people to understand the change purely by reading this file, without relying on links to possibly-impermanent sources like Pull Request descriptions or issues.
 
-## [Unreleased]
+## Unreleased
+
+### Added
+- Push collections and communities to preservation on save along with a rake task to do so [#255](https://github.com/ualbertalib/pushmi_pullyu/issues/255)
+- Added minitest-retry gem to retry flapping tests that are able to pass through retries [#3044](https://github.com/ualbertalib/jupiter/pull/3044)
+### Removed
+- Skylight performance monitoring.  Will need to remove this secret from ansible playbook secrets as well. [#3023](https://github.com/ualbertalib/jupiter/issues/3023)
+
+## [2.4.3] - 2022-12-14
+
+### Security
+- Bump rails-html-sanitizer from 1.4.3 to 1.4.4
+- Bump loofah from 2.19.0 to 2.19.1
+- Bump nokogiri from 1.13.9 to 1.13.10
+- Bump decode-uri-component from 0.2.0 to 0.2.2
+- Bump loader-utils from 1.4.1 to 1.4.2
+
+### Chores
+- Bump sidekiq from 6.4.1 to 6.5.8
+
+## [2.4.2] - 2022-11-01
+
+### Fix
+- Make sure all files are copied when items are ingested with multiple files each [#2990](https://github.com/ualbertalib/jupiter/issues/2990)
+
+### Chores
+- Bump nokogiri from 1.13.7 to 1.13.9
+- Bump regenerator-runtime from 0.13.9 to 0.13.10
+- Bump webdrivers from 5.0.0 to 5.2.0
+
+## [2.4.1] - 2022-10-19
+
+### Fix
+- Stop batch ingests where items have with duplicate files [#2980](https://github.com/ualbertalib/jupiter/issues/2980)
+
+### Chores
+- Bump webpack-dev-server from 4.11.0 to 4.11.1 
+- Bump webmock from 3.17.1 to 3.18.1
+- Bump rubocop-rails from 2.15.2 to 2.16.1
+- add Ruby 3.0 [PR#2879](https://github.com/ualbertalib/jupiter/pull/2879)
+
+## [2.4.0] - 2022-09-20
+
+### Added
+- Add multi-file upload per item on batch ingest workflow [#2943](https://github.com/ualbertalib/jupiter/issues/2943)
+
+### Removed
+- references to EZID [#2671](https://github.com/ualbertalib/jupiter/issues/2671)
+- Unnecessary disabling of Naming/MethodParameterName cop [PR#2960](https://github.com/ualbertalib/jupiter/pull/2960)
+
+### Changed
+- Column header names for batch ingestion spreadsheet [#2941](https://github.com/ualbertalib/jupiter/issues/2941)
+- Community links to exclude description [#2969](https://github.com/ualbertalib/jupiter/issues/2969)
+- Files attached to items and thesis are now sorted alphabetically in their views [#2946](https://github.com/ualbertalib/jupiter/issues/2946)
+
+
+## [2.3.7] - 2022-07-13
+
+### Removed 
+- link to ERA A+V [#2765](https://github.com/ualbertalib/jupiter/issues/2765)
+
+### Chores
+- remove Ruby 2.6 [PR#2878](https://github.com/ualbertalib/jupiter/pull/2878)
+- bump rubocop and fix new nags [PR#2900](https://github.com/ualbertalib/jupiter/pull/2900)
+- bump ruboocp-rails and fix new nags [PR#2899](https://github.com/ualbertalib/jupiter/pull/2899)
+- bump Ruby from 2.6 to 2.7 for UAT [PR#2909](https://github.com/ualbertalib/jupiter/pull/2909)
+
+### Security
+- bump rails 6.1.6 to 6.1.6.1
+
+## [2.3.6] - 2022-04-28
+
+### Security
+- bump rails 6.1.5 to 6.1.5.1
+
+### Chores
+- bump omniauth-saml 2.0.0 to 2.1.0 [PR#2767](https://github.com/ualbertalib/jupiter/pull/2767)
+
+## [2.3.5] - 2022-04-06
+
+- Jupiter II work is continuing to incorporate Digitized materials into Jupiter in the digitalcollections namespace.
+  - batch ingest reports [PR#2612](https://github.com/ualbertalib/jupiter/pull/2612)
+
+### Fixed
+- File Upload error [PR#2798](https://github.com/ualbertalib/jupiter/pull/2798)
+
+## [2.3.4] - 2022-02-08
+
+### Added
+- Add readiness healthchecks for Rails and Sidekiq [PR#2657](https://github.com/ualbertalib/jupiter/pull/2657)
+
+### Security
+- Bump Sidekiq from 5.2.9 to 6.4.1 [#2189](https://github.com/ualbertalib/jupiter/issues/2189)
+- Bump follow-redirects
+- Bump puma
+- Bump actionpack 
+
+## [2.3.3] - 2022-01-19
+
+### Fixed
+- Bring back illogical date range faceting flash message [#2030](https://github.com/ualbertalib/jupiter/issues/2030)
+- Thesis not being assigned a DOI [#2707](https://github.com/ualbertalib/jupiter/issues/2707)
+- Render markdown when viewing Collections as an administrator [#2708](https://github.com/ualbertalib/jupiter/issues/2708)
+
+## [2.3.2] - 2022-01-10
+
+- Jupiter II work is continuing to incorporate Digitized materials into Jupiter in the digitalcollections namespace.
+  - newspaper metadata for ACN digitization [#2645](https://github.com/ualbertalib/jupiter/issues/2645)
+
+### Fixed
+- nil Class error when viewing Collections drop down on Communities page [#2655](https://github.com/ualbertalib/jupiter/issues/2655)
+- Render markdown when viewing Communities as an administrator [#1322](https://github.com/ualbertalib/jupiter/issues/1322)
+
+### Chores
+- Bump rubocop-rails to 2.13.0 and fix cop violations [PR#2683](https://github.com/ualbertalib/jupiter/pull/2683)
+- Bump rdf-vocab to 3.2.0 [PR#2696](https://github.com/ualbertalib/jupiter/pull/2696)
+
+## [2.3.1] - 2021-12-07
+
+- Fix Gemfile so that `strong_migrations` is usesd in all environments
+  
+## [2.3.0] - 2021-12-01
+
+- The EZID Compatibility API is sunsetting at the end of this year, per https://blog.datacite.org/sunsetting-of-the-ez-api/.  [datacite-client](https://github.com/pgwillia/datacite-client) is a ruby gem that wraps the [Datacite API](https://support.datacite.org/reference/introduction) for our use.  The main changes are the DOI's no longer have the `doi:` prefix, the format of metadata attributes, and the event mechanism for publishing/hiding the metadata from the public. Requires `datacite_api` feature flag and new secrets for our datacite credentials. [#2268](https://github.com/ualbertalib/jupiter/issues/2268)
+
+- We had a request by a researcher to attach several 2.8 Gb zip files to an existing object.  We couldn't fulfill this request because of the way we were storing metadata about the file.  Using `Integer` put an artificial limitation of 2,147,483,647 (2^31-1) on the size of files we could attach.  We migrate the `byte_size` of blobs to use `BigInt`, 9,223,372,036,854,775,807 (2^63-1), instead.
+
+### Chores
+- bump sidekiq-unique-jobs from 7.0.12 to 7.1.8 and fix a long missed deprecation
+- fixed deprecation warning on tests [#2604](https://github.com/ualbertalib/jupiter/issues/2604)
+- revise uat deploy configuration and watchtower script [#1985](https://github.com/ualbertalib/jupiter/issues/1985)
+- fixes: Docker demo Redis bad URI error [#2610](https://github.com/ualbertalib/jupiter/issues/2610)
+- add `strong_migrations` to catch unsafe migrations in development [#2621](https://github.com/ualbertalib/jupiter/issues/2621)
+- Upgrade Rails to version 6.1 [#2079](https://github.com/ualbertalib/jupiter/issues/2079)
 
 ### Changed
 - Refactored tests into smaller tests [PR#2563](https://github.com/ualbertalib/jupiter/pull/2563)

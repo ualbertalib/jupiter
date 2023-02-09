@@ -31,7 +31,7 @@ class DraftItemTest < ActiveSupport::TestCase
   test 'should be able to create a draft item with user when on inactive status' do
     user = users(:user_regular)
     draft_item = DraftItem.new(user: user)
-    assert draft_item.valid?
+    assert_predicate draft_item, :valid?
   end
 
   test 'should run validations when on describe_item step' do
@@ -49,7 +49,7 @@ class DraftItemTest < ActiveSupport::TestCase
       description: 'Really random description about this random book',
       member_of_paths: { community_id: [@community.id], collection_id: [@collection.id] }
     )
-    assert draft_item.valid?
+    assert_predicate draft_item, :valid?
   end
 
   test 'should run validations when on choose_license_and_visibility wizard step' do
@@ -80,7 +80,7 @@ class DraftItemTest < ActiveSupport::TestCase
       visibility: DraftItem.visibilities[:open_access]
     )
 
-    assert draft_item.valid?
+    assert_predicate draft_item, :valid?
   end
 
   test 'should run validations when on file_uploads wizard step' do
@@ -104,7 +104,7 @@ class DraftItemTest < ActiveSupport::TestCase
     )
     assert_not draft_item.valid?
 
-    fake_file = ActiveStorage::Blob.create_after_upload!(
+    fake_file = ActiveStorage::Blob.create_and_upload!(
       io: StringIO.new('RandomData'),
       filename: 'book_cover.jpg',
       content_type: 'text/plain'
@@ -112,7 +112,7 @@ class DraftItemTest < ActiveSupport::TestCase
 
     draft_item.files.attach fake_file
 
-    assert draft_item.valid?
+    assert_predicate draft_item, :valid?
   end
 
   test 'should handle license text validations' do
@@ -138,7 +138,7 @@ class DraftItemTest < ActiveSupport::TestCase
     draft_item.assign_attributes(
       license_text_area: 'Random license text or url to a license goes here'
     )
-    assert draft_item.valid?
+    assert_predicate draft_item, :valid?
   end
 
   test 'should handle embargo end date visibility validations' do
@@ -165,7 +165,7 @@ class DraftItemTest < ActiveSupport::TestCase
       embargo_end_date: Date.current + 1.year
     )
 
-    assert draft_item.valid?
+    assert_predicate draft_item, :valid?
   end
 
   test 'should handle community/collection validations on member_of_paths' do
@@ -200,7 +200,7 @@ class DraftItemTest < ActiveSupport::TestCase
     draft_item.assign_attributes(
       member_of_paths: { community_id: [@community.id], collection_id: [@collection.id] }
     )
-    assert draft_item.valid?
+    assert_predicate draft_item, :valid?
 
     # Regular user can't deposit to a restricted collection
     restricted_collection = Collection.create!(title: 'Risque fantasy Books',
@@ -216,7 +216,7 @@ class DraftItemTest < ActiveSupport::TestCase
     # Admin user can deposit to a restricted collection
     user_admin = users(:user_admin)
     draft_item.user = user_admin
-    assert draft_item.valid?
+    assert_predicate draft_item, :valid?
 
     restricted_collection.destroy
   end
@@ -245,7 +245,7 @@ class DraftItemTest < ActiveSupport::TestCase
       contributors: [''], places: [''], time_periods: ['']
     )
 
-    assert draft_item.valid?
+    assert_predicate draft_item, :valid?
     assert_nil draft_item.contributors
     assert_nil draft_item.places
     assert_nil draft_item.time_periods

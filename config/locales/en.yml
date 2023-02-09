@@ -167,6 +167,18 @@ en:
               infected: '%{filename} is infected with a virus'
         digitization/book:
             attributes:
+              peel_number:
+                taken: "number %{peel_number} has already been taken"
+              resource_type:
+                not_recognized: 'is not recognized'
+              genres:
+                not_recognized: 'is not recognized'
+              languages:
+                not_recognized: 'is not recognized'
+              rights:
+                not_recognized: 'is not recognized'
+        digitization/newspaper:
+            attributes:
               resource_type:
                 not_recognized: 'is not recognized'
               genres:
@@ -194,8 +206,9 @@ en:
                 publication_status_required_for_articles: 'Publication status is required for articles and was not found for row %{row_number} of spreadsheet'
                 embargo_missing_required_data: 'Embargo end date and visibility after embargo is required for embargo items. Missing data was not found for row %{row_number} of spreadsheet'
                 column_not_found: "%{column} does not exist in ERA for row %{row_number} of spreadsheet"
-                no_matching_files: "file_name for row %{row_number} of spreadsheet has no matching files below"
+                no_matching_files: "File(s) '%{file_names}' from row %{row_number} of spreadsheet are not listed in the file list below"
                 spreadsheet_could_not_be_read: "Spreadsheet could not be read. Please follow the template spreadsheet as an example"
+                duplicate_files: "File '%{file_name}' is repeated in rows %{rows} of the spreadsheet but should only appear in a single row"
   application:
     navbar:
       era_logo_alt: 'ERA - Education and Research Archive'
@@ -603,8 +616,6 @@ en:
       images_of_research_attribution: 'Image: “Frozen Kaleidoscope” by Vincent McFarlane CC-BY 4.0'
       theses_collection: 'University of Alberta Theses and Dissertations'
       afns_collection: 'Department of Agriculture, Food and Nutritional Science Journal Articles'
-      era_av_header: 'Explore ERA Audio+Video'
-      era_av_text: "The University of Alberta Library's Media Streaming Service"
 
   items:
     index:
@@ -849,6 +860,7 @@ en:
     range_begin: 'Range Begin'
     range_end: 'Range End'
     range_limit: 'Limit'
+    invalid_date_range_flash: 'Your selected date filters are not a valid range'
 
     index:
       header: 'Search'

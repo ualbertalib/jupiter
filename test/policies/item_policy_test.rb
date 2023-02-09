@@ -6,28 +6,28 @@ class ItemPolicyTest < ActiveSupport::TestCase
     current_user = users(:user_admin)
     item = Item.new
 
-    assert ItemPolicy.new(current_user, item).index?
-    assert ItemPolicy.new(current_user, item).create?
-    assert ItemPolicy.new(current_user, item).new?
-    assert ItemPolicy.new(current_user, item).show?
-    assert ItemPolicy.new(current_user, item).edit?
-    assert ItemPolicy.new(current_user, item).update?
-    assert ItemPolicy.new(current_user, item).destroy?
-    assert ItemPolicy.new(current_user, item).download?
-    assert ItemPolicy.new(current_user, item).thumbnail?
+    assert_predicate ItemPolicy.new(current_user, item), :index?
+    assert_predicate ItemPolicy.new(current_user, item), :create?
+    assert_predicate ItemPolicy.new(current_user, item), :new?
+    assert_predicate ItemPolicy.new(current_user, item), :show?
+    assert_predicate ItemPolicy.new(current_user, item), :edit?
+    assert_predicate ItemPolicy.new(current_user, item), :update?
+    assert_predicate ItemPolicy.new(current_user, item), :destroy?
+    assert_predicate ItemPolicy.new(current_user, item), :download?
+    assert_predicate ItemPolicy.new(current_user, item), :thumbnail?
   end
 
   test 'authenticated user should only be able to create, see and modify, but not delete, their own items' do
     current_user = users(:user_regular)
     item = Item.new(owner_id: current_user.id)
 
-    assert ItemPolicy.new(current_user, item).index?
-    assert ItemPolicy.new(current_user, item).show?
-    assert ItemPolicy.new(current_user, item).edit?
-    assert ItemPolicy.new(current_user, item).update?
+    assert_predicate ItemPolicy.new(current_user, item), :index?
+    assert_predicate ItemPolicy.new(current_user, item), :show?
+    assert_predicate ItemPolicy.new(current_user, item), :edit?
+    assert_predicate ItemPolicy.new(current_user, item), :update?
 
-    assert ItemPolicy.new(current_user, item).create?
-    assert ItemPolicy.new(current_user, item).new?
+    assert_predicate ItemPolicy.new(current_user, item), :create?
+    assert_predicate ItemPolicy.new(current_user, item), :new?
     assert_not ItemPolicy.new(current_user, item).destroy?
   end
 
@@ -37,10 +37,10 @@ class ItemPolicyTest < ActiveSupport::TestCase
 
     item = Item.new(owner_id: another_user.id, visibility: JupiterCore::VISIBILITY_PUBLIC)
 
-    assert ItemPolicy.new(current_user, item).index?
-    assert ItemPolicy.new(current_user, item).show?
-    assert ItemPolicy.new(current_user, item).download?
-    assert ItemPolicy.new(current_user, item).thumbnail?
+    assert_predicate ItemPolicy.new(current_user, item), :index?
+    assert_predicate ItemPolicy.new(current_user, item), :show?
+    assert_predicate ItemPolicy.new(current_user, item), :download?
+    assert_predicate ItemPolicy.new(current_user, item), :thumbnail?
 
     assert_not ItemPolicy.new(current_user, item).edit?
     assert_not ItemPolicy.new(current_user, item).update?
@@ -53,10 +53,10 @@ class ItemPolicyTest < ActiveSupport::TestCase
 
     item = Item.new(owner_id: another_user.id, visibility: JupiterCore::VISIBILITY_AUTHENTICATED)
 
-    assert ItemPolicy.new(current_user, item).index?
-    assert ItemPolicy.new(current_user, item).show?
-    assert ItemPolicy.new(current_user, item).download?
-    assert ItemPolicy.new(current_user, item).thumbnail?
+    assert_predicate ItemPolicy.new(current_user, item), :index?
+    assert_predicate ItemPolicy.new(current_user, item), :show?
+    assert_predicate ItemPolicy.new(current_user, item), :download?
+    assert_predicate ItemPolicy.new(current_user, item), :thumbnail?
 
     assert_not ItemPolicy.new(current_user, item).edit?
     assert_not ItemPolicy.new(current_user, item).update?
@@ -67,10 +67,10 @@ class ItemPolicyTest < ActiveSupport::TestCase
     current_user = nil
     item = Item.new(visibility: JupiterCore::VISIBILITY_PUBLIC)
 
-    assert ItemPolicy.new(current_user, item).index?
-    assert ItemPolicy.new(current_user, item).show?
-    assert ItemPolicy.new(current_user, item).download?
-    assert ItemPolicy.new(current_user, item).thumbnail?
+    assert_predicate ItemPolicy.new(current_user, item), :index?
+    assert_predicate ItemPolicy.new(current_user, item), :show?
+    assert_predicate ItemPolicy.new(current_user, item), :download?
+    assert_predicate ItemPolicy.new(current_user, item), :thumbnail?
 
     assert_not ItemPolicy.new(current_user, item).create?
     assert_not ItemPolicy.new(current_user, item).new?
@@ -83,8 +83,8 @@ class ItemPolicyTest < ActiveSupport::TestCase
     current_user = nil
     item = Item.new(visibility: JupiterCore::VISIBILITY_AUTHENTICATED)
 
-    assert ItemPolicy.new(current_user, item).index?
-    assert ItemPolicy.new(current_user, item).show?
+    assert_predicate ItemPolicy.new(current_user, item), :index?
+    assert_predicate ItemPolicy.new(current_user, item), :show?
 
     assert_not ItemPolicy.new(current_user, item).create?
     assert_not ItemPolicy.new(current_user, item).new?

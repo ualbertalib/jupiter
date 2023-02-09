@@ -7,7 +7,7 @@ class Digitization::ImageTest < ActiveSupport::TestCase
   end
 
   test 'valid Peel image' do
-    assert @image.valid?
+    assert_predicate @image, :valid?
   end
 
   test 'unique Peel image' do

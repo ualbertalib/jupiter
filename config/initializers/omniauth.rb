@@ -4,8 +4,8 @@ Rails.application.config.middleware.use OmniAuth::Builder do
            idp_cert: Rails.application.secrets.saml_idp_cert,
            certificate: Rails.application.secrets.saml_certificate,
            private_key: Rails.application.secrets.saml_private_key,
-           idp_sso_target_url: Rails.application.secrets.saml_idp_sso_target_url,
-           issuer: Rails.application.secrets.saml_issuer,
+           idp_sso_service_url: Rails.application.secrets.saml_idp_sso_target_url,
+           sp_entity_id: Rails.application.secrets.saml_issuer,
            name_identifier_format: 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
            attribute_statements: {
              # TODO: How to get values as human readable instead of URNs?

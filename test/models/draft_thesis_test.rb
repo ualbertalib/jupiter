@@ -28,7 +28,7 @@ class DraftThesisTest < ActiveSupport::TestCase
   test 'should be able to create a draft thesis with user when on inactive status' do
     user = users(:user_admin)
     draft_thesis = DraftThesis.new(user: user)
-    assert draft_thesis.valid?
+    assert_predicate draft_thesis, :valid?
   end
 
   test 'should run validations when on describe_item step' do
@@ -47,7 +47,7 @@ class DraftThesisTest < ActiveSupport::TestCase
       member_of_paths: { community_id: [@community.id], collection_id: [@collection.id] }
     )
 
-    assert draft_thesis.valid?
+    assert_predicate draft_thesis, :valid?
   end
 
   test 'should run validations when on choose_license_and_visibility wizard step' do
@@ -75,7 +75,7 @@ class DraftThesisTest < ActiveSupport::TestCase
       rights: 'License text goes here'
     )
 
-    assert draft_thesis.valid?
+    assert_predicate draft_thesis, :valid?
   end
 
   test 'should run validations when on file_uploads wizard step' do
@@ -100,7 +100,7 @@ class DraftThesisTest < ActiveSupport::TestCase
     assert_not draft_thesis.valid?
     assert_equal "Files can't be blank", draft_thesis.errors.full_messages.first
 
-    fake_file = ActiveStorage::Blob.create_after_upload!(
+    fake_file = ActiveStorage::Blob.create_and_upload!(
       io: StringIO.new('RandomData'),
       filename: 'book_cover.jpg',
       content_type: 'text/plain'
@@ -108,7 +108,7 @@ class DraftThesisTest < ActiveSupport::TestCase
 
     draft_thesis.files.attach fake_file
 
-    assert draft_thesis.valid?
+    assert_predicate draft_thesis, :valid?
   end
 
   test 'should handle embargo end date visibility validations' do
@@ -135,7 +135,7 @@ class DraftThesisTest < ActiveSupport::TestCase
       embargo_end_date: Date.current + 1.year
     )
 
-    assert draft_thesis.valid?
+    assert_predicate draft_thesis, :valid?
   end
 
   test 'should handle community/collection validations on member_of_paths' do
@@ -168,7 +168,7 @@ class DraftThesisTest < ActiveSupport::TestCase
     draft_thesis.assign_attributes(
       member_of_paths: { community_id: [@community.id], collection_id: [@collection.id] }
     )
-    assert draft_thesis.valid?
+    assert_predicate draft_thesis, :valid?
   end
 
   test 'regular user cannot deposit' do
@@ -248,7 +248,7 @@ class DraftThesisTest < ActiveSupport::TestCase
       graduation_year: 2000
     )
 
-    assert draft_thesis.valid?
+    assert_predicate draft_thesis, :valid?
   end
 
 end
