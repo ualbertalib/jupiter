@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_25_195251) do
+ActiveRecord::Schema.define(version: 2021_12_03_185004) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -32,10 +32,17 @@ ActiveRecord::Schema.define(version: 2021_08_25_195251) do
     t.string "filename"
     t.string "content_type"
     t.text "metadata"
-    t.integer "byte_size"
+    t.bigint "byte_size"
     t.string "checksum"
     t.datetime "created_at"
+    t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_variant_records", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
   create_table "announcements", force: :cascade do |t|
@@ -204,6 +211,19 @@ ActiveRecord::Schema.define(version: 2021_08_25_195251) do
     t.string "visibility"
     t.bigint "owner_id", null: false
     t.string "title", null: false
+    t.string "dates_issued", array: true
+    t.text "alternative_titles", array: true
+    t.string "resource_type", null: false
+    t.string "genres", null: false, array: true
+    t.string "languages", null: false, array: true
+    t.string "places_of_publication", array: true
+    t.string "extent"
+    t.text "notes", array: true
+    t.string "geographic_subjects", array: true
+    t.string "rights"
+    t.string "volume"
+    t.string "issue"
+    t.string "editions", array: true
     t.index ["owner_id"], name: "index_digitization_newspapers_on_owner_id"
     t.index ["publication_code", "year", "month", "day"], name: "unique_peel_newspaper", unique: true
   end
@@ -471,6 +491,7 @@ ActiveRecord::Schema.define(version: 2021_08_25_195251) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "announcements", "users"
   add_foreign_key "batch_ingest_files", "batch_ingests"
   add_foreign_key "batch_ingests", "users"

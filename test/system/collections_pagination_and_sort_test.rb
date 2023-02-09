@@ -68,6 +68,7 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
     assert_selector 'div', text: '1 - 10 of 11'
     assert_selector 'ul.list-group li:first-child a', text: 'Fancy Collection 10'
     assert_selector 'ul.list-group li:nth-child(2) a', text: 'Nice Collection 09'
+    assert_selector 'ul.list-group li:nth-child(9) a', text: 'Fancy Collection 02'
     assert_selector 'ul.list-group li:nth-child(10) a', text: 'Nice Collection 01'
     # The first 'Fancy' collection should be on next page
     refute_selector 'a', text: 'Fancy Collection 00'
@@ -105,6 +106,7 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
     assert_selector 'div', text: '1 - 10 of 11'
     assert_selector 'ul.list-group li:first-child a', text: 'Fancy Collection 00'
     assert_selector 'ul.list-group li:nth-child(2) a', text: 'Nice Collection 01'
+    assert_selector 'ul.list-group li:nth-child(9) a', text: 'Fancy Collection 08'
     assert_selector 'ul.list-group li:nth-child(10) a', text: 'Nice Collection 09'
     # The Last 'Nice' collection should be on next page
     refute_selector 'a', text: 'Fancy Collection 10'

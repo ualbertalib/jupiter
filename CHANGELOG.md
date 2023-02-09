@@ -9,6 +9,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+### Changed
+- Refactored tests into smaller tests [PR#2563](https://github.com/ualbertalib/jupiter/pull/2563)
+
 ## [2.2.0] - 2021-10-21
 
 - Refactored Controlled Vocabulary support to allow for new, raw vocabs without i18n translations. The motivation here is that we have a bunch of URIs we want to machine-map to human readable values, and it doesn't make sense to introduce intermediate symbols we'd have to cobble together somehow, plus that would involve polluting the i18n file with hundreds of new entries.
@@ -113,9 +116,6 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 - Fixture names have been modified to ensure their uniqueness [PR#2302](https://github.com/ualbertalib/jupiter/pull/2302) 
 - Rails upgraded to 6.0.3.7 to resolve security issues
 - Added Collection and Community to reindex rake task [#2444](https://github.com/ualbertalib/jupiter/issues/2444)
-- predeploy script to reference this branch
-- UAT VIRTUAL_HOSTS configuration on just the containers that need it
-- Refactored tests into smaller tests [PR#2563](https://github.com/ualbertalib/jupiter/pull/2563)
 
 ### Fixed
 - oaisys: change etdms date source to graduation date as per LAC spec [#2298](https://github.com/ualbertalib/jupiter/pull/2510)
