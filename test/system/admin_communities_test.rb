@@ -1,6 +1,6 @@
 require 'application_system_test_case'
 
-class AdminCommunitiesIndexTest < ApplicationSystemTestCase
+class AdminCommunitiesTest < ApplicationSystemTestCase
 
   test 'should be able to see rendered markdown of a description for a community and collection' do
     admin = users(:user_admin)

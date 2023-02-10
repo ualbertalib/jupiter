@@ -432,6 +432,8 @@ class SearchTest < ApplicationSystemTestCase
     within 'div.jupiter-filters a', text: 'Fancy Collection 1' do
       assert_selector 'i.far.fa-square', count: 1
     end
+
+    logout_user
   end
 
   test 'admin should be able to filter the public and private items' do
@@ -479,6 +481,8 @@ class SearchTest < ApplicationSystemTestCase
     badges = find('div.jupiter-facet-badges')
     badge = badges.find_link('a', text: 'Fancy Collection 1', href: search_path(search: 'Fancy'))
     badge.assert_selector 'span.badge', text: 'Fancy Collection 1'
+
+    logout_user
   end
 
 end
