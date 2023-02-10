@@ -12,9 +12,18 @@ New entries in this file should aim to provide a meaningful amount of informatio
 ### Added
 - Push collections and communities to preservation on save along with a rake task to do so [#255](https://github.com/ualbertalib/pushmi_pullyu/issues/255)
 - Added minitest-retry gem to retry flapping tests that are able to pass through retries [#3044](https://github.com/ualbertalib/jupiter/pull/3044)
+- Add attempt count for entity ingestion on depositable model. Related to [pushmi_pullyu#297](https://github.com/ualbertalib/pushmi_pullyu/issues/297)
+
 ### Removed
 - Skylight performance monitoring.  Will need to remove this secret from ansible playbook secrets as well. [#3023](https://github.com/ualbertalib/jupiter/issues/3023)
+- Remove brakeman's ruby EOL check [PR#3051](https://github.com/ualbertalib/jupiter/pull/3051)
 
+### Fixed 
+- Resolved new rubocop offenses [PR#3042](https://github.com/ualbertalib/jupiter/pull/3042)
+
+### Changed
+- Account for new status code given by wicked [PR#2978](https://github.com/ualbertalib/jupiter/pull/2978)
+- Refactored tests into smaller tests [PR#2563](https://github.com/ualbertalib/jupiter/pull/2563)
 ## [2.4.3] - 2022-12-14
 
 ### Security
@@ -141,9 +150,6 @@ New entries in this file should aim to provide a meaningful amount of informatio
 - fixes: Docker demo Redis bad URI error [#2610](https://github.com/ualbertalib/jupiter/issues/2610)
 - add `strong_migrations` to catch unsafe migrations in development [#2621](https://github.com/ualbertalib/jupiter/issues/2621)
 - Upgrade Rails to version 6.1 [#2079](https://github.com/ualbertalib/jupiter/issues/2079)
-
-### Changed
-- Refactored tests into smaller tests [PR#2563](https://github.com/ualbertalib/jupiter/pull/2563)
 
 ## [2.2.0] - 2021-10-21
 

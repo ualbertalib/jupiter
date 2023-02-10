@@ -22,11 +22,11 @@ gem 'simple_form'
 gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', tag: '0.4.0'
 gem 'rdf', '~> 3.2.9'
 gem 'rdf-n3', '~> 3.2.1'
-gem 'rdf-vocab', '~> 3.2.1' # this gem changed predicate names without warning, be cautious and test with migrations
+gem 'rdf-vocab', '~> 3.2.3' # this gem changed predicate names without warning, be cautious and test with migrations
 
 # Database stuff
 gem 'connection_pool'
-gem 'pg', '~> 1.4.3'
+gem 'pg', '~> 1.4.5'
 gem 'redis', '~> 4.8'
 gem 'rsolr'
 gem 'strong_migrations', '~> 1.4.0'
@@ -52,8 +52,8 @@ gem 'datacite-client', github: 'ualbertalib/datacite-client', tag: 'v0.1.0', req
 gem 'differ' # Used to diff two strings
 gem 'draper'
 gem 'edtf', '~> 3.1' # parsing Extended Date/Time Format
-gem 'flipper', '~> 0.25.2' # Feature flags for Ruby
-gem 'flipper-active_record', '~> 0.25.0' # Store feature flags in ActiveRecord
+gem 'flipper', '~> 0.25.4' # Feature flags for Ruby
+gem 'flipper-active_record', '~> 0.25.4' # Store feature flags in ActiveRecord
 gem 'flipper-ui', '~> 0.25.0' # UI for feature flags
 gem 'jbuilder' # generate JSON objects
 gem 'kaminari' # Pagination
@@ -93,7 +93,7 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
 
-  gem 'rubocop', '~> 1.36.0', require: false
+  gem 'rubocop', '~> 1.44.1', require: false
   gem 'rubocop-minitest', require: false
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false
@@ -115,7 +115,7 @@ group :development do
 end
 
 group :test do
-  gem 'danger', '~> 8.6', require: false # Pull Request etiquette enforcement
+  gem 'danger', '~> 9.2', require: false # Pull Request etiquette enforcement
   gem 'simplecov'
   # Faker added 0.5 seconds to the test suite per call. Haikunator seems much faster for faking strings
   gem 'haikunator'
