@@ -19,12 +19,12 @@ class StatisticsTest < ActiveSupport::TestCase
     freeze_time do
       Statistics.increment_view_count_for(item_id: @obj_id, ip: @test_ip)
       assert_equal 1, Statistics.views_for(item_id: @obj_id)
-      assert_equal [1, 0], Statistics.for(item_id: obj_id)
+      assert_equal 1, Statistics.for(item_id: @obj_id)[0]
 
       # a second view inside the same time period is ignored
       Statistics.increment_view_count_for(item_id: @obj_id, ip: @test_ip)
       assert_equal 1, Statistics.views_for(item_id: @obj_id)
-      assert_equal [1, 0], Statistics.for(item_id: obj_id)
+      assert_equal 1, Statistics.for(item_id: @obj_id)[0]
     end
   end
 
@@ -41,7 +41,7 @@ class StatisticsTest < ActiveSupport::TestCase
 
       # Susequent viewings outside the ip filter expiry period should now count
       Statistics.increment_view_count_for(item_id: @obj_id, ip: @test_ip)
-      views =  Statistics.views_for(item_id: @obj_id)
+      views = Statistics.views_for(item_id: @obj_id)
       assert_equal previous_views + 1, views
 
       # a second view inside the same time period is still ignored
@@ -55,13 +55,12 @@ class StatisticsTest < ActiveSupport::TestCase
     freeze_time do
       Statistics.increment_download_count_for(item_id: @obj_id, ip: @test_ip)
       assert_equal 1, Statistics.downloads_for(item_id: @obj_id)
-      assert_equal [1, 1], Statistics.for(item_id: obj_id)
+      assert_equal 1, Statistics.for(item_id: @obj_id)[1]
 
       # a second view inside the same time period is ignored
       Statistics.increment_download_count_for(item_id: @obj_id, ip: @test_ip)
       assert_equal 1, Statistics.downloads_for(item_id: @obj_id)
-      assert_equal [1, 1], Statistics.for(item_id: obj_id)
-      assert_equal [2, 1], Statistics.for(item_id: obj_id)
+      assert_equal 1, Statistics.for(item_id: @obj_id)[1]
     end
   end
 

@@ -28,6 +28,8 @@ class AdminCommunitiesIndexTest < ApplicationSystemTestCase
     refute_link 'Fancy Collection 0'
     refute_link 'Fancy Collection 1'
     refute_button 'Close'
+
+    logout_user
   end
 
   test 'should be able to expand the collection for a community in the list' do
