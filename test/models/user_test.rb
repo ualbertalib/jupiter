@@ -25,9 +25,9 @@ class UserTest < ActiveSupport::TestCase
 
   test 'should update the activity columns when not signing-in for new user without activity update' do
     user = users(:user_admin)
-    assert user.last_seen_at.blank?
-    assert user.last_sign_in_at.blank?
-    assert user.previous_sign_in_at.blank?
+    assert_predicate user.last_seen_at, :blank?
+    assert_predicate user.last_sign_in_at, :blank?
+    assert_predicate user.previous_sign_in_at, :blank?
   end
 
   test 'should update the activity columns when not signing-in' do
@@ -39,14 +39,14 @@ class UserTest < ActiveSupport::TestCase
     user.update_activity!(now, ip)
     user.reload
 
-    assert user.last_seen_at.present?
+    assert_predicate user.last_seen_at, :present?
     assert_equal user.last_seen_at.to_s, now
     assert_equal user.last_seen_ip, ip
     # Does not change sign-in information
-    assert user.last_sign_in_at.blank?
-    assert user.last_sign_in_ip.blank?
-    assert user.previous_sign_in_at.blank?
-    assert user.previous_sign_in_ip.blank?
+    assert_predicate user.last_sign_in_at, :blank?
+    assert_predicate user.last_sign_in_ip, :blank?
+    assert_predicate user.previous_sign_in_at, :blank?
+    assert_predicate user.previous_sign_in_ip, :blank?
   end
 
   test 'should update the activity columns when signing-in' do
@@ -56,13 +56,13 @@ class UserTest < ActiveSupport::TestCase
 
     user.update_activity!(now, ip, sign_in: true)
     user.reload
-    assert user.last_seen_at.present?
+    assert_predicate user.last_seen_at, :present?
     assert_equal user.last_seen_at.to_s, now
     assert_equal user.last_seen_ip, ip
     assert_equal user.last_sign_in_at.to_s, now
     assert_equal user.last_sign_in_ip, ip
-    assert user.previous_sign_in_at.blank?
-    assert user.previous_sign_in_ip.blank?
+    assert_predicate user.previous_sign_in_at, :blank?
+    assert_predicate user.previous_sign_in_ip, :blank?
   end
 
   test 'should validate if it does not have an api key and it is not a system account' do
@@ -72,7 +72,7 @@ class UserTest < ActiveSupport::TestCase
       system: false
     )
 
-    assert user.valid?
+    assert_predicate user, :valid?
   end
 
   test 'should validate if it has an api key and it is a system account' do
@@ -84,7 +84,7 @@ class UserTest < ActiveSupport::TestCase
       system: true
     )
 
-    assert user.valid?
+    assert_predicate user, :valid?
   end
 
   test 'should not validate if it has an api key and it is not a system account' do
