@@ -61,6 +61,7 @@ jobs:
       - name: Run Tests
         env:
           RAILS_ENV: test
+          DISABLE_SPRING: "true"
         run: |
           bundle exec rails db:create db:schema:load
           bundle exec rails test
