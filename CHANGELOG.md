@@ -24,6 +24,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 ### Changed
 - Account for new status code given by wicked [PR#2978](https://github.com/ualbertalib/jupiter/pull/2978)
 
+### Chores
+- Bump simplecov from 0.21.2 to 0.22.0
+
 ## [2.4.3] - 2022-12-14
 
 ### Security
