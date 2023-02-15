@@ -67,6 +67,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 - Bump simplecov from 0.21.2 to 0.22.0 [PR#3063](https://github.com/ualbertalib/jupiter/pull/3063)
 - Bump @rails/webpacker from 5.4.3 to 5.4.4 [PR#3073](https://github.com/ualbertalib/jupiter/pull/3073)
 
+### Security
+- Bump rails from 6.1.7 to 6.1.7.2
+
 ## [2.4.3] - 2022-12-14
 
 ### Security
