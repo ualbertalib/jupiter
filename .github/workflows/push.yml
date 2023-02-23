@@ -15,6 +15,10 @@ jobs:
         with:
           fetch-depth: 100
 
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
       - name: Build the docker-compose stack
         run: docker-compose up -d
 
