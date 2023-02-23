@@ -17,7 +17,7 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
 
       - name: Build the docker-compose stack
         run: docker-compose up -d
