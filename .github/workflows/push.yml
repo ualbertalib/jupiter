@@ -1,5 +1,5 @@
 name: CI
-on: [pull_request]
+on: pull_request
 
 jobs:
   test:
@@ -7,7 +7,8 @@ jobs:
 
     strategy:
       matrix:
-        ruby: [2.7]
+        # Due to https://github.com/actions/runner/issues/849, we have to use quotes for '3.0'
+        ruby: [2.7, '3.0']
 
     steps:
       - uses: actions/checkout@v3
@@ -17,7 +18,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: 'yarn'
+          cache: yarn
 
       - name: Build the docker-compose stack
         run: docker-compose up -d
