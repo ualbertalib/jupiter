@@ -52,6 +52,11 @@ jobs:
       - name: Run ERBLint
         run: bundle exec erblint .
 
+      - name: 'Compile Assets'
+        run: |
+          bin/rails webpacker:compile
+          bin/rails assets:precompile
+
       - name: Run Tests
         env:
           RAILS_ENV: test
