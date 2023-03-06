@@ -73,9 +73,11 @@ Metrics/ParameterLists:
     - app/models/jupiter_core/search.rb
     - app/models/jupiter_core/solr_services/deferred_faceted_solr_query.rb
 
-# TODO: our tests are quite smelly.  We should be working to get this lower!
 Minitest/MultipleAssertions:
   Max: 15 # default 3
+  Exclude:
+    - test/system/admin_users_show_test.rb
+    - test/system/search_test.rb
 
 Naming/FileName:
   Exclude:
