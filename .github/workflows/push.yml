@@ -15,6 +15,10 @@ jobs:
         with:
           fetch-depth: 100
 
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
       - name: Build the docker-compose stack
         run: docker-compose up -d
 
@@ -61,6 +65,7 @@ jobs:
       - name: Run Tests
         env:
           RAILS_ENV: test
+          DISABLE_SPRING: "true"
         run: |
           bundle exec rails db:create db:schema:load
           bundle exec rails test

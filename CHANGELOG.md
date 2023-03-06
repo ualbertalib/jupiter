@@ -10,13 +10,59 @@ New entries in this file should aim to provide a meaningful amount of informatio
 ## Unreleased
 
 ### Added
+- Crawl-Delay to robots.txt [PR#3027](https://github.com/ualbertalib/jupiter/pull/3027)
+
+## [2.4.4] - 2023-02-17
+
+### Added
 - Push collections and communities to preservation on save along with a rake task to do so [#255](https://github.com/ualbertalib/pushmi_pullyu/issues/255)
 - Added minitest-retry gem to retry flapping tests that are able to pass through retries [#3044](https://github.com/ualbertalib/jupiter/pull/3044)
-- Crawl-Delay to robots.txt [PR#3027](https://github.com/ualbertalib/jupiter/pull/3027)
+- Add attempt count for entity ingestion on depositable model. Related to [pushmi_pullyu#297](https://github.com/ualbertalib/pushmi_pullyu/issues/297)
 
 ### Removed
 - Skylight performance monitoring.  Will need to remove this secret from ansible playbook secrets as well. [#3023](https://github.com/ualbertalib/jupiter/issues/3023)
 - Remove brakeman's ruby EOL check [PR#3051](https://github.com/ualbertalib/jupiter/pull/3051)
+
+### Fixed 
+- Resolved new rubocop offenses [PR#3042](https://github.com/ualbertalib/jupiter/pull/3042)
+
+### Changed
+- Account for new status code given by wicked [PR#2978](https://github.com/ualbertalib/jupiter/pull/2978)
+
+### Chores
+- Bump simplecov from 0.21.2 to 0.22.0 [PR#3063](https://github.com/ualbertalib/jupiter/pull/3063)
+- Bump json5 from 1.0.1 to 1.0.2 [PR#3031](https://github.com/ualbertalib/jupiter/pull/3031)
+- Bump @rails/activestorage from 6.1.6 to 6.1.7 [PR#2964](https://github.com/ualbertalib/jupiter/pull/2964)
+- Bump @rails/actiontext from 6.1.6 to 6.1.7 [PR#2966](https://github.com/ualbertalib/jupiter/pull/2966)
+- Bump sanitize from 6.0.0 to 6.0.1 [PR#3047](https://github.com/ualbertalib/jupiter/pull/3047)
+- Bump eslint-plugin-import from 2.26.0 to 2.27.5 [PR#3036](https://github.com/ualbertalib/jupiter/pull/3036)
+- Bump pg from 1.4.3 to 1.4.5 [PR#3006](https://github.com/ualbertalib/jupiter/pull/3006)
+- Bump bootsnap from 1.11.1 to 1.16.0 [PR#3043](https://github.com/ualbertalib/jupiter/pull/3043)
+- Bump pry-byebug from 3.8.0 to 3.10.1 [PR#2947](https://github.com/ualbertalib/jupiter/pull/2947)
+- Bump flipper from 0.25.2 to 0.25.4 [PR#3004](https://github.com/ualbertalib/jupiter/pull/3004)
+- Bump faker from 2.22.0 to 3.1.0 [PR#3029](https://github.com/ualbertalib/jupiter/pull/3029)
+- Bump rdf-vocab from 3.2.1 to 3.2.3 [PR#3001](https://github.com/ualbertalib/jupiter/pull/3001)
+- Bump git from 1.11.0 to 1.13.2 [PR#3052](https://github.com/ualbertalib/jupiter/pull/3052)
+- Bump @fortawesome/fontawesome-free from 6.2.0 to 6.2.1 [PR#3005](https://github.com/ualbertalib/jupiter/pull/3005)
+- Bump globalid from 1.0.0 to 1.1.0 [PR#3046](https://github.com/ualbertalib/jupiter/pull/3046)
+- Bump regenerator-runtime from 0.13.10 to 0.13.11 [PR#3007](https://github.com/ualbertalib/jupiter/pull/3007)
+- Bump @rails/ujs from 6.1.6 to 6.1.7 [PR#2965](https://github.com/ualbertalib/jupiter/pull/2965)
+- Bump jquery from 3.6.1 to 3.6.3 [PR#3025](https://github.com/ualbertalib/jupiter/pull/3025)
+- Bump core-js from 3.24.1 to 3.25.0 [PR#2953](https://github.com/ualbertalib/jupiter/pull/2953)
+- Bump rubocop from 1.36.0 to 1.44.1 [PR#3042](https://github.com/ualbertalib/jupiter/pull/3042)
+- Bump capybara from 3.37.1 to 3.38.0 [PR#3054](https://github.com/ualbertalib/jupiter/pull/3054)
+- Bump simple_form from 5.1.0 to 5.2.0 [PR#3055](https://github.com/ualbertalib/jupiter/pull/3055)
+- Bump core-js from 3.25.0 to 3.27.2 [PR#3053](https://github.com/ualbertalib/jupiter/pull/3053)
+- Bump selenium-webdriver from 4.4.0 to 4.8.0 [PR#3057](https://github.com/ualbertalib/jupiter/pull/3057)
+- Bump danger from 8.6.1 to 9.2.0 [PR#3048](https://github.com/ualbertalib/jupiter/pull/3048)
+- Bump flipper-active_record from 0.25.0 to 0.25.4 [PR#3058](https://github.com/ualbertalib/jupiter/pull/3058)
+- Bump spring from 4.1.0 to 4.1.1 [PR#3056](https://github.com/ualbertalib/jupiter/pull/3056)
+- Bump faker from 3.1.0 to 3.1.1 [PR#3059](https://github.com/ualbertalib/jupiter/pull/3059)
+- Bump wicked from 1.4.0 to 2.0.0 [PR#2978](https://github.com/ualbertalib/jupiter/pull/2978)
+- Bump strong_migrations from 1.4.0 to 1.4.2 [PR#3060](https://github.com/ualbertalib/jupiter/pull/3060)
+- Bump rollbar from 3.3.1 to 3.4.0 [PR#3062](https://github.com/ualbertalib/jupiter/pull/3062)
+- Bump simplecov from 0.21.2 to 0.22.0 [PR#3063](https://github.com/ualbertalib/jupiter/pull/3063)
+- Bump @rails/webpacker from 5.4.3 to 5.4.4 [PR#3073](https://github.com/ualbertalib/jupiter/pull/3073)
 
 ## [2.4.3] - 2022-12-14
 

@@ -29,10 +29,10 @@ class MarkdownTest < ActiveSupport::TestCase
     <p>This line is also a separate paragraph, but...<br>
     This line is only separated by a single newline, so it&#39;s a separate line in the <em>same paragraph</em>.</p>
 
-    <p><a href=\"https://www.google.com\" title=\"Google&#39;s Homepage\" rel=\"noopener noreferrer\" target=\"_blank\">I&#39;m an inline-style link with title</a></p>
+    <p><a href="https://www.google.com" title="Google&#39;s Homepage" rel="noopener noreferrer" target="_blank">I&#39;m an inline-style link with title</a></p>
 
     <p>URLs and URLs in angle brackets will automatically get turned into links.<br>
-    <a href=\"http://www.example.com\" rel=\"noopener noreferrer\" target=\"_blank\">http://www.example.com</a> or <a href=\"http://www.example.com\" rel=\"noopener noreferrer\" target=\"_blank\">http://www.example.com</a> and sometimes<br>
+    <a href="http://www.example.com" rel="noopener noreferrer" target="_blank">http://www.example.com</a> or <a href="http://www.example.com" rel="noopener noreferrer" target="_blank">http://www.example.com</a> and sometimes<br>
     example.com (but not on Github, for example).</p>
   RENDERED
   STRIPPED_MARKDOWN = <<~STRIPPED.freeze
