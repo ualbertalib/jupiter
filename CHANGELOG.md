@@ -9,10 +9,14 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## Unreleased
 
+### Added
+- Crawl-Delay to robots.txt [PR#3027](https://github.com/ualbertalib/jupiter/pull/3027)
+
 ### Changed
 - Refactored tests into smaller tests [PR#2563](https://github.com/ualbertalib/jupiter/pull/2563)
 
 ## [2.4.4] - 2023-02-17
+
 ### Added
 - Push collections and communities to preservation on save along with a rake task to do so [#255](https://github.com/ualbertalib/pushmi_pullyu/issues/255)
 - Added minitest-retry gem to retry flapping tests that are able to pass through retries [#3044](https://github.com/ualbertalib/jupiter/pull/3044)
