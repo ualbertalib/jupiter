@@ -27,29 +27,27 @@ class BatchIngestSpreadsheetValidator < ActiveModel::EachValidator
       ]
 
       required_columns.each do |column|
-        if row[column].blank?
-          record.errors.add(attribute, :missing_required_column, column: column, row_number: row_number)
-        end
+        record.errors.add(attribute, :missing_required_column, column:, row_number:) if row[column].blank?
       end
 
       # Check if "item_type" is article, then it must have a "publication_status"
       if row['item_type'] == 'article' && row['publication_status'].blank?
-        record.errors.add(attribute, :publication_status_required_for_articles, row_number: row_number)
+        record.errors.add(attribute, :publication_status_required_for_articles, row_number:)
       end
 
       # check if "status" is embargo, then it must have "embargo_end_date" and "visibility_after_embargo"
       if row['visibility'] == 'embargo' &&
          (row['embargo_end_date'].blank? || row['visibility_after_embargo'].blank?)
-        record.errors.add(attribute, :embargo_missing_required_data, row_number: row_number)
+        record.errors.add(attribute, :embargo_missing_required_data, row_number:)
       end
 
       # Check if given community/collection ids actually exists?
       unless Community.exists?(row['community_id'])
-        record.errors.add(attribute, :column_not_found, column: 'community_id', row_number: row_number)
+        record.errors.add(attribute, :column_not_found, column: 'community_id', row_number:)
       end
 
       unless Collection.exists?(row['collection_id'])
-        record.errors.add(attribute, :column_not_found, column: 'collection_id', row_number: row_number)
+        record.errors.add(attribute, :column_not_found, column: 'collection_id', row_number:)
       end
 
       # Ensure that all files name in the spreadsheet have a corresponding uploaded file
@@ -59,7 +57,7 @@ class BatchIngestSpreadsheetValidator < ActiveModel::EachValidator
 
       unless missing_files.empty?
         record.errors.add(attribute, :no_matching_files, file_names: missing_files.join(', '),
-                                                         row_number: row_number)
+                                                         row_number:)
       end
 
       # Keep a log of the files that have been listed for all items
@@ -71,7 +69,7 @@ class BatchIngestSpreadsheetValidator < ActiveModel::EachValidator
 
     # Ensure files in spreadsheet are only used once for all uploaded files
     verified_google_file_names.each do |file_name, rows|
-      record.errors.add(attribute, :duplicate_files, file_name: file_name, rows: rows.join(', ')) if rows.many?
+      record.errors.add(attribute, :duplicate_files, file_name:, rows: rows.join(', ')) if rows.many?
     end
   rescue StandardError
     # Most likely `download_spreadsheet` method threw an error as given spreadsheet doesn't match what we expected

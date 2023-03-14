@@ -12,7 +12,7 @@ class URIValidator < ActiveModel::EachValidator
 
     value.each do |v|
       record.errors.add(attr, :not_recognized) unless vocabs.any? do |vocab|
-        val, _ = ControlledVocabulary.value_from_uri(namespace: namespace, vocab: vocab, uri: v)
+        val, _ = ControlledVocabulary.value_from_uri(namespace:, vocab:, uri: v)
         val.present?
       end
     end
