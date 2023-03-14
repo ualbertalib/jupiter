@@ -9,6 +9,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## Unreleased
 
+### Security
+-Upgraded to ruby 3.1.3
+
 ### Changed
 - Refactored tests into smaller tests [PR#2563](https://github.com/ualbertalib/jupiter/pull/2563)
 

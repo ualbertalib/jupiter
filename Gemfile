@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '>= 2.7', '< 3.1'
+ruby '>= 3.1', '< 3.2'
 
 # Core Rails stuff
 gem 'image_processing' # for ActiveStorage Variants
@@ -61,7 +61,7 @@ gem 'paper_trail' # Track object changes
 gem 'ransack', '3.2.1' # ActiveRecord search/filter
 gem 'redcarpet', '~> 3.5', '>= 3.5.1', require: ['redcarpet', 'redcarpet/render_strip'] # Markdown to (X)HTML parser
 gem 'uuidtools'
-gem 'voight_kampff' # bot detection
+gem 'voight_kampff', '~> 2.0', require: 'voight_kampff/rails' # bot detection
 gem 'wicked' # Multi-step wizard
 
 # resolve production errors in minutes
