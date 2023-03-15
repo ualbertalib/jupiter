@@ -23,7 +23,7 @@ class GoogleDriveClientService
     authorization = client_secrets.to_authorization
     scope = [Google::Apis::DriveV3::AUTH_DRIVE, Google::Apis::SheetsV4::AUTH_SPREADSHEETS_READONLY]
     authorization.update!(
-      scope: scope,
+      scope:,
       redirect_uri: Rails.application.routes.url_helpers.new_admin_google_session_url,
       additional_parameters: {
         prompt: 'consent' # This is the only way to get a new refresh token if we have authenticated before

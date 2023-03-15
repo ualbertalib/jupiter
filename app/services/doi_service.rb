@@ -60,8 +60,8 @@ class DOIService
       event = Datacite::Event::PUBLISH
     end
 
-    response = Datacite::Client.modify(@item.doi.delete_prefix('doi:'), datacite_attributes, event: event,
-                                                                                             reason: reason)
+    response = Datacite::Client.modify(@item.doi.delete_prefix('doi:'), datacite_attributes, event:,
+                                                                                             reason:)
 
     return if response.blank?
 

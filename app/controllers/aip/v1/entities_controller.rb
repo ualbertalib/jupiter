@@ -190,7 +190,7 @@ class Aip::V1::EntitiesController < ApplicationController
     )
 
     statements = [
-      RDF::Statement(subject: subject, predicate: RDF::Vocab::PREMIS.hasFixity, object: self_subject),
+      RDF::Statement(subject:, predicate: RDF::Vocab::PREMIS.hasFixity, object: self_subject),
       RDF::Statement(subject: self_subject, predicate: RDF::Vocab::PREMIS.hasEventOutcome, object: 'SUCCESS'),
       RDF::Statement(subject: self_subject, predicate: RDF::Vocab::PREMIS.hasMessageDigestAlgorithm, object: 'md5'),
       RDF::Statement(subject: self_subject, predicate: RDF.type, object: RDF::Vocab::PREMIS.EventOutcomeDetail),
