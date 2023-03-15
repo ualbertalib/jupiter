@@ -16,7 +16,7 @@
     <div class="col-md-8">
       <ul class="list-unstyled">
         <% @draft.ordered_files.each do |file| %>
-          <%= render partial: 'admin/theses/draft/file', locals: { file: file } %>
+          <%= render partial: 'admin/theses/draft/file', locals: { file: } %>
         <% end %>
       </ul>
     </div>
