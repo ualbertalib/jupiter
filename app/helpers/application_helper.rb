@@ -6,7 +6,7 @@ module ApplicationHelper
   end
 
   def humanize_uri(namespace, vocab, uri)
-    val, is_i18n = ControlledVocabulary.value_from_uri(namespace:, vocab:, uri:)
+    val, is_i18n = ControlledVocabulary.value_from_uri(namespace: namespace, vocab: vocab, uri: uri)
     return nil if val.nil?
 
     return val unless is_i18n
@@ -31,7 +31,7 @@ module ApplicationHelper
   def jupiter_time_tag(date, format: '%F', blank_message: '')
     return blank_message if date.blank?
 
-    time_tag(date, format:)
+    time_tag(date, format: format)
   end
 
   def jupiter_time_ago_in_words(date, blank_message: '')
@@ -44,7 +44,7 @@ module ApplicationHelper
     # results come from a Jupiter query/search with pagination
     first = results.offset_value + 1
     last = results.offset_value + results.count
-    t(:page_range, first:, last:, total: results.total_count)
+    t(:page_range, first: first, last: last, total: results.total_count)
   end
 
   def search_link_for(object, attribute, value: nil, facet: :facet, display: nil)
@@ -66,6 +66,6 @@ module ApplicationHelper
   end
 
   def jupiter_truncate(text, length: TRUNCATE_CHARS_DEFAULT, separator: ' ', omission: '...')
-    truncate text, length:, separator:, omission:
+    truncate text, length: length, separator: separator, omission: omission
   end
 end

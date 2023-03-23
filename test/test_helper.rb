@@ -88,7 +88,7 @@ class ActiveSupport::TestCase
   def sign_in_as_system_user
     user = users(:user_system)
     api_key = '3eeb395e-63b7-11ea-bc55-0242ac130003'
-    post auth_system_url, params: { email: user.email, api_key: }
+    post auth_system_url, params: { email: user.email, api_key: api_key }
   end
 
   # Returns true if a test user is logged in.
@@ -97,8 +97,8 @@ class ActiveSupport::TestCase
   end
 
   # Stub out `puts` and logger messages in our test suite as needed to avoid clutter.
-  def disable_output(&)
-    $stdout.stub(:puts, nil, &)
+  def disable_output(&block)
+    $stdout.stub(:puts, nil, &block)
   end
 
   # turn on test mode for omniauth

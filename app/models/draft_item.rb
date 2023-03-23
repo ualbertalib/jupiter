@@ -250,7 +250,7 @@ class DraftItem < ApplicationRecord
 
     raise ArgumentError, "Unable to map DraftItem type from URI: #{uri}, code: #{code}" if name.blank?
 
-    type = Type.find_by(name:)
+    type = Type.find_by(name: name)
     raise ArgumentError, "Unable to find DraftItem type: #{name}" if type.blank?
 
     type

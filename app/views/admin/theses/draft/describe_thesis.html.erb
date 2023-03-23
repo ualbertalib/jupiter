@@ -89,7 +89,7 @@
         <% if @draft.communities.present? %>
           <% @draft.each_community_collection do |community, collection| %>
             <%= render partial: 'community_collection_input',
-                       locals: { community:, collection: } %>
+                       locals: { community: community, collection: collection } %>
           <% end %>
         <% else %>
           <%= render partial: 'community_collection_input',

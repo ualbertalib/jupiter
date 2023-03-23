@@ -152,20 +152,20 @@ ControlledVocabulary = Class.new do
   end
 
   def self.uri_from_value(namespace:, vocab:, value:)
-    lookup_vocab(namespace:, vocab:)[:data].from_value(value)
+    lookup_vocab(namespace: namespace, vocab: vocab)[:data].from_value(value)
   end
 
   def self.value_from_uri(namespace:, vocab:, uri:)
-    vocab = lookup_vocab(namespace:, vocab:)
+    vocab = lookup_vocab(namespace: namespace, vocab: vocab)
 
     [vocab[:data].from_uri(uri), vocab[:is_i18n]]
   end
 
   def self.i18n?(namespace:, vocab:)
-    lookup_vocab(namespace:, vocab:)[:is_i18n]
+    lookup_vocab(namespace: namespace, vocab: vocab)[:is_i18n]
   end
 
-  def self.method_missing(name, *args, &)
+  def self.method_missing(name, *args, &block)
     raise JupiterCore::VocabularyMissingError, "Unknown namespace #{name}"
   end
 

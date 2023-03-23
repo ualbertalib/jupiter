@@ -42,7 +42,7 @@ class CommunitiesController < ApplicationController
         # Used in item_draft.js
         collections = community.collections.order(title: :asc)
         collections = collections.select { |c| c.restricted.blank? } unless current_user&.admin?
-        render json: community.attributes.merge(collections:)
+        render json: community.attributes.merge(collections: collections)
       end
     end
   end

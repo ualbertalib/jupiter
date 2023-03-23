@@ -12,7 +12,7 @@ class GoogleDriveClientServiceTest < ActiveSupport::TestCase
     access_token = 'ACCESSTOKEN'
 
     google_drive_client = GoogleDriveClientService.new(
-      access_token:,
+      access_token: access_token,
       refresh_token: nil,
       expires_in: 3600,
       issued_at: Time.current
@@ -27,8 +27,8 @@ class GoogleDriveClientServiceTest < ActiveSupport::TestCase
       refresh_token = 'REFRESHTOKEN'
 
       google_drive_client = GoogleDriveClientService.new(
-        access_token:,
-        refresh_token:,
+        access_token: access_token,
+        refresh_token: refresh_token,
         expires_in: 3600,
         issued_at: 3.months.ago
       )
@@ -44,7 +44,7 @@ class GoogleDriveClientServiceTest < ActiveSupport::TestCase
     access_token = 'ACCESSTOKEN'
 
     google_drive_client = GoogleDriveClientService.new(
-      access_token:,
+      access_token: access_token,
       refresh_token: nil,
       expires_in: 3600,
       issued_at: Time.current
@@ -68,7 +68,7 @@ class GoogleDriveClientServiceTest < ActiveSupport::TestCase
     access_token = 'ACCESSTOKEN'
 
     google_drive_client = GoogleDriveClientService.new(
-      access_token:,
+      access_token: access_token,
       refresh_token: nil,
       expires_in: 3600,
       issued_at: Time.current

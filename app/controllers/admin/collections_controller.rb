@@ -7,8 +7,8 @@ class Admin::CollectionsController < Admin::AdminController
     search_query_index = UserSearchService.new(
       base_restriction_key: Item.solr_exporter_class.solr_name_for(:member_of_paths, role: :pathing),
       value: @collection.path,
-      params:,
-      current_user:
+      params: params,
+      current_user: current_user
     )
 
     @results = search_query_index.results

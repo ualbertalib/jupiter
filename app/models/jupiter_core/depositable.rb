@@ -116,7 +116,7 @@ class JupiterCore::Depositable < ApplicationRecord
 
     attachables = file_handles.map do |fileio|
       filename = fileio.try(:original_filename) || File.basename(fileio.path)
-      { io: fileio, filename: }
+      { io: fileio, filename: filename }
     end
 
     # We need to attach all the files at the same time to make sure their

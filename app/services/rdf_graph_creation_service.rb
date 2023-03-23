@@ -69,7 +69,7 @@ class RdfGraphCreationService
 
     # Here we expect the value of @rdfable_entity.send(column) to be a JSON array
     list = RDF::List(@rdfable_entity.send(rdf_annotation.column))
-    statement = RDF::Statement(subject:, predicate: rdf_list_predicate, object: list)
+    statement = RDF::Statement(subject: subject, predicate: rdf_list_predicate, object: list)
 
     [list, statement]
   end

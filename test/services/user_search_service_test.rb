@@ -23,9 +23,9 @@ class UserSearchServiceTest < ActiveSupport::TestCase
 
     assert_raise(ArgumentError) do
       UserSearchService.new(
-        current_user:,
-        params:,
-        base_restriction_key:
+        current_user: current_user,
+        params: params,
+        base_restriction_key: base_restriction_key
       )
     end
   end
@@ -35,8 +35,8 @@ class UserSearchServiceTest < ActiveSupport::TestCase
     params = ActionController::Parameters.new(search: 'Item')
 
     search = UserSearchService.new(
-      current_user:,
-      params:
+      current_user: current_user,
+      params: params
     )
 
     assert_instance_of JupiterCore::SolrServices::DeferredFacetedSolrQuery, search.results
@@ -48,8 +48,8 @@ class UserSearchServiceTest < ActiveSupport::TestCase
     params = ActionController::Parameters.new(search: 'Item')
 
     search = UserSearchService.new(
-      current_user:,
-      params:
+      current_user: current_user,
+      params: params
     )
 
     assert_equal(2, search.results.count)
@@ -62,9 +62,9 @@ class UserSearchServiceTest < ActiveSupport::TestCase
     base_restriction_key = Item.solr_exporter_class.solr_name_for(:owner, role: :exact_match)
 
     search = UserSearchService.new(
-      current_user:,
-      params:,
-      base_restriction_key:,
+      current_user: current_user,
+      params: params,
+      base_restriction_key: base_restriction_key,
       value: current_user.id
     )
 
@@ -78,8 +78,8 @@ class UserSearchServiceTest < ActiveSupport::TestCase
     params = ActionController::Parameters.new(search: 'French')
 
     search = UserSearchService.new(
-      current_user:,
-      params:,
+      current_user: current_user,
+      params: params,
       fulltext: true
     )
 

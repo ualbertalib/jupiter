@@ -51,7 +51,7 @@ class Exporters::Solr::BaseExporter
   def self.search_term_for(attr, value, role: :search)
     raise ArgumentError, "search value can't be nil" if value.nil?
 
-    solr_attr_name = solr_name_for(attr, role:)
+    solr_attr_name = solr_name_for(attr, role: role)
     %Q(#{solr_attr_name}:"#{value}")
   end
 
@@ -62,7 +62,7 @@ class Exporters::Solr::BaseExporter
   def self.facet_term_for(attr_name, value, role: :facet)
     raise ArgumentError, "search value can't be nil" if value.nil?
 
-    solr_attr_name = solr_name_for(attr_name, role:)
+    solr_attr_name = solr_name_for(attr_name, role: role)
     return { solr_attr_name => { begin: value, end: value } } if role == :range_facet
 
     { solr_attr_name => [value].flatten }
@@ -80,7 +80,7 @@ class Exporters::Solr::BaseExporter
 
   def self.solr_name_for(name, role:)
     type = name_to_type_map[name]
-    JupiterCore::SolrServices::NameMangling.mangled_name_for(name, type:, role:)
+    JupiterCore::SolrServices::NameMangling.mangled_name_for(name, type: type, role: role)
   end
 
   def self.solr_roles_for(name)
@@ -90,14 +90,14 @@ class Exporters::Solr::BaseExporter
   def self.facet?(name)
     raise Exporters::Solr::UnknownAttributeError, "no such attribute #{name}" unless name_to_roles_map.key?(name)
 
-    name_to_roles_map[name].intersect?(SOLR_FACET_ROLES)
+    (name_to_roles_map[name] & SOLR_FACET_ROLES).present?
   end
 
   def self.mangled_facet_name_for(name)
     type = name_to_type_map[name]
     roles = name_to_roles_map[name]
     facet_role = roles.detect { |r| SOLR_FACET_ROLES.include? r }
-    JupiterCore::SolrServices::NameMangling.mangled_name_for(name, type:, role: facet_role)
+    JupiterCore::SolrServices::NameMangling.mangled_name_for(name, type: type, role: facet_role)
   end
 
   def self.range?(name)
@@ -108,7 +108,7 @@ class Exporters::Solr::BaseExporter
 
   def self.mangled_range_name_for(name)
     type = name_to_type_map[name]
-    JupiterCore::SolrServices::NameMangling.mangled_name_for(name, type:, role: :range_facet)
+    JupiterCore::SolrServices::NameMangling.mangled_name_for(name, type: type, role: :range_facet)
   end
 
   def self.name_for_mangled_name(mangled_name)
@@ -166,7 +166,7 @@ class Exporters::Solr::BaseExporter
     return solr_doc unless (raw_val.is_a?(Array) && raw_val.any?(&:present?)) || raw_val.present?
 
     roles.each do |role|
-      solr_index_name = JupiterCore::SolrServices::NameMangling.mangled_name_for(attr, type:, role:)
+      solr_index_name = JupiterCore::SolrServices::NameMangling.mangled_name_for(attr, type: type, role: role)
 
       solr_doc[solr_index_name] = if self.class.singular_role?(role)
                                     raw_val = raw_val.first if raw_val.is_a? Array
@@ -265,7 +265,7 @@ class Exporters::Solr::BaseExporter
       self.ranges ||= []
 
       roles.each do |r|
-        mangled_name = JupiterCore::SolrServices::NameMangling.mangled_name_for(attr, type:, role: r)
+        mangled_name = JupiterCore::SolrServices::NameMangling.mangled_name_for(attr, type: type, role: r)
         self.reverse_solr_name_map[mangled_name] = attr
         self.name_to_solr_name_map[attr] << mangled_name
         self.searched_solr_names << mangled_name if r == :search

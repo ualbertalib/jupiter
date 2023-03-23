@@ -30,13 +30,13 @@ class DraftItemTest < ActiveSupport::TestCase
 
   test 'should be able to create a draft item with user when on inactive status' do
     user = users(:user_regular)
-    draft_item = DraftItem.new(user:)
+    draft_item = DraftItem.new(user: user)
     assert_predicate draft_item, :valid?
   end
 
   test 'should run validations when on describe_item step' do
     user = users(:user_regular)
-    draft_item = DraftItem.new(user:, status: DraftItem.statuses[:active])
+    draft_item = DraftItem.new(user: user, status: DraftItem.statuses[:active])
     assert_not draft_item.valid?
 
     draft_item.assign_attributes(
@@ -56,7 +56,7 @@ class DraftItemTest < ActiveSupport::TestCase
     user = users(:user_regular)
 
     draft_item = DraftItem.new(
-      user:,
+      user: user,
       status: DraftItem.statuses[:active],
       wizard_step: DraftItem.wizard_steps[:choose_license_and_visibility],
       title: 'Book of Random',
@@ -90,7 +90,7 @@ class DraftItemTest < ActiveSupport::TestCase
     draft_item = draft_items(:draft_item_inactive)
 
     draft_item.update(
-      user:,
+      user: user,
       status: DraftItem.statuses[:active],
       wizard_step: DraftItem.wizard_steps[:upload_files],
       title: 'Book of Random',
@@ -119,7 +119,7 @@ class DraftItemTest < ActiveSupport::TestCase
     user = users(:user_regular)
 
     draft_item = DraftItem.new(
-      user:,
+      user: user,
       status: DraftItem.statuses[:active],
       wizard_step: DraftItem.wizard_steps[:choose_license_and_visibility],
       title: 'Book of Random',
@@ -145,7 +145,7 @@ class DraftItemTest < ActiveSupport::TestCase
     user = users(:user_regular)
 
     draft_item = DraftItem.new(
-      user:,
+      user: user,
       status: DraftItem.statuses[:active],
       wizard_step: DraftItem.wizard_steps[:choose_license_and_visibility],
       title: 'Book of Random',
@@ -172,7 +172,7 @@ class DraftItemTest < ActiveSupport::TestCase
     user = users(:user_regular)
 
     draft_item = DraftItem.new(
-      user:,
+      user: user,
       status: DraftItem.statuses[:active],
       title: 'Book of Random',
       type: types(:type_book),
@@ -226,7 +226,7 @@ class DraftItemTest < ActiveSupport::TestCase
     user = users(:user_regular)
 
     draft_item = DraftItem.new(
-      user:,
+      user: user,
       status: DraftItem.statuses[:active],
       title: 'Book of Random',
       type: types(:type_book),
