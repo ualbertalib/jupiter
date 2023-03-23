@@ -10,12 +10,16 @@ New entries in this file should aim to provide a meaningful amount of informatio
 ## Unreleased
 
 ### Security
--Upgraded to ruby 3.1.3
+- Upgraded to ruby 3.1.3 [PR#3091](https://github.com/ualbertalib/jupiter/pull/3091)
+
+### Added
+- Crawl-Delay to robots.txt [PR#3027](https://github.com/ualbertalib/jupiter/pull/3027)
 
 ### Changed
 - Refactored tests into smaller tests [PR#2563](https://github.com/ualbertalib/jupiter/pull/2563)
 
 ## [2.4.4] - 2023-02-17
+
 ### Added
 - Push collections and communities to preservation on save along with a rake task to do so [#255](https://github.com/ualbertalib/pushmi_pullyu/issues/255)
 - Added minitest-retry gem to retry flapping tests that are able to pass through retries [#3044](https://github.com/ualbertalib/jupiter/pull/3044)
@@ -65,6 +69,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 - Bump rollbar from 3.3.1 to 3.4.0 [PR#3062](https://github.com/ualbertalib/jupiter/pull/3062)
 - Bump simplecov from 0.21.2 to 0.22.0 [PR#3063](https://github.com/ualbertalib/jupiter/pull/3063)
 - Bump @rails/webpacker from 5.4.3 to 5.4.4 [PR#3073](https://github.com/ualbertalib/jupiter/pull/3073)
+
+### Security
+- Bump rails from 6.1.7 to 6.1.7.2
 
 ## [2.4.3] - 2022-12-14
 
