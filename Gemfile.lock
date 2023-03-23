@@ -700,7 +700,7 @@ DEPENDENCIES
   wicked
 
 RUBY VERSION
-   ruby 3.1.3p185
+   ruby 2.7.3p183
 
 BUNDLED WITH
    2.3.12
