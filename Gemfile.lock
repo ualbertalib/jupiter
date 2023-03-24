@@ -585,8 +585,8 @@ GEM
     unicode-types (1.7.0)
     uuidtools (2.2.0)
     vcr (5.0.0)
-    voight_kampff (1.1.4)
-      rack (>= 1.4, < 3.0)
+    voight_kampff (2.0.0)
+      rack (>= 1.4)
     web-console (4.2.0)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -692,7 +692,7 @@ DEPENDENCIES
   strong_migrations (~> 1.4.2)
   uuidtools
   vcr (= 5.0)
-  voight_kampff
+  voight_kampff (~> 2.0)
   web-console (>= 4.1.0)
   webdrivers (~> 5.2)
   webmock
