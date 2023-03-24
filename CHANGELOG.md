@@ -13,7 +13,7 @@ New entries in this file should aim to provide a meaningful amount of informatio
 - Crawl-Delay to robots.txt [PR#3027](https://github.com/ualbertalib/jupiter/pull/3027)
 
 ### Security
--Upgraded to ruby 3.1.3
+- Upgraded to ruby 3.1.3 [PR#3097](https://github.com/ualbertalib/jupiter/pull/3097)
 
 ### Changed
 - Refactored tests into smaller tests [PR#2563](https://github.com/ualbertalib/jupiter/pull/2563)
