@@ -9,6 +9,8 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## Unreleased
 
+## [2.4.5] - 2023-03-24
+
 ### Security
 - Prepared for ruby upgrade to 3.1.3 [PR#3096](https://github.com/ualbertalib/jupiter/pull/3096)
 
@@ -17,6 +19,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ### Changed
 - Refactored tests into smaller tests [PR#2563](https://github.com/ualbertalib/jupiter/pull/2563)
+
+### Chores
+- Bump rack from 2.2.6.2 to 2.2.6.4
 
 ## [2.4.4] - 2023-02-17
 
