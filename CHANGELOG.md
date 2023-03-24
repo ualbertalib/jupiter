@@ -9,6 +9,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## Unreleased
 
+### Security
+- Prepared for ruby upgrade to 3.1.3 [PR#3096](https://github.com/ualbertalib/jupiter/pull/3096)
+
 ### Added
 - Crawl-Delay to robots.txt [PR#3027](https://github.com/ualbertalib/jupiter/pull/3027)
 
