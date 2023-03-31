@@ -9,7 +9,10 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## Unreleased
 
+## [2.4.5] - 2023-03-24
+
 ### Security
+- Bump rails from 6.1.7 to 6.1.7.2
 - Prepared for ruby upgrade to 3.1.3 [PR#3096](https://github.com/ualbertalib/jupiter/pull/3096)
 
 ### Added
@@ -20,6 +23,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ### Changed
 - Refactored tests into smaller tests [PR#2563](https://github.com/ualbertalib/jupiter/pull/2563)
+
+### Chores
+- Bump rack from 2.2.6.2 to 2.2.6.4
 
 ## [2.4.4] - 2023-02-17
 
@@ -72,9 +78,6 @@ New entries in this file should aim to provide a meaningful amount of informatio
 - Bump rollbar from 3.3.1 to 3.4.0 [PR#3062](https://github.com/ualbertalib/jupiter/pull/3062)
 - Bump simplecov from 0.21.2 to 0.22.0 [PR#3063](https://github.com/ualbertalib/jupiter/pull/3063)
 - Bump @rails/webpacker from 5.4.3 to 5.4.4 [PR#3073](https://github.com/ualbertalib/jupiter/pull/3073)
-
-### Security
-- Bump rails from 6.1.7 to 6.1.7.2
 
 ## [2.4.3] - 2022-12-14
 
