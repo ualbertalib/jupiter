@@ -13,7 +13,7 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ### Security
 - Bump rails from 6.1.7 to 6.1.7.2
-- Prepared for ruby upgrade to 3.1.3 [PR#3096](https://github.com/ualbertalib/jupiter/pull/3096)
+- Prepared for ruby upgrade to 3.1.4 [PR#3096](https://github.com/ualbertalib/jupiter/pull/3096)
 
 ### Added
 - Crawl-Delay to robots.txt [PR#3027](https://github.com/ualbertalib/jupiter/pull/3027)
