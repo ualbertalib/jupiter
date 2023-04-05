@@ -9,6 +9,11 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## Unreleased
 
+## [2.5.0] - 2023-04-05
+
+### Security
+- Upgraded to ruby 3.1.4 [PR#3097](https://github.com/ualbertalib/jupiter/pull/3097)
+
 ## [2.4.5] - 2023-03-24
 
 ### Security
@@ -17,9 +22,6 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ### Added
 - Crawl-Delay to robots.txt [PR#3027](https://github.com/ualbertalib/jupiter/pull/3027)
-
-### Security
-- Upgraded to ruby 3.1.3 [PR#3097](https://github.com/ualbertalib/jupiter/pull/3097)
 
 ### Changed
 - Refactored tests into smaller tests [PR#2563](https://github.com/ualbertalib/jupiter/pull/2563)
