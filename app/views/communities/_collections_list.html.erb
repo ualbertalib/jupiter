@@ -2,7 +2,7 @@
   <% @collections.each do |collection| %>
     <li class="list-group-item list-group-item-action">
       <div class="d-flex justify-content-between align-items-start">
-        <%= render partial: 'collection_path', locals: { community: @community, collection: collection } %>
+        <%= render partial: 'collection_path', locals: { community: @community, collection: } %>
 
           <% if policy(:admin).access? %>
             <div class="btn-group" role="group" aria-label="Collection Actions">

@@ -1,11 +1,11 @@
 class Statistics
 
   def self.increment_view_count_for(item_id:, ip:)
-    increment_action_counter(action: :view, id: item_id, ip: ip)
+    increment_action_counter(action: :view, id: item_id, ip:)
   end
 
   def self.increment_download_count_for(item_id:, ip:)
-    increment_action_counter(action: :download, id: item_id, ip: ip)
+    increment_action_counter(action: :download, id: item_id, ip:)
   end
 
   def self.views_for(item_id:)
@@ -21,7 +21,7 @@ class Statistics
   #
   #    @views, @downloads = Statistics.for(item.id)
   def self.for(item_id:)
-    [views_for(item_id: item_id), downloads_for(item_id: item_id)]
+    [views_for(item_id:), downloads_for(item_id:)]
   end
 
   class << self

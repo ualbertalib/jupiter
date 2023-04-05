@@ -58,9 +58,9 @@ class JupiterCore::Search
                                                             qf: calculate_queried_fields(models),
                                                             facet_map: construct_facet_map(models),
                                                             facet_fields: construct_facet_fields(models, user: as),
-                                                            ranges: ranges,
+                                                            ranges:,
                                                             restrict_to_model: models,
-                                                            fulltext_fields: fulltext_fields)
+                                                            fulltext_fields:)
   end
 
   # derive additional restriction or broadening of the visibilitily query on top of the default
@@ -82,12 +82,12 @@ class JupiterCore::Search
 
   def self.perform_solr_query(q:, qf: '', fq: '', facet: false, facet_fields: [], facet_max: MAX_FACETS_RETURNED,
                               restrict_to_model: nil, rows: MAX_RESULTS, start: nil, sort: nil, fulltext_fields: [])
-    params = prepare_solr_query(q: q, qf: qf, fq: fq, facet: facet, facet_fields: facet_fields, facet_max: facet_max,
-                                restrict_to_model: restrict_to_model, rows: rows,
-                                start: start, sort: sort, fulltext_fields: fulltext_fields)
+    params = prepare_solr_query(q:, qf:, fq:, facet:, facet_fields:, facet_max:,
+                                restrict_to_model:, rows:,
+                                start:, sort:, fulltext_fields:)
 
     response = begin
-      JupiterCore::SolrServices::Client.instance.connection.get('select', params: params)
+      JupiterCore::SolrServices::Client.instance.connection.get('select', params:)
     rescue RSolr::Error::Http => e
       raise JupiterCore::SolrBadRequestError if e.response[:status] == 400
 
@@ -118,10 +118,10 @@ class JupiterCore::Search
 
     params = {
       q: query.join(' AND '),
-      qf: qf,
+      qf:,
       fq: fquery.join(' AND '),
-      facet: facet,
-      rows: rows,
+      facet:,
+      rows:,
       'facet.field': facet_fields,
       'facet.limit': facet_max
     }

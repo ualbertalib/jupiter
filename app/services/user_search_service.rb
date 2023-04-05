@@ -30,7 +30,7 @@ class UserSearchService
     facets[@base_restriction_key] = [@value] if @base_restriction_key.present?
 
     search_options = { q: query, models: search_models, as: @current_user,
-                       facets: facets, ranges: @search_params[:ranges],
+                       facets:, ranges: @search_params[:ranges],
                        fulltext: @fulltext }
 
     # Sort by relevance if a search term is present and no explicit sort field has been chosen

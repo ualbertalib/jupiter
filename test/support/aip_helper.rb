@@ -118,8 +118,8 @@ module AipHelper
       fileset_0_uuid: entity.files[0].fileset_uuid,
       fileset_1_uuid: entity.files[1].fileset_uuid,
       url: Jupiter::TEST_URL,
-      community_uuid: community_uuid,
-      collection_uuid: collection_uuid
+      community_uuid:,
+      collection_uuid:
     }
 
     load_n3_graph(file_fixture("n3/#{entity.class.table_name}/#{entity.id}-#{postfix}.n3"), variables)
