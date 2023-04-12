@@ -31,7 +31,7 @@
     "eslint-plugin-import": "^2.27.5",
     "stylelint": "^13.13.1",
     "stylelint-config-standard": "^22.0.0",
-    "webpack-dev-server": "^4.11.1"
+    "webpack-dev-server": "^4.13.2"
   },
   "resolutions": {
     "webpack": "^4.0.0"
