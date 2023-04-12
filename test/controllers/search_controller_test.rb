@@ -14,7 +14,7 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
   test 'should get results in alphabetical order when no query present' do
     get search_url, as: :json, params: { search: '' }
     assert_response :success
-    results = JSON.parse(response.body).map { |result| result['id'] }
+    results = response.parsed_body.pluck('id')
     assert_equal([@item3.id, @item2.id, @item1.id], results)
     assert_not_equal([@item4.id], results)
   end
@@ -23,14 +23,14 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
     sign_in_as(users(:user_admin))
     get search_url, as: :json, params: { search: '' }
     assert_response :success
-    results = JSON.parse(response.body).map { |result| result['id'] }
+    results = response.parsed_body.pluck('id')
     assert_equal([@item3.id, @item2.id, @item1.id, @item4.id], results)
   end
 
   test 'should get results in relevance order when a query is present' do
     get search_url, as: :json, params: { search: 'Item' }
     assert_response :success
-    results = JSON.parse(response.body).map { |result| result['id'] }
+    results = response.parsed_body.pluck('id')
 
     # TODO: is there a way to set relevance score?
     # Each item has the same relevance score, so just check each item
@@ -44,7 +44,7 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
   test 'should only get results matching query' do
     get search_url, as: :json, params: { search: 'Fancy Item' }
     assert_response :success
-    results = JSON.parse(response.body).map { |result| result['id'] }
+    results = response.parsed_body.pluck('id')
 
     assert_includes(results, @item1.id)
     assert_not_includes(results, @item2.id)

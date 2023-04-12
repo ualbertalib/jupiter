@@ -8,7 +8,6 @@ module Admin::UsersHelper
   end
 
   # html_safe is used securely in the next two methods
-  # rubocop:disable Rails/OutputSafety
   def user_role(user)
     if user.admin?
       "<span class='user-admin'>#{icon('fas', 'shield-alt')} #{t('admin.users.admin_role')}</span>".html_safe
@@ -24,5 +23,4 @@ module Admin::UsersHelper
       t('admin.users.active_status')
     end
   end
-  # rubocop:enable Rails/OutputSafety
 end

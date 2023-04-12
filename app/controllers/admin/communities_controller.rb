@@ -44,6 +44,8 @@ class Admin::CommunitiesController < Admin::AdminController
     @community = Community.new
   end
 
+  def edit; end
+
   def create
     @community =
       Community.new(permitted_attributes(Community)
@@ -59,8 +61,6 @@ class Admin::CommunitiesController < Admin::AdminController
       end
     end
   end
-
-  def edit; end
 
   def update
     if params[:community][:logo].present?
