@@ -24,6 +24,8 @@ class Admin::CollectionsController < Admin::AdminController
     @collection = Collection.new(community_id: @community.id)
   end
 
+  def edit; end
+
   def create
     @collection =
       Collection.new(permitted_attributes(Collection)
@@ -36,8 +38,6 @@ class Admin::CollectionsController < Admin::AdminController
       end
     end
   end
-
-  def edit; end
 
   def update
     @collection.tap do |unlocked_collection|
