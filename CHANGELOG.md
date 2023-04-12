@@ -9,6 +9,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## Unreleased
 
+### Fixed 
+- Resolved new rubocop offenses [PR#3109](https://github.com/ualbertalib/jupiter/pull/3109)
+
 ## [2.5.0] - 2023-04-05
 
 ### Security
