@@ -315,7 +315,7 @@ GEM
     launchy (2.5.0)
       addressable (~> 2.7)
     link_header (0.0.8)
-    listen (3.7.1)
+    listen (3.8.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     logger (1.5.0)
@@ -651,7 +651,7 @@ DEPENDENCIES
   json-schema (~> 3.0.0)
   kaminari
   launchy
-  listen (>= 3.0.5, < 3.8)
+  listen (>= 3.0.5, < 3.9)
   minitest-retry
   nokogiri
   oaisys!

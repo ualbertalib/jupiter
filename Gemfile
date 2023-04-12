@@ -107,7 +107,7 @@ group :development do
 
   gem 'brakeman'
 
-  gem 'listen', '>= 3.0.5', '< 3.8'
+  gem 'listen', '>= 3.0.5', '< 3.9'
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.1.0'
 
