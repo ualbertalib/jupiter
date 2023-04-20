@@ -67,4 +67,22 @@ class Aip::V1::CollectionsControllerTest < ActionDispatch::IntegrationTest
     assert_equal rendered_graph, graph
   end
 
+  test 'should get collection metadata graph with n3 serialization even when description is markdown' do
+    # specifically we want to make sure that any URLs are preserved
+    @collection.assign_attributes(description: '[Collection description](https://example.com)')
+    @collection.save!
+    sign_in_as_system_user
+    get aip_v1_collection_url(
+      id: @collection
+    )
+    assert_response :success
+
+    graph = generate_graph_from_n3(response.body)
+    rendered_graph = load_n3_graph(
+      file_fixture('n3/collections/a93cbb63-4bb2-4deb-a952-c96c4c851c8c_markdown_description.n3')
+    )
+
+    assert_equal rendered_graph, graph
+  end
+
 end
