@@ -9,9 +9,22 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## Unreleased
 
+## [2.5.1] - 2023-04-26
+
 ### Fixed 
 - Resolved new rubocop offenses [PR#3109](https://github.com/ualbertalib/jupiter/pull/3109)
 - AIP api collections with nil descriptions [#3117](https://github.com/ualbertalib/jupiter/issues/3117)
+
+### Chores
+- Bump dns-packet from 5.3.1 to 5.5.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3112
+- Bump rubocop-rails from 2.16.1 to 2.19.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3109
+- Bump nokogiri from 1.14.2 to 1.14.3 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3111
+- Bump brakeman from 5.3.1 to 5.4.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3080
+- Bump listen from 3.7.1 to 3.8.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3076
+- Bump pry from 0.14.1 to 0.14.2 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3075
+- Bump shoulda-matchers from 5.1.0 to 5.3.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3066
+- Bump flipper-ui from 0.25.0 to 0.25.4 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3070
+- Bump @fortawesome/fontawesome-free from 6.2.1 to 6.4.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3099
 
 ## [2.5.0] - 2023-04-05
 
