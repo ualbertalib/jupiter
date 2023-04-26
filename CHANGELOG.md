@@ -11,6 +11,7 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ### Fixed 
 - Resolved new rubocop offenses [PR#3109](https://github.com/ualbertalib/jupiter/pull/3109)
+- AIP api collections with nil descriptions [#3117](https://github.com/ualbertalib/jupiter/issues/3117)
 
 ## [2.5.0] - 2023-04-05
 
