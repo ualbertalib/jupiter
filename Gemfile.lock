@@ -395,7 +395,7 @@ GEM
       activesupport (>= 3.0.0)
     raabro (1.4.0)
     racc (1.6.2)
-    rack (2.2.6.4)
+    rack (2.2.7)
     rack-protection (3.0.6)
       rack
     rack-proxy (0.7.0)
@@ -457,6 +457,8 @@ GEM
     rdoc (6.3.3)
     redcarpet (3.5.1)
     redis (4.8.0)
+    redis-client (0.14.1)
+      connection_pool
     regexp_parser (2.7.0)
     representable (3.1.1)
       declarative (< 0.1.0)
@@ -518,10 +520,11 @@ GEM
     semantic_range (3.0.0)
     shoulda-matchers (5.3.0)
       activesupport (>= 5.2.0)
-    sidekiq (6.5.8)
-      connection_pool (>= 2.2.5, < 3)
-      rack (~> 2.0)
-      redis (>= 4.5.0, < 5)
+    sidekiq (7.1.1)
+      concurrent-ruby (< 2)
+      connection_pool (>= 2.3.0)
+      rack (>= 2.2.4)
+      redis-client (>= 0.14.0)
     sidekiq-cron (1.7.0)
       fugit (~> 1)
       sidekiq (>= 4.2.1)
@@ -682,7 +685,7 @@ DEPENDENCIES
   sdoc
   selenium-webdriver
   shoulda-matchers (~> 5.3)
-  sidekiq (~> 6.4)
+  sidekiq (~> 7.1)
   sidekiq-cron
   sidekiq-unique-jobs (~> 7.1)
   simple_form
