@@ -377,9 +377,9 @@ def legacy_thesis_ingest(thesis_data, index, csv_directory)
                                                     '%Y-%m-%d')
     end
     if thesis_data[:visibility_after_embargo].present?
-      unlocked_obj.visibility_after_embargo = unlocked_obj.visibility = ControlledVocabulary.jupiter_core.visibility.from_value(thesis_data[:visibility_after_embargo])
+      unlocked_obj.visibility_after_embargo = ControlledVocabulary.jupiter_core.visibility.from_value(thesis_data[:visibility_after_embargo])
     end
-    unlocked_obj.visibility = unlocked_obj.visibility = ControlledVocabulary.jupiter_core.visibility.from_value(thesis_data[:visibility])
+    unlocked_obj.visibility = ControlledVocabulary.jupiter_core.visibility.from_value(thesis_data[:visibility])
     unlocked_obj.add_to_path(thesis_community_id, thesis_collection_id)
 
     # Add extra field, fedora3_uuid for fedora3 thesis redirecting
