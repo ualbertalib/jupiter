@@ -2,15 +2,15 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# This file is the source Rails uses to define your schema when running `rails
-# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
 # be faster and is potentially less error prone than running all of your
 # migrations from scratch. Old migrations may fail to apply correctly if those
 # migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_31_182732) do
+ActiveRecord::Schema.define(version: 2021_12_03_185004) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -32,10 +32,17 @@ ActiveRecord::Schema.define(version: 2020_08_31_182732) do
     t.string "filename"
     t.string "content_type"
     t.text "metadata"
-    t.integer "byte_size"
+    t.bigint "byte_size"
     t.string "checksum"
     t.datetime "created_at"
+    t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_variant_records", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
   create_table "announcements", force: :cascade do |t|
@@ -53,6 +60,32 @@ ActiveRecord::Schema.define(version: 2020_08_31_182732) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "logo_id"
+  end
+
+  create_table "batch_ingest_files", force: :cascade do |t|
+    t.string "google_file_name", null: false
+    t.string "google_file_id", null: false
+    t.bigint "batch_ingest_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["batch_ingest_id"], name: "index_batch_ingest_files_on_batch_ingest_id"
+  end
+
+  create_table "batch_ingests", force: :cascade do |t|
+    t.string "title", null: false
+    t.integer "status", default: 0, null: false
+    t.string "access_token", null: false
+    t.string "refresh_token"
+    t.string "expires_in"
+    t.string "issued_at"
+    t.string "error_message"
+    t.string "google_spreadsheet_name", null: false
+    t.string "google_spreadsheet_id", null: false
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["title"], name: "index_batch_ingests_on_title", unique: true
+    t.index ["user_id"], name: "index_batch_ingests_on_user_id"
   end
 
   create_table "collections", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -87,6 +120,112 @@ ActiveRecord::Schema.define(version: 2020_08_31_182732) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["owner_id"], name: "index_communities_on_owner_id"
+  end
+
+  create_table "digitization_batch_metadata_ingests", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "title", null: false
+    t.integer "status", default: 0, null: false
+    t.string "error_message"
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_digitization_batch_metadata_ingests_on_user_id"
+  end
+
+  create_table "digitization_books", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "peel_id"
+    t.integer "run"
+    t.integer "part_number"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "dates_issued", array: true
+    t.string "temporal_subjects", array: true
+    t.string "title", null: false
+    t.text "alternative_titles", array: true
+    t.string "resource_type", null: false
+    t.string "genres", null: false, array: true
+    t.string "languages", null: false, array: true
+    t.string "publishers", array: true
+    t.string "places_of_publication", array: true
+    t.string "extent"
+    t.text "notes", array: true
+    t.string "geographic_subjects", array: true
+    t.string "rights"
+    t.string "topical_subjects", array: true
+    t.string "volume_label"
+    t.datetime "date_ingested", null: false
+    t.datetime "record_created_at"
+    t.string "visibility"
+    t.bigint "owner_id", null: false
+    t.uuid "digitization_batch_metadata_ingest_id"
+    t.bigint "logo_id"
+    t.index ["digitization_batch_metadata_ingest_id"], name: "index_digitization_books_on_batch_metadata_ingest_id"
+    t.index ["logo_id"], name: "index_digitization_books_on_logo_id"
+    t.index ["owner_id"], name: "index_digitization_books_on_owner_id"
+    t.index ["peel_id", "run", "part_number"], name: "unique_peel_book", unique: true
+  end
+
+  create_table "digitization_fulltexts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "digitization_book_id", null: false
+    t.text "text", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["digitization_book_id"], name: "index_digitization_fulltexts_on_digitization_book_id"
+  end
+
+  create_table "digitization_images", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "peel_image_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "date_ingested", null: false
+    t.datetime "record_created_at"
+    t.string "visibility"
+    t.bigint "owner_id", null: false
+    t.string "title", null: false
+    t.index ["owner_id"], name: "index_digitization_images_on_owner_id"
+    t.index ["peel_image_id"], name: "unique_peel_image", unique: true
+  end
+
+  create_table "digitization_maps", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "peel_map_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "date_ingested", null: false
+    t.datetime "record_created_at"
+    t.string "visibility"
+    t.bigint "owner_id", null: false
+    t.string "title", null: false
+    t.index ["owner_id"], name: "index_digitization_maps_on_owner_id"
+    t.index ["peel_map_id"], name: "unique_peel_map", unique: true
+  end
+
+  create_table "digitization_newspapers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "publication_code"
+    t.string "year"
+    t.string "month"
+    t.string "day"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "date_ingested", null: false
+    t.datetime "record_created_at"
+    t.string "visibility"
+    t.bigint "owner_id", null: false
+    t.string "title", null: false
+    t.string "dates_issued", array: true
+    t.text "alternative_titles", array: true
+    t.string "resource_type", null: false
+    t.string "genres", null: false, array: true
+    t.string "languages", null: false, array: true
+    t.string "places_of_publication", array: true
+    t.string "extent"
+    t.text "notes", array: true
+    t.string "geographic_subjects", array: true
+    t.string "rights"
+    t.string "volume"
+    t.string "issue"
+    t.string "editions", array: true
+    t.index ["owner_id"], name: "index_digitization_newspapers_on_owner_id"
+    t.index ["publication_code", "year", "month", "day"], name: "unique_peel_newspaper", unique: true
   end
 
   create_table "draft_items", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -165,6 +304,22 @@ ActiveRecord::Schema.define(version: 2020_08_31_182732) do
     t.index ["user_id"], name: "index_draft_theses_on_user_id"
   end
 
+  create_table "flipper_features", force: :cascade do |t|
+    t.string "key", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["key"], name: "index_flipper_features_on_key", unique: true
+  end
+
+  create_table "flipper_gates", force: :cascade do |t|
+    t.string "feature_key", null: false
+    t.string "key", null: false
+    t.string "value"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["feature_key", "key", "value"], name: "index_flipper_gates_on_feature_key_and_key_and_value", unique: true
+  end
+
   create_table "identities", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "uid", null: false
@@ -229,6 +384,8 @@ ActiveRecord::Schema.define(version: 2020_08_31_182732) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.json "subject", array: true
+    t.bigint "batch_ingest_id"
+    t.index ["batch_ingest_id"], name: "index_items_on_batch_ingest_id"
     t.index ["logo_id"], name: "index_items_on_logo_id"
     t.index ["owner_id"], name: "index_items_on_owner_id"
   end
@@ -334,15 +491,25 @@ ActiveRecord::Schema.define(version: 2020_08_31_182732) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "announcements", "users"
+  add_foreign_key "batch_ingest_files", "batch_ingests"
+  add_foreign_key "batch_ingests", "users"
   add_foreign_key "collections", "users", column: "owner_id"
   add_foreign_key "communities", "users", column: "owner_id"
+  add_foreign_key "digitization_batch_metadata_ingests", "users"
+  add_foreign_key "digitization_books", "active_storage_attachments", column: "logo_id", on_delete: :nullify
+  add_foreign_key "digitization_books", "digitization_batch_metadata_ingests"
+  add_foreign_key "digitization_books", "users", column: "owner_id"
+  add_foreign_key "digitization_fulltexts", "digitization_books"
+  add_foreign_key "digitization_images", "users", column: "owner_id"
+  add_foreign_key "digitization_maps", "users", column: "owner_id"
+  add_foreign_key "digitization_newspapers", "users", column: "owner_id"
   add_foreign_key "draft_items", "users"
   add_foreign_key "draft_theses", "institutions"
   add_foreign_key "draft_theses", "languages"
   add_foreign_key "draft_theses", "users"
-  add_foreign_key "items", "active_storage_attachments", column: "logo_id", on_delete: :nullify
+  add_foreign_key "items", "batch_ingests"
   add_foreign_key "items", "users", column: "owner_id"
-  add_foreign_key "theses", "active_storage_attachments", column: "logo_id", on_delete: :nullify
   add_foreign_key "theses", "users", column: "owner_id"
 end

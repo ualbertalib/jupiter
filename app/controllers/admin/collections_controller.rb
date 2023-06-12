@@ -7,12 +7,13 @@ class Admin::CollectionsController < Admin::AdminController
     search_query_index = UserSearchService.new(
       base_restriction_key: Item.solr_exporter_class.solr_name_for(:member_of_paths, role: :pathing),
       value: @collection.path,
-      params: params,
-      current_user: current_user
+      params:,
+      current_user:
     )
 
     @results = search_query_index.results
     @search_models = search_query_index.search_models
+    @collection = @collection.decorate
 
     respond_to do |format|
       format.html { render template: 'collections/show' }
@@ -22,6 +23,8 @@ class Admin::CollectionsController < Admin::AdminController
   def new
     @collection = Collection.new(community_id: @community.id)
   end
+
+  def edit; end
 
   def create
     @collection =
@@ -35,8 +38,6 @@ class Admin::CollectionsController < Admin::AdminController
       end
     end
   end
-
-  def edit; end
 
   def update
     @collection.tap do |unlocked_collection|

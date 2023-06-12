@@ -16,4 +16,14 @@ class CommunitiesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test 'should show community js' do
+    get community_url(@community, format: :js), xhr: true
+    assert_response :success
+  end
+
+  test 'should show community json' do
+    get community_url(@community, format: :json)
+    assert_response :success
+  end
+
 end

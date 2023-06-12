@@ -1,16 +1,19 @@
 class URIValidator < ActiveModel::EachValidator
 
   def validate_each(record, attr, value)
+    return if value.blank?
+
+    namespace = options[:namespace]
     vocabs = options[:in_vocabularies]
     vocabs ||= [options[:in_vocabulary]]
     raise ArgumentError, "#{attr} must specify a vocabulary to validate against!" if vocabs.empty?
-    return if value.blank?
 
     value = [value] unless value.is_a?(Array)
 
     value.each do |v|
-      unless vocabs.any? { |vocab| ::CONTROLLED_VOCABULARIES[vocab].from_uri(v).present? }
-        record.errors.add(attr, :not_recognized)
+      record.errors.add(attr, :not_recognized) unless vocabs.any? do |vocab|
+        val, _ = ControlledVocabulary.value_from_uri(namespace:, vocab:, uri: v)
+        val.present?
       end
     end
   end

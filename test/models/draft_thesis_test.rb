@@ -27,13 +27,13 @@ class DraftThesisTest < ActiveSupport::TestCase
 
   test 'should be able to create a draft thesis with user when on inactive status' do
     user = users(:user_admin)
-    draft_thesis = DraftThesis.new(user: user)
-    assert draft_thesis.valid?
+    draft_thesis = DraftThesis.new(user:)
+    assert_predicate draft_thesis, :valid?
   end
 
   test 'should run validations when on describe_item step' do
     user = users(:user_admin)
-    draft_thesis = DraftThesis.new(user: user, status: DraftThesis.statuses[:active])
+    draft_thesis = DraftThesis.new(user:, status: DraftThesis.statuses[:active])
 
     assert_not draft_thesis.valid?
     assert_equal 5, draft_thesis.errors.full_messages.count
@@ -47,14 +47,14 @@ class DraftThesisTest < ActiveSupport::TestCase
       member_of_paths: { community_id: [@community.id], collection_id: [@collection.id] }
     )
 
-    assert draft_thesis.valid?
+    assert_predicate draft_thesis, :valid?
   end
 
   test 'should run validations when on choose_license_and_visibility wizard step' do
     user = users(:user_admin)
 
     draft_thesis = DraftThesis.new(
-      user: user,
+      user:,
       status: DraftThesis.statuses[:active],
       wizard_step: DraftThesis.wizard_steps[:choose_license_and_visibility],
       title: 'Thesis of Random',
@@ -75,7 +75,7 @@ class DraftThesisTest < ActiveSupport::TestCase
       rights: 'License text goes here'
     )
 
-    assert draft_thesis.valid?
+    assert_predicate draft_thesis, :valid?
   end
 
   test 'should run validations when on file_uploads wizard step' do
@@ -85,7 +85,7 @@ class DraftThesisTest < ActiveSupport::TestCase
     draft_thesis = draft_theses(:draft_thesis_inactive)
 
     draft_thesis.update(
-      user: user,
+      user:,
       status: DraftThesis.statuses[:active],
       wizard_step: DraftThesis.wizard_steps[:upload_files],
       title: 'Thesis of Random',
@@ -100,7 +100,7 @@ class DraftThesisTest < ActiveSupport::TestCase
     assert_not draft_thesis.valid?
     assert_equal "Files can't be blank", draft_thesis.errors.full_messages.first
 
-    fake_file = ActiveStorage::Blob.create_after_upload!(
+    fake_file = ActiveStorage::Blob.create_and_upload!(
       io: StringIO.new('RandomData'),
       filename: 'book_cover.jpg',
       content_type: 'text/plain'
@@ -108,14 +108,14 @@ class DraftThesisTest < ActiveSupport::TestCase
 
     draft_thesis.files.attach fake_file
 
-    assert draft_thesis.valid?
+    assert_predicate draft_thesis, :valid?
   end
 
   test 'should handle embargo end date visibility validations' do
     user = users(:user_admin)
 
     draft_thesis = DraftThesis.new(
-      user: user,
+      user:,
       status: DraftThesis.statuses[:active],
       wizard_step: DraftThesis.wizard_steps[:choose_license_and_visibility],
       title: 'Thesis of Random',
@@ -135,14 +135,14 @@ class DraftThesisTest < ActiveSupport::TestCase
       embargo_end_date: Date.current + 1.year
     )
 
-    assert draft_thesis.valid?
+    assert_predicate draft_thesis, :valid?
   end
 
   test 'should handle community/collection validations on member_of_paths' do
     user = users(:user_admin)
 
     draft_thesis = DraftThesis.new(
-      user: user,
+      user:,
       status: DraftThesis.statuses[:active],
       title: 'Thesis of Random',
       creator: 'Jane Doe',
@@ -168,14 +168,14 @@ class DraftThesisTest < ActiveSupport::TestCase
     draft_thesis.assign_attributes(
       member_of_paths: { community_id: [@community.id], collection_id: [@collection.id] }
     )
-    assert draft_thesis.valid?
+    assert_predicate draft_thesis, :valid?
   end
 
   test 'regular user cannot deposit' do
     user = users(:user_regular)
 
     draft_thesis = DraftThesis.new(
-      user: user,
+      user:,
       status: DraftThesis.statuses[:active],
       title: 'Thesis of Random',
       creator: 'Jane Doe',
@@ -196,7 +196,7 @@ class DraftThesisTest < ActiveSupport::TestCase
                                                    community_id: @community.id)
 
     draft_thesis = DraftThesis.new(
-      user: user,
+      user:,
       status: DraftThesis.statuses[:active],
       title: 'Thesis of Random',
       creator: 'Jane Doe',
@@ -214,7 +214,7 @@ class DraftThesisTest < ActiveSupport::TestCase
 
   test 'parse_graduation_term_from_fedora works correctly' do
     user = users(:user_admin)
-    draft_thesis = DraftThesis.new(user: user)
+    draft_thesis = DraftThesis.new(user:)
 
     assert_equal '11', draft_thesis.send(:parse_graduation_term_from_fedora, '2018-11')
     assert_equal '06', draft_thesis.send(:parse_graduation_term_from_fedora, '2018-06')
@@ -227,7 +227,7 @@ class DraftThesisTest < ActiveSupport::TestCase
     user = users(:user_admin)
 
     draft_thesis = DraftThesis.new(
-      user: user,
+      user:,
       status: DraftThesis.statuses[:active],
       wizard_step: DraftThesis.wizard_steps[:choose_license_and_visibility],
       title: 'Thesis Missing Description',
@@ -248,7 +248,7 @@ class DraftThesisTest < ActiveSupport::TestCase
       graduation_year: 2000
     )
 
-    assert draft_thesis.valid?
+    assert_predicate draft_thesis, :valid?
   end
 
 end

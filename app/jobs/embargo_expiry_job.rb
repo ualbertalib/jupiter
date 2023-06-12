@@ -9,19 +9,19 @@ class EmbargoExpiryJob < ApplicationJob
     visibility_solr_name = Item.solr_exporter_class.solr_name_for(:visibility, role: :exact_match)
     embargo_end_date_solr_name = Item.solr_exporter_class.solr_name_for(:embargo_end_date, role: :sort)
 
-    item_results_count, item_results, _ = JupiterCore::Search.perform_solr_query(
+    item_results_count, item_results, _, _ = JupiterCore::Search.perform_solr_query(
       q: '',
-      fq: "_query_:\"{!raw f=has_model_ssim}#{Item.solr_exporter_class.indexed_has_model_name}\""\
-          " AND #{visibility_solr_name}:\"#{JupiterCore::Depositable::VISIBILITY_EMBARGO}\""\
-          " AND #{embargo_end_date_solr_name}:[* TO NOW]",
+      fq: "_query_:\"{!raw f=has_model_ssim}#{Item.solr_exporter_class.indexed_has_model_name}\" " \
+          "AND #{visibility_solr_name}:\"#{JupiterCore::Depositable::VISIBILITY_EMBARGO}\" " \
+          "AND #{embargo_end_date_solr_name}:[* TO NOW]",
       rows: 10_000_000
     )
 
-    thesis_results_count, thesis_results, _ = JupiterCore::Search.perform_solr_query(
+    thesis_results_count, thesis_results, _, _ = JupiterCore::Search.perform_solr_query(
       q: '',
-      fq: "_query_:\"{!raw f=has_model_ssim}#{Thesis.solr_exporter_class.indexed_has_model_name}\""\
-          " AND #{visibility_solr_name}:\"#{JupiterCore::Depositable::VISIBILITY_EMBARGO}\""\
-          " AND #{embargo_end_date_solr_name}:[* TO NOW]",
+      fq: "_query_:\"{!raw f=has_model_ssim}#{Thesis.solr_exporter_class.indexed_has_model_name}\" " \
+          "AND #{visibility_solr_name}:\"#{JupiterCore::Depositable::VISIBILITY_EMBARGO}\" " \
+          "AND #{embargo_end_date_solr_name}:[* TO NOW]",
       rows: 10_000_000
     )
 

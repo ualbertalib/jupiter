@@ -9,8 +9,9 @@ class ProfileController < ApplicationController
     search_query_index = UserSearchService.new(
       base_restriction_key: Item.solr_exporter_class.solr_name_for(:owner, role: :exact_match),
       value: @user.id,
-      params: params,
-      current_user: @user
+      params:,
+      current_user: @user,
+      fulltext: Flipper.enabled?(:fulltext_search, current_user)
     )
     @results = search_query_index.results
     @search_models = search_query_index.search_models

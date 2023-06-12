@@ -21,7 +21,7 @@ class Admin::DashboardControllerTest < ActionDispatch::IntegrationTest
     admin = users(:user_admin)
     sign_in_as admin
 
-    assert logged_in?
+    assert_predicate self, :logged_in?
 
     get admin_root_url
     assert_response :success

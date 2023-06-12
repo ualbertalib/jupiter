@@ -15,8 +15,12 @@ class HumanizedChangeSet
 
   def user_info
     if @whodunnit.present?
-      user = User.find(@whodunnit)
-      user_info = "#{user.name} - #{user.email}"
+      user = User.find_by(id: @whodunnit)
+      user_info = if user.present?
+                    "#{user.name} - #{user.email}"
+                  else
+                    @whodunnit
+                  end
     else
       user_info = 'Unknown'
     end
@@ -142,7 +146,7 @@ class HumanizedChangeSet
   end
 
   def humanize_visibility_attribute(attribute)
-    @changeset[attribute].map { |visibility| @h.humanize_uri(:visibility, visibility) }
+    @changeset[attribute].map { |visibility| @h.humanize_uri(:jupiter_core, :visibility, visibility) }
   end
 
   def localize_date_to_timezone(attribute)
@@ -175,8 +179,8 @@ class HumanizedChangeSet
 
       change_item.map do |path|
         community_id, collection_id = path.split('/')
-        community_title = Community.find(community_id).title
-        collection_title = Collection.find(collection_id).title
+        community_title = Community.find_by(id: community_id)&.title || community_id.to_s
+        collection_title = Collection.find_by(id: collection_id)&.title || collection_id.to_s
         "#{community_title}/#{collection_title}"
       end
     end
@@ -189,7 +193,7 @@ class HumanizedChangeSet
       next [] if change_item.nil?
 
       change_item.map do |language|
-        @h.humanize_uri(:language, language)
+        @h.humanize_uri(:era, :language, language)
       end
     end
 
@@ -197,15 +201,15 @@ class HumanizedChangeSet
   end
 
   def language
-    @changeset[:language].map { |language| @h.humanize_uri(:language, language) }
+    @changeset[:language].map { |language| @h.humanize_uri(:era, :language, language) }
   end
 
   def license
-    @changeset[:license].map { |license| @h.humanize_uri(:license, license) }
+    @changeset[:license].map { |license| @h.humanize_uri(:era, :license, license) }
   end
 
   def institution
-    @changeset[:institution].map { |institution| @h.humanize_uri(:institution, institution) }
+    @changeset[:institution].map { |institution| @h.humanize_uri(:era, :institution, institution) }
   end
 
   def publication_status
@@ -213,7 +217,7 @@ class HumanizedChangeSet
       next [] if change_item.nil?
 
       change_item.map do |publication_status|
-        CONTROLLED_VOCABULARIES[:publication_status].from_uri(publication_status)
+        ControlledVocabulary.era.publication_status.from_uri(publication_status)
       end
     end
 
@@ -226,13 +230,13 @@ class HumanizedChangeSet
     last_version_object = last_version.reify
     last_version_type = last_version_object.item_type_with_status_code
     if last_version_type.present?
-      humanized_item_type[0] = I18n.t("controlled_vocabularies.item_type_with_status.#{last_version_type}")
+      humanized_item_type[0] = I18n.t("controlled_vocabularies.era.item_type_with_status.#{last_version_type}")
     end
 
     new_version_object = last_version.next.reify
     new_version_type = new_version_object.item_type_with_status_code
     if new_version_type.present?
-      humanized_item_type[1] = I18n.t("controlled_vocabularies.item_type_with_status.#{new_version_type}")
+      humanized_item_type[1] = I18n.t("controlled_vocabularies.era.item_type_with_status.#{new_version_type}")
     end
 
     humanized_item_type

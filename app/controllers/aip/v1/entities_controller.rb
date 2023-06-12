@@ -151,8 +151,8 @@ class Aip::V1::EntitiesController < ApplicationController
       RDF::Statement(
         subject: self_subject,
         predicate: ::TERMS[:ual].sitemap_link,
-        object: RDF::URI('rs:ln') + %Q( href="#{file_view_uri.path}" rel="content" hash="md5:#{@file.checksum}" ) +
-                %Q(length="#{@file.byte_size}" type="#{@file.content_type}")
+        object: %Q(<#{RDF::URI('rs:ln')} href="#{file_view_uri.path}" rel="content" hash="md5:#{@file.checksum}") +
+                %Q( length="#{@file.byte_size}" type="#{@file.content_type}">)
       ),
       RDF::Statement(subject: self_subject, predicate: RDF.type, object: RDF::Vocab::PCDM.File),
       RDF::Statement(
@@ -169,8 +169,10 @@ class Aip::V1::EntitiesController < ApplicationController
       )
     ]
 
-    rdf_graph_creator.graph.delete_insert(rdf_graph_creator.graph.query(predicate: RDF::Vocab::PREMIS.hasMessageDigest),
-                                          statements)
+    rdf_graph_creator.graph.delete_insert(
+      rdf_graph_creator.graph.query({ predicate: RDF::Vocab::PREMIS.hasMessageDigest }),
+      statements
+    )
 
     render plain: rdf_graph_creator.graph.to_n3, status: :ok
   end
@@ -188,7 +190,7 @@ class Aip::V1::EntitiesController < ApplicationController
     )
 
     statements = [
-      RDF::Statement(subject: subject, predicate: RDF::Vocab::PREMIS.hasFixity, object: self_subject),
+      RDF::Statement(subject:, predicate: RDF::Vocab::PREMIS.hasFixity, object: self_subject),
       RDF::Statement(subject: self_subject, predicate: RDF::Vocab::PREMIS.hasEventOutcome, object: 'SUCCESS'),
       RDF::Statement(subject: self_subject, predicate: RDF::Vocab::PREMIS.hasMessageDigestAlgorithm, object: 'md5'),
       RDF::Statement(subject: self_subject, predicate: RDF.type, object: RDF::Vocab::PREMIS.EventOutcomeDetail),

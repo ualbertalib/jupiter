@@ -38,6 +38,10 @@ class JupiterCore::Doiable < JupiterCore::Depositable
     end
   end
 
+  def doi_url
+    "https://doi.org/#{doi.delete_prefix('doi:')}"
+  end
+
   def handle_doi_states
     # this should be disabled during migration runs and enabled for production
     return unless Rails.application.secrets.doi_minting_enabled

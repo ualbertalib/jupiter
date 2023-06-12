@@ -254,7 +254,7 @@ def thesis_ingest(thesis_data, index, csv_directory)
     unlocked_obj.abstract = thesis_data[:abstract]
 
     # Handle visibility and embargo logic
-    unlocked_obj.visibility = unlocked_obj.visibility = ControlledVocabulary.jupiter_core.visibility.from_value(:embargo)
+    unlocked_obj.visibility = ControlledVocabulary.jupiter_core.visibility.from_value(:embargo)
 
     if thesis_data[:date_of_embargo].present?
       unlocked_obj.visibility_after_embargo =

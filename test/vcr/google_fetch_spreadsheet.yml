@@ -1,0 +1,136 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://sheets.googleapis.com/v4/spreadsheets/RANDOMSPREADSHEETID/values/'Data'!A:W?key=test-google-developer-key
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-api-ruby-client/0.3.0 Mac OS X/10.15.7 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Thu, 20 May 2021 06:15:54 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/2.7.2 gdcl/1.3.0
+      Authorization:
+      - Bearer ya29.a0AfH6SMBI2469alYSAkSBAl0dRlxikffuLsqI8Hn19hjNo6MXoUU6L2JPX9ebv_r49TQHgItFcrtxOqQUw8iONJvMMoL97d-FFAn6qfmTtGL7tXTMzTzdRi9XT4pYfZUzlYulk3FzN8sKVW_j2v2t6LpAjGTA
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Vary:
+      - Origin
+      - Referer
+      - X-Origin
+      Content-Encoding:
+      - gzip
+      Date:
+      - Thu, 20 May 2021 06:15:54 GMT
+      Server:
+      - ESF
+      Cache-Control:
+      - private
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3-29=":443"; ma=2592000,h3-T051=":443"; ma=2592000,h3-Q050=":443"; ma=2592000,h3-Q046=":443";
+        ma=2592000,h3-Q043=":443"; ma=2592000,quic=":443"; ma=2592000; v="46,43"
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "range": "Data!A1:W1004",
+          "majorDimension": "ROWS",
+          "values": [
+            [
+              "file_name",
+              "title",
+              "alternative_title",
+              "item_type",
+              "publication_status",
+              "languages",
+              "creators",
+              "subject",
+              "created",
+              "description",
+              "community_id",
+              "collection_id",
+              "contributors",
+              "spatial_subjects",
+              "temporal_subjects",
+              "is_version_of",
+              "source",
+              "related_link",
+              "license",
+              "rights",
+              "visibility",
+              "embargo_end_date",
+              "visibility_after_embargo"
+            ],
+            [
+              "conference_logo.png | conference_map.jpg",
+              "Conference logo",
+              "",
+              "image",
+              "",
+              "english",
+              "Shane",
+              "Conference, Image",
+              "1978-01-01",
+              "",
+              "<%= community_id %>",
+              "<%= collection_id %>",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "public_domain_mark_1_0",
+              "",
+              "public"
+            ],
+            [
+              "conference.pdf",
+              "Conference report",
+              "",
+              "report",
+              "",
+              "english",
+              "Shane",
+              "Conference, PDF",
+              "1999-01-01",
+              "",
+              "<%= community_id %>",
+              "<%= collection_id %>",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "attribution_noncommercial_4_0_international",
+              "",
+              "public"
+            ]
+          ]
+        }
+    http_version:
+  recorded_at: Thu, 20 May 2021 06:15:54 GMT
+recorded_with: VCR 5.0.0

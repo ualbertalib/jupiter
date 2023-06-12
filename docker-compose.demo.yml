@@ -3,11 +3,11 @@
 # To use, you must pass in the `-f` flag to docker-compose
 # For example: docker-compose -f docker-compose.demo.yml up -d
 
-version: '3.4'
+version: "3.4"
 
 services:
   postgres:
-    image: postgres:11-alpine
+    image: postgres:12-alpine
     environment:
       - POSTGRES_PASSWORD=mysecretpassword
     volumes:
@@ -34,7 +34,7 @@ services:
       - DB_PASSWORD=mysecretpassword
       - SOLR_URL=http://solr:8983/solr/development
       - SOLR_TEST_URL=http://solr:8983/solr/test
-      - REDIS_URL='redis://redis/1'
+      - REDIS_URL=redis://redis/1
     ports:
       - "3000:3000"
     links:

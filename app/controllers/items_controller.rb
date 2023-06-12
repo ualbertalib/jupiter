@@ -6,6 +6,7 @@ class ItemsController < ApplicationController
   def show
     authorize @item
     @views_count, @downloads_count = fetch_item_statistics
+    @item = @item.decorate
   end
 
   def edit
@@ -26,9 +27,9 @@ class ItemsController < ApplicationController
 
   def load_item
     @item = begin
-      Item.find(params[:id]).decorate
+      Item.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      Thesis.find(params[:id]).decorate
+      Thesis.find(params[:id])
     end
   end
 

@@ -4,17 +4,21 @@ class UserSearchService
   # How many facets are shown before it says 'Show more ...'
   MAX_FACETS = 6
 
-  attr_reader :search_models
+  attr_reader :search_models, :invalid_date_range
 
-  def initialize(current_user:, base_restriction_key: nil, value: nil,
-                 search_models: [Item, Thesis], params: nil)
-    raise ArgumentError, 'Must supply both a key and value' if @base_restriction_key.present? && @value.blank?
+  def initialize(current_user:, params:, base_restriction_key: nil, value: nil, # rubocop:disable Metrics/ParameterLists
+                 search_models: [Item, Thesis], fulltext: false)
+    if base_restriction_key.present? && value.blank?
+      raise ArgumentError, 'Must supply both a base_restriction_key and a value'
+    end
 
+    @invalid_date_range = false
     @base_restriction_key = base_restriction_key
     @value = value
     @search_models = search_models
     @search_params = search_params(params)
     @current_user = current_user
+    @fulltext = fulltext
   end
 
   def results
@@ -26,14 +30,15 @@ class UserSearchService
     facets[@base_restriction_key] = [@value] if @base_restriction_key.present?
 
     search_options = { q: query, models: search_models, as: @current_user,
-                       facets: facets, ranges: @search_params[:ranges] }
+                       facets:, ranges: @search_params[:ranges],
+                       fulltext: @fulltext }
 
     # Sort by relevance if a search term is present and no explicit sort field has been chosen
     sort_fields = @search_params[:sort]
     sort_fields ||= [:relevance, :title] if query.present?
     sort_orders = @search_params[:direction]
 
-    JupiterCore::Search.faceted_search(search_options)
+    JupiterCore::Search.faceted_search(**search_options)
                        .sort(sort_fields, sort_orders)
                        .page(@search_params[:page])
   end
@@ -51,13 +56,14 @@ class UserSearchService
           r[range] = [:begin, :end]
         else
           params[:ranges].delete(range)
+          @invalid_date_range = true
         end
       end
       model.solr_exporter_class.facets.each do |facet|
         f[facet] = []
       end
     end
-    params.permit(:community_id, :id, :tab, :page, :search, :sort, :direction, { facets: f }, ranges: r)
+    params.permit(:community_id, :id, :tab, :page, :search, :sort, :direction, :subdomain, { facets: f }, ranges: r)
   end
 
   def validate_range(range)

@@ -7,31 +7,31 @@
     "lint-css": "stylelint \"app/javascript/**/*.scss\""
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.15.2",
-    "@rails/actiontext": "^6.0.3",
-    "@rails/activestorage": "^6.0.3",
-    "@rails/ujs": "^6.0.3",
-    "@rails/webpacker": "^5.2.1",
-    "bootstrap": "^4.6.0",
-    "core-js": "^3.8.3",
-    "dropzone": "^5.7.6",
+    "@fortawesome/fontawesome-free": "^6.4.0",
+    "@rails/actiontext": "^6.1.7",
+    "@rails/activestorage": "^6.1.7",
+    "@rails/ujs": "^6.1.7",
+    "@rails/webpacker": "^5.4.4",
+    "bootstrap": "^4.6.2",
+    "core-js": "^3.27.2",
+    "dropzone": "^5.9.3",
     "easy-autocomplete": "^1.3.5",
-    "jquery": "^3.5.1",
+    "jquery": "^3.6.3",
     "jquery-multidownload": "^4.0.1",
     "popper.js": "^1.16.0",
-    "regenerator-runtime": "^0.13.7",
+    "regenerator-runtime": "^0.13.11",
     "selectize": "^0.12.6",
     "trix": "^1.3.1",
     "turbolinks": "^5.2.0"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
-    "eslint": "^7.20.0",
-    "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-plugin-import": "^2.22.1",
-    "stylelint": "^13.10.0",
-    "stylelint-config-standard": "^20.0.0",
-    "webpack-dev-server": "^3.11.2"
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.27.5",
+    "stylelint": "^13.13.1",
+    "stylelint-config-standard": "^22.0.0",
+    "webpack-dev-server": "^4.11.1"
   },
   "resolutions": {
     "webpack": "^4.0.0"

@@ -15,12 +15,11 @@ class Metadata::OaiEtdms::ThesisDecorator < ApplicationDecorator
   end
 
   def type
-    I18n.t("controlled_vocabularies.item_type_with_status.#{object.item_type_with_status_code}")
+    I18n.t("controlled_vocabularies.era.item_type_with_status.#{object.item_type_with_status_code}")
   end
 
   def date
-    # TODO: need to talk to metadata about fallback if date accepted is not present, which it isn't for legacy theses
-    object.date_accepted || object.created_at
+    object.graduation_date
   end
 
   def identifiers
@@ -36,7 +35,7 @@ class Metadata::OaiEtdms::ThesisDecorator < ApplicationDecorator
   delegate :rights, to: :object
 
   def language
-    h.humanize_uri(:language, object.language)
+    h.humanize_uri(:era, :language, object.language)
   end
 
   def degree_level
@@ -49,7 +48,7 @@ class Metadata::OaiEtdms::ThesisDecorator < ApplicationDecorator
 
   def institution
     # TODO: Replace Unknown with appropriate tag from metadata team
-    h.humanize_uri(:institution, object.institution) || 'Unknown'
+    h.humanize_uri(:era, :institution, object.institution) || 'Unknown'
   end
 
   def degree_name
@@ -59,7 +58,7 @@ class Metadata::OaiEtdms::ThesisDecorator < ApplicationDecorator
 
   def publisher
     # TODO: Replace Unknown with appropriate tag from metadata team
-    h.humanize_uri(:institution, object.institution) || 'Unknown'
+    h.humanize_uri(:era, :institution, object.institution) || 'Unknown'
   end
 
 end

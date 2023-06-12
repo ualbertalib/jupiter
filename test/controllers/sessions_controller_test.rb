@@ -24,7 +24,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'johndoe', identity.uid
     assert_redirected_to root_url
     assert_equal I18n.t('login.success'), flash[:notice]
-    assert logged_in?
+    assert_predicate self, :logged_in?
   end
 
   test 'should use existing identity if present' do
@@ -43,7 +43,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to root_url
     assert_equal I18n.t('login.success'), flash[:notice]
-    assert logged_in?
+    assert_predicate self, :logged_in?
   end
 
   test 'should create a new identity if not present' do
@@ -65,7 +65,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to root_url
     assert_equal I18n.t('login.success'), flash[:notice]
-    assert logged_in?
+    assert_predicate self, :logged_in?
   end
 
   test 'should give an error message and not save the user with invalid new user' do
@@ -107,7 +107,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
     sign_in_as user
 
-    assert logged_in?
+    assert_predicate self, :logged_in?
 
     get logout_url
     assert_redirected_to root_url

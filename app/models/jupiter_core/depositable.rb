@@ -4,11 +4,11 @@ class JupiterCore::Depositable < ApplicationRecord
 
   self.abstract_class = true
 
-  VISIBILITY_EMBARGO = CONTROLLED_VOCABULARIES[:visibility].embargo.freeze
+  VISIBILITY_EMBARGO = ControlledVocabulary.jupiter_core.visibility.embargo.freeze
   VISIBILITIES = (JupiterCore::VISIBILITIES + [VISIBILITY_EMBARGO]).freeze
-  VISIBILITIES_AFTER_EMBARGO = [CONTROLLED_VOCABULARIES[:visibility].authenticated,
-                                CONTROLLED_VOCABULARIES[:visibility].draft,
-                                CONTROLLED_VOCABULARIES[:visibility].public].freeze
+  VISIBILITIES_AFTER_EMBARGO = [ControlledVocabulary.jupiter_core.visibility.authenticated,
+                                ControlledVocabulary.jupiter_core.visibility.draft,
+                                ControlledVocabulary.jupiter_core.visibility.public].freeze
 
   validates :visibility, known_visibility: true
 
@@ -20,6 +20,9 @@ class JupiterCore::Depositable < ApplicationRecord
   before_validation :set_record_created_at, on: :create
   before_validation :set_date_ingested
 
+  scope :updated_on_or_after, ->(date) { where('updated_at >= ?', date) }
+  scope :updated_before, ->(date) { where('updated_at < ?', date) }
+
   # this isn't a predicate name you daft thing
   # rubocop:disable Naming/PredicateName
   def self.has_solr_exporter(klass)
@@ -29,10 +32,10 @@ class JupiterCore::Depositable < ApplicationRecord
 
     end
     define_method :solr_exporter do
-      return solr_exporter_class.new(self)
+      solr_exporter_class.new(self)
     end
     define_method :solr_exporter_class do
-      return self.class.solr_exporter_class
+      self.class.solr_exporter_class
     end
 
     self.solr_exporter_class = klass
@@ -76,10 +79,6 @@ class JupiterCore::Depositable < ApplicationRecord
     visibility == JupiterCore::VISIBILITY_AUTHENTICATED
   end
 
-  def doi_url
-    "https://doi.org/#{doi.delete_prefix('doi:')}"
-  end
-
   def each_community_collection
     member_of_paths.each do |path|
       community_id, collection_id = path.split('/')
@@ -115,12 +114,16 @@ class JupiterCore::Depositable < ApplicationRecord
     return if file_handles.blank?
     raise 'Item not yet saved!' if id.nil?
 
-    file_handles.each do |fileio|
-      attached = files.attach(io: fileio, filename: File.basename(fileio.path))
-      # TODO: Do something smarter here if not attached
-      next unless attached
+    attachables = file_handles.map do |fileio|
+      filename = fileio.try(:original_filename) || File.basename(fileio.path)
+      { io: fileio, filename: }
+    end
 
-      attachment = files.attachments.last
+    # We need to attach all the files at the same time to make sure their
+    # callbacks are run when they are wrapped in a base transaction block
+    files.attach(attachables)
+
+    files.attachments.each do |attachment|
       attachment.fileset_uuid = UUIDTools::UUID.random_create
       attachment.save!
     end
@@ -154,30 +157,36 @@ class JupiterCore::Depositable < ApplicationRecord
   def add_to_embargo_history
     self.embargo_history ||= []
     embargo_history_item = "An embargo was deactivated on #{Time.now.getlocal('-06:00')}. Its release date was " \
-    "#{embargo_end_date}. Intended visibility after embargo was #{visibility_after_embargo}"
+                           "#{embargo_end_date}. Intended visibility after embargo was #{visibility_after_embargo}"
     self.embargo_history << embargo_history_item
   end
 
   # rubocop:disable Style/GlobalVars
-  def push_item_id_for_preservation
+
+  def push_entity_for_preservation
     queue_name = Rails.application.secrets.preservation_queue_name
 
-    $queue ||= ConnectionPool.new(size: 1, timeout: 5) { Redis.current }
+    $queue ||= ConnectionPool.new(size: 1, timeout: 5) { RedisClient.current }
 
     $queue.with do |connection|
-      connection.zadd queue_name, Time.now.to_f, id
+      # pushmi_pullyu requires both the id and type of the depositable
+      connection.zadd(queue_name, Time.now.to_f, { uuid: id, type: self.class.table_name }.to_json)
+      # Add the attempt count as value 0 that pmpy will use to count the tries to ingest the depositable. If the key
+      # already exists, the value will be reset to 0. the ```connection.zadd``` method called before resets the score as
+      # well. These two pieces of information let PMPY know that the entity needs to be deposited ASAP
+      connection.set("#{Rails.application.secrets.attempt_ingest_prefix}#{id}", 0)
     end
 
     true
   rescue StandardError => e
     # we trap errors in writing to the Redis queue in order to avoid crashing the save process for the user.
-    Rollbar.error("Error occurred in push_item_id_for_preservation, Could not preserve #{id}", e)
+    Rollbar.error("Error occurred in push_entity_for_preservation, Could not preserve #{id}", e)
     true
   end
   # rubocop:enable Style/GlobalVars
 
   def to_partial_path
-    self.class.to_s.downcase
+    self.class.name.demodulize.underscore
   end
 
   def self.sort_order(params)

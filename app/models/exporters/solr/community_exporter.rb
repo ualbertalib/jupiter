@@ -8,8 +8,11 @@ class Exporters::Solr::CommunityExporter < Exporters::Solr::BaseExporter
   index :fedora3_uuid, role: :exact_match
   index :depositor, role: [:search]
 
-  index :description, role: [:search]
   index :creators, role: :exact_match
+
+  # Description may contain markdown which isn't particularly useful in a search context. Let's strip this out.
+  custom_index :description, role: [:search],
+                             as: ->(community) { strip_markdown(community.description) }
 
   default_sort index: :title, direction: :asc
 

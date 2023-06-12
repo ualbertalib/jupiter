@@ -4,12 +4,12 @@ class AdminPolicyTest < ActiveSupport::TestCase
 
   test 'should deny normal user' do
     current_user = users(:user_regular)
-    assert_equal false, AdminPolicy.new(current_user, :admin).access?
+    assert_not AdminPolicy.new(current_user, :admin).access?
   end
 
   test 'should allow admin user' do
     current_user = users(:user_admin)
-    assert AdminPolicy.new(current_user, :admin).access?
+    assert_predicate AdminPolicy.new(current_user, :admin), :access?
   end
 
 end

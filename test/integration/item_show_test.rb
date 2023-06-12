@@ -16,11 +16,11 @@ class ItemShowTest < ActionDispatch::IntegrationTest
       uo.creators = ['Joe Blow']
       uo.visibility = JupiterCore::VISIBILITY_PUBLIC
       uo.created = '1999-09-09'
-      uo.languages = [CONTROLLED_VOCABULARIES[:language].english]
-      uo.license = CONTROLLED_VOCABULARIES[:license].attribution_4_0_international
-      uo.item_type = CONTROLLED_VOCABULARIES[:item_type].article
-      uo.publication_status = [CONTROLLED_VOCABULARIES[:publication_status].draft,
-                               CONTROLLED_VOCABULARIES[:publication_status].submitted]
+      uo.languages = [ControlledVocabulary.era.language.english]
+      uo.license = ControlledVocabulary.era.license.attribution_4_0_international
+      uo.item_type = ControlledVocabulary.era.item_type.article
+      uo.publication_status = [ControlledVocabulary.era.publication_status.draft,
+                               ControlledVocabulary.era.publication_status.submitted]
       uo.subject = ['Items']
       uo.add_to_path(@community.id, @collection1.id)
       uo.add_to_path(@community.id, @collection2.id)

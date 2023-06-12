@@ -1,5 +1,5 @@
 # This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
+# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
 #
 # Examples:
 #
@@ -7,14 +7,14 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 if Rails.env.development? || Rails.env.uat?
-  require "open-uri"
+  require 'open-uri'
   require 'faker'
 
   # For the main community/collections
   THINGS = ['cat', 'dog', 'unicorn', 'hamburger', 'librarian'].freeze
   # For padding community/collection lists for pagination (need at least 26, a couple uppercase to confirm sort)
   EXTRA_THINGS = ['Library', 'DONAIR', 'magpie', 'toque', 'sombrero', 'yeti', 'mimosa', 'ukulele', 'tourtière',
-                   'falafel', 'calculator', 'papusa'].freeze
+                  'falafel', 'calculator', 'papusa'].freeze
 
   puts 'Starting seeding of dev database...'
 
@@ -58,43 +58,51 @@ if Rails.env.development? || Rails.env.uat?
   end
 
   # Lets pick 10 prolific creators, 10 contributors
-  creators = 10.times.map { "#{Faker::Creature::Cat.unique.name} #{Faker::Creature::Cat.unique.breed.gsub(/[ ,]+/, '-')}" }
+  creators = 10.times.map do
+    "#{Faker::Creature::Cat.unique.name} #{Faker::Creature::Cat.unique.breed.gsub(/[ ,]+/, '-')}"
+  end
   contributors = 10.times.map { Faker::FunnyName.unique.name_with_initial }
 
-  institutions = [CONTROLLED_VOCABULARIES[:institution].uofa, CONTROLLED_VOCABULARIES[:institution].st_stephens]
+  institutions = [ControlledVocabulary.era.institution.uofa, ControlledVocabulary.era.institution.st_stephens]
 
   THINGS.each_with_index do |thing, idx|
-    if idx % 2 == 0
-      title = "The department of #{thing.capitalize}"
-    else
-      title = "Special reports about #{thing.pluralize}"
-    end
+    title = if idx.even?
+              "The department of #{thing.capitalize}"
+            else
+              "Special reports about #{thing.pluralize}"
+            end
     community = Community.create!(
       owner_id: admin.id,
       title: title,
-      description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop
+      description: if idx == THINGS.size - 1
+                     Faker::Markdown.sandwich
+                   else
+                     Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop
+                   end
     )
 
     # Attach logos, if possible
     filename = File.expand_path(Rails.root + "tmp/#{thing}.png")
-    unless File.exist?(filename)
-      unless ENV['SKIP_DOWNLOAD_COMMUNITY_LOGOS'].present?
-        set = (thing == 'cat') ? 'set4' : 'set1'
-        url = Faker::Avatar.image(slug: thing, size: "100x100", format: "png", set: set)
-        File.open(filename, 'wb') do |fo|
-          fo.write open(url).read
-        end
+    if !File.exist?(filename) && ENV['SKIP_DOWNLOAD_COMMUNITY_LOGOS'].blank?
+      set = thing == 'cat' ? 'set4' : 'set1'
+      url = Faker::Avatar.image(slug: thing, size: '100x100', format: 'png', set: set)
+      File.open(filename, 'wb') do |fo|
+        fo.write URI.open(url).read
       end
     end
     if File.exist?(filename)
-      community.logo.attach(io: File.open(filename), filename: "#{thing}.png", content_type: "image/png")
+      community.logo.attach(io: File.open(filename), filename: "#{thing}.png", content_type: 'image/png')
     end
 
     item_collection = Collection.create!(
       owner_id: admin.id,
       title: "The annals of '#{thing.capitalize} International'",
       community_id: community.id,
-      description: Faker::Lorem.sentence(word_count: 40, supplemental: false, random_words_to_add: 0).chop
+      description: if idx == THINGS.size - 1
+                     Faker::Markdown.sandwich
+                   else
+                     Faker::Lorem.sentence(word_count: 40, supplemental: false, random_words_to_add: 0).chop
+                   end
     )
 
     thesis_collection = Collection.create!(
@@ -116,56 +124,59 @@ if Rails.env.development? || Rails.env.uat?
       # Add an occasional verbose description
       description = if i % 10 == 5
                       Faker::Lorem.sentence(word_count: 100, supplemental: false, random_words_to_add: 0).chop
+                    elsif i % 7 == 0
+                      Faker::Markdown.sandwich
                     else
                       Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop
                     end
       # Probabilistically about 70% English, 20% French, 10% Ukrainian
       languages = if seed % 10 > 2
-                    [CONTROLLED_VOCABULARIES[:language].english]
+                    [ControlledVocabulary.era.language.english]
                   elsif seed % 10 > 0
-                    [CONTROLLED_VOCABULARIES[:language].french]
+                    [ControlledVocabulary.era.language.french]
                   else
-                    [CONTROLLED_VOCABULARIES[:language].ukrainian]
+                    [ControlledVocabulary.era.language.ukrainian]
                   end
       licence_right = {}
 
       item_attributes = base_attributes.merge({
-        owner_id: admin.id,
-        title: "The effects of #{Faker::Beer.name} on #{thing.pluralize}",
-        created: rand(20_000).days.ago.to_s,
-        creators: [creators[seed]],
-        contributors: [contributors[seed2]],
-        description: description,
-        languages: languages,
-      })
+                                                owner_id: admin.id,
+                                                title: "The effects of #{Faker::Beer.name} on #{thing.pluralize}",
+                                                created: rand(20_000).days.ago.to_s,
+                                                creators: [creators[seed]],
+                                                contributors: [contributors[seed2]],
+                                                description: description,
+                                                languages: languages
+                                              })
 
       # Add the occasional double-author work
       item_attributes[:creators] << creators[(seed + 5) % 10] if i % 7 == 3
       if seed % 10 < 6
-        item_attributes[:license] = CONTROLLED_VOCABULARIES[:license].attribution_4_0_international
+        item_attributes[:license] = ControlledVocabulary.era.license.attribution_4_0_international
       elsif seed % 10 < 7
-        item_attributes[:license] = CONTROLLED_VOCABULARIES[:license].public_domain_mark_1_0
+        item_attributes[:license] = ControlledVocabulary.era.license.public_domain_mark_1_0
       elsif seed % 10 < 8
-        item_attributes[:license] = CONTROLLED_VOCABULARIES[:old_license].attribution_3_0_international
+        item_attributes[:license] = ControlledVocabulary.era.old_license.attribution_3_0_international
       else
         item_attributes[:rights] = 'Share my stuff with everybody'
       end
-      if idx % 3 == 0
-        item_attributes[:item_type] = CONTROLLED_VOCABULARIES[:item_type].article
-        item_attributes[:publication_status] = [CONTROLLED_VOCABULARIES[:publication_status].published]
-      elsif idx % 3 == 1
-        item_attributes[:item_type] = CONTROLLED_VOCABULARIES[:item_type].article
-        item_attributes[:publication_status] = [CONTROLLED_VOCABULARIES[:publication_status].draft,
-                                           CONTROLLED_VOCABULARIES[:publication_status].submitted]
+      case idx % 3
+      when 0
+        item_attributes[:item_type] = ControlledVocabulary.era.item_type.article
+        item_attributes[:publication_status] = [ControlledVocabulary.era.publication_status.published]
+      when 1
+        item_attributes[:item_type] = ControlledVocabulary.era.item_type.article
+        item_attributes[:publication_status] = [ControlledVocabulary.era.publication_status.draft,
+                                                ControlledVocabulary.era.publication_status.submitted]
       else
-        item_attributes[:item_type] = CONTROLLED_VOCABULARIES[:item_type].report
+        item_attributes[:item_type] = ControlledVocabulary.era.item_type.report
       end
 
       # Every once in a while, create a mondo-item with full, rich metadata to help view-related work
       if i == 8
         item_attributes[:title] = item_attributes[:title].gsub(/^The/, 'The complete')
         # Throw in a second language occasionally
-        item_attributes[:languages] << CONTROLLED_VOCABULARIES[:language].other
+        item_attributes[:languages] << ControlledVocabulary.era.language.other
         # Why 3 and 7 below? Neither number shares a divisor with 10, ensuring a unique set
         item_attributes[:creators] += 4.times.map { |j| creators[(seed + 3 * j) % 10] }
         item_attributes[:contributors] += 3.times.map { |j| contributors[(seed2 + 7 * j) % 10] }
@@ -175,7 +186,7 @@ if Rails.env.development? || Rails.env.uat?
         item_attributes[:alternative_title] = "A full, holistic, #{thing}-tastic approach"
         item_attributes[:related_link] = "http://www.example.com/#{thing}"
         item_attributes[:is_version_of] = ["The CDROM titled '#{thing.pluralize.capitalize}!'",
-                                      'The original laserdisc series from Orange-on-a-Blue-Background studios']
+                                           'The original laserdisc series from Orange-on-a-Blue-Background studios']
         item_attributes[:source] = "Chapter 5 of '#{thing.pluralize.capitalize} and what they drink'"
       end
 
@@ -192,8 +203,8 @@ if Rails.env.development? || Rails.env.uat?
 
       if i == 8
         # Attach two files to the mondo-item
-        File.open(Rails.root + 'app/javascript/images/theses.jpg', 'r') do |file1|
-          File.open(Rails.root + 'test/fixtures/files/image-sample.jpeg', 'r') do |file2|
+        File.open("#{Rails.root}/app/javascript/images/theses.jpg", 'r') do |file1|
+          File.open("#{Rails.root}/test/fixtures/files/image-sample.jpeg", 'r') do |file2|
             # Bit of a hack to fake a long file name ...
             def file2.original_filename
               'wefksdkhvkasdkfjhwekkjahsdkjkajvbkejfkwejfjkdvkhdkfhw&ükefkhoiekldkfhkdfjhiwuegfugksjdcjbsjkdbw.jpeg'
@@ -209,7 +220,7 @@ if Rails.env.development? || Rails.env.uat?
       thesis_attributes = base_attributes.merge({
         owner_id: admin.id,
         title: "Thesis about the effects of #{Faker::Beer.name} on #{thing.pluralize}",
-        graduation_date: "Fall #{rand(20_000).days.ago.year}",
+        graduation_date: "#{rand(20_000).days.ago.year}#{['-06','-11',''][i % 3]}",
         dissertant: creators[seed],
         abstract: description,
         language: languages.first,
@@ -229,7 +240,7 @@ if Rails.env.development? || Rails.env.uat?
         thesis_attributes[:subject] += ['Mondo']
         thesis_attributes[:alternative_title] = "A full, holistic, #{thing}-tastic approach"
         thesis_attributes[:is_version_of] = ["The CDROM titled '#{thing.pluralize.capitalize}!'",
-                                      'The original laserdisc series from Orange-on-a-Blue-Background studios']
+                                             'The original laserdisc series from Orange-on-a-Blue-Background studios']
         department2 = 'Department of Everything'
         thesis_attributes[:departments] += [department2]
         thesis_attributes[:supervisors] += ["#{contributors[(seed + 3 * seed2) % 10]} (#{department2})"]
@@ -248,9 +259,9 @@ if Rails.env.development? || Rails.env.uat?
       end
       if i == 8
         # To test PCDM/list_source ordering, attach three files to the mondo-thesis!
-        File.open(Rails.root + 'app/javascript/images/theses.jpg', 'r') do |file1|
-          File.open(Rails.root + 'test/fixtures/files/image-sample.jpeg', 'r') do |file2|
-            File.open(Rails.root + 'app/javascript/images/era-logo.png', 'r') do |file3|
+        File.open("#{Rails.root}/app/javascript/images/theses.jpg", 'r') do |file1|
+          File.open("#{Rails.root}/test/fixtures/files/image-sample.jpeg", 'r') do |file2|
+            File.open("#{Rails.root}/app/javascript/images/era-logo.png", 'r') do |file3|
               thesis.add_and_ingest_files([file1, file2, file3])
             end
           end
@@ -267,9 +278,9 @@ if Rails.env.development? || Rails.env.uat?
       created: rand(20_000).days.ago.to_s,
       title: "Private #{thing.pluralize}, public lives: a survey of social media trends",
       description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop,
-      languages: [CONTROLLED_VOCABULARIES[:language].english],
-      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-      item_type: CONTROLLED_VOCABULARIES[:item_type].chapter,
+      languages: [ControlledVocabulary.era.language.english],
+      license: ControlledVocabulary.era.license.attribution_4_0_international,
+      item_type: ControlledVocabulary.era.item_type.chapter,
       subject: [thing.capitalize, 'Privacy'],
       doi: "doi:bogus-#{Time.current.utc.iso8601(3)}"
     ).tap do |uo|
@@ -285,9 +296,9 @@ if Rails.env.development? || Rails.env.uat?
       created: rand(20_000).days.ago.to_s,
       title: "Everything You Need To Know About: University of Alberta and #{thing.pluralize}!",
       description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop,
-      languages: [CONTROLLED_VOCABULARIES[:language].english],
-      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-      item_type: CONTROLLED_VOCABULARIES[:item_type].report,
+      languages: [ControlledVocabulary.era.language.english],
+      license: ControlledVocabulary.era.license.attribution_4_0_international,
+      item_type: ControlledVocabulary.era.item_type.report,
       subject: [thing.capitalize, 'CCID'],
       doi: "doi:bogus-#{Time.current.utc.iso8601(3)}"
     ).tap do |uo|
@@ -303,15 +314,15 @@ if Rails.env.development? || Rails.env.uat?
       created: rand(20_000).days.ago.to_s,
       title: "Embargo and #{Faker::Address.country}: were the #{thing.pluralize} left behind?",
       description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop,
-      languages: [CONTROLLED_VOCABULARIES[:language].english],
-      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-      item_type: CONTROLLED_VOCABULARIES[:item_type].conference_workshop_presentation,
+      languages: [ControlledVocabulary.era.language.english],
+      license: ControlledVocabulary.era.license.attribution_4_0_international,
+      item_type: ControlledVocabulary.era.item_type.conference_workshop_presentation,
       subject: [thing.capitalize, 'Embargoes'],
       doi: "doi:bogus-#{Time.current.utc.iso8601(3)}"
     ).tap do |uo|
       uo.add_to_path(community.id, item_collection.id)
       uo.embargo_end_date = 20.years.from_now.to_date
-      uo.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].public
+      uo.visibility_after_embargo = ControlledVocabulary.jupiter_core.visibility.public
       uo.save!
     end
 
@@ -323,15 +334,15 @@ if Rails.env.development? || Rails.env.uat?
       created: rand(20_000).days.ago.to_s,
       title: "Former embargo of #{Faker::Address.country}: the day the #{thing.pluralize} were free",
       description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop,
-      languages: [CONTROLLED_VOCABULARIES[:language].english],
-      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-      item_type: CONTROLLED_VOCABULARIES[:item_type].dataset,
+      languages: [ControlledVocabulary.era.language.english],
+      license: ControlledVocabulary.era.license.attribution_4_0_international,
+      item_type: ControlledVocabulary.era.item_type.dataset,
       subject: [thing.capitalize, 'Freedom'],
       doi: "doi:bogus-#{Time.current.utc.iso8601(3)}"
     ).tap do |uo|
       uo.add_to_path(community.id, item_collection.id)
       uo.embargo_end_date = 2.days.ago.to_date
-      uo.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].public
+      uo.visibility_after_embargo = ControlledVocabulary.jupiter_core.visibility.public
       uo.save!
     end
 
@@ -343,9 +354,9 @@ if Rails.env.development? || Rails.env.uat?
       created: rand(20_000).days.ago.to_s,
       title: "Impact of non-admin users on #{thing.pluralize}",
       description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop,
-      languages: [CONTROLLED_VOCABULARIES[:language].english],
-      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-      item_type: CONTROLLED_VOCABULARIES[:item_type].learning_object,
+      languages: [ControlledVocabulary.era.language.english],
+      license: ControlledVocabulary.era.license.attribution_4_0_international,
+      item_type: ControlledVocabulary.era.item_type.learning_object,
       subject: [thing.capitalize, 'Equality'],
       # Add a temporal subject
       temporal_subjects: ['The 1950s'],
@@ -364,9 +375,9 @@ if Rails.env.development? || Rails.env.uat?
       title: "Multi-collection random images of #{thing.pluralize}",
       description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop,
       # No linguistic content
-      languages: [CONTROLLED_VOCABULARIES[:language].no_linguistic_content],
-      license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-      item_type: CONTROLLED_VOCABULARIES[:item_type].image,
+      languages: [ControlledVocabulary.era.language.no_linguistic_content],
+      license: ControlledVocabulary.era.license.attribution_4_0_international,
+      item_type: ControlledVocabulary.era.item_type.image,
       subject: [thing.capitalize, 'Randomness', 'Pictures'],
       # Add a spacial subject
       spatial_subjects: ['Onoway'],
@@ -390,7 +401,7 @@ if Rails.env.development? || Rails.env.uat?
   # One community with a lot of empty restricted collections
   community = Community.create!(
     owner_id: admin.id,
-    title: "The Everything Department",
+    title: 'The Everything Department',
     description: Faker::Lorem.sentence(word_count: 20, supplemental: false, random_words_to_add: 0).chop
   )
 
@@ -400,7 +411,7 @@ if Rails.env.development? || Rails.env.uat?
       title: "Articles about the relationship between #{thing.pluralize} and non-#{thing.pluralize}",
       community_id: community.id,
       restricted: true,
-      description: "A restricted collection"
+      description: 'A restricted collection'
     )
   end
 
@@ -413,7 +424,7 @@ if Rails.env.development? || Rails.env.uat?
   base_radioactive_item_values = {
     # Set model id on each new Item so we can find it easily when testing
     owner_id: admin.id,
-    doi: 'doi:10.7939/xxxxxxxxx',
+    doi: 'doi:10.80243/99dh-v584',
     visibility: JupiterCore::VISIBILITY_PUBLIC,
     creators: ['dc:creator1$ Doe, Jane', 'dc:creator2$ Doe, John'],
     contributors: ['dc:contributor1$ Perez, Juan', 'dc:contributor2$ Perez, Maria'],
@@ -432,16 +443,16 @@ if Rails.env.development? || Rails.env.uat?
       '118(9), 5562-5578. http://doi.org/10.1002/jgra.50531',
       'dcterms:isVersionOf2$ Another version'
     ],
-    languages: [CONTROLLED_VOCABULARIES[:language].no_linguistic_content, CONTROLLED_VOCABULARIES[:language].french],
+    languages: [ControlledVocabulary.era.language.no_linguistic_content, ControlledVocabulary.era.language.french],
     related_link: 'dcterms:relation1$ http://doi.org/10.1007/xxxxxx-xxx-xxxx-x',
     source: 'dcterms:source1$ Some source',
     spatial_subjects: ['dcterms:spatial1$ Canada', 'dcterms:spatial2$ Nicaragua'],
     temporal_subjects: ['dcterms:temporal1$ Holocene', 'dcterms:temporal2$ Holocene'],
     title: 'dcterms:title1$ Some Title for Item',
     alternative_title: 'dcterms:alternative1$ Some Alternative Title',
-    item_type: CONTROLLED_VOCABULARIES[:item_type].image,
+    item_type: ControlledVocabulary.era.item_type.image,
     depositor: 'eraadmi@ualberta.ca',
-    license: CONTROLLED_VOCABULARIES[:license].attribution_sharealike_4_0_international,
+    license: ControlledVocabulary.era.license.attribution_sharealike_4_0_international,
     fedora3_uuid: 'uuid:97b1a8e2-a4b9-4941-b6ed-c4730f0a2a61',
     fedora3_handle: 'http://hdl.handle.net/10402/era.33419',
     hydra_noid: 'cgq67jr26k',
@@ -498,7 +509,7 @@ if Rails.env.development? || Rails.env.uat?
       visibility: Item::VISIBILITY_EMBARGO,
       embargo_history: ['acl:embargoHistory1$ Item currently embargoed'],
       embargo_end_date: '2080-01-01T00:00:00.000Z',
-      visibility_after_embargo: CONTROLLED_VOCABULARIES[:visibility].public
+      visibility_after_embargo: ControlledVocabulary.jupiter_core.visibility.public
     )
   ).tap do |item|
     # Attach files
@@ -529,7 +540,7 @@ if Rails.env.development? || Rails.env.uat?
         '2000-01-01T00:00:00.000Z.  Visibility during embargo was restricted and intended visibility after embargo '\
         'was open'
       ],
-      visibility_after_embargo: CONTROLLED_VOCABULARIES[:visibility].public
+      visibility_after_embargo: ControlledVocabulary.jupiter_core.visibility.public
     )
   ).tap do |item|
     # Attach files
@@ -551,8 +562,8 @@ if Rails.env.development? || Rails.env.uat?
     base_radioactive_item_values.merge(
       id: '93126aae-4b9d-4db2-98f1-4e04b40778cf',
       # The value for publication_status published only appears for article item type
-      item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-      publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published]
+      item_type: ControlledVocabulary.era.item_type.article,
+      publication_status: [ControlledVocabulary.era.publication_status.published]
     )
   ).tap do |item|
     # Attach files
@@ -568,135 +579,191 @@ if Rails.env.development? || Rails.env.uat?
     item.save!
   end
 
-end
-
-base_radioactive_thesis_values = {
-  visibility: JupiterCore::VISIBILITY_PUBLIC,
-  owner_id: admin.id,
-  hydra_noid: 'c6108vb30p',
-  record_created_at: '2018-03-13T16:52:49.818Z',
-  date_ingested: '2018-03-13T16:52:49.818Z',
-  title: 'dcterms:title1$ Some Thesis Title',
-  fedora3_uuid: 'uuid:a4701510-ef9b-45cf-a7d0-2d2f16e00787',
-  depositor: 'lisboa@ualberta.ca',
-  alternative_title: 'dcterms:alternative1$ Some Alternative Title',
-  doi: 'doi:10.7939/R3V980074',
-  fedora3_handle: 'http://hdl.handle.net/10402/era.40349',
-  ingest_batch: '6395w734s',
-  rights: 'dc:rights1$ Some license terms',
-  sort_year: '2015',
-  is_version_of: [
-    'dcterms:isVersionOf1$ Lartey, S., Cummings, G. G., & Profetto-McGrath, J. (2013). Interventions that promote ' \
-    'retention of experienced registered nurses in health care settings: A systematic review. Journal of Nursing ' \
-    'Management. doi: 10.1111/jonm.12105'
-  ],
-  member_of_paths: ["#{community_with_collection.id}/#{community_with_collection.collections[0].id}"],
-  subject: [
-    'dc:subject1$ Some subject heading',
-    'dc:subject2$ Some subject heading',
-    'dc:subject3$ Some subject heading'
-  ],
-  abstract: 'dcterms:abstract1$ Arabic ناتيومرلبسفأعدقحكهجشطصزخضغذثئةظؤىءآإ Greek αβγδεζηθικλμνξοπρςστυφχψω ' \
-  'ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ Cyrillic абвгдеёжзийклмнопрстуфхцчшщъыьэюя АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ Lao ກ-ໝ ' \
-  'Thai ก-๎ Burmese က-ၙ Khmer ក-៹ Korean 가-힣 Bengali অ-ৱ // Spanish áéíóúüñ French àâçèéêëîïôùûü Portuguese ' \
-  'àáâãçéêíóôõú Hindi ऄ-ॿ Pujabi ਅ-ੴ Mandarin 海萵苣白菜冬瓜韭菜竹筍生菜大頭菜豆薯銀甜菜莧菜豌豆蒲公英蔥豌豆苗亞羅婆羅門參西葫蘆 ' \
-  '小豆辣根土豆 Japanese アオサメロンキャベツニラ竹シュートレタスルタバガのクズイモ銀ビートアマランスエンドウタンポポねぎ',
-  language: CONTROLLED_VOCABULARIES[:language].english,
-  date_accepted: '2014-12-23T15:33:25Z',
-  date_submitted: '2014-12-23T14:50:01Z',
-  degree: 'bibo:degree1$ Doctor of Philosophy',
-  institution: 'http://id.loc.gov/authorities/names/n79058482',
-  dissertant: 'ual:dissertant$1 Lisboa, Luiz',
-  graduation_date: '2015-06',
-  thesis_level: 'ual:thesisLevel1$ Doctoral',
-  proquest: 'NN88234',
-  unicorn: '2133190',
-  specialization: 'ual:specialization1$ Experimental Medicine',
-  departments: [
-    'ual:department1$ Department of Medicine',
-    'ual:department2$ Department of Something',
-    'ual:department3$ Another Department'
-  ],
-  supervisors: [
-    'ual:supervisor1$ Humar, Atul (Medicine)',
-    'ual:supervisor2$ Kumar, Deepali (Medicine)',
-    'ual:supervisor3$ Tyrrell, D. Lorne (Medicine)'
-  ],
-  committee_members: [
-    'ual:commiteeMember1$ Hemmings, Denise (Obstetrics & Gynecology)',
-    'ual:commiteeMember2$ Humar, Atul (Medicine)',
-    'ual:commiteeMember3$ McMurtry, M. Sean (Medicine)'
-  ],
-  aasm_state: 'available'
-}
-
-# Add base radioactive Thesis
-Thesis.new(
-  base_radioactive_thesis_values.merge(id: '8e18f37c-dc60-41bb-9459-990586176730')
-).tap do |thesis|
-  # Attach files
-
-  radioactive_example_file_paths.each do |file_path|
-    File.open(Rails.root + file_path, 'r') do |file|
-      thesis.add_and_ingest_files([file])
-    end
-  end
-
-  thesis.set_thumbnail(thesis.files.first) if thesis.files.first.present?
-
-  thesis.save!
-end
-
-# Add Thesis that is currently embargoed
-Thesis.new(
-  base_radioactive_thesis_values.merge(
-    id: 'b3cc2224-9303-47be-8b54-e6556a486be8',
-    visibility: Thesis::VISIBILITY_EMBARGO,
-    embargo_history: ['acl:embargoHistory1$ Thesis currently embargoed'],
-    embargo_end_date: '2080-01-01T00:00:00.000Z',
-    visibility_after_embargo: CONTROLLED_VOCABULARIES[:visibility].public
-  )
-).tap do |thesis|
-  # Attach files
-
-  radioactive_example_file_paths.each do |file_path|
-    File.open(Rails.root + file_path, 'r') do |file|
-      thesis.add_and_ingest_files([file])
-    end
-  end
-
-  thesis.set_thumbnail(thesis.files.first) if thesis.files.first.present?
-
-  thesis.save!
-end
-
-# Add Thesis that was previously embargoed
-Thesis.new(
-  base_radioactive_thesis_values.merge(
-    id: '9d7c12f0-b396-4511-ba0e-c012ec028e8a',
-    # In order to set embargo values the visibility value needs to be set to
-    visibility: Thesis::VISIBILITY_EMBARGO,
-    embargo_end_date: '2000-01-01T00:00:00.000Z',
-    embargo_history: [
-      'acl:embargoHistory1$ An expired embargo was deactivated on 2016-06-15T18:00:15.651Z.  Its release date was ' \
-      '2016-06-15T06:00:00.000Z.  Visibility during embargo was restricted and intended visibility after embargo ' \
-      'was open'
+  base_radioactive_thesis_values = {
+    visibility: JupiterCore::VISIBILITY_PUBLIC,
+    owner_id: admin.id,
+    hydra_noid: 'c6108vb30p',
+    record_created_at: '2018-03-13T16:52:49.818Z',
+    date_ingested: '2018-03-13T16:52:49.818Z',
+    title: 'dcterms:title1$ Some Thesis Title',
+    fedora3_uuid: 'uuid:a4701510-ef9b-45cf-a7d0-2d2f16e00787',
+    depositor: 'lisboa@ualberta.ca',
+    alternative_title: 'dcterms:alternative1$ Some Alternative Title',
+    doi: 'doi:10.7939/R3V980074',
+    fedora3_handle: 'http://hdl.handle.net/10402/era.40349',
+    ingest_batch: '6395w734s',
+    rights: 'dc:rights1$ Some license terms',
+    sort_year: '2015',
+    is_version_of: [
+      'dcterms:isVersionOf1$ Lartey, S., Cummings, G. G., & Profetto-McGrath, J. (2013). Interventions that promote ' \
+      'retention of experienced registered nurses in health care settings: A systematic review. Journal of Nursing ' \
+      'Management. doi: 10.1111/jonm.12105'
     ],
-    visibility_after_embargo: CONTROLLED_VOCABULARIES[:visibility].public
-  )
-).tap do |thesis|
-  # Attach files
+    member_of_paths: ["#{community_with_collection.id}/#{community_with_collection.collections[0].id}"],
+    subject: [
+      'dc:subject1$ Some subject heading',
+      'dc:subject2$ Some subject heading',
+      'dc:subject3$ Some subject heading'
+    ],
+    abstract: 'dcterms:abstract1$ Arabic ناتيومرلبسفأعدقحكهجشطصزخضغذثئةظؤىءآإ Greek αβγδεζηθικλμνξοπρςστυφχψω ' \
+    'ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ Cyrillic абвгдеёжзийклмнопрстуфхцчшщъыьэюя АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ Lao ກ-ໝ ' \
+    'Thai ก-๎ Burmese က-ၙ Khmer ក-៹ Korean 가-힣 Bengali অ-ৱ // Spanish áéíóúüñ French àâçèéêëîïôùûü Portuguese ' \
+    'àáâãçéêíóôõú Hindi ऄ-ॿ Pujabi ਅ-ੴ Mandarin 海萵苣白菜冬瓜韭菜竹筍生菜大頭菜豆薯銀甜菜莧菜豌豆蒲公英蔥豌豆苗亞羅婆羅門參西葫蘆 ' \
+    '小豆辣根土豆 Japanese アオサメロンキャベツニラ竹シュートレタスルタバガのクズイモ銀ビートアマランスエンドウタンポポねぎ',
+    language: ControlledVocabulary.era.language.english,
+    date_accepted: '2014-12-23T15:33:25Z',
+    date_submitted: '2014-12-23T14:50:01Z',
+    degree: 'bibo:degree1$ Doctor of Philosophy',
+    institution: 'http://id.loc.gov/authorities/names/n79058482',
+    dissertant: 'ual:dissertant$1 Lisboa, Luiz',
+    graduation_date: '2015-06',
+    thesis_level: 'ual:thesisLevel1$ Doctoral',
+    proquest: 'NN88234',
+    unicorn: '2133190',
+    specialization: 'ual:specialization1$ Experimental Medicine',
+    departments: [
+      'ual:department1$ Department of Medicine',
+      'ual:department2$ Department of Something',
+      'ual:department3$ Another Department'
+    ],
+    supervisors: [
+      'ual:supervisor1$ Humar, Atul (Medicine)',
+      'ual:supervisor2$ Kumar, Deepali (Medicine)',
+      'ual:supervisor3$ Tyrrell, D. Lorne (Medicine)'
+    ],
+    committee_members: [
+      'ual:commiteeMember1$ Hemmings, Denise (Obstetrics & Gynecology)',
+      'ual:commiteeMember2$ Humar, Atul (Medicine)',
+      'ual:commiteeMember3$ McMurtry, M. Sean (Medicine)'
+    ],
+    aasm_state: 'available'
+  }
 
-  radioactive_example_file_paths.each do |file_path|
-    File.open(Rails.root + file_path, 'r') do |file|
-      thesis.add_and_ingest_files([file])
+  # Add base radioactive Thesis
+  Thesis.new(
+    base_radioactive_thesis_values.merge(id: '8e18f37c-dc60-41bb-9459-990586176730')
+  ).tap do |thesis|
+    # Attach files
+
+    radioactive_example_file_paths.each do |file_path|
+      File.open(Rails.root + file_path, 'r') do |file|
+        thesis.add_and_ingest_files([file])
+      end
     end
+
+    thesis.set_thumbnail(thesis.files.first) if thesis.files.first.present?
+
+    thesis.save!
   end
 
-  thesis.set_thumbnail(thesis.files.first) if thesis.files.first.present?
+  # Add Thesis that is currently embargoed
+  Thesis.new(
+    base_radioactive_thesis_values.merge(
+      id: 'b3cc2224-9303-47be-8b54-e6556a486be8',
+      visibility: Thesis::VISIBILITY_EMBARGO,
+      embargo_history: ['acl:embargoHistory1$ Thesis currently embargoed'],
+      embargo_end_date: '2080-01-01T00:00:00.000Z',
+      visibility_after_embargo: ControlledVocabulary.jupiter_core.visibility.public
+    )
+  ).tap do |thesis|
+    # Attach files
 
-  thesis.save!
+    radioactive_example_file_paths.each do |file_path|
+      File.open(Rails.root + file_path, 'r') do |file|
+        thesis.add_and_ingest_files([file])
+      end
+    end
+
+    thesis.set_thumbnail(thesis.files.first) if thesis.files.first.present?
+
+    thesis.save!
+  end
+
+  # Add Thesis that was previously embargoed
+  Thesis.new(
+    base_radioactive_thesis_values.merge(
+      id: '9d7c12f0-b396-4511-ba0e-c012ec028e8a',
+      # In order to set embargo values the visibility value needs to be set to
+      visibility: Thesis::VISIBILITY_EMBARGO,
+      embargo_end_date: '2000-01-01T00:00:00.000Z',
+      embargo_history: [
+        'acl:embargoHistory1$ An expired embargo was deactivated on 2016-06-15T18:00:15.651Z.  Its release date was ' \
+        '2016-06-15T06:00:00.000Z.  Visibility during embargo was restricted and intended visibility after embargo ' \
+        'was open'
+      ],
+      visibility_after_embargo: ControlledVocabulary.jupiter_core.visibility.public
+    )
+  ).tap do |thesis|
+    # Attach files
+
+    radioactive_example_file_paths.each do |file_path|
+      File.open(Rails.root + file_path, 'r') do |file|
+        thesis.add_and_ingest_files([file])
+      end
+    end
+
+    thesis.set_thumbnail(thesis.files.first) if thesis.files.first.present?
+
+    thesis.save!
+  end
+
+  11.times do |_i|
+    book = Digitization::Book.create!(peel_id: rand(1..3400), part_number: rand(1..100),
+                              owner_id: admin.id,
+                              dates_issued: [rand(1900..2020).to_s],
+                              date_ingested: '2016-12-08T06:00:00.000Z',
+                              title: "#{Faker::Company.name} #{Faker::WorldCup.city} Music Festival",
+                              alternative_titles: [Faker::Hipster.sentence.to_s],
+                              resource_type: ControlledVocabulary.digitization.resource_type.from_value('Text'),
+                              genres: [ControlledVocabulary.digitization.genre.from_value('Programs (Publications)')],
+                              languages: [ControlledVocabulary.digitization.language.from_value('English')],
+                              publishers: [ControlledVocabulary.digitization.subject.from_value('Edmonton Folk Music Festival')],
+                              places_of_publication: [ControlledVocabulary.digitization.subject.from_value('Edmonton (Alta.)')],
+                              extent: 'v. : ill. ; 22-27 cm.',
+                              notes: ['Souvenir program of the festival, including biographical notes on and portraits and discographies of the performers, articles, etc.', Faker::Hipster.sentence.to_s],
+                              temporal_subjects: ['1981'],
+                              geographic_subjects: [ControlledVocabulary.digitization.subject.from_value('Edmonton (Alta.)')],
+                              topical_subjects: [ControlledVocabulary.digitization.subject.from_value('Folk music festivals')],
+                              rights: ControlledVocabulary.digitization.rights.from_value('In Copyright')
+    )
+    book.create_fulltext!(text: Faker::Lorem.sentence(word_count: 250, supplemental: false, random_words_to_add: 0))
+  end
+
+  11.times do |_i|
+    date = Faker::Date.between(from: '1900-01-01', to: Date.today)
+    place = [ControlledVocabulary.digitization.subject.from_value('Edmonton (Alta.)'), ControlledVocabulary.digitization.subject.from_value('Lacombe (Alta.)')].sample
+    newspaper = Digitization::Newspaper.create!(publication_code: ['ACN', 'LSV', 'SDN'].sample, 
+                              year: date.year,
+                              month: date.month.to_s.rjust(2, "0"),
+                              day: date.mday.to_s.rjust(2, "0"),
+                              owner_id: admin.id,
+                              dates_issued: [date.edtf],
+                              date_ingested: '2016-12-08T06:00:00.000Z',
+                              title: "#{Faker::Address.city} #{Faker::Subscription.subscription_term}",
+                              alternative_titles: [Faker::Hipster.sentence.to_s],
+                              resource_type: ControlledVocabulary.digitization.resource_type.from_value('Text'),
+                              genres: [ControlledVocabulary.digitization.genre.from_value('Newspapers')],
+                              languages: [ControlledVocabulary.digitization.language.from_value('English')],
+                              places_of_publication: [place],
+                              extent: 'v. : ill.',
+                              notes: [Faker::Hipster.sentence.to_s],
+                              geographic_subjects: [place],
+                              rights: ControlledVocabulary.digitization.rights.from_value('No Known Copyright')
+    )
+  end
+
+  Digitization::Book.create(peel_id: '4062') # monograph
+  Digitization::Book.create(peel_id: '10571', part_number: '2') # Government Document
+  Digitization::Book.create(peel_id: '3178', run: '2', part_number: '12') # Henderson
+  Digitization::Newspaper.create(publication_code: 'LSV', year: '1967', month: '03', day: '29')
+  Digitization::Image.create(peel_image_id: 'MGNGBG0464') # Magee
+  Digitization::Image.create(peel_image_id: 'PC006393') # Postcard
+  Digitization::Map.create(peel_map_id: 'M000230')
+
 end
+
+# Rdf Annotations
+load('db/seeds/rdf_annotations.rb')
 
 # Types
 [:book, :book_chapter, :conference_workshop_poster,

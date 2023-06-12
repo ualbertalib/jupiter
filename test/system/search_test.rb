@@ -17,10 +17,10 @@ class SearchTest < ApplicationSystemTestCase
                  owner_id: admin.id, title: "#{random_title(i)} Item #{i}",
                  creators: ['Joe Blow'],
                  created: "19#{50 + i}-11-11",
-                 languages: [CONTROLLED_VOCABULARIES[:language].english],
-                 item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                 publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                 languages: [ControlledVocabulary.era.language.english],
+                 item_type: ControlledVocabulary.era.item_type.article,
+                 publication_status: [ControlledVocabulary.era.publication_status.published],
+                 license: ControlledVocabulary.era.license.attribution_4_0_international,
                  subject: ['Items'])
             .tap do |uo|
           uo.add_to_path(@community.id, @collections[0].id)
@@ -30,7 +30,7 @@ class SearchTest < ApplicationSystemTestCase
         Thesis.new(visibility: JupiterCore::VISIBILITY_PUBLIC,
                    owner_id: admin.id, title: "#{random_title(i)} Item #{i}",
                    dissertant: 'Joe Blow',
-                   language: CONTROLLED_VOCABULARIES[:language].english,
+                   language: ControlledVocabulary.era.language.english,
                    graduation_date: "19#{50 + i}-11-11")
               .tap do |uo|
           uo.add_to_path(@community.id, @collections[1].id)
@@ -43,10 +43,10 @@ class SearchTest < ApplicationSystemTestCase
                     owner_id: admin.id, title: 'Fancy CCID Item',
                     creators: ['Joe Blow'],
                     created: '1950-11-11',
-                    languages: [CONTROLLED_VOCABULARIES[:language].english],
-                    item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                    publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-                    license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                    languages: [ControlledVocabulary.era.language.english],
+                    item_type: ControlledVocabulary.era.item_type.article,
+                    publication_status: [ControlledVocabulary.era.publication_status.published],
+                    license: ControlledVocabulary.era.license.attribution_4_0_international,
                     subject: ['Items'])
                .tap do |uo|
       uo.add_to_path(@community.id, @collections[0].id)
@@ -66,10 +66,10 @@ class SearchTest < ApplicationSystemTestCase
                  owner_id: admin.id, title: "#{random_title(i)} Private Item #{i + 10}",
                  creators: ['Joe Blow'],
                  created: "19#{70 + i}-11-11",
-                 languages: [CONTROLLED_VOCABULARIES[:language].english],
-                 item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                 publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-                 license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                 languages: [ControlledVocabulary.era.language.english],
+                 item_type: ControlledVocabulary.era.item_type.article,
+                 publication_status: [ControlledVocabulary.era.publication_status.published],
+                 license: ControlledVocabulary.era.license.attribution_4_0_international,
                  subject: ['Items'])
             .tap do |uo|
           uo.add_to_path(@community.id, @collections[0].id)
@@ -79,7 +79,7 @@ class SearchTest < ApplicationSystemTestCase
         Thesis.new(visibility: JupiterCore::VISIBILITY_PRIVATE,
                    owner_id: admin.id, title: "#{random_title(i)} Private Item #{i + 10}",
                    dissertant: 'Joe Blow',
-                   language: CONTROLLED_VOCABULARIES[:language].english,
+                   language: ControlledVocabulary.era.language.english,
                    graduation_date: "19#{70 + i}-11-11")
               .tap do |uo|
           uo.add_to_path(@community.id, @collections[1].id)
@@ -97,10 +97,10 @@ class SearchTest < ApplicationSystemTestCase
                owner_id: admin.id, title: "Extra Item #{i}",
                creators: ['Joe Blow'],
                created: "19#{90 + i}-11-11",
-               languages: [CONTROLLED_VOCABULARIES[:language].english],
-               item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-               publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published],
-               license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+               languages: [ControlledVocabulary.era.language.english],
+               item_type: ControlledVocabulary.era.item_type.article,
+               publication_status: [ControlledVocabulary.era.publication_status.published],
+               license: ControlledVocabulary.era.license.attribution_4_0_international,
                subject: ['Items'])
           .tap do |uo|
         uo.add_to_path(community.id, collection.id)
@@ -109,7 +109,7 @@ class SearchTest < ApplicationSystemTestCase
     end
   end
 
-  test 'anybody should be able to filter the public items' do
+  test 'anybody should be able to view search results' do
     visit root_path
     fill_in name: 'search', with: 'Fancy'
     click_button 'Search'
@@ -149,6 +149,12 @@ class SearchTest < ApplicationSystemTestCase
     within '.list-group-item', text: 'Fancy CCID Item' do
       refute_selector 'a', text: 'Download'
     end
+  end
+
+  test 'anybody should be able to filter the public items by collection' do
+    visit root_path
+    fill_in name: 'search', with: 'Fancy'
+    click_button 'Search'
 
     # A checkbox for the facet should be unchecked, and link should turn on facet
     within 'div.jupiter-filters a', text: 'Fancy Collection 1' do
@@ -194,6 +200,24 @@ class SearchTest < ApplicationSystemTestCase
     badge.assert_selector 'span.badge', text: 'Fancy Collection 1'
   end
 
+  test 'facet badge should have category when flipped' do
+    Flipper.enable(:facet_badge_category_name)
+    visit root_path
+    fill_in name: 'search', with: 'Fancy'
+    click_button 'Search'
+
+    # Click on facet
+    click_link 'Fancy Collection 1'
+
+    # A badge should be displayed for the enabled facet as a link that turns off facet
+    badges = find('div.jupiter-facet-badges')
+    badge = badges.find_link('a', text: 'Collections: Fancy Community/Fancy Collection 1',
+                                  href: search_path(search: 'Fancy'))
+    badge.assert_selector 'span.badge', text: 'Collections: Fancy Community/Fancy Collection 1'
+
+    Flipper.disable(:facet_badge_category_name)
+  end
+
   test 'anybody should be able to view community/collection hits via tabs' do
     visit root_path
     fill_in name: 'search', with: 'Fancy'
@@ -209,6 +233,13 @@ class SearchTest < ApplicationSystemTestCase
     assert_selector 'div.jupiter-results-list h3 a', text: 'Item', count: 6
     assert_selector 'div.jupiter-results-list a', text: 'Community', count: 0
     assert_selector 'div.jupiter-results-list a', text: 'Collection', count: 0
+  end
+
+  test 'anybody should be able to view community hits via tabs' do
+    visit root_path
+    fill_in name: 'search', with: 'Fancy'
+    click_button 'Search'
+    assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy')
 
     # Visit community tab
     click_link 'Communities'
@@ -220,6 +251,13 @@ class SearchTest < ApplicationSystemTestCase
     assert_selector 'div.jupiter-results-list h3 a', text: 'Item', count: 0
     assert_selector 'div.jupiter-results-list a', text: 'Community', count: 1
     assert_selector 'div.jupiter-results-list a', text: 'Collection', count: 0
+  end
+
+  test 'anybody should be able to view collection hits via tabs' do
+    visit root_path
+    fill_in name: 'search', with: 'Fancy'
+    click_button 'Search'
+    assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy')
 
     # Visit collection tab
     within('.nav-tabs') do
@@ -263,7 +301,7 @@ class SearchTest < ApplicationSystemTestCase
     assert_selector 'li a', text: /Extra Community/, count: 6
   end
 
-  test 'anybody should be able to sort results' do
+  test 'anybody should be able to view sort options and view items in default order (ascending alphabetical)' do
     visit root_path
     fill_in name: 'search', with: 'Fancy'
     click_button 'Search'
@@ -281,30 +319,59 @@ class SearchTest < ApplicationSystemTestCase
     assert_selector 'a', text: 'Date (newest first)'
     assert_selector 'a', text: 'Date (oldest first)'
     assert_selector 'a', text: 'Relevance'
+  end
+
+  test 'anybody should be able to sort results in descending alphabetical order' do
+    visit root_path
+    fill_in name: 'search', with: 'Fancy'
+    click_button 'Search'
+    assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy')
 
     # Reverse sort
+    click_button 'Sort by'
     click_link 'Title (Z-A)'
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy', sort: 'title', direction: 'desc')
     assert_selector 'button', text: 'Title (Z-A)'
     assert_match(/Fancy Item 8.*Fancy Item 6.*Fancy Item 4.*Fancy Item 2.*Fancy Item 0.*Fancy CCID Item/m, page.text)
+  end
+
+  test 'anybody should be able to sort results in ascending alphabetical order' do
+    visit root_path
+    fill_in name: 'search', with: 'Fancy'
+    click_button 'Search'
+    assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy')
 
     # Sort the other way again
-    click_button 'Title (Z-A)'
+    click_button 'Sort by'
     click_link 'Title (A-Z)'
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy', sort: 'title', direction: 'asc')
     assert_selector 'button', text: 'Title (A-Z)'
     assert_match(/Fancy CCID Item.*Fancy Item 0.*Fancy Item 2.*Fancy Item 4.*Fancy Item 6.*Fancy Item 8/m, page.text)
+  end
+
+  test 'anybody should be able to sort results by newest first' do
+    visit root_path
+    fill_in name: 'search', with: 'Fancy'
+    click_button 'Search'
+    assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy')
 
     # Sort with newest first
-    click_button 'Title (A-Z)'
+    click_button 'Sort by'
     click_link 'Date (newest first)'
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy',
                                                                  sort: 'sort_year', direction: 'desc')
     assert_selector 'button', text: 'Date (newest first)'
     assert_match(/Fancy Item 8.*Fancy Item 6.*Fancy Item 4.*Fancy Item 2.*Fancy Item 0/m, page.text)
+  end
+
+  test 'anybody should be able to sort results by oldest first' do
+    visit root_path
+    fill_in name: 'search', with: 'Fancy'
+    click_button 'Search'
+    assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy')
 
     # Sort with oldest first
-    click_button 'Date (newest first)'
+    click_button 'Sort by'
     click_link 'Date (oldest first)'
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy',
                                                                  sort: 'sort_year', direction: 'asc')
@@ -312,8 +379,8 @@ class SearchTest < ApplicationSystemTestCase
     assert_match(/Fancy Item 0.*Fancy Item 2.*Fancy Item 4.*Fancy Item 6.*Fancy Item 8/m, page.text)
   end
 
-  # TODO: Slow Test, consistently around ~8-9 seconds
-  test 'admin should be able to filter the public and private items' do
+  # TODO: Slow Tests, next two consistently around ~8-9 seconds
+  test 'admin should be able to view public and private items' do
     admin = users(:user_admin)
     login_user(admin)
 
@@ -366,6 +433,18 @@ class SearchTest < ApplicationSystemTestCase
       assert_selector 'i.far.fa-square', count: 1
     end
 
+    logout_user
+  end
+
+  test 'admin should be able to filter the public and private items' do
+    admin = users(:user_admin)
+    login_user(admin)
+
+    # Search box should be on any page we happen to be on
+    fill_in name: 'search', with: 'Fancy'
+    click_button 'Search'
+    assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy')
+
     # Click on facet
     click_link 'Fancy Collection 1'
 
@@ -402,6 +481,8 @@ class SearchTest < ApplicationSystemTestCase
     badges = find('div.jupiter-facet-badges')
     badge = badges.find_link('a', text: 'Fancy Collection 1', href: search_path(search: 'Fancy'))
     badge.assert_selector 'span.badge', text: 'Fancy Collection 1'
+
+    logout_user
   end
 
 end

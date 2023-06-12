@@ -44,6 +44,11 @@ en:
   edit: 'Edit'
   edited_by: 'Edited by'
   edit_history: 'Edit history ...'
+  edit_history_explainer_title: 'Note about how changes are shown'
+  edit_history_explainer_styles_title: 'We use these styles for each change:'
+  edit_history_explainer_styles_content_html: 'Unchanged<del class="differ">Old</del><ins class="differ">New</ins>'
+  edit_history_explainer_deleted_title: 'When part of the history has been deleted we will show only the id:'
+  edit_history_explainer_deleted_content: 'e.g. 00000000-0000-0000-0000-000000000000'
   filter_by: 'Filter by'
   home: 'Home'
   hide_edit_history: 'Hide edit history ...'
@@ -160,6 +165,28 @@ en:
               collection_restricted: "Deposit is restricted for this collection"
             files:
               infected: '%{filename} is infected with a virus'
+        digitization/book:
+            attributes:
+              peel_number:
+                taken: "number %{peel_number} has already been taken"
+              resource_type:
+                not_recognized: 'is not recognized'
+              genres:
+                not_recognized: 'is not recognized'
+              languages:
+                not_recognized: 'is not recognized'
+              rights:
+                not_recognized: 'is not recognized'
+        digitization/newspaper:
+            attributes:
+              resource_type:
+                not_recognized: 'is not recognized'
+              genres:
+                not_recognized: 'is not recognized'
+              languages:
+                not_recognized: 'is not recognized'
+              rights:
+                not_recognized: 'is not recognized'
         user:
           attributes:
             api_key_digest:
@@ -170,7 +197,18 @@ en:
           attributes:
             enabled:
               only_one_record_exists: 'Only one ReadOnlyMode record may exist'
-
+        batch_ingest:
+          attributes:
+            batch_ingest_files:
+              too_long: "too many files added (maximum is %{count} files). If you need more files, try submitting multiple batch ingests"
+            google_spreadsheet_id:
+                missing_required_column: "%{column} is required and was not found for row %{row_number} of spreadsheet"
+                publication_status_required_for_articles: 'Publication status is required for articles and was not found for row %{row_number} of spreadsheet'
+                embargo_missing_required_data: 'Embargo end date and visibility after embargo is required for embargo items. Missing data was not found for row %{row_number} of spreadsheet'
+                column_not_found: "%{column} does not exist in ERA for row %{row_number} of spreadsheet"
+                no_matching_files: "File(s) '%{file_names}' from row %{row_number} of spreadsheet are not listed in the file list below"
+                spreadsheet_could_not_be_read: "Spreadsheet could not be read. Please follow the template spreadsheet as an example"
+                duplicate_files: "File '%{file_name}' is repeated in rows %{rows} of the spreadsheet but should only appear in a single row"
   application:
     navbar:
       era_logo_alt: 'ERA - Education and Research Archive'
@@ -202,6 +240,17 @@ en:
       skip_to_results: 'Skip to Search Results'
     range_facet_result:
       to: 'to'
+    files_section_sidebar:
+      view: 'View'
+      download: 'Download'
+      download_all: 'Download All'
+      header: 'Files'
+      ccid_restricted_item: Item Restricted to University of Alberta Users
+      login_with_ccid_to_view: Log In with CCID to View Item
+
+  layouts:
+    admin:
+      feature_flags: 'Feature Flags'
 
   locked_ldp_object:
     errors:
@@ -288,12 +337,6 @@ en:
         posted: 'Announcement was successfully posted!'
       destroy:
         removed: 'Announcement was successfully removed!'
-    pages:
-      index:
-        header: 'Static Pages'
-    analytics:
-      index:
-        header: 'Analytics'
     items:
       index:
         header: 'Items'
@@ -456,7 +499,73 @@ en:
           header_icon: 'check-square'
           please_review_thesis: 'Please review your thesis before depositing into ERA'
           legal_disclaimer_html: 'By depositing this thesis into ERA you agree to the <a href="/policies">ERA Deposit Policy agreements</a>'
+    batch_ingests:
+      create:
+        created: 'Batch Ingest was successfully created!'
+      index:
+        header: 'Batch ingests'
+        search_placeholder: 'search title...'
+        status: 'Status'
+        new_batch_ingest: 'New batch ingest'
+      batch_ingests:
+        title: 'Title'
+        status: 'Status'
+        created: 'Created'
+        display_batch_ingests_count: "Displaying %{shown_batch_ingests_count} of %{matching_batch_ingests_count}
+        matching batch ingests (%{total_batch_ingests_count} total batch ingests)"
+        no_batch_ingests_found: 'No batch ingests found'
+      form:
+        title: 'Title'
+        spreadsheet: 'Spreadsheet'
+        add_spreadsheet: 'Add spreadsheet'
+        files: 'Files'
+        add_files: 'Add files'
+        title_placeholder: 'Enter title'
+        create_batch_ingest: 'Create batch ingest'
+        saving_html: "<i class='fas fa-spinner fa-pulse mr-2'></i>Saving..."
+      show:
+        batch_ingest_failed: 'Batch ingest has failed. The following error has occurred:'
+        failure_hint: 'Please fix the error above and try again by starting a new batch ingest.
+          Be cautious if any items have already been ingested when starting a new batch ingest, as this could lead to duplicated items being ingested!
+          If you stuck or need help, please ask a developer'
+        status: 'Status'
+        created_by: 'Created by'
+        files: 'Files'
+        google_file_name: 'Google file name'
+        google_file_id: 'Google file id'
+        spreadsheet: 'Spreadsheet'
+        google_spreadsheet_name: 'Google spreadsheet name'
+        google_spreadsheet_id: 'Google spreadsheet id'
+        ingested_items: Ingested items
+        title: 'Title'
+        no_items_found: 'No items found'
+      new:
+        header: Create batch ingest
 
+  digitization:
+    collection:
+      title: 'Collection'
+    books:
+      show:
+        usage: 'Usage'
+        views: 'Views'
+        downloads: 'Download'
+      book:
+        creators: 'Author / Creator'
+        description: 'Notes'
+        created: 'Date Created'
+        volume_label: 'Volume & Issue'
+        item_type: 'Type of Item'
+        genre: 'Genre'
+        language: 'Language'
+        place_of_publication: 'Place of Publication'
+        extent: 'Extent'
+    peel_image_id: 'Peel Image Id'
+    peel_map_id: 'Peel Map Id'
+    publication_code: 'Publication code'
+    year: 'Year'
+    month: 'Month'
+    day: 'Day'
 
   profile:
     index:
@@ -507,8 +616,6 @@ en:
       images_of_research_attribution: 'Image: “Frozen Kaleidoscope” by Vincent McFarlane CC-BY 4.0'
       theses_collection: 'University of Alberta Theses and Dissertations'
       afns_collection: 'Department of Agriculture, Food and Nutritional Science Journal Articles'
-      era_av_header: 'Explore ERA Audio+Video'
-      era_av_text: "The University of Alberta Library's Media Streaming Service"
 
   items:
     index:
@@ -561,13 +668,6 @@ en:
       committee_members: 'Examining committee members and their departments'
     thumbnail:
       thumbnail: 'thumbnail'
-    files_section_sidebar:
-      view: 'View'
-      download: 'Download'
-      download_all: 'Download All'
-      header: 'Files'
-      ccid_restricted_item: Item Restricted to University of Alberta Users
-      login_with_ccid_to_view: Log In with CCID to View Item
     admin_sidebar:
       admin: 'Admin'
       reset_doi: 'Reset DOI'
@@ -760,6 +860,7 @@ en:
     range_begin: 'Range Begin'
     range_end: 'Range End'
     range_limit: 'Limit'
+    invalid_date_range_flash: 'Your selected date filters are not a valid range'
 
     index:
       header: 'Search'
@@ -774,61 +875,62 @@ en:
       thumbnail: 'Thumbnail'
 
   controlled_vocabularies:
-    item_type_with_status:
-      article_published: Article (Published)
-      article_submitted: Article (Draft / Submitted)
-      book: Book
-      chapter: Chapter
-      image: Image
-      report: Report
-      research_material: 'Research Material'
-      conference_workshop_presentation: 'Conference/Workshop Presentation'
-      conference_workshop_poster: 'Conference/Workshop Poster'
-      dataset: Dataset
-      review: Review
-      learning_object: 'Learning Object'
-      thesis: 'Thesis'
-    language:
-      ukrainian: Ukrainian
-      japanese: Japanese
-      german: German
-      other: 'Other language'
-      italian: Italian
-      russian: Russian
-      no_linguistic_content: 'No linguistic content'
-      english: English
-      french: French
-      chinese: Chinese
-      spanish: Spanish
-    license:
-      attribution_4_0_international: 'Attribution 4.0 International'
-      attribution_sharealike_4_0_international: 'Attribution-ShareAlike 4.0 International'
-      attribution_noncommercial_4_0_international: 'Attribution-NonCommercial 4.0 International'
-      attribution_noncommercial_noderivatives_4_0_international:
-        'Attribution-NonCommercial-NoDerivatives 4.0 International'
-      cc0_1_0_universal: 'CC0 1.0 Universal'
-      attribution_noderivatives_4_0_international: 'Attribution-NoDerivatives 4.0 International'
-      public_domain_mark_1_0: 'Public Domain Mark 1.0'
-      attribution_noncommercial_sharealike_4_0_international:
-        'Attribution-NonCommercial-ShareAlike 4.0 International'
-    old_license:
-      attribution_3_0_international: 'Attribution 3.0 International'
-      attribution_sharealike_3_0_international: 'Attribution-ShareAlike 3.0 International'
-      attribution_noncommercial_3_0_international: 'Attribution-NonCommercial 3.0 International'
-      attribution_noncommercial_noderivatives_3_0_international:
-        'Attribution-NonCommercial-NoDerivatives 3.0 International'
-      attribution_noncommercial_sharealike_2_5_canada:
-        'Attribution-NonCommercial-ShareAlike 2.5 Canada'
-
-    visibility:
-      authenticated: Authenticated
-      embargo: Embargo
-      draft: Draft
-      private: Private
-      public: Public
-    institution:
-      uofa: 'University of Alberta'
-      st_stephens: "St. Stephen's College"
+    era:
+      item_type_with_status:
+        article_published: Article (Published)
+        article_submitted: Article (Draft / Submitted)
+        book: Book
+        chapter: Chapter
+        image: Image
+        report: Report
+        research_material: 'Research Material'
+        conference_workshop_presentation: 'Conference/Workshop Presentation'
+        conference_workshop_poster: 'Conference/Workshop Poster'
+        dataset: Dataset
+        review: Review
+        learning_object: 'Learning Object'
+        thesis: 'Thesis'
+      language:
+        ukrainian: Ukrainian
+        japanese: Japanese
+        german: German
+        other: 'Other language'
+        italian: Italian
+        russian: Russian
+        no_linguistic_content: 'No linguistic content'
+        english: English
+        french: French
+        chinese: Chinese
+        spanish: Spanish
+      license:
+        attribution_4_0_international: 'Attribution 4.0 International'
+        attribution_sharealike_4_0_international: 'Attribution-ShareAlike 4.0 International'
+        attribution_noncommercial_4_0_international: 'Attribution-NonCommercial 4.0 International'
+        attribution_noncommercial_noderivatives_4_0_international:
+          'Attribution-NonCommercial-NoDerivatives 4.0 International'
+        cc0_1_0_universal: 'CC0 1.0 Universal'
+        attribution_noderivatives_4_0_international: 'Attribution-NoDerivatives 4.0 International'
+        public_domain_mark_1_0: 'Public Domain Mark 1.0'
+        attribution_noncommercial_sharealike_4_0_international:
+          'Attribution-NonCommercial-ShareAlike 4.0 International'
+      old_license:
+        attribution_3_0_international: 'Attribution 3.0 International'
+        attribution_sharealike_3_0_international: 'Attribution-ShareAlike 3.0 International'
+        attribution_noncommercial_3_0_international: 'Attribution-NonCommercial 3.0 International'
+        attribution_noncommercial_noderivatives_3_0_international:
+          'Attribution-NonCommercial-NoDerivatives 3.0 International'
+        attribution_noncommercial_sharealike_2_5_canada:
+          'Attribution-NonCommercial-ShareAlike 2.5 Canada'
+      institution:
+        uofa: 'University of Alberta'
+        st_stephens: "St. Stephen's College"
+    jupiter_core:
+      visibility:
+        authenticated: Authenticated
+        embargo: Embargo
+        draft: Draft
+        private: Private
+        public: Public
 
   facets:
     member_of_paths: 'Collections'
@@ -836,6 +938,9 @@ en:
     all_contributors: 'Author / Creator / Contributor'
     all_subjects: 'Subject / Keyword'
     sort_year: 'Year'
+    short:
+      all_contributors: 'Author'
+      all_subjects: 'Subject'
 
   views:
     pagination:

@@ -5,6 +5,15 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
 
   Capybara.default_max_wait_time = 5
 
+  setup do
+    Capybara.app_host = Jupiter::TEST_URL
+  end
+
+  # If you `snap install chromium` on Ubuntu, you might have tests that hang after a minute
+  # https://github.com/titusfortner/webdrivers/issues/217
+  if ENV['CHROMIUM_CHROMEDRIVER_PATH']
+    Selenium::WebDriver::Chrome::Service.driver_path = proc { ENV.fetch('CHROMIUM_CHROMEDRIVER_PATH', nil) }
+  end
   if ENV['CAPYBARA_NO_HEADLESS']
     driven_by :selenium, using: :chrome, screen_size: [1400, 1400]
   else
@@ -33,6 +42,11 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
 
   def logout_user
     visit logout_url
+  end
+
+  def attach_file_in_dropzone(file_path)
+    # Attach the file to the hidden input selector
+    attach_file(nil, file_path, class: 'dz-hidden-input', visible: false)
   end
 
   # Used to enable papertrail gem (disabled by default in tests).

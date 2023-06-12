@@ -1,23 +1,28 @@
 community_books:
-  title: 'Books'
+  title: "Books"
   owner: user_admin
   record_created_at: <%= Time.zone.now - 1.hour %>
+  created_at: <%= Time.zone.now - 1.hour %>
   date_ingested: <%= Time.zone.now - 1.hour %>
 
 community_thesis:
-  title: 'Thesis'
+  title: "Thesis"
   owner: user_admin
-  record_created_at: <%= Time.zone.now - 1.hour %>
-  date_ingested: <%= Time.zone.now - 1.hour %>
+  record_created_at: <%= Time.zone.now - 2.hour %>
+  created_at: <%= Time.zone.now - 2.hour %>
+  date_ingested: <%= Time.zone.now - 2.hour %>
 
 community_fancy:
-  title: 'Fancy Community'
+  title: "Fancy Community"
+  description: '[Markdown link](http://example.com)'
   owner: user_admin
-  record_created_at: <%= Time.zone.now - 1.hour %>
-  date_ingested: <%= Time.zone.now - 1.hour %>
+  record_created_at: <%= Time.zone.now - 3.hour %>
+  created_at: <%= Time.zone.now - 3.hour %>
+  date_ingested: <%= Time.zone.now - 3.hour %>
 
 community_with_no_collections:
-    title: 'Community with no collections'
-    owner: user_admin
-    record_created_at: <%= Time.zone.now - 1.hour %>
-    date_ingested: <%= Time.zone.now - 1.hour %>
+  title: "Community with no collections"
+  owner: user_admin
+  record_created_at: <%= Time.zone.now - 4.hour %>
+  created_at: <%= Time.zone.now - 4.hour %>
+  date_ingested: <%= Time.zone.now - 4.hour %>

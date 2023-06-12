@@ -15,11 +15,11 @@ class SiteForBotsTest < ActionDispatch::IntegrationTest
       uo.creators = ['Joe Blow', 'Smokey Chantilly-Tiffany', 'Céline Marie Claudette Dion']
       uo.visibility = JupiterCore::VISIBILITY_PUBLIC
       uo.created = '1999-09-09'
-      uo.languages = [CONTROLLED_VOCABULARIES[:language].english]
-      uo.license = CONTROLLED_VOCABULARIES[:license].attribution_4_0_international
-      uo.item_type = CONTROLLED_VOCABULARIES[:item_type].article
-      uo.publication_status = [CONTROLLED_VOCABULARIES[:publication_status].draft,
-                               CONTROLLED_VOCABULARIES[:publication_status].submitted]
+      uo.languages = [ControlledVocabulary.era.language.english]
+      uo.license = ControlledVocabulary.era.license.attribution_4_0_international
+      uo.item_type = ControlledVocabulary.era.item_type.article
+      uo.publication_status = [ControlledVocabulary.era.publication_status.draft,
+                               ControlledVocabulary.era.publication_status.submitted]
       uo.subject = ['Items']
       uo.add_to_path(@community1.id, @collection1.id)
       uo.add_to_path(@community1.id, @collection2.id)
@@ -111,7 +111,7 @@ class SiteForBotsTest < ActionDispatch::IntegrationTest
     assert_select "a[rel='nofollow']", text: @item.subject.first
   end
 
-  test 'structured data for google scholar' do
+  test 'structured thesis data for google scholar' do
     # TODO: can be a lot more complicated see https://scholar.google.com/intl/en/scholar/inclusion.html#indexing
     get item_path @thesis
     assert_select "meta[name='citation_title'][content='#{@thesis.title}']"
@@ -125,7 +125,9 @@ class SiteForBotsTest < ActionDispatch::IntegrationTest
                          ))
     assert_select "meta[name='dc.identifier'][content='#{@item.doi}']"
     assert_select "meta[name='citation_doi'][content='#{@item.doi}']"
+  end
 
+  test 'structured item data for google scholar' do
     get item_path @item
     assert_select "meta[name='citation_title'][content='#{@item.title}']"
     @item.creators.each do |author|

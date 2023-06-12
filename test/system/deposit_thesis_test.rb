@@ -66,12 +66,12 @@ class DepositThesisTest < ApplicationSystemTestCase
     # Success! Deposit Successful
 
     assert_text I18n.t('admin.theses.draft.successful_deposit')
-    assert Thesis.find_by(title: 'A Dance with Dragons').present?
+    assert_predicate Thesis.find_by(title: 'A Dance with Dragons'), :present?
     assert_selector 'h1', text: 'A Dance with Dragons'
 
     # Check to make sure there isn't any embargo_history
     item_id = current_url.split('/').last
-    _, item_results, _ = JupiterCore::Search.perform_solr_query(q: item_id, fq: "id:#{item_id}", rows: 1)
+    _, item_results, _, _ = JupiterCore::Search.perform_solr_query(q: item_id, fq: "id:#{item_id}", rows: 1)
     assert_nil item_results.first['embargo_history_ssim']
 
     # verify editing
@@ -101,7 +101,7 @@ class DepositThesisTest < ApplicationSystemTestCase
     assert_selector '#draft_thesis_visibility_open_access:checked'
 
     # Ensure embargo_history is now present
-    _, item_results, _ = JupiterCore::Search.perform_solr_query(q: item_id, fq: "id:#{item_id}", rows: 1)
+    _, item_results, _, _ = JupiterCore::Search.perform_solr_query(q: item_id, fq: "id:#{item_id}", rows: 1)
     assert_not_nil item_results.first['embargo_history_ssim']
     logout_user
   end
@@ -131,11 +131,6 @@ class DepositThesisTest < ApplicationSystemTestCase
   # Helper methods for javascript fields (dropzone)
   # (could be moved and made as generic helpers if these are needed elsewhere)
   private
-
-  def attach_file_in_dropzone(file_path)
-    # Attach the file to the hidden input selector
-    attach_file(nil, file_path, class: 'dz-hidden-input', visible: false)
-  end
 
   def select_date(date, field_id:)
     date = Date.parse(date)

@@ -178,16 +178,16 @@ class DraftItem < ApplicationRecord
 
   # Control Vocab Conversions
 
-  # Maps Language names to CONTROLLED_VOCABULARIES[:language] URIs
+  # Maps Language names to ControlledVocabulary.era.language URIs
   def languages_as_uri
     languages.pluck(:name).map do |language|
-      CONTROLLED_VOCABULARIES[:language].send(language)
+      ControlledVocabulary.era.language.from_value(language)
     end
   end
 
   def languages_for_uris(uris)
     uris.map do |uri|
-      code = CONTROLLED_VOCABULARIES[:language].from_uri(uri)
+      code = ControlledVocabulary.era.language.from_uri(uri)
       raise ArgumentError, "No known code for language uri: #{uri}" if code.blank?
 
       language = Language.find_by(name: code)
@@ -197,24 +197,21 @@ class DraftItem < ApplicationRecord
     end
   end
 
-  # Maps DraftItem.licenses to CONTROLLED_VOCABULARIES[:license]
+  # Maps DraftItem.licenses to ControlledVocabulary.era.license
   def license_as_uri
     # no mapping for `license_text` as this gets checked and ingested as a `rights` field in Fedora Item
     return nil if license == 'license_text'
 
     code = LICENSE_TO_URI_CODE.fetch(license.to_sym)
 
-    begin
-      CONTROLLED_VOCABULARIES[:license].send(code)
-    rescue JupiterCore::VocabularyMissingError
-      CONTROLLED_VOCABULARIES[:old_license].send(code)
-    end
+    ControlledVocabulary.era.license.from_value(code) || ControlledVocabulary.era.old_license.from_value(code)
   end
 
   def license_for_uri(uri)
     return 'license_text' if uri.nil?
 
-    code = CONTROLLED_VOCABULARIES[:license].from_uri(uri) || CONTROLLED_VOCABULARIES[:old_license].from_uri(uri)
+    code = ControlledVocabulary.era.license.from_uri(uri) ||
+           ControlledVocabulary.era.old_license.from_uri(uri)
     license = URI_CODE_TO_LICENSE[code].to_s
 
     license.presence || 'unselected'
@@ -224,24 +221,25 @@ class DraftItem < ApplicationRecord
   def publication_status_as_uri
     case type.name
     when 'journal_article_draft'
-      [CONTROLLED_VOCABULARIES[:publication_status].draft, CONTROLLED_VOCABULARIES[:publication_status].submitted]
+      [ControlledVocabulary.era.publication_status.draft,
+       ControlledVocabulary.era.publication_status.submitted]
     when 'journal_article_published'
-      [CONTROLLED_VOCABULARIES[:publication_status].published]
+      [ControlledVocabulary.era.publication_status.published]
     end
   end
 
-  # Maps Type names to CONTROLLED_VOCABULARIES[:item_type]
+  # Maps Type names to ControlledVocabulary.era.item_type
   def item_type_as_uri
     code = ITEM_TYPE_TO_URI_CODE.fetch(type.name.to_sym)
-    CONTROLLED_VOCABULARIES[:item_type].send(code)
+    ControlledVocabulary.era.item_type.from_value(code)
   end
 
   def item_type_for_uri(uri, status:)
-    code = CONTROLLED_VOCABULARIES[:item_type].from_uri(uri)
+    code = ControlledVocabulary.era.item_type.from_uri(uri)
     if status.present?
-      if status.include?(CONTROLLED_VOCABULARIES[:publication_status].draft)
+      if status.include?(ControlledVocabulary.era.publication_status.draft)
         name = 'journal_article_draft'
-      elsif status.include?(CONTROLLED_VOCABULARIES[:publication_status].published)
+      elsif status.include?(ControlledVocabulary.era.publication_status.published)
         name = 'journal_article_published'
       else
         raise ArgumentError, "Unmappable DraftItem publication status(es): #{publication_status}"
@@ -252,45 +250,52 @@ class DraftItem < ApplicationRecord
 
     raise ArgumentError, "Unable to map DraftItem type from URI: #{uri}, code: #{code}" if name.blank?
 
-    type = Type.find_by(name: name)
+    type = Type.find_by(name:)
     raise ArgumentError, "Unable to find DraftItem type: #{name}" if type.blank?
 
     type
   end
 
-  # Maps DraftItem.visibilities to CONTROLLED_VOCABULARIES[:visibility]
+  # Maps DraftItem.visibilities to ControlledVocabulary.jupiter_core.visibility
   def visibility_as_uri
     # Can't have a private or draft visibilty so no mappings for this
     code = VISIBILITY_TO_URI_CODE.fetch(visibility.to_sym)
-    CONTROLLED_VOCABULARIES[:visibility].send(code)
+    ControlledVocabulary.jupiter_core.visibility.from_value(code)
   end
 
   def visibility_for_uri(uri)
-    code = CONTROLLED_VOCABULARIES[:visibility].from_uri(uri)
+    code = ControlledVocabulary.jupiter_core.visibility.from_uri(uri)
     visibility = URI_CODE_TO_VISIBILITY[code].to_s
     raise ArgumentError, "Unable to map DraftItem visbility from URI: #{uri}, code: #{code}" if visibility.blank?
 
     visibility
   end
 
-  # Maps DraftItem.visibility_after_embargo to CONTROLLED_VOCABULARIES[:visibility]
+  # Maps DraftItem.visibility_after_embargo to ControlledVocabulary.jupiter_core.visibility
   def visibility_after_embargo_as_uri
     return nil unless embargo?
 
     code = VISIBILITY_AFTER_EMBARGO_TO_URI_CODE.fetch(visibility_after_embargo.to_sym)
-    CONTROLLED_VOCABULARIES[:visibility].send(code)
+    ControlledVocabulary.jupiter_core.visibility.from_value(code)
   end
 
   def visibility_after_embargo_for_uri(uri)
     return 0 if uri.blank?
 
-    code = CONTROLLED_VOCABULARIES[:visibility].from_uri(uri)
+    code = ControlledVocabulary.jupiter_core.visibility.from_uri(uri)
     visibility = URI_CODE_TO_VISIBILITY_AFTER_EMBARGO[code].to_s
     if visibility.blank?
       raise ArgumentError, "Unable to map DraftItem visbility_after_embargo from URI: #{uri}, code: #{code}"
     end
 
     visibility
+  end
+
+  def ordered_files
+    # We are sorting with lowercase filenames so we get a list that would be
+    # more familiar to end users mixing upper and lower case in the final order
+    # like 0-9,a-z
+    files.joins(:blob).order('LOWER(active_storage_blobs.filename) ASC')
   end
 
   private
@@ -326,7 +331,7 @@ class DraftItem < ApplicationRecord
     attributes.each do |key, value|
       next unless value.is_a?(Array)
 
-      self[key] = value.reject(&:blank?)
+      self[key] = value.compact_blank
       self[key] = nil if self[key].blank?
     end
   end

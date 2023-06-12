@@ -95,7 +95,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
     draft_item.reload
     assert_equal 'public_domain_mark', draft_item.license
     assert_equal 'embargo', draft_item.visibility
-    assert_equal Date.current + 1.year, draft_item.embargo_end_date
+    assert_equal (Date.current + 1.year).to_datetime, draft_item.embargo_end_date
     assert_equal 'choose_license_and_visibility', draft_item.wizard_step
     assert_equal 'active', draft_item.status
   end
@@ -108,8 +108,8 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
     draft_item.member_of_paths = { community_id: [@community.id], collection_id: [@collection.id] }
     draft_item.save!
 
-    file_fixture = fixture_file_upload('/files/image-sample.jpeg', 'image/jpeg')
-    image_file = ActiveStorage::Blob.create_after_upload!(
+    file_fixture = fixture_file_upload('/image-sample.jpeg', 'image/jpeg')
+    image_file = ActiveStorage::Blob.create_and_upload!(
       io: file_fixture.open,
       filename: file_fixture.original_filename, content_type: file_fixture.content_type
     )
@@ -137,7 +137,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
     # and if so, updated the wizard_step to upload_files and redirects to review_and_deposit_item
     patch item_draft_url(id: :upload_files, item_id: draft_item.id)
 
-    assert_response :success # silly but this is actually rerendering upload_files with errors
+    assert_response :unprocessable_entity
     assert_match 'Files can&#39;t be blank', @response.body
     draft_item.reload
 
@@ -152,8 +152,8 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
     draft_item = draft_items(:draft_item_completed_choose_license_and_visibility_step)
     draft_item.member_of_paths = { community_id: [@community.id], collection_id: [@collection.id] }
 
-    file_fixture = fixture_file_upload('/files/image-sample.jpeg', 'image/jpeg')
-    image_file = ActiveStorage::Blob.create_after_upload!(
+    file_fixture = fixture_file_upload('/image-sample.jpeg', 'image/jpeg')
+    image_file = ActiveStorage::Blob.create_and_upload!(
       io: file_fixture.open,
       filename: file_fixture.original_filename, content_type: file_fixture.content_type
     )
@@ -168,10 +168,10 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
 
     draft_item.reload
 
-    assert draft_item.uuid.present?
+    assert_predicate draft_item.uuid, :present?
 
     item = Item.find(draft_item.uuid)
-    assert item.present?
+    assert_predicate item, :present?
 
     assert_redirected_to item_url(item)
     assert_equal I18n.t('items.draft.successful_deposit'), flash[:notice]
@@ -186,8 +186,8 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
     draft_item = draft_items(:draft_item_completed_choose_license_and_visibility_step)
     draft_item.member_of_paths = { community_id: [@community.id], collection_id: [@collection.id] }
 
-    file_fixture = fixture_file_upload('/files/image-sample.jpeg', 'image/jpeg')
-    image_file = ActiveStorage::Blob.create_after_upload!(
+    file_fixture = fixture_file_upload('/image-sample.jpeg', 'image/jpeg')
+    image_file = ActiveStorage::Blob.create_and_upload!(
       io: file_fixture.open,
       filename: file_fixture.original_filename, content_type: file_fixture.content_type
     )

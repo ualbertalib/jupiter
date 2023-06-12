@@ -12,12 +12,13 @@ class ThesisTest < ActiveSupport::TestCase
                           departments: ['Physics', 'Non-physics'],
                           supervisors: ['Billy (Physics)', 'Sally (Non-physics)'],
                           graduation_date: 'Fall 2013')
+
       thesis.tap do |unlocked_thesis|
         unlocked_thesis.add_to_path(community.id, collection.id)
         unlocked_thesis.save!
       end
     end
-    assert thesis.valid?
+    assert_predicate thesis, :valid?
   end
 
   test 'there is no default visibility' do
@@ -34,7 +35,7 @@ class ThesisTest < ActiveSupport::TestCase
     end
 
     assert_not thesis.valid?
-    assert thesis.errors[:visibility].present?
+    assert_predicate thesis.errors[:visibility], :present?
     assert_includes thesis.errors[:visibility], 'some_fake_visibility is not a known visibility'
   end
 
@@ -60,7 +61,7 @@ class ThesisTest < ActiveSupport::TestCase
     end
 
     assert_not thesis.valid?
-    assert thesis.errors[:embargo_end_date].present?
+    assert_predicate thesis.errors[:embargo_end_date], :present?
     assert_includes thesis.errors[:embargo_end_date], "can't be blank"
   end
 
@@ -72,7 +73,7 @@ class ThesisTest < ActiveSupport::TestCase
     end
 
     assert_not thesis.valid?
-    assert thesis.errors[:embargo_end_date].present?
+    assert_predicate thesis.errors[:embargo_end_date], :present?
     assert_includes thesis.errors[:embargo_end_date], 'must be blank'
 
     assert_not thesis.errors[:visibility].present?
@@ -85,7 +86,7 @@ class ThesisTest < ActiveSupport::TestCase
     end
 
     assert_not thesis.valid?
-    assert thesis.errors[:visibility_after_embargo].present?
+    assert_predicate thesis.errors[:visibility_after_embargo], :present?
     assert_includes thesis.errors[:visibility_after_embargo], "can't be blank"
   end
 
@@ -93,11 +94,11 @@ class ThesisTest < ActiveSupport::TestCase
     thesis = Thesis.new
     thesis.tap do |unlocked_thesis|
       unlocked_thesis.visibility = JupiterCore::VISIBILITY_PUBLIC
-      unlocked_thesis.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].draft
+      unlocked_thesis.visibility_after_embargo = ControlledVocabulary.jupiter_core.visibility.draft
     end
 
     assert_not thesis.valid?
-    assert thesis.errors[:visibility_after_embargo].present?
+    assert_predicate thesis.errors[:visibility_after_embargo], :present?
     assert_includes thesis.errors[:visibility_after_embargo], 'must be blank'
     # Make sure no controlled vocabulary error
     assert_not_includes thesis.errors[:visibility_after_embargo], 'is not recognized'
@@ -113,7 +114,7 @@ class ThesisTest < ActiveSupport::TestCase
     end
 
     assert_not thesis.valid?
-    assert thesis.errors[:visibility_after_embargo].present?
+    assert_predicate thesis.errors[:visibility_after_embargo], :present?
     assert_includes thesis.errors[:visibility_after_embargo], 'whatever is not a known visibility'
     assert_not thesis.errors[:visibility].present?
   end
@@ -156,7 +157,7 @@ class ThesisTest < ActiveSupport::TestCase
 
   test 'item_type_with_status_code gets set correctly' do
     thesis = Thesis.new
-    assert_equal thesis.item_type_with_status_code, :thesis
+    assert_equal(:thesis, thesis.item_type_with_status_code)
   end
 
   test 'a title is required' do
@@ -187,7 +188,44 @@ class ThesisTest < ActiveSupport::TestCase
     thesis = Thesis.new(graduation_date: 'Fall 2015')
     thesis.valid?
     assert_not thesis.errors[:sort_year].present?
-    assert_equal thesis.sort_year, 2015
+    assert_equal(2015, thesis.sort_year)
+  end
+
+  # Preservation queue handling
+  test 'should add id and type with the correct score for a new thesis to preservation queue' do
+    RedisClient.current.del Rails.application.secrets.preservation_queue_name
+
+    # Setup a thesis...
+    admin = users(:user_admin)
+    community = communities(:community_books)
+    collection = collections(:collection_fantasy)
+
+    thesis = Thesis.new(title: 'Thesis',
+                        owner_id: admin.id,
+                        visibility: JupiterCore::VISIBILITY_PUBLIC,
+                        dissertant: 'Joe Blow',
+                        departments: ['Physics', 'Non-physics'],
+                        supervisors: ['Billy (Physics)', 'Sally (Non-physics)'],
+                        graduation_date: 'Fall 2013')
+
+    freeze_time do
+      thesis.tap do |unlocked_thesis|
+        unlocked_thesis.add_to_path(community.id, collection.id)
+        unlocked_thesis.save
+      end
+
+      thesis_output, score = RedisClient.current.zrange(Rails.application.secrets.preservation_queue_name,
+                                                        0,
+                                                        -1,
+                                                        with_scores: true)[0]
+      thesis_output = JSON.parse(thesis_output)
+
+      assert_equal thesis.id, thesis_output['uuid']
+      assert_equal 'theses', thesis_output['type']
+      assert_in_delta 0.5, score, Time.now.to_f
+    end
+
+    RedisClient.current.del Rails.application.secrets.preservation_queue_name
   end
 
 end

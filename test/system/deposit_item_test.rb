@@ -55,6 +55,7 @@ class DepositItemTest < ApplicationSystemTestCase
 
     assert_selector 'h2', text: I18n.t('items.draft.upload_files.header')
 
+    attach_file_in_dropzone(file_fixture('pdf-sample.pdf'))
     attach_file_in_dropzone(file_fixture('image-sample.jpeg'))
     has_css? '.j-thumbnail'
 
@@ -69,12 +70,12 @@ class DepositItemTest < ApplicationSystemTestCase
     # Success! Deposit Successful
 
     assert_text I18n.t('items.draft.successful_deposit')
-    assert Item.find_by(title: 'A Dance with Dragons').present?
+    assert_predicate Item.find_by(title: 'A Dance with Dragons'), :present?
     assert_selector 'h1', text: 'A Dance with Dragons'
 
     # Check to make sure there isn't any embargo_history
     item_id = current_url.split('/').last
-    _, item_results, _ = JupiterCore::Search.perform_solr_query(q: item_id, fq: "id:#{item_id}", rows: 1)
+    _, item_results, _, _ = JupiterCore::Search.perform_solr_query(q: item_id, fq: "id:#{item_id}", rows: 1)
     assert_nil item_results.first['embargo_history_ssim']
 
     # verify editing
@@ -104,7 +105,7 @@ class DepositItemTest < ApplicationSystemTestCase
     assert_selector '#draft_item_visibility_open_access:checked'
 
     # Ensure embargo_history is now present
-    _, item_results, _ = JupiterCore::Search.perform_solr_query(q: item_id, fq: "id:#{item_id}", rows: 1)
+    _, item_results, _, _ = JupiterCore::Search.perform_solr_query(q: item_id, fq: "id:#{item_id}", rows: 1)
     assert_not_nil item_results.first['embargo_history_ssim']
 
     logout_user
@@ -156,11 +157,6 @@ class DepositItemTest < ApplicationSystemTestCase
     select date.year.to_s, from: "#{field_id}_1i"
     select I18n.l(date, format: '%B'), from: "#{field_id}_2i"
     select date.day.to_s, from: "#{field_id}_3i"
-  end
-
-  def attach_file_in_dropzone(file_path)
-    # Attach the file to the hidden input selector
-    attach_file(nil, file_path, class: 'dz-hidden-input', visible: false)
   end
 
 end

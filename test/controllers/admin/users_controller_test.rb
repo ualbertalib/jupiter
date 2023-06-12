@@ -26,7 +26,7 @@ class Admin::UsersControllerTest < ActionDispatch::IntegrationTest
     assert_equal I18n.t('admin.users.show.suspend_flash'), flash[:notice]
 
     user.reload
-    assert user.suspended?
+    assert_predicate user, :suspended?
   end
 
   test 'should be able to unsuspend a user' do
@@ -49,7 +49,7 @@ class Admin::UsersControllerTest < ActionDispatch::IntegrationTest
     assert_equal I18n.t('admin.users.show.grant_admin_flash'), flash[:notice]
 
     user.reload
-    assert user.admin?
+    assert_predicate user, :admin?
   end
 
   test 'should be able to revoke admin to an admin' do

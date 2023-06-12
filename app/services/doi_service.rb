@@ -1,6 +1,6 @@
 class DOIService
 
-  PUBLISHER = 'University of Alberta Libraries'.freeze
+  PUBLISHER = 'University of Alberta Library'.freeze
   DATACITE_METADATA_SCHEME = {
     article_published: 'Text/Published Journal Article',
     article_submitted: 'Text/Submitted Journal Article',
@@ -16,25 +16,27 @@ class DOIService
     review: 'Text/Review',
     thesis: 'Text/Thesis'
   }.freeze
-  UNAVAILABLE_MESSAGE = "#{Ezid::Status::UNAVAILABLE} | not publicly released".freeze
+  UNAVAILABLE_MESSAGE = 'unavailable| not publicly released'.freeze
 
   attr_reader :item
 
   def initialize(item)
-    @item = item
+    @item = item.decorate
   end
 
   def create
     return unless @item.unminted? && !@item.private?
 
-    ezid_identifer = Ezid::Identifier.mint(Ezid::Client.config.default_shoulder, ezid_metadata)
-    if ezid_identifer.present?
+    response = Datacite::Client.mint(datacite_attributes)
+    id = "doi:#{response.doi}"
+
+    if response.present?
       @item.tap do |uo|
-        uo.doi = ezid_identifer.id
+        uo.doi = id
         uo.save!
       end
       @item.synced!
-      ezid_identifer
+      response
     end
   rescue StandardError => e
     # Skip the next handle_doi_states after_save callback and roll back
@@ -51,15 +53,24 @@ class DOIService
   def update
     return unless @item.awaiting_update?
 
-    ezid_identifer = Ezid::Identifier.modify(@item.doi, ezid_metadata)
-    return if ezid_identifer.blank?
+    if @item.private?
+      event = Datacite::Event::HIDE
+      reason = UNAVAILABLE_MESSAGE
+    else
+      event = Datacite::Event::PUBLISH
+    end
+
+    response = Datacite::Client.modify(@item.doi.delete_prefix('doi:'), datacite_attributes, event:,
+                                                                                             reason:)
+
+    return if response.blank?
 
     if @item.private?
       @item.unpublish!
     else
       @item.synced!
     end
-    ezid_identifer
+    response
   rescue StandardError => e
     # Skip the next handle_doi_states after_save callback and roll back
     # the state to it's previous value. By skipping the callback we can prevent
@@ -76,23 +87,29 @@ class DOIService
   end
 
   def self.remove(doi)
-    Ezid::Identifier.modify(doi, status: "#{Ezid::Status::UNAVAILABLE} | withdrawn", export: 'no')
+    Datacite::Client.modify(doi.delete_prefix('doi:'),
+                            { reason: 'unavailable | withdrawn', event: Datacite::Event::HIDE })
   end
 
   private
 
-  def ezid_metadata
+  def datacite_attributes
     {
-      datacite_creator: @item.authors.join('; '),
-      datacite_publisher: PUBLISHER,
-      datacite_publicationyear: @item.sort_year.presence || '(:unav)',
-      datacite_resourcetype: DATACITE_METADATA_SCHEME[@item.item_type_with_status_code],
-      datacite_resourcetypegeneral: DATACITE_METADATA_SCHEME[@item.item_type_with_status_code].split('/').first,
-      datacite_title: @item.title,
-      target: Rails.application.routes.url_helpers.item_url(id: @item.id),
-      # Can only set status if been minted previously, else its public
-      status: @item.private? && @item.doi.present? ? UNAVAILABLE_MESSAGE : Ezid::Status::PUBLIC,
-      export: @item.private? ? 'no' : 'yes'
+      creators: @item.authors.map { |author| { name: author } },
+      titles: [{
+        title: @item.title
+      }],
+      descriptions: [{
+        description: @item.description
+      }],
+      publisher: PUBLISHER,
+      publicationYear: @item.sort_year.presence || '(:unav)',
+      types: {
+        resourceType: DATACITE_METADATA_SCHEME[@item.item_type_with_status_code],
+        resourceTypeGeneral: DATACITE_METADATA_SCHEME[@item.item_type_with_status_code].split('/').first
+      },
+      url: Rails.application.routes.url_helpers.item_url(id: @item.id),
+      schemaVersion: 'http://datacite.org/schema/kernel-4'
     }
   end
 

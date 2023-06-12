@@ -1,0 +1,32 @@
+<table class="table table-responsive-md table-hover">
+  <thead>
+    <tr>
+      <th><%= sort_link(@search, :title, t('.title')) %></th>
+      <th><%= sort_link(@search, :status, t('.status')) %></th>
+      <th><%= sort_link(@search, :created_at, t('.created')) %></th>
+    </tr>
+  </thead>
+  <tbody>
+  <% if @batch_ingests.present? %>
+    <% @batch_ingests.each do |batch_ingest| %>
+      <tr>
+        <th scope="row"><%= link_to batch_ingest.title, admin_batch_ingest_path(batch_ingest) %></th>
+        <td><%= batch_ingest.status %></td>
+        <td><%= jupiter_time_tag(batch_ingest.created_at) %></td>
+      </tr>
+    <% end %>
+  <% else %>
+    <tr>
+      <td colspan="3" class="text-center">
+        <%= t('.no_batch_ingests_found') %>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+<p class="text-center">
+  <%= t('.display_batch_ingests_count', shown_batch_ingests_count: @batch_ingests.count,
+                                        matching_batch_ingests_count: @batch_ingests.total_count,
+                                        total_batch_ingests_count: BatchIngest.count) %>
+</p>
+<%= paginate @batch_ingests %>

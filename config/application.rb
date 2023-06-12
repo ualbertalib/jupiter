@@ -26,20 +26,38 @@ module Jupiter
     require_dependency 'lib/jupiter/version'
 
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 6.0
+    config.load_defaults 6.1
 
-    # Settings in config/environments/* take precedence over those specified here.
-    # Application configuration can go into files in config/initializers
-    # -- all .rb files in that directory are automatically loaded after loading
-    # the framework and any gems in your application.
+    # Configuration for the application, engines, and railties goes here.
+    #
+    # These settings can be overridden in specific environments using the files
+    # in config/environments, which are processed later.
+    #
+    # config.time_zone = "Central Time (US & Canada)"
+    # config.eager_load_paths << Rails.root.join("extras")
 
     # Set ActiveJob adapter
     config.active_job.queue_adapter = :sidekiq
 
-    # Run skylight in Staging for performance metric monitoring pre-launch
-    config.skylight.environments << 'staging'
-
     config.redis_key_prefix = "jupiter.#{Rails.env}."
+
+    config.action_dispatch.tld_length = Rails.application.secrets.tld_length.to_i
+
+    # Set Redcarpet markdown options and extensions
+    config.markdown_rendering_extensions = {
+      lax_spacing: true,
+      strikethrough: true,
+      fenced_code_blocks: true,
+      tables: true,
+      autolink: true
+    }
+    config.markdown_rendering_options = {
+      filter_html: true,
+      no_images: true,
+      no_styles: true,
+      hard_wrap: true,
+      link_attributes: { rel: 'noopener noreferrer', target: '_blank' }
+    }
 
   end
 end

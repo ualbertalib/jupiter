@@ -17,7 +17,7 @@ class RdfGraphCreationService
     return unless @graph.has_predicate?(rdf_original_predicate)
 
     @graph.delete_insert(
-      @graph.query(predicate: rdf_original_predicate),
+      @graph.query({ predicate: rdf_original_predicate }),
       derivate_list_values(subject, rdf_original_predicate)
     )
   end
@@ -69,7 +69,7 @@ class RdfGraphCreationService
 
     # Here we expect the value of @rdfable_entity.send(column) to be a JSON array
     list = RDF::List(@rdfable_entity.send(rdf_annotation.column))
-    statement = RDF::Statement(subject: subject, predicate: rdf_list_predicate, object: list)
+    statement = RDF::Statement(subject:, predicate: rdf_list_predicate, object: list)
 
     [list, statement]
   end

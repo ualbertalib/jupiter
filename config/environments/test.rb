@@ -3,7 +3,7 @@
 # your test database is "scratch space" for the test suite and is wiped
 # and recreated between test runs. Don't rely on the data there!
 
-Rails.application.routes.default_url_options = { host: 'localhost' }
+Rails.application.routes.default_url_options = { host: URI(Jupiter::TEST_URL).host }
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -45,8 +45,17 @@ Rails.application.configure do
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
 
+  # Raise exceptions for disallowed deprecations.
+  config.active_support.disallowed_deprecation = :raise
+
+  # Tell Active Support which deprecation messages to disallow.
+  config.active_support.disallowed_deprecation_warnings = []
+
   # Raises error for missing translations
-  config.action_view.raise_on_missing_translations = true
+  config.i18n.raise_on_missing_translations = true
+
+  # Annotate rendered view with file names.
+  # config.action_view.annotate_rendered_view_with_filenames = true
 
   # FITS characterization
   config.run_fits_characterization = false

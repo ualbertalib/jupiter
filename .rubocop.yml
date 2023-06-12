@@ -4,6 +4,7 @@
 # https://github.com/bbatsov/rubocop/blob/master/config/enabled.yml
 
 require:
+  - rubocop-minitest
   - rubocop-performance
   - rubocop-rails
 
@@ -11,14 +12,14 @@ AllCops:
   DisplayCopNames: true
   DisplayStyleGuide: true
   Exclude:
-    - 'db/**/*'
-    - 'tmp/**/*'
-    - 'vendor/**/*'
-    - 'Dangerfile'
-    - 'node_modules/**/*'
+    - "db/**/*"
+    - "tmp/**/*"
+    - "vendor/**/*"
+    - "Dangerfile"
+    - "node_modules/**/*"
   ExtraDetails: true
   NewCops: enable
-  TargetRubyVersion: 2.5
+  TargetRubyVersion: 3.1
 
 # readability is Actually Good
 Layout/EmptyLinesAroundClassBody:
@@ -29,9 +30,9 @@ Layout/IndentationConsistency:
   EnforcedStyle: normal
 
 Layout/LineLength:
-    Enabled: true
-    Max: 120 # default is 80
-    IgnoredPatterns: ['\A\s*#'] # tweak to ignore long comments, which often are examples or URLs that are not easily broken up
+  Enabled: true
+  Max: 120 # default is 80
+  AllowedPatterns: ['\A\s*#'] # tweak to ignore long comments, which often are examples or URLs that are not easily broken up
 
 # readability is Actually Good
 Layout/RescueEnsureAlignment:
@@ -72,6 +73,11 @@ Metrics/ParameterLists:
     - app/models/jupiter_core/search.rb
     - app/models/jupiter_core/solr_services/deferred_faceted_solr_query.rb
 
+Minitest/MultipleAssertions:
+  Max: 15 # default 3
+  Exclude:
+    - test/system/admin_users_show_test.rb
+    - test/system/search_test.rb
 
 Naming/FileName:
   Exclude:
@@ -87,18 +93,14 @@ Naming/MethodParameterName:
   Exclude:
     - app/models/jupiter_core//solr_services/deferred_faceted_solr_query.rb
     - app/models/jupiter_core/search.rb
-    - app/services/statistics.rb
 
 Rails:
   Enabled: true
 
-# Autocorrecting this actively breaks code
-Rails/FindEach:
-  Enabled: false
-
 Rails/SkipsModelValidations:
   Exclude:
     - app/controllers/aip/v1/collections_controller.rb
+    - app/controllers/aip/v1/communities_controller.rb
     - app/controllers/aip/v1/entities_controller.rb
     - app/services/rdf_graph_creation_service.rb
 
@@ -107,9 +109,6 @@ Rails/UnknownEnv:
   Enabled: false
 
 Style/ArrayCoercion:
-  Enabled: false
-
-Style/AsciiComments:
   Enabled: false
 
 Style/BarePercentLiterals:
@@ -174,3 +173,12 @@ Style/RedundantBegin:
 
 Naming/VariableNumber:
   Enabled: false
+
+Style/OpenStructUse:
+  Exclude:
+    - config/initializers/controlled_vocabularies.rb
+
+# Migrations are YYYYMMDDHHMMSS rather than a numeric
+Style/NumericLiterals:
+  Exclude:
+    - config/initializers/strong_migrations.rb

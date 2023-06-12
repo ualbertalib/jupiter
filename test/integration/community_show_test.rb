@@ -55,7 +55,7 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
                   text: I18n.t('delete')
   end
 
-  test 'visiting the show page for a community with two collections and a logo '\
+  test 'visiting the show page for a community with two collections and a logo ' \
        'as a regular user' do
     user = users(:user_regular)
     sign_in_as user
@@ -111,19 +111,19 @@ class CommunityShowTest < ActionDispatch::IntegrationTest
     user = users(:user_regular)
     sign_in_as user
     get community_url(@community1, format: :json)
-    body = JSON.parse(response.body)
-    assert_equal body['collections'].count, 1
-    assert_includes body['collections'].map { |c| c['id'] }, @collection1.id
+    body = response.parsed_body
+    assert_equal(1, body['collections'].count)
+    assert_includes body['collections'].pluck('id'), @collection1.id
   end
 
   test 'JSON for collections (deposit form AJAX) as admin includes all collections' do
     user = users(:user_admin)
     sign_in_as user
     get community_url(@community1, format: :json)
-    body = JSON.parse(response.body)
-    assert_equal body['collections'].count, 2
-    assert_includes body['collections'].map { |c| c['id'] }, @collection1.id
-    assert_includes body['collections'].map { |c| c['id'] }, @collection2.id
+    body = response.parsed_body
+    assert_equal(2, body['collections'].count)
+    assert_includes body['collections'].pluck('id'), @collection1.id
+    assert_includes body['collections'].pluck('id'), @collection2.id
   end
 
 end

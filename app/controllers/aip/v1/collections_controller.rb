@@ -6,23 +6,30 @@ class Aip::V1::CollectionsController < ApplicationController
   before_action :ensure_access
 
   def show
-    # TODO: Check information included with metadata team, this set is only a
-    # placeholder.
+    # ::TERMS[:ual].schema not here as it doesn't seem to be added as a prefix and path is added
     prefixes = [
       RDF::Vocab::DC,
-      ::TERMS[:ual].schema
+      RDF::Vocab::PCDM
     ]
 
     rdf_graph_creator = RdfGraphCreationService.new(@collection, prefixes, self_subject)
-
-    statement_definitions = [
-      { subject: self_subject, predicate: RDF.type, object: RDF::Vocab::PCDM.Collection },
-      { subject: self_subject, predicate: ::TERMS[:fedora].has_model, object: COLLECTION_INSTITUTIONAL_REPOSITORY_NAME }
+    statements = [
+      RDF::Statement(subject: self_subject, predicate: RDF.type, object: RDF::Vocab::PCDM.Collection),
+      RDF::Statement(subject: self_subject, predicate: RDF::Vocab::PCDM.memberOf, object: @collection.community_id),
+      RDF::Statement(subject: self_subject, predicate: RDF::Vocab::DC.title, object: @collection.title),
+      RDF::Statement(subject: self_subject, predicate: RDF::Vocab::DC.accessRights, object: @collection.visibility),
+      RDF::Statement(subject: self_subject, predicate: TERMS[:ual].restricted_collection,
+                     object: @collection.restricted),
+      RDF::Statement(subject: self_subject, predicate: RDF::Vocab::DC.created, object: @collection.created_at),
+      RDF::Statement(subject: self_subject, predicate: TERMS[:ual].record_created_in_jupiter,
+                     object: @collection.record_created_at)
     ]
-
-    statement_definitions.each do |statement_definition|
-      rdf_graph_creator.graph.insert(RDF::Statement(statement_definition))
+    if @collection.description.present?
+      statements << RDF::Statement(subject: self_subject, predicate: RDF::Vocab::DC.description,
+                                   object: @collection.description)
     end
+
+    rdf_graph_creator.graph.insert(*statements)
 
     render plain: rdf_graph_creator.graph.to_n3, status: :ok
   end

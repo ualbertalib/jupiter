@@ -8,7 +8,6 @@ class Collection < JupiterCore::Depositable
   belongs_to :community
 
   validates :title, presence: true
-  validates :community_id, presence: true
   validates :community_id, community_existence: true
 
   before_destroy :can_be_destroyed?
@@ -16,6 +15,8 @@ class Collection < JupiterCore::Depositable
   before_validation do
     self.visibility = JupiterCore::VISIBILITY_PUBLIC
   end
+
+  after_save :push_entity_for_preservation
 
   # We have no attachments, so the scope is just the class itself.
   def self.eager_attachment_scope; self; end

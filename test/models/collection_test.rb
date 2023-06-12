@@ -6,7 +6,7 @@ class CollectionTest < ActiveSupport::TestCase
     community = communities(:community_books)
     collection = Collection.new(title: 'foo', owner_id: users(:user_regular).id,
                                 community_id: community.id)
-    assert collection.valid?
+    assert_predicate collection, :valid?
   end
 
   test 'needs title' do
@@ -21,11 +21,11 @@ class CollectionTest < ActiveSupport::TestCase
     assert_equal collection.visibility, JupiterCore::VISIBILITY_PUBLIC
   end
 
-  test 'a community_id must be present' do
+  test 'a community must be present' do
     collection = Collection.new(title: 'foo', owner_id: users(:user_regular).id)
 
     assert_not collection.valid?
-    assert_includes collection.errors[:community_id], "can't be blank"
+    assert_includes collection.errors[:community], 'must exist'
   end
 
   test 'community must exist' do

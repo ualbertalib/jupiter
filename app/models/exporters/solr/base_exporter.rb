@@ -51,7 +51,7 @@ class Exporters::Solr::BaseExporter
   def self.search_term_for(attr, value, role: :search)
     raise ArgumentError, "search value can't be nil" if value.nil?
 
-    solr_attr_name = solr_name_for(attr, role: role)
+    solr_attr_name = solr_name_for(attr, role:)
     %Q(#{solr_attr_name}:"#{value}")
   end
 
@@ -62,7 +62,7 @@ class Exporters::Solr::BaseExporter
   def self.facet_term_for(attr_name, value, role: :facet)
     raise ArgumentError, "search value can't be nil" if value.nil?
 
-    solr_attr_name = solr_name_for(attr_name, role: role)
+    solr_attr_name = solr_name_for(attr_name, role:)
     return { solr_attr_name => { begin: value, end: value } } if role == :range_facet
 
     { solr_attr_name => [value].flatten }
@@ -80,7 +80,7 @@ class Exporters::Solr::BaseExporter
 
   def self.solr_name_for(name, role:)
     type = name_to_type_map[name]
-    JupiterCore::SolrServices::NameMangling.mangled_name_for(name, type: type, role: role)
+    JupiterCore::SolrServices::NameMangling.mangled_name_for(name, type:, role:)
   end
 
   def self.solr_roles_for(name)
@@ -90,14 +90,14 @@ class Exporters::Solr::BaseExporter
   def self.facet?(name)
     raise Exporters::Solr::UnknownAttributeError, "no such attribute #{name}" unless name_to_roles_map.key?(name)
 
-    (name_to_roles_map[name] & SOLR_FACET_ROLES).present?
+    name_to_roles_map[name].intersect?(SOLR_FACET_ROLES)
   end
 
   def self.mangled_facet_name_for(name)
     type = name_to_type_map[name]
     roles = name_to_roles_map[name]
     facet_role = roles.detect { |r| SOLR_FACET_ROLES.include? r }
-    JupiterCore::SolrServices::NameMangling.mangled_name_for(name, type: type, role: facet_role)
+    JupiterCore::SolrServices::NameMangling.mangled_name_for(name, type:, role: facet_role)
   end
 
   def self.range?(name)
@@ -108,7 +108,7 @@ class Exporters::Solr::BaseExporter
 
   def self.mangled_range_name_for(name)
     type = name_to_type_map[name]
-    JupiterCore::SolrServices::NameMangling.mangled_name_for(name, type: type, role: :range_facet)
+    JupiterCore::SolrServices::NameMangling.mangled_name_for(name, type:, role: :range_facet)
   end
 
   def self.name_for_mangled_name(mangled_name)
@@ -125,6 +125,22 @@ class Exporters::Solr::BaseExporter
 
   def self.indexed_has_model_name
     @indexed_model_name
+  end
+
+  def self.fulltext_searchable_field
+    fulltext_searchable_name
+  end
+
+  def self.fulltext_searchable_mangled_solr_name
+    solr_name_for(fulltext_searchable_field, role: :search)
+  end
+
+  def self.fulltext_searchable?(name)
+    name == fulltext_searchable_field
+  end
+
+  def self.strip_markdown(text)
+    plaintext_renderer.render(text) if text.present?
   end
 
   protected
@@ -150,7 +166,7 @@ class Exporters::Solr::BaseExporter
     return solr_doc unless (raw_val.is_a?(Array) && raw_val.any?(&:present?)) || raw_val.present?
 
     roles.each do |role|
-      solr_index_name = JupiterCore::SolrServices::NameMangling.mangled_name_for(attr, type: type, role: role)
+      solr_index_name = JupiterCore::SolrServices::NameMangling.mangled_name_for(attr, type:, role:)
 
       solr_doc[solr_index_name] = if self.class.singular_role?(role)
                                     raw_val = raw_val.first if raw_val.is_a? Array
@@ -168,15 +184,14 @@ class Exporters::Solr::BaseExporter
 
     attr_accessor :reverse_solr_name_map, :name_to_type_map, :name_to_roles_map,
                   :name_to_solr_name_map, :name_to_custom_lambda_map, :indexed_attributes, :searched_solr_names,
-                  :facets, :ranges, :default_sort_direction, :default_sort_indexes, :default_ar_sort_args
+                  :facets, :ranges, :default_sort_direction, :default_sort_indexes, :default_ar_sort_args,
+                  :fulltext_searchable_name
 
     protected
 
-    # rubocop:disable Style/TrivialAccessors
     def indexed_model_name(name)
       @indexed_model_name = name
     end
-    # rubocop:enable Style/TrivialAccessors
 
     # the basic DSL for declaring Solr indexes who will take their contents from attributes
     # declared on the objects we will export
@@ -197,9 +212,7 @@ class Exporters::Solr::BaseExporter
 
     # DSL for declaring custom indexes, where the value isn't taken from a pre-existing
     # attribute but instead is determined by a given lambda
-    #
-    # Sorry rubocop, but you index something *AS* something. It's communicative.
-    def custom_index(attr, role:, as:, type: :string) # rubocop:disable Naming/MethodParameterName
+    def custom_index(attr, role:, as:, type: :string)
       role = [role] unless role.is_a? Array
 
       if role.count { |r| !JupiterCore::SolrServices.valid_solr_role?(r) } > 0
@@ -220,6 +233,15 @@ class Exporters::Solr::BaseExporter
       direction = [direction] unless direction.is_a?(Array)
       self.default_sort_indexes = index.map { |idx| solr_name_for(idx, role: :sort) }
       self.default_sort_direction = direction
+    end
+
+    # Declare a particular attribute as being searchable on fulltext and therefore providing fulltext highlighted result hits
+    # attr must already be declared text and indexed for :search
+    def fulltext_searchable(attr)
+      raise ArgumentError, "#{attr} must be indexed for :search" unless name_to_roles_map[attr].include?(:search)
+      raise ArgumentError, "#{attr} must be of type :text" unless name_to_type_map[attr] == :text
+
+      self.fulltext_searchable_name = attr
     end
 
     def record_type(name, type)
@@ -243,7 +265,7 @@ class Exporters::Solr::BaseExporter
       self.ranges ||= []
 
       roles.each do |r|
-        mangled_name = JupiterCore::SolrServices::NameMangling.mangled_name_for(attr, type: type, role: r)
+        mangled_name = JupiterCore::SolrServices::NameMangling.mangled_name_for(attr, type:, role: r)
         self.reverse_solr_name_map[mangled_name] = attr
         self.name_to_solr_name_map[attr] << mangled_name
         self.searched_solr_names << mangled_name if r == :search
@@ -284,6 +306,13 @@ class Exporters::Solr::BaseExporter
 
         index :date_ingested, type: :date, role: [:sort]
       end
+    end
+
+    # memoized method to initialize and reuse the renderer for stripping markdown
+    # which is used to create plaintext for the exporter
+    def plaintext_renderer
+      @plaintext_renderer ||= Redcarpet::Markdown.new(Redcarpet::Render::StripDown,
+                                                      Rails.configuration.markdown_rendering_extensions)
     end
 
   end

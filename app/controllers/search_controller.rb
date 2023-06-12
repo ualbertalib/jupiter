@@ -18,11 +18,13 @@ class SearchController < ApplicationController
 
     search_query_index = UserSearchService.new(
       search_models: models,
-      params: params,
-      current_user: current_user
+      params:,
+      current_user:,
+      fulltext: Flipper.enabled?(:fulltext_search, current_user)
     )
     @results = search_query_index.results
     @search_models = search_query_index.search_models
+    flash.now[:alert] = t('search.invalid_date_range_flash') if search_query_index.invalid_date_range
 
     respond_to do |format|
       format.html

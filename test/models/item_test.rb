@@ -7,21 +7,21 @@ class ItemTest < ActiveSupport::TestCase
     collection = collections(:collection_fantasy)
     item = Item.new(title: 'Item', owner_id: users(:user_admin).id, visibility: JupiterCore::VISIBILITY_PUBLIC,
                     created: '2017-02-02',
-                    languages: [CONTROLLED_VOCABULARIES[:language].english],
+                    languages: [ControlledVocabulary.era.language.english],
                     creators: ['Joe Blow'],
                     subject: ['Things'],
-                    license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
-                    item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                    publication_status: [CONTROLLED_VOCABULARIES[:publication_status].draft,
-                                         CONTROLLED_VOCABULARIES[:publication_status].submitted])
+                    license: ControlledVocabulary.era.license.attribution_4_0_international,
+                    item_type: ControlledVocabulary.era.item_type.article,
+                    publication_status: [ControlledVocabulary.era.publication_status.draft,
+                                         ControlledVocabulary.era.publication_status.submitted])
     assert_difference -> { Item.public_items.count } do
       item.tap do |unlocked_item|
         unlocked_item.add_to_path(community.id, collection.id)
         unlocked_item.save!
       end
     end
-    assert item.valid?
-    assert Item.public_items.map(&:id).include?(item.id)
+    assert_predicate item, :valid?
+    assert_includes Item.public_items.map(&:id), item.id
 
     assert_difference -> { Item.public_items.count }, -1 do
       item.tap do |unlocked_item|
@@ -29,7 +29,7 @@ class ItemTest < ActiveSupport::TestCase
         unlocked_item.save!
       end
     end
-    assert item.valid?
+    assert_predicate item, :valid?
     assert_not Item.public_items.map(&:id).include?(item.id)
   end
 
@@ -46,7 +46,7 @@ class ItemTest < ActiveSupport::TestCase
       unlocked_item.visibility = 'some_fake_visibility'
     end
     assert_not item.valid?
-    assert item.errors[:visibility].present?
+    assert_predicate item.errors[:visibility], :present?
     assert_includes item.errors[:visibility], 'some_fake_visibility is not a known visibility'
   end
 
@@ -72,7 +72,7 @@ class ItemTest < ActiveSupport::TestCase
     end
 
     assert_not item.valid?
-    assert item.errors[:embargo_end_date].present?
+    assert_predicate item.errors[:embargo_end_date], :present?
     assert_includes item.errors[:embargo_end_date], "can't be blank"
   end
 
@@ -84,7 +84,7 @@ class ItemTest < ActiveSupport::TestCase
     end
 
     assert_not item.valid?
-    assert item.errors[:embargo_end_date].present?
+    assert_predicate item.errors[:embargo_end_date], :present?
     assert_includes item.errors[:embargo_end_date], 'must be blank'
 
     assert_not item.errors[:visibility].present?
@@ -97,7 +97,7 @@ class ItemTest < ActiveSupport::TestCase
     end
 
     assert_not item.valid?
-    assert item.errors[:visibility_after_embargo].present?
+    assert_predicate item.errors[:visibility_after_embargo], :present?
     assert_includes item.errors[:visibility_after_embargo], "can't be blank"
   end
 
@@ -105,11 +105,11 @@ class ItemTest < ActiveSupport::TestCase
     item = Item.new
     item.tap do |unlocked_item|
       unlocked_item.visibility = JupiterCore::VISIBILITY_PUBLIC
-      unlocked_item.visibility_after_embargo = CONTROLLED_VOCABULARIES[:visibility].draft
+      unlocked_item.visibility_after_embargo = ControlledVocabulary.jupiter_core.visibility.draft
     end
 
     assert_not item.valid?
-    assert item.errors[:visibility_after_embargo].present?
+    assert_predicate item.errors[:visibility_after_embargo], :present?
     assert_includes item.errors[:visibility_after_embargo], 'must be blank'
     # Make sure no controlled vocabulary error
     assert_not_includes item.errors[:visibility_after_embargo], 'is not recognized'
@@ -125,7 +125,7 @@ class ItemTest < ActiveSupport::TestCase
     end
 
     assert_not item.valid?
-    assert item.errors[:visibility_after_embargo].present?
+    assert_predicate item.errors[:visibility_after_embargo], :present?
     assert_includes item.errors[:visibility_after_embargo], 'whatever is not a known visibility'
     assert_not item.errors[:visibility].present?
   end
@@ -178,9 +178,9 @@ class ItemTest < ActiveSupport::TestCase
     assert_not item.valid?
     assert_includes item.errors[:languages], 'is not recognized'
 
-    item = Item.new(languages: [CONTROLLED_VOCABULARIES[:language].english])
+    item = Item.new(languages: [ControlledVocabulary.era.language.english])
     assert_not item.valid?
-    assert_not_includes item.errors.keys, :languages
+    assert_not_includes item.errors.attribute_names, :languages
   end
 
   test 'a license or rights statement must be present' do
@@ -192,7 +192,7 @@ class ItemTest < ActiveSupport::TestCase
 
   test 'a rights statement must not be present if a license is present' do
     item = Item.new(rights: 'Share my work with everybody',
-                    license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international)
+                    license: ControlledVocabulary.era.license.attribution_4_0_international)
 
     assert_not item.valid?
     assert_includes item.errors[:base], 'should not have both a license and a rights statement'
@@ -203,13 +203,13 @@ class ItemTest < ActiveSupport::TestCase
     assert_not item.valid?
     assert_includes item.errors[:license], 'is not recognized'
 
-    item = Item.new(license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international)
+    item = Item.new(license: ControlledVocabulary.era.license.attribution_4_0_international)
     item.valid?
-    assert_not_includes item.errors.keys, :license
+    assert_not_includes item.errors.attribute_names, :license
 
-    item = Item.new(license: CONTROLLED_VOCABULARIES[:old_license].attribution_3_0_international)
+    item = Item.new(license: ControlledVocabulary.era.old_license.attribution_3_0_international)
     item.valid?
-    assert_not_includes item.errors.keys, :license
+    assert_not_includes item.errors.attribute_names, :license
   end
 
   test 'an item type is required' do
@@ -225,59 +225,59 @@ class ItemTest < ActiveSupport::TestCase
   end
 
   test 'publication status is needed for articles' do
-    item = Item.new(item_type: CONTROLLED_VOCABULARIES[:item_type].article)
+    item = Item.new(item_type: ControlledVocabulary.era.item_type.article)
     assert_not item.valid?
     assert_includes item.errors[:publication_status], 'is required for articles'
   end
 
   test 'publication status must come from controlled vocabulary' do
-    item = Item.new(item_type: CONTROLLED_VOCABULARIES[:item_type].article,
+    item = Item.new(item_type: ControlledVocabulary.era.item_type.article,
                     publication_status: ['whatever'])
     assert_not item.valid?
     assert_includes item.errors[:publication_status], 'is not recognized'
   end
 
   test 'publication status must either be published or both draft/submitted' do
-    item = Item.new(item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                    publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published])
+    item = Item.new(item_type: ControlledVocabulary.era.item_type.article,
+                    publication_status: [ControlledVocabulary.era.publication_status.published])
     item.valid?
     assert_not item.errors[:publication_status].present?
 
-    item = Item.new(item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                    publication_status: [CONTROLLED_VOCABULARIES[:publication_status].draft,
-                                         CONTROLLED_VOCABULARIES[:publication_status].submitted])
+    item = Item.new(item_type: ControlledVocabulary.era.item_type.article,
+                    publication_status: [ControlledVocabulary.era.publication_status.draft,
+                                         ControlledVocabulary.era.publication_status.submitted])
     item.valid?
     assert_not item.errors[:publication_status].present?
 
-    item = Item.new(item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                    publication_status: [CONTROLLED_VOCABULARIES[:publication_status].draft])
+    item = Item.new(item_type: ControlledVocabulary.era.item_type.article,
+                    publication_status: [ControlledVocabulary.era.publication_status.draft])
     item.valid?
     assert_includes item.errors[:publication_status], 'is not recognized'
 
-    item = Item.new(item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                    publication_status: [CONTROLLED_VOCABULARIES[:publication_status].submitted])
+    item = Item.new(item_type: ControlledVocabulary.era.item_type.article,
+                    publication_status: [ControlledVocabulary.era.publication_status.submitted])
     item.valid?
     assert_includes item.errors[:publication_status], 'is not recognized'
   end
 
   test 'publication status must be absent for non-articles' do
-    item = Item.new(item_type: CONTROLLED_VOCABULARIES[:item_type].book,
-                    publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published])
+    item = Item.new(item_type: ControlledVocabulary.era.item_type.book,
+                    publication_status: [ControlledVocabulary.era.publication_status.published])
     assert_not item.valid?
     assert_includes item.errors[:publication_status], 'must be absent for non-articles'
   end
 
   test 'item_type_with_status_code gets set correctly' do
-    item = Item.new(item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                    publication_status: [CONTROLLED_VOCABULARIES[:publication_status].published])
+    item = Item.new(item_type: ControlledVocabulary.era.item_type.article,
+                    publication_status: [ControlledVocabulary.era.publication_status.published])
     assert_equal :article_published, item.item_type_with_status_code
 
-    item = Item.new(item_type: CONTROLLED_VOCABULARIES[:item_type].article,
-                    publication_status: [CONTROLLED_VOCABULARIES[:publication_status].draft,
-                                         CONTROLLED_VOCABULARIES[:publication_status].submitted])
+    item = Item.new(item_type: ControlledVocabulary.era.item_type.article,
+                    publication_status: [ControlledVocabulary.era.publication_status.draft,
+                                         ControlledVocabulary.era.publication_status.submitted])
     assert_equal :article_submitted, item.item_type_with_status_code
 
-    item = Item.new(item_type: CONTROLLED_VOCABULARIES[:item_type].report)
+    item = Item.new(item_type: ControlledVocabulary.era.item_type.report)
     assert_equal :report, item.item_type_with_status_code
   end
 
@@ -309,12 +309,12 @@ class ItemTest < ActiveSupport::TestCase
     item = Item.new(created: 'Fall 2015')
     item.valid?
     assert_not item.errors[:sort_year].present?
-    assert_equal item.sort_year, 2015
+    assert_equal(2015, item.sort_year)
   end
 
   # Preservation queue handling
-  test 'should add id with the correct score for a new item to preservation queue' do
-    Redis.current.del Rails.application.secrets.preservation_queue_name
+  test 'should add id and type with the correct score for a new item to preservation queue' do
+    RedisClient.current.del Rails.application.secrets.preservation_queue_name
 
     # Setup an item...
     community = communities(:community_books)
@@ -325,9 +325,9 @@ class ItemTest < ActiveSupport::TestCase
                     visibility: JupiterCore::VISIBILITY_PUBLIC,
                     created: '1978-01-01',
                     owner_id: users(:user_admin).id,
-                    item_type: CONTROLLED_VOCABULARIES[:item_type].report,
-                    languages: [CONTROLLED_VOCABULARIES[:language].english],
-                    license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                    item_type: ControlledVocabulary.era.item_type.report,
+                    languages: [ControlledVocabulary.era.language.english],
+                    license: ControlledVocabulary.era.license.attribution_4_0_international,
                     subject: ['Randomness'])
 
     freeze_time do
@@ -336,20 +336,22 @@ class ItemTest < ActiveSupport::TestCase
         unlocked_item.save
       end
 
-      item_id, score = Redis.current.zrange(Rails.application.secrets.preservation_queue_name,
-                                            0,
-                                            -1,
-                                            with_scores: true)[0]
+      item_output, score = RedisClient.current.zrange(Rails.application.secrets.preservation_queue_name,
+                                                      0,
+                                                      -1,
+                                                      with_scores: true)[0]
+      item_output = JSON.parse(item_output)
 
-      assert_equal item.id, item_id
+      assert_equal item.id, item_output['uuid']
+      assert_equal 'items', item_output['type']
       assert_in_delta 0.5, score, Time.now.to_f
     end
 
-    Redis.current.del Rails.application.secrets.preservation_queue_name
+    RedisClient.current.del Rails.application.secrets.preservation_queue_name
   end
 
   test 'should end up with the queue only having an item id once after multiple saves of the same item' do
-    Redis.current.del Rails.application.secrets.preservation_queue_name
+    RedisClient.current.del Rails.application.secrets.preservation_queue_name
 
     # Setup an item...
     community = communities(:community_books)
@@ -360,9 +362,9 @@ class ItemTest < ActiveSupport::TestCase
                     visibility: JupiterCore::VISIBILITY_PUBLIC,
                     created: '1978-01-01',
                     owner_id: users(:user_admin).id,
-                    item_type: CONTROLLED_VOCABULARIES[:item_type].report,
-                    languages: [CONTROLLED_VOCABULARIES[:language].english],
-                    license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                    item_type: ControlledVocabulary.era.item_type.report,
+                    languages: [ControlledVocabulary.era.language.english],
+                    license: ControlledVocabulary.era.license.attribution_4_0_international,
                     subject: ['Randomness'])
 
     travel 1.minute do
@@ -379,22 +381,22 @@ class ItemTest < ActiveSupport::TestCase
         unlocked_item.save
       end
 
-      assert_equal 1, Redis.current.zcard(Rails.application.secrets.preservation_queue_name)
+      assert_equal 1, RedisClient.current.zcard(Rails.application.secrets.preservation_queue_name)
 
-      item_id, score = Redis.current.zrange(Rails.application.secrets.preservation_queue_name,
-                                            0,
-                                            -1,
-                                            with_scores: true)[0]
-
-      assert_equal item.id, item_id
+      item_output, score = RedisClient.current.zrange(Rails.application.secrets.preservation_queue_name,
+                                                      0,
+                                                      -1,
+                                                      with_scores: true)[0]
+      item_output = JSON.parse(item_output)
+      assert_equal item.id, item_output['uuid']
       assert_in_delta 0.5, score, 3.minutes.from_now.to_f
     end
 
-    Redis.current.del Rails.application.secrets.preservation_queue_name
+    RedisClient.current.del Rails.application.secrets.preservation_queue_name
   end
 
   test 'should end up with item ids in the queue in the correct temporal order' do
-    Redis.current.del Rails.application.secrets.preservation_queue_name
+    RedisClient.current.del Rails.application.secrets.preservation_queue_name
 
     # Setup some items...
     community = communities(:community_books)
@@ -407,9 +409,9 @@ class ItemTest < ActiveSupport::TestCase
                         visibility: JupiterCore::VISIBILITY_PUBLIC,
                         created: '1978-01-01',
                         owner_id: users(:user_admin).id,
-                        item_type: CONTROLLED_VOCABULARIES[:item_type].report,
-                        languages: [CONTROLLED_VOCABULARIES[:language].english],
-                        license: CONTROLLED_VOCABULARIES[:license].attribution_4_0_international,
+                        item_type: ControlledVocabulary.era.item_type.report,
+                        languages: [ControlledVocabulary.era.language.english],
+                        license: ControlledVocabulary.era.license.attribution_4_0_international,
                         subject: ['Randomness'])
     end
 
@@ -438,11 +440,11 @@ class ItemTest < ActiveSupport::TestCase
     end
 
     save_order = [items[1], items[0], items[2]]
+    queue = RedisClient.current.zrange(Rails.application.secrets.preservation_queue_name, 0, -1, with_scores: false)
 
-    queue = Redis.current.zrange(Rails.application.secrets.preservation_queue_name, 0, -1, with_scores: false)
-    assert_equal save_order.map(&:id), queue
+    assert_equal save_order.map(&:id), (queue.map { |x| JSON.parse(x)['uuid'] })
 
-    Redis.current.del Rails.application.secrets.preservation_queue_name
+    RedisClient.current.del Rails.application.secrets.preservation_queue_name
   end
 
 end
