@@ -95,7 +95,8 @@ def generate_ingest_report(successful_ingested_items)
 
     successful_ingested_items.each do |item|
       csv << [item.id,
-              Rails.application.routes.url_helpers.item_url(item).gsub('era-test', ENV['HOSTNAME'].split('.')[0]), item.title]
+              Rails.application.routes.url_helpers.item_url(item).gsub('era-test', 
+                ENV['HOSTNAME'].split('.')[0]), item.title]
     end
   end
   log 'REPORT: Ingest success report generated!'
