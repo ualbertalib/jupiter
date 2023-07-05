@@ -26,7 +26,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
-    "eslint": "^7.32.0",
+    "eslint": "^8.44.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.27.5",
     "stylelint": "^13.13.1",
@@ -35,9 +35,5 @@
   },
   "resolutions": {
     "webpack": "^4.0.0"
-  },
-  "//": "Comment: Override unmaintained word-wrap package with a currently maintained fork",
-  "overrides": {
-    "word-wrap": "npm:@aashutoshrathi/word-wrap@1.2.6"
   }
 }
