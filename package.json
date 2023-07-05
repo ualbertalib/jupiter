@@ -38,6 +38,6 @@
   },
   "//": "Comment: Override unmaintained word-wrap package with a currently maintained fork",
   "overrides": {
-    "word-wrap": "npm:@aashutoshrathi/word-wrap"
+    "word-wrap": "npm:@aashutoshrathi/word-wrap@1.2.6"
   }
 }
