@@ -13,7 +13,7 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ### Security
 - Bump rails from 6.1.7.2 to 6.1.7.4 [PR#3149](https://github.com/ualbertalib/jupiter/pull/3149)
-- Override unmaintained word-wrap package with a currently maintained fork to resolve CVE
+- Override unmaintained word-wrap package with a currently maintained fork to resolve CVE [PR#3150](https://github.com/ualbertalib/jupiter/pull/3150)
 
 ### Fixed 
 - Resolved new rubocop offenses [PR#3109](https://github.com/ualbertalib/jupiter/pull/3109)
