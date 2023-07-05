@@ -35,5 +35,9 @@
   },
   "resolutions": {
     "webpack": "^4.0.0"
+  },
+  "//": "Comment: Override unmaintained word-wrap package with a currently maintained fork",
+  "overrides": {
+    "word-wrap": "npm:@aashutoshrathi/word-wrap"
   }
 }
