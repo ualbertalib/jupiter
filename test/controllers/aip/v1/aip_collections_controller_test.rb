@@ -26,6 +26,7 @@ class Aip::V1::CollectionsControllerTest < ActionDispatch::IntegrationTest
     get aip_v1_collection_url(
       id: @collection
     )
+
     assert_response :success
   end
 
@@ -34,6 +35,7 @@ class Aip::V1::CollectionsControllerTest < ActionDispatch::IntegrationTest
     get aip_v1_collection_url(
       id: @collection
     )
+
     assert_response :redirect
   end
 
@@ -42,6 +44,7 @@ class Aip::V1::CollectionsControllerTest < ActionDispatch::IntegrationTest
     get aip_v1_collection_url(
       id: @collection
     )
+
     assert_response :success
 
     graph = generate_graph_from_n3(response.body)
@@ -57,6 +60,7 @@ class Aip::V1::CollectionsControllerTest < ActionDispatch::IntegrationTest
     get aip_v1_collection_url(
       id: @collection
     )
+
     assert_response :success
 
     graph = generate_graph_from_n3(response.body)
@@ -75,6 +79,7 @@ class Aip::V1::CollectionsControllerTest < ActionDispatch::IntegrationTest
     get aip_v1_collection_url(
       id: @collection
     )
+
     assert_response :success
 
     graph = generate_graph_from_n3(response.body)

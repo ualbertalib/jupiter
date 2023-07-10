@@ -1,7 +1,5 @@
 class Aip::V1::EntitiesController < ApplicationController
 
-  ITEM_CLASS_NAME = Item.name.freeze
-  THESIS_CLASS_NAME = Thesis.name.freeze
   ITEM_INSTITUTIONAL_REPOSITORY_NAME = 'IRItem'.freeze
   THESIS_INSTITUTIONAL_REPOSITORY_NAME = 'IRThesis'.freeze
   FILESET_INSTITUTIONAL_REPOSITORY_NAME = 'IRFileSet'.freeze
@@ -222,10 +220,10 @@ class Aip::V1::EntitiesController < ApplicationController
   protected
 
   def entity_institutional_repository_name
-    case @entity.class.to_s
-    when ITEM_CLASS_NAME
+    case @entity
+    when Item
       ITEM_INSTITUTIONAL_REPOSITORY_NAME
-    when THESIS_CLASS_NAME
+    when Thesis
       THESIS_INSTITUTIONAL_REPOSITORY_NAME
     else
       ENTITY_INSTITUTIONAL_REPOSITORY_NAME
@@ -307,7 +305,7 @@ class Aip::V1::EntitiesController < ApplicationController
 
   def entity_type_statements
     statements = [RDF::Statement(subject: self_subject, predicate: RDF.type, object: RDF::Vocab::PCDM.Object)]
-    if @entity.class.to_s == THESIS_CLASS_NAME
+    if @entity.instance_of?(Thesis)
       statements << RDF::Statement(subject: self_subject, predicate: RDF.type, object: RDF::Vocab::BIBO.Thesis)
     end
 

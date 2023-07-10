@@ -12,6 +12,7 @@ class ProfileControllerTest < ActionDispatch::IntegrationTest
   test 'should get profile index' do
     sign_in_as(@admin)
     get profile_url
+
     assert_response :success
   end
 
@@ -35,6 +36,7 @@ class ProfileControllerTest < ActionDispatch::IntegrationTest
     }
 
     get profile_url
+
     assert_includes @response.body, 'Random Book'
   end
 
@@ -55,6 +57,7 @@ class ProfileControllerTest < ActionDispatch::IntegrationTest
     }
 
     get profile_url
+
     assert_includes @response.body, 'Random Thesis'
   end
 

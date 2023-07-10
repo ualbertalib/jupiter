@@ -9,11 +9,13 @@ class Admin::BatchIngestsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should get index' do
     get admin_batch_ingests_url
+
     assert_response :success
   end
 
   test 'should redirect to google session callback without valid google credentials' do
     get new_admin_batch_ingest_url
+
     assert_response :redirect
     assert_redirected_to new_admin_google_session_url
   end
@@ -29,6 +31,7 @@ class Admin::BatchIngestsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to new_admin_batch_ingest_url
 
     follow_redirect!
+
     assert_response :success
   end
 
@@ -72,6 +75,7 @@ class Admin::BatchIngestsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should show batch_ingest' do
     get admin_batch_ingest_url(@batch_ingest)
+
     assert_response :success
   end
 
