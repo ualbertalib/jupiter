@@ -9,11 +9,13 @@ class Admin::UsersControllerTest < ActionDispatch::IntegrationTest
 
   test 'should be able to get to admin users index as admin user' do
     get admin_users_url
+
     assert_response :success
   end
 
   test 'should be able to get to admin users show as admin user' do
     get admin_user_url(@admin)
+
     assert_response :success
   end
 
@@ -26,6 +28,7 @@ class Admin::UsersControllerTest < ActionDispatch::IntegrationTest
     assert_equal I18n.t('admin.users.show.suspend_flash'), flash[:notice]
 
     user.reload
+
     assert_predicate user, :suspended?
   end
 
@@ -38,6 +41,7 @@ class Admin::UsersControllerTest < ActionDispatch::IntegrationTest
     assert_equal I18n.t('admin.users.show.unsuspend_flash'), flash[:notice]
 
     user.reload
+
     assert_not user.suspended?
   end
 
@@ -45,10 +49,12 @@ class Admin::UsersControllerTest < ActionDispatch::IntegrationTest
     user = users(:user_regular)
 
     patch grant_admin_admin_user_url(user)
+
     assert_redirected_to admin_user_url(user)
     assert_equal I18n.t('admin.users.show.grant_admin_flash'), flash[:notice]
 
     user.reload
+
     assert_predicate user, :admin?
   end
 
@@ -61,6 +67,7 @@ class Admin::UsersControllerTest < ActionDispatch::IntegrationTest
     assert_equal I18n.t('admin.users.show.revoke_admin_flash'), flash[:notice]
 
     user.reload
+
     assert_not user.admin?
   end
 
@@ -68,6 +75,7 @@ class Admin::UsersControllerTest < ActionDispatch::IntegrationTest
     user = users(:user_regular)
 
     post login_as_user_admin_user_url(user)
+
     assert_redirected_to root_url
     assert_equal I18n.t('admin.users.show.login_as_user_flash', user: user.name), flash[:notice]
 

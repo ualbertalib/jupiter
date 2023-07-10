@@ -21,12 +21,14 @@ class DataciteDoiServiceTest < ActiveSupport::TestCase
     VCR.use_cassette('datacite_minting', erb: { id: @item.id }, record: :once) do
       assert_no_enqueued_jobs
       @item.update(doi: nil)
+
       assert_enqueued_jobs 1, only: DOICreateJob
       clear_enqueued_jobs
 
       assert_equal 'unminted', @item.aasm_state
 
       datacite_identifer = DOIService.new(@item).create
+
       assert_not_nil datacite_identifer
       assert_equal @item.doi.delete_prefix('doi:'), datacite_identifer.doi
       assert_equal 'University of Alberta Library', datacite_identifer.publisher
@@ -46,12 +48,14 @@ class DataciteDoiServiceTest < ActiveSupport::TestCase
     VCR.use_cassette('datacite_minting_for_thesis', erb: { id: thesis.id }, record: :once) do
       assert_no_enqueued_jobs
       thesis.update(doi: nil, aasm_state: :not_available)
+
       assert_enqueued_jobs 1, only: DOICreateJob
       clear_enqueued_jobs
 
       assert_equal 'unminted', thesis.aasm_state
 
       datacite_identifer = DOIService.new(thesis).create
+
       assert_not_nil datacite_identifer
       assert_equal thesis.doi.delete_prefix('doi:'), datacite_identifer.doi
       assert_equal 'University of Alberta Library', datacite_identifer.publisher
@@ -75,6 +79,7 @@ class DataciteDoiServiceTest < ActiveSupport::TestCase
       clear_enqueued_jobs
 
       datacite_identifer = DOIService.new(@item).update
+
       assert_not_nil datacite_identifer
       assert_equal @item.doi.delete_prefix('doi:'), datacite_identifer.doi
       assert_equal Datacite::State::FINDABLE, datacite_identifer.state
@@ -93,6 +98,7 @@ class DataciteDoiServiceTest < ActiveSupport::TestCase
       clear_enqueued_jobs
 
       datacite_identifer = DOIService.new(@item).update
+
       assert_not_nil datacite_identifer
       assert_equal @item.doi.delete_prefix('doi:'), datacite_identifer.doi
       assert_equal Datacite::State::REGISTERED, datacite_identifer.state
@@ -111,6 +117,7 @@ class DataciteDoiServiceTest < ActiveSupport::TestCase
       clear_enqueued_jobs
 
       datacite_identifer = DOIService.remove(@item.doi)
+
       assert_not_nil datacite_identifer
       assert_equal @item.doi.delete_prefix('doi:'), datacite_identifer.doi
       assert_equal Datacite::State::REGISTERED, datacite_identifer.state

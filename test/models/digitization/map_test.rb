@@ -12,6 +12,7 @@ class Digitization::MapTest < ActiveSupport::TestCase
 
   test 'unique Peel map' do
     map = Digitization::Map.create(peel_map_id: 'M000230')
+
     assert_not map.valid?
     assert_equal('has already been taken', map.errors[:peel_map_id].first)
     map.destroy

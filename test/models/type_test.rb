@@ -8,6 +8,7 @@ class TypeTest < ActiveSupport::TestCase
 
   test 'should give the translated version of the name' do
     book_type = types(:type_book)
+
     assert_equal('book', book_type.name)
     assert_equal('Book', book_type.translated_name)
   end

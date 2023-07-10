@@ -24,6 +24,7 @@ class Admin::GoogleSessionsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to new_admin_batch_ingest_url
 
     follow_redirect!
+
     assert_response :success
   end
 

@@ -15,6 +15,7 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
     draft_thesis = draft_theses(:draft_thesis_inactive)
 
     get admin_thesis_draft_url(id: draft_thesis.wizard_step, thesis_id: draft_thesis.id)
+
     assert_response :success
   end
 
@@ -67,6 +68,7 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to admin_thesis_draft_path(id: :choose_license_and_visibility, thesis_id: draft_thesis.id)
 
     draft_thesis.reload
+
     assert_equal 'Random Thesis', draft_thesis.title
     assert_equal 'describe_thesis', draft_thesis.wizard_step
     assert_equal 'active', draft_thesis.status
@@ -91,6 +93,7 @@ class Admin::Theses::DraftControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to admin_thesis_draft_path(id: :upload_files, thesis_id: draft_thesis.id)
 
     draft_thesis.reload
+
     assert_equal 'Open to everyone!', draft_thesis.rights
     assert_equal 'embargo', draft_thesis.visibility
     assert_equal (Date.current + 1.year).to_datetime, draft_thesis.embargo_end_date

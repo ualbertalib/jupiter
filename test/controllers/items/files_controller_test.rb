@@ -44,6 +44,7 @@ class Items::FilesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     @draft_item.reload
+
     assert_not @draft_item.files.attached?
   end
 
@@ -54,12 +55,14 @@ class Items::FilesControllerTest < ActionDispatch::IntegrationTest
     )
 
     @draft_item.files.attach image_file
+
     assert_equal 'pdf-sample.pdf', @draft_item.thumbnail.filename.to_s
 
     patch set_thumbnail_item_file_url(@draft_item, @draft_item.files.last), xhr: true
 
     assert_response :success
     @draft_item.reload
+
     assert_equal 'image-sample.jpeg', @draft_item.thumbnail.filename.to_s
   end
 

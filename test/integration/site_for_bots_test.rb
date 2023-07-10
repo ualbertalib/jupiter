@@ -70,28 +70,35 @@ class SiteForBotsTest < ActionDispatch::IntegrationTest
 
   test 'search results should be noindex' do
     get search_path
+
     assert_select "meta[name='robots'][content='noindex']"
 
     get search_path(tab: 'item')
+
     assert_select "meta[name='robots'][content='noindex']"
 
     get search_path(tab: 'collection')
+
     assert_select "meta[name='robots'][content='noindex']"
 
     get search_path(tab: 'community')
+
     assert_select "meta[name='robots'][content='noindex']"
   end
 
   test 'nofollow for download links' do
     # on search page (for item and thesis)
     get search_path
+
     assert_select "a[rel='nofollow']", text: I18n.t('download'), count: 2
 
     # on show page (for item and thesis)
     get item_path @item
+
     assert_select "a[rel='nofollow']", text: I18n.t('download'), count: 1
 
     get item_path @thesis
+
     assert_select "a[rel='nofollow']", text: I18n.t('download'), count: 1
   end
 
@@ -104,6 +111,7 @@ class SiteForBotsTest < ActionDispatch::IntegrationTest
 
   test 'nofollow for item metadata links to search' do
     get item_path @item
+
     assert_select "a[rel='nofollow']", text: @item.creators.first
     assert_select "a[rel='nofollow']", text: @item.creation_date
     assert_select "a[rel='nofollow']", text: 'English'
@@ -114,6 +122,7 @@ class SiteForBotsTest < ActionDispatch::IntegrationTest
   test 'structured thesis data for google scholar' do
     # TODO: can be a lot more complicated see https://scholar.google.com/intl/en/scholar/inclusion.html#indexing
     get item_path @thesis
+
     assert_select "meta[name='citation_title'][content='#{@thesis.title}']"
     assert_select "meta[name='citation_author'][content='#{@thesis.dissertant}']"
     assert_select "meta[name='citation_publication_date'][content='#{@thesis.creation_date}']"
@@ -129,6 +138,7 @@ class SiteForBotsTest < ActionDispatch::IntegrationTest
 
   test 'structured item data for google scholar' do
     get item_path @item
+
     assert_select "meta[name='citation_title'][content='#{@item.title}']"
     @item.creators.each do |author|
       assert_select "meta[name='citation_author'][content='#{author}']"
@@ -156,6 +166,7 @@ class SiteForBotsTest < ActionDispatch::IntegrationTest
   test 'viewport used' do
     @public_paths.each do |route|
       get route
+
       assert_select "meta[name='viewport']", count: 1
     end
   end
@@ -163,18 +174,22 @@ class SiteForBotsTest < ActionDispatch::IntegrationTest
   test 'search page with query params should link to canonical version of search' do
     # canonical should appear for the default
     get search_path
+
     assert_select 'link[rel="canonical"]:match("href", ?)', "#{Jupiter::PRODUCTION_URL}/search"
 
     # canonical should appear for the item tab
     get search_path(search: 'random', tab: 'item')
+
     assert_select 'link[rel="canonical"]:match("href", ?)', "#{Jupiter::PRODUCTION_URL}/search"
 
     # canonical should appear for the collection tab
     get search_path(tab: 'collection')
+
     assert_select 'link[rel="canonical"]:match("href", ?)', "#{Jupiter::PRODUCTION_URL}/search"
 
     # canonical should appear for the community tab
     get search_path(tab: 'community')
+
     assert_select 'link[rel="canonical"]:match("href", ?)', "#{Jupiter::PRODUCTION_URL}/search"
   end
 

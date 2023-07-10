@@ -23,6 +23,7 @@ class Aip::V1::CommunitiesControllerTest < ActionDispatch::IntegrationTest
     get aip_v1_community_url(
       id: @community
     )
+
     assert_response :success
   end
 
@@ -31,6 +32,7 @@ class Aip::V1::CommunitiesControllerTest < ActionDispatch::IntegrationTest
     get aip_v1_community_url(
       id: @community
     )
+
     assert_response :redirect
   end
 
@@ -40,6 +42,7 @@ class Aip::V1::CommunitiesControllerTest < ActionDispatch::IntegrationTest
     get aip_v1_community_url(
       id: @community
     )
+
     assert_response :success
 
     graph = generate_graph_from_n3(response.body)
