@@ -45,6 +45,7 @@ class Admin::Theses::FilesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     @draft_thesis.reload
+
     assert_not @draft_thesis.files.attached?
   end
 
@@ -55,12 +56,14 @@ class Admin::Theses::FilesControllerTest < ActionDispatch::IntegrationTest
     )
 
     @draft_thesis.files.attach image_file
+
     assert_equal 'pdf-sample.pdf', @draft_thesis.thumbnail.filename.to_s
 
     patch set_thumbnail_admin_thesis_file_url(@draft_thesis, @draft_thesis.files.last), xhr: true
 
     assert_response :success
     @draft_thesis.reload
+
     assert_equal 'image-sample.jpeg', @draft_thesis.thumbnail.filename.to_s
   end
 

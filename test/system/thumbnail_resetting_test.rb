@@ -20,6 +20,7 @@ class ThumbnailResettingTest < ApplicationSystemTestCase
     click_on I18n.t('items.draft.save_and_continue')
     click_on I18n.t('items.draft.save_and_continue')
     click_on I18n.t('items.draft.save_and_deposit_edits')
+
     assert_text I18n.t('items.draft.successful_deposit')
 
     click_on I18n.t('edit')
@@ -30,6 +31,7 @@ class ThumbnailResettingTest < ApplicationSystemTestCase
     click_on 'Set as Thumbnail'
     click_on I18n.t('items.draft.save_and_continue')
     click_on I18n.t('items.draft.save_and_deposit_edits')
+
     assert_text I18n.t('items.draft.successful_deposit')
 
     click_on I18n.t('edit')
@@ -39,6 +41,7 @@ class ThumbnailResettingTest < ApplicationSystemTestCase
     click_on I18n.t('items.draft.save_and_continue')
     click_on I18n.t('items.draft.save_and_continue')
     click_on I18n.t('items.draft.save_and_deposit_edits')
+
     assert_text I18n.t('items.draft.successful_deposit')
 
     click_on I18n.t('edit')
@@ -48,6 +51,7 @@ class ThumbnailResettingTest < ApplicationSystemTestCase
     click_on I18n.t('items.draft.save_and_continue')
     click_on I18n.t('items.draft.save_and_continue')
     click_on I18n.t('items.draft.save_and_deposit_edits')
+
     assert_text I18n.t('items.draft.successful_deposit')
 
     # Assert that statements in above comments are true.

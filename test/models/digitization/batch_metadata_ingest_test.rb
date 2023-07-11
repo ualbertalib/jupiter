@@ -9,6 +9,7 @@ class Digitization::BatchMetadataIngestTest < ActiveSupport::TestCase
   test 'valid batch ingest' do
     @batch_ingest.csvfile.attach(io: File.open(file_fixture('digitization_metadata_graph.csv')),
                                  filename: 'folkfest.csv')
+
     assert_predicate @batch_ingest, :valid?
   end
 
@@ -19,6 +20,7 @@ class Digitization::BatchMetadataIngestTest < ActiveSupport::TestCase
 
   test 'invalid without title' do
     @batch_ingest.title = nil
+
     assert_not @batch_ingest.valid?
     assert_equal("can't be blank", @batch_ingest.errors[:title].first)
   end
@@ -35,6 +37,7 @@ class Digitization::BatchMetadataIngestTest < ActiveSupport::TestCase
 
     errors = ['Entity not found for row 1 of spreadsheet', 'Property not found for row 1 of spreadsheet',
               'Value not found for row 1 of spreadsheet', 'Graph contains no local identifiers']
+
     assert_equal(errors, @batch_ingest.errors[:csvfile])
   end
 

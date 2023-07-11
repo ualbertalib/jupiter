@@ -13,6 +13,7 @@ class AdminUsersIndexTest < ApplicationSystemTestCase
     assert_selector 'h1', text: I18n.t('admin.dashboard.index.header')
 
     click_link I18n.t('admin.users.index.header')
+
     assert_selector 'h1', text: I18n.t('admin.users.index.header')
     assert_selector 'tbody tr', count: 6
 
@@ -39,6 +40,7 @@ class AdminUsersIndexTest < ApplicationSystemTestCase
 
     # Autocomplete 'administrator@example.com'
     fill_in I18n.t('search_label'), with: admin.email
+
     assert_selector 'tbody tr', count: 1
     assert_selector 'tbody tr:first-child th[scope="row"]', text: admin.email
 
@@ -55,6 +57,7 @@ class AdminUsersIndexTest < ApplicationSystemTestCase
 
     # Autocomplete 'Administrator'
     fill_in I18n.t('search_label'), with: admin.name
+
     assert_selector 'div', text: 'Displaying 1 of 1 matching users'
     assert_selector 'tbody tr', count: 1
     assert_selector 'tbody tr:first-child th[scope="row"]', text: admin.email
@@ -73,6 +76,7 @@ class AdminUsersIndexTest < ApplicationSystemTestCase
 
     # Filter to show user(s) with status of suspended
     select(I18n.t('admin.users.suspended_status'), from: I18n.t('admin.users.status'))
+
     assert_selector 'tbody tr', count: 1
     assert_selector 'tbody tr:first-child th[scope="row"]', text: suspended.email
 
