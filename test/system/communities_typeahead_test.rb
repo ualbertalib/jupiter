@@ -29,6 +29,7 @@ class CommunitiesTypeaheadTest < ApplicationSystemTestCase
 
     # Select a result to visit the page
     find('.easy-autocomplete-container li', text: 'Other community -- Other stuff things').click
+
     assert_current_path(community_collection_path(@community2, @collection))
   end
 

@@ -9,6 +9,7 @@ class CollectionsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should show collection' do
     get community_collection_url(@community, @collection)
+
     assert_response :success
   end
 

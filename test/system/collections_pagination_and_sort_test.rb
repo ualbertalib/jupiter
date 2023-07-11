@@ -14,6 +14,7 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
 
   test 'anybody should be able to sort and paginate collections' do
     visit community_path(@community)
+
     assert_selector 'div', text: '1 - 10 of 11'
     # Default sort is by title. First 6 say 'Fancy', last 4 say 'Nice'
     assert_selector 'ul.list-group li:first-child a', text: 'Fancy Collection 00'
@@ -25,6 +26,7 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
     # The last one should be on next page
     refute_selector 'a', text: 'Nice Collection 09'
     click_link 'Next'
+
     assert_equal URI.parse(current_url).request_uri, community_path(@community, page: '2')
     assert_selector 'div', text: '11 - 11 of 11'
     assert_selector 'ul.list-group li:first-child a', text: 'Nice Collection 09'
@@ -33,6 +35,7 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
   test 'sort by descending alphabetical order and paginate collections' do
     visit community_path(@community)
     click_button 'Sort by'
+
     assert_selector 'a', text: 'Title (A-Z)'
     assert_selector 'a', text: 'Title (Z-A)'
     assert_selector 'a', text: 'Date (newest first)'
@@ -40,6 +43,7 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
 
     # Reverse sort
     click_link 'Title (Z-A)'
+
     assert_equal URI.parse(current_url).request_uri, community_path(@community, sort: 'title', direction: 'desc')
     assert_selector 'div', text: '1 - 10 of 11'
     assert_selector 'button', text: 'Title (Z-A)'
@@ -51,6 +55,7 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
     # The first 'Fancy' collection should be on next page
     refute_selector 'a', text: 'Fancy Collection 00'
     click_link 'Next'
+
     assert_equal URI.parse(current_url).request_uri, community_path(@community, sort: 'title', direction: 'desc',
                                                                                 page: '2')
     assert_selector 'div', text: '11 - 11 of 11'
@@ -62,6 +67,7 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
     # Sort with newest first
     click_button 'Sort by'
     click_link 'Date (newest first)'
+
     assert_equal URI.parse(current_url).request_uri, community_path(@community, sort: 'record_created_at',
                                                                                 direction: 'desc')
     assert_selector 'button', text: 'Date (newest first)'
@@ -74,6 +80,7 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
     refute_selector 'a', text: 'Fancy Collection 00'
 
     click_link 'Next'
+
     assert_equal URI.parse(current_url).request_uri, community_path(@community, sort: 'record_created_at',
                                                                                 direction: 'desc', page: '2')
     assert_selector 'div', text: '11 - 11 of 11'
@@ -85,6 +92,7 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
     # Sort the other way again
     click_button 'Sort by'
     click_link 'Title (A-Z)'
+
     assert_equal URI.parse(current_url).request_uri, community_path(@community, sort: 'title', direction: 'asc')
     assert_selector 'button', text: 'Title (A-Z)'
     assert_selector 'div', text: '1 - 10 of 11'
@@ -100,6 +108,7 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
     # Sort with oldest first
     click_button 'Sort by'
     click_link 'Date (oldest first)'
+
     assert_equal URI.parse(current_url).request_uri, community_path(@community, sort: 'record_created_at',
                                                                                 direction: 'asc')
     assert_selector 'button', text: 'Date (oldest first)'
@@ -111,6 +120,7 @@ class CollectionsPaginationAndSortTest < ApplicationSystemTestCase
     # The Last 'Nice' collection should be on next page
     refute_selector 'a', text: 'Fancy Collection 10'
     click_link 'Next'
+
     assert_equal URI.parse(current_url).request_uri, community_path(@community, sort: 'record_created_at',
                                                                                 direction: 'asc', page: '2')
     assert_selector 'div', text: '11 - 11 of 11'

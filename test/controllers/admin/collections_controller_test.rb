@@ -11,11 +11,13 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should show collection' do
     get admin_community_collection_url(@community, @collection)
+
     assert_response :success
   end
 
   test 'should get new' do
     get new_admin_community_collection_url(@community)
+
     assert_response :success
   end
 
@@ -40,6 +42,7 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should get edit' do
     get edit_admin_community_collection_url(@community, @collection)
+
     assert_response :success
   end
 

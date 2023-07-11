@@ -28,9 +28,11 @@ class ItemEditHistoryTest < ApplicationSystemTestCase
       click_on I18n.t('admin.theses.draft.save_and_continue')
       click_on I18n.t('admin.theses.draft.save_and_continue')
       click_on I18n.t('admin.theses.draft.save_and_deposit_edits')
+
       assert_text I18n.t('admin.theses.draft.successful_deposit')
 
       click_on I18n.t('edit_history')
+
       assert_selector 'dt', text: I18n.t('edited_by')
       assert_selector 'dd', text: 'Administrator - administrator@example.com'
       assert_selector 'dt', text: 'Title'
@@ -69,9 +71,11 @@ class ItemEditHistoryTest < ApplicationSystemTestCase
       click_on I18n.t('items.draft.save_and_continue')
       click_on I18n.t('items.draft.save_and_continue')
       click_on I18n.t('items.draft.save_and_deposit_edits')
+
       assert_text I18n.t('items.draft.successful_deposit')
 
       click_on I18n.t('edit_history')
+
       assert_selector 'dt', text: I18n.t('edited_by')
       assert_selector 'dd', text: 'Administrator - administrator@example.com'
       assert_selector 'dt', text: 'Title'

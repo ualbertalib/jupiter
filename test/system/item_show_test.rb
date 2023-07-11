@@ -75,6 +75,7 @@ class ItemShowTest < ApplicationSystemTestCase
 
   test 'unauthed users should be able to download all files from a public item' do
     visit item_path @item
+
     assert_selector '.js-download', count: 3
     assert_selector '.js-download-all'
     # TODO: test that the files are downloaded via js successfully without making the suite brittle
@@ -83,6 +84,7 @@ class ItemShowTest < ApplicationSystemTestCase
   test 'Search faceting on item values is not broken' do
     visit item_path @item
     click_link 'Joe Blow'
+
     assert_selector "a[href='/search?tab=item']", count: 1
   end
 
@@ -98,6 +100,7 @@ class ItemShowTest < ApplicationSystemTestCase
 
   test 'Visiting authenticated items as an unauthenticated user works' do
     visit item_path @item2
+
     assert_selector 'h1', text: 'CCID Item', count: 1
   end
 
@@ -111,6 +114,7 @@ class ItemShowTest < ApplicationSystemTestCase
 
   test 'Item statistics are present' do
     visit item_path @thesis
+
     assert_selector "div[class='card-header']", text: 'Usage', count: 1
     assert_selector 'div ul li', text: 'No download information available'
   end
