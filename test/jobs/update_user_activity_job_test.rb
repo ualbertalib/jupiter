@@ -8,6 +8,7 @@ class UpdateUserActivityJobTest < ActiveSupport::TestCase
     now = Time.now.utc.to_s
     UpdateUserActivityJob.perform_now(user.id, now, ip)
     user.reload
+
     assert_equal user.last_seen_at.to_s, now
     assert_equal user.last_seen_ip, ip
     # Still does not change sign-in information

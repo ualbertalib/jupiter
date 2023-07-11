@@ -34,6 +34,7 @@ class ItemEditTest < ApplicationSystemTestCase
     visit item_path item
 
     click_on I18n.t('more_information')
+
     assert_selector 'dt', text: 'Additional contributors'
 
     click_on I18n.t('application.navbar.links.login') # TODO: not sure why the login didn't persist
@@ -49,12 +50,15 @@ class ItemEditTest < ApplicationSystemTestCase
 
     click_on I18n.t('items.draft.save_and_continue')
     click_on I18n.t('items.draft.save_and_continue')
+
     refute_selector 'h6', text: 'Additional contributors'
 
     click_on I18n.t('items.draft.save_and_deposit_edits')
+
     assert_text I18n.t('items.draft.successful_deposit')
 
     click_on I18n.t('more_information')
+
     refute_selector 'dt', text: 'Additional contributors'
 
     logout_user

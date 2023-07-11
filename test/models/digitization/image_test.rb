@@ -12,6 +12,7 @@ class Digitization::ImageTest < ActiveSupport::TestCase
 
   test 'unique Peel image' do
     image = Digitization::Image.create(peel_image_id: 'MGNGBG0001')
+
     assert_not image.valid?
     assert_equal('has already been taken', image.errors[:peel_image_id].first)
     image.destroy
