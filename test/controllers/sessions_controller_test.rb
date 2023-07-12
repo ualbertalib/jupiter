@@ -18,6 +18,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
     user = User.last
     identity = user.identities.last
+
     assert_equal 'John Doe', user.name
     assert_equal 'johndoe@ualberta.ca', user.email
     assert_equal 'saml', identity.provider
@@ -60,6 +61,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     end
 
     identity = user.identities.last
+
     assert_equal 'twitter', identity.provider
     assert_equal 'twitter-012345', identity.uid
 
@@ -94,6 +96,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     end
 
     identity = user.identities.last
+
     assert_equal 'twitter', identity.provider
     assert_equal 'twitter-012345', identity.uid
 
@@ -110,6 +113,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_predicate self, :logged_in?
 
     get logout_url
+
     assert_redirected_to root_url
     assert_equal I18n.t('sessions.destroy.signed_out'), flash[:notice]
 
@@ -118,6 +122,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should return properly flash message on a omniauth failure' do
     get auth_failure_url
+
     assert_redirected_to root_url
     assert_equal I18n.t('login.error'), flash[:alert]
   end

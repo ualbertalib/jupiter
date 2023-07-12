@@ -13,6 +13,7 @@ class ThesisDescriptionOptionalTest < ApplicationSystemTestCase
     fill_in I18n.t('admin.theses.draft.describe_thesis.description'), with: ''
 
     click_on I18n.t('admin.theses.draft.save_and_continue')
+
     assert_text I18n.t('admin.theses.draft.please_fix_errors')
 
     logout_user
@@ -30,6 +31,7 @@ class ThesisDescriptionOptionalTest < ApplicationSystemTestCase
     select '2000', from: I18n.t('admin.theses.draft.describe_thesis.graduation_year')
 
     click_on I18n.t('admin.theses.draft.save_and_continue')
+
     assert_no_text I18n.t('admin.theses.draft.please_fix_errors')
     logout_user
   end

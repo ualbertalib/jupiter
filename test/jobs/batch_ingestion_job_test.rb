@@ -16,6 +16,7 @@ class BatchIngestionJobTest < ActiveJob::TestCase
       end
 
       batch_ingest.reload
+
       assert_predicate(batch_ingest, :completed?)
       assert_equal(0, batch_ingest.items.count)
     end
@@ -36,6 +37,7 @@ class BatchIngestionJobTest < ActiveJob::TestCase
       end
 
       batch_ingest.reload
+
       assert_predicate(batch_ingest, :failed?)
       assert_equal('An exception was raised!', batch_ingest.error_message)
     end
@@ -59,6 +61,7 @@ class BatchIngestionJobTest < ActiveJob::TestCase
       end
 
       batch_ingest.reload
+
       assert_predicate(batch_ingest, :completed?)
       assert_equal(2, batch_ingest.items.count)
     end
@@ -118,6 +121,7 @@ class BatchIngestionJobTest < ActiveJob::TestCase
     end
 
     batch_ingest.reload
+
     assert_predicate(batch_ingest, :completed?)
     assert_equal(3, batch_ingest.items.count)
     # Check items have their multiple files attached. Order is not guaranteed so
@@ -128,6 +132,7 @@ class BatchIngestionJobTest < ActiveJob::TestCase
     assert_equal(1, Item.find_by(title: 'Test Resource Title 3').files.count)
 
     item = Item.find_by(title: 'Test Resource Title 1')
+
     assert(File.file?(ActiveStorage::Blob.service.path_for(item.files[0].blob.key)))
     assert(File.file?(ActiveStorage::Blob.service.path_for(item.files[1].blob.key)))
   end

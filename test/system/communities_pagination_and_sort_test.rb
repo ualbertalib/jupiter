@@ -25,6 +25,7 @@ class CommunitiesPaginationAndSortTest < ApplicationSystemTestCase
     # The last one should be on next page
     refute_selector 'a', text: 'Thesis'
     click_link 'Next'
+
     assert_equal URI.parse(current_url).request_uri, communities_path(page: '2')
     assert_selector 'div', text: '4 - 4 of 4'
     assert_selector 'li:first-child a', text: 'Thesis'
@@ -37,6 +38,7 @@ class CommunitiesPaginationAndSortTest < ApplicationSystemTestCase
 
     # Reverse sort
     click_link 'Title (Z-A)'
+
     assert_equal URI.parse(current_url).request_uri, communities_path(sort: 'title', direction: 'desc')
     assert_selector 'button', text: 'Title (Z-A)'
     assert_selector 'li:first-child a', text: 'Thesis'
@@ -46,6 +48,7 @@ class CommunitiesPaginationAndSortTest < ApplicationSystemTestCase
     # Sort the other way again
     click_button 'Title (Z-A)'
     click_link 'Title (A-Z)'
+
     assert_equal URI.parse(current_url).request_uri, communities_path(sort: 'title', direction: 'asc')
     assert_selector 'button', text: 'Title (A-Z)'
     assert_selector 'li:first-child a', text: 'Books'
@@ -60,6 +63,7 @@ class CommunitiesPaginationAndSortTest < ApplicationSystemTestCase
 
     # Sort with newest first
     click_link 'Date (newest first)'
+
     assert_equal URI.parse(current_url).request_uri, communities_path(sort: 'record_created_at', direction: 'desc')
     assert_selector 'button', text: 'Date (newest first)'
     assert_selector 'li:first-child a', text: 'Books'
@@ -69,6 +73,7 @@ class CommunitiesPaginationAndSortTest < ApplicationSystemTestCase
     # Sort with oldest first
     click_button 'Date (newest first)'
     click_link 'Date (oldest first)'
+
     assert_equal URI.parse(current_url).request_uri, communities_path(sort: 'record_created_at', direction: 'asc')
     assert_selector 'button', text: 'Date (oldest first)'
     assert_selector 'li:first-child a', text: 'Community with no collections'

@@ -18,6 +18,7 @@ class UserActivityTest < ActionDispatch::IntegrationTest
         sign_in_as user
       end
       user.reload
+
       assert_equal user.last_seen_at.to_s, now1
       assert_equal('127.0.0.1', user.last_seen_ip)
       assert_equal user.last_sign_in_at.to_s, now1
@@ -33,6 +34,7 @@ class UserActivityTest < ActionDispatch::IntegrationTest
         sign_in_as user
       end
       user.reload
+
       assert_equal user.last_seen_at.to_s, now2
       assert_equal('127.0.0.1', user.last_seen_ip)
       assert_equal user.last_sign_in_at.to_s, now2
@@ -55,6 +57,7 @@ class UserActivityTest < ActionDispatch::IntegrationTest
       perform_enqueued_jobs do
         get communities_url
       end
+
       assert_performed_jobs 0
       user.reload
       # Nothing change
@@ -69,6 +72,7 @@ class UserActivityTest < ActionDispatch::IntegrationTest
       perform_enqueued_jobs do
         get communities_url
       end
+
       assert_performed_jobs 1
       user.reload
       # `last_seen_at` changed

@@ -6,11 +6,13 @@ class CollectionTest < ActiveSupport::TestCase
     community = communities(:community_books)
     collection = Collection.new(title: 'foo', owner_id: users(:user_regular).id,
                                 community_id: community.id)
+
     assert_predicate collection, :valid?
   end
 
   test 'needs title' do
     collection = Collection.new(owner_id: users(:user_admin).id)
+
     assert_not collection.valid?
     assert_equal "Title can't be blank", collection.errors.full_messages.first
   end
@@ -18,6 +20,7 @@ class CollectionTest < ActiveSupport::TestCase
   test 'visibility callback' do
     collection = Collection.new(title: 'foo', owner_id: users(:user_regular).id)
     collection.valid?
+
     assert_equal collection.visibility, JupiterCore::VISIBILITY_PUBLIC
   end
 

@@ -12,6 +12,7 @@ class Digitization::FulltextTest < ActiveSupport::TestCase
 
   test 'should have text' do
     @fulltext.assign_attributes(text: nil)
+
     assert_not @fulltext.valid?
     assert_equal("can't be blank", @fulltext.errors[:text].first)
   end

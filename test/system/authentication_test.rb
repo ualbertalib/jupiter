@@ -87,6 +87,7 @@ class AuthenticationTest < ApplicationSystemTestCase
   test 'should after login should be redirected back to previous page user was on' do
     # Go to browse page before logging in
     visit communities_path
+
     assert_selector 'h1', text: I18n.t('communities.index.header')
 
     Rails.application.env_config['omniauth.auth'] =
