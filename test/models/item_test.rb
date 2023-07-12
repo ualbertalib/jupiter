@@ -45,6 +45,7 @@ class ItemTest < ActiveSupport::TestCase
     item.tap do |unlocked_item|
       unlocked_item.visibility = 'some_fake_visibility'
     end
+
     assert_not item.valid?
     assert_predicate item.errors[:visibility], :present?
     assert_includes item.errors[:visibility], 'some_fake_visibility is not a known visibility'
@@ -175,10 +176,12 @@ class ItemTest < ActiveSupport::TestCase
 
   test 'a language must be from the controlled vocabulary' do
     item = Item.new(languages: ['whatever'])
+
     assert_not item.valid?
     assert_includes item.errors[:languages], 'is not recognized'
 
     item = Item.new(languages: [ControlledVocabulary.era.language.english])
+
     assert_not item.valid?
     assert_not_includes item.errors.attribute_names, :languages
   end
@@ -200,32 +203,38 @@ class ItemTest < ActiveSupport::TestCase
 
   test 'a license must be either from the controlled vocabulary for new licenses or for old licenses' do
     item = Item.new(license: 'whatever')
+
     assert_not item.valid?
     assert_includes item.errors[:license], 'is not recognized'
 
     item = Item.new(license: ControlledVocabulary.era.license.attribution_4_0_international)
     item.valid?
+
     assert_not_includes item.errors.attribute_names, :license
 
     item = Item.new(license: ControlledVocabulary.era.old_license.attribution_3_0_international)
     item.valid?
+
     assert_not_includes item.errors.attribute_names, :license
   end
 
   test 'an item type is required' do
     item = Item.new
+
     assert_not item.valid?
     assert_includes item.errors[:item_type], "can't be blank"
   end
 
   test 'an item type must come from the controlled vocabulary' do
     item = Item.new(item_type: 'whatever')
+
     assert_not item.valid?
     assert_includes item.errors[:item_type], 'is not recognized'
   end
 
   test 'publication status is needed for articles' do
     item = Item.new(item_type: ControlledVocabulary.era.item_type.article)
+
     assert_not item.valid?
     assert_includes item.errors[:publication_status], 'is required for articles'
   end
@@ -233,6 +242,7 @@ class ItemTest < ActiveSupport::TestCase
   test 'publication status must come from controlled vocabulary' do
     item = Item.new(item_type: ControlledVocabulary.era.item_type.article,
                     publication_status: ['whatever'])
+
     assert_not item.valid?
     assert_includes item.errors[:publication_status], 'is not recognized'
   end
@@ -241,28 +251,33 @@ class ItemTest < ActiveSupport::TestCase
     item = Item.new(item_type: ControlledVocabulary.era.item_type.article,
                     publication_status: [ControlledVocabulary.era.publication_status.published])
     item.valid?
+
     assert_not item.errors[:publication_status].present?
 
     item = Item.new(item_type: ControlledVocabulary.era.item_type.article,
                     publication_status: [ControlledVocabulary.era.publication_status.draft,
                                          ControlledVocabulary.era.publication_status.submitted])
     item.valid?
+
     assert_not item.errors[:publication_status].present?
 
     item = Item.new(item_type: ControlledVocabulary.era.item_type.article,
                     publication_status: [ControlledVocabulary.era.publication_status.draft])
     item.valid?
+
     assert_includes item.errors[:publication_status], 'is not recognized'
 
     item = Item.new(item_type: ControlledVocabulary.era.item_type.article,
                     publication_status: [ControlledVocabulary.era.publication_status.submitted])
     item.valid?
+
     assert_includes item.errors[:publication_status], 'is not recognized'
   end
 
   test 'publication status must be absent for non-articles' do
     item = Item.new(item_type: ControlledVocabulary.era.item_type.book,
                     publication_status: [ControlledVocabulary.era.publication_status.published])
+
     assert_not item.valid?
     assert_includes item.errors[:publication_status], 'must be absent for non-articles'
   end
@@ -270,37 +285,44 @@ class ItemTest < ActiveSupport::TestCase
   test 'item_type_with_status_code gets set correctly' do
     item = Item.new(item_type: ControlledVocabulary.era.item_type.article,
                     publication_status: [ControlledVocabulary.era.publication_status.published])
+
     assert_equal :article_published, item.item_type_with_status_code
 
     item = Item.new(item_type: ControlledVocabulary.era.item_type.article,
                     publication_status: [ControlledVocabulary.era.publication_status.draft,
                                          ControlledVocabulary.era.publication_status.submitted])
+
     assert_equal :article_submitted, item.item_type_with_status_code
 
     item = Item.new(item_type: ControlledVocabulary.era.item_type.report)
+
     assert_equal :report, item.item_type_with_status_code
   end
 
   test 'a subject is required' do
     item = Item.new
+
     assert_not item.valid?
     assert_includes item.errors[:subject], "can't be blank"
   end
 
   test 'a creator is required' do
     item = Item.new
+
     assert_not item.valid?
     assert_includes item.errors[:creators], "can't be blank"
   end
 
   test 'created is required' do
     item = Item.new
+
     assert_not item.valid?
     assert_includes item.errors[:created], "can't be blank"
   end
 
   test 'sort_year is required' do
     item = Item.new
+
     assert_not item.valid?
     assert_includes item.errors[:sort_year], "can't be blank"
   end
@@ -308,6 +330,7 @@ class ItemTest < ActiveSupport::TestCase
   test 'sort_year is derived from created' do
     item = Item.new(created: 'Fall 2015')
     item.valid?
+
     assert_not item.errors[:sort_year].present?
     assert_equal(2015, item.sort_year)
   end
@@ -388,6 +411,7 @@ class ItemTest < ActiveSupport::TestCase
                                                       -1,
                                                       with_scores: true)[0]
       item_output = JSON.parse(item_output)
+
       assert_equal item.id, item_output['uuid']
       assert_in_delta 0.5, score, 3.minutes.from_now.to_f
     end

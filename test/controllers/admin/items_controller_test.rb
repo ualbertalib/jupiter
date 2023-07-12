@@ -14,6 +14,7 @@ class Admin::ItemsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should get items index' do
     get admin_items_url
+
     assert_response :success
   end
 
@@ -31,6 +32,7 @@ class Admin::ItemsControllerTest < ActionDispatch::IntegrationTest
     Rails.application.secrets.doi_minting_enabled = true
 
     patch reset_doi_admin_item_url(@item)
+
     assert_response :redirect
     assert_redirected_to root_url
     assert_enqueued_jobs 1, only: DOICreateJob

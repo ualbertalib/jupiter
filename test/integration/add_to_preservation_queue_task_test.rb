@@ -21,6 +21,7 @@ class AddToPreservationQueueTaskTest < ApplicationSystemTestCase
     disable_output do
       Rake::Task['jupiter:preserve_all_collections_and_communities'].execute
       collection_and_community_count = Community.count + Collection.count
+
       assert_equal collection_and_community_count,
                    RedisClient.current.zcard(Rails.application.secrets.preservation_queue_name)
     end
@@ -32,6 +33,7 @@ class AddToPreservationQueueTaskTest < ApplicationSystemTestCase
         Collection.first.save!
         Community.first.save!
         Rake::Task['jupiter:preserve_all_collections_and_communities'].execute(after_date_arguments)
+
         assert_equal 2, RedisClient.current.zcard(Rails.application.secrets.preservation_queue_name)
       end
     end
@@ -41,6 +43,7 @@ class AddToPreservationQueueTaskTest < ApplicationSystemTestCase
     disable_output do
       travel 1.week do
         Rake::Task['jupiter:preserve_all_collections_and_communities'].execute(after_date_arguments)
+
         assert_equal 0, RedisClient.current.zcard(Rails.application.secrets.preservation_queue_name)
       end
     end
@@ -50,6 +53,7 @@ class AddToPreservationQueueTaskTest < ApplicationSystemTestCase
     disable_output do
       Rake::Task['jupiter:preserve_all_items_and_theses'].execute
       item_and_thesis__count = Item.count + Thesis.count
+
       assert_equal item_and_thesis__count,
                    RedisClient.current.zcard(Rails.application.secrets.preservation_queue_name)
     end
@@ -61,6 +65,7 @@ class AddToPreservationQueueTaskTest < ApplicationSystemTestCase
         Item.first.save!
         Thesis.first.save!
         Rake::Task['jupiter:preserve_all_items_and_theses'].execute(after_date_arguments)
+
         assert_equal 2, RedisClient.current.zcard(Rails.application.secrets.preservation_queue_name)
       end
     end
@@ -70,6 +75,7 @@ class AddToPreservationQueueTaskTest < ApplicationSystemTestCase
     disable_output do
       travel 1.week do
         Rake::Task['jupiter:preserve_all_items_and_theses'].execute(after_date_arguments)
+
         assert_equal 0, RedisClient.current.zcard(Rails.application.secrets.preservation_queue_name)
       end
     end

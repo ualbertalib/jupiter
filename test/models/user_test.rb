@@ -20,11 +20,13 @@ class UserTest < ActiveSupport::TestCase
 
   test '#flipper_id' do
     user = users(:user_regular)
+
     assert_equal "User:#{user.id}", user.flipper_id
   end
 
   test 'should update the activity columns when not signing-in for new user without activity update' do
     user = users(:user_admin)
+
     assert_predicate user.last_seen_at, :blank?
     assert_predicate user.last_sign_in_at, :blank?
     assert_predicate user.previous_sign_in_at, :blank?
@@ -56,6 +58,7 @@ class UserTest < ActiveSupport::TestCase
 
     user.update_activity!(now, ip, sign_in: true)
     user.reload
+
     assert_predicate user.last_seen_at, :present?
     assert_equal user.last_seen_at.to_s, now
     assert_equal user.last_seen_ip, ip

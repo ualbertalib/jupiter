@@ -24,6 +24,7 @@ class Admin::DashboardControllerTest < ActionDispatch::IntegrationTest
     assert_predicate self, :logged_in?
 
     get admin_root_url
+
     assert_response :success
   end
 

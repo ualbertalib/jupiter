@@ -25,6 +25,7 @@ class SitemapTest < ActionDispatch::IntegrationTest
 
     schema = Nokogiri::XML::Schema(File.open(file_fixture('siteindex.xsd')), Nokogiri::XML::ParseOptions.new.nononet)
     document = Nokogiri::XML(@response.body)
+
     assert_empty schema.validate(document)
 
     assert_select 'sitemap', 4
@@ -39,6 +40,7 @@ class SitemapTest < ActionDispatch::IntegrationTest
 
     schema = Nokogiri::XML::Schema(File.open(file_fixture('sitemap.xsd')), Nokogiri::XML::ParseOptions.new.nononet)
     document = Nokogiri::XML(@response.body)
+
     assert_empty schema.validate(document)
 
     assert_select 'url' do
@@ -61,6 +63,7 @@ class SitemapTest < ActionDispatch::IntegrationTest
 
     schema = Nokogiri::XML::Schema(File.open(file_fixture('sitemap.xsd')), Nokogiri::XML::ParseOptions.new.nononet)
     document = Nokogiri::XML(@response.body)
+
     assert_empty schema.validate(document)
 
     assert_select 'url' do
@@ -81,6 +84,7 @@ class SitemapTest < ActionDispatch::IntegrationTest
 
     schema = Nokogiri::XML::Schema(File.open(file_fixture('sitemap.xsd')), Nokogiri::XML::ParseOptions.new.nononet)
     document = Nokogiri::XML(@response.body)
+
     assert_empty schema.validate(document)
 
     assert_select 'url' do

@@ -113,6 +113,7 @@ class SearchTest < ApplicationSystemTestCase
     visit root_path
     fill_in name: 'search', with: 'Fancy'
     click_button 'Search'
+
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy')
     # Tabs
     assert_selector 'a.nav-link.active', text: 'Items (6)'
@@ -132,6 +133,7 @@ class SearchTest < ApplicationSystemTestCase
     assert_selector 'li a', text: /2\nFancy Community\/Fancy Collection 1/
     assert_selector 'div.card-header', text: I18n.t('facets.sort_year')
     sort_year_facet = Item.solr_exporter_class.solr_name_for(:sort_year, role: :range_facet)
+
     assert_selector "#ranges_#{sort_year_facet}_begin"
     assert_selector "#ranges_#{sort_year_facet}_end"
     assert_selector 'input.btn'
@@ -166,6 +168,7 @@ class SearchTest < ApplicationSystemTestCase
 
     path = "#{@community.id}/#{@collections[1].id}"
     facet_path = search_path(search: 'Fancy', facets: { member_of_paths_dpsim: [path] })
+
     assert_equal URI.parse(current_url).request_uri, facet_path
 
     # Tab counts should only change for this tab
@@ -197,6 +200,7 @@ class SearchTest < ApplicationSystemTestCase
     # A badge should be displayed for the enabled facet as a link that turns off facet
     badges = find('div.jupiter-facet-badges')
     badge = badges.find_link('a', text: 'Fancy Collection 1', href: search_path(search: 'Fancy'))
+
     badge.assert_selector 'span.badge', text: 'Fancy Collection 1'
   end
 
@@ -213,6 +217,7 @@ class SearchTest < ApplicationSystemTestCase
     badges = find('div.jupiter-facet-badges')
     badge = badges.find_link('a', text: 'Collections: Fancy Community/Fancy Collection 1',
                                   href: search_path(search: 'Fancy'))
+
     badge.assert_selector 'span.badge', text: 'Collections: Fancy Community/Fancy Collection 1'
 
     Flipper.disable(:facet_badge_category_name)
@@ -222,6 +227,7 @@ class SearchTest < ApplicationSystemTestCase
     visit root_path
     fill_in name: 'search', with: 'Fancy'
     click_button 'Search'
+
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy')
 
     # Tabs
@@ -239,10 +245,12 @@ class SearchTest < ApplicationSystemTestCase
     visit root_path
     fill_in name: 'search', with: 'Fancy'
     click_button 'Search'
+
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy')
 
     # Visit community tab
     click_link 'Communities'
+
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy', tab: 'community')
     assert_selector 'a.nav-link', text: 'Items'
     assert_selector 'a.nav-link', text: 'Collections'
@@ -257,12 +265,14 @@ class SearchTest < ApplicationSystemTestCase
     visit root_path
     fill_in name: 'search', with: 'Fancy'
     click_button 'Search'
+
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy')
 
     # Visit collection tab
     within('.nav-tabs') do
       click_link 'Collections'
     end
+
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy', tab: 'collection')
     assert_selector 'a.nav-link', text: 'Items'
     assert_selector 'a.nav-link.active', text: 'Collections (2)'
@@ -277,6 +287,7 @@ class SearchTest < ApplicationSystemTestCase
     visit root_path
     fill_in name: 'search', with: 'Extra'
     click_button 'Search'
+
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Extra')
 
     # Facets and counts. 20 should match, expect only 6 to be shown
@@ -305,6 +316,7 @@ class SearchTest < ApplicationSystemTestCase
     visit root_path
     fill_in name: 'search', with: 'Fancy'
     click_button 'Search'
+
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy')
 
     # Default sort is by relevance
@@ -314,6 +326,7 @@ class SearchTest < ApplicationSystemTestCase
 
     # Sort sort links
     click_button 'Sort by'
+
     assert_selector 'a', text: 'Title (A-Z)'
     assert_selector 'a', text: 'Title (Z-A)'
     assert_selector 'a', text: 'Date (newest first)'
@@ -325,11 +338,13 @@ class SearchTest < ApplicationSystemTestCase
     visit root_path
     fill_in name: 'search', with: 'Fancy'
     click_button 'Search'
+
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy')
 
     # Reverse sort
     click_button 'Sort by'
     click_link 'Title (Z-A)'
+
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy', sort: 'title', direction: 'desc')
     assert_selector 'button', text: 'Title (Z-A)'
     assert_match(/Fancy Item 8.*Fancy Item 6.*Fancy Item 4.*Fancy Item 2.*Fancy Item 0.*Fancy CCID Item/m, page.text)
@@ -339,11 +354,13 @@ class SearchTest < ApplicationSystemTestCase
     visit root_path
     fill_in name: 'search', with: 'Fancy'
     click_button 'Search'
+
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy')
 
     # Sort the other way again
     click_button 'Sort by'
     click_link 'Title (A-Z)'
+
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy', sort: 'title', direction: 'asc')
     assert_selector 'button', text: 'Title (A-Z)'
     assert_match(/Fancy CCID Item.*Fancy Item 0.*Fancy Item 2.*Fancy Item 4.*Fancy Item 6.*Fancy Item 8/m, page.text)
@@ -353,11 +370,13 @@ class SearchTest < ApplicationSystemTestCase
     visit root_path
     fill_in name: 'search', with: 'Fancy'
     click_button 'Search'
+
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy')
 
     # Sort with newest first
     click_button 'Sort by'
     click_link 'Date (newest first)'
+
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy',
                                                                  sort: 'sort_year', direction: 'desc')
     assert_selector 'button', text: 'Date (newest first)'
@@ -368,11 +387,13 @@ class SearchTest < ApplicationSystemTestCase
     visit root_path
     fill_in name: 'search', with: 'Fancy'
     click_button 'Search'
+
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy')
 
     # Sort with oldest first
     click_button 'Sort by'
     click_link 'Date (oldest first)'
+
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy',
                                                                  sort: 'sort_year', direction: 'asc')
     assert_selector 'button', text: 'Date (oldest first)'
@@ -387,6 +408,7 @@ class SearchTest < ApplicationSystemTestCase
     # Search box should be on any page we happen to be on
     fill_in name: 'search', with: 'Fancy'
     click_button 'Search'
+
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy')
 
     # Tabs
@@ -443,6 +465,7 @@ class SearchTest < ApplicationSystemTestCase
     # Search box should be on any page we happen to be on
     fill_in name: 'search', with: 'Fancy'
     click_button 'Search'
+
     assert_equal URI.parse(current_url).request_uri, search_path(search: 'Fancy')
 
     # Click on facet
@@ -450,6 +473,7 @@ class SearchTest < ApplicationSystemTestCase
 
     path = "#{@community.id}/#{@collections[1].id}"
     facet_path = search_path(search: 'Fancy', facets: { member_of_paths_dpsim: [path] })
+
     assert_equal URI.parse(current_url).request_uri, facet_path
 
     # Tab counts should only change for this tab
@@ -480,6 +504,7 @@ class SearchTest < ApplicationSystemTestCase
     # A badge should be displayed for the enabled facet as a link that turns off facet
     badges = find('div.jupiter-facet-badges')
     badge = badges.find_link('a', text: 'Fancy Collection 1', href: search_path(search: 'Fancy'))
+
     badge.assert_selector 'span.badge', text: 'Fancy Collection 1'
 
     logout_user

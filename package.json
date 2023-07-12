@@ -13,7 +13,7 @@
     "@rails/ujs": "^6.1.7",
     "@rails/webpacker": "^5.4.4",
     "bootstrap": "^4.6.2",
-    "core-js": "^3.27.2",
+    "core-js": "^3.31.1",
     "dropzone": "^5.9.3",
     "easy-autocomplete": "^1.3.5",
     "jquery": "^3.7.0",
@@ -31,7 +31,7 @@
     "eslint-plugin-import": "^2.27.5",
     "stylelint": "^13.13.1",
     "stylelint-config-standard": "^22.0.0",
-    "webpack-dev-server": "^4.11.1"
+    "webpack-dev-server": "^4.15.1"
   },
   "resolutions": {
     "webpack": "^4.0.0"

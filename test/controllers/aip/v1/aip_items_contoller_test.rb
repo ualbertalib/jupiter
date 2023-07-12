@@ -37,6 +37,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
       id: @public_item,
       entity: @entity
     )
+
     assert_response :success
   end
 
@@ -46,6 +47,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
       id: @public_item,
       entity: @entity
     )
+
     assert_response :redirect
   end
 
@@ -55,6 +57,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
       id: @public_item,
       entity: @entity
     )
+
     assert_response :redirect
   end
 
@@ -71,6 +74,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
       entity: @entity,
       id: radioactive_item.id
     )
+
     assert_response :success
 
     graph = generate_graph_from_n3(response.body)
@@ -95,6 +99,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
       entity: @entity,
       id: radioactive_item.id
     )
+
     assert_response :success
 
     graph = generate_graph_from_n3(response.body)
@@ -126,6 +131,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
       entity: @entity,
       id: radioactive_item.id
     )
+
     assert_response :success
 
     graph = generate_graph_from_n3(response.body)
@@ -149,6 +155,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
       entity: @entity,
       id: radioactive_item.id
     )
+
     assert_response :success
 
     graph = generate_graph_from_n3(response.body)
@@ -171,6 +178,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
       entity: @entity,
       id: radioactive_item.id
     )
+
     assert_response :success
 
     graph = generate_graph_from_n3(response.body)
@@ -198,8 +206,10 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
       entity: @entity,
       id: @public_item
     )
+
     assert_response :success
     json_string = response.body
+
     assert JSON::Validator.validate(
       file_paths_json_schema,
       json_string
@@ -229,6 +239,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
       id: radioactive_item,
       file_set_id: radioactive_item.files.first.fileset_uuid
     )
+
     assert_response :success
 
     graph = generate_graph_from_n3(response.body)
@@ -252,6 +263,7 @@ class Aip::V1::ItemsControllerTest < ActionDispatch::IntegrationTest
     )
 
     graph = get_n3_graph(url)
+
     assert_response :success
 
     variables = {

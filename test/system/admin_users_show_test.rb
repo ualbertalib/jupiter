@@ -13,6 +13,7 @@ class AdminUsersShowTest < ApplicationSystemTestCase
     assert_selector 'h1', text: I18n.t('admin.dashboard.index.header')
 
     click_link I18n.t('admin.users.index.header')
+
     assert_selector 'h1', text: I18n.t('admin.users.index.header')
     assert_selector 'tbody tr', count: 6
     assert_selector 'tbody tr:first-child th[scope="row"]', text: admin.email
@@ -43,6 +44,7 @@ class AdminUsersShowTest < ApplicationSystemTestCase
     assert_selector 'h1', text: I18n.t('admin.dashboard.index.header')
 
     click_link I18n.t('admin.users.index.header')
+
     assert_selector 'h1', text: I18n.t('admin.users.index.header')
     assert_selector 'tbody tr', count: 6
     assert_selector 'tbody tr:first-child th[scope="row"]', text: admin.email
@@ -116,6 +118,7 @@ class AdminUsersShowTest < ApplicationSystemTestCase
     assert_selector 'h1', text: I18n.t('admin.dashboard.index.header')
 
     click_link I18n.t('admin.users.index.header')
+
     assert_selector 'h1', text: I18n.t('admin.users.index.header')
     assert_selector 'tbody tr', count: 6
     assert_selector 'tbody tr:first-child th[scope="row"]', text: admin.email
@@ -142,6 +145,7 @@ class AdminUsersShowTest < ApplicationSystemTestCase
     # we log out as user and get redirected back to admin user show page
     click_link user.name # opens user dropdown which has the logout as user link
     click_link I18n.t('application.navbar.links.logout_as_user')
+
     assert_text I18n.t('sessions.logout_as_user.flash', original_user: user.name)
     assert_selector 'h1', text: user.name
 
@@ -178,6 +182,7 @@ class AdminUsersShowTest < ApplicationSystemTestCase
     # Search items
     fill_in id: 'search_bar', with: 'Fancy'
     click_button 'Search Items'
+
     assert_selector 'div.jupiter-results-list li.list-group-item', count: 1
     assert_selector 'div.jupiter-results-list li.list-group-item .media-body a', text: 'Fancy Item', count: 1
     refute_selector 'div.jupiter-results-list li.list-group-item .media-body a', text: 'Nice Item'

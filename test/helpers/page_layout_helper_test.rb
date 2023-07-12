@@ -23,6 +23,7 @@ class PageLayoutHelperTest < ActionView::TestCase
   test 'should concat multiple page titles together when called multiple times' do
     page_title(t('admin.users.index.header'))
     page_title(t('admin.header'))
+
     assert_equal "#{t('admin.users.index.header')} | #{t('admin.header')} | #{t('site_name')}",
                  page_title(t('site_name'))
   end
@@ -112,6 +113,7 @@ class PageLayoutHelperTest < ActionView::TestCase
     expected = Rails.application.routes.url_helpers.rails_representation_path(
       logo.preview(resize_to_limit: [100, 100], auto_orient: true).processed
     )
+
     assert_equal expected, thumbnail_path(logo)
   end
 
@@ -125,6 +127,7 @@ class PageLayoutHelperTest < ActionView::TestCase
     expected = Rails.application.routes.url_helpers.rails_representation_path(
       logo.variant(resize_to_limit: [100, 100], auto_orient: true).processed
     )
+
     assert_equal expected, thumbnail_path(logo)
   end
 
