@@ -30,7 +30,7 @@ class HumanizedChangeSet
 
   def date
     date = @date.in_time_zone(TIMEZONE)
-    date.to_formatted_s(:long)
+    date.to_fs(:long)
   end
 
   private
@@ -153,7 +153,7 @@ class HumanizedChangeSet
     @changeset[attribute].map do |date|
       next nil if date.nil?
 
-      date.in_time_zone(TIMEZONE).to_formatted_s(:long)
+      date.in_time_zone(TIMEZONE).to_fs(:long)
     end
   end
 
