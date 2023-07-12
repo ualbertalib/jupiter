@@ -312,8 +312,8 @@ GEM
       rexml
     kramdown-parser-gfm (1.1.0)
       kramdown (~> 2.0)
-    launchy (2.5.0)
-      addressable (~> 2.7)
+    launchy (2.5.2)
+      addressable (~> 2.8)
     link_header (0.0.8)
     listen (3.8.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
