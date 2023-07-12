@@ -157,29 +157,34 @@ class ThesisTest < ActiveSupport::TestCase
 
   test 'item_type_with_status_code gets set correctly' do
     thesis = Thesis.new
+
     assert_equal(:thesis, thesis.item_type_with_status_code)
   end
 
   test 'a title is required' do
     thesis = Thesis.new
+
     assert_not thesis.valid?
     assert_includes thesis.errors[:title], "can't be blank"
   end
 
   test 'a dissertant is required' do
     thesis = Thesis.new
+
     assert_not thesis.valid?
     assert_includes thesis.errors[:dissertant], "can't be blank"
   end
 
   test 'a graduation date is required' do
     thesis = Thesis.new
+
     assert_not thesis.valid?
     assert_includes thesis.errors[:graduation_date], "can't be blank"
   end
 
   test 'a sort year is required' do
     thesis = Thesis.new
+
     assert_not thesis.valid?
     assert_includes thesis.errors[:sort_year], "can't be blank"
   end
@@ -187,6 +192,7 @@ class ThesisTest < ActiveSupport::TestCase
   test 'a sort year is derived from graduation date' do
     thesis = Thesis.new(graduation_date: 'Fall 2015')
     thesis.valid?
+
     assert_not thesis.errors[:sort_year].present?
     assert_equal(2015, thesis.sort_year)
   end

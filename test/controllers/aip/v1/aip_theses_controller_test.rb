@@ -32,6 +32,7 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
       id: @public_thesis,
       entity: @entity
     )
+
     assert_response :success
   end
 
@@ -41,6 +42,7 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
       id: @public_thesis,
       entity: @entity
     )
+
     assert_response :redirect
   end
 
@@ -50,6 +52,7 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
       id: @private_thesis,
       entity: @entity
     )
+
     assert_response :redirect
   end
 
@@ -65,6 +68,7 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
       entity: @entity,
       id: radioactive_thesis.id
     )
+
     assert_response :success
 
     graph = generate_graph_from_n3(response.body)
@@ -89,6 +93,7 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
       entity: @entity,
       id: radioactive_thesis.id
     )
+
     assert_response :success
 
     graph = generate_graph_from_n3(response.body)
@@ -117,6 +122,7 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
       entity: @entity,
       id: radioactive_thesis.id
     )
+
     assert_response :success
 
     graph = generate_graph_from_n3(response.body)
@@ -143,8 +149,10 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
       entity: @entity,
       id: @public_thesis
     )
+
     assert_response :success
     json_string = response.body
+
     assert JSON::Validator.validate(
       file_paths_json_schema,
       json_string
@@ -171,6 +179,7 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
       id: radioactive_thesis,
       file_set_id: radioactive_thesis.files.first.fileset_uuid
     )
+
     assert_response :success
 
     graph = generate_graph_from_n3(response.body)
@@ -195,6 +204,7 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
     )
 
     graph = get_n3_graph(url)
+
     assert_response :success
 
     variables = {

@@ -24,7 +24,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def storable_location?
-    request.get? && !request.xhr? && request.fullpath !~ /auth/
+    request.get? && !request.xhr? && request.fullpath.exclude?('auth')
   end
 
   def store_user_location!
@@ -82,7 +82,7 @@ class ApplicationController < ActionController::Base
 
       # referer gets funky with omniauth and all the redirects it does,
       # so handle this sanely by ignoring any referer coming from omniauth (/auth/) path
-      if request.referer && request.referer !~ /auth/
+      if request.referer&.exclude?('auth')
         redirect_to request.referer
       else
         redirect_to root_path

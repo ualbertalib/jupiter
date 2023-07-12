@@ -5,6 +5,7 @@ class Admin::AnnouncementsControllerTest < ActionDispatch::IntegrationTest
   test 'index' do
     sign_in_as(users(:user_admin))
     get admin_announcements_url
+
     assert_response :success
   end
 

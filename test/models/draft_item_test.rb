@@ -24,6 +24,7 @@ class DraftItemTest < ActiveSupport::TestCase
 
   test 'should not be able to create a draft item without user' do
     draft_item = DraftItem.new
+
     assert_not draft_item.valid?
     assert_equal 'User must exist', draft_item.errors.full_messages.first
   end
@@ -31,12 +32,14 @@ class DraftItemTest < ActiveSupport::TestCase
   test 'should be able to create a draft item with user when on inactive status' do
     user = users(:user_regular)
     draft_item = DraftItem.new(user:)
+
     assert_predicate draft_item, :valid?
   end
 
   test 'should run validations when on describe_item step' do
     user = users(:user_regular)
     draft_item = DraftItem.new(user:, status: DraftItem.statuses[:active])
+
     assert_not draft_item.valid?
 
     draft_item.assign_attributes(
@@ -49,6 +52,7 @@ class DraftItemTest < ActiveSupport::TestCase
       description: 'Really random description about this random book',
       member_of_paths: { community_id: [@community.id], collection_id: [@collection.id] }
     )
+
     assert_predicate draft_item, :valid?
   end
 
@@ -102,6 +106,7 @@ class DraftItemTest < ActiveSupport::TestCase
       description: 'Really random description about this random book',
       member_of_paths: { community_id: [@community.id], collection_id: [@collection.id] }
     )
+
     assert_not draft_item.valid?
 
     fake_file = ActiveStorage::Blob.create_and_upload!(
@@ -138,6 +143,7 @@ class DraftItemTest < ActiveSupport::TestCase
     draft_item.assign_attributes(
       license_text_area: 'Random license text or url to a license goes here'
     )
+
     assert_predicate draft_item, :valid?
   end
 
@@ -192,6 +198,7 @@ class DraftItemTest < ActiveSupport::TestCase
     draft_item.assign_attributes(
       member_of_paths: { community_id: ['random-uuid-123'], collection_id: ['random-uuid-abc'] }
     )
+
     assert_not draft_item.valid?
     assert_equal 2, draft_item.errors.full_messages.count
     assert_equal "Community can't be found", draft_item.errors.messages[:member_of_paths].first
@@ -200,6 +207,7 @@ class DraftItemTest < ActiveSupport::TestCase
     draft_item.assign_attributes(
       member_of_paths: { community_id: [@community.id], collection_id: [@collection.id] }
     )
+
     assert_predicate draft_item, :valid?
 
     # Regular user can't deposit to a restricted collection
@@ -210,12 +218,14 @@ class DraftItemTest < ActiveSupport::TestCase
     draft_item.assign_attributes(
       member_of_paths: { community_id: [@community.id], collection_id: [restricted_collection.id] }
     )
+
     assert_not draft_item.valid?
     assert_equal ['Deposit is restricted for this collection'], draft_item.errors.messages[:member_of_paths]
 
     # Admin user can deposit to a restricted collection
     user_admin = users(:user_admin)
     draft_item.user = user_admin
+
     assert_predicate draft_item, :valid?
 
     restricted_collection.destroy

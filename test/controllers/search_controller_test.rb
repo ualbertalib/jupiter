@@ -13,8 +13,10 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
 
   test 'should get results in alphabetical order when no query present' do
     get search_url, as: :json, params: { search: '' }
+
     assert_response :success
     results = response.parsed_body.pluck('id')
+
     assert_equal([@item3.id, @item2.id, @item1.id], results)
     assert_not_equal([@item4.id], results)
   end
@@ -22,13 +24,16 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
   test 'should get all results in alphabetical order when no query present when signed in as admin' do
     sign_in_as(users(:user_admin))
     get search_url, as: :json, params: { search: '' }
+
     assert_response :success
     results = response.parsed_body.pluck('id')
+
     assert_equal([@item3.id, @item2.id, @item1.id, @item4.id], results)
   end
 
   test 'should get results in relevance order when a query is present' do
     get search_url, as: :json, params: { search: 'Item' }
+
     assert_response :success
     results = response.parsed_body.pluck('id')
 
@@ -43,6 +48,7 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
 
   test 'should only get results matching query' do
     get search_url, as: :json, params: { search: 'Fancy Item' }
+
     assert_response :success
     results = response.parsed_body.pluck('id')
 
@@ -54,6 +60,7 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
 
   test 'should work when asking for HTML results too' do
     get search_url, params: { search: 'Item' }
+
     assert_response :success
 
     [@item1, @item2, @item3].each do |expected_result|
@@ -64,6 +71,7 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
 
   test 'should NOT render highlights on search result page by default' do
     get search_url, params: { search: 'French' }
+
     assert_response :success
 
     assert_no_match(/<mark>French<\/mark>/, response.body)
@@ -73,6 +81,7 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
     Flipper.enable(:fulltext_search)
 
     get search_url, params: { search: 'French' }
+
     assert_response :success
 
     assert_match(/<mark>French<\/mark>/, response.body)
@@ -83,6 +92,7 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
   test 'search with invalid date range shows alert' do
     sort_year_facet = Item.solr_exporter_class.solr_name_for(:sort_year, role: :range_facet)
     get search_url(ranges: { sort_year_facet => { begin: 2022, end: 2021 } })
+
     assert_response :success
     assert_equal I18n.t('search.invalid_date_range_flash'), flash[:alert]
   end
