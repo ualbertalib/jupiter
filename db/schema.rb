@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_09_20_041027) do
-
+ActiveRecord::Schema[7.0].define(version: 2023_07_12_204038) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -19,7 +18,7 @@ ActiveRecord::Schema.define(version: 2023_09_20_041027) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at"
+    t.datetime "created_at", precision: nil
     t.string "record_type"
     t.uuid "fileset_uuid"
     t.uuid "record_id"
@@ -34,7 +33,7 @@ ActiveRecord::Schema.define(version: 2023_09_20_041027) do
     t.text "metadata"
     t.bigint "byte_size"
     t.string "checksum"
-    t.datetime "created_at"
+    t.datetime "created_at", precision: nil
     t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
@@ -48,17 +47,17 @@ ActiveRecord::Schema.define(version: 2023_09_20_041027) do
   create_table "announcements", force: :cascade do |t|
     t.text "message", null: false
     t.bigint "user_id", null: false
-    t.datetime "removed_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "removed_at", precision: nil
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["user_id"], name: "index_announcements_on_user_id"
   end
 
   create_table "attachment_shims", force: :cascade do |t|
     t.string "owner_global_id", null: false
     t.string "name", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "logo_id"
   end
 
@@ -66,8 +65,8 @@ ActiveRecord::Schema.define(version: 2023_09_20_041027) do
     t.string "google_file_name", null: false
     t.string "google_file_id", null: false
     t.bigint "batch_ingest_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["batch_ingest_id"], name: "index_batch_ingest_files_on_batch_ingest_id"
   end
 
@@ -82,8 +81,8 @@ ActiveRecord::Schema.define(version: 2023_09_20_041027) do
     t.string "google_spreadsheet_name", null: false
     t.string "google_spreadsheet_id", null: false
     t.bigint "user_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["title"], name: "index_batch_ingests_on_title", unique: true
     t.index ["user_id"], name: "index_batch_ingests_on_user_id"
   end
@@ -91,9 +90,9 @@ ActiveRecord::Schema.define(version: 2023_09_20_041027) do
   create_table "collections", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string "visibility"
     t.bigint "owner_id", null: false
-    t.datetime "record_created_at"
+    t.datetime "record_created_at", precision: nil
     t.string "hydra_noid"
-    t.datetime "date_ingested"
+    t.datetime "date_ingested", precision: nil
     t.string "title", null: false
     t.string "fedora3_uuid"
     t.string "depositor"
@@ -101,24 +100,24 @@ ActiveRecord::Schema.define(version: 2023_09_20_041027) do
     t.text "description"
     t.json "creators", array: true
     t.boolean "restricted", default: false, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["owner_id"], name: "index_collections_on_owner_id"
   end
 
   create_table "communities", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string "visibility"
     t.bigint "owner_id", null: false
-    t.datetime "record_created_at"
+    t.datetime "record_created_at", precision: nil
     t.string "hydra_noid"
-    t.datetime "date_ingested"
+    t.datetime "date_ingested", precision: nil
     t.string "title", null: false
     t.string "fedora3_uuid"
     t.string "depositor"
     t.text "description"
     t.json "creators", array: true
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["owner_id"], name: "index_communities_on_owner_id"
   end
 
@@ -127,8 +126,8 @@ ActiveRecord::Schema.define(version: 2023_09_20_041027) do
     t.integer "status", default: 0, null: false
     t.string "error_message"
     t.bigint "user_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_digitization_batch_metadata_ingests_on_user_id"
   end
 
@@ -136,8 +135,8 @@ ActiveRecord::Schema.define(version: 2023_09_20_041027) do
     t.integer "peel_id"
     t.integer "run"
     t.integer "part_number"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "dates_issued", array: true
     t.string "temporal_subjects", array: true
     t.string "title", null: false
@@ -153,8 +152,8 @@ ActiveRecord::Schema.define(version: 2023_09_20_041027) do
     t.string "rights"
     t.string "topical_subjects", array: true
     t.string "volume_label"
-    t.datetime "date_ingested", null: false
-    t.datetime "record_created_at"
+    t.datetime "date_ingested", precision: nil, null: false
+    t.datetime "record_created_at", precision: nil
     t.string "visibility"
     t.bigint "owner_id", null: false
     t.uuid "digitization_batch_metadata_ingest_id"
@@ -168,17 +167,17 @@ ActiveRecord::Schema.define(version: 2023_09_20_041027) do
   create_table "digitization_fulltexts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "digitization_book_id", null: false
     t.text "text", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["digitization_book_id"], name: "index_digitization_fulltexts_on_digitization_book_id"
   end
 
   create_table "digitization_images", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "peel_image_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.datetime "date_ingested", null: false
-    t.datetime "record_created_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "date_ingested", precision: nil, null: false
+    t.datetime "record_created_at", precision: nil
     t.string "visibility"
     t.bigint "owner_id", null: false
     t.string "title", null: false
@@ -188,10 +187,10 @@ ActiveRecord::Schema.define(version: 2023_09_20_041027) do
 
   create_table "digitization_maps", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "peel_map_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.datetime "date_ingested", null: false
-    t.datetime "record_created_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "date_ingested", precision: nil, null: false
+    t.datetime "record_created_at", precision: nil
     t.string "visibility"
     t.bigint "owner_id", null: false
     t.string "title", null: false
@@ -204,10 +203,10 @@ ActiveRecord::Schema.define(version: 2023_09_20_041027) do
     t.string "year"
     t.string "month"
     t.string "day"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.datetime "date_ingested", null: false
-    t.datetime "record_created_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "date_ingested", precision: nil, null: false
+    t.datetime "record_created_at", precision: nil
     t.string "visibility"
     t.bigint "owner_id", null: false
     t.string "title", null: false
@@ -241,7 +240,7 @@ ActiveRecord::Schema.define(version: 2023_09_20_041027) do
     t.integer "license", default: 0, null: false
     t.text "license_text_area"
     t.integer "visibility", default: 0, null: false
-    t.datetime "embargo_end_date"
+    t.datetime "embargo_end_date", precision: nil
     t.integer "visibility_after_embargo", default: 0, null: false
     t.bigint "type_id"
     t.bigint "user_id", null: false
@@ -252,8 +251,8 @@ ActiveRecord::Schema.define(version: 2023_09_20_041027) do
     t.json "places", array: true
     t.json "time_periods", array: true
     t.json "citations", array: true
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.uuid "thumbnail_id"
     t.index ["id"], name: "index_draft_items_on_id", unique: true
     t.index ["type_id"], name: "index_draft_items_on_type_id"
@@ -262,8 +261,8 @@ ActiveRecord::Schema.define(version: 2023_09_20_041027) do
 
   create_table "draft_items_languages", force: :cascade do |t|
     t.bigint "language_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.uuid "draft_item_id"
     t.index ["draft_item_id"], name: "index_draft_items_languages_on_draft_item_id"
     t.index ["language_id"], name: "index_draft_items_languages_on_language_id"
@@ -285,18 +284,18 @@ ActiveRecord::Schema.define(version: 2023_09_20_041027) do
     t.integer "graduation_year"
     t.bigint "language_id"
     t.bigint "institution_id"
-    t.datetime "date_accepted"
-    t.datetime "date_submitted"
+    t.datetime "date_accepted", precision: nil
+    t.datetime "date_submitted", precision: nil
     t.text "rights"
     t.integer "visibility", default: 0, null: false
-    t.datetime "embargo_end_date"
+    t.datetime "embargo_end_date", precision: nil
     t.json "member_of_paths"
     t.json "subjects", array: true
     t.json "supervisors", array: true
     t.json "departments", array: true
     t.json "committee_members", array: true
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.uuid "thumbnail_id"
     t.index ["id"], name: "index_draft_theses_on_id", unique: true
     t.index ["institution_id"], name: "index_draft_theses_on_institution_id"
@@ -306,8 +305,8 @@ ActiveRecord::Schema.define(version: 2023_09_20_041027) do
 
   create_table "flipper_features", force: :cascade do |t|
     t.string "key", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["key"], name: "index_flipper_features_on_key", unique: true
   end
 
@@ -315,8 +314,8 @@ ActiveRecord::Schema.define(version: 2023_09_20_041027) do
     t.string "feature_key", null: false
     t.string "key", null: false
     t.string "value"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["feature_key", "key", "value"], name: "index_flipper_gates_on_feature_key_and_key_and_value", unique: true
   end
 
@@ -324,8 +323,8 @@ ActiveRecord::Schema.define(version: 2023_09_20_041027) do
     t.bigint "user_id", null: false
     t.string "uid", null: false
     t.string "provider", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["uid", "provider"], name: "index_identities_on_uid_and_provider", unique: true
     t.index ["user_id", "provider"], name: "index_identities_on_user_id_and_provider", unique: true
     t.index ["user_id"], name: "index_identities_on_user_id"
@@ -333,29 +332,29 @@ ActiveRecord::Schema.define(version: 2023_09_20_041027) do
 
   create_table "institutions", force: :cascade do |t|
     t.string "name", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "item_doi_states", force: :cascade do |t|
     t.uuid "item_id"
     t.string "aasm_state"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "items", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string "visibility"
     t.bigint "owner_id", null: false
-    t.datetime "record_created_at"
+    t.datetime "record_created_at", precision: nil
     t.string "hydra_noid"
-    t.datetime "date_ingested", null: false
+    t.datetime "date_ingested", precision: nil, null: false
     t.string "title", null: false
     t.string "fedora3_uuid"
     t.string "depositor"
     t.string "alternative_title"
     t.string "doi"
-    t.datetime "embargo_end_date"
+    t.datetime "embargo_end_date", precision: nil
     t.string "visibility_after_embargo"
     t.string "fedora3_handle"
     t.string "ingest_batch"
@@ -381,8 +380,8 @@ ActiveRecord::Schema.define(version: 2023_09_20_041027) do
     t.json "publication_status", array: true
     t.bigint "logo_id"
     t.string "aasm_state"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.json "subject", array: true
     t.bigint "batch_ingest_id"
     t.index ["batch_ingest_id"], name: "index_items_on_batch_ingest_id"
@@ -392,16 +391,16 @@ ActiveRecord::Schema.define(version: 2023_09_20_041027) do
 
   create_table "languages", force: :cascade do |t|
     t.string "name", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "rdf_annotations", force: :cascade do |t|
     t.string "table"
     t.string "column"
     t.string "predicate"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "read_only_modes", force: :cascade do |t|
@@ -411,15 +410,15 @@ ActiveRecord::Schema.define(version: 2023_09_20_041027) do
   create_table "theses", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string "visibility"
     t.bigint "owner_id", null: false
-    t.datetime "record_created_at"
+    t.datetime "record_created_at", precision: nil
     t.string "hydra_noid"
-    t.datetime "date_ingested", null: false
+    t.datetime "date_ingested", precision: nil, null: false
     t.string "title", null: false
     t.string "fedora3_uuid"
     t.string "depositor"
     t.string "alternative_title"
     t.string "doi"
-    t.datetime "embargo_end_date"
+    t.datetime "embargo_end_date", precision: nil
     t.string "visibility_after_embargo"
     t.string "fedora3_handle"
     t.string "ingest_batch"
@@ -432,8 +431,8 @@ ActiveRecord::Schema.define(version: 2023_09_20_041027) do
     t.json "member_of_paths", null: false, array: true
     t.text "abstract"
     t.string "language"
-    t.datetime "date_accepted"
-    t.datetime "date_submitted"
+    t.datetime "date_accepted", precision: nil
+    t.datetime "date_submitted", precision: nil
     t.string "degree"
     t.string "institution"
     t.string "dissertant"
@@ -447,8 +446,8 @@ ActiveRecord::Schema.define(version: 2023_09_20_041027) do
     t.json "committee_members", array: true
     t.bigint "logo_id"
     t.string "aasm_state"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.json "subject", array: true
     t.index ["logo_id"], name: "index_theses_on_logo_id"
     t.index ["owner_id"], name: "index_theses_on_owner_id"
@@ -456,8 +455,8 @@ ActiveRecord::Schema.define(version: 2023_09_20_041027) do
 
   create_table "types", force: :cascade do |t|
     t.string "name", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -465,14 +464,14 @@ ActiveRecord::Schema.define(version: 2023_09_20_041027) do
     t.string "name", null: false
     t.boolean "admin", default: false, null: false
     t.integer "sign_in_count", default: 0, null: false
-    t.datetime "last_sign_in_at"
+    t.datetime "last_sign_in_at", precision: nil
     t.string "last_sign_in_ip"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.boolean "suspended", default: false, null: false
-    t.datetime "previous_sign_in_at"
+    t.datetime "previous_sign_in_at", precision: nil
     t.string "previous_sign_in_ip"
-    t.datetime "last_seen_at"
+    t.datetime "last_seen_at", precision: nil
     t.string "last_seen_ip"
     t.string "api_key_digest"
     t.boolean "system", default: false, null: false
@@ -484,9 +483,9 @@ ActiveRecord::Schema.define(version: 2023_09_20_041027) do
     t.uuid "item_id", null: false
     t.string "event", null: false
     t.string "whodunnit"
-    t.datetime "created_at"
-    t.jsonb "object"
-    t.jsonb "object_changes"
+    t.text "object"
+    t.datetime "created_at", precision: nil
+    t.text "object_changes"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 

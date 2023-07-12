@@ -21,9 +21,8 @@ Bundler.require(*Rails.groups)
 
 module Jupiter
   class Application < Rails::Application
-
-    require_dependency 'lib/jupiter'
-    require_dependency 'lib/jupiter/version'
+    require 'jupiter'
+    require 'jupiter/version'
 
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.1
