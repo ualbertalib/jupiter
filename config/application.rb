@@ -21,6 +21,7 @@ Bundler.require(*Rails.groups)
 
 module Jupiter
   class Application < Rails::Application
+
     require 'jupiter'
     require 'jupiter/version'
 
