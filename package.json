@@ -29,7 +29,7 @@
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.27.5",
-    "stylelint": "^13.13.1",
+    "stylelint": "^15.10.1",
     "stylelint-config-standard": "^22.0.0",
     "webpack-dev-server": "^4.15.1"
   },
