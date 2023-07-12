@@ -14,11 +14,13 @@ class AdminBatchIngestsTest < ApplicationSystemTestCase
 
   test 'visiting the index' do
     visit admin_batch_ingests_url
+
     assert_selector 'h1', text: I18n.t('admin.batch_ingests.index.header')
   end
 
   test 'visting show page of a batch ingest' do
     visit admin_batch_ingest_url(@batch_ingest)
+
     assert_selector 'h1', text: @batch_ingest.title
   end
 

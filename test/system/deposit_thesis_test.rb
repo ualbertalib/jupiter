@@ -72,11 +72,13 @@ class DepositThesisTest < ApplicationSystemTestCase
     # Check to make sure there isn't any embargo_history
     item_id = current_url.split('/').last
     _, item_results, _, _ = JupiterCore::Search.perform_solr_query(q: item_id, fq: "id:#{item_id}", rows: 1)
+
     assert_nil item_results.first['embargo_history_ssim']
 
     # verify editing
 
     click_on I18n.t('edit')
+
     assert_selector 'h1', text: I18n.t('admin.theses.draft.header_edit')
 
     # edit title
@@ -96,12 +98,15 @@ class DepositThesisTest < ApplicationSystemTestCase
 
     # go back to editing to ensure visibility stuck
     click_on I18n.t('edit')
+
     assert_selector 'h1', text: I18n.t('admin.theses.draft.header_edit')
     click_on I18n.t('admin.theses.draft.save_and_continue')
+
     assert_selector '#draft_thesis_visibility_open_access:checked'
 
     # Ensure embargo_history is now present
     _, item_results, _, _ = JupiterCore::Search.perform_solr_query(q: item_id, fq: "id:#{item_id}", rows: 1)
+
     assert_not_nil item_results.first['embargo_history_ssim']
     logout_user
   end

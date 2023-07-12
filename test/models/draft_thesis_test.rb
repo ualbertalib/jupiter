@@ -21,6 +21,7 @@ class DraftThesisTest < ActiveSupport::TestCase
 
   test 'should not be able to create a draft thesis without user' do
     draft_thesis = DraftThesis.new
+
     assert_not draft_thesis.valid?
     assert_equal 'User must exist', draft_thesis.errors.full_messages.first
   end
@@ -28,6 +29,7 @@ class DraftThesisTest < ActiveSupport::TestCase
   test 'should be able to create a draft thesis with user when on inactive status' do
     user = users(:user_admin)
     draft_thesis = DraftThesis.new(user:)
+
     assert_predicate draft_thesis, :valid?
   end
 
@@ -97,6 +99,7 @@ class DraftThesisTest < ActiveSupport::TestCase
       rights: 'License text goes here',
       member_of_paths: { community_id: [@community.id], collection_id: [@collection.id] }
     )
+
     assert_not draft_thesis.valid?
     assert_equal "Files can't be blank", draft_thesis.errors.full_messages.first
 
@@ -160,6 +163,7 @@ class DraftThesisTest < ActiveSupport::TestCase
     draft_thesis.assign_attributes(
       member_of_paths: { community_id: ['random-uuid-123'], collection_id: ['random-uuid-abc'] }
     )
+
     assert_not draft_thesis.valid?
     assert_equal 2, draft_thesis.errors.full_messages.count
     assert_equal "Community can't be found", draft_thesis.errors.messages[:member_of_paths].first
@@ -168,6 +172,7 @@ class DraftThesisTest < ActiveSupport::TestCase
     draft_thesis.assign_attributes(
       member_of_paths: { community_id: [@community.id], collection_id: [@collection.id] }
     )
+
     assert_predicate draft_thesis, :valid?
   end
 

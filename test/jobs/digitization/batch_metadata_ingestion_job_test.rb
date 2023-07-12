@@ -29,6 +29,7 @@ class Digitization::BatchMetadataIngestionJobTest < ActiveJob::TestCase
     end
 
     batch_ingest.reload
+
     assert_predicate(batch_ingest, :completed?)
     assert_equal(2, batch_ingest.books.count)
   end

@@ -9,7 +9,13 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## Unreleased
 
+### Chores
+- Bump rubocop-minitest from 0.21.0 to 0.31.0 [PR#3133](https://github.com/ualbertalib/jupiter/pull/3133)
+
 ## [2.5.1] - 2023-04-26
+
+### Security
+- Bump rails from 6.1.7.2 to 6.1.7.4 [PR#3149](https://github.com/ualbertalib/jupiter/pull/3149)
 
 ### Fixed 
 - Resolved new rubocop offenses [PR#3109](https://github.com/ualbertalib/jupiter/pull/3109)

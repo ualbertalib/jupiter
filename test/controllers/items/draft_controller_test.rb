@@ -14,6 +14,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
     draft_item = draft_items(:draft_item_inactive)
 
     get item_draft_url(id: draft_item.wizard_step, item_id: draft_item.id)
+
     assert_response :success
   end
 
@@ -66,9 +67,11 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to item_draft_path(id: :choose_license_and_visibility, item_id: draft_item.id)
     get profile_url
+
     assert_response :success
     assert_includes @response.body, 'Random Book'
     draft_item.reload
+
     assert_equal 'Random Book', draft_item.title
     assert_equal 'describe_item', draft_item.wizard_step
     assert_equal 'active', draft_item.status
@@ -93,6 +96,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to item_draft_path(id: :upload_files, item_id: draft_item.id)
 
     draft_item.reload
+
     assert_equal 'public_domain_mark', draft_item.license
     assert_equal 'embargo', draft_item.visibility
     assert_equal (Date.current + 1.year).to_datetime, draft_item.embargo_end_date
@@ -171,6 +175,7 @@ class Items::DraftControllerTest < ActionDispatch::IntegrationTest
     assert_predicate draft_item.uuid, :present?
 
     item = Item.find(draft_item.uuid)
+
     assert_predicate item, :present?
 
     assert_redirected_to item_url(item)
