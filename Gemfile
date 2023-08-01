@@ -52,9 +52,9 @@ gem 'datacite-client', github: 'ualbertalib/datacite-client', tag: 'v0.1.0', req
 gem 'differ' # Used to diff two strings
 gem 'draper'
 gem 'edtf', '~> 3.1' # parsing Extended Date/Time Format
-gem 'flipper', '~> 0.25.4' # Feature flags for Ruby
-gem 'flipper-active_record', '~> 0.25.4' # Store feature flags in ActiveRecord
-gem 'flipper-ui', '~> 0.25.4' # UI for feature flags
+gem 'flipper', '~> 0.28.3' # Feature flags for Ruby
+gem 'flipper-active_record', '~> 0.28.3' # Store feature flags in ActiveRecord
+gem 'flipper-ui', '~> 0.28.3' # UI for feature flags
 gem 'jbuilder' # generate JSON objects
 gem 'kaminari' # Pagination
 gem 'paper_trail' # Track object changes

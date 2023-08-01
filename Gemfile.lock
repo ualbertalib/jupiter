@@ -233,13 +233,14 @@ GEM
     faraday-rack (1.0.0)
     faraday-retry (1.0.3)
     ffi (1.15.5)
-    flipper (0.25.4)
-    flipper-active_record (0.25.4)
+    flipper (0.28.3)
+      concurrent-ruby (< 2)
+    flipper-active_record (0.28.3)
       activerecord (>= 4.2, < 8)
-      flipper (~> 0.25.4)
-    flipper-ui (0.25.4)
+      flipper (~> 0.28.3)
+    flipper-ui (0.28.3)
       erubi (>= 1.0.0, < 2.0.0)
-      flipper (~> 0.25.4)
+      flipper (~> 0.28.3)
       rack (>= 1.4, < 3)
       rack-protection (>= 1.5.3, <= 4.0.0)
       sanitize (< 7)
@@ -334,7 +335,7 @@ GEM
     mini_magick (4.11.0)
     mini_mime (1.1.2)
     mini_portile2 (2.8.4)
-    minitest (5.18.1)
+    minitest (5.19.0)
     minitest-retry (0.2.2)
       minitest (>= 5.0)
     msgpack (1.6.0)
@@ -344,7 +345,7 @@ GEM
     nap (1.1.0)
     net-http-persistent (4.0.1)
       connection_pool (~> 2.2)
-    net-imap (0.3.6)
+    net-imap (0.3.7)
       date
       net-protocol
     net-pop (0.1.2)
@@ -377,8 +378,9 @@ GEM
       activerecord (>= 5.2)
       request_store (~> 1.1)
     parallel (1.23.0)
-    parser (3.2.2.1)
+    parser (3.2.2.3)
       ast (~> 2.4.1)
+      racc
     pg (1.5.2)
     pry (0.14.2)
       coderay (~> 1.1)
@@ -395,7 +397,7 @@ GEM
       activesupport (>= 3.0.0)
     raabro (1.4.0)
     racc (1.7.1)
-    rack (2.2.7)
+    rack (2.2.8)
     rack-protection (3.0.6)
       rack
     rack-proxy (0.7.0)
@@ -482,7 +484,7 @@ GEM
       rubocop-ast (>= 1.24.1, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 2.4.0, < 3.0)
-    rubocop-ast (1.28.1)
+    rubocop-ast (1.29.0)
       parser (>= 3.2.1.0)
     rubocop-minitest (0.31.0)
       rubocop (>= 1.39, < 2.0)
@@ -606,14 +608,14 @@ GEM
       semantic_range (>= 2.3.0)
     webrick (1.7.0)
     websocket (1.2.9)
-    websocket-driver (0.7.5)
+    websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
     wicked (2.0.0)
       railties (>= 3.0.7)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.6.8)
+    zeitwerk (2.6.10)
 
 PLATFORMS
   ruby
@@ -640,9 +642,9 @@ DEPENDENCIES
   edtf (~> 3.1)
   erb_lint (>= 0.0.35)
   faker
-  flipper (~> 0.25.4)
-  flipper-active_record (~> 0.25.4)
-  flipper-ui (~> 0.25.4)
+  flipper (~> 0.28.3)
+  flipper-active_record (~> 0.28.3)
+  flipper-ui (~> 0.28.3)
   google-api-client
   haikunator
   image_processing
