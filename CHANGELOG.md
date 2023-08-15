@@ -11,13 +11,30 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [2.5.2] - 2023-08-16
 
-### Chores
-- Bump rubocop-minitest from 0.21.0 to 0.31.0 [PR#3133](https://github.com/ualbertalib/jupiter/pull/3133)
-
-## [2.5.1] - 2023-04-26
-
 ### Security
 - Bump rails from 6.1.7.2 to 6.1.7.4 [PR#3149](https://github.com/ualbertalib/jupiter/pull/3149)
+
+### Chores
+- Bump pg from 1.4.5 to 1.5.2 [PR#3128](https://github.com/ualbertalib/jupiter/pull/3128)
+- Bump aasm from 5.3.0 to 5.5.0 [PR#3115](https://github.com/ualbertalib/jupiter/pull/3115)
+- Bump erb_lint from 0.3.1 to 0.4.0 [PR#3129](https://github.com/ualbertalib/jupiter/pull/3129)
+- Bump jquery from 3.6.3 to 3.7.0 [PR#3134](https://github.com/ualbertalib/jupiter/pull/3134)
+- Bump puma from 5.6.4 to 6.3.0 [PR#3139](https://github.com/ualbertalib/jupiter/pull/3139)
+- Bump webpack-dev-server from 4.11.1 to 4.15.1 [PR#3144](https://github.com/ualbertalib/jupiter/pull/3144)
+- Bump core-js from 3.27.2 to 3.31.1 [PR#3152](https://github.com/ualbertalib/jupiter/pull/3152)
+- Bump sanitize from 6.0.1 to 6.0.2 [PR#3153](https://github.com/ualbertalib/jupiter/pull/3153)
+- Bump rubocop-minitest from 0.21.0 to 0.31.0 [PR#3133](https://github.com/ualbertalib/jupiter/pull/3133)
+- Bump sidekiq-unique-jobs from 7.1.27 to 7.1.29 [PR#3061](hhttps://github.com/ualbertalib/jupiter/pull/3061)
+- Bump addressable from 2.8.0 to 2.8.4 [PR#3110](https://github.com/ualbertalib/jupiter/pull/3110)
+- Bump capybara from 3.38.0 to 3.39.2 [PR#3146](https://github.com/ualbertalib/jupiter/pull/3146)
+- Bump launchy from 2.5.0 to 2.5.2 [PR#3116](https://github.com/ualbertalib/jupiter/pull/3116)
+- Bump semver from 5.7.1 to 5.7.2 [PR#3156](https://github.com/ualbertalib/jupiter/pull/3156)
+- Bump eslint-plugin-import from 2.27.5 to 2.28.0 [PR#3168](https://github.com/ualbertalib/jupiter/pull/3168)
+- Bump selenium-webdriver from 4.8.0 to 4.11.0 [PR#3168](https://github.com/ualbertalib/jupiter/pull/3168)
+- Bump word-wrap from 1.2.3 to 1.2.5 [PR#3170](https://github.com/ualbertalib/jupiter/pull/3170)
+- Bump webpacker from 5.4.3 to 5.4.4 [PR#3160](https://github.com/ualbertalib/jupiter/pull/3160)
+
+## [2.5.1] - 2023-04-26
 
 ### Fixed 
 - Resolved new rubocop offenses [PR#3109](https://github.com/ualbertalib/jupiter/pull/3109)
