@@ -24,7 +24,7 @@ New entries in this file should aim to provide a meaningful amount of informatio
 - Bump core-js from 3.27.2 to 3.31.1 [PR#3152](https://github.com/ualbertalib/jupiter/pull/3152)
 - Bump sanitize from 6.0.1 to 6.0.2 [PR#3153](https://github.com/ualbertalib/jupiter/pull/3153)
 - Bump rubocop-minitest from 0.21.0 to 0.31.0 [PR#3133](https://github.com/ualbertalib/jupiter/pull/3133)
-- Bump sidekiq-unique-jobs from 7.1.27 to 7.1.29 [PR#3061](hhttps://github.com/ualbertalib/jupiter/pull/3061)
+- Bump sidekiq-unique-jobs from 7.1.27 to 7.1.29 [PR#3061](https://github.com/ualbertalib/jupiter/pull/3061)
 - Bump addressable from 2.8.0 to 2.8.4 [PR#3110](https://github.com/ualbertalib/jupiter/pull/3110)
 - Bump capybara from 3.38.0 to 3.39.2 [PR#3146](https://github.com/ualbertalib/jupiter/pull/3146)
 - Bump launchy from 2.5.0 to 2.5.2 [PR#3116](https://github.com/ualbertalib/jupiter/pull/3116)
