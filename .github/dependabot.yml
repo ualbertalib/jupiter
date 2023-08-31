@@ -32,7 +32,7 @@ updates:
     target-branch: master
     labels:
       - "dependencies"
-      - "ruby"
+      - "javascript"
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
