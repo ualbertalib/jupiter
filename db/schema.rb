@@ -498,7 +498,7 @@ ActiveRecord::Schema.define(version: 2021_12_03_185004) do
   add_foreign_key "collections", "users", column: "owner_id"
   add_foreign_key "communities", "users", column: "owner_id"
   add_foreign_key "digitization_batch_metadata_ingests", "users"
-  add_foreign_key "digitization_books", "active_storage_attachments", column: "logo_id", on_delete: :nullify
+  add_foreign_key "digitization_books", "active_storage_attachments", column: "logo_id"
   add_foreign_key "digitization_books", "digitization_batch_metadata_ingests"
   add_foreign_key "digitization_books", "users", column: "owner_id"
   add_foreign_key "digitization_fulltexts", "digitization_books"
