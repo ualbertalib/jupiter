@@ -9,6 +9,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## Unreleased
 
+### Chores
+- Bump rubocop-performance from 1.14.3 to 1.19.0 [PR#3191](https://github.com/ualbertalib/jupiter/pull/3191)
+
 ## [2.5.2] - 2023-08-16
 
 ### Security
@@ -36,7 +39,7 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [2.5.1] - 2023-04-26
 
-### Fixed 
+### Fixed
 - Resolved new rubocop offenses [PR#3109](https://github.com/ualbertalib/jupiter/pull/3109)
 - AIP api collections with nil descriptions [#3117](https://github.com/ualbertalib/jupiter/issues/3117)
 
@@ -82,7 +85,7 @@ New entries in this file should aim to provide a meaningful amount of informatio
 - Skylight performance monitoring.  Will need to remove this secret from ansible playbook secrets as well. [#3023](https://github.com/ualbertalib/jupiter/issues/3023)
 - Remove brakeman's ruby EOL check [PR#3051](https://github.com/ualbertalib/jupiter/pull/3051)
 
-### Fixed 
+### Fixed
 - Resolved new rubocop offenses [PR#3042](https://github.com/ualbertalib/jupiter/pull/3042)
 
 ### Changed
@@ -151,7 +154,7 @@ New entries in this file should aim to provide a meaningful amount of informatio
 - Stop batch ingests where items have with duplicate files [#2980](https://github.com/ualbertalib/jupiter/issues/2980)
 
 ### Chores
-- Bump webpack-dev-server from 4.11.0 to 4.11.1 
+- Bump webpack-dev-server from 4.11.0 to 4.11.1
 - Bump webmock from 3.17.1 to 3.18.1
 - Bump rubocop-rails from 2.15.2 to 2.16.1
 - add Ruby 3.0 [PR#2879](https://github.com/ualbertalib/jupiter/pull/2879)
@@ -173,7 +176,7 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [2.3.7] - 2022-07-13
 
-### Removed 
+### Removed
 - link to ERA A+V [#2765](https://github.com/ualbertalib/jupiter/issues/2765)
 
 ### Chores
@@ -210,7 +213,7 @@ New entries in this file should aim to provide a meaningful amount of informatio
 - Bump Sidekiq from 5.2.9 to 6.4.1 [#2189](https://github.com/ualbertalib/jupiter/issues/2189)
 - Bump follow-redirects
 - Bump puma
-- Bump actionpack 
+- Bump actionpack
 
 ## [2.3.3] - 2022-01-19
 
@@ -235,7 +238,7 @@ New entries in this file should aim to provide a meaningful amount of informatio
 ## [2.3.1] - 2021-12-07
 
 - Fix Gemfile so that `strong_migrations` is usesd in all environments
-  
+
 ## [2.3.0] - 2021-12-01
 
 - The EZID Compatibility API is sunsetting at the end of this year, per https://blog.datacite.org/sunsetting-of-the-ez-api/.  [datacite-client](https://github.com/pgwillia/datacite-client) is a ruby gem that wraps the [Datacite API](https://support.datacite.org/reference/introduction) for our use.  The main changes are the DOI's no longer have the `doi:` prefix, the format of metadata attributes, and the event mechanism for publishing/hiding the metadata from the public. Requires `datacite_api` feature flag and new secrets for our datacite credentials. [#2268](https://github.com/ualbertalib/jupiter/issues/2268)
@@ -291,7 +294,7 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
   - Add task that will kick off job for batch ingestion of digitization metadata from a csv containing triples [#2011](https://github.com/ualbertalib/jupiter/issues/2011)
 
 - Improve batch ingest workflow by using Google Drive for staging and a user interface for creating and reviewing batches. Requires new secrets to be configured and `batch_ingest` feature flag. Further context can be found [#1986](https://github.com/ualbertalib/jupiter/issues/1986)
-  - Add new models (BatchIngest and BatchIngestFile) for improved batch ingest work 
+  - Add new models (BatchIngest and BatchIngestFile) for improved batch ingest work
   - Add new google drive client service to be able to retrieve files/spreadsheets from Google Drive
   - Add batch ingest controller and views for CRUDing batch ingests
   - Add batch ingest form with google file picker and spreadsheet validation
@@ -349,9 +352,9 @@ Further discussion of the context can be found at [#2119](https://github.com/ual
 - Turn off reporting things like "this excel spreadsheet isn't thumbnailable" as warnings to Rollbar [PR#2046](https://github.com/ualbertalib/jupiter/pull/2046)
 - migration to fix concatenated subjects (part 2) [#1449](https://github.com/ualbertalib/jupiter/issues/1449)
 - Catch and log embargo expiry job save errors [#1989](https://github.com/ualbertalib/jupiter/issues/1989)
-- Don't send failures to SessionController in development environment [PR#2121](https://github.com/ualbertalib/jupiter/pull/2121) 
+- Don't send failures to SessionController in development environment [PR#2121](https://github.com/ualbertalib/jupiter/pull/2121)
 - Rails upgraded to 6.0.3.6 to resolve certain issues with community dependencies
-- Fixture names have been modified to ensure their uniqueness [PR#2302](https://github.com/ualbertalib/jupiter/pull/2302) 
+- Fixture names have been modified to ensure their uniqueness [PR#2302](https://github.com/ualbertalib/jupiter/pull/2302)
 - Rails upgraded to 6.0.3.7 to resolve security issues
 - Added Collection and Community to reindex rake task [#2444](https://github.com/ualbertalib/jupiter/issues/2444)
 
