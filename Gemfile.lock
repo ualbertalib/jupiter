@@ -109,7 +109,7 @@ GEM
       minitest (>= 5.1)
       tzinfo (~> 2.0)
       zeitwerk (~> 2.3)
-    addressable (2.8.4)
+    addressable (2.8.5)
       public_suffix (>= 2.0.2, < 6.0)
     amazing_print (1.4.0)
     ast (2.4.2)
@@ -623,7 +623,7 @@ DEPENDENCIES
   aasm
   active_link_to
   acts_as_rdfable!
-  addressable (~> 2.8.4)
+  addressable (~> 2.8.5)
   bcrypt (>= 3.1.13)
   better_errors (>= 2.3.0)
   binding_of_caller
