@@ -529,7 +529,7 @@ GEM
     sidekiq-cron (1.7.0)
       fugit (~> 1)
       sidekiq (>= 4.2.1)
-    sidekiq-unique-jobs (7.1.29)
+    sidekiq-unique-jobs (7.1.30)
       brpoplpush-redis_script (> 0.1.1, <= 2.0.0)
       concurrent-ruby (~> 1.0, >= 1.0.5)
       redis (< 5.0)
