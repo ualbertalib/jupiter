@@ -202,7 +202,7 @@ class DraftThesis < ApplicationRecord
 
   def parse_graduation_term_from_fedora(graduation_date)
     result = graduation_date&.match(/-(06|11)/)
-    result = result[0]&.gsub!('-', '') if result.present?
+    result = result[0]&.delete!('-') if result.present?
     result
   end
 
