@@ -47,7 +47,7 @@ gem 'sidekiq-unique-jobs', '~> 7.1'
 
 # Misc Utilities
 gem 'aasm' # state-machine management
-gem 'addressable', '~> 2.8.4' # Replacement for the standard URI implementation
+gem 'addressable', '~> 2.8.5' # Replacement for the standard URI implementation
 gem 'datacite-client', github: 'ualbertalib/datacite-client', tag: 'v0.1.0', require: 'datacite'
 gem 'differ' # Used to diff two strings
 gem 'draper'
@@ -115,7 +115,7 @@ group :development do
 end
 
 group :test do
-  gem 'danger', '~> 9.2', require: false # Pull Request etiquette enforcement
+  gem 'danger', '~> 9.3', require: false # Pull Request etiquette enforcement
   gem 'simplecov'
   # Faker added 0.5 seconds to the test suite per call. Haikunator seems much faster for faking strings
   gem 'haikunator'
