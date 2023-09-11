@@ -15,6 +15,7 @@ services:
 
   solr:
     image: solr:6.6
+    platform: linux/amd64
     ports:
       - '8983:8983'
     volumes:
