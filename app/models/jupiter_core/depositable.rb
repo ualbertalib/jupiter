@@ -143,15 +143,15 @@ class JupiterCore::Depositable < ApplicationRecord
 
   # utility methods for checking for certain visibility transitions
   def transitioned_to_private?
-    return true if changes['visibility'].present? &&
-                   (changes['visibility'][0] != JupiterCore::VISIBILITY_PRIVATE) &&
-                   (changes['visibility'][1] == JupiterCore::VISIBILITY_PRIVATE)
+    true if changes['visibility'].present? &&
+            (changes['visibility'][0] != JupiterCore::VISIBILITY_PRIVATE) &&
+            (changes['visibility'][1] == JupiterCore::VISIBILITY_PRIVATE)
   end
 
   def transitioned_from_private?
-    return true if changes['visibility'].present? &&
-                   (changes['visibility'][0] == JupiterCore::VISIBILITY_PRIVATE) &&
-                   (changes['visibility'][1] != JupiterCore::VISIBILITY_PRIVATE)
+    true if changes['visibility'].present? &&
+            (changes['visibility'][0] == JupiterCore::VISIBILITY_PRIVATE) &&
+            (changes['visibility'][1] != JupiterCore::VISIBILITY_PRIVATE)
   end
 
   def add_to_embargo_history
