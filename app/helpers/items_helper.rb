@@ -18,7 +18,8 @@ module ItemsHelper
 
   def description(object)
     return object.abstract if object.respond_to? :abstract
-    return object.description if object.respond_to? :description
+
+    object.description if object.respond_to? :description
   end
 
   # We have a lot of messy "date-ish" data. Created dates coming through the Draft interface are actual date types
