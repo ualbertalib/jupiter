@@ -1,5 +1,12 @@
-class AnnotateTablesWithRdf < ActiveRecord::Migration[5.2]
+class AnnotateTablesWithRdf < ActiveRecord::Migration[6.0]
   def change
+    add_rdf_table_annotations for_table: :active_storage_blobs do |t|
+      t.filename has_predicate: ::RDF::Vocab::EBUCore.resourceFilename
+      t.content_type has_predicate: ::RDF::Vocab::EBUCore.hasMimeType
+      t.byte_size has_predicate: ::RDF::Vocab::PREMIS.hasSize
+      t.checksum has_predicate: ::RDF::Vocab::PREMIS.hasMessageDigest
+    end
+
     add_rdf_table_annotations for_table: :items do |t|
       t.title has_predicate: ::RDF::Vocab::DC.title
       t.fedora3_uuid has_predicate: ::TERMS[:ual].fedora3_uuid
@@ -13,6 +20,7 @@ class AnnotateTablesWithRdf < ActiveRecord::Migration[5.2]
       t.northern_north_america_item_id has_predicate: ::TERMS[:ual].northern_north_america_item_id
       t.rights has_predicate: ::RDF::Vocab::DC11.rights
       t.sort_year has_predicate: ::TERMS[:ual].sort_year
+      t.visibility has_predicate: ::RDF::Vocab::DC.accessRights
       t.visibility_after_embargo has_predicate: ::TERMS[:acl].visibility_after_embargo
       t.embargo_history has_predicate: ::TERMS[:acl].embargo_history
       t.is_version_of has_predicate: ::RDF::Vocab::DC.isVersionOf
@@ -46,6 +54,7 @@ class AnnotateTablesWithRdf < ActiveRecord::Migration[5.2]
       t.northern_north_america_item_id has_predicate: ::TERMS[:ual].northern_north_america_item_id
       t.rights has_predicate: ::RDF::Vocab::DC11.rights
       t.sort_year has_predicate: ::TERMS[:ual].sort_year
+      t.visibility has_predicate: ::RDF::Vocab::DC.accessRights
       t.visibility_after_embargo has_predicate: ::TERMS[:acl].visibility_after_embargo
       t.embargo_history has_predicate: ::TERMS[:acl].embargo_history
       t.is_version_of has_predicate: ::RDF::Vocab::DC.isVersionOf
@@ -76,6 +85,7 @@ class AnnotateTablesWithRdf < ActiveRecord::Migration[5.2]
       t.description has_predicate: ::RDF::Vocab::DC.description
       t.restricted has_predicate: ::TERMS[:ual].restricted_collection
       t.creators has_predicate: ::RDF::Vocab::DC.creator
+      t.visibility has_predicate: ::RDF::Vocab::DC.accessRights
     end
 
     add_rdf_table_annotations for_table: :communities do |t|
@@ -84,6 +94,7 @@ class AnnotateTablesWithRdf < ActiveRecord::Migration[5.2]
       t.depositor has_predicate: ::TERMS[:ual].depositor
       t.description has_predicate: ::RDF::Vocab::DC.description
       t.creators has_predicate: ::RDF::Vocab::DC.creator
+      t.visibility has_predicate: ::RDF::Vocab::DC.accessRights
     end
   end
 end
