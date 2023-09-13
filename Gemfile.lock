@@ -593,7 +593,7 @@ GEM
     unicode-display_width (2.4.2)
     unicode-types (1.7.0)
     uuidtools (2.2.0)
-    vcr (5.0.0)
+    vcr (6.2.0)
     voight_kampff (2.0.0)
       rack (>= 1.4)
     web-console (4.2.0)
@@ -696,7 +696,7 @@ DEPENDENCIES
   spring-watcher-listen (~> 2.1.0)
   strong_migrations (~> 1.6.1)
   uuidtools
-  vcr (= 5.0)
+  vcr (= 6.2)
   voight_kampff (~> 2.0)
   web-console (>= 4.1.0)
   webmock

@@ -125,7 +125,7 @@ group :test do
   gem 'launchy'
   gem 'minitest-retry', require: false
   gem 'rdf-isomorphic', '~> 3.2.1'
-  gem 'vcr', '5.0', require: false
+  gem 'vcr', '6.2', require: false
   gem 'webmock', require: false
 end
 
