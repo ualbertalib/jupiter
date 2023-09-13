@@ -1,10 +1,11 @@
 require 'test_helper'
 require 'rake'
-Rails.application.load_tasks
 
 class ReadOnlyModeIntegrationTest < ActionDispatch::IntegrationTest
 
   setup do
+    Jupiter::Application.load_tasks if Rake::Task.tasks.empty?
+
     Announcement.destroy_all
   end
 
