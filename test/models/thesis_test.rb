@@ -221,9 +221,9 @@ class ThesisTest < ActiveSupport::TestCase
       end
 
       thesis_output, score = Jupiter::Redis.current.zrange(Rails.application.secrets.preservation_queue_name,
-                                                        0,
-                                                        -1,
-                                                        with_scores: true)[0]
+                                                           0,
+                                                           -1,
+                                                           with_scores: true)[0]
       thesis_output = JSON.parse(thesis_output)
 
       assert_equal thesis.id, thesis_output['uuid']

@@ -360,9 +360,9 @@ class ItemTest < ActiveSupport::TestCase
       end
 
       item_output, score = Jupiter::Redis.current.zrange(Rails.application.secrets.preservation_queue_name,
-                                                      0,
-                                                      -1,
-                                                      with_scores: true)[0]
+                                                         0,
+                                                         -1,
+                                                         with_scores: true)[0]
       item_output = JSON.parse(item_output)
 
       assert_equal item.id, item_output['uuid']
@@ -407,9 +407,9 @@ class ItemTest < ActiveSupport::TestCase
       assert_equal 1, Jupiter::Redis.current.zcard(Rails.application.secrets.preservation_queue_name)
 
       item_output, score = Jupiter::Redis.current.zrange(Rails.application.secrets.preservation_queue_name,
-                                                      0,
-                                                      -1,
-                                                      with_scores: true)[0]
+                                                         0,
+                                                         -1,
+                                                         with_scores: true)[0]
       item_output = JSON.parse(item_output)
 
       assert_equal item.id, item_output['uuid']
