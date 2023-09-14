@@ -2,11 +2,11 @@ require 'test_helper'
 require 'rake'
 require 'application_system_test_case'
 
-Rails.application.load_tasks
-
 class AddToPreservationQueueTaskTest < ApplicationSystemTestCase
 
   setup do
+    Jupiter::Application.load_tasks if Rake::Task.tasks.empty?
+
     @admin = users(:user_admin)
     login_user(@admin)
 
