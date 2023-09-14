@@ -161,14 +161,10 @@ class JupiterCore::Depositable < ApplicationRecord
     self.embargo_history << embargo_history_item
   end
 
-  # rubocop:disable Style/GlobalVars
-
   def push_entity_for_preservation
     queue_name = Rails.application.secrets.preservation_queue_name
 
-    $queue ||= ConnectionPool.new(size: 1, timeout: 5) { Jupiter::Redis.current }
-
-    $queue.with do |connection|
+    Jupiter::Redis.current.with do |connection|
       # pushmi_pullyu requires both the id and type of the depositable
       connection.zadd(queue_name, Time.now.to_f, { uuid: id, type: self.class.table_name }.to_json)
       # Add the attempt count as value 0 that pmpy will use to count the tries to ingest the depositable. If the key
@@ -183,7 +179,6 @@ class JupiterCore::Depositable < ApplicationRecord
     Rollbar.error("Error occurred in push_entity_for_preservation, Could not preserve #{id}", e)
     true
   end
-  # rubocop:enable Style/GlobalVars
 
   def to_partial_path
     self.class.name.demodulize.underscore
