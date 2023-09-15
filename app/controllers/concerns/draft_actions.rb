@@ -144,6 +144,6 @@ module DraftActions
   end
 
   def initialize_communities
-    @communities = Community.all.order(title: :desc)
+    @communities = Community.order(title: :desc)
   end
 end

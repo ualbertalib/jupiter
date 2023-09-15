@@ -26,10 +26,10 @@ gem 'rdf-vocab', '~> 3.2.3' # this gem changed predicate names without warning, 
 
 # Database stuff
 gem 'connection_pool'
-gem 'pg', '~> 1.5.3'
+gem 'pg', '~> 1.5.4'
 gem 'redis', '~> 4.8'
 gem 'rsolr'
-gem 'strong_migrations', '~> 1.6.1'
+gem 'strong_migrations', '~> 1.6.2'
 
 # Authentication
 gem 'bcrypt', '>= 3.1.13'
@@ -121,7 +121,7 @@ group :test do
   gem 'haikunator'
   gem 'shoulda-matchers', '~> 5.3'
 
-  gem 'json-schema', '~> 3.0.0'
+  gem 'json-schema', '~> 4.0.0'
   gem 'launchy'
   gem 'minitest-retry', require: false
   gem 'rdf-isomorphic', '~> 3.2.1'
