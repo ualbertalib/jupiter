@@ -119,8 +119,7 @@ namespace :jupiter do
   task clear_preservation_queue: :environment do
     queue_name = Rails.application.secrets.preservation_queue_name
 
-    queue = ConnectionPool.new(size: 1, timeout: 5) { RedisClient.current }
-    success = queue.with { |connection| connection.del queue_name }
+    success = Jupiter::Redis.current.with { |connection| connection.del queue_name }
     puts case success
          when 1
            "#{queue_name} deleted"
