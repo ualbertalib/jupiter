@@ -1,20 +1,15 @@
 require 'test_helper'
 require 'rake'
-require 'application_system_test_case'
 
-class AddToPreservationQueueTaskTest < ApplicationSystemTestCase
+class AddToPreservationQueueTaskTest < ActionDispatch::IntegrationTest
 
   setup do
     Jupiter::Application.load_tasks if Rake::Task.tasks.empty?
 
     @admin = users(:user_admin)
-    login_user(@admin)
+    sign_in_as(@admin)
 
     RedisClient.current.del Rails.application.secrets.preservation_queue_name
-  end
-
-  teardown do
-    logout_user
   end
 
   test 'add all communities and collections to queue through task' do
