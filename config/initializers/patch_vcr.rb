@@ -3,6 +3,8 @@
 # NOTE: If we ever upgrade VCR to v6.0+ then this monkeypatch
 # will not be needed anymore and can be safely removed
 # More info: https://github.com/vcr/vcr/pull/907/files
+#
+# This code was inspired by the patch suggested here: https://github.com/vcr/vcr/pull/907#issuecomment-1038958113
 if Rails.env.test?
   require 'vcr'
   require 'vcr/library_hooks/webmock'
