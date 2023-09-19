@@ -104,8 +104,8 @@ group :development do
 
   gem 'better_errors', '>= 2.3.0'
   gem 'binding_of_caller'
-
   gem 'brakeman'
+  gem 'listen'
 
   gem 'web-console', '>= 4.1.0'
 end
