@@ -14,11 +14,7 @@ updates:
           - "> 1.1.0"
       - dependency-name: vcr
         versions:
-          - ">= 5.1.a"
-          - "< 5.2"
-      - dependency-name: vcr
-        versions:
-          - "> 6.0.0"
+          - "> 5.0.0" # Lock VCR to v5.0 due to licensing issues
     labels:
       - "dependencies"
       - "ruby"
