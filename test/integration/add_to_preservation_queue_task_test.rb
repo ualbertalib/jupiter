@@ -1,20 +1,15 @@
 require 'test_helper'
 require 'rake'
-require 'application_system_test_case'
 
-class AddToPreservationQueueTaskTest < ApplicationSystemTestCase
+class AddToPreservationQueueTaskTest < ActionDispatch::IntegrationTest
 
   setup do
     Jupiter::Application.load_tasks if Rake::Task.tasks.empty?
 
     @admin = users(:user_admin)
-    login_user(@admin)
+    sign_in_as(@admin)
 
-    RedisClient.current.del Rails.application.secrets.preservation_queue_name
-  end
-
-  teardown do
-    logout_user
+    Jupiter::Redis.current.del Rails.application.secrets.preservation_queue_name
   end
 
   test 'add all communities and collections to queue through task' do
@@ -23,7 +18,7 @@ class AddToPreservationQueueTaskTest < ApplicationSystemTestCase
       collection_and_community_count = Community.count + Collection.count
 
       assert_equal collection_and_community_count,
-                   RedisClient.current.zcard(Rails.application.secrets.preservation_queue_name)
+                   Jupiter::Redis.current.zcard(Rails.application.secrets.preservation_queue_name)
     end
   end
 
@@ -34,7 +29,7 @@ class AddToPreservationQueueTaskTest < ApplicationSystemTestCase
         Community.first.save!
         Rake::Task['jupiter:preserve_all_collections_and_communities'].execute(after_date_arguments)
 
-        assert_equal 2, RedisClient.current.zcard(Rails.application.secrets.preservation_queue_name)
+        assert_equal 2, Jupiter::Redis.current.zcard(Rails.application.secrets.preservation_queue_name)
       end
     end
   end
@@ -44,7 +39,7 @@ class AddToPreservationQueueTaskTest < ApplicationSystemTestCase
       travel 1.week do
         Rake::Task['jupiter:preserve_all_collections_and_communities'].execute(after_date_arguments)
 
-        assert_equal 0, RedisClient.current.zcard(Rails.application.secrets.preservation_queue_name)
+        assert_equal 0, Jupiter::Redis.current.zcard(Rails.application.secrets.preservation_queue_name)
       end
     end
   end
@@ -55,7 +50,7 @@ class AddToPreservationQueueTaskTest < ApplicationSystemTestCase
       item_and_thesis__count = Item.count + Thesis.count
 
       assert_equal item_and_thesis__count,
-                   RedisClient.current.zcard(Rails.application.secrets.preservation_queue_name)
+                   Jupiter::Redis.current.zcard(Rails.application.secrets.preservation_queue_name)
     end
   end
 
@@ -66,7 +61,7 @@ class AddToPreservationQueueTaskTest < ApplicationSystemTestCase
         Thesis.first.save!
         Rake::Task['jupiter:preserve_all_items_and_theses'].execute(after_date_arguments)
 
-        assert_equal 2, RedisClient.current.zcard(Rails.application.secrets.preservation_queue_name)
+        assert_equal 2, Jupiter::Redis.current.zcard(Rails.application.secrets.preservation_queue_name)
       end
     end
   end
@@ -76,7 +71,7 @@ class AddToPreservationQueueTaskTest < ApplicationSystemTestCase
       travel 1.week do
         Rake::Task['jupiter:preserve_all_items_and_theses'].execute(after_date_arguments)
 
-        assert_equal 0, RedisClient.current.zcard(Rails.application.secrets.preservation_queue_name)
+        assert_equal 0, Jupiter::Redis.current.zcard(Rails.application.secrets.preservation_queue_name)
       end
     end
   end

@@ -199,7 +199,7 @@ class ThesisTest < ActiveSupport::TestCase
 
   # Preservation queue handling
   test 'should add id and type with the correct score for a new thesis to preservation queue' do
-    RedisClient.current.del Rails.application.secrets.preservation_queue_name
+    Jupiter::Redis.current.del Rails.application.secrets.preservation_queue_name
 
     # Setup a thesis...
     admin = users(:user_admin)
@@ -220,10 +220,10 @@ class ThesisTest < ActiveSupport::TestCase
         unlocked_thesis.save
       end
 
-      thesis_output, score = RedisClient.current.zrange(Rails.application.secrets.preservation_queue_name,
-                                                        0,
-                                                        -1,
-                                                        with_scores: true)[0]
+      thesis_output, score = Jupiter::Redis.current.zrange(Rails.application.secrets.preservation_queue_name,
+                                                           0,
+                                                           -1,
+                                                           with_scores: true)[0]
       thesis_output = JSON.parse(thesis_output)
 
       assert_equal thesis.id, thesis_output['uuid']
@@ -231,7 +231,7 @@ class ThesisTest < ActiveSupport::TestCase
       assert_in_delta 0.5, score, Time.now.to_f
     end
 
-    RedisClient.current.del Rails.application.secrets.preservation_queue_name
+    Jupiter::Redis.current.del Rails.application.secrets.preservation_queue_name
   end
 
 end
