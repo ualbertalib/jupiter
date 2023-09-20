@@ -14,6 +14,7 @@ New entries in this file should aim to provide a meaningful amount of informatio
 - Bump rubocop from 1.44.1 to 1.56.3 [PR#3207](https://github.com/ualbertalib/jupiter/pull/3207)
 - Bump rubocop-rails from 2.20.2 to 2.21.0 [PR#3211](https://github.com/ualbertalib/jupiter/pull/3211)
 - Bump Sidekiq and Sidekiq gems to latest version [PR#3217](https://github.com/ualbertalib/jupiter/pull/3217)
+- Bump ransack from 3.2.1 to 4.0.0 [PR#3235](https://github.com/ualbertalib/jupiter/pull/3235)
 
 ## [2.5.2] - 2023-08-16
 
