@@ -16,4 +16,12 @@ class BatchIngest < ApplicationRecord
   validates :batch_ingest_files, presence: true, length: { maximum: 50 }
   validates :title, presence: true, uniqueness: { case_sensitive: false }
 
+  def self.ransackable_attributes(_auth_object = nil)
+    ['created_at', 'status', 'title']
+  end
+
+  def self.ransackable_associations(_auth_object = nil)
+    []
+  end
+
 end
