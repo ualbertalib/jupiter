@@ -9,9 +9,6 @@ updates:
     open-pull-requests-limit: 10
     target-branch: master
     ignore:
-      - dependency-name: pundit
-        versions:
-          - "> 1.1.0"
       - dependency-name: vcr
         versions:
           - "> 5.0.0" # Lock VCR to v5.0 due to licensing issues
