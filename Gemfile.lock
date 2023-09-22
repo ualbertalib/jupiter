@@ -438,7 +438,7 @@ GEM
       thor (~> 1.0)
     rainbow (3.1.1)
     rake (13.0.6)
-    ransack (3.2.1)
+    ransack (4.0.0)
       activerecord (>= 6.1.5)
       activesupport (>= 6.1.5)
       i18n
@@ -673,7 +673,7 @@ DEPENDENCIES
   puma (~> 6.4)
   pundit (= 1.1.0)
   rails (~> 6.1.7)
-  ransack (= 3.2.1)
+  ransack (= 4.0.0)
   rdf (~> 3.2.9)
   rdf-isomorphic (~> 3.2.1)
   rdf-n3 (~> 3.2.1)

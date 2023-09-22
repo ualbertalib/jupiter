@@ -70,4 +70,12 @@ class User < ApplicationRecord
     "User:#{id}"
   end
 
+  def self.ransackable_attributes(_auth_object = nil)
+    ['admin', 'created_at', 'email', 'last_seen_at', 'name', 'suspended']
+  end
+
+  def self.ransackable_associations(_auth_object = nil)
+    []
+  end
+
 end
