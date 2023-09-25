@@ -17,18 +17,11 @@ FileUtils.chdir APP_ROOT do
   system! 'gem install bundler --conservative'
   system('bundle check') || system!('bundle install')
 
-  # Install JavaScript dependencies
-  # system('bin/yarn')
+  puts "\n== Install JavaScript dependencies =="
+  system('yarn check --check-files') || system!('yarn install')
 
-<<<<<<< Updated upstream
-  # puts "\n== Copying sample files =="
-  # unless File.exist?('config/database.yml')
-  #   FileUtils.cp 'config/database.yml.sample', 'config/database.yml'
-  # end
-=======
   puts "\n== Start Docker Containers =="
   system! 'docker compose up -d'
->>>>>>> Stashed changes
 
   puts "\n== Preparing database =="
   system! 'bin/rails db:prepare'
