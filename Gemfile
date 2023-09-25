@@ -5,7 +5,7 @@ ruby '>= 3.1.4', '< 3.2'
 
 # Core Rails stuff
 gem 'image_processing' # for ActiveStorage Variants
-gem 'puma', '~> 6.3'
+gem 'puma', '~> 6.4'
 gem 'rails', '~> 6.1.7'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
@@ -29,7 +29,7 @@ gem 'connection_pool'
 gem 'pg', '~> 1.5.4'
 gem 'redis', '~> 4.8'
 gem 'rsolr'
-gem 'strong_migrations', '~> 1.6.2'
+gem 'strong_migrations', '~> 1.6.3'
 
 # Authentication
 gem 'bcrypt', '>= 3.1.13'
@@ -58,7 +58,7 @@ gem 'flipper-ui', '~> 1.0.0' # UI for feature flags
 gem 'jbuilder' # generate JSON objects
 gem 'kaminari' # Pagination
 gem 'paper_trail', '~> 15.0.0' # Track object changes
-gem 'ransack', '3.2.1' # ActiveRecord search/filter
+gem 'ransack', '4.0.0' # ActiveRecord search/filter
 gem 'redcarpet', '~> 3.6', require: ['redcarpet', 'redcarpet/render_strip'] # Markdown to (X)HTML parser
 gem 'uuidtools'
 gem 'voight_kampff', '~> 2.0', require: 'voight_kampff/rails' # bot detection
@@ -104,12 +104,8 @@ group :development do
 
   gem 'better_errors', '>= 2.3.0'
   gem 'binding_of_caller'
-
   gem 'brakeman'
-
-  gem 'listen', '>= 3.0.5', '< 3.9'
-  gem 'spring'
-  gem 'spring-watcher-listen', '~> 2.1.0'
+  gem 'listen'
 
   gem 'web-console', '>= 4.1.0'
 end
