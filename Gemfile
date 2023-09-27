@@ -120,7 +120,7 @@ group :test do
   gem 'json-schema', '~> 4.1.1'
   gem 'launchy'
   gem 'minitest-retry', require: false
-  gem 'rdf-isomorphic', '~> 3.2.1'
+  gem 'rdf-isomorphic', '~> 3.3.0'
   gem 'vcr', '5.0', require: false
   gem 'webmock', require: false
 end
