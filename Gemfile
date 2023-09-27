@@ -22,7 +22,7 @@ gem 'simple_form'
 gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', tag: '0.4.0'
 gem 'rdf', '~> 3.3.1'
 gem 'rdf-n3', '~> 3.2.1'
-gem 'rdf-vocab', '~> 3.2.3' # this gem changed predicate names without warning, be cautious and test with migrations
+gem 'rdf-vocab', '~> 3.3.0' # this gem changed predicate names without warning, be cautious and test with migrations
 
 # Database stuff
 gem 'connection_pool'
