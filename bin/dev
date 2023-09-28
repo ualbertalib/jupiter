@@ -1,7 +1,9 @@
 #!/usr/bin/env sh
 
-if command -v overmind &> /dev/null; then
-  export PORT="${PORT:-3000}"
+# Default to port 3000 if not specified
+export PORT="${PORT:-3000}"
+
+if command -v overmind > /dev/null 2>&1; then
 
   exec overmind start -f Procfile.dev "$@"
 else
@@ -9,9 +11,6 @@ else
     echo "Installing foreman..."
     gem install foreman
   fi
-
-  # Default to port 3000 if not specified
-  export PORT="${PORT:-3000}"
 
   exec foreman start -f Procfile.dev "$@"
 fi
