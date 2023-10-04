@@ -114,45 +114,48 @@ git clone git@github.com:ualbertalib/jupiter.git
 cd jupiter
 ```
 
-## Step 3: Start docker and docker compose
+## Step 3: Initial Setup of Jupiter
 
-We use docker for provisioning all of our datastores we require for jupiter (solr/postgres/redis)
+You can run `bin/setup` to setup Jupiter on your machine. This will:
 
-To start and setup your docker containers simply
+- Install Rubygem and Javascript dependencies.
+- Setup and provision all of our docker containers we require for Jupiter (solr/postgres/redis).
+- Create, migrate and seed our database.
+- And a few house keeping tasks like cleaning up old logs and tmp directories.
 
 ```shell
-docker-compose -f docker-compose.yml up -d
+bin/setup
 ```
 
-## Step 4: Bundle install project's dependencies
+## Step 4: Start the Rails server
+
+To run your application, you can use the `bin/dev` command:
 
 ```shell
-bundle install
+bin/dev
 ```
 
-## Step 5: Install project's external modules
+This starts up Overmind (or fallback to Foreman) running the Procfile.dev config.
+
+We've configured this to run the Rails server, Sidekiq background worker and webpacker (for CSS bundling and JS bundling) out of the box.
+
+Here's a couple of useful Overmind commands:
 
 ```shell
-yarn
-```
+# Debugging with byebug/pry: connect to the `web` process to be able to input commands:
+overmind connect web
+# Then disconnect by hitting [Ctrl+B] (or your tmux prefix) and then [D].
 
-Note: This step failed on CentOS 7 with node version 16. Have to downgrade node from v16 to 14. (2021/07/11)
+# Restart a process without restarting all the other ones:
+overmind restart web
 
-## Step 6: Setup Database
-
-```shell
-bundle exec rails db:prepare
-```
-
-## Step 7: Start the Rails server
-
-```shell
-bin/rails s
+# If something goes wrong, you can kill all running processes:
+overmind kill
 ```
 
 Now everything should be up and running!
 
-## Step 8: Open and view Jupiter!
+## Step 5: Open and view Jupiter!
 
 Now everything is ready, you can go and view Jupiter! Just open your favorite browser and go to the following url:
 

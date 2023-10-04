@@ -20,9 +20,9 @@ gem 'simple_form'
 
 # RDF stuff
 gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', tag: '0.4.0'
-gem 'rdf', '~> 3.2.9'
-gem 'rdf-n3', '~> 3.2.1'
-gem 'rdf-vocab', '~> 3.2.3' # this gem changed predicate names without warning, be cautious and test with migrations
+gem 'rdf', '~> 3.3.1'
+gem 'rdf-n3', '~> 3.3.0'
+gem 'rdf-vocab', '~> 3.3.0' # this gem changed predicate names without warning, be cautious and test with migrations
 
 # Database stuff
 gem 'connection_pool'
@@ -38,7 +38,7 @@ gem 'omniauth-rails_csrf_protection', '~> 1.0'
 gem 'omniauth-saml', '~> 2.1'
 
 # Authorization
-gem 'pundit', '1.1.0'
+gem 'pundit', '2.3.1'
 
 # Background tasks
 gem 'sidekiq', '~> 7.1'
@@ -93,7 +93,7 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
 
-  gem 'rubocop', '~> 1.56.3', require: false
+  gem 'rubocop', '~> 1.56.4', require: false
   gem 'rubocop-minitest', require: false
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false
@@ -120,7 +120,7 @@ group :test do
   gem 'json-schema', '~> 4.1.1'
   gem 'launchy'
   gem 'minitest-retry', require: false
-  gem 'rdf-isomorphic', '~> 3.2.1'
+  gem 'rdf-isomorphic', '~> 3.3.0'
   gem 'vcr', '5.0', require: false
   gem 'webmock', require: false
 end

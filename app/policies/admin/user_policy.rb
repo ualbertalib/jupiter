@@ -5,7 +5,7 @@ class Admin::UserPolicy < ApplicationPolicy
   end
 
   def unsuspend?
-    record.last.suspended?
+    record.suspended?
   end
 
   def grant_admin?
@@ -13,7 +13,7 @@ class Admin::UserPolicy < ApplicationPolicy
   end
 
   def revoke_admin?
-    record.last.admin? && not_self?
+    record.admin? && not_self?
   end
 
   def login_as_user?
@@ -23,11 +23,11 @@ class Admin::UserPolicy < ApplicationPolicy
   protected
 
   def regular_user?
-    !record.last.suspended? && !record.last.admin?
+    !record.suspended? && !record.admin?
   end
 
   def not_self?
-    record.last && user && record.last != user
+    record && user && record != user
   end
 
 end
