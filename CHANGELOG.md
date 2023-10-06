@@ -7,15 +7,82 @@ and releases in Jupiter project adheres to [Semantic Versioning](http://semver.o
 
 New entries in this file should aim to provide a meaningful amount of information in order to allow people to understand the change purely by reading this file, without relying on links to possibly-impermanent sources like Pull Request descriptions or issues.
 
-## Unreleased
+## [Unreleased]
+
+## [2.6.0] - 2023-10-05
+
+### Added
+
+- Add dev/setup binstubs to more easily setup and dev on local [PR#3238](https:://github.com/ualbertalib/jupiter/pull/3238)
+- Upgrade pundit to latest [PR#3237](https:://github.com/ualbertalib/jupiter/pull/3237)
+- Bump paper_trail from 13.0.0 to 15.0.0 [PR#3236](https:://github.com/ualbertalib/jupiter/pull/3236)
+- Update Sidekiq and Sidekiq cron/unique job gems to latest versions [PR#3217](https:://github.com/ualbertalib/jupiter/pull/3217)
+- Set platform for linux/amd64 for our Solr image [PR#3193](https:://github.com/ualbertalib/jupiter/pull/3193)
+- add @murny to CODEOWNERS [PR#3183](https:://github.com/ualbertalib/jupiter/pull/3183)
+
+### Removed
+
+- Rails no longer recommends Spring by default. Let's remove it [PR#3231](https:://github.com/ualbertalib/jupiter/pull/3231)
+
+### Fixed
+
+- Squash old migrations and RDF annotations [PR#3194](https:://github.com/ualbertalib/jupiter/pull/3194)
+- Fix Non system tests from running capybara/selenium [PR#3227](https:://github.com/ualbertalib/jupiter/pull/3227)
+- Add patch for VCR for fixing VCR crashing in Ruby v3.1 [PR#3216](https:://github.com/ualbertalib/jupiter/pull/3216)
+- Fix warning about already initialized constants in rake tests within tests [PR#3210](https:://github.com/ualbertalib/jupiter/pull/3210)
+- Update dependabot.yml for npm updates to use correct javascript label [PR#3184](https:://github.com/ualbertalib/jupiter/pull/3184)
 
 ### Chores
-- Bump rubocop-performance from 1.14.3 to 1.19.0 [PR#3191](https://github.com/ualbertalib/jupiter/pull/3191)
-- Bump rubocop from 1.44.1 to 1.56.3 [PR#3207](https://github.com/ualbertalib/jupiter/pull/3207)
-- Bump rubocop-rails from 2.20.2 to 2.21.0 [PR#3211](https://github.com/ualbertalib/jupiter/pull/3211)
-- Bump Sidekiq and Sidekiq gems to latest version [PR#3217](https://github.com/ualbertalib/jupiter/pull/3217)
-- Bump ransack from 3.2.1 to 4.0.0 [PR#3235](https://github.com/ualbertalib/jupiter/pull/3235)
-- Upgrade pundit to latest [PR#3237](https://github.com/ualbertalib/jupiter/pull/3237)
+
+- Bump rubocop-rails from 2.21.1 to 2.21.2 [PR#3254](https:://github.com/ualbertalib/jupiter/pull/3254)
+- Bump sidekiq from 7.1.4 to 7.1.5 [PR#3253](https:://github.com/ualbertalib/jupiter/pull/3253)
+- Bump core-js from 3.32.2 to 3.33.0  dependencies javascript [PR#3252](https:://github.com/ualbertalib/jupiter/pull/3252)
+- Bump rubocop from 1.56.3 to 1.56.4 [PR#3251](https:://github.com/ualbertalib/jupiter/pull/3251)
+- Bump rubocop-minitest from 0.32.1 to 0.32.2 [PR#3249](https:://github.com/ualbertalib/jupiter/pull/3249)
+- Bump rdf-isomorphic from 3.2.1 to 3.3.0 [PR#3247](https:://github.com/ualbertalib/jupiter/pull/3247)
+- Bump selenium-webdriver from 4.12.0 to 4.13.1 [PR#3246](https:://github.com/ualbertalib/jupiter/pull/3246)
+- Bump rdf-n3 from 3.2.1 to 3.3.0 [PR#3245](https:://github.com/ualbertalib/jupiter/pull/3245)
+- Bump rdf-vocab from 3.2.3 to 3.3.0 [PR#3243](https:://github.com/ualbertalib/jupiter/pull/3243)
+- Bump rubocop-minitest from 0.31.1 to 0.32.1 [PR#3242](https:://github.com/ualbertalib/jupiter/pull/3242)
+- Bump clamby from 1.6.8 to 1.6.10 [PR#3241](https:://github.com/ualbertalib/jupiter/pull/3241)
+- Bump puma from 6.3.1 to 6.4.0 [PR#3240](https:://github.com/ualbertalib/jupiter/pull/3240)
+- Bump strong_migrations from 1.6.2 to 1.6.3 [PR#3239](https:://github.com/ualbertalib/jupiter/pull/3239)
+- Bump ransack from 3.2.1 to 4.0.0 [PR#3235](https:://github.com/ualbertalib/jupiter/pull/3235)
+- Bump danger from 9.3.1 to 9.3.2 [PR#3234](https:://github.com/ualbertalib/jupiter/pull/3234)
+- Bump postgres to v15 locally [PR#3233](https:://github.com/ualbertalib/jupiter/pull/3233)
+- Bump rubocop-performance from 1.19.0 to 1.19.1 [PR#3232](https:://github.com/ualbertalib/jupiter/pull/3232)
+- Bump json-schema from 4.0.0 to 4.1.1 [PR#3230](https:://github.com/ualbertalib/jupiter/pull/3230)
+- Bump web-console from 4.2.0 to 4.2.1  dependencies ruby [PR#3222](https:://github.com/ualbertalib/jupiter/pull/3222)
+- Bump rubocop-minitest from 0.31.0 to 0.31.1  dependencies ruby [PR#3221](https:://github.com/ualbertalib/jupiter/pull/3221)
+- Bump rubocop-rails from 2.21.0 to 2.21.1  dependencies ruby [PR#3219](https:://github.com/ualbertalib/jupiter/pull/3219)
+- Bump strong_migrations from 1.6.1 to 1.6.2  dependencies ruby [PR#3218](https:://github.com/ualbertalib/jupiter/pull/3218)
+- Bump pg from 1.5.3 to 1.5.4  dependencies ruby [PR#3215](https:://github.com/ualbertalib/jupiter/pull/3215)
+- Bump selenium-webdriver from 4.11.0 to 4.12.0  dependencies ruby [PR#3213](https:://github.com/ualbertalib/jupiter/pull/3213)
+- Bump json-schema from 3.0.0 to 4.0.0  dependencies ruby [PR#3212](https:://github.com/ualbertalib/jupiter/pull/3212)
+- Bump rubocop-rails from 2.20.2 to 2.21.0  dependencies ruby [PR#3211](https:://github.com/ualbertalib/jupiter/pull/3211)
+- Bump rdf from 3.2.9 to 3.3.1  dependencies ruby [PR#3209](https:://github.com/ualbertalib/jupiter/pull/3209)
+- Bump erb_lint from 0.4.0 to 0.5.0  dependencies ruby [PR#3208](https:://github.com/ualbertalib/jupiter/pull/3208)
+- Bump rubocop from 1.44.1 to 1.56.3  dependencies ruby [PR#3207](https:://github.com/ualbertalib/jupiter/pull/3207)
+- Bump core-js from 3.32.1 to 3.32.2  dependencies javascript [PR#3206](https:://github.com/ualbertalib/jupiter/pull/3206)
+- Bump actions/checkout from 3 to 4  actions dependencies [PR#3204](https:://github.com/ualbertalib/jupiter/pull/3204)
+- Bump webmock from 3.18.1 to 3.19.1  dependencies ruby [PR#3202](https:://github.com/ualbertalib/jupiter/pull/3202)
+- Bump nokogiri from 1.15.3 to 1.15.4  dependencies ruby [PR#3201](https:://github.com/ualbertalib/jupiter/pull/3201)
+- Bump omniauth from 2.1.0 to 2.1.1  dependencies ruby [PR#3199](https:://github.com/ualbertalib/jupiter/pull/3199)
+- Bump sidekiq-unique-jobs from 7.1.29 to 7.1.30  dependencies ruby [PR#3198](https:://github.com/ualbertalib/jupiter/pull/3198)
+- Bump better_errors from 2.9.1 to 2.10.1  dependencies ruby [PR#3197](https:://github.com/ualbertalib/jupiter/pull/3197)
+- Bump rails from 6.1.7.4 to 6.1.7.6  dependencies ruby [PR#3196](https:://github.com/ualbertalib/jupiter/pull/3196)
+- Bump danger from 9.2.0 to 9.3.1  dependencies ruby [PR#3195](https:://github.com/ualbertalib/jupiter/pull/3195)
+- Bump edtf from 3.1.0 to 3.1.1  dependencies ruby [PR#3192](https:://github.com/ualbertalib/jupiter/pull/3192)
+- Bump rubocop-performance from 1.14.3 to 1.19.0  dependencies ruby [PR#3191](https:://github.com/ualbertalib/jupiter/pull/3191)
+- Bump connection_pool from 2.3.0 to 2.4.1  dependencies ruby [PR#3190](https:://github.com/ualbertalib/jupiter/pull/3190)
+- Bump flipper-active_record, flipper, and flipper-ui  dependencies ruby [PR#3189](https:://github.com/ualbertalib/jupiter/pull/3189)
+- Bump addressable from 2.8.4 to 2.8.5  dependencies ruby [PR#3188](https:://github.com/ualbertalib/jupiter/pull/3188)
+- Bump rubocop-rails from 2.19.0 to 2.20.2  dependencies ruby [PR#3187](https:://github.com/ualbertalib/jupiter/pull/3187)
+- Bump faker from 3.1.1 to 3.2.1  dependencies ruby [PR#3186](https:://github.com/ualbertalib/jupiter/pull/3186)
+- Bump jquery from 3.7.0 to 3.7.1  dependencies ruby [PR#3182](https:://github.com/ualbertalib/jupiter/pull/3182)
+- Bump eslint-plugin-import from 2.28.0 to 2.28.1  dependencies ruby [PR#3181](https:://github.com/ualbertalib/jupiter/pull/3181)
+- Bump core-js from 3.31.1 to 3.32.1  dependencies ruby [PR#3180](https:://github.com/ualbertalib/jupiter/pull/3180)
+- Bump puma from 6.3.0 to 6.3.1  dependencies ruby [PR#3179](https:://github.com/ualbertalib/jupiter/pull/3179)
 
 ## [2.5.2] - 2023-08-16
 
