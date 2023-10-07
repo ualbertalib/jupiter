@@ -137,7 +137,6 @@ GEM
       concurrent-ruby (~> 1.0, >= 1.0.5)
       redis (>= 1.0, < 6)
     builder (3.2.4)
-    bump (0.10.0)
     byebug (11.1.3)
     capybara (3.39.2)
       addressable
@@ -637,7 +636,6 @@ DEPENDENCIES
   bootsnap (>= 1.4.4)
   brakeman
   builder_deferred_tagging!
-  bump
   capybara (>= 3.26, < 4.0)
   clamby
   connection_pool
