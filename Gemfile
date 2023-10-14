@@ -94,7 +94,7 @@ group :development, :test do
   gem 'erb_lint', '>= 0.0.35', require: false
 
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem "debug", platforms: %i[ mri mingw x64_mingw ]
+  gem 'debug', platforms: [:mri, :mingw, :x64_mingw]
 
   gem 'rubocop', '~> 1.59.0', require: false
   gem 'rubocop-minitest', require: false
