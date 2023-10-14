@@ -17,6 +17,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [2.7.1] - 2024-01-24
 
+### Added
+- Rails 7 upgrade [PR#3250](https:://github.com/ualbertalib/jupiter/pull/3250)
+
 ### Chores
 - Bump rubocop-minitest from 0.34.4 to 0.34.5 [PR#3351](https://github.com/ualbertalib/jupiter/pull/3351)
 - Bump sidekiq-unique-jobs from 8.0.5 to 8.0.6 [PR#3357](https://github.com/ualbertalib/jupiter/pull/3357)
