@@ -9,13 +9,13 @@ Rails.application.configure do
     policy.default_src :self, :https
     policy.font_src    :self, :https, :data
     policy.img_src     :self, :https, :data,
-                      'analytics.library.ualberta.ca',
-                      'www.google-analytics.com'
+                       'analytics.library.ualberta.ca',
+                       'www.google-analytics.com'
     policy.object_src  :none
     policy.script_src  :unsafe_inline, :self, :https,
-                      'analytics.library.ualberta.ca',
-                      'www.google-analytics.com',
-                      'www.googletagmanager.com'
+                       'analytics.library.ualberta.ca',
+                       'www.google-analytics.com',
+                       'www.googletagmanager.com'
 
     policy.style_src   :unsafe_inline, :self, :https
 
