@@ -59,5 +59,9 @@ module Jupiter
       link_attributes: { rel: 'noopener noreferrer', target: '_blank' }
     }
 
+    # We should be using VIPS which is now the default, but this requires work to migrate?
+    # Delete this line if we ever migrate to VIPS
+    config.active_storage.variant_processor = :mini_magick
+
   end
 end
