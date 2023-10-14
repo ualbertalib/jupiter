@@ -12,7 +12,7 @@ gem 'rails', '~> 7.0.8'
 gem 'webpacker', '~> 5.4'
 
 # Reduces boot times through caching; required in config/boot.rb
-gem 'bootsnap', '>= 1.4.4', require: false
+gem 'bootsnap', require: false
 
 # View stuff
 gem 'active_link_to'
@@ -89,9 +89,8 @@ group :development, :test do
 
   gem 'erb_lint', '>= 0.0.35', require: false
 
-  gem 'pry'
-  gem 'pry-byebug'
-  gem 'pry-rails'
+  # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
+  gem "debug", platforms: %i[ mri mingw x64_mingw ]
 
   gem 'rubocop', '~> 1.59.0', require: false
   gem 'rubocop-minitest', require: false
@@ -102,9 +101,8 @@ end
 group :development do
   gem 'better_errors', '>= 2.3.0'
   gem 'binding_of_caller'
+  # gem "rack-mini-profiler"
   gem 'brakeman'
-  gem 'listen'
-
   gem 'web-console', '>= 4.1.0'
 end
 
