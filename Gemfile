@@ -100,8 +100,6 @@ group :development, :test do
 end
 
 group :development do
-  gem 'bump', require: false
-
   gem 'better_errors', '>= 2.3.0'
   gem 'binding_of_caller'
   gem 'brakeman'
