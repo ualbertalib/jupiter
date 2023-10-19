@@ -12,20 +12,20 @@ New entries in this file should aim to provide a meaningful amount of informatio
 ## [2.6.1] - 2023-10-17
 
 ### Added
-- Update bundler to v2.4.18 as this is what we use in staging/production [PR#3266](https:://github.com/ualbertalib/jupiter/pull/3266)
-- Update Dockerfile.deployment [PR#3264](https:://github.com/ualbertalib/jupiter/pull/3264)
+- Update bundler to v2.4.18 as this is what we use in staging/production [PR#3266](https://github.com/ualbertalib/jupiter/pull/3266)
+- Update Dockerfile.deployment [PR#3264](https://github.com/ualbertalib/jupiter/pull/3264)
 
 ### Removed
-- Remove bump infavor of a simple guide doc [PR#3256](https:://github.com/ualbertalib/jupiter/pull/3256)
+- Remove bump infavor of a simple guide doc [PR#3256](https://github.com/ualbertalib/jupiter/pull/3256)
 
 ### Chores
-- Bump @babel/traverse from 7.9.6 to 7.23.2  dependencies javascript[PR#3265](https:://github.com/ualbertalib/jupiter/pull/3265)
-- Bump rollbar from 3.4.0 to 3.4.1  dependencies ruby[PR#3263](https:://github.com/ualbertalib/jupiter/pull/3263)
-- Bump rubocop from 1.57.0 to 1.57.1  dependencies ruby[PR#3262](https:://github.com/ualbertalib/jupiter/pull/3262)
-- Bump simple_form from 5.2.0 to 5.3.0  dependencies ruby[PR#3260](https:://github.com/ualbertalib/jupiter/pull/3260)
-- Bump rubocop from 1.56.4 to 1.57.0  dependencies ruby[PR#3259](https:://github.com/ualbertalib/jupiter/pull/3259)
-- Bump selenium-webdriver from 4.13.1 to 4.14.0  dependencies ruby[PR#3258](https:://github.com/ualbertalib/jupiter/pull/3258)
-- Bump sidekiq from 7.1.5 to 7.1.6  dependencies ruby[PR#3257](https:://github.com/ualbertalib/jupiter/pull/3257)
+- Bump @babel/traverse from 7.9.6 to 7.23.2 [PR#3265](https://github.com/ualbertalib/jupiter/pull/3265)
+- Bump rollbar from 3.4.0 to 3.4.1 [PR#3263](https://github.com/ualbertalib/jupiter/pull/3263)
+- Bump rubocop from 1.57.0 to 1.57.1 [PR#3262](https://github.com/ualbertalib/jupiter/pull/3262)
+- Bump simple_form from 5.2.0 to 5.3.0 [PR#3260](https://github.com/ualbertalib/jupiter/pull/3260)
+- Bump rubocop from 1.56.4 to 1.57.0 [PR#3259](https://github.com/ualbertalib/jupiter/pull/3259)
+- Bump selenium-webdriver from 4.13.1 to 4.14.0 [PR#3258](https://github.com/ualbertalib/jupiter/pull/3258)
+- Bump sidekiq from 7.1.5 to 7.1.6 [PR#3257](https://github.com/ualbertalib/jupiter/pull/3257)
 
 ## [2.6.0] - 2023-10-05
 
