@@ -112,7 +112,6 @@ GEM
     addressable (2.8.5)
       public_suffix (>= 2.0.2, < 6.0)
     ast (2.4.2)
-    base64 (0.1.1)
     bcp47_spec (0.2.1)
     bcrypt (3.1.19)
     better_errors (2.10.1)
@@ -436,7 +435,7 @@ GEM
       thor (~> 1.0)
     rainbow (3.1.1)
     rake (13.0.6)
-    ransack (4.0.0)
+    ransack (4.1.0)
       activerecord (>= 6.1.5)
       activesupport (>= 6.1.5)
       i18n
@@ -480,8 +479,7 @@ GEM
     rsolr (2.5.0)
       builder (>= 2.1.2)
       faraday (>= 0.9, < 3, != 2.0.0)
-    rubocop (1.57.1)
-      base64 (~> 0.1.1)
+    rubocop (1.57.2)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
       parallel (~> 1.10)
@@ -492,7 +490,7 @@ GEM
       rubocop-ast (>= 1.28.1, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 2.4.0, < 3.0)
-    rubocop-ast (1.29.0)
+    rubocop-ast (1.30.0)
       parser (>= 3.2.1.0)
     rubocop-minitest (0.33.0)
       rubocop (>= 1.39, < 2.0)
@@ -671,7 +669,7 @@ DEPENDENCIES
   puma (~> 6.4)
   pundit (= 2.3.1)
   rails (~> 6.1.7)
-  ransack (= 4.0.0)
+  ransack (= 4.1.0)
   rdf (~> 3.3.1)
   rdf-isomorphic (~> 3.3.0)
   rdf-n3 (~> 3.3.0)
@@ -680,7 +678,7 @@ DEPENDENCIES
   redis (~> 4.8)
   rollbar
   rsolr
-  rubocop (~> 1.57.1)
+  rubocop (~> 1.57.2)
   rubocop-minitest
   rubocop-performance
   rubocop-rails
