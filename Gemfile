@@ -41,7 +41,7 @@ gem 'omniauth-saml', '~> 2.1'
 gem 'pundit', '2.3.1'
 
 # Background tasks
-gem 'sidekiq', '~> 7.1'
+gem 'sidekiq', '~> 7.2'
 gem 'sidekiq-cron', '~> 1.10'
 gem 'sidekiq-unique-jobs', '~> 8.0'
 
