@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/ualbertalib/acts_as_rdfable.git
-  revision: 1ea0065f78b500b1503460c8e0923dfa86472df8
-  tag: 0.4.0
+  revision: e7ae5f76157139bae3804230a0d789affee1a9af
+  tag: v0.5.0
   specs:
-    acts_as_rdfable (0.2.1)
+    acts_as_rdfable (0.5.0)
       rails (>= 5.2.3)
       seed_dump (~> 3.3, >= 3.3.1)
 
@@ -174,7 +174,7 @@ GEM
       no_proxy_fix
       octokit (~> 6.0)
       terminal-table (>= 1, < 4)
-    date (3.3.3)
+    date (3.3.4)
     debug_inspector (1.1.0)
     declarative (0.0.20)
     differ (0.1.2)
@@ -321,7 +321,7 @@ GEM
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     logger (1.5.3)
-    loofah (2.21.4)
+    loofah (2.22.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
     mail (2.8.1)
@@ -335,7 +335,7 @@ GEM
     method_source (1.0.0)
     mini_magick (4.11.0)
     mini_mime (1.1.5)
-    mini_portile2 (2.8.4)
+    mini_portile2 (2.8.5)
     minitest (5.20.0)
     minitest-retry (0.2.2)
       minitest (>= 5.0)
@@ -346,14 +346,14 @@ GEM
     nap (1.1.0)
     net-http-persistent (4.0.2)
       connection_pool (~> 2.2)
-    net-imap (0.3.7)
+    net-imap (0.4.5)
       date
       net-protocol
     net-pop (0.1.2)
       net-protocol
-    net-protocol (0.2.1)
+    net-protocol (0.2.2)
       timeout
-    net-smtp (0.3.3)
+    net-smtp (0.4.0)
       net-protocol
     nio4r (2.5.9)
     no_proxy_fix (0.1.2)
@@ -397,7 +397,7 @@ GEM
     pundit (2.3.1)
       activesupport (>= 3.0.0)
     raabro (1.4.0)
-    racc (1.7.1)
+    racc (1.7.3)
     rack (2.2.8)
     rack-protection (3.1.0)
       rack (~> 2.2, >= 2.2.4)
@@ -434,7 +434,7 @@ GEM
       rake (>= 12.2)
       thor (~> 1.0)
     rainbow (3.1.1)
-    rake (13.0.6)
+    rake (13.1.0)
     ransack (4.1.1)
       activerecord (>= 6.1.5)
       activesupport (>= 6.1.5)
@@ -583,8 +583,8 @@ GEM
       rdf (~> 3.3)
     terminal-table (3.0.2)
       unicode-display_width (>= 1.1.1, < 3)
-    thor (1.2.2)
-    timeout (0.4.0)
+    thor (1.3.0)
+    timeout (0.4.1)
     trailblazer-option (0.1.1)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
