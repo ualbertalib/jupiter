@@ -124,11 +124,11 @@ module DraftActions
   end
 
   def describe_step_name
-    "describe_#{item_class.model_name.singular}".to_sym
+    :"describe_#{item_class.model_name.singular}"
   end
 
   def review_step_name
-    "review_and_deposit_#{item_class.model_name.singular}".to_sym
+    :"review_and_deposit_#{item_class.model_name.singular}"
   end
 
   def draft_param
@@ -136,7 +136,7 @@ module DraftActions
   end
 
   def draft_id_param
-    "#{item_class.model_name.singular}_id".to_sym
+    :"#{item_class.model_name.singular}_id"
   end
 
   def set_draft
