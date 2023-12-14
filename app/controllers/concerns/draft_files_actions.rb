@@ -58,7 +58,7 @@ module DraftFilesActions
   end
 
   def draft_id_param
-    "#{item_class.model_name.singular}_id".to_sym
+    :"#{item_class.model_name.singular}_id"
   end
 
   def set_draft

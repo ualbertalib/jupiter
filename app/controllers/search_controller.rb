@@ -5,7 +5,7 @@ class SearchController < ApplicationController
   skip_after_action :verify_authorized
 
   def index
-    models = case (params[:tab] || DEFAULT_TAB)
+    models = case params[:tab] || DEFAULT_TAB
              when 'item'
                [Item, Thesis]
              when 'collection'

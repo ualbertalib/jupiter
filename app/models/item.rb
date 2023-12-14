@@ -64,7 +64,7 @@ class Item < JupiterCore::Doiable
     publication_status_code = ControlledVocabulary.era.publication_status.from_uri(publication_status.first)
     # Next line of code means that 'article_submitted' exists, but 'article_draft' doesn't ("There can be only one!")
     publication_status_code = :submitted if publication_status_code == :draft
-    "#{item_type_code}_#{publication_status_code}".to_sym
+    :"#{item_type_code}_#{publication_status_code}"
   rescue ArgumentError
     nil
   end
