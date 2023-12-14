@@ -42,12 +42,12 @@ gem 'pundit', '2.3.1'
 
 # Background tasks
 gem 'sidekiq', '~> 7.2'
-gem 'sidekiq-cron', '~> 1.11'
+gem 'sidekiq-cron', '~> 1.12'
 gem 'sidekiq-unique-jobs', '~> 8.0'
 
 # Misc Utilities
 gem 'aasm' # state-machine management
-gem 'addressable', '~> 2.8.5' # Replacement for the standard URI implementation
+gem 'addressable', '~> 2.8.6' # Replacement for the standard URI implementation
 gem 'datacite-client', github: 'ualbertalib/datacite-client', tag: 'v0.1.0', require: 'datacite'
 gem 'differ' # Used to diff two strings
 gem 'draper'
