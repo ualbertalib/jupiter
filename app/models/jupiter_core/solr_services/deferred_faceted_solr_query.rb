@@ -168,9 +168,9 @@ class JupiterCore::SolrServices::DeferredFacetedSolrQuery
   end
 
   # Kaminari integration
-  define_method Kaminari.config.page_method_name, (proc { |num|
+  define_method Kaminari.config.page_method_name, proc { |num|
     limit(default_per_page).offset(default_per_page * ([num.to_i, 1].max - 1))
-  })
+  }
 
   def count
     @count_cache ||= super
