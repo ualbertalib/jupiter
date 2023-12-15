@@ -161,7 +161,7 @@ GEM
     crack (0.4.5)
       rexml
     crass (1.0.6)
-    danger (9.4.1)
+    danger (9.4.2)
       claide (~> 1.0)
       claide-plugins (>= 0.9.2)
       colored2 (~> 3.1)
@@ -172,7 +172,7 @@ GEM
       kramdown (~> 2.3)
       kramdown-parser-gfm (~> 1.0)
       no_proxy_fix
-      octokit (>= 6.0)
+      octokit (>= 4.0)
       terminal-table (>= 1, < 4)
     date (3.3.4)
     debug_inspector (1.1.0)
