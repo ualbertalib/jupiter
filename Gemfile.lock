@@ -293,7 +293,7 @@ GEM
     jbuilder (2.11.5)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
-    json (2.7.0)
+    json (2.7.1)
     json-schema (4.1.1)
       addressable (>= 2.8)
     jwt (2.2.3)
@@ -465,7 +465,7 @@ GEM
     redis (4.8.1)
     redis-client (0.19.0)
       connection_pool
-    regexp_parser (2.8.2)
+    regexp_parser (2.8.3)
     representable (3.1.1)
       declarative (< 0.1.0)
       trailblazer-option (>= 0.1.1, < 0.2.0)
@@ -479,7 +479,7 @@ GEM
     rsolr (2.5.0)
       builder (>= 2.1.2)
       faraday (>= 0.9, < 3, != 2.0.0)
-    rubocop (1.58.0)
+    rubocop (1.59.0)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
       parallel (~> 1.10)
@@ -679,7 +679,7 @@ DEPENDENCIES
   redis (~> 4.8)
   rollbar
   rsolr
-  rubocop (~> 1.58.0)
+  rubocop (~> 1.59.0)
   rubocop-minitest
   rubocop-performance
   rubocop-rails
