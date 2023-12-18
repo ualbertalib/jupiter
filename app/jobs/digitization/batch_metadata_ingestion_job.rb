@@ -90,10 +90,10 @@ class Digitization::BatchMetadataIngestionJob < ApplicationJob
     return if attribute.blank?
 
     if book.class.columns_hash[attribute.to_s].array?
-      book.send("#{attribute}=", []) if book.send(attribute.to_s).blank?
+      book.send(:"#{attribute}=", []) if book.send(attribute.to_s).blank?
       book.send(attribute.to_s).push(term)
     else
-      book.send("#{attribute}=", term)
+      book.send(:"#{attribute}=", term)
     end
   end
 
