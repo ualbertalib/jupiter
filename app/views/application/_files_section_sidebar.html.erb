@@ -10,17 +10,17 @@
         <div class="d-flex justify-content-center mt-3">
           <div class="p-1">
             <%= link_to(t('.view'),
-                        send("file_view_#{item.model_name.singular}_url", id: file.record.id,
-                                                                          file_set_id: file.fileset_uuid,
-                                                                          file_name: file.filename.to_s),
+                        send(:"file_view_#{item.model_name.singular}_url", id: file.record.id,
+                                                                           file_set_id: file.fileset_uuid,
+                                                                           file_name: file.filename.to_s),
                         class: 'btn btn-outline-primary',
                         rel: 'noopener noreferrer',
                         target: :_blank) %>
           </div>
           <div class="p-1">
             <%= link_to(t('.download'),
-                        send("file_download_#{item.model_name.singular}_url", id: file.record.id,
-                                                                              file_set_id: file.fileset_uuid),
+                        send(:"file_download_#{item.model_name.singular}_url", id: file.record.id,
+                                                                               file_set_id: file.fileset_uuid),
                         class: 'btn btn-outline-primary',
                         rel: 'nofollow',
                         download: file.filename) %>
@@ -39,17 +39,17 @@
                   <div class="d-flex justify-content-center">
                     <div class="p-1">
                       <%= link_to(t('.view'),
-                                  send("file_view_#{item.model_name.singular}_url", id: file.record.id,
-                                                                                    file_set_id: file.fileset_uuid,
-                                                                                    file_name: file.filename.to_s),
+                                  send(:"file_view_#{item.model_name.singular}_url", id: file.record.id,
+                                                                                     file_set_id: file.fileset_uuid,
+                                                                                     file_name: file.filename.to_s),
                                   class: 'btn btn-outline-primary',
                                   rel: 'noopener noreferrer',
                                   target: :_blank) %>
                     </div>
                     <div class="p-1">
                       <%= link_to(t('.download'),
-                                  send("file_download_#{item.model_name.singular}_url", id: file.record.id,
-                                                                                        file_set_id: file.fileset_uuid),
+                                  send(:"file_download_#{item.model_name.singular}_url", id: file.record.id,
+                                                                                         file_set_id: file.fileset_uuid),
                                   class: 'js-download btn btn-outline-primary',
                                   rel: 'nofollow',
                                   download: file.filename) %>
