@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
 
-  include Pundit
+  include Pundit::Authorization
 
   before_action :store_user_location!, if: :storable_location?
   after_action :verify_authorized, except: [:service_unavailable]
