@@ -3,7 +3,7 @@
     <%= safe_thumbnail_tag(thumbnail_path(object&.thumbnail_file), alt: '', title: object.title, size: '100x100') %>
   <% else %>
     <% if object.is_a? Community %>
-      <%= image_pack_tag('era-logo-without-text.png', class: 'j-thumbnail img-thumbnail', alt: '', title: object.title, size: '100x100') %>
+      <%= image_tag('era-logo-without-text.png', class: 'j-thumbnail img-thumbnail', alt: '', title: object.title, size: '100x100') %>
     <% else %>
       <div class="text-muted text-center img-thumbnail p-3">
         <%= icon('far', file_icon(object.thumbnail_file&.content_type), class: 'fa-5x') %>
@@ -12,5 +12,5 @@
     <% end %>
   <% end %>
 <% else %>
-  <%= image_pack_tag('locked-uofa-logo.png', class: 'j-thumbnail img-thumbnail', alt: '', title: object.title, size: '100x100') %>
+  <%= image_tag('locked-uofa-logo.png', class: 'j-thumbnail img-thumbnail', alt: '', title: object.title, size: '100x100') %>
 <% end %>
