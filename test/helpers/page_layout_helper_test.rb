@@ -78,13 +78,13 @@ class PageLayoutHelperTest < ActionView::TestCase
   # page_image_url
 
   test 'page_image_url defaults to the jupiter logo' do
-    assert_equal asset_pack_url('media/images/era-logo.png'), page_image_url
+    assert_equal image_url('era-logo.png'), page_image_url
   end
 
   test 'page_image_url should return default image on community/item with no logo' do
     @community = communities(:community_books)
 
-    assert_equal asset_pack_url('media/images/era-logo.png'), page_image_url
+    assert_equal image_url('era-logo.png'), page_image_url
   end
 
   test 'page_image_url should return community/item logo' do
