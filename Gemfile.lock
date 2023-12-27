@@ -528,7 +528,7 @@ GEM
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
     semantic_range (3.0.0)
-    shoulda-matchers (5.3.0)
+    shoulda-matchers (6.0.0)
       activesupport (>= 5.2.0)
     sidekiq (7.2.0)
       concurrent-ruby (< 2)
@@ -686,7 +686,7 @@ DEPENDENCIES
   rubocop-rails
   sdoc
   selenium-webdriver
-  shoulda-matchers (~> 5.3)
+  shoulda-matchers (~> 6.0)
   sidekiq (~> 7.2)
   sidekiq-cron (~> 1.12)
   sidekiq-unique-jobs (~> 8.0)
