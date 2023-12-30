@@ -14,7 +14,7 @@ import 'selectize/dist/js/standalone/selectize';
 import 'easy-autocomplete/dist/jquery.easy-autocomplete';
 import 'jquery-multidownload/jquery-multidownload';
 
-import 'src/application';
+import './src/application';
 
 // Expose jquery so RJS (e.g: js.erb templates) works properly
 window.$ = $;
