@@ -6,12 +6,10 @@
 // External Library Stylesheets
 @import 'bootstrap/scss/bootstrap';
 
-$fa-font-path: "@fortawesome/fontawesome-free/webfonts";
+$fa-font-path: ".";
+@import "@fortawesome/fontawesome-free/scss/fontawesome.scss";
+@import "@fortawesome/fontawesome-free/scss/solid.scss";
 
-@import '@fortawesome/fontawesome-free/scss/fontawesome';
-@import '@fortawesome/fontawesome-free/scss/brands';
-@import '@fortawesome/fontawesome-free/scss/regular';
-@import '@fortawesome/fontawesome-free/scss/solid';
 @import 'selectize/dist/css/selectize';
 @import 'selectize/dist/css/selectize.bootstrap3';
 @import 'easy-autocomplete/dist/easy-autocomplete';
