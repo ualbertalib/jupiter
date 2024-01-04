@@ -1,6 +1,8 @@
 // Entry point for the build script in your package.json
 
 
+import './src/add_jquery';
+
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import Rails from '@rails/ujs';
@@ -15,9 +17,6 @@ import 'easy-autocomplete/dist/jquery.easy-autocomplete';
 import 'jquery-multidownload/jquery-multidownload';
 
 import './src/application';
-
-// Expose jquery so RJS (e.g: js.erb templates) works properly
-window.$ = $;
 
 ActiveStorage.start();
 Rails.start();
