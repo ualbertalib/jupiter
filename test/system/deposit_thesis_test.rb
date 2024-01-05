@@ -44,7 +44,11 @@ class DepositThesisTest < ApplicationSystemTestCase
             with: 'Open for everyone!'
 
     choose I18n.t('admin.theses.draft.choose_license_and_visibility.visibility.embargo')
-    select_date '2023/01/01', field_id: 'draft_thesis_embargo_end_date'
+
+    # set Embargo's "Will be open access on" field to first day of current year
+    select Date.current.year.to_s, from: 'draft_thesis_embargo_end_date_1i'
+    select 'January', from: 'draft_thesis_embargo_end_date_2i'
+    select '1', from: 'draft_thesis_embargo_end_date_3i'
 
     click_on I18n.t('admin.theses.draft.save_and_continue')
 
@@ -131,18 +135,6 @@ class DepositThesisTest < ApplicationSystemTestCase
     assert has_select?('draft_thesis[collection_id][]', selected: collection.title)
 
     logout_user
-  end
-
-  # Helper methods for javascript fields (dropzone)
-  # (could be moved and made as generic helpers if these are needed elsewhere)
-  private
-
-  def select_date(date, field_id:)
-    date = Date.parse(date)
-
-    select date.year.to_s, from: "#{field_id}_1i"
-    select I18n.l(date, format: '%B'), from: "#{field_id}_2i"
-    select date.day.to_s, from: "#{field_id}_3i"
   end
 
 end

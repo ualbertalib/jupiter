@@ -27,7 +27,10 @@ class DepositItemTest < ApplicationSystemTestCase
     selectize_set_text '.draft_item_subjects', with: 'A Song of Ice and Fire'
     selectize_set_text '.draft_item_subjects', with: 'Fantasy'
 
-    select_date '2011/07/12', field_id: 'draft_item_date_created'
+    # set Date created field to July 12, 2011
+    select '2011', from: 'draft_item_date_created_1i'
+    select 'July', from: 'draft_item_date_created_2i'
+    select '12', from: 'draft_item_date_created_3i'
 
     fill_in I18n.t('items.draft.describe_item.description'), with: 'A Dance with Dragons Description Goes Here!!!'
 
@@ -47,7 +50,11 @@ class DepositItemTest < ApplicationSystemTestCase
     fill_in 'draft_item_license_text_area', with: 'License Text Goes Here!!!'
 
     choose I18n.t('items.draft.choose_license_and_visibility.visibility.embargo')
-    select_date '2023/01/01', field_id: 'draft_item_embargo_end_date'
+
+    # set Embargo's "Will be open access on" field to first day of current year
+    select Date.current.year.to_s, from: 'draft_item_embargo_end_date_1i'
+    select 'January', from: 'draft_item_embargo_end_date_2i'
+    select '1', from: 'draft_item_embargo_end_date_3i'
 
     click_on I18n.t('items.draft.save_and_continue')
 
@@ -138,7 +145,7 @@ class DepositItemTest < ApplicationSystemTestCase
     logout_user
   end
 
-  # Helper methods for javascript fields (selectize/dropzone) and date select
+  # Helper methods for javascript fields (selectize/dropzone)
   # (could be moved and made as generic helpers if these are needed elsewhere)
   private
 
@@ -154,14 +161,6 @@ class DepositItemTest < ApplicationSystemTestCase
       first('.selectize-input input').click
       find('.option', text: with).click
     end
-  end
-
-  def select_date(date, field_id:)
-    date = Date.parse(date)
-
-    select date.year.to_s, from: "#{field_id}_1i"
-    select I18n.l(date, format: '%B'), from: "#{field_id}_2i"
-    select date.day.to_s, from: "#{field_id}_3i"
   end
 
 end
