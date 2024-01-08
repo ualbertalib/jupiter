@@ -74,10 +74,7 @@ Metrics/ParameterLists:
     - app/models/jupiter_core/solr_services/deferred_faceted_solr_query.rb
 
 Minitest/MultipleAssertions:
-  Max: 15 # default 3
-  Exclude:
-    - test/system/admin_users_show_test.rb
-    - test/system/search_test.rb
+  Enabled: false
 
 Naming/FileName:
   Exclude:
