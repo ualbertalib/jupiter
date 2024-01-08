@@ -15,6 +15,7 @@ New entries in this file should aim to provide a meaningful amount of informatio
 ### Chores
 - Bump rubocop from 1.57.2 to 1.58.0 [PR#3299](https://github.com/ualbertalib/jupiter/pull/3299)
 - Bump rubocop-performance from 1.19.1 to 1.20.0 [PR#3315](https://github.com/ualbertalib/jupiter/pull/3315)
+- Bump rubocop-minitest from 0.34.2 to 0.34.3 [PR#3327](https://github.com/ualbertalib/jupiter/pull/3327)
 
 ## [2.6.1] - 2023-10-17
 
