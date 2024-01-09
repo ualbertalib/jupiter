@@ -1,6 +1,7 @@
 require 'test_helper'
 
 class PageLayoutHelperTest < ActionView::TestCase
+
   attr_reader :request
 
   setup do
