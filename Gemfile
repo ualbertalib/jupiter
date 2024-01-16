@@ -101,7 +101,6 @@ end
 group :development do
   gem 'better_errors', '>= 2.3.0'
   gem 'binding_of_caller'
-  # gem "rack-mini-profiler"
   gem 'brakeman'
   gem 'web-console', '>= 4.1.0'
 end
