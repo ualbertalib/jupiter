@@ -12,6 +12,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 ### Fixed
 - fix "include Pundit is deprecated. Please use include Pundit::Authorization instead." warnings [PR#3318](https://github.com/ualbertalib/jupiter/pull/3318)
 
+### Added
+- Rails 7 upgrade [PR#3250](https:://github.com/ualbertalib/jupiter/pull/3250)
+
 ### Chores
 - Bump rubocop from 1.57.2 to 1.58.0 [PR#3299](https://github.com/ualbertalib/jupiter/pull/3299)
 - Bump rubocop-performance from 1.19.1 to 1.20.0 [PR#3315](https://github.com/ualbertalib/jupiter/pull/3315)

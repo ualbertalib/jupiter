@@ -4,8 +4,8 @@ item_fancy:
   title: "Fancy Item"
   creators: ["Joe Blow"]
   created: "Fall 2017"
-  record_created_at: <%= 5.day.ago.to_s(:db) %>
-  updated_at: <%= 5.day.ago.to_s(:db) %>
+  record_created_at: <%= 5.day.ago.to_fs(:db) %>
+  updated_at: <%= 5.day.ago.to_fs(:db) %>
   date_ingested: <%= 5.day.ago %>
   languages: <%= [ControlledVocabulary.era.language.english] %>
   license: <%= ControlledVocabulary.era.license.attribution_4_0_international %>
@@ -16,19 +16,19 @@ item_fancy:
 
 item_practical:
   visibility: <%= JupiterCore::VISIBILITY_PUBLIC %>
-  owner: regular
+  owner: user_regular
   title: "Fancy Item"
   creators: ["Joe Blow"]
   created: "Fall 2017"
-  record_created_at: <%= 5.day.ago.to_s(:db) %>
-  updated_at: <%= 5.day.ago.to_s(:db) %>
+  record_created_at: <%= 5.day.ago.to_fs(:db) %>
+  updated_at: <%= 5.day.ago.to_fs(:db) %>
   date_ingested: <%= 5.day.ago %>
   languages: <%= [ControlledVocabulary.era.language.english] %>
   license: <%= ControlledVocabulary.era.license.attribution_4_0_international %>
   item_type: <%= ControlledVocabulary.era.item_type.article %>
   publication_status: <%= [ControlledVocabulary.era.publication_status.published] %>
   subject: ["Practical things"]
-  member_of_paths: <%= ["#{ActiveRecord::FixtureSet.identify(:fancy_community, :uuid)}/#{ActiveRecord::FixtureSet.identify(:fancy_collection, :uuid)}"] %>
+  member_of_paths: <%= ["#{ActiveRecord::FixtureSet.identify(:community_fancy, :uuid)}/#{ActiveRecord::FixtureSet.identify(:collection_fancy, :uuid)}"] %>
 
 # The admin item contains a base item entry that contains one of the possible value combinations that pass all validations
 # This is a radioactive item
@@ -68,7 +68,7 @@ item_admin:
   ingest_batch: "9019s326c"
   date_ingested: "2000-01-01T00:00:00.007Z"
   record_created_at: "2000-01-01T00:00:00.007Z"
-  updated_at: <%= 5.day.from_now.to_s(:db) %>
+  updated_at: <%= 5.day.from_now.to_fs(:db) %>
 
 item_private:
   visibility: <%= JupiterCore::VISIBILITY_PRIVATE %>
@@ -77,7 +77,7 @@ item_private:
   creators: ["Joe Blow"]
   created: "Fall 2017"
   date_ingested: <%= 5.day.ago %>
-  record_created_at: <%= 5.day.ago.to_s(:db) %>
+  record_created_at: <%= 5.day.ago.to_fs(:db) %>
   languages: <%= [ControlledVocabulary.era.language.english] %>
   license: <%= ControlledVocabulary.era.license.attribution_4_0_international %>
   item_type: <%= ControlledVocabulary.era.item_type.article %>
@@ -92,7 +92,7 @@ item_old_license:
   creators: ["Joe Blow"]
   created: "Winter 2017"
   date_ingested: <%= 5.day.ago %>
-  record_created_at: <%= 5.day.ago.to_s(:db) %>
+  record_created_at: <%= 5.day.ago.to_fs(:db) %>
   languages: <%= [ControlledVocabulary.era.language.english] %>
   license: <%= ControlledVocabulary.era.old_license.attribution_3_0_international %>
   item_type: <%= ControlledVocabulary.era.item_type.book %>
@@ -106,7 +106,7 @@ item_authenticated:
   creators: ["Joe Blow"]
   created: "Fall 2017"
   date_ingested: <%= 5.day.ago %>
-  record_created_at: <%= 5.day.ago.to_s(:db) %>
+  record_created_at: <%= 5.day.ago.to_fs(:db) %>
   languages: <%= [ControlledVocabulary.era.language.english] %>
   license: <%= ControlledVocabulary.era.license.attribution_4_0_international %>
   item_type: <%= ControlledVocabulary.era.item_type.article %>

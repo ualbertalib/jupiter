@@ -1,9 +1,8 @@
 require 'sidekiq/web'
 require 'sidekiq/cron/web'
-require_dependency 'admin_constraint'
-require_dependency 'entity_constraint'
+require 'admin_constraint'
+require 'entity_constraint'
 
-# rubocop is bad and recommends insane things
 Rails.application.routes.draw do
   constraints(subdomain: 'era') do
     mount Oaisys::Engine, at: '/oai'

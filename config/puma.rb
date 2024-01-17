@@ -48,5 +48,6 @@ if ENV.fetch('RAILS_ENV', nil) == 'uat'
     end
   end
 end
-# Allow puma to be restarted by `rails restart` command.
+
+# Allow puma to be restarted by `bin/rails restart` command.
 plugin :tmp_restart

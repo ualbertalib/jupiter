@@ -22,11 +22,11 @@ Bundler.require(*Rails.groups)
 module Jupiter
   class Application < Rails::Application
 
-    require_dependency 'lib/jupiter'
-    require_dependency 'lib/jupiter/version'
+    require 'jupiter'
+    require 'jupiter/version'
 
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 6.1
+    config.load_defaults 7.0
 
     # Configuration for the application, engines, and railties goes here.
     #
@@ -58,6 +58,10 @@ module Jupiter
       hard_wrap: true,
       link_attributes: { rel: 'noopener noreferrer', target: '_blank' }
     }
+
+    # We should be using VIPS which is now the default, but this requires work to migrate?
+    # Delete this line if we ever migrate to VIPS
+    config.active_storage.variant_processor = :mini_magick
 
   end
 end

@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_09_20_041027) do
-
+ActiveRecord::Schema[7.0].define(version: 2023_10_14_195012) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -66,8 +65,8 @@ ActiveRecord::Schema.define(version: 2023_09_20_041027) do
     t.string "google_file_name", null: false
     t.string "google_file_id", null: false
     t.bigint "batch_ingest_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["batch_ingest_id"], name: "index_batch_ingest_files_on_batch_ingest_id"
   end
 
@@ -82,8 +81,8 @@ ActiveRecord::Schema.define(version: 2023_09_20_041027) do
     t.string "google_spreadsheet_name", null: false
     t.string "google_spreadsheet_id", null: false
     t.bigint "user_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["title"], name: "index_batch_ingests_on_title", unique: true
     t.index ["user_id"], name: "index_batch_ingests_on_user_id"
   end
@@ -127,8 +126,8 @@ ActiveRecord::Schema.define(version: 2023_09_20_041027) do
     t.integer "status", default: 0, null: false
     t.string "error_message"
     t.bigint "user_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_digitization_batch_metadata_ingests_on_user_id"
   end
 
@@ -136,8 +135,8 @@ ActiveRecord::Schema.define(version: 2023_09_20_041027) do
     t.integer "peel_id"
     t.integer "run"
     t.integer "part_number"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "dates_issued", array: true
     t.string "temporal_subjects", array: true
     t.string "title", null: false
@@ -168,15 +167,15 @@ ActiveRecord::Schema.define(version: 2023_09_20_041027) do
   create_table "digitization_fulltexts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "digitization_book_id", null: false
     t.text "text", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["digitization_book_id"], name: "index_digitization_fulltexts_on_digitization_book_id"
   end
 
   create_table "digitization_images", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "peel_image_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.datetime "date_ingested", null: false
     t.datetime "record_created_at"
     t.string "visibility"
@@ -188,8 +187,8 @@ ActiveRecord::Schema.define(version: 2023_09_20_041027) do
 
   create_table "digitization_maps", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "peel_map_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.datetime "date_ingested", null: false
     t.datetime "record_created_at"
     t.string "visibility"
@@ -204,8 +203,8 @@ ActiveRecord::Schema.define(version: 2023_09_20_041027) do
     t.string "year"
     t.string "month"
     t.string "day"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.datetime "date_ingested", null: false
     t.datetime "record_created_at"
     t.string "visibility"
@@ -306,8 +305,8 @@ ActiveRecord::Schema.define(version: 2023_09_20_041027) do
 
   create_table "flipper_features", force: :cascade do |t|
     t.string "key", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["key"], name: "index_flipper_features_on_key", unique: true
   end
 
@@ -315,8 +314,8 @@ ActiveRecord::Schema.define(version: 2023_09_20_041027) do
     t.string "feature_key", null: false
     t.string "key", null: false
     t.string "value"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["feature_key", "key", "value"], name: "index_flipper_gates_on_feature_key_and_key_and_value", unique: true
   end
 
