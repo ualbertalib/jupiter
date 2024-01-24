@@ -9,7 +9,16 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+## [2.7.1] - 2024-01-24
+
 ### Chores
+- Bump rubocop-minitest from 0.34.4 to 0.34.5 [PR#3351](https://github.com/ualbertalib/jupiter/pull/3351)
+- Bump sidekiq-unique-jobs from 8.0.5 to 8.0.6 [PR#3357](https://github.com/ualbertalib/jupiter/pull/3357)
+- Bump rubocop from 1.59.0 to 1.60.2 [PR#3356](https://github.com/ualbertalib/jupiter/pull/3356)
+- Bump selenium-webdriver from 4.16.0 to 4.17.0 [PR#3355](https://github.com/ualbertalib/jupiter/pull/3355)
+- Bump sidekiq from 7.2.0 to 7.2.1 [PR#3352](https://github.com/ualbertalib/jupiter/pull/3352)
+- Bump core-js from 3.35.0 to 3.35.1 [PR#3353](https://github.com/ualbertalib/jupiter/pull/3353)
+- Bump version of ffi to 1.16.3 [PR#3358](https://github.com/ualbertalib/jupiter/pull/3358)
 - Bump rubocop-minitest from 0.34.4 to 0.34.5 [PR#3351](https://github.com/ualbertalib/jupiter/pull/3351)
 
 ## [2.7.0] - 2024-01-20
