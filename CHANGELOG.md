@@ -9,6 +9,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+### Chores
+- Bump rubocop-minitest from 0.34.4 to 0.34.5 [PR#3351](https://github.com/ualbertalib/jupiter/pull/3351)
+
 ## [2.7.0] - 2024-01-20
 
 ### Fixed
