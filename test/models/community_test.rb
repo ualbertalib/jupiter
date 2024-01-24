@@ -27,7 +27,7 @@ class CommunityTest < ActiveSupport::TestCase
     community.logo.attach io: File.open(file_fixture('image-sample.jpeg')),
                           filename: 'image-sample.jpeg', content_type: 'image/jpeg'
 
-    assert community.logo.is_a?(ActiveStorage::Attached::One)
+    assert_kind_of ActiveStorage::Attached::One, community.logo
     assert_equal('image-sample.jpeg', community.logo.filename.to_s)
     assert_equal('image/jpeg', community.logo.blob.content_type)
     assert_equal(12_086, community.logo.blob.byte_size)
@@ -35,7 +35,7 @@ class CommunityTest < ActiveSupport::TestCase
     # Find file on disk
     key = community.logo.blob.key
 
-    assert key.is_a?(String)
+    assert_kind_of String, key
     file_path = ActiveStorage::Blob.service.root + "/#{key[0..1]}/#{key[2..3]}/#{key}"
 
     assert_path_exists(file_path)
