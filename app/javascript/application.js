@@ -1,6 +1,5 @@
 // Entry point for the build script in your package.json
 
-
 import './src/add_jquery';
 
 import 'core-js/stable';

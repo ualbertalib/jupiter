@@ -192,15 +192,17 @@ function loadAndInitGAPI() {
 }
 
 document.addEventListener('turbolinks:load', () => {
-  loadAndInitGAPI();
-  $('.js-batch-ingest-spreadsheet').on(
-    'click',
-    '.js-btn-delete-file',
-    deleteSpreadsheet,
-  );
-  $('.js-batch-ingest-files-list').on(
-    'click',
-    '.js-btn-delete-file',
-    deleteFileFromFilesList,
-  );
+  if (document.querySelector('.js-batch-ingest-spreadsheet')) {
+    loadAndInitGAPI();
+    $('.js-batch-ingest-spreadsheet').on(
+      'click',
+      '.js-btn-delete-file',
+      deleteSpreadsheet,
+    );
+    $('.js-batch-ingest-files-list').on(
+      'click',
+      '.js-btn-delete-file',
+      deleteFileFromFilesList,
+    );
+  }
 });

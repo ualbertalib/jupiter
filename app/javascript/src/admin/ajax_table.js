@@ -1,4 +1,4 @@
-$(document).on('turbolinks:load', () => {
+document.addEventListener('turbolinks:load', () => {
   function renderNewTable() {
     const $form = $(this).closest('form');
     let action = $form.attr('action');
