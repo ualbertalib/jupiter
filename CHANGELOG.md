@@ -12,6 +12,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 ### Added
 - Migrate Webpacker to Esbuild [PR#3320](https://github.com/ualbertalib/jupiter/pull/3320)
 
+### Changed
+- Updates to Dockerfile.deployment which now builds properly [#3268](https://github.com/ualbertalib/jupiter/issues/3268)
+
 ## [2.7.1] - 2024-01-24
 
 ### Chores
