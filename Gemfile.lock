@@ -660,6 +660,7 @@ DEPENDENCIES
   rubocop-minitest
   rubocop-performance
   rubocop-rails
+  rubyzip (~> 2.3.0)
   sdoc
   selenium-webdriver
   shoulda-matchers (~> 6.1)

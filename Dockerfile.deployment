@@ -40,7 +40,9 @@ WORKDIR $APP_ROOT
 
 # Update bundler
 RUN gem update --system
-RUN gem install bundler:2.1.4
+
+# Bundler version will match the BUNDLED WITH version in Gemfile.lock
+RUN gem install bundler
 
 # Install standard gems
 COPY Gemfile* /app/
