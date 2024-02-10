@@ -9,6 +9,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+### Added
+* Upgrade rails to v7.1.3 [PR#3346](https://github.com/ualbertalib/jupiter/pull/3346)
+
 ## [2.8.0] - 2024-02-28
 
 ### Added
