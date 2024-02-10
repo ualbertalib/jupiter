@@ -67,6 +67,6 @@ module PageLayoutHelper
   end
 
   def canonical_href(request_path = request.path)
-    "#{Jupiter::PRODUCTION_URL}#{request_path == '/' ? '' : request_path}"
+    "#{Rails.application.secrets.production_url}#{request_path == '/' ? '' : request_path}"
   end
 end
