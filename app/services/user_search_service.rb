@@ -6,7 +6,7 @@ class UserSearchService
 
   attr_reader :search_models, :invalid_date_range
 
-  def initialize(current_user:, params:, base_restriction_key: nil, value: nil, # rubocop:disable Metrics/ParameterLists
+  def initialize(current_user:, params:, base_restriction_key: nil, value: nil,
                  search_models: [Item, Thesis])
     if base_restriction_key.present? && value.blank?
       raise ArgumentError, 'Must supply both a base_restriction_key and a value'
