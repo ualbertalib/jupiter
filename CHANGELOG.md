@@ -9,6 +9,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+### Removed
+- Remove fully enabled feature flags that have been enabled for years [PR#3375](https://github.com/ualbertalib/jupiter/pull/3375)
+
 ## [2.7.1] - 2024-01-24
 
 ### Chores
