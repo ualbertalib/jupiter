@@ -9,6 +9,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+### Chores
+- Update Bundler to v2.5.5 to match production [PR#3374](https://github.com/ualbertalib/jupiter/pull/3374)
+
 ## [2.7.1] - 2024-01-24
 
 ### Chores
