@@ -9,6 +9,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+### Removed
+- Remove fully enabled feature flags that have been enabled for years [PR#3375](https://github.com/ualbertalib/jupiter/pull/3375)
+
 ### Chores
 - Update Bundler to v2.5.5 to match production [PR#3374](https://github.com/ualbertalib/jupiter/pull/3374)
 

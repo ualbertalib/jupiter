@@ -29,11 +29,7 @@ class Facets::DefaultFacetDecorator
   end
 
   def display
-    if Flipper.enabled?(:facet_badge_category_name)
-      "#{@category_name}: #{display_value}"
-    else
-      display_value
-    end
+    "#{@category_name}: #{display_value}"
   end
 
   def display_value

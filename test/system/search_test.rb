@@ -204,8 +204,7 @@ class SearchTest < ApplicationSystemTestCase
     badge.assert_selector 'span.badge', text: 'Fancy Collection 1'
   end
 
-  test 'facet badge should have category when flipped' do
-    Flipper.enable(:facet_badge_category_name)
+  test 'facet badge should have category' do
     visit root_path
     fill_in name: 'search', with: 'Fancy'
     click_button 'Search'
@@ -219,8 +218,6 @@ class SearchTest < ApplicationSystemTestCase
                                   href: search_path(search: 'Fancy'))
 
     badge.assert_selector 'span.badge', text: 'Collections: Fancy Community/Fancy Collection 1'
-
-    Flipper.disable(:facet_badge_category_name)
   end
 
   test 'anybody should be able to view community/collection hits via tabs' do
