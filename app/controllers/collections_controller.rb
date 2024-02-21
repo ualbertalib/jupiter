@@ -8,8 +8,7 @@ class CollectionsController < ApplicationController
       base_restriction_key: Item.solr_exporter_class.solr_name_for(:member_of_paths, role: :pathing),
       value: @collection.path,
       params:,
-      current_user:,
-      fulltext: Flipper.enabled?(:fulltext_search, current_user)
+      current_user:
     )
     @results = search_query_index.results
     @search_models = search_query_index.search_models
