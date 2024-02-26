@@ -66,5 +66,6 @@ jobs:
           RAILS_ENV: test
         run: |
           bundle exec rails db:create db:schema:load
+          bundle exec rails test:prepare
           bundle exec rails test
           bundle exec rails test:system

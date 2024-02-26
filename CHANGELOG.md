@@ -9,6 +9,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+### Added
+- Migrate Webpacker to Esbuild [PR#3320](https://github.com/ualbertalib/jupiter/pull/3320)
+
 ### Removed
 - Remove fully enabled feature flags that have been enabled for years [PR#3375](https://github.com/ualbertalib/jupiter/pull/3375)
 
