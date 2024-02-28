@@ -9,7 +9,7 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
-## [2.8.0] - 2024-02-26
+## [2.8.0] - 2024-02-28
 
 ### Added
 * Migrate Webpacker to Esbuild [PR#3320](https://github.com/ualbertalib/jupiter/pull/3320)
