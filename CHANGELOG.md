@@ -36,6 +36,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 * Bump webmock from 3.22.0 to 3.23.0 [PR#3390](https://github.com/ualbertalib/jupiter/pull/3390)
 * Bump jsbundling-rails from 1.2.1 to 1.3.0 [PR#3391](https://github.com/ualbertalib/jupiter/pull/3391)
 * Bump cssbundling-rails from 1.3.3 to 1.4.0 [PR#3392](https://github.com/ualbertalib/jupiter/pull/3392)
+* Bump rails from 7.0.8 to 7.0.8.1  dependencies ruby [PR#3396](https://github.com/ualbertalib/jupiter/pull/3396)
+* Bump sass from 1.70.0 to 1.71.1  dependencies javascript [PR##3395](https://github.com/ualbertalib/jupiter/pull/3395)
+* Bump esbuild from 0.20.0 to 0.20.1  dependencies javascript [PR##3394](https://github.com/ualbertalib/jupiter/pull/3394)
 
 ## [2.7.1] - 2024-01-24
 
