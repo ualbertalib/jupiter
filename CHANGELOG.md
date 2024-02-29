@@ -9,14 +9,36 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+## [2.8.0] - 2024-02-28
+
 ### Added
-- Migrate Webpacker to Esbuild [PR#3320](https://github.com/ualbertalib/jupiter/pull/3320)
+* Migrate Webpacker to Esbuild [PR#3320](https://github.com/ualbertalib/jupiter/pull/3320)
 
 ### Removed
-- Remove fully enabled feature flags that have been enabled for years [PR#3375](https://github.com/ualbertalib/jupiter/pull/3375)
+* Remove fully enabled feature flags that have been enabled for years [PR#3375](https://github.com/ualbertalib/jupiter/pull/3375)
 
 ### Chores
-- Update Bundler to v2.5.5 to match production [PR#3374](https://github.com/ualbertalib/jupiter/pull/3374)
+* Bump nokogiri from 1.16.0 to 1.16.2 [PR#3368](https://github.com/ualbertalib/jupiter/pull/3368)
+* Bump capybara from 3.39.2 to 3.40.0 [PR#3360](https://github.com/ualbertalib/jupiter/pull/3360)
+* Bump bootsnap from 1.17.1 to 1.18.3 [PR#3363](https://github.com/ualbertalib/jupiter/pull/3363)
+* Bump webmock from 3.19.1 to 3.20.0 [PR#3373](https://github.com/ualbertalib/jupiter/pull/3373)
+* Bump sidekiq-unique-jobs from 8.0.6 to 8.0.7 [PR#3370](https://github.com/ualbertalib/jupiter/pull/3370)
+* Bump danger from 9.4.2 to 9.4.3 [PR#3369](https://github.com/ualbertalib/jupiter/pull/3369)
+* Bump brakeman from 6.1.1 to 6.1.2 [PR#3365](https://github.com/ualbertalib/jupiter/pull/3365)
+* Update Bundler to v2.5.5 to match production [PR#3374](https://github.com/ualbertalib/jupiter/pull/3374)
+* Bump sidekiq-unique-jobs from 8.0.7 to 8.0.9 [PR#3377](https://github.com/ualbertalib/jupiter/pull/3377)
+* Bump pg from 1.5.4 to 1.5.5 [PR#3380](https://github.com/ualbertalib/jupiter/pull/3380)
+* Bump selenium-webdriver from 4.17.0 to 4.18.1 [PR#3386](https://github.com/ualbertalib/jupiter/pull/3386)
+* Bump webmock from 3.20.0 to 3.22.0 [PR#3387](https://github.com/ualbertalib/jupiter/pull/3387)
+* Bump rollbar from 3.5.1 to 3.5.2 [PR#3385](https://github.com/ualbertalib/jupiter/pull/3385)
+* Bump sidekiq from 7.2.1 to 7.2.2 [PR#3382](https://github.com/ualbertalib/jupiter/pull/3382)
+* Bump sidekiq-unique-jobs from 8.0.9 to 8.0.10 [PR#3388](https://github.com/ualbertalib/jupiter/pull/3388)
+* Bump webmock from 3.22.0 to 3.23.0 [PR#3390](https://github.com/ualbertalib/jupiter/pull/3390)
+* Bump jsbundling-rails from 1.2.1 to 1.3.0 [PR#3391](https://github.com/ualbertalib/jupiter/pull/3391)
+* Bump cssbundling-rails from 1.3.3 to 1.4.0 [PR#3392](https://github.com/ualbertalib/jupiter/pull/3392)
+* Bump rails from 7.0.8 to 7.0.8.1  dependencies ruby [PR#3396](https://github.com/ualbertalib/jupiter/pull/3396)
+* Bump sass from 1.70.0 to 1.71.1  dependencies javascript [PR##3395](https://github.com/ualbertalib/jupiter/pull/3395)
+* Bump esbuild from 0.20.0 to 0.20.1  dependencies javascript [PR##3394](https://github.com/ualbertalib/jupiter/pull/3394)
 
 ## [2.7.1] - 2024-01-24
 
