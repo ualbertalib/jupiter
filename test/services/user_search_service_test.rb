@@ -79,8 +79,7 @@ class UserSearchServiceTest < ActiveSupport::TestCase
 
     search = UserSearchService.new(
       current_user:,
-      params:,
-      fulltext: true
+      params:
     )
 
     # Only Admin item has "French" in its description

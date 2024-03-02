@@ -8,8 +8,10 @@ gem 'image_processing' # for ActiveStorage Variants
 gem 'puma', '~> 6.4'
 gem 'rails', '~> 7.0.8'
 
-# Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem 'webpacker', '~> 5.4'
+# Assets
+gem 'cssbundling-rails'
+gem 'jsbundling-rails'
+gem 'sprockets-rails'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', require: false
@@ -26,7 +28,7 @@ gem 'rdf-vocab', '~> 3.3.0' # this gem changed predicate names without warning, 
 
 # Database stuff
 gem 'connection_pool'
-gem 'pg', '~> 1.5.4'
+gem 'pg', '~> 1.5.5'
 gem 'redis', '~> 4.8'
 gem 'rsolr'
 gem 'strong_migrations', '~> 1.7.0'
@@ -92,7 +94,7 @@ group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: [:mri, :mingw, :x64_mingw]
 
-  gem 'rubocop', '~> 1.60.2', require: false
+  gem 'rubocop', '~> 1.61.0', require: false
   gem 'rubocop-minitest', require: false
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false

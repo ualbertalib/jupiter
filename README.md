@@ -137,7 +137,7 @@ bin/dev
 
 This starts up Overmind (or fallback to Foreman) running the Procfile.dev config.
 
-We've configured this to run the Rails server, Sidekiq background worker and webpacker (for CSS bundling and JS bundling) out of the box.
+We've configured this to run the Rails server, Sidekiq background worker and CSS/JS bundling out of the box.
 
 Here's a couple of useful Overmind commands:
 

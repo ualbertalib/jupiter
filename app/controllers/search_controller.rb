@@ -19,8 +19,7 @@ class SearchController < ApplicationController
     search_query_index = UserSearchService.new(
       search_models: models,
       params:,
-      current_user:,
-      fulltext: Flipper.enabled?(:fulltext_search, current_user)
+      current_user:
     )
     @results = search_query_index.results
     @search_models = search_query_index.search_models
