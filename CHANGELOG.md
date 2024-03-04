@@ -9,6 +9,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+### Fixes
+* Prevent theses and items sitemap views from using the same cache key [#3361](https://github.com/ualbertalib/jupiter/pull/3400)
+
 ## [2.8.0] - 2024-02-28
 
 ### Added
