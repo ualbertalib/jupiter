@@ -140,7 +140,6 @@ GEM
       msgpack (~> 1.2)
     brakeman (6.1.2)
       racc
-    brow (0.4.1)
     builder (3.2.4)
     capybara (3.40.0)
       addressable
@@ -224,15 +223,14 @@ GEM
     faraday-net_http (3.1.0)
       net-http
     ffi (1.16.3)
-    flipper (1.0.0)
-      brow (~> 0.4.1)
+    flipper (1.2.2)
       concurrent-ruby (< 2)
-    flipper-active_record (1.0.0)
+    flipper-active_record (1.2.2)
       activerecord (>= 4.2, < 8)
-      flipper (~> 1.0.0)
-    flipper-ui (1.0.0)
+      flipper (~> 1.2.2)
+    flipper-ui (1.2.2)
       erubi (>= 1.0.0, < 2.0.0)
-      flipper (~> 1.0.0)
+      flipper (~> 1.2.2)
       rack (>= 1.4, < 4)
       rack-protection (>= 1.5.3, <= 4.0.0)
       sanitize (< 7)
@@ -389,7 +387,8 @@ GEM
     raabro (1.4.0)
     racc (1.7.3)
     rack (2.2.8.1)
-    rack-protection (3.1.0)
+    rack-protection (3.2.0)
+      base64 (>= 0.1.0)
       rack (~> 2.2, >= 2.2.4)
     rack-test (2.1.0)
       rack (>= 1.3)
@@ -632,9 +631,9 @@ DEPENDENCIES
   edtf (~> 3.1)
   erb_lint (>= 0.0.35)
   faker
-  flipper (~> 1.0.0)
-  flipper-active_record (~> 1.0.0)
-  flipper-ui (~> 1.0.0)
+  flipper (~> 1.2.2)
+  flipper-active_record (~> 1.2.2)
+  flipper-ui (~> 1.2.2)
   google-api-client
   haikunator
   image_processing
