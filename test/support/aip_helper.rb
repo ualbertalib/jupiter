@@ -117,7 +117,7 @@ module AipHelper
     variables = {
       fileset_0_uuid: entity.files[0].fileset_uuid,
       fileset_1_uuid: entity.files[1].fileset_uuid,
-      url: Jupiter::TEST_URL,
+      url: Rails.application.secrets.test_url,
       community_uuid:,
       collection_uuid:
     }

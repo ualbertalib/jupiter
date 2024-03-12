@@ -1,4 +1,4 @@
-if Rails.env.development? || Rails.env.test?
+if Rails.env.local?
 
   require 'sdoc'
   require 'rdoc/task' # ensure this file is also required in order to use `RDoc::Task`
