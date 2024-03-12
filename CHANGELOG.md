@@ -9,8 +9,11 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
-### Changed
+## Changed
 * Modify ERA take down policy text [PR#3410](https://github.com/ualbertalib/jupiter/pull/3410)
+
+### Added
+* Upgrade rails to v7.1.3 [PR#3346](https://github.com/ualbertalib/jupiter/pull/3346)
 
 ## [2.8.0] - 2024-02-28
 

@@ -6,7 +6,7 @@ ruby '>= 3.1.4', '< 3.2'
 # Core Rails stuff
 gem 'image_processing' # for ActiveStorage Variants
 gem 'puma', '~> 6.4'
-gem 'rails', '~> 7.0.8'
+gem 'rails', '~> 7.1.3'
 
 # Assets
 gem 'cssbundling-rails'
@@ -31,7 +31,7 @@ gem 'connection_pool'
 gem 'pg', '~> 1.5.6'
 gem 'redis', '~> 4.8'
 gem 'rsolr'
-gem 'strong_migrations', '~> 1.7.0'
+gem 'strong_migrations', '~> 1.8.0'
 
 # Authentication
 gem 'bcrypt', '>= 3.1.13'
@@ -94,7 +94,7 @@ group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: [:mri, :mingw, :x64_mingw]
 
-  gem 'rubocop', '~> 1.62.0', require: false
+  gem 'rubocop', '~> 1.62.1', require: false
   gem 'rubocop-minitest', require: false
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false

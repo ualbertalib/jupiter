@@ -103,7 +103,7 @@ end
 class ActionDispatch::IntegrationTest
 
   setup do
-    host! URI(Jupiter::TEST_URL).host
+    host! URI(Rails.application.secrets.test_url).host
   end
 
 end
