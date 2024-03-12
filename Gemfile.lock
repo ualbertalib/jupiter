@@ -274,7 +274,7 @@ GEM
     hashie (5.0.0)
     htmlentities (4.3.4)
     httpclient (2.8.3)
-    i18n (1.14.1)
+    i18n (1.14.4)
       concurrent-ruby (~> 1.0)
     image_processing (1.12.2)
       mini_magick (>= 4.9.5, < 5)
@@ -565,7 +565,7 @@ GEM
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
     stringio (3.0.8)
-    strong_migrations (1.7.0)
+    strong_migrations (1.8.0)
       activerecord (>= 5.2)
     sxp (1.3.0)
       matrix (~> 0.4)
@@ -675,7 +675,7 @@ DEPENDENCIES
   simple_form
   simplecov
   sprockets-rails
-  strong_migrations (~> 1.7.0)
+  strong_migrations (~> 1.8.0)
   uuidtools
   vcr (= 5.0)
   voight_kampff (~> 2.0)
