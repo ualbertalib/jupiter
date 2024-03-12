@@ -9,6 +9,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+### Changed
+* Modify ERA take down policy text
+
 ## [2.8.0] - 2024-02-28
 
 ### Added
