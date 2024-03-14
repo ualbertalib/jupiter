@@ -102,7 +102,7 @@ Rails.application.routes.draw do
     get 'sitemap-communities.xml', to: 'sitemap#communities', defaults: { format: :xml }, as: :communities_sitemap
     get 'sitemap-collections.xml', to: 'sitemap#collections', defaults: { format: :xml }, as: :collections_sitemap
     get 'sitemap-items.xml', to: 'sitemap#items', defaults: { format: :xml }, as: :items_sitemap
-    get 'sitemap-theses.xml', to: 'sitemap#theses', defaults: { format: :xml }
+    get 'sitemap-theses.xml', to: 'sitemap#theses', defaults: { format: :xml }, as: :theses_sitemap
 
     # Dynamic robots.txt
     get 'robots.txt' => 'robots#robots'

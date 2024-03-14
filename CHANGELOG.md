@@ -9,6 +9,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+### Fixed
+* Prevent theses and items sitemap views from using the same cache key [#3361](https://github.com/ualbertalib/jupiter/pull/3400)
+
 ### Changed
 * Modify ERA take down policy text [PR#3410](https://github.com/ualbertalib/jupiter/pull/3410)
 

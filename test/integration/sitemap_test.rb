@@ -58,6 +58,30 @@ class SitemapTest < ActionDispatch::IntegrationTest
     assert_select 'loc', { count: 0, text: item_url(@private_item) }, 'private items should not appear in the sitemap'
   end
 
+  test 'theses sitemap should be valid sitemap xml' do
+    get theses_sitemap_url
+
+    schema = Nokogiri::XML::Schema(File.open(file_fixture('sitemap.xsd')), Nokogiri::XML::ParseOptions.new.nononet)
+    document = Nokogiri::XML(@response.body)
+
+    assert_empty schema.validate(document)
+
+    assert_select 'url' do
+      assert_select 'loc'
+      assert_select 'lastmod'
+      assert_select 'changefreq'
+      assert_select 'priority'
+    end
+
+    # show public thesis attributes
+    # if test fails then check cache key for thesis and item is not reused in the _object.xml.builder partial
+    assert_select 'loc', item_url(@thesis)
+    assert_select 'lastmod', @thesis.updated_at.iso8601
+    # not show private items
+    assert_select 'url', count: 4
+    assert_select 'loc', { count: 0, text: item_url(@private_item) }, 'private items should not appear in the sitemap'
+  end
+
   test 'collections sitemap should be valid sitemap xml' do
     get collections_sitemap_url
 
