@@ -1,7 +1,5 @@
 require 'sidekiq/web'
 require 'sidekiq/cron/web'
-require 'admin_constraint'
-require 'entity_constraint'
 
 Rails.application.routes.draw do
   constraints(subdomain: 'era') do

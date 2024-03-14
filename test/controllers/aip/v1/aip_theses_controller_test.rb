@@ -187,7 +187,7 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
     variables = {
       fileset_id: radioactive_thesis.files.first.fileset_uuid,
       collection_id: radioactive_thesis.member_of_paths.first.split('/')[1],
-      url: Jupiter::TEST_URL
+      url: Rails.application.secrets.test_url
     }
     rendered_graph = load_n3_graph(file_fixture('n3/theses/file_set.n3'), variables)
 
@@ -212,7 +212,7 @@ class Aip::V1::ThesesControllerTest < ActionDispatch::IntegrationTest
       fileset_id: @public_thesis.files.first.fileset_uuid,
       checksum: @public_thesis.files.first.blob.checksum,
       byte_size: @public_thesis.files.first.blob.byte_size,
-      url: Jupiter::TEST_URL
+      url: Rails.application.secrets.test_url
     }
     rendered_graph = load_n3_graph(file_fixture('n3/theses/fixity.n3'), variables)
 

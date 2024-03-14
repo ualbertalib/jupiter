@@ -149,10 +149,10 @@ class PageLayoutHelperTest < ActionView::TestCase
   # canonical_href
 
   test 'canonical_href is returning the correct canoncial url' do
-    assert_equal Jupiter::PRODUCTION_URL, canonical_href(nil)
-    assert_equal Jupiter::PRODUCTION_URL, canonical_href('/')
-    assert_equal "#{Jupiter::PRODUCTION_URL}/search", canonical_href('/search')
-    assert_equal "#{Jupiter::PRODUCTION_URL}/search/nested", canonical_href('/search/nested')
+    assert_equal Rails.application.secrets.production_url, canonical_href(nil)
+    assert_equal Rails.application.secrets.production_url, canonical_href('/')
+    assert_equal "#{Rails.application.secrets.production_url}/search", canonical_href('/search')
+    assert_equal "#{Rails.application.secrets.production_url}/search/nested", canonical_href('/search/nested')
   end
 
 end

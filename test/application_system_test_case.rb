@@ -6,7 +6,7 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   Capybara.default_max_wait_time = 5
 
   setup do
-    Capybara.app_host = Jupiter::TEST_URL
+    Capybara.app_host = Rails.application.secrets.test_url
   end
 
   # If you `snap install chromium` on Ubuntu, you might have tests that hang after a minute

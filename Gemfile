@@ -6,7 +6,7 @@ ruby '>= 3.1.4', '< 3.2'
 # Core Rails stuff
 gem 'image_processing' # for ActiveStorage Variants
 gem 'puma', '~> 6.4'
-gem 'rails', '~> 7.0.8'
+gem 'rails', '~> 7.1.3'
 
 # Assets
 gem 'cssbundling-rails'
@@ -28,10 +28,10 @@ gem 'rdf-vocab', '~> 3.3.0' # this gem changed predicate names without warning, 
 
 # Database stuff
 gem 'connection_pool'
-gem 'pg', '~> 1.5.5'
+gem 'pg', '~> 1.5.6'
 gem 'redis', '~> 4.8'
 gem 'rsolr'
-gem 'strong_migrations', '~> 1.7.0'
+gem 'strong_migrations', '~> 1.8.0'
 
 # Authentication
 gem 'bcrypt', '>= 3.1.13'
@@ -54,9 +54,9 @@ gem 'datacite-client', github: 'ualbertalib/datacite-client', tag: 'v0.1.0', req
 gem 'differ' # Used to diff two strings
 gem 'draper'
 gem 'edtf', '~> 3.1' # parsing Extended Date/Time Format
-gem 'flipper', '~> 1.0.0' # Feature flags for Ruby
-gem 'flipper-active_record', '~> 1.0.0' # Store feature flags in ActiveRecord
-gem 'flipper-ui', '~> 1.0.0' # UI for feature flags
+gem 'flipper', '~> 1.2.2' # Feature flags for Ruby
+gem 'flipper-active_record', '~> 1.2.2' # Store feature flags in ActiveRecord
+gem 'flipper-ui', '~> 1.2.2' # UI for feature flags
 gem 'jbuilder' # generate JSON objects
 gem 'kaminari' # Pagination
 gem 'paper_trail', '~> 15.1.0' # Track object changes
@@ -94,7 +94,7 @@ group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: [:mri, :mingw, :x64_mingw]
 
-  gem 'rubocop', '~> 1.61.0', require: false
+  gem 'rubocop', '~> 1.62.1', require: false
   gem 'rubocop-minitest', require: false
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false
