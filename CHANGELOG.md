@@ -9,14 +9,32 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+
+## [2.9.0] - 2024-03-14
+
 ### Fixed
-* Prevent theses and items sitemap views from using the same cache key [#3361](https://github.com/ualbertalib/jupiter/pull/3400)
+* Prevent theses and items sitemap views from using the same cache key [PR#3400](https://github.com/ualbertalib/jupiter/pull/3400)
 
 ### Changed
 * Modify ERA take down policy text [PR#3410](https://github.com/ualbertalib/jupiter/pull/3410)
 
 ### Added
 * Upgrade rails to v7.1.3 [PR#3346](https://github.com/ualbertalib/jupiter/pull/3346)
+
+### Chores
+* Bump rubocop from 1.60.2 to 1.61.0 [PR#3398](https://github.com/ualbertalib/jupiter/pull/3398)
+* Update changelog to use stars for bullets for all list items [PR#3399](https://github.com/ualbertalib/jupiter/pull/3399)
+* Bump rubocop-rails from 2.23.1 to 2.24.0 [PR#3404](https://github.com/ualbertalib/jupiter/pull/3404)
+* Bump launchy from 2.5.2 to 3.0.0 [PR#3403](https://github.com/ualbertalib/jupiter/pull/3403)
+* Bump pg from 1.5.5 to 1.5.6 [PR#3401](https://github.com/ualbertalib/jupiter/pull/3401)
+* Bump clamby from 1.6.10 to 1.6.11 [PR#3402](https://github.com/ualbertalib/jupiter/pull/3402)
+* Bump rubocop from 1.61.0 to 1.62.0 [PR#3406](https://github.com/ualbertalib/jupiter/pull/3406)
+* Bump flipper-ui, flipper and flipper-active_record [PR#3348](https://github.com/ualbertalib/jupiter/pull/3348)
+* Bump binding_of_caller from 1.0.0 to 1.0.1 [PR#3407](https://github.com/ualbertalib/jupiter/pull/3407)
+* Bump strong_migrations from 1.7.0 to 1.8.0 [PR#3411](https://github.com/ualbertalib/jupiter/pull/3411)
+* Bump rubocop from 1.62.0 to 1.62.1 [PR#3409](https://github.com/ualbertalib/jupiter/pull/3409)
+* Bump rubocop-minitest from 0.34.5 to 0.35.0 [PR#3408](https://github.com/ualbertalib/jupiter/pull/3408)
+* Bump sass from 1.71.1 to 1.72.0 [PR#3412](https://github.com/ualbertalib/jupiter/pull/3412)
 
 ## [2.8.0] - 2024-02-28
 
