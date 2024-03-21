@@ -56,7 +56,6 @@
        1.3: removed optional field compress feature
        1.4: default auto-phrase (QueryParser feature) to off
      -->
-
   <types>
     <fieldType name="string" class="solr.StrField" sortMissingLast="true" />
     <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true"/>
@@ -181,7 +180,6 @@
       </analyzer>
     </fieldType>
   </types>
-
 
   <fields>
     <!-- If you remove this field, you must _also_ disable the update log in solrconfig.xml
@@ -337,19 +335,12 @@
     <!-- you must define copyField source and dest fields explicity or schemaBrowser doesn't work -->
     <field name="all_text_timv" type="text" stored="false" indexed="true" multiValued="true" termVectors="true" termPositions="true" termOffsets="true"/>
 
-
   </fields>
 
  <!-- Field to use to determine and enforce document uniqueness.
       Unless this field is marked with required="false", it will be a required field
    -->
  <uniqueKey>id</uniqueKey>
-
- <!-- field for the QueryParser to use when an explicit fieldname is absent -->
- <!--  <defaultSearchField>text</defaultSearchField> -->
-
- <!-- SolrQueryParser configuration: defaultOperator="AND|OR" -->
- <solrQueryParser defaultOperator="OR"/>
 
   <!-- copyField commands copy one field to another at the time a document
         is added to the index.  It's used either to index the same field differently,
