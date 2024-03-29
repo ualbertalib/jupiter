@@ -83,7 +83,7 @@ class ApplicationController < ActionController::Base
       # referer gets funky with omniauth and all the redirects it does,
       # so handle this sanely by ignoring any referer coming from omniauth (/auth/) path
       if request.referer&.exclude?('auth')
-        redirect_to request.referer
+        redirect_to(request.referer, allow_other_host: true)
       else
         redirect_to root_path
       end
