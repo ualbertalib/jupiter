@@ -10,8 +10,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 ## [Unreleased]
 
 ### Fixed
-* Improves performance of Active Storage lookups via adding an table index [PR#3428](https://github.com/ualbertalib/jupiter/pull/3428
-  * Requires a db:migration that creates the index concurrently thus does not lock the DB table
+* Improves performance of Active Storage lookups via adding an table index.
+  Requires a db:migration that creates the index concurrently thus does not
+  lock the DB table [PR#3428](https://github.com/ualbertalib/jupiter/pull/3428)
 
 ## [2.9.0] - 2024-03-14
 
