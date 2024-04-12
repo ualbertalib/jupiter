@@ -94,7 +94,7 @@ group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: [:mri, :mingw, :x64_mingw]
 
-  gem 'rubocop', '~> 1.62.1', require: false
+  gem 'rubocop', '~> 1.63.1', require: false
   gem 'rubocop-minitest', require: false
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false
@@ -114,7 +114,7 @@ group :test do
   gem 'haikunator'
   gem 'shoulda-matchers', '~> 6.2'
 
-  gem 'json-schema', '~> 4.2.0'
+  gem 'json-schema', '~> 4.3.0'
   gem 'launchy'
   gem 'minitest-retry', require: false
   gem 'rdf-isomorphic', '~> 3.3.0'
