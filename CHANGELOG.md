@@ -9,6 +9,8 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+### Chores
+* Bump rubocop from 1.62.1 to 1.63.1 [PR#3439](https://github.com/ualbertalib/jupiter/pull/3439)
 
 ## [2.9.0] - 2024-03-14
 
