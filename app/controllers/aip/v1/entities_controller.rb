@@ -261,10 +261,8 @@ class Aip::V1::EntitiesController < ApplicationController
   end
 
   def entity_file_statements
-    file_statements = []
-
-    @entity.files.each do |file|
-      file_statements << RDF::Statement(
+    @entity.files.map do |file|
+      RDF::Statement(
         subject: self_subject,
         predicate: RDF::Vocab::PCDM.hasMember,
         # RDF::URI Overrides the #/ operator to be used as a smart separator when building URIs.
@@ -272,8 +270,6 @@ class Aip::V1::EntitiesController < ApplicationController
         object: RDF::URI.new(request.original_url) / 'filesets' / file.fileset_uuid
       )
     end
-
-    file_statements
   end
 
   def entity_member_of_statements
