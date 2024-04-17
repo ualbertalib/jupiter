@@ -79,14 +79,7 @@ class ApplicationController < ActionController::Base
   def user_not_authorized
     if current_user.present?
       flash[:alert] = t('authorization.user_not_authorized')
-
-      # referer gets funky with omniauth and all the redirects it does,
-      # so handle this sanely by ignoring any referer coming from omniauth (/auth/) path
-      if request.referer&.exclude?('auth')
-        redirect_to(request.referer, allow_other_host: true)
-      else
-        redirect_to root_path
-      end
+      redirect_back_or_to(root_path)
     else
       session[:forwarding_url] = request.original_url if request.get?
       redirect_to root_url, alert: t('authorization.user_not_authorized_try_logging_in')
