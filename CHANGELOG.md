@@ -9,6 +9,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+### Changed
+* #3420: Update bundler to match version in production [PR#3433](https://github.com/ualbertalib/jupiter/pull/3433)
+
 ### Chores
 * Bump rubocop from 1.62.1 to 1.63.1 [PR#3439](https://github.com/ualbertalib/jupiter/pull/3439)
 
