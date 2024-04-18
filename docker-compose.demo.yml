@@ -14,7 +14,7 @@ services:
       - postgres-data:/var/lib/postgresql/data
 
   solr:
-    image: solr:6.6
+    image: solr:8
     volumes:
       - solr-data:/opt/solr/server/solr/mycores
       - ./solr/config:/config
