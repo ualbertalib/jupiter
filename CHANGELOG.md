@@ -9,7 +9,7 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
-## [2.9.1] - 2024-03-22
+## [2.9.1] - 2024-04-22
 
 ### Fixed
 * Improves performance of Active Storage lookups via adding an table index.
