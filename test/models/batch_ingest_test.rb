@@ -91,7 +91,7 @@ class BatchIngestTest < ActiveSupport::TestCase
                      batch_ingest.errors[:google_spreadsheet_id].first)
         assert_equal('collection_id does not exist in ERA for row 1 of spreadsheet',
                      batch_ingest.errors[:google_spreadsheet_id].second)
-        assert_equal("Invalid metadata on row 1 of spreadsheet: Unknown visibility key: Public",
+        assert_equal('Invalid metadata on row 1 of spreadsheet: Unknown visibility key: Public',
                      batch_ingest.errors[:google_spreadsheet_id].third)
         # rubocop:disable Layout/LineLength
         assert_equal("File(s) 'file_1.txt, file_2.txt, file_3.txt' from row 1 of spreadsheet are not listed in the file list below",
@@ -99,7 +99,6 @@ class BatchIngestTest < ActiveSupport::TestCase
         assert_equal("File 'file_1.txt' is repeated in rows 1, 2 of the spreadsheet but should only appear in a single row",
                      batch_ingest.errors[:google_spreadsheet_id][10])
         # rubocop:enable Layout/LineLength
-
       end
     end
   end

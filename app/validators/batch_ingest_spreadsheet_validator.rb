@@ -52,9 +52,7 @@ class BatchIngestSpreadsheetValidator < ActiveModel::EachValidator
 
       # Confirm metadata matches vocab when required.
       begin
-        if row['item_type'].present?
-          ControlledVocabulary.era.item_type.send(row['item_type'].to_sym)
-        end
+        ControlledVocabulary.era.item_type.send(row['item_type'].to_sym) if row['item_type'].present?
 
         if row['languages'].present?
           row['languages'].split('|').map(&:strip).map do |language|
@@ -62,16 +60,13 @@ class BatchIngestSpreadsheetValidator < ActiveModel::EachValidator
           end
         end
 
-        if row['visibility'].present?
-          ControlledVocabulary.jupiter_core.visibility.send(row['visibility'].to_sym)
-        end
+        ControlledVocabulary.jupiter_core.visibility.send(row['visibility'].to_sym) if row['visibility'].present?
 
         if row['visibility_after_embargo'].present?
           ControlledVocabulary.jupiter_core.visibility.send(row['visibility_after_embargo'].to_sym)
         end
-
-      rescue JupiterCore::VocabularyMissingError => exception
-        record.errors.add(attribute, :invalid_metadata, exception_message: exception.message, row_number:)
+      rescue JupiterCore::VocabularyMissingError => e
+        record.errors.add(attribute, :invalid_metadata, exception_message: e.message, row_number:)
       end
 
       # Ensure that all files name in the spreadsheet have a corresponding uploaded file
