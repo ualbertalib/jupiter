@@ -10,7 +10,16 @@ New entries in this file should aim to provide a meaningful amount of informatio
 ## [Unreleased]
 
 ### Fixed
+* Improves performance of Active Storage lookups via adding an table index.
+  Requires a db:migration that creates the index concurrently thus does not
+  lock the DB table [PR#3428](https://github.com/ualbertalib/jupiter/pull/3428)
 * Fixed edge case on batch ingest front end tool where metadata is invalid [#3148](https://github.com/ualbertalib/jupiter/issues/3148)
+
+### Changed
+* #3420: Update bundler to match version in production [PR#3433](https://github.com/ualbertalib/jupiter/pull/3433)
+
+### Chores
+* Bump rubocop from 1.62.1 to 1.63.1 [PR#3439](https://github.com/ualbertalib/jupiter/pull/3439)
 
 ## [2.9.0] - 2024-03-14
 
