@@ -9,6 +9,8 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+### Fixed
+* Fixed edge case on batch ingest front end tool where metadata is invalid [#3148](https://github.com/ualbertalib/jupiter/issues/3148)
 
 ## [2.9.0] - 2024-03-14
 
