@@ -21,6 +21,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 ### Chores
 * Bump rubocop from 1.62.1 to 1.63.1 [PR#3439](https://github.com/ualbertalib/jupiter/pull/3439)
 
+### Fixed
+* #3429: Fix unsafe redirect errors by using allow_other_host [PR#3429](https://github.com/ualbertalib/jupiter/pull/3429)
+
 ## [2.9.0] - 2024-03-14
 
 ### Fixed
