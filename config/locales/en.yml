@@ -209,6 +209,7 @@ en:
                 no_matching_files: "File(s) '%{file_names}' from row %{row_number} of spreadsheet are not listed in the file list below"
                 spreadsheet_could_not_be_read: "Spreadsheet could not be read. Please follow the template spreadsheet as an example"
                 duplicate_files: "File '%{file_name}' is repeated in rows %{rows} of the spreadsheet but should only appear in a single row"
+                invalid_metadata: "Invalid metadata on row %{row_number} of spreadsheet: %{exception_message}"
   application:
     navbar:
       era_logo_alt: 'ERA - Education and Research Archive'

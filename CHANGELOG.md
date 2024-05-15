@@ -15,6 +15,7 @@ New entries in this file should aim to provide a meaningful amount of informatio
 * Improves performance of Active Storage lookups via adding an table index.
   Requires a db:migration that creates the index concurrently thus does not
   lock the DB table [PR#3428](https://github.com/ualbertalib/jupiter/pull/3428)
+* Fixed edge case on batch ingest front end tool where metadata is invalid [#3148](https://github.com/ualbertalib/jupiter/issues/3148)
 
 ### Changed
 * #3420: Update bundler to match version in production [PR#3433](https://github.com/ualbertalib/jupiter/pull/3433)
@@ -41,6 +42,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 * Bump sass from 1.74.1 to 1.75.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3441
 * Bump rubocop from 1.63.1 to 1.63.2 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3443
 * Bump flipper-active_record, flipper and flipper-ui by @dependabot in https://github.com/ualbertalib/jupiter/pull/3444
+
+### Fixed
+* #3429: Fix unsafe redirect errors by using allow_other_host [PR#3429](https://github.com/ualbertalib/jupiter/pull/3429)
 
 ## [2.9.0] - 2024-03-14
 
