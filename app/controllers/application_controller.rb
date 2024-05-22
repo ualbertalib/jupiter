@@ -15,6 +15,10 @@ class ApplicationController < ActionController::Base
 
   rescue_from JupiterCore::SolrBadRequestError, with: :render_400
 
+  rescue_from ActionController::Redirecting::UnsafeRedirectError do
+    redirect_to root_url
+  end
+
   before_action :set_paper_trail_whodunnit
 
   def service_unavailable
@@ -55,19 +59,15 @@ class ApplicationController < ActionController::Base
 
   # Signs in the given user.
   def sign_in(user)
+    return if user.blank?
     return if read_only_mode_enabled?
 
     @current_user = user
-    session[:user_id] = user.try(:id)
-
-    # rubocop:disable Style/GuardClause
-    if @current_user.present?
-      UpdateUserActivityJob.perform_now(@current_user.id,
-                                        Time.now.utc.to_s,
-                                        request.remote_ip,
-                                        sign_in: true)
-    end
-    # rubocop:enable Style/GuardClause
+    session[:user_id] = user.id
+    UpdateUserActivityJob.perform_now(@current_user.id,
+                                      Time.now.utc.to_s,
+                                      request.remote_ip,
+                                      sign_in: true)
   end
 
   # Logs out the current user.
@@ -79,16 +79,9 @@ class ApplicationController < ActionController::Base
   def user_not_authorized
     if current_user.present?
       flash[:alert] = t('authorization.user_not_authorized')
-
-      # referer gets funky with omniauth and all the redirects it does,
-      # so handle this sanely by ignoring any referer coming from omniauth (/auth/) path
-      if request.referer&.exclude?('auth')
-        redirect_to request.referer
-      else
-        redirect_to root_path
-      end
+      redirect_back_or_to(root_path)
     else
-      session[:forwarding_url] = request.original_url if request.get?
+      session[:forwarding_url] = request.fullpath if request.get?
       redirect_to root_url, alert: t('authorization.user_not_authorized_try_logging_in')
     end
   end
@@ -118,7 +111,7 @@ class ApplicationController < ActionController::Base
   end
 
   def redirect_back_to
-    redirect_to session.delete(:forwarding_url) || session.delete(:previous_user_location) || root_path
+    redirect_to(session.delete(:forwarding_url) || session.delete(:previous_user_location) || root_path)
   end
 
   def current_announcements
