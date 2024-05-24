@@ -9,6 +9,49 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+## [2.9.1] - 2024-05-16
+
+### Fixed
+* Improves performance of Active Storage lookups via adding an table index.
+  Requires a db:migration that creates the index concurrently thus does not
+  lock the DB table [PR#3428](https://github.com/ualbertalib/jupiter/pull/3428)
+* Fixed edge case on batch ingest front end tool where metadata is invalid [#3148](https://github.com/ualbertalib/jupiter/issues/3148)
+* Fix unsafe redirect errors by using allow_other_host [PR#3429](https://github.com/ualbertalib/jupiter/pull/3429)
+
+### Changed
+* Update bundler to match version in production [PR#3433](https://github.com/ualbertalib/jupiter/pull/3433)
+
+### Chores
+* Bump rubocop from 1.62.1 to 1.63.1 [PR#3439](https://github.com/ualbertalib/jupiter/pull/3439)
+* Bump json-schema from 4.1.1 to 4.2.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3414
+* Bump esbuild from 0.20.1 to 0.20.2 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3415
+* Bump nokogiri from 1.16.2 to 1.16.3 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3418
+* Bump shoulda-matchers from 6.1.0 to 6.2.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3417
+* Bump rails from 7.1.3 to 7.1.3.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3421
+* Bump rubocop-rails from 2.24.0 to 2.24.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3422
+* Bump selenium-webdriver from 4.18.1 to 4.19.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3426
+* Bump json-schema from 4.2.0 to 4.3.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3427
+* Bump rsolr from 2.5.0 to 2.6.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3425
+* Bump faker from 3.2.3 to 3.3.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3424
+* Bump debug from 1.9.1 to 1.9.2 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3430
+* Bump faker from 3.3.0 to 3.3.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3432
+* Bump rubocop-performance from 1.20.2 to 1.21.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3431
+* Bump nokogiri from 1.16.3 to 1.16.4 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3440
+* Bump @fortawesome/fontawesome-free from 6.5.1 to 6.5.2 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3434
+* Bump sass from 1.72.0 to 1.74.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3436
+* Bump trix and @rails/actiontext by @dependabot in https://github.com/ualbertalib/jupiter/pull/3437
+* Bump sass from 1.74.1 to 1.75.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3441
+* Bump rubocop from 1.63.1 to 1.63.2 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3443
+* Bump flipper-active_record, flipper and flipper-ui by @dependabot in https://github.com/ualbertalib/jupiter/pull/3444
+* Bump rubocop from 1.63.2 to 1.63.3 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3446
+* Bump selenium-webdriver from 4.19.0 to 4.20.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3449
+* Bump sidekiq from 7.2.2 to 7.2.3 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3448
+* Bump sidekiq from 7.2.3 to 7.2.4 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3454
+* Bump rubocop from 1.63.3 to 1.63.4 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3452
+* Bump jbuilder from 2.11.5 to 2.12.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3453
+* Bump sass from 1.75.0 to 1.76.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3455
+* Bump nokogiri from 1.16.4 to 1.16.5 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3468
+* Bump trix from 2.1.0 to 2.1.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3457
 
 ## [2.9.0] - 2024-03-14
 
