@@ -40,7 +40,7 @@ gem 'omniauth-rails_csrf_protection', '~> 1.0'
 gem 'omniauth-saml', '~> 2.1'
 
 # Authorization
-gem 'pundit', '2.3.1'
+gem 'pundit', '2.3.2'
 
 # Background tasks
 gem 'sidekiq', '~> 7.2'
