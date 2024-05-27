@@ -40,7 +40,7 @@ gem 'omniauth-rails_csrf_protection', '~> 1.0'
 gem 'omniauth-saml', '~> 2.1'
 
 # Authorization
-gem 'pundit', '2.3.1'
+gem 'pundit', '2.3.2'
 
 # Background tasks
 gem 'sidekiq', '~> 7.2'
@@ -94,7 +94,7 @@ group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: [:mri, :mingw, :x64_mingw]
 
-  gem 'rubocop', '~> 1.63.4', require: false
+  gem 'rubocop', '~> 1.64.0', require: false
   gem 'rubocop-minitest', require: false
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false
