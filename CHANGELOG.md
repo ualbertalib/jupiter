@@ -9,6 +9,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+### Chores
+- Bump rubocop-rails from 2.24.1 to 2.25.0 [PR#3475](https://github.com/ualbertalib/jupiter/pull/3475)
+
 ## [2.9.1] - 2024-05-16
 
 ### Fixed
