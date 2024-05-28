@@ -194,7 +194,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     }
 
     # Receive unauthorized response
-    assert_response 401
+    assert_response :unauthorized
   end
 
 end
