@@ -22,7 +22,7 @@ services:
 
   solr:
     restart: always
-    image: solr:7
+    image: solr:8
     environment:
       - VIRTUAL_HOST=solr.era.uat.library.ualberta.ca
       - HTTPS_METHOD=nohttps
