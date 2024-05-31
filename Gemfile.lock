@@ -384,7 +384,7 @@ GEM
       activerecord (>= 6.1)
       request_store (~> 1.4)
     parallel (1.24.0)
-    parser (3.3.1.0)
+    parser (3.3.2.0)
       ast (~> 2.4.1)
       racc
     pg (1.5.6)
@@ -484,7 +484,7 @@ GEM
     rsolr (2.6.0)
       builder (>= 2.1.2)
       faraday (>= 0.9, < 3, != 2.0.0)
-    rubocop (1.64.0)
+    rubocop (1.64.1)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
       parallel (~> 1.10)
@@ -681,7 +681,7 @@ DEPENDENCIES
   redis (~> 4.8)
   rollbar
   rsolr
-  rubocop (~> 1.64.0)
+  rubocop (~> 1.64.1)
   rubocop-minitest
   rubocop-performance
   rubocop-rails
