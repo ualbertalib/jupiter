@@ -292,7 +292,7 @@ def generate_checksums(csv_directory)
 end
 
 def thesis_community_id
-  Community.where(title: 'Graduate Studies and Research, Faculty of').first.id
+  Community.where(title: 'Graduate and Postdoctoral Studies (GPS), Faculty of').first.id
 end
 
 def thesis_collection_id
