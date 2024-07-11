@@ -15,7 +15,7 @@
 - **Redis**
 - **Solr**
 - **ImageMagick, Poppler, FFMpeg**
-- **Node.js** 10.13.0+
+- **Node.js** 18.15.0+
 - **Yarn**
 
 # Generate Documentation
