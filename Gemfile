@@ -60,7 +60,7 @@ gem 'flipper-ui', '~> 1.3.0' # UI for feature flags
 gem 'jbuilder' # generate JSON objects
 gem 'kaminari' # Pagination
 gem 'paper_trail', '~> 15.1.0' # Track object changes
-gem 'ransack', '4.1.1' # ActiveRecord search/filter
+gem 'ransack', '4.2.0' # ActiveRecord search/filter
 gem 'redcarpet', '~> 3.6', require: ['redcarpet', 'redcarpet/render_strip'] # Markdown to (X)HTML parser
 gem 'uuidtools'
 gem 'voight_kampff', '~> 2.0', require: 'voight_kampff/rails' # bot detection
@@ -94,7 +94,7 @@ group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: [:mri, :mingw, :x64_mingw]
 
-  gem 'rubocop', '~> 1.64.1', require: false
+  gem 'rubocop', '~> 1.65.0', require: false
   gem 'rubocop-minitest', require: false
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false
@@ -114,7 +114,7 @@ group :test do
   gem 'haikunator'
   gem 'shoulda-matchers', '~> 6.2'
 
-  gem 'json-schema', '~> 4.3.0'
+  gem 'json-schema', '~> 4.3.1'
   gem 'launchy'
   gem 'minitest-retry', require: false
   gem 'rdf-isomorphic', '~> 3.3.0'
