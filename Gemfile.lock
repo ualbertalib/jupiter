@@ -387,7 +387,7 @@ GEM
     parser (3.3.4.0)
       ast (~> 2.4.1)
       racc
-    pg (1.5.6)
+    pg (1.5.7)
     psych (5.1.2)
       stringio
     public_suffix (6.0.0)
@@ -670,7 +670,7 @@ DEPENDENCIES
   omniauth-rails_csrf_protection (~> 1.0)
   omniauth-saml (~> 2.1)
   paper_trail (~> 15.1.0)
-  pg (~> 1.5.6)
+  pg (~> 1.5.7)
   puma (~> 6.4)
   pundit (= 2.3.2)
   rails (~> 7.1.3)
