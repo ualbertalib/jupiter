@@ -19,7 +19,7 @@ jobs:
           node-version: 18
 
       - name: Build the docker-compose stack
-        run: docker-compose up -d
+        run: docker compose up -d
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
