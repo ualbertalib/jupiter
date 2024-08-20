@@ -114,7 +114,7 @@ group :test do
   gem 'haikunator'
   gem 'shoulda-matchers', '~> 6.3'
 
-  gem 'json-schema', '~> 4.3.1'
+  gem 'json-schema', '~> 5.0.0'
   gem 'launchy'
   gem 'minitest-retry', require: false
   gem 'rdf-isomorphic', '~> 3.3.0'
