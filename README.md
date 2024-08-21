@@ -79,7 +79,7 @@ Some alternatives is you may also use the `localhost` top level domain (e.g: you
 # UAT Environment
 
 The UAT server is accessible on all library staff workstation, and through VPN on any external IP address.  More details regarding access and deployment can be found:
-[Jupiter UAT Setup](https://github.com/ualbertalib/di_internal/blob/master/System-Adminstration/UAT/UAT-Environment.md)
+[Jupiter UAT Setup](https://github.com/ualbertalib/di_internal/blob/master/System-Administration/UAT/UAT-Environment.md)
 
 # Docker
 

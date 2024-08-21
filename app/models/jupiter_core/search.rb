@@ -1,6 +1,6 @@
 class JupiterCore::Search
 
-  # How dumb is this? Seems pretty dumb, but that's the official recommendation I guess:
+  # How unintelligent is this? Seems pretty unintelligent, but that's the official recommendation I guess:
   # https://wiki.apache.org/solr/CommonQueryParameters
   MAX_RESULTS = 10_000_000
 
@@ -69,7 +69,7 @@ class JupiterCore::Search
 
     # make any visibility setting, including a missing visibility specifier, visible to admins
     #
-    # this translates into non-insane query language as "OR visibility is null ([* TO *] AND *:*") OR visibility
+    # this translates into a sensible query language as "OR visibility is null ([* TO *] AND *:*") OR visibility
     # is any non-null value (*)
     ' OR _query_:"-visibility_ssim:[* TO *] AND *:*" OR _query_:"visibility_ssim:*"'
   end
