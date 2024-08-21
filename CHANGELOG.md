@@ -9,6 +9,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+### Added
+* Bring in and enforce inclusive language cops [PR#3544](https://github.com/ualbertalib/jupiter/pull/3544)
+
 ## [2.9.2] - 2024-06-13
 
 ### Chores
