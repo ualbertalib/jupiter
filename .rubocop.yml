@@ -8,9 +8,8 @@ require:
   - rubocop-performance
   - rubocop-rails
 
-# TODO: update reference once merged.
 inherit_from:
-  - https://raw.githubusercontent.com/ualbertalib/library_applications_development_inclusive_language/cds/initial-commit/inclusive_language_rubocop.yml
+  - https://raw.githubusercontent.com/ualbertalib/library_applications_development_inclusive_language/main/inclusive_language_rubocop.yml
 
 AllCops:
   DisplayCopNames: true

@@ -2,8 +2,7 @@
 
 # This script will be sitting in /home/deploy directory, and is for setting up directories and pulling required files for docker deployment
 # This script should be either rsynced or copied to the UAT server when setting up fresh server.
-# For more information, please see the documentation: https://github.com/ualbertalib/di_internal/blob/master/System-Administration/UAT-Environment.md
-
+# For more information, please see the documentation: (https://github.com/ualbertalib/library_applications_development/blob/main/System-Administration/UAT/UAT-Environment.md>
 set -o errexit
 set -o pipefail
 set -o nounset

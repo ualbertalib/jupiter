@@ -1,7 +1,7 @@
 class JupiterCore::Search
 
-  # How unintelligent is this? Seems pretty unintelligent, but that's the official recommendation I guess:
-  # https://wiki.apache.org/solr/CommonQueryParameters
+  # Official recommendation to return all results in a single page: set to number higher than possible number of results
+  # https://web.archive.org/web/20190405125211/https://wiki.apache.org/solr/CommonQueryParameters
   MAX_RESULTS = 10_000_000
 
   # Maximum number of facet results to retrieve per Facet
