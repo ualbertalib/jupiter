@@ -221,7 +221,7 @@ GEM
       rubocop (>= 1)
       smart_properties
     erubi (1.13.0)
-    et-orbi (1.2.7)
+    et-orbi (1.2.11)
       tzinfo
     faker (3.4.2)
       i18n (>= 1.8.11, < 2)
@@ -245,8 +245,8 @@ GEM
       rack-protection (>= 1.5.3, < 5.0.0)
       rack-session (>= 1.0.2, < 3.0.0)
       sanitize (< 7)
-    fugit (1.9.0)
-      et-orbi (~> 1, >= 1.2.7)
+    fugit (1.11.1)
+      et-orbi (~> 1, >= 1.2.11)
       raabro (~> 1.4)
     gems (1.2.0)
     git (1.19.1)
@@ -475,7 +475,7 @@ GEM
     request_store (1.5.1)
       rack (>= 1.4)
     retriable (3.1.2)
-    rexml (3.3.4)
+    rexml (3.3.6)
       strscan
     rollbar (3.5.2)
     rouge (4.1.3)
