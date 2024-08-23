@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
 module FontAwesomeHelper
+  # rubocop:disable Naming/InclusiveLanguage
   # Helper from Font Awesome Sass:
   # https://github.com/FortAwesome/font-awesome-sass/blob/master/lib/font_awesome/sass/rails/helpers.rb
+  # rubocop:enable Naming/InclusiveLanguage
   def icon(style, name, text = nil, html_options = {})
     if text.is_a?(Hash)
       html_options = text
