@@ -79,7 +79,7 @@ Some alternatives is you may also use the `localhost` top level domain (e.g: you
 # UAT Environment
 
 The UAT server is accessible on all library staff workstation, and through VPN on any external IP address.  More details regarding access and deployment can be found:
-[Jupiter UAT Setup](https://github.com/ualbertalib/di_internal/blob/master/System-Adminstration/UAT/UAT-Environment.md)
+[Jupiter UAT Setup](https://github.com/ualbertalib/di_internal/blob/main/System-Administration/UAT/UAT-Environment.md)
 
 # Docker
 
@@ -279,4 +279,4 @@ Jupiter comes with a handy rake task for batch ingesting items/theses.
 ## Items Batch Ingest via Google Drive for Admins
 Batch ingest for items can now also be done via the admin dashboard. There is a new tab called "Batch ingest" where you can create a new batch ingest by providing a manifest file and files from Google Drive.
 
-For more info about this admin batch ingest screen and how to configure it, [please see the documentation in DI internal](https://github.com/ualbertalib/di_internal/blob/master/Applications/Jupiter/Batch_Ingest/README.md)
+For more info about this admin batch ingest screen and how to configure it, [please see the documentation in DI internal](https://github.com/ualbertalib/di_internal/blob/main/Applications/Jupiter/Batch_Ingest/README.md)

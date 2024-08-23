@@ -49,7 +49,7 @@
 #        => "http://id.loc.gov/vocabulary/iso639-2/eng"
 #
 #
-# I can't believe rubocop is so dumb it doesn't know these are required args for any method_missing override, method OR block.
+# I can't believe rubocop is so unintelligent it doesn't know these are required args for any method_missing override, method OR block.
 # It also gets CONSTANT scope definitions wrong in self.methods in Class.new position wrong, and doesn't get that
 # you don't want respond_to_missing if you're just raising a more-specific error in method_missing, so I'm shutting all these off for
 # this file. Garbage effort, rubocop.
