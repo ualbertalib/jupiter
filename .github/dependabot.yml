@@ -7,7 +7,7 @@ updates:
       time: "10:00"
       timezone: America/Edmonton
     open-pull-requests-limit: 10
-    target-branch: master
+    target-branch: main
     ignore:
       - dependency-name: vcr
         versions:
@@ -22,7 +22,7 @@ updates:
       time: "10:00"
       timezone: America/Edmonton
     open-pull-requests-limit: 10
-    target-branch: master
+    target-branch: main
     labels:
       - "dependencies"
       - "javascript"
@@ -33,7 +33,7 @@ updates:
       time: "10:00"
       timezone: America/Edmonton
     open-pull-requests-limit: 10
-    target-branch: master
+    target-branch: main
     labels:
       - "dependencies"
       - "actions"

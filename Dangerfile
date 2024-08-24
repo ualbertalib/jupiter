@@ -20,5 +20,5 @@ warn('This PR is too big! Consider breaking it down into smaller PRs.') if git.l
 declared_trivial = (github.pr_title + github.pr_body).include?("#trivial") || !has_app_changes
 
 if !git.modified_files.include?("CHANGELOG.md") && !declared_trivial
-  fail("Please include a CHANGELOG entry. \nYou can find it at [CHANGELOG.md](https://github.com/ualbertalib/jupiter/blob/master/CHANGELOG.md).", sticky: false)
+  fail("Please include a CHANGELOG entry. \nYou can find it at [CHANGELOG.md](https://github.com/ualbertalib/jupiter/blob/main/CHANGELOG.md).", sticky: false)
 end

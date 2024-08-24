@@ -151,7 +151,7 @@ SimpleForm.setup do |config|
 end
 
 SimpleForm::Inputs::Base.class_eval do
-  # Original method: https://github.com/plataformatec/simple_form/blob/master/lib/simple_form/inputs/base.rb#L191-L206
+  # Original method: https://github.com/heartcombo/simple_form/blob/main/lib/simple_form/inputs/base.rb#L191-L206
   # Need to monkey patch input field so we can add the `is-invalid` class on errors
   def merge_wrapper_options(options, wrapper_options)
     if wrapper_options
