@@ -381,8 +381,8 @@ GEM
     paper_trail (15.1.0)
       activerecord (>= 6.1)
       request_store (~> 1.4)
-    parallel (1.25.1)
-    parser (3.3.4.0)
+    parallel (1.26.3)
+    parser (3.3.4.2)
       ast (~> 2.4.1)
       racc
     pg (1.5.7)
@@ -482,18 +482,17 @@ GEM
     rsolr (2.6.0)
       builder (>= 2.1.2)
       faraday (>= 0.9, < 3, != 2.0.0)
-    rubocop (1.65.1)
+    rubocop (1.66.0)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
       parallel (~> 1.10)
       parser (>= 3.3.0.2)
       rainbow (>= 2.2.2, < 4.0)
       regexp_parser (>= 2.4, < 3.0)
-      rexml (>= 3.2.5, < 4.0)
-      rubocop-ast (>= 1.31.1, < 2.0)
+      rubocop-ast (>= 1.32.1, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 2.4.0, < 3.0)
-    rubocop-ast (1.31.3)
+    rubocop-ast (1.32.1)
       parser (>= 3.3.1.0)
     rubocop-minitest (0.35.1)
       rubocop (>= 1.61, < 2.0)
@@ -682,7 +681,7 @@ DEPENDENCIES
   redis (~> 4.8)
   rollbar
   rsolr
-  rubocop (~> 1.65.1)
+  rubocop (~> 1.66.0)
   rubocop-minitest
   rubocop-performance
   rubocop-rails
