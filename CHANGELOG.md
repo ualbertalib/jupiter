@@ -16,9 +16,27 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ### Chores
 * Bump rubocop-rails from 2.24.1 to 2.25.0 [PR#3475](https://github.com/ualbertalib/jupiter/pull/3475)
+* Bump rubocop from 1.63.4 to 1.64.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3476
+* Bump webmock from 3.23.0 to 3.23.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3477
+* Bump selenium-webdriver from 4.20.1 to 4.21.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3474
+* Bump launchy from 3.0.0 to 3.0.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3456
+* Bump omniauth-rails_csrf_protection from 1.0.1 to 1.0.2 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3464
+* Bump pundit from 2.3.1 to 2.3.2 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3462
+* Bump sass from 1.76.0 to 1.77.2 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3473
+* Bump esbuild from 0.20.2 to 0.21.4 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3479
+* Bump simple_form from 5.3.0 to 5.3.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3478
+* Bump faker from 3.3.1 to 3.4.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3480
+* Bump rubocop from 1.64.0 to 1.64.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3484
+* Bump sass from 1.77.2 to 1.77.4 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3485
+* Bump actionpack from 7.1.3.1 to 7.1.3.4 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3487
+* Bump rdf-vocab from 3.3.0 to 3.3.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3481
+* Bump sprockets-rails from 3.4.2 to 3.5.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3488
+* Bump sprockets-rails from 3.5.0 to 3.5.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3489
 
 ### Changed
-* Modified the target destination for ingested theses [#3495](https://github.com/ualbertalib/jupiter/issues/3495) 
+* Modified the target destination for ingested theses [#3495](https://github.com/ualbertalib/jupiter/issues/3495)
+* Upgrade solr to v7.x [PR#3416](https://github.com/ualbertalib/jupiter/pull/3416)
+* Upgrade solr to 8 by [PR#3442](https://github.com/ualbertalib/jupiter/pull/3442)
 
 ## [2.9.1] - 2024-05-16
 
