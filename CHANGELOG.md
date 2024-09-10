@@ -9,8 +9,62 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+## [2.9.3] - 2024-06-13
+
+### CVE fixes
+* Bump ruby-saml from 1.15.0 to 1.17.0 - [CVE-2024-45409](https://github.com/advisories/GHSA-jw9c-mfg7-9rx2) [PR#3565](https://github.com/ualbertalib/jupiter/pull/3564)
+
 ### Added
 * Bring in and enforce inclusive language cops [PR#3544](https://github.com/ualbertalib/jupiter/pull/3544)
+
+### Chores
+* Bump rubocop-performance from 1.21.0 to 1.21.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3499
+* Bump nokogiri from 1.16.5 to 1.16.6 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3494
+* Bump braces from 3.0.2 to 3.0.3 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3498
+* Bump esbuild from 0.21.4 to 0.21.5 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3491
+* Bump sass from 1.77.4 to 1.77.6 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3500
+* Bump selenium-webdriver from 4.21.1 to 4.22.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3502
+* Bump addressable from 2.8.6 to 2.8.7 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3503
+* Bump strong_migrations from 1.8.0 to 2.0.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3505
+* Bump rubocop-rails from 2.25.0 to 2.25.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3506
+* Bump sidekiq from 7.2.4 to 7.3.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3508
+* Bump trix from 2.1.1 to 2.1.2 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3509
+* Bump sass from 1.77.6 to 1.77.7 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3512
+* Bump esbuild from 0.21.5 to 0.23.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3507
+* Bump ransack from 4.1.1 to 4.2.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3513
+* Bump rubocop-minitest from 0.35.0 to 0.35.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3514
+* Bump json-schema from 4.3.0 to 4.3.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3515
+* Bump rubocop from 1.64.1 to 1.65.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3511
+* Bump sass from 1.77.7 to 1.77.8 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3516
+* Bump trix from 2.1.2 to 2.1.3 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3517
+* Bump faker from 3.4.1 to 3.4.2 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3518
+* Bump selenium-webdriver from 4.22.0 to 4.23.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3520
+* Bump @fortawesome/fontawesome-free from 6.5.2 to 6.6.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3519
+* Bump nokogiri from 1.16.6 to 1.16.7 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3523
+* Bump image_processing from 1.12.2 to 1.13.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3521
+* Bump pg from 1.5.6 to 1.5.7 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3522
+* Bump cssbundling-rails from 1.4.0 to 1.4.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3524
+* Bump jsbundling-rails from 1.3.0 to 1.3.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3525
+* Bump sprockets-rails from 3.5.1 to 3.5.2 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3526
+* Bump erb_lint from 0.5.0 to 0.6.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3527
+* Bump rubocop from 1.65.0 to 1.65.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3528
+* docker compose command has changed, updated to newest command by @murny in https://github.com/ualbertalib/jupiter/pull/3533
+* Bump trix from 2.1.3 to 2.1.4 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3529
+* Bump danger from 9.4.3 to 9.5.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3531
+* Bump bootsnap from 1.18.3 to 1.18.4 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3532
+* Bump trix from 2.1.4 to 2.1.5 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3534
+* Bump ransack from 4.2.0 to 4.2.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3537
+* Bump shoulda-matchers from 6.2.0 to 6.3.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3538
+* Bump rexml from 3.3.4 to 3.3.6 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3545
+* Bump fugit from 1.9.0 to 1.11.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3542
+* Bump shoulda-matchers from 6.3.1 to 6.4.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3540
+* Bump brakeman from 6.1.2 to 6.2.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3547
+* Bump micromatch from 4.0.5 to 4.0.8 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3546
+* Bump esbuild from 0.23.0 to 0.23.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3541
+* Bump sidekiq from 7.3.0 to 7.3.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3539
+* Bump pundit from 2.3.2 to 2.4.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3549
+* Bump selenium-webdriver from 4.23.0 to 4.24.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3550
+* Update CHANGELOG.md by @pgwillia in https://github.com/ualbertalib/jupiter/pull/3501
 
 ## [2.9.2] - 2024-06-13
 
