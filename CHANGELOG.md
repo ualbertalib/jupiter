@@ -9,6 +9,11 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+## [2.9.3] - 2024-09-11
+
+### CVE fixes
+* Bump ruby-saml from 1.15.0 to 1.17.0 - [CVE-2024-45409](https://github.com/advisories/GHSA-jw9c-mfg7-9rx2) [PR#3565](https://github.com/ualbertalib/jupiter/pull/3564)
+
 ## [2.9.2] - 2024-06-13
 
 ### Chores
