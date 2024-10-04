@@ -22,7 +22,7 @@
     "popper.js": "^1.16.0",
     "sass": "^1.77.8",
     "selectize": "^0.12.6",
-    "trix": "^2.1.5",
+    "trix": "^2.1.6",
     "turbolinks": "^5.2.0"
   },
   "devDependencies": {
