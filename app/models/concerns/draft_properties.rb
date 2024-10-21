@@ -9,7 +9,7 @@ module DraftProperties
     # inactive: Draft objects where the user never passed first step of deposit wizard.
     # active: Draft objects where the user made it passed first step, but hasn't finished completing the deposit wizard.
     # archived: Draft objects that have been "published" where a user has successfully deposited and completed the deposit wizard.
-    enum status: { inactive: 0, active: 1, archived: 2 }
+    enum :status, { inactive: 0, active: 1, archived: 2 }
 
     # Note that dependent: false is necessary here as Items and DraftItems can both have ActiveStorage::Attachment records
     # that point at the same underlying blob record. See Item#from_draft.
