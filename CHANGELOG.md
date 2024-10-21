@@ -9,6 +9,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+### Added
+* Restore brakeman's ruby EOL check [#3050](https://github.com/ualbertalib/jupiter/issues/3050)
+
 ## [2.10.0] - Unreleased
 
 :warning: Updated requirement **Node.js** 18.15.0+
