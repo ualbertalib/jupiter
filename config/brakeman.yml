@@ -2,5 +2,4 @@
 :run_all_checks: true
 :skip_checks:
         - CheckUnscopedFind
-        - CheckEOLRuby
 :github_repo: ualbertalib/jupiter

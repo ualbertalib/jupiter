@@ -9,11 +9,13 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+### Added
+* Restore brakeman's ruby EOL check [#3050](https://github.com/ualbertalib/jupiter/issues/3050)
+
 ### Changed ###
 * Rails/EnumSyntax: Enum defined with keyword arguments in enum declarations. Use positional arguments instead. [PR#3576](https://github.com/ualbertalib/jupiter/pull/3576)
 
-
-## [2.10.0] - Unreleased
+## [2.10.0] - 2024-09-16
 
 :warning: Updated requirement **Node.js** 18.15.0+
 
