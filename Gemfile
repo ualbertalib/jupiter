@@ -31,7 +31,7 @@ gem 'connection_pool'
 gem 'pg', '~> 1.5.7'
 gem 'redis', '~> 4.8'
 gem 'rsolr'
-gem 'strong_migrations', '~> 2.0.0'
+gem 'strong_migrations', '~> 2.0.1'
 
 # Authentication
 gem 'bcrypt', '>= 3.1.13'
