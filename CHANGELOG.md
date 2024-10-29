@@ -9,11 +9,43 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
-### Added
+## 2.10.1 - 2024-10-30
+
+### Added 
 * Restore brakeman's ruby EOL check [#3050](https://github.com/ualbertalib/jupiter/issues/3050)
 
-### Changed ###
+### Changed
 * Rails/EnumSyntax: Enum defined with keyword arguments in enum declarations. Use positional arguments instead. [PR#3576](https://github.com/ualbertalib/jupiter/pull/3576)
+
+### Chores
+* Bump omniauth-saml from 2.1.1 to 2.1.2 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3571
+* Bump puma from 6.4.2 to 6.4.3 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3572
+* Bump webrick from 1.8.1 to 1.8.2 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3578
+* Bump trix from 2.1.5 to 2.1.7 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3591
+* Bump actiontext from 7.1.3.4 to 7.1.4.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3588
+* Bump sass from 1.77.8 to 1.80.3 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3596
+* Bump json-schema from 4.3.1 to 5.0.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3581
+* Bump flipper from 1.3.0 to 1.3.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3558
+* Bump rollbar from 3.5.2 to 3.6.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3552
+* Bump rubocop from 1.65.1 to 1.67.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3587
+* Bump rubocop-rails from 2.25.1 to 2.26.2 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3576
+* Bump rubocop-minitest from 0.35.1 to 0.36.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3554
+* Bump danger from 9.5.0 to 9.5.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3602
+* Bump sidekiq from 7.3.1 to 7.3.4 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3608
+* Bump rexml from 3.3.8 to 3.3.9 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3609
+* Bump paper_trail from 15.1.0 to 15.2.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3599
+* Bump strong_migrations from 2.0.0 to 2.0.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3607
+* Bump flipper-active_record from 1.3.0 to 1.3.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3557
+* Bump faker from 3.4.2 to 3.5.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3601
+* Bump flipper-ui from 1.3.0 to 1.3.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3559
+* Bump brakeman from 6.2.1 to 6.2.2 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3598
+* Bump webmock from 3.23.1 to 3.24.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3606
+* Bump sass from 1.80.3 to 1.80.4 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3604
+* Bump @rails/activestorage from 6.1.7 to 6.1.710 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3603
+* Bump @rails/ujs from 6.1.7 to 6.1.710 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3605
+* Bump rubocop-performance from 1.21.1 to 1.22.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3600
+* Bump jbuilder from 2.12.0 to 2.13.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3610
+* Bump rdf from 3.3.1 to 3.3.2 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3510
 
 ## [2.10.0] - 2024-09-16
 
