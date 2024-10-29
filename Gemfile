@@ -54,7 +54,7 @@ gem 'datacite-client', github: 'ualbertalib/datacite-client', tag: 'v0.1.0', req
 gem 'differ' # Used to diff two strings
 gem 'draper'
 gem 'edtf', '~> 3.1' # parsing Extended Date/Time Format
-gem 'flipper', '~> 1.3.0' # Feature flags for Ruby
+gem 'flipper', '~> 1.3.1' # Feature flags for Ruby
 gem 'flipper-active_record', '~> 1.3.0' # Store feature flags in ActiveRecord
 gem 'flipper-ui', '~> 1.3.0' # UI for feature flags
 gem 'jbuilder' # generate JSON objects
@@ -94,7 +94,7 @@ group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: [:mri, :mingw, :x64_mingw]
 
-  gem 'rubocop', '~> 1.65.1', require: false
+  gem 'rubocop', '~> 1.67.0', require: false
   gem 'rubocop-minitest', require: false
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false
@@ -114,7 +114,7 @@ group :test do
   gem 'haikunator'
   gem 'shoulda-matchers', '~> 6.4'
 
-  gem 'json-schema', '~> 4.3.1'
+  gem 'json-schema', '~> 5.0.1'
   gem 'launchy'
   gem 'minitest-retry', require: false
   gem 'rdf-isomorphic', '~> 3.3.0'

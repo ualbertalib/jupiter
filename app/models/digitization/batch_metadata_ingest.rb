@@ -1,6 +1,6 @@
 class Digitization::BatchMetadataIngest < ApplicationRecord
 
-  enum status: { created: 0, processing: 1, completed: 2, failed: 3 }
+  enum :status, { created: 0, processing: 1, completed: 2, failed: 3 }
 
   belongs_to :user
 

@@ -11,14 +11,14 @@ class DraftThesis < ApplicationRecord
     [I18n.t('admin.theses.graduation_terms.fall'), '11']
   ].freeze
 
-  enum wizard_step: { describe_thesis: 0,
-                      choose_license_and_visibility: 1,
-                      upload_files: 2,
-                      review_and_deposit_thesis: 3 }
+  enum :wizard_step, { describe_thesis: 0,
+                       choose_license_and_visibility: 1,
+                       upload_files: 2,
+                       review_and_deposit_thesis: 3 }
 
   # Can't use public as this is a ActiveRecord method, using open_access instead
-  enum visibility: { open_access: 0,
-                     embargo: 1 }
+  enum :visibility, { open_access: 0,
+                      embargo: 1 }
 
   VISIBILITY_TO_URI_CODE = { open_access: :public,
                              embargo: :embargo }.freeze

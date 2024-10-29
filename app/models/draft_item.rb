@@ -2,26 +2,26 @@ class DraftItem < ApplicationRecord
 
   include DraftProperties
 
-  enum wizard_step: { describe_item: 0,
-                      choose_license_and_visibility: 1,
-                      upload_files: 2,
-                      review_and_deposit_item: 3 }
+  enum :wizard_step, { describe_item: 0,
+                       choose_license_and_visibility: 1,
+                       upload_files: 2,
+                       review_and_deposit_item: 3 }
 
-  enum license: { attribution_non_commercial: 0,
-                  attribution: 1,
-                  attribution_non_commercial_no_derivatives: 2,
-                  attribution_non_commercial_share_alike: 3,
-                  attribution_no_derivatives: 4,
-                  attribution_share_alike: 5,
-                  cco_universal: 6,
-                  public_domain_mark: 7,
-                  license_text: 8,
-                  attribution_3_0: 9,
-                  attribution_non_commercial_3_0: 10,
-                  attribution_share_alike_3_0: 11,
-                  attribution_non_commercial_no_derivatives_3_0: 12,
-                  attribution_non_commercial_share_alike_2_5: 13,
-                  unselected: 14 }
+  enum :license, { attribution_non_commercial: 0,
+                   attribution: 1,
+                   attribution_non_commercial_no_derivatives: 2,
+                   attribution_non_commercial_share_alike: 3,
+                   attribution_no_derivatives: 4,
+                   attribution_share_alike: 5,
+                   cco_universal: 6,
+                   public_domain_mark: 7,
+                   license_text: 8,
+                   attribution_3_0: 9,
+                   attribution_non_commercial_3_0: 10,
+                   attribution_share_alike_3_0: 11,
+                   attribution_non_commercial_no_derivatives_3_0: 12,
+                   attribution_non_commercial_share_alike_2_5: 13,
+                   unselected: 14 }
   LICENSE_TO_URI_CODE =
     { attribution_non_commercial: :attribution_noncommercial_4_0_international,
       attribution: :attribution_4_0_international,
@@ -39,9 +39,9 @@ class DraftItem < ApplicationRecord
   URI_CODE_TO_LICENSE = LICENSE_TO_URI_CODE.invert
 
   # Can't use public as this is a ActiveRecord method, using open_access instead
-  enum visibility: { open_access: 0,
-                     embargo: 1,
-                     authenticated: 2 }
+  enum :visibility, { open_access: 0,
+                      embargo: 1,
+                      authenticated: 2 }
 
   VISIBILITY_TO_URI_CODE = { open_access: :public,
                              embargo: :embargo,
@@ -54,8 +54,8 @@ class DraftItem < ApplicationRecord
   # By default it will always be in `public`/`opened` status
   # Only needed for for the odd chance they want to change an item's visibility_after_embargo
   # to `ccid_authenticated`/`authenticated` from the console
-  enum visibility_after_embargo: { opened: 0,
-                                   ccid_protected: 1 }
+  enum :visibility_after_embargo, { opened: 0,
+                                    ccid_protected: 1 }
 
   VISIBILITY_AFTER_EMBARGO_TO_URI_CODE = { opened: :public,
                                            ccid_protected: :authenticated }.freeze
