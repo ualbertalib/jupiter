@@ -376,7 +376,7 @@ GEM
     omniauth-rails_csrf_protection (1.0.2)
       actionpack (>= 4.2)
       omniauth (~> 2.0)
-    omniauth-saml (2.1.2)
+    omniauth-saml (2.2.1)
       omniauth (~> 2.1)
       ruby-saml (~> 1.17)
     open4 (1.3.4)
@@ -668,7 +668,7 @@ DEPENDENCIES
   oaisys!
   omniauth (~> 2.1)
   omniauth-rails_csrf_protection (~> 1.0)
-  omniauth-saml (~> 2.1)
+  omniauth-saml (~> 2.2)
   paper_trail (~> 15.2.0)
   pg (~> 1.5.9)
   puma (~> 6.4)
