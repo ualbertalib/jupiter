@@ -126,7 +126,9 @@ GEM
       tzinfo (~> 2.0)
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
+    aes_key_wrap (1.1.0)
     ast (2.4.2)
+    attr_required (1.0.2)
     base64 (0.2.0)
     bcp47_spec (0.2.1)
     bcrypt (3.1.20)
@@ -142,6 +144,7 @@ GEM
       parser (>= 2.4)
       smart_properties
     bigdecimal (3.1.8)
+    bindata (2.5.0)
     bindex (0.8.1)
     binding_of_caller (1.0.1)
       debug_inspector (>= 1.2.0)
@@ -214,6 +217,8 @@ GEM
       unicode-types (~> 1.8)
     edtf (3.1.1)
       activesupport (>= 3.0, < 8.0)
+    email_validator (2.2.4)
+      activemodel
     erb_lint (0.5.0)
       activesupport
       better_html (>= 2.0.1)
@@ -228,6 +233,8 @@ GEM
       i18n (>= 1.8.11, < 2)
     faraday (2.9.0)
       faraday-net_http (>= 2.0, < 3.2)
+    faraday-follow_redirects (0.3.0)
+      faraday (>= 1, < 3)
     faraday-http-cache (2.5.1)
       faraday (>= 0.8)
     faraday-net_http (3.1.0)
@@ -300,6 +307,13 @@ GEM
     jsbundling-rails (1.3.0)
       railties (>= 6.0.0)
     json (2.7.2)
+    json-jwt (1.16.6)
+      activesupport (>= 4.2)
+      aes_key_wrap
+      base64
+      bindata
+      faraday (~> 2.0)
+      faraday-follow_redirects
     json-schema (4.3.1)
       addressable (>= 2.8)
     jwt (2.7.1)
@@ -378,7 +392,23 @@ GEM
     omniauth-saml (2.1.0)
       omniauth (~> 2.0)
       ruby-saml (~> 1.12)
+    omniauth_openid_connect (0.8.0)
+      omniauth (>= 1.9, < 3)
+      openid_connect (~> 2.2)
     open4 (1.3.4)
+    openid_connect (2.3.0)
+      activemodel
+      attr_required (>= 1.0.0)
+      email_validator
+      faraday (~> 2.0)
+      faraday-follow_redirects
+      json-jwt (>= 1.16)
+      mail
+      rack-oauth2 (~> 2.2)
+      swd (~> 2.0)
+      tzinfo
+      validate_url
+      webfinger (~> 2.0)
     os (1.1.4)
     paper_trail (15.1.0)
       activerecord (>= 6.1)
@@ -398,6 +428,13 @@ GEM
     raabro (1.4.0)
     racc (1.8.0)
     rack (2.2.9)
+    rack-oauth2 (2.2.1)
+      activesupport
+      attr_required
+      faraday (~> 2.0)
+      faraday-follow_redirects
+      json-jwt (>= 1.11.0)
+      rack (>= 2.1.0)
     rack-protection (3.2.0)
       base64 (>= 0.1.0)
       rack (~> 2.2, >= 2.2.4)
@@ -588,6 +625,11 @@ GEM
     strong_migrations (2.0.0)
       activerecord (>= 6.1)
     strscan (3.1.0)
+    swd (2.0.3)
+      activesupport (>= 3)
+      attr_required (>= 0.0.5)
+      faraday (~> 2.0)
+      faraday-follow_redirects
     sxp (1.3.0)
       matrix (~> 0.4)
       rdf (~> 3.3)
@@ -603,6 +645,9 @@ GEM
     unicode-types (1.8.0)
     uri (0.13.0)
     uuidtools (2.2.0)
+    validate_url (1.0.15)
+      activemodel (>= 3.0.0)
+      public_suffix
     vcr (5.0.0)
     voight_kampff (2.0.0)
       rack (>= 1.4)
@@ -611,6 +656,10 @@ GEM
       activemodel (>= 6.0.0)
       bindex (>= 0.4.0)
       railties (>= 6.0.0)
+    webfinger (2.1.3)
+      activesupport
+      faraday (~> 2.0)
+      faraday-follow_redirects
     webmock (3.23.1)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
@@ -669,6 +718,7 @@ DEPENDENCIES
   omniauth (~> 2.1)
   omniauth-rails_csrf_protection (~> 1.0)
   omniauth-saml (~> 2.1)
+  omniauth_openid_connect (~> 0.8)
   paper_trail (~> 15.1.0)
   pg (~> 1.5.6)
   puma (~> 6.4)
