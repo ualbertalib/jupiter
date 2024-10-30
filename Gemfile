@@ -28,7 +28,7 @@ gem 'rdf-vocab', '~> 3.3.1' # this gem changed predicate names without warning, 
 
 # Database stuff
 gem 'connection_pool'
-gem 'pg', '~> 1.5.7'
+gem 'pg', '~> 1.5.9'
 gem 'redis', '~> 4.8'
 gem 'rsolr'
 gem 'strong_migrations', '~> 2.0.1'
