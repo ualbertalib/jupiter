@@ -3053,10 +3053,10 @@ trim-newlines@^3.0.0:
   resolved "https://registry.yarnpkg.com/trim-newlines/-/trim-newlines-3.0.1.tgz#260a5d962d8b752425b32f3a7db0dcacd176c144"
   integrity sha512-c1PTsA3tYrIsLGkJkzHF+w9F2EyxfXGo4UyJc4pFL++FMjnq0HJS69T3M7d//gKrFKwy429bouPescbjecU+Zw==
 
-trix@^2.1.7:
-  version "2.1.7"
-  resolved "https://registry.yarnpkg.com/trix/-/trix-2.1.7.tgz#239dc3fbba87ce30eea44286ea09865c7fbab10f"
-  integrity sha512-RyFmjLJfxP2nuAKqgVqJ40wk4qoYfDQtyi71q6ozkP+X4EOILe+j5ll5g/suvTyMx7BacGszNWzjnx9Vbj17sw==
+trix@^2.1.8:
+  version "2.1.8"
+  resolved "https://registry.yarnpkg.com/trix/-/trix-2.1.8.tgz#b9383af8cd9c1a0a0818d6b4e0c9e771bf7fd564"
+  integrity sha512-y1h5mKQcjMsZDsUOqOgyIUfw+Z31u4Fe9JqXtKGUzIC7FM9cTpxZFFWxQggwXBo18ccIKYx1Fn9toVO5mCpn9g==
 
 trough@^1.0.0:
   version "1.0.5"
