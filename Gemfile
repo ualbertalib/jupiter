@@ -59,7 +59,7 @@ gem 'flipper-active_record', '~> 1.3.1' # Store feature flags in ActiveRecord
 gem 'flipper-ui', '~> 1.3.1' # UI for feature flags
 gem 'jbuilder' # generate JSON objects
 gem 'kaminari' # Pagination
-gem 'paper_trail', '~> 15.2.0' # Track object changes
+gem 'paper_trail', '~> 16.0.0' # Track object changes
 gem 'ransack', '4.2.1' # ActiveRecord search/filter
 gem 'redcarpet', '~> 3.6', require: ['redcarpet', 'redcarpet/render_strip'] # Markdown to (X)HTML parser
 gem 'uuidtools'
