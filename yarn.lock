@@ -491,17 +491,17 @@
     "@parcel/watcher-win32-ia32" "2.4.1"
     "@parcel/watcher-win32-x64" "2.4.1"
 
-"@rails/actiontext@^7.1.3":
-  version "7.1.3"
-  resolved "https://registry.yarnpkg.com/@rails/actiontext/-/actiontext-7.1.3.tgz#1b7aa2732c45cbc8a5708c54457c16fb81ce3da3"
-  integrity sha512-jwY0LJ0xpyIWkYs6BUMY4RcwVA3jZ+bFDPvv5KpKQnw+24BhJVtBLqF0XIsROaRCyabakueRyVuSG9NNhnLTvA==
+"@rails/actiontext@^8.0.1":
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/@rails/actiontext/-/actiontext-8.0.1.tgz#80ad6e1339198d2a1159022dc91c5b07595dfbc7"
+  integrity sha512-ts7CmATxoG3v6jMxjBEcE/hcko8UGFRHWBJll/gepYSmAjhUKKDpZ2QcIIjwsTSQniX6ESeeBIDA58wcLMlZ7g==
   dependencies:
-    "@rails/activestorage" ">= 7.1.0-alpha"
+    "@rails/activestorage" ">= 8.0.0-alpha"
 
-"@rails/activestorage@>= 7.1.0-alpha":
-  version "7.1.3"
-  resolved "https://registry.yarnpkg.com/@rails/activestorage/-/activestorage-7.1.3.tgz#e83ece6c5fd94b3ddf30a8cf3b8f78cad049e596"
-  integrity sha512-B+RFYAU8vdTPFg0IJcRp2ey0Qw9hpcUOqHHcWqftDJ76ZMBi9+m/UUeMJlNsSd0l9eD+1HLlFSo1X//cY4yiDw==
+"@rails/activestorage@>= 8.0.0-alpha":
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/@rails/activestorage/-/activestorage-8.0.1.tgz#ff012a997617e1bf953cff7d1c4d5cc8b4ceda77"
+  integrity sha512-LBLMOVL+nGTyiSyrLhikSCVr7lPLOmkGKELR8NxaoneIV4+QICvhe+AYVuklhJcMIN21WK7M1SzwItv9mSXX4A==
   dependencies:
     spark-md5 "^3.0.1"
 
