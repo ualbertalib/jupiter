@@ -20,7 +20,7 @@
     "jquery": "^3.7.1",
     "jquery-multidownload": "^4.0.1",
     "popper.js": "^1.16.0",
-    "sass": "^1.80.6",
+    "sass": "^1.83.0",
     "selectize": "^0.12.6",
     "trix": "^2.1.8",
     "turbolinks": "^5.2.0"
