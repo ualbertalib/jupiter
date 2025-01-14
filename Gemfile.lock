@@ -141,7 +141,7 @@ GEM
       erubi (~> 1.4)
       parser (>= 2.4)
       smart_properties
-    bigdecimal (3.1.8)
+    bigdecimal (3.1.9)
     bindex (0.8.1)
     binding_of_caller (1.0.1)
       debug_inspector (>= 1.2.0)
@@ -175,6 +175,9 @@ GEM
       bigdecimal
       rexml
     crass (1.0.6)
+    cronex (0.15.0)
+      tzinfo
+      unicode (>= 0.4.4.5)
     cssbundling-rails (1.4.1)
       railties (>= 6.0.0)
     danger (9.5.1)
@@ -327,7 +330,7 @@ GEM
       addressable (~> 2.8)
       childprocess (~> 5.0)
     link_header (0.0.8)
-    logger (1.6.1)
+    logger (1.6.5)
     loofah (2.23.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
@@ -341,12 +344,12 @@ GEM
     mini_magick (4.13.2)
     mini_mime (1.1.5)
     mini_portile2 (2.8.7)
-    minitest (5.25.1)
+    minitest (5.25.4)
     minitest-retry (0.2.3)
       minitest (>= 5.0)
     msgpack (1.7.2)
     multi_json (1.15.0)
-    mutex_m (0.2.0)
+    mutex_m (0.3.0)
     nanoid (2.0.0)
     nap (1.1.0)
     net-http (0.4.1)
@@ -468,7 +471,7 @@ GEM
       psych (>= 4.0.0)
     redcarpet (3.6.0)
     redis (4.8.1)
-    redis-client (0.22.2)
+    redis-client (0.23.1)
       connection_pool
     regexp_parser (2.9.2)
     reline (0.5.9)
@@ -543,10 +546,11 @@ GEM
       logger
       rack (>= 2.2.4)
       redis-client (>= 0.22.2)
-    sidekiq-cron (1.12.0)
-      fugit (~> 1.8)
+    sidekiq-cron (2.0.1)
+      cronex (>= 0.13.0)
+      fugit (~> 1.8, >= 1.11.1)
       globalid (>= 1.0.1)
-      sidekiq (>= 6)
+      sidekiq (>= 6.5.0)
     sidekiq-unique-jobs (8.0.10)
       concurrent-ruby (~> 1.0, >= 1.0.5)
       sidekiq (>= 7.0.0, < 8.0.0)
@@ -599,6 +603,7 @@ GEM
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     uber (0.1.0)
+    unicode (0.4.4.5)
     unicode-display_width (2.6.0)
     unicode-types (1.8.0)
     uri (0.13.1)
@@ -691,7 +696,7 @@ DEPENDENCIES
   selenium-webdriver
   shoulda-matchers (~> 6.4)
   sidekiq (~> 7.3)
-  sidekiq-cron (~> 1.12)
+  sidekiq-cron (~> 2.0)
   sidekiq-unique-jobs (~> 8.0)
   simple_form
   simplecov
