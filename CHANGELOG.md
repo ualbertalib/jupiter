@@ -9,6 +9,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+### Changed
+* Pin ubuntu to 22.04 for stability through the end of the project [#3676](https://github.com/ualbertalib/jupiter/issues/3676)
+
 ## 2.10.1 - 2024-10-30
 
 ### Added 
