@@ -5,7 +5,7 @@ ruby '>= 3.1.4', '< 3.2'
 
 # Core Rails stuff
 gem 'image_processing' # for ActiveStorage Variants
-gem 'puma', '~> 6.4'
+gem 'puma', '~> 6.5'
 gem 'rails', '~> 7.1.3'
 
 # Assets
