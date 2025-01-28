@@ -9,6 +9,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+### Chores
+* Bump bundler in Gemfile.lock to match production and build environments 
+
 ## 2.10.2 - 2025-01-15
 
 ### Changed
