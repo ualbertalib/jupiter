@@ -184,6 +184,7 @@ GEM
       unicode (>= 0.4.4.5)
     cssbundling-rails (1.4.1)
       railties (>= 6.0.0)
+    csv (3.3.2)
     danger (9.5.1)
       base64 (~> 0.2)
       claide (~> 1.0)
@@ -663,6 +664,7 @@ DEPENDENCIES
   clamby
   connection_pool
   cssbundling-rails
+  csv (~> 3.3, >= 3.3.2)
   danger (~> 9.5)
   datacite-client!
   debug
