@@ -9,6 +9,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+### Changed
+* skip brakeman Remove brakeman's ruby EOL check
+
 ### Chores
 * Bump bundler in Gemfile.lock to match production and build environments 
 
