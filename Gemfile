@@ -94,7 +94,7 @@ group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: [:mri, :mingw, :x64_mingw]
 
-  gem 'rubocop', '~> 1.68.0', require: false
+  gem 'rubocop', '~> 1.71.2', require: false
   gem 'rubocop-minitest', require: false
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false
