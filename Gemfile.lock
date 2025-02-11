@@ -198,7 +198,7 @@ GEM
       octokit (>= 4.0)
       pstore (~> 0.1)
       terminal-table (>= 1, < 4)
-    date (3.3.4)
+    date (3.4.1)
     debug (1.9.2)
       irb (~> 1.10)
       reline (>= 0.3.8)
@@ -361,7 +361,7 @@ GEM
       uri
     net-http-persistent (4.0.2)
       connection_pool (~> 2.2)
-    net-imap (0.4.10)
+    net-imap (0.4.19)
       date
       net-protocol
     net-pop (0.1.2)
