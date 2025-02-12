@@ -59,7 +59,7 @@ jobs:
         run: yarn run lint-css
 
       - name: Run ERBLint
-        run: bundle exec erblint .
+        run: bundle exec erb_lint .
 
       - name: Run Tests
         env:
