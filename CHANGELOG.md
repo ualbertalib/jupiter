@@ -14,6 +14,7 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ### Chores
 * Bump bundler in Gemfile.lock to match production and build environments 
+* Bump erb_lint from 0.7.0 to 0.9.0 [PR#3689](https://github.com/ualbertalib/jupiter/pull/3689)
 
 ## 2.10.2 - 2025-01-15
 
