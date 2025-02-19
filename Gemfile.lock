@@ -336,7 +336,7 @@ GEM
       addressable (~> 2.8)
       childprocess (~> 5.0)
     link_header (0.0.8)
-    logger (1.6.5)
+    logger (1.6.6)
     loofah (2.24.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
@@ -481,7 +481,7 @@ GEM
       psych (>= 4.0.0)
     redcarpet (3.6.0)
     redis (4.8.1)
-    redis-client (0.23.1)
+    redis-client (0.23.2)
       connection_pool
     regexp_parser (2.10.0)
     reline (0.6.0)
@@ -557,7 +557,7 @@ GEM
       logger
       rack (>= 2.2.4)
       redis-client (>= 0.22.2)
-    sidekiq-cron (2.0.1)
+    sidekiq-cron (2.1.0)
       cronex (>= 0.13.0)
       fugit (~> 1.8, >= 1.11.1)
       globalid (>= 1.0.1)
@@ -707,7 +707,7 @@ DEPENDENCIES
   selenium-webdriver
   shoulda-matchers (~> 6.4)
   sidekiq (~> 7.3)
-  sidekiq-cron (~> 2.0)
+  sidekiq-cron (~> 2.1)
   sidekiq-unique-jobs (~> 8.0)
   simple_form
   simplecov
