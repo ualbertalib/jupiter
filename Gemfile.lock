@@ -481,7 +481,7 @@ GEM
       psych (>= 4.0.0)
     redcarpet (3.6.0)
     redis (4.8.1)
-    redis-client (0.23.1)
+    redis-client (0.23.2)
       connection_pool
     regexp_parser (2.10.0)
     reline (0.6.0)
@@ -552,7 +552,8 @@ GEM
       websocket (~> 1.0)
     shoulda-matchers (6.4.0)
       activesupport (>= 5.2.0)
-    sidekiq (7.3.7)
+    sidekiq (7.3.9)
+      base64
       connection_pool (>= 2.3.0)
       logger
       rack (>= 2.2.4)
