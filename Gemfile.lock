@@ -562,7 +562,7 @@ GEM
       logger
       rack (>= 2.2.4)
       redis-client (>= 0.22.2)
-    sidekiq-cron (2.0.1)
+    sidekiq-cron (2.1.0)
       cronex (>= 0.13.0)
       fugit (~> 1.8, >= 1.11.1)
       globalid (>= 1.0.1)
@@ -712,7 +712,7 @@ DEPENDENCIES
   selenium-webdriver
   shoulda-matchers (~> 6.4)
   sidekiq (~> 7.3)
-  sidekiq-cron (~> 2.0)
+  sidekiq-cron (~> 2.1)
   sidekiq-unique-jobs (~> 8.0)
   simple_form
   simplecov
