@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '>= 3.1.4', '< 3.2'
+ruby '>= 3.1.4', '< 3.5'
 
 # Core Rails stuff
 gem 'image_processing' # for ActiveStorage Variants
@@ -50,6 +50,7 @@ gem 'sidekiq-unique-jobs', '~> 8.0'
 # Misc Utilities
 gem 'aasm' # state-machine management
 gem 'addressable', '~> 2.8.7' # Replacement for the standard URI implementation
+gem 'csv', '~> 3.3', '>= 3.3.2' # CSV parsing
 gem 'datacite-client', github: 'ualbertalib/datacite-client', tag: 'v0.1.0', require: 'datacite'
 gem 'differ' # Used to diff two strings
 gem 'draper'
@@ -59,6 +60,7 @@ gem 'flipper-active_record', '~> 1.3.2' # Store feature flags in ActiveRecord
 gem 'flipper-ui', '~> 1.3.2' # UI for feature flags
 gem 'jbuilder' # generate JSON objects
 gem 'kaminari' # Pagination
+gem 'ostruct', '~> 0.6.1' # similar to hash
 gem 'paper_trail', '~> 15.2.0' # Track object changes
 gem 'ransack', '4.3.0' # ActiveRecord search/filter
 gem 'redcarpet', '~> 3.6', require: ['redcarpet', 'redcarpet/render_strip'] # Markdown to (X)HTML parser
