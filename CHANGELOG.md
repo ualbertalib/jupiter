@@ -11,6 +11,7 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ### Changed
 * skip brakeman Remove brakeman's ruby EOL check
+* bump Ruby 3.4 [ualbertalib/library_applications_development#163](https://github.com/ualbertalib/library_applications_development/issues/163)
 * silence deprecation warnings when running tests
 
 ### Chores

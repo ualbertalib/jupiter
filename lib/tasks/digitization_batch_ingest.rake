@@ -41,7 +41,7 @@ namespace :digitization do
       # - Give `title` 80 characters of space.
       # - `processing` should be the longest `status`
       # - batch `size` should be pretty small to ensure that the jobs can finish in a timely manner
-      puts format '%38s,%80s,%12s,%7s', 'id', 'title', 'status', 'size'
+      puts format '%38s,%80s,%12s,%7d', 'id', 'title', 'status', 'size'
       Digitization::BatchMetadataIngest.order(created_at: :desc).limit(limit).each do |batch_ingest|
         puts format '%38s,%80s,%12s,%7d', batch_ingest.id, batch_ingest.title, batch_ingest.status,
                     batch_ingest.books.count
