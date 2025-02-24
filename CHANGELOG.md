@@ -11,6 +11,7 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ### Changed
 * skip brakeman Remove brakeman's ruby EOL check
+* silence deprecation warnings when running tests
 
 ### Chores
 * Bump bundler in Gemfile.lock to match production and build environments 
