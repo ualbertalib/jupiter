@@ -55,7 +55,7 @@ gem 'differ' # Used to diff two strings
 gem 'draper'
 gem 'edtf', '~> 3.2' # parsing Extended Date/Time Format
 gem 'flipper', '~> 1.3.2' # Feature flags for Ruby
-gem 'flipper-active_record', '~> 1.3.2' # Store feature flags in ActiveRecord
+gem 'flipper-active_record', '~> 1.3.3' # Store feature flags in ActiveRecord
 gem 'flipper-ui', '~> 1.3.2' # UI for feature flags
 gem 'jbuilder' # generate JSON objects
 gem 'kaminari' # Pagination
