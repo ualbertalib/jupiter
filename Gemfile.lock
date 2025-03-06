@@ -675,7 +675,7 @@ DEPENDENCIES
   edtf (~> 3.2)
   erb_lint (>= 0.0.35)
   faker
-  flipper (~> 1.3.2)
+  flipper (~> 1.3.4)
   flipper-active_record (~> 1.3.4)
   flipper-ui (~> 1.3.4)
   google-api-client
