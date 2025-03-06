@@ -9,6 +9,47 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+### Changed
+* skip brakeman Remove brakeman's ruby EOL check
+* silence deprecation warnings when running tests
+
+### Chores
+* Bump bundler in Gemfile.lock to match production and build environments 
+* Bump erb_lint from 0.7.0 to 0.9.0 [PR#3689](https://github.com/ualbertalib/jupiter/pull/3689)
+
+## 2.10.2 - 2025-01-15
+
+### Changed
+* Pin ubuntu to 22.04 for stability through the end of the project [#3676](https://github.com/ualbertalib/jupiter/issues/3676)
+
+### Chores
+* Bump pg from 1.5.7 to 1.5.9 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3616
+* Bump omniauth-saml from 2.1.2 to 2.2.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3618
+* Bump sass from 1.80.4 to 1.80.6 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3624
+* Bump sidekiq from 7.3.4 to 7.3.5 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3623
+* Bump rubocop from 1.67.0 to 1.68.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3622
+* Bump strong_migrations from 2.0.1 to 2.0.2 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3621
+* Bump rubocop-rails from 2.26.2 to 2.27.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3619
+* Bump selenium-webdriver from 4.24.0 to 4.26.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3615
+* Bump minitest-retry from 0.2.2 to 0.2.3 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3617
+* Bump erb_lint from 0.6.0 to 0.7.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3614
+* Bump trix from 2.1.7 to 2.1.8 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3612
+* Bump sidekiq-cron from 1.12.0 to 2.0.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3634
+* Bump trix from 2.1.8 to 2.1.12 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3670
+* Bump actionpack from 7.1.4.1 to 7.1.5.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3657
+* Bump strong_migrations from 2.0.2 to 2.1.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3632
+* Bump rails-html-sanitizer from 1.6.0 to 1.6.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3651
+* Bump rubocop-performance from 1.22.1 to 1.23.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3672
+* Bump sidekiq from 7.3.5 to 7.3.7 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3665
+* Bump esbuild from 0.23.1 to 0.24.2 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3669
+* Bump json-schema from 5.0.1 to 5.1.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3653
+* Bump cross-spawn from 7.0.3 to 7.0.6 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3637
+* Bump sass from 1.80.6 to 1.83.4 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3675
+* Bump flipper from 1.3.1 to 1.3.2 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3639
+* Bump flipper-ui from 1.3.1 to 1.3.2 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3640
+* Bump flipper-active_record from 1.3.1 to 1.3.2 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3641
+* Bump @fortawesome/fontawesome-free from 6.6.0 to 6.7.2 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3663
+
 ## 2.10.1 - 2024-10-30
 
 ### Added 

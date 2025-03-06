@@ -34,7 +34,7 @@ For Ruby files:
 `$ bundle exec rubocop`
 
 For ERB files:
-`$ bundle exec erblint .`
+`$ bundle exec erb_lint .`
 
 For javascript files:
 `$ yarn lint`

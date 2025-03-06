@@ -5,7 +5,7 @@ ruby '>= 3.1.4', '< 3.2'
 
 # Core Rails stuff
 gem 'image_processing' # for ActiveStorage Variants
-gem 'puma', '~> 6.4'
+gem 'puma', '~> 6.6'
 gem 'rails', '~> 7.1.3'
 
 # Assets
@@ -24,14 +24,14 @@ gem 'simple_form'
 gem 'acts_as_rdfable', github: 'ualbertalib/acts_as_rdfable', tag: 'v0.5.0'
 gem 'rdf', '~> 3.3.2'
 gem 'rdf-n3', '~> 3.3.0'
-gem 'rdf-vocab', '~> 3.3.1' # this gem changed predicate names without warning, be cautious and test with migrations
+gem 'rdf-vocab', '~> 3.3.2' # this gem changed predicate names without warning, be cautious and test with migrations
 
 # Database stuff
 gem 'connection_pool'
 gem 'pg', '~> 1.5.9'
 gem 'redis', '~> 4.8'
 gem 'rsolr'
-gem 'strong_migrations', '~> 2.0.2'
+gem 'strong_migrations', '~> 2.2.0'
 
 # Authentication
 gem 'bcrypt', '>= 3.1.13'
@@ -44,7 +44,7 @@ gem 'pundit', '2.4.0'
 
 # Background tasks
 gem 'sidekiq', '~> 7.3'
-gem 'sidekiq-cron', '~> 1.12'
+gem 'sidekiq-cron', '~> 2.1'
 gem 'sidekiq-unique-jobs', '~> 8.0'
 
 # Misc Utilities
@@ -53,14 +53,14 @@ gem 'addressable', '~> 2.8.7' # Replacement for the standard URI implementation
 gem 'datacite-client', github: 'ualbertalib/datacite-client', tag: 'v0.1.0', require: 'datacite'
 gem 'differ' # Used to diff two strings
 gem 'draper'
-gem 'edtf', '~> 3.1' # parsing Extended Date/Time Format
-gem 'flipper', '~> 1.3.1' # Feature flags for Ruby
-gem 'flipper-active_record', '~> 1.3.1' # Store feature flags in ActiveRecord
-gem 'flipper-ui', '~> 1.3.1' # UI for feature flags
+gem 'edtf', '~> 3.2' # parsing Extended Date/Time Format
+gem 'flipper', '~> 1.3.2' # Feature flags for Ruby
+gem 'flipper-active_record', '~> 1.3.2' # Store feature flags in ActiveRecord
+gem 'flipper-ui', '~> 1.3.2' # UI for feature flags
 gem 'jbuilder' # generate JSON objects
 gem 'kaminari' # Pagination
 gem 'paper_trail', '~> 16.0.0' # Track object changes
-gem 'ransack', '4.2.1' # ActiveRecord search/filter
+gem 'ransack', '4.3.0' # ActiveRecord search/filter
 gem 'redcarpet', '~> 3.6', require: ['redcarpet', 'redcarpet/render_strip'] # Markdown to (X)HTML parser
 gem 'uuidtools'
 gem 'voight_kampff', '~> 2.0', require: 'voight_kampff/rails' # bot detection
@@ -94,7 +94,7 @@ group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: [:mri, :mingw, :x64_mingw]
 
-  gem 'rubocop', '~> 1.68.0', require: false
+  gem 'rubocop', '~> 1.71.2', require: false
   gem 'rubocop-minitest', require: false
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false
@@ -114,7 +114,7 @@ group :test do
   gem 'haikunator'
   gem 'shoulda-matchers', '~> 6.4'
 
-  gem 'json-schema', '~> 5.0.1'
+  gem 'json-schema', '~> 5.1.1'
   gem 'launchy'
   gem 'minitest-retry', require: false
   gem 'rdf-isomorphic', '~> 3.3.0'
