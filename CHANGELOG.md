@@ -9,14 +9,54 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+## 2.10.3 - 2025-03-06
+
 ### Changed
-* skip brakeman Remove brakeman's ruby EOL check
-* silence deprecation warnings when running tests
+* skip brakeman Remove brakeman's ruby EOL check [PR#3698](https://github.com/ualbertalib/jupiter/pull/3698)
+* silence deprecation warnings when running tests [PR#3712](https://github.com/ualbertalib/jupiter/pull/3712)
+
+### Security
+* Bump rack from 2.2.11 to 2.2.12 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3735
 
 ### Chores
-* Bump bundler in Gemfile.lock to match production and build environments 
-* Bump erb_lint from 0.7.0 to 0.9.0 [PR#3689](https://github.com/ualbertalib/jupiter/pull/3689)
+* Bump bundler in Gemfile.lock to match production and build environments [PR#3693](https://github.com/ualbertalib/jupiter/pull/3693)
+* Bump @rails/actiontext from 7.1.3 to 7.1.501 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3695
+* Bump puma from 6.4.3 to 6.6.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3694
+* Bump selenium-webdriver from 4.26.0 to 4.28.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3690
+* Bump rubocop from 1.68.0 to 1.71.2 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3699
+* Bump rubocop-rails from 2.27.0 to 2.29.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3701
+* Bump brakeman from 6.2.2 to 7.0.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3688
+* Bump net-imap from 0.4.10 to 0.4.19 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3706
+* Bump esbuild from 0.24.2 to 0.25.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3709
+* Bump edtf from 3.1.1 to 3.2.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3679
+* Bump connection_pool from 2.4.1 to 2.5.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3681
+* Bump strong_migrations from 2.1.0 to 2.2.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3700
+* Bump debug from 1.9.2 to 1.10.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3685
+* Bump erb_lint from 0.7.0 to 0.9.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3689
+* Bump rdf-vocab from 3.3.1 to 3.3.2 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3625
+* Bump rack from 2.2.10 to 2.2.11 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3713
+* Bump dompurify from 3.2.3 to 3.2.4 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3720
+* Bump nokogiri from 1.18.1 to 1.18.3 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3721
+* Bump draper from 4.0.2 to 4.0.4 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3722
+* Bump sidekiq from 7.3.7 to 7.3.9 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3719
+* Bump webmock from 3.24.0 to 3.25.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3703
+* Bump ransack from 4.2.1 to 4.3.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3714
+* Bump image_processing from 1.13.0 to 1.14.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3717
+* Bump launchy from 3.0.1 to 3.1.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3711
+* Bump sidekiq-cron from 2.0.1 to 2.1.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3715
+* Bump minitest-retry from 0.2.3 to 0.2.5 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3716
+* Bump sass from 1.83.4 to 1.85.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3718
+* Bump paper_trail from 15.2.0 to 16.0.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3630
+* Bump rollbar from 3.6.0 to 3.6.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3710
+* Bump launchy from 3.1.0 to 3.1.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3724
+* Bump rubocop-minitest from 0.36.0 to 0.37.0 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3725
+* Bump selenium-webdriver from 4.28.0 to 4.29.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3730
+* Bump sass from 1.85.0 to 1.85.1 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3732
+* Bump flipper-active_record from 1.3.2 to 1.3.4 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3736
+* Bump cssbundling-rails from 1.4.1 to 1.4.3 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3739
+* Bump flipper-ui from 1.3.2 to 1.3.4 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3740
 * Bump rubocop from 1.71.2 to 1.73.2 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3738
+* Bump flipper from 1.3.2 to 1.3.4. [PR#3741](https://github.com/ualbertalib/jupiter/pull/3741)
 
 ## 2.10.2 - 2025-01-15
 
