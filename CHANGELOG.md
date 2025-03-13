@@ -9,6 +9,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+### Changed
+* pin ubuntu image for stable ci
+
 ## 2.10.3 - 2025-03-06
 
 ### Changed

@@ -4,6 +4,8 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-22.04
+    container:
+      image: ubuntu:22.04-20250302.1.0
 
     strategy:
       matrix:
