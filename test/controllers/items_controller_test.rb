@@ -83,4 +83,17 @@ class ItemsControllerTest < ActionDispatch::IntegrationTest
     assert_equal [1, 0], Statistics.for(item_id: @item.id)
   end
 
+  test 'shouldnt be able to edit an item if its read_only' do
+    @item.read_only = true
+    @item.save!
+
+    sign_in_as @admin
+    get edit_item_url(@item)
+
+    assert_redirected_to item_path @item, alert: 'This item is frozen and cannot be edited.'
+
+    @item.read_only = false
+    @item.save!
+  end
+
 end
