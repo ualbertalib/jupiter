@@ -14,6 +14,8 @@ class Admin::ItemsController < Admin::AdminController
       Thesis.find(params[:id])
     end
 
+    return redirect_to item_path @item, alert: 'This item is frozen and cannot be edited.' if @item.read_only?
+
     begin
       @item.destroy!
       flash[:notice] = t('.deleted')
