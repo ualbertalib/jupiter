@@ -212,10 +212,10 @@ class DraftItemTest < ActiveSupport::TestCase
 
     @collection.read_only = true
     @collection.save!
-    frozen_collection = Collection.create!(title: 'Risque fantasy Books',
-                                           owner_id: user.id,
-                                           restricted: true,
-                                           community_id: @community.id)
+    Collection.create!(title: 'Risque fantasy Books',
+                       owner_id: user.id,
+                       restricted: true,
+                       community_id: @community.id)
     draft_item.assign_attributes(
       member_of_paths: { community_id: [@community.id], collection_id: [@collection.id] }
     )
