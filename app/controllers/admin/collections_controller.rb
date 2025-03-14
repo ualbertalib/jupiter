@@ -24,7 +24,12 @@ class Admin::CollectionsController < Admin::AdminController
     @collection = Collection.new(community_id: @community.id)
   end
 
-  def edit; end
+  def edit
+    return unless @collection.read_only?
+
+    redirect_to admin_community_collection_path(@community, @collection),
+                alert: 'This item is frozen and cannot be edited.'
+  end
 
   def create
     @collection =
