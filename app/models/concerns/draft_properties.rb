@@ -116,6 +116,8 @@ module DraftProperties
           errors.add(:member_of_paths, :collection_not_found)
         elsif collection.community_id != community.id
           errors.add(:member_of_paths, :collection_not_in_community)
+        elsif collection.read_only?
+          errors.add(:member_of_paths, :collection_read_only)
         end
       end
     end
