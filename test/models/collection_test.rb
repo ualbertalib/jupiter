@@ -44,4 +44,18 @@ class CollectionTest < ActiveSupport::TestCase
                            id: community_id)
   end
 
+  test 'after_save read_only callback' do
+    collection = collections(:collection_fancy)
+    item = items(:item_fancy)
+
+    assert_not item.read_only?
+
+    collection.read_only = true
+    collection.save!
+
+    item.reload
+
+    assert_predicate item, :read_only?
+  end
+
 end
