@@ -53,7 +53,7 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
     get edit_admin_community_collection_url(@community, @collection)
 
     assert_redirected_to admin_community_collection_url(@community, @collection)
-    assert_equal 'This item is frozen and cannot be edited.', flash[:alert]
+    assert_equal 'This collection is frozen and cannot be edited.', flash[:alert]
 
     @collection.read_only = false
     @collection.save!

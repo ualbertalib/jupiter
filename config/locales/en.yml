@@ -308,6 +308,7 @@ en:
         created: 'Collection was successfully created!'
       edit:
         header: 'Edit %{title}'
+        read_only: 'This collection is frozen and cannot be edited.'
       update:
         updated: 'Collection was successfully updated!'
       destroy:
@@ -625,6 +626,7 @@ en:
       header: 'Items'
     edit:
       header: 'Edit Item'
+      read_only: 'This item is frozen and cannot be edited.'
     update:
       updated: 'Item was successfully updated!'
     show:

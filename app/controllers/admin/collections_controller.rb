@@ -27,8 +27,8 @@ class Admin::CollectionsController < Admin::AdminController
   def edit
     return unless @collection.read_only?
 
-    redirect_to admin_community_collection_path(@community, @collection),
-                alert: 'This item is frozen and cannot be edited.'
+    flash[:alert] = t('.read_only')
+    redirect_to admin_community_collection_path(@community, @collection)
   end
 
   def create
