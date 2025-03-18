@@ -13,7 +13,8 @@ class ItemsController < ApplicationController
     authorize @item
 
     if @item.read_only?
-      redirect_to item_path @item, alert: 'This item is frozen and cannot be edited.'
+      flash[:alert] = t('.read_only')
+      redirect_to item_path @item
     elsif @item.is_a? Thesis
       draft_thesis = DraftThesis.from_thesis(@item, for_user: current_user)
 

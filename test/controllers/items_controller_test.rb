@@ -90,7 +90,8 @@ class ItemsControllerTest < ActionDispatch::IntegrationTest
     sign_in_as @admin
     get edit_item_url(@item)
 
-    assert_redirected_to item_path @item, alert: 'This item is frozen and cannot be edited.'
+    assert_redirected_to item_path @item
+    assert_equal 'This item is frozen and cannot be edited.', flash[:alert]
 
     @item.read_only = false
     @item.save!
