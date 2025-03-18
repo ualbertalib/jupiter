@@ -24,7 +24,12 @@ class Admin::CollectionsController < Admin::AdminController
     @collection = Collection.new(community_id: @community.id)
   end
 
-  def edit; end
+  def edit
+    return unless @collection.read_only?
+
+    flash[:alert] = t('.read_only')
+    redirect_to admin_community_collection_path(@community, @collection)
+  end
 
   def create
     @collection =

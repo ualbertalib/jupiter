@@ -14,6 +14,11 @@ class Admin::ItemsController < Admin::AdminController
       Thesis.find(params[:id])
     end
 
+    if @item.read_only?
+      flash[:alert] = t('items.edit.read_only')
+      return redirect_to item_path @item
+    end
+
     begin
       @item.destroy!
       flash[:notice] = t('.deleted')

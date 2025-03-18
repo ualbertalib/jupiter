@@ -151,6 +151,7 @@ en:
               community_not_found: "Community can't be found"
               collection_not_found: "Collection can't be found"
               collection_not_in_community: "Collection not in community"
+              collection_read_only: "Collection is frozen and not available for deposit"
               collection_restricted: "Deposit is restricted for this collection"
             files:
               infected: '%{filename} is infected with a virus'
@@ -162,6 +163,7 @@ en:
               community_not_found: "Community can't be found"
               collection_not_found: "Collection can't be found"
               collection_not_in_community: "Collection not in community"
+              collection_read_only: "Collection is frozen and not available for deposit"
               collection_restricted: "Deposit is restricted for this collection"
             files:
               infected: '%{filename} is infected with a virus'
@@ -306,6 +308,7 @@ en:
         created: 'Collection was successfully created!'
       edit:
         header: 'Edit %{title}'
+        read_only: 'This collection is frozen and cannot be edited.'
       update:
         updated: 'Collection was successfully updated!'
       destroy:
@@ -623,6 +626,7 @@ en:
       header: 'Items'
     edit:
       header: 'Edit Item'
+      read_only: 'This item is frozen and cannot be edited.'
     update:
       updated: 'Item was successfully updated!'
     show:

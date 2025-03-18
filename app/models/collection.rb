@@ -17,6 +17,7 @@ class Collection < JupiterCore::Depositable
   end
 
   after_save :push_entity_for_preservation
+  after_save :update_member_objects_read_only
 
   # We have no attachments, so the scope is just the class itself.
   def self.eager_attachment_scope; self; end
@@ -52,6 +53,12 @@ class Collection < JupiterCore::Depositable
     errors.add(:member_objects, :must_be_empty,
                list_of_objects: member_objects.map(&:title).join(', '))
     throw(:abort)
+  end
+
+  def update_member_objects_read_only
+    member_objects.each do |member_object|
+      member_object.update(read_only: read_only)
+    end
   end
 
 end

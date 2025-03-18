@@ -12,7 +12,10 @@ class ItemsController < ApplicationController
   def edit
     authorize @item
 
-    if @item.is_a? Thesis
+    if @item.read_only?
+      flash[:alert] = t('.read_only')
+      redirect_to item_path @item
+    elsif @item.is_a? Thesis
       draft_thesis = DraftThesis.from_thesis(@item, for_user: current_user)
 
       redirect_to admin_thesis_draft_path(id: Wicked::FIRST_STEP, thesis_id: draft_thesis.id)
