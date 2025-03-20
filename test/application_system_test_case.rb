@@ -19,6 +19,8 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   else
     driven_by :selenium, using: :headless_chrome, screen_size: [1400, 1400]
   end
+  puts page.driver.browser.capabilities[:browser_name]
+  puts page.driver.browser.capabilities[:browser_version]
 
   RANDOM_TITLE = ['Fancy', 'Nice'].freeze
 
