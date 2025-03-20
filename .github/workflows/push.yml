@@ -61,6 +61,15 @@ jobs:
       - name: Run ERBLint
         run: bundle exec erb_lint .
 
+      - name: Remove image-bundled Chrome
+        run: sudo apt-get purge google-chrome-stable
+      - name: Setup stable Chrome
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: 133
+          install-chromedriver: true
+          install-dependencies: true
+
       - name: Run Tests
         env:
           RAILS_ENV: test
