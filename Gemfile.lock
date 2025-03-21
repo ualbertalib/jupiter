@@ -626,7 +626,7 @@ GEM
     unicode-display_width (2.6.0)
     unicode-types (1.8.0)
     uri (0.13.1)
-    uuidtools (2.2.0)
+    uuidtools (3.0.0)
     vcr (5.0.0)
     voight_kampff (2.0.0)
       rack (>= 1.4)
