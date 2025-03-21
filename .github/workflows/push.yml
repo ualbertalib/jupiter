@@ -66,7 +66,7 @@ jobs:
       - name: Setup stable Chrome
         uses: browser-actions/setup-chrome@v1
         with:
-          chrome-version: 133
+          chrome-version: 127
           install-chromedriver: true
           install-dependencies: true
 

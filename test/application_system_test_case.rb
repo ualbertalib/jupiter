@@ -14,13 +14,12 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   if ENV['CHROMIUM_CHROMEDRIVER_PATH']
     Selenium::WebDriver::Chrome::Service.driver_path = proc { ENV.fetch('CHROMIUM_CHROMEDRIVER_PATH', nil) }
   end
+  Selenium::WebDriver::Chrome.path = ENV.fetch('CHROME_BINARY_PATH', nil) if ENV['CHROME_BINARY_PATH']
   if ENV['CAPYBARA_NO_HEADLESS']
     driven_by :selenium, using: :chrome, screen_size: [1400, 1400]
   else
     driven_by :selenium, using: :headless_chrome, screen_size: [1400, 1400]
   end
-  puts page.driver.browser.capabilities[:browser_name]
-  puts page.driver.browser.capabilities[:browser_version]
 
   RANDOM_TITLE = ['Fancy', 'Nice'].freeze
 
