@@ -280,3 +280,20 @@ Jupiter comes with a handy rake task for batch ingesting items/theses.
 Batch ingest for items can now also be done via the admin dashboard. There is a new tab called "Batch ingest" where you can create a new batch ingest by providing a manifest file and files from Google Drive.
 
 For more info about this admin batch ingest screen and how to configure it, [please see the documentation in DI internal](https://github.com/ualbertalib/di_internal/blob/main/Applications/Jupiter/Batch_Ingest/README.md)
+
+## Freeze Collections
+
+To freeze a single collection
+```shell
+rails jupiter:freeze_collection['5de1de5f-8905-4dad-b509-16a469119c0a']
+```
+
+To freeze a list of collections from a file called collections.txt
+```shell
+rails jupiter:freeze_collections['collections.txt']
+```
+
+To freeze a single item
+```shell
+rails jupiter:freeze_item['5ff7ea1a-6883-4981-a1fc-bf1da720b93e']
+```

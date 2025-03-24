@@ -14,6 +14,7 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ### Added
 * read_only behavior to items, thesis and collection [#3758](https://github.com/ualbertalib/jupiter/issues/3758)
+* rake task to freeze collection, item or collections [#3758](https://github.com/ualbertalib/jupiter/issues/3758)
 
 ## 2.10.3 - 2025-03-06
 
