@@ -29,7 +29,7 @@ class AddToPreservationQueueTaskTest < ActionDispatch::IntegrationTest
         Community.first.save!
         Rake::Task['jupiter:preserve_all_collections_and_communities'].execute(after_date_arguments)
 
-        # the communiy, collection and four items all have save actions that trigger the preservation step
+        # the community, collection and four items all have save actions that trigger the preservation step
         assert_equal 6, Jupiter::Redis.current.zcard(Rails.application.secrets.preservation_queue_name)
       end
     end
