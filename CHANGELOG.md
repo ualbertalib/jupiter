@@ -13,7 +13,7 @@ New entries in this file should aim to provide a meaningful amount of informatio
 * pin chrome so ci passes [3764](https://github.com/ualbertalib/jupiter/issues/3764)
 
 ### Added
-* read_only behavior to items, thesis and collection [[#3758](https://github.com/ualbertalib/jupiter/issues/3758)]
+* read_only behavior to items, thesis and collection [#3758](https://github.com/ualbertalib/jupiter/issues/3758)
 
 ## 2.10.3 - 2025-03-06
 

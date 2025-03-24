@@ -91,7 +91,7 @@ class ItemsControllerTest < ActionDispatch::IntegrationTest
     get edit_item_url(@item)
 
     assert_redirected_to item_path @item
-    assert_equal 'This item is frozen and cannot be edited.', flash[:alert]
+    assert_equal I18n.t('items.edit.read_only'), flash[:alert]
 
     @item.read_only = false
     @item.save!
