@@ -58,4 +58,22 @@ class CollectionTest < ActiveSupport::TestCase
     assert_predicate item, :read_only?
   end
 
+  test 'should not set read only to false if object belongs to other read_only collections' do
+    collection1 = collections(:collection_read_only)
+    collection2 = collections(:collection_another_read_only)
+    item = items(:item_fancy)
+
+    # Add the item to both collections
+    item.add_to_path(collection1.community_id, collection1.id)
+    item.add_to_path(collection2.community_id, collection2.id)
+    item.read_only = true
+    item.save!
+
+    # Attempt to set read_only to false in one collection
+    collection1.update(read_only: false)
+
+    # Ensure the item's read_only remains true because of the other collection
+    assert item.reload.read_only
+  end
+
 end

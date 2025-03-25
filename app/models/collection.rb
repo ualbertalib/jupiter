@@ -57,7 +57,13 @@ class Collection < JupiterCore::Depositable
 
   def update_member_objects_read_only
     member_objects.each do |member_object|
-      member_object.update(read_only: read_only)
+      # Check if the object belongs to any other collections marked as read_only
+      other_read_only_collections = []
+      member_object.each_community_collection do |_, collection|
+        other_read_only_collections << collection if collection.read_only? && collection != self
+      end
+      # Only update read_only to false if no other collections are read_only
+      member_object.update(read_only: read_only) if read_only || other_read_only_collections.empty?
     end
   end
 
