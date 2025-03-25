@@ -19,6 +19,10 @@ New entries in this file should aim to provide a meaningful amount of informatio
 * Bump json from 2.10.1 to 2.10.2 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3755
 * Bump nokogiri from 1.18.3 to 1.18.4 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3766
 
+### Added
+* read_only behavior to items, thesis and collection [#3758](https://github.com/ualbertalib/jupiter/issues/3758)
+* rake task to freeze collection, item or collections, or to unfreeze everything [#3758](https://github.com/ualbertalib/jupiter/issues/3758)
+
 ## 2.10.3 - 2025-03-06
 
 ### Changed

@@ -27,6 +27,19 @@ class Admin::ItemsControllerTest < ActionDispatch::IntegrationTest
     assert_equal I18n.t('admin.items.destroy.deleted'), flash[:notice]
   end
 
+  test 'shouldnt destroy read_only item' do
+    @item.read_only = true
+    @item.save!
+
+    delete admin_item_url(@item)
+
+    assert_redirected_to item_path @item
+    assert_equal I18n.t('items.edit.read_only'), flash[:alert]
+
+    @item.read_only = false
+    @item.save!
+  end
+
   test 'reset DOI should queue job' do
     assert_no_enqueued_jobs only: DOIRemoveJob
     Rails.application.secrets.doi_minting_enabled = true
