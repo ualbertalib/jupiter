@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_27_203605) do
+ActiveRecord::Schema[7.1].define(version: 2025_03_12_221142) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -103,6 +103,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_27_203605) do
     t.boolean "restricted", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "read_only", default: false
     t.index ["owner_id"], name: "index_collections_on_owner_id"
   end
 
@@ -385,6 +386,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_27_203605) do
     t.datetime "updated_at", null: false
     t.json "subject", array: true
     t.bigint "batch_ingest_id"
+    t.boolean "read_only", default: false
     t.index ["batch_ingest_id"], name: "index_items_on_batch_ingest_id"
     t.index ["logo_id"], name: "index_items_on_logo_id"
     t.index ["owner_id"], name: "index_items_on_owner_id"
@@ -450,6 +452,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_27_203605) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.json "subject", array: true
+    t.boolean "read_only", default: false
     t.index ["logo_id"], name: "index_theses_on_logo_id"
     t.index ["owner_id"], name: "index_theses_on_owner_id"
   end

@@ -46,6 +46,19 @@ class Admin::CollectionsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test 'shouldnt edit read_only collection' do
+    @collection.read_only = true
+    @collection.save!
+
+    get edit_admin_community_collection_url(@community, @collection)
+
+    assert_redirected_to admin_community_collection_url(@community, @collection)
+    assert_equal I18n.t('admin.collections.edit.read_only'), flash[:alert]
+
+    @collection.read_only = false
+    @collection.save!
+  end
+
   test 'update collection when given valid information' do
     patch admin_community_collection_url(@community, @collection),
           params: { collection: { title: 'Updated collection' } }

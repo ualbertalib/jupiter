@@ -210,6 +210,14 @@ class DraftItemTest < ActiveSupport::TestCase
 
     assert_predicate draft_item, :valid?
 
+    @collection.read_only = true
+    @collection.save!
+
+    assert_not draft_item.valid?
+    assert_equal ['Collection is frozen and not available for deposit'], draft_item.errors.messages[:member_of_paths]
+    @collection.read_only = false
+    @collection.save!
+
     # Regular user can't deposit to a restricted collection
     restricted_collection = Collection.create!(title: 'Risque fantasy Books',
                                                owner_id: user.id,
