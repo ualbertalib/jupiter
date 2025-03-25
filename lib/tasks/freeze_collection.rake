@@ -23,7 +23,7 @@ namespace :jupiter do
   end
 
   desc 'unfreeze all collections'
-  task :unfreeze_all, [] => :environment do |_t, args|
+  task :unfreeze_all, [] => :environment do |_t, _args|
     Collection.find_each do |collection|
       collection.update!(read_only: false)
     end
