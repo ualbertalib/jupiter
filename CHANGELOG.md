@@ -9,8 +9,15 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+## 2.11.0 - 2025-03-25
+
 ### Changed
 * pin chrome so ci passes [3764](https://github.com/ualbertalib/jupiter/issues/3764)
+
+### Security
+* Bump omniauth-saml from 2.2.1 to 2.2.3 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3756
+* Bump json from 2.10.1 to 2.10.2 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3755
+* Bump nokogiri from 1.18.3 to 1.18.4 by @dependabot in https://github.com/ualbertalib/jupiter/pull/3766
 
 ### Added
 * read_only behavior to items, thesis and collection [#3758](https://github.com/ualbertalib/jupiter/issues/3758)
