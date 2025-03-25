@@ -1,5 +1,5 @@
 module Jupiter::Version
   def self.version_info
-    '2.10.4'.freeze
+    '2.11.0'.freeze
   end
 end

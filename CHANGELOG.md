@@ -9,7 +9,7 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
-## 2.10.4 - 2025-03-24
+## 2.11.0 - 2025-03-25
 
 ### Changed
 * pin chrome so ci passes [3764](https://github.com/ualbertalib/jupiter/issues/3764)
