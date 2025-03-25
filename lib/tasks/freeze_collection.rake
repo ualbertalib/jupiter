@@ -15,10 +15,17 @@ namespace :jupiter do
     end
   end
 
-  desc 'freeze a item by setting read_only to true'
+  desc 'freeze an item by setting read_only to true'
   task :freeze_item, [:item] => :environment do |_t, args|
     item = Item.find(args[:item])
     item.read_only = true
     item.save!
+  end
+
+  desc 'unfreeze all collections'
+  task :unfreeze_all, [] => :environment do |_t, args|
+    Collection.find_each do |collection|
+      collection.update!(read_only: false)
+    end
   end
 end

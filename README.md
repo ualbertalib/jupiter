@@ -297,3 +297,8 @@ To freeze a single item
 ```shell
 rails jupiter:freeze_item['5ff7ea1a-6883-4981-a1fc-bf1da720b93e']
 ```
+
+To unfreeze all collections
+```shell
+rails jupiter:unfreeze_all
+```
