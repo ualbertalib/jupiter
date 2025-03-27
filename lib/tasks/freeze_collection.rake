@@ -17,15 +17,22 @@ namespace :jupiter do
 
   desc 'freeze an item by setting read_only to true'
   task :freeze_item, [:item] => :environment do |_t, args|
-    item = Item.find(args[:item])
+    item = begin
+      Item.find(args[:item])
+    rescue ActiveRecord::RecordNotFound
+      Thesis.find(args[:item])
+    end
     item.read_only = true
     item.save!
   end
 
   desc 'unfreeze all collections'
   task :unfreeze_all, [] => :environment do |_t, _args|
-    Collection.find_each do |collection|
-      collection.update!(read_only: false)
+    Collection.where(read_only: true).find_each do |collection|
+      collection.update_columns(read_only: false)
+    end
+    Item.where(read_only: true).find_each do |item|
+      item.update_columns(read_only: false)
     end
   end
 end
