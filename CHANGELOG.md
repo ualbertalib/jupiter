@@ -9,6 +9,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+### Changed
+* fixed freeze collection rake tasks [#3758](https://github.com/ualbertalib/jupiter/issues/3758)
+
 ## 2.11.0 - 2025-03-25
 
 ### Changed
