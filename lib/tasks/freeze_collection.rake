@@ -28,11 +28,14 @@ namespace :jupiter do
 
   desc 'unfreeze all collections'
   task :unfreeze_all, [] => :environment do |_t, _args|
+    # specifically use update_columns to skip validations and avoid performance issues
+    # rubocop:disable Rails/SkipsModelValidations
     Collection.where(read_only: true).find_each do |collection|
       collection.update_columns(read_only: false)
     end
     Item.where(read_only: true).find_each do |item|
       item.update_columns(read_only: false)
     end
+    # rubocop:enable Rails/SkipsModelValidations
   end
 end
