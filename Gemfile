@@ -44,7 +44,7 @@ gem 'pundit', '2.4.0'
 
 # Background tasks
 gem 'sidekiq', '~> 7.3'
-gem 'sidekiq-cron', '~> 2.1'
+gem 'sidekiq-cron', '~> 2.2'
 gem 'sidekiq-unique-jobs', '~> 8.0'
 
 # Misc Utilities
