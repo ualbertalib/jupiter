@@ -339,7 +339,7 @@ GEM
       logger (~> 1.6)
     link_header (0.0.8)
     lint_roller (1.1.0)
-    logger (1.6.6)
+    logger (1.7.0)
     loofah (2.24.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
@@ -355,7 +355,7 @@ GEM
       logger
     mini_mime (1.1.5)
     mini_portile2 (2.8.8)
-    minitest (5.25.4)
+    minitest (5.25.5)
     minitest-retry (0.2.5)
       minitest (>= 5.0)
     msgpack (1.7.2)
@@ -417,7 +417,7 @@ GEM
       activesupport (>= 3.0.0)
     raabro (1.4.0)
     racc (1.8.1)
-    rack (2.2.13)
+    rack (2.2.14)
     rack-protection (3.2.0)
       base64 (>= 0.1.0)
       rack (~> 2.2, >= 2.2.4)
@@ -486,7 +486,7 @@ GEM
       psych (>= 4.0.0)
     redcarpet (3.6.0)
     redis (4.8.1)
-    redis-client (0.23.2)
+    redis-client (0.24.0)
       connection_pool
     regexp_parser (2.10.0)
     reline (0.6.0)
@@ -565,7 +565,7 @@ GEM
       logger
       rack (>= 2.2.4)
       redis-client (>= 0.22.2)
-    sidekiq-cron (2.1.0)
+    sidekiq-cron (2.3.0)
       cronex (>= 0.13.0)
       fugit (~> 1.8, >= 1.11.1)
       globalid (>= 1.0.1)
@@ -715,7 +715,7 @@ DEPENDENCIES
   selenium-webdriver
   shoulda-matchers (~> 6.4)
   sidekiq (~> 7.3)
-  sidekiq-cron (~> 2.1)
+  sidekiq-cron (~> 2.3)
   sidekiq-unique-jobs (~> 8.0)
   simple_form
   simplecov
