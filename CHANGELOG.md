@@ -9,8 +9,14 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+## 2.11.1 - 2025-06-20
+
 ### Changed
 * fixed freeze collection rake tasks [#3758](https://github.com/ualbertalib/jupiter/issues/3758)
+
+### Security
+* Bump rack from 2.2.13 to 2.2.14 [#3789](https://github.com/ualbertalib/jupiter/pull/3789)
+* Bump trix from 2.1.12 to 2.1.15 [#3687](https://github.com/ualbertalib/jupiter/pull/3787)
 
 ## 2.11.0 - 2025-03-25
 
