@@ -616,7 +616,7 @@ GEM
       rdf (~> 3.3)
     terminal-table (3.0.2)
       unicode-display_width (>= 1.1.1, < 3)
-    thor (1.3.2)
+    thor (1.4.0)
     timeout (0.4.3)
     trailblazer-option (0.1.2)
     tzinfo (2.0.6)
