@@ -3,4 +3,5 @@
 :skip_checks:
         - CheckUnscopedFind
         - CheckEOLRuby
+        - CheckEOLRails
 :github_repo: ualbertalib/jupiter
