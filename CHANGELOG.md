@@ -9,6 +9,9 @@ New entries in this file should aim to provide a meaningful amount of informatio
 
 ## [Unreleased]
 
+### Changed
+* Skip brakeman Remove brakeman's rails EOL check [PR#3821](https://github.com/ualbertalib/jupiter/pull/3821)
+
 ## 2.11.1 - 2025-06-20
 
 ### Changed
