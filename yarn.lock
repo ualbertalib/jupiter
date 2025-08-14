@@ -496,10 +496,10 @@
     "@parcel/watcher-win32-ia32" "2.4.1"
     "@parcel/watcher-win32-x64" "2.4.1"
 
-"@rails/actiontext@^7.1.501":
-  version "7.1.501"
-  resolved "https://registry.yarnpkg.com/@rails/actiontext/-/actiontext-7.1.501.tgz#37f54c338bb43526301e94de5cf7a6aa87dce8ad"
-  integrity sha512-GuJe12E5C/8iX0qmwGMTw3jXJtDcjyvwUfkKwpkrADUHVlML7ptPe6VUmfC7ZtKrCc/QychLJm5X9IY6o9hAqw==
+"@rails/actiontext@^7.1.502":
+  version "7.1.502"
+  resolved "https://registry.yarnpkg.com/@rails/actiontext/-/actiontext-7.1.502.tgz#4b7dde6a91bbd1428c782737d5fe03e1d52719c3"
+  integrity sha512-Jw7eMU4MIJLsO7pOJQIyOjspiYOC+0FJxc004pdKsZzn94q4AbzyzvTZdSyzqbA5kPpydkoxOwEDCOO973/aUA==
   dependencies:
     "@rails/activestorage" ">= 7.1.0-alpha"
 
