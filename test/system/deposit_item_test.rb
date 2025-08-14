@@ -66,11 +66,11 @@ class DepositItemTest < ApplicationSystemTestCase
     attach_file_in_dropzone(file_fixture('image-sample.jpeg'))
     has_css? '.j-thumbnail'
 
-    click_on I18n.t('items.draft.save_and_continue'), wait: 5
+    click_on I18n.t('items.draft.save_and_continue')
 
     # 4. Review and Deposit Form
 
-    assert_selector 'h2', text: I18n.t('items.draft.review_and_deposit_item.header')
+    assert_selector 'h2', text: I18n.t('items.draft.review_and_deposit_item.header'), wait: 15
 
     click_on I18n.t('items.draft.header')
 

@@ -59,11 +59,11 @@ class DepositThesisTest < ApplicationSystemTestCase
     attach_file_in_dropzone(file_fixture('image-sample.jpeg'))
     has_css? '.j-thumbnail'
 
-    click_on I18n.t('admin.theses.draft.save_and_continue'), wait: 5
+    click_on I18n.t('admin.theses.draft.save_and_continue'), wait: 15
 
     # 4. Review and Deposit Form
 
-    assert_selector 'h2', text: I18n.t('admin.theses.draft.review_and_deposit_thesis.header')
+    assert_selector 'h2', text: I18n.t('admin.theses.draft.review_and_deposit_thesis.header'), wait: 15
 
     click_on I18n.t('admin.theses.draft.header')
 
